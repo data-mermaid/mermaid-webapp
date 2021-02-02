@@ -1,3 +1,7 @@
 {
-  "extends": ["@sparkgeo/eslint-config-react"]
+  "extends": ["@sparkgeo/eslint-config-react"],
+  "plugins": ["react-hooks"],
+  "rules": {
+    "react/jsx-props-no-spreading": "off"
+  }
 }
