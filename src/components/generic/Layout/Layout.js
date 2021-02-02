@@ -4,10 +4,11 @@ import PropTypes from 'prop-types'
 /**
  * Describe your component
  */
-const Layout = ({ children, nav, header, footer }) => {
+const Layout = ({ breadcrumbs, children, footer, header, nav }) => {
   return (
     <>
       {header}
+      {breadcrumbs}
       {nav}
       <main>{children}</main>
       {footer}
@@ -16,10 +17,11 @@ const Layout = ({ children, nav, header, footer }) => {
 }
 
 Layout.propTypes = {
+  breadcrumbs: PropTypes.node.isRequired,
   children: PropTypes.node.isRequired,
-  nav: PropTypes.node.isRequired,
-  header: PropTypes.node.isRequired,
   footer: PropTypes.node.isRequired,
+  header: PropTypes.node.isRequired,
+  nav: PropTypes.node.isRequired,
 }
 
 export default Layout
