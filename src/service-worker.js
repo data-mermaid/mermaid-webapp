@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-undef */
 /* eslint-disable no-restricted-globals */
 
 // This service worker can be customized!
@@ -25,6 +27,7 @@ precacheAndRoute(self.__WB_MANIFEST)
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
 const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$')
+
 registerRoute(
   // Return false to exempt requests from being fulfilled by index.html.
   ({ request, url }) => {
@@ -43,7 +46,7 @@ registerRoute(
 
     return true
   },
-  createHandlerBoundToURL(process.env.PUBLIC_URL + '/index.html'),
+  createHandlerBoundToURL(`${process.env.PUBLIC_URL}/index.html`),
 )
 
 // An example runtime caching route for requests that aren't handled by the
@@ -64,7 +67,7 @@ registerRoute(
 
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: 'SKIP_WAITING'})
-self.addEventListener('message', event => {
+self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting()
   }
