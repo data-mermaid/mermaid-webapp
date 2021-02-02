@@ -1,0 +1,3 @@
+{
+  "extends": ["@sparkgeo/eslint-config-react"]
+}
