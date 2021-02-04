@@ -2,9 +2,10 @@ import '@testing-library/jest-dom/extend-expect'
 // import React from 'react'
 // import { render } from '@testing-library/react'
 
-// import Breadcrumbs from './Breadcrumbs'
+// import Projects from './Projects'
 
-test('Breadcrumbs component renders with the expected UI elements', () => {
-  // const utilities = render(<Breadcrumbs />)
+test('Projects component renders with the expected UI elements', () => {
+  // const utilities = render(
+  // <Projects />)
   // expect(utilities.getByText('I should fail'))
 })

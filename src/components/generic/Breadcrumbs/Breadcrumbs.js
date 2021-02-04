@@ -11,7 +11,8 @@ const Breadcrumbs = ({ crumbs }) => {
     const isLastCrumb = index === crumbs.length - 1
 
     return (
-      <span key={`Breadcrumb${index}`}>
+      // react doesnt see path alone as unique, so munged name onto key
+      <span key={`${crumb.name}-${crumbs.path}`}>
         <a href={crumb.path}>{crumb.name}</a>{' '}
         {!isLastCrumb && !hasOnlyOneCrumb && ' > '}
       </span>

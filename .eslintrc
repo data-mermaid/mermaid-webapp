@@ -2,6 +2,7 @@
   "extends": ["@sparkgeo/eslint-config-react"],
   "plugins": ["react-hooks"],
   "rules": {
+    "no-underscore-dangle": "off",
     "react/jsx-props-no-spreading": "off"
   }
 }

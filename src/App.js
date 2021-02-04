@@ -1,22 +1,49 @@
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
 import React from 'react'
-import Layout from './components/generic/Layout'
-import Nav from './components/Nav'
-import Header from './components/Header'
-import Footer from './components/Footer'
+
 import Breadcrumbs from './components/generic/Breadcrumbs'
+import Footer from './components/Footer'
+import Header from './components/Header'
+import Layout from './components/generic/Layout'
+
+import routes, { getBreadCrumbs } from './routes'
 
 function App() {
   const layoutProps = {
-    nav: <Nav />,
     header: <Header />,
     footer: <Footer />,
-    breadcumbs: <Breadcrumbs />,
   }
 
   return (
-    <Layout {...layoutProps} foo="fjdksl">
-      children
-    </Layout>
+    <Router>
+      <Switch>
+        {routes.map(({ path, Component }) => (
+          <Route
+            exact
+            path={path}
+            key={path}
+            render={(routeProps) => (
+              <Layout
+                {...layoutProps}
+                breadcrumbs={
+                  <Breadcrumbs crumbs={getBreadCrumbs(routeProps)} />
+                }
+              >
+                <Component />
+              </Layout>
+            )}
+          />
+        ))}
+        <Route exact path="/">
+          <Redirect to="/projects" />
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 
