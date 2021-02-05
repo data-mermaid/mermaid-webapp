@@ -6,8 +6,8 @@ const routes = [
   { path: '/projects', name: 'Projects', Component: Projects },
   { path: '/projects/:projectId', name: 'Project Details', Component: Details },
   {
-    path: '/projects/:projectId/collect',
-    name: 'Collect',
+    path: '/projects/:projectId/collecting',
+    name: 'Collecting',
     Component: Collect,
   },
 ]
