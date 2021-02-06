@@ -1,17 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Column } from '../positioning'
 
 /**
- * Describe your component
+ * Basic stacked layout
  */
+
 const Layout = ({ breadcrumbs, children, footer, header }) => {
   return (
-    <>
+    <Column>
       {header}
       {breadcrumbs}
       <main>{children}</main>
       {footer}
-    </>
+    </Column>
   )
 }
 
