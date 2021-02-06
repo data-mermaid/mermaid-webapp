@@ -4,6 +4,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
+import { ThemeProvider } from 'styled-components'
 import React from 'react'
 
 import Breadcrumbs from './components/generic/Breadcrumbs'
@@ -13,6 +14,8 @@ import Layout from './components/generic/Layout'
 
 import routes, { getBreadCrumbs } from './routes'
 
+import theme from './theme'
+
 function App() {
   const layoutProps = {
     header: <Header />,
@@ -20,30 +23,32 @@ function App() {
   }
 
   return (
-    <Router>
-      <Switch>
-        {routes.map(({ path, Component }) => (
-          <Route
-            exact
-            path={path}
-            key={path}
-            render={(routeProps) => (
-              <Layout
-                {...layoutProps}
-                breadcrumbs={
-                  <Breadcrumbs crumbs={getBreadCrumbs(routeProps)} />
-                }
-              >
-                <Component />
-              </Layout>
-            )}
-          />
-        ))}
-        <Route exact path="/">
-          <Redirect to="/projects" />
-        </Route>
-      </Switch>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Switch>
+          {routes.map(({ path, Component }) => (
+            <Route
+              exact
+              path={path}
+              key={path}
+              render={(routeProps) => (
+                <Layout
+                  {...layoutProps}
+                  breadcrumbs={
+                    <Breadcrumbs crumbs={getBreadCrumbs(routeProps)} />
+                  }
+                >
+                  <Component />
+                </Layout>
+              )}
+            />
+          ))}
+          <Route exact path="/">
+            <Redirect to="/projects" />
+          </Route>
+        </Switch>
+      </Router>
+    </ThemeProvider>
   )
 }
 
