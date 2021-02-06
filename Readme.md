@@ -1,4 +1,4 @@
-# Mermaid UI Remix
+# Mermaid Webapp
 
 ## Steps to Set Up Development Environment
 
