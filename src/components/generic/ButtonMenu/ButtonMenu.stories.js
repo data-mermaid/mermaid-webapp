@@ -1,8 +1,8 @@
-import React from 'react'
 import { action } from '@storybook/addon-actions'
+import React from 'react'
+import styled from 'styled-components'
 
 import ButtonMenu from '.'
-import styled from 'styled-components'
 
 export default {
   title: 'ButtonMenu',
