@@ -1,13 +1,11 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
-import { render } from '@testing-library/react'
-
+import { renderAuthenticated } from '../../testUtilities/testingLibraryWithHelpers'
 
 import {{pascalCase name}} from './{{pascalCase name}}'
 
 test('{{pascalCase name}} component renders with the expected UI elements', () => {
-const utilities = render(
-<{{pascalCase name}} />)
+  const utilities = renderAuthenticated(<{{pascalCase name}} />)
 
-expect(utilities.getByText('I should fail'))
+  expect(utilities.getByText('I should fail'))
 })
