@@ -1,19 +1,28 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
+import styled from 'styled-components/macro'
+
 import { Column } from '../positioning'
 
 /**
  * Basic stacked layout
  */
 
+const LayoutContainer = styled(Column)`
+  & main {
+    flex-grow: 2;
+  }
+  height: 100vh;
+`
+
 const Layout = ({ breadcrumbs, children, footer, header }) => {
   return (
-    <Column>
+    <LayoutContainer>
       {header}
-      {breadcrumbs}
+      <div>{breadcrumbs}</div>
       <main>{children}</main>
       {footer}
-    </Column>
+    </LayoutContainer>
   )
 }
 

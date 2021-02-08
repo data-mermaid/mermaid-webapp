@@ -1,10 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-  BrowserRouter,
-} from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import React from 'react'
 
