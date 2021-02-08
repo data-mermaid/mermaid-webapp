@@ -3,8 +3,9 @@ import {
   Switch,
   Route,
   Redirect,
+  BrowserRouter,
 } from 'react-router-dom'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from 'styled-components/macro'
 import React from 'react'
 
 import Breadcrumbs from './components/generic/Breadcrumbs'
@@ -24,34 +25,32 @@ function App() {
   const { isAuthenticated } = useEnsureLogin()
 
   return (
-    isAuthenticated && (
-      <ThemeProvider theme={theme}>
-        <Router>
-          <Switch>
-            {routes.map(({ path, Component }) => (
-              <Route
-                exact
-                path={path}
-                key={path}
-                render={(routeProps) => (
-                  <Layout
-                    {...layoutProps}
-                    breadcrumbs={
-                      <Breadcrumbs crumbs={getBreadCrumbs(routeProps)} />
-                    }
-                  >
-                    <Component />
-                  </Layout>
-                )}
-              />
-            ))}
-            <Route exact path="/">
-              <Redirect to="/projects" />
-            </Route>
-          </Switch>
-        </Router>
-      </ThemeProvider>
-    )
+    <ThemeProvider theme={theme}>
+      {isAuthenticated && (
+        <Switch>
+          {routes.map(({ path, Component }) => (
+            <Route
+              exact
+              path={path}
+              key={path}
+              render={(routeProps) => (
+                <Layout
+                  {...layoutProps}
+                  breadcrumbs={
+                    <Breadcrumbs crumbs={getBreadCrumbs(routeProps)} />
+                  }
+                >
+                  <Component />
+                </Layout>
+              )}
+            />
+          ))}
+          <Route exact path="/">
+            <Redirect to="/projects" />
+          </Route>
+        </Switch>
+      )}
+    </ThemeProvider>
   )
 }
 

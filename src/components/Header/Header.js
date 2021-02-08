@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import ButtonMenu from '../generic/ButtonMenu'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
 

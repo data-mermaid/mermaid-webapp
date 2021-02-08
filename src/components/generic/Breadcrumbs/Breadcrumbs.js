@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Row } from '../positioning'
@@ -16,7 +17,7 @@ const Breadcrumbs = ({ crumbs }) => {
         return (
           // react doesnt see path alone as unique, so munged name onto key
           <span key={`${crumb.name}-${crumbs.path}`}>
-            <a href={crumb.path}>{crumb.name}</a>{' '}
+            <Link to={crumb.path}>{crumb.name}</Link>{' '}
             {!isLastCrumb && !hasOnlyOneCrumb && ' > '}
           </span>
         )
