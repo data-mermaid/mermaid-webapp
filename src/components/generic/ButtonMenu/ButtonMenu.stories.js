@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions'
 import React from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 
 import ButtonMenu from '.'
 
