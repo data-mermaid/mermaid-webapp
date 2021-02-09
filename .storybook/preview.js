@@ -9,7 +9,9 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <MemoryRouter>
-      <Story />
+      <ThemeProvider theme={theme}>
+        <Story />
+      </ThemeProvider>
     </MemoryRouter>
   ),
 ]
