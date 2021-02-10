@@ -1,6 +1,5 @@
-export default function pluralize(val, singluar, plural) {
-  if (val === 1) {
-    return singluar
-  }
+export default function pluralize(val, singular, plural) {
+  if (val === 1) return singular
+
   return plural
 }
