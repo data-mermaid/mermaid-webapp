@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import pluralize from '../../library/helpers/pluralize'
 
@@ -80,6 +80,12 @@ const ProjectCard = ({
   )
 }
 
-ProjectCard.propTypes = {}
+ProjectCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  country: PropTypes.string.isRequired,
+  numberOfSites: PropTypes.number.isRequired,
+  offlineReady: PropTypes.bool.isRequired,
+  lastUpdatedDate: PropTypes.string.isRequired,
+}
 
 export default ProjectCard
