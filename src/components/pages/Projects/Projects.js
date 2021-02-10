@@ -1,6 +1,6 @@
 import React from 'react'
-import SubLayout1 from '../../SubLayout1'
 import PropTypes from 'prop-types'
+import SubLayout1 from '../../SubLayout1'
 
 /**
  * Describe your component
