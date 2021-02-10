@@ -20,6 +20,7 @@ const CardWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 10px;
+  margin-bottom: 10px;
   box-shadow: 4px 4px 8px darkgrey;
 
   &:hover {
