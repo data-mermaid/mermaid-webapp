@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const ButtonPrimary = styled.button`
@@ -13,3 +14,8 @@ export const ButtonCallout = styled.button`
 export const ButtonCaution = styled.button`
   background-color: red;
 `
+export const ButtonyNavLink = styled(NavLink)`
+  background-color: lightgray;
+  border: solid thin grey;
+`
+export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
