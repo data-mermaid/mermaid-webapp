@@ -5,13 +5,8 @@ import SubLayout1 from '../../SubLayout1'
 /**
  * Describe your component
  */
-const Projects = () => {
-  return (
-    <SubLayout1
-      topRow={<>top row stuff goes here</>}
-      bottomRow={<>All projects page placeholder</>}
-    />
-  )
+const Projects = ({ topRow, bottomRow }) => {
+  return <SubLayout1 topRow={topRow} bottomRow={bottomRow} />
 }
 
 Projects.propTypes = {}

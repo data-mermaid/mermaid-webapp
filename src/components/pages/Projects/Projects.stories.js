@@ -7,7 +7,13 @@ export default {
   title: 'Projects',
   component: Projects,
 }
-export const basic = () => <Projects />
+
+export const basic = () => (
+  <Projects
+    topRow={<>top row stuff goes here</>}
+    bottomRow={<>All projects page placeholder</>}
+  />
+)
 
 export const populatedMultipleProjects = () => {
   const projectSamples = [
@@ -40,5 +46,7 @@ export const populatedMultipleProjects = () => {
     ),
   )
 
-  return <>{projectList}</>
+  return (
+    <Projects topRow={<>top row stuff goes here</>} bottomRow={projectList} />
+  )
 }
