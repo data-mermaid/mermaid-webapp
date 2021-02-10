@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import pluralize from '../../library/helpers/pluralize'
 
@@ -41,13 +41,13 @@ const RightWrapper = styled.div`
 `
 
 const ProjectCard = ({
-  project_name,
+  name,
   country,
-  number_of_sites,
-  offline_ready,
-  last_updated_date,
+  numberOfSites,
+  offlineReady,
+  lastUpdatedDate,
 }) => {
-  const [offlineStatus, setOfflineStatus] = useState(offline_ready)
+  const [offlineStatus, setOfflineStatus] = useState(offlineReady)
 
   const toggleOfflineStatus = (e) => {
     setOfflineStatus(e.target.checked)
@@ -56,10 +56,10 @@ const ProjectCard = ({
   return (
     <CardWrapper>
       <LeftWrapper>
-        <Header>{project_name}</Header>
+        <Header>{name}</Header>
         <ItemRow>
-          {country} - {number_of_sites}{' '}
-          {number_of_sites && pluralize(number_of_sites, 'site', 'sites')}
+          {country} - {numberOfSites}{' '}
+          {numberOfSites && pluralize(numberOfSites, 'site', 'sites')}
         </ItemRow>
         <ButtonGroups>Buttons group</ButtonGroups>
       </LeftWrapper>
@@ -74,7 +74,7 @@ const ProjectCard = ({
           ></input>
         </ItemRow>
         <ItemRow>Last Updated</ItemRow>
-        <ItemRow>{last_updated_date}</ItemRow>
+        <ItemRow>{lastUpdatedDate}</ItemRow>
       </RightWrapper>
     </CardWrapper>
   )
