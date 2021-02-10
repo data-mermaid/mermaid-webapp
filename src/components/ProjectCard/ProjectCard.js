@@ -71,7 +71,7 @@ const ProjectCard = ({
             type="checkbox"
             checked={offlineStatus}
             onChange={toggleOfflineStatus}
-          ></input>
+          />
         </ItemRow>
         <ItemRow>Last Updated</ItemRow>
         <ItemRow>{lastUpdatedDate}</ItemRow>
