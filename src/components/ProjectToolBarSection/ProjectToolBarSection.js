@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const GlobalWrapper = styled.div`
@@ -65,6 +65,6 @@ const ProjectToolBarSection = () => {
   )
 }
 
-ProjectToolBarSection.propTypes = {}
+// ProjectToolBarSection.propTypes = {}
 
 export default ProjectToolBarSection
