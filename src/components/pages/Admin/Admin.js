@@ -3,18 +3,18 @@ import SubLayout2 from '../../SubLayout2'
 // import PropTypes from 'prop-types'
 
 /**
- * Project Collect Page
+ * Project Admin Page
  */
-const Collect = () => {
+const Admin = () => {
   return (
     <SubLayout2
       lowerLeft={<>Side bar</>}
-      lowerRight={<>Collect Placeholder</>}
+      lowerRight={<>Admin Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />
   )
 }
 
-Collect.propTypes = {}
+Admin.propTypes = {}
 
-export default Collect
+export default Admin

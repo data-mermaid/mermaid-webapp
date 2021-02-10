@@ -1,5 +1,7 @@
 import React from 'react'
+import Admin from './components/pages/Admin'
 import Collect from './components/pages/Collect'
+import Data from './components/pages/Data'
 import Details from './components/pages/Details'
 import Projects from './components/pages/Projects'
 
@@ -19,6 +21,16 @@ export const useRoutes = (apiService) => {
       path: '/projects/:projectId/collecting',
       name: 'Collecting',
       Component: Collect,
+    },
+    {
+      path: '/projects/:projectId/data',
+      name: 'Data',
+      Component: Data,
+    },
+    {
+      path: '/projects/:projectId/admin',
+      name: 'Admin',
+      Component: Admin,
     },
   ]
 
