@@ -1,0 +1,11 @@
+import '@testing-library/jest-dom/extend-expect'
+import React from 'react'
+import { renderAuthenticated } from '../../testUtilities/testingLibraryWithHelpers'
+
+import ProjectToolBarSection from './ProjectToolBarSection'
+
+test('ProjectToolBarSection component renders with the expected UI elements', () => {
+  const utilities = renderAuthenticated(<ProjectToolBarSection />)
+
+  expect(utilities.getByText('I should fail'))
+})
