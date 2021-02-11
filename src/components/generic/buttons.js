@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 export const ButtonPrimary = styled.button`
   background-color: blue;
+  color: white;
 `
 
 export const ButtonSecondary = styled.button`
