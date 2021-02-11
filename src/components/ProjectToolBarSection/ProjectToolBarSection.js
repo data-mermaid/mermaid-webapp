@@ -3,7 +3,9 @@ import React from 'react'
 import styled from 'styled-components'
 
 const GlobalWrapper = styled.div`
-  padding: 10px 40px;
+  /* padding: 10px; */
+  margin-bottom: 20px;
+  border-bottom: 1px solid;
 `
 
 const RowWrapper = styled.div`
