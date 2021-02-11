@@ -6,9 +6,9 @@ import Breadcrumbs from './components/generic/Breadcrumbs'
 import Footer from './components/Footer'
 import Header from './components/Header'
 import Layout from './components/generic/Layout'
-import routes, { getBreadCrumbs } from './routes'
 import theme from './theme'
 import useEnsureLogin from './library/useEnsureLogin'
+import { useRoutes } from './useRoutes'
 
 function App() {
   const layoutProps = {
@@ -17,6 +17,7 @@ function App() {
   }
 
   const { isAuthenticated } = useEnsureLogin()
+  const { routes, getBreadCrumbs } = useRoutes()
 
   return (
     <ThemeProvider theme={theme}>
