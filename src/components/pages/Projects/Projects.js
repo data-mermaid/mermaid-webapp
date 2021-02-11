@@ -1,19 +1,17 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import SubLayout1 from '../../SubLayout1'
-// import PropTypes from 'prop-types'
 
 /**
  * Describe your component
  */
-const Projects = () => {
-  return (
-    <SubLayout1
-      topRow={<>top row stuff goes here</>}
-      bottomRow={<>All projects page placeholder</>}
-    />
-  )
+const Projects = ({ topRow, bottomRow }) => {
+  return <SubLayout1 topRow={topRow} bottomRow={bottomRow} />
 }
 
-Projects.propTypes = {}
+Projects.propTypes = {
+  topRow: PropTypes.node.isRequired,
+  bottomRow: PropTypes.node.isRequired,
+}
 
 export default Projects
