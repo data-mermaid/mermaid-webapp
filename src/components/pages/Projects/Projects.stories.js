@@ -2,6 +2,7 @@ import React from 'react'
 
 import Projects from '.'
 import ProjectCard from '../../ProjectCard'
+import ProjectToolBarSection from '../../ProjectToolBarSection'
 
 export default {
   title: 'Projects',
@@ -46,7 +47,5 @@ export const populatedMultipleProjects = () => {
     ),
   )
 
-  return (
-    <Projects topRow={<>top row stuff goes here</>} bottomRow={projectList} />
-  )
+  return <Projects topRow={<ProjectToolBarSection />} bottomRow={projectList} />
 }
