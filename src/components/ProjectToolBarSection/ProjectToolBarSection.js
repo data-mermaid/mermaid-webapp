@@ -15,7 +15,7 @@ const RowWrapper = styled.div`
   margin-bottom: 10px;
 `
 
-const HeaderStyle = styled.div`
+const HeaderStyle = styled.h1`
   flex-grow: 1;
   font-size: 30px;
   text-transform: uppercase;
@@ -45,7 +45,7 @@ const ProjectToolBarSection = () => {
   return (
     <GlobalWrapper>
       <RowWrapper>
-        <HeaderStyle>projects</HeaderStyle>
+        <HeaderStyle>Projects</HeaderStyle>
         <ButtonPrimary>New Project</ButtonPrimary>
       </RowWrapper>
       <RowWrapper>
