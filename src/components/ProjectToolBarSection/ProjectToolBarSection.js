@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 import { ButtonPrimary } from '../generic/buttons'
 import { IconSortDown } from '../icons'
 
