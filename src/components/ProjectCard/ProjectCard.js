@@ -16,7 +16,6 @@ const ButtonGroups = styled.div`
   visibility: hidden;
 `
 const CardWrapper = styled.div`
-  height: 100%;
   display: flex;
   align-items: center;
   padding: 10px;

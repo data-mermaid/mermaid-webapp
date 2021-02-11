@@ -1,17 +1,35 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import SubLayout1 from '../../SubLayout1'
+import { mermaidApiServicePropType } from '../../../ApiGateway/useMermaidApi'
+import ProjectCard from '../../ProjectCard'
+import ProjectToolBarSection from '../../ProjectToolBarSection'
 
 /**
- * Describe your component
+ * All Projects page (lists projects)
  */
-const Projects = ({ topRow, bottomRow }) => {
-  return <SubLayout1 topRow={topRow} bottomRow={bottomRow} />
+const Projects = ({ apiService }) => {
+  const { projects } = apiService
+
+  const projectList = projects.map(
+    ({ name, country, numberOfSites, offlineReady, lastUpdatedDate }) => (
+      <ProjectCard
+        key={name}
+        name={name}
+        country={country}
+        numberOfSites={numberOfSites}
+        offlineReady={offlineReady}
+        lastUpdatedDate={lastUpdatedDate}
+      />
+    ),
+  )
+
+  return (
+    <SubLayout1 topRow={<ProjectToolBarSection />} bottomRow={projectList} />
+  )
 }
 
 Projects.propTypes = {
-  topRow: PropTypes.node.isRequired,
-  bottomRow: PropTypes.node.isRequired,
+  apiService: mermaidApiServicePropType.isRequired,
 }
 
 export default Projects
