@@ -31,6 +31,8 @@ const CardWrapper = styled.div`
   }
 `
 
+const InputCheckBox = styled.input``
+
 const LeftWrapper = styled.div`
   flex-grow: 1;
 `
@@ -67,7 +69,7 @@ const ProjectCard = ({
       <RightWrapper>
         <ItemRow>
           Offline Ready{' '}
-          <input
+          <InputCheckBox
             id="offline-toggle"
             type="checkbox"
             checked={offlineStatus}
