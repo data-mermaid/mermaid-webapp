@@ -1,10 +1,11 @@
 import React from 'react'
-import { useRouteMatch } from 'react-router-dom'
 import styled from 'styled-components/macro'
 import SubLayout1 from '../../SubLayout1'
 import { RowSpaceBetween, RowRight, RowLeft } from '../../generic/positioning'
-import { ButtonyNavLinkIcon } from '../../generic/buttons'
+import { NavLinkButtonishIcon } from '../../generic/links'
+import { ButtonSecondary } from '../../generic/buttons'
 import { IconCollect, IconData, IconAdmin, IconCopy } from '../../icons'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 // import PropTypes from 'prop-types'
 
 /**
@@ -32,29 +33,28 @@ const ProjectInfoRight = styled(RowRight)`
 `
 
 const ProjectInfo = () => {
-  const { params } = useRouteMatch()
-  const projectUrl = `/projects/${params.projectId}`
+  const projectUrl = useCurrentProjectPath()
 
   return (
     <GlobalWrapper>
       <ProjectInfoLeft>
         <div>project name</div>
         <RowLeft>
-          <ButtonyNavLinkIcon
+          <NavLinkButtonishIcon
             to={`${projectUrl}/collecting`}
             aria-label="Collect"
           >
             <IconCollect />
-          </ButtonyNavLinkIcon>
-          <ButtonyNavLinkIcon to={`${projectUrl}/data`} aria-label="Data">
+          </NavLinkButtonishIcon>
+          <NavLinkButtonishIcon to={`${projectUrl}/data`} aria-label="Data">
             <IconData />
-          </ButtonyNavLinkIcon>
-          <ButtonyNavLinkIcon to={`${projectUrl}/admin`} aria-label="Admin">
+          </NavLinkButtonishIcon>
+          <NavLinkButtonishIcon to={`${projectUrl}/admin`} aria-label="Admin">
             <IconAdmin />
-          </ButtonyNavLinkIcon>
-          <ButtonyNavLinkIcon as="button">
+          </NavLinkButtonishIcon>
+          <ButtonSecondary>
             <IconCopy />
-          </ButtonyNavLinkIcon>
+          </ButtonSecondary>
         </RowLeft>
       </ProjectInfoLeft>
       <ProjectInfoRight>
