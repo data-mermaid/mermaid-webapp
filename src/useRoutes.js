@@ -1,11 +1,9 @@
 import React from 'react'
-import { useMermaidApi } from './ApiGateway/useMermaidApi'
 import Collect from './components/pages/Collect'
 import Details from './components/pages/Details'
 import Projects from './components/pages/Projects'
 
-export const useRoutes = () => {
-  const apiService = useMermaidApi()
+export const useRoutes = (apiService) => {
   const routes = [
     {
       path: '/projects',

@@ -9,6 +9,7 @@ import Layout from './components/generic/Layout'
 import theme from './theme'
 import useEnsureLogin from './library/useEnsureLogin'
 import { useRoutes } from './useRoutes'
+import { useMermaidApi } from './ApiGateway/useMermaidApi'
 
 function App() {
   const layoutProps = {
@@ -17,7 +18,8 @@ function App() {
   }
 
   const { isAuthenticated } = useEnsureLogin()
-  const { routes, getBreadCrumbs } = useRoutes()
+  const apiService = useMermaidApi()
+  const { routes, getBreadCrumbs } = useRoutes(apiService)
 
   return (
     <ThemeProvider theme={theme}>
