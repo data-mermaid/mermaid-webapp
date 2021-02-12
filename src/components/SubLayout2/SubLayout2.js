@@ -1,4 +1,3 @@
-import { useRouteMatch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
@@ -6,6 +5,7 @@ import styled from 'styled-components/macro'
 import { NavLinkButtonish, NavLinkButtonishIcon } from '../generic/links'
 import { Column, Row } from '../generic/positioning'
 import { IconCollect, IconData, IconAdmin } from '../icons'
+import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 
 /**
  * Describe your component
@@ -30,8 +30,7 @@ const NavContainer = styled.nav`
 `
 
 const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
-  const { params } = useRouteMatch()
-  const projectUrl = `/projects/${params.projectId}`
+  const projectUrl = useCurrentProjectPath()
 
   return (
     <SubLayout2Container>
