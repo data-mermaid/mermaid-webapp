@@ -8,7 +8,7 @@ import Header from './components/Header'
 import Layout from './components/generic/Layout'
 import theme from './theme'
 import useEnsureLogin from './library/useEnsureLogin'
-import { useRoutes } from './useRoutes'
+import { useRoutes } from './library/useRoutes'
 import { useMermaidApi } from './ApiGateway/useMermaidApi'
 
 function App() {

@@ -1,22 +1,21 @@
 import React from 'react'
-import DataNav from '../../DataNav'
-
-import SubLayout2 from '../../SubLayout2'
 // import PropTypes from 'prop-types'
+import DataNav from '../../DataNav'
+import SubLayout2 from '../../SubLayout2'
 
 /**
- * Project Data Page
+ * Describe your component
  */
-const Data = () => {
+const GraphsAndMaps = () => {
   return (
     <SubLayout2
       lowerLeft={<DataNav />}
-      lowerRight={<>Data Placeholder</>}
+      lowerRight={<>Graphs and Maps Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />
   )
 }
 
-Data.propTypes = {}
+GraphsAndMaps.propTypes = {}
 
-export default Data
+export default GraphsAndMaps

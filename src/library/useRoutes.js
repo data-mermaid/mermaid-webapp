@@ -1,9 +1,12 @@
 import React from 'react'
-import Admin from './components/pages/Admin'
-import Collect from './components/pages/Collect'
-import Data from './components/pages/Data'
-import Details from './components/pages/Details'
-import Projects from './components/pages/Projects'
+import Admin from '../components/pages/Admin'
+import Collect from '../components/pages/Collect'
+import Data from '../components/pages/Data'
+import Details from '../components/pages/Details'
+import GraphsAndMaps from '../components/pages/GraphsAndMaps'
+import ManagementRegimes from '../components/pages/ManagementRegimes'
+import Projects from '../components/pages/Projects'
+import Sites from '../components/pages/Sites'
 
 export const useRoutes = (apiService) => {
   const routes = [
@@ -31,6 +34,24 @@ export const useRoutes = (apiService) => {
       path: '/projects/:projectId/admin',
       name: 'Admin',
       Component: Admin,
+    },
+
+    {
+      path: '/projects/:projectId/graphs-and-maps',
+      name: 'Admin',
+      Component: GraphsAndMaps,
+    },
+
+    {
+      path: '/projects/:projectId/sites',
+      name: 'Admin',
+      Component: Sites,
+    },
+
+    {
+      path: '/projects/:projectId/management-regimes',
+      name: 'Admin',
+      Component: ManagementRegimes,
     },
   ]
 
