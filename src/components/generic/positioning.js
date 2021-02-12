@@ -9,7 +9,18 @@ export const RowSpaceBetween = styled(Row)`
 `
 export const RowRight = styled(Row)`
   justify-content: flex-end;
+  & > * {
+    margin-right: ${(props) => props.theme.spacing.small};
+  }
 `
+
+export const RowLeft = styled(Row)`
+  justify-content: flex-start;
+  & > * {
+    margin-right: ${(props) => props.theme.spacing.small};
+  }
+`
+
 export const Column = styled.div`
   display: flex;
   flex-direction: column;
