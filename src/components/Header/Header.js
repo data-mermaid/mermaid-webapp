@@ -14,7 +14,7 @@ const Header = () => {
   return (
     <RowSpaceBetween>
       Header
-      <RowRight>
+      <RowRight as="nav">
         <Link to="/projects">Projects</Link>
         <Link to="/#">Reports</Link>
         <Link to="/#">Reference</Link>

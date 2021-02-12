@@ -14,7 +14,7 @@ const Footer = () => {
         <div>Offline Toggle</div>
         <div>Refresh</div>
       </RowLeft>
-      <RowRight>
+      <RowRight as="nav">
         <Link to="/#">Help</Link>
         <Link to="/#">Terms</Link>
         <Link to="/#">Contact</Link>
