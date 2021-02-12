@@ -7,4 +7,9 @@ export const NavLinkButtonish = styled(NavLink)`
 `
 export const NavLinkButtonishIcon = styled(NavLinkButtonish)``
 
-export const NavLinkSidebar = styled(NavLink)``
+export const NavLinkSidebar = styled(NavLink)`
+  & > svg {
+    margin-left: ${(props) => props.theme.spacing.small};
+    margin-right: ${(props) => props.theme.spacing.small};
+  }
+`

@@ -1,4 +1,6 @@
 import React from 'react'
+import DataNav from '../../DataNav'
+
 import SubLayout2 from '../../SubLayout2'
 // import PropTypes from 'prop-types'
 
@@ -8,7 +10,7 @@ import SubLayout2 from '../../SubLayout2'
 const Data = () => {
   return (
     <SubLayout2
-      lowerLeft={<>Side bar</>}
+      lowerLeft={<DataNav />}
       lowerRight={<>Data Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />
