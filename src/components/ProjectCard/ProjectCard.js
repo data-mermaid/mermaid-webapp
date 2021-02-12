@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
-import pluralize from '../../library/helpers/pluralize'
+import pluralize from '../../library/pluralize'
 
 /**
  * Describe your component
