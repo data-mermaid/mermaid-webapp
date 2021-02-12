@@ -1,10 +1,10 @@
 const color = {}
 const spacing = {
-  xsmall: '4px',
-  small: '10px',
-  medium: '16px',
-  large: '24px',
-  xlarge: '32px',
+  xsmall: '0.4rem',
+  small: '1rem',
+  medium: '1.6rem',
+  large: '2.4rem',
+  xlarge: '3.2rem',
 }
 const typography = {}
 
