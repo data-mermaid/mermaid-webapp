@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
 
-import { ButtonyNavLink, ButtonyNavLinkIcon } from '../generic/buttons'
+import { NavLinkButtonish, NavLinkButtonishIcon } from '../generic/links'
 import { Column, Row } from '../generic/positioning'
 import { IconCollect, IconData, IconAdmin } from '../icons'
 
@@ -37,20 +37,20 @@ const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
     <SubLayout2Container>
       <SideBar>
         <NavContainer>
-          <ButtonyNavLink to={projectUrl}>Project Overview</ButtonyNavLink>
+          <NavLinkButtonish to={projectUrl}>Project Overview</NavLinkButtonish>
           <Row>
-            <ButtonyNavLinkIcon
+            <NavLinkButtonishIcon
               to={`${projectUrl}/collecting`}
               aria-label="Collect"
             >
               <IconCollect />
-            </ButtonyNavLinkIcon>
-            <ButtonyNavLinkIcon to={`${projectUrl}/data`} aria-label="Data">
+            </NavLinkButtonishIcon>
+            <NavLinkButtonishIcon to={`${projectUrl}/data`} aria-label="Data">
               <IconData />
-            </ButtonyNavLinkIcon>
-            <ButtonyNavLinkIcon to={`${projectUrl}/admin`} aria-label="Admin">
+            </NavLinkButtonishIcon>
+            <NavLinkButtonishIcon to={`${projectUrl}/admin`} aria-label="Admin">
               <IconAdmin />
-            </ButtonyNavLinkIcon>
+            </NavLinkButtonishIcon>
           </Row>
         </NavContainer>
         <div>{lowerLeft}</div>
