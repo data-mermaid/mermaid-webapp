@@ -2,11 +2,10 @@ import React from 'react'
 import styled from 'styled-components/macro'
 import SubLayout1 from '../../SubLayout1'
 import { RowSpaceBetween, RowRight, RowLeft } from '../../generic/positioning'
-import { NavLinkButtonishIcon } from '../../generic/links'
 import { ButtonSecondary } from '../../generic/buttons'
-import { IconCollect, IconData, IconAdmin, IconCopy } from '../../icons'
+import { IconCopy } from '../../icons'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-// import PropTypes from 'prop-types'
+import NavLinkButtonRow from '../../generic/NavLinkButtonRow'
 
 /**
  * Describe your component
@@ -40,18 +39,7 @@ const ProjectInfo = () => {
       <ProjectInfoLeft>
         <div>project name</div>
         <RowLeft>
-          <NavLinkButtonishIcon
-            to={`${projectUrl}/collecting`}
-            aria-label="Collect"
-          >
-            <IconCollect />
-          </NavLinkButtonishIcon>
-          <NavLinkButtonishIcon to={`${projectUrl}/data`} aria-label="Data">
-            <IconData />
-          </NavLinkButtonishIcon>
-          <NavLinkButtonishIcon to={`${projectUrl}/admin`} aria-label="Admin">
-            <IconAdmin />
-          </NavLinkButtonishIcon>
+          <NavLinkButtonRow projectUrl={projectUrl} />
           <ButtonSecondary>
             <IconCopy />
           </ButtonSecondary>
@@ -75,7 +63,5 @@ const Details = () => {
     />
   )
 }
-
-Details.propTypes = {}
 
 export default Details

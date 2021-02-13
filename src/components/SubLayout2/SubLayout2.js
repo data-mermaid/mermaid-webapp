@@ -2,10 +2,10 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
 
-import { NavLinkButtonish, NavLinkButtonishIcon } from '../generic/links'
+import { NavLinkButtonish } from '../generic/links'
 import { Column, Row } from '../generic/positioning'
-import { IconCollect, IconData, IconAdmin } from '../icons'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
+import NavLinkButtonRow from '../generic/NavLinkButtonRow'
 
 /**
  * Describe your component
@@ -38,18 +38,7 @@ const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
         <NavContainer>
           <NavLinkButtonish to={projectUrl}>Project Overview</NavLinkButtonish>
           <Row>
-            <NavLinkButtonishIcon
-              to={`${projectUrl}/collecting`}
-              aria-label="Collect"
-            >
-              <IconCollect />
-            </NavLinkButtonishIcon>
-            <NavLinkButtonishIcon to={`${projectUrl}/data`} aria-label="Data">
-              <IconData />
-            </NavLinkButtonishIcon>
-            <NavLinkButtonishIcon to={`${projectUrl}/admin`} aria-label="Admin">
-              <IconAdmin />
-            </NavLinkButtonishIcon>
+            <NavLinkButtonRow projectUrl={projectUrl} />
           </Row>
         </NavContainer>
         <div>{lowerLeft}</div>
