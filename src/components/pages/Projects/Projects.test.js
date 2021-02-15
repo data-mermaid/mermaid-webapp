@@ -1,11 +1,13 @@
 import '@testing-library/jest-dom/extend-expect'
 // import React from 'react'
-// import { render } from '@testing-library/react'
+// import {
+//   renderAuthenticated,
+//   screen,
+// } from '../../../testUtilities/testingLibraryWithHelpers'
 
 // import Projects from './Projects'
 
 test('Projects component renders with the expected UI elements', () => {
-  // const utilities = render(
-  // <Projects />)
-  // expect(utilities.getByText('I should fail'))
+  // const utilities = renderAuthenticated(<Projects />)
+  // expect(screen.getByText('I should fail'))
 })

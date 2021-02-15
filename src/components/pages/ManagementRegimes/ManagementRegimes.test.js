@@ -1,10 +1,13 @@
 import '@testing-library/jest-dom/extend-expect'
 // import React from 'react'
-// import { renderAuthenticated } from '../../../testUtilities/testingLibraryWithHelpers'
+// import {
+//   renderAuthenticated,
+//   screen,
+// } from '../../../testUtilities/testingLibraryWithHelpers'
 
 // import ManagementRegimes from './ManagementRegimes'
 
 test('ManagementRegimes component renders with the expected UI elements', () => {
   // const utilities = renderAuthenticated(<ManagementRegimes />)
-  // expect(utilities.getByText('I should fail'))
+  // expect(screen.getByText('I should fail'))
 })
