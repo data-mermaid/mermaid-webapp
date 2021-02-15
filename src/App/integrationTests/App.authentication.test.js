@@ -4,8 +4,8 @@ import {
   renderAuthenticated,
   renderUnauthenticated,
   screen,
-} from '../testUtilities/testingLibraryWithHelpers'
-import App from './App'
+} from '../../testUtilities/testingLibraryWithHelpers'
+import App from '../App'
 
 test('App renders the initial screen as expected for a authenticated user', () => {
   renderAuthenticated(<App />)
