@@ -1,10 +1,13 @@
 import '@testing-library/jest-dom/extend-expect'
 // import React from 'react'
-// import { render } from '@testing-library/react'
+// import {
+//   renderAuthenticated,
+//   screen,
+// } from '../../../testUtilities/testingLibraryWithHelpers'
 
 // import Breadcrumbs from './Breadcrumbs'
 
 test('Breadcrumbs component renders with the expected UI elements', () => {
   // const utilities = render(<Breadcrumbs />)
-  // expect(utilities.getByText('I should fail'))
+  // expect(screen.getByText('I should fail'))
 })
