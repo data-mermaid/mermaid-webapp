@@ -1,4 +1,5 @@
 import React from 'react'
+import CollectingNav from '../../CollectingNav'
 import SubLayout2 from '../../SubLayout2'
 // import PropTypes from 'prop-types'
 
@@ -8,7 +9,7 @@ import SubLayout2 from '../../SubLayout2'
 const Collect = () => {
   return (
     <SubLayout2
-      lowerLeft={<>Side bar</>}
+      lowerLeft={<CollectingNav />}
       lowerRight={<>Collect Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

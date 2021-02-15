@@ -38,19 +38,19 @@ export const useRoutes = (apiService) => {
 
     {
       path: '/projects/:projectId/graphs-and-maps',
-      name: 'Admin',
+      name: 'Graphs and Maps',
       Component: GraphsAndMaps,
     },
 
     {
-      path: '/projects/:projectId/sites',
-      name: 'Admin',
+      path: '/projects/:projectId/sites/:workflow?',
+      name: 'Sites',
       Component: Sites,
     },
 
     {
-      path: '/projects/:projectId/management-regimes',
-      name: 'Admin',
+      path: '/projects/:projectId/management-regimes/:workflow?',
+      name: 'Management Regimes',
       Component: ManagementRegimes,
     },
   ]
