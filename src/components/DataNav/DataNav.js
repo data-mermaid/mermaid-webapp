@@ -21,11 +21,17 @@ const DataNav = () => {
         <IconGraph />
         Graphs and Maps
       </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/sites`}>
+      {/* When we are using the 'data workflow' we want the sites page to show the side bar/nav
+       for the data workflow with the workflow=data parameter (its different from the sidebar
+       nav for the 'collecting workflow') */}
+      <NavLinkSidebar to={`${currentProjectPath}/sites/data`}>
         <IconSites />
         Sites
       </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/management-regimes`}>
+      {/* When we are using the 'data workflow' we want the management regimes page to show the side bar/nav
+       for the data workflow with the workflow=data parameter (its different from the sidebar
+       nav for the 'collecting workflow') */}
+      <NavLinkSidebar to={`${currentProjectPath}/management-regimes/data`}>
         <IconCopy />
         Management Regimes
       </NavLinkSidebar>
