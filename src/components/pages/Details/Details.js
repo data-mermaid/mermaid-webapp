@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/macro'
 import SubLayout1 from '../../SubLayout1'
-import { RowSpaceBetween, RowRight, RowLeft } from '../../generic/positioning'
+import { RowSpaceBetween, RowLeft, Column } from '../../generic/positioning'
 import { ButtonSecondary } from '../../generic/buttons'
 import { IconCopy } from '../../icons'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
@@ -11,23 +11,20 @@ import NavLinkButtonRow from '../../generic/NavLinkButtonRow'
  * Describe your component
  */
 
-const GlobalWrapper = styled(RowSpaceBetween)`
+const ProjectInfoWrapper = styled(RowSpaceBetween)`
   margin-bottom: 20px;
   border-bottom: 1px solid;
   padding: 10px 100px;
   align-items: center;
 `
 
-const ProjectInfoLeft = styled(RowLeft)`
-  flex-direction: column;
-
+const ProjectInfoLeft = styled(Column)`
   div:first-child {
     font-size: 3em;
   }
 `
 
-const ProjectInfoRight = styled(RowRight)`
-  flex-direction: column;
+const ProjectInfoRight = styled(Column)`
   align-items: flex-end;
 `
 
@@ -35,7 +32,7 @@ const ProjectInfo = () => {
   const projectUrl = useCurrentProjectPath()
 
   return (
-    <GlobalWrapper>
+    <ProjectInfoWrapper>
       <ProjectInfoLeft>
         <div>project name</div>
         <RowLeft>
@@ -51,7 +48,7 @@ const ProjectInfo = () => {
         <div>date</div>
         <div>country - number of sites</div>
       </ProjectInfoRight>
-    </GlobalWrapper>
+    </ProjectInfoWrapper>
   )
 }
 
