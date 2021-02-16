@@ -14,7 +14,7 @@ const CollectingNav = () => {
     <Column as="nav">
       <NavLinkSidebar to={`${currentProjectPath}/collecting`}>
         <IconCollect />
-        Submitted
+        Collecting
       </NavLinkSidebar>
       <NavLinkSidebar to={`${currentProjectPath}/sites`}>
         <IconSites />
