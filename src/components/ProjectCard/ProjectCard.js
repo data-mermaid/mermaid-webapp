@@ -7,7 +7,6 @@ import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import { NavLinkButtonishIcon } from '../generic/links'
 import NavLinkButtonGroup from '../generic/NavLinkButtonGroup'
-import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 
 /**
  * Describe your component
@@ -52,7 +51,7 @@ const ProjectCard = ({
   lastUpdatedDate,
 }) => {
   const [offlineStatus, setOfflineStatus] = useState(offlineReady)
-  const projectUrl = useCurrentProjectPath()
+  const projectUrl = `projects/${name}`
 
   const toggleOfflineStatus = (e) => {
     setOfflineStatus(e.target.checked)
@@ -71,10 +70,7 @@ const ProjectCard = ({
           <ButtonSecondary>
             <IconCopy />
           </ButtonSecondary>
-          <NavLinkButtonishIcon
-            to={`${projectUrl}`}
-            aria-label="Project Overview"
-          >
+          <NavLinkButtonishIcon to={projectUrl} aria-label="Project Overview">
             Project Overview
           </NavLinkButtonishIcon>
         </ButtonGroups>
