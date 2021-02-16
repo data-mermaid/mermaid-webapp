@@ -9,7 +9,7 @@ import Layout from '../components/generic/Layout'
 import theme from '../theme'
 import useEnsureLogin from '../library/useEnsureLogin'
 import { useRoutes } from '../library/useRoutes'
-import { useMermaidApi } from '../ApiGateway/useMermaidApi'
+import { useMermaidApi } from '../ApiServices/useMermaidApi'
 
 function App() {
   const layoutProps = {

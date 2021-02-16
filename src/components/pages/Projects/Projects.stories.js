@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Projects from '.'
-import mockApiService from '../../../ApiGateway/mockApiService'
+import mockApiService from '../../../ApiServices/mockApiService'
 
 export default {
   title: 'Projects',
