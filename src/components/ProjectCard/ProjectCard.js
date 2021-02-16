@@ -2,21 +2,30 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import pluralize from '../../library/pluralize'
+import { RowSpaceBetween, RowLeft, Column } from '../generic/positioning'
+import { ButtonSecondary } from '../generic/buttons'
+import { IconCopy } from '../icons'
+import { NavLinkButtonishIcon } from '../generic/links'
+import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
 /**
  * Describe your component
  */
-const ItemRow = styled.div``
-
-const Header = styled(ItemRow)`
-  font-size: 2rem;
+const ProjectCardLeft = styled(Column)`
+  div:first-child {
+    font-size: 2em;
+  }
 `
 
-const ButtonGroups = styled.div`
+const ProjectCardRight = styled(Column)`
+  align-items: flex-end;
+`
+
+const ButtonGroups = styled(RowLeft)`
   visibility: hidden;
 `
-const CardWrapper = styled.div`
-  display: flex;
+
+const CardWrapper = styled(RowSpaceBetween)`
   align-items: center;
   padding: 10px;
   margin-bottom: 10px;
@@ -32,16 +41,6 @@ const CardWrapper = styled.div`
 
 const InputCheckBox = styled.input``
 
-const LeftWrapper = styled.div`
-  flex-grow: 1;
-`
-
-const RightWrapper = styled.div`
-  display: flex;
-  flex-flow: column;
-  align-items: flex-end;
-`
-
 const ProjectCard = ({
   name,
   country,
@@ -50,6 +49,7 @@ const ProjectCard = ({
   lastUpdatedDate,
 }) => {
   const [offlineStatus, setOfflineStatus] = useState(offlineReady)
+  const projectUrl = `projects/${name}`
 
   const toggleOfflineStatus = (e) => {
     setOfflineStatus(e.target.checked)
@@ -57,16 +57,24 @@ const ProjectCard = ({
 
   return (
     <CardWrapper>
-      <LeftWrapper>
-        <Header>{name}</Header>
-        <ItemRow>
+      <ProjectCardLeft>
+        <div>{name}</div>
+        <div>
           {country} - {numberOfSites}{' '}
           {numberOfSites && pluralize(numberOfSites, 'site', 'sites')}
-        </ItemRow>
-        <ButtonGroups>Buttons group</ButtonGroups>
-      </LeftWrapper>
-      <RightWrapper>
-        <ItemRow>
+        </div>
+        <ButtonGroups>
+          <NavLinkButtonGroup projectUrl={projectUrl} />
+          <ButtonSecondary>
+            <IconCopy />
+          </ButtonSecondary>
+          <NavLinkButtonishIcon to={projectUrl} aria-label="Project Overview">
+            Project Overview
+          </NavLinkButtonishIcon>
+        </ButtonGroups>
+      </ProjectCardLeft>
+      <ProjectCardRight>
+        <div>
           Offline Ready{' '}
           <InputCheckBox
             id="offline-toggle"
@@ -74,10 +82,10 @@ const ProjectCard = ({
             checked={offlineStatus}
             onChange={toggleOfflineStatus}
           />
-        </ItemRow>
-        <ItemRow>Last Updated</ItemRow>
-        <ItemRow>{lastUpdatedDate}</ItemRow>
-      </RightWrapper>
+        </div>
+        <div>Last Updated</div>
+        <div>{lastUpdatedDate}</div>
+      </ProjectCardRight>
     </CardWrapper>
   )
 }

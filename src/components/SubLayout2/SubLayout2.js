@@ -5,7 +5,7 @@ import styled from 'styled-components/macro'
 import { NavLinkButtonish } from '../generic/links'
 import { Column, Row } from '../generic/positioning'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import NavLinkButtonRow from '../generic/NavLinkButtonRow'
+import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
 /**
  * Describe your component
@@ -38,7 +38,7 @@ const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
         <NavContainer>
           <NavLinkButtonish to={projectUrl}>Project Overview</NavLinkButtonish>
           <Row>
-            <NavLinkButtonRow projectUrl={projectUrl} />
+            <NavLinkButtonGroup projectUrl={projectUrl} />
           </Row>
         </NavContainer>
         <div>{lowerLeft}</div>
