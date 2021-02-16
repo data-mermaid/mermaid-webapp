@@ -4,18 +4,18 @@ import SubLayout2 from '../../SubLayout2'
 // import PropTypes from 'prop-types'
 
 /**
- * Project Admin Page
+ * Describe your component
  */
-const Admin = () => {
+const DataSharing = () => {
   return (
     <SubLayout2
       lowerLeft={<AdminNav />}
-      lowerRight={<>Admin Placeholder</>}
+      lowerRight={<>Data Sharing Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />
   )
 }
 
-Admin.propTypes = {}
+// DataSharing.propTypes = {}
 
-export default Admin
+export default DataSharing

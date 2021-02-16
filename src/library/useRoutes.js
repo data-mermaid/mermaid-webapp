@@ -2,11 +2,14 @@ import React from 'react'
 import Admin from '../components/pages/Admin'
 import Collect from '../components/pages/Collect'
 import Data from '../components/pages/Data'
+import DataSharing from '../components/pages/DataSharing'
 import Details from '../components/pages/Details'
+import FishFamilies from '../components/pages/FishFamilies'
 import GraphsAndMaps from '../components/pages/GraphsAndMaps'
 import ManagementRegimes from '../components/pages/ManagementRegimes'
 import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
+import Users from '../components/pages/Users'
 
 export const useRoutes = (apiService) => {
   const routes = [
@@ -53,12 +56,34 @@ export const useRoutes = (apiService) => {
       name: 'Management Regimes',
       Component: ManagementRegimes,
     },
+    {
+      path: '/projects/:projectId/users',
+      name: 'Users',
+      Component: Users,
+    },
+    {
+      path: '/projects/:projectId/fish-families',
+      name: 'Fish Families',
+      Component: FishFamilies,
+    },
+    {
+      path: '/projects/:projectId/data-sharing',
+      name: 'Data Sharing',
+      Component: DataSharing,
+    },
   ]
 
-  const _getContainingRoutes = (reactRouterRenderProps) =>
-    routes.filter((route) => {
-      return reactRouterRenderProps.match.path.includes(route.path)
+  const _getContainingRoutes = (reactRouterRenderProps) => {
+    // adding a slash to the matchee and matcher makes sure partial words dont get matched and extra crumbs dont get generated
+    // EG data-sharing matches the data route and creates an extra data crumb without this fix
+    const reactRouterMatchPathWithEndingSlashForBetterFiltering = `${reactRouterRenderProps.match.path}/`
+
+    return routes.filter((route) => {
+      return reactRouterMatchPathWithEndingSlashForBetterFiltering.includes(
+        `${route.path}/`,
+      )
     })
+  }
   const _generateUrlsWithParameterValues = (
     originalRoutePath,
     reactRouterRenderProps,
