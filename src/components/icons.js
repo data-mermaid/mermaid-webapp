@@ -6,10 +6,13 @@ import {
   faExternalLinkAlt,
   faFileAlt,
   faFilter,
+  faHeart,
   faMapMarkerAlt,
   faPencilAlt,
+  faShareAlt,
   faSortAmountDownAlt,
   faSortAmountUpAlt,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
@@ -23,8 +26,11 @@ export const IconExternalLink = () => (
   <FontAwesomeIcon icon={faExternalLinkAlt} />
 )
 export const IconFilter = () => <FontAwesomeIcon icon={faFilter} />
+export const IconFishFamilies = () => <FontAwesomeIcon icon={faHeart} />
 export const IconGraph = () => <FontAwesomeIcon icon={faChartBar} />
+export const IconSharing = () => <FontAwesomeIcon icon={faShareAlt} />
 export const IconSites = () => <FontAwesomeIcon icon={faMapMarkerAlt} />
 export const IconSortDown = () => <FontAwesomeIcon icon={faSortAmountDownAlt} />
 export const IconSortUp = () => <FontAwesomeIcon icon={faSortAmountUpAlt} />
 export const IconUp = () => <FontAwesomeIcon icon={faCaretUp} />
+export const IconUsers = () => <FontAwesomeIcon icon={faUsers} />
