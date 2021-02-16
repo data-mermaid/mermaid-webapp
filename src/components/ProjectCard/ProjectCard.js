@@ -10,7 +10,7 @@ import {
 import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import { NavLinkButtonishIcon } from '../generic/links'
-import NavLinkButtonRow from '../generic/NavLinkButtonRow'
+import NavLinkButtonGroup from '../generic/NavLinkButtonGroup'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 
 /**
@@ -71,7 +71,7 @@ const ProjectCard = ({
           {numberOfSites && pluralize(numberOfSites, 'site', 'sites')}
         </div>
         <ButtonGroups>
-          <NavLinkButtonRow projectUrl={projectUrl} />
+          <NavLinkButtonGroup projectUrl={projectUrl} />
           <ButtonSecondary>
             <IconCopy />
           </ButtonSecondary>

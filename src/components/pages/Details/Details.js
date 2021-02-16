@@ -6,7 +6,7 @@ import { ButtonSecondary } from '../../generic/buttons'
 import { H1 } from '../../generic/text'
 import { IconCopy } from '../../icons'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import NavLinkButtonRow from '../../generic/NavLinkButtonRow'
+import NavLinkButtonGroup from '../../generic/NavLinkButtonGroup'
 
 /**
  * Describe your component
@@ -37,7 +37,7 @@ const ProjectInfo = () => {
       <ProjectInfoLeft>
         <H1>project name</H1>
         <RowLeft>
-          <NavLinkButtonRow projectUrl={projectUrl} />
+          <NavLinkButtonGroup projectUrl={projectUrl} />
           <ButtonSecondary>
             <IconCopy />
           </ButtonSecondary>

@@ -5,7 +5,7 @@ import { IconCollect, IconData, IconAdmin } from '../../icons'
 /**
  * Describe your component
  */
-const NavLinkButtonRow = ({ projectUrl }) => {
+const NavLinkButtonGroup = ({ projectUrl }) => {
   return (
     <>
       <NavLinkButtonishIcon
@@ -24,8 +24,8 @@ const NavLinkButtonRow = ({ projectUrl }) => {
   )
 }
 
-NavLinkButtonRow.propTypes = {
+NavLinkButtonGroup.propTypes = {
   projectUrl: PropTypes.string.isRequired,
 }
 
-export default NavLinkButtonRow
+export default NavLinkButtonGroup
