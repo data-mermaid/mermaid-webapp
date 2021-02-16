@@ -5,7 +5,7 @@ import styled from 'styled-components/macro'
 import { NavLinkButtonish } from '../generic/links'
 import { Column, Row } from '../generic/positioning'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import NavLinkButtonGroup from '../generic/NavLinkButtonGroup'
+import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
 /**
  * Describe your component

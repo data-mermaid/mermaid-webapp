@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { NavLinkButtonishIcon } from '../links'
-import { IconCollect, IconData, IconAdmin } from '../../icons'
+import { NavLinkButtonishIcon } from '../generic/links'
+import { IconCollect, IconData, IconAdmin } from '../icons'
 /**
  * Describe your component
  */

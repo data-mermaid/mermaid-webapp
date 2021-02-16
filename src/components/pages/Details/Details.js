@@ -6,7 +6,7 @@ import { ButtonSecondary } from '../../generic/buttons'
 import { H1 } from '../../generic/text'
 import { IconCopy } from '../../icons'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import NavLinkButtonGroup from '../../generic/NavLinkButtonGroup'
+import NavLinkButtonGroup from '../../NavLinkButtonGroup'
 
 /**
  * Describe your component
