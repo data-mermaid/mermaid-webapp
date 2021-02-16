@@ -3,6 +3,7 @@ import styled from 'styled-components/macro'
 import SubLayout1 from '../../SubLayout1'
 import { RowSpaceBetween, RowLeft, Column } from '../../generic/positioning'
 import { ButtonSecondary } from '../../generic/buttons'
+import { H1 } from '../../generic/text'
 import { IconCopy } from '../../icons'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import NavLinkButtonRow from '../../generic/NavLinkButtonRow'
@@ -34,7 +35,7 @@ const ProjectInfo = () => {
   return (
     <ProjectInfoWrapper>
       <ProjectInfoLeft>
-        <div>project name</div>
+        <H1>project name</H1>
         <RowLeft>
           <NavLinkButtonRow projectUrl={projectUrl} />
           <ButtonSecondary>
