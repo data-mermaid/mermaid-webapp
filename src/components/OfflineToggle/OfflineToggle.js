@@ -8,10 +8,21 @@ const ToggleCss = raw('react-toggle/style.css')
 
 const ToggleWrapper = styled.div`
   ${ToggleCss}
-  & .react-toggle--checked .react-toggle-track {
+  & .react-toggle-track {
+    height: 16px;
+    width: 32px;
+  }
+  .react-toggle-thumb {
+    top: 0px;
+    left: 0px;
+    height: 16px;
+    width: 16px;
+  }
+  .react-toggle--checked .react-toggle-track {
     background-color: red;
   }
   .react-toggle--checked .react-toggle-thumb {
+    left: 16px;
     border-color: red;
   }
   .react-toggle--checked:hover:not(.react-toggle--disabled)
@@ -28,8 +39,9 @@ const OfflineToggle = ({ onChange }) => {
   return (
     <ToggleWrapper>
       <Toggle
-        onChange={handleChange}
+        id="offline-toggle-switch"
         aria-label="offline-toggle-switch"
+        onChange={handleChange}
         icons={false}
       />
     </ToggleWrapper>
