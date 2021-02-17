@@ -1,11 +1,16 @@
 import React from 'react'
+import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { RowSpaceBetween, RowRight, RowLeft } from '../generic/positioning'
 import OfflineToggle from '../OfflineToggle'
+import { IconRefresh } from '../icons'
 
 /**
  * Describe your component
  */
+const IconStyleWrapper = styled.div`
+  color: grey;
+`
 
 const Footer = () => {
   return (
@@ -13,7 +18,9 @@ const Footer = () => {
       <RowLeft>
         <div>© 2021 Mermaid Version v1.0.0</div>
         <OfflineToggle />
-        <div>Refresh</div>
+        <IconStyleWrapper>
+          <IconRefresh />
+        </IconStyleWrapper>
       </RowLeft>
       <RowRight as="nav">
         <Link to="/#">Help</Link>
