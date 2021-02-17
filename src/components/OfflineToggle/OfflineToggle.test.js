@@ -10,6 +10,7 @@ import OfflineToggle from './OfflineToggle'
 const setup = () => {
   const utils = renderAuthenticated(<OfflineToggle />)
   const input = utils.getByLabelText('offline-toggle-switch')
+
   return {
     input,
     ...utils,
@@ -18,6 +19,7 @@ const setup = () => {
 
 test('Toggle wifi is false initially, should be true when toggle is switch', () => {
   const { input } = setup()
+
   expect(input.checked).toBe(false)
   fireEvent.change(input, { target: { checked: true } })
   expect(input.checked).toBe(true)

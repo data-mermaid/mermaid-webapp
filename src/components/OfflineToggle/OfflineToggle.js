@@ -8,7 +8,7 @@ import Switch from 'react-switch'
 const OfflineToggle = () => {
   const [checked, setChecked] = useState(false)
 
-  const handleChange = (checked) => setChecked(checked)
+  const handleChange = (value) => setChecked(value)
 
   return (
     <Switch
