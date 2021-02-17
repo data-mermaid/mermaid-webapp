@@ -13,6 +13,7 @@ import {
   faSortAmountDownAlt,
   faSortAmountUpAlt,
   faUsers,
+  faSyncAlt,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
@@ -34,3 +35,4 @@ export const IconSortDown = () => <FontAwesomeIcon icon={faSortAmountDownAlt} />
 export const IconSortUp = () => <FontAwesomeIcon icon={faSortAmountUpAlt} />
 export const IconUp = () => <FontAwesomeIcon icon={faCaretUp} />
 export const IconUsers = () => <FontAwesomeIcon icon={faUsers} />
+export const IconRefresh = () => <FontAwesomeIcon icon={faSyncAlt} />
