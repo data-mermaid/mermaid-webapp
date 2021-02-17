@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { RowSpaceBetween, RowRight, RowLeft } from '../generic/positioning'
+import OfflineToggle from '../OfflineToggle'
 
 /**
  * Describe your component
@@ -11,7 +12,7 @@ const Footer = () => {
     <RowSpaceBetween>
       <RowLeft>
         <div>© 2021 Mermaid Version v1.0.0</div>
-        <div>Offline Toggle</div>
+        <OfflineToggle />
         <div>Refresh</div>
       </RowLeft>
       <RowRight as="nav">
