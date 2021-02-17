@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import Switch from 'react-switch'
+import PropTypes from 'prop-types'
 
 /**
  * Describe your component
  */
 
-const OfflineToggle = () => {
+const OfflineToggle = ({ onChange }) => {
   const [checked, setChecked] = useState(false)
 
-  const handleChange = (value) => setChecked(value)
+  const handleChange = (value) => {
+    setChecked(value)
+    onChange(value)
+  }
 
   return (
     <Switch
@@ -26,6 +30,7 @@ const OfflineToggle = () => {
   )
 }
 
-OfflineToggle.propTypes = {}
+OfflineToggle.propTypes = { onChange: PropTypes.func }
+OfflineToggle.defaultProps = { onChange: () => {} }
 
 export default OfflineToggle
