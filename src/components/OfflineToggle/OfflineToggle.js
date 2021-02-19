@@ -1,31 +1,54 @@
-import React, { useState } from 'react'
-import Switch from 'react-switch'
+import PropTypes from 'prop-types'
+import raw from 'raw.macro'
+import React from 'react'
+import styled from 'styled-components/macro'
+import Toggle from 'react-toggle'
 
-/**
- * Describe your component
- */
+const ToggleCss = raw('react-toggle/style.css')
 
-const OfflineToggle = () => {
-  const [checked, setChecked] = useState(false)
+const ToggleWrapper = styled.div`
+  ${ToggleCss}
+  & .react-toggle-track {
+    height: 16px;
+    width: 32px;
+  }
+  .react-toggle-thumb {
+    top: 0px;
+    left: 0px;
+    height: 16px;
+    width: 16px;
+  }
+  .react-toggle--checked .react-toggle-track {
+    background-color: red;
+  }
+  .react-toggle--checked .react-toggle-thumb {
+    left: 16px;
+    border-color: red;
+  }
+  .react-toggle--checked:hover:not(.react-toggle--disabled)
+    .react-toggle-track {
+    background-color: darkred;
+  }
+`
 
-  const handleChange = (value) => setChecked(value)
+const OfflineToggle = ({ onChange }) => {
+  const handleChange = (event) => {
+    onChange(event.target.checked)
+  }
 
   return (
-    <Switch
-      id="offline-toggle-switch"
-      aria-label="offline-toggle-switch"
-      onChange={handleChange}
-      checked={checked}
-      onColor="#CC0A00"
-      height={16}
-      width={32}
-      boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-      activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-      uncheckedIcon={false}
-    />
+    <ToggleWrapper>
+      <Toggle
+        id="offline-toggle-switch"
+        aria-label="offline-toggle-switch"
+        onChange={handleChange}
+        icons={false}
+      />
+    </ToggleWrapper>
   )
 }
 
-OfflineToggle.propTypes = {}
+OfflineToggle.propTypes = { onChange: PropTypes.func }
+OfflineToggle.defaultProps = { onChange: () => {} }
 
 export default OfflineToggle
