@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ButtonMenu from '../generic/ButtonMenu'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
 
@@ -8,7 +8,15 @@ import { RowSpaceBetween, RowRight } from '../generic/positioning'
  * Mermaid Header
  */
 
-const Header = ({ logout }) => {
+const Header = ({ logout, isOnline }) => {
+  const userMenuItems = []
+
+  const _showLogoutButtonIfOnline = useEffect(() => {
+    if (isOnline) {
+      userMenuItems.push({ label: 'Logout', onClick: logout })
+    }
+  }, [isOnline, userMenuItems])
+
   return (
     <RowSpaceBetween>
       Header
@@ -17,15 +25,15 @@ const Header = ({ logout }) => {
         <Link to="/#">Reports</Link>
         <Link to="/#">Reference</Link>
         <Link to="/#">Global Dashboard</Link>
-        <ButtonMenu
-          label="placeholder"
-          items={[{ label: 'Logout', onClick: logout }]}
-        />
+        <ButtonMenu label="placeholder" items={userMenuItems} />
       </RowRight>
     </RowSpaceBetween>
   )
 }
 
-Header.propTypes = { logout: PropTypes.func.isRequired }
+Header.propTypes = {
+  isOnline: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired,
+}
 
 export default Header

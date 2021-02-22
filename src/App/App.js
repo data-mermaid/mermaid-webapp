@@ -13,17 +13,17 @@ import { useMermaidApi } from '../ApiServices/useMermaidApi'
 import useOnlineStatus from '../library/useOnlineStatus'
 
 function App() {
-  const layoutProps = {
-    header: <Header />,
-    footer: <Footer />,
-  }
-
   const { isOnline } = useOnlineStatus()
   const { isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     isOnline,
   })
   const apiService = useMermaidApi()
   const { routes, getBreadCrumbs } = useRoutes(apiService)
+
+  const layoutProps = {
+    header: <Header logout={logoutMermaid} isOnline={isOnline} />,
+    footer: <Footer />,
+  }
 
   return (
     <ThemeProvider theme={theme}>
