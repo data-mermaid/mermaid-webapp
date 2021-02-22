@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 const useOnlineStatus = () => {
   const [isOnline, setIsOnline] = useState(false)
+
   const handleOnline = () => {
     setIsOnline(true)
   }
@@ -21,7 +22,7 @@ const useOnlineStatus = () => {
     return cleanup
   }, [])
 
-  return isOnline
+  return { isOnline }
 }
 
 export default useOnlineStatus
