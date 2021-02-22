@@ -4,8 +4,9 @@ import mockApiService from './mockApiService'
 
 export const useMermaidApi = () => {
   const [projects] = useState(mockApiService.projects)
+  const [collectRecords] = useState(mockApiService.collectRecords)
 
-  return { projects }
+  return { projects, collectRecords }
 }
 
 export const mermaidApiServicePropType = PropTypes.shape({

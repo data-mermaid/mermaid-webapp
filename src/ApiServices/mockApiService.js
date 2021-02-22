@@ -15,4 +15,18 @@ export default {
       lastUpdatedDate: '11/21/2021',
     },
   ],
+  collectRecords: [
+    {
+      method: 'Benthic LIT',
+      site: '1203',
+      management_regime: 'Ankivonjy no-take',
+      depth: 20,
+    },
+    {
+      method: 'Fish Belt',
+      site: 'Karang Kapal',
+      management_regime: 'Fisheries Utilization',
+      depth: 10,
+    },
+  ],
 }
