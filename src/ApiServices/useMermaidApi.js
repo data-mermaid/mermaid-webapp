@@ -5,8 +5,10 @@ import mockApiService from './mockApiService'
 export const useMermaidApi = () => {
   const [projects] = useState(mockApiService.projects)
   const [collectRecords] = useState(mockApiService.collectRecords)
+  const [sites] = useState(mockApiService.sites)
+  const [management_regimes] = useState(mockApiService.management_regimes)
 
-  return { projects, collectRecords }
+  return { projects, collectRecords, sites, management_regimes }
 }
 
 export const mermaidApiServicePropType = PropTypes.shape({
@@ -27,6 +29,19 @@ export const mermaidApiServicePropType = PropTypes.shape({
         protocol: PropTypes.string,
       }),
       depth: PropTypes.number,
+    }),
+  ),
+  sites: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      reef_type: PropTypes.string,
+      reef_zone: PropTypes.string,
+      exposure: PropTypes.string,
+    }),
+  ),
+  management_regimes: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
     }),
   ),
 })

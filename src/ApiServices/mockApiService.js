@@ -33,4 +33,35 @@ export default {
       depth: 10,
     },
   ],
+  sites: [
+    {
+      name: 'Amazing Maze',
+      reef_type: 'patch',
+      reef_zone: 'pinnacle',
+      exposure: 'exposed',
+    },
+    {
+      name: 'BU02',
+      reef_type: 'fringing',
+      reef_zone: 'back reef',
+      exposure: 'sheltered',
+    },
+    {
+      name: '1203',
+      reef_type: 'patch',
+      reef_zone: 'fore reef',
+      exposure: 'very sheltered',
+    },
+    {
+      name: 'Karang Kapal',
+      reef_type: 'patch',
+      reef_zone: 'back reef',
+      exposure: 'exposed',
+    },
+  ],
+  management_regimes: [
+    {name: 'Fisheries Utilization'},
+    {name: 'Ankivonjy no-take'},
+    {name: 'Bureta tabu'},
+  ]
 }
