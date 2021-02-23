@@ -18,4 +18,15 @@ export const mermaidApiServicePropType = PropTypes.shape({
       lastUpdatedDate: PropTypes.string,
     }),
   ),
+  collectRecords: PropTypes.arrayOf(
+    PropTypes.shape({
+      method: PropTypes.string,
+      site: PropTypes.string,
+      management_regime: PropTypes.string,
+      data: PropTypes.shape({
+        protocol: PropTypes.string,
+      }),
+      depth: PropTypes.number,
+    }),
+  ),
 })

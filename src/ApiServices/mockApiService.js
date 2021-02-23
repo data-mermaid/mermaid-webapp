@@ -17,15 +17,19 @@ export default {
   ],
   collectRecords: [
     {
+      id: '1',
       method: 'Benthic LIT',
       site: '1203',
       management_regime: 'Ankivonjy no-take',
+      data: { protocol: 'benthiclit' },
       depth: 20,
     },
     {
+      id: '2',
       method: 'Fish Belt',
       site: 'Karang Kapal',
       management_regime: 'Fisheries Utilization',
+      data: { protocol: 'fishbelt' },
       depth: 10,
     },
   ],
