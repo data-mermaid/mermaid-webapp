@@ -80,5 +80,8 @@
       "pre-commit": "yarn run prettier",
       "pre-push": "yarn run lint && yarn run test --watchAll=false"
     }
+  },
+  "jest": {
+    "restoreMocks": true
   }
 }
