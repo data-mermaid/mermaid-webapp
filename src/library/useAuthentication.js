@@ -28,7 +28,7 @@ const useAuthentication = ({ isOnline }) => {
       localStorage.setItem('hasAuth0Authenticated', 'true')
       setIsMermaidAuthenticated(true)
     }
-  }, [isAuth0Authenticated, isLoading])
+  }, [isAuth0Authenticated, isLoading, isOnline])
 
   const logoutMermaid = () => {
     if (isOnline) {
