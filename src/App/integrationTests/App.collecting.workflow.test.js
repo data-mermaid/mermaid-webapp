@@ -2,14 +2,14 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import {
   fireEvent,
-  renderAuthenticated,
+  renderAuthenticatedOnline,
   screen,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
 test('Collecting workflow shows proper nav when routing for sites page', () => {
-  renderAuthenticated(<App />)
+  renderAuthenticatedOnline(<App />)
   fireEvent.click(screen.getAllByLabelText('Collect')[0])
   fireEvent.click(screen.getByText('Sites'))
 
@@ -27,7 +27,7 @@ test('Collecting workflow shows proper nav when routing for sites page', () => {
 })
 
 test('Collecting workflow shows proper nav when routing for management regimes page', () => {
-  renderAuthenticated(<App />)
+  renderAuthenticatedOnline(<App />)
   fireEvent.click(screen.getAllByLabelText('Collect')[0])
   fireEvent.click(screen.getByText('Management Regimes'))
 
@@ -44,7 +44,7 @@ test('Collecting workflow shows proper nav when routing for management regimes p
   expect(within(main).queryByText('Graphs and Maps')).toBeNull()
 })
 test('Collecting workflow shows proper nav when routing for collecting page', () => {
-  renderAuthenticated(<App />)
+  renderAuthenticatedOnline(<App />)
   fireEvent.click(screen.getAllByLabelText('Collect')[0])
 
   expect(screen.getByText('Collect Placeholder'))
