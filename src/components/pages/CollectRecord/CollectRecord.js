@@ -1,7 +1,7 @@
 import React from 'react'
 import SubLayout2 from '../../SubLayout2'
 import CollectingNav from '../../CollectingNav'
-import SelectInputForm from '../../generic/SelectInputForm'
+import InputSelect from '../../generic/InputSelect'
 import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
 
 /**
@@ -14,8 +14,8 @@ const CollectBody = ({ apiService }) => {
 
   return (
     <>
-      <SelectInputForm key="sites" label="Site" options={sites} />
-      <SelectInputForm
+      <InputSelect key="sites" label="Site" options={sites} />
+      <InputSelect
         key="managementRegimes"
         label="Management Regime"
         options={managementRegimes}

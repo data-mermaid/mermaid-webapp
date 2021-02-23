@@ -10,7 +10,7 @@ const SelectInputStyle = styled(Column)`
   margin: 10px;
 `
 
-const SelectInputForm = ({ label, options }) => {
+const InputSelect = ({ label, options }) => {
   const optionList = options.map(({ name }) => (
     <option key={name} value={name}>
       {name}
@@ -18,19 +18,14 @@ const SelectInputForm = ({ label, options }) => {
   ))
 
   return (
-    <SelectInputStyle>
+    <SelectInputStyle id="mermaid-select">
       <label htmlFor="mermaid-select">{label}:</label>
-      <select id="mermaid-select">
-        {/* <option value="dog">Dog</option>
-        <option value="cat">Cat</option>
-        <option value="hamster">Hamster</option> */}
-        {optionList}
-      </select>
+      <select>{optionList}</select>
     </SelectInputStyle>
   )
 }
 
-SelectInputForm.propTypes = {
+InputSelect.propTypes = {
   label: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -39,4 +34,4 @@ SelectInputForm.propTypes = {
   ).isRequired,
 }
 
-export default SelectInputForm
+export default InputSelect
