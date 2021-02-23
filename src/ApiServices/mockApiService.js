@@ -60,8 +60,8 @@ export default {
     },
   ],
   management_regimes: [
-    {name: 'Fisheries Utilization'},
-    {name: 'Ankivonjy no-take'},
-    {name: 'Bureta tabu'},
-  ]
+    { name: 'Fisheries Utilization' },
+    { name: 'Ankivonjy no-take' },
+    { name: 'Bureta tabu' },
+  ],
 }
