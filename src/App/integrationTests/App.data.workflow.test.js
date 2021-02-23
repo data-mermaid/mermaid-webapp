@@ -2,14 +2,14 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import {
   fireEvent,
-  renderAuthenticated,
+  renderAuthenticatedOnline,
   screen,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
 test('Data workflow shows proper nav when routing for sites page', () => {
-  renderAuthenticated(<App />)
+  renderAuthenticatedOnline(<App />)
   fireEvent.click(screen.getAllByLabelText('Data')[0])
   fireEvent.click(screen.getByText('Sites'))
 
@@ -27,7 +27,7 @@ test('Data workflow shows proper nav when routing for sites page', () => {
 })
 
 test('Data workflow shows proper nav when routing for management and regimes page', () => {
-  renderAuthenticated(<App />)
+  renderAuthenticatedOnline(<App />)
   fireEvent.click(screen.getAllByLabelText('Data')[0])
   fireEvent.click(screen.getByText('Management Regimes'))
 
@@ -45,7 +45,7 @@ test('Data workflow shows proper nav when routing for management and regimes pag
 })
 
 test('Data workflow shows proper nav when routing for data/submitted page', () => {
-  renderAuthenticated(<App />)
+  renderAuthenticatedOnline(<App />)
   fireEvent.click(screen.getAllByLabelText('Data')[0])
 
   expect(screen.getByText('Data Placeholder'))
@@ -62,7 +62,7 @@ test('Data workflow shows proper nav when routing for data/submitted page', () =
 })
 
 test('Data workflow shows proper nav when routing graphs and maps page', () => {
-  renderAuthenticated(<App />)
+  renderAuthenticatedOnline(<App />)
   fireEvent.click(screen.getAllByLabelText('Data')[0])
   fireEvent.click(screen.getByText('Graphs and Maps'))
 
