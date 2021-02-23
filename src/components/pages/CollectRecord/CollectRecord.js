@@ -9,8 +9,8 @@ import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
  */
 
 // this will be a separate component soon...
-const CollectBody = ({ apiData }) => {
-  const { sites, managementRegimes } = apiData
+const CollectBody = ({ apiService }) => {
+  const { sites, managementRegimes } = apiService
 
   return (
     <>
@@ -28,10 +28,14 @@ const CollectRecord = ({ apiService }) => {
   return (
     <SubLayout2
       lowerLeft={<CollectingNav />}
-      lowerRight={<CollectBody apiData={apiService} />}
+      lowerRight={<CollectBody apiService={apiService} />}
       upperRight={<>Sub layout top bar</>}
     />
   )
+}
+
+CollectBody.propTypes = {
+  apiService: mermaidApiServicePropType.isRequired,
 }
 
 CollectRecord.propTypes = {
