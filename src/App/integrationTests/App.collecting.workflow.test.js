@@ -47,8 +47,6 @@ test('Collecting workflow shows proper nav when routing for collecting page', ()
   renderAuthenticated(<App />)
   fireEvent.click(screen.getAllByLabelText('Collect')[0])
 
-  expect(screen.getByText('Collect Placeholder'))
-
   // use main to limit selection scope to avoid the nav links in the breadcrumbs
   const main = screen.getByRole('main')
 
