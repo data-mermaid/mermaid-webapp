@@ -59,7 +59,7 @@ export default {
       exposure: 'exposed',
     },
   ],
-  management_regimes: [
+  managementRegimes: [
     { name: 'Fisheries Utilization' },
     { name: 'Ankivonjy no-take' },
     { name: 'Bureta tabu' },

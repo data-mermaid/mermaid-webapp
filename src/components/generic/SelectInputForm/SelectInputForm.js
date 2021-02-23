@@ -31,8 +31,12 @@ const SelectInputForm = ({ label, options }) => {
 }
 
 SelectInputForm.propTypes = {
-  label: PropTypes.string,
-  options: PropTypes.array,
+  label: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  ).isRequired,
 }
 
 export default SelectInputForm

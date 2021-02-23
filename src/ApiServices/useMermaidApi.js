@@ -6,9 +6,9 @@ export const useMermaidApi = () => {
   const [projects] = useState(mockApiService.projects)
   const [collectRecords] = useState(mockApiService.collectRecords)
   const [sites] = useState(mockApiService.sites)
-  const [management_regimes] = useState(mockApiService.management_regimes)
+  const [managementRegimes] = useState(mockApiService.managementRegimes)
 
-  return { projects, collectRecords, sites, management_regimes }
+  return { projects, collectRecords, sites, managementRegimes }
 }
 
 export const mermaidApiServicePropType = PropTypes.shape({
@@ -39,7 +39,7 @@ export const mermaidApiServicePropType = PropTypes.shape({
       exposure: PropTypes.string,
     }),
   ),
-  management_regimes: PropTypes.arrayOf(
+  managementRegimes: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
     }),
