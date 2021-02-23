@@ -30,12 +30,12 @@ export const useRoutes = (apiService) => {
       Component: () => <Collect apiService={apiService} />,
     },
     {
-      path: '/projects/:projectId/collecting/fishbelt/:id',
+      path: '/projects/:projectId/collecting/fishbelt/:recordId',
       name: 'Fish Belt',
       Component: () => <CollectRecord apiService={apiService} />,
     },
     {
-      path: '/projects/:projectId/collecting/benthiclit/:id',
+      path: '/projects/:projectId/collecting/benthiclit/:recordId',
       name: 'Benthic LIT',
       Component: () => <CollectRecord apiService={apiService} />,
     },

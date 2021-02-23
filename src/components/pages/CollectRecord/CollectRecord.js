@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import SubLayout2 from '../../SubLayout2'
 import CollectingNav from '../../CollectingNav'
 import InputSelect from '../../generic/InputSelect'
+import { fetchCollectRecord } from '../../../ApiServices/fetchApiService'
 import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
 
 /**
@@ -11,13 +13,21 @@ import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
 // this will be a separate component soon...
 const CollectBody = ({ apiService }) => {
   const { sites, managementRegimes } = apiService
+  const { recordId } = useParams()
+  const result = fetchCollectRecord(recordId)[0]
 
   return (
     <>
-      <InputSelect key="sites" label="Site" options={sites} />
+      <InputSelect
+        key="sites"
+        label="Site"
+        options={sites}
+        value={result.site}
+      />
       <InputSelect
         key="managementRegimes"
         label="Management Regime"
+        value={result.management_regime}
         options={managementRegimes}
       />
     </>

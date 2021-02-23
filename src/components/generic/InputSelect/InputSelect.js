@@ -10,7 +10,7 @@ const SelectInputStyle = styled(Column)`
   margin: 10px;
 `
 
-const InputSelect = ({ label, options }) => {
+const InputSelect = ({ label, options, value }) => {
   const optionList = options.map(({ name }) => (
     <option key={name} value={name}>
       {name}
@@ -20,7 +20,9 @@ const InputSelect = ({ label, options }) => {
   return (
     <SelectInputStyle id="mermaid-select">
       <label htmlFor="mermaid-select">{label}:</label>
-      <select>{optionList}</select>
+      <select value={value} onChange={() => {}}>
+        {optionList}
+      </select>
     </SelectInputStyle>
   )
 }
