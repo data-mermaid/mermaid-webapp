@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useEffect } from 'react'
+import React, { useMemo } from 'react'
 import ButtonMenu from '../generic/ButtonMenu'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
 
@@ -9,13 +9,10 @@ import { RowSpaceBetween, RowRight } from '../generic/positioning'
  */
 
 const Header = ({ logout, isOnline }) => {
-  const userMenuItems = []
-
-  const _showLogoutButtonIfOnline = useEffect(() => {
-    if (isOnline) {
-      userMenuItems.push({ label: 'Logout', onClick: logout })
-    }
-  }, [isOnline, userMenuItems])
+  const userMenuItems = useMemo(
+    () => (isOnline ? [{ label: 'Logout', onClick: logout }] : []),
+    [isOnline, logout],
+  )
 
   return (
     <RowSpaceBetween>

@@ -9,9 +9,10 @@ const useAuthentication = ({ isOnline }) => {
     logout,
   } = useAuth0()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
-  const isOffline = !isOnline
 
   useEffect(() => {
+    const isOffline = !isOnline
+
     if (
       !isAuth0Authenticated &&
       localStorage.getItem('hasAuth0Authenticated') === 'true' &&
@@ -28,7 +29,7 @@ const useAuthentication = ({ isOnline }) => {
       localStorage.setItem('hasAuth0Authenticated', 'true')
       setIsMermaidAuthenticated(true)
     }
-  }, [isAuth0Authenticated, isLoading, isOnline])
+  }, [isAuth0Authenticated, isLoading, isOnline, loginWithRedirect])
 
   const logoutMermaid = () => {
     if (isOnline) {
