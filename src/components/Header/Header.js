@@ -22,7 +22,7 @@ const Header = ({ logout, isOnline }) => {
         <Link to="/#">Reports</Link>
         <Link to="/#">Reference</Link>
         <Link to="/#">Global Dashboard</Link>
-        <ButtonMenu label="placeholder" items={userMenuItems} />
+        <ButtonMenu label="Fake User" items={userMenuItems} />
       </RowRight>
     </RowSpaceBetween>
   )
@@ -30,7 +30,10 @@ const Header = ({ logout, isOnline }) => {
 
 Header.propTypes = {
   isOnline: PropTypes.bool.isRequired,
-  logout: PropTypes.func.isRequired,
+  logout: PropTypes.func,
+}
+Header.defaultProps = {
+  logout: () => {},
 }
 
 export default Header
