@@ -4,42 +4,40 @@ import { useEffect, useState } from 'react'
 const useAuthentication = ({ isOnline }) => {
   const {
     isAuthenticated: isAuth0Authenticated,
-    loginWithRedirect,
-    isLoading,
-    logout,
+    loginWithRedirect: auth0LoginWithRedirect,
+    isLoading: isAuth0Loading,
+    logout: auth0Logout,
   } = useAuth0()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
 
   useEffect(() => {
     const isOffline = !isOnline
+    const hasPreviouslyAuthenticated =
+      localStorage.getItem('hasAuth0Authenticated') === 'true'
 
-    if (
-      !isAuth0Authenticated &&
-      localStorage.getItem('hasAuth0Authenticated') === 'true' &&
-      isOffline
-    ) {
+    if (!isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline) {
       setIsMermaidAuthenticated(true)
     }
-    if (!isAuth0Authenticated && !isLoading && isOnline) {
+    if (!isAuth0Authenticated && !isAuth0Loading && isOnline) {
       localStorage.removeItem('hasAuth0Authenticated')
       setIsMermaidAuthenticated(false)
-      loginWithRedirect()
+      auth0LoginWithRedirect()
     }
     if (isAuth0Authenticated) {
       localStorage.setItem('hasAuth0Authenticated', 'true')
       setIsMermaidAuthenticated(true)
     }
-  }, [isAuth0Authenticated, isLoading, isOnline, loginWithRedirect])
+  }, [isAuth0Authenticated, isAuth0Loading, isOnline, auth0LoginWithRedirect])
 
-  const logoutMermaid = () => {
+  const auth0LogoutMermaid = () => {
     if (isOnline) {
       localStorage.removeItem('hasAuth0Authenticated')
-      logout()
+      auth0Logout()
       setIsMermaidAuthenticated(false)
     }
   }
 
-  return { isMermaidAuthenticated, logoutMermaid }
+  return { isMermaidAuthenticated, auth0LogoutMermaid }
 }
 
 export default useAuthentication
