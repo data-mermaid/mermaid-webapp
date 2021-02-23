@@ -9,6 +9,14 @@ const useAuthentication = ({ isOnline }) => {
     logout: auth0Logout,
   } = useAuth0()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
+  const setAuthenticatedStates = () => {
+    localStorage.setItem('hasAuth0Authenticated', 'true')
+    setIsMermaidAuthenticated(true)
+  }
+  const setInauthenticatedStates = () => {
+    localStorage.removeItem('hasAuth0Authenticated')
+    setIsMermaidAuthenticated(false)
+  }
 
   useEffect(() => {
     const isOffline = !isOnline
@@ -19,21 +27,19 @@ const useAuthentication = ({ isOnline }) => {
       setIsMermaidAuthenticated(true)
     }
     if (!isAuth0Authenticated && !isAuth0Loading && isOnline) {
-      localStorage.removeItem('hasAuth0Authenticated')
-      setIsMermaidAuthenticated(false)
+      setInauthenticatedStates()
       auth0LoginWithRedirect()
     }
     if (isAuth0Authenticated) {
-      localStorage.setItem('hasAuth0Authenticated', 'true')
-      setIsMermaidAuthenticated(true)
+      // this is where logged in state gets set after successful login. (because of redirect)
+      setAuthenticatedStates()
     }
-  }, [isAuth0Authenticated, isAuth0Loading, isOnline, auth0LoginWithRedirect])
+  }, [auth0LoginWithRedirect, isAuth0Authenticated, isAuth0Loading, isOnline])
 
   const auth0LogoutMermaid = () => {
     if (isOnline) {
-      localStorage.removeItem('hasAuth0Authenticated')
       auth0Logout()
-      setIsMermaidAuthenticated(false)
+      setInauthenticatedStates()
     }
   }
 
