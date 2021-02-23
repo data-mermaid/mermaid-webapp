@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
-import { renderAuthenticated, screen } from '../../testUtilities/testingLibraryWithHelpers'
+import { renderAuthenticatedOnline, screen } from '../../testUtilities/testingLibraryWithHelpers'
 
 import {{pascalCase name}} from './{{pascalCase name}}'
 
 test('{{pascalCase name}} component renders with the expected UI elements', () => {
-  renderAuthenticated(<{{pascalCase name}} />)
+  renderAuthenticatedOnline(<{{pascalCase name}} />)
 
   expect(screen.getByText('I should fail'))
 })

@@ -13,7 +13,7 @@ const useAuthentication = ({ isOnline }) => {
     localStorage.setItem('hasAuth0Authenticated', 'true')
     setIsMermaidAuthenticated(true)
   }
-  const setInauthenticatedStates = () => {
+  const setUnauthenticatedStates = () => {
     localStorage.removeItem('hasAuth0Authenticated')
     setIsMermaidAuthenticated(false)
   }
@@ -27,7 +27,7 @@ const useAuthentication = ({ isOnline }) => {
       setIsMermaidAuthenticated(true)
     }
     if (!isAuth0Authenticated && !isAuth0Loading && isOnline) {
-      setInauthenticatedStates()
+      setUnauthenticatedStates()
       auth0LoginWithRedirect()
     }
     if (isAuth0Authenticated) {
@@ -39,7 +39,7 @@ const useAuthentication = ({ isOnline }) => {
   const auth0LogoutMermaid = () => {
     if (isOnline) {
       auth0Logout()
-      setInauthenticatedStates()
+      setUnauthenticatedStates()
     }
   }
 

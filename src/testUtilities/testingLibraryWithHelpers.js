@@ -39,16 +39,37 @@ BasicProviders.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-const renderAuthenticated = (ui, options) =>
+const renderAuthenticatedOnline = (ui, options) =>
   render(ui, { wrapper: AuthenticatedProviders, ...options })
-const renderUnauthenticated = (ui, options) =>
+const renderUnauthenticatedOnline = (ui, options) =>
   render(ui, { wrapper: UnauthenticatedProviders, ...options })
+
+const renderAuthenticatedOffline = (ui, options) => {
+  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+
+  return render(ui, {
+    wrapper: AuthenticatedProviders,
+    ...options,
+  })
+}
+
+const renderUnauthenticatedOffline = (ui, options) => {
+  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+
+  return render(ui, { wrapper: UnauthenticatedProviders, ...options })
+}
 
 const renderOverride = () => {
   throw new Error(
-    'Please use renderAuthenticated or renderUnauthenticated instead of render.',
+    'Please use renderAuthenticatedOnline, renderUnauthenticatedOnline, renderAuthenticatedOffline, or renderUnauthenticatedOffline instead of render.',
   )
 }
 
 export * from '@testing-library/react'
-export { renderOverride as render, renderAuthenticated, renderUnauthenticated }
+export {
+  renderOverride as render,
+  renderAuthenticatedOffline,
+  renderAuthenticatedOnline,
+  renderUnauthenticatedOffline,
+  renderUnauthenticatedOnline,
+}
