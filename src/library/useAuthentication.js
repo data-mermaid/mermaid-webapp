@@ -36,14 +36,14 @@ const useAuthentication = ({ isOnline }) => {
     }
   }, [auth0LoginWithRedirect, isAuth0Authenticated, isAuth0Loading, isOnline])
 
-  const auth0LogoutMermaid = () => {
+  const logoutMermaid = () => {
     if (isOnline) {
       auth0Logout()
       setUnauthenticatedStates()
     }
   }
 
-  return { isMermaidAuthenticated, auth0LogoutMermaid }
+  return { isMermaidAuthenticated, logoutMermaid }
 }
 
 export default useAuthentication
