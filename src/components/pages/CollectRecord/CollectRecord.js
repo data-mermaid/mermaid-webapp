@@ -39,9 +39,7 @@ const CollectBody = ({ apiService }) => {
 }
 
 const CollectRecord = ({ apiService }) => {
-  const saveRecord = () => {
-    console.log('click save')
-  }
+  const saveRecord = () => {}
 
   return (
     <SubLayout2
