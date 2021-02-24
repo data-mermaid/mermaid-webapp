@@ -10,6 +10,7 @@ export const ButtonSecondary = styled.button`
 `
 export const ButtonCallout = styled.button`
   background-color: green;
+  color: white;
 `
 export const ButtonCaution = styled.button`
   background-color: red;

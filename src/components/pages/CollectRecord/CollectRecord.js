@@ -4,6 +4,8 @@ import SubLayout2 from '../../SubLayout2'
 import CollectingNav from '../../CollectingNav'
 import InputSelect from '../../generic/InputSelect'
 import InputNumber from '../../generic/InputNumber'
+import { ButtonCallout } from '../../generic/buttons'
+import { RowRight } from '../../generic/positioning'
 import { fetchCollectRecord } from '../../../ApiServices/fetchApiService'
 import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
 
@@ -37,11 +39,19 @@ const CollectBody = ({ apiService }) => {
 }
 
 const CollectRecord = ({ apiService }) => {
+  const saveRecord = () => {
+    console.log('click save')
+  }
+
   return (
     <SubLayout2
       lowerLeft={<CollectingNav />}
       lowerRight={<CollectBody apiService={apiService} />}
-      upperRight={<>Sub layout top bar</>}
+      upperRight={
+        <RowRight>
+          <ButtonCallout onClick={saveRecord}>Save</ButtonCallout>
+        </RowRight>
+      }
     />
   )
 }
