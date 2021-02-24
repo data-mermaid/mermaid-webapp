@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import SubLayout2 from '../../SubLayout2'
 import CollectingNav from '../../CollectingNav'
 import InputSelect from '../../generic/InputSelect'
+import InputNumber from '../../generic/InputNumber'
 import { fetchCollectRecord } from '../../../ApiServices/fetchApiService'
 import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
 
@@ -30,6 +31,7 @@ const CollectBody = ({ apiService }) => {
         value={result.management_regime}
         options={managementRegimes}
       />
+      <InputNumber label="Depth" value={result.depth} />
     </>
   )
 }

@@ -6,7 +6,7 @@ import { Column } from '../positioning'
  * Describe your component
  */
 
-const SelectInputStyle = styled(Column)`
+const InputSelectStyle = styled(Column)`
   margin: 10px;
 `
 
@@ -18,12 +18,12 @@ const InputSelect = ({ label, options, value }) => {
   ))
 
   return (
-    <SelectInputStyle id="mermaid-select">
+    <InputSelectStyle id="mermaid-select">
       <label htmlFor="mermaid-select">{label}:</label>
       <select value={value} onChange={() => {}}>
         {optionList}
       </select>
-    </SelectInputStyle>
+    </InputSelectStyle>
   )
 }
 
@@ -34,6 +34,7 @@ InputSelect.propTypes = {
       name: PropTypes.string,
     }),
   ).isRequired,
+  value: PropTypes.string.isRequired,
 }
 
 export default InputSelect
