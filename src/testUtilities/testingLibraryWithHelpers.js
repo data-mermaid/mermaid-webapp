@@ -15,7 +15,11 @@ const BasicProviders = ({ children }) => (
 
 const AuthenticatedProviders = ({ children }) => (
   <Auth0Context.Provider
-    value={{ isAuthenticated: true, user: { name: 'Fake User' } }}
+    value={{
+      isAuthenticated: true,
+      user: { name: 'Fake User' },
+      logout: () => {},
+    }}
   >
     <BasicProviders>{children}</BasicProviders>
   </Auth0Context.Provider>
