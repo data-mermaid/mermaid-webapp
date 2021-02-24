@@ -4,6 +4,7 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import SubLayout2 from '../../SubLayout2'
 import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
 import CollectingNav from '../../CollectingNav'
+import { H3 } from '../../generic/text'
 
 /**
  * Project Collect Page
@@ -12,18 +13,27 @@ const Collect = ({ apiService }) => {
   const currentProjectPath = useCurrentProjectPath()
   const { collectRecords } = apiService
 
-  const collectRecordList = collectRecords.map(({ id, method, data }) => (
-    <div key={id}>
-      <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
-        {method}
-      </Link>
-    </div>
-  ))
+  const CollectRecordList = () => {
+    return (
+      <>
+        <H3>Collect Records</H3>
+        {collectRecords.map(({ id, method, data }) => (
+          <div key={id}>
+            <Link
+              to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}
+            >
+              {method}
+            </Link>
+          </div>
+        ))}
+      </>
+    )
+  }
 
   return (
     <SubLayout2
       lowerLeft={<CollectingNav />}
-      lowerRight={collectRecordList}
+      lowerRight={<CollectRecordList />}
       upperRight={<>Sub layout top bar</>}
     />
   )
