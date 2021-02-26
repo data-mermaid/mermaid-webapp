@@ -26,8 +26,8 @@ const CollectBody = ({ collectRecord, apiService, handleInputChange }) => {
         key="sites"
         inputName="site"
         label="Site"
-        options={sites}
         value={site}
+        options={sites}
         handleInputChange={handleInputChange}
       />
       <InputSelect
