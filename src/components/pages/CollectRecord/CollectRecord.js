@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import SubLayout2 from '../../SubLayout2'
 import CollectingNav from '../../CollectingNav'
@@ -15,9 +16,9 @@ import { _save } from '../../../library/offlineTable'
  */
 
 // this will be a separate component soon...
-const CollectBody = ({ result, apiService, handleInputChange }) => {
+const CollectBody = ({ collectRecord, apiService, handleInputChange }) => {
   const { sites, managementRegimes } = apiService
-  const { site, management_regime, depth } = result
+  const { site, management, depth } = collectRecord
 
   return (
     <>
@@ -31,9 +32,9 @@ const CollectBody = ({ result, apiService, handleInputChange }) => {
       />
       <InputSelect
         key="managementRegimes"
-        inputName="management_regime"
+        inputName="management"
         label="Management Regime"
-        value={management_regime}
+        value={management}
         options={managementRegimes}
         handleInputChange={handleInputChange}
       />
@@ -69,7 +70,7 @@ const CollectRecord = ({ apiService }) => {
       lowerLeft={<CollectingNav />}
       lowerRight={
         <CollectBody
-          result={collectRecord}
+          collectRecord={collectRecord}
           apiService={apiService}
           handleInputChange={handleInputChange}
         />
@@ -81,6 +82,16 @@ const CollectRecord = ({ apiService }) => {
       }
     />
   )
+}
+
+CollectBody.propTypes = {
+  apiService: mermaidApiServicePropType.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+  collectRecord: PropTypes.shape({
+    site: PropTypes.string.isRequired,
+    management: PropTypes.string.isRequired,
+    depth: PropTypes.number.isRequired,
+  }).isRequired,
 }
 
 CollectRecord.propTypes = {
