@@ -10,18 +10,25 @@ const InputNumberStyle = styled(Column)`
   margin: 10px;
 `
 
-const InputNumber = ({ label, value }) => {
+const InputNumber = ({ inputName, label, value, handleInputChange }) => {
   return (
     <InputNumberStyle>
       <label htmlFor="collect-input-number">{label}:</label>
-      <input type="number" value={value} onChange={() => {}} />
+      <input
+        type="number"
+        name={inputName}
+        value={value}
+        onChange={handleInputChange}
+      />
     </InputNumberStyle>
   )
 }
 
 InputNumber.propTypes = {
+  inputName: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
+  handleInputChange: PropTypes.func.isRequired,
 }
 
 export default InputNumber
