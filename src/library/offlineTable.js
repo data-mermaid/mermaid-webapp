@@ -1,7 +1,7 @@
 import Dexie from 'dexie'
 
-const DB_Name = 'mermaid-<PROFILE_ID>'
-const DB_Version = 1
+const DBName = 'mermaid-<PROFILE_ID>'
+const DBVersion = 1
 const schema = {
   collect_records: '++id',
   sites: '++id',
@@ -9,9 +9,9 @@ const schema = {
   project_profiles: '++id',
   projects: '++id',
 }
-const db = new Dexie(DB_Name, { autoOpen: true })
+const db = new Dexie(DBName, { autoOpen: true })
 
-db.version(DB_Version).stores(schema)
+db.version(DBVersion).stores(schema)
 
 export const _save = (tableName, data) => {
   return db.transaction('rw?', tableName, () => {
