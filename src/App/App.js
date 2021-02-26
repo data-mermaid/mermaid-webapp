@@ -2,6 +2,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import React from 'react'
 
+import GlobalStyle from '../library/styling/globalStyles'
 import Breadcrumbs from '../components/generic/Breadcrumbs'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <GlobalStyle />
       {isAuthenticated && (
         <Switch>
           {routes.map(({ path, Component }) => (
