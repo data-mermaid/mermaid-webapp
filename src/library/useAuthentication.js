@@ -38,7 +38,7 @@ const useAuthentication = ({ isOnline }) => {
 
   const logoutMermaid = () => {
     if (isOnline) {
-      auth0Logout()
+      auth0Logout({ returnTo: window.location.origin })
       setUnauthenticatedStates()
     }
   }
