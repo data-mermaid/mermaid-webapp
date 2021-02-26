@@ -348,7 +348,7 @@ template {
     display: none;
 }
 
-html {
+:root {
     font-size: 62.5%;
 }
 
