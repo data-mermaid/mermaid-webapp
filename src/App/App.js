@@ -15,10 +15,18 @@ import useOnlineStatus from '../library/useOnlineStatus'
 
 function App() {
   const { isOnline } = useOnlineStatus()
-  const { isMermaidAuthenticated, logoutMermaid } = useAuthentication({
+  const {
+    isMermaidAuthenticated,
+    logoutMermaid,
+    authenticatedAxios,
+  } = useAuthentication({
     isOnline,
   })
-  const apiService = useMermaidApi()
+  const apiService = useMermaidApi({
+    authenticatedAxios,
+    isMermaidAuthenticated,
+    isOnline,
+  })
   const { routes, getBreadCrumbs } = useRoutes(apiService)
 
   const layoutProps = {

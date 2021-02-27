@@ -17,8 +17,9 @@ const AuthenticatedProviders = ({ children }) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
-      user: { name: 'Fake User' },
+      user: { name: 'Fake Auth0 User' },
       logout: () => {},
+      getAccessTokenSilently: () => Promise.resolve(),
     }}
   >
     <BasicProviders>{children}</BasicProviders>
