@@ -22,15 +22,20 @@ const useAuthentication = ({ isOnline }) => {
     const isOffline = !isOnline
     const hasPreviouslyAuthenticated =
       localStorage.getItem('hasAuth0Authenticated') === 'true'
+    const isAuth0ReadyAndLoggedOut =
+      !isAuth0Authenticated && !isAuth0Loading && isOnline
+    const isAuth0LoggedIn = isAuth0Authenticated
+    const isUserOfflineAndAuthenticated =
+      !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
 
-    if (!isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline) {
+    if (isUserOfflineAndAuthenticated) {
       setIsMermaidAuthenticated(true)
     }
-    if (!isAuth0Authenticated && !isAuth0Loading && isOnline) {
+    if (isAuth0ReadyAndLoggedOut) {
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
     }
-    if (isAuth0Authenticated) {
+    if (isAuth0LoggedIn) {
       // this is where logged in state gets set after successful login. (because of redirect)
       setAuthenticatedStates()
     }
