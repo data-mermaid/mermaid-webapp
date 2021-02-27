@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import axios from 'axios'
 
 const useAuthentication = ({ isOnline }) => {
   const {
@@ -21,7 +22,21 @@ const useAuthentication = ({ isOnline }) => {
     setIsMermaidAuthenticated(false)
   }
 
-  useEffect(() => {
+  const authenticatedAxios = useMemo(() => {
+    const isNoAuthenticationOrToken = !isAuth0Authenticated || !auth0Token
+    if (isNoAuthenticationOrToken) {
+      // toast message in upcoming commit
+      return undefined
+    }
+
+    return axios.create({
+      headers: {
+        Authorization: `Bearer ${auth0Token}`,
+      },
+    })
+  }, [isAuth0Authenticated, auth0Token])
+
+  const _initializeAuthentication = useEffect(() => {
     const isOffline = !isOnline
     const hasPreviouslyAuthenticated =
       localStorage.getItem('hasAuth0Authenticated') === 'true'
@@ -58,7 +73,7 @@ const useAuthentication = ({ isOnline }) => {
     }
   }
 
-  return { isMermaidAuthenticated, logoutMermaid }
+  return { isMermaidAuthenticated, logoutMermaid, authenticatedAxios }
 }
 
 export default useAuthentication
