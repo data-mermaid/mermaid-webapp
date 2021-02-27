@@ -13,3 +13,7 @@
 1. `src/components/pages` are for pages or page-like components
 1. Styles will be done with Styled Components for easy scoping, speed, and maintainability. Make sure to import using the macro for easier debugging (it results in more human-friendly classnames) `import styled from 'styled-components/macro'`
 1. Focus on integration tests, and testing complex pieces of code.
+
+## Manual Testing
+
+- Offline (PWA) apps are not created with the Create React App development server. To test offline functionality, you need to build and serve the built code. `yarn build && serve -s build`.
