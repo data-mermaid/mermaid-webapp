@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useMemo } from 'react'
-import ButtonMenu from '../generic/ButtonMenu'
+
+import { currentUserPropType } from '../../ApiServices/useMermaidApi'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
+import ButtonMenu from '../generic/ButtonMenu'
 
 /**
  * Mermaid Header
  */
 
-const Header = ({ logout, isOnline }) => {
+const Header = ({ logout, isOnline, currentUser }) => {
   const userMenuItems = useMemo(
     () => (isOnline ? [{ label: 'Logout', onClick: logout }] : []),
     [isOnline, logout],
@@ -22,17 +24,21 @@ const Header = ({ logout, isOnline }) => {
         <Link to="/#">Reports</Link>
         <Link to="/#">Reference</Link>
         <Link to="/#">Global Dashboard</Link>
-        <ButtonMenu label="Fake User" items={userMenuItems} />
+        {currentUser && (
+          <ButtonMenu label={currentUser.first_name} items={userMenuItems} />
+        )}
       </RowRight>
     </RowSpaceBetween>
   )
 }
 
 Header.propTypes = {
+  currentUser: currentUserPropType,
   isOnline: PropTypes.bool.isRequired,
   logout: PropTypes.func,
 }
 Header.defaultProps = {
+  currentUser: undefined,
   logout: () => {},
 }
 
