@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import React, { useMemo } from 'react'
 import colorHelper from 'color'
-import ButtonMenu from '../generic/ButtonMenu'
 import {
   mediaQueryForTabletLandscapeUp,
   hoverState,
   mediaQueryPhoneOnly,
 } from '../../library/styling/mediaQueries'
+
+import { currentUserPropType } from '../../ApiServices/useMermaidApi'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
+import ButtonMenu from '../generic/ButtonMenu'
 
 /**
  * Mermaid Header
@@ -63,7 +65,7 @@ const StyledNavLink = styled(Link)`
   `)}
 `
 
-const Header = ({ logout, isOnline }) => {
+const Header = ({ logout, isOnline, currentUser }) => {
   const userMenuItems = useMemo(
     () => (isOnline ? [{ label: 'Logout', onClick: logout }] : []),
     [isOnline, logout],
@@ -88,17 +90,22 @@ const Header = ({ logout, isOnline }) => {
         <StyledNavLink to="/#">Reports</StyledNavLink>
         <StyledNavLink to="/#">Reference</StyledNavLink>
         <StyledNavLink to="/#">Global Dashboard</StyledNavLink>
-        <ButtonMenu label="Fake User" items={userMenuItems} />
+
+        {currentUser && (
+          <ButtonMenu label={currentUser.first_name} items={userMenuItems} />
+        )}
       </RowRight>
     </StyledHeader>
   )
 }
 
 Header.propTypes = {
+  currentUser: currentUserPropType,
   isOnline: PropTypes.bool.isRequired,
   logout: PropTypes.func,
 }
 Header.defaultProps = {
+  currentUser: undefined,
   logout: () => {},
 }
 

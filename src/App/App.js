@@ -30,7 +30,13 @@ function App() {
   const { routes, getBreadCrumbs } = useRoutes(apiService)
 
   const layoutProps = {
-    header: <Header logout={logoutMermaid} isOnline={isOnline} />,
+    header: (
+      <Header
+        currentUser={apiService.currentUser}
+        isOnline={isOnline}
+        logout={logoutMermaid}
+      />
+    ),
     footer: <Footer />,
   }
 
