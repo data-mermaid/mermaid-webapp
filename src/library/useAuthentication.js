@@ -3,13 +3,6 @@ import { useEffect, useMemo, useState } from 'react'
 import axios from 'axios'
 
 const useAuthentication = ({ isOnline }) => {
-  const {
-    isAuthenticated: isAuth0Authenticated,
-    loginWithRedirect: auth0LoginWithRedirect,
-    isLoading: isAuth0Loading,
-    logout: auth0Logout,
-    getAccessTokenSilently: getAuth0AccessTokenSilently,
-  } = useAuth0()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
   const [auth0Token, setAuth0Token] = useState()
 
@@ -22,19 +15,13 @@ const useAuthentication = ({ isOnline }) => {
     setIsMermaidAuthenticated(false)
   }
 
-  const authenticatedAxios = useMemo(() => {
-    const isNoAuthenticationOrToken = !isAuth0Authenticated || !auth0Token
-    if (isNoAuthenticationOrToken) {
-      // toast message in upcoming commit
-      return undefined
-    }
-
-    return axios.create({
-      headers: {
-        Authorization: `Bearer ${auth0Token}`,
-      },
-    })
-  }, [isAuth0Authenticated, auth0Token])
+  const {
+    isAuthenticated: isAuth0Authenticated,
+    loginWithRedirect: auth0LoginWithRedirect,
+    isLoading: isAuth0Loading,
+    logout: auth0Logout,
+    getAccessTokenSilently: getAuth0AccessTokenSilently,
+  } = useAuth0()
 
   const _initializeAuthentication = useEffect(() => {
     const isOffline = !isOnline
@@ -64,7 +51,13 @@ const useAuthentication = ({ isOnline }) => {
           throw Error('Unable to get access token from Auth0', err)
         })
     }
-  }, [auth0LoginWithRedirect, isAuth0Authenticated, isAuth0Loading, isOnline])
+  }, [
+    auth0LoginWithRedirect,
+    getAuth0AccessTokenSilently,
+    isAuth0Authenticated,
+    isAuth0Loading,
+    isOnline,
+  ])
 
   const logoutMermaid = () => {
     if (isOnline) {
@@ -72,6 +65,21 @@ const useAuthentication = ({ isOnline }) => {
       setUnauthenticatedStates()
     }
   }
+
+  const authenticatedAxios = useMemo(() => {
+    const isNotReadyToMakeApiCalls = !isAuth0Authenticated || !auth0Token
+
+    if (isNotReadyToMakeApiCalls) {
+      // toast message in upcoming commit
+      return undefined
+    }
+
+    return axios.create({
+      headers: {
+        Authorization: `Bearer ${auth0Token}`,
+      },
+    })
+  }, [isAuth0Authenticated, auth0Token])
 
   return { isMermaidAuthenticated, logoutMermaid, authenticatedAxios }
 }
