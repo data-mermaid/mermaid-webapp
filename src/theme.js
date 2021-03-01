@@ -9,6 +9,7 @@ const black = primary.mix(colorHelper('black'), 0.95)
 const color = {
   white,
   black,
+  backgroundColor: white.mix(colorHelper(black), 0.05),
   primaryColor: primary,
   primaryHover: primary.mix(colorHelper(white), 0.1),
   primaryText: white,

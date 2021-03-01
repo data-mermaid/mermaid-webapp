@@ -347,14 +347,3 @@ template {
 [hidden] {
     display: none;
 }
-
-html {
-    font-size: 62.5%;
-}
-
-body {
-    font: 1.8rem/1.2 Arial, Helvetica Neue, Helvetica, sans-serif;
-}
-*,*::before,*::after{
-  box-sizing: border-box;
-}
