@@ -16,7 +16,7 @@ import {
 } from '../ApiServices/useMermaidApi'
 import useOnlineStatus from '../library/useOnlineStatus'
 
-function App({ mermaidDbInstance }) {
+function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
   const {
     isMermaidAuthenticated,
@@ -29,7 +29,7 @@ function App({ mermaidDbInstance }) {
     authenticatedAxios,
     isMermaidAuthenticated,
     isOnline,
-    mermaidDbInstance,
+    mermaidDbAccessInstance,
   })
   const { routes, getBreadCrumbs } = useRoutes(apiService)
 
@@ -80,7 +80,7 @@ function App({ mermaidDbInstance }) {
 }
 
 App.propTypes = {
-  mermaidDbInstance: mermaidApiServicePropType.isRequired,
+  mermaidDbAccessInstance: mermaidApiServicePropType.isRequired,
 }
 
 export default App

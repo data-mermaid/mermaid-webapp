@@ -20,7 +20,7 @@ export const useMermaidApi = ({
   isMermaidAuthenticated,
   isOnline,
   authenticatedAxios,
-  mermaidDbInstance,
+  mermaidDbAccessInstance,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
@@ -29,15 +29,16 @@ export const useMermaidApi = ({
     isMermaidAuthenticated &&
     isOnline &&
     authenticatedAxios &&
-    mermaidDbInstance
+    mermaidDbAccessInstance
 
   const isOfflineAuthenticatedAndReady =
-    isMermaidAuthenticated && !isOnline && mermaidDbInstance
+    isMermaidAuthenticated && !isOnline && mermaidDbAccessInstance
 
   const _initializeUserOnAuthentication = useEffect(() => {
     if (isOnlineAuthenticatedAndReady) {
       const getCurrentUserFromApi = authenticatedAxios.get(`${apiBaseUrl}/me`)
       const _addCurrentUserToStateAndOfflineStorage = getCurrentUserFromApi
+
         .then((apiResults) => {
           const user = apiResults.data
 
@@ -50,7 +51,7 @@ export const useMermaidApi = ({
             payload: user,
           })
 
-          return mermaidDbInstance.currentUser.put(user)
+          return mermaidDbAccessInstance.currentUser.put(user)
         })
         .catch((error) => {
           // toast coming up in other ticket
@@ -58,8 +59,9 @@ export const useMermaidApi = ({
         })
     }
     if (isOfflineAuthenticatedAndReady) {
-      const getCurrentUserFromOfflineStorage = mermaidDbInstance.toArray()
+      const getCurrentUserFromOfflineStorage = mermaidDbAccessInstance.toArray()
       const _addCurrentUserToState = getCurrentUserFromOfflineStorage
+
         .then((results) => {
           const user = results[0]
 
@@ -85,7 +87,7 @@ export const useMermaidApi = ({
     authenticatedAxios,
     isOfflineAuthenticatedAndReady,
     isOnlineAuthenticatedAndReady,
-    mermaidDbInstance,
+    mermaidDbAccessInstance,
   ])
 
   return { projects: state.projects, currentUser: state.currentUser }
