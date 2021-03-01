@@ -1,6 +1,6 @@
-import { useAuth0 } from '@auth0/auth0-react'
-import React from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React, { useMemo } from 'react'
 import ButtonMenu from '../generic/ButtonMenu'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
 
@@ -8,8 +8,11 @@ import { RowSpaceBetween, RowRight } from '../generic/positioning'
  * Mermaid Header
  */
 
-const Header = () => {
-  const { logout, user } = useAuth0()
+const Header = ({ logout, isOnline }) => {
+  const userMenuItems = useMemo(
+    () => (isOnline ? [{ label: 'Logout', onClick: logout }] : []),
+    [isOnline, logout],
+  )
 
   return (
     <RowSpaceBetween>
@@ -19,15 +22,18 @@ const Header = () => {
         <Link to="/#">Reports</Link>
         <Link to="/#">Reference</Link>
         <Link to="/#">Global Dashboard</Link>
-        <ButtonMenu
-          label={user.name}
-          items={[{ label: 'Logout', onClick: logout }]}
-        />
+        <ButtonMenu label="Fake User" items={userMenuItems} />
       </RowRight>
     </RowSpaceBetween>
   )
 }
 
-Header.propTypes = {}
+Header.propTypes = {
+  isOnline: PropTypes.bool.isRequired,
+  logout: PropTypes.func,
+}
+Header.defaultProps = {
+  logout: () => {},
+}
 
 export default Header

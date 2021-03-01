@@ -7,23 +7,27 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/generic/Layout'
 import theme from '../theme'
-import useEnsureLogin from '../library/useEnsureLogin'
+import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
 import { useMermaidApi } from '../ApiServices/useMermaidApi'
+import useOnlineStatus from '../library/useOnlineStatus'
 
 function App() {
-  const layoutProps = {
-    header: <Header />,
-    footer: <Footer />,
-  }
-
-  const { isAuthenticated } = useEnsureLogin()
+  const { isOnline } = useOnlineStatus()
+  const { isMermaidAuthenticated, logoutMermaid } = useAuthentication({
+    isOnline,
+  })
   const apiService = useMermaidApi()
   const { routes, getBreadCrumbs } = useRoutes(apiService)
 
+  const layoutProps = {
+    header: <Header logout={logoutMermaid} isOnline={isOnline} />,
+    footer: <Footer />,
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      {isAuthenticated && (
+      {isMermaidAuthenticated && (
         <Switch>
           {routes.map(({ path, Component }) => (
             <Route
