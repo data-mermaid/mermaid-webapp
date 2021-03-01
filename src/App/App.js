@@ -9,10 +9,13 @@ import Layout from '../components/generic/Layout'
 import theme from '../theme'
 import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
-import { useMermaidApi } from '../ApiServices/useMermaidApi'
+import {
+  mermaidApiServicePropType,
+  useMermaidApi,
+} from '../ApiServices/useMermaidApi'
 import useOnlineStatus from '../library/useOnlineStatus'
 
-function App() {
+function App({ mermaidDbInstance }) {
   const { isOnline } = useOnlineStatus()
   const {
     isMermaidAuthenticated,
@@ -25,6 +28,7 @@ function App() {
     authenticatedAxios,
     isMermaidAuthenticated,
     isOnline,
+    mermaidDbInstance,
   })
   const { routes, getBreadCrumbs } = useRoutes(apiService)
 
@@ -39,9 +43,12 @@ function App() {
     footer: <Footer />,
   }
 
+  const isMermaidAuthenticatedAndReady =
+    isMermaidAuthenticated && apiService.currentUser
+
   return (
     <ThemeProvider theme={theme}>
-      {isMermaidAuthenticated && (
+      {isMermaidAuthenticatedAndReady && (
         <Switch>
           {routes.map(({ path, Component }) => (
             <Route
@@ -67,6 +74,10 @@ function App() {
       )}
     </ThemeProvider>
   )
+}
+
+App.propTypes = {
+  mermaidDbInstance: mermaidApiServicePropType.isRequired,
 }
 
 export default App

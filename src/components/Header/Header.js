@@ -24,9 +24,8 @@ const Header = ({ logout, isOnline, currentUser }) => {
         <Link to="/#">Reports</Link>
         <Link to="/#">Reference</Link>
         <Link to="/#">Global Dashboard</Link>
-        {currentUser && (
-          <ButtonMenu label={currentUser.first_name} items={userMenuItems} />
-        )}
+
+        <ButtonMenu label={currentUser.first_name} items={userMenuItems} />
       </RowRight>
     </RowSpaceBetween>
   )
