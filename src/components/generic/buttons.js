@@ -61,8 +61,8 @@ export const ButtonCaution = styled(Button)`
     ${buttonActive};
   }
 `
-// export const ButtonyNavLink = styled(NavLink)`
-//   background-color: lightgray;
-//   border: solid thin grey;
-// `
-// export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
+export const ButtonyNavLink = styled(NavLink)`
+  background-color: lightgray;
+  border: solid thin grey;
+`
+export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
