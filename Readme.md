@@ -2,9 +2,14 @@
 
 ## Steps to Set Up Development Environment
 
-1. clone this repo
-1. yarn install
-1. yarn start
+1. Set up a local Mermaid back end
+   1. Clone https://github.com/data-mermaid/mermaid-api
+   1. To get the server up and running, run `make freshinstall && make runserver` the first time or `make up && make runserver`
+1. Set up local front end
+   1. clone this repo
+   1. obtain values for `.env` file (see `.env.sample`)
+   1. yarn install
+   1. yarn start
 
 ## Dev Notes
 
