@@ -1,7 +1,5 @@
-import { useEffect, useReducer, useRef } from 'react'
-import Dexie from 'dexie'
+import { useEffect, useReducer } from 'react'
 import PropTypes from 'prop-types'
-
 import mockApiService from './mockApiService'
 
 const reducer = (state, action) => {
@@ -22,27 +20,19 @@ export const useMermaidApi = ({
   isMermaidAuthenticated,
   isOnline,
   authenticatedAxios,
+  mermaidDbInstance,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const mermaidDbRef = useRef()
 
   const isOnlineAuthenticatedAndReady =
     isMermaidAuthenticated &&
     isOnline &&
     authenticatedAxios &&
-    mermaidDbRef.current
+    mermaidDbInstance
 
   const isOfflineAuthenticatedAndReady =
-    isMermaidAuthenticated && !isOnline && mermaidDbRef.current
-
-  // antipattern to use ref inside useEffect. Looking into callback ref pattern
-  const _initializeIndexedDb = useEffect(() => {
-    mermaidDbRef.current = new Dexie('mermaid')
-    mermaidDbRef.current.version(1).stores({
-      currentUser: 'id, first_name, last_name, full_name, email',
-    })
-  }, [])
+    isMermaidAuthenticated && !isOnline && mermaidDbInstance
 
   const _initializeUserOnAuthentication = useEffect(() => {
     if (isOnlineAuthenticatedAndReady) {
@@ -60,7 +50,7 @@ export const useMermaidApi = ({
             payload: user,
           })
 
-          return mermaidDbRef.current.currentUser.put(user)
+          return mermaidDbInstance.currentUser.put(user)
         })
         .catch((error) => {
           // toast coming up in other ticket
@@ -68,7 +58,7 @@ export const useMermaidApi = ({
         })
     }
     if (isOfflineAuthenticatedAndReady) {
-      const getCurrentUserFromOfflineStorage = mermaidDbRef.current.currentUser.toArray()
+      const getCurrentUserFromOfflineStorage = mermaidDbInstance.toArray()
       const _addCurrentUserToState = getCurrentUserFromOfflineStorage
         .then((results) => {
           const user = results[0]
@@ -95,6 +85,7 @@ export const useMermaidApi = ({
     authenticatedAxios,
     isOfflineAuthenticatedAndReady,
     isOnlineAuthenticatedAndReady,
+    mermaidDbInstance,
   ])
 
   return { projects: state.projects, currentUser: state.currentUser }

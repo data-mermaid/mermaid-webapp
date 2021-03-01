@@ -8,6 +8,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 import reportWebVitals from './reportWebVitals'
 import { App } from './App'
+import mermaidDbInstance from './ApiServices/mermaidDbInstance'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -19,7 +20,7 @@ ReactDOM.render(
       scope="read:current_user update:current_user_metadata"
     >
       <BrowserRouter>
-        <App />
+        <App mermaidDbInstance={mermaidDbInstance} />
       </BrowserRouter>
     </Auth0Provider>
   </React.StrictMode>,
