@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components/macro'
+import { NavLink } from 'react-router-dom'
 import { hoverState } from '../../library/styling/mediaQueries'
 
 const buttonActive = css`
@@ -18,9 +19,11 @@ export const ButtonPrimary = styled(Button)`
   background-color: ${(props) => props.theme.color.primaryColor};
   color: ${(props) => props.theme.color.primaryText};
   border-color: ${(props) => props.theme.color.primaryBorder};
-  &:hover {
-    background-color: ${(props) => props.theme.color.primaryHover};
-  }
+  ${hoverState(
+    css`
+      background-color: ${(props) => props.theme.color.primaryHover};
+    `,
+  )}
   &:active {
     ${buttonActive};
   }
@@ -58,8 +61,8 @@ export const ButtonCaution = styled(Button)`
     ${buttonActive};
   }
 `
-export const ButtonyNavLink = styled(NavLink)`
-  background-color: lightgray;
-  border: solid thin grey;
-`
-export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
+// export const ButtonyNavLink = styled(NavLink)`
+//   background-color: lightgray;
+//   border: solid thin grey;
+// `
+// export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
