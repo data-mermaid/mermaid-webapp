@@ -2,8 +2,19 @@ import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const NavLinkButtonish = styled(NavLink)`
-  background-color: lightgray;
-  border: solid thin grey;
+  padding: ${(props) => props.theme.spacing.buttonPadding};
+  border-width: 1px;
+  border-style: solid;
+  text-decoration: none;
+  background-color: ${(props) => props.theme.color.secondaryColor};
+  color: ${(props) => props.theme.color.secondaryText};
+  border-color: ${(props) => props.theme.color.secondaryBorder};
+  &:hover {
+    background-color: ${(props) => props.theme.color.secondaryHover};
+  }
+  &:active {
+    background-color: red;
+  }
 `
 export const NavLinkButtonishIcon = styled(NavLinkButtonish)``
 
