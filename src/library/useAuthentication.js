@@ -27,20 +27,17 @@ const useAuthentication = ({ isOnline }) => {
     const isOffline = !isOnline
     const hasPreviouslyAuthenticated =
       localStorage.getItem('hasAuth0Authenticated') === 'true'
-    const isAuth0ReadyAndLoggedOut =
+    const isUserOnlineAndLoggedOut =
       !isAuth0Authenticated && !isAuth0Loading && isOnline
-    const isAuth0LoggedIn = isAuth0Authenticated && !isAuth0Loading
-    const isUserOfflineAndAuthenticated =
+    const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading
+    const isUserOfflineAndLoggedIn =
       !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
 
-    if (isUserOfflineAndAuthenticated) {
-      setIsMermaidAuthenticated(true)
-    }
-    if (isAuth0ReadyAndLoggedOut) {
+    if (isUserOnlineAndLoggedOut) {
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
     }
-    if (isAuth0LoggedIn) {
+    if (isUserOnlineAndLoggedIn) {
       // this is where logged in state gets set after successful login. (because of redirect)
       setAuthenticatedStates()
       getAuth0AccessTokenSilently()
@@ -50,6 +47,9 @@ const useAuthentication = ({ isOnline }) => {
         .catch((err) => {
           throw Error('Unable to get access token from Auth0', err)
         })
+    }
+    if (isUserOfflineAndLoggedIn) {
+      setIsMermaidAuthenticated(true)
     }
   }, [
     auth0LoginWithRedirect,
