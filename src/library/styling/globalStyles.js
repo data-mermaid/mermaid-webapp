@@ -6,7 +6,14 @@ const GlobalStyle = createGlobalStyle`
     }
     body {
         background: ${(props) => props.theme.color.backgroundColor};
-        font: 1.8rem/1.2 Arial, Helvetica Neue, Helvetica, sans-serif;
+    }
+    body, select, input, textarea, p, a{
+        font-family: ${(props) => props.theme.typography.fontStack};
+        font-size: ${(props) => props.theme.typography.defaultFontSize};
+    
+    }
+    select, input, textarea, p, a{
+        line-height: ${(props) => props.theme.typography.lineHeight};
     }
     *,*::before,*::after{
         box-sizing: border-box;

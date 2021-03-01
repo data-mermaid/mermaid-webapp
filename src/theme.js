@@ -39,7 +39,11 @@ const spacing = {
   xlarge: '3.2rem',
   buttonPadding: '1rem 2rem',
 }
-const typography = {}
+const typography = {
+  defaultFontSize: '1.8rem',
+  lineHeight: '1.2',
+  fontStack: 'Arial, Helvetica Neue, Helvetica, sans-serif',
+}
 
 const theme = { color, spacing, typography }
 

@@ -29,7 +29,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {isAuthenticated && (
+      {isMermaidAuthenticated && (
         <Switch>
           {routes.map(({ path, Component }) => (
             <Route
