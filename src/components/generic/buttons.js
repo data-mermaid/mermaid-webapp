@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components/macro'
-import { mediaQueryHover } from '../../library/styling/mediaQueries'
+import { hoverState } from '../../library/styling/mediaQueries'
 
 const buttonActive = css`
   background-color: fuchsia;
@@ -10,7 +10,7 @@ export const Button = styled.button`
   border-width: 1px;
   border-style: solid;
   &:active {
-    background-color: red;
+    ${buttonActive};
   }
 `
 
@@ -21,6 +21,9 @@ export const ButtonPrimary = styled(Button)`
   &:hover {
     background-color: ${(props) => props.theme.color.primaryHover};
   }
+  &:active {
+    ${buttonActive};
+  }
 `
 export const ButtonSecondary = styled(Button)`
   background-color: ${(props) => props.theme.color.secondaryColor};
@@ -28,6 +31,9 @@ export const ButtonSecondary = styled(Button)`
   border-color: ${(props) => props.theme.color.secondaryBorder};
   &:hover {
     background-color: ${(props) => props.theme.color.secondaryHover};
+  }
+  &:active {
+    ${buttonActive};
   }
 `
 export const ButtonCallout = styled(Button)`
@@ -37,6 +43,9 @@ export const ButtonCallout = styled(Button)`
   &:hover {
     background-color: ${(props) => props.theme.color.calloutHover};
   }
+  &:active {
+    ${buttonActive};
+  }
 `
 export const ButtonCaution = styled(Button)`
   background-color: ${(props) => props.theme.color.cautionColor};
@@ -44,5 +53,8 @@ export const ButtonCaution = styled(Button)`
   border-color: ${(props) => props.theme.color.cautionBorder};
   &:hover {
     background-color: ${(props) => props.theme.color.cautionHover};
+  }
+  &:active {
+    ${buttonActive};
   }
 `
