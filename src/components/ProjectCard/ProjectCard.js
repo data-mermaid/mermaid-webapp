@@ -5,7 +5,6 @@ import pluralize from '../../library/pluralize'
 import { RowSpaceBetween, RowLeft, Column } from '../generic/positioning'
 import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
-import { NavLinkButtonishIcon } from '../generic/links'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
 /**

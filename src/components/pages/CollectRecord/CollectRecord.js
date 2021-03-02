@@ -7,7 +7,7 @@ import InputSelect from '../../generic/InputSelect'
 import InputNumber from '../../generic/InputNumber'
 import { ButtonCallout } from '../../generic/buttons'
 import { RowRight } from '../../generic/positioning'
-import { fetchCollectRecord } from '../../../ApiServices/fetchApiService'
+import { fetchMockCollectRecord } from '../../../ApiServices/fetchMockCollectRecord'
 import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
 import { _save } from '../../../library/offlineTable'
 
@@ -50,7 +50,7 @@ const CollectBody = ({ collectRecord, apiService, handleInputChange }) => {
 
 const CollectRecord = ({ apiService }) => {
   const { recordId } = useParams()
-  const result = fetchCollectRecord(recordId)[0]
+  const result = fetchMockCollectRecord(recordId)[0]
   const [collectRecord, setCollectRecord] = useState(result)
 
   const handleInputChange = (e) => {
