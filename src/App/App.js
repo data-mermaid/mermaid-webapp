@@ -13,7 +13,7 @@ import { useRoutes } from '../library/useRoutes'
 import {
   mermaidApiServicePropType,
   useMermaidApi,
-} from '../ApiServices/useMermaidApi'
+} from '../library/apiServices/useMermaidApi'
 import useOnlineStatus from '../library/useOnlineStatus'
 
 function App({ mermaidDbAccessInstance }) {
