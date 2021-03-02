@@ -70,6 +70,7 @@ const renderOverride = () => {
   )
 }
 
+export { default as mockMermaidApiAllSuccessful } from './mockMermaidApiAllSuccessful'
 export * from '@testing-library/react'
 export {
   renderOverride as render,
