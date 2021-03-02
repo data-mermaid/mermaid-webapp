@@ -7,6 +7,12 @@ const caution = colorHelper('#BD585A')
 const white = primary.mix(colorHelper('white'), 0.95)
 const black = primary.mix(colorHelper('black'), 0.95)
 
+const xsmall = '0.5rem'
+const small = '1rem'
+const medium = '2rem'
+const large = '2.5rem'
+const xlarge = '3.5rem'
+
 const color = {
   white,
   black,
@@ -32,12 +38,12 @@ const color = {
   disabledBorder: '#969696',
 }
 const spacing = {
-  xsmall: '0.4rem',
-  small: '1rem',
-  medium: '1.6rem',
-  large: '2.4rem',
-  xlarge: '3.2rem',
-  buttonPadding: '1rem 2rem',
+  xsmall,
+  small,
+  medium,
+  large,
+  xlarge,
+  buttonPadding: `${small} ${medium}`,
 }
 const typography = {
   defaultFontSize: '1.8rem',
