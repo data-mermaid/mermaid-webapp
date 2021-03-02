@@ -19,7 +19,7 @@ const AuthenticatedProviders = ({ children }) => (
       isAuthenticated: true,
       user: { name: 'Fake Auth0 User' },
       logout: () => {},
-      getAccessTokenSilently: () => Promise.resolve(),
+      getAccessTokenSilently: () => Promise.resolve('fake-token'),
     }}
   >
     <BasicProviders>{children}</BasicProviders>
