@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
-import mockMermaidDbAccessInstance from '../../library/apiServices/mockMermaidDbAccessInstance'
+import mockMermaidDbAccessInstance from '../../testUtilities/mockMermaidDbAccessInstance'
 import {
   fireEvent,
   mockMermaidApiAllSuccessful,
