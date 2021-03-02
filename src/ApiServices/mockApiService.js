@@ -1,7 +1,8 @@
 export default {
   projects: [
     {
-      name: 'Karimunjawa National Park is a long name for a project, not as log as Karimunjawaawajnumirak',
+      name:
+        'Karimunjawa National Park is a long name for a project, not as log as Karimunjawaawajnumirak',
       country: 'Fiji',
       numberOfSites: 23,
       offlineReady: true,
