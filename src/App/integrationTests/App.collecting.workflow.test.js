@@ -1,5 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
+import { rest } from 'msw'
+import { setupServer } from 'msw/node'
 import React from 'react'
+import mockMermaidDbAccessInstance from '../../library/apiServices/mockMermaidDbAccessInstance'
 import {
   fireEvent,
   renderAuthenticatedOnline,
@@ -8,8 +11,33 @@ import {
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
-test('Collecting workflow shows proper nav when routing for sites page', () => {
-  renderAuthenticatedOnline(<App />)
+const server = setupServer(
+  rest.get(`${process.env.REACT_APP_MERMAID_API}/me`, (req, res, ctx) => {
+    return res(
+      ctx.json({
+        id: 'fake-id',
+        first_name: 'FakeFirstNameOnline',
+        last_name: 'FakeLastName',
+        full_name: 'FakeFirstName FakeLastName',
+        email: 'fake@email.com',
+        created_on: '2020-10-16T15:27:30.555961Z',
+        updated_on: '2020-10-16T15:27:30.569938Z',
+      }),
+    )
+  }),
+)
+
+beforeAll(() => server.listen())
+afterEach(() => server.resetHandlers())
+afterAll(() => server.close())
+
+test('Collecting workflow shows proper nav when routing for sites page', async () => {
+  renderAuthenticatedOnline(
+    <App mermaidDbAccessInstance={mockMermaidDbAccessInstance} />,
+  )
+  // we dont have loading indicators built yet, so we wait for the heading to show up.
+  expect(await screen.findByRole('heading')).toHaveTextContent('Projects')
+
   fireEvent.click(screen.getAllByLabelText('Collect')[0])
   fireEvent.click(screen.getByText('Sites'))
 
@@ -26,8 +54,13 @@ test('Collecting workflow shows proper nav when routing for sites page', () => {
   expect(within(main).queryByText('Graphs and Maps')).toBeNull()
 })
 
-test('Collecting workflow shows proper nav when routing for management regimes page', () => {
-  renderAuthenticatedOnline(<App />)
+test('Collecting workflow shows proper nav when routing for management regimes page', async () => {
+  renderAuthenticatedOnline(
+    <App mermaidDbAccessInstance={mockMermaidDbAccessInstance} />,
+  )
+  // we dont have loading indicators built yet, so we wait for the heading to show up.
+  expect(await screen.findByRole('heading')).toHaveTextContent('Projects')
+
   fireEvent.click(screen.getAllByLabelText('Collect')[0])
   fireEvent.click(screen.getByText('Management Regimes'))
 
@@ -43,8 +76,13 @@ test('Collecting workflow shows proper nav when routing for management regimes p
   expect(within(main).queryByText('Submitted')).toBeNull()
   expect(within(main).queryByText('Graphs and Maps')).toBeNull()
 })
-test('Collecting workflow shows proper nav when routing for collecting page', () => {
-  renderAuthenticatedOnline(<App />)
+test('Collecting workflow shows proper nav when routing for collecting page', async () => {
+  renderAuthenticatedOnline(
+    <App mermaidDbAccessInstance={mockMermaidDbAccessInstance} />,
+  )
+
+  // we dont have loading indicators built yet, so we wait for the heading to show up.
+  expect(await screen.findByRole('heading')).toHaveTextContent('Projects')
   fireEvent.click(screen.getAllByLabelText('Collect')[0])
 
   expect(screen.getByText('Collect Placeholder'))

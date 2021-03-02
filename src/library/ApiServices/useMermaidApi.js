@@ -29,10 +29,10 @@ export const useMermaidApi = ({
     isMermaidAuthenticated &&
     isOnline &&
     authenticatedAxios &&
-    mermaidDbAccessInstance
+    !!mermaidDbAccessInstance
 
   const isOfflineAuthenticatedAndReady =
-    isMermaidAuthenticated && !isOnline && mermaidDbAccessInstance
+    isMermaidAuthenticated && !isOnline && !!mermaidDbAccessInstance
 
   const _initializeUserOnAuthentication = useEffect(() => {
     if (isOnlineAuthenticatedAndReady) {
@@ -59,7 +59,7 @@ export const useMermaidApi = ({
         })
     }
     if (isOfflineAuthenticatedAndReady) {
-      const getCurrentUserFromOfflineStorage = mermaidDbAccessInstance.toArray()
+      const getCurrentUserFromOfflineStorage = mermaidDbAccessInstance.currentUser.toArray()
       const _addCurrentUserToState = getCurrentUserFromOfflineStorage
 
         .then((results) => {
