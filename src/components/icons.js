@@ -27,7 +27,7 @@ export const IconExternalLink = () => (
   <FontAwesomeIcon icon={faExternalLinkAlt} />
 )
 export const IconFilter = () => <FontAwesomeIcon icon={faFilter} />
-export const IconFishFamilies = () => <FontAwesomeIcon icon={faHeart} />
+export const IconHeart = () => <FontAwesomeIcon icon={faHeart} />
 export const IconGraph = () => <FontAwesomeIcon icon={faChartBar} />
 export const IconSharing = () => <FontAwesomeIcon icon={faShareAlt} />
 export const IconSites = () => <FontAwesomeIcon icon={faMapMarkerAlt} />

@@ -2,7 +2,7 @@ import React from 'react'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import { NavLinkSidebar } from '../generic/links'
 import { Column } from '../generic/positioning'
-import { IconAdmin, IconFishFamilies, IconSharing, IconUsers } from '../icons'
+import { IconAdmin, IconHeart, IconSharing, IconUsers } from '../icons'
 
 /**
  * Describe your component
@@ -21,7 +21,7 @@ const AdminNav = () => {
         Users
       </NavLinkSidebar>
       <NavLinkSidebar to={`${currentProjectPath}/fish-families`}>
-        <IconFishFamilies />
+        <IconHeart />
         Fish Families
       </NavLinkSidebar>
       <NavLinkSidebar to={`${currentProjectPath}/data-sharing`}>

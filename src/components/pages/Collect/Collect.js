@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import SubLayout2 from '../../SubLayout2'
 import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
-import CollectingNav from '../../CollectingNav'
+import NavMenu from '../../NavMenu'
 import { H3 } from '../../generic/text'
 
 /**
@@ -32,7 +32,7 @@ const Collect = ({ apiService }) => {
 
   return (
     <SubLayout2
-      lowerLeft={<CollectingNav />}
+      lowerLeft={<NavMenu />}
       lowerRight={<CollectRecordList />}
       upperRight={<>Sub layout top bar</>}
     />

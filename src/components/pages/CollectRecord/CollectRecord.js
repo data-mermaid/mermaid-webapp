@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import SubLayout2 from '../../SubLayout2'
-import CollectingNav from '../../CollectingNav'
+import NavMenu from '../../NavMenu'
 import InputSelect from '../../generic/InputSelect'
 import InputNumber from '../../generic/InputNumber'
 import { ButtonCallout } from '../../generic/buttons'
@@ -67,7 +67,7 @@ const CollectRecord = ({ apiService }) => {
 
   return (
     <SubLayout2
-      lowerLeft={<CollectingNav />}
+      lowerLeft={<NavMenu />}
       lowerRight={
         <CollectBody
           collectRecord={collectRecord}
