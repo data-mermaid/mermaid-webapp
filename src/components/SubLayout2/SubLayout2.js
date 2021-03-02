@@ -2,10 +2,8 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
 
-import { NavLinkButtonish } from '../generic/links'
 import { Column, Row } from '../generic/positioning'
-import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import NavLinkButtonGroup from '../NavLinkButtonGroup'
+import { H3 } from '../generic/text'
 
 /**
  * Describe your component
@@ -30,16 +28,11 @@ const NavContainer = styled.nav`
 `
 
 const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
-  const projectUrl = useCurrentProjectPath()
-
   return (
     <SubLayout2Container>
       <SideBar>
         <NavContainer>
-          <NavLinkButtonish to={projectUrl}>Project Overview</NavLinkButtonish>
-          <Row>
-            <NavLinkButtonGroup projectUrl={projectUrl} />
-          </Row>
+          <H3>Project Overview</H3>
         </NavContainer>
         <div>{lowerLeft}</div>
       </SideBar>

@@ -68,9 +68,6 @@ const ProjectCard = ({
           <ButtonSecondary>
             <IconCopy />
           </ButtonSecondary>
-          <NavLinkButtonishIcon to={projectUrl} aria-label="Project Overview">
-            Project Overview
-          </NavLinkButtonishIcon>
         </ButtonGroups>
       </ProjectCardLeft>
       <ProjectCardRight>
