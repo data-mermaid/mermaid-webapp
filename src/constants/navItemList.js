@@ -13,7 +13,7 @@ import {
 export const navItemList = [
   {
     header: 'Project Overview',
-    itemList: [{ path: 'collecting', name: 'Project Health', icon: IconHeart }],
+    itemList: [{ path: 'health', name: 'Project Health', icon: IconHeart }],
   },
   {
     header: 'Collect',

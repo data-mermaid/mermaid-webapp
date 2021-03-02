@@ -34,11 +34,13 @@ const NavItem = ({ header, itemList }) => {
 
 NavItem.propTypes = {
   header: PropTypes.string.isRequired,
-  itemList: PropTypes.arrayOf({
-    path: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    icon: PropTypes.node.isRequired,
-  }).isRequired,
+  itemList: PropTypes.arrayOf(
+    PropTypes.shape({
+      path: PropTypes.string,
+      name: PropTypes.string,
+      icon: PropTypes.func,
+    }),
+  ).isRequired,
 }
 
 export default NavItem
