@@ -1,46 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import SubLayout2 from '../../SubLayout2'
-import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
 import NavMenu from '../../NavMenu'
-import { H3 } from '../../generic/text'
 
 /**
  * Project Collect Page
  */
-const Collect = ({ apiService }) => {
-  const currentProjectPath = useCurrentProjectPath()
-  const { collectRecords } = apiService
-
-  const CollectRecordList = () => {
-    return (
-      <>
-        <H3>Collect Records</H3>
-        {collectRecords.map(({ id, method, data }) => (
-          <div key={id}>
-            <Link
-              to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}
-            >
-              {method}
-            </Link>
-          </div>
-        ))}
-      </>
-    )
-  }
-
+const Collect = () => {
   return (
     <SubLayout2
       lowerLeft={<NavMenu />}
-      lowerRight={<CollectRecordList />}
+      lowerRight={<>Collect Table Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />
   )
 }
 
-Collect.propTypes = {
-  apiService: mermaidApiServicePropType.isRequired,
-}
+Collect.propTypes = {}
 
 export default Collect

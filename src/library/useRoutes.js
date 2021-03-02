@@ -10,7 +10,6 @@ import ManagementRegimes from '../components/pages/ManagementRegimes'
 import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Users from '../components/pages/Users'
-import CollectRecord from '../components/pages/CollectRecord'
 
 export const useRoutes = (apiService) => {
   const routes = [
@@ -27,17 +26,7 @@ export const useRoutes = (apiService) => {
     {
       path: '/projects/:projectId/collecting',
       name: 'Collecting',
-      Component: () => <Collect apiService={apiService} />,
-    },
-    {
-      path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      name: 'Fish Belt',
-      Component: () => <CollectRecord apiService={apiService} />,
-    },
-    {
-      path: '/projects/:projectId/collecting/benthiclit/:recordId',
-      name: 'Benthic LIT',
-      Component: () => <CollectRecord apiService={apiService} />,
+      Component: Collect,
     },
     {
       path: '/projects/:projectId/data',
