@@ -77,7 +77,7 @@ const ButtonGroups = styled('div')`
 `
 const CardWrapper = styled('div')`
   display:grid;
-  grid-template-columns: 4fr auto;
+  grid-template-columns: 4fr 1fr;
   transition: ${(props) => props.theme.timing.hoverTransition};
   align-items: center;
   margin: ${(props) => props.theme.spacing.medium} auto 0 auto;
@@ -95,21 +95,18 @@ const CardWrapper = styled('div')`
   }
   ${mediaQueryTabletLandscapeOnly(css`
     width: 100%;
-    /* margin: ${(props) => props.theme.spacing.xsmall} 0; */
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
   `)}
 `
 
-const ProjectCardLeft = styled('div')`
-  h2,
-  p {
+const ProjectNameWrapper = styled('div')`
+  align-self: start;
+  h2 {
     margin: ${(props) => props.theme.spacing.xsmall} 0;
     padding-top: ${(props) => props.theme.spacing.small};
     padding-left: ${(props) => props.theme.spacing.medium};
-  }
-  h2 {
     text-transform: uppercase;
     letter-spacing: 2px;
     ${noWordBreak};
@@ -119,11 +116,14 @@ const ProjectCardLeft = styled('div')`
   }
 `
 
-const ProjectCardRight = styled('div')`
-  //offline ready, last updated
+const ProjectInfoWrapper = styled('div')`
   align-self: start;
-  padding: ${(props) => props.theme.spacing.medium}
+  margin: ${(props) => props.theme.spacing.small}
     ${(props) => props.theme.spacing.medium} 0 0;
+  p:first-child {
+    font-size: larger;
+    font-weight: 900;
+  }
   p,
   label {
     font-size: smaller;
@@ -131,16 +131,14 @@ const ProjectCardRight = styled('div')`
     padding: 0 ${(props) => props.theme.spacing.medium};
   }
   ${mediaQueryTabletLandscapeOnly(css`
-    padding: 0;
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
   `)}
 `
 const CheckBoxWithLabel = styled.label`
   padding: ${(props) => props.theme.spacing.xsmall};
   width: 100%;
   display: inline-block;
-  ${hoverState(css`
-    background-color: ${(props) => props.theme.color.secondaryHover};
-  `)}
   input {
     margin: 0 ${(props) => props.theme.spacing.xsmall} 0 0;
   }
@@ -176,14 +174,15 @@ const ProjectCard = ({
 
   return (
     <CardWrapper>
-      <ProjectCardLeft>
+      <ProjectNameWrapper>
         <h2>{name}</h2>
+      </ProjectNameWrapper>
+      <ProjectInfoWrapper>
+        <p>{country}</p>
         <p>
-          {country} - {numberOfSites}{' '}
+          {numberOfSites}{' '}
           {numberOfSites && pluralize(numberOfSites, 'site', 'sites')}
         </p>
-      </ProjectCardLeft>
-      <ProjectCardRight>
         <CheckBoxWithLabel for="offline-toggle">
           <input
             id="offline-toggle"
@@ -193,9 +192,8 @@ const ProjectCard = ({
           />
           Offline Ready
         </CheckBoxWithLabel>
-        {/* <label>Last Updated</label> */}
         <p>Updated: {lastUpdatedDate}</p>
-      </ProjectCardRight>
+      </ProjectInfoWrapper>
       <ButtonGroups>
         <NavLinkButtonGroup projectUrl={projectUrl} />
         <VerticalRule />
