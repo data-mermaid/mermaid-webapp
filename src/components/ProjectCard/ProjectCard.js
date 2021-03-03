@@ -24,7 +24,7 @@ const stylesForNoHover = css`
   a {
     font-size: smaller;
     text-align: center;
-    label {
+    span {
       display: block;
     }
   }
@@ -38,12 +38,12 @@ const ButtonGroups = styled('div')`
     display:inline-block;
     position: relative;
     margin-right: ${(props) => props.theme.spacing.small};
-    label {
+    span {
       display: none;
     }
     ${mediaQueryForTabletLandscapeUp(css`
       ${hoverState(css`
-      label{
+      span{
         display: block;
         position: absolute;
         top: 4.3rem;
@@ -199,7 +199,7 @@ const ProjectCard = ({
         <VerticalRule />
         <ButtonSecondary>
           <IconCopy />
-          <label>Copy</label>
+          <span>Copy</span>
         </ButtonSecondary>
       </ButtonGroups>
     </CardWrapper>

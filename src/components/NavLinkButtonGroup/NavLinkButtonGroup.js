@@ -6,9 +6,7 @@ import { IconCollect, IconData, IconAdmin, IconHeart } from '../icons'
 /**
  * Describe your component
  */
-const ButtonLabel = styled('label')`
-  /* display: none; */
-`
+const ButtonLabel = styled('span')``
 const NavLinkButtonGroup = ({ projectUrl }) => {
   return (
     <>
