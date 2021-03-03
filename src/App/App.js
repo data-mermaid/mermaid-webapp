@@ -4,6 +4,7 @@ import React from 'react'
 
 import GlobalStyle from '../library/styling/globalStyles'
 import Breadcrumbs from '../components/generic/Breadcrumbs'
+import ProjectName from '../components/ProjectName'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/generic/Layout'
@@ -19,7 +20,7 @@ function App() {
     isOnline,
   })
   const apiService = useMermaidApi()
-  const { routes, getBreadCrumbs } = useRoutes(apiService)
+  const { routes, getRoutePaths } = useRoutes(apiService)
 
   const layoutProps = {
     header: <Header logout={logoutMermaid} isOnline={isOnline} />,
@@ -39,8 +40,8 @@ function App() {
               render={(routeProps) => (
                 <Layout
                   {...layoutProps}
-                  breadcrumbs={
-                    <Breadcrumbs crumbs={getBreadCrumbs(routeProps)} />
+                  projectName={
+                    <ProjectName routePaths={getRoutePaths(routeProps)} />
                   }
                 >
                   <Component />
