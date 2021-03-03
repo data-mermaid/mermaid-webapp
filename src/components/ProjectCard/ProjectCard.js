@@ -183,7 +183,7 @@ const ProjectCard = ({
           {numberOfSites}{' '}
           {numberOfSites && pluralize(numberOfSites, 'site', 'sites')}
         </p>
-        <CheckBoxWithLabel for="offline-toggle">
+        <CheckBoxWithLabel htmlFor="offline-toggle">
           <input
             id="offline-toggle"
             type="checkbox"
