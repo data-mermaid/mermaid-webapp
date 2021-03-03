@@ -9,7 +9,7 @@ import SubLayout2 from '../../SubLayout2'
 const Health = () => {
   return (
     <SubLayout2
-      lowerLeft={<NavMenu />}
+      sidebar={<NavMenu />}
       lowerRight={<>Project Health Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

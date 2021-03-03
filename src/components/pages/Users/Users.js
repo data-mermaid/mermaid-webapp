@@ -9,7 +9,7 @@ import SubLayout2 from '../../SubLayout2'
 const Users = () => {
   return (
     <SubLayout2
-      lowerLeft={<NavMenu />}
+      sidebar={<NavMenu />}
       lowerRight={<>Users Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

@@ -9,7 +9,7 @@ import SubLayout2 from '../../SubLayout2'
 const FishFamilies = () => {
   return (
     <SubLayout2
-      lowerLeft={<NavMenu />}
+      sidebar={<NavMenu />}
       lowerRight={<>Fish Families Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

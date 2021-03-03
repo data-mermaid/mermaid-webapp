@@ -8,7 +8,7 @@ import NavMenu from '../../NavMenu'
 const Collect = () => {
   return (
     <SubLayout2
-      lowerLeft={<NavMenu />}
+      sidebar={<NavMenu />}
       lowerRight={<>Collect Table Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

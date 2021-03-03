@@ -16,12 +16,10 @@ const SideBar = styled(Column)`
   width: 260px;
 `
 
-const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
+const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
   return (
     <SubLayout2Container>
-      <SideBar>
-        <div>{lowerLeft}</div>
-      </SideBar>
+      <SideBar>{sidebar}</SideBar>
 
       <Column>
         <div>{upperRight}</div>
@@ -32,7 +30,7 @@ const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
 }
 
 SubLayout2.propTypes = {
-  lowerLeft: PropTypes.node.isRequired,
+  sidebar: PropTypes.node.isRequired,
   lowerRight: PropTypes.node.isRequired,
   upperRight: PropTypes.node.isRequired,
 }

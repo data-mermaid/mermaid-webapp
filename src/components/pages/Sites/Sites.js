@@ -10,7 +10,7 @@ import SubLayout2 from '../../SubLayout2'
 const Sites = () => {
   return (
     <SubLayout2
-      lowerLeft={<NavMenu />}
+      sidebar={<NavMenu />}
       lowerRight={<>Sites Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

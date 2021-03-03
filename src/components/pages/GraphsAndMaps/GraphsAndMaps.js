@@ -9,7 +9,7 @@ import SubLayout2 from '../../SubLayout2'
 const GraphsAndMaps = () => {
   return (
     <SubLayout2
-      lowerLeft={<NavMenu />}
+      sidebar={<NavMenu />}
       lowerRight={<>Graphs and Maps Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

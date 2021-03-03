@@ -9,7 +9,7 @@ import SubLayout2 from '../../SubLayout2'
 const Admin = () => {
   return (
     <SubLayout2
-      lowerLeft={<NavMenu />}
+      sidebar={<NavMenu />}
       lowerRight={<>Admin Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

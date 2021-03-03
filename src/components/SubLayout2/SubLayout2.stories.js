@@ -8,7 +8,7 @@ export default {
 }
 export const basic = () => (
   <SubLayout2
-    lowerLeft={<>Lower Left</>}
+    sidebar={<>Lower Left</>}
     lowerRight={<>Lower Right</>}
     upperRight={<>Upper Right</>}
   />
