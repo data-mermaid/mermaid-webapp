@@ -3,7 +3,6 @@ import { ThemeProvider } from 'styled-components/macro'
 import React from 'react'
 
 import GlobalStyle from '../library/styling/globalStyles'
-import Breadcrumbs from '../components/generic/Breadcrumbs'
 import ProjectName from '../components/ProjectName'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
