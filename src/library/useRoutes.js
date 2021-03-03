@@ -99,7 +99,7 @@ export const useRoutes = (apiService) => {
       originalRoutePath,
     )
   }
-  const getBreadCrumbs = (reactRouterRenderProps) => {
+  const getRoutePaths = (reactRouterRenderProps) => {
     const containingRoutes = _getContainingRoutes(reactRouterRenderProps)
     const parameterNames = Object.keys(reactRouterRenderProps.match.params)
     const hasParameters = parameterNames.length
@@ -119,5 +119,5 @@ export const useRoutes = (apiService) => {
     return crumbs
   }
 
-  return { routes, getBreadCrumbs }
+  return { routes, getRoutePaths }
 }
