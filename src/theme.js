@@ -44,13 +44,20 @@ const spacing = {
   large,
   xlarge,
   buttonPadding: `${small} ${medium}`,
+  width: '90vw',
+  maxWidth: '1200px',
 }
+
+const timing = {
+  hoverTransition: '0.25s',
+}
+
 const typography = {
   defaultFontSize: '1.8rem',
   lineHeight: '1.2',
   fontStack: 'Arial, Helvetica Neue, Helvetica, sans-serif',
 }
 
-const theme = { color, spacing, typography }
+const theme = { color, timing, spacing, typography }
 
 export default theme

@@ -2,11 +2,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
-
-import { NavLinkButtonish } from '../generic/links'
 import { Column, Row } from '../generic/positioning'
-import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
 /**
  * Describe your component
@@ -17,33 +13,13 @@ const SubLayout2Container = styled(Row)`
 `
 
 const SideBar = styled(Column)`
-  width: 200px;
-`
-const NavContainer = styled.nav`
-  display: flex;
-  flex-direction: column;
-  border-bottom: thin solid lightgray;
-  padding: ${(props) => props.theme.spacing.small};
-  & > ${Row} {
-    justify-content: space-between;
-    padding-top: ${(props) => props.theme.spacing.small};
-  }
+  width: 260px;
 `
 
-const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
-  const projectUrl = useCurrentProjectPath()
-
+const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
   return (
     <SubLayout2Container>
-      <SideBar>
-        <NavContainer>
-          <NavLinkButtonish to={projectUrl}>Project Overview</NavLinkButtonish>
-          <Row>
-            <NavLinkButtonGroup projectUrl={projectUrl} />
-          </Row>
-        </NavContainer>
-        <div>{lowerLeft}</div>
-      </SideBar>
+      <SideBar>{sidebar}</SideBar>
 
       <Column>
         <div>{upperRight}</div>
@@ -54,7 +30,7 @@ const SubLayout2 = ({ lowerLeft, lowerRight, upperRight }) => {
 }
 
 SubLayout2.propTypes = {
-  lowerLeft: PropTypes.node.isRequired,
+  sidebar: PropTypes.node.isRequired,
   lowerRight: PropTypes.node.isRequired,
   upperRight: PropTypes.node.isRequired,
 }

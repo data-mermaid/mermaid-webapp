@@ -1,7 +1,8 @@
 export default {
   projects: [
     {
-      name: 'Karimunjawa National Park',
+      name:
+        'Karimunjawa National Park is a long name for a project, not as long as Karimunjawaawajnumirak',
       country: 'Fiji',
       numberOfSites: 23,
       offlineReady: true,
@@ -9,10 +10,81 @@ export default {
     },
     {
       name: 'Gita Nada_MPA 2018',
-      country: 'Fiji',
-      numberOfSites: 1,
+      country: 'Indonesia',
+      numberOfSites: 26,
+      offlineReady: true,
+      lastUpdatedDate: '11/21/2021',
+    },
+    {
+      name:
+        'Survei Ekologi KKPD Aceh Besar, KKPD Pesisir Timur Sabang dan TWAL Pulau Weh',
+      country: 'Albania, Indonesia, Malaysia',
+      numberOfSites: 34,
       offlineReady: false,
       lastUpdatedDate: '11/21/2021',
     },
+    {
+      name: "Belize Glover's Atoll 2019",
+      country: 'Fiji, Indonesia',
+      numberOfSites: 49,
+      offlineReady: false,
+      lastUpdatedDate: '11/21/2021',
+    },
+    {
+      name: 'XPDC Kei Kecil 2018',
+      country: 'Fiji',
+      numberOfSites: 33,
+      offlineReady: false,
+      lastUpdatedDate: '11/21/2021',
+    },
+  ],
+  collectRecords: [
+    {
+      id: '1',
+      method: 'Benthic LIT',
+      site: '1203',
+      management: 'Ankivonjy no-take',
+      data: { protocol: 'benthiclit' },
+      depth: 20,
+    },
+    {
+      id: '2',
+      method: 'Fish Belt',
+      site: 'Karang Kapal',
+      management: 'Fisheries Utilization',
+      data: { protocol: 'fishbelt' },
+      depth: 10,
+    },
+  ],
+  sites: [
+    {
+      name: 'Amazing Maze',
+      reef_type: 'patch',
+      reef_zone: 'pinnacle',
+      exposure: 'exposed',
+    },
+    {
+      name: 'BU02',
+      reef_type: 'fringing',
+      reef_zone: 'back reef',
+      exposure: 'sheltered',
+    },
+    {
+      name: '1203',
+      reef_type: 'patch',
+      reef_zone: 'fore reef',
+      exposure: 'very sheltered',
+    },
+    {
+      name: 'Karang Kapal',
+      reef_type: 'patch',
+      reef_zone: 'back reef',
+      exposure: 'exposed',
+    },
+  ],
+  managementRegimes: [
+    { name: 'Fisheries Utilization' },
+    { name: 'Ankivonjy no-take' },
+    { name: 'Bureta tabu' },
   ],
 }

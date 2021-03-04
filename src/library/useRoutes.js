@@ -10,6 +10,7 @@ import ManagementRegimes from '../components/pages/ManagementRegimes'
 import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Users from '../components/pages/Users'
+import Health from '../components/pages/Health'
 
 export const useRoutes = (apiService) => {
   const routes = [
@@ -22,6 +23,11 @@ export const useRoutes = (apiService) => {
       path: '/projects/:projectId',
       name: 'Project Details',
       Component: Details,
+    },
+    {
+      path: '/projects/:projectId/health',
+      name: 'Project Health',
+      Component: Health,
     },
     {
       path: '/projects/:projectId/collecting',
