@@ -20,6 +20,7 @@ import React from 'react'
 
 export const IconAdmin = () => <FontAwesomeIcon icon={faFileAlt} />
 export const IconCollect = () => <FontAwesomeIcon icon={faPencilAlt} />
+export const IconHeart = () => <FontAwesomeIcon icon={faHeart} />
 export const IconCopy = () => <FontAwesomeIcon icon={faCopy} />
 export const IconData = () => <FontAwesomeIcon icon={faCheckCircle} />
 export const IconDown = () => <FontAwesomeIcon icon={faCaretDown} />

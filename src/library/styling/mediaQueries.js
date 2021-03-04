@@ -1,4 +1,4 @@
-const { css } = require('styled-components')
+import { css } from 'styled-components/macro'
 
 const mediaQueryPhoneOnly = (content) => css`
   @media (max-width: 599px) {
@@ -7,6 +7,11 @@ const mediaQueryPhoneOnly = (content) => css`
 `
 const mediaQueryForTabletPortraitUp = (content) => css`
   @media (min-width: 600px) {
+    ${content};
+  }
+`
+const mediaQueryTabletLandscapeOnly = (content) => css`
+  @media (max-width: 899px) {
     ${content};
   }
 `
@@ -37,6 +42,7 @@ export {
   mediaQueryPhoneOnly,
   mediaQueryForBigDesktopUp,
   mediaQueryForTabletLandscapeUp,
+  mediaQueryTabletLandscapeOnly,
   mediaQueryForTabletPortraitUp,
   mediaQueryForDesktopUp,
   hoverState,

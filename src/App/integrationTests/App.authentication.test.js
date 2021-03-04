@@ -30,10 +30,10 @@ test('App: an online and authenticated user can logout', async () => {
   await waitFor(() => expect(screen.queryByText('Projects')).toBeNull())
 })
 
-test('App renders the initial screen as expected for an offline user who is authenticated when online', () => {
+test.only('App renders the initial screen as expected for an offline user who is authenticated when online', async () => {
   renderAuthenticatedOffline(<App />)
 
-  expect(screen.getByRole('heading')).toHaveTextContent('Projects')
+  expect(await screen.findByText('Projects', { selector: 'h1' }))
 
   fireEvent.click(screen.getByText('Fake User'))
 

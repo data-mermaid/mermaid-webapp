@@ -3,6 +3,7 @@ const { createGlobalStyle } = require('styled-components')
 const GlobalStyle = createGlobalStyle`
     :root{
         font-size: 62.5%;
+        color: ${(props) => props.theme.color.black};
     }
     body {
         background: ${(props) => props.theme.color.backgroundColor};
