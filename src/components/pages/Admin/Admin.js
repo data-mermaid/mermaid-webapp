@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminNav from '../../AdminNav'
+import NavMenu from '../../NavMenu'
 import SubLayout2 from '../../SubLayout2'
 // import PropTypes from 'prop-types'
 
@@ -9,7 +9,7 @@ import SubLayout2 from '../../SubLayout2'
 const Admin = () => {
   return (
     <SubLayout2
-      lowerLeft={<AdminNav />}
+      sidebar={<NavMenu />}
       lowerRight={<>Admin Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

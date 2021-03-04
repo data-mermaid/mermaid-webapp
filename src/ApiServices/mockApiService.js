@@ -38,4 +38,53 @@ export default {
       lastUpdatedDate: '11/21/2021',
     },
   ],
+  collectRecords: [
+    {
+      id: '1',
+      method: 'Benthic LIT',
+      site: '1203',
+      management: 'Ankivonjy no-take',
+      data: { protocol: 'benthiclit' },
+      depth: 20,
+    },
+    {
+      id: '2',
+      method: 'Fish Belt',
+      site: 'Karang Kapal',
+      management: 'Fisheries Utilization',
+      data: { protocol: 'fishbelt' },
+      depth: 10,
+    },
+  ],
+  sites: [
+    {
+      name: 'Amazing Maze',
+      reef_type: 'patch',
+      reef_zone: 'pinnacle',
+      exposure: 'exposed',
+    },
+    {
+      name: 'BU02',
+      reef_type: 'fringing',
+      reef_zone: 'back reef',
+      exposure: 'sheltered',
+    },
+    {
+      name: '1203',
+      reef_type: 'patch',
+      reef_zone: 'fore reef',
+      exposure: 'very sheltered',
+    },
+    {
+      name: 'Karang Kapal',
+      reef_type: 'patch',
+      reef_zone: 'back reef',
+      exposure: 'exposed',
+    },
+  ],
+  managementRegimes: [
+    { name: 'Fisheries Utilization' },
+    { name: 'Ankivonjy no-take' },
+    { name: 'Bureta tabu' },
+  ],
 }

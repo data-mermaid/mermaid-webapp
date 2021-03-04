@@ -35,7 +35,7 @@ const ButtonGroups = styled('div')`
     ${(props) => props.theme.spacing.medium};
   button,
   a {
-    display:inline-block;
+    display: inline-block;
     position: relative;
     margin-right: ${(props) => props.theme.spacing.small};
     span {
@@ -43,20 +43,21 @@ const ButtonGroups = styled('div')`
     }
     ${mediaQueryForTabletLandscapeUp(css`
       ${hoverState(css`
-      span{
-        display: block;
-        position: absolute;
-        top: 4.3rem;
-        left: 0;
-        color: ${(props) => props.theme.color.white};
-        background-color: ${(props) => props.theme.color.black};
-        text-align: center;
-        padding: ${(props) => props.theme.spacing.small};
-        text-transform: uppercase;
+        span {
+          display: block;
+          position: absolute;
+          top: 4.3rem;
+          left: 0;
+          color: ${(props) => props.theme.color.white};
+          background-color: ${(props) => props.theme.color.black};
+          text-align: center;
+          padding: ${(props) => props.theme.spacing.small};
+          text-transform: uppercase;
+        }
       `)}
     `)}
-    }
   }
+
   @media (hover: hover) {
     visibility: hidden;
   }
@@ -75,6 +76,7 @@ const ButtonGroups = styled('div')`
     }
   `)}
 `
+
 const CardWrapper = styled('div')`
   display:grid;
   grid-template-columns: 4fr 1fr;

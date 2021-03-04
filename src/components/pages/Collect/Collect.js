@@ -1,7 +1,6 @@
 import React from 'react'
-import CollectingNav from '../../CollectingNav'
 import SubLayout2 from '../../SubLayout2'
-// import PropTypes from 'prop-types'
+import NavMenu from '../../NavMenu'
 
 /**
  * Project Collect Page
@@ -9,8 +8,8 @@ import SubLayout2 from '../../SubLayout2'
 const Collect = () => {
   return (
     <SubLayout2
-      lowerLeft={<CollectingNav />}
-      lowerRight={<>Collect Placeholder</>}
+      sidebar={<NavMenu />}
+      lowerRight={<>Collect Table Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />
   )
