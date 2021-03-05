@@ -11,16 +11,12 @@ import ProjectName from '../ProjectName'
 
 const SubLayout2Container = styled(Row)``
 
-const SideBar = styled(Column)`
-  width: 260px;
-`
-
 const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
   return (
     <>
       <ProjectName />
       <SubLayout2Container>
-        <SideBar>{sidebar}</SideBar>
+        <Column>{sidebar}</Column>
 
         <Column>
           <div>{upperRight}</div>

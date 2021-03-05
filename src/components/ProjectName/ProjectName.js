@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components/macro'
 import { H2 } from '../generic/text'
 import { Row } from '../generic/positioning'
-import { NavLinkSidebar } from '../generic/links'
+import { NavLinkButtonishIcon } from '../generic/links'
 import { IconHome } from '../icons'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 
@@ -21,9 +21,9 @@ const ProjectName = () => {
 
   return (
     <ProjectNameWrapper>
-      <NavLinkSidebar to="/">
+      <NavLinkButtonishIcon to="/">
         <IconHome />
-      </NavLinkSidebar>
+      </NavLinkButtonishIcon>
       <H2>{projectId}</H2>
     </ProjectNameWrapper>
   )
