@@ -3,7 +3,6 @@ import { ThemeProvider } from 'styled-components/macro'
 import React from 'react'
 
 import GlobalStyle from '../library/styling/globalStyles'
-import ProjectName from '../components/ProjectName'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/generic/Layout'
@@ -19,7 +18,7 @@ function App() {
     isOnline,
   })
   const apiService = useMermaidApi()
-  const { routes, getRoutePaths } = useRoutes(apiService)
+  const { routes } = useRoutes(apiService)
 
   const layoutProps = {
     header: <Header logout={logoutMermaid} isOnline={isOnline} />,
@@ -36,13 +35,8 @@ function App() {
               exact
               path={path}
               key={path}
-              render={(routeProps) => (
-                <Layout
-                  {...layoutProps}
-                  projectName={
-                    <ProjectName routePaths={getRoutePaths(routeProps)} />
-                  }
-                >
+              render={() => (
+                <Layout {...layoutProps}>
                   <Component />
                 </Layout>
               )}

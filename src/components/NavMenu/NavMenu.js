@@ -26,53 +26,53 @@ const NavHeader = styled(H4)`
 `
 
 const NavMenu = () => {
-  const currentProjectPath = useCurrentProjectPath()
+  const { projectUrl } = useCurrentProjectPath()
 
   return (
     <Column as="nav">
       <NavHeader>Project Overview</NavHeader>
-      <NavLinkSidebar to={`${currentProjectPath}/health`}>
+      <NavLinkSidebar to={`${projectUrl}/health`}>
         <IconHeart /> Project Health
       </NavLinkSidebar>
 
       <NavHeader>Collect</NavHeader>
-      <NavLinkSidebar to={`${currentProjectPath}/collecting`}>
+      <NavLinkSidebar to={`${projectUrl}/collecting`}>
         <IconCollect />
         Collecting
       </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/sites`}>
+      <NavLinkSidebar to={`${projectUrl}/sites`}>
         <IconSites />
         Sites
       </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/management-regimes`}>
+      <NavLinkSidebar to={`${projectUrl}/management-regimes`}>
         <IconCopy />
         Management Regimes
       </NavLinkSidebar>
 
       <NavHeader>Data</NavHeader>
-      <NavLinkSidebar to={`${currentProjectPath}/data`}>
+      <NavLinkSidebar to={`${projectUrl}/data`}>
         <IconData />
         Submitted
       </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/graphs-and-maps`}>
+      <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
         <IconGraph />
         Graphs and Maps
       </NavLinkSidebar>
 
       <NavHeader>Admin</NavHeader>
-      <NavLinkSidebar to={`${currentProjectPath}/admin`}>
+      <NavLinkSidebar to={`${projectUrl}/admin`}>
         <IconAdmin />
         Project Info
       </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/users`}>
+      <NavLinkSidebar to={`${projectUrl}/users`}>
         <IconUsers />
         Users
       </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/fish-families`}>
+      <NavLinkSidebar to={`${projectUrl}/fish-families`}>
         <IconHeart />
         Fish Families
       </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/data-sharing`}>
+      <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
         <IconSharing />
         Data Sharing
       </NavLinkSidebar>

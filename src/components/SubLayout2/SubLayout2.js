@@ -3,14 +3,13 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
 import { Column, Row } from '../generic/positioning'
+import ProjectName from '../ProjectName'
 
 /**
  * Describe your component
  */
 
-const SubLayout2Container = styled(Row)`
-  height: 100%;
-`
+const SubLayout2Container = styled(Row)``
 
 const SideBar = styled(Column)`
   width: 260px;
@@ -18,14 +17,17 @@ const SideBar = styled(Column)`
 
 const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
   return (
-    <SubLayout2Container>
-      <SideBar>{sidebar}</SideBar>
+    <>
+      <ProjectName />
+      <SubLayout2Container>
+        <SideBar>{sidebar}</SideBar>
 
-      <Column>
-        <div>{upperRight}</div>
-        <div>{lowerRight}</div>
-      </Column>
-    </SubLayout2Container>
+        <Column>
+          <div>{upperRight}</div>
+          <div>{lowerRight}</div>
+        </Column>
+      </SubLayout2Container>
+    </>
   )
 }
 

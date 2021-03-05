@@ -15,11 +15,10 @@ const LayoutContainer = styled(Column)`
   height: 100vh;
 `
 
-const Layout = ({ projectName, children, footer, header }) => {
+const Layout = ({ children, footer, header }) => {
   return (
     <LayoutContainer>
       {header}
-      <div>{projectName}</div>
       <main>{children}</main>
       {footer}
     </LayoutContainer>
@@ -30,7 +29,6 @@ Layout.propTypes = {
   children: PropTypes.node.isRequired,
   footer: PropTypes.node.isRequired,
   header: PropTypes.node.isRequired,
-  projectName: PropTypes.node.isRequired,
 }
 
 export default Layout
