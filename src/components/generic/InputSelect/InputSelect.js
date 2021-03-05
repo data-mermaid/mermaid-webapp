@@ -1,0 +1,40 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { Column } from '../positioning'
+/**
+ * Describe your component
+ */
+
+const InputSelectStyle = styled(Column)`
+  margin: 10px;
+`
+
+const InputSelect = ({ label, options, value }) => {
+  const optionList = options.map(({ name }) => (
+    <option key={name} value={name}>
+      {name}
+    </option>
+  ))
+
+  return (
+    <InputSelectStyle id="mermaid-select">
+      <label htmlFor="mermaid-select">{label}:</label>
+      <select value={value} onChange={() => {}}>
+        {optionList}
+      </select>
+    </InputSelectStyle>
+  )
+}
+
+InputSelect.propTypes = {
+  label: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  ).isRequired,
+  value: PropTypes.string.isRequired,
+}
+
+export default InputSelect

@@ -1,6 +1,7 @@
 import React from 'react'
 import Admin from '../components/pages/Admin'
 import Collect from '../components/pages/Collect'
+import CollectRecord from '../components/pages/CollectRecord'
 import Data from '../components/pages/Data'
 import DataSharing from '../components/pages/DataSharing'
 import Details from '../components/pages/Details'
@@ -32,7 +33,17 @@ export const useRoutes = (apiService) => {
     {
       path: '/projects/:projectId/collecting',
       name: 'Collecting',
-      Component: Collect,
+      Component: () => <Collect apiService={apiService} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/fishbelt/:recordId',
+      name: 'Fish Belt',
+      Component: () => <CollectRecord apiService={apiService} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/benthiclit/:recordId',
+      name: 'Benthic LIT',
+      Component: () => <CollectRecord apiService={apiService} />,
     },
     {
       path: '/projects/:projectId/data',
