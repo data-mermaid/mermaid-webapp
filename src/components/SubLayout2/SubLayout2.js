@@ -12,14 +12,10 @@ const SubLayout2Container = styled(Row)`
   height: 100%;
 `
 
-const SideBar = styled(Column)`
-  width: 260px;
-`
-
 const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
   return (
     <SubLayout2Container>
-      <SideBar>{sidebar}</SideBar>
+      <Column>{sidebar}</Column>
 
       <Column>
         <div>{upperRight}</div>
