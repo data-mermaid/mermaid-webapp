@@ -1,6 +1,9 @@
 import { NavLink } from 'react-router-dom'
 import styled, { css } from 'styled-components/macro'
-import { hoverState } from '../../library/styling/mediaQueries'
+import {
+  mediaQueryTabletLandscapeOnly,
+  hoverState,
+} from '../../library/styling/mediaQueries'
 
 export const NavLinkButtonish = styled(NavLink)`
   padding: ${(props) => props.theme.spacing.buttonPadding};
@@ -41,4 +44,9 @@ export const NavLinkSidebar = styled(NavLink)`
   &.active {
     ${activeStyle};
   }
+  ${mediaQueryTabletLandscapeOnly(css`
+    span {
+      display: none;
+    }
+  `)}
 `

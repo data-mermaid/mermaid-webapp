@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { NavLinkSidebar } from '../generic/links'
+import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import {
   IconCollect,
@@ -38,6 +39,9 @@ const NavHeader = styled('p')`
   letter-spacing: 2px;
   padding: ${(props) => props.theme.spacing.small};
   padding-top: ${(props) => props.theme.spacing.medium};
+  ${mediaQueryTabletLandscapeOnly(css`
+    display: none;
+  `)}
 `
 
 const NavMenu = () => {
@@ -51,7 +55,7 @@ const NavMenu = () => {
           <ul>
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/health`}>
-                <IconHeart /> Project Health
+                <IconHeart /> <span>Project Health</span>
               </NavLinkSidebar>
             </li>
           </ul>
@@ -62,19 +66,19 @@ const NavMenu = () => {
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/collecting`}>
                 <IconCollect />
-                Collecting
+                <span>Collecting</span>
               </NavLinkSidebar>
             </li>
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/sites`}>
                 <IconSites />
-                Sites
+                <span>Sites</span>
               </NavLinkSidebar>
             </li>
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/management-regimes`}>
                 <IconCopy />
-                Management Regimes
+                <span>Management Regimes</span>
               </NavLinkSidebar>
             </li>
           </ul>
@@ -85,13 +89,13 @@ const NavMenu = () => {
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/data`}>
                 <IconData />
-                Submitted
+                <span>Submitted</span>
               </NavLinkSidebar>
             </li>
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/graphs-and-maps`}>
                 <IconGraph />
-                Graphs and Maps
+                <span>Graphs and Maps</span>
               </NavLinkSidebar>
             </li>
           </ul>
@@ -102,25 +106,25 @@ const NavMenu = () => {
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/admin`}>
                 <IconAdmin />
-                Project Info
+                <span>Project Info</span>
               </NavLinkSidebar>
             </li>
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/users`}>
                 <IconUsers />
-                Users
+                <span>Users</span>
               </NavLinkSidebar>
             </li>
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/fish-families`}>
                 <IconHeart />
-                Fish Families
+                <span>Fish Families</span>
               </NavLinkSidebar>
             </li>
             <li>
               <NavLinkSidebar to={`${currentProjectPath}/data-sharing`}>
                 <IconSharing />
-                Data Sharing
+                <span>Data Sharing</span>
               </NavLinkSidebar>
             </li>
           </ul>
