@@ -1,4 +1,5 @@
-const { createGlobalStyle } = require('styled-components')
+import { createGlobalStyle, css } from 'styled-components'
+import { hoverState } from './mediaQueries'
 
 const GlobalStyle = createGlobalStyle`
     :root{
@@ -19,6 +20,13 @@ const GlobalStyle = createGlobalStyle`
     *,*::before,*::after{
         box-sizing: border-box;
     } 
+    a{
+        color: ${(props) => props.theme.color.black};
+        text-decoration: underline;
+        ${hoverState(css`
+          text-decoration: none;
+        `)}
+    }
 `
 
 export default GlobalStyle

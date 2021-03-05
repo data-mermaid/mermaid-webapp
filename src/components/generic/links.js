@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components/macro'
+import { hoverState } from '../../library/styling/mediaQueries'
 
 export const NavLinkButtonish = styled(NavLink)`
   padding: ${(props) => props.theme.spacing.buttonPadding};
@@ -19,6 +20,13 @@ export const NavLinkButtonish = styled(NavLink)`
 export const NavLinkButtonishIcon = styled(NavLinkButtonish)``
 
 export const NavLinkSidebar = styled(NavLink)`
+  padding: ${(props) => props.theme.spacing.small};
+  text-decoration: none;
+  display: block;
+  ${hoverState(css`
+    background-color: ${(props) => props.theme.color.primaryHover};
+    color: ${(props) => props.theme.color.white};
+  `)}
   & > svg {
     margin-left: ${(props) => props.theme.spacing.small};
     margin-right: ${(props) => props.theme.spacing.small};
