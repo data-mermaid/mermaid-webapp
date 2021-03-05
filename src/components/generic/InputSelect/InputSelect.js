@@ -10,7 +10,7 @@ const InputSelectStyle = styled(Column)`
   margin: 10px;
 `
 
-const InputSelect = ({ label, options, value }) => {
+const InputSelect = ({ label, options, ...restOfProps }) => {
   const optionList = options.map(({ name }) => (
     <option key={name} value={name}>
       {name}
@@ -18,11 +18,9 @@ const InputSelect = ({ label, options, value }) => {
   ))
 
   return (
-    <InputSelectStyle id="mermaid-select">
-      <label htmlFor="mermaid-select">{label}:</label>
-      <select value={value} onChange={() => {}}>
-        {optionList}
-      </select>
+    <InputSelectStyle>
+      <label htmlFor="input-select">{label}:</label>
+      <select {...restOfProps}>{optionList}</select>
     </InputSelectStyle>
   )
 }
@@ -34,7 +32,9 @@ InputSelect.propTypes = {
       name: PropTypes.string,
     }),
   ).isRequired,
+  name: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default InputSelect

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import { useParams } from 'react-router-dom'
 import SubLayout2 from '../../SubLayout2'
 import NavMenu from '../../NavMenu'
@@ -13,19 +14,36 @@ import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
  */
 
 // this will be a separate component soon...
-const CollectBody = ({ collectRecord, sites, managementRegimes }) => {
+const CollectBody = ({
+  collectRecord,
+  sites,
+  managementRegimes,
+  handleInputChange,
+}) => {
   const { site, management, depth } = collectRecord
 
   return (
     <>
-      <InputSelect key="sites" label="Site" options={sites} value={site} />
       <InputSelect
-        key="managementRegimes"
+        name="site"
+        label="Site"
+        options={sites}
+        value={site}
+        onChange={handleInputChange}
+      />
+      <InputSelect
+        name="management"
         label="Management Regime"
         value={management}
         options={managementRegimes}
+        onChange={handleInputChange}
       />
-      <InputNumber label="Depth" value={depth} />
+      <InputNumber
+        name="depth"
+        label="Depth"
+        value={depth}
+        onChange={handleInputChange}
+      />
     </>
   )
 }
@@ -41,6 +59,14 @@ const CollectRecord = ({ apiService }) => {
     filterRecord(recordId),
   )
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+
+    const newValue = name === 'depth' ? parseInt(value, 10) : value
+
+    setCurCollectRecord({ ...curCollectRecord, [name]: newValue })
+  }
+
   const saveRecord = () => {}
 
   return (
@@ -51,6 +77,7 @@ const CollectRecord = ({ apiService }) => {
           collectRecord={curCollectRecord}
           sites={sites}
           managementRegimes={managementRegimes}
+          handleInputChange={handleInputChange}
         />
       }
       upperRight={
@@ -62,7 +89,24 @@ const CollectRecord = ({ apiService }) => {
   )
 }
 
-CollectBody.propTypes = {}
+CollectBody.propTypes = {
+  collectRecord: PropTypes.shape({
+    site: PropTypes.string,
+    management: PropTypes.string,
+    depth: PropTypes.number,
+  }).isRequired,
+  sites: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  ).isRequired,
+  managementRegimes: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  ).isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+}
 
 CollectRecord.propTypes = {
   apiService: mermaidApiServicePropType.isRequired,
