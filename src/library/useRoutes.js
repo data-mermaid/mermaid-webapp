@@ -20,11 +20,6 @@ export const useRoutes = (apiService) => {
       Component: () => <Projects apiService={apiService} />,
     },
     {
-      path: '/projects/:projectId',
-      name: 'Project Details',
-      Component: Details,
-    },
-    {
       path: '/projects/:projectId/health',
       name: 'Project Health',
       Component: Health,
