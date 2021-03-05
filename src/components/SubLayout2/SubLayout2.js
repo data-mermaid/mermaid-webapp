@@ -9,19 +9,26 @@ import ProjectName from '../ProjectName'
  * Describe your component
  */
 
-const SubLayout2Container = styled(Row)``
+const SubLayout2Container = styled(Column)`
+  height: 100%;
+`
+
+const SubLayout2ContentWrapper = styled(Row)`
+  height: 100%;
+`
 
 const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
   return (
     <>
-      <ProjectName />
       <SubLayout2Container>
-        <Column>{sidebar}</Column>
-
-        <Column>
-          <div>{upperRight}</div>
-          <div>{lowerRight}</div>
-        </Column>
+        <ProjectName />
+        <SubLayout2ContentWrapper>
+          <Column>{sidebar}</Column>
+          <Column>
+            <div>{upperRight}</div>
+            <div>{lowerRight}</div>
+          </Column>
+        </SubLayout2ContentWrapper>
       </SubLayout2Container>
     </>
   )
