@@ -10,14 +10,19 @@ export const NavLinkButtonish = styled(NavLink)`
   background-color: ${(props) => props.theme.color.secondaryColor};
   color: ${(props) => props.theme.color.secondaryText};
   border-color: ${(props) => props.theme.color.secondaryBorder};
-  &:hover {
+  ${hoverState(css`
     background-color: ${(props) => props.theme.color.secondaryHover};
-  }
+  `)}
   &:active {
-    background-color: red;
+    background-color: ${(props) => props.theme.color.secondaryActive};
   }
 `
 export const NavLinkButtonishIcon = styled(NavLinkButtonish)``
+
+const activeStyle = css`
+  background-color: ${(props) => props.theme.color.black};
+  color: ${(props) => props.theme.color.white};
+`
 
 export const NavLinkSidebar = styled(NavLink)`
   padding: ${(props) => props.theme.spacing.small};
@@ -27,8 +32,13 @@ export const NavLinkSidebar = styled(NavLink)`
     background-color: ${(props) => props.theme.color.primaryHover};
     color: ${(props) => props.theme.color.white};
   `)}
+  :active {
+    background-color: ${(props) => props.theme.color.primaryActive};
+  }
   & > svg {
-    margin-left: ${(props) => props.theme.spacing.small};
-    margin-right: ${(props) => props.theme.spacing.small};
+    margin: 0 ${(props) => props.theme.spacing.small};
+  }
+  &.active {
+    ${activeStyle};
   }
 `

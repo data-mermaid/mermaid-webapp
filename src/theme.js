@@ -19,10 +19,12 @@ const color = {
   backgroundColor: white.mix(colorHelper(black), 0.05),
   primaryColor: primary,
   primaryHover: primary.mix(colorHelper(white), 0.1),
+  primaryActive: primary.mix(colorHelper(black), 0.1),
   primaryText: white,
   primaryBorder: primary.mix(colorHelper(black), 0.2),
   secondaryColor: secondary,
   secondaryHover: secondary.mix(colorHelper('white'), 0.2),
+  secondaryActive: secondary.mix(colorHelper('black'), 0.2),
   secondaryText: black,
   secondaryBorder: secondary.mix(colorHelper(black), 0.2),
   cautionColor: caution,
@@ -36,6 +38,7 @@ const color = {
   disabledColor: '#D5D5DD',
   disabledText: '#969696',
   disabledBorder: '#969696',
+  border: white.mix(colorHelper(black), 0.5),
 }
 const spacing = {
   xsmall,

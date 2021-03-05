@@ -1,6 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Column } from '../generic/positioning'
+import styled, { css } from 'styled-components'
 import { NavLinkSidebar } from '../generic/links'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import {
@@ -18,13 +17,15 @@ import {
 /**
  * Describe your component
  */
+
 const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
-  /* border-right: solid 2px ${(props) => props.theme.color.black}; */
+  border-right: solid 1px ${(props) => props.theme.color.border};
+  height: 100%;
 `
 const NavList = styled('ul')`
-  padding: 0;
+  &,
   & ul {
     padding: 0;
   }
@@ -32,10 +33,11 @@ const NavList = styled('ul')`
 const NavHeader = styled('p')`
   text-transform: uppercase;
   font-weight: 900;
-  margin: ${(props) => props.theme.spacing.small} 0 0 0;
-  border-bottom: 1px solid;
+  margin: 0;
+  border-top: solid 1px ${(props) => props.theme.color.border};
   letter-spacing: 2px;
   padding: ${(props) => props.theme.spacing.small};
+  padding-top: ${(props) => props.theme.spacing.medium};
 `
 
 const NavMenu = () => {
