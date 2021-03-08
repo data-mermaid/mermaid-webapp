@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import InputSelect from '../generic/InputSelect'
-import InputNumber from '../generic/InputNumber'
-import InputDate from '../generic/InputDate'
-import InputTime from '../generic/InputTime'
+import SampleInfoForms from '../SampleInfoForms'
 
 /**
  * Describe your component
@@ -14,33 +11,13 @@ const CollectForms = ({
   managementRegimes,
   handleInputChange,
 }) => {
-  const { site, management, depth } = collectRecord
-
   return (
-    <>
-      <InputSelect
-        name="site"
-        label="Site"
-        options={sites}
-        value={site}
-        onChange={handleInputChange}
-      />
-      <InputSelect
-        name="management"
-        label="Management Regime"
-        value={management}
-        options={managementRegimes}
-        onChange={handleInputChange}
-      />
-      <InputDate label="Sample Date" />
-      <InputTime label="Sample Time" />
-      <InputNumber
-        name="depth"
-        label="Depth"
-        value={depth}
-        onChange={handleInputChange}
-      />
-    </>
+    <SampleInfoForms
+      collectRecord={collectRecord}
+      sites={sites}
+      managementRegimes={managementRegimes}
+      handleInputChange={handleInputChange}
+    />
   )
 }
 
