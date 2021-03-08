@@ -2,24 +2,25 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Column } from '../positioning'
+
 /**
  * Describe your component
  */
-const InputDateStyle = styled(Column)`
+const InputTimeStyle = styled(Column)`
   margin: 10px;
 `
 
-const InputDate = ({ label }) => {
+const InputTime = ({ label }) => {
   return (
-    <InputDateStyle>
+    <InputTimeStyle>
       <label htmlFor="input-number">{label}:</label>
-      <input type="date" />
-    </InputDateStyle>
+      <input type="time" />
+    </InputTimeStyle>
   )
 }
 
-InputDate.propTypes = {
+InputTime.propTypes = {
   label: PropTypes.string.isRequired,
 }
 
-export default InputDate
+export default InputTime
