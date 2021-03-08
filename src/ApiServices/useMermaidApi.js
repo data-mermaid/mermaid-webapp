@@ -46,6 +46,8 @@ export const useMermaidApi = ({
     isMermaidAuthenticated && !isOnline && !!mermaidDbAccessInstance
 
   const _initializeUserOnAuthentication = useEffect(() => {
+    let isMounted = true
+
     if (isOnlineAuthenticatedAndReady) {
       const getCurrentUserFromApi = authenticatedAxios.get(`${apiBaseUrl}/me`)
       const _addCurrentUserToStateAndOfflineStorage = getCurrentUserFromApi
@@ -56,11 +58,12 @@ export const useMermaidApi = ({
           if (!user) {
             throw Error('User Profile not returned from API')
           }
-
-          dispatch({
-            type: 'addUser',
-            payload: user,
-          })
+          if (isMounted) {
+            dispatch({
+              type: 'addUser',
+              payload: user,
+            })
+          }
 
           return mermaidDbAccessInstance.currentUser.put(user)
         })
@@ -79,11 +82,12 @@ export const useMermaidApi = ({
           if (!user) {
             throw Error('User Profile not returned from offline storage')
           }
-
-          dispatch({
-            type: 'addUser',
-            payload: user,
-          })
+          if (isMounted) {
+            dispatch({
+              type: 'addUser',
+              payload: user,
+            })
+          }
         })
         .catch((error) =>
           // future toast message
@@ -92,6 +96,10 @@ export const useMermaidApi = ({
             error,
           ),
         )
+    }
+
+    return () => {
+      isMounted = false
     }
   }, [
     apiBaseUrl,
