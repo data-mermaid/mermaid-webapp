@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import mockApiService from './mockApiService'
@@ -24,6 +24,11 @@ export const useMermaidApi = ({
   mermaidDbAccessInstance,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const [collectRecords] = useState(mockApiService.collectRecords)
+  const [sites] = useState(mockApiService.sites)
+  const [managementRegimes] = useState(mockApiService.managementRegimes)
+
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const authenticatedAxios = axios.create({
     headers: {
@@ -96,7 +101,13 @@ export const useMermaidApi = ({
     mermaidDbAccessInstance,
   ])
 
-  return { projects: state.projects, currentUser: state.currentUser }
+  return {
+    projects: state.projects,
+    currentUser: state.currentUser,
+    collectRecords,
+    sites,
+    managementRegimes,
+  }
 }
 export const projectsPropType = PropTypes.arrayOf(
   PropTypes.shape({
@@ -117,4 +128,28 @@ export const currentUserPropType = PropTypes.shape({
 export const mermaidApiServicePropType = PropTypes.shape({
   projects: projectsPropType,
   currentUser: currentUserPropType,
+  collectRecords: PropTypes.arrayOf(
+    PropTypes.shape({
+      method: PropTypes.string,
+      site: PropTypes.string,
+      management_regime: PropTypes.string,
+      data: PropTypes.shape({
+        protocol: PropTypes.string,
+      }),
+      depth: PropTypes.number,
+    }),
+  ),
+  sites: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      reef_type: PropTypes.string,
+      reef_zone: PropTypes.string,
+      exposure: PropTypes.string,
+    }),
+  ),
+  managementRegimes: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  ),
 })
