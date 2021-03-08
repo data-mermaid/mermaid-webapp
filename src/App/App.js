@@ -10,26 +10,48 @@ import Layout from '../components/generic/Layout'
 import theme from '../theme'
 import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
-import { useMermaidApi } from '../ApiServices/useMermaidApi'
+import {
+  mermaidApiServicePropType,
+  useMermaidApi,
+} from '../ApiServices/useMermaidApi'
 import useOnlineStatus from '../library/useOnlineStatus'
 
-function App() {
+function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
-  const { isMermaidAuthenticated, logoutMermaid } = useAuthentication({
+  const {
+    auth0Token,
+    isMermaidAuthenticated,
+    logoutMermaid,
+  } = useAuthentication({
     isOnline,
   })
-  const apiService = useMermaidApi()
+  const apiService = useMermaidApi({
+    auth0Token,
+    isMermaidAuthenticated,
+    isOnline,
+    mermaidDbAccessInstance,
+  })
   const { routes, getBreadCrumbs } = useRoutes(apiService)
 
   const layoutProps = {
-    header: <Header logout={logoutMermaid} isOnline={isOnline} />,
+    header: (
+      <Header
+        currentUser={apiService.currentUser}
+        isOnline={isOnline}
+        logout={logoutMermaid}
+      />
+    ),
     footer: <Footer />,
   }
+
+  const isMermaidAuthenticatedAndReady =
+    isMermaidAuthenticated && apiService.currentUser
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {isMermaidAuthenticated && (
+
+      {isMermaidAuthenticatedAndReady && (
         <Switch>
           {routes.map(({ path, Component }) => (
             <Route
@@ -55,6 +77,10 @@ function App() {
       )}
     </ThemeProvider>
   )
+}
+
+App.propTypes = {
+  mermaidDbAccessInstance: mermaidApiServicePropType.isRequired,
 }
 
 export default App
