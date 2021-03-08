@@ -22,7 +22,7 @@ test('App renders the initial screen as expected for an online and authenticated
     <App mermaidDbAccessInstance={mockMermaidDbAccessInstance} />,
   )
 
-  expect(await screen.findByRole('heading')).toHaveTextContent('Projects')
+  expect(await screen.findByText('Projects', { selector: 'h1' }))
 
   fireEvent.click(screen.getByText('FakeFirstNameOnline'))
 
