@@ -19,14 +19,14 @@ import useOnlineStatus from '../library/useOnlineStatus'
 function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
   const {
+    auth0Token,
     isMermaidAuthenticated,
     logoutMermaid,
-    authenticatedAxios,
   } = useAuthentication({
     isOnline,
   })
   const apiService = useMermaidApi({
-    authenticatedAxios,
+    auth0Token,
     isMermaidAuthenticated,
     isOnline,
     mermaidDbAccessInstance,

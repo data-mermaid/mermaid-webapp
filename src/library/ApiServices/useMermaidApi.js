@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 import mockApiService from './mockApiService'
 
 const reducer = (state, action) => {
@@ -17,18 +18,23 @@ const initialState = {
 }
 
 export const useMermaidApi = ({
+  auth0Token,
   isMermaidAuthenticated,
   isOnline,
-  authenticatedAxios,
   mermaidDbAccessInstance,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+  const authenticatedAxios = axios.create({
+    headers: {
+      Authorization: `Bearer ${auth0Token}`,
+    },
+  })
 
   const isOnlineAuthenticatedAndReady =
     isMermaidAuthenticated &&
     isOnline &&
-    authenticatedAxios &&
+    !!auth0Token &&
     !!mermaidDbAccessInstance
 
   const isOfflineAuthenticatedAndReady =

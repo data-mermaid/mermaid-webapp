@@ -1,6 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useMemo, useState } from 'react'
-import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 const useAuthentication = ({ isOnline }) => {
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
@@ -66,22 +65,11 @@ const useAuthentication = ({ isOnline }) => {
     }
   }
 
-  const authenticatedAxios = useMemo(() => {
-    const isNotReadyToMakeApiCalls = !isAuth0Authenticated || !auth0Token
-
-    if (isNotReadyToMakeApiCalls) {
-      // toast message in upcoming commit
-      return undefined
-    }
-
-    return axios.create({
-      headers: {
-        Authorization: `Bearer ${auth0Token}`,
-      },
-    })
-  }, [isAuth0Authenticated, auth0Token])
-
-  return { isMermaidAuthenticated, logoutMermaid, authenticatedAxios }
+  return {
+    isMermaidAuthenticated,
+    logoutMermaid,
+    auth0Token,
+  }
 }
 
 export default useAuthentication

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
-import React, { useMemo } from 'react'
+import React from 'react'
 import colorHelper from 'color'
 import {
   mediaQueryForTabletLandscapeUp,
@@ -66,10 +66,7 @@ const StyledNavLink = styled(Link)`
 `
 
 const Header = ({ logout, isOnline, currentUser }) => {
-  const userMenuItems = useMemo(
-    () => (isOnline ? [{ label: 'Logout', onClick: logout }] : []),
-    [isOnline, logout],
-  )
+  const userMenuItems = isOnline ? [{ label: 'Logout', onClick: logout }] : []
 
   return (
     <StyledHeader>
