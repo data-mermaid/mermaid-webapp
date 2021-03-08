@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import InputSelect from '../generic/InputSelect'
 import InputNumber from '../generic/InputNumber'
+import InputDate from '../generic/InputDate'
 
 /**
  * Describe your component
@@ -30,6 +31,7 @@ const CollectForms = ({
         options={managementRegimes}
         onChange={handleInputChange}
       />
+      <InputDate label="Sample Date" />
       <InputNumber
         name="depth"
         label="Depth"
