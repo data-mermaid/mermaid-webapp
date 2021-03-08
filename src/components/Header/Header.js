@@ -9,7 +9,7 @@ import {
   mediaQueryPhoneOnly,
 } from '../../library/styling/mediaQueries'
 
-import { currentUserPropType } from '../../library/apiServices/useMermaidApi'
+import { currentUserPropType } from '../../ApiServices/useMermaidApi'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
 import ButtonMenu from '../generic/ButtonMenu'
 

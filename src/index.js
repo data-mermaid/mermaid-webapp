@@ -8,7 +8,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 import reportWebVitals from './reportWebVitals'
 import { App } from './App'
-import mermaidDbAccessInstance from './library/apiServices/mermaidDbAccessInstance'
+import mermaidDbAccessInstance from './ApiServices/mermaidDbAccessInstance'
 
 ReactDOM.render(
   <React.StrictMode>
