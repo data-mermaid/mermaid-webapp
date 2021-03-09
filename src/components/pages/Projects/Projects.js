@@ -8,8 +8,8 @@ import ProjectToolBarSection from '../../ProjectToolBarSection'
 /**
  * All Projects page (lists projects)
  */
-const Projects = ({ apiService }) => {
-  const { projects } = apiService
+const Projects = ({ mermaidData }) => {
+  const { projects } = mermaidData
 
   const projectList = projects.map(
     ({ name, country, numberOfSites, offlineReady, lastUpdatedDate }) => (
@@ -30,7 +30,7 @@ const Projects = ({ apiService }) => {
 }
 
 Projects.propTypes = {
-  apiService: mermaidDataPropType.isRequired,
+  mermaidData: mermaidDataPropType.isRequired,
 }
 
 export default Projects

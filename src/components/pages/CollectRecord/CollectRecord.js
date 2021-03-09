@@ -11,9 +11,9 @@ import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData
  * Describe your component
  */
 
-const CollectRecord = ({ apiService }) => {
+const CollectRecord = ({ mermaidData }) => {
   const { recordId } = useParams()
-  const { collectRecords, sites, managementRegimes } = apiService
+  const { collectRecords, sites, managementRegimes } = mermaidData
 
   const filterRecord = (record) =>
     collectRecords.filter(({ id }) => id === record)[0]
@@ -53,7 +53,7 @@ const CollectRecord = ({ apiService }) => {
 }
 
 CollectRecord.propTypes = {
-  apiService: mermaidDataPropType.isRequired,
+  mermaidData: mermaidDataPropType.isRequired,
 }
 
 export default CollectRecord

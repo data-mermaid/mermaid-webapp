@@ -25,18 +25,18 @@ function App({ mermaidDbAccessInstance }) {
   } = useAuthentication({
     isOnline,
   })
-  const apiService = useMermaidData({
+  const mermaidData = useMermaidData({
     auth0Token,
     isMermaidAuthenticated,
     isOnline,
     mermaidDbAccessInstance,
   })
-  const { routes, getBreadCrumbs } = useRoutes(apiService)
+  const { routes, getBreadCrumbs } = useRoutes({ mermaidData })
 
   const layoutProps = {
     header: (
       <Header
-        currentUser={apiService.currentUser}
+        currentUser={mermaidData.currentUser}
         isOnline={isOnline}
         logout={logoutMermaid}
       />
@@ -45,7 +45,7 @@ function App({ mermaidDbAccessInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated && apiService.currentUser
+    isMermaidAuthenticated && mermaidData.currentUser
 
   return (
     <ThemeProvider theme={theme}>

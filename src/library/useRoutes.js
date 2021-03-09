@@ -13,12 +13,12 @@ import Sites from '../components/pages/Sites'
 import Users from '../components/pages/Users'
 import Health from '../components/pages/Health'
 
-export const useRoutes = (apiService) => {
+export const useRoutes = ({ mermaidData }) => {
   const routes = [
     {
       path: '/projects',
       name: 'Projects',
-      Component: () => <Projects apiService={apiService} />,
+      Component: () => <Projects mermaidData={mermaidData} />,
     },
     {
       path: '/projects/:projectId',
@@ -33,17 +33,17 @@ export const useRoutes = (apiService) => {
     {
       path: '/projects/:projectId/collecting',
       name: 'Collecting',
-      Component: () => <Collect apiService={apiService} />,
+      Component: () => <Collect mermaidData={mermaidData} />,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
       name: 'Fish Belt',
-      Component: () => <CollectRecord apiService={apiService} />,
+      Component: () => <CollectRecord mermaidData={mermaidData} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
       name: 'Benthic LIT',
-      Component: () => <CollectRecord apiService={apiService} />,
+      Component: () => <CollectRecord mermaidData={mermaidData} />,
     },
     {
       path: '/projects/:projectId/data',
