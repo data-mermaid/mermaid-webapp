@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useReducer, useState } from 'react'
+import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
+import language from '../../language'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -71,9 +73,8 @@ export const useMermaidData = ({
 
           return mermaidDbAccessInstance.currentUser.put(user)
         })
-        .catch((error) => {
-          // toast coming up in other ticket
-          console.error('The user profile is unavailable', error)
+        .catch(() => {
+          toast.error(language.error.userProfileUnavailableApi)
         })
     }
     if (isOfflineAuthenticatedAndReady) {
@@ -93,13 +94,9 @@ export const useMermaidData = ({
             })
           }
         })
-        .catch((error) =>
-          // future toast message
-          console.error(
-            'Could not obtain user profile from offline storage',
-            error,
-          ),
-        )
+        .catch(() => {
+          toast.error(language.error.userProfileUnavailableApi)
+        })
     }
 
     return () => {
