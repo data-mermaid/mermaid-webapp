@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import SubLayout2 from '../../SubLayout2'
-import { mermaidApiServicePropType } from '../../../mermaidData/useMermaidData'
+import { mermaidApiServicePropType } from '../../../library/mermaidData/useMermaidData'
 import NavMenu from '../../NavMenu'
 import { H3 } from '../../generic/text'
 
