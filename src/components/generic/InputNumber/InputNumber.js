@@ -1,19 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Column } from '../positioning'
+import { Row } from '../positioning'
 
 /**
  * Describe your component
  */
-const InputNumberStyle = styled(Column)`
+const InputNumberStyle = styled(Row)`
   margin: 10px;
+  align-items: center;
 `
 
 const InputNumber = ({ label, ...restOfProps }) => {
   return (
     <InputNumberStyle>
-      <label htmlFor="input-number">{label}:</label>
+      <label htmlFor="input-number">{label}</label>
       <input type="number" {...restOfProps} />
     </InputNumberStyle>
   )

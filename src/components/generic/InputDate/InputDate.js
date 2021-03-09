@@ -1,18 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Column } from '../positioning'
+import {  Row } from '../positioning'
 /**
  * Describe your component
  */
-const InputDateStyle = styled(Column)`
+const InputDateStyle = styled(Row)`
   margin: 10px;
+  align-items: center;
 `
 
 const InputDate = ({ label }) => {
   return (
     <InputDateStyle>
-      <label htmlFor="input-date">{label}:</label>
+      <label htmlFor="input-date">{label}</label>
       <input type="date" />
     </InputDateStyle>
   )
