@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import mockApiService from '../../testUtilities/mockApiService'
+import mockMermaidData from '../../testUtilities/mockMermaidData'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -14,7 +14,7 @@ const reducer = (state, action) => {
 
 const initialState = {
   currentUser: undefined,
-  projects: mockApiService.projects,
+  projects: mockMermaidData.projects,
 }
 
 export const useMermaidData = ({
@@ -25,9 +25,9 @@ export const useMermaidData = ({
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const [collectRecords] = useState(mockApiService.collectRecords)
-  const [sites] = useState(mockApiService.sites)
-  const [managementRegimes] = useState(mockApiService.managementRegimes)
+  const [collectRecords] = useState(mockMermaidData.collectRecords)
+  const [sites] = useState(mockMermaidData.sites)
+  const [managementRegimes] = useState(mockMermaidData.managementRegimes)
 
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const authenticatedAxios = axios.create({
