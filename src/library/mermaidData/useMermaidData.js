@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useMemo, useReducer, useState } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
@@ -30,11 +30,15 @@ export const useMermaidData = ({
   const [managementRegimes] = useState(mockMermaidData.managementRegimes)
 
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const authenticatedAxios = axios.create({
-    headers: {
-      Authorization: `Bearer ${auth0Token}`,
-    },
-  })
+  const authenticatedAxios = useMemo(
+    () =>
+      axios.create({
+        headers: {
+          Authorization: `Bearer ${auth0Token}`,
+        },
+      }),
+    [auth0Token],
+  )
 
   const isOnlineAuthenticatedAndReady =
     isMermaidAuthenticated &&
