@@ -1,23 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { Row } from '../positioning'
+import { FormGrid } from '../positioning'
+import { WarningFormText } from '../text'
 
 /**
  * Describe your component
  */
 
-const InputTextStyle = styled(Row)`
-  margin: 10px;
-  align-items: center;
-`
-
-const InputText = ({ label }) => {
+const InputText = ({ label, validation }) => {
   return (
-    <InputTextStyle>
+    <FormGrid validation={validation}>
       <label htmlFor="input-text">{label}</label>
       <input type="text" />
-    </InputTextStyle>
+      {validation !== 'ok' && (
+        <WarningFormText>Warning/Error Text</WarningFormText>
+      )}
+    </FormGrid>
   )
 }
 

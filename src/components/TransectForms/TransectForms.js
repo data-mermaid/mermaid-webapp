@@ -15,13 +15,15 @@ const TransectForms = () => {
         name="transect-number"
         label="Transect Number"
         value={0}
+        validation="ok"
         onChange={() => {}}
       />
-      <InputText name="label" label="Label" />
+      <InputText name="label" label="Label" validation="ok" />
       <InputNumber
         name="transect-length-survey"
         label="Transect Length Survey"
         value={0}
+        validation="warning"
         onChange={() => {}}
       />
       <InputSelect
@@ -29,6 +31,7 @@ const TransectForms = () => {
         label="Width"
         options={[]}
         value=""
+        validation="ok"
         onChange={() => {}}
       />
       <InputSelect
@@ -36,6 +39,7 @@ const TransectForms = () => {
         label="Fish Size Bin"
         options={[]}
         value=""
+        validation="warning"
         onChange={() => {}}
       />
       <InputSelect
@@ -43,6 +47,7 @@ const TransectForms = () => {
         label="Reef Slope"
         options={[]}
         value=""
+        validation="error"
         onChange={() => {}}
       />
     </>

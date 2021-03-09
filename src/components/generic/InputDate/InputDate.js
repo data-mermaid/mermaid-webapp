@@ -1,26 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import {  Row } from '../positioning'
+import { FormGrid } from '../positioning'
+import { WarningFormText } from '../text'
 /**
  * Describe your component
  */
-const InputDateStyle = styled(Row)`
-  margin: 10px;
-  align-items: center;
-`
 
-const InputDate = ({ label }) => {
+const InputDate = ({ label, validation }) => {
   return (
-    <InputDateStyle>
+    <FormGrid validation={validation}>
       <label htmlFor="input-date">{label}</label>
       <input type="date" />
-    </InputDateStyle>
+      {validation !== 'ok' && (
+        <WarningFormText>Warning/Error Text</WarningFormText>
+      )}
+    </FormGrid>
   )
 }
 
 InputDate.propTypes = {
   label: PropTypes.string.isRequired,
+  validation: PropTypes.string.isRequired,
 }
 
 export default InputDate

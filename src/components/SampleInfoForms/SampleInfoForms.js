@@ -23,23 +23,26 @@ const SampleInfoForms = ({
       <InputSelect
         name="site"
         label="Site"
-        options={sites}
         value={site}
+        validation="ok"
+        options={sites}
         onChange={handleInputChange}
       />
       <InputSelect
         name="management"
         label="Management Regime"
         value={management}
+        validation="warning"
         options={managementRegimes}
         onChange={handleInputChange}
       />
-      <InputDate label="Sample Date" />
-      <InputTime label="Sample Time" />
+      <InputDate label="Sample Date" validation="ok" />
+      <InputTime label="Sample Time" validation="ok" />
       <InputNumber
         name="depth"
         label="Depth"
         value={depth}
+        validation="error"
         onChange={handleInputChange}
       />
     </>

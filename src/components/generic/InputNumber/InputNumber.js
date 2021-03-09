@@ -1,27 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { Row } from '../positioning'
+import { FormGrid } from '../positioning'
+import { WarningFormText } from '../text'
 
 /**
  * Describe your component
  */
-const InputNumberStyle = styled(Row)`
-  margin: 10px;
-  align-items: center;
-`
 
-const InputNumber = ({ label, ...restOfProps }) => {
+const InputNumber = ({ label, validation, ...restOfProps }) => {
   return (
-    <InputNumberStyle>
+    <FormGrid validation={validation}>
       <label htmlFor="input-number">{label}</label>
       <input type="number" {...restOfProps} />
-    </InputNumberStyle>
+      {validation !== 'ok' && (
+        <WarningFormText>Warning/Error Text</WarningFormText>
+      )}
+    </FormGrid>
   )
 }
 
 InputNumber.propTypes = {
   label: PropTypes.string.isRequired,
+  validation: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
