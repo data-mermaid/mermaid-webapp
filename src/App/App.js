@@ -12,8 +12,8 @@ import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
 import {
   mermaidApiServicePropType,
-  useMermaidApi,
-} from '../ApiServices/useMermaidApi'
+  useMermaidData,
+} from '../mermaidData/useMermaidData'
 import useOnlineStatus from '../library/useOnlineStatus'
 
 function App({ mermaidDbAccessInstance }) {
@@ -25,7 +25,7 @@ function App({ mermaidDbAccessInstance }) {
   } = useAuthentication({
     isOnline,
   })
-  const apiService = useMermaidApi({
+  const apiService = useMermaidData({
     auth0Token,
     isMermaidAuthenticated,
     isOnline,

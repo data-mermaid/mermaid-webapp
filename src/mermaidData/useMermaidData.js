@@ -17,7 +17,7 @@ const initialState = {
   projects: mockApiService.projects,
 }
 
-export const useMermaidApi = ({
+export const useMermaidData = ({
   auth0Token,
   isMermaidAuthenticated,
   isOnline,

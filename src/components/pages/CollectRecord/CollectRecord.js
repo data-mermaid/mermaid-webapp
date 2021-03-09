@@ -5,7 +5,7 @@ import NavMenu from '../../NavMenu'
 import CollectForms from '../../CollectForms'
 import { ButtonCallout } from '../../generic/buttons'
 import { RowRight } from '../../generic/positioning'
-import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
+import { mermaidApiServicePropType } from '../../../mermaidData/useMermaidData'
 
 /**
  * Describe your component
