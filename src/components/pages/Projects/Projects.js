@@ -1,7 +1,7 @@
 import React from 'react'
 import SubLayout1 from '../../SubLayout1'
 
-import { mermaidApiServicePropType } from '../../../library/mermaidData/useMermaidData'
+import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
 
@@ -30,7 +30,7 @@ const Projects = ({ apiService }) => {
 }
 
 Projects.propTypes = {
-  apiService: mermaidApiServicePropType.isRequired,
+  apiService: mermaidDataPropType.isRequired,
 }
 
 export default Projects

@@ -133,7 +133,7 @@ export const currentUserPropType = PropTypes.shape({
   full_name: PropTypes.string,
   email: PropTypes.string,
 })
-export const mermaidApiServicePropType = PropTypes.shape({
+export const mermaidDataPropType = PropTypes.shape({
   projects: projectsPropType,
   currentUser: currentUserPropType,
   collectRecords: PropTypes.arrayOf(
