@@ -1,7 +1,7 @@
 import React from 'react'
 import SubLayout1 from '../../SubLayout1'
 
-import { mermaidApiServicePropType } from '../../../mermaidData/useMermaidData'
+import { mermaidApiServicePropType } from '../../../library/mermaidData/useMermaidData'
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
 

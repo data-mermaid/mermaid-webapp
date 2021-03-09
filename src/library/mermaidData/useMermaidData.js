@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useState } from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import mockApiService from '../testUtilities/mockApiService'
+import mockApiService from '../../testUtilities/mockApiService'
 
 const reducer = (state, action) => {
   switch (action.type) {
