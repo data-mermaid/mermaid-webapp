@@ -13,7 +13,7 @@ const InputTimeStyle = styled(Column)`
 const InputTime = ({ label }) => {
   return (
     <InputTimeStyle>
-      <label htmlFor="input-number">{label}:</label>
+      <label htmlFor="input-time">{label}:</label>
       <input type="time" />
     </InputTimeStyle>
   )

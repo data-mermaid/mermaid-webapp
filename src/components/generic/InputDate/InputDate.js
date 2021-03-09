@@ -12,7 +12,7 @@ const InputDateStyle = styled(Column)`
 const InputDate = ({ label }) => {
   return (
     <InputDateStyle>
-      <label htmlFor="input-number">{label}:</label>
+      <label htmlFor="input-date">{label}:</label>
       <input type="date" />
     </InputDateStyle>
   )

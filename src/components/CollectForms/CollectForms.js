@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SampleInfoForms from '../SampleInfoForms'
+import TransectForms from '../TransectForms'
 
 /**
  * Describe your component
@@ -12,12 +13,15 @@ const CollectForms = ({
   handleInputChange,
 }) => {
   return (
-    <SampleInfoForms
-      collectRecord={collectRecord}
-      sites={sites}
-      managementRegimes={managementRegimes}
-      handleInputChange={handleInputChange}
-    />
+    <>
+      <SampleInfoForms
+        collectRecord={collectRecord}
+        sites={sites}
+        managementRegimes={managementRegimes}
+        handleInputChange={handleInputChange}
+      />
+      <TransectForms />
+    </>
   )
 }
 
