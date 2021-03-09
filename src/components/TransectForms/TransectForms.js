@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import InputSelect from '../generic/InputSelect'
 import InputNumber from '../generic/InputNumber'
 import InputText from '../generic/InputText'
@@ -49,7 +48,5 @@ const TransectForms = () => {
     </>
   )
 }
-
-TransectForms.propTypes = {}
 
 export default TransectForms
