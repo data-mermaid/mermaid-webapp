@@ -9,9 +9,9 @@ import { H3 } from '../../generic/text'
 /**
  * Project Collect Page
  */
-const Collect = ({ apiService }) => {
+const Collect = ({ mermaidData }) => {
   const currentProjectPath = useCurrentProjectPath()
-  const { collectRecords } = apiService
+  const { collectRecords } = mermaidData
 
   const CollectRecordList = () => {
     return (
@@ -40,7 +40,7 @@ const Collect = ({ apiService }) => {
 }
 
 Collect.propTypes = {
-  apiService: mermaidDataPropType.isRequired,
+  mermaidData: mermaidDataPropType.isRequired,
 }
 
 export default Collect
