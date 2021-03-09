@@ -11,7 +11,7 @@ import theme from '../theme'
 import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
 import {
-  mermaidApiServicePropType,
+  mermaidDataPropType,
   useMermaidData,
 } from '../library/mermaidData/useMermaidData'
 import useOnlineStatus from '../library/useOnlineStatus'
@@ -80,7 +80,7 @@ function App({ mermaidDbAccessInstance }) {
 }
 
 App.propTypes = {
-  mermaidDbAccessInstance: mermaidApiServicePropType.isRequired,
+  mermaidDbAccessInstance: mermaidDataPropType.isRequired,
 }
 
 export default App

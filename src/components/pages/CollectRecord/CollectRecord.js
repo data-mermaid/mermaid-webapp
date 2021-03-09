@@ -5,7 +5,7 @@ import NavMenu from '../../NavMenu'
 import CollectForms from '../../CollectForms'
 import { ButtonCallout } from '../../generic/buttons'
 import { RowRight } from '../../generic/positioning'
-import { mermaidApiServicePropType } from '../../../library/mermaidData/useMermaidData'
+import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 
 /**
  * Describe your component
@@ -53,7 +53,7 @@ const CollectRecord = ({ apiService }) => {
 }
 
 CollectRecord.propTypes = {
-  apiService: mermaidApiServicePropType.isRequired,
+  apiService: mermaidDataPropType.isRequired,
 }
 
 export default CollectRecord
