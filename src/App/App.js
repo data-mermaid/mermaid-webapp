@@ -14,6 +14,7 @@ import {
   useMermaidData,
 } from '../library/mermaidData/useMermaidData'
 import useOnlineStatus from '../library/useOnlineStatus'
+import { CustomToastContainer } from '../components/generic/toast'
 
 function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
@@ -49,7 +50,7 @@ function App({ mermaidDbAccessInstance }) {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-
+      <CustomToastContainer />
       {isMermaidAuthenticatedAndReady && (
         <Switch>
           {routes.map(({ path, Component }) => (

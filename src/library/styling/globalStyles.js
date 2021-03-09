@@ -1,7 +1,11 @@
 import { createGlobalStyle, css } from 'styled-components'
+import raw from 'raw.macro'
 import { hoverState } from './mediaQueries'
 
+const toastifyCss = raw('react-toastify/dist/ReactToastify.css')
+
 const GlobalStyle = createGlobalStyle`
+    ${toastifyCss}
     :root{
         font-size: 62.5%;
         color: ${(props) => props.theme.color.black};
