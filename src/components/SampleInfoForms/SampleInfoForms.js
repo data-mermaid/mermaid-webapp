@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import InputSelect from '../generic/InputSelect'
-import InputNumber from '../generic/InputNumber'
-import InputDate from '../generic/InputDate'
-import InputTime from '../generic/InputTime'
+import InputForm from '../generic/InputForm'
 import { H2 } from '../generic/text'
 
 /**
@@ -20,7 +17,8 @@ const SampleInfoForms = ({
   return (
     <>
       <H2>Sample Info</H2>
-      <InputSelect
+      <InputForm
+        type="select"
         name="site"
         label="Site"
         value={site}
@@ -28,7 +26,8 @@ const SampleInfoForms = ({
         options={sites}
         onChange={handleInputChange}
       />
-      <InputSelect
+      <InputForm
+        type="select"
         name="management"
         label="Management Regime"
         value={management}
@@ -36,9 +35,10 @@ const SampleInfoForms = ({
         options={managementRegimes}
         onChange={handleInputChange}
       />
-      <InputDate label="Sample Date" validation="ok" />
-      <InputTime label="Sample Time" validation="ok" />
-      <InputNumber
+      <InputForm type="date" label="Sample Date" validation="ok" />
+      <InputForm type="time" label="Sample Time" validation="ok" />
+      <InputForm
+        type="number"
         name="depth"
         label="Depth"
         value={depth}

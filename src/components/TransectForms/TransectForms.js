@@ -1,7 +1,5 @@
 import React from 'react'
-import InputSelect from '../generic/InputSelect'
-import InputNumber from '../generic/InputNumber'
-import InputText from '../generic/InputText'
+import InputForm from '../generic/InputForm'
 import { H2 } from '../generic/text'
 
 /**
@@ -11,22 +9,25 @@ const TransectForms = () => {
   return (
     <>
       <H2>Transect</H2>
-      <InputNumber
+      <InputForm
+        type="number"
         name="transect-number"
         label="Transect Number"
         value={0}
         validation="ok"
         onChange={() => {}}
       />
-      <InputText name="label" label="Label" validation="ok" />
-      <InputNumber
+      <InputForm type="text" name="label" label="Label" validation="ok" />
+      <InputForm
+        type="number"
         name="transect-length-survey"
         label="Transect Length Survey"
         value={0}
         validation="warning"
         onChange={() => {}}
       />
-      <InputSelect
+      <InputForm
+        type="select"
         name="width"
         label="Width"
         options={[]}
@@ -34,7 +35,8 @@ const TransectForms = () => {
         validation="ok"
         onChange={() => {}}
       />
-      <InputSelect
+      <InputForm
+        type="select"
         name="fish-size-bin"
         label="Fish Size Bin"
         options={[]}
@@ -42,7 +44,8 @@ const TransectForms = () => {
         validation="warning"
         onChange={() => {}}
       />
-      <InputSelect
+      <InputForm
+        type="select"
         name="reef-slope"
         label="Reef Slope"
         options={[]}
