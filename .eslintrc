@@ -16,7 +16,7 @@
   },
   "overrides": [
     {
-      "files": ["*.stories.js"],
+      "files": ["*.stories.js", "src/testUtilities/**/*"],
       "rules": { "import/no-extraneous-dependencies": "off" }
     }
   ]

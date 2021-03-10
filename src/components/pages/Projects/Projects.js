@@ -1,14 +1,15 @@
 import React from 'react'
 import SubLayout1 from '../../SubLayout1'
-import { mermaidApiServicePropType } from '../../../ApiServices/useMermaidApi'
+
+import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
 
 /**
  * All Projects page (lists projects)
  */
-const Projects = ({ apiService }) => {
-  const { projects } = apiService
+const Projects = ({ mermaidData }) => {
+  const { projects } = mermaidData
 
   const projectList = projects.map(
     ({ name, country, numberOfSites, offlineReady, lastUpdatedDate }) => (
@@ -29,7 +30,7 @@ const Projects = ({ apiService }) => {
 }
 
 Projects.propTypes = {
-  apiService: mermaidApiServicePropType.isRequired,
+  mermaidData: mermaidDataPropType.isRequired,
 }
 
 export default Projects
