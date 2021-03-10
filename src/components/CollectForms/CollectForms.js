@@ -1,11 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import SampleInfoForms from '../SampleInfoForms'
 import TransectForms from '../TransectForms'
+import { Column } from '../generic/positioning'
 
 /**
  * Describe your component
  */
+
 const CollectForms = ({
   collectRecord,
   sites,

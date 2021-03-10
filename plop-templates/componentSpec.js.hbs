@@ -1,8 +1,22 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
-import { renderAuthenticatedOnline, screen } from '../../testUtilities/testingLibraryWithHelpers'
+import {
+  renderAuthenticatedOnline,
+  screen,
+  mockMermaidApiAllSuccessful,
+} from '../../testUtilities/testingLibraryWithHelpers'
 
 import {{pascalCase name}} from './{{pascalCase name}}'
+
+beforeAll(() => {
+  mockMermaidApiAllSuccessful.listen()
+})
+afterEach(() => {
+  mockMermaidApiAllSuccessful.resetHandlers()
+})
+afterAll(() => {
+  mockMermaidApiAllSuccessful.close()
+})
 
 test('{{pascalCase name}} component renders with the expected UI elements', () => {
   renderAuthenticatedOnline(<{{pascalCase name}} />)

@@ -45,7 +45,7 @@ const NavHeader = styled('p')`
 `
 
 const NavMenu = () => {
-  const currentProjectPath = useCurrentProjectPath()
+  const projectUrl = useCurrentProjectPath()
 
   return (
     <NavWrapper>
@@ -54,7 +54,7 @@ const NavMenu = () => {
           <NavHeader>Project Overview</NavHeader>
           <ul>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/health`}>
+              <NavLinkSidebar to={`${projectUrl}/health`}>
                 <IconHeart /> <span>Project Health</span>
               </NavLinkSidebar>
             </li>
@@ -64,19 +64,19 @@ const NavMenu = () => {
           <NavHeader>Collect</NavHeader>
           <ul>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/collecting`}>
+              <NavLinkSidebar to={`${projectUrl}/collecting`}>
                 <IconCollect />
                 <span>Collecting</span>
               </NavLinkSidebar>
             </li>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/sites`}>
+              <NavLinkSidebar to={`${projectUrl}/sites`}>
                 <IconSites />
                 <span>Sites</span>
               </NavLinkSidebar>
             </li>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/management-regimes`}>
+              <NavLinkSidebar to={`${projectUrl}/management-regimes`}>
                 <IconCopy />
                 <span>Management Regimes</span>
               </NavLinkSidebar>
@@ -87,13 +87,13 @@ const NavMenu = () => {
           <NavHeader>Data</NavHeader>
           <ul>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/data`}>
+              <NavLinkSidebar to={`${projectUrl}/data`}>
                 <IconData />
                 <span>Submitted</span>
               </NavLinkSidebar>
             </li>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/graphs-and-maps`}>
+              <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
                 <IconGraph />
                 <span>Graphs and Maps</span>
               </NavLinkSidebar>
@@ -104,25 +104,25 @@ const NavMenu = () => {
           <NavHeader>Admin</NavHeader>
           <ul>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/admin`}>
+              <NavLinkSidebar to={`${projectUrl}/admin`}>
                 <IconAdmin />
                 <span>Project Info</span>
               </NavLinkSidebar>
             </li>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/users`}>
+              <NavLinkSidebar to={`${projectUrl}/users`}>
                 <IconUsers />
                 <span>Users</span>
               </NavLinkSidebar>
             </li>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/fish-families`}>
+              <NavLinkSidebar to={`${projectUrl}/fish-families`}>
                 <IconHeart />
                 <span>Fish Families</span>
               </NavLinkSidebar>
             </li>
             <li>
-              <NavLinkSidebar to={`${currentProjectPath}/data-sharing`}>
+              <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
                 <IconSharing />
                 <span>Data Sharing</span>
               </NavLinkSidebar>

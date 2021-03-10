@@ -17,8 +17,9 @@ const AuthenticatedProviders = ({ children }) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
-      user: { name: 'Fake User' },
+      user: { name: 'Fake Auth0 User' },
       logout: () => {},
+      getAccessTokenSilently: () => Promise.resolve('fake-token'),
     }}
   >
     <BasicProviders>{children}</BasicProviders>
@@ -69,6 +70,7 @@ const renderOverride = () => {
   )
 }
 
+export { default as mockMermaidApiAllSuccessful } from './mockMermaidApiAllSuccessful'
 export * from '@testing-library/react'
 export {
   renderOverride as render,
