@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import InputForm from '../generic/InputForm'
+import InputSelect from '../generic/InputSelect'
 import { H2 } from '../generic/text'
 
 /**
@@ -26,8 +27,7 @@ const SampleInfoForms = ({
         options={sites}
         onChange={handleInputChange}
       />
-      <InputForm
-        type="select"
+      <InputSelect
         name="management"
         label="Management Regime"
         value={management}
