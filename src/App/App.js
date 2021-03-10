@@ -3,7 +3,6 @@ import { ThemeProvider } from 'styled-components/macro'
 import React from 'react'
 
 import GlobalStyle from '../library/styling/globalStyles'
-import Breadcrumbs from '../components/generic/Breadcrumbs'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/generic/Layout'
@@ -31,7 +30,7 @@ function App({ mermaidDbAccessInstance }) {
     isOnline,
     mermaidDbAccessInstance,
   })
-  const { routes, getBreadCrumbs } = useRoutes({ mermaidData })
+  const { routes } = useRoutes({ mermaidData })
 
   const layoutProps = {
     header: (
@@ -58,13 +57,8 @@ function App({ mermaidDbAccessInstance }) {
               exact
               path={path}
               key={path}
-              render={(routeProps) => (
-                <Layout
-                  {...layoutProps}
-                  breadcrumbs={
-                    <Breadcrumbs crumbs={getBreadCrumbs(routeProps)} />
-                  }
-                >
+              render={() => (
+                <Layout {...layoutProps}>
                   <Component />
                 </Layout>
               )}

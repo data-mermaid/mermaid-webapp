@@ -10,7 +10,7 @@ const ButtonLabel = styled('span')``
 const NavLinkButtonGroup = ({ projectUrl }) => {
   return (
     <>
-      <NavLinkButtonishIcon to={`${projectUrl}/`} aria-label="Data">
+      <NavLinkButtonishIcon to={`${projectUrl}/health`} aria-label="Data">
         <IconHeart />
         <ButtonLabel>Health</ButtonLabel>
       </NavLinkButtonishIcon>
