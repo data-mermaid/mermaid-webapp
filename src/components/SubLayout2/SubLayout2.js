@@ -1,4 +1,3 @@
-// import { useRouteMatch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
@@ -17,11 +16,16 @@ const SubLayout2ContentWrapper = styled(Row)`
   height: 100%;
 `
 
-const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
+const SubLayout2 = ({
+  sidebar,
+  lowerRight,
+  upperRight,
+  pageTitle = 'Project Name Placeholder',
+}) => {
   return (
     <>
       <SubLayout2Container>
-        <ProjectName />
+        <ProjectName pageTitle={pageTitle} />
         <SubLayout2ContentWrapper>
           <Column>{sidebar}</Column>
           <Column>
@@ -38,6 +42,7 @@ SubLayout2.propTypes = {
   sidebar: PropTypes.node.isRequired,
   lowerRight: PropTypes.node.isRequired,
   upperRight: PropTypes.node.isRequired,
+  pageTitle: PropTypes.string.isRequired,
 }
 
 export default SubLayout2

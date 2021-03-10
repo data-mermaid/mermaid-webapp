@@ -4,7 +4,7 @@ const useCurrentProjectPath = () => {
   const params = useParams()
   const projectUrl = `/projects/${params.projectId}`
 
-  return { projectUrl, projectId: params.projectId }
+  return projectUrl
 }
 
 export default useCurrentProjectPath
