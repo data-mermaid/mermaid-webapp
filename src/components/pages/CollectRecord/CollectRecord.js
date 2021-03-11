@@ -7,10 +7,6 @@ import { ButtonCallout } from '../../generic/buttons'
 import { RowRight } from '../../generic/positioning'
 import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 
-/**
- * Describe your component
- */
-
 const CollectRecord = ({ mermaidData }) => {
   const { recordId } = useParams()
   const { collectRecords, sites, managementRegimes } = mermaidData

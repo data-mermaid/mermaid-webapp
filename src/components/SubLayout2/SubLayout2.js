@@ -4,10 +4,6 @@ import styled from 'styled-components/macro'
 import { Column, Row } from '../generic/positioning'
 import ProjectName from '../ProjectName'
 
-/**
- * Describe your component
- */
-
 const SubLayout2Container = styled(Column)`
   height: 100%;
 `

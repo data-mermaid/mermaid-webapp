@@ -4,9 +4,6 @@ import NavMenu from '../../NavMenu'
 // import PropTypes from 'prop-types'
 import SubLayout2 from '../../SubLayout2'
 
-/**
- * Describe your component
- */
 const Sites = () => {
   return (
     <SubLayout2
