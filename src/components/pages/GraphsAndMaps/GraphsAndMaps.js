@@ -3,9 +3,6 @@ import React from 'react'
 import NavMenu from '../../NavMenu'
 import SubLayout2 from '../../SubLayout2'
 
-/**
- * Describe your component
- */
 const GraphsAndMaps = () => {
   return (
     <SubLayout2
