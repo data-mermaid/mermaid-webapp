@@ -1,16 +1,21 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
+import styled from 'styled-components'
 import HideShow from '../HideShow'
 import { ButtonSecondary } from '../buttons'
 import { IconDown } from '../../icons'
+
+const CustomButtonSecondary = styled(ButtonSecondary)`
+  padding: ${(props) => props.theme.spacing.xsmall};
+`
 
 const ButtonSecondaryDropdown = ({ children, label }) => {
   return (
     <HideShow
       button={
-        <ButtonSecondary>
+        <CustomButtonSecondary>
           {label} <IconDown />
-        </ButtonSecondary>
+        </CustomButtonSecondary>
       }
       contents={children}
     />
