@@ -6,7 +6,7 @@ import { H2 } from '../generic/text'
 /**
  * Describe your component
  */
-const TransectForms = () => {
+const FishBeltTransectForms = () => {
   return (
     <>
       <H2>Transect</H2>
@@ -55,4 +55,4 @@ const TransectForms = () => {
   )
 }
 
-export default TransectForms
+export default FishBeltTransectForms

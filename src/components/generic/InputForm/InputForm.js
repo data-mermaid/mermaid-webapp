@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FormGrid } from '../positioning'
+import { Grid } from '../positioning'
 import { WarningFormText } from '../text'
 
 /**
@@ -8,13 +8,13 @@ import { WarningFormText } from '../text'
  */
 const InputForm = ({ type, label, validation, ...restOfProps }) => {
   return (
-    <FormGrid validation={validation}>
+    <Grid validation={validation}>
       <label htmlFor={type}>{label}</label>
       <input type={type} {...restOfProps} />
       {validation !== 'ok' && (
         <WarningFormText>Warning/Error Text</WarningFormText>
       )}
-    </FormGrid>
+    </Grid>
   )
 }
 

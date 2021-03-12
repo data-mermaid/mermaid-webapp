@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FormGrid } from '../positioning'
+import { Grid } from '../positioning'
 import { WarningFormText } from '../text'
 /**
  * Describe your component
@@ -13,13 +13,13 @@ const InputSelect = ({ label, validation, options, ...restOfProps }) => {
   ))
 
   return (
-    <FormGrid validation={validation}>
+    <Grid validation={validation}>
       <label htmlFor="select">{label}</label>
       <select {...restOfProps}>{optionList}</select>
       {validation !== 'ok' && (
         <WarningFormText>Warning/Error Text</WarningFormText>
       )}
-    </FormGrid>
+    </Grid>
   )
 }
 

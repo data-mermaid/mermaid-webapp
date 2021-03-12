@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import SampleInfoForms from '../SampleInfoForms'
-import TransectForms from '../TransectForms'
+import FishBeltTransectForms from '../FishBeltTransectForms'
 
 /**
  * Describe your component
@@ -21,7 +21,7 @@ const CollectForms = ({
         managementRegimes={managementRegimes}
         handleInputChange={handleInputChange}
       />
-      <TransectForms />
+      <FishBeltTransectForms />
     </>
   )
 }
