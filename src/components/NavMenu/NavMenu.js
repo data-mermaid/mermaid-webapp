@@ -15,10 +15,6 @@ import {
   IconSharing,
 } from '../icons'
 
-/**
- * Describe your component
- */
-
 const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
