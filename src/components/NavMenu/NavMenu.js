@@ -45,7 +45,7 @@ const NavHeader = styled('p')`
 `
 
 const NavMenu = () => {
-  const { projectUrl } = useCurrentProjectPath()
+  const projectUrl = useCurrentProjectPath()
 
   return (
     <NavWrapper>

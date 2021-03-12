@@ -1,16 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { Column } from '../positioning'
+import { Grid } from '../positioning'
+import { WarningFormText } from '../text'
 /**
  * Describe your component
  */
-
-const InputSelectStyle = styled(Column)`
-  margin: 10px;
-`
-
-const InputSelect = ({ label, options, ...restOfProps }) => {
+const InputSelect = ({ label, validation, options, ...restOfProps }) => {
   const optionList = options.map(({ name }) => (
     <option key={name} value={name}>
       {name}
@@ -18,23 +13,24 @@ const InputSelect = ({ label, options, ...restOfProps }) => {
   ))
 
   return (
-    <InputSelectStyle>
-      <label htmlFor="input-select">{label}:</label>
+    <Grid validation={validation}>
+      <label htmlFor="select">{label}</label>
       <select {...restOfProps}>{optionList}</select>
-    </InputSelectStyle>
+      {validation !== 'ok' && (
+        <WarningFormText>Warning/Error Text</WarningFormText>
+      )}
+    </Grid>
   )
 }
 
 InputSelect.propTypes = {
   label: PropTypes.string.isRequired,
+  validation: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
     }),
   ).isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
 export default InputSelect
