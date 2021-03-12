@@ -1,0 +1,55 @@
+# This workflow deploys the DEV version of the app in the S3 Bucket: "dev-app.datamermaid.org"
+# Note: This workflow requires the bucket to already have been created,
+#       along with the right bucket policy to allow actions on s3 objects,
+#       as well as public read access
+
+name: Develop Build & Deploy
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  S3_BUCKET: dev-app.datamermaid.org
+  REACT_APP_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
+  REACT_APP_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
+  REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
+  REACT_APP_MERMAID_API: https://dev-api.datamermaid.org/v1
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+        
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Cache Node Modules
+      id: npm_cache
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-v1-${{ hashFiles('package-lock.json') }}
+
+    - name: NPM Install
+      if: steps.npm_cache.outputs.cache-hit != 'true'
+      run: |
+        npm install
+    
+    - name: Run Unit Tests
+      run: |
+        npm run test
+
+    - name: NPM Build
+      run: |
+        npm run build
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Upload files to S3 with AWS CLI
+      run: |
+        aws s3 sync build/ s3://${S3_BUCKET}/ --delete
