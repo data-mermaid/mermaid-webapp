@@ -8,13 +8,9 @@ const SubLayout2Container = styled(Column)`
   height: 100%;
 `
 
-const SubLayout2ContentWrapper = styled(Row)`
-  height: 100%;
-`
-
-const RightSideContentWrapper = styled(Column)`
-  width: 80%;
-  margin: 20px 0 40px 60px;
+const LayoutMainSection = styled.div`
+  width: 100%;
+  padding: ${(props) => props.theme.spacing.medium};
 `
 
 const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
@@ -25,13 +21,14 @@ const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
     <>
       <SubLayout2Container>
         <ProjectName pageTitle={pageTitle} />
-        <SubLayout2ContentWrapper>
+        <Row>
           <Column>{sidebar}</Column>
-          <RightSideContentWrapper>
+
+          <LayoutMainSection>
             <div>{upperRight}</div>
             <div>{lowerRight}</div>
-          </RightSideContentWrapper>
-        </SubLayout2ContentWrapper>
+          </LayoutMainSection>
+        </Row>
       </SubLayout2Container>
     </>
   )
