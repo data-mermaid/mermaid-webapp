@@ -10,7 +10,6 @@ const DropdownContainer = styled.div`
   margin: 0;
   position: absolute;
   right: 0;
-  text-align: right;
 `
 const PositionedAncestor = styled.div`
   position: relative;

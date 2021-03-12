@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import HideShow from '../HideShow'
 import { ButtonSecondary } from '../buttons'
 import { IconDown } from '../../icons'
+import { Column } from '../positioning'
 
 const CustomButtonSecondary = styled(ButtonSecondary)`
   padding: ${(props) => props.theme.spacing.xsmall};
@@ -27,4 +28,9 @@ ButtonSecondaryDropdown.propTypes = {
   label: PropTypes.oneOf([PropTypes.string, PropTypes.node]).isRequired,
 }
 
+const StyledDropdownContainer = styled(Column)`
+  padding: ${(props) => props.theme.spacing.small};
+`
+
 export default ButtonSecondaryDropdown
+export { StyledDropdownContainer }
