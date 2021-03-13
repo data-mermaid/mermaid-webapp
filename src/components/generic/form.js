@@ -10,7 +10,7 @@ export const InputWithValidationRow = styled.div`
   align-items: center;
   border-left: 10px solid lightgrey;
   ${(props) =>
-    props.validation &&
+    props.validationType === 'error' &&
     css`
       border-left-color: #85282c;
       border-top: 1px solid red;
@@ -18,4 +18,14 @@ export const InputWithValidationRow = styled.div`
       border-bottom: 1px solid red;
       background: #e4babb;
     `}
+  ${(props) =>
+    props.validationType === 'warning' &&
+    css`
+      border-left-color: yellow;
+      border-top: 1px solid yellow;
+      border-right: 1px solid yellow;
+      border-bottom: 1px solid yellow;
+      background: lightyellow;
+    `}
 `
+export const ValidationMessage = styled.div``
