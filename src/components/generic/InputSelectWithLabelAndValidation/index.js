@@ -1,0 +1,3 @@
+import InputSelectWithLabelAndValidation from './InputSelectWithLabelAndValidation'
+
+export default InputSelectWithLabelAndValidation
