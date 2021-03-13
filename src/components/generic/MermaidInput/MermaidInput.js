@@ -1,21 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useField } from 'formik'
-import { Grid } from '../positioning'
-import { WarningFormText } from '../text'
+
+import { InputWithValidationRow } from '../form'
+import { TextWarning } from '../text'
+import { RowCenter } from '../positioning'
 
 const MermaidInput = ({ label, ...props }) => {
   const [field, meta] = useField(props)
   const { name } = props
 
   return (
-    <Grid validation={meta.touched && meta.error}>
+    <InputWithValidationRow validation={meta.touched && meta.error}>
       <label htmlFor={name}>{label}</label>
-      <input className="text-number-input" {...field} {...props} />
+      <input {...field} {...props} />
       {meta.touched && meta.error ? (
-        <WarningFormText> {meta.error}</WarningFormText>
+        <RowCenter>
+          <TextWarning> {meta.error}</TextWarning>
+        </RowCenter>
       ) : null}
-    </Grid>
+    </InputWithValidationRow>
   )
 }
 
