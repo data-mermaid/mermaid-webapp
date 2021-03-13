@@ -1,56 +1,70 @@
 import React from 'react'
-import InputForm from '../generic/InputForm'
-import InputSelect from '../generic/InputSelect'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
+import MermaidInput from '../generic/MermaidInput'
+import MermaidSelect from '../generic/MermaidSelect'
 import { H2 } from '../generic/text'
 
 /**
  * Describe your component
  */
 const FishBeltTransectForms = () => {
+  const emptyOption = [
+    { name: 'option 1' },
+    { name: 'option 2' },
+    { name: 'option 3' },
+    { name: 'option 4' },
+  ]
+
   return (
     <>
       <H2>Transect</H2>
-      <InputForm
-        type="number"
-        name="transect-number"
-        label="Transect Number"
-        value={0}
-        validation="ok"
-        onChange={() => {}}
-      />
-      <InputForm type="text" name="label" label="Label" validation="ok" />
-      <InputForm
-        type="number"
-        name="transect-length-survey"
-        label="Transect Length Survey"
-        value={0}
-        validation="warning"
-        onChange={() => {}}
-      />
-      <InputSelect
-        name="width"
-        label="Width"
-        options={[]}
-        value=""
-        validation="ok"
-        onChange={() => {}}
-      />
-      <InputSelect
-        name="fish-size-bin"
-        label="Fish Size Bin"
-        options={[]}
-        value=""
-        validation="warning"
-        onChange={() => {}}
-      />
-      <InputSelect
-        name="reef-slope"
-        label="Reef Slope"
-        options={[]}
-        value=""
-        validation="error"
-        onChange={() => {}}
-      />
+      <Formik
+        initialValues={{
+          transectNumber: '',
+          label: '',
+          transectLengthSurveyed: '',
+          width: '',
+          fishSizeBin: '',
+          reefSlope: '',
+          notes: '',
+        }}
+        validationSchema={Yup.object({
+          transectNumber: Yup.number().required('Transect number is required'),
+          transectNLengthSurveyed: Yup.number().required(
+            'Transect length surveyed is required',
+          ),
+          width: Yup.string().required('Width is required'),
+          fishSizeBin: Yup.string().required('Fish size bin is required'),
+        })}
+        // onSubmit={(values) => {}}
+      >
+        <Form>
+          <MermaidInput
+            label="Transect Number"
+            name="transectNumber"
+            type="number"
+          />
+          <MermaidInput label="Label" name="label" type="text" />
+          <MermaidInput
+            label="Transect Length Surveyed"
+            name="transectLengthSurveyed"
+            type="number"
+          />
+          <MermaidSelect label="Width" name="width" options={emptyOption} />
+          <MermaidSelect
+            label="Fish Size Bin"
+            name="fishSizeBin"
+            options={emptyOption}
+          />
+          <MermaidSelect
+            label="Reef Slope"
+            name="reefSlope"
+            options={emptyOption}
+          />
+          <MermaidInput label="Notes" name="notes" type="text-area" />
+        </Form>
+      </Formik>
     </>
   )
 }

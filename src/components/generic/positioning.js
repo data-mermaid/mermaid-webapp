@@ -35,7 +35,7 @@ export const Grid = styled.div`
   padding: 10px 0px 10px 20px;
   align-items: center;
   border-left: 10px solid lightgrey;
-  ${(props) =>
+  /* ${(props) =>
     props.validation === 'warning' &&
     css`
       border-left-color: #d99d61;
@@ -43,9 +43,9 @@ export const Grid = styled.div`
       border-right: 1px solid red;
       border-bottom: 1px solid red;
       background: #e5ca80;
-    `}
+    `} */
   ${(props) =>
-    props.validation === 'error' &&
+    props.validation &&
     css`
       border-left-color: #85282c;
       border-top: 1px solid red;
