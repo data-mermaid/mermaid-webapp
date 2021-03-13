@@ -134,31 +134,31 @@ export const currentUserPropType = PropTypes.shape({
   full_name: PropTypes.string,
   email: PropTypes.string,
 })
+export const sitePropType = PropTypes.shape({
+  id: PropTypes.string,
+  name: PropTypes.string,
+  reef_type: PropTypes.string,
+  reef_zone: PropTypes.string,
+  exposure: PropTypes.string,
+})
+export const collectRecordPropType = PropTypes.shape({
+  method: PropTypes.string,
+  site: sitePropType,
+  management_regime: PropTypes.string,
+  data: PropTypes.shape({
+    protocol: PropTypes.string,
+  }),
+  depth: PropTypes.number,
+})
+
+export const managementRegimePropType = PropTypes.shape({
+  name: PropTypes.string,
+})
+
 export const mermaidDataPropType = PropTypes.shape({
   projects: projectsPropType,
   currentUser: currentUserPropType,
-  collectRecords: PropTypes.arrayOf(
-    PropTypes.shape({
-      method: PropTypes.string,
-      site: PropTypes.string,
-      management_regime: PropTypes.string,
-      data: PropTypes.shape({
-        protocol: PropTypes.string,
-      }),
-      depth: PropTypes.number,
-    }),
-  ),
-  sites: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      reef_type: PropTypes.string,
-      reef_zone: PropTypes.string,
-      exposure: PropTypes.string,
-    }),
-  ),
-  managementRegimes: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  ),
+  collectRecords: PropTypes.arrayOf(collectRecordPropType),
+  sites: PropTypes.arrayOf(sitePropType),
+  managementRegimes: PropTypes.arrayOf(managementRegimePropType),
 })

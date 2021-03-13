@@ -42,40 +42,50 @@ export default {
     {
       id: '1',
       method: 'Benthic LIT',
-      site: '1203',
-      management: 'Ankivonjy no-take',
+      site: {
+        id: '3',
+        name: '1203',
+      },
+      management: { id: '2', name: 'Ankivonjy no-take' },
       data: { protocol: 'benthiclit' },
       depth: 20,
     },
     {
       id: '2',
       method: 'Fish Belt',
-      site: 'Karang Kapal',
-      management: 'Fisheries Utilization',
+      site: {
+        id: '4',
+        name: 'Karang Kapal',
+      },
+      management: { id: '1', name: 'Fisheries Utilization' },
       data: { protocol: 'fishbelt' },
       depth: 10,
     },
   ],
   sites: [
     {
+      id: '1',
       name: 'Amazing Maze',
       reef_type: 'patch',
       reef_zone: 'pinnacle',
       exposure: 'exposed',
     },
     {
+      id: '2',
       name: 'BU02',
       reef_type: 'fringing',
       reef_zone: 'back reef',
       exposure: 'sheltered',
     },
     {
+      id: '3',
       name: '1203',
       reef_type: 'patch',
       reef_zone: 'fore reef',
       exposure: 'very sheltered',
     },
     {
+      id: '4',
       name: 'Karang Kapal',
       reef_type: 'patch',
       reef_zone: 'back reef',
@@ -83,8 +93,8 @@ export default {
     },
   ],
   managementRegimes: [
-    { name: 'Fisheries Utilization' },
-    { name: 'Ankivonjy no-take' },
-    { name: 'Bureta tabu' },
+    { id: '1', name: 'Fisheries Utilization' },
+    { id: '2', name: 'Ankivonjy no-take' },
+    { id: '3', name: 'Bureta tabu' },
   ],
 }
