@@ -1,0 +1,39 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+
+import { InputWithValidationRow, ValidationMessage } from '../form'
+import { RowCenter } from '../positioning'
+
+const InputWithLabelAndValidation = ({
+  label,
+  id,
+  validationMessage,
+  validationType,
+  ...restOfProps
+}) => {
+  return (
+    <InputWithValidationRow validationType={validationType}>
+      <label htmlFor={id}>{label}</label>
+      <input id={id} {...restOfProps} />
+      {validationMessage ? (
+        <RowCenter>
+          <ValidationMessage> {validationMessage}</ValidationMessage>
+        </RowCenter>
+      ) : null}
+    </InputWithValidationRow>
+  )
+}
+
+InputWithLabelAndValidation.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  validationType: PropTypes.string,
+  validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+}
+
+InputWithLabelAndValidation.defaultProps = {
+  validationType: undefined,
+  validationMessage: undefined,
+}
+
+export default InputWithLabelAndValidation
