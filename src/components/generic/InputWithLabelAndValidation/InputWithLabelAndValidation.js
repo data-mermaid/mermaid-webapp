@@ -17,7 +17,9 @@ const InputWithLabelAndValidation = ({
       <input id={id} {...restOfProps} />
       {validationMessage ? (
         <RowCenter>
-          <ValidationMessage> {validationMessage}</ValidationMessage>
+          <ValidationMessage validationType={validationType}>
+            {validationMessage}
+          </ValidationMessage>
         </RowCenter>
       ) : null}
     </InputWithValidationRow>
