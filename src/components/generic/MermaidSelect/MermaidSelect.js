@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useField } from 'formik'
-import { Grid } from '../positioning'
-import { WarningFormText } from '../text'
+import { TextWarning } from '../text'
+import { InputWithValidationRow } from '../form'
+import { RowCenter } from '../positioning'
 
 const MermaidSelect = ({ label, ...props }) => {
   const [field, meta] = useField(props)
@@ -15,15 +16,17 @@ const MermaidSelect = ({ label, ...props }) => {
   ))
 
   return (
-    <Grid validation={meta.touched && meta.error}>
+    <InputWithValidationRow validation={meta.touched && meta.error}>
       <label htmlFor={name}>{label}</label>
       <select {...field} {...props}>
         {optionList}
       </select>
       {meta.touched && meta.error ? (
-        <WarningFormText >{meta.error}</WarningFormText>
+        <RowCenter>
+          <TextWarning> {meta.error}</TextWarning>
+        </RowCenter>
       ) : null}
-    </Grid>
+    </InputWithValidationRow>
   )
 }
 
