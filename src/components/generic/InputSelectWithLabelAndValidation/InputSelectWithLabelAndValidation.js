@@ -1,14 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useField } from 'formik'
-import { TextWarning } from '../text'
-import { InputWithValidationRow } from '../form'
+import { InputWithValidationRow, ValidationMessage } from '../form'
 import { RowCenter } from '../positioning'
 
-const MermaidSelect = ({ label, ...props }) => {
-  const [field, meta] = useField(props)
-  const { name, options } = props
-
+const InputSelectWithLabelAndValidation = ({
+  label,
+  name,
+  options,
+  ...props
+}) => {
   const optionList = options.map((item) => (
     <option key={item.name} value={item.name}>
       {item.name}
@@ -23,14 +24,14 @@ const MermaidSelect = ({ label, ...props }) => {
       </select>
       {meta.touched && meta.error ? (
         <RowCenter>
-          <TextWarning> {meta.error}</TextWarning>
+          <ValidationMessage> {meta.error}</ValidationMessage>
         </RowCenter>
       ) : null}
     </InputWithValidationRow>
   )
 }
 
-MermaidSelect.propTypes = {
+InputSelectWithLabelAndValidation.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
@@ -40,4 +41,4 @@ MermaidSelect.propTypes = {
   ).isRequired,
 }
 
-export default MermaidSelect
+export default InputSelectWithLabelAndValidation
