@@ -1,7 +1,7 @@
 import React from 'react'
 import Admin from '../components/pages/Admin'
 import Collect from '../components/pages/Collect'
-import CollectRecord from '../components/pages/CollectRecord'
+import CollectRecord from '../components/pages/EditfishBelt'
 import Data from '../components/pages/Data'
 import DataSharing from '../components/pages/DataSharing'
 import FishFamilies from '../components/pages/FishFamilies'
@@ -16,6 +16,7 @@ import NewBenthicLit from '../components/pages/NewBenthicLit'
 import NewBenthicPit from '../components/pages/NewBenthicPit'
 import NewHabitatComplexity from '../components/pages/NewHabitatComplexity'
 import NewBleaching from '../components/pages/NewBleaching'
+import EditFishBelt from '../components/pages/EditfishBelt/EditFishBelt'
 
 export const useRoutes = ({ mermaidData }) => {
   const routes = [
@@ -37,7 +38,7 @@ export const useRoutes = ({ mermaidData }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      Component: () => <CollectRecord mermaidData={mermaidData} />,
+      Component: () => <EditFishBelt mermaidData={mermaidData} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
@@ -45,7 +46,7 @@ export const useRoutes = ({ mermaidData }) => {
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
-      Component: () => <CollectRecord mermaidData={mermaidData} />,
+      Component: () => <> Placeholder edit benthic LIT collect record page</>,
     },
     {
       path: '/projects/:projectId/collecting/benthicpit/',

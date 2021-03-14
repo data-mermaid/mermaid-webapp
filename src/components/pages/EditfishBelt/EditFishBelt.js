@@ -1,4 +1,4 @@
-import { Formik, useFormik } from 'formik'
+import { Formik } from 'formik'
 import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import React, { useState } from 'react'
@@ -14,7 +14,7 @@ import {
   getSampleInfoValidationInfo,
 } from '../../../library/collectRecordHelpers'
 
-const CollectRecord = ({ mermaidData }) => {
+const EditFishBelt = ({ mermaidData }) => {
   const { recordId } = useParams()
   const { sites, managementRegimes } = mermaidData
 
@@ -65,8 +65,8 @@ const CollectRecord = ({ mermaidData }) => {
   )
 }
 
-CollectRecord.propTypes = {
+EditFishBelt.propTypes = {
   mermaidData: mermaidDataPropType.isRequired,
 }
 
-export default CollectRecord
+export default EditFishBelt
