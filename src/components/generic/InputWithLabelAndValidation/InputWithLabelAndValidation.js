@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { InputWithValidationRow, ValidationMessage } from '../form'
+import { InputRow, ValidationMessage } from '../form'
 import { RowCenter } from '../positioning'
 
 const InputWithLabelAndValidation = ({
@@ -12,7 +12,7 @@ const InputWithLabelAndValidation = ({
   ...restOfProps
 }) => {
   return (
-    <InputWithValidationRow validationType={validationType}>
+    <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
       <input id={id} {...restOfProps} />
       {validationMessage ? (
@@ -22,7 +22,7 @@ const InputWithLabelAndValidation = ({
           </ValidationMessage>
         </RowCenter>
       ) : null}
-    </InputWithValidationRow>
+    </InputRow>
   )
 }
 
