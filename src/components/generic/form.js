@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-export const InputWithValidationRow = styled.div`
+export const InputRow = styled.div`
   display: inline-grid;
   grid-template-columns: 1fr 1fr 1fr;
   width: 100%;
