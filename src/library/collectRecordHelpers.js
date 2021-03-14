@@ -2,8 +2,8 @@ import * as Yup from 'yup'
 
 const getSampleInfoInitialValues = (collectRecord) => ({
   depth: collectRecord.depth,
-  site: collectRecord.site.id,
-  management: collectRecord.management.id,
+  site: collectRecord.site,
+  management: collectRecord.management,
   sampleDate: '',
   sampleTime: '',
 })

@@ -42,10 +42,7 @@ export default {
     {
       id: '1',
       method: 'Benthic LIT',
-      site: {
-        id: '3',
-        name: '1203',
-      },
+      site: '3',
       management: { id: '2', name: 'Ankivonjy no-take' },
       data: { protocol: 'benthiclit' },
       depth: 20,
@@ -53,10 +50,7 @@ export default {
     {
       id: '2',
       method: 'Fish Belt',
-      site: {
-        id: '4',
-        name: 'Karang Kapal',
-      },
+      site: '4',
       management: { id: '1', name: 'Fisheries Utilization' },
       data: { protocol: 'fishbelt' },
       depth: 10,
