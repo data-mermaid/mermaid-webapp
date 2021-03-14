@@ -9,43 +9,28 @@ import { ButtonCallout } from '../../generic/buttons'
 import { RowRight } from '../../generic/positioning'
 import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 import SampleInfoInputs from '../../SampleInfoInputs'
+import {
+  getSampleInfoInitialValues,
+  getSampleInfoValidationInfo,
+} from '../../../library/collectRecordHelpers'
 
 const CollectRecord = ({ mermaidData }) => {
   const { recordId } = useParams()
-  const { collectRecords, sites, managementRegimes } = mermaidData
-
-  const initializeCollectRecordBeingEdited = (record) =>
-    collectRecords.filter(({ id }) => id === record)[0]
+  const { sites, managementRegimes } = mermaidData
 
   const [collectRecordBeingEdited] = useState(
-    initializeCollectRecordBeingEdited(recordId),
-  )
-
-  const validSiteValues = sites.map((site) => site.id)
-
-  const validManagementRegimeValues = managementRegimes.map(
-    (regime) => regime.id,
+    mermaidData.getCollectRecord(recordId),
   )
 
   const formikOptions = {
     initialValues: {
-      depth: collectRecordBeingEdited.depth,
-      site: collectRecordBeingEdited.site.id,
-      management: collectRecordBeingEdited.management.id,
-      sampleDate: '',
-      sampleTime: '',
+      ...getSampleInfoInitialValues(collectRecordBeingEdited),
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
-      site: Yup.string()
-        .oneOf(validSiteValues, 'Invalid site')
-        .required('Site is required'),
-      management: Yup.string()
-        .oneOf(validManagementRegimeValues, 'Invalid management regime')
-        .required('Management Regime is required'),
-      depth: Yup.number().required('Depth is required'),
+      ...getSampleInfoValidationInfo(mermaidData),
     }),
-    onSubmit: (values) => console.log('here', values),
+    onSubmit: () => {},
   }
 
   return (
@@ -61,7 +46,6 @@ const CollectRecord = ({ mermaidData }) => {
                 sites={sites}
                 managementRegimes={managementRegimes}
               />
-              {/* // put transect here */}
             </form>
           }
           upperRight={
