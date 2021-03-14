@@ -4,7 +4,6 @@ import * as Yup from 'yup'
 import React, { useState } from 'react'
 
 import SubLayout2 from '../../SubLayout2'
-import NavMenu from '../../NavMenu'
 import { ButtonCallout } from '../../generic/buttons'
 import { RowRight } from '../../generic/positioning'
 import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
@@ -51,7 +50,6 @@ const EditFishBelt = ({ mermaidData }) => {
     <Formik {...formikOptions}>
       {(formik) => (
         <SubLayout2
-          sidebar={<NavMenu />}
           lowerRight={
             <form id="benthiclit-form" onSubmit={formik.handleSubmit}>
               <SampleInfoInputs

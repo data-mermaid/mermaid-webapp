@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
 import { Column, Row } from '../generic/positioning'
+import NavMenu from '../NavMenu'
 import ProjectName from '../ProjectName'
 
 const SubLayout2Container = styled(Column)`
@@ -13,7 +14,7 @@ const LayoutMainSection = styled.div`
   padding: ${(props) => props.theme.spacing.medium};
 `
 
-const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
+const SubLayout2 = ({ lowerRight, upperRight }) => {
   // I don't see the point of passing pageTitle to every components using this layout, leave as constant for now.
   const pageTitle = 'Project Name Placeholder'
 
@@ -22,7 +23,9 @@ const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
       <SubLayout2Container>
         <ProjectName pageTitle={pageTitle} />
         <Row>
-          <Column>{sidebar}</Column>
+          <Column>
+            <NavMenu />
+          </Column>
 
           <LayoutMainSection>
             <div>{upperRight}</div>
@@ -35,7 +38,6 @@ const SubLayout2 = ({ sidebar, lowerRight, upperRight }) => {
 }
 
 SubLayout2.propTypes = {
-  sidebar: PropTypes.node.isRequired,
   lowerRight: PropTypes.node.isRequired,
   upperRight: PropTypes.node.isRequired,
 }

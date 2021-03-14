@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import SubLayout2 from '../../SubLayout2'
 import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
-import NavMenu from '../../NavMenu'
 import { H3 } from '../../generic/text'
 import { Column, RowSpaceBetween } from '../../generic/positioning'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
@@ -83,7 +82,6 @@ CollectRecordList.propTypes = {
 const Collect = ({ mermaidData }) => {
   return (
     <SubLayout2
-      sidebar={<NavMenu />}
       lowerRight={<CollectRecordList mermaidData={mermaidData} />}
       upperRight={<TopBar />}
     />

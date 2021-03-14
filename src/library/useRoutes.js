@@ -1,7 +1,6 @@
 import React from 'react'
 import Admin from '../components/pages/Admin'
 import Collect from '../components/pages/Collect'
-import CollectRecord from '../components/pages/EditfishBelt'
 import Data from '../components/pages/Data'
 import DataSharing from '../components/pages/DataSharing'
 import FishFamilies from '../components/pages/FishFamilies'
