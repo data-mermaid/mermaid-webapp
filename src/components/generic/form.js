@@ -28,4 +28,15 @@ export const InputWithValidationRow = styled.div`
       background: lightyellow;
     `}
 `
-export const ValidationMessage = styled.div``
+export const ValidationMessage = styled.div`
+  ${(props) =>
+    props.validationType === 'error' &&
+    css`
+      color: red;
+    `}
+  ${(props) =>
+    props.validationType === 'warning' &&
+    css`
+      color: darkgoldenrod;
+    `}
+`
