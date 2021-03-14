@@ -13,6 +13,7 @@ import {
   getSampleInfoInitialValues,
   getSampleInfoValidationInfo,
 } from '../../../library/collectRecordHelpers'
+import FishBeltTransectForms from '../../FishBeltTransectForms'
 
 const EditFishBelt = ({ mermaidData }) => {
   const { recordId } = useParams()
@@ -25,10 +26,23 @@ const EditFishBelt = ({ mermaidData }) => {
   const formikOptions = {
     initialValues: {
       ...getSampleInfoInitialValues(collectRecordBeingEdited),
+      transectNumber: '-9999',
+      label: 'Placeholder initial value',
+      transectLengthSurveyed: '-9999',
+      width: 'value 1',
+      fishSizeBin: 'value 1',
+      reefSlope: 'value 1',
+      notes: 'Placeholder initial value',
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
       ...getSampleInfoValidationInfo(mermaidData),
+      transectNumber: Yup.number().required('Transect number is required'),
+      transectNLengthSurveyed: Yup.number().required(
+        'Transect length surveyed is required',
+      ),
+      width: Yup.string().required('Width is required'),
+      fishSizeBin: Yup.string().required('Fish size bin is required'),
     }),
     onSubmit: () => {},
   }
@@ -46,6 +60,7 @@ const EditFishBelt = ({ mermaidData }) => {
                 sites={sites}
                 managementRegimes={managementRegimes}
               />
+              <FishBeltTransectForms formik={formik} />
             </form>
           }
           upperRight={
