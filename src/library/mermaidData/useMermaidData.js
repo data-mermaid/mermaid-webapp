@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
 import axios from 'axios'
@@ -30,6 +30,11 @@ export const useMermaidData = ({
   const [collectRecords] = useState(mockMermaidData.collectRecords)
   const [sites] = useState(mockMermaidData.sites)
   const [managementRegimes] = useState(mockMermaidData.managementRegimes)
+
+  const getCollectRecord = useCallback(
+    (searchId) => collectRecords.find((record) => record.id === searchId),
+    [collectRecords],
+  )
 
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const authenticatedAxios = useMemo(
@@ -116,6 +121,7 @@ export const useMermaidData = ({
     collectRecords,
     sites,
     managementRegimes,
+    getCollectRecord,
   }
 }
 export const projectsPropType = PropTypes.arrayOf(
@@ -161,4 +167,5 @@ export const mermaidDataPropType = PropTypes.shape({
   collectRecords: PropTypes.arrayOf(collectRecordPropType),
   sites: PropTypes.arrayOf(sitePropType),
   managementRegimes: PropTypes.arrayOf(managementRegimePropType),
+  getCollectRecord: PropTypes.func,
 })
