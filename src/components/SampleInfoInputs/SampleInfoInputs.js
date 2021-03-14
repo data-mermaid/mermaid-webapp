@@ -10,7 +10,7 @@ import {
 import { formikPropType } from '../../library/formikHelpers/formikPropType'
 import getValidationPropsFromFormik from '../../library/formikHelpers/getValidationPropsFromFormik'
 
-const SampleInfoForms = ({ formik, sites, managementRegimes }) => {
+const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
   const siteSelectOptions = sites.map((site) => ({
     label: site.name,
     value: site.id,
@@ -63,10 +63,10 @@ const SampleInfoForms = ({ formik, sites, managementRegimes }) => {
   )
 }
 
-SampleInfoForms.propTypes = {
+SampleInfoInputs.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   formik: formikPropType.isRequired,
 }
 
-export default SampleInfoForms
+export default SampleInfoInputs
