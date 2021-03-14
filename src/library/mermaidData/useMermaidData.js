@@ -149,7 +149,7 @@ export const sitePropType = PropTypes.shape({
 })
 export const collectRecordPropType = PropTypes.shape({
   method: PropTypes.string,
-  site: sitePropType,
+  site: PropTypes.string,
   management_regime: PropTypes.string,
   data: PropTypes.shape({
     protocol: PropTypes.string,
