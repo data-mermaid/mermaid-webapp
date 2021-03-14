@@ -1,72 +1,80 @@
 import React from 'react'
-import { Formik, Form } from 'formik'
-import * as Yup from 'yup'
-import MermaidInput from '../generic/MermaidInput'
-import MermaidSelect from '../generic/MermaidSelect'
 import { H2 } from '../generic/text'
+import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
+import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
+import { formikPropType } from '../../library/formikHelpers/formikPropType'
+import getValidationPropsFromFormik from '../../library/formikHelpers/getValidationPropsFromFormik'
 
 /**
  * Describe your component
  */
-const FishBeltTransectForms = () => {
+const FishBeltTransectForms = ({ formik }) => {
   const emptyOption = [
-    { name: 'option 1' },
-    { name: 'option 2' },
-    { name: 'option 3' },
-    { name: 'option 4' },
+    { label: 'Placeholder option 1', value: 'value 1' },
+    { label: 'Placeholder option 2', value: 'value 2' },
+    { label: 'Placeholder option 3', value: 'value 3' },
+    { label: 'Placeholder option 4', value: 'value 4' },
   ]
 
   return (
     <>
       <H2>Transect</H2>
-      <Formik
-        initialValues={{
-          transectNumber: '',
-          label: '',
-          transectLengthSurveyed: '',
-          width: '',
-          fishSizeBin: '',
-          reefSlope: '',
-          notes: '',
-        }}
-        validationSchema={Yup.object({
-          transectNumber: Yup.number().required('Transect number is required'),
-          transectNLengthSurveyed: Yup.number().required(
-            'Transect length surveyed is required',
-          ),
-          width: Yup.string().required('Width is required'),
-          fishSizeBin: Yup.string().required('Fish size bin is required'),
-        })}
-        // onSubmit={(values) => {}}
-      >
-        <Form>
-          <MermaidInput
-            label="Transect Number"
-            name="transectNumber"
-            type="number"
-          />
-          <MermaidInput label="Label" name="label" type="text" />
-          <MermaidInput
-            label="Transect Length Surveyed"
-            name="transectLengthSurveyed"
-            type="number"
-          />
-          <MermaidSelect label="Width" name="width" options={emptyOption} />
-          <MermaidSelect
-            label="Fish Size Bin"
-            name="fishSizeBin"
-            options={emptyOption}
-          />
-          <MermaidSelect
-            label="Reef Slope"
-            name="reefSlope"
-            options={emptyOption}
-          />
-          <MermaidInput label="Notes" name="notes" type="text-area" />
-        </Form>
-      </Formik>
+
+      <InputWithLabelAndValidation
+        label="Transect Number"
+        id="transectNumber"
+        type="number"
+        {...formik.getFieldProps('transectNumber')}
+        {...getValidationPropsFromFormik(formik, 'transectNumber')}
+      />
+      <InputWithLabelAndValidation
+        label="Label"
+        id="label"
+        type="text"
+        {...formik.getFieldProps('label')}
+        {...getValidationPropsFromFormik(formik, 'label')}
+      />
+      <InputWithLabelAndValidation
+        label="Transect Length Surveyed"
+        id="transectLengthSurveyed"
+        type="number"
+        {...formik.getFieldProps('transectLengthSurveyed')}
+        {...getValidationPropsFromFormik(formik, 'transectLengthSurveyed')}
+      />
+      <InputSelectWithLabelAndValidation
+        label="Width"
+        id="width"
+        options={emptyOption}
+        {...formik.getFieldProps('width')}
+        {...getValidationPropsFromFormik(formik, 'width')}
+      />
+      <InputSelectWithLabelAndValidation
+        label="Fish Size Bin"
+        id="fishSizeBin"
+        options={emptyOption}
+        {...formik.getFieldProps('fishSizeBin')}
+        {...getValidationPropsFromFormik(formik, 'fishSizeBin')}
+      />
+      <InputSelectWithLabelAndValidation
+        label="Reef Slope"
+        id="reefSlope"
+        options={emptyOption}
+        {...formik.getFieldProps('reefSlope')}
+        {...getValidationPropsFromFormik(formik, 'reefSlope')}
+      />
+      <InputWithLabelAndValidation
+        label="Notes"
+        id="notes"
+        type="text-area"
+        {...formik.getFieldProps('notes')}
+        {...getValidationPropsFromFormik(formik, 'notes')}
+      />
     </>
   )
+}
+
+FishBeltTransectForms.propTypes = {
+  formik: formikPropType.isRequired,
 }
 
 export default FishBeltTransectForms
