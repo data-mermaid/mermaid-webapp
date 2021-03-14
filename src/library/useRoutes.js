@@ -46,7 +46,7 @@ export const useRoutes = ({ mermaidData }) => {
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
-      Component: () => <> Placeholder edit benthic LIT collect record page</>,
+      Component: () => <> Placeholder edit benthic LIT collect record page </>,
     },
     {
       path: '/projects/:projectId/collecting/benthicpit/',
