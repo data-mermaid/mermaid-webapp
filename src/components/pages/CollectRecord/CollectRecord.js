@@ -8,7 +8,7 @@ import NavMenu from '../../NavMenu'
 import { ButtonCallout } from '../../generic/buttons'
 import { RowRight } from '../../generic/positioning'
 import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
-import SampleInfoForms from '../../SampleInfoForms'
+import SampleInfoInputs from '../../SampleInfoInputs'
 
 const CollectRecord = ({ mermaidData }) => {
   const { recordId } = useParams()
@@ -55,7 +55,7 @@ const CollectRecord = ({ mermaidData }) => {
           sidebar={<NavMenu />}
           lowerRight={
             <form id="benthiclit-form" onSubmit={formik.handleSubmit}>
-              <SampleInfoForms
+              <SampleInfoInputs
                 formik={formik}
                 collectRecord={collectRecordBeingEdited}
                 sites={sites}
