@@ -3,14 +3,12 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import { NavLinkButtonishIcon } from '../generic/links'
 import { IconCollect, IconData, IconAdmin, IconHeart } from '../icons'
-/**
- * Describe your component
- */
+
 const ButtonLabel = styled('span')``
 const NavLinkButtonGroup = ({ projectUrl }) => {
   return (
     <>
-      <NavLinkButtonishIcon to={`${projectUrl}/`} aria-label="Data">
+      <NavLinkButtonishIcon to={`${projectUrl}/health`} aria-label="Data">
         <IconHeart />
         <ButtonLabel>Health</ButtonLabel>
       </NavLinkButtonishIcon>

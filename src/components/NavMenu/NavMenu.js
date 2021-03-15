@@ -1,9 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Column } from '../generic/positioning'
+import styled, { css } from 'styled-components'
 import { NavLinkSidebar } from '../generic/links'
+import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import { H4 } from '../generic/text'
 import {
   IconCollect,
   IconSites,
@@ -16,67 +15,118 @@ import {
   IconSharing,
 } from '../icons'
 
-/**
- * Describe your component
- */
-const NavHeader = styled(H4)`
+const NavWrapper = styled('nav')`
+  display: flex;
+  flex-direction: column;
+  border-right: solid 1px ${(props) => props.theme.color.border};
+  height: 100%;
+`
+const NavList = styled('ul')`
+  &,
+  & ul {
+    padding: 0;
+  }
+`
+const NavHeader = styled('p')`
   text-transform: uppercase;
-  border-bottom: 1px solid;
-  padding: 10px;
+  font-weight: 900;
+  margin: 0;
+  border-top: solid 1px ${(props) => props.theme.color.border};
+  letter-spacing: 2px;
+  padding: ${(props) => props.theme.spacing.small};
+  padding-top: ${(props) => props.theme.spacing.medium};
+  ${mediaQueryTabletLandscapeOnly(css`
+    display: none;
+  `)}
 `
 
 const NavMenu = () => {
-  const currentProjectPath = useCurrentProjectPath()
+  const projectUrl = useCurrentProjectPath()
 
   return (
-    <Column as="nav">
-      <NavHeader>Project Overview</NavHeader>
-      <NavLinkSidebar to={`${currentProjectPath}/health`}>
-        <IconHeart /> Project Health
-      </NavLinkSidebar>
-
-      <NavHeader>Collect</NavHeader>
-      <NavLinkSidebar to={`${currentProjectPath}/collecting`}>
-        <IconCollect />
-        Collecting
-      </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/sites`}>
-        <IconSites />
-        Sites
-      </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/management-regimes`}>
-        <IconCopy />
-        Management Regimes
-      </NavLinkSidebar>
-
-      <NavHeader>Data</NavHeader>
-      <NavLinkSidebar to={`${currentProjectPath}/data`}>
-        <IconData />
-        Submitted
-      </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/graphs-and-maps`}>
-        <IconGraph />
-        Graphs and Maps
-      </NavLinkSidebar>
-
-      <NavHeader>Admin</NavHeader>
-      <NavLinkSidebar to={`${currentProjectPath}/admin`}>
-        <IconAdmin />
-        Project Info
-      </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/users`}>
-        <IconUsers />
-        Users
-      </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/fish-families`}>
-        <IconHeart />
-        Fish Families
-      </NavLinkSidebar>
-      <NavLinkSidebar to={`${currentProjectPath}/data-sharing`}>
-        <IconSharing />
-        Data Sharing
-      </NavLinkSidebar>
-    </Column>
+    <NavWrapper>
+      <NavList>
+        <li>
+          <NavHeader>Project Overview</NavHeader>
+          <ul>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/health`}>
+                <IconHeart /> <span>Project Health</span>
+              </NavLinkSidebar>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <NavHeader>Collect</NavHeader>
+          <ul>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/collecting`}>
+                <IconCollect />
+                <span>Collecting</span>
+              </NavLinkSidebar>
+            </li>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/sites`}>
+                <IconSites />
+                <span>Sites</span>
+              </NavLinkSidebar>
+            </li>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/management-regimes`}>
+                <IconCopy />
+                <span>Management Regimes</span>
+              </NavLinkSidebar>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <NavHeader>Data</NavHeader>
+          <ul>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/data`}>
+                <IconData />
+                <span>Submitted</span>
+              </NavLinkSidebar>
+            </li>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
+                <IconGraph />
+                <span>Graphs and Maps</span>
+              </NavLinkSidebar>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <NavHeader>Admin</NavHeader>
+          <ul>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/admin`}>
+                <IconAdmin />
+                <span>Project Info</span>
+              </NavLinkSidebar>
+            </li>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/users`}>
+                <IconUsers />
+                <span>Users</span>
+              </NavLinkSidebar>
+            </li>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/fish-families`}>
+                <IconHeart />
+                <span>Fish Families</span>
+              </NavLinkSidebar>
+            </li>
+            <li>
+              <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
+                <IconSharing />
+                <span>Data Sharing</span>
+              </NavLinkSidebar>
+            </li>
+          </ul>
+        </li>
+      </NavList>
+    </NavWrapper>
   )
 }
 

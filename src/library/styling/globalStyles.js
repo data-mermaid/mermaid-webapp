@@ -1,6 +1,11 @@
-const { createGlobalStyle } = require('styled-components')
+import { createGlobalStyle, css } from 'styled-components'
+import raw from 'raw.macro'
+import { hoverState } from './mediaQueries'
+
+const toastifyCss = raw('react-toastify/dist/ReactToastify.css')
 
 const GlobalStyle = createGlobalStyle`
+    ${toastifyCss}
     :root{
         font-size: 62.5%;
         color: ${(props) => props.theme.color.black};
@@ -19,6 +24,13 @@ const GlobalStyle = createGlobalStyle`
     *,*::before,*::after{
         box-sizing: border-box;
     } 
+    a{
+        color: ${(props) => props.theme.color.black};
+        text-decoration: underline;
+        ${hoverState(css`
+          text-decoration: none;
+        `)}
+    }
 `
 
 export default GlobalStyle

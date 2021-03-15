@@ -3,46 +3,63 @@ import { ThemeProvider } from 'styled-components/macro'
 import React from 'react'
 
 import GlobalStyle from '../library/styling/globalStyles'
-import Breadcrumbs from '../components/generic/Breadcrumbs'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/generic/Layout'
 import theme from '../theme'
 import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
-import { useMermaidApi } from '../ApiServices/useMermaidApi'
+import {
+  mermaidDataPropType,
+  useMermaidData,
+} from '../library/mermaidData/useMermaidData'
 import useOnlineStatus from '../library/useOnlineStatus'
+import { CustomToastContainer } from '../components/generic/toast'
 
-function App() {
+function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
-  const { isMermaidAuthenticated, logoutMermaid } = useAuthentication({
+  const {
+    auth0Token,
+    isMermaidAuthenticated,
+    logoutMermaid,
+  } = useAuthentication({
     isOnline,
   })
-  const apiService = useMermaidApi()
-  const { routes, getBreadCrumbs } = useRoutes(apiService)
+  const mermaidData = useMermaidData({
+    auth0Token,
+    isMermaidAuthenticated,
+    isOnline,
+    mermaidDbAccessInstance,
+  })
+  const { routes } = useRoutes({ mermaidData })
 
   const layoutProps = {
-    header: <Header logout={logoutMermaid} isOnline={isOnline} />,
+    header: (
+      <Header
+        currentUser={mermaidData.currentUser}
+        isOnline={isOnline}
+        logout={logoutMermaid}
+      />
+    ),
     footer: <Footer />,
   }
+
+  const isMermaidAuthenticatedAndReady =
+    isMermaidAuthenticated && mermaidData.currentUser
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {isMermaidAuthenticated && (
+      <CustomToastContainer />
+      {isMermaidAuthenticatedAndReady && (
         <Switch>
           {routes.map(({ path, Component }) => (
             <Route
               exact
               path={path}
               key={path}
-              render={(routeProps) => (
-                <Layout
-                  {...layoutProps}
-                  breadcrumbs={
-                    <Breadcrumbs crumbs={getBreadCrumbs(routeProps)} />
-                  }
-                >
+              render={() => (
+                <Layout {...layoutProps}>
                   <Component />
                 </Layout>
               )}
@@ -55,6 +72,10 @@ function App() {
       )}
     </ThemeProvider>
   )
+}
+
+App.propTypes = {
+  mermaidDbAccessInstance: mermaidDataPropType.isRequired,
 }
 
 export default App

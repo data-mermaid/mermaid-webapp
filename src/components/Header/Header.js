@@ -1,15 +1,17 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
-import React, { useMemo } from 'react'
+import React from 'react'
 import colorHelper from 'color'
-import ButtonMenu from '../generic/ButtonMenu'
 import {
   mediaQueryForTabletLandscapeUp,
   hoverState,
   mediaQueryPhoneOnly,
 } from '../../library/styling/mediaQueries'
+
+import { currentUserPropType } from '../../library/mermaidData/useMermaidData'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
+import HideShow from '../generic/HideShow'
 
 /**
  * Mermaid Header
@@ -66,11 +68,18 @@ const StyledNavLink = styled(Link)`
       ${(props) => props.theme.spacing.xsmall};
   `)}
 `
+const UserMenuButton = styled.button``
+const UserMenuDropDownContentContainer = styled.div``
 
-const Header = ({ logout, isOnline }) => {
-  const userMenuItems = useMemo(
-    () => (isOnline ? [{ label: 'Logout', onClick: logout }] : []),
-    [isOnline, logout],
+const Header = ({ logout, isOnline, currentUser }) => {
+  const UserMenuDropDownContent = () => (
+    <UserMenuDropDownContentContainer>
+      {isOnline && (
+        <button type="button" onClick={logout}>
+          Logout
+        </button>
+      )}
+    </UserMenuDropDownContentContainer>
   )
 
   return (
@@ -92,17 +101,27 @@ const Header = ({ logout, isOnline }) => {
         <StyledNavLink to="/#">Reports</StyledNavLink>
         <StyledNavLink to="/#">Reference</StyledNavLink>
         <StyledNavLink to="/#">Global Dashboard</StyledNavLink>
-        <ButtonMenu label="Fake User" items={userMenuItems} />
+
+        {currentUser && (
+          <>
+            <HideShow
+              button={<UserMenuButton>{currentUser.first_name}</UserMenuButton>}
+              contents={<UserMenuDropDownContent />}
+            />
+          </>
+        )}
       </RowRight>
     </StyledHeader>
   )
 }
 
 Header.propTypes = {
+  currentUser: currentUserPropType,
   isOnline: PropTypes.bool.isRequired,
   logout: PropTypes.func,
 }
 Header.defaultProps = {
+  currentUser: undefined,
   logout: () => {},
 }
 

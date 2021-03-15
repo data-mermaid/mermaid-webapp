@@ -2,13 +2,9 @@ import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
 
 const useAuthentication = ({ isOnline }) => {
-  const {
-    isAuthenticated: isAuth0Authenticated,
-    loginWithRedirect: auth0LoginWithRedirect,
-    isLoading: isAuth0Loading,
-    logout: auth0Logout,
-  } = useAuth0()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
+  const [auth0Token, setAuth0Token] = useState()
+
   const setAuthenticatedStates = () => {
     localStorage.setItem('hasAuth0Authenticated', 'true')
     setIsMermaidAuthenticated(true)
@@ -18,23 +14,49 @@ const useAuthentication = ({ isOnline }) => {
     setIsMermaidAuthenticated(false)
   }
 
-  useEffect(() => {
+  const {
+    isAuthenticated: isAuth0Authenticated,
+    loginWithRedirect: auth0LoginWithRedirect,
+    isLoading: isAuth0Loading,
+    logout: auth0Logout,
+    getAccessTokenSilently: getAuth0AccessTokenSilently,
+  } = useAuth0()
+
+  const _initializeAuthentication = useEffect(() => {
     const isOffline = !isOnline
     const hasPreviouslyAuthenticated =
       localStorage.getItem('hasAuth0Authenticated') === 'true'
+    const isUserOnlineAndLoggedOut =
+      !isAuth0Authenticated && !isAuth0Loading && isOnline
+    const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading
+    const isUserOfflineAndLoggedIn =
+      !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
 
-    if (!isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline) {
-      setIsMermaidAuthenticated(true)
-    }
-    if (!isAuth0Authenticated && !isAuth0Loading && isOnline) {
+    if (isUserOnlineAndLoggedOut) {
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
     }
-    if (isAuth0Authenticated) {
+    if (isUserOnlineAndLoggedIn) {
       // this is where logged in state gets set after successful login. (because of redirect)
       setAuthenticatedStates()
+      getAuth0AccessTokenSilently()
+        .then((token) => {
+          setAuth0Token(token)
+        })
+        .catch((err) => {
+          throw Error('Unable to get access token from Auth0', err)
+        })
     }
-  }, [auth0LoginWithRedirect, isAuth0Authenticated, isAuth0Loading, isOnline])
+    if (isUserOfflineAndLoggedIn) {
+      setIsMermaidAuthenticated(true)
+    }
+  }, [
+    auth0LoginWithRedirect,
+    getAuth0AccessTokenSilently,
+    isAuth0Authenticated,
+    isAuth0Loading,
+    isOnline,
+  ])
 
   const logoutMermaid = () => {
     if (isOnline) {
@@ -43,7 +65,11 @@ const useAuthentication = ({ isOnline }) => {
     }
   }
 
-  return { isMermaidAuthenticated, logoutMermaid }
+  return {
+    isMermaidAuthenticated,
+    logoutMermaid,
+    auth0Token,
+  }
 }
 
 export default useAuthentication
