@@ -25,16 +25,16 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Cache Node Modules
-      id: npm_cache
+      id: yarn_cache
       uses: actions/cache@v2
       with:
         path: node_modules
-        key: ${{ runner.os }}-v1-${{ hashFiles('package-lock.json') }}
+        key: ${{ runner.os }}-v1-${{ hashFiles('yarn.lock') }}
 
-    - name: NPM Install
-      if: steps.npm_cache.outputs.cache-hit != 'true'
+    - name: Yarn Install
+      if: steps.yarn_cache.outputs.cache-hit != 'true'
       run: |
-        npm install
+        yarn install
 
     - name: SED Add homepage route based on PR Number
       run: |
@@ -42,11 +42,11 @@ jobs:
 
     - name: Run Unit Tests
       run: |
-        npm run test
+        yarn test
 
-    - name: NPM Build
+    - name: yarn Build
       run: |
-        npm run build
+        yarn build
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
