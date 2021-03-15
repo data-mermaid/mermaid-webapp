@@ -27,7 +27,8 @@ const Content = styled('div')`
 
 const ContentToolbar = styled('div')`
   border-bottom: solid 1px ${(props) => props.theme.color.border};
-  padding: ${(props) => props.theme.spacing.medium};
+  padding: ${(props) => props.theme.spacing.small}
+    ${(props) => props.theme.spacing.medium};
 `
 const SubLayout2 = ({ content, toolbar }) => {
   // I don't see the point of passing pageTitle to every components using this layout, leave as constant for now.
