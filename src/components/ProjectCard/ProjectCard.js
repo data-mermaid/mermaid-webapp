@@ -7,14 +7,10 @@ import {
   mediaQueryForTabletLandscapeUp,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { noWordBreak } from '../../library/styling/mixins'
 import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
-/**
- * Describe your component
- */
 const borderWidth = '2px'
 const stylesForNoHover = css`
   display: grid;
@@ -107,11 +103,10 @@ const ProjectNameWrapper = styled('div')`
   align-self: start;
   h2 {
     margin: ${(props) => props.theme.spacing.xsmall} 0;
-    padding-top: ${(props) => props.theme.spacing.small};
-    padding-left: ${(props) => props.theme.spacing.medium};
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    ${noWordBreak};
+    padding: ${(props) => props.theme.spacing.small}
+      ${(props) => props.theme.spacing.medium};
+    ${(props) => props.theme.typography.noWordBreak};
+    ${(props) => props.theme.typography.upperCase};
     ${mediaQueryTabletLandscapeOnly(css`
       letter-spacing: 0;
     `)}

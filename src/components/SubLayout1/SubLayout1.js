@@ -3,11 +3,9 @@ import React from 'react'
 import styled from 'styled-components/macro'
 import { Column } from '../generic/positioning'
 
-/**
- * Describe your component
- */
 const SubLayout1Container = styled(Column)`
-  height: 100%;
+  margin-top: 23rem;
+  margin-bottom: ${(props) => props.theme.spacing.medium};
 `
 const TopRow = styled.div``
 const BottomRow = styled.div`

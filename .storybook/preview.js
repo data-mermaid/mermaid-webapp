@@ -1,3 +1,4 @@
+import { Auth0Context } from '@auth0/auth0-react'
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import theme from '../src/theme'
@@ -8,10 +9,19 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <MemoryRouter>
-      <ThemeProvider theme={theme}>
-        <Story />
-      </ThemeProvider>
-    </MemoryRouter>
+    <Auth0Context.Provider
+      value={{
+        isAuthenticated: true,
+        user: { name: 'Fake Auth0 User' },
+        logout: () => {},
+        getAccessTokenSilently: () => Promise.resolve('fake-token'),
+      }}
+    >
+      <MemoryRouter>
+        <ThemeProvider theme={theme}>
+          <Story />
+        </ThemeProvider>
+      </MemoryRouter>
+    </Auth0Context.Provider>
   ),
 ]

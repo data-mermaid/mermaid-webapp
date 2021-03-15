@@ -5,9 +5,6 @@ import { RowSpaceBetween, RowRight, RowLeft } from '../generic/positioning'
 import OfflineToggle from '../OfflineToggle'
 import { IconRefresh } from '../icons'
 
-/**
- * Describe your component
- */
 const IconStyleWrapper = styled.div`
   color: grey;
 `
