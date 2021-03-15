@@ -1,41 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import InputSelect from '../generic/InputSelect'
-import InputNumber from '../generic/InputNumber'
+import SampleInfoForms from '../SampleInfoForms'
+import FishBeltTransectForms from '../FishBeltTransectForms'
 
 /**
  * Describe your component
  */
+
 const CollectForms = ({
   collectRecord,
   sites,
   managementRegimes,
   handleInputChange,
 }) => {
-  const { site, management, depth } = collectRecord
-
   return (
     <>
-      <InputSelect
-        name="site"
-        label="Site"
-        options={sites}
-        value={site}
-        onChange={handleInputChange}
+      <SampleInfoForms
+        collectRecord={collectRecord}
+        sites={sites}
+        managementRegimes={managementRegimes}
+        handleInputChange={handleInputChange}
       />
-      <InputSelect
-        name="management"
-        label="Management Regime"
-        value={management}
-        options={managementRegimes}
-        onChange={handleInputChange}
-      />
-      <InputNumber
-        name="depth"
-        label="Depth"
-        value={depth}
-        onChange={handleInputChange}
-      />
+      <FishBeltTransectForms />
     </>
   )
 }

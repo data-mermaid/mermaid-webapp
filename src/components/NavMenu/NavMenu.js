@@ -15,10 +15,6 @@ import {
   IconSharing,
 } from '../icons'
 
-/**
- * Describe your component
- */
-
 const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
@@ -45,7 +41,7 @@ const NavHeader = styled('p')`
 `
 
 const NavMenu = () => {
-  const { projectUrl } = useCurrentProjectPath()
+  const projectUrl = useCurrentProjectPath()
 
   return (
     <NavWrapper>
