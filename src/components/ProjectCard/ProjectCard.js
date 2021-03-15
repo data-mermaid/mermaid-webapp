@@ -107,8 +107,8 @@ const ProjectNameWrapper = styled('div')`
   align-self: start;
   h2 {
     margin: ${(props) => props.theme.spacing.xsmall} 0;
-    padding-top: ${(props) => props.theme.spacing.small};
-    padding-left: ${(props) => props.theme.spacing.medium};
+    padding: ${(props) => props.theme.spacing.small}
+      ${(props) => props.theme.spacing.medium};
     text-transform: uppercase;
     letter-spacing: 2px;
     ${noWordBreak};
