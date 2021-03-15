@@ -82,8 +82,8 @@ CollectRecordList.propTypes = {
 const Collect = ({ mermaidData }) => {
   return (
     <SubLayout2
-      lowerRight={<CollectRecordList mermaidData={mermaidData} />}
-      upperRight={<TopBar />}
+      content={<CollectRecordList mermaidData={mermaidData} />}
+      toolbar={<TopBar />}
     />
   )
 }

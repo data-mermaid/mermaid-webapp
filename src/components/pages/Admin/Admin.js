@@ -8,8 +8,8 @@ import SubLayout2 from '../../SubLayout2'
 const Admin = () => {
   return (
     <SubLayout2
-      lowerRight={<>Admin Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>Admin Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }

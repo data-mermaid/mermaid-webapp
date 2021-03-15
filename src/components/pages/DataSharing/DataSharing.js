@@ -5,8 +5,8 @@ import SubLayout2 from '../../SubLayout2'
 const DataSharing = () => {
   return (
     <SubLayout2
-      lowerRight={<>Data Sharing Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>Data Sharing Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }

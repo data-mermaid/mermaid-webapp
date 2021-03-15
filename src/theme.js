@@ -5,7 +5,7 @@ const primary = colorHelper('#1C4C73')
 const secondary = colorHelper('#E6E6E6')
 const callout = colorHelper('#52B434')
 const caution = colorHelper('#BD585A')
-const white = primary.mix(colorHelper('white'), 0.95)
+const white = primary.mix(colorHelper('white'), 0.98)
 const black = primary.mix(colorHelper('black'), 0.95)
 
 const xsmall = '0.5rem'

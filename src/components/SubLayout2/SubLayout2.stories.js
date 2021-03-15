@@ -7,5 +7,5 @@ export default {
   component: SubLayout2,
 }
 export const basic = () => (
-  <SubLayout2 lowerRight={<>Lower Right</>} upperRight={<>Upper Right</>} />
+  <SubLayout2 content={<>Lower Right</>} toolbar={<>Upper Right</>} />
 )
