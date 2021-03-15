@@ -9,6 +9,11 @@ import { Column } from '../positioning'
 const CustomButtonSecondary = styled(ButtonSecondary)`
   padding: ${(props) => props.theme.spacing.xsmall};
 `
+const DropdownContainer = styled.div`
+  padding: ${(props) => props.theme.spacing.small};
+  background-color: ${(props) => props.theme.color.backgroundColor};
+  border: solid thin ${(props) => props.theme.color.primaryBorder};
+`
 
 const ButtonSecondaryDropdown = ({ children, label }) => {
   return (
@@ -18,7 +23,7 @@ const ButtonSecondaryDropdown = ({ children, label }) => {
           {label} <IconDown />
         </CustomButtonSecondary>
       }
-      contents={children}
+      contents={<DropdownContainer>{children}</DropdownContainer>}
     />
   )
 }
@@ -28,9 +33,4 @@ ButtonSecondaryDropdown.propTypes = {
   label: PropTypes.oneOf([PropTypes.string, PropTypes.node]).isRequired,
 }
 
-const StyledDropdownContainer = styled(Column)`
-  padding: ${(props) => props.theme.spacing.small};
-`
-
 export default ButtonSecondaryDropdown
-export { StyledDropdownContainer }
