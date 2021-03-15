@@ -14,6 +14,13 @@ const useAuthentication = ({ isOnline }) => {
     setIsMermaidAuthenticated(false)
   }
 
+  // Required for a re-direct for the deploy previews.
+  const setPullRequestNumber = () => {
+    if (window.location.origin.includes("preview")) {
+      localStorage.setItem("pullRequestNumber", process.env.PUBLIC_URL)
+    }
+  }
+
   const {
     isAuthenticated: isAuth0Authenticated,
     loginWithRedirect: auth0LoginWithRedirect,
@@ -33,6 +40,7 @@ const useAuthentication = ({ isOnline }) => {
       !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
 
     if (isUserOnlineAndLoggedOut) {
+      setPullRequestNumber()
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
     }
