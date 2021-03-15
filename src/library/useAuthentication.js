@@ -16,8 +16,8 @@ const useAuthentication = ({ isOnline }) => {
 
   // Required for a re-direct for the deploy previews.
   const setPullRequestNumber = () => {
-    if (window.location.origin.includes("preview")) {
-      localStorage.setItem("pullRequestNumber", process.env.PUBLIC_URL)
+    if (window.location.origin.includes('preview')) {
+      localStorage.setItem('pullRequestNumber', process.env.PUBLIC_URL)
     }
   }
 
