@@ -5,8 +5,8 @@ import SubLayout2 from '../../SubLayout2'
 const FishFamilies = () => {
   return (
     <SubLayout2
-      lowerRight={<>Fish Families Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>Fish Families Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }

@@ -5,8 +5,8 @@ import SubLayout2 from '../../SubLayout2'
 const Users = () => {
   return (
     <SubLayout2
-      lowerRight={<>Users Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>Users Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }

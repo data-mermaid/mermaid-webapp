@@ -8,8 +8,8 @@ import SubLayout2 from '../../SubLayout2'
 const Data = () => {
   return (
     <SubLayout2
-      lowerRight={<>Data Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>Data Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }

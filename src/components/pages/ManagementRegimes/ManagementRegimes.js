@@ -5,8 +5,8 @@ import SubLayout2 from '../../SubLayout2'
 const ManagementRegimes = () => {
   return (
     <SubLayout2
-      lowerRight={<>Management Regimes Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>Management Regimes Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }
