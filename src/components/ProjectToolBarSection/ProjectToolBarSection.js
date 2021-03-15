@@ -63,12 +63,10 @@ const SortByLabelWrapper = styled.label`
     ${inputStyles}
   }
   ${mediaQueryPhoneOnly(css`
-    display: none;
-  `)}
-`
-const ResponsiveButtonSecondary = styled(ButtonSecondary)`
-  ${mediaQueryPhoneOnly(css`
-    display: none;
+    &,
+    button {
+      display: none;
+    }
   `)}
 `
 /**
@@ -95,9 +93,9 @@ const ProjectToolBarSection = () => {
             <option value="LastUpdated">Last Updated Dates</option>
           </select>
         </SortByLabelWrapper>
-        <ResponsiveButtonSecondary>
+        <ButtonSecondary>
           <IconSortDown />
-        </ResponsiveButtonSecondary>
+        </ButtonSecondary>
       </RowWrapper>
     </GlobalWrapper>
   )
