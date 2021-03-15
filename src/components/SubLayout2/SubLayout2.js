@@ -6,7 +6,8 @@ import NavMenu from '../NavMenu'
 import ProjectName from '../ProjectName'
 
 const SubLayout2Container = styled(Column)`
-  height: 100%;
+  height: calc(100% - ${(props) => props.theme.spacing.headerHeight});
+  margin-top: ${(props) => props.theme.spacing.headerHeight};
 `
 
 const LayoutMainSection = styled.div`

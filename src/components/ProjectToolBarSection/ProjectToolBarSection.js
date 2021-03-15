@@ -11,7 +11,7 @@ const GlobalWrapper = styled.div`
   width: 100%;
   border-bottom: 1px solid;
   position: fixed;
-  top: 4.2rem;
+  top: ${(props) => props.theme.spacing.headerHeight};
   background-color: ${(props) => props.theme.color.white};
   z-index: 9;
   ${mediaQueryPhoneOnly(css`

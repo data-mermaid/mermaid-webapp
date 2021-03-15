@@ -25,8 +25,9 @@ const StyledHeader = styled(RowSpaceBetween)`
   width: 100%;
   top: 0;
   z-index: 9;
+  height: ${(props) => props.theme.spacing.headerHeight};
   img {
-    height: 36px;
+    height: calc(${(props) => props.theme.spacing.headerHeight} - 10px);
     padding: 0 ${(props) => props.theme.spacing.small};
     margin-top: 5px;
     &.desktop-logo {
