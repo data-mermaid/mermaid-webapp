@@ -3,10 +3,6 @@ import PropTypes from 'prop-types'
 import SampleInfoForms from '../SampleInfoForms'
 import FishBeltTransectForms from '../FishBeltTransectForms'
 
-/**
- * Describe your component
- */
-
 const CollectForms = ({
   collectRecord,
   sites,

@@ -12,9 +12,6 @@ import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
-/**
- * Describe your component
- */
 const borderWidth = '2px'
 const stylesForNoHover = css`
   display: grid;

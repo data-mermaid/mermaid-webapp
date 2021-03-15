@@ -11,7 +11,7 @@ import {
 
 import { currentUserPropType } from '../../library/mermaidData/useMermaidData'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
-import ButtonMenu from '../generic/ButtonMenu'
+import HideShow from '../generic/HideShow'
 
 /**
  * Mermaid Header
@@ -68,9 +68,19 @@ const StyledNavLink = styled(Link)`
       ${(props) => props.theme.spacing.xsmall};
   `)}
 `
+const UserMenuButton = styled.button``
+const UserMenuDropDownContentContainer = styled.div``
 
 const Header = ({ logout, isOnline, currentUser }) => {
-  const userMenuItems = isOnline ? [{ label: 'Logout', onClick: logout }] : []
+  const UserMenuDropDownContent = () => (
+    <UserMenuDropDownContentContainer>
+      {isOnline && (
+        <button type="button" onClick={logout}>
+          Logout
+        </button>
+      )}
+    </UserMenuDropDownContentContainer>
+  )
 
   return (
     <StyledHeader>
@@ -93,7 +103,12 @@ const Header = ({ logout, isOnline, currentUser }) => {
         <StyledNavLink to="/#">Global Dashboard</StyledNavLink>
 
         {currentUser && (
-          <ButtonMenu label={currentUser.first_name} items={userMenuItems} />
+          <>
+            <HideShow
+              button={<UserMenuButton>{currentUser.first_name}</UserMenuButton>}
+              contents={<UserMenuDropDownContent />}
+            />
+          </>
         )}
       </RowRight>
     </StyledHeader>

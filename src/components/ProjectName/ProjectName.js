@@ -6,10 +6,6 @@ import { Row } from '../generic/positioning'
 import { NavLinkButtonishIcon } from '../generic/links'
 import { IconHome } from '../icons'
 
-/**
- * Describe your component
- */
-
 const ProjectNameWrapper = styled(Row)`
   align-items: center;
   padding: 0px 10px;
