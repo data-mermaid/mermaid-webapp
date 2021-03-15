@@ -7,9 +7,8 @@ import SubLayout2 from '../../SubLayout2'
 import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 import NavMenu from '../../NavMenu'
 import { H3 } from '../../generic/text'
-import { RowSpaceBetween } from '../../generic/positioning'
+import { Column, RowSpaceBetween } from '../../generic/positioning'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
-import { StyledDropdownContainer } from '../../generic/ButtonSecondaryDropdown/ButtonSecondaryDropdown'
 import { IconPlus } from '../../icons'
 
 /**
@@ -29,7 +28,7 @@ const AddSampleUnitDropdown = () => {
 
   return (
     <ButtonSecondaryDropdown label={label}>
-      <StyledDropdownContainer as="nav">
+      <Column as="nav">
         <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>
           Fish Belt
         </CustomNavLink>
@@ -47,7 +46,7 @@ const AddSampleUnitDropdown = () => {
         <CustomNavLink to={`${currentProjectPath}/collecting/bleaching`}>
           Bleaching
         </CustomNavLink>
-      </StyledDropdownContainer>
+      </Column>
     </ButtonSecondaryDropdown>
   )
 }
