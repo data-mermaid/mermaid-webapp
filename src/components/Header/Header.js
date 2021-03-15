@@ -21,10 +21,14 @@ const StyledHeader = styled(RowSpaceBetween)`
   background-color: ${(props) => props.theme.color.black};
   color: ${(props) => props.theme.color.white};
   align-items: flex-start;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 9;
   img {
     height: 36px;
-    padding-top: ${(props) => props.theme.spacing.small};
-    padding-left: ${(props) => props.theme.spacing.small};
+    padding: 0 ${(props) => props.theme.spacing.small};
+    margin-top: 5px;
     &.desktop-logo {
       display: none;
     }
