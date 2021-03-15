@@ -35,8 +35,7 @@ const RowWrapper = styled.div`
 
 const HeaderStyle = styled.h1`
   flex-grow: 1;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  ${(props) => props.theme.typography.upperCase};
   margin: 0;
 `
 const inputStyles = css`

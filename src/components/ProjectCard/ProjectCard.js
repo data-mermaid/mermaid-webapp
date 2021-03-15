@@ -7,7 +7,6 @@ import {
   mediaQueryForTabletLandscapeUp,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { noWordBreak } from '../../library/styling/mixins'
 import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
@@ -109,9 +108,8 @@ const ProjectNameWrapper = styled('div')`
     margin: ${(props) => props.theme.spacing.xsmall} 0;
     padding: ${(props) => props.theme.spacing.small}
       ${(props) => props.theme.spacing.medium};
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    ${noWordBreak};
+    ${(props) => props.theme.typography.noWordBreak};
+    ${(props) => props.theme.typography.upperCase};
     ${mediaQueryTabletLandscapeOnly(css`
       letter-spacing: 0;
     `)}

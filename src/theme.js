@@ -1,3 +1,4 @@
+import { css } from 'styled-components/macro'
 import colorHelper from 'color'
 
 const primary = colorHelper('#1C4C73')
@@ -56,6 +57,17 @@ const typography = {
   defaultFontSize: '1.8rem',
   lineHeight: '1.2',
   fontStack: 'Arial, Helvetica Neue, Helvetica, sans-serif',
+  noWordBreak: css`
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-all;
+    word-break: break-word;
+    hyphens: auto;
+  `,
+  upperCase: css`
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  `,
 }
 
 const theme = { color, timing, spacing, typography }
