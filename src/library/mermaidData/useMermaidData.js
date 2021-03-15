@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
 import axios from 'axios'
@@ -30,6 +30,11 @@ export const useMermaidData = ({
   const [collectRecords] = useState(mockMermaidData.collectRecords)
   const [sites] = useState(mockMermaidData.sites)
   const [managementRegimes] = useState(mockMermaidData.managementRegimes)
+
+  const getCollectRecord = useCallback(
+    (searchId) => collectRecords.find((record) => record.id === searchId),
+    [collectRecords],
+  )
 
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const authenticatedAxios = useMemo(
@@ -116,6 +121,7 @@ export const useMermaidData = ({
     collectRecords,
     sites,
     managementRegimes,
+    getCollectRecord,
   }
 }
 export const projectsPropType = PropTypes.arrayOf(
@@ -134,31 +140,32 @@ export const currentUserPropType = PropTypes.shape({
   full_name: PropTypes.string,
   email: PropTypes.string,
 })
+export const sitePropType = PropTypes.shape({
+  id: PropTypes.string,
+  name: PropTypes.string,
+  reef_type: PropTypes.string,
+  reef_zone: PropTypes.string,
+  exposure: PropTypes.string,
+})
+export const collectRecordPropType = PropTypes.shape({
+  method: PropTypes.string,
+  site: PropTypes.string,
+  management_regime: PropTypes.string,
+  data: PropTypes.shape({
+    protocol: PropTypes.string,
+  }),
+  depth: PropTypes.number,
+})
+
+export const managementRegimePropType = PropTypes.shape({
+  name: PropTypes.string,
+})
+
 export const mermaidDataPropType = PropTypes.shape({
   projects: projectsPropType,
   currentUser: currentUserPropType,
-  collectRecords: PropTypes.arrayOf(
-    PropTypes.shape({
-      method: PropTypes.string,
-      site: PropTypes.string,
-      management_regime: PropTypes.string,
-      data: PropTypes.shape({
-        protocol: PropTypes.string,
-      }),
-      depth: PropTypes.number,
-    }),
-  ),
-  sites: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-      reef_type: PropTypes.string,
-      reef_zone: PropTypes.string,
-      exposure: PropTypes.string,
-    }),
-  ),
-  managementRegimes: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  ),
+  collectRecords: PropTypes.arrayOf(collectRecordPropType),
+  sites: PropTypes.arrayOf(sitePropType),
+  managementRegimes: PropTypes.arrayOf(managementRegimePropType),
+  getCollectRecord: PropTypes.func,
 })

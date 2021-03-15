@@ -1,5 +1,4 @@
 import React from 'react'
-import NavMenu from '../../NavMenu'
 import SubLayout2 from '../../SubLayout2'
 // import PropTypes from 'prop-types'
 
@@ -9,7 +8,6 @@ import SubLayout2 from '../../SubLayout2'
 const Data = () => {
   return (
     <SubLayout2
-      sidebar={<NavMenu />}
       lowerRight={<>Data Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />

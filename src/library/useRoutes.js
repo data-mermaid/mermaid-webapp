@@ -1,7 +1,6 @@
 import React from 'react'
 import Admin from '../components/pages/Admin'
 import Collect from '../components/pages/Collect'
-import CollectRecord from '../components/pages/CollectRecord'
 import Data from '../components/pages/Data'
 import DataSharing from '../components/pages/DataSharing'
 import FishFamilies from '../components/pages/FishFamilies'
@@ -11,75 +10,88 @@ import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Users from '../components/pages/Users'
 import Health from '../components/pages/Health'
+import NewFishBelt from '../components/pages/NewFishBelt'
+import NewBenthicLit from '../components/pages/NewBenthicLit'
+import NewBenthicPit from '../components/pages/NewBenthicPit'
+import NewHabitatComplexity from '../components/pages/NewHabitatComplexity'
+import NewBleaching from '../components/pages/NewBleaching'
+import EditFishBelt from '../components/pages/EditfishBelt/EditFishBelt'
 
 export const useRoutes = ({ mermaidData }) => {
   const routes = [
     {
       path: '/projects',
-      name: 'Projects',
       Component: () => <Projects mermaidData={mermaidData} />,
     },
     {
       path: '/projects/:projectId/health',
-      name: 'Project Health',
       Component: Health,
     },
     {
       path: '/projects/:projectId/collecting',
-      name: 'Collecting',
       Component: () => <Collect mermaidData={mermaidData} />,
     },
     {
+      path: '/projects/:projectId/collecting/fishbelt',
+      Component: () => <NewFishBelt />,
+    },
+    {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      name: 'Fish Belt',
-      Component: () => <CollectRecord mermaidData={mermaidData} />,
+      Component: () => <EditFishBelt mermaidData={mermaidData} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/benthiclit/',
+      Component: () => <NewBenthicLit />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
-      name: 'Benthic LIT',
-      Component: () => <CollectRecord mermaidData={mermaidData} />,
+      Component: () => <> Placeholder edit benthic LIT collect record page </>,
+    },
+    {
+      path: '/projects/:projectId/collecting/benthicpit/',
+      Component: () => <NewBenthicPit />,
+    },
+    {
+      path: '/projects/:projectId/collecting/habitatcomplexity/',
+      Component: () => <NewHabitatComplexity />,
+    },
+    {
+      path: '/projects/:projectId/collecting/bleaching/',
+      Component: () => <NewBleaching />,
     },
     {
       path: '/projects/:projectId/data',
-      name: 'Data',
       Component: Data,
     },
     {
       path: '/projects/:projectId/admin',
-      name: 'Admin',
       Component: Admin,
     },
 
     {
       path: '/projects/:projectId/graphs-and-maps',
-      name: 'Graphs and Maps',
       Component: GraphsAndMaps,
     },
 
     {
       path: '/projects/:projectId/sites/:workflow?',
-      name: 'Sites',
       Component: Sites,
     },
 
     {
       path: '/projects/:projectId/management-regimes/:workflow?',
-      name: 'Management Regimes',
       Component: ManagementRegimes,
     },
     {
       path: '/projects/:projectId/users',
-      name: 'Users',
       Component: Users,
     },
     {
       path: '/projects/:projectId/fish-families',
-      name: 'Fish Families',
       Component: FishFamilies,
     },
     {
       path: '/projects/:projectId/data-sharing',
-      name: 'Data Sharing',
       Component: DataSharing,
     },
   ]

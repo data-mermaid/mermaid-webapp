@@ -1,17 +1,15 @@
 import React from 'react'
-
-// import PropTypes from 'prop-types'
 import SubLayout2 from '../../SubLayout2'
 
-const Sites = () => {
+const NewBenthicPit = () => {
   return (
     <SubLayout2
-      lowerRight={<>Sites Placeholder</>}
+      lowerRight={<>New Benthic PIT Placeholder</>}
       upperRight={<>Sub layout top bar</>}
     />
   )
 }
 
-Sites.propTypes = {}
+NewBenthicPit.propTypes = {}
 
-export default Sites
+export default NewBenthicPit
