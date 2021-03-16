@@ -73,17 +73,20 @@ const Footer = () => {
       <OfflineToggleWrapper>
         <OfflineToggle />
         <label htmlFor="offline-toggle-switch">
+          {/* WIP see M76 */}
           {/* You&apos;re <strong>OFFLINE</strong> */}
           You&apos;re <strong>ONLINE</strong>
         </label>
       </OfflineToggleWrapper>
       <UpdateWrapper>
+        {/* WIP see M77 */}
         {/* When it's up to date */}
-        <IconCheck /> <p>MERMAID is up to date</p>
+        {/* Hide when offline */}
+        {/* <IconCheck /> <p>MERMAID is up to date</p> */}
         {/* When it needs to be updated */}
-        {/* <ButtonCallout>
+        <ButtonCallout>
           <IconRefresh /> There&apos;s a new Version of MERMAID
-        </ButtonCallout> */}
+        </ButtonCallout>
       </UpdateWrapper>
       <FooterNav>
         <Link to="/#">Help</Link>
