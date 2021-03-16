@@ -50,7 +50,7 @@ const EditFishBelt = ({ mermaidData }) => {
     <Formik {...formikOptions}>
       {(formik) => (
         <SubLayout2
-          lowerRight={
+          content={
             <form id="benthiclit-form" onSubmit={formik.handleSubmit}>
               <SampleInfoInputs
                 formik={formik}
@@ -61,7 +61,7 @@ const EditFishBelt = ({ mermaidData }) => {
               <FishBeltTransectForms formik={formik} />
             </form>
           }
-          upperRight={
+          toolbar={
             <RowRight>
               <ButtonCallout
                 type="submit"
