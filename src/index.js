@@ -19,7 +19,7 @@ ReactDOM.render(
       audience={process.env.REACT_APP_AUTH0_AUDIENCE}
       scope="read:current_user update:current_user_metadata"
     >
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <App mermaidDbAccessInstance={mermaidDbAccessInstance} />
       </BrowserRouter>
     </Auth0Provider>

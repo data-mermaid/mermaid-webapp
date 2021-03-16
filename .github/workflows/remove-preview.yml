@@ -1,0 +1,28 @@
+# This workflow removes the deploy preview that is created when a pull request is opened.
+# It is run when a PR is closed (including merged)
+
+name: Remove PR Preview
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  S3_BUCKET: preview.datamermaid.org
+  PR_NUMBER: ${{ github.event.number }}
+
+jobs:
+  remove-preview-from-s3:
+    runs-on: ubuntu-latest
+        
+    steps:
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Recursively delete files in S3 PR subfolder through AWS CLI
+      run: |
+        aws s3 rm s3://${S3_BUCKET}/${PR_NUMBER} --recursive
