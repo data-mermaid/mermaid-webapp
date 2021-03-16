@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
+import { pullRequestRedirectAuth0Hack } from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
 const useAuthentication = ({ isOnline }) => {
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
@@ -12,13 +13,6 @@ const useAuthentication = ({ isOnline }) => {
   const setUnauthenticatedStates = () => {
     localStorage.removeItem('hasAuth0Authenticated')
     setIsMermaidAuthenticated(false)
-  }
-
-  // Required for a re-direct for the deploy previews.
-  const setPullRequestNumber = () => {
-    if (window.location.origin.includes('preview')) {
-      localStorage.setItem('pullRequestNumber', process.env.PUBLIC_URL)
-    }
   }
 
   const {
@@ -40,7 +34,7 @@ const useAuthentication = ({ isOnline }) => {
       !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
 
     if (isUserOnlineAndLoggedOut) {
-      setPullRequestNumber()
+      pullRequestRedirectAuth0Hack()
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
     }
