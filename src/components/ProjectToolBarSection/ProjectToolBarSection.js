@@ -11,7 +11,7 @@ const GlobalWrapper = styled.div`
   width: 100%;
   border-bottom: 1px solid;
   position: fixed;
-  top: 4.2rem;
+  top: ${(props) => props.theme.spacing.headerHeight};
   background-color: ${(props) => props.theme.color.white};
   z-index: 9;
   ${mediaQueryPhoneOnly(css`
@@ -35,8 +35,7 @@ const RowWrapper = styled.div`
 
 const HeaderStyle = styled.h1`
   flex-grow: 1;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  ${(props) => props.theme.typography.upperCase};
   margin: 0;
 `
 const inputStyles = css`
@@ -64,17 +63,17 @@ const SortByLabelWrapper = styled.label`
     ${inputStyles}
   }
   ${mediaQueryPhoneOnly(css`
-    display: none;
+    &,
+    button {
+      display: none;
+    }
   `)}
 `
-const ResponsiveButtonSecondary = styled(ButtonSecondary)`
-  ${mediaQueryPhoneOnly(css`
-    display: none;
-  `)}
-`
+
 /**
  * Describe your component
  */
+
 const ProjectToolBarSection = () => {
   return (
     <GlobalWrapper>
@@ -96,9 +95,9 @@ const ProjectToolBarSection = () => {
             <option value="LastUpdated">Last Updated Dates</option>
           </select>
         </SortByLabelWrapper>
-        <ResponsiveButtonSecondary>
+        <ButtonSecondary>
           <IconSortDown />
-        </ResponsiveButtonSecondary>
+        </ButtonSecondary>
       </RowWrapper>
     </GlobalWrapper>
   )

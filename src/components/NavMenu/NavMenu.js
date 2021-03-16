@@ -22,6 +22,7 @@ const NavWrapper = styled('nav')`
   height: 100%;
 `
 const NavList = styled('ul')`
+  margin-top: -1px;
   &,
   & ul {
     padding: 0;
