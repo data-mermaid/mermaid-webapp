@@ -8,6 +8,11 @@ const ToggleCss = raw('react-toggle/style.css')
 
 const ToggleWrapper = styled.div`
   ${ToggleCss}
+  display: inline-block;
+  // weighted alignment adjustment
+  position: relative;
+  top: 3px;
+  //
   & .react-toggle-track {
     height: 16px;
     width: 32px;
@@ -19,15 +24,15 @@ const ToggleWrapper = styled.div`
     width: 16px;
   }
   .react-toggle--checked .react-toggle-track {
-    background-color: red;
+    background-color: ${(props) => props.theme.color.cautionColor};
   }
   .react-toggle--checked .react-toggle-thumb {
     left: 16px;
-    border-color: red;
+    border-color: ${(props) => props.theme.color.cautionColor};
   }
   .react-toggle--checked:hover:not(.react-toggle--disabled)
     .react-toggle-track {
-    background-color: darkred;
+    background-color: ${(props) => props.theme.color.cautionHover};
   }
 `
 
