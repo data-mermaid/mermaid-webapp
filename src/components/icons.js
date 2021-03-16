@@ -3,6 +3,7 @@ import {
   faCaretDown,
   faCaretUp,
   faCheckCircle,
+  faCheck,
   faExternalLinkAlt,
   faFileAlt,
   faFilter,
@@ -20,6 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 export const IconAdmin = () => <FontAwesomeIcon icon={faFileAlt} />
+export const IconCheck = () => <FontAwesomeIcon icon={faCheck} />
 export const IconCollect = () => <FontAwesomeIcon icon={faPencilAlt} />
 export const IconHeart = () => <FontAwesomeIcon icon={faHeart} />
 export const IconCopy = () => <FontAwesomeIcon icon={faCopy} />
