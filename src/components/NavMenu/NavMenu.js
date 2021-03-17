@@ -1,7 +1,10 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { NavLinkSidebar } from '../generic/links'
-import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
+import {
+  mediaQueryTabletLandscapeOnly,
+  mediaQueryPhoneOnly,
+} from '../../library/styling/mediaQueries'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import {
   IconCollect,
@@ -20,12 +23,27 @@ const NavWrapper = styled('nav')`
   flex-direction: column;
   border-right: solid 1px ${(props) => props.theme.color.border};
   height: 100%;
+  ${mediaQueryTabletLandscapeOnly(css`
+    width: 8rem;
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    width: 6rem;
+  `)}
 `
 const NavList = styled('ul')`
   margin-top: -1px;
   &,
   & ul {
     padding: 0;
+    li {
+      ${mediaQueryPhoneOnly(css`
+        a {
+          font-size: smaller;
+          padding: ${(props) => props.theme.spacing.small}
+            ${(props) => props.theme.spacing.xsmall};
+        }
+      `)}
+    }
   }
 `
 const NavHeader = styled('p')`
