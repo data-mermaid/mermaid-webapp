@@ -3,14 +3,14 @@ export default {
     {
       name:
         'Karimunjawa National Park is a long name for a project, not as long as Karimunjawaawajnumirak',
-      country: 'Fiji',
+      countries: ['Fiji'],
       num_sites: 23,
       offlineReady: true,
       updated_on: '01/21/2020',
     },
     {
       name: 'Gita Nada_MPA 2018',
-      country: 'Indonesia',
+      countries: ['Indonesia'],
       num_sites: 26,
       offlineReady: true,
       updated_on: '11/21/2021',
@@ -18,21 +18,21 @@ export default {
     {
       name:
         'Survei Ekologi KKPD Aceh Besar, KKPD Pesisir Timur Sabang dan TWAL Pulau Weh',
-      country: 'Albania, Indonesia, Malaysia',
+      countries: ['Albania, Indonesia, Malaysia'],
       num_sites: 34,
       offlineReady: false,
       updated_on: '11/21/2021',
     },
     {
       name: "Belize Glover's Atoll 2019",
-      country: 'Fiji, Indonesia',
+      countries: ['Fiji, Indonesia'],
       num_sites: 49,
       offlineReady: false,
       updated_on: '11/21/2021',
     },
     {
       name: 'XPDC Kei Kecil 2018',
-      country: 'Fiji',
+      countries: ['Fiji'],
       num_sites: 33,
       offlineReady: false,
       updated_on: '11/21/2021',

@@ -157,7 +157,7 @@ const VerticalRule = styled.div`
 
 const ProjectCard = ({
   name,
-  country,
+  countries,
   num_sites,
   offlineReady,
   updated_on,
@@ -175,10 +175,9 @@ const ProjectCard = ({
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
-        <p>{country}</p>
+        <p>{countries.join(',')}</p>
         <p>
-          {num_sites}{' '}
-          {num_sites && pluralize(num_sites, 'site', 'sites')}
+          {num_sites} {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
         <CheckBoxWithLabel htmlFor="offline-toggle">
           <input
@@ -205,7 +204,7 @@ const ProjectCard = ({
 
 ProjectCard.propTypes = {
   name: PropTypes.string.isRequired,
-  country: PropTypes.string.isRequired,
+  countries: PropTypes.arrayOf(PropTypes.string).isRequired,
   num_sites: PropTypes.number.isRequired,
   offlineReady: PropTypes.bool.isRequired,
   updated_on: PropTypes.string.isRequired,
