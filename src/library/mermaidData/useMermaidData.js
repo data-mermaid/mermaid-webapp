@@ -128,7 +128,7 @@ export const projectsPropType = PropTypes.arrayOf(
   PropTypes.shape({
     name: PropTypes.string,
     country: PropTypes.string,
-    numberOfSites: PropTypes.number,
+    num_sites: PropTypes.number,
     lastUpdatedDate: PropTypes.string,
   }),
 )

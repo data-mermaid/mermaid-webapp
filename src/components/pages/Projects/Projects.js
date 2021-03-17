@@ -12,12 +12,12 @@ const Projects = ({ mermaidData }) => {
   const { projects } = mermaidData
 
   const projectList = projects.map(
-    ({ name, country, numberOfSites, offlineReady, lastUpdatedDate }) => (
+    ({ name, country, num_sites, offlineReady, lastUpdatedDate }) => (
       <ProjectCard
         key={name}
         name={name}
         country={country}
-        numberOfSites={numberOfSites}
+        num_sites={num_sites}
         offlineReady={offlineReady}
         lastUpdatedDate={lastUpdatedDate}
       />

@@ -12,7 +12,7 @@ export const populatedProjectCardWith1Site = () => {
   const singleProjectCard = {
     name: 'Gita Nada_MPA 2018',
     country: 'Fiji',
-    numberOfSites: 1,
+    num_sites: 1,
     offlineReady: false,
     lastUpdatedDate: '11/21/2021',
   }
@@ -21,7 +21,7 @@ export const populatedProjectCardWith1Site = () => {
     <ProjectCard
       name={singleProjectCard.name}
       country={singleProjectCard.country}
-      numberOfSites={singleProjectCard.numberOfSites}
+      num_sites={singleProjectCard.num_sites}
       offlineReady={singleProjectCard.offlineReady}
       lastUpdatedDate={singleProjectCard.lastUpdatedDate}
     />
@@ -31,7 +31,7 @@ export const populatedProjectCardMoreThan1Site = () => {
   const singleProjectCard = {
     name: 'Karimunjawa National Park',
     country: 'Fiji',
-    numberOfSites: 23,
+    num_sites: 23,
     offlineReady: true,
     lastUpdatedDate: '01/21/2020',
   }
@@ -40,7 +40,7 @@ export const populatedProjectCardMoreThan1Site = () => {
     <ProjectCard
       name={singleProjectCard.name}
       country={singleProjectCard.country}
-      numberOfSites={singleProjectCard.numberOfSites}
+      num_sites={singleProjectCard.num_sites}
       offlineReady={singleProjectCard.offlineReady}
       lastUpdatedDate={singleProjectCard.lastUpdatedDate}
     />
