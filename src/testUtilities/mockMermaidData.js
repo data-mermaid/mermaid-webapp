@@ -42,18 +42,33 @@ export default {
     {
       id: '1',
       method: 'Benthic LIT',
-      site: '3',
-      management: '2',
-      data: { protocol: 'benthiclit' },
-      depth: 20,
+      data: {
+        protocol: 'benthiclit',
+        sample_event: {
+          site: '3',
+          management: '2',
+          sample_date: '2021-3-11',
+        },
+        benthic_transect: {
+          depth: 20,
+        },
+      },
     },
     {
       id: '2',
       method: 'Fish Belt',
-      site: '4',
-      management: '3',
-      data: { protocol: 'fishbelt' },
-      depth: 10,
+      data: {
+        protocol: 'fishbelt',
+        sample_event: {
+          site: '4',
+          notes: 'some lit notes',
+          management: '3',
+          sample_date: '2021-3-2',
+        },
+        fishbelt_transect: {
+          depth: 10,
+        },
+      },
     },
   ],
   sites: [
