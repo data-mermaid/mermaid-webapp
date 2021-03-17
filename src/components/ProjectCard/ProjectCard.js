@@ -160,7 +160,7 @@ const ProjectCard = ({
   country,
   num_sites,
   offlineReady,
-  lastUpdatedDate,
+  updated_on,
 }) => {
   const [offlineStatus, setOfflineStatus] = useState(offlineReady)
   const projectUrl = `projects/${name}`
@@ -189,7 +189,7 @@ const ProjectCard = ({
           />
           Offline Ready
         </CheckBoxWithLabel>
-        <p>Updated: {lastUpdatedDate}</p>
+        <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
       <ButtonGroups>
         <NavLinkButtonGroup projectUrl={projectUrl} />
@@ -208,7 +208,7 @@ ProjectCard.propTypes = {
   country: PropTypes.string.isRequired,
   num_sites: PropTypes.number.isRequired,
   offlineReady: PropTypes.bool.isRequired,
-  lastUpdatedDate: PropTypes.string.isRequired,
+  updated_on: PropTypes.string.isRequired,
 }
 
 export default ProjectCard

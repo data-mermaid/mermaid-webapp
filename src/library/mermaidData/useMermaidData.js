@@ -129,7 +129,7 @@ export const projectsPropType = PropTypes.arrayOf(
     name: PropTypes.string,
     country: PropTypes.string,
     num_sites: PropTypes.number,
-    lastUpdatedDate: PropTypes.string,
+    updated_on: PropTypes.string,
   }),
 )
 

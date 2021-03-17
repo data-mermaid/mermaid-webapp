@@ -6,14 +6,14 @@ export default {
       country: 'Fiji',
       num_sites: 23,
       offlineReady: true,
-      lastUpdatedDate: '01/21/2020',
+      updated_on: '01/21/2020',
     },
     {
       name: 'Gita Nada_MPA 2018',
       country: 'Indonesia',
       num_sites: 26,
       offlineReady: true,
-      lastUpdatedDate: '11/21/2021',
+      updated_on: '11/21/2021',
     },
     {
       name:
@@ -21,21 +21,21 @@ export default {
       country: 'Albania, Indonesia, Malaysia',
       num_sites: 34,
       offlineReady: false,
-      lastUpdatedDate: '11/21/2021',
+      updated_on: '11/21/2021',
     },
     {
       name: "Belize Glover's Atoll 2019",
       country: 'Fiji, Indonesia',
       num_sites: 49,
       offlineReady: false,
-      lastUpdatedDate: '11/21/2021',
+      updated_on: '11/21/2021',
     },
     {
       name: 'XPDC Kei Kecil 2018',
       country: 'Fiji',
       num_sites: 33,
       offlineReady: false,
-      lastUpdatedDate: '11/21/2021',
+      updated_on: '11/21/2021',
     },
   ],
   collectRecords: [

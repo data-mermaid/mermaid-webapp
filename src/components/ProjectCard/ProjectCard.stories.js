@@ -14,7 +14,7 @@ export const populatedProjectCardWith1Site = () => {
     country: 'Fiji',
     num_sites: 1,
     offlineReady: false,
-    lastUpdatedDate: '11/21/2021',
+    updated_on: '11/21/2021',
   }
 
   return (
@@ -23,7 +23,7 @@ export const populatedProjectCardWith1Site = () => {
       country={singleProjectCard.country}
       num_sites={singleProjectCard.num_sites}
       offlineReady={singleProjectCard.offlineReady}
-      lastUpdatedDate={singleProjectCard.lastUpdatedDate}
+      updated_on={singleProjectCard.updated_on}
     />
   )
 }
@@ -33,7 +33,7 @@ export const populatedProjectCardMoreThan1Site = () => {
     country: 'Fiji',
     num_sites: 23,
     offlineReady: true,
-    lastUpdatedDate: '01/21/2020',
+    updated_on: '01/21/2020',
   }
 
   return (
@@ -42,7 +42,7 @@ export const populatedProjectCardMoreThan1Site = () => {
       country={singleProjectCard.country}
       num_sites={singleProjectCard.num_sites}
       offlineReady={singleProjectCard.offlineReady}
-      lastUpdatedDate={singleProjectCard.lastUpdatedDate}
+      updated_on={singleProjectCard.updated_on}
     />
   )
 }
