@@ -69,14 +69,9 @@ const ButtonGroups = styled('div')`
     button {
       background-color: transparent;
       opacity: 0.6;
-      border-width: 0 0 0 1px;
-      border-color: ${(props) => props.theme.color.border};
-      border-style: solid;
+      border: none;
       padding: 1rem 0;
       margin: 0;
-      &:first-child {
-        border: none;
-      }
     }
   `)}
   ${mediaQueryPhoneOnly(css`
@@ -125,6 +120,7 @@ const ProjectNameWrapper = styled('div')`
     `)}
     ${mediaQueryPhoneOnly(css`
       font-size: ${(props) => props.theme.typography.defaultFontSize};
+      padding: ${(props) => props.theme.spacing.small};
     `)}
   }
 `
@@ -149,6 +145,12 @@ const ProjectInfoWrapper = styled('div')`
   ${mediaQueryTabletLandscapeOnly(css`
     display: grid;
     grid-template-rows: repeat(4, 1fr);
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    p,
+    label {
+      padding: 0 ${(props) => props.theme.spacing.small};
+    }
   `)}
 `
 const CheckBoxWithLabel = styled.label`
