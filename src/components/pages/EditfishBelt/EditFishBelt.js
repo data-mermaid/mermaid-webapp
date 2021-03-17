@@ -67,7 +67,7 @@ const EditFishBelt = ({ mermaidData }) => {
               <ButtonCallout
                 type="submit"
                 onSubmit={formik.handleSubmit}
-                form="benthiclit-form"
+                form="sampleinfo-form"
               >
                 Save
               </ButtonCallout>

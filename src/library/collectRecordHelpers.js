@@ -4,8 +4,8 @@ const getSampleInfoInitialValues = (collectRecordData, transect) => ({
   depth: collectRecordData[transect].depth,
   site: collectRecordData.sample_event.site,
   management: collectRecordData.sample_event.management,
-  sampleDate: '',
-  sampleTime: '',
+  sample_date: collectRecordData.sample_event.sample_date,
+  sample_time: collectRecordData[transect].sample_time,
 })
 
 const getSampleInfoValidationInfo = (mermaidData) => {

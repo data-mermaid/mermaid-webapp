@@ -47,10 +47,11 @@ export default {
         sample_event: {
           site: '3',
           management: '2',
-          sample_date: '2021-3-11',
+          sample_date: '2021-03-11',
         },
         benthic_transect: {
           depth: 20,
+          sample_time: '22:55',
         },
       },
     },
@@ -63,10 +64,11 @@ export default {
           site: '4',
           notes: 'some lit notes',
           management: '3',
-          sample_date: '2021-3-2',
+          sample_date: '2021-03-02',
         },
         fishbelt_transect: {
           depth: 10,
+          sample_time: '11:55',
         },
       },
     },
