@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import pluralize from '../../library/pluralize'
 import {
+  mediaQueryPhoneOnly,
   hoverState,
   mediaQueryForTabletLandscapeUp,
   mediaQueryTabletLandscapeOnly,
@@ -67,8 +68,20 @@ const ButtonGroups = styled('div')`
     a,
     button {
       background-color: transparent;
-      border: none;
       opacity: 0.6;
+      border-width: 0 0 0 1px;
+      border-color: ${(props) => props.theme.color.border};
+      border-style: solid;
+      padding: 1rem 0;
+      margin: 0;
+      &:first-child {
+        border: none;
+      }
+    }
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    span {
+      font-size: 1rem;
     }
   `)}
 `
@@ -110,6 +123,9 @@ const ProjectNameWrapper = styled('div')`
     ${mediaQueryTabletLandscapeOnly(css`
       letter-spacing: 0;
     `)}
+    ${mediaQueryPhoneOnly(css`
+      font-size: ${(props) => props.theme.typography.defaultFontSize};
+    `)}
   }
 `
 
@@ -120,6 +136,9 @@ const ProjectInfoWrapper = styled('div')`
   p:first-child {
     font-size: larger;
     font-weight: 900;
+    ${mediaQueryPhoneOnly(css`
+      font-size: initial;
+    `)}
   }
   p,
   label {

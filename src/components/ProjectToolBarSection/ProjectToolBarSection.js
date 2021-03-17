@@ -31,6 +31,10 @@ const RowWrapper = styled.div`
     width: 100%;
     padding: ${(props) => props.theme.spacing.medium};
   `)}
+  ${mediaQueryPhoneOnly(css`
+    font-size: smaller;
+    padding: ${(props) => props.theme.spacing.small};
+  `)}
 `
 
 const HeaderStyle = styled.h1`
@@ -54,7 +58,13 @@ const FilterLabelWrapper = styled.label`
     ${inputStyles}
   }
 `
-
+const FilterRowWrapper = styled(RowWrapper)`
+  ${mediaQueryPhoneOnly(css`
+    button {
+      display: none;
+    }
+  `)}
+`
 const SortByLabelWrapper = styled.label`
   display: flex;
   flex-direction: column;
@@ -63,10 +73,7 @@ const SortByLabelWrapper = styled.label`
     ${inputStyles}
   }
   ${mediaQueryPhoneOnly(css`
-    &,
-    button {
-      display: none;
-    }
+    display: none;
   `)}
 `
 
@@ -81,7 +88,7 @@ const ProjectToolBarSection = () => {
         <HeaderStyle>Projects</HeaderStyle>
         <ButtonPrimary>New Project</ButtonPrimary>
       </RowWrapper>
-      <RowWrapper>
+      <FilterRowWrapper>
         <FilterLabelWrapper htmlFor="filter_projects">
           Filter Projects By Name or Country
           <input type="text" id="filter_projects" />
@@ -98,7 +105,7 @@ const ProjectToolBarSection = () => {
         <ButtonSecondary>
           <IconSortDown />
         </ButtonSecondary>
-      </RowWrapper>
+      </FilterRowWrapper>
     </GlobalWrapper>
   )
 }
