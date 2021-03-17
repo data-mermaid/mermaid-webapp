@@ -8,6 +8,10 @@ const getSampleInfoInitialValues = (collectRecordData, transect) => ({
   sample_time: collectRecordData[transect].sample_time,
 })
 
+const getTransectInitialValues = (collectRecordTransectData) => ({
+  transectNumber: collectRecordTransectData.number,
+})
+
 const getSampleInfoValidationInfo = (mermaidData) => {
   const { sites, managementRegimes } = mermaidData
 
@@ -28,4 +32,8 @@ const getSampleInfoValidationInfo = (mermaidData) => {
   }
 }
 
-export { getSampleInfoInitialValues, getSampleInfoValidationInfo }
+export {
+  getSampleInfoInitialValues,
+  getTransectInitialValues,
+  getSampleInfoValidationInfo,
+}
