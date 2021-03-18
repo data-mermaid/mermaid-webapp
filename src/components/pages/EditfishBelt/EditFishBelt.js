@@ -17,7 +17,7 @@ import FishBeltTransectForms from '../../FishBeltTransectForms'
 
 const EditFishBelt = ({ mermaidData }) => {
   const { recordId } = useParams()
-  const { sites, managementRegimes } = mermaidData
+  const { sites, managementRegimes, choices } = mermaidData
   const transect = 'fishbelt_transect'
 
   const [collectRecordBeingEdited] = useState(
