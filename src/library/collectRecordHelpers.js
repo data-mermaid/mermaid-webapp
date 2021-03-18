@@ -1,7 +1,7 @@
 import * as Yup from 'yup'
 
-const getSampleInfoInitialValues = (collectRecordData, transect) => ({
-  depth: collectRecordData[transect].depth,
+const getSampleInfoInitialValues = (collectRecordData, transectType) => ({
+  depth: collectRecordData[transectType].depth,
   site: collectRecordData.sample_event.site,
   management: collectRecordData.sample_event.management,
   sample_date: collectRecordData.sample_event.sample_date,
