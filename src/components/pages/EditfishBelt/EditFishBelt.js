@@ -29,9 +29,6 @@ const EditFishBelt = ({ mermaidData }) => {
     initialValues: {
       ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
       ...getTransectInitialValues(collectRecordData, 'fishbelt_transect'),
-      width: 'value 1',
-      fishSizeBin: 'value 1',
-      reefSlope: 'value 1',
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
