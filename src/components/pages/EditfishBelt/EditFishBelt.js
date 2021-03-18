@@ -17,8 +17,7 @@ import FishBeltTransectForms from '../../FishBeltTransectForms'
 
 const EditFishBelt = ({ mermaidData }) => {
   const { recordId } = useParams()
-  const { sites, managementRegimes, choices } = mermaidData
-  const transect = 'fishbelt_transect'
+  const { sites, managementRegimes } = mermaidData
 
   const [collectRecordBeingEdited] = useState(
     mermaidData.getCollectRecord(recordId),
@@ -28,8 +27,8 @@ const EditFishBelt = ({ mermaidData }) => {
 
   const formikOptions = {
     initialValues: {
-      ...getSampleInfoInitialValues(collectRecordData, transect),
-      ...getTransectInitialValues(collectRecordData, transect),
+      ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
+      ...getTransectInitialValues(collectRecordData, 'fishbelt_transect'),
       width: 'value 1',
       fishSizeBin: 'value 1',
       reefSlope: 'value 1',
@@ -52,7 +51,7 @@ const EditFishBelt = ({ mermaidData }) => {
       {(formik) => (
         <SubLayout2
           content={
-            <form id="sampleinfo-form" onSubmit={formik.handleSubmit}>
+            <form id="fishbelt-form" onSubmit={formik.handleSubmit}>
               <SampleInfoInputs
                 formik={formik}
                 collectRecord={collectRecordBeingEdited}

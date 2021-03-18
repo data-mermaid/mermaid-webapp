@@ -47,8 +47,7 @@ export default {
         sample_event: {
           site: '3',
           management: '2',
-          sample_date: '2021-03-11',
-          notes: 'Benthic LIT Experiment Place',
+          sample_date: '2021-3-11',
         },
         benthic_transect: {
           depth: 20,
@@ -68,7 +67,7 @@ export default {
           site: '4',
           notes: 'some fish notes',
           management: '3',
-          sample_date: '2021-03-02',
+          sample_date: '2021-3-2',
         },
         fishbelt_transect: {
           depth: 10,
