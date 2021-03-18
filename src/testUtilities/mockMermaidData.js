@@ -64,7 +64,7 @@ export default {
           site: '4',
           notes: 'some lit notes',
           management: '3',
-          sample_date: '2021-3-02',
+          sample_date: '2021-3-2',
         },
         fishbelt_transect: {
           depth: 10,
