@@ -47,7 +47,7 @@ export default {
         sample_event: {
           site: '3',
           management: '2',
-          sample_date: '2021-3-11',
+          sample_date: '2021-3-22',
         },
         benthic_transect: {
           depth: 20,
