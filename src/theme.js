@@ -50,7 +50,7 @@ const spacing = {
   buttonPadding: `${small} ${medium}`,
   width: '90vw',
   maxWidth: '1200px',
-  headerHeight: '4.2rem',
+  headerHeight: '4.4rem',
 }
 
 const timing = {
