@@ -4,8 +4,8 @@ import SubLayout2 from '../../SubLayout2'
 const NewHabitatComplexity = () => {
   return (
     <SubLayout2
-      lowerRight={<>New Habitat Complexity Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>New Habitat Complexity Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }
