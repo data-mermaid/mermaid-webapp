@@ -25,18 +25,14 @@ const EditFishBelt = ({ mermaidData }) => {
   )
 
   const collectRecordData = collectRecordBeingEdited.data
-  const collectRecordTransectData = collectRecordData[transect]
 
   const formikOptions = {
     initialValues: {
       ...getSampleInfoInitialValues(collectRecordData, transect),
-      ...getTransectInitialValues(collectRecordTransectData),
-      label: 'Placeholder initial value',
-      transectLengthSurveyed: '-9999',
+      ...getTransectInitialValues(collectRecordData, transect),
       width: 'value 1',
       fishSizeBin: 'value 1',
       reefSlope: 'value 1',
-      notes: 'Placeholder initial value',
     },
     enableReinitialize: true,
     validationSchema: Yup.object({

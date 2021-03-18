@@ -1,15 +1,18 @@
 import * as Yup from 'yup'
 
 const getSampleInfoInitialValues = (collectRecordData, transect) => ({
-  depth: collectRecordData[transect].depth,
-  site: collectRecordData.sample_event.site,
-  management: collectRecordData.sample_event.management,
-  sample_date: collectRecordData.sample_event.sample_date,
-  sample_time: collectRecordData[transect].sample_time,
+  depth: collectRecordData[transect].depth || -9999,
+  site: collectRecordData.sample_event.site || '',
+  management: collectRecordData.sample_event.management || '',
+  sample_date: collectRecordData.sample_event.sample_date || '',
+  sample_time: collectRecordData[transect].sample_time || '',
 })
 
-const getTransectInitialValues = (collectRecordTransectData) => ({
-  transectNumber: collectRecordTransectData.number,
+const getTransectInitialValues = (collectRecordData, transect) => ({
+  transectNumber: collectRecordData[transect].number || -9999,
+  label: collectRecordData[transect].label || '',
+  transectLengthSurveyed: collectRecordData[transect].len_surveyed || -9999,
+  notes: collectRecordData.sample_event.notes || '',
 })
 
 const getSampleInfoValidationInfo = (mermaidData) => {
