@@ -4,8 +4,8 @@ import SubLayout2 from '../../SubLayout2'
 const NewFishBelt = () => {
   return (
     <SubLayout2
-      lowerRight={<>New Fish Belt Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>New Fish Belt Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }

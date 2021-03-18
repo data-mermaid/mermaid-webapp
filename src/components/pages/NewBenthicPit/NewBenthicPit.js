@@ -4,8 +4,8 @@ import SubLayout2 from '../../SubLayout2'
 const NewBenthicPit = () => {
   return (
     <SubLayout2
-      lowerRight={<>New Benthic PIT Placeholder</>}
-      upperRight={<>Sub layout top bar</>}
+      content={<>New Benthic PIT Placeholder</>}
+      toolbar={<>Sub layout top bar</>}
     />
   )
 }
