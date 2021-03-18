@@ -51,6 +51,7 @@ export default {
         },
         benthic_transect: {
           depth: 20,
+          sample_time: '22:55',
         },
       },
     },
@@ -67,6 +68,7 @@ export default {
         },
         fishbelt_transect: {
           depth: 10,
+          sample_time: '11:55',
         },
       },
     },

@@ -47,17 +47,17 @@ const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
       />
       <InputWithLabelAndValidation
         label="Sample Date"
-        id="sampleDate"
+        id="sample_date"
         type="date"
-        {...formik.getFieldProps('sampleDate')}
-        {...getValidationPropsFromFormik(formik, 'sampleDate')}
+        {...formik.getFieldProps('sample_date')}
+        {...getValidationPropsFromFormik(formik, 'sample_date')}
       />
       <InputWithLabelAndValidation
         label="Sample Time"
-        id="sampleTime"
+        id="sample_time"
         type="time"
-        {...formik.getFieldProps('sampleTime')}
-        {...getValidationPropsFromFormik(formik, 'sampleTime')}
+        {...formik.getFieldProps('sample_time')}
+        {...getValidationPropsFromFormik(formik, 'sample_time')}
       />
     </>
   )

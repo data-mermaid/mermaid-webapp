@@ -1,11 +1,12 @@
 import * as Yup from 'yup'
+import dateFormat from './dateFormat'
 
 const getSampleInfoInitialValues = (collectRecordData, transectType) => ({
   depth: collectRecordData[transectType].depth,
   site: collectRecordData.sample_event.site,
   management: collectRecordData.sample_event.management,
-  sampleDate: '',
-  sampleTime: '',
+  sample_date: dateFormat(collectRecordData.sample_event.sample_date),
+  sample_time: collectRecordData[transectType].sample_time,
 })
 
 const getSampleInfoValidationInfo = (mermaidData) => {
