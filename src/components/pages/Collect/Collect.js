@@ -1,59 +1,19 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import React from 'react'
-import styled from 'styled-components'
 
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import SubLayout2 from '../../SubLayout2'
 import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 import { H3 } from '../../generic/text'
-import { Column, RowSpaceBetween } from '../../generic/positioning'
-import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
-import { IconPlus } from '../../icons'
+import { RowSpaceBetween } from '../../generic/positioning'
 
-/**
- * Project Collect Page
- */
-const CustomNavLink = styled(NavLink)`
-  padding: ${(props) => props.theme.spacing.xsmall};
-`
-const AddSampleUnitDropdown = () => {
-  const currentProjectPath = useCurrentProjectPath()
+import AddSampleUnitButton from './AddSampleUnitButton'
 
-  const label = (
-    <>
-      <IconPlus /> Add Sample Unit
-    </>
-  )
-
-  return (
-    <ButtonSecondaryDropdown label={label}>
-      <Column as="nav">
-        <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>
-          Fish Belt
-        </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/benthiclit`}>
-          Benthic LIT
-        </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/benthicpit`}>
-          Benthic PIT
-        </CustomNavLink>
-        <CustomNavLink
-          to={`${currentProjectPath}/collecting/habitatcomplexity`}
-        >
-          Habitat Complexity
-        </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/bleaching`}>
-          Bleaching
-        </CustomNavLink>
-      </Column>
-    </ButtonSecondaryDropdown>
-  )
-}
 const TopBar = () => (
   <>
     <H3>Collect Records</H3>
     <RowSpaceBetween>
-      <div>Future filter</div> <AddSampleUnitDropdown />
+      <div>Future filter</div> <AddSampleUnitButton />
     </RowSpaceBetween>
   </>
 )
