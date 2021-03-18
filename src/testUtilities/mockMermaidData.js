@@ -114,8 +114,8 @@ export default {
     { id: '2', name: 'Ankivonjy no-take' },
     { id: '3', name: 'Bureta tabu' },
   ],
-  choices: [
-    {
+  choices: {
+    belttransectwidths: {
       name: 'belttransectwidths',
       data: [
         {
@@ -226,7 +226,7 @@ export default {
         },
       ],
     },
-    {
+    fishsizebins: {
       name: 'fishsizebins',
       data: [
         {
@@ -255,7 +255,7 @@ export default {
         },
       ],
     },
-    {
+    reefslopes: {
       name: 'reefslopes',
       data: [
         {
@@ -284,5 +284,5 @@ export default {
         },
       ],
     },
-  ],
+  },
 }

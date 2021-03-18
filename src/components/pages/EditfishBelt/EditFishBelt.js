@@ -17,7 +17,7 @@ import FishBeltTransectForms from '../../FishBeltTransectForms'
 
 const EditFishBelt = ({ mermaidData }) => {
   const { recordId } = useParams()
-  const { sites, managementRegimes } = mermaidData
+  const { sites, managementRegimes, choices } = mermaidData
 
   const [collectRecordBeingEdited] = useState(
     mermaidData.getCollectRecord(recordId),
@@ -58,7 +58,7 @@ const EditFishBelt = ({ mermaidData }) => {
                 sites={sites}
                 managementRegimes={managementRegimes}
               />
-              <FishBeltTransectForms formik={formik} />
+              <FishBeltTransectForms formik={formik} choices={choices} />
             </form>
           }
           toolbar={

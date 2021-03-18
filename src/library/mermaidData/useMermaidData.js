@@ -30,6 +30,7 @@ export const useMermaidData = ({
   const [collectRecords] = useState(mockMermaidData.collectRecords)
   const [sites] = useState(mockMermaidData.sites)
   const [managementRegimes] = useState(mockMermaidData.managementRegimes)
+  const [choices] = useState(mockMermaidData.choices)
 
   const getCollectRecord = useCallback(
     (searchId) => collectRecords.find((record) => record.id === searchId),
@@ -121,6 +122,7 @@ export const useMermaidData = ({
     collectRecords,
     sites,
     managementRegimes,
+    choices,
     getCollectRecord,
   }
 }
@@ -161,11 +163,59 @@ export const managementRegimePropType = PropTypes.shape({
   name: PropTypes.string,
 })
 
+export const fishSizeBinPropType = PropTypes.shape({
+  name: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      updated_on: PropTypes.string,
+      val: PropTypes.string,
+    }),
+  ),
+})
+export const beltTransectWidthPropType = PropTypes.shape({
+  name: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      updated_on: PropTypes.string,
+      conditions: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+          name: PropTypes.string,
+          updated_on: PropTypes.string,
+          size: PropTypes.number,
+          operator: PropTypes.string,
+          val: PropTypes.number,
+        }),
+      ),
+    }),
+  ),
+})
+export const reefSlopePropType = PropTypes.shape({
+  name: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      updated_on: PropTypes.string,
+      val: PropTypes.number,
+    }),
+  ),
+})
+
 export const mermaidDataPropType = PropTypes.shape({
   projects: projectsPropType,
   currentUser: currentUserPropType,
   collectRecords: PropTypes.arrayOf(collectRecordPropType),
   sites: PropTypes.arrayOf(sitePropType),
   managementRegimes: PropTypes.arrayOf(managementRegimePropType),
+  choices: PropTypes.shape({
+    fishsizebins: fishSizeBinPropType,
+    belttransectwidths: beltTransectWidthPropType,
+    reefslopes: reefSlopePropType,
+  }),
   getCollectRecord: PropTypes.func,
 })
