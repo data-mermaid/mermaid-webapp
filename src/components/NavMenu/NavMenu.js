@@ -24,10 +24,10 @@ const NavWrapper = styled('nav')`
   border-right: solid 1px ${(props) => props.theme.color.border};
   height: 100%;
   ${mediaQueryTabletLandscapeOnly(css`
-    width: 8rem;
+    width: ${(props) => props.theme.spacing.sideNavWidthTabletLandscapeOnly};
   `)}
   ${mediaQueryPhoneOnly(css`
-    width: 6rem;
+    width: ${(props) => props.theme.spacing.sideNavWidthPhoneOnly};
   `)}
 `
 const NavList = styled('ul')`
