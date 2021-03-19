@@ -9,8 +9,9 @@ import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import {
   IconCollect,
   IconSites,
-  IconCopy,
   IconData,
+  IconFish,
+  IconMgmt,
   IconGraph,
   IconAdmin,
   IconUsers,
@@ -92,7 +93,7 @@ const NavMenu = () => {
             </li>
             <li>
               <NavLinkSidebar to={`${projectUrl}/management-regimes`}>
-                <IconCopy />
+                <IconMgmt />
                 <span>Management Regimes</span>
               </NavLinkSidebar>
             </li>
@@ -132,7 +133,7 @@ const NavMenu = () => {
             </li>
             <li>
               <NavLinkSidebar to={`${projectUrl}/fish-families`}>
-                <IconHeart />
+                <IconFish />
                 <span>Fish Families</span>
               </NavLinkSidebar>
             </li>

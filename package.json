@@ -72,6 +72,9 @@
     ]
   },
   "devDependencies": {
+    "@iconify-icons/mdi": "^1.1.12",
+    "@iconify-icons/ri": "^1.1.0",
+    "@iconify/react": "^1.1.4",
     "@sparkgeo/eslint-config-react": "^0.9.0",
     "@storybook/addon-actions": "^6.1.16",
     "@storybook/addon-essentials": "^6.1.16",
