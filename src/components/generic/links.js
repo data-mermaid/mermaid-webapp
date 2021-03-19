@@ -45,8 +45,11 @@ export const NavLinkSidebar = styled(NavLink)`
     ${activeStyle};
   }
   ${mediaQueryTabletLandscapeOnly(css`
+    text-align: center;
     span {
-      display: none;
+      display: block;
+      font-size: 1rem;
+      ${(props) => props.theme.typography.noWordBreak};
     }
   `)}
 `

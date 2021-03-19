@@ -9,6 +9,7 @@ import {
   faFilter,
   faHeart,
   faMapMarkerAlt,
+  faBars,
   faPencilAlt,
   faShareAlt,
   faSortAmountDownAlt,
@@ -34,6 +35,7 @@ export const IconFilter = () => <FontAwesomeIcon icon={faFilter} />
 export const IconGraph = () => <FontAwesomeIcon icon={faChartBar} />
 export const IconHeart = () => <FontAwesomeIcon icon={faHeart} />
 export const IconHome = () => <FontAwesomeIcon icon={faHome} />
+export const IconMenu = () => <FontAwesomeIcon icon={faBars} />
 export const IconPlus = () => <FontAwesomeIcon icon={faPlus} />
 export const IconRefresh = () => <FontAwesomeIcon icon={faSyncAlt} />
 export const IconSharing = () => <FontAwesomeIcon icon={faShareAlt} />

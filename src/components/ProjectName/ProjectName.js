@@ -1,15 +1,52 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 import { H2 } from '../generic/text'
-import { Row } from '../generic/positioning'
+import {
+  mediaQueryTabletLandscapeOnly,
+  mediaQueryPhoneOnly,
+} from '../../library/styling/mediaQueries'
 import { NavLinkButtonishIcon } from '../generic/links'
 import { IconHome } from '../icons'
 
-const ProjectNameWrapper = styled(Row)`
+const ProjectNameWrapper = styled('div')`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  ${mediaQueryTabletLandscapeOnly(css`
+    grid-template-columns: ${(props) =>
+        props.theme.spacing.sideNavWidthTabletLandscapeOnly} 1fr;
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    grid-template-columns: ${(props) =>
+        props.theme.spacing.sideNavWidthPhoneOnly} 1fr;
+  `)}
   align-items: center;
-  padding: 0px 10px;
-  border-bottom: thin solid grey;
+  border-bottom: 1px solid ${(props) => props.theme.color.border};
+  h2 {
+    overflow-x: scroll;
+    white-space: nowrap;
+    padding: ${(props) => props.theme.spacing.medium}
+      ${(props) => props.theme.spacing.small}
+      ${(props) => props.theme.spacing.medium} 0;
+    height: 100%;
+    margin: 0;
+  }
+  a {
+    font-size: larger;
+    border: none;
+    background: none;
+  }
+  ${mediaQueryPhoneOnly(css`
+    h2 {
+      font-size: smaller;
+      padding: ${(props) => props.theme.spacing.small}
+        ${(props) => props.theme.spacing.xsmall}
+        ${(props) => props.theme.spacing.small} 0;
+    }
+    a {
+      font-size: initial;
+    }
+  `)}
 `
 
 const ProjectName = ({ pageTitle }) => {
