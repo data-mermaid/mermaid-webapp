@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
+import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
 const useAuthentication = ({ isOnline }) => {
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
@@ -33,6 +34,7 @@ const useAuthentication = ({ isOnline }) => {
       !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
 
     if (isUserOnlineAndLoggedOut) {
+      pullRequestRedirectAuth0Hack()
       setUnauthenticatedStates()
       auth0LoginWithRedirect()
     }

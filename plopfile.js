@@ -1,5 +1,4 @@
 module.exports = (plop) => {
-  // controller generator
   plop.setGenerator('controller', {
     description: 'application controller logic',
     prompts: [
@@ -24,12 +23,6 @@ module.exports = (plop) => {
         type: 'add',
         path: 'src/components/{{pascalCase name}}/{{pascalCase name}}.test.js',
         templateFile: 'plop-templates/componentSpec.js.hbs',
-      },
-      {
-        type: 'add',
-        path:
-          'src/components/{{pascalCase name}}/{{pascalCase name}}.stories.js',
-        templateFile: 'plop-templates/componentStories.js.hbs',
       },
     ],
   })
