@@ -1,5 +1,3 @@
-import getCollectRecordMethodLabel from '../library/mermaidData/getCollectRecordMethodLabel'
-
 const projects = [
   {
     name:
@@ -299,7 +297,6 @@ const mockMermaidData = {
   getSite: (searchId) => sites.find((site) => site.id === searchId),
   getManagementRegime: (searchId) =>
     managementRegimes.find((regime) => regime.id === searchId),
-  getCollectRecordMethodLabel,
 }
 
 export default mockMermaidData

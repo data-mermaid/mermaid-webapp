@@ -14,6 +14,7 @@ import { Table, Tr, Th, Td } from '../../generic/Table/table'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import PageSelector from '../../generic/Table/PageSelector'
+import MermaidDatabaseGateway from '../../../library/mermaidData/MermaidDatabaseGateway'
 
 const TopBar = () => (
   <>
@@ -99,7 +100,7 @@ const Collect = ({ mermaidData }) => {
       collectRecords.map(({ id, data }) => ({
         method: (
           <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
-            {mermaidData.getCollectRecordMethodLabel(data.protocol)}
+            {MermaidDatabaseGateway.getCollectRecordMethodLabel(data.protocol)}
           </Link>
         ),
         site: mermaidData.getSite(data.sample_event.site).name,
