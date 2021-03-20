@@ -40,3 +40,4 @@ export const ValidationMessage = styled.div`
       color: darkgoldenrod;
     `}
 `
+export const Select = styled.select``
