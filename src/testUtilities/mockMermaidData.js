@@ -1,3 +1,5 @@
+import getCollectRecordMethodLabel from '../library/mermaidData/getCollectRecordMethodLabel'
+
 const projects = [
   {
     name:
@@ -41,7 +43,7 @@ const projects = [
 const collectRecords = [
   {
     id: '1',
-    method: 'Benthic LIT',
+
     data: {
       protocol: 'benthiclit',
       sample_event: {
@@ -60,7 +62,6 @@ const collectRecords = [
   },
   {
     id: '2',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -80,7 +81,6 @@ const collectRecords = [
   },
   {
     id: '3',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -100,7 +100,6 @@ const collectRecords = [
   },
   {
     id: '4',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -120,7 +119,6 @@ const collectRecords = [
   },
   {
     id: '5',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -140,7 +138,6 @@ const collectRecords = [
   },
   {
     id: '6',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -160,7 +157,6 @@ const collectRecords = [
   },
   {
     id: '7',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -180,7 +176,6 @@ const collectRecords = [
   },
   {
     id: '8',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -200,7 +195,6 @@ const collectRecords = [
   },
   {
     id: '9',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -220,7 +214,6 @@ const collectRecords = [
   },
   {
     id: '10',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -240,7 +233,6 @@ const collectRecords = [
   },
   {
     id: '11',
-    method: 'Fish Belt',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -307,6 +299,7 @@ const mockMermaidData = {
   getSite: (searchId) => sites.find((site) => site.id === searchId),
   getManagementRegime: (searchId) =>
     managementRegimes.find((regime) => regime.id === searchId),
+  getCollectRecordMethodLabel,
 }
 
 export default mockMermaidData
