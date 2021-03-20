@@ -28,7 +28,7 @@ const Collect = ({ mermaidData }) => {
   const { collectRecords } = mermaidData
   const currentProjectPath = useCurrentProjectPath()
 
-  const columns = useMemo(
+  const tableColumns = useMemo(
     () => [
       {
         Header: 'Method',
@@ -94,19 +94,17 @@ const Collect = ({ mermaidData }) => {
     [],
   )
 
-  const data = useMemo(
+  const tableCellData = useMemo(
     () =>
-      collectRecords.map(({ id, method, data: recordData }) => ({
+      collectRecords.map(({ id, data }) => ({
         method: (
-          <Link
-            to={`${currentProjectPath}/collecting/${recordData.protocol}/${id}`}
-          >
-            {method}
+          <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
+            {mermaidData.getCollectRecordMethodLabel(data.protocol)}
           </Link>
         ),
-        site: mermaidData.getSite(recordData.sample_event.site).name,
+        site: mermaidData.getSite(data.sample_event.site).name,
         management: mermaidData.getManagementRegime(
-          recordData.sample_event.management,
+          data.sample_event.management,
         ).name,
         sampleUnitNumber: 'wip',
         size: 'wip',
@@ -134,8 +132,8 @@ const Collect = ({ mermaidData }) => {
     state: { pageIndex, pageSize },
   } = useTable(
     {
-      columns,
-      data,
+      columns: tableColumns,
+      data: tableCellData,
       initialState: { pageSize: 10 },
     },
     useSortBy,

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import language from '../../language'
+import getCollectRecordMethodLabel from './getCollectRecordMethodLabel'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -134,6 +135,7 @@ export const useMermaidData = ({
     getCollectRecord,
     getSite,
     getManagementRegime,
+    getCollectRecordMethodLabel,
   }
 }
 export const projectsPropType = PropTypes.arrayOf(
