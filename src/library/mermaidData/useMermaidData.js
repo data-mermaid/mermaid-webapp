@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import { useCallback, useEffect, useReducer, useState } from 'react'
 import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
-import axios from 'axios'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import language from '../../language'
 
@@ -19,12 +18,7 @@ const initialState = {
   projects: mockMermaidData.projects,
 }
 
-export const useMermaidData = ({
-  auth0Token,
-  isMermaidAuthenticated,
-  isOnline,
-  mermaidDbAccessInstance,
-}) => {
+export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const [collectRecords] = useState(mockMermaidData.collectRecords)
@@ -46,62 +40,13 @@ export const useMermaidData = ({
     [managementRegimes],
   )
 
-  const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const authenticatedAxios = useMemo(
-    () =>
-      axios.create({
-        headers: {
-          Authorization: `Bearer ${auth0Token}`,
-        },
-      }),
-    [auth0Token],
-  )
-
-  const isOnlineAuthenticatedAndReady =
-    isMermaidAuthenticated &&
-    isOnline &&
-    !!auth0Token &&
-    !!mermaidDbAccessInstance
-
-  const isOfflineAuthenticatedAndReady =
-    isMermaidAuthenticated && !isOnline && !!mermaidDbAccessInstance
-
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
 
-    if (isOnlineAuthenticatedAndReady) {
-      const getCurrentUserFromApi = authenticatedAxios.get(`${apiBaseUrl}/me`)
-      const _addCurrentUserToStateAndOfflineStorage = getCurrentUserFromApi
-
-        .then((apiResults) => {
-          const user = apiResults.data
-
-          if (!user) {
-            throw Error('User Profile not returned from API')
-          }
-          if (isMounted) {
-            dispatch({
-              type: 'addUser',
-              payload: user,
-            })
-          }
-
-          return mermaidDbAccessInstance.currentUser.put(user)
-        })
-        .catch(() => {
-          toast.error(language.error.userProfileUnavailableApi)
-        })
-    }
-    if (isOfflineAuthenticatedAndReady) {
-      const getCurrentUserFromOfflineStorage = mermaidDbAccessInstance.currentUser.toArray()
-      const _addCurrentUserToState = getCurrentUserFromOfflineStorage
-
-        .then((results) => {
-          const user = results[0]
-
-          if (!user) {
-            throw Error('User Profile not returned from offline storage')
-          }
+    if (mermaidDatabaseGatewayInstance) {
+      mermaidDatabaseGatewayInstance
+        .getUserProfile()
+        .then((user) => {
           if (isMounted) {
             dispatch({
               type: 'addUser',
@@ -117,13 +62,7 @@ export const useMermaidData = ({
     return () => {
       isMounted = false
     }
-  }, [
-    apiBaseUrl,
-    authenticatedAxios,
-    isOfflineAuthenticatedAndReady,
-    isOnlineAuthenticatedAndReady,
-    mermaidDbAccessInstance,
-  ])
+  }, [mermaidDatabaseGatewayInstance])
 
   return {
     projects: state.projects,

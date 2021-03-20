@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import GlobalStyle from '../library/styling/globalStyles'
 import Footer from '../components/Footer'
@@ -15,6 +15,7 @@ import {
 } from '../library/mermaidData/useMermaidData'
 import useOnlineStatus from '../library/useOnlineStatus'
 import { CustomToastContainer } from '../components/generic/toast'
+import MermaidDatabaseGateway from '../library/mermaidData/MermaidDatabaseGateway'
 
 function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
@@ -25,11 +26,24 @@ function App({ mermaidDbAccessInstance }) {
   } = useAuthentication({
     isOnline,
   })
+  const mermaidDatabaseGatewayInstance = useMemo(() => {
+    const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+    const isAppReady =
+      isMermaidAuthenticated && !!mermaidDbAccessInstance && apiBaseUrl
+
+    return !isAppReady
+      ? undefined
+      : new MermaidDatabaseGateway({
+          apiBaseUrl,
+          auth0Token,
+          isMermaidAuthenticated,
+          isOnline,
+          mermaidDbAccessInstance,
+        })
+  }, [auth0Token, isMermaidAuthenticated, isOnline, mermaidDbAccessInstance])
+
   const mermaidData = useMermaidData({
-    auth0Token,
-    isMermaidAuthenticated,
-    isOnline,
-    mermaidDbAccessInstance,
+    mermaidDatabaseGatewayInstance,
   })
   const { routes } = useRoutes({ mermaidData })
 
