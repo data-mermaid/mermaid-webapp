@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useTable } from 'react-table'
 import React, { useEffect, useMemo, useState } from 'react'
 
@@ -34,6 +35,9 @@ const Collect = ({ mermaidDatabaseGatewayInstance }) => {
       .then((records) => {
         setCollectRecordsForUiDisplay(records)
         setIsLoading(false)
+      })
+      .catch((error) => {
+        toast.error(error.message)
       })
   }, [mermaidDatabaseGatewayInstance])
 
