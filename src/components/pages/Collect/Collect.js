@@ -13,6 +13,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import SubLayout2 from '../../SubLayout2'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import language from '../../../language'
 
 const TopBar = () => (
   <>
@@ -36,8 +37,8 @@ const Collect = ({ mermaidDatabaseGatewayInstance }) => {
         setCollectRecordsForUiDisplay(records)
         setIsLoading(false)
       })
-      .catch((error) => {
-        toast.error(error.message)
+      .catch(() => {
+        toast.error(language.error.collectRecordsUnavailable)
       })
   }, [mermaidDatabaseGatewayInstance])
 
