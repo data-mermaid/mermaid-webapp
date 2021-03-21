@@ -49,6 +49,12 @@ class MermaidDatabaseGateway {
       this.#isAuthenticatedAndReady && !isOnline
   }
 
+  getCollectRecord = (id) => {
+    return this.getCollectRecords().then((records) =>
+      records.find((record) => record.id === id),
+    )
+  }
+
   getCollectRecordMethodLabel = (protocol) => {
     switch (protocol) {
       default:
@@ -151,6 +157,7 @@ class MermaidDatabaseGateway {
 }
 
 const mermaidDatabaseGatewayPropTypes = PropTypes.shape({
+  getCollectRecord: PropTypes.func,
   getCollectRecordMethodLabel: PropTypes.func,
   getCollectRecords: PropTypes.func,
   getCollectRecordsForUIDisplay: PropTypes.func,

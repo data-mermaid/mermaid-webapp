@@ -1,7 +1,7 @@
 import { Formik } from 'formik'
 import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import SubLayout2 from '../../SubLayout2'
 import { ButtonCallout } from '../../generic/buttons'
@@ -14,16 +14,31 @@ import {
   getSampleInfoValidationInfo,
 } from '../../../library/collectRecordHelpers'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
+import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
 
-const EditFishBelt = ({ mermaidData }) => {
+const EditFishBelt = ({ databaseGatewayInstance }) => {
   const { recordId } = useParams()
-  const { sites, managementRegimes } = mermaidData
 
-  const [collectRecordBeingEdited] = useState(
-    mermaidData.getCollectRecord(recordId),
-  )
+  const [isLoading, setIsLoading] = useState(true)
 
-  const collectRecordData = collectRecordBeingEdited.data
+  const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
+  const [sites, setSites] = useState([])
+  const [managementRegimes, setManagementRegimes] = useState([])
+
+  const _getSupportingData = useEffect(() => {
+    Promise.all([
+      databaseGatewayInstance.getCollectRecord(recordId),
+      databaseGatewayInstance.getSites(),
+      databaseGatewayInstance.getManagementRegimes(),
+    ]).then(([collectRecord, sitesResponse, managementRegimesResponse]) => {
+      setCollectRecordBeingEdited(collectRecord)
+      setSites(sitesResponse)
+      setManagementRegimes(managementRegimesResponse)
+      setIsLoading(false)
+    })
+  }, [databaseGatewayInstance, recordId])
+
+  const collectRecordData = collectRecordBeingEdited?.data
 
   const formikOptions = {
     initialValues: {
@@ -35,7 +50,7 @@ const EditFishBelt = ({ mermaidData }) => {
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
-      ...getSampleInfoValidationInfo(mermaidData),
+      ...getSampleInfoValidationInfo({ sites, managementRegimes }),
       transectNumber: Yup.number().required('Transect number is required'),
       transectNLengthSurveyed: Yup.number().required(
         'Transect length surveyed is required',
@@ -50,6 +65,7 @@ const EditFishBelt = ({ mermaidData }) => {
     <Formik {...formikOptions}>
       {(formik) => (
         <SubLayout2
+          isLoading={isLoading}
           content={
             <form id="fishbelt-form" onSubmit={formik.handleSubmit}>
               <SampleInfoInputs
@@ -79,7 +95,7 @@ const EditFishBelt = ({ mermaidData }) => {
 }
 
 EditFishBelt.propTypes = {
-  mermaidData: mermaidDataPropType.isRequired,
+  databaseGatewayInstance: mermaidDatabaseGatewayPropTypes.isRequired,
 }
 
 export default EditFishBelt
