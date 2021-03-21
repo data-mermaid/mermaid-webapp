@@ -3,16 +3,16 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import React from 'react'
 import colorHelper from 'color'
-import Logo from '../../assets/mermaid-logo.svg'
-import { IconMenu, IconDown } from '../icons'
+
 import {
   hoverState,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-
-import { currentUserPropType } from '../../library/mermaidData/useMermaidData'
+import { currentUserPropType } from '../../library/mermaidData/mermaidDataProptypes'
+import { IconMenu, IconDown } from '../icons'
 import { RowSpaceBetween } from '../generic/positioning'
 import HideShow from '../generic/HideShow'
+import Logo from '../../assets/mermaid-logo.svg'
 
 /**
  * Mermaid Header

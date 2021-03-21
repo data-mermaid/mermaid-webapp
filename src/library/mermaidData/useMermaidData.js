@@ -1,26 +1,9 @@
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import PropTypes from 'prop-types'
-import mockMermaidData from '../../testUtilities/mockMermaidData'
 import language from '../../language'
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'addUser':
-      return { ...state, currentUser: action.payload }
-    default:
-      throw new Error()
-  }
-}
-
-const initialState = {
-  currentUser: undefined,
-}
-
 export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
-
-  const [sites] = useState(mockMermaidData.sites)
+  const [currentUser, setCurrentUser] = useState()
 
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
@@ -30,10 +13,7 @@ export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
         .getUserProfile()
         .then((user) => {
           if (isMounted && user) {
-            dispatch({
-              type: 'addUser',
-              payload: user,
-            })
+            setCurrentUser(user)
           }
         })
         .catch(() => {
@@ -47,15 +27,6 @@ export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
   }, [mermaidDatabaseGatewayInstance])
 
   return {
-    currentUser: state.currentUser,
-    sites,
+    currentUser,
   }
 }
-
-export const currentUserPropType = PropTypes.shape({
-  id: PropTypes.string,
-  first_name: PropTypes.string,
-  last_name: PropTypes.string,
-  full_name: PropTypes.string,
-  email: PropTypes.string,
-})
