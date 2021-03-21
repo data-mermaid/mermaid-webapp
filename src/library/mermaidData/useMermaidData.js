@@ -30,7 +30,7 @@ export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
       mermaidDatabaseGatewayInstance
         .getUserProfile()
         .then((user) => {
-          if (isMounted) {
+          if (isMounted && user) {
             dispatch({
               type: 'addUser',
               payload: user,
@@ -38,7 +38,7 @@ export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
           }
         })
         .catch(() => {
-          toast.error(language.error.userProfileUnavailableApi)
+          toast.error(language.error.userProfileUnavailable)
         })
     }
 
