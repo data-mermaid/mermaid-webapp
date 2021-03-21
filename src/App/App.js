@@ -28,10 +28,10 @@ function App({ mermaidDbAccessInstance }) {
   })
   const mermaidDatabaseGatewayInstance = useMemo(() => {
     const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-    const isAppReady =
+    const areDependenciesReady =
       isMermaidAuthenticated && !!mermaidDbAccessInstance && apiBaseUrl
 
-    return !isAppReady
+    return !areDependenciesReady
       ? undefined
       : new MermaidDatabaseGateway({
           apiBaseUrl,
@@ -45,7 +45,7 @@ function App({ mermaidDbAccessInstance }) {
   const mermaidData = useMermaidData({
     mermaidDatabaseGatewayInstance,
   })
-  const { routes } = useRoutes({ mermaidData })
+  const { routes } = useRoutes({ mermaidData, mermaidDatabaseGatewayInstance })
 
   const layoutProps = {
     header: (
@@ -59,7 +59,9 @@ function App({ mermaidDbAccessInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated && mermaidData.currentUser
+    isMermaidAuthenticated &&
+    mermaidData.currentUser &&
+    mermaidDatabaseGatewayInstance
 
   return (
     <ThemeProvider theme={theme}>

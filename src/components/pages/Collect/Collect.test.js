@@ -1,23 +1,30 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
+import mockOnlineMermaidDatabaseGatewayInstance from '../../../testUtilities/mockOnlineMermaidDatabaseGatewayInstance'
 import {
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import Collect from './Collect'
-
-// import Collect from './Collect'
 
 test('Collect component renders with the expected UI elements', () => {
   // const utilities = renderAuthenticatedOnline(<Collect />)
   // expect(screen.getByText('I should fail'))
 })
 
-test('Collect Records table sorts properly by method column', () => {
-  renderAuthenticatedOnline(<Collect mermaidData={mockMermaidData} />)
+test('Collect Records table sorts properly by method column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      mermaidDatabaseGatewayInstance={mockOnlineMermaidDatabaseGatewayInstance}
+    />,
+  )
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  )
 
   const table = screen.getByRole('table')
 
@@ -32,8 +39,16 @@ test('Collect Records table sorts properly by method column', () => {
 
   expect(within(tableRowsAfter[1]).getByText('Fish Belt'))
 })
-test('Collect Records table sorts properly by site column', () => {
-  renderAuthenticatedOnline(<Collect mermaidData={mockMermaidData} />)
+test('Collect Records table sorts properly by site column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      mermaidDatabaseGatewayInstance={mockOnlineMermaidDatabaseGatewayInstance}
+    />,
+  )
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  )
 
   const table = screen.getByRole('table')
 
@@ -57,9 +72,15 @@ test('Collect Records table sorts properly by observers column', () => {})
 test('Collect Records table sorts properly by status column', () => {})
 test('Collect Records table sorts properly by synced column', () => {})
 
-test('Collect Records table changes number of rows visible size when pagination size is changed', () => {
-  renderAuthenticatedOnline(<Collect mermaidData={mockMermaidData} />)
-
+test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      mermaidDatabaseGatewayInstance={mockOnlineMermaidDatabaseGatewayInstance}
+    />,
+  )
+  await waitFor(() =>
+    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  )
   const table = screen.getByRole('table')
 
   const tableRows = within(table).getAllByRole('row')
@@ -75,8 +96,15 @@ test('Collect Records table changes number of rows visible size when pagination 
   expect(tableRowsAfter.length).toEqual(12)
 })
 
-test('Collect Records table change pages when different page is selected ', () => {
-  renderAuthenticatedOnline(<Collect mermaidData={mockMermaidData} />)
+test('Collect Records table change pages when different page is selected ', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      mermaidDatabaseGatewayInstance={mockOnlineMermaidDatabaseGatewayInstance}
+    />,
+  )
+  await waitFor(() =>
+    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  )
 
   const table = screen.getByRole('table')
 
