@@ -1,4 +1,8 @@
 export default function dateFormat(dateString) {
+  if (!dateString) {
+    return undefined
+  }
+
   const dateSplit = dateString.split('-')
 
   return `${dateSplit[0]}-${`0${dateSplit[1]}`.slice(
