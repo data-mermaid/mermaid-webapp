@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import { H2 } from '../generic/text'
+
+import { formikPropType } from '../../library/formikHelpers/formikPropType'
+import getValidationPropsFromFormik from '../../library/formikHelpers/getValidationPropsFromFormik'
 import {
   managementRegimePropType,
   sitePropType,
-} from '../../library/mermaidData/useMermaidData'
-import { formikPropType } from '../../library/formikHelpers/formikPropType'
-import getValidationPropsFromFormik from '../../library/formikHelpers/getValidationPropsFromFormik'
+} from '../../library/mermaidData/mermaidDataProptypes'
 
 const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
   const siteSelectOptions = sites.map((site) => ({
