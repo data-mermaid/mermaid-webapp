@@ -45,7 +45,7 @@ function App({ mermaidDbAccessInstance }) {
   const mermaidData = useMermaidData({
     mermaidDatabaseGatewayInstance,
   })
-  const { routes } = useRoutes({ mermaidData, mermaidDatabaseGatewayInstance })
+  const { routes } = useRoutes({ mermaidDatabaseGatewayInstance })
 
   const layoutProps = {
     header: (
