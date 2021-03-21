@@ -1,20 +1,17 @@
 import { Link } from 'react-router-dom'
 import { usePagination, useSortBy, useTable } from 'react-table'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import SubLayout2 from '../../SubLayout2'
-import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 import { H3 } from '../../generic/text'
-import { RowSpaceBetween } from '../../generic/positioning'
-
-import AddSampleUnitButton from './AddSampleUnitButton'
-
-import { Table, Tr, Th, Td } from '../../generic/Table/table'
+import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import { RowSpaceBetween } from '../../generic/positioning'
+import { Table, Tr, Th, Td } from '../../generic/Table/table'
+import AddSampleUnitButton from './AddSampleUnitButton'
 import PageSelector from '../../generic/Table/PageSelector'
-import MermaidDatabaseGateway from '../../../library/mermaidData/MermaidDatabaseGateway'
+import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import SubLayout2 from '../../SubLayout2'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 
 const TopBar = () => (
   <>
@@ -25,8 +22,21 @@ const TopBar = () => (
   </>
 )
 
-const Collect = ({ mermaidData }) => {
-  const { collectRecords } = mermaidData
+const Collect = ({ mermaidDatabaseGatewayInstance }) => {
+  const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState(
+    [],
+  )
+  const [isLoading, setIsLoading] = useState(true)
+
+  const _getCollectRecords = useEffect(() => {
+    mermaidDatabaseGatewayInstance
+      .getCollectRecordsForUIDisplay()
+      .then((records) => {
+        setCollectRecordsForUiDisplay(records)
+        setIsLoading(false)
+      })
+  }, [mermaidDatabaseGatewayInstance])
+
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
@@ -97,16 +107,14 @@ const Collect = ({ mermaidData }) => {
 
   const tableCellData = useMemo(
     () =>
-      collectRecords.map(({ id, data }) => ({
+      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => ({
         method: (
           <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
-            {MermaidDatabaseGateway.getCollectRecordMethodLabel(data.protocol)}
+            {uiLabels.protocol}
           </Link>
         ),
-        site: mermaidData.getSite(data.sample_event.site).name,
-        management: mermaidData.getManagementRegime(
-          data.sample_event.management,
-        ).name,
+        site: uiLabels.site,
+        management: uiLabels.management,
         sampleUnitNumber: 'wip',
         size: 'wip',
         depth: 'wip',
@@ -115,7 +123,7 @@ const Collect = ({ mermaidData }) => {
         status: 'wip',
         synced: 'wip',
       })),
-    [collectRecords, currentProjectPath, mermaidData],
+    [collectRecordsForUiDisplay, currentProjectPath],
   )
   const {
     canNextPage,
@@ -200,16 +208,12 @@ const Collect = ({ mermaidData }) => {
   )
 
   return (
-    <SubLayout2
-      // content={<CollectRecordList mermaidData={mermaidData} />}
-      toolbar={<TopBar />}
-      content={table}
-    />
+    <SubLayout2 toolbar={<TopBar />} content={table} isLoading={isLoading} />
   )
 }
 
 Collect.propTypes = {
-  mermaidData: mermaidDataPropType.isRequired,
+  mermaidDatabaseGatewayInstance: mermaidDatabaseGatewayPropTypes.isRequired,
 }
 
 export default Collect

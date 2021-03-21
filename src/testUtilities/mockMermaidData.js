@@ -41,7 +41,6 @@ const projects = [
 const collectRecords = [
   {
     id: '1',
-
     data: {
       protocol: 'benthiclit',
       sample_event: {
@@ -294,9 +293,6 @@ const mockMermaidData = {
   managementRegimes,
   getCollectRecord: (searchId) =>
     collectRecords.find((record) => record.id === searchId),
-  getSite: (searchId) => sites.find((site) => site.id === searchId),
-  getManagementRegime: (searchId) =>
-    managementRegimes.find((regime) => regime.id === searchId),
 }
 
 export default mockMermaidData

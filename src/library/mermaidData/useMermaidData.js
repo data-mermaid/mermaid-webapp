@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
@@ -21,24 +21,7 @@ const initialState = {
 export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const [collectRecords] = useState(mockMermaidData.collectRecords)
   const [sites] = useState(mockMermaidData.sites)
-  const [managementRegimes] = useState(mockMermaidData.managementRegimes)
-
-  const getCollectRecord = useCallback(
-    (searchId) => collectRecords.find((record) => record.id === searchId),
-    [collectRecords],
-  )
-
-  const getSite = useCallback(
-    (searchId) => sites.find((site) => site.id === searchId),
-    [sites],
-  )
-
-  const getManagementRegime = useCallback(
-    (searchId) => managementRegimes.find((regime) => regime.id === searchId),
-    [managementRegimes],
-  )
 
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
@@ -67,12 +50,7 @@ export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
   return {
     projects: state.projects,
     currentUser: state.currentUser,
-    collectRecords,
     sites,
-    managementRegimes,
-    getCollectRecord,
-    getSite,
-    getManagementRegime,
   }
 }
 export const projectsPropType = PropTypes.arrayOf(

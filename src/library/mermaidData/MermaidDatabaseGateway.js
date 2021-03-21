@@ -1,23 +1,9 @@
 import axios from 'axios'
+import PropTypes from 'prop-types'
+
+import mockMermaidData from '../../testUtilities/mockMermaidData'
 
 class MermaidDatabaseGateway {
-  static getCollectRecordMethodLabel = (protocol) => {
-    switch (protocol) {
-      default:
-        return 'Unknown Method'
-      case 'fishbelt':
-        return 'Fish Belt'
-      case 'benthiclit':
-        return 'Benthic LIT'
-      case 'benthicpit':
-        return 'Benthic PIT'
-      case 'habitatcomplexity':
-        return 'Habitat Complexity'
-      case 'bleachingqc':
-        return 'Bleaching'
-    }
-  }
-
   #apiBaseUrl
 
   #authenticatedAxios
@@ -55,6 +41,55 @@ class MermaidDatabaseGateway {
       : undefined
   }
 
+  getCollectRecordMethodLabel = (protocol) => {
+    switch (protocol) {
+      default:
+        return 'Unknown Method'
+      case 'fishbelt':
+        return 'Fish Belt'
+      case 'benthiclit':
+        return 'Benthic LIT'
+      case 'benthicpit':
+        return 'Benthic PIT'
+      case 'habitatcomplexity':
+        return 'Habitat Complexity'
+      case 'bleachingqc':
+        return 'Bleaching'
+    }
+  }
+
+  getCollectRecords = () => Promise.resolve(mockMermaidData.collectRecords)
+
+  getCollectRecordsForUIDisplay = () => {
+    return Promise.all([
+      this.getCollectRecords(),
+      this.getSites(),
+      this.getManagementRegimes(),
+    ]).then(([collectRecords, sites, managementRegimes]) => {
+      const getSiteLabel = (searchId) =>
+        sites.find((site) => site.id === searchId).name
+
+      const getManagementRegimeLabel = (searchId) =>
+        managementRegimes.find((regime) => regime.id === searchId).name
+
+      return collectRecords.map((record) => ({
+        ...record,
+        uiLabels: {
+          site: getSiteLabel(record.data.sample_event.site),
+          management: getManagementRegimeLabel(
+            record.data.sample_event.management,
+          ),
+          protocol: this.getCollectRecordMethodLabel(record.data.protocol),
+        },
+      }))
+    })
+  }
+
+  getManagementRegimes = () =>
+    Promise.resolve(mockMermaidData.managementRegimes)
+
+  getSites = () => Promise.resolve(mockMermaidData.sites)
+
   getUserProfile = () => {
     if (this.#isOnlineAuthenticatedAndReady) {
       return this.#authenticatedAxios
@@ -89,4 +124,14 @@ class MermaidDatabaseGateway {
   }
 }
 
+const mermaidDatabaseGatewayPropTypes = PropTypes.shape({
+  getCollectRecordMethodLabel: PropTypes.func,
+  getCollectRecords: PropTypes.func,
+  getCollectRecordsForUIDisplay: PropTypes.func,
+  getManagementRegimes: PropTypes.func,
+  getSites: PropTypes.func,
+  getUserProfile: PropTypes.func,
+})
+
 export default MermaidDatabaseGateway
+export { mermaidDatabaseGatewayPropTypes }
