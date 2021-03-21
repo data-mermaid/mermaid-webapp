@@ -21,7 +21,9 @@ export const useRoutes = ({ mermaidData, mermaidDatabaseGatewayInstance }) => {
   const routes = [
     {
       path: '/projects',
-      Component: () => <Projects mermaidData={mermaidData} />,
+      Component: () => (
+        <Projects databaseGatewayInstance={mermaidDatabaseGatewayInstance} />
+      ),
     },
     {
       path: '/projects/:projectId/health',
