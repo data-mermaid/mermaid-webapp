@@ -1,19 +1,21 @@
 import { Formik } from 'formik'
+import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import React, { useEffect, useState } from 'react'
 
-import SubLayout2 from '../../SubLayout2'
-import { ButtonCallout } from '../../generic/buttons'
-import { RowRight } from '../../generic/positioning'
-import SampleInfoInputs from '../../SampleInfoInputs'
 import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
   getSampleInfoValidationInfo,
 } from '../../../library/collectRecordHelpers'
-import FishBeltTransectForms from '../../FishBeltTransectForms'
+import { ButtonCallout } from '../../generic/buttons'
 import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
+import { RowRight } from '../../generic/positioning'
+import FishBeltTransectForms from '../../FishBeltTransectForms'
+import language from '../../../language'
+import SampleInfoInputs from '../../SampleInfoInputs'
+import SubLayout2 from '../../SubLayout2'
 
 const EditFishBelt = ({ databaseGatewayInstance }) => {
   const { recordId } = useParams()
@@ -29,12 +31,16 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
       databaseGatewayInstance.getCollectRecord(recordId),
       databaseGatewayInstance.getSites(),
       databaseGatewayInstance.getManagementRegimes(),
-    ]).then(([collectRecord, sitesResponse, managementRegimesResponse]) => {
-      setCollectRecordBeingEdited(collectRecord)
-      setSites(sitesResponse)
-      setManagementRegimes(managementRegimesResponse)
-      setIsLoading(false)
-    })
+    ])
+      .then(([collectRecord, sitesResponse, managementRegimesResponse]) => {
+        setCollectRecordBeingEdited(collectRecord)
+        setSites(sitesResponse)
+        setManagementRegimes(managementRegimesResponse)
+        setIsLoading(false)
+      })
+      .catch(() => {
+        toast.error(language.error.collectRecordUnavailable)
+      })
   }, [databaseGatewayInstance, recordId])
 
   const collectRecordData = collectRecordBeingEdited?.data

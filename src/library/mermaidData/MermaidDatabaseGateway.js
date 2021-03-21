@@ -49,11 +49,12 @@ class MermaidDatabaseGateway {
       this.#isAuthenticatedAndReady && !isOnline
   }
 
-  getCollectRecord = (id) => {
-    return this.getCollectRecords().then((records) =>
-      records.find((record) => record.id === id),
-    )
-  }
+  getCollectRecord = (id) =>
+    this.#isAuthenticatedAndReady
+      ? this.getCollectRecords().then((records) =>
+          records.find((record) => record.id === id),
+        )
+      : Promise.reject(this.#notAuthenticatedAndReadyError)
 
   getCollectRecordMethodLabel = (protocol) => {
     switch (protocol) {
