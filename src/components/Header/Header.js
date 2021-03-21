@@ -9,9 +9,9 @@ import {
   mediaQueryPhoneOnly,
 } from '../../library/styling/mediaQueries'
 
-import { currentUserPropType } from '../../library/mermaidData/useMermaidData'
 import { RowSpaceBetween, RowRight } from '../generic/positioning'
 import HideShow from '../generic/HideShow'
+import { currentUserPropType } from '../../library/mermaidData/mermaidDataProptypes'
 
 /**
  * Mermaid Header
