@@ -4,7 +4,7 @@ import { getMockMermaidDbAccessInstance } from './mockMermaidDbAccess'
 const mockOnlineMermaidDatabaseGatewayInstance = new MermaidDatabaseGateway({
   apiBaseUrl: process.env.REACT_APP_MERMAID_API,
   auth0Token: 'token',
-  isMermaidAuthenticate: true,
+  isMermaidAuthenticated: true,
   isOnline: true,
   mermaidDbAccessInstance: getMockMermaidDbAccessInstance(),
 })

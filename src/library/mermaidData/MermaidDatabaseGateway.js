@@ -1,5 +1,6 @@
 import axios from 'axios'
 import PropTypes from 'prop-types'
+import language from '../../language'
 
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 
@@ -8,11 +9,19 @@ class MermaidDatabaseGateway {
 
   #authenticatedAxios
 
+  #isAuthenticatedAndReady
+
   #isOfflineAuthenticatedAndReady
+
+  #isOnlineAuthenticatedAndLoading
 
   #isOnlineAuthenticatedAndReady
 
   #mermaidDbAccessInstance
+
+  #notAuthenticatedAndReadyError = new Error(
+    language.error.appNotAuthenticatedOrReady,
+  )
 
   constructor({
     apiBaseUrl,
@@ -23,15 +32,8 @@ class MermaidDatabaseGateway {
   }) {
     this.#apiBaseUrl = apiBaseUrl
     this.#mermaidDbAccessInstance = mermaidDbAccessInstance
-    this.#isOnlineAuthenticatedAndReady =
-      isMermaidAuthenticated &&
-      isOnline &&
-      !!auth0Token &&
-      !!mermaidDbAccessInstance
-
-    this.#isOfflineAuthenticatedAndReady =
-      isMermaidAuthenticated && !isOnline && !!mermaidDbAccessInstance
-
+    this.#isAuthenticatedAndReady =
+      isMermaidAuthenticated && !!mermaidDbAccessInstance
     this.#authenticatedAxios = auth0Token
       ? axios.create({
           headers: {
@@ -39,6 +41,12 @@ class MermaidDatabaseGateway {
           },
         })
       : undefined
+    this.#isOnlineAuthenticatedAndReady =
+      this.#isAuthenticatedAndReady && isOnline && !!this.#authenticatedAxios
+    this.#isOnlineAuthenticatedAndLoading =
+      this.#isAuthenticatedAndReady && isOnline && !this.#authenticatedAxios
+    this.#isOfflineAuthenticatedAndReady =
+      this.#isAuthenticatedAndReady && !isOnline
   }
 
   getCollectRecordMethodLabel = (protocol) => {
@@ -58,39 +66,52 @@ class MermaidDatabaseGateway {
     }
   }
 
-  getCollectRecords = () => Promise.resolve(mockMermaidData.collectRecords)
+  getCollectRecords = () =>
+    this.#isAuthenticatedAndReady
+      ? Promise.resolve(mockMermaidData.collectRecords)
+      : Promise.reject(this.#notAuthenticatedAndReadyError)
 
   getCollectRecordsForUIDisplay = () => {
-    return Promise.all([
-      this.getCollectRecords(),
-      this.getSites(),
-      this.getManagementRegimes(),
-    ]).then(([collectRecords, sites, managementRegimes]) => {
-      const getSiteLabel = (searchId) =>
-        sites.find((site) => site.id === searchId).name
+    return this.#isAuthenticatedAndReady
+      ? Promise.all([
+          this.getCollectRecords(),
+          this.getSites(),
+          this.getManagementRegimes(),
+        ]).then(([collectRecords, sites, managementRegimes]) => {
+          const getSiteLabel = (searchId) =>
+            sites.find((site) => site.id === searchId).name
 
-      const getManagementRegimeLabel = (searchId) =>
-        managementRegimes.find((regime) => regime.id === searchId).name
+          const getManagementRegimeLabel = (searchId) =>
+            managementRegimes.find((regime) => regime.id === searchId).name
 
-      return collectRecords.map((record) => ({
-        ...record,
-        uiLabels: {
-          site: getSiteLabel(record.data.sample_event.site),
-          management: getManagementRegimeLabel(
-            record.data.sample_event.management,
-          ),
-          protocol: this.getCollectRecordMethodLabel(record.data.protocol),
-        },
-      }))
-    })
+          return collectRecords.map((record) => ({
+            ...record,
+            uiLabels: {
+              site: getSiteLabel(record.data.sample_event.site),
+              management: getManagementRegimeLabel(
+                record.data.sample_event.management,
+              ),
+              protocol: this.getCollectRecordMethodLabel(record.data.protocol),
+            },
+          }))
+        })
+      : Promise.reject(this.#notAuthenticatedAndReadyError)
   }
 
   getManagementRegimes = () =>
-    Promise.resolve(mockMermaidData.managementRegimes)
+    this.#isAuthenticatedAndReady
+      ? Promise.resolve(mockMermaidData.managementRegimes)
+      : Promise.reject(this.#notAuthenticatedAndReadyError)
 
-  getSites = () => Promise.resolve(mockMermaidData.sites)
+  getSites = () =>
+    this.#isAuthenticatedAndReady
+      ? Promise.resolve(mockMermaidData.sites)
+      : Promise.reject(this.#notAuthenticatedAndReadyError)
 
   getUserProfile = () => {
+    if (this.#isOnlineAuthenticatedAndLoading) {
+      return Promise.resolve(undefined)
+    }
     if (this.#isOnlineAuthenticatedAndReady) {
       return this.#authenticatedAxios
         .get(`${this.#apiBaseUrl}/me`)
@@ -120,7 +141,7 @@ class MermaidDatabaseGateway {
         })
     }
 
-    return Promise.reject(new Error('fail'))
+    return Promise.reject(this.#notAuthenticatedAndReadyError)
   }
 }
 
