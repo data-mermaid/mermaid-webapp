@@ -9,13 +9,11 @@ import Layout from '../components/generic/Layout'
 import theme from '../theme'
 import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
-import {
-  mermaidDataPropType,
-  useMermaidData,
-} from '../library/mermaidData/useMermaidData'
+import { useMermaidData } from '../library/mermaidData/useMermaidData'
 import useOnlineStatus from '../library/useOnlineStatus'
 import { CustomToastContainer } from '../components/generic/toast'
 import MermaidDatabaseGateway from '../library/mermaidData/MermaidDatabaseGateway'
+import { mermaidDbAccessInstancePropTypes } from '../library/mermaidData/mermaidDbAccessInstance'
 
 function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
@@ -91,7 +89,7 @@ function App({ mermaidDbAccessInstance }) {
 }
 
 App.propTypes = {
-  mermaidDbAccessInstance: mermaidDataPropType.isRequired,
+  mermaidDbAccessInstance: mermaidDbAccessInstancePropTypes.isRequired,
 }
 
 export default App

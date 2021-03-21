@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react'
 import SubLayout2 from '../../SubLayout2'
 import { ButtonCallout } from '../../generic/buttons'
 import { RowRight } from '../../generic/positioning'
-import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import {
   getSampleInfoInitialValues,
