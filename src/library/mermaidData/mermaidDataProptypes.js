@@ -28,3 +28,11 @@ export const collectRecordPropType = PropTypes.shape({
 export const managementRegimePropType = PropTypes.shape({
   name: PropTypes.string,
 })
+
+export const currentUserPropType = PropTypes.shape({
+  id: PropTypes.string,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  full_name: PropTypes.string,
+  email: PropTypes.string,
+})
