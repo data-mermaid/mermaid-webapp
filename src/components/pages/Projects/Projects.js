@@ -6,6 +6,7 @@ import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
 import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
+import language from '../../../language'
 
 /**
  * All Projects page (lists projects)
@@ -21,8 +22,8 @@ const Projects = ({ databaseGatewayInstance }) => {
         setIsLoading(false)
         setProjects(projectsResponse)
       })
-      .catch((error) => {
-        toast.error(error.message)
+      .catch(() => {
+        toast.error(language.error.projectsUnavailable)
       })
   }, [databaseGatewayInstance])
 
