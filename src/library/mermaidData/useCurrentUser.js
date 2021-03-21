@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../../language'
 
-export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
+export const useCurrentUser = ({ mermaidDatabaseGatewayInstance }) => {
   const [currentUser, setCurrentUser] = useState()
 
   const _initializeUserOnAuthentication = useEffect(() => {
@@ -26,7 +26,5 @@ export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
     }
   }, [mermaidDatabaseGatewayInstance])
 
-  return {
-    currentUser,
-  }
+  return currentUser
 }
