@@ -15,7 +15,6 @@ const reducer = (state, action) => {
 
 const initialState = {
   currentUser: undefined,
-  projects: mockMermaidData.projects,
 }
 
 export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
@@ -48,7 +47,6 @@ export const useMermaidData = ({ mermaidDatabaseGatewayInstance }) => {
   }, [mermaidDatabaseGatewayInstance])
 
   return {
-    projects: state.projects,
     currentUser: state.currentUser,
     sites,
   }

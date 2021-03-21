@@ -103,6 +103,11 @@ class MermaidDatabaseGateway {
       ? Promise.resolve(mockMermaidData.managementRegimes)
       : Promise.reject(this.#notAuthenticatedAndReadyError)
 
+  getProjects = () =>
+    this.#isAuthenticatedAndReady
+      ? Promise.resolve(mockMermaidData.projects)
+      : Promise.reject(this.#notAuthenticatedAndReadyError)
+
   getSites = () =>
     this.#isAuthenticatedAndReady
       ? Promise.resolve(mockMermaidData.sites)
@@ -150,6 +155,7 @@ const mermaidDatabaseGatewayPropTypes = PropTypes.shape({
   getCollectRecords: PropTypes.func,
   getCollectRecordsForUIDisplay: PropTypes.func,
   getManagementRegimes: PropTypes.func,
+  getProjects: PropTypes.finc,
   getSites: PropTypes.func,
   getUserProfile: PropTypes.func,
 })
