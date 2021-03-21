@@ -9,7 +9,7 @@ import Layout from '../components/generic/Layout'
 import theme from '../theme'
 import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
-import { useMermaidData } from '../library/mermaidData/useMermaidData'
+import { useCurrentUser } from '../library/mermaidData/useCurrentUser'
 import useOnlineStatus from '../library/useOnlineStatus'
 import { CustomToastContainer } from '../components/generic/toast'
 import MermaidDatabaseGateway from '../library/mermaidData/MermaidDatabaseGateway'
@@ -40,7 +40,7 @@ function App({ mermaidDbAccessInstance }) {
         })
   }, [auth0Token, isMermaidAuthenticated, isOnline, mermaidDbAccessInstance])
 
-  const mermaidData = useMermaidData({
+  const currentUser = useCurrentUser({
     mermaidDatabaseGatewayInstance,
   })
   const { routes } = useRoutes({ mermaidDatabaseGatewayInstance })
@@ -48,7 +48,7 @@ function App({ mermaidDbAccessInstance }) {
   const layoutProps = {
     header: (
       <Header
-        currentUser={mermaidData.currentUser}
+        currentUser={currentUser}
         isOnline={isOnline}
         logout={logoutMermaid}
       />
@@ -57,9 +57,7 @@ function App({ mermaidDbAccessInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated &&
-    mermaidData.currentUser &&
-    mermaidDatabaseGatewayInstance
+    isMermaidAuthenticated && currentUser && mermaidDatabaseGatewayInstance
 
   return (
     <ThemeProvider theme={theme}>
