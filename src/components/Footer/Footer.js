@@ -17,7 +17,7 @@ const StyledFooter = styled('footer')`
   nav a,
   button {
     color: ${(props) => props.theme.color.white};
-    font-size: 1.2rem;
+    font-size: ${(props) => props.theme.typography.smallFontSize};
     margin: ${(props) => props.theme.spacing.medium} 0;
     ${mediaQueryPhoneOnly(css`
       margin: ${(props) => props.theme.spacing.small} 0;
