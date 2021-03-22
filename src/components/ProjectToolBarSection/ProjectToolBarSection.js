@@ -69,11 +69,9 @@ const SortByLabelWrapper = styled.label`
     }
   `)}
 `
-
 /**
  * Describe your component
  */
-
 const ProjectToolBarSection = () => {
   return (
     <GlobalWrapper>
