@@ -6,7 +6,6 @@ import colorHelper from 'color'
 import Logo from '../../assets/mermaid-logo.svg'
 import { IconMenu, IconDown } from '../icons'
 import {
-  mediaQueryForTabletLandscapeUp,
   hoverState,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
@@ -33,9 +32,8 @@ const StyledHeader = styled(RowSpaceBetween)`
     padding: 0 ${(props) => props.theme.spacing.small};
     margin-top: 5px;
     ${mediaQueryTabletLandscapeOnly(css`
-      img {
-        height: calc(${(props) => props.theme.spacing.headerHeight} - 15px);
-      }
+      height: calc(${(props) => props.theme.spacing.headerHeight} - 15px);
+      margin-top: 7px;
     `)}
   }
 `
@@ -162,7 +160,7 @@ const Header = ({ logout, isOnline, currentUser }) => {
   return (
     <StyledHeader>
       <Link to="/projects">
-        <img className="mermaid-logo" src={Logo} alt="MERMAID Logo" />
+        <img src={Logo} alt="MERMAID Logo" />
       </Link>
       <GlobalNav>
         <div className="desktop">
