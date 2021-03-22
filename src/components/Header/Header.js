@@ -58,7 +58,7 @@ const linkStyles = css`
 `
 const dropdownLinkStyles = css`
   ${linkStyles};
-  border-width: 0 0 ${(props) => props.theme.spacing.borderLarge} 4px 0;
+  border-width: 0 0 ${(props) => props.theme.spacing.borderLarge} 0;
   background: none;
   display: block;
   color: ${(props) => props.theme.color.white};
