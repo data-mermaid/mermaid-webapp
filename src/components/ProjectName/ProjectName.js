@@ -12,14 +12,6 @@ import { IconHome } from '../icons'
 const ProjectNameWrapper = styled('div')`
   display: grid;
   grid-template-columns: auto 1fr;
-  ${mediaQueryTabletLandscapeOnly(css`
-    grid-template-columns: ${(props) =>
-        props.theme.spacing.sideNavWidthTabletLandscapeOnly} 1fr;
-  `)}
-  ${mediaQueryPhoneOnly(css`
-    grid-template-columns: ${(props) =>
-        props.theme.spacing.sideNavWidthPhoneOnly} 1fr;
-  `)}
   align-items: center;
   border-bottom: 1px solid ${(props) => props.theme.color.border};
   h2 {
@@ -32,23 +24,41 @@ const ProjectNameWrapper = styled('div')`
     margin: 0;
   }
   a {
-    font-size: larger;
     border: none;
     background: none;
+    text-align: center;
+    svg {
+      width: ${(props) => props.theme.typography.largeIconSize};
+      height: ${(props) => props.theme.typography.largeIconSize};
+    }
   }
+  ${mediaQueryTabletLandscapeOnly(css`
+    grid-template-columns: ${(props) =>
+        props.theme.spacing.sideNavWidthTabletLandscapeOnly} 1fr;
+    h2 {
+      padding-left: ${(props) => props.theme.spacing.medium};
+    }
+  `)}
   ${mediaQueryPhoneOnly(css`
+    grid-template-columns: ${(props) =>
+        props.theme.spacing.sideNavWidthPhoneOnly} 1fr;
     h2 {
       font-size: smaller;
       padding: ${(props) => props.theme.spacing.small}
         ${(props) => props.theme.spacing.xsmall}
-        ${(props) => props.theme.spacing.small} 0;
+        ${(props) => props.theme.spacing.small}
+        ${(props) => props.theme.spacing.medium};
     }
     a {
       font-size: initial;
+      svg {
+        width: ${(props) => props.theme.typography.defaultIconSize};
+        height: ${(props) => props.theme.typography.defaultIconSize};
+      }
     }
   `)}
 `
-
+// const StyledIconHome = styled(IconHome)``
 const ProjectName = ({ pageTitle }) => {
   return (
     <ProjectNameWrapper>

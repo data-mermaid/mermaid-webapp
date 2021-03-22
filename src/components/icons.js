@@ -11,6 +11,7 @@ import fileMultipleOutline from '@iconify-icons/mdi/file-multiple-outline'
 import shareVariantOutline from '@iconify-icons/mdi/share-variant-outline'
 import filterOutline from '@iconify-icons/mdi/filter-outline'
 import contentCopy from '@iconify-icons/mdi/content-copy'
+import menu from '@iconify-icons/mdi/menu'
 import menuDown from '@iconify-icons/mdi/menu-down'
 import menuUp from '@iconify-icons/mdi/menu-up'
 import launch from '@iconify-icons/mdi/launch'
@@ -32,6 +33,7 @@ export const IconExternalLink = () => <InlineIcon icon={launch} />
 export const IconFilter = () => <InlineIcon icon={filterOutline} />
 export const IconFish = () => <InlineIcon icon={fish} />
 export const IconGraph = () => <InlineIcon icon={chartBar} />
+export const IconMenu = () => <InlineIcon icon={menu} />
 export const IconMgmt = () => <InlineIcon icon={fileMultipleOutline} />
 export const IconHeart = () => <InlineIcon icon={heartOutline} />
 export const IconHome = () => <InlineIcon icon={homeOutline} />

@@ -22,8 +22,8 @@ const GlobalStyle = createGlobalStyle`
         line-height: ${(props) => props.theme.typography.lineHeight};
     }
     svg {
-        width: ${(props) => props.theme.typography.defaultFontSize};
-        height: ${(props) => props.theme.typography.defaultFontSize};
+        width: ${(props) => props.theme.typography.defaultIconSize};
+        height: ${(props) => props.theme.typography.defaultIconSize};
     }
     *,*::before,*::after {
         box-sizing: border-box;
