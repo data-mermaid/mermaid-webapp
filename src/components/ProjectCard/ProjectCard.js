@@ -70,13 +70,13 @@ const ButtonGroups = styled('div')`
       background-color: transparent;
       opacity: 0.6;
       border: none;
-      padding: 1rem 0;
+      padding: ${(props) => props.theme.spacing.small} 0;
       margin: 0;
     }
   `)}
   ${mediaQueryPhoneOnly(css`
     span {
-      font-size: 1rem;
+      font-size: ${(props) => props.theme.typography.xSmallFontSize};
     }
   `)}
 `

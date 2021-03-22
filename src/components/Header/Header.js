@@ -40,13 +40,14 @@ const StyledHeader = styled(RowSpaceBetween)`
 const linkStyles = css`
   color: ${(props) => props.theme.color.white};
   cursor: pointer;
-  border-bottom: solid 4px transparent;
+  border-bottom: solid ${(props) => props.theme.spacing.borderLarge} transparent;
   text-decoration: none;
   margin: 0;
   padding: ${(props) => props.theme.spacing.small};
   ${hoverState(
     css`
-      border-bottom: solid 4px ${(props) => props.theme.color.white};
+      border-bottom: solid ${(props) => props.theme.spacing.borderLarge}
+        ${(props) => props.theme.color.white};
       opacity: 1;
     `,
   )}
@@ -57,7 +58,7 @@ const linkStyles = css`
 `
 const dropdownLinkStyles = css`
   ${linkStyles};
-  border-width: 0 0 4px 0;
+  border-width: 0 0 ${(props) => props.theme.spacing.borderLarge} 4px 0;
   background: none;
   display: block;
   color: ${(props) => props.theme.color.white};
