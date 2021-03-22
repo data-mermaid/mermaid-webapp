@@ -1,3 +1,4 @@
+import React from 'react'
 import { InlineIcon } from '@iconify/react'
 import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
 import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline'
@@ -21,7 +22,6 @@ import sortDescending from '@iconify-icons/mdi/sort-descending'
 import sortAscending from '@iconify-icons/mdi/sort-ascending'
 import plus from '@iconify-icons/mdi/plus'
 import sync from '@iconify-icons/mdi/sync'
-import React from 'react'
 
 export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
 export const IconCheck = () => <InlineIcon icon={checkOutline} />
