@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import React from 'react'
 import colorHelper from 'color'
+import Logo from '../../assets/mermaid-logo.svg'
 import { IconMenu, IconDown } from '../icons'
 import {
   mediaQueryForTabletLandscapeUp,
@@ -31,18 +32,9 @@ const StyledHeader = styled(RowSpaceBetween)`
     height: calc(${(props) => props.theme.spacing.headerHeight} - 10px);
     padding: 0 ${(props) => props.theme.spacing.small};
     margin-top: 5px;
-    &.desktop-logo {
-      display: none;
-    }
-    &.mobile-logo {
-      display: block;
-    }
-    ${mediaQueryForTabletLandscapeUp(css`
-      &.desktop-logo {
-        display: block;
-      }
-      &.mobile-logo {
-        display: none;
+    ${mediaQueryTabletLandscapeOnly(css`
+      img {
+        height: calc(${(props) => props.theme.spacing.headerHeight} - 15px);
       }
     `)}
   }
@@ -170,16 +162,7 @@ const Header = ({ logout, isOnline, currentUser }) => {
   return (
     <StyledHeader>
       <Link to="/projects">
-        <img
-          className="desktop-logo"
-          src="/mermaid-logo.svg"
-          alt="MERMAID Logo"
-        />
-        <img
-          className="mobile-logo"
-          src="/mermaid-logo-only.svg"
-          alt="MERMAID Logo"
-        />
+        <img className="mermaid-logo" src={Logo} alt="MERMAID Logo" />
       </Link>
       <GlobalNav>
         <div className="desktop">
