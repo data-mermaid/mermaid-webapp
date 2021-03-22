@@ -178,10 +178,10 @@ const VerticalRule = styled.div`
 
 const ProjectCard = ({
   name,
-  country,
-  numberOfSites,
+  countries,
+  num_sites,
   offlineReady,
-  lastUpdatedDate,
+  updated_on,
 }) => {
   const [offlineStatus, setOfflineStatus] = useState(offlineReady)
   const projectUrl = `projects/${name}`
@@ -196,10 +196,9 @@ const ProjectCard = ({
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
-        <p>{country}</p>
+        <p>{countries.join(',')}</p>
         <p>
-          {numberOfSites}{' '}
-          {numberOfSites && pluralize(numberOfSites, 'site', 'sites')}
+          {num_sites} {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
         <CheckBoxWithLabel htmlFor="offline-toggle">
           <input
@@ -210,7 +209,7 @@ const ProjectCard = ({
           />
           Offline Ready
         </CheckBoxWithLabel>
-        <p>Updated: {lastUpdatedDate}</p>
+        <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
       <ButtonGroups>
         <NavLinkButtonGroup projectUrl={projectUrl} />
@@ -226,10 +225,10 @@ const ProjectCard = ({
 
 ProjectCard.propTypes = {
   name: PropTypes.string.isRequired,
-  country: PropTypes.string.isRequired,
-  numberOfSites: PropTypes.number.isRequired,
+  countries: PropTypes.arrayOf(PropTypes.string).isRequired,
+  num_sites: PropTypes.number.isRequired,
   offlineReady: PropTypes.bool.isRequired,
-  lastUpdatedDate: PropTypes.string.isRequired,
+  updated_on: PropTypes.string.isRequired,
 }
 
 export default ProjectCard

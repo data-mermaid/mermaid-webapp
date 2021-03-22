@@ -10,6 +10,7 @@ import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData
 import SampleInfoInputs from '../../SampleInfoInputs'
 import {
   getSampleInfoInitialValues,
+  getTransectInitialValues,
   getSampleInfoValidationInfo,
 } from '../../../library/collectRecordHelpers'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
@@ -22,16 +23,15 @@ const EditFishBelt = ({ mermaidData }) => {
     mermaidData.getCollectRecord(recordId),
   )
 
+  const collectRecordData = collectRecordBeingEdited.data
+
   const formikOptions = {
     initialValues: {
-      ...getSampleInfoInitialValues(collectRecordBeingEdited),
-      transectNumber: '-9999',
-      label: 'Placeholder initial value',
-      transectLengthSurveyed: '-9999',
+      ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
+      ...getTransectInitialValues(collectRecordData, 'fishbelt_transect'),
       width: 'value 1',
       fishSizeBin: 'value 1',
       reefSlope: 'value 1',
-      notes: 'Placeholder initial value',
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
@@ -51,7 +51,7 @@ const EditFishBelt = ({ mermaidData }) => {
       {(formik) => (
         <SubLayout2
           content={
-            <form id="benthiclit-form" onSubmit={formik.handleSubmit}>
+            <form id="fishbelt-form" onSubmit={formik.handleSubmit}>
               <SampleInfoInputs
                 formik={formik}
                 collectRecord={collectRecordBeingEdited}
@@ -66,7 +66,7 @@ const EditFishBelt = ({ mermaidData }) => {
               <ButtonCallout
                 type="submit"
                 onSubmit={formik.handleSubmit}
-                form="benthiclit-form"
+                form="sampleinfo-form"
               >
                 Save
               </ButtonCallout>

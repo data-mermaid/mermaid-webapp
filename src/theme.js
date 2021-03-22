@@ -61,6 +61,7 @@ const timing = {
 
 const typography = {
   defaultFontSize: '1.8rem',
+  smallFontSize: '1.2rem',
   lineHeight: '1.2',
   fontStack: 'Arial, Helvetica Neue, Helvetica, sans-serif',
   noWordBreak: css`

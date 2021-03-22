@@ -127,9 +127,9 @@ export const useMermaidData = ({
 export const projectsPropType = PropTypes.arrayOf(
   PropTypes.shape({
     name: PropTypes.string,
-    country: PropTypes.string,
-    numberOfSites: PropTypes.number,
-    lastUpdatedDate: PropTypes.string,
+    countries: PropTypes.arrayOf(PropTypes.string),
+    num_sites: PropTypes.number,
+    updated_on: PropTypes.string,
   }),
 )
 
