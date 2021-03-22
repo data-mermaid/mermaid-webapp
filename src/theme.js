@@ -65,7 +65,10 @@ const typography = {
   smallFontSize: '1.2rem',
   xSmallFontSize: '1rem',
   lineHeight: '1.2',
-  fontStack: 'Arial, Helvetica Neue, Helvetica, sans-serif',
+  fontStack: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  smallIconSize: '1rem',
+  defaultIconSize: '1.8rem',
+  largeIconSize: '3.5rem',
   noWordBreak: css`
     overflow-wrap: break-word;
     word-wrap: break-word;

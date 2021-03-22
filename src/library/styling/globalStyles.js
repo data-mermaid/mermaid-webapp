@@ -6,25 +6,29 @@ const toastifyCss = raw('react-toastify/dist/ReactToastify.css')
 
 const GlobalStyle = createGlobalStyle`
     ${toastifyCss}
-    :root{
+    :root {
         font-size: 62.5%;
         color: ${(props) => props.theme.color.black};
     }
     body {
         background: ${(props) => props.theme.color.backgroundColor};
     }
-    body, select, input, textarea, p, a{
+    body, select, input, textarea, p, a {
         font-family: ${(props) => props.theme.typography.fontStack};
         font-size: ${(props) => props.theme.typography.defaultFontSize};
     
     }
-    select, input, textarea, p, a{
+    select, input, textarea, p, a {
         line-height: ${(props) => props.theme.typography.lineHeight};
     }
-    *,*::before,*::after{
+    svg {
+        width: ${(props) => props.theme.typography.defaultIconSize};
+        height: ${(props) => props.theme.typography.defaultIconSize};
+    }
+    *,*::before,*::after {
         box-sizing: border-box;
     } 
-    a{
+    a {
         color: ${(props) => props.theme.color.black};
         text-decoration: underline;
         ${hoverState(css`
