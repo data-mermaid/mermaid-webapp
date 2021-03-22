@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import pluralize from '../../library/pluralize'
 import {
+  mediaQueryPhoneOnly,
   hoverState,
   mediaQueryForTabletLandscapeUp,
   mediaQueryTabletLandscapeOnly,
@@ -67,8 +68,15 @@ const ButtonGroups = styled('div')`
     a,
     button {
       background-color: transparent;
-      border: none;
       opacity: 0.6;
+      border: none;
+      padding: ${(props) => props.theme.spacing.small} 0;
+      margin: 0;
+    }
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    span {
+      font-size: ${(props) => props.theme.typography.xSmallFontSize};
     }
   `)}
 `
@@ -110,6 +118,10 @@ const ProjectNameWrapper = styled('div')`
     ${mediaQueryTabletLandscapeOnly(css`
       letter-spacing: 0;
     `)}
+    ${mediaQueryPhoneOnly(css`
+      font-size: ${(props) => props.theme.typography.defaultFontSize};
+      padding: ${(props) => props.theme.spacing.small};
+    `)}
   }
 `
 
@@ -120,6 +132,9 @@ const ProjectInfoWrapper = styled('div')`
   p:first-child {
     font-size: larger;
     font-weight: 900;
+    ${mediaQueryPhoneOnly(css`
+      font-size: initial;
+    `)}
   }
   p,
   label {
@@ -130,6 +145,12 @@ const ProjectInfoWrapper = styled('div')`
   ${mediaQueryTabletLandscapeOnly(css`
     display: grid;
     grid-template-rows: repeat(4, 1fr);
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    p,
+    label {
+      padding: 0 ${(props) => props.theme.spacing.small};
+    }
   `)}
 `
 const CheckBoxWithLabel = styled.label`
