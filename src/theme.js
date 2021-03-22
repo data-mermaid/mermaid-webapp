@@ -53,6 +53,7 @@ const spacing = {
   headerHeight: '4.4rem',
   sideNavWidthTabletLandscapeOnly: '8rem',
   sideNavWidthPhoneOnly: '6rem',
+  borderLarge: '4px',
 }
 
 const timing = {
@@ -62,6 +63,7 @@ const timing = {
 const typography = {
   defaultFontSize: '1.8rem',
   smallFontSize: '1.2rem',
+  xSmallFontSize: '1rem',
   lineHeight: '1.2',
   fontStack: 'Arial, Helvetica Neue, Helvetica, sans-serif',
   noWordBreak: css`
