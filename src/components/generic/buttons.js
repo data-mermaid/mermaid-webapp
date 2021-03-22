@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components/macro'
 import { NavLink } from 'react-router-dom'
+import theme from '../../theme'
 import { hoverState } from '../../library/styling/mediaQueries'
 
 const buttonActive = css`
@@ -7,7 +8,7 @@ const buttonActive = css`
 `
 
 export const Button = styled.button`
-  padding: ${(props) => props.theme.spacing.buttonPadding};
+  padding: ${theme.spacing.buttonPadding};
   border-width: 1px;
   border-style: solid;
   &:active {
@@ -16,12 +17,12 @@ export const Button = styled.button`
 `
 
 export const ButtonPrimary = styled(Button)`
-  background-color: ${(props) => props.theme.color.primaryColor};
-  color: ${(props) => props.theme.color.primaryText};
-  border-color: ${(props) => props.theme.color.primaryBorder};
+  background-color: ${theme.color.primaryColor};
+  color: ${theme.color.primaryText};
+  border-color: ${theme.color.primaryBorder};
   ${hoverState(
     css`
-      background-color: ${(props) => props.theme.color.primaryHover};
+      background-color: ${theme.color.primaryHover};
     `,
   )}
   &:active {
@@ -29,33 +30,33 @@ export const ButtonPrimary = styled(Button)`
   }
 `
 export const ButtonSecondary = styled(Button)`
-  background-color: ${(props) => props.theme.color.secondaryColor};
-  color: ${(props) => props.theme.color.secondaryText};
-  border-color: ${(props) => props.theme.color.secondaryBorder};
+  background-color: ${theme.color.secondaryColor};
+  color: ${theme.color.secondaryText};
+  border-color: ${theme.color.secondaryBorder};
   &:hover {
-    background-color: ${(props) => props.theme.color.secondaryHover};
+    background-color: ${theme.color.secondaryHover};
   }
   &:active {
     ${buttonActive};
   }
 `
 export const ButtonCallout = styled(Button)`
-  background-color: ${(props) => props.theme.color.calloutColor};
-  color: ${(props) => props.theme.color.calloutText};
-  border-color: ${(props) => props.theme.color.calloutBorder};
+  background-color: ${theme.color.calloutColor};
+  color: ${theme.color.calloutText};
+  border-color: ${theme.color.calloutBorder};
   &:hover {
-    background-color: ${(props) => props.theme.color.calloutHover};
+    background-color: ${theme.color.calloutHover};
   }
   &:active {
     ${buttonActive};
   }
 `
 export const ButtonCaution = styled(Button)`
-  background-color: ${(props) => props.theme.color.cautionColor};
-  color: ${(props) => props.theme.color.cautionText};
-  border-color: ${(props) => props.theme.color.cautionBorder};
+  background-color: ${theme.color.cautionColor};
+  color: ${theme.color.cautionText};
+  border-color: ${theme.color.cautionBorder};
   &:hover {
-    background-color: ${(props) => props.theme.color.cautionHover};
+    background-color: ${theme.color.cautionHover};
   }
   &:active {
     ${buttonActive};

@@ -1,4 +1,5 @@
 import styled from 'styled-components/macro'
+import theme from '../../theme'
 
 export const Row = styled.div`
   display: flex;
@@ -10,7 +11,7 @@ export const RowSpaceBetween = styled(Row)`
 export const RowRight = styled(Row)`
   justify-content: flex-end;
   & > * {
-    margin-right: ${(props) => props.theme.spacing.small};
+    margin-right: ${theme.spacing.small};
   }
 `
 
@@ -21,7 +22,7 @@ export const RowCenter = styled(Row)`
 export const RowLeft = styled(Row)`
   justify-content: flex-start;
   & > * {
-    margin-right: ${(props) => props.theme.spacing.small};
+    margin-right: ${theme.spacing.small};
   }
 `
 

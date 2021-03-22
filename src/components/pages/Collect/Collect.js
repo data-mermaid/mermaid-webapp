@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom'
 import React from 'react'
 import styled from 'styled-components'
-
+import theme from '../../../theme'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import SubLayout2 from '../../SubLayout2'
 import { mermaidDataPropType } from '../../../library/mermaidData/useMermaidData'
@@ -14,7 +14,7 @@ import { IconPlus } from '../../icons'
  * Project Collect Page
  */
 const CustomNavLink = styled(NavLink)`
-  padding: ${(props) => props.theme.spacing.xsmall};
+  padding: ${theme.spacing.xsmall};
 `
 const AddSampleUnitDropdown = () => {
   const currentProjectPath = useCurrentProjectPath()

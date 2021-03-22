@@ -3,6 +3,7 @@ import raw from 'raw.macro'
 import React from 'react'
 import styled from 'styled-components/macro'
 import Toggle from 'react-toggle'
+import theme from '../../theme'
 
 const ToggleCss = raw('react-toggle/style.css')
 
@@ -24,15 +25,15 @@ const ToggleWrapper = styled.div`
     width: 16px;
   }
   .react-toggle--checked .react-toggle-track {
-    background-color: ${(props) => props.theme.color.cautionColor};
+    background-color: ${theme.color.cautionColor};
   }
   .react-toggle--checked .react-toggle-thumb {
     left: 16px;
-    border-color: ${(props) => props.theme.color.cautionColor};
+    border-color: ${theme.color.cautionColor};
   }
   .react-toggle--checked:hover:not(.react-toggle--disabled)
     .react-toggle-track {
-    background-color: ${(props) => props.theme.color.cautionHover};
+    background-color: ${theme.color.cautionHover};
   }
 `
 

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
+import theme from '../../../theme'
 
 import { Row } from '../positioning'
 
@@ -10,7 +11,7 @@ import { Row } from '../positioning'
  */
 
 const BreadcrumbLink = styled(Link)`
-  padding: 0 ${(props) => props.theme.spacing.small};
+  padding: 0 ${theme.spacing.small};
 `
 
 const Breadcrumbs = ({ crumbs }) => {
