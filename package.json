@@ -94,6 +94,9 @@
     }
   },
   "jest": {
-    "restoreMocks": true
+    "restoreMocks": true,
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!@iconify-icons/.*)"
+    ]
   }
 }
