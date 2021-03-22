@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
-import theme from '../../theme'
 import React from 'react'
 import colorHelper from 'color'
+import theme from '../../theme'
 import Logo from '../../assets/mermaid-logo.svg'
 import { IconMenu, IconDown } from '../icons'
 import {
