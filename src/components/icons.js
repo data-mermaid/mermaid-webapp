@@ -1,4 +1,4 @@
-import { Icon, InlineIcon } from '@iconify/react'
+import { InlineIcon } from '@iconify/react'
 import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
 import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline'
 import checkOutline from '@iconify-icons/mdi/check-outline'
