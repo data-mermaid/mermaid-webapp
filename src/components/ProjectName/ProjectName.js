@@ -1,17 +1,64 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 import { H2 } from '../generic/text'
-import { Row } from '../generic/positioning'
+import {
+  mediaQueryTabletLandscapeOnly,
+  mediaQueryPhoneOnly,
+} from '../../library/styling/mediaQueries'
 import { NavLinkButtonishIcon } from '../generic/links'
 import { IconHome } from '../icons'
 
-const ProjectNameWrapper = styled(Row)`
+const ProjectNameWrapper = styled('div')`
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  padding: 0px 10px;
-  border-bottom: thin solid grey;
+  border-bottom: 1px solid ${(props) => props.theme.color.border};
+  h2 {
+    overflow-x: scroll;
+    white-space: nowrap;
+    padding: ${(props) => props.theme.spacing.medium}
+      ${(props) => props.theme.spacing.small}
+      ${(props) => props.theme.spacing.medium} 0;
+    height: 100%;
+    margin: 0;
+  }
+  a {
+    border: none;
+    background: none;
+    text-align: center;
+    svg {
+      width: ${(props) => props.theme.typography.largeIconSize};
+      height: ${(props) => props.theme.typography.largeIconSize};
+    }
+  }
+  ${mediaQueryTabletLandscapeOnly(css`
+    grid-template-columns: ${(props) =>
+        props.theme.spacing.sideNavWidthTabletLandscapeOnly} 1fr;
+    h2 {
+      padding-left: ${(props) => props.theme.spacing.medium};
+    }
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    grid-template-columns: ${(props) =>
+        props.theme.spacing.sideNavWidthPhoneOnly} 1fr;
+    h2 {
+      font-size: smaller;
+      padding: ${(props) => props.theme.spacing.small}
+        ${(props) => props.theme.spacing.xsmall}
+        ${(props) => props.theme.spacing.small}
+        ${(props) => props.theme.spacing.medium};
+    }
+    a {
+      font-size: initial;
+      svg {
+        width: ${(props) => props.theme.typography.defaultIconSize};
+        height: ${(props) => props.theme.typography.defaultIconSize};
+      }
+    }
+  `)}
 `
-
+// const StyledIconHome = styled(IconHome)``
 const ProjectName = ({ pageTitle }) => {
   return (
     <ProjectNameWrapper>

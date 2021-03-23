@@ -37,6 +37,16 @@ export const useMermaidData = ({
     [collectRecords],
   )
 
+  const getSite = useCallback(
+    (searchId) => sites.find((site) => site.id === searchId),
+    [sites],
+  )
+
+  const getManagementRegime = useCallback(
+    (searchId) => managementRegimes.find((regime) => regime.id === searchId),
+    [managementRegimes],
+  )
+
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const authenticatedAxios = useMemo(
     () =>
@@ -124,6 +134,8 @@ export const useMermaidData = ({
     managementRegimes,
     choices,
     getCollectRecord,
+    getSite,
+    getManagementRegime,
   }
 }
 export const projectsPropType = PropTypes.arrayOf(

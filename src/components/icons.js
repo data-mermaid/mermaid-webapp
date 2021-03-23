@@ -1,44 +1,47 @@
-import { faChartBar, faCopy } from '@fortawesome/free-regular-svg-icons'
-import {
-  faCaretDown,
-  faCaretUp,
-  faCheckCircle,
-  faCheck,
-  faExternalLinkAlt,
-  faFileAlt,
-  faFilter,
-  faHeart,
-  faMapMarkerAlt,
-  faPencilAlt,
-  faShareAlt,
-  faSortAmountDownAlt,
-  faSortAmountUpAlt,
-  faUsers,
-  faSyncAlt,
-  faHome,
-  faPlus,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import { InlineIcon } from '@iconify/react'
+import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
+import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline'
+import checkOutline from '@iconify-icons/mdi/check-outline'
+import circleEditOutline from '@iconify-icons/mdi/circle-edit-outline'
+import checkCircleOutline from '@iconify-icons/mdi/check-circle-outline'
+import chartBar from '@iconify-icons/mdi/chart-bar'
+import accountGroup from '@iconify-icons/mdi/account-group'
+import fish from '@iconify-icons/mdi/fish'
+import fileMultipleOutline from '@iconify-icons/mdi/file-multiple-outline'
+import shareVariantOutline from '@iconify-icons/mdi/share-variant-outline'
+import filterOutline from '@iconify-icons/mdi/filter-outline'
+import contentCopy from '@iconify-icons/mdi/content-copy'
+import menu from '@iconify-icons/mdi/menu'
+import menuDown from '@iconify-icons/mdi/menu-down'
+import menuUp from '@iconify-icons/mdi/menu-up'
+import launch from '@iconify-icons/mdi/launch'
+import heartOutline from '@iconify-icons/mdi/heart-outline'
+import homeOutline from '@iconify-icons/mdi/home-outline'
+import sortDescending from '@iconify-icons/mdi/sort-descending'
+import sortAscending from '@iconify-icons/mdi/sort-ascending'
+import plus from '@iconify-icons/mdi/plus'
+import sync from '@iconify-icons/mdi/sync'
 
-export const IconAdmin = () => <FontAwesomeIcon icon={faFileAlt} />
-export const IconCheck = () => <FontAwesomeIcon icon={faCheck} />
-export const IconCollect = () => <FontAwesomeIcon icon={faPencilAlt} />
-export const IconCopy = () => <FontAwesomeIcon icon={faCopy} />
-export const IconData = () => <FontAwesomeIcon icon={faCheckCircle} />
-export const IconDown = () => <FontAwesomeIcon icon={faCaretDown} />
-export const IconExternalLink = () => (
-  <FontAwesomeIcon icon={faExternalLinkAlt} />
-)
-export const IconFilter = () => <FontAwesomeIcon icon={faFilter} />
-export const IconGraph = () => <FontAwesomeIcon icon={faChartBar} />
-export const IconHeart = () => <FontAwesomeIcon icon={faHeart} />
-export const IconHome = () => <FontAwesomeIcon icon={faHome} />
-export const IconPlus = () => <FontAwesomeIcon icon={faPlus} />
-export const IconRefresh = () => <FontAwesomeIcon icon={faSyncAlt} />
-export const IconSharing = () => <FontAwesomeIcon icon={faShareAlt} />
-export const IconSites = () => <FontAwesomeIcon icon={faMapMarkerAlt} />
-export const IconSortDown = () => <FontAwesomeIcon icon={faSortAmountDownAlt} />
-export const IconSortUp = () => <FontAwesomeIcon icon={faSortAmountUpAlt} />
-export const IconUp = () => <FontAwesomeIcon icon={faCaretUp} />
-export const IconUsers = () => <FontAwesomeIcon icon={faUsers} />
+export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
+export const IconCheck = () => <InlineIcon icon={checkOutline} />
+export const IconCollect = () => <InlineIcon icon={circleEditOutline} />
+export const IconCopy = () => <InlineIcon icon={contentCopy} />
+export const IconData = () => <InlineIcon icon={checkCircleOutline} />
+export const IconDown = () => <InlineIcon icon={menuDown} />
+export const IconExternalLink = () => <InlineIcon icon={launch} />
+export const IconFilter = () => <InlineIcon icon={filterOutline} />
+export const IconFish = () => <InlineIcon icon={fish} />
+export const IconGraph = () => <InlineIcon icon={chartBar} />
+export const IconMenu = () => <InlineIcon icon={menu} />
+export const IconMgmt = () => <InlineIcon icon={fileMultipleOutline} />
+export const IconHeart = () => <InlineIcon icon={heartOutline} />
+export const IconHome = () => <InlineIcon icon={homeOutline} />
+export const IconPlus = () => <InlineIcon icon={plus} />
+export const IconRefresh = () => <InlineIcon icon={sync} />
+export const IconSharing = () => <InlineIcon icon={shareVariantOutline} />
+export const IconSites = () => <InlineIcon icon={mapMarkerRadiusOutline} />
+export const IconSortDown = () => <InlineIcon icon={sortDescending} />
+export const IconSortUp = () => <InlineIcon icon={sortAscending} />
+export const IconUp = () => <InlineIcon icon={menuUp} />
+export const IconUsers = () => <InlineIcon icon={accountGroup} />

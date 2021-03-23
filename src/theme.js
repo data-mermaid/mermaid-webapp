@@ -50,7 +50,10 @@ const spacing = {
   buttonPadding: `${small} ${medium}`,
   width: '90vw',
   maxWidth: '1200px',
-  headerHeight: '4.2rem',
+  headerHeight: '4.4rem',
+  sideNavWidthTabletLandscapeOnly: '8rem',
+  sideNavWidthPhoneOnly: '6rem',
+  borderLarge: '4px',
 }
 
 const timing = {
@@ -60,8 +63,12 @@ const timing = {
 const typography = {
   defaultFontSize: '1.8rem',
   smallFontSize: '1.2rem',
+  xSmallFontSize: '1rem',
   lineHeight: '1.2',
-  fontStack: 'Arial, Helvetica Neue, Helvetica, sans-serif',
+  fontStack: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+  smallIconSize: '1rem',
+  defaultIconSize: '1.8rem',
+  largeIconSize: '3.5rem',
   noWordBreak: css`
     overflow-wrap: break-word;
     word-wrap: break-word;

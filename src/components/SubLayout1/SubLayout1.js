@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
+import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import { Column } from '../generic/positioning'
 
 const SubLayout1Container = styled(Column)`
   margin-top: 23rem;
   margin-bottom: ${(props) => props.theme.spacing.medium};
+  ${mediaQueryPhoneOnly(css`
+    margin-top: 16rem;
+  `)}
 `
 const TopRow = styled.div``
 const BottomRow = styled.div`
