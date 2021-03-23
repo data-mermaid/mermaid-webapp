@@ -7,7 +7,7 @@ const toastifyCss = raw('react-toastify/dist/ReactToastify.css')
 
 const GlobalStyle = createGlobalStyle`
     ${toastifyCss}
-    :root{
+    :root {
         font-size: 62.5%;
         color: ${theme.color.black};
     }
@@ -21,8 +21,13 @@ const GlobalStyle = createGlobalStyle`
     }
     select, input, textarea, p, a{
         line-height: ${theme.typography.lineHeight};
+
     }
-    *,*::before,*::after{
+    svg {
+        width: ${(props) => props.theme.typography.defaultIconSize};
+        height: ${(props) => props.theme.typography.defaultIconSize};
+    }
+    *,*::before,*::after {
         box-sizing: border-box;
     } 
     a{
