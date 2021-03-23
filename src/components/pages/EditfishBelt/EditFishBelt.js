@@ -8,7 +8,7 @@ import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
   getSampleInfoValidationInfo,
-} from '../../../library/collectRecordHelpers'
+} from '../../../library/mermaidData/collectRecordHelpers'
 import { ButtonCallout } from '../../generic/buttons'
 import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
 import { RowRight } from '../../generic/positioning'

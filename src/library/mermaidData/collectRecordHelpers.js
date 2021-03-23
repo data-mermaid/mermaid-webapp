@@ -1,20 +1,20 @@
 import * as Yup from 'yup'
-import dateFormat from './dateFormat'
+import dateFormat from '../dateFormat'
 
 const getSampleInfoInitialValues = (collectRecordData, transectType) => ({
-  depth: collectRecordData?.[transectType].depth || -9999,
-  site: collectRecordData?.sample_event.site || '',
-  management: collectRecordData?.sample_event.management || '',
-  sample_date: dateFormat(collectRecordData?.sample_event.sample_date) || '',
-  sample_time: collectRecordData?.[transectType].sample_time || '',
+  depth: collectRecordData?.[transectType].depth ?? -9999,
+  site: collectRecordData?.sample_event.site ?? '',
+  management: collectRecordData?.sample_event.management ?? '',
+  sample_date: dateFormat(collectRecordData?.sample_event.sample_date) ?? '',
+  sample_time: collectRecordData?.[transectType].sample_time ?? '',
 })
 
 const getTransectInitialValues = (collectRecordData, transectType) => ({
-  transectNumber: collectRecordData?.[transectType].number || -9999,
-  label: collectRecordData?.[transectType].label || '',
+  transectNumber: collectRecordData?.[transectType].number ?? -9999,
+  label: collectRecordData?.[transectType].label ?? '',
   transectLengthSurveyed:
-    collectRecordData?.[transectType].len_surveyed || -9999,
-  notes: collectRecordData?.sample_event.notes || '',
+    collectRecordData?.[transectType].len_surveyed ?? -9999,
+  notes: collectRecordData?.sample_event.notes ?? '',
 })
 
 const getSampleInfoValidationInfo = ({ sites, managementRegimes }) => {
