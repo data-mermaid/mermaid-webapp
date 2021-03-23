@@ -3,16 +3,16 @@ import React from 'react'
 import { action } from '@storybook/addon-actions'
 import PageSelector from './PageSelector'
 import { Table, Td, Th, Tr } from './table'
-import PageSizeSelector from './PageSizeSelector'
+import PageSizeSelectorComponent from './PageSizeSelector'
 import { reactTableNaturalSort } from './reactTableNaturalSort'
 
 export default {
   title: 'TableAndPagination',
 }
 
-export const PageSizeSelector_ = () => {
+export const PageSizeSelector = () => {
   return (
-    <PageSizeSelector
+    <PageSizeSelectorComponent
       onChange={action('on change')}
       pageSize={2}
       pageSizeOptions={[1, 2, 50, 437]}
