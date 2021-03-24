@@ -11,10 +11,8 @@ import {
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../library/mermaidData/mermaidDataProptypes'
-import { IconMenu, IconDown } from '../icons'
 import { RowSpaceBetween } from '../generic/positioning'
 import HideShow from '../generic/HideShow'
-import Logo from '../../assets/mermaid-logo.svg'
 
 /**
  * Mermaid Header
