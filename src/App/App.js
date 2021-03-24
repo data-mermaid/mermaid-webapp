@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import GlobalStyle from '../library/styling/globalStyles'
 import Footer from '../components/Footer'
@@ -9,12 +9,11 @@ import Layout from '../components/generic/Layout'
 import theme from '../theme'
 import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
-import {
-  mermaidDataPropType,
-  useMermaidData,
-} from '../library/mermaidData/useMermaidData'
+import { useCurrentUser } from '../library/mermaidData/useCurrentUser'
 import useOnlineStatus from '../library/useOnlineStatus'
 import { CustomToastContainer } from '../components/generic/toast'
+import MermaidDatabaseGateway from '../library/mermaidData/MermaidDatabaseGateway'
+import { mermaidDbAccessInstancePropTypes } from '../library/mermaidData/mermaidDbAccessInstance'
 
 function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
@@ -25,18 +24,31 @@ function App({ mermaidDbAccessInstance }) {
   } = useAuthentication({
     isOnline,
   })
-  const mermaidData = useMermaidData({
-    auth0Token,
-    isMermaidAuthenticated,
-    isOnline,
-    mermaidDbAccessInstance,
+  const mermaidDatabaseGatewayInstance = useMemo(() => {
+    const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+    const areDependenciesReady =
+      isMermaidAuthenticated && !!mermaidDbAccessInstance && apiBaseUrl
+
+    return !areDependenciesReady
+      ? undefined
+      : new MermaidDatabaseGateway({
+          apiBaseUrl,
+          auth0Token,
+          isMermaidAuthenticated,
+          isOnline,
+          mermaidDbAccessInstance,
+        })
+  }, [auth0Token, isMermaidAuthenticated, isOnline, mermaidDbAccessInstance])
+
+  const currentUser = useCurrentUser({
+    mermaidDatabaseGatewayInstance,
   })
-  const { routes } = useRoutes({ mermaidData })
+  const { routes } = useRoutes({ mermaidDatabaseGatewayInstance })
 
   const layoutProps = {
     header: (
       <Header
-        currentUser={mermaidData.currentUser}
+        currentUser={currentUser}
         isOnline={isOnline}
         logout={logoutMermaid}
       />
@@ -45,7 +57,7 @@ function App({ mermaidDbAccessInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated && mermaidData.currentUser
+    isMermaidAuthenticated && currentUser && mermaidDatabaseGatewayInstance
 
   return (
     <ThemeProvider theme={theme}>
@@ -75,7 +87,7 @@ function App({ mermaidDbAccessInstance }) {
 }
 
 App.propTypes = {
-  mermaidDbAccessInstance: mermaidDataPropType.isRequired,
+  mermaidDbAccessInstance: mermaidDbAccessInstancePropTypes.isRequired,
 }
 
 export default App

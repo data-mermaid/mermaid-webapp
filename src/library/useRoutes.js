@@ -17,11 +17,13 @@ import NewHabitatComplexity from '../components/pages/NewHabitatComplexity'
 import NewBleaching from '../components/pages/NewBleaching'
 import EditFishBelt from '../components/pages/EditfishBelt/EditFishBelt'
 
-export const useRoutes = ({ mermaidData }) => {
+export const useRoutes = ({ mermaidDatabaseGatewayInstance }) => {
   const routes = [
     {
       path: '/projects',
-      Component: () => <Projects mermaidData={mermaidData} />,
+      Component: () => (
+        <Projects databaseGatewayInstance={mermaidDatabaseGatewayInstance} />
+      ),
     },
     {
       path: '/projects/:projectId/health',
@@ -29,7 +31,11 @@ export const useRoutes = ({ mermaidData }) => {
     },
     {
       path: '/projects/:projectId/collecting',
-      Component: () => <Collect mermaidData={mermaidData} />,
+      Component: () => (
+        <Collect
+          mermaidDatabaseGatewayInstance={mermaidDatabaseGatewayInstance}
+        />
+      ),
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
@@ -37,7 +43,11 @@ export const useRoutes = ({ mermaidData }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      Component: () => <EditFishBelt mermaidData={mermaidData} />,
+      Component: () => (
+        <EditFishBelt
+          databaseGatewayInstance={mermaidDatabaseGatewayInstance}
+        />
+      ),
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',

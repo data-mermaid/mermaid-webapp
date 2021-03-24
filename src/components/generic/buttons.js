@@ -67,3 +67,14 @@ export const ButtonyNavLink = styled(NavLink)`
   border: solid thin grey;
 `
 export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
+
+export const LinkButton = styled('button')`
+  font-size: inherit;
+  background: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  overflow: visible; /* IE hack */
+  width: auto; /* IE hack */
+`
