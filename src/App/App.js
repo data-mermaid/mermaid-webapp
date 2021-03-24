@@ -64,7 +64,7 @@ function App({ mermaidDbAccessInstance }) {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <CustomToastContainer />
-      <OfflineBorders />
+      <OfflineBorders isOffline={!isOnline} />
       {isMermaidAuthenticatedAndReady && (
         <Switch>
           {routes.map(({ path, Component }) => (
