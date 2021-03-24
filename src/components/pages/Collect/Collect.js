@@ -75,7 +75,7 @@ const Collect = ({ mermaidDatabaseGatewayInstance }) => {
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'size',
+        Header: 'Size',
         accessor: 'size',
         align: 'right',
         sortType: reactTableNaturalSort,

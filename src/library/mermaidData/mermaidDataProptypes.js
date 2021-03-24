@@ -36,3 +36,52 @@ export const currentUserPropType = PropTypes.shape({
   full_name: PropTypes.string,
   email: PropTypes.string,
 })
+
+export const fishSizeBinPropType = PropTypes.shape({
+  name: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      updated_on: PropTypes.string,
+      val: PropTypes.string,
+    }),
+  ),
+})
+export const beltTransectWidthPropType = PropTypes.shape({
+  name: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      updated_on: PropTypes.string,
+      conditions: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string,
+          name: PropTypes.string,
+          updated_on: PropTypes.string,
+          size: PropTypes.number,
+          operator: PropTypes.string,
+          val: PropTypes.number,
+        }),
+      ),
+    }),
+  ),
+})
+export const reefSlopePropType = PropTypes.shape({
+  name: PropTypes.string,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      updated_on: PropTypes.string,
+      val: PropTypes.number,
+    }),
+  ),
+})
+
+export const choicesPropType = PropTypes.shape({
+  fishsizebins: fishSizeBinPropType,
+  belttransectwidths: beltTransectWidthPropType,
+  reefslopes: reefSlopePropType,
+})

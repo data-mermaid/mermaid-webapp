@@ -25,19 +25,29 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
+  const [choices, setChoices] = useState({})
 
   const _getSupportingData = useEffect(() => {
     Promise.all([
       databaseGatewayInstance.getCollectRecord(recordId),
       databaseGatewayInstance.getSites(),
       databaseGatewayInstance.getManagementRegimes(),
+      databaseGatewayInstance.getChoices(),
     ])
-      .then(([collectRecord, sitesResponse, managementRegimesResponse]) => {
-        setCollectRecordBeingEdited(collectRecord)
-        setSites(sitesResponse)
-        setManagementRegimes(managementRegimesResponse)
-        setIsLoading(false)
-      })
+      .then(
+        ([
+          collectRecord,
+          sitesResponse,
+          managementRegimesResponse,
+          choicesResponse,
+        ]) => {
+          setCollectRecordBeingEdited(collectRecord)
+          setSites(sitesResponse)
+          setManagementRegimes(managementRegimesResponse)
+          setChoices(choicesResponse)
+          setIsLoading(false)
+        },
+      )
       .catch(() => {
         toast.error(language.error.collectRecordUnavailable)
       })
@@ -49,9 +59,6 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
     initialValues: {
       ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
       ...getTransectInitialValues(collectRecordData, 'fishbelt_transect'),
-      width: 'value 1',
-      fishSizeBin: 'value 1',
-      reefSlope: 'value 1',
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
@@ -79,7 +86,7 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
                 sites={sites}
                 managementRegimes={managementRegimes}
               />
-              <FishBeltTransectForms formik={formik} />
+              <FishBeltTransectForms formik={formik} choices={choices} />
             </form>
           }
           toolbar={
