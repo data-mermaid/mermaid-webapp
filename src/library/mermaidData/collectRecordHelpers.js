@@ -14,6 +14,9 @@ const getTransectInitialValues = (collectRecordData, transectType) => ({
   label: collectRecordData?.[transectType].label ?? '',
   transectLengthSurveyed:
     collectRecordData?.[transectType].len_surveyed ?? -9999,
+  width: collectRecordData?.[transectType].width || '',
+  fishSizeBin: collectRecordData?.[transectType].size_bin || '',
+  reefSlope: collectRecordData?.[transectType].reef_slope || '',
   notes: collectRecordData?.sample_event.notes ?? '',
 })
 

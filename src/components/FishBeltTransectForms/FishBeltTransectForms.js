@@ -1,20 +1,36 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import { formikPropType } from '../../library/formikHelpers/formikPropType'
 import getValidationPropsFromFormik from '../../library/formikHelpers/getValidationPropsFromFormik'
+import {
+  beltTransectWidthPropType,
+  fishSizeBinPropType,
+  reefSlopePropType,
+} from '../../library/mermaidData/mermaidDataProptypes'
 
 /**
  * Describe your component
  */
-const FishBeltTransectForms = ({ formik }) => {
-  const emptyOption = [
-    { label: 'Placeholder option 1', value: 'value 1' },
-    { label: 'Placeholder option 2', value: 'value 2' },
-    { label: 'Placeholder option 3', value: 'value 3' },
-    { label: 'Placeholder option 4', value: 'value 4' },
-  ]
+const FishBeltTransectForms = ({ formik, choices }) => {
+  const { belttransectwidths, fishsizebins, reefslopes } = choices
+
+  const transectWidthSelectOptions = belttransectwidths.data.map(
+    ({ name, id }) => ({
+      label: name,
+      value: id,
+    }),
+  )
+  const fishSizeBinSelectOptions = fishsizebins.data.map(({ name, id }) => ({
+    label: name,
+    value: id,
+  }))
+  const reefSlopeSelectOptions = reefslopes.data.map(({ name, id }) => ({
+    label: name,
+    value: id,
+  }))
 
   return (
     <>
@@ -44,21 +60,21 @@ const FishBeltTransectForms = ({ formik }) => {
       <InputSelectWithLabelAndValidation
         label="Width"
         id="width"
-        options={emptyOption}
+        options={transectWidthSelectOptions}
         {...formik.getFieldProps('width')}
         {...getValidationPropsFromFormik(formik, 'width')}
       />
       <InputSelectWithLabelAndValidation
         label="Fish Size Bin"
         id="fishSizeBin"
-        options={emptyOption}
+        options={fishSizeBinSelectOptions}
         {...formik.getFieldProps('fishSizeBin')}
         {...getValidationPropsFromFormik(formik, 'fishSizeBin')}
       />
       <InputSelectWithLabelAndValidation
         label="Reef Slope"
         id="reefSlope"
-        options={emptyOption}
+        options={reefSlopeSelectOptions}
         {...formik.getFieldProps('reefSlope')}
         {...getValidationPropsFromFormik(formik, 'reefSlope')}
       />
@@ -75,6 +91,11 @@ const FishBeltTransectForms = ({ formik }) => {
 
 FishBeltTransectForms.propTypes = {
   formik: formikPropType.isRequired,
+  choices: PropTypes.shape({
+    fishsizebins: fishSizeBinPropType,
+    belttransectwidths: beltTransectWidthPropType,
+    reefslopes: reefSlopePropType,
+  }).isRequired,
 }
 
 export default FishBeltTransectForms
