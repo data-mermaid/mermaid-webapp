@@ -79,3 +79,9 @@ export const reefSlopePropType = PropTypes.shape({
     }),
   ),
 })
+
+export const choicesPropType = PropTypes.shape({
+  fishsizebins: fishSizeBinPropType,
+  belttransectwidths: beltTransectWidthPropType,
+  reefslopes: reefSlopePropType,
+})

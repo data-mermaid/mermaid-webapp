@@ -1,15 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import { formikPropType } from '../../library/formikHelpers/formikPropType'
 import getValidationPropsFromFormik from '../../library/formikHelpers/getValidationPropsFromFormik'
-import {
-  beltTransectWidthPropType,
-  fishSizeBinPropType,
-  reefSlopePropType,
-} from '../../library/mermaidData/mermaidDataProptypes'
+import { choicesPropType } from '../../library/mermaidData/mermaidDataProptypes'
 
 /**
  * Describe your component
@@ -91,11 +86,7 @@ const FishBeltTransectForms = ({ formik, choices }) => {
 
 FishBeltTransectForms.propTypes = {
   formik: formikPropType.isRequired,
-  choices: PropTypes.shape({
-    fishsizebins: fishSizeBinPropType,
-    belttransectwidths: beltTransectWidthPropType,
-    reefslopes: reefSlopePropType,
-  }).isRequired,
+  choices: choicesPropType.isRequired,
 }
 
 export default FishBeltTransectForms
