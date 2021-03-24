@@ -2,12 +2,13 @@ import React from 'react'
 import styled, { css } from 'styled-components/macro'
 import { Link } from 'react-router-dom'
 import OfflineToggle from '../OfflineToggle'
+import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 const StyledFooter = styled('footer')`
   display: grid;
   grid-template-columns: 1fr auto auto;
-  background: ${(props) => props.theme.color.black};
+  background: ${theme.color.black};
   ${mediaQueryPhoneOnly(css`
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, auto);
@@ -16,29 +17,29 @@ const StyledFooter = styled('footer')`
   label,
   nav a,
   button {
-    color: ${(props) => props.theme.color.white};
-    font-size: ${(props) => props.theme.typography.smallFontSize};
-    margin: ${(props) => props.theme.spacing.medium} 0;
+    color: ${theme.color.white};
+    font-size: ${theme.typography.smallFontSize};
+    margin: ${theme.spacing.medium} 0;
     ${mediaQueryPhoneOnly(css`
-      margin: ${(props) => props.theme.spacing.small} 0;
+      margin: ${theme.spacing.small} 0;
     `)}
   }
 `
 const OfflineToggleWrapper = styled('div')`
-  padding-left: ${(props) => props.theme.spacing.small};
+  padding-left: ${theme.spacing.small};
   label {
-    padding-left: ${(props) => props.theme.spacing.small};
+    padding-left: ${theme.spacing.small};
     display: inline-block;
   }
 `
 const FooterNav = styled('nav')`
   a {
     display: inline-block;
-    padding: 0 ${(props) => props.theme.spacing.small};
+    padding: 0 ${theme.spacing.small};
   }
 `
 const Copyright = styled.p`
-  padding: 0 ${(props) => props.theme.spacing.small};
+  padding: 0 ${theme.spacing.small};
 `
 
 const Footer = () => {

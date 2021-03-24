@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
+import theme from '../../theme'
 import { NavLinkSidebar } from '../generic/links'
 import {
   mediaQueryTabletLandscapeOnly,
@@ -22,13 +23,13 @@ import {
 const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
-  border-right: solid 1px ${(props) => props.theme.color.border};
+  border-right: solid 1px ${theme.color.border};
   height: 100%;
   ${mediaQueryTabletLandscapeOnly(css`
-    width: ${(props) => props.theme.spacing.sideNavWidthTabletLandscapeOnly};
+    width: ${theme.spacing.sideNavWidthTabletLandscapeOnly};
   `)}
   ${mediaQueryPhoneOnly(css`
-    width: ${(props) => props.theme.spacing.sideNavWidthPhoneOnly};
+    width: ${theme.spacing.sideNavWidthPhoneOnly};
   `)}
 `
 const NavList = styled('ul')`
@@ -40,8 +41,7 @@ const NavList = styled('ul')`
       ${mediaQueryPhoneOnly(css`
         a {
           font-size: smaller;
-          padding: ${(props) => props.theme.spacing.small}
-            ${(props) => props.theme.spacing.xsmall};
+          padding: ${theme.spacing.small} ${theme.spacing.xsmall};
         }
       `)}
     }
@@ -51,10 +51,10 @@ const NavHeader = styled('p')`
   text-transform: uppercase;
   font-weight: 900;
   margin: 0;
-  border-top: solid 1px ${(props) => props.theme.color.border};
+  border-top: solid 1px ${theme.color.border};
   letter-spacing: 2px;
-  padding: ${(props) => props.theme.spacing.small};
-  padding-top: ${(props) => props.theme.spacing.medium};
+  padding: ${theme.spacing.small};
+  padding-top: ${theme.spacing.medium};
   ${mediaQueryTabletLandscapeOnly(css`
     display: none;
   `)}

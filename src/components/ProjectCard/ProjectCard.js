@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
+import theme from '../../theme'
 import pluralize from '../../library/pluralize'
 import {
   mediaQueryPhoneOnly,
@@ -28,13 +29,12 @@ const stylesForNoHover = css`
 `
 const ButtonGroups = styled('div')`
   grid-column: 1 / -1;
-  margin: ${(props) => props.theme.spacing.small}
-    ${(props) => props.theme.spacing.medium};
+  margin: ${theme.spacing.small} ${theme.spacing.medium};
   button,
   a {
     display: inline-block;
     position: relative;
-    margin-right: ${(props) => props.theme.spacing.small};
+    margin-right: ${theme.spacing.small};
     span {
       display: none;
     }
@@ -45,10 +45,10 @@ const ButtonGroups = styled('div')`
           position: absolute;
           top: 4.3rem;
           left: 0;
-          color: ${(props) => props.theme.color.white};
-          background-color: ${(props) => props.theme.color.black};
+          color: ${theme.color.white};
+          background-color: ${theme.color.black};
           text-align: center;
-          padding: ${(props) => props.theme.spacing.small};
+          padding: ${theme.spacing.small};
           text-transform: uppercase;
         }
       `)}
@@ -60,23 +60,23 @@ const ButtonGroups = styled('div')`
   }
   @media (hover: none) {
     ${stylesForNoHover};
-    margin: ${(props) => props.theme.spacing.medium};
+    margin: ${theme.spacing.medium};
   }
   ${mediaQueryTabletLandscapeOnly(css`
     ${stylesForNoHover};
-    margin-top: ${(props) => props.theme.spacing.medium};
+    margin-top: ${theme.spacing.medium};
     a,
     button {
       background-color: transparent;
       opacity: 0.6;
       border: none;
-      padding: ${(props) => props.theme.spacing.small} 0;
+      padding: ${theme.spacing.small} 0;
       margin: 0;
     }
   `)}
   ${mediaQueryPhoneOnly(css`
     span {
-      font-size: ${(props) => props.theme.typography.xSmallFontSize};
+      font-size: ${theme.typography.xSmallFontSize};
     }
   `)}
 `
@@ -84,16 +84,16 @@ const ButtonGroups = styled('div')`
 const CardWrapper = styled('div')`
   display:grid;
   grid-template-columns: 4fr 1fr;
-  transition: ${(props) => props.theme.timing.hoverTransition};
+  transition: ${theme.timing.hoverTransition};
   align-items: center;
-  margin: ${(props) => props.theme.spacing.medium} auto 0 auto;
-  width: ${(props) => props.theme.spacing.width};
-  max-width: ${(props) => props.theme.spacing.maxWidth};
-  background: ${(props) => props.theme.color.white};
+  margin: ${theme.spacing.medium} auto 0 auto;
+  width: ${theme.spacing.width};
+  max-width: ${theme.spacing.maxWidth};
+  background: ${theme.color.white};
   border: solid ${borderWidth} transparent;
   ${hoverState(css`
-    transition: ${(props) => props.theme.timing.hoverTransition};
-    border: solid ${borderWidth} ${(props) => props.theme.color.primaryColor};
+    transition: ${theme.timing.hoverTransition};
+    border: solid ${borderWidth} ${theme.color.primaryColor};
     ${ButtonGroups} {
       visibility: visible;
     }
@@ -110,25 +110,23 @@ const CardWrapper = styled('div')`
 const ProjectNameWrapper = styled('div')`
   align-self: start;
   h2 {
-    margin: ${(props) => props.theme.spacing.xsmall} 0;
-    padding: ${(props) => props.theme.spacing.small}
-      ${(props) => props.theme.spacing.medium};
-    ${(props) => props.theme.typography.noWordBreak};
-    ${(props) => props.theme.typography.upperCase};
+    margin: ${theme.spacing.xsmall} 0;
+    padding: ${theme.spacing.small} ${theme.spacing.medium};
+    ${theme.typography.noWordBreak};
+    ${theme.typography.upperCase};
     ${mediaQueryTabletLandscapeOnly(css`
       letter-spacing: 0;
     `)}
     ${mediaQueryPhoneOnly(css`
-      font-size: ${(props) => props.theme.typography.defaultFontSize};
-      padding: ${(props) => props.theme.spacing.small};
+      font-size: ${theme.typography.defaultFontSize};
+      padding: ${theme.spacing.small};
     `)}
   }
 `
 
 const ProjectInfoWrapper = styled('div')`
   align-self: start;
-  margin: ${(props) => props.theme.spacing.small}
-    ${(props) => props.theme.spacing.medium} 0 0;
+  margin: ${theme.spacing.small} ${theme.spacing.medium} 0 0;
   p:first-child {
     font-size: larger;
     font-weight: 900;
@@ -140,7 +138,7 @@ const ProjectInfoWrapper = styled('div')`
   label {
     font-size: smaller;
     margin: 0;
-    padding: 0 ${(props) => props.theme.spacing.medium};
+    padding: 0 ${theme.spacing.medium};
   }
   ${mediaQueryTabletLandscapeOnly(css`
     display: grid;
@@ -149,16 +147,16 @@ const ProjectInfoWrapper = styled('div')`
   ${mediaQueryPhoneOnly(css`
     p,
     label {
-      padding: 0 ${(props) => props.theme.spacing.small};
+      padding: 0 ${theme.spacing.small};
     }
   `)}
 `
 const CheckBoxWithLabel = styled.label`
-  padding: ${(props) => props.theme.spacing.xsmall};
+  padding: ${theme.spacing.xsmall};
   width: 100%;
   display: inline-block;
   input {
-    margin: 0 ${(props) => props.theme.spacing.xsmall} 0 0;
+    margin: 0 ${theme.spacing.xsmall} 0 0;
   }
 `
 
@@ -169,10 +167,10 @@ const VerticalRule = styled.div`
   @media (hover: none) {
     display: none;
   }
-  border: solid 1px ${(props) => props.theme.color.secondaryBorder};
+  border: solid 1px ${theme.color.secondaryBorder};
   width: 0;
-  margin-right: ${(props) => props.theme.spacing.small};
-  padding: ${(props) => props.theme.spacing.small} 0;
+  margin-right: ${theme.spacing.small};
+  padding: ${theme.spacing.small} 0;
   display: inline;
 `
 

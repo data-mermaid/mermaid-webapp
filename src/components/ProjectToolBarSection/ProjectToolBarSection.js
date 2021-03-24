@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
+import theme from '../../theme'
 import {
   mediaQueryPhoneOnly,
   mediaQueryTabletLandscapeOnly,
@@ -11,8 +12,8 @@ const GlobalWrapper = styled.div`
   width: 100%;
   border-bottom: 1px solid;
   position: fixed;
-  top: ${(props) => props.theme.spacing.headerHeight};
-  background-color: ${(props) => props.theme.color.white};
+  top: ${theme.spacing.headerHeight};
+  background-color: ${theme.color.white};
   z-index: 9;
   ${mediaQueryPhoneOnly(css`
     font-size: smaller;
@@ -23,29 +24,29 @@ const RowWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  width: ${(props) => props.theme.spacing.width};
-  max-width: ${(props) => props.theme.spacing.maxWidth};
+  width: ${theme.spacing.width};
+  max-width: ${theme.spacing.maxWidth};
   margin: 0 auto;
-  padding: ${(props) => props.theme.spacing.medium} 0;
+  padding: ${theme.spacing.medium} 0;
   ${mediaQueryTabletLandscapeOnly(css`
     width: 100%;
-    padding: ${(props) => props.theme.spacing.medium};
+    padding: ${theme.spacing.medium};
   `)}
   ${mediaQueryPhoneOnly(css`
     font-size: smaller;
-    padding: ${(props) => props.theme.spacing.small};
+    padding: ${theme.spacing.small};
   `)}
 `
 
 const HeaderStyle = styled.h1`
   flex-grow: 1;
-  ${(props) => props.theme.typography.upperCase};
+  ${theme.typography.upperCase};
   margin: 0;
 `
 const inputStyles = css`
-  padding: ${(props) => props.theme.spacing.small};
+  padding: ${theme.spacing.small};
   ${mediaQueryPhoneOnly(css`
-    padding: ${(props) => props.theme.spacing.xsmall};
+    padding: ${theme.spacing.xsmall};
   `)}
 `
 

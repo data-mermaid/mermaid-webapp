@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
+import theme from '../../theme'
 import { Column } from '../generic/positioning'
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 import NavMenu from '../NavMenu'
@@ -9,8 +10,8 @@ import ProjectName from '../ProjectName'
 const SubLayout2Container = styled('div')`
   display: grid;
   grid-template-rows: auto 1fr;
-  height: calc(100% - ${(props) => props.theme.spacing.headerHeight});
-  margin-top: ${(props) => props.theme.spacing.headerHeight};
+  height: calc(100% - ${theme.spacing.headerHeight});
+  margin-top: ${theme.spacing.headerHeight};
 `
 
 const SubLayout2ContentWrapper = styled('div')`
@@ -20,16 +21,15 @@ const SubLayout2ContentWrapper = styled('div')`
 `
 
 const ContentWrapper = styled('div')`
-  background: ${(props) => props.theme.color.white};
+  background: ${theme.color.white};
 `
 const Content = styled('div')`
-  padding: ${(props) => props.theme.spacing.medium};
+  padding: ${theme.spacing.medium};
 `
 
 const ContentToolbar = styled('div')`
-  border-bottom: solid 1px ${(props) => props.theme.color.border};
-  padding: ${(props) => props.theme.spacing.small}
-    ${(props) => props.theme.spacing.medium};
+  border-bottom: solid 1px ${theme.color.border};
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
 `
 const SubLayout2 = ({ content, toolbar, isLoading }) => {
   // I don't see the point of passing pageTitle to every components using this layout, leave as constant for now.

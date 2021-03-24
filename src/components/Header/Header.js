@@ -3,67 +3,64 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import React from 'react'
 import colorHelper from 'color'
-
+import theme from '../../theme'
+import Logo from '../../assets/mermaid-logo.svg'
+import { IconMenu, IconDown } from '../icons'
 import {
   hoverState,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../library/mermaidData/mermaidDataProptypes'
-import { IconMenu, IconDown } from '../icons'
 import { RowSpaceBetween } from '../generic/positioning'
 import HideShow from '../generic/HideShow'
-import Logo from '../../assets/mermaid-logo.svg'
 
 /**
  * Mermaid Header
  */
 
 const StyledHeader = styled(RowSpaceBetween)`
-  background-color: ${(props) => props.theme.color.black};
-  color: ${(props) => props.theme.color.white};
+  background-color: ${theme.color.black};
+  color: ${theme.color.white};
   align-items: flex-start;
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 10;
-  height: ${(props) => props.theme.spacing.headerHeight};
+  height: ${theme.spacing.headerHeight};
   img {
-    height: calc(${(props) => props.theme.spacing.headerHeight} - 10px);
-    padding: 0 ${(props) => props.theme.spacing.small};
+    height: calc(${theme.spacing.headerHeight} - 10px);
+    padding: 0 ${theme.spacing.small};
     margin-top: 5px;
     ${mediaQueryTabletLandscapeOnly(css`
-      height: calc(${(props) => props.theme.spacing.headerHeight} - 15px);
+      height: calc(${theme.spacing.headerHeight} - 15px);
       margin-top: 7px;
     `)}
   }
 `
 const linkStyles = css`
-  color: ${(props) => props.theme.color.white};
+  color: ${theme.color.white};
   cursor: pointer;
-  border-bottom: solid ${(props) => props.theme.spacing.borderLarge} transparent;
+  border-bottom: solid ${theme.spacing.borderLarge} transparent;
   text-decoration: none;
   margin: 0;
-  padding: ${(props) => props.theme.spacing.small};
+  padding: ${theme.spacing.small};
   ${hoverState(
     css`
-      border-bottom: solid ${(props) => props.theme.spacing.borderLarge}
-        ${(props) => props.theme.color.white};
+      border-bottom: solid ${theme.spacing.borderLarge} ${theme.color.white};
       opacity: 1;
     `,
   )}
   &:active {
-    background: ${(props) =>
-      props.theme.color.black.mix(colorHelper('white'), 0.2)};
+    background: ${theme.color.black.mix(colorHelper('white'), 0.2)};
   }
 `
 const dropdownLinkStyles = css`
   ${linkStyles};
-  border-width: 0 0 ${(props) => props.theme.spacing.borderLarge} 0;
+  border-width: 0 0 ${theme.spacing.borderLarge} 0;
   background: none;
   display: block;
-  color: ${(props) => props.theme.color.white};
-  padding: ${(props) => props.theme.spacing.small}
-    ${(props) => props.theme.spacing.large};
+  color: ${theme.color.white};
+  padding: ${theme.spacing.small} ${theme.spacing.large};
   width: 100%;
 `
 const StyledNavLink = styled(Link)`
@@ -80,12 +77,12 @@ const GlobalNav = styled('nav')`
     }
     .desktopUserMenu {
       position: absolute;
-      top: ${(props) => props.theme.spacing.headerHeight};
+      top: ${theme.spacing.headerHeight};
       right: 0;
-      background-color: ${(props) => props.theme.color.black};
+      background-color: ${theme.color.black};
       border-style: solid;
       border-width: 0 1px 1px 1px;
-      border-color: ${(props) => props.theme.color.border};
+      border-color: ${theme.color.border};
       a {
         ${dropdownLinkStyles}
       }
@@ -99,28 +96,27 @@ const GlobalNav = styled('nav')`
       background: none;
     }
     .menuDropdown {
-      background-color: ${(props) => props.theme.color.black};
+      background-color: ${theme.color.black};
     }
     a,
     div p,
     button {
       display: block;
       text-decoration: none;
-      color: ${(props) => props.theme.color.white};
+      color: ${theme.color.white};
       text-align: right;
-      padding: ${(props) => props.theme.spacing.small}
-        ${(props) => props.theme.spacing.medium};
+      padding: ${theme.spacing.small} ${theme.spacing.medium};
       margin: 0;
       width: 100%;
       white-space: nowrap;
       font-size: smaller;
     }
     .mobileMenu {
-      top: ${(props) => props.theme.spacing.headerHeight};
+      top: ${theme.spacing.headerHeight};
       right: 0;
     }
     .loggedInAs {
-      background: ${(props) => props.theme.color.primaryColor};
+      background: ${theme.color.primaryColor};
     }
   }
   ${mediaQueryTabletLandscapeOnly(css`

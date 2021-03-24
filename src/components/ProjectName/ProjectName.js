@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
+import theme from '../../theme'
 import { H2 } from '../generic/text'
 import {
   mediaQueryTabletLandscapeOnly,
@@ -13,13 +14,12 @@ const ProjectNameWrapper = styled('div')`
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  border-bottom: 1px solid ${(props) => props.theme.color.border};
+  border-bottom: 1px solid ${theme.color.border};
   h2 {
     overflow-x: scroll;
     white-space: nowrap;
-    padding: ${(props) => props.theme.spacing.medium}
-      ${(props) => props.theme.spacing.small}
-      ${(props) => props.theme.spacing.medium} 0;
+    padding: ${theme.spacing.medium} ${theme.spacing.small}
+      ${theme.spacing.medium} 0;
     height: 100%;
     margin: 0;
   }
@@ -44,10 +44,9 @@ const ProjectNameWrapper = styled('div')`
         props.theme.spacing.sideNavWidthPhoneOnly} 1fr;
     h2 {
       font-size: smaller;
-      padding: ${(props) => props.theme.spacing.small}
-        ${(props) => props.theme.spacing.xsmall}
-        ${(props) => props.theme.spacing.small}
-        ${(props) => props.theme.spacing.medium};
+      padding: ${theme.spacing.small} ${theme.spacing.xsmall}
+        ${theme.spacing.small} 0;
+
     }
     a {
       font-size: initial;
