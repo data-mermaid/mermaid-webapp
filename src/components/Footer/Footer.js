@@ -6,6 +6,9 @@ import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 const StyledFooter = styled('footer')`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr auto auto;
   background: ${theme.color.black};

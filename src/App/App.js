@@ -6,6 +6,7 @@ import GlobalStyle from '../library/styling/globalStyles'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Layout from '../components/generic/Layout'
+import OfflineBorders from '../components/OfflineBorders'
 import theme from '../theme'
 import useAuthentication from '../library/useAuthentication'
 import { useRoutes } from '../library/useRoutes'
@@ -63,6 +64,7 @@ function App({ mermaidDbAccessInstance }) {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <CustomToastContainer />
+      <OfflineBorders />
       {isMermaidAuthenticatedAndReady && (
         <Switch>
           {routes.map(({ path, Component }) => (
