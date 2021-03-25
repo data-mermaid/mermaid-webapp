@@ -30,6 +30,7 @@ const Projects = ({ databaseGatewayInstance }) => {
   const projectList = projects.map(
     ({ name, countries, num_sites, offlineReady, updated_on }) => (
       <ProjectCard
+        role="listitem"
         key={name}
         name={name}
         countries={countries}
@@ -43,7 +44,10 @@ const Projects = ({ databaseGatewayInstance }) => {
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <SubLayout1 topRow={<ProjectToolBarSection />} bottomRow={projectList} />
+    <SubLayout1
+      topRow={<ProjectToolBarSection />}
+      bottomRow={<div role="list">{projectList}</div>}
+    />
   )
 }
 
