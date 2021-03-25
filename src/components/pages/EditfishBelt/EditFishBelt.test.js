@@ -39,16 +39,27 @@ test('EditFishBelt component renders with the expected UI elements', async () =>
   )
   // specifying that the above text is an h2 might be overkill,
   // but it also protects against a fragile test that fails if someone adds the text 'sample info' to a nav menu for example
-  // its also in implementation detail territory, but also not. Im thinking header heierarchy is a user focused approach, because it is informational archetecture
+  // its also in implementation detail territory, but also not. Im thinking header hierarchy is a user focused approach, because it is informational architecture
   // I think while expect(screen.getByText('Sample Info')) is a bit more fragile, its also good enough, and easier to get started with if you want.
 
   // in this test we are testing that the important deal breaking elements are displayed
   expect(screen.getByLabelText('Site'))
   // (getByLabelText selects the input associated with a label or one that has aria-label specified)
   // add assertions for the rest of the inputs here
+  expect(screen.getByLabelText('Management'))
+  expect(screen.getByLabelText('Depth'))
+  expect(screen.getByLabelText('Sample Date'))
+  expect(screen.getByLabelText('Sample Time'))
+  expect(screen.getByLabelText('Transect Number'))
+  expect(screen.getByLabelText('Label'))
+  expect(screen.getByLabelText('Transect Length Surveyed'))
+  expect(screen.getByLabelText('Width'))
+  expect(screen.getByLabelText('Fish Size Bin'))
+  expect(screen.getByLabelText('Reef Slope'))
+  expect(screen.getByLabelText('Notes'))
 })
 
 test('EditFishBelt form inputs are initialized with the correct values', async () => {
-  // ive got to run, and will finish these later (likely tomorrow, less liekly tonight)
+  // ive got to run, and will finish these later (likely tomorrow, less likely tonight)
   // for now you can work on the above test (not explicitly in the ticket, but related)
 })
