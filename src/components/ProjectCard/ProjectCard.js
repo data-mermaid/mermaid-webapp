@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
@@ -9,6 +10,7 @@ import {
   mediaQueryForTabletLandscapeUp,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
+import useOnlineStatus from '../../library/useOnlineStatus'
 import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
@@ -181,6 +183,8 @@ const ProjectCard = ({
   offlineReady,
   updated_on,
 }) => {
+  const history = useHistory()
+  const { isOnline } = useOnlineStatus()
   const [offlineStatus, setOfflineStatus] = useState(offlineReady)
   const projectUrl = `projects/${name}`
 
@@ -188,8 +192,16 @@ const ProjectCard = ({
     setOfflineStatus(e.target.checked)
   }
 
+  const handleProjectNavigation = (onlineStatus) => {
+    const destinationUrl = onlineStatus
+      ? `${projectUrl}/health`
+      : `${projectUrl}/collecting`
+
+    history.push(destinationUrl)
+  }
+
   return (
-    <CardWrapper>
+    <CardWrapper onClick={() => handleProjectNavigation(isOnline)}>
       <ProjectNameWrapper>
         <h2>{name}</h2>
       </ProjectNameWrapper>
