@@ -193,7 +193,7 @@ const ProjectCard = ({
     setOfflineStatus(e.target.checked)
   }
 
-  const handleCardClick = (e) => {
+  const handleCardClick = () => {
     const destinationUrl = isOnline
       ? `${projectUrl}/health`
       : `${projectUrl}/collecting`
@@ -201,9 +201,7 @@ const ProjectCard = ({
     history.push(destinationUrl)
   }
 
-  const handleProjectCopyClick = (e) => {
-    e.stopPropagation()
-  }
+  const handleProjectCopyClick = () => {}
 
   return (
     <CardWrapper>
