@@ -11,6 +11,7 @@ export const Button = styled.button`
   padding: ${theme.spacing.buttonPadding};
   border-width: 1px;
   border-style: solid;
+  cursor: pointer;
   &:active {
     ${buttonActive};
   }
