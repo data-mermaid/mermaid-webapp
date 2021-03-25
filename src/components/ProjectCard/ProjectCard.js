@@ -183,6 +183,7 @@ const ProjectCard = ({
   num_sites,
   offlineReady,
   updated_on,
+  ...restOfProps
 }) => {
   const history = useHistory()
   const { isOnline } = useOnlineStatus()
@@ -205,7 +206,7 @@ const ProjectCard = ({
 
   return (
     <CardWrapper>
-      <ProjectNameWrapper onClick={handleCardClick}>
+      <ProjectNameWrapper onClick={handleCardClick} {...restOfProps}>
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
@@ -227,7 +228,7 @@ const ProjectCard = ({
       <ButtonGroups>
         <NavLinkButtonGroup projectUrl={projectUrl} />
         <VerticalRule />
-        <ButtonSecondary onClick={handleProjectCopyClick}>
+        <ButtonSecondary onClick={handleProjectCopyClick} aria-label="Copy">
           <IconCopy />
           <span>Copy</span>
         </ButtonSecondary>
