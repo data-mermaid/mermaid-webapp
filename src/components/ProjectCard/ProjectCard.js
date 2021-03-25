@@ -111,6 +111,7 @@ const CardWrapper = styled('div')`
 
 const ProjectNameWrapper = styled('div')`
   align-self: start;
+  cursor: pointer;
   h2 {
     margin: ${theme.spacing.xsmall} 0;
     padding: ${theme.spacing.small} ${theme.spacing.medium};
@@ -188,21 +189,25 @@ const ProjectCard = ({
   const [offlineStatus, setOfflineStatus] = useState(offlineReady)
   const projectUrl = `projects/${name}`
 
-  const toggleOfflineStatus = (e) => {
+  const handleProjectOfflineReadyClick = (e) => {
     setOfflineStatus(e.target.checked)
   }
 
-  const handleProjectNavigation = (onlineStatus) => {
-    const destinationUrl = onlineStatus
+  const handleCardClick = (e) => {
+    const destinationUrl = isOnline
       ? `${projectUrl}/health`
       : `${projectUrl}/collecting`
 
     history.push(destinationUrl)
   }
 
+  const handleProjectCopyClick = (e) => {
+    e.stopPropagation()
+  }
+
   return (
-    <CardWrapper onClick={() => handleProjectNavigation(isOnline)}>
-      <ProjectNameWrapper>
+    <CardWrapper>
+      <ProjectNameWrapper onClick={handleCardClick}>
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
@@ -215,7 +220,7 @@ const ProjectCard = ({
             id="offline-toggle"
             type="checkbox"
             checked={offlineStatus}
-            onChange={toggleOfflineStatus}
+            onChange={handleProjectOfflineReadyClick}
           />
           Offline Ready
         </CheckBoxWithLabel>
@@ -224,7 +229,7 @@ const ProjectCard = ({
       <ButtonGroups>
         <NavLinkButtonGroup projectUrl={projectUrl} />
         <VerticalRule />
-        <ButtonSecondary>
+        <ButtonSecondary onClick={handleProjectCopyClick}>
           <IconCopy />
           <span>Copy</span>
         </ButtonSecondary>
