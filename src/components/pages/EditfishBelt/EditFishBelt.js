@@ -10,7 +10,7 @@ import {
   getSampleInfoValidationInfo,
 } from '../../../library/mermaidData/collectRecordHelpers'
 import { ButtonCallout } from '../../generic/buttons'
-import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
+import { databaseGatewayPropTypes } from '../../../library/mermaidData/DatabaseGateway'
 import { RowRight } from '../../generic/positioning'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import language from '../../../language'
@@ -107,7 +107,7 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
 }
 
 EditFishBelt.propTypes = {
-  databaseGatewayInstance: mermaidDatabaseGatewayPropTypes.isRequired,
+  databaseGatewayInstance: databaseGatewayPropTypes.isRequired,
 }
 
 export default EditFishBelt

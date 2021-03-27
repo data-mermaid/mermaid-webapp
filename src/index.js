@@ -7,9 +7,10 @@ import './index.css'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 import reportWebVitals from './reportWebVitals'
+
 import { App } from './App'
-import mermaidDbAccessInstance from './library/mermaidData/mermaidDbAccessInstance'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
+import dexieInstance from './library/mermaidData/dexieInstance'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -22,7 +23,7 @@ ReactDOM.render(
     >
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <OnlineStatusProvider>
-          <App mermaidDbAccessInstance={mermaidDbAccessInstance} />
+          <App dexieInstance={dexieInstance} />
         </OnlineStatusProvider>
       </BrowserRouter>
     </Auth0Provider>

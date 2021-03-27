@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
-import { getMockMermaidDbAccessInstance } from '../../testUtilities/mockMermaidDbAccess'
+import getMockDexieInstance from '../../testUtilities/getMockDexieInstance'
+
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
@@ -21,9 +22,7 @@ afterAll(() => {
 })
 
 test('App renders shows the users name from the API for an online and authenticated user', async () => {
-  renderAuthenticatedOnline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
-  )
+  renderAuthenticatedOnline(<App dexieInstance={getMockDexieInstance()} />)
 
   // wait for page to load in lieu of being able to test for a loading indicator to have vanished
   expect(await screen.findByText('Projects', { selector: 'h1' }))
@@ -36,7 +35,7 @@ test('App renders shows the users name from the API for an online and authentica
 
 test('App renders shows the users name from offline storage for an offline user who is authenticated when online', async () => {
   const thing = renderAuthenticatedOffline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstance()} />,
   )
 
   // wait for page to load in lieu of being able to test for a loading indicator to have vanished
