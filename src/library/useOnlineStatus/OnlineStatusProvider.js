@@ -3,8 +3,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 
 const OnlineStatusContext = createContext()
 
-const OnlineStatusProvider = ({ children }) => {
-  const [isOnline, setIsOnline] = useState(false)
+const OnlineStatusProvider = ({ children, value }) => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
 
   useEffect(() => {
     const handleOnline = () => {
@@ -18,7 +18,6 @@ const OnlineStatusProvider = ({ children }) => {
       window.removeEventListener('online', handleOnline)
     }
 
-    setIsOnline(navigator.onLine) // move this
     window.addEventListener('offline', handleOffline)
     window.addEventListener('online', handleOnline)
 
@@ -26,7 +25,8 @@ const OnlineStatusProvider = ({ children }) => {
   }, [])
 
   return (
-    <OnlineStatusContext.Provider value={{ isOnline }}>
+    // the value prop spread here allows for online status to be mocked for testing
+    <OnlineStatusContext.Provider value={{ isOnline, ...value }}>
       {children}
     </OnlineStatusContext.Provider>
   )
@@ -46,6 +46,9 @@ const useOnlineStatus = () => {
 
 OnlineStatusProvider.propTypes = {
   children: PropTypes.node.isRequired,
+  value: PropTypes.shape({ isOnline: PropTypes.bool }),
 }
+
+OnlineStatusProvider.defaultProps = { value: {} }
 
 export { OnlineStatusProvider, useOnlineStatus }
