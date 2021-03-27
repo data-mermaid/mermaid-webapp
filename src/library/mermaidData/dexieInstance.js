@@ -1,15 +1,15 @@
 import Dexie from 'dexie'
 import PropTypes from 'prop-types'
 
-const mermaidDbAccessInstance = new Dexie('mermaid')
+const dexieInstance = new Dexie('mermaid')
 
-mermaidDbAccessInstance.version(1).stores({
+dexieInstance.version(1).stores({
   currentUser: 'id, first_name, last_name, full_name, email',
 })
 
 // If This were TypeScript, types would be easy to obtain for Dexie
 // however, we are using proptypes, so we'll make an exception for good typing
 // here because this is a third party library
-const mermaidDbAccessInstancePropTypes = PropTypes.any
+const dexieInstancePropTypes = PropTypes.any
 
-export { mermaidDbAccessInstance as default, mermaidDbAccessInstancePropTypes }
+export { dexieInstance as default, dexieInstancePropTypes }

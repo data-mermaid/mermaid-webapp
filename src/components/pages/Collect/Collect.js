@@ -4,7 +4,7 @@ import { usePagination, useSortBy, useTable } from 'react-table'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { H3 } from '../../generic/text'
-import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
+import { databaseGatewayPropTypes } from '../../../library/mermaidData/DatabaseGateway'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
 import { Table, Tr, Th, Td } from '../../generic/Table/table'
@@ -24,14 +24,14 @@ const TopBar = () => (
   </>
 )
 
-const Collect = ({ mermaidDatabaseGatewayInstance }) => {
+const Collect = ({ databaseGatewayInstance }) => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState(
     [],
   )
   const [isLoading, setIsLoading] = useState(true)
 
   const _getCollectRecords = useEffect(() => {
-    mermaidDatabaseGatewayInstance
+    databaseGatewayInstance
       .getCollectRecordsForUIDisplay()
       .then((records) => {
         setCollectRecordsForUiDisplay(records)
@@ -40,7 +40,7 @@ const Collect = ({ mermaidDatabaseGatewayInstance }) => {
       .catch(() => {
         toast.error(language.error.collectRecordsUnavailable)
       })
-  }, [mermaidDatabaseGatewayInstance])
+  }, [databaseGatewayInstance])
 
   const currentProjectPath = useCurrentProjectPath()
 
@@ -218,7 +218,7 @@ const Collect = ({ mermaidDatabaseGatewayInstance }) => {
 }
 
 Collect.propTypes = {
-  mermaidDatabaseGatewayInstance: mermaidDatabaseGatewayPropTypes.isRequired,
+  databaseGatewayInstance: databaseGatewayPropTypes.isRequired,
 }
 
 export default Collect

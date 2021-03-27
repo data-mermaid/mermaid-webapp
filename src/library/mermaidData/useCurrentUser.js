@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../../language'
 
-export const useCurrentUser = ({ mermaidDatabaseGatewayInstance }) => {
+export const useCurrentUser = ({ databaseGatewayInstance }) => {
   const [currentUser, setCurrentUser] = useState()
 
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
 
-    if (mermaidDatabaseGatewayInstance) {
-      mermaidDatabaseGatewayInstance
+    if (databaseGatewayInstance) {
+      databaseGatewayInstance
         .getUserProfile()
         .then((user) => {
           if (isMounted && user) {
@@ -24,7 +24,7 @@ export const useCurrentUser = ({ mermaidDatabaseGatewayInstance }) => {
     return () => {
       isMounted = false
     }
-  }, [mermaidDatabaseGatewayInstance])
+  }, [databaseGatewayInstance])
 
   return currentUser
 }
