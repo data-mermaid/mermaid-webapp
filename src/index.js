@@ -9,6 +9,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { App } from './App'
 import mermaidDbAccessInstance from './library/mermaidData/mermaidDbAccessInstance'
+import { OnlineStatusProvider } from './library/useOnlineStatus/OnlineStatusProvider'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,7 +21,9 @@ ReactDOM.render(
       scope="read:current_user update:current_user_metadata"
     >
       <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <App mermaidDbAccessInstance={mermaidDbAccessInstance} />
+        <OnlineStatusProvider>
+          <App mermaidDbAccessInstance={mermaidDbAccessInstance} />
+        </OnlineStatusProvider>
       </BrowserRouter>
     </Auth0Provider>
   </React.StrictMode>,
