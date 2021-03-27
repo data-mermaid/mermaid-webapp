@@ -16,14 +16,12 @@ import { mermaidDbAccessInstancePropTypes } from '../library/mermaidData/mermaid
 import { useOnlineStatus } from '../library/useOnlineStatus/OnlineStatusProvider'
 
 function App({ mermaidDbAccessInstance }) {
-  const { isOnline } = useOnlineStatus()
+  const isOnline = useOnlineStatus()
   const {
     auth0Token,
     isMermaidAuthenticated,
     logoutMermaid,
-  } = useAuthentication({
-    isOnline,
-  })
+  } = useAuthentication()
   const mermaidDatabaseGatewayInstance = useMemo(() => {
     const apiBaseUrl = process.env.REACT_APP_MERMAID_API
     const areDependenciesReady =
@@ -46,13 +44,7 @@ function App({ mermaidDbAccessInstance }) {
   const { routes } = useRoutes({ mermaidDatabaseGatewayInstance })
 
   const layoutProps = {
-    header: (
-      <Header
-        currentUser={currentUser}
-        isOnline={isOnline}
-        logout={logoutMermaid}
-      />
-    ),
+    header: <Header currentUser={currentUser} logout={logoutMermaid} />,
     footer: <Footer />,
   }
 

@@ -41,7 +41,7 @@ const useOnlineStatus = () => {
     )
   }
 
-  return context
+  return context.isOnline
 }
 
 OnlineStatusProvider.propTypes = {
