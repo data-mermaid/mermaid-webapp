@@ -16,7 +16,7 @@ import { mermaidDbAccessInstancePropTypes } from '../library/mermaidData/mermaid
 import { useOnlineStatus } from '../library/useOnlineStatus/OnlineStatusProvider'
 
 function App({ mermaidDbAccessInstance }) {
-  const isOnline = useOnlineStatus()
+  const { isOnline } = useOnlineStatus()
   const {
     auth0Token,
     isMermaidAuthenticated,
