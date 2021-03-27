@@ -4,7 +4,7 @@ import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirect
 import { useOnlineStatus } from './useOnlineStatus/OnlineStatusProvider'
 
 const useAuthentication = () => {
-  const isOnline = useOnlineStatus()
+  const { isOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
   const [auth0Token, setAuth0Token] = useState()
 

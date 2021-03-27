@@ -142,7 +142,7 @@ const GlobalLinks = () => (
 )
 
 const Header = ({ logout, currentUser }) => {
-  const isOnline = useOnlineStatus()
+  const { isOnline } = useOnlineStatus()
   const UserMenuDropDownContent = () => (
     <div>
       {isOnline && (
