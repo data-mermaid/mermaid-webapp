@@ -4,12 +4,10 @@ import React, { useMemo } from 'react'
 
 import { CustomToastContainer } from '../components/generic/toast'
 import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
-
-import DatabaseGateway from './mermaidData/DatabaseGateway'
-
 import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
+import DatabaseGateway from './mermaidData/DatabaseGateway'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
