@@ -6,14 +6,14 @@ import {
   screen,
   waitFor,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import mockOnlineMermaidDatabaseGatewayInstance from '../../../testUtilities/mockOnlineMermaidDatabaseGatewayInstance'
+import mockOnlineDatabaseGatewayInstance from '../../../testUtilities/mockOnlineDatabaseGatewayInstance'
 
 import EditFishBelt from './EditFishBelt'
 
 test('EditFishBelt component renders with the expected UI elements', async () => {
   renderAuthenticatedOnline(
     <EditFishBelt
-      databaseGatewayInstance={mockOnlineMermaidDatabaseGatewayInstance}
+      databaseGatewayInstance={mockOnlineDatabaseGatewayInstance}
     />,
   )
 
@@ -50,7 +50,7 @@ test('EditFishBelt form inputs are initialized with the correct values', async (
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <EditFishBelt
-        databaseGatewayInstance={mockOnlineMermaidDatabaseGatewayInstance}
+        databaseGatewayInstance={mockOnlineDatabaseGatewayInstance}
       />
     </Route>,
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
