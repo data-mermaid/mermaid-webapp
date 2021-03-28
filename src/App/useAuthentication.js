@@ -59,6 +59,7 @@ const useAuthentication = () => {
     getAuth0AccessTokenSilently,
     isAuth0Authenticated,
     isAuth0Loading,
+    isOnline,
   ])
 
   const logoutMermaid = () => {
