@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import dateFormat from '../dateFormat'
+import dateFormat from './dateFormat'
 
 const getSampleInfoInitialValues = (collectRecordData, transectType) => ({
   depth: collectRecordData?.[transectType].depth ?? '',
