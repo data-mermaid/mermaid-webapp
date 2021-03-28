@@ -1,12 +1,12 @@
 import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
-import SubLayout1 from '../../SubLayout1'
 
+import { databaseGatewayPropTypes } from '../../../App/mermaidData/DatabaseGateway'
+import language from '../../../language'
+import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
-import { databaseGatewayPropTypes } from '../../../library/mermaidData/DatabaseGateway'
-import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
-import language from '../../../language'
+import SubLayout1 from '../../SubLayout1'
 
 /**
  * All Projects page (lists projects)
