@@ -3,7 +3,7 @@ import { ThemeProvider } from 'styled-components/macro'
 import React, { useMemo } from 'react'
 
 import { CustomToastContainer } from '../components/generic/toast'
-import { mermaidDbAccessInstancePropTypes } from './mermaidData/mermaidDbAccessInstance'
+import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
 import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
@@ -15,7 +15,7 @@ import MermaidDatabaseGateway from './mermaidData/MermaidDatabaseGateway'
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 
-function App({ mermaidDbAccessInstance }) {
+function App({ dexieInstance }) {
   const { isOnline } = useOnlineStatus()
   const {
     auth0Token,
@@ -25,7 +25,7 @@ function App({ mermaidDbAccessInstance }) {
   const mermaidDatabaseGatewayInstance = useMemo(() => {
     const apiBaseUrl = process.env.REACT_APP_MERMAID_API
     const areDependenciesReady =
-      isMermaidAuthenticated && !!mermaidDbAccessInstance && apiBaseUrl
+      isMermaidAuthenticated && !!dexieInstance && apiBaseUrl
 
     return !areDependenciesReady
       ? undefined
@@ -34,9 +34,9 @@ function App({ mermaidDbAccessInstance }) {
           auth0Token,
           isMermaidAuthenticated,
           isOnline,
-          mermaidDbAccessInstance,
+          dexieInstance,
         })
-  }, [auth0Token, isMermaidAuthenticated, isOnline, mermaidDbAccessInstance])
+  }, [auth0Token, isMermaidAuthenticated, isOnline, dexieInstance])
 
   const currentUser = useCurrentUser({
     mermaidDatabaseGatewayInstance,
@@ -79,7 +79,7 @@ function App({ mermaidDbAccessInstance }) {
 }
 
 App.propTypes = {
-  mermaidDbAccessInstance: mermaidDbAccessInstancePropTypes.isRequired,
+  dexieInstance: dexieInstancePropTypes.isRequired,
 }
 
 export default App

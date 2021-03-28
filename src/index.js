@@ -9,7 +9,7 @@ import reportWebVitals from './reportWebVitals'
 
 import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
-import mermaidDbAccessInstance from './App/mermaidData/mermaidDbAccessInstance'
+import dexieInstance from './App/mermaidData/dexieInstance'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -22,7 +22,7 @@ ReactDOM.render(
     >
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <OnlineStatusProvider>
-          <App mermaidDbAccessInstance={mermaidDbAccessInstance} />
+          <App dexieInstance={dexieInstance} />
         </OnlineStatusProvider>
       </BrowserRouter>
     </Auth0Provider>

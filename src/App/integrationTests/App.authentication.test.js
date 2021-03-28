@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
-import { getMockMermaidDbAccessInstance } from '../../testUtilities/mockMermaidDbAccess'
+import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 
 import {
   fireEvent,
@@ -26,7 +26,7 @@ afterAll(() => {
 
 test('App renders the initial screen as expected for an online and authenticated user', async () => {
   renderAuthenticatedOnline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
   expect(await screen.findByText('Projects', { selector: 'h1' }))
@@ -39,7 +39,7 @@ test('App renders the initial screen as expected for an online and authenticated
 
 test('App: an online and authenticated user can logout', async () => {
   renderAuthenticatedOnline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
   fireEvent.click(await screen.findByText('FakeFirstNameOnline'))
@@ -49,7 +49,7 @@ test('App: an online and authenticated user can logout', async () => {
 
 test('App renders the initial screen as expected for an offline user who is authenticated when online', async () => {
   renderAuthenticatedOffline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
   expect(await screen.findByText('Projects', { selector: 'h1' }))
@@ -62,7 +62,7 @@ test('App renders the initial screen as expected for an offline user who is auth
 
 test('App renders the initial screen as expected for an online but not authenticated user', () => {
   renderUnauthenticatedOnline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
   expect(screen.queryByText('Projects')).toBeNull()
@@ -70,7 +70,7 @@ test('App renders the initial screen as expected for an online but not authentic
 
 test('App renders the initial screen as expected for an offline user who is not authenticated in an online environment', () => {
   renderUnauthenticatedOffline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
   expect(screen.queryByText('Projects')).toBeNull()
