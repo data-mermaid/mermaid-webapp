@@ -9,7 +9,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { App } from './App'
 import mermaidDbAccessInstance from './library/mermaidData/mermaidDbAccessInstance'
-import { OnlineStatusProvider } from './library/useOnlineStatus/OnlineStatusProvider'
+import { OnlineStatusProvider } from './library/onlineStatusContext'
 
 ReactDOM.render(
   <React.StrictMode>

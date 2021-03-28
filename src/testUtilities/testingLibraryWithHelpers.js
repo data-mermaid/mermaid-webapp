@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import theme from '../theme'
-import { OnlineStatusProvider } from '../library/useOnlineStatus/OnlineStatusProvider'
+import { OnlineStatusProvider } from '../library/onlineStatusContext'
 
 const BasicProviders = ({ children }) => (
   <MemoryRouter>
