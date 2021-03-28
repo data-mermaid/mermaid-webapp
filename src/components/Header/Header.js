@@ -13,7 +13,7 @@ import {
 import { currentUserPropType } from '../../library/mermaidData/mermaidDataProptypes'
 import { RowSpaceBetween } from '../generic/positioning'
 import HideShow from '../generic/HideShow'
-import { useOnlineStatus } from '../../library/useOnlineStatus/OnlineStatusProvider'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 /**
  * Mermaid Header

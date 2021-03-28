@@ -13,7 +13,7 @@ import { useCurrentUser } from '../library/mermaidData/useCurrentUser'
 import { CustomToastContainer } from '../components/generic/toast'
 import MermaidDatabaseGateway from '../library/mermaidData/MermaidDatabaseGateway'
 import { mermaidDbAccessInstancePropTypes } from '../library/mermaidData/mermaidDbAccessInstance'
-import { useOnlineStatus } from '../library/useOnlineStatus/OnlineStatusProvider'
+import { useOnlineStatus } from '../library/onlineStatusContext'
 
 function App({ mermaidDbAccessInstance }) {
   const { isOnline } = useOnlineStatus()
