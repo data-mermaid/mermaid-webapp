@@ -1,12 +1,12 @@
-import DatabaseGateway from '../library/mermaidData/DatabaseGateway'
-import getMockDexieInstance from './getMockDexieInstance'
+import DatabaseGateway from '../App/mermaidData/DatabaseGateway'
+import { getMockDexieInstanceAllSuccess } from './mockDexie'
 
 const mockOnlineDatabaseGatewayInstance = new DatabaseGateway({
   apiBaseUrl: process.env.REACT_APP_MERMAID_API,
   auth0Token: 'token',
   isMermaidAuthenticated: true,
   isOnline: true,
-  dexieInstance: getMockDexieInstance(),
+  dexieInstance: getMockDexieInstanceAllSuccess(),
 })
 
 export default mockOnlineDatabaseGatewayInstance
