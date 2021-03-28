@@ -75,7 +75,7 @@ const collectRecords = [
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
         number: 2,
         sample_time: '11:55',
-        len_surveyed: 5,
+        len_surveyed: 6,
       },
     },
   },

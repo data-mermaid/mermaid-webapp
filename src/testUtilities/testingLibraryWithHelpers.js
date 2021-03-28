@@ -50,7 +50,7 @@ UnauthenticatedProviders.defaultProps = {
 
 const renderAuthenticatedOnline = (
   ui,
-  { renderOptions, initialEntries } = ({} = {}),
+  { renderOptions, initialEntries } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
