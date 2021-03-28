@@ -5,11 +5,11 @@ import ReactDOM from 'react-dom'
 
 import './index.css'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-
 import reportWebVitals from './reportWebVitals'
+
 import { App } from './App'
-import mermaidDbAccessInstance from './library/mermaidData/mermaidDbAccessInstance'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
+import mermaidDbAccessInstance from './App/mermaidData/mermaidDbAccessInstance'
 
 ReactDOM.render(
   <React.StrictMode>

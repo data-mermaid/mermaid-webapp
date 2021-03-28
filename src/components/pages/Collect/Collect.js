@@ -4,16 +4,16 @@ import { usePagination, useSortBy, useTable } from 'react-table'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { H3 } from '../../generic/text'
-import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
+import { mermaidDatabaseGatewayPropTypes } from '../../../App/mermaidData/MermaidDatabaseGateway'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
 import { Table, Tr, Th, Td } from '../../generic/Table/table'
 import AddSampleUnitButton from './AddSampleUnitButton'
+import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import SubLayout2 from '../../SubLayout2'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import language from '../../../language'
 
 const TopBar = () => (
   <>

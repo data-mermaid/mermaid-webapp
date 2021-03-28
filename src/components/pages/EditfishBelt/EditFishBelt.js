@@ -8,9 +8,9 @@ import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
   getSampleInfoValidationInfo,
-} from '../../../library/mermaidData/collectRecordHelpers'
+} from '../../../library/collectRecordHelpers'
 import { ButtonCallout } from '../../generic/buttons'
-import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
+import { mermaidDatabaseGatewayPropTypes } from '../../../App/mermaidData/MermaidDatabaseGateway'
 import { RowRight } from '../../generic/positioning'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import language from '../../../language'

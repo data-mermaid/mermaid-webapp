@@ -1,4 +1,4 @@
-import MermaidDatabaseGateway from '../library/mermaidData/MermaidDatabaseGateway'
+import MermaidDatabaseGateway from '../App/mermaidData/MermaidDatabaseGateway'
 import { getMockMermaidDbAccessInstance } from './mockMermaidDbAccess'
 
 const mockOnlineMermaidDatabaseGatewayInstance = new MermaidDatabaseGateway({
