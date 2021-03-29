@@ -5,12 +5,11 @@ import ReactDOM from 'react-dom'
 
 import './index.css'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-
 import reportWebVitals from './reportWebVitals'
 
 import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
-import dexieInstance from './library/mermaidData/dexieInstance'
+import dexieInstance from './App/mermaidData/dexieInstance'
 
 ReactDOM.render(
   <React.StrictMode>

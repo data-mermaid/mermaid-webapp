@@ -3,17 +3,17 @@ import { ThemeProvider } from 'styled-components/macro'
 import React, { useMemo } from 'react'
 
 import { CustomToastContainer } from '../components/generic/toast'
-import { dexieInstancePropTypes } from '../library/mermaidData/dexieInstance'
-import { useCurrentUser } from '../library/mermaidData/useCurrentUser'
+import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
+import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
-import { useRoutes } from '../library/useRoutes'
-import DatabaseGateway from '../library/mermaidData/DatabaseGateway'
+import { useRoutes } from './useRoutes'
+import DatabaseGateway from './mermaidData/DatabaseGateway'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
 import Layout from '../components/generic/Layout'
 import theme from '../theme'
-import useAuthentication from '../library/useAuthentication'
+import useAuthentication from './useAuthentication'
 
 function App({ dexieInstance }) {
   const { isOnline } = useOnlineStatus()

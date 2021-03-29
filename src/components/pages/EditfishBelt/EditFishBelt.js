@@ -8,14 +8,15 @@ import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
   getSampleInfoValidationInfo,
-} from '../../../library/mermaidData/collectRecordHelpers'
+} from '../../../library/collectRecordHelpers'
 import { ButtonCallout } from '../../generic/buttons'
-import { databaseGatewayPropTypes } from '../../../library/mermaidData/DatabaseGateway'
+import { databaseGatewayPropTypes } from '../../../App/mermaidData/DatabaseGateway'
 import { RowRight } from '../../generic/positioning'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import language from '../../../language'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import SubLayout2 from '../../SubLayout2'
+import { H2 } from '../../generic/text'
 
 const EditFishBelt = ({ databaseGatewayInstance }) => {
   const { recordId } = useParams()
@@ -79,7 +80,11 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
         <SubLayout2
           isLoading={isLoading}
           content={
-            <form id="fishbelt-form" onSubmit={formik.handleSubmit}>
+            <form
+              id="fishbelt-form"
+              aria-labelledby="fishbelt-form-title"
+              onSubmit={formik.handleSubmit}
+            >
               <SampleInfoInputs
                 formik={formik}
                 collectRecord={collectRecordBeingEdited}
@@ -90,15 +95,20 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
             </form>
           }
           toolbar={
-            <RowRight>
-              <ButtonCallout
-                type="submit"
-                onSubmit={formik.handleSubmit}
-                form="sampleinfo-form"
-              >
-                Save
-              </ButtonCallout>
-            </RowRight>
+            <>
+              <H2 id="fishbelt-form-title">
+                Placeholder Collect Record Form Title
+              </H2>
+              <RowRight>
+                <ButtonCallout
+                  type="submit"
+                  onSubmit={formik.handleSubmit}
+                  form="sampleinfo-form"
+                >
+                  Save
+                </ButtonCallout>
+              </RowRight>
+            </>
           }
         />
       )}

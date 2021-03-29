@@ -10,10 +10,10 @@ import {
   hoverState,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { currentUserPropType } from '../../library/mermaidData/mermaidDataProptypes'
+import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { RowSpaceBetween } from '../generic/positioning'
-import HideShow from '../generic/HideShow'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
+import HideShow from '../generic/HideShow'
 
 /**
  * Mermaid Header

@@ -8,13 +8,7 @@ import React from 'react'
 import theme from '../theme'
 import { OnlineStatusProvider } from '../library/onlineStatusContext'
 
-const BasicProviders = ({ children }) => (
-  <MemoryRouter>
-    <ThemeProvider theme={theme}>{children}</ThemeProvider>
-  </MemoryRouter>
-)
-
-const AuthenticatedProviders = ({ children }) => (
+const AuthenticatedProviders = ({ children, initialEntries }) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
@@ -23,32 +17,44 @@ const AuthenticatedProviders = ({ children }) => (
       getAccessTokenSilently: () => Promise.resolve('fake-token'),
     }}
   >
-    <BasicProviders>{children}</BasicProviders>
+    <MemoryRouter initialEntries={initialEntries}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </MemoryRouter>
   </Auth0Context.Provider>
 )
 
-const UnauthenticatedProviders = ({ children }) => (
+const UnauthenticatedProviders = ({ children, initialEntries }) => (
   <Auth0Context.Provider
     value={{ isAuthenticated: false, loginWithRedirect: () => {} }}
   >
-    <BasicProviders>{children}</BasicProviders>
+    <MemoryRouter initialEntries={initialEntries}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </MemoryRouter>
   </Auth0Context.Provider>
 )
 
 AuthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
+  initialEntries: PropTypes.arrayOf(PropTypes.string),
+}
+AuthenticatedProviders.defaultProps = {
+  initialEntries: undefined,
 }
 UnauthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
+  initialEntries: PropTypes.arrayOf(PropTypes.string),
 }
-BasicProviders.propTypes = {
-  children: PropTypes.node.isRequired,
+UnauthenticatedProviders.defaultProps = {
+  initialEntries: undefined,
 }
 
-const renderAuthenticatedOnline = (ui, options) => {
+const renderAuthenticatedOnline = (
+  ui,
+  { renderOptions, initialEntries } = {},
+) => {
   const wrapper = ({ children }) => {
     return (
-      <AuthenticatedProviders>
+      <AuthenticatedProviders initialEntries={initialEntries}>
         <OnlineStatusProvider value={{ isOnline: true }}>
           {children}
         </OnlineStatusProvider>
@@ -58,14 +64,17 @@ const renderAuthenticatedOnline = (ui, options) => {
 
   return render(ui, {
     wrapper,
-    ...options,
+    ...renderOptions,
   })
 }
 
-const renderUnauthenticatedOnline = (ui, options) => {
+const renderUnauthenticatedOnline = (
+  ui,
+  { renderOptions, initialEntries } = {},
+) => {
   const wrapper = ({ children }) => {
     return (
-      <UnauthenticatedProviders>
+      <UnauthenticatedProviders initialEntries={initialEntries}>
         <OnlineStatusProvider value={{ isOnline: true }}>
           {children}
         </OnlineStatusProvider>
@@ -73,13 +82,16 @@ const renderUnauthenticatedOnline = (ui, options) => {
     )
   }
 
-  render(ui, { wrapper, ...options })
+  render(ui, { wrapper, ...renderOptions })
 }
 
-const renderAuthenticatedOffline = (ui, options) => {
+const renderAuthenticatedOffline = (
+  ui,
+  { renderOptions, initialEntries } = {},
+) => {
   const wrapper = ({ children }) => {
     return (
-      <AuthenticatedProviders>
+      <AuthenticatedProviders initialEntries={initialEntries}>
         <OnlineStatusProvider value={{ isOnline: false }}>
           {children}
         </OnlineStatusProvider>
@@ -89,14 +101,17 @@ const renderAuthenticatedOffline = (ui, options) => {
 
   return render(ui, {
     wrapper,
-    ...options,
+    ...renderOptions,
   })
 }
 
-const renderUnauthenticatedOffline = (ui, options) => {
+const renderUnauthenticatedOffline = (
+  ui,
+  { renderOptions, initialEntries } = {},
+) => {
   const wrapper = ({ children }) => {
     return (
-      <UnauthenticatedProviders>
+      <UnauthenticatedProviders initialEntries={initialEntries}>
         <OnlineStatusProvider value={{ isOnline: false }}>
           {children}
         </OnlineStatusProvider>
@@ -104,7 +119,7 @@ const renderUnauthenticatedOffline = (ui, options) => {
     )
   }
 
-  return render(ui, { wrapper, ...options })
+  return render(ui, { wrapper, ...renderOptions })
 }
 
 const renderOverride = () => {

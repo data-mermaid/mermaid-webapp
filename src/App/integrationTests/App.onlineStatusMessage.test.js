@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
-import { getMockMermaidDbAccessInstance } from '../../testUtilities/mockMermaidDbAccess'
+import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
@@ -21,7 +21,7 @@ afterAll(() => {
 
 test('Appropriate online status message shows when app is online', async () => {
   renderAuthenticatedOnline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
   expect(
@@ -33,7 +33,7 @@ test('Appropriate online status message shows when app is online', async () => {
 })
 test('Appropriate online status message shows when app is offline', async () => {
   renderAuthenticatedOffline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
   expect(
