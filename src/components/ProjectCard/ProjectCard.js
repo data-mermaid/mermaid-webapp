@@ -93,6 +93,7 @@ const CardWrapper = styled('div')`
   max-width: ${theme.spacing.maxWidth};
   background: ${theme.color.white};
   border: solid ${borderWidth} transparent;
+  cursor: pointer;
   ${hoverState(css`
     transition: ${theme.timing.hoverTransition};
     border: solid ${borderWidth} ${theme.color.primaryColor};
@@ -111,7 +112,6 @@ const CardWrapper = styled('div')`
 
 const ProjectNameWrapper = styled('div')`
   align-self: start;
-  cursor: pointer;
   h2 {
     margin: ${theme.spacing.xsmall} 0;
     padding: ${theme.spacing.small} ${theme.spacing.medium};
@@ -160,6 +160,7 @@ const CheckBoxWithLabel = styled.label`
   display: inline-block;
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
+    cursor: pointer;
   }
 `
 
@@ -202,11 +203,13 @@ const ProjectCard = ({
     history.push(destinationUrl)
   }
 
-  const handleProjectCopyClick = () => {}
+  const handleProjectCopyClick = (e) => {
+    e.stopPropagation()
+  }
 
   return (
-    <CardWrapper>
-      <ProjectNameWrapper onClick={handleCardClick} {...restOfProps}>
+    <CardWrapper onClick={handleCardClick}>
+      <ProjectNameWrapper {...restOfProps}>
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
@@ -220,6 +223,9 @@ const ProjectCard = ({
             type="checkbox"
             checked={offlineStatus}
             onChange={handleProjectOfflineReadyClick}
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
           />
           Offline Ready
         </CheckBoxWithLabel>
