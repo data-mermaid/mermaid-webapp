@@ -8,22 +8,43 @@ const ButtonLabel = styled('span')``
 const NavLinkButtonGroup = ({ projectUrl }) => {
   return (
     <>
-      <NavLinkButtonishIcon to={`${projectUrl}/health`} aria-label="Data">
+      <NavLinkButtonishIcon
+        to={`${projectUrl}/health`}
+        aria-label="Data"
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
+      >
         <IconHeart />
         <ButtonLabel>Health</ButtonLabel>
       </NavLinkButtonishIcon>
       <NavLinkButtonishIcon
         to={`${projectUrl}/collecting`}
         aria-label="Collect"
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
       >
         <IconCollect />
         <ButtonLabel>Collecting</ButtonLabel>
       </NavLinkButtonishIcon>
-      <NavLinkButtonishIcon to={`${projectUrl}/data`} aria-label="Data">
+      <NavLinkButtonishIcon
+        to={`${projectUrl}/data`}
+        aria-label="Data"
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
+      >
         <IconData />
         <ButtonLabel>Submitted</ButtonLabel>
       </NavLinkButtonishIcon>
-      <NavLinkButtonishIcon to={`${projectUrl}/admin`} aria-label="Admin">
+      <NavLinkButtonishIcon
+        to={`${projectUrl}/admin`}
+        aria-label="Admin"
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
+      >
         <IconAdmin />
         <ButtonLabel>Info</ButtonLabel>
       </NavLinkButtonishIcon>
