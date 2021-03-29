@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import OfflineToggle from '../OfflineToggle'
 import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 const StyledFooter = styled('footer')`
   position: fixed;
@@ -46,14 +47,25 @@ const Copyright = styled.p`
 `
 
 const Footer = () => {
+  const { isOnline } = useOnlineStatus()
+
   return (
     <StyledFooter>
       <OfflineToggleWrapper>
         <OfflineToggle />
-        <label htmlFor="offline-toggle-switch">
-          {/* WIP see M76 */}
-          {/* You&apos;re <strong>OFFLINE</strong> */}
-          You&apos;re <strong>ONLINE</strong>
+        <label
+          htmlFor="offline-toggle-switch"
+          data-testid="offline-toggle-switch-label"
+        >
+          {isOnline ? (
+            <>
+              You&apos;re <strong>ONLINE</strong>
+            </>
+          ) : (
+            <>
+              You&apos;re <strong>OFFLINE</strong>
+            </>
+          )}
         </label>
       </OfflineToggleWrapper>
       <FooterNav>

@@ -10,8 +10,9 @@ import {
   hoverState,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { currentUserPropType } from '../../library/mermaidData/mermaidDataProptypes'
+import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { RowSpaceBetween } from '../generic/positioning'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 import HideShow from '../generic/HideShow'
 
 /**
@@ -131,16 +132,17 @@ const GlobalNav = styled('nav')`
 const UserMenuButton = styled.button`
   ${dropdownLinkStyles}
 `
+const GlobalLinks = () => (
+  <>
+    <StyledNavLink to="/projects">Projects</StyledNavLink>
+    <StyledNavLink to="/#">Reports</StyledNavLink>
+    <StyledNavLink to="/#">Reference</StyledNavLink>
+    <StyledNavLink to="/#">Global Dashboard</StyledNavLink>
+  </>
+)
 
-const Header = ({ logout, isOnline, currentUser }) => {
-  const GlobalLinks = () => (
-    <>
-      <StyledNavLink to="/projects">Projects</StyledNavLink>
-      <StyledNavLink to="/#">Reports</StyledNavLink>
-      <StyledNavLink to="/#">Reference</StyledNavLink>
-      <StyledNavLink to="/#">Global Dashboard</StyledNavLink>
-    </>
-  )
+const Header = ({ logout, currentUser }) => {
+  const { isOnline } = useOnlineStatus()
   const UserMenuDropDownContent = () => (
     <div>
       {isOnline && (
@@ -202,7 +204,6 @@ const Header = ({ logout, isOnline, currentUser }) => {
 
 Header.propTypes = {
   currentUser: currentUserPropType,
-  isOnline: PropTypes.bool.isRequired,
   logout: PropTypes.func,
 }
 Header.defaultProps = {

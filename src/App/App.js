@@ -2,63 +2,55 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import React, { useMemo } from 'react'
 
-import GlobalStyle from '../library/styling/globalStyles'
+import { CustomToastContainer } from '../components/generic/toast'
+import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
+import { useCurrentUser } from './mermaidData/useCurrentUser'
+import { useOnlineStatus } from '../library/onlineStatusContext'
+import { useRoutes } from './useRoutes'
+import DatabaseGateway from './mermaidData/DatabaseGateway'
 import Footer from '../components/Footer'
+import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
 import Layout from '../components/generic/Layout'
 import OfflineBorders from '../components/OfflineBorders'
 import theme from '../theme'
-import useAuthentication from '../library/useAuthentication'
-import { useRoutes } from '../library/useRoutes'
-import { useCurrentUser } from '../library/mermaidData/useCurrentUser'
-import useOnlineStatus from '../library/useOnlineStatus'
-import { CustomToastContainer } from '../components/generic/toast'
-import MermaidDatabaseGateway from '../library/mermaidData/MermaidDatabaseGateway'
-import { mermaidDbAccessInstancePropTypes } from '../library/mermaidData/mermaidDbAccessInstance'
+import useAuthentication from './useAuthentication'
 
-function App({ mermaidDbAccessInstance }) {
+function App({ dexieInstance }) {
   const { isOnline } = useOnlineStatus()
   const {
     auth0Token,
     isMermaidAuthenticated,
     logoutMermaid,
-  } = useAuthentication({
-    isOnline,
-  })
-  const mermaidDatabaseGatewayInstance = useMemo(() => {
+  } = useAuthentication({})
+  const databaseGatewayInstance = useMemo(() => {
     const apiBaseUrl = process.env.REACT_APP_MERMAID_API
     const areDependenciesReady =
-      isMermaidAuthenticated && !!mermaidDbAccessInstance && apiBaseUrl
+      isMermaidAuthenticated && !!dexieInstance && apiBaseUrl
 
     return !areDependenciesReady
       ? undefined
-      : new MermaidDatabaseGateway({
+      : new DatabaseGateway({
           apiBaseUrl,
           auth0Token,
           isMermaidAuthenticated,
           isOnline,
-          mermaidDbAccessInstance,
+          dexieInstance,
         })
-  }, [auth0Token, isMermaidAuthenticated, isOnline, mermaidDbAccessInstance])
+  }, [auth0Token, isMermaidAuthenticated, isOnline, dexieInstance])
 
   const currentUser = useCurrentUser({
-    mermaidDatabaseGatewayInstance,
+    databaseGatewayInstance,
   })
-  const { routes } = useRoutes({ mermaidDatabaseGatewayInstance })
+  const { routes } = useRoutes({ databaseGatewayInstance })
 
   const layoutProps = {
-    header: (
-      <Header
-        currentUser={currentUser}
-        isOnline={isOnline}
-        logout={logoutMermaid}
-      />
-    ),
+    header: <Header currentUser={currentUser} logout={logoutMermaid} />,
     footer: <Footer />,
   }
 
   const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated && currentUser && mermaidDatabaseGatewayInstance
+    isMermaidAuthenticated && currentUser && databaseGatewayInstance
 
   return (
     <ThemeProvider theme={theme}>
@@ -89,7 +81,7 @@ function App({ mermaidDbAccessInstance }) {
 }
 
 App.propTypes = {
-  mermaidDbAccessInstance: mermaidDbAccessInstancePropTypes.isRequired,
+  dexieInstance: dexieInstancePropTypes.isRequired,
 }
 
 export default App

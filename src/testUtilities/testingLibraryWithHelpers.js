@@ -6,14 +6,9 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import theme from '../theme'
+import { OnlineStatusProvider } from '../library/onlineStatusContext'
 
-const BasicProviders = ({ children }) => (
-  <MemoryRouter>
-    <ThemeProvider theme={theme}>{children}</ThemeProvider>
-  </MemoryRouter>
-)
-
-const AuthenticatedProviders = ({ children }) => (
+const AuthenticatedProviders = ({ children, initialEntries }) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
@@ -22,46 +17,109 @@ const AuthenticatedProviders = ({ children }) => (
       getAccessTokenSilently: () => Promise.resolve('fake-token'),
     }}
   >
-    <BasicProviders>{children}</BasicProviders>
+    <MemoryRouter initialEntries={initialEntries}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </MemoryRouter>
   </Auth0Context.Provider>
 )
 
-const UnauthenticatedProviders = ({ children }) => (
+const UnauthenticatedProviders = ({ children, initialEntries }) => (
   <Auth0Context.Provider
     value={{ isAuthenticated: false, loginWithRedirect: () => {} }}
   >
-    <BasicProviders>{children}</BasicProviders>
+    <MemoryRouter initialEntries={initialEntries}>
+      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+    </MemoryRouter>
   </Auth0Context.Provider>
 )
 
 AuthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
+  initialEntries: PropTypes.arrayOf(PropTypes.string),
+}
+AuthenticatedProviders.defaultProps = {
+  initialEntries: undefined,
 }
 UnauthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
+  initialEntries: PropTypes.arrayOf(PropTypes.string),
 }
-BasicProviders.propTypes = {
-  children: PropTypes.node.isRequired,
+UnauthenticatedProviders.defaultProps = {
+  initialEntries: undefined,
 }
 
-const renderAuthenticatedOnline = (ui, options) =>
-  render(ui, { wrapper: AuthenticatedProviders, ...options })
-const renderUnauthenticatedOnline = (ui, options) =>
-  render(ui, { wrapper: UnauthenticatedProviders, ...options })
-
-const renderAuthenticatedOffline = (ui, options) => {
-  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+const renderAuthenticatedOnline = (
+  ui,
+  { renderOptions, initialEntries } = {},
+) => {
+  const wrapper = ({ children }) => {
+    return (
+      <AuthenticatedProviders initialEntries={initialEntries}>
+        <OnlineStatusProvider value={{ isOnline: true }}>
+          {children}
+        </OnlineStatusProvider>
+      </AuthenticatedProviders>
+    )
+  }
 
   return render(ui, {
-    wrapper: AuthenticatedProviders,
-    ...options,
+    wrapper,
+    ...renderOptions,
   })
 }
 
-const renderUnauthenticatedOffline = (ui, options) => {
-  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+const renderUnauthenticatedOnline = (
+  ui,
+  { renderOptions, initialEntries } = {},
+) => {
+  const wrapper = ({ children }) => {
+    return (
+      <UnauthenticatedProviders initialEntries={initialEntries}>
+        <OnlineStatusProvider value={{ isOnline: true }}>
+          {children}
+        </OnlineStatusProvider>
+      </UnauthenticatedProviders>
+    )
+  }
 
-  return render(ui, { wrapper: UnauthenticatedProviders, ...options })
+  render(ui, { wrapper, ...renderOptions })
+}
+
+const renderAuthenticatedOffline = (
+  ui,
+  { renderOptions, initialEntries } = {},
+) => {
+  const wrapper = ({ children }) => {
+    return (
+      <AuthenticatedProviders initialEntries={initialEntries}>
+        <OnlineStatusProvider value={{ isOnline: false }}>
+          {children}
+        </OnlineStatusProvider>
+      </AuthenticatedProviders>
+    )
+  }
+
+  return render(ui, {
+    wrapper,
+    ...renderOptions,
+  })
+}
+
+const renderUnauthenticatedOffline = (
+  ui,
+  { renderOptions, initialEntries } = {},
+) => {
+  const wrapper = ({ children }) => {
+    return (
+      <UnauthenticatedProviders initialEntries={initialEntries}>
+        <OnlineStatusProvider value={{ isOnline: false }}>
+          {children}
+        </OnlineStatusProvider>
+      </UnauthenticatedProviders>
+    )
+  }
+
+  return render(ui, { wrapper, ...renderOptions })
 }
 
 const renderOverride = () => {

@@ -4,7 +4,7 @@ import language from '../../language'
 
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 
-class MermaidDatabaseGateway {
+class DatabaseGateway {
   #apiBaseUrl
 
   #authenticatedAxios
@@ -17,7 +17,7 @@ class MermaidDatabaseGateway {
 
   #isOnlineAuthenticatedAndReady
 
-  #mermaidDbAccessInstance
+  #dexieInstance
 
   #notAuthenticatedAndReadyError = new Error(
     language.error.appNotAuthenticatedOrReady,
@@ -28,12 +28,11 @@ class MermaidDatabaseGateway {
     auth0Token,
     isMermaidAuthenticated,
     isOnline,
-    mermaidDbAccessInstance,
+    dexieInstance,
   }) {
     this.#apiBaseUrl = apiBaseUrl
-    this.#mermaidDbAccessInstance = mermaidDbAccessInstance
-    this.#isAuthenticatedAndReady =
-      isMermaidAuthenticated && !!mermaidDbAccessInstance
+    this.#dexieInstance = dexieInstance
+    this.#isAuthenticatedAndReady = isMermaidAuthenticated && !!dexieInstance
     this.#authenticatedAxios = auth0Token
       ? axios.create({
           headers: {
@@ -139,30 +138,26 @@ class MermaidDatabaseGateway {
             throw Error('User Profile not returned from API')
           }
 
-          return this.#mermaidDbAccessInstance.currentUser
-            .put(user)
-            .then(() => user)
+          return this.#dexieInstance.currentUser.put(user).then(() => user)
         })
     }
     if (this.#isOfflineAuthenticatedAndReady) {
-      return this.#mermaidDbAccessInstance.currentUser
-        .toArray()
-        .then((results) => {
-          const user = results[0]
+      return this.#dexieInstance.currentUser.toArray().then((results) => {
+        const user = results[0]
 
-          if (!user) {
-            throw Error('User Profile not returned from offline storage')
-          }
+        if (!user) {
+          throw Error('User Profile not returned from offline storage')
+        }
 
-          return user
-        })
+        return user
+      })
     }
 
     return Promise.reject(this.#notAuthenticatedAndReadyError)
   }
 }
 
-const mermaidDatabaseGatewayPropTypes = PropTypes.shape({
+const databaseGatewayPropTypes = PropTypes.shape({
   getCollectRecord: PropTypes.func,
   getCollectRecordMethodLabel: PropTypes.func,
   getCollectRecords: PropTypes.func,
@@ -174,5 +169,5 @@ const mermaidDatabaseGatewayPropTypes = PropTypes.shape({
   getUserProfile: PropTypes.func,
 })
 
-export default MermaidDatabaseGateway
-export { mermaidDatabaseGatewayPropTypes }
+export default DatabaseGateway
+export { databaseGatewayPropTypes }

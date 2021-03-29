@@ -9,7 +9,7 @@ import getValidationPropsFromFormik from '../../library/formikHelpers/getValidat
 import {
   managementRegimePropType,
   sitePropType,
-} from '../../library/mermaidData/mermaidDataProptypes'
+} from '../../App/mermaidData/mermaidDataProptypes'
 
 const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
   const siteSelectOptions = sites.map((site) => ({
