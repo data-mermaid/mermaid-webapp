@@ -10,7 +10,7 @@ import {
   mediaQueryForTabletLandscapeUp,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import useOnlineStatus from '../../library/useOnlineStatus'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonSecondary } from '../generic/buttons'
 import CheckBoxWithLabel from '../generic/CheckBoxWithLabel'
 import { IconCopy } from '../icons'
