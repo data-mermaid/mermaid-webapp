@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
 import pluralize from '../../library/pluralize'
+import stopEventPropagation from '../../library/stopEventPropagation'
 import {
   mediaQueryPhoneOnly,
   hoverState,
@@ -12,7 +13,6 @@ import {
 } from '../../library/styling/mediaQueries'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonSecondary } from '../generic/buttons'
-import CheckBoxWithLabel from '../generic/CheckBoxWithLabel'
 import { IconCopy } from '../icons'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
@@ -156,6 +156,16 @@ const ProjectInfoWrapper = styled('div')`
   `)}
 `
 
+const CheckBoxWithLabel = styled.label`
+  padding: ${theme.spacing.xsmall};
+  width: 100%;
+  display: inline-block;
+  input {
+    margin: 0 ${theme.spacing.xsmall} 0 0;
+    cursor: pointer;
+  }
+`
+
 const VerticalRule = styled.div`
   ${mediaQueryTabletLandscapeOnly(css`
     display: none;
@@ -209,12 +219,16 @@ const ProjectCard = ({
         <p>
           {num_sites} {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
-        <CheckBoxWithLabel
-          id="offline-toggle"
-          label="Offline Toggle"
-          checked={offlineStatus}
-          onChange={handleProjectOfflineReadyClick}
-        />
+        <CheckBoxWithLabel htmlFor="offline-toggle">
+          <input
+            id="offline-toggle"
+            type="checkbox"
+            checked={offlineStatus}
+            onChange={handleProjectOfflineReadyClick}
+            onClick={stopEventPropagation}
+          />
+          Offline Ready
+        </CheckBoxWithLabel>
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
       <ButtonGroups>
