@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { getMockMermaidDbAccessInstance } from '../../testUtilities/mockMermaidDbAccess'
+import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
@@ -20,15 +20,10 @@ afterAll(() => {
   mockMermaidApiAllSuccessful.close()
 })
 
-// remove testing comments here before merging or next pr please
-
 test('Clicking anywhere on a project card navigates to the project collect page when offline', async () => {
   renderAuthenticatedOffline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
-
-  // the root level app doesnt have a loading indicator yet, so well test for the page name
-  // otherwise testing that the indicator has disappeared progresses the test before the actual projects view has loaded
 
   expect(
     await screen.findByText('Projects', {
@@ -36,11 +31,6 @@ test('Clicking anywhere on a project card navigates to the project collect page 
     }),
   )
 
-  // trying to avoid using getByTestId leads us to make the application have
-  // better accessibility by making the dev realize a list wasnt using good html semantics
-  // that said there could be other lists on the screen which will make this test fail without more specificity
-  // Im not sure how to solve that problem while avoiding a testId, so well leave it for now.
-  // ... i tried though
   const projectCard = screen.getAllByRole('listitem')[0]
 
   userEvent.click(projectCard)
@@ -54,7 +44,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 
 test('Clicking anywhere on a project card navigates to the project health page when online', async () => {
   renderAuthenticatedOnline(
-    <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
   expect(
@@ -73,30 +63,3 @@ test('Clicking anywhere on a project card navigates to the project health page w
     }),
   )
 })
-
-// this next test would pass regardless even if it should fail, im not sure why.
-// Probably because we are explicitly  clicking the actual button, not the area
-// above the button ???
-// so we wont test for that (not ideal)
-
-// test('Clicking on the copy button on a project card does not cause navigation', async () => {
-//   renderAuthenticatedOnline(
-//     <App mermaidDbAccessInstance={getMockMermaidDbAccessInstance()} />,
-//   )
-
-//   expect(
-//     await screen.findByText('Projects', {
-//       selector: 'h1',
-//     }),
-//   )
-
-//   const projectCard = screen.getAllByRole('listitem')[0]
-
-//   within(projectCard).getByText('Copy')
-
-//   expect(
-//     await screen.findByText('Projects', {
-//       selector: 'h1',
-//     }),
-//   )
-// })
