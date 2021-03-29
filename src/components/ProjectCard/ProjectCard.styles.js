@@ -1,0 +1,173 @@
+import styled, { css } from 'styled-components/macro'
+import theme from '../../theme'
+import {
+  mediaQueryPhoneOnly,
+  hoverState,
+  mediaQueryForTabletLandscapeUp,
+  mediaQueryTabletLandscapeOnly,
+} from '../../library/styling/mediaQueries'
+
+const borderWidth = '2px'
+
+export const stylesForNoHover = css`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 0;
+  button,
+  a {
+    font-size: smaller;
+    text-align: center;
+    span {
+      display: block;
+    }
+  }
+`
+export const ButtonGroups = styled('div')`
+  grid-column: 1 / -1;
+  margin: ${theme.spacing.small} ${theme.spacing.medium};
+  button,
+  a {
+    display: inline-block;
+    position: relative;
+    margin-right: ${theme.spacing.small};
+    span {
+      display: none;
+    }
+    ${mediaQueryForTabletLandscapeUp(css`
+      ${hoverState(css`
+        span {
+          display: block;
+          position: absolute;
+          top: 4.3rem;
+          left: 0;
+          color: ${theme.color.white};
+          background-color: ${theme.color.black};
+          text-align: center;
+          padding: ${theme.spacing.small};
+          text-transform: uppercase;
+        }
+      `)}
+    `)}
+  }
+
+  @media (hover: hover) {
+    visibility: hidden;
+  }
+  @media (hover: none) {
+    ${stylesForNoHover};
+    margin: ${theme.spacing.medium};
+  }
+  ${mediaQueryTabletLandscapeOnly(css`
+    ${stylesForNoHover};
+    margin-top: ${theme.spacing.medium};
+    a,
+    button {
+      background-color: transparent;
+      opacity: 0.6;
+      border: none;
+      padding: ${theme.spacing.small} 0;
+      margin: 0;
+    }
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    span {
+      font-size: ${theme.typography.xSmallFontSize};
+    }
+  `)}
+`
+
+export const CardWrapper = styled('div')`
+  display:grid;
+  grid-template-columns: 4fr 1fr;
+  transition: ${theme.timing.hoverTransition};
+  align-items: center;
+  margin: ${theme.spacing.medium} auto 0 auto;
+  width: ${theme.spacing.width};
+  max-width: ${theme.spacing.maxWidth};
+  background: ${theme.color.white};
+  border: solid ${borderWidth} transparent;
+  cursor: pointer;
+  ${hoverState(css`
+    transition: ${theme.timing.hoverTransition};
+    border: solid ${borderWidth} ${theme.color.primaryColor};
+    ${ButtonGroups} {
+      visibility: visible;
+    }
+  `)}
+  }
+  ${mediaQueryTabletLandscapeOnly(css`
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  `)}
+`
+
+export const ProjectNameWrapper = styled('div')`
+  align-self: start;
+  h2 {
+    margin: ${theme.spacing.xsmall} 0;
+    padding: ${theme.spacing.small} ${theme.spacing.medium};
+    ${theme.typography.noWordBreak};
+    ${theme.typography.upperCase};
+    ${mediaQueryTabletLandscapeOnly(css`
+      letter-spacing: 0;
+    `)}
+    ${mediaQueryPhoneOnly(css`
+      font-size: ${theme.typography.defaultFontSize};
+      padding: ${theme.spacing.small};
+    `)}
+  }
+`
+
+export const ProjectInfoWrapper = styled('div')`
+  align-self: start;
+  margin: ${theme.spacing.small} ${theme.spacing.medium} 0 0;
+  p:first-child {
+    font-size: larger;
+    font-weight: 900;
+    ${mediaQueryPhoneOnly(css`
+      font-size: initial;
+    `)}
+  }
+  p,
+  label {
+    font-size: smaller;
+    margin: 0;
+    padding: 0 ${theme.spacing.medium};
+  }
+  ${mediaQueryTabletLandscapeOnly(css`
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    p,
+    label {
+      padding: 0 ${theme.spacing.small};
+    }
+  `)}
+`
+
+export const CheckBoxLabel = styled.label`
+  padding: ${theme.spacing.xsmall};
+  width: 100%;
+  display: inline-block;
+  input {
+    margin: 0 ${theme.spacing.xsmall} 0 0;
+    cursor: pointer;
+  }
+`
+
+export const VerticalRule = styled.div`
+  ${mediaQueryTabletLandscapeOnly(css`
+    display: none;
+  `)}
+  @media (hover: none) {
+    display: none;
+  }
+  border: solid 1px ${theme.color.secondaryBorder};
+  width: 0;
+  margin-right: ${theme.spacing.small};
+  padding: ${theme.spacing.small} 0;
+  display: inline;
+`
