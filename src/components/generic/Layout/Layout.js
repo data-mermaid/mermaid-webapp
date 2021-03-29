@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 import { Column } from '../positioning'
 
@@ -14,12 +15,34 @@ const LayoutContainer = styled(Column)`
   }
   height: 100vh;
 `
+const OfflineIndicatorStyles = styled.div`
+  ${(props) =>
+    !props.isOnline &&
+    css`
+      border: solid thick red;
+    `}
+`
+
+const OfflineIndicator = ({ children }) => {
+  const { isOnline } = useOnlineStatus()
+
+  return (
+    <OfflineIndicatorStyles isOnline={isOnline}>
+      {children} {!isOnline && <>LABEL</>}
+    </OfflineIndicatorStyles>
+  )
+}
+
+OfflineIndicator.propTypes = { children: PropTypes.node.isRequired }
 
 const Layout = ({ children, footer, header }) => {
   return (
     <LayoutContainer>
-      {header}
-      <main>{children}</main>
+      <OfflineIndicator>
+        {header}
+        <main>{children}</main>
+      </OfflineIndicator>
+
       {footer}
     </LayoutContainer>
   )
