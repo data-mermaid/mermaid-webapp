@@ -1,16 +1,16 @@
 import Dexie from 'dexie'
 import fakeIndexedDB from 'fake-indexeddb'
 
-const getMockMermaidDbAccessInstance = () => {
-  const mockMermaidDbAccessInstance = new Dexie('mermaid', {
+const getMockDexieInstance = () => {
+  const mockDexieInstance = new Dexie('mermaid', {
     indexedDB: fakeIndexedDB,
   })
 
-  mockMermaidDbAccessInstance.version(1).stores({
+  mockDexieInstance.version(1).stores({
     currentUser: 'id, first_name, last_name, full_name, email',
   })
 
-  mockMermaidDbAccessInstance.currentUser
+  mockDexieInstance.currentUser
     .put({
       id: 'fake-id',
       first_name: 'FakeFirstNameOffline',
@@ -27,7 +27,7 @@ const getMockMermaidDbAccessInstance = () => {
       ),
     )
 
-  return mockMermaidDbAccessInstance
+  return mockDexieInstance
 }
 
-export { getMockMermaidDbAccessInstance }
+export default getMockDexieInstance

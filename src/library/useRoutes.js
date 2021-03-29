@@ -17,12 +17,12 @@ import NewHabitatComplexity from '../components/pages/NewHabitatComplexity'
 import NewBleaching from '../components/pages/NewBleaching'
 import EditFishBelt from '../components/pages/EditfishBelt/EditFishBelt'
 
-export const useRoutes = ({ mermaidDatabaseGatewayInstance }) => {
+export const useRoutes = ({ databaseGatewayInstance }) => {
   const routes = [
     {
       path: '/projects',
       Component: () => (
-        <Projects databaseGatewayInstance={mermaidDatabaseGatewayInstance} />
+        <Projects databaseGatewayInstance={databaseGatewayInstance} />
       ),
     },
     {
@@ -32,9 +32,7 @@ export const useRoutes = ({ mermaidDatabaseGatewayInstance }) => {
     {
       path: '/projects/:projectId/collecting',
       Component: () => (
-        <Collect
-          mermaidDatabaseGatewayInstance={mermaidDatabaseGatewayInstance}
-        />
+        <Collect databaseGatewayInstance={databaseGatewayInstance} />
       ),
     },
     {
@@ -44,9 +42,7 @@ export const useRoutes = ({ mermaidDatabaseGatewayInstance }) => {
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
       Component: () => (
-        <EditFishBelt
-          databaseGatewayInstance={mermaidDatabaseGatewayInstance}
-        />
+        <EditFishBelt databaseGatewayInstance={databaseGatewayInstance} />
       ),
     },
     {

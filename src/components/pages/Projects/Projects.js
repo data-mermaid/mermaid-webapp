@@ -4,7 +4,7 @@ import SubLayout1 from '../../SubLayout1'
 
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
-import { mermaidDatabaseGatewayPropTypes } from '../../../library/mermaidData/MermaidDatabaseGateway'
+import { databaseGatewayPropTypes } from '../../../library/mermaidData/DatabaseGateway'
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
 import language from '../../../language'
 
@@ -52,7 +52,7 @@ const Projects = ({ databaseGatewayInstance }) => {
 }
 
 Projects.propTypes = {
-  databaseGatewayInstance: mermaidDatabaseGatewayPropTypes.isRequired,
+  databaseGatewayInstance: databaseGatewayPropTypes.isRequired,
 }
 
 export default Projects

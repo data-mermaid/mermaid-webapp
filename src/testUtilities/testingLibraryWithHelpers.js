@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import theme from '../theme'
+import { OnlineStatusProvider } from '../library/onlineStatusContext'
 
 const BasicProviders = ({ children }) => (
   <MemoryRouter>
@@ -44,24 +45,66 @@ BasicProviders.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
-const renderAuthenticatedOnline = (ui, options) =>
-  render(ui, { wrapper: AuthenticatedProviders, ...options })
-const renderUnauthenticatedOnline = (ui, options) =>
-  render(ui, { wrapper: UnauthenticatedProviders, ...options })
-
-const renderAuthenticatedOffline = (ui, options) => {
-  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+const renderAuthenticatedOnline = (ui, options) => {
+  const wrapper = ({ children }) => {
+    return (
+      <AuthenticatedProviders>
+        <OnlineStatusProvider value={{ isOnline: true }}>
+          {children}
+        </OnlineStatusProvider>
+      </AuthenticatedProviders>
+    )
+  }
 
   return render(ui, {
-    wrapper: AuthenticatedProviders,
+    wrapper,
+    ...options,
+  })
+}
+
+const renderUnauthenticatedOnline = (ui, options) => {
+  const wrapper = ({ children }) => {
+    return (
+      <UnauthenticatedProviders>
+        <OnlineStatusProvider value={{ isOnline: true }}>
+          {children}
+        </OnlineStatusProvider>
+      </UnauthenticatedProviders>
+    )
+  }
+
+  render(ui, { wrapper, ...options })
+}
+
+const renderAuthenticatedOffline = (ui, options) => {
+  const wrapper = ({ children }) => {
+    return (
+      <AuthenticatedProviders>
+        <OnlineStatusProvider value={{ isOnline: false }}>
+          {children}
+        </OnlineStatusProvider>
+      </AuthenticatedProviders>
+    )
+  }
+
+  return render(ui, {
+    wrapper,
     ...options,
   })
 }
 
 const renderUnauthenticatedOffline = (ui, options) => {
-  jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
+  const wrapper = ({ children }) => {
+    return (
+      <UnauthenticatedProviders>
+        <OnlineStatusProvider value={{ isOnline: false }}>
+          {children}
+        </OnlineStatusProvider>
+      </UnauthenticatedProviders>
+    )
+  }
 
-  return render(ui, { wrapper: UnauthenticatedProviders, ...options })
+  return render(ui, { wrapper, ...options })
 }
 
 const renderOverride = () => {

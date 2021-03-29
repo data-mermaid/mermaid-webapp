@@ -1,8 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { useEffect, useState } from 'react'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
+import { useOnlineStatus } from './onlineStatusContext'
 
-const useAuthentication = ({ isOnline }) => {
+const useAuthentication = () => {
+  const { isOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
   const [auth0Token, setAuth0Token] = useState()
 
@@ -57,7 +59,6 @@ const useAuthentication = ({ isOnline }) => {
     getAuth0AccessTokenSilently,
     isAuth0Authenticated,
     isAuth0Loading,
-    isOnline,
   ])
 
   const logoutMermaid = () => {
