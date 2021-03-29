@@ -12,7 +12,7 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
     <>
       <NavLinkButtonishIcon
         to={`${projectUrl}/health`}
-        aria-label="Data"
+        aria-label="Health"
         onClick={stopEventPropagation}
       >
         <IconHeart />
