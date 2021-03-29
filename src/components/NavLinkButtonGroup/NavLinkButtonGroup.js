@@ -3,17 +3,17 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import { NavLinkButtonishIcon } from '../generic/links'
 import { IconCollect, IconData, IconAdmin, IconHeart } from '../icons'
+import stopEventPropagation from '../../library/stopEventPropagation'
 
 const ButtonLabel = styled('span')``
+
 const NavLinkButtonGroup = ({ projectUrl }) => {
   return (
     <>
       <NavLinkButtonishIcon
         to={`${projectUrl}/health`}
         aria-label="Data"
-        onClick={(e) => {
-          e.stopPropagation()
-        }}
+        onClick={stopEventPropagation}
       >
         <IconHeart />
         <ButtonLabel>Health</ButtonLabel>
@@ -21,9 +21,7 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
       <NavLinkButtonishIcon
         to={`${projectUrl}/collecting`}
         aria-label="Collect"
-        onClick={(e) => {
-          e.stopPropagation()
-        }}
+        onClick={stopEventPropagation}
       >
         <IconCollect />
         <ButtonLabel>Collecting</ButtonLabel>
@@ -31,9 +29,7 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
       <NavLinkButtonishIcon
         to={`${projectUrl}/data`}
         aria-label="Data"
-        onClick={(e) => {
-          e.stopPropagation()
-        }}
+        onClick={stopEventPropagation}
       >
         <IconData />
         <ButtonLabel>Submitted</ButtonLabel>
@@ -41,9 +37,7 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
       <NavLinkButtonishIcon
         to={`${projectUrl}/admin`}
         aria-label="Admin"
-        onClick={(e) => {
-          e.stopPropagation()
-        }}
+        onClick={stopEventPropagation}
       >
         <IconAdmin />
         <ButtonLabel>Info</ButtonLabel>

@@ -12,6 +12,7 @@ import {
 } from '../../library/styling/mediaQueries'
 import useOnlineStatus from '../../library/useOnlineStatus'
 import { ButtonSecondary } from '../generic/buttons'
+import CheckBoxWithLabel from '../generic/CheckBoxWithLabel'
 import { IconCopy } from '../icons'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
 
@@ -154,15 +155,6 @@ const ProjectInfoWrapper = styled('div')`
     }
   `)}
 `
-const CheckBoxWithLabel = styled.label`
-  padding: ${theme.spacing.xsmall};
-  width: 100%;
-  display: inline-block;
-  input {
-    margin: 0 ${theme.spacing.xsmall} 0 0;
-    cursor: pointer;
-  }
-`
 
 const VerticalRule = styled.div`
   ${mediaQueryTabletLandscapeOnly(css`
@@ -217,18 +209,12 @@ const ProjectCard = ({
         <p>
           {num_sites} {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
-        <CheckBoxWithLabel htmlFor="offline-toggle">
-          <input
-            id="offline-toggle"
-            type="checkbox"
-            checked={offlineStatus}
-            onChange={handleProjectOfflineReadyClick}
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          />
-          Offline Ready
-        </CheckBoxWithLabel>
+        <CheckBoxWithLabel
+          id="offline-toggle"
+          label="Offline Toggle"
+          checked={offlineStatus}
+          onChange={handleProjectOfflineReadyClick}
+        />
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
       <ButtonGroups>
