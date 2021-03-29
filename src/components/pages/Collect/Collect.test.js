@@ -11,8 +11,12 @@ import {
 import Collect from './Collect'
 
 test('Collect component renders with the expected UI elements', () => {
-  // const utilities = renderAuthenticatedOnline(<Collect />)
-  // expect(screen.getByText('I should fail'))
+  // renderAuthenticatedOnline(<Collect />)
+  // expect sample unit button exists
+  // expect within form to have table headers with proper text for each column
+  // can ignore testing title. Its logic will come later
+  // expect page size selector (review M76 App.OnlineStatusMessage.test.js for inspiration on testing broken up text)
+  // expect page selector. (ignore how many pages, maybe look for previous and next text)
 })
 
 test('Collect Records table sorts properly by method column', async () => {
