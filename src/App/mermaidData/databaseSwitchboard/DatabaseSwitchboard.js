@@ -1,6 +1,7 @@
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import language from '../../../language'
+import { createUuid } from '../../../library/createUuid'
 
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
@@ -155,18 +156,48 @@ class DatabaseSwitchboard {
 
     return Promise.reject(this.#notAuthenticatedAndReadyError)
   }
+
+  saveFishBelt = (record) => {
+    const idToSubmit = record.id ?? createUuid()
+    const recordToSubmit = { ...record, id: idToSubmit }
+
+    if (this.#isOnlineAuthenticatedAndReady) {
+      // upcoming work
+    }
+    if (this.#isOfflineAuthenticatedAndReady) {
+      return this.#dexieInstance.collectRecords
+        .put(recordToSubmit)
+        .then(() => recordToSubmit)
+    }
+
+    return Promise.reject(this.#notAuthenticatedAndReadyError)
+  }
+
+  getFishBelt = (id) => {
+    if (this.#isOnlineAuthenticatedAndReady) {
+      // upcoming work
+    }
+
+    if (this.#isOfflineAuthenticatedAndReady) {
+      return this.#dexieInstance.collectRecords.get(id)
+    }
+
+    return Promise.reject(this.#notAuthenticatedAndReadyError)
+  }
 }
 
 const databaseSwitchboardPropTypes = PropTypes.shape({
+  getChoices: PropTypes.func,
   getCollectRecord: PropTypes.func,
   getCollectRecordMethodLabel: PropTypes.func,
   getCollectRecords: PropTypes.func,
   getCollectRecordsForUIDisplay: PropTypes.func,
+  getFishBelt: PropTypes.func,
   getManagementRegimes: PropTypes.func,
   getProjects: PropTypes.func,
   getSites: PropTypes.func,
-  getChoices: PropTypes.func,
   getUserProfile: PropTypes.func,
+  saveFishBelt: PropTypes.func,
 })
 
 export default DatabaseSwitchboard
