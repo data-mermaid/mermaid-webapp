@@ -12,7 +12,7 @@ import AddSampleUnitButton from './AddSampleUnitButton'
 import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import SubLayout2 from '../../SubLayout2'
+import ContentPageLayout from '../../ContentPageLayout'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 
 const TopBar = () => (
@@ -213,7 +213,11 @@ const Collect = ({ databaseGatewayInstance }) => {
   )
 
   return (
-    <SubLayout2 toolbar={<TopBar />} content={table} isLoading={isLoading} />
+    <ContentPageLayout
+      toolbar={<TopBar />}
+      content={table}
+      isLoading={isLoading}
+    />
   )
 }
 

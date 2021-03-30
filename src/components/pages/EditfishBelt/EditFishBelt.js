@@ -15,7 +15,7 @@ import { RowRight } from '../../generic/positioning'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import language from '../../../language'
 import SampleInfoInputs from '../../SampleInfoInputs'
-import SubLayout2 from '../../SubLayout2'
+import ContentPageLayout from '../../ContentPageLayout'
 import { H2 } from '../../generic/text'
 
 const EditFishBelt = ({ databaseGatewayInstance }) => {
@@ -77,7 +77,7 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
   return (
     <Formik {...formikOptions}>
       {(formik) => (
-        <SubLayout2
+        <ContentPageLayout
           isLoading={isLoading}
           content={
             <form
