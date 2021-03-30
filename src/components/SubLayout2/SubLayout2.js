@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
 import { Column } from '../generic/positioning'
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
@@ -24,15 +24,24 @@ const SubLayout2ContentWrapper = styled('div')`
 const ContentWrapper = styled('div')`
   background: ${theme.color.backgroundColor};
 `
-const Content = styled('div')`
-  margin: ${theme.spacing.medium};
-  padding: ${theme.spacing.medium};
+const contentStyles = css`
+  margin: ${theme.spacing.small};
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
   background: ${theme.color.white};
 `
-
 const ContentToolbar = styled('div')`
-  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  ${contentStyles};
+  position: sticky;
+  top: ${theme.spacing.headerHeight};
+  border-bottom: solid ${theme.spacing.borderMedium}
+    ${theme.color.backgroundColor};
+  margin-bottom: 0px;
 `
+const Content = styled('div')`
+  ${contentStyles};
+  margin-top: 0px;
+`
+
 const SubLayout2 = ({ content, toolbar, isLoading }) => {
   // I don't see the point of passing pageTitle to every components using this layout, leave as constant for now.
   const pageTitle = 'Project Name Placeholder'

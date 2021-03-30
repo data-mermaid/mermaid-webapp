@@ -56,6 +56,7 @@ const spacing = {
   headerHeight: '4.4rem',
   sideNavWidthTabletLandscapeOnly: '8rem',
   sideNavWidthPhoneOnly: '6rem',
+  borderMedium: '2px',
   borderLarge: '4px',
 }
 

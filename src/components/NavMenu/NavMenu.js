@@ -24,14 +24,19 @@ const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
   height: 100%;
+  white-space: nowrap;
   ${mediaQueryTabletLandscapeOnly(css`
     width: ${theme.spacing.sideNavWidthTabletLandscapeOnly};
+    white-space: normal;
   `)}
   ${mediaQueryPhoneOnly(css`
     width: ${theme.spacing.sideNavWidthPhoneOnly};
+    white-space: auto;
   `)}
 `
 const NavList = styled('ul')`
+  position: sticky;
+  top: ${theme.spacing.headerHeight};
   margin-top: -1px;
   &,
   & ul {
