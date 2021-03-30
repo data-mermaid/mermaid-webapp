@@ -21,7 +21,7 @@ function App({ dexieInstance }) {
     auth0Token,
     isMermaidAuthenticated,
     logoutMermaid,
-  } = useAuthentication({})
+  } = useAuthentication()
   const databaseSwitchboardInstance = useMemo(() => {
     const apiBaseUrl = process.env.REACT_APP_MERMAID_API
     const areDependenciesReady =
