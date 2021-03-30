@@ -23,7 +23,6 @@ import {
 const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
-  border-right: solid 1px ${theme.color.border};
   height: 100%;
   ${mediaQueryTabletLandscapeOnly(css`
     width: ${theme.spacing.sideNavWidthTabletLandscapeOnly};
@@ -38,6 +37,9 @@ const NavList = styled('ul')`
   & ul {
     padding: 0;
     li {
+      a {
+        color: ${theme.color.black};
+      }
       ${mediaQueryPhoneOnly(css`
         a {
           font-size: smaller;
@@ -48,16 +50,14 @@ const NavList = styled('ul')`
   }
 `
 const NavHeader = styled('p')`
-  text-transform: uppercase;
-  font-weight: 900;
   margin: 0;
-  border-top: solid 1px ${theme.color.border};
-  letter-spacing: 2px;
+  color: ${theme.color.black};
   padding: ${theme.spacing.small};
-  padding-top: ${theme.spacing.medium};
+  padding-top: ${theme.spacing.large};
   ${mediaQueryTabletLandscapeOnly(css`
     display: none;
   `)}
+  ${theme.typography.upperCase};
 `
 
 const NavMenu = () => {

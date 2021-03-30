@@ -20,7 +20,7 @@ import HideShow from '../generic/HideShow'
  */
 
 const StyledHeader = styled(RowSpaceBetween)`
-  background-color: ${theme.color.black};
+  background-color: ${theme.color.headerColor};
   color: ${theme.color.white};
   align-items: flex-start;
   position: fixed;

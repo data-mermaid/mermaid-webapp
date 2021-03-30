@@ -12,6 +12,7 @@ const SubLayout2Container = styled('div')`
   grid-template-rows: auto 1fr;
   height: calc(100% - ${theme.spacing.headerHeight});
   margin-top: ${theme.spacing.headerHeight};
+  background: ${theme.color.white};
 `
 
 const SubLayout2ContentWrapper = styled('div')`
@@ -21,14 +22,15 @@ const SubLayout2ContentWrapper = styled('div')`
 `
 
 const ContentWrapper = styled('div')`
-  background: ${theme.color.white};
+  background: ${theme.color.backgroundColor};
 `
 const Content = styled('div')`
+  margin: ${theme.spacing.medium};
   padding: ${theme.spacing.medium};
+  background: ${theme.color.white};
 `
 
 const ContentToolbar = styled('div')`
-  border-bottom: solid 1px ${theme.color.border};
   padding: ${theme.spacing.small} ${theme.spacing.medium};
 `
 const SubLayout2 = ({ content, toolbar, isLoading }) => {
