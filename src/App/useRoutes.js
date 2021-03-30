@@ -17,12 +17,12 @@ import NewHabitatComplexity from '../components/pages/NewHabitatComplexity'
 import NewBleaching from '../components/pages/NewBleaching'
 import EditFishBelt from '../components/pages/EditfishBelt/EditFishBelt'
 
-export const useRoutes = ({ databaseGatewayInstance }) => {
+export const useRoutes = ({ databaseSwitchboardInstance }) => {
   const routes = [
     {
       path: '/projects',
       Component: () => (
-        <Projects databaseGatewayInstance={databaseGatewayInstance} />
+        <Projects databaseSwitchboardInstance={databaseSwitchboardInstance} />
       ),
     },
     {
@@ -32,7 +32,7 @@ export const useRoutes = ({ databaseGatewayInstance }) => {
     {
       path: '/projects/:projectId/collecting',
       Component: () => (
-        <Collect databaseGatewayInstance={databaseGatewayInstance} />
+        <Collect databaseSwitchboardInstance={databaseSwitchboardInstance} />
       ),
     },
     {
@@ -42,7 +42,9 @@ export const useRoutes = ({ databaseGatewayInstance }) => {
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
       Component: () => (
-        <EditFishBelt databaseGatewayInstance={databaseGatewayInstance} />
+        <EditFishBelt
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+        />
       ),
     },
     {

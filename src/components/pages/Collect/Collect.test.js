@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import mockOnlineDatabaseGatewayInstance from '../../../testUtilities/mockOnlineDatabaseGatewayInstance'
+import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -21,7 +21,9 @@ test('Collect component renders with the expected UI elements', () => {
 
 test('Collect Records table sorts properly by method column', async () => {
   renderAuthenticatedOnline(
-    <Collect databaseGatewayInstance={mockOnlineDatabaseGatewayInstance} />,
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
   )
 
   await waitFor(() =>
@@ -43,7 +45,9 @@ test('Collect Records table sorts properly by method column', async () => {
 })
 test('Collect Records table sorts properly by site column', async () => {
   renderAuthenticatedOnline(
-    <Collect databaseGatewayInstance={mockOnlineDatabaseGatewayInstance} />,
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
   )
 
   await waitFor(() =>
@@ -74,7 +78,9 @@ test('Collect Records table sorts properly by synced column', () => {})
 
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
   renderAuthenticatedOnline(
-    <Collect databaseGatewayInstance={mockOnlineDatabaseGatewayInstance} />,
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
   )
   await waitFor(() =>
     expect(screen.queryByLabelText('loading indicator')).toBeNull(),
@@ -96,7 +102,9 @@ test('Collect Records table changes number of rows visible size when pagination 
 
 test('Collect Records table change pages when different page is selected ', async () => {
   renderAuthenticatedOnline(
-    <Collect databaseGatewayInstance={mockOnlineDatabaseGatewayInstance} />,
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
   )
   await waitFor(() =>
     expect(screen.queryByLabelText('loading indicator')).toBeNull(),

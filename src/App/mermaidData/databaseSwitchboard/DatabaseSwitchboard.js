@@ -1,10 +1,10 @@
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import language from '../../language'
+import language from '../../../language'
 
-import mockMermaidData from '../../testUtilities/mockMermaidData'
+import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
-class DatabaseGateway {
+class DatabaseSwitchboard {
   #apiBaseUrl
 
   #authenticatedAxios
@@ -157,7 +157,7 @@ class DatabaseGateway {
   }
 }
 
-const databaseGatewayPropTypes = PropTypes.shape({
+const databaseSwitchboardPropTypes = PropTypes.shape({
   getCollectRecord: PropTypes.func,
   getCollectRecordMethodLabel: PropTypes.func,
   getCollectRecords: PropTypes.func,
@@ -169,5 +169,5 @@ const databaseGatewayPropTypes = PropTypes.shape({
   getUserProfile: PropTypes.func,
 })
 
-export default DatabaseGateway
-export { databaseGatewayPropTypes }
+export default DatabaseSwitchboard
+export { databaseSwitchboardPropTypes }

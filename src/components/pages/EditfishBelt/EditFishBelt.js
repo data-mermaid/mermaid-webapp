@@ -10,7 +10,7 @@ import {
   getSampleInfoValidationInfo,
 } from '../../../library/collectRecordHelpers'
 import { ButtonCallout } from '../../generic/buttons'
-import { databaseGatewayPropTypes } from '../../../App/mermaidData/DatabaseGateway'
+import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
 import { RowRight } from '../../generic/positioning'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import language from '../../../language'
@@ -18,7 +18,7 @@ import SampleInfoInputs from '../../SampleInfoInputs'
 import SubLayout2 from '../../SubLayout2'
 import { H2 } from '../../generic/text'
 
-const EditFishBelt = ({ databaseGatewayInstance }) => {
+const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   const { recordId } = useParams()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -30,10 +30,10 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
 
   const _getSupportingData = useEffect(() => {
     Promise.all([
-      databaseGatewayInstance.getCollectRecord(recordId),
-      databaseGatewayInstance.getSites(),
-      databaseGatewayInstance.getManagementRegimes(),
-      databaseGatewayInstance.getChoices(),
+      databaseSwitchboardInstance.getCollectRecord(recordId),
+      databaseSwitchboardInstance.getSites(),
+      databaseSwitchboardInstance.getManagementRegimes(),
+      databaseSwitchboardInstance.getChoices(),
     ])
       .then(
         ([
@@ -52,7 +52,7 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
       .catch(() => {
         toast.error(language.error.collectRecordUnavailable)
       })
-  }, [databaseGatewayInstance, recordId])
+  }, [databaseSwitchboardInstance, recordId])
 
   const collectRecordData = collectRecordBeingEdited?.data
 
@@ -117,7 +117,7 @@ const EditFishBelt = ({ databaseGatewayInstance }) => {
 }
 
 EditFishBelt.propTypes = {
-  databaseGatewayInstance: databaseGatewayPropTypes.isRequired,
+  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default EditFishBelt
