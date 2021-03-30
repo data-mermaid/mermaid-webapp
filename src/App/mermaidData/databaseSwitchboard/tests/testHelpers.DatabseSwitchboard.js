@@ -1,6 +1,6 @@
 import {
   getMockDexieInstanceAllSuccess,
-  getMockDexieInstanceNoData,
+  getMockDexieInstanceError,
 } from '../../../../testUtilities/mockDexie'
 import DatabaseSwitchboard from '../DatabaseSwitchboard'
 
@@ -16,13 +16,13 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnline = () => {
   })
 }
 
-export const getDatabaseSwitchboardInstanceAuthenticatedOfflineNoData = () => {
+export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () => {
   return new DatabaseSwitchboard({
     apiBaseUrl,
     auth0Token: 'fake token',
     isMermaidAuthenticated: true,
     isOnline: false,
-    dexieInstance: getMockDexieInstanceNoData(),
+    dexieInstance: getMockDexieInstanceError(),
   })
 }
 

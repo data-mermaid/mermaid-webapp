@@ -25,16 +25,8 @@ const getMockDexieInstanceAllSuccess = () => {
 
   return dexieInstance
 }
-const getMockDexieInstanceNoData = () => {
-  const dexieInstance = new Dexie('mermaidNoData', {
-    indexedDB: fakeIndexedDB,
-  })
-
-  dexieInstance.version(1).stores({
-    currentUser: 'id',
-  })
-
-  return dexieInstance
+const getMockDexieInstanceError = () => {
+  return undefined
 }
 
-export { getMockDexieInstanceAllSuccess, getMockDexieInstanceNoData }
+export { getMockDexieInstanceAllSuccess, getMockDexieInstanceError }

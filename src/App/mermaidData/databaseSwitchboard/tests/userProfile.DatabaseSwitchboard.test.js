@@ -1,13 +1,8 @@
 import { rest } from 'msw'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import {
-  getMockDexieInstanceAllSuccess,
-  getMockDexieInstanceNoData,
-} from '../../../../testUtilities/mockDexie'
-import DatabaseSwitchboard from '../DatabaseSwitchboard'
-import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess,
-  getDatabaseSwitchboardInstanceAuthenticatedOfflineNoData,
+  getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
   getDatabaseSwitchboardInstanceAuthenticatedOnline,
 } from './testHelpers.DatabseSwitchboard'
 
@@ -59,7 +54,7 @@ test('getUserProfile offline returns data from local storage', async () => {
   })
 })
 test('getUserProfile offline returns error message upon dexie error', async () => {
-  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOfflineNoData()
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError()
 
   expect.assertions(1)
 
