@@ -1,3 +1,3 @@
-import HomePageLayout from './HomePageLayout'
+import PageLayout from './HomePageLayout'
 
-export default HomePageLayout
+export default PageLayout
