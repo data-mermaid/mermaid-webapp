@@ -6,14 +6,14 @@ import {
   screen,
   waitFor,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import mockOnlineDatabaseGatewayInstance from '../../../testUtilities/mockOnlineDatabaseGatewayInstance'
+import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 
 import EditFishBelt from './EditFishBelt'
 
 test('EditFishBelt component renders with the expected UI elements', async () => {
   renderAuthenticatedOnline(
     <EditFishBelt
-      databaseGatewayInstance={mockOnlineDatabaseGatewayInstance}
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
     />,
   )
 
@@ -50,7 +50,7 @@ test('EditFishBelt form inputs are initialized with the correct values', async (
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <EditFishBelt
-        databaseGatewayInstance={mockOnlineDatabaseGatewayInstance}
+        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
       />
     </Route>,
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },

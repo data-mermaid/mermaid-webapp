@@ -1,7 +1,7 @@
-import DatabaseGateway from '../App/mermaidData/DatabaseGateway'
 import { getMockDexieInstanceAllSuccess } from './mockDexie'
+import DatabaseSwitchboard from '../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 
-const mockOnlineDatabaseGatewayInstance = new DatabaseGateway({
+const mockOnlineDatabaseSwitchboardInstance = new DatabaseSwitchboard({
   apiBaseUrl: process.env.REACT_APP_MERMAID_API,
   auth0Token: 'token',
   isMermaidAuthenticated: true,
@@ -9,4 +9,4 @@ const mockOnlineDatabaseGatewayInstance = new DatabaseGateway({
   dexieInstance: getMockDexieInstanceAllSuccess(),
 })
 
-export default mockOnlineDatabaseGatewayInstance
+export default mockOnlineDatabaseSwitchboardInstance

@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 
-import { databaseGatewayPropTypes } from '../../../App/mermaidData/DatabaseGateway'
+import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
 import language from '../../../language'
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
 import ProjectCard from '../../ProjectCard'
@@ -11,12 +11,12 @@ import SubLayout1 from '../../SubLayout1'
 /**
  * All Projects page (lists projects)
  */
-const Projects = ({ databaseGatewayInstance }) => {
+const Projects = ({ databaseSwitchboardInstance }) => {
   const [projects, setProjects] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const _getProjects = useEffect(() => {
-    databaseGatewayInstance
+    databaseSwitchboardInstance
       .getProjects()
       .then((projectsResponse) => {
         setIsLoading(false)
@@ -25,7 +25,7 @@ const Projects = ({ databaseGatewayInstance }) => {
       .catch(() => {
         toast.error(language.error.projectsUnavailable)
       })
-  }, [databaseGatewayInstance])
+  }, [databaseSwitchboardInstance])
 
   const projectList = projects.map(
     ({ name, countries, num_sites, offlineReady, updated_on }) => (
@@ -48,7 +48,7 @@ const Projects = ({ databaseGatewayInstance }) => {
 }
 
 Projects.propTypes = {
-  databaseGatewayInstance: databaseGatewayPropTypes.isRequired,
+  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default Projects
