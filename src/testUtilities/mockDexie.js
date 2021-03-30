@@ -7,7 +7,8 @@ const getMockDexieInstanceAllSuccess = () => {
   })
 
   dexieInstance.version(1).stores({
-    currentUser: 'id, first_name, last_name, full_name, email',
+    currentUser: 'id',
+    collectRecords: 'id',
   })
 
   dexieInstance.currentUser
@@ -30,7 +31,7 @@ const getMockDexieInstanceNoData = () => {
   })
 
   dexieInstance.version(1).stores({
-    currentUser: 'id, first_name, last_name, full_name, email',
+    currentUser: 'id',
   })
 
   return dexieInstance
