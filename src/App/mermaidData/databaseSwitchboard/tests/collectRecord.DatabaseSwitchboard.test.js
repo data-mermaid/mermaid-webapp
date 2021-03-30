@@ -3,7 +3,7 @@ import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidAp
 
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess,
-  getDatabaseSwitchboardInstanceAuthenticatedOfflineNoData,
+  getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
 } from './testHelpers.DatabseSwitchboard'
 
 beforeAll(() => {
@@ -66,7 +66,7 @@ test('saveFishBelt offline returns saved record including an id if one isnt supp
   expect(validateUuid(savedFishBeltResponse.id)).toBeTruthy()
 })
 test('saveFishBelt offline returns error message upon dexie error', async () => {
-  const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineNoData()
+  const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError()
 
   expect.assertions(1)
 
