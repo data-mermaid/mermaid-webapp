@@ -1,16 +1,14 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
+import userEvent from '@testing-library/user-event'
 import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import {
   renderAuthenticatedOnline,
   screen,
   waitFor,
   within,
-  fireEvent,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import Projects from './Projects'
-
-// import Projects from './Projects'
 
 test('Projects component renders with the expected UI elements', async () => {
   // const utilities = renderAuthenticatedOnline(<Projects />)
@@ -54,7 +52,32 @@ test('Projects component renders with the expected UI elements', async () => {
   expect(sortButton).toBeInTheDocument()
 })
 
-test('A project card hover, shows extra buttons', () => {})
-test('A project card shows  relevant data for a project', () => {
+test('A project card hover, shows extra buttons', async () => {
+  renderAuthenticatedOnline(
+    <Projects
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  )
+
+  const projectCard = screen.getAllByRole('listitem')[0]
+
+  const healthButton = within(projectCard).getByLabelText(/health/i)
+  const collectButton = within(projectCard).getByLabelText(/collect/i)
+  const dataButton = within(projectCard).getByLabelText(/data/i)
+  const adminButton = within(projectCard).getByLabelText(/admin/i)
+
+  userEvent.hover(projectCard)
+
+  expect(healthButton).toHaveStyle(`visibility: visible`)
+  expect(collectButton).toHaveStyle(`visibility: visible`)
+  expect(dataButton).toHaveStyle(`visibility: visible`)
+  expect(adminButton).toHaveStyle(`visibility: visible`)
+})
+
+test('A project card shows relevant data for a project', () => {
   // test the things that are wired in from data. (title, country, etc)
 })
