@@ -103,7 +103,7 @@ const ProjectToolBarSection = () => {
             <option value="LastUpdated">Last Updated Dates</option>
           </select>
         </SortByLabelWrapper>
-        <ButtonSecondary>
+        <ButtonSecondary aria-label="sort-projects">
           <IconSortDown />
         </ButtonSecondary>
       </FilterRowWrapper>
