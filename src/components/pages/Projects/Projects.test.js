@@ -69,6 +69,7 @@ test('A project card hover, shows extra buttons', async () => {
   const collectButton = within(projectCard).getByLabelText(/collect/i)
   const dataButton = within(projectCard).getByLabelText(/data/i)
   const adminButton = within(projectCard).getByLabelText(/admin/i)
+  const copyButton = within(projectCard).getByLabelText(/copy/i)
 
   userEvent.hover(projectCard)
 
@@ -76,8 +77,30 @@ test('A project card hover, shows extra buttons', async () => {
   expect(collectButton).toHaveStyle(`visibility: visible`)
   expect(dataButton).toHaveStyle(`visibility: visible`)
   expect(adminButton).toHaveStyle(`visibility: visible`)
+  expect(copyButton).toHaveStyle(`visibility: visible`)
 })
 
-test('A project card shows relevant data for a project', () => {
+test('A project card shows relevant data for a project', async () => {
   // test the things that are wired in from data. (title, country, etc)
+  renderAuthenticatedOnline(
+    <Projects
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  )
+
+  const projectCard = screen.getAllByRole('listitem')[0]
+
+  expect(
+    within(projectCard).getByText(
+      'Karimunjawa National Park is a long name for a project, not as long as Karimunjawaawajnumirak',
+    ),
+  )
+  expect(within(projectCard).getByText('Fiji'))
+  expect(within(projectCard).getByText('23 sites'))
+  expect(within(projectCard).getByRole('checkbox'))
+  expect(within(projectCard).getByText('Updated: 01/21/2020'))
 })
