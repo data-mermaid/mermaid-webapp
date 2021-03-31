@@ -43,6 +43,8 @@ const color = {
   sideBarColor: black.mix(colorHelper(white), 0.9),
   headerColor: primary,
   footerColor: white,
+  tableRowOdd: primary.mix(colorHelper(white), 0.9),
+  tableRowEven: primary.mix(colorHelper(white), 0.95),
 }
 const spacing = {
   xsmall,
@@ -56,6 +58,7 @@ const spacing = {
   headerHeight: '4.4rem',
   sideNavWidthTabletLandscapeOnly: '8rem',
   sideNavWidthPhoneOnly: '6rem',
+  sideNavWidthDesktop: '25rem',
   borderMedium: '2px',
   borderLarge: '4px',
 }

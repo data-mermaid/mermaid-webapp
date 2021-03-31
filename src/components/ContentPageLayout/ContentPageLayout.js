@@ -34,8 +34,10 @@ const ContentToolbar = styled('div')`
 `
 const Content = styled('div')`
   margin: ${theme.spacing.small};
-  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  /* padding: ${theme.spacing.small} ${theme.spacing.medium}; */
   background: ${theme.color.white};
+  width: calc(100vw - ${theme.spacing.sideNavWidthDesktop});
+  overflow-x: scroll;
   margin-top: 0px;
 `
 

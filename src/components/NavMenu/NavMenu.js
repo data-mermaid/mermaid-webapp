@@ -25,6 +25,7 @@ const NavWrapper = styled('nav')`
   flex-direction: column;
   height: 100%;
   white-space: nowrap;
+  width: ${theme.spacing.sideNavWidthDesktop};
   ${mediaQueryTabletLandscapeOnly(css`
     width: ${theme.spacing.sideNavWidthTabletLandscapeOnly};
     white-space: normal;
