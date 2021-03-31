@@ -16,7 +16,7 @@ import FishBeltTransectForms from '../../FishBeltTransectForms'
 import language from '../../../language'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import SubLayout2 from '../../SubLayout2'
-import { H2 } from '../../generic/text'
+import CollectRecordFormTitle from '../../CollectRecordFormTitle'
 
 const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   const { recordId } = useParams()
@@ -96,9 +96,7 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
           }
           toolbar={
             <>
-              <H2 id="fishbelt-form-title">
-                Placeholder Collect Record Form Title
-              </H2>
+              <CollectRecordFormTitle />
               <RowRight>
                 <ButtonCallout
                   type="submit"
