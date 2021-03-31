@@ -47,8 +47,8 @@ const ProjectCard = ({
   }
 
   return (
-    <CardWrapper onClick={handleCardClick}>
-      <ProjectNameWrapper {...restOfProps}>
+    <CardWrapper onClick={handleCardClick} {...restOfProps}>
+      <ProjectNameWrapper>
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
