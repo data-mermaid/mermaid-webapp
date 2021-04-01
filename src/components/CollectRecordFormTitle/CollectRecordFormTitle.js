@@ -4,13 +4,13 @@ import { H2 } from '../generic/text'
 
 const CollectRecordFormTitle = ({
   protocol,
-  siteValue,
+  siteVal,
   transectVal,
   labelVal,
 }) => {
   const collectRecordTitle = []
 
-  if (siteValue !== '') collectRecordTitle.push(siteValue)
+  if (siteVal !== '') collectRecordTitle.push(siteVal)
   if (transectVal !== '') collectRecordTitle.push(transectVal)
   if (labelVal !== '') collectRecordTitle.push(labelVal)
 
@@ -22,14 +22,14 @@ const CollectRecordFormTitle = ({
 
 CollectRecordFormTitle.propTypes = {
   protocol: PropTypes.string,
-  siteValue: PropTypes.string,
+  siteVal: PropTypes.string,
   transectVal: PropTypes.string,
   labelVal: PropTypes.string,
 }
 
 CollectRecordFormTitle.defaultProps = {
   protocol: '',
-  siteValue: '',
+  siteVal: '',
   transectVal: '',
   labelVal: '',
 }

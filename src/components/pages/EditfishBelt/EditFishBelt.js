@@ -55,7 +55,7 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   }, [databaseSwitchboardInstance, recordId])
 
   const collectRecordData = collectRecordBeingEdited?.data
-  const siteValue = collectRecordData?.sample_event.site
+  const siteVal = collectRecordData?.sample_event.site
   const transectVal = collectRecordData?.fishbelt_transect.number.toString()
   const labelVal = collectRecordData?.fishbelt_transect.label
 
@@ -101,7 +101,7 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
             <>
               <CollectRecordFormTitle
                 protocol="Fish Belt"
-                siteValue={siteValue}
+                siteVal={siteVal}
                 transectVal={transectVal}
                 labelVal={labelVal}
               />
