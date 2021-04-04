@@ -76,3 +76,34 @@ test('saveFishBelt offline returns error message upon dexie error', async () => 
     expect(error.message).toBeTruthy()
   }
 })
+test('deleteFishBelt offline deletes the record', async () => {
+  const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess()
+
+  const fishBeltToBeDeleted = {
+    id: 'foo',
+    data: {},
+    profile: '1234',
+    randomUnexpectedProperty: 'whatever',
+  }
+
+  await dbInstanceOffline.saveFishBelt(fishBeltToBeDeleted)
+
+  expect(await dbInstanceOffline.getFishBelt('foo')).toEqual(
+    fishBeltToBeDeleted,
+  )
+
+  await dbInstanceOffline.deleteFishBelt('foo')
+
+  expect(await dbInstanceOffline.getFishBelt('foo')).toBeUndefined()
+})
+test('deleteFishBelt offline returns error message upon dexie error', async () => {
+  const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError()
+
+  expect.assertions(1)
+
+  try {
+    await dbInstanceOffline.deleteFishBelt('someId')
+  } catch (error) {
+    expect(error.message).toBeTruthy()
+  }
+})
