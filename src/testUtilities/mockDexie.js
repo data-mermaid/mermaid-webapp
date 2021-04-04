@@ -25,8 +25,15 @@ const getMockDexieInstanceAllSuccess = () => {
 
   return dexieInstance
 }
-const getMockDexieInstanceError = () => {
-  return undefined
+const getMockDexieInstanceThatProducesErrors = () => {
+  // produces an error in all cases so far because there are no stores defined
+  // leaving indexedDb as undefined is extra assurance
+  return new Dexie('mermaidError', {
+    indexedDB: undefined,
+  })
 }
 
-export { getMockDexieInstanceAllSuccess, getMockDexieInstanceError }
+export {
+  getMockDexieInstanceAllSuccess,
+  getMockDexieInstanceThatProducesErrors,
+}

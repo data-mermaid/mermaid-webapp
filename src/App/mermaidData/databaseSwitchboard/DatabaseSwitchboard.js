@@ -196,6 +196,21 @@ class DatabaseSwitchboard {
 
     return Promise.reject(this.#notAuthenticatedAndReadyError)
   }
+
+  deleteFishBelt = (id) => {
+    if (!id) {
+      Promise.reject(this.#operationMissingIdParameterError)
+    }
+    if (this.#isOnlineAuthenticatedAndReady) {
+      // upcoming work
+    }
+
+    if (this.#isOfflineAuthenticatedAndReady) {
+      return this.#dexieInstance.collectRecords.delete(id)
+    }
+
+    return Promise.reject(this.#notAuthenticatedAndReadyError)
+  }
 }
 
 const databaseSwitchboardPropTypes = PropTypes.shape({
@@ -210,6 +225,7 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getSites: PropTypes.func,
   getUserProfile: PropTypes.func,
   saveFishBelt: PropTypes.func,
+  deleteFishBelt: PropTypes.func,
 })
 
 export default DatabaseSwitchboard
