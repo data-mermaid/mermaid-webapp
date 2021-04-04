@@ -12,9 +12,12 @@ import EditFishBelt from './EditFishBelt'
 
 test('EditFishBelt component renders with the expected UI elements', async () => {
   renderAuthenticatedOnline(
-    <EditFishBelt
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <EditFishBelt
+        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+      />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
   )
 
   await waitFor(() =>

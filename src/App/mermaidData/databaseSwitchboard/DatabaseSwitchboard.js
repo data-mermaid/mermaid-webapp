@@ -24,6 +24,10 @@ class DatabaseSwitchboard {
     language.error.appNotAuthenticatedOrReady,
   )
 
+  #operationMissingIdParameterError = new Error(
+    'This operation requires an id to be supplied',
+  )
+
   constructor({
     apiBaseUrl,
     auth0Token,
@@ -49,12 +53,17 @@ class DatabaseSwitchboard {
       this.#isAuthenticatedAndReady && !isOnline
   }
 
-  getCollectRecord = (id) =>
-    this.#isAuthenticatedAndReady
+  getCollectRecord = (id) => {
+    if (!id) {
+      Promise.reject(this.#operationMissingIdParameterError)
+    }
+
+    return this.#isAuthenticatedAndReady
       ? this.getCollectRecords().then((records) =>
           records.find((record) => record.id === id),
         )
       : Promise.reject(this.#notAuthenticatedAndReadyError)
+  }
 
   getCollectRecordMethodLabel = (protocol) => {
     switch (protocol) {
@@ -174,6 +183,9 @@ class DatabaseSwitchboard {
   }
 
   getFishBelt = (id) => {
+    if (!id) {
+      Promise.reject(this.#operationMissingIdParameterError)
+    }
     if (this.#isOnlineAuthenticatedAndReady) {
       // upcoming work
     }
