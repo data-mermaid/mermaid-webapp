@@ -84,6 +84,8 @@
     "@storybook/node-logger": "^6.1.16",
     "@storybook/preset-create-react-app": "^3.1.5",
     "@storybook/react": "^6.1.16",
+    "eslint-plugin-jest-dom": "^3.7.0",
+    "eslint-plugin-testing-library": "^3.10.2",
     "fake-indexeddb": "^3.1.2",
     "husky": "3.1.0",
     "msw": "^0.27.0",
