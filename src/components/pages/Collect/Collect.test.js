@@ -5,7 +5,7 @@ import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOn
 import {
   renderAuthenticatedOnline,
   screen,
-  waitFor,
+  waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import Collect from './Collect'
@@ -26,8 +26,8 @@ test('Collect Records table sorts properly by method column', async () => {
     />,
   )
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -50,8 +50,8 @@ test('Collect Records table sorts properly by site column', async () => {
     />,
   )
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -82,8 +82,8 @@ test('Collect Records table changes number of rows visible size when pagination 
       databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
     />,
   )
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
   const table = screen.getByRole('table')
 
@@ -106,8 +106,8 @@ test('Collect Records table change pages when different page is selected ', asyn
       databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
     />,
   )
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
 
   const table = screen.getByRole('table')
