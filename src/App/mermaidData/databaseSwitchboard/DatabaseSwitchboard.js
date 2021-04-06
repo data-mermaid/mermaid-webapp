@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import language from '../../../language'
 
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
+import { getNameBySearchId } from '../../../library/utilities'
 
 class DatabaseSwitchboard {
   #apiBaseUrl
@@ -84,17 +85,12 @@ class DatabaseSwitchboard {
           this.getSites(),
           this.getManagementRegimes(),
         ]).then(([collectRecords, sites, managementRegimes]) => {
-          const getSiteLabel = (searchId) =>
-            sites.find((site) => site.id === searchId).name
-
-          const getManagementRegimeLabel = (searchId) =>
-            managementRegimes.find((regime) => regime.id === searchId).name
-
           return collectRecords.map((record) => ({
             ...record,
             uiLabels: {
-              site: getSiteLabel(record.data.sample_event.site),
-              management: getManagementRegimeLabel(
+              site: getNameBySearchId(sites, record.data.sample_event.site),
+              management: getNameBySearchId(
+                managementRegimes,
                 record.data.sample_event.management,
               ),
               protocol: this.getCollectRecordMethodLabel(record.data.protocol),
@@ -159,6 +155,8 @@ class DatabaseSwitchboard {
 
 const databaseSwitchboardPropTypes = PropTypes.shape({
   getCollectRecord: PropTypes.func,
+  getSite: PropTypes.func,
+  getManagementRegime: PropTypes.func,
   getCollectRecordMethodLabel: PropTypes.func,
   getCollectRecords: PropTypes.func,
   getCollectRecordsForUIDisplay: PropTypes.func,

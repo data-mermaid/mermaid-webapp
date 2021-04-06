@@ -12,8 +12,9 @@ import {
 import { ButtonCallout } from '../../generic/buttons'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
 import { RowRight } from '../../generic/positioning'
-import FishBeltTransectForms from '../../FishBeltTransectForms'
 import language from '../../../language'
+import { getNameBySearchId } from '../../../library/utilities'
+import FishBeltTransectForms from '../../FishBeltTransectForms'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import SubLayout2 from '../../SubLayout2'
 import CollectRecordFormTitle from '../../CollectRecordFormTitle'
@@ -55,9 +56,16 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   }, [databaseSwitchboardInstance, recordId])
 
   const collectRecordData = collectRecordBeingEdited?.data
-  const siteVal = collectRecordData?.sample_event.site
-  const transectVal = collectRecordData?.fishbelt_transect.number.toString()
-  const labelVal = collectRecordData?.fishbelt_transect.label
+
+  const siteName =
+    collectRecordData !== undefined &&
+    collectRecordData.sample_event.site &&
+    sites.length > 0
+      ? getNameBySearchId(sites, collectRecordData.sample_event.site)
+      : ''
+  const transectName =
+    collectRecordData?.fishbelt_transect?.number.toString() || ''
+  const labelName = collectRecordData?.fishbelt_transect?.label || ''
 
   const formikOptions = {
     initialValues: {
@@ -101,9 +109,9 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
             <>
               <CollectRecordFormTitle
                 protocol="Fish Belt"
-                siteVal={siteVal}
-                transectVal={transectVal}
-                labelVal={labelVal}
+                siteName={siteName}
+                transectName={transectName}
+                labelName={labelName}
               />
               <RowRight>
                 <ButtonCallout
