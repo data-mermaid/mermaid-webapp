@@ -15,7 +15,7 @@ import { RowRight } from '../../generic/positioning'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import language from '../../../language'
 import SampleInfoInputs from '../../SampleInfoInputs'
-import ContentPageLayout from '../../ContentPageLayout'
+import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 
 const EditFishBelt = ({ databaseSwitchboardInstance }) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { H3 } from '../../generic/text'
 // import PropTypes from 'prop-types'
-import ContentPageLayout from '../../ContentPageLayout'
+import { ContentPageLayout } from '../../Layout'
 
 const Health = () => {
   return (

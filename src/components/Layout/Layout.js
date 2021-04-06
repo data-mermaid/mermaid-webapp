@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
 
-import { Column } from '../positioning'
+import { Column } from '../generic/positioning'
 
 /**
  * Basic stacked layout

@@ -11,9 +11,10 @@ import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
-import Layout from '../components/generic/Layout'
+
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
+import Layout from '../components/Layout'
 
 function App({ dexieInstance }) {
   const { isOnline } = useOnlineStatus()
