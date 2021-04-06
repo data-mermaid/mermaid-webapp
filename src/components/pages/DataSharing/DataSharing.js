@@ -1,5 +1,6 @@
 import React from 'react'
-import ContentPageLayout from '../../ContentPageLayout'
+import { ContentPageLayout } from '../../Layout'
+
 // import PropTypes from 'prop-types'
 
 const DataSharing = () => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import ContentPageLayout from '../../ContentPageLayout'
+import { ContentPageLayout } from '../../Layout'
 
 const NewFishBelt = () => {
   return (
