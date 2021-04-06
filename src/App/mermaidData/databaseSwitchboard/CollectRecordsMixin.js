@@ -44,7 +44,7 @@ const CollectRecordsMixin = (Base) =>
 
     deleteFishBelt = (id) => {
       if (!id) {
-        Promise.reject(super._operationMissingIdParameterError)
+        Promise.reject(this._operationMissingIdParameterError)
       }
       if (this._isOnlineAuthenticatedAndReady) {
         // upcoming work
