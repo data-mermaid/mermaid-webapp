@@ -1,11 +1,11 @@
 import React from 'react'
 import { H3 } from '../../generic/text'
 // import PropTypes from 'prop-types'
-import SubLayout2 from '../../SubLayout2'
+import ContentPageLayout from '../../ContentPageLayout'
 
 const Health = () => {
   return (
-    <SubLayout2
+    <ContentPageLayout
       content={<>Project Health Placeholder</>}
       toolbar={
         <>

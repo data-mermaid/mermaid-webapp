@@ -5,7 +5,7 @@ import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import { Column } from '../generic/positioning'
 
-const SubLayout1Container = styled(Column)`
+const HomePageContainer = styled(Column)`
   margin-top: 23rem;
   margin-bottom: ${theme.spacing.medium};
   ${mediaQueryPhoneOnly(css`
@@ -17,18 +17,18 @@ const BottomRow = styled.div`
   flex-grow: 2;
 `
 
-const SubLayout1 = ({ topRow, bottomRow }) => {
+const HomePageLayout = ({ topRow, bottomRow }) => {
   return (
-    <SubLayout1Container>
+    <HomePageContainer>
       <TopRow>{topRow}</TopRow>
       <BottomRow>{bottomRow}</BottomRow>
-    </SubLayout1Container>
+    </HomePageContainer>
   )
 }
 
-SubLayout1.propTypes = {
+HomePageLayout.propTypes = {
   topRow: PropTypes.node.isRequired,
   bottomRow: PropTypes.node.isRequired,
 }
 
-export default SubLayout1
+export default HomePageLayout

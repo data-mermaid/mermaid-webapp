@@ -6,7 +6,7 @@ import language from '../../../language'
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
-import SubLayout1 from '../../SubLayout1'
+import HomePageLayout from '../../HomePageLayout'
 
 /**
  * All Projects page (lists projects)
@@ -44,7 +44,7 @@ const Projects = ({ databaseSwitchboardInstance }) => {
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <SubLayout1
+    <HomePageLayout
       topRow={<ProjectToolBarSection />}
       bottomRow={<div role="list">{projectList}</div>}
     />

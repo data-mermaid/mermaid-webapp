@@ -1,9 +1,9 @@
 import React from 'react'
-import SubLayout2 from '../../SubLayout2'
+import ContentPageLayout from '../../ContentPageLayout'
 
 const NewBleaching = () => {
   return (
-    <SubLayout2
+    <ContentPageLayout
       content={<>New Bleaching Placeholder</>}
       toolbar={<>Sub layout top bar</>}
     />

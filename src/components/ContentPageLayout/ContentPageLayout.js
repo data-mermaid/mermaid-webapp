@@ -7,40 +7,48 @@ import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
 import NavMenu from '../NavMenu'
 import ProjectName from '../ProjectName'
 
-const SubLayout2Container = styled('div')`
+const MainContentPageLayout = styled('div')`
   display: grid;
   grid-template-rows: auto 1fr;
   height: calc(100% - ${theme.spacing.headerHeight});
   margin-top: ${theme.spacing.headerHeight};
+  background: ${theme.color.white};
 `
-
-const SubLayout2ContentWrapper = styled('div')`
+const NavAndContentLayout = styled('div')`
   display: grid;
   grid-template-columns: auto 1fr;
   height: 100%;
 `
-
 const ContentWrapper = styled('div')`
+  background: ${theme.color.backgroundColor};
+`
+const ContentToolbar = styled('div')`
+  margin: ${theme.spacing.small};
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
   background: ${theme.color.white};
+  position: sticky;
+  top: ${theme.spacing.headerHeight};
+  border-bottom: solid ${theme.spacing.borderMedium}
+    ${theme.color.backgroundColor};
+  margin-bottom: 0px;
 `
 const Content = styled('div')`
-  padding: ${theme.spacing.medium};
+  margin: ${theme.spacing.small};
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  background: ${theme.color.white};
+  margin-top: 0px;
 `
 
-const ContentToolbar = styled('div')`
-  border-bottom: solid 1px ${theme.color.border};
-  padding: ${theme.spacing.small} ${theme.spacing.medium};
-`
-const SubLayout2 = ({ content, toolbar, isLoading }) => {
+const ContentPageLayout = ({ content, toolbar, isLoading }) => {
   // I don't see the point of passing pageTitle to every components using this layout, leave as constant for now.
   const pageTitle = 'Project Name Placeholder'
 
   return (
     <>
-      <SubLayout2Container>
+      <MainContentPageLayout>
         <ProjectName pageTitle={pageTitle} />
 
-        <SubLayout2ContentWrapper>
+        <NavAndContentLayout>
           <Column>
             <NavMenu />
           </Column>
@@ -54,20 +62,20 @@ const SubLayout2 = ({ content, toolbar, isLoading }) => {
               </>
             )}
           </ContentWrapper>
-        </SubLayout2ContentWrapper>
-      </SubLayout2Container>
+        </NavAndContentLayout>
+      </MainContentPageLayout>
     </>
   )
 }
 
-SubLayout2.propTypes = {
+ContentPageLayout.propTypes = {
   content: PropTypes.node.isRequired,
   isLoading: PropTypes.bool,
   toolbar: PropTypes.node.isRequired,
 }
 
-SubLayout2.defaultProps = {
+ContentPageLayout.defaultProps = {
   isLoading: false,
 }
 
-export default SubLayout2
+export default ContentPageLayout
