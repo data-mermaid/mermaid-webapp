@@ -3,6 +3,14 @@ import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
+    #collectRecordProtocolLabels = {
+      fishbelt: 'Fish Belt',
+      benthiclit: 'Benthic LIT',
+      benthicpit: 'Benthic PIT',
+      habitatcomplexity: 'Habitat Complexity',
+      bleachingqc: 'Bleaching',
+    }
+
     saveFishBelt = (record) => {
       const idToSubmit = record.id ?? createUuid()
       const recordToSubmit = { ...record, id: idToSubmit }
@@ -61,23 +69,6 @@ const CollectRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecordMethodLabel = (protocol) => {
-      switch (protocol) {
-        default:
-          return 'Unknown Method'
-        case 'fishbelt':
-          return 'Fish Belt'
-        case 'benthiclit':
-          return 'Benthic LIT'
-        case 'benthicpit':
-          return 'Benthic PIT'
-        case 'habitatcomplexity':
-          return 'Habitat Complexity'
-        case 'bleachingqc':
-          return 'Bleaching'
-      }
-    }
-
     getCollectRecords = () =>
       this._isAuthenticatedAndReady
         ? Promise.resolve(mockMermaidData.collectRecords)
@@ -103,9 +94,9 @@ const CollectRecordsMixin = (Base) =>
                 management: getManagementRegimeLabel(
                   record.data.sample_event.management,
                 ),
-                protocol: this.getCollectRecordMethodLabel(
-                  record.data.protocol,
-                ),
+                protocol: this.#collectRecordProtocolLabels[
+                  record.data.protocol
+                ],
               },
             }))
           })
