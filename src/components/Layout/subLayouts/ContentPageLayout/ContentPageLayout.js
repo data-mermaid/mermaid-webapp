@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
-import theme from '../../theme'
-import { Column } from '../generic/positioning'
-import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
-import NavMenu from '../NavMenu'
-import ProjectName from '../ProjectName'
+
+import { Column } from '../../../generic/positioning'
+import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
+import NavMenu from '../../../NavMenu'
+import ProjectName from '../../../ProjectName'
+import theme from '../../../../theme'
 
 const MainContentPageLayout = styled('div')`
   display: grid;

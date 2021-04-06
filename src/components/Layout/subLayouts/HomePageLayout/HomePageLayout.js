@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
-import theme from '../../theme'
-import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
-import { Column } from '../generic/positioning'
+import theme from '../../../../theme'
+import { mediaQueryPhoneOnly } from '../../../../library/styling/mediaQueries'
+import { Column } from '../../../generic/positioning'
 
 const HomePageContainer = styled(Column)`
   margin-top: 23rem;
