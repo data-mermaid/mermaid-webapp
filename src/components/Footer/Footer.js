@@ -9,7 +9,7 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 const StyledFooter = styled('footer')`
   display: grid;
   grid-template-columns: 1fr auto auto;
-  background: ${theme.color.black};
+  background-color: ${theme.color.footerColor};
   ${mediaQueryPhoneOnly(css`
     grid-template-columns: 1fr;
     grid-template-rows: repeat(3, auto);
@@ -18,7 +18,6 @@ const StyledFooter = styled('footer')`
   label,
   nav a,
   button {
-    color: ${theme.color.white};
     font-size: ${theme.typography.smallFontSize};
     margin: ${theme.spacing.medium} 0;
     ${mediaQueryPhoneOnly(css`

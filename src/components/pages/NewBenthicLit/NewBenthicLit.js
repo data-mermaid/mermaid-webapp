@@ -1,9 +1,9 @@
 import React from 'react'
-import SubLayout2 from '../../SubLayout2'
+import ContentPageLayout from '../../ContentPageLayout'
 
 const NewBenthicLit = () => {
   return (
-    <SubLayout2
+    <ContentPageLayout
       content={<>New Benthic LIT Placeholder</>}
       toolbar={<>Sub layout top bar</>}
     />

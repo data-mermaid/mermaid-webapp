@@ -1,5 +1,5 @@
 import React from 'react'
-import SubLayout2 from '../../SubLayout2'
+import ContentPageLayout from '../../ContentPageLayout'
 // import PropTypes from 'prop-types'
 
 /**
@@ -7,7 +7,7 @@ import SubLayout2 from '../../SubLayout2'
  */
 const Admin = () => {
   return (
-    <SubLayout2
+    <ContentPageLayout
       content={<>Admin Placeholder</>}
       toolbar={<>Sub layout top bar</>}
     />
