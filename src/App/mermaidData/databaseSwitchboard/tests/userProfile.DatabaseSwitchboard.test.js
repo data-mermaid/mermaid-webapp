@@ -1,10 +1,10 @@
 import { rest } from 'msw'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import {
-  getMockDexieInstanceAllSuccess,
-  getMockDexieInstanceNoData,
-} from '../../../../testUtilities/mockDexie'
-import DatabaseSwitchboard from '../DatabaseSwitchboard'
+  getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess,
+  getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
+  getDatabaseSwitchboardInstanceAuthenticatedOnline,
+} from './testHelpers.DatabseSwitchboard'
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
@@ -18,13 +18,7 @@ afterAll(() => {
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('getUserProfile online returns data from the API', async () => {
-  const dbInstance = new DatabaseSwitchboard({
-    apiBaseUrl,
-    auth0Token: 'fake token',
-    isMermaidAuthenticated: true,
-    isOnline: true,
-    dexieInstance: getMockDexieInstanceAllSuccess(),
-  })
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnline()
   const userProfile = await dbInstance.getUserProfile()
 
   expect(userProfile).toEqual({
@@ -39,13 +33,7 @@ test('getUserProfile online returns error message upon API error', async () => {
     }),
   )
 
-  const dbInstance = new DatabaseSwitchboard({
-    apiBaseUrl,
-    auth0Token: 'fake token',
-    isMermaidAuthenticated: true,
-    isOnline: true,
-    dexieInstance: getMockDexieInstanceAllSuccess(),
-  })
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnline()
 
   expect.assertions(1)
 
@@ -56,13 +44,7 @@ test('getUserProfile online returns error message upon API error', async () => {
   }
 })
 test('getUserProfile offline returns data from local storage', async () => {
-  const dbInstance = new DatabaseSwitchboard({
-    apiBaseUrl,
-    auth0Token: 'fake token',
-    isMermaidAuthenticated: true,
-    isOnline: false,
-    dexieInstance: getMockDexieInstanceAllSuccess(),
-  })
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess()
 
   const userProfile = await dbInstance.getUserProfile()
 
@@ -72,13 +54,7 @@ test('getUserProfile offline returns data from local storage', async () => {
   })
 })
 test('getUserProfile offline returns error message upon dexie error', async () => {
-  const dbInstance = new DatabaseSwitchboard({
-    apiBaseUrl,
-    auth0Token: 'fake token',
-    isMermaidAuthenticated: true,
-    isOnline: false,
-    dexieInstance: getMockDexieInstanceNoData(),
-  })
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError()
 
   expect.assertions(1)
 

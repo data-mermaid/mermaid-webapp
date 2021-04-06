@@ -22,8 +22,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('2'))
   expect(container.getByText('3'))
@@ -31,11 +31,11 @@ test('PageSelector with more than 8 pages renders as expected when the current p
 
   expect(container.getByText('9'))
 
-  expect(container.queryByText('4')).toBeNull()
-  expect(container.queryByText('5')).toBeNull()
-  expect(container.queryByText('6')).toBeNull()
-  expect(container.queryByText('7')).toBeNull()
-  expect(container.queryByText('8')).toBeNull()
+  expect(container.queryByText('4')).not.toBeInTheDocument()
+  expect(container.queryByText('5')).not.toBeInTheDocument()
+  expect(container.queryByText('6')).not.toBeInTheDocument()
+  expect(container.queryByText('7')).not.toBeInTheDocument()
+  expect(container.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages indicates current page', () => {
@@ -71,8 +71,8 @@ test('PageSelector with more than 8 pages shows the next and previous buttons as
     />,
   )
 
-  expect(container.getByText('« Previous')).toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeDisabled()
+  expect(container.getByText('Next »')).toBeDisabled()
 })
 test('PageSelector with more than 8 pages calls onGoToPage with the correct page when a page button is clicked', () => {
   const mockFunction = jest.fn()
@@ -152,8 +152,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('2'))
   expect(container.getByText('3'))
@@ -161,10 +161,10 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(container.getByText('...'))
   expect(container.getByText('9'))
 
-  expect(container.queryByText('5')).toBeNull()
-  expect(container.queryByText('6')).toBeNull()
-  expect(container.queryByText('7')).toBeNull()
-  expect(container.queryByText('8')).toBeNull()
+  expect(container.queryByText('5')).not.toBeInTheDocument()
+  expect(container.queryByText('6')).not.toBeInTheDocument()
+  expect(container.queryByText('7')).not.toBeInTheDocument()
+  expect(container.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 3', () => {
@@ -180,8 +180,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('2'))
   expect(container.getByText('3'))
@@ -190,9 +190,9 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(container.getByText('...'))
   expect(container.getByText('9'))
 
-  expect(container.queryByText('6')).toBeNull()
-  expect(container.queryByText('7')).toBeNull()
-  expect(container.queryByText('8')).toBeNull()
+  expect(container.queryByText('6')).not.toBeInTheDocument()
+  expect(container.queryByText('7')).not.toBeInTheDocument()
+  expect(container.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 4', () => {
@@ -208,8 +208,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('2'))
   expect(container.getByText('3'))
@@ -219,8 +219,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(container.getByText('...'))
   expect(container.getByText('9'))
 
-  expect(container.queryByText('7')).toBeNull()
-  expect(container.queryByText('8')).toBeNull()
+  expect(container.queryByText('7')).not.toBeInTheDocument()
+  expect(container.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 5', () => {
@@ -236,8 +236,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('3'))
   expect(container.getByText('4'))
@@ -246,8 +246,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(container.getByText('7'))
   expect(container.getByText('9'))
 
-  expect(container.queryByText('2')).toBeNull()
-  expect(container.queryByText('8')).toBeNull()
+  expect(container.queryByText('2')).not.toBeInTheDocument()
+  expect(container.queryByText('8')).not.toBeInTheDocument()
 
   expect(container.getAllByText('...').length).toEqual(2)
 })
@@ -265,8 +265,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('4'))
   expect(container.getByText('5'))
@@ -275,8 +275,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(container.getByText('8'))
   expect(container.getByText('9'))
 
-  expect(container.queryByText('2')).toBeNull()
-  expect(container.queryByText('3')).toBeNull()
+  expect(container.queryByText('2')).not.toBeInTheDocument()
+  expect(container.queryByText('3')).not.toBeInTheDocument()
 
   expect(container.getAllByText('...').length).toEqual(1)
 })
@@ -294,8 +294,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('5'))
   expect(container.getByText('6'))
@@ -303,9 +303,9 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(container.getByText('8'))
   expect(container.getByText('9'))
 
-  expect(container.queryByText('2')).toBeNull()
-  expect(container.queryByText('3')).toBeNull()
-  expect(container.queryByText('4')).toBeNull()
+  expect(container.queryByText('2')).not.toBeInTheDocument()
+  expect(container.queryByText('3')).not.toBeInTheDocument()
+  expect(container.queryByText('4')).not.toBeInTheDocument()
 
   expect(container.getAllByText('...').length).toEqual(1)
 })
@@ -323,18 +323,18 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('6'))
   expect(container.getByText('7'))
   expect(container.getByText('8'))
   expect(container.getByText('9'))
 
-  expect(container.queryByText('2')).toBeNull()
-  expect(container.queryByText('3')).toBeNull()
-  expect(container.queryByText('4')).toBeNull()
-  expect(container.queryByText('5')).toBeNull()
+  expect(container.queryByText('2')).not.toBeInTheDocument()
+  expect(container.queryByText('3')).not.toBeInTheDocument()
+  expect(container.queryByText('4')).not.toBeInTheDocument()
+  expect(container.queryByText('5')).not.toBeInTheDocument()
 
   expect(container.getAllByText('...').length).toEqual(1)
 })
@@ -352,18 +352,18 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('7'))
   expect(container.getByText('8'))
   expect(container.getByText('9'))
 
-  expect(container.queryByText('2')).toBeNull()
-  expect(container.queryByText('3')).toBeNull()
-  expect(container.queryByText('4')).toBeNull()
-  expect(container.queryByText('5')).toBeNull()
-  expect(container.queryByText('6')).toBeNull()
+  expect(container.queryByText('2')).not.toBeInTheDocument()
+  expect(container.queryByText('3')).not.toBeInTheDocument()
+  expect(container.queryByText('4')).not.toBeInTheDocument()
+  expect(container.queryByText('5')).not.toBeInTheDocument()
+  expect(container.queryByText('6')).not.toBeInTheDocument()
 
   expect(container.getAllByText('...').length).toEqual(1)
 })

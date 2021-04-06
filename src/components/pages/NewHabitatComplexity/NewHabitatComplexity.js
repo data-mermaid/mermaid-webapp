@@ -1,9 +1,9 @@
 import React from 'react'
-import SubLayout2 from '../../SubLayout2'
+import { ContentPageLayout } from '../../Layout'
 
 const NewHabitatComplexity = () => {
   return (
-    <SubLayout2
+    <ContentPageLayout
       content={<>New Habitat Complexity Placeholder</>}
       toolbar={<>Sub layout top bar</>}
     />
