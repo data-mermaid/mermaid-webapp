@@ -45,6 +45,7 @@ const color = {
   footerColor: white,
   tableRowOdd: primary.mix(colorHelper(white), 0.9),
   tableRowEven: primary.mix(colorHelper(white), 0.95),
+  tableRowHover: '#D7DDE2',
 }
 const spacing = {
   xsmall,

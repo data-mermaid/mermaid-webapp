@@ -1,7 +1,25 @@
 import styled, { css } from 'styled-components'
+import {
+  mediaQueryTabletLandscapeOnly,
+  mediaQueryPhoneOnly,
+  hoverState,
+} from '../../../library/styling/mediaQueries'
 import theme from '../../../theme'
 
+export const TableOverflowWrapper = styled.div`
+  max-width: calc(100vw - ${theme.spacing.sideNavWidthDesktop});
+  ${mediaQueryTabletLandscapeOnly(css`
+    max-width: calc(100vw - ${theme.spacing.sideNavWidthTabletLandscapeOnly});
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    max-width: calc(100vw - ${theme.spacing.sideNavWidthPhoneOnly});
+  `)}
+  overflow-x: auto;
+  height: 100%;
+`
+
 export const Table = styled.table`
+  table-layout: fixed;
   border-collapse: collapse;
 `
 export const Th = styled.th(
@@ -39,6 +57,12 @@ export const Td = styled.td(
     border-width: 0 thin;
     border-color: rgba(255, 255, 255, 0.5);
     border-style: solid;
+    ${mediaQueryTabletLandscapeOnly(css`
+      &,
+      a {
+        font-size: smaller;
+      }
+    `)}
   `,
 )
 export const Tr = styled.tr`
@@ -48,4 +72,7 @@ export const Tr = styled.tr`
   &:nth-child(even) {
     background-color: ${theme.color.tableRowEven};
   }
+  ${hoverState(css`
+    background-color: ${theme.color.tableRowHover};
+  `)}
 `

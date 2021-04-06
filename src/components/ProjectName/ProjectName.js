@@ -17,8 +17,7 @@ const ProjectNameWrapper = styled('div')`
   h2 {
     overflow-x: scroll;
     white-space: nowrap;
-    padding: ${theme.spacing.medium} ${theme.spacing.small}
-      ${theme.spacing.medium} 0;
+    padding: ${theme.spacing.medium} 0;
     height: 100%;
     margin: 0;
   }

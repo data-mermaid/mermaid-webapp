@@ -7,7 +7,13 @@ import { databaseGatewayPropTypes } from '../../../App/mermaidData/DatabaseGatew
 import { H3 } from '../../generic/text'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
-import { Table, Tr, Th, Td } from '../../generic/Table/table'
+import {
+  Table,
+  Tr,
+  Th,
+  Td,
+  TableOverflowWrapper,
+} from '../../generic/Table/table'
 import AddSampleUnitButton from './AddSampleUnitButton'
 import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
@@ -159,40 +165,42 @@ const Collect = ({ databaseGatewayInstance }) => {
 
   const table = (
     <>
-      <Table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <Th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  isSorted={column.isSorted}
-                  isSortedDescending={column.isSortedDesc}
-                >
-                  {column.render('Header')}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row)
-
-            return (
-              <Tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <Td {...cell.getCellProps()} align={cell.column.align}>
-                      {cell.render('Cell')}
-                    </Td>
-                  )
-                })}
+      <TableOverflowWrapper>
+        <Table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <Th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    isSorted={column.isSorted}
+                    isSortedDescending={column.isSortedDesc}
+                  >
+                    {column.render('Header')}
+                  </Th>
+                ))}
               </Tr>
-            )
-          })}
-        </tbody>
-      </Table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row)
+
+              return (
+                <Tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                        {cell.render('Cell')}
+                      </Td>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
+          </tbody>
+        </Table>
+      </TableOverflowWrapper>
       <RowSpaceBetween>
         <PageSizeSelector
           onChange={handleRowsNumberChange}
