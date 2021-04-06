@@ -67,7 +67,7 @@ const ProjectCard = ({
         </CheckBoxLabel>
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
-      <ButtonGroups>
+      <ButtonGroups data-testid="parent-3">
         <NavLinkButtonGroup projectUrl={projectUrl} />
         <VerticalRule />
         <ButtonSecondary onClick={handleProjectCopyClick} aria-label="Copy">

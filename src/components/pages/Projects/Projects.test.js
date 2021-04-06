@@ -52,7 +52,7 @@ test('Projects component renders with the expected UI elements', async () => {
   expect(sortButton).toBeInTheDocument()
 })
 
-test('A project card hover, shows extra buttons', async () => {
+test('A project card renders with the expected UI elements for button groups', async () => {
   renderAuthenticatedOnline(
     <Projects
       databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
@@ -71,13 +71,11 @@ test('A project card hover, shows extra buttons', async () => {
   const adminButton = within(projectCard).getByLabelText(/admin/i)
   const copyButton = within(projectCard).getByLabelText(/copy/i)
 
-  userEvent.hover(projectCard)
-
-  expect(healthButton).toHaveStyle(`visibility: visible`)
-  expect(collectButton).toHaveStyle(`visibility: visible`)
-  expect(dataButton).toHaveStyle(`visibility: visible`)
-  expect(adminButton).toHaveStyle(`visibility: visible`)
-  expect(copyButton).toHaveStyle(`visibility: visible`)
+  expect(healthButton).toBeInTheDocument()
+  expect(collectButton).toBeInTheDocument()
+  expect(dataButton).toBeInTheDocument()
+  expect(adminButton).toBeInTheDocument()
+  expect(copyButton).toBeInTheDocument()
 })
 
 test('A project card shows relevant data for a project', async () => {
@@ -101,6 +99,11 @@ test('A project card shows relevant data for a project', async () => {
   )
   expect(within(projectCard).getByText('Fiji'))
   expect(within(projectCard).getByText('23 sites'))
-  expect(within(projectCard).getByRole('checkbox'))
+
+  const offlineCheckbox = within(projectCard).getByRole('checkbox')
+
+  expect(offlineCheckbox)
+  expect(offlineCheckbox).toBeChecked()
+
   expect(within(projectCard).getByText('Updated: 01/21/2020'))
 })
