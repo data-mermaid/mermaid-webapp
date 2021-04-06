@@ -2,6 +2,7 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
+import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
 import {
@@ -18,18 +19,27 @@ import SampleInfoInputs from '../../SampleInfoInputs'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 
-const EditFishBelt = ({ databaseSwitchboardInstance }) => {
+const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
+  const [choices, setChoices] = useState({})
+  const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
+  const [isLoading, setIsLoading] = useState(true)
+  const [managementRegimes, setManagementRegimes] = useState([])
+  const [sites, setSites] = useState([])
   const { recordId } = useParams()
 
-  const [isLoading, setIsLoading] = useState(true)
-
-  const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-  const [sites, setSites] = useState([])
-  const [managementRegimes, setManagementRegimes] = useState([])
-  const [choices, setChoices] = useState({})
-
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && recordId) {
+    if (isNewRecord) {
+      databaseSwitchboardInstance
+        .getChoices()
+        .then((choicesResponse) => {
+          setChoices(choicesResponse)
+          setIsLoading(false)
+        })
+        .catch(() => {
+          toast.error(language.error.collectRecordChoicesUnavailable)
+        })
+    }
+    if (databaseSwitchboardInstance && recordId && !isNewRecord) {
       Promise.all([
         databaseSwitchboardInstance.getCollectRecord(recordId),
         databaseSwitchboardInstance.getSites(),
@@ -54,7 +64,7 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
           toast.error(language.error.collectRecordUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, recordId])
+  }, [databaseSwitchboardInstance, recordId, isNewRecord])
 
   const collectRecordData = collectRecordBeingEdited?.data
 
@@ -99,7 +109,11 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
           toolbar={
             <>
               <H2 id="fishbelt-form-title">
-                Placeholder Collect Record Form Title
+                {isNewRecord ? (
+                  <>New Fish Belt</>
+                ) : (
+                  <>Placeholder Collect Record Form Title</>
+                )}
               </H2>
               <RowRight>
                 <ButtonCallout
@@ -118,8 +132,13 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   )
 }
 
-EditFishBelt.propTypes = {
+FishBelt.propTypes = {
   databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
+  isNewRecord: PropTypes.bool,
 }
 
-export default EditFishBelt
+FishBelt.defaultProps = {
+  isNewRecord: true,
+}
+
+export default FishBelt
