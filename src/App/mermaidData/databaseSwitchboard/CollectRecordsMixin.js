@@ -91,12 +91,6 @@ const CollectRecordsMixin = (Base) =>
             this.getSites(),
             this.getManagementRegimes(),
           ]).then(([collectRecords, sites, managementRegimes]) => {
-            const getSiteLabel = (searchId) =>
-              sites.find((site) => site.id === searchId).name
-
-            const getManagementRegimeLabel = (searchId) =>
-              managementRegimes.find((regime) => regime.id === searchId).name
-
             return collectRecords.map((record) => ({
               ...record,
               uiLabels: {
