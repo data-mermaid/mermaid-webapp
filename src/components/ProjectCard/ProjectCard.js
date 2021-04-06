@@ -14,7 +14,7 @@ import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
-import pluralize from '../../library/pluralize'
+import { pluralize } from '../../library/utilities'
 import stopEventPropagation from '../../library/stopEventPropagation'
 
 const ProjectCard = ({
