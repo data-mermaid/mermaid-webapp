@@ -4,7 +4,7 @@ import React from 'react'
 import {
   renderAuthenticatedOnline,
   screen,
-  waitFor,
+  waitForElementToBeRemoved,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 
@@ -12,15 +12,17 @@ import EditFishBelt from './EditFishBelt'
 
 test('EditFishBelt component renders with the expected UI elements', async () => {
   renderAuthenticatedOnline(
-    <EditFishBelt
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <EditFishBelt
+        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+      />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
   )
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
-
   expect(
     screen.getByText('Sample Info', {
       selector: 'h2',
@@ -56,8 +58,8 @@ test('EditFishBelt form inputs are initialized with the correct values', async (
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
   )
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
 
   // Site select

@@ -24,7 +24,7 @@ export const NavLinkButtonish = styled(NavLink)`
 export const NavLinkButtonishIcon = styled(NavLinkButtonish)``
 
 const activeStyle = css`
-  background-color: ${theme.color.black};
+  background-color: ${theme.color.primaryColor};
   color: ${theme.color.white};
 `
 

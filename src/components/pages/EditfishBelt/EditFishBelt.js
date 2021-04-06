@@ -16,8 +16,8 @@ import language from '../../../language'
 import { getNameBySearchId } from '../../../library/utilities'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import SampleInfoInputs from '../../SampleInfoInputs'
-import SubLayout2 from '../../SubLayout2'
 import CollectRecordFormTitle from '../../CollectRecordFormTitle'
+import { ContentPageLayout } from '../../Layout'
 
 const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   const { recordId } = useParams()
@@ -30,29 +30,31 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   const [choices, setChoices] = useState({})
 
   const _getSupportingData = useEffect(() => {
-    Promise.all([
-      databaseSwitchboardInstance.getCollectRecord(recordId),
-      databaseSwitchboardInstance.getSites(),
-      databaseSwitchboardInstance.getManagementRegimes(),
-      databaseSwitchboardInstance.getChoices(),
-    ])
-      .then(
-        ([
-          collectRecord,
-          sitesResponse,
-          managementRegimesResponse,
-          choicesResponse,
-        ]) => {
-          setCollectRecordBeingEdited(collectRecord)
-          setSites(sitesResponse)
-          setManagementRegimes(managementRegimesResponse)
-          setChoices(choicesResponse)
-          setIsLoading(false)
-        },
-      )
-      .catch(() => {
-        toast.error(language.error.collectRecordUnavailable)
-      })
+    if (databaseSwitchboardInstance && recordId) {
+      Promise.all([
+        databaseSwitchboardInstance.getCollectRecord(recordId),
+        databaseSwitchboardInstance.getSites(),
+        databaseSwitchboardInstance.getManagementRegimes(),
+        databaseSwitchboardInstance.getChoices(),
+      ])
+        .then(
+          ([
+            collectRecord,
+            sitesResponse,
+            managementRegimesResponse,
+            choicesResponse,
+          ]) => {
+            setCollectRecordBeingEdited(collectRecord)
+            setSites(sitesResponse)
+            setManagementRegimes(managementRegimesResponse)
+            setChoices(choicesResponse)
+            setIsLoading(false)
+          },
+        )
+        .catch(() => {
+          toast.error(language.error.collectRecordUnavailable)
+        })
+    }
   }, [databaseSwitchboardInstance, recordId])
 
   const collectRecordData = collectRecordBeingEdited?.data
@@ -88,7 +90,7 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   return (
     <Formik {...formikOptions}>
       {(formik) => (
-        <SubLayout2
+        <ContentPageLayout
           isLoading={isLoading}
           content={
             <form

@@ -21,8 +21,8 @@ test('PageSelector with 8 or less pages renders as expected', () => {
     />,
   )
 
-  expect(container.getByText('« Previous')).not.toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).not.toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeEnabled()
+  expect(container.getByText('Next »')).toBeEnabled()
   expect(container.getByText('1'))
   expect(container.getByText('2'))
   expect(container.getByText('3'))
@@ -70,8 +70,8 @@ test('PageSelector with 8 or less pages shows the next and previous buttons as b
     />,
   )
 
-  expect(container.getByText('« Previous')).toHaveAttribute('disabled')
-  expect(container.getByText('Next »')).toHaveAttribute('disabled')
+  expect(container.getByText('« Previous')).toBeDisabled()
+  expect(container.getByText('Next »')).toBeDisabled()
 })
 test('PageSelector with 8 or less pages calls onGoToPage with the correct page when a page button is clicked', () => {
   const mockFunction = jest.fn()

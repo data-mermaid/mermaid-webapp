@@ -1,5 +1,10 @@
 {
-  "extends": ["@sparkgeo/eslint-config-react"],
+  "extends": [
+    "@sparkgeo/eslint-config-react",
+    "plugin:testing-library/recommended",
+    "plugin:testing-library/react",
+    "plugin:jest-dom/recommended"
+  ],
   "plugins": ["react-hooks"],
   "rules": {
     "no-underscore-dangle": "off",

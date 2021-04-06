@@ -45,7 +45,9 @@ test('App: an online and authenticated user can logout', async () => {
 
   fireEvent.click(await screen.findByText('FakeFirstNameOnline'))
   fireEvent.click(screen.getByText('Logout'))
-  await waitFor(() => expect(screen.queryByText('Projects')).toBeNull())
+  await waitFor(() =>
+    expect(screen.queryByText('Projects')).not.toBeInTheDocument(),
+  )
 })
 
 test('App renders the initial screen as expected for an offline user who is authenticated when online', async () => {
@@ -58,7 +60,10 @@ test('App renders the initial screen as expected for an offline user who is auth
   fireEvent.click(screen.getByText('FakeFirstNameOffline'))
 
   // there is not a logout button
-  expect(await waitFor(() => screen.queryByText('Logout'))).toBeNull()
+
+  await waitFor(() =>
+    expect(screen.queryByText('Logout')).not.toBeInTheDocument(),
+  )
 })
 
 test('App renders the initial screen as expected for an online but not authenticated user', () => {
@@ -66,7 +71,7 @@ test('App renders the initial screen as expected for an online but not authentic
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
-  expect(screen.queryByText('Projects')).toBeNull()
+  expect(screen.queryByText('Projects')).not.toBeInTheDocument()
 })
 
 test('App renders the initial screen as expected for an offline user who is not authenticated in an online environment', () => {
@@ -74,5 +79,5 @@ test('App renders the initial screen as expected for an offline user who is not 
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
-  expect(screen.queryByText('Projects')).toBeNull()
+  expect(screen.queryByText('Projects')).not.toBeInTheDocument()
 })

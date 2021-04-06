@@ -1,7 +1,7 @@
 import { css } from 'styled-components/macro'
 import colorHelper from 'color'
 
-const primary = colorHelper('#1C4C73')
+const primary = colorHelper('#004c76')
 const secondary = colorHelper('#E6E6E6')
 const callout = colorHelper('#52B434')
 const caution = colorHelper('#BD585A')
@@ -17,7 +17,7 @@ const xlarge = '3.5rem'
 const color = {
   white,
   black,
-  backgroundColor: white.mix(colorHelper(black), 0.05),
+  backgroundColor: black.mix(colorHelper(white), 0.9),
   primaryColor: primary,
   primaryHover: primary.mix(colorHelper(white), 0.1),
   primaryActive: primary.mix(colorHelper(black), 0.1),
@@ -40,6 +40,9 @@ const color = {
   disabledText: '#969696',
   disabledBorder: '#969696',
   border: white.mix(colorHelper(black), 0.5),
+  sideBarColor: black.mix(colorHelper(white), 0.9),
+  headerColor: primary,
+  footerColor: white,
 }
 const spacing = {
   xsmall,
@@ -53,6 +56,7 @@ const spacing = {
   headerHeight: '4.4rem',
   sideNavWidthTabletLandscapeOnly: '8rem',
   sideNavWidthPhoneOnly: '6rem',
+  borderMedium: '2px',
   borderLarge: '4px',
 }
 
