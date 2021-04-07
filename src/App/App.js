@@ -73,6 +73,7 @@ function App({ dexieInstance }) {
           <Route exact path="/">
             <Redirect to="/projects" />
           </Route>
+          <Route component={() => <>Not Found</>} />
         </Switch>
       )}
     </ThemeProvider>
