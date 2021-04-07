@@ -13,6 +13,7 @@ import {
   Th,
   Td,
   TableOverflowWrapper,
+  TableNavigation,
 } from '../../generic/Table/table'
 import AddSampleUnitButton from './AddSampleUnitButton'
 import language from '../../../language'
@@ -201,7 +202,7 @@ const Collect = ({ databaseGatewayInstance }) => {
           </tbody>
         </Table>
       </TableOverflowWrapper>
-      <RowSpaceBetween>
+      <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
@@ -216,7 +217,7 @@ const Collect = ({ databaseGatewayInstance }) => {
           currentPageIndex={pageIndex}
           pageCount={pageOptions.length}
         />
-      </RowSpaceBetween>
+      </TableNavigation>
     </>
   )
 

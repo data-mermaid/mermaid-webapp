@@ -6,6 +6,17 @@ import {
 } from '../../../library/styling/mediaQueries'
 import theme from '../../../theme'
 
+export const TableNavigation = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0 0 ${theme.spacing.xsmall} 0;
+  > * {
+    padding: ${theme.spacing.small} ${theme.spacing.medium};
+  }
+  *:nth-child(2) {
+    justify-self: end;
+  }
+`
 export const TableOverflowWrapper = styled.div`
   max-width: calc(100vw - ${theme.spacing.sideNavWidthDesktop});
   ${mediaQueryTabletLandscapeOnly(css`
