@@ -31,10 +31,12 @@ const PaginationLinkButton = styled(LinkButton)`
 // eslint-disable-next-line react/prop-types
 const PageButton = ({ pageIndex, currentPageIndex, onGoToPage }) => {
   const pageLabel = pageIndex + 1
+  const isCurrentPage = currentPageIndex === pageIndex
 
   return (
     <PageNumberButtons
-      className={currentPageIndex === pageIndex && 'paginationCurrentPage'}
+      className={isCurrentPage && 'paginationCurrentPage'}
+      aria-current={isCurrentPage}
       onClick={() => onGoToPage(pageIndex)}
       key={`pagination-button-${pageIndex}`}
     >

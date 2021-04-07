@@ -5,7 +5,6 @@ import {
   renderAuthenticatedOnline,
   waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
-import theme from '../../../../theme'
 
 import PageSelector from './PageSelector'
 
@@ -51,12 +50,10 @@ test('PageSelector with more than 8 pages indicates current page', () => {
     />,
   )
 
-  expect(container.getByText('1')).toHaveStyle(
-    `background-color: ${theme.color.primaryColor}`,
-  )
-  expect(container.getByText('2')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('3')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('9')).toHaveStyle('background-color: transparent')
+  expect(container.getByText('1')).toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('2')).not.toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('3')).not.toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('9')).not.toHaveAttribute('aria-current', 'true')
 })
 test('PageSelector with more than 8 pages shows the next and previous buttons as being disabled', () => {
   const container = renderAuthenticatedOnline(

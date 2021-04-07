@@ -5,7 +5,6 @@ import {
   renderAuthenticatedOnline,
   waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
-import theme from '../../../../theme'
 import PageSelector from './PageSelector'
 
 test('PageSelector with 8 or less pages renders as expected', () => {
@@ -46,16 +45,14 @@ test('PageSelector with 8 or less pages indicates current page', () => {
     />,
   )
 
-  expect(container.getByText('1')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('2')).toHaveStyle(
-    `background-color: ${theme.color.primaryColor}`,
-  )
-  expect(container.getByText('3')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('4')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('5')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('6')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('7')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('8')).toHaveStyle('background-color: transparent')
+  expect(container.getByText('1')).not.toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('2')).toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('3')).not.toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('4')).not.toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('5')).not.toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('6')).not.toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('7')).not.toHaveAttribute('aria-current', 'true')
+  expect(container.getByText('8')).not.toHaveAttribute('aria-current', 'true')
 })
 test('PageSelector with 8 or less pages shows the next and previous buttons as being disabled', () => {
   const container = renderAuthenticatedOnline(
