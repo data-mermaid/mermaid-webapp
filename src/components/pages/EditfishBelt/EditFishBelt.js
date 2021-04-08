@@ -57,7 +57,6 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
   }, [databaseSwitchboardInstance, recordId])
 
   const collectRecordData = collectRecordBeingEdited?.data
-
   const formikOptions = {
     initialValues: {
       ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
