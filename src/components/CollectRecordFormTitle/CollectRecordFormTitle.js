@@ -17,12 +17,12 @@ const CollectRecordFormTitle = ({ collectRecordData, sites }) => {
       ? 'fishbelt_transect'
       : 'benthic_transect'
 
-  const defaultName = getProtocolName(collectRecordData?.protocol)
+  const defaultTitle = getProtocolName(collectRecordData?.protocol)
   const siteName =
     siteId && sites.length > 0 ? getObjectById(sites, siteId).name : ''
   const transectNumber =
     collectRecordData[transectType]?.number.toString() || ''
-  const label = collectRecordData?.fishbelt_transect?.label || ''
+  const label = collectRecordData[transectType]?.label || ''
 
   if (siteName !== '') collectRecordTitle.push(siteName)
   if (transectNumber !== '') collectRecordTitle.push(transectNumber)
@@ -30,10 +30,14 @@ const CollectRecordFormTitle = ({ collectRecordData, sites }) => {
 
   const collectRecordTitleText =
     collectRecordTitle.length === 0
-      ? defaultName
+      ? defaultTitle
       : collectRecordTitle.join(' - ')
 
-  return <H2 id="fishbelt-form-title">{collectRecordTitleText}</H2>
+  return (
+    <H2 id="collect-form-title" aria-label="Collect Form Title">
+      {collectRecordTitleText}
+    </H2>
+  )
 }
 
 CollectRecordFormTitle.propTypes = {
