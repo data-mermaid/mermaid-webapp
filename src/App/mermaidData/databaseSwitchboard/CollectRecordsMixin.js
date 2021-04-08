@@ -1,5 +1,5 @@
 import { createUuid } from '../../../library/createUuid'
-import { getNameBySearchId } from '../../../library/utilities'
+import { getObjectById } from '../../../library/utilities'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const CollectRecordsMixin = (Base) =>
@@ -85,11 +85,12 @@ const CollectRecordsMixin = (Base) =>
             return collectRecords.map((record) => ({
               ...record,
               uiLabels: {
-                site: getNameBySearchId(sites, record.data.sample_event.site),
-                management: getNameBySearchId(
+                site: getObjectById(sites, record.data.sample_event.site)
+                  .name,
+                management: getObjectById(
                   managementRegimes,
                   record.data.sample_event.management,
-                ),
+                ).name,
                 protocol: this.#collectRecordProtocolLabels[
                   record.data.protocol
                 ],
