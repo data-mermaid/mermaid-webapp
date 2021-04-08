@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 import { getObjectById, getProtocolName } from '../../library/utilities'
 import {
-  collectFishBeltRecordPropType,
+  fishBeltTransectPropType,
+  benthicTransectPropType,
   sitePropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
 
@@ -11,16 +12,21 @@ const CollectRecordFormTitle = ({ collectRecordData, sites }) => {
   const collectRecordTitle = []
 
   const siteId = collectRecordData?.sample_event.site
+  const transectType =
+    collectRecordData?.protocol === 'fishbelt'
+      ? 'fishbelt_transect'
+      : 'benthic_transect'
+
+  const defaultName = getProtocolName(collectRecordData?.protocol)
   const siteName =
     siteId && sites.length > 0 ? getObjectById(sites, siteId).name : ''
-  const transectName =
-    collectRecordData?.fishbelt_transect?.number.toString() || ''
-  const labelName = collectRecordData?.fishbelt_transect?.label || ''
-  const defaultName = getProtocolName(collectRecordData?.protocol)
+  const transectNumber =
+    collectRecordData[transectType]?.number.toString() || ''
+  const label = collectRecordData?.fishbelt_transect?.label || ''
 
   if (siteName !== '') collectRecordTitle.push(siteName)
-  if (transectName !== '') collectRecordTitle.push(transectName)
-  if (labelName !== '') collectRecordTitle.push(labelName)
+  if (transectNumber !== '') collectRecordTitle.push(transectNumber)
+  if (label !== '') collectRecordTitle.push(label)
 
   const collectRecordTitleText =
     collectRecordTitle.length === 0
@@ -31,7 +37,10 @@ const CollectRecordFormTitle = ({ collectRecordData, sites }) => {
 }
 
 CollectRecordFormTitle.propTypes = {
-  collectRecordData: collectFishBeltRecordPropType,
+  collectRecordData: PropTypes.oneOfType([
+    fishBeltTransectPropType,
+    benthicTransectPropType,
+  ]),
   sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 
