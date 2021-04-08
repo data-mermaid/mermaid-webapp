@@ -173,11 +173,11 @@ const PageSelector = ({
         onClick={onPreviousClick}
         disabled={previousDisabled}
       >
-        « Previous
+        Back
       </PaginationLinkButton>
       {pageButtons}
       <PaginationLinkButton onClick={onNextClick} disabled={nextDisabled}>
-        Next »
+        Next
       </PaginationLinkButton>
     </div>
   )
