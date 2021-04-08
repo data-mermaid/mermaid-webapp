@@ -106,7 +106,7 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
           toolbar={
             <>
               <CollectRecordFormTitle
-                protocol="Fish Belt"
+                defaultTitle="Fish Belt"
                 siteName={siteName}
                 transectName={transectName}
                 labelName={labelName}

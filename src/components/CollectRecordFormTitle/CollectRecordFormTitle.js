@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 
 const CollectRecordFormTitle = ({
-  protocol,
+  defaultTitle,
   siteName,
   transectName,
   labelName,
@@ -15,20 +15,25 @@ const CollectRecordFormTitle = ({
   if (labelName !== '') collectRecordTitle.push(labelName)
 
   const collectRecordTitleText =
-    collectRecordTitle.length === 0 ? protocol : collectRecordTitle.join(' - ')
+    collectRecordTitle.length === 0
+      ? defaultTitle
+      : collectRecordTitle.join(' - ')
 
-  return <H2 id="fishbelt-form-title">{collectRecordTitleText}</H2>
+  return (
+    <H2 id="collect-form-title" aria-label="Collect Form Title">
+      {collectRecordTitleText}
+    </H2>
+  )
 }
 
 CollectRecordFormTitle.propTypes = {
-  protocol: PropTypes.string,
+  defaultTitle: PropTypes.string.isRequired,
   siteName: PropTypes.string,
   transectName: PropTypes.string,
   labelName: PropTypes.string,
 }
 
 CollectRecordFormTitle.defaultProps = {
-  protocol: '',
   siteName: '',
   transectName: '',
   labelName: '',
