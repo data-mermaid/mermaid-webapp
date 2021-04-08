@@ -15,14 +15,21 @@ export const sitePropType = PropTypes.shape({
   reef_zone: PropTypes.string,
   exposure: PropTypes.string,
 })
-export const collectRecordPropType = PropTypes.shape({
-  method: PropTypes.string,
-  site: PropTypes.string,
-  management_regime: PropTypes.string,
-  data: PropTypes.shape({
-    protocol: PropTypes.string,
+
+export const collectFishBeltRecordPropType = PropTypes.shape({
+  protocol: PropTypes.string,
+  sample_event: PropTypes.shape({
+    site: PropTypes.string,
+    management: PropTypes.string,
+    sample_date: PropTypes.string,
   }),
-  depth: PropTypes.number,
+  fishbelt_transect: PropTypes.shape({
+    depth: PropTypes.number,
+    label: PropTypes.string,
+    number: PropTypes.number,
+    sample_time: PropTypes.string,
+    len_surveyed: PropTypes.number,
+  }),
 })
 
 export const managementRegimePropType = PropTypes.shape({

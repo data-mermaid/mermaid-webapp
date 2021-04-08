@@ -13,7 +13,6 @@ import { ButtonCallout } from '../../generic/buttons'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
 import { RowRight } from '../../generic/positioning'
 import language from '../../../language'
-import { getNameBySearchId } from '../../../library/utilities'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import CollectRecordFormTitle from '../../CollectRecordFormTitle'
@@ -59,16 +58,6 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
 
   const collectRecordData = collectRecordBeingEdited?.data
 
-  const siteName =
-    collectRecordData !== undefined &&
-    collectRecordData.sample_event.site &&
-    sites.length > 0
-      ? getNameBySearchId(sites, collectRecordData.sample_event.site)
-      : ''
-  const transectName =
-    collectRecordData?.fishbelt_transect?.number.toString() || ''
-  const labelName = collectRecordData?.fishbelt_transect?.label || ''
-
   const formikOptions = {
     initialValues: {
       ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
@@ -100,7 +89,6 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
             >
               <SampleInfoInputs
                 formik={formik}
-                collectRecord={collectRecordBeingEdited}
                 sites={sites}
                 managementRegimes={managementRegimes}
               />
@@ -110,10 +98,8 @@ const EditFishBelt = ({ databaseSwitchboardInstance }) => {
           toolbar={
             <>
               <CollectRecordFormTitle
-                protocol="Fish Belt"
-                siteName={siteName}
-                transectName={transectName}
-                labelName={labelName}
+                collectRecordData={collectRecordData}
+                sites={sites}
               />
               <RowRight>
                 <ButtonCallout
