@@ -27,7 +27,7 @@ test('App renders shows page not found when navigate to unknown path.', () => {
   )
 
   expect(
-    screen.getByText(/sorry page not found/i, {
+    screen.getByText(/sorry, page not found/i, {
       selector: 'h1',
     }),
   )
