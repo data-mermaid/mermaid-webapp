@@ -21,7 +21,6 @@ class DatabaseSwitchboard extends SitesMixin(
 const databaseSwitchboardPropTypes = PropTypes.shape({
   getChoices: PropTypes.func,
   getCollectRecord: PropTypes.func,
-  getCollectRecordMethodLabel: PropTypes.func,
   getCollectRecords: PropTypes.func,
   getCollectRecordsForUIDisplay: PropTypes.func,
   getFishBelt: PropTypes.func,
