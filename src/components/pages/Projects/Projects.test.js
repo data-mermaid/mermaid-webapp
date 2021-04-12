@@ -20,7 +20,9 @@ test('Projects component renders with the expected UI elements', async () => {
   )
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+    expect(
+      screen.queryByLabelText('loading indicator'),
+    ).not.toBeInTheDocument(),
   )
   // expect count of projects renders is the same as the count in mock data
   const projectList = screen.getByRole('list')
@@ -59,7 +61,9 @@ test('A project card renders with the expected UI elements for button groups', a
   )
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+    expect(
+      screen.queryByLabelText('loading indicator'),
+    ).not.toBeInTheDocument(),
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
@@ -86,7 +90,9 @@ test('A project card shows relevant data for a project', async () => {
   )
 
   await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+    expect(
+      screen.queryByLabelText('loading indicator'),
+    ).not.toBeInTheDocument(),
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
@@ -99,7 +105,9 @@ test('A project card shows relevant data for a project', async () => {
   expect(within(projectCard).getByText('Fiji'))
   expect(within(projectCard).getByText('23 sites'))
 
-  const offlineCheckbox = within(projectCard).getByRole('checkbox')
+  const offlineCheckbox = within(projectCard).getByRole('checkbox', {
+    name: /offline ready/i,
+  })
 
   expect(offlineCheckbox)
   expect(offlineCheckbox).toBeChecked()
