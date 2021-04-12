@@ -6,4 +6,9 @@ export default {
   title: 'ProjectName',
   component: ProjectName,
 }
-export const basic = () => <ProjectName />
+
+export const basic = () => {
+  const pageTitle = 'Project Name'
+
+  return <ProjectName pageTitle={pageTitle} />
+}
