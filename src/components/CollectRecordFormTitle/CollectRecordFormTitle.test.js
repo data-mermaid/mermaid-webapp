@@ -45,3 +45,65 @@ test('CollectRecordFormTitle component renders with missing label props and show
 
   expect(screen.getByText('Fish Belt'))
 })
+
+test('CollectRecordFormTitle component renders missing site name in title when site name is missing.', () => {
+  const mockMissingSiteCollectRecordData = {
+    protocol: 'fishbelt',
+    sample_event: {},
+    fishbelt_transect: {
+      label: 'FB-2',
+      number: 2,
+    },
+  }
+
+  renderAuthenticatedOnline(
+    <CollectRecordFormTitle
+      collectRecordData={mockMissingSiteCollectRecordData}
+      sites={mockMermaidData.sites}
+    />,
+  )
+
+  expect(screen.getByText('2 - FB-2'))
+})
+
+test('CollectRecordFormTitle component renders missing label in title when label is missing.', () => {
+  const mockMissingLabelCollectRecordData = {
+    protocol: 'fishbelt',
+    sample_event: {
+      site: '4',
+    },
+    fishbelt_transect: {
+      number: 2,
+    },
+  }
+
+  renderAuthenticatedOnline(
+    <CollectRecordFormTitle
+      collectRecordData={mockMissingLabelCollectRecordData}
+      sites={mockMermaidData.sites}
+    />,
+  )
+
+  expect(screen.getByText('Karang Kapal - 2'))
+})
+
+test('CollectRecordFormTitle component renders missing transect number in title when transect number is missing.', () => {
+  const mockMissingTransectNumberCollectRecordData = {
+    protocol: 'fishbelt',
+    sample_event: {
+      site: '4',
+    },
+    fishbelt_transect: {
+      label: 'FB-2',
+    },
+  }
+
+  renderAuthenticatedOnline(
+    <CollectRecordFormTitle
+      collectRecordData={mockMissingTransectNumberCollectRecordData}
+      sites={mockMermaidData.sites}
+    />,
+  )
+
+  expect(screen.getByText('Karang Kapal - FB-2'))
+})
