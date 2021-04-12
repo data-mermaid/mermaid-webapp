@@ -7,24 +7,18 @@ import {
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import CollectRecordFormTitle from './CollectRecordFormTitle'
 
-const mockCollectRecordData = {
-  protocol: 'fishbelt',
-  sample_event: {
-    site: '4',
-  },
-  fishbelt_transect: {
-    label: 'FB-2',
-    number: 2,
-  },
-}
-
-const mockMissingLabelData = {
-  protocol: 'fishbelt',
-  sample_event: {},
-  fishbelt_transect: {},
-}
-
 test('CollectRecordFormTitle component renders with the expected UI elements.', () => {
+  const mockCollectRecordData = {
+    protocol: 'fishbelt',
+    sample_event: {
+      site: '4',
+    },
+    fishbelt_transect: {
+      label: 'FB-2',
+      number: 2,
+    },
+  }
+
   renderAuthenticatedOnline(
     <CollectRecordFormTitle
       collectRecordData={mockCollectRecordData}
@@ -36,6 +30,12 @@ test('CollectRecordFormTitle component renders with the expected UI elements.', 
 })
 
 test('CollectRecordFormTitle component renders with missing label props and shows a default title.', () => {
+  const mockMissingLabelData = {
+    protocol: 'fishbelt',
+    sample_event: {},
+    fishbelt_transect: {},
+  }
+
   renderAuthenticatedOnline(
     <CollectRecordFormTitle
       collectRecordData={mockMissingLabelData}
