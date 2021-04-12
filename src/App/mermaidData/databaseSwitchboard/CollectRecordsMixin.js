@@ -1,6 +1,8 @@
 import { createUuid } from '../../../library/createUuid'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
+const FISH_BELT_TRANSECT_TYPE = 'fishbelt'
+
 const CollectRecordsMixin = (Base) =>
   class extends Base {
     #collectRecordProtocolLabels = {
@@ -74,6 +76,32 @@ const CollectRecordsMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.collectRecords)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
+    getSampleUnitNumber = (data) => {
+      let result
+
+      let transectNumber
+
+      let labelName
+
+      const { protocol } = data
+
+      if (protocol === FISH_BELT_TRANSECT_TYPE) {
+        transectNumber = data?.fishbelt_transect?.number || ''
+        labelName = data?.fishbelt_transect?.label || ''
+      } else {
+        transectNumber = data?.benthic_transect?.number || ''
+        labelName = data?.benthic_transect?.label || ''
+      }
+
+      if (transectNumber === '') {
+        result = labelName
+      } else if (labelName !== '') {
+        result = transectNumber + labelName
+      }
+
+      return result
+    }
+
     getCollectRecordsForUIDisplay = () => {
       return this._isAuthenticatedAndReady
         ? Promise.all([
@@ -97,6 +125,7 @@ const CollectRecordsMixin = (Base) =>
                 protocol: this.#collectRecordProtocolLabels[
                   record.data.protocol
                 ],
+                sampleUnitNumber: this.getSampleUnitNumber(record.data),
               },
             }))
           })
