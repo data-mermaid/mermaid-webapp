@@ -8,9 +8,10 @@ import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
-import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
+import PageNotFound from '../components/pages/PageNotFound'
 
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
@@ -73,6 +74,7 @@ function App({ dexieInstance }) {
           <Route exact path="/">
             <Redirect to="/projects" />
           </Route>
+          <Route component={PageNotFound} />
         </Switch>
       )}
     </ThemeProvider>
