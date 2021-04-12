@@ -47,8 +47,8 @@ const ProjectCard = ({
   }
 
   return (
-    <CardWrapper onClick={handleCardClick}>
-      <ProjectNameWrapper {...restOfProps}>
+    <CardWrapper onClick={handleCardClick} {...restOfProps}>
+      <ProjectNameWrapper>
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
@@ -67,7 +67,7 @@ const ProjectCard = ({
         </CheckBoxLabel>
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
-      <ButtonGroups>
+      <ButtonGroups data-testid="parent-3">
         <NavLinkButtonGroup projectUrl={projectUrl} />
         <VerticalRule />
         <ButtonSecondary onClick={handleProjectCopyClick} aria-label="Copy">
