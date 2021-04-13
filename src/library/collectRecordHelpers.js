@@ -1,4 +1,3 @@
-import * as Yup from 'yup'
 import { dateFormat } from './dateFormat'
 
 const getSampleInfoInitialValues = (collectRecordData, transectType) => {
@@ -22,26 +21,4 @@ const getTransectInitialValues = (collectRecordData, transectType) => ({
   notes: collectRecordData?.sample_event.notes ?? '',
 })
 
-const getSampleInfoValidationInfo = ({ sites, managementRegimes }) => {
-  const validSiteValues = sites.map((site) => site.id)
-
-  const validManagementRegimeValues = managementRegimes.map(
-    (regime) => regime.id,
-  )
-
-  return {
-    site: Yup.string()
-      .oneOf(validSiteValues, 'Invalid site')
-      .required('Site is required'),
-    management: Yup.string()
-      .oneOf(validManagementRegimeValues, 'Invalid management regime')
-      .required('Management Regime is required'),
-    depth: Yup.number().required('Depth is required'),
-  }
-}
-
-export {
-  getSampleInfoInitialValues,
-  getTransectInitialValues,
-  getSampleInfoValidationInfo,
-}
+export { getSampleInfoInitialValues, getTransectInitialValues }
