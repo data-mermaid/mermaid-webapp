@@ -74,15 +74,6 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
       ...getTransectInitialValues(collectRecordData, 'fishbelt_transect'),
     },
     enableReinitialize: true,
-    validationSchema: Yup.object({
-      ...getSampleInfoValidationInfo({ sites, managementRegimes }),
-      transectNumber: Yup.number().required('Transect number is required'),
-      transectNLengthSurveyed: Yup.number().required(
-        'Transect length surveyed is required',
-      ),
-      width: Yup.string().required('Width is required'),
-      fishSizeBin: Yup.string().required('Fish size bin is required'),
-    }),
     onSubmit: () => {},
   }
 
