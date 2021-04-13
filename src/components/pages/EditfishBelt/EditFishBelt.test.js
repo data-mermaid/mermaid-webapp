@@ -23,6 +23,13 @@ test('EditFishBelt component renders with the expected UI elements', async () =>
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
   )
+
+  expect(
+    screen.getByText('Karang Kapal - 2 - FB-2', {
+      selector: 'h2',
+    }),
+  )
+
   expect(
     screen.getByText('Sample Info', {
       selector: 'h2',
