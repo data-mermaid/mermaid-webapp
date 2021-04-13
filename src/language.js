@@ -3,6 +3,8 @@ const error = {
     'Initialization error. Try reloading or reauthenticating',
   collectRecordUnavailable:
     'Collect Record data is currently unavailable. Please try again',
+  collectRecordChoicesUnavailable:
+    'Options data for creating a collect record is currently unavailable. Please try again',
   collectRecordsUnavailable:
     'Collect Records data is currently unavailable. Please try again',
   projectsUnavailable:

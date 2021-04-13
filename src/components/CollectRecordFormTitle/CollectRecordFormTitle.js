@@ -10,17 +10,16 @@ import {
 const CollectRecordFormTitle = ({ collectRecordData, sites }) => {
   const collectRecordTitle = []
 
-  const siteId = collectRecordData.sample_event.site
+  const siteId = collectRecordData?.sample_event?.site
   const transectType =
-    collectRecordData.protocol === 'fishbelt'
-      ? 'fishbelt_transect'
-      : 'benthic_transect'
+    collectRecordData.protocol === 'fishbelt' ? 'fishbelt_transect' : ''
 
-  const defaultTitle = getProtocolName(collectRecordData.protocol)
+  const defaultTitle =
+    getProtocolName(collectRecordData.protocol) || 'Fish Belt'
   const siteName =
     siteId && sites.length > 0 ? getObjectById(sites, siteId).name : ''
-  const transectNumber = collectRecordData[transectType].number || ''
-  const label = collectRecordData[transectType].label || ''
+  const transectNumber = collectRecordData[transectType]?.number || ''
+  const label = collectRecordData[transectType]?.label || ''
 
   if (siteName !== '') collectRecordTitle.push(siteName)
   if (transectNumber !== '') collectRecordTitle.push(transectNumber)
