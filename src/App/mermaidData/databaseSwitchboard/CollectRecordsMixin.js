@@ -77,8 +77,6 @@ const CollectRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
     getSampleUnitNumber = (data) => {
-      let result
-
       let transectNumber
 
       let labelName
@@ -94,12 +92,12 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (transectNumber === '') {
-        result = labelName
+        transectNumber = labelName
       } else if (labelName !== '') {
-        result = transectNumber + labelName
+        transectNumber += labelName
       }
 
-      return result
+      return transectNumber
     }
 
     getDepth = (data) => {
