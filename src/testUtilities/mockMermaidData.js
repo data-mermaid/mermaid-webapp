@@ -55,6 +55,7 @@ const collectRecords = [
         sample_time: '22:55',
         len_surveyed: 10,
       },
+      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
   },
   {
@@ -77,6 +78,7 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 6,
       },
+      observers: [{ profile_name: 'Nick' }],
     },
   },
   {
@@ -99,6 +101,7 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
   },
   {
@@ -121,6 +124,7 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
   },
   {
@@ -143,6 +147,7 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Brian' }, { profile_name: 'Melissa' }],
     },
   },
   {
@@ -165,6 +170,7 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Dustin' }],
     },
   },
   {
@@ -186,6 +192,7 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Nick' }, { profile_name: 'Dustin' }],
     },
   },
   {
@@ -208,6 +215,11 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [
+        { profile_name: 'AL' },
+        { profile_name: 'Dustin' },
+        { profile_name: 'Kim' },
+      ],
     },
   },
   {
