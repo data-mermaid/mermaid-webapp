@@ -114,6 +114,13 @@ const CollectRecordsMixin = (Base) =>
       return result
     }
 
+    dateFormat = (dateString) => {
+      const datePieces = new Date(dateString).toDateString().split(' ')
+
+      // date format DD-MMM-YYYY
+      return `${datePieces[2]}-${datePieces[1]}-${datePieces[3]}`
+    }
+
     getCollectRecordsForUIDisplay = () => {
       return this._isAuthenticatedAndReady
         ? Promise.all([
@@ -139,7 +146,9 @@ const CollectRecordsMixin = (Base) =>
                 ],
                 sampleUnitNumber: this.getSampleUnitNumber(record.data),
                 depth: this.getDepth(record.data),
-                sampleDate: record.data.sample_event.sample_date,
+                sampleDate: this.dateFormat(
+                  record.data.sample_event.sample_date,
+                ),
               },
             }))
           })
