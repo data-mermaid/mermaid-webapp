@@ -46,7 +46,7 @@ test('CollectRecordFormTitle component renders with missing label props and show
   expect(screen.getByText('Fish Belt'))
 })
 
-test('CollectRecordFormTitle component renders properly when site name is missing', () => {
+test('CollectRecordFormTitle component renders properly when site name is missing.', () => {
   const mockMissingSiteCollectRecordData = {
     protocol: 'fishbelt',
     sample_event: {},
