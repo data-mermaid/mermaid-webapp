@@ -33,10 +33,10 @@ const FishBeltTransectForms = ({ formik, choices }) => {
 
       <InputWithLabelAndValidation
         label="Transect Number"
-        id="transectNumber"
+        id="number"
         type="number"
-        {...formik.getFieldProps('transectNumber')}
-        {...getValidationPropsFromFormik(formik, 'transectNumber')}
+        {...formik.getFieldProps('number')}
+        {...getValidationPropsFromFormik(formik, 'number')}
       />
       <InputWithLabelAndValidation
         label="Label"
@@ -47,10 +47,10 @@ const FishBeltTransectForms = ({ formik, choices }) => {
       />
       <InputWithLabelAndValidation
         label="Transect Length Surveyed"
-        id="transectLengthSurveyed"
+        id="len_surveyed"
         type="number"
-        {...formik.getFieldProps('transectLengthSurveyed')}
-        {...getValidationPropsFromFormik(formik, 'transectLengthSurveyed')}
+        {...formik.getFieldProps('len_surveyed')}
+        {...getValidationPropsFromFormik(formik, 'len_surveyed')}
       />
       <InputSelectWithLabelAndValidation
         label="Width"
@@ -61,17 +61,17 @@ const FishBeltTransectForms = ({ formik, choices }) => {
       />
       <InputSelectWithLabelAndValidation
         label="Fish Size Bin"
-        id="fishSizeBin"
+        id="size_bin"
         options={fishSizeBinSelectOptions}
-        {...formik.getFieldProps('fishSizeBin')}
-        {...getValidationPropsFromFormik(formik, 'fishSizeBin')}
+        {...formik.getFieldProps('size_bin')}
+        {...getValidationPropsFromFormik(formik, 'size_bin')}
       />
       <InputSelectWithLabelAndValidation
         label="Reef Slope"
-        id="reefSlope"
+        id="reef_slope"
         options={reefSlopeSelectOptions}
-        {...formik.getFieldProps('reefSlope')}
-        {...getValidationPropsFromFormik(formik, 'reefSlope')}
+        {...formik.getFieldProps('reef_slope')}
+        {...getValidationPropsFromFormik(formik, 'reef_slope')}
       />
       <InputWithLabelAndValidation
         label="Notes"

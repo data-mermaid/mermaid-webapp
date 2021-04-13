@@ -1,7 +1,6 @@
-import { dateFormat } from './dateFormat'
+import { dateFormat } from '../dateFormat'
 
 const getSampleInfoInitialValues = (collectRecordData, transectType) => {
-  // console.log('here', collectRecordData, transectType)
   return {
     depth: collectRecordData?.[transectType]?.depth ?? '',
     site: collectRecordData?.sample_event.site ?? '',
@@ -12,12 +11,12 @@ const getSampleInfoInitialValues = (collectRecordData, transectType) => {
 }
 
 const getTransectInitialValues = (collectRecordData, transectType) => ({
-  transectNumber: collectRecordData?.[transectType]?.number ?? '',
+  number: collectRecordData?.[transectType]?.number ?? '',
   label: collectRecordData?.[transectType]?.label ?? '',
-  transectLengthSurveyed: collectRecordData?.[transectType]?.len_surveyed ?? '',
+  len_surveyed: collectRecordData?.[transectType]?.len_surveyed ?? '',
   width: collectRecordData?.[transectType]?.width ?? '',
-  fishSizeBin: collectRecordData?.[transectType]?.size_bin ?? '',
-  reefSlope: collectRecordData?.[transectType]?.reef_slope ?? '',
+  size_bin: collectRecordData?.[transectType]?.size_bin ?? '',
+  reef_slope: collectRecordData?.[transectType]?.reef_slope ?? '',
   notes: collectRecordData?.sample_event.notes ?? '',
 })
 
