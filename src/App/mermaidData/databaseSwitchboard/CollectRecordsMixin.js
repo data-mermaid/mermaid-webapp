@@ -139,6 +139,7 @@ const CollectRecordsMixin = (Base) =>
                 ],
                 sampleUnitNumber: this.getSampleUnitNumber(record.data),
                 depth: this.getDepth(record.data),
+                sampleDate: record.data.sample_event.sample_date,
               },
             }))
           })
