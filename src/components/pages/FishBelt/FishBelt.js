@@ -1,23 +1,22 @@
 import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
 import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
-  getSampleInfoValidationInfo,
-} from '../../../library/collectRecordHelpers'
+} from '../../../library/formikHelpers/collectRecordHelpers'
 import { ButtonCallout } from '../../generic/buttons'
+import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
+import { H2 } from '../../generic/text'
 import { RowRight } from '../../generic/positioning'
 import language from '../../../language'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import EditCollectRecordFormTitle from '../../EditCollectRecordFormTitle'
-import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 
 const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
@@ -68,13 +67,56 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   }, [databaseSwitchboardInstance, recordId, isNewRecord])
 
   const collectRecordData = collectRecordBeingEdited?.data
+
+  const reformatFormValuesIntoFishBeltRecord = (values) => {
+    const {
+      management,
+      notes,
+      sample_date,
+      site,
+
+      depth,
+      label,
+      len_surveyed,
+      number,
+      reef_slope,
+      sample_time,
+      size_bin,
+      width,
+    } = values
+
+    return {
+      ...collectRecordBeingEdited,
+      data: {
+        fishbelt_transect: {
+          depth,
+          label,
+          len_surveyed,
+          number,
+          reef_slope,
+          sample_time,
+          size_bin,
+          width,
+        },
+        sample_event: { management, notes, sample_date, site },
+      },
+    }
+  }
   const formikOptions = {
     initialValues: {
       ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
       ...getTransectInitialValues(collectRecordData, 'fishbelt_transect'),
     },
     enableReinitialize: true,
-    onSubmit: () => {},
+
+    onSubmit: (values) => {
+      const newRecord = reformatFormValuesIntoFishBeltRecord(values)
+
+      databaseSwitchboardInstance
+        .saveFishBelt(newRecord)
+        .then(() => toast.success(language.success.collectRecordSave))
+        .catch(() => toast.error(language.error.collectRecordSave))
+    },
   }
 
   return (
@@ -107,11 +149,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
               )}
 
               <RowRight>
-                <ButtonCallout
-                  type="submit"
-                  onSubmit={formik.handleSubmit}
-                  form="sampleinfo-form"
-                >
+                <ButtonCallout type="submit" form="fishbelt-form">
                   Save
                 </ButtonCallout>
               </RowRight>
