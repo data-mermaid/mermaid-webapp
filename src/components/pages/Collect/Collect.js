@@ -122,7 +122,7 @@ const Collect = ({ databaseSwitchboardInstance }) => {
         management: uiLabels.management,
         sampleUnitNumber: uiLabels.sampleUnitNumber,
         size: 'wip',
-        depth: 'wip',
+        depth: uiLabels.depth,
         sampleDate: 'wip',
         observers: 'wip',
         status: 'wip',

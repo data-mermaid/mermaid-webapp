@@ -102,6 +102,20 @@ const CollectRecordsMixin = (Base) =>
       return result
     }
 
+    getDepth = (data) => {
+      let result
+
+      const { protocol } = data
+
+      if (protocol === FISH_BELT_TRANSECT_TYPE) {
+        result = data?.fishbelt_transect?.depth || ''
+      } else {
+        result = data?.benthic_transect?.depth || ''
+      }
+
+      return result
+    }
+
     getCollectRecordsForUIDisplay = () => {
       return this._isAuthenticatedAndReady
         ? Promise.all([
@@ -126,6 +140,7 @@ const CollectRecordsMixin = (Base) =>
                   record.data.protocol
                 ],
                 sampleUnitNumber: this.getSampleUnitNumber(record.data),
+                depth: this.getDepth(record.data),
               },
             }))
           })
