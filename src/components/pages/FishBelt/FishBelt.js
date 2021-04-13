@@ -1,6 +1,6 @@
 import { Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
@@ -26,42 +26,40 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
   const { recordId } = useParams()
+  const history = useHistory()
 
   const _getSupportingData = useEffect(() => {
-    if (isNewRecord) {
-      databaseSwitchboardInstance
-        .getChoices()
-        .then((choicesResponse) => {
-          setChoices(choicesResponse)
-          setIsLoading(false)
-        })
-        .catch(() => {
-          toast.error(language.error.collectRecordChoicesUnavailable)
-        })
-    }
-    if (databaseSwitchboardInstance && recordId && !isNewRecord) {
-      Promise.all([
-        databaseSwitchboardInstance.getCollectRecord(recordId),
+    if (databaseSwitchboardInstance) {
+      const promises = [
         databaseSwitchboardInstance.getSites(),
         databaseSwitchboardInstance.getManagementRegimes(),
         databaseSwitchboardInstance.getChoices(),
-      ])
+      ]
+
+      if (recordId && !isNewRecord) {
+        promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
+      }
+      Promise.all(promises)
         .then(
           ([
-            collectRecord,
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
+            collectRecordResponse,
           ]) => {
-            setCollectRecordBeingEdited(collectRecord)
             setSites(sitesResponse)
             setManagementRegimes(managementRegimesResponse)
             setChoices(choicesResponse)
             setIsLoading(false)
+            setCollectRecordBeingEdited(collectRecordResponse)
           },
         )
         .catch(() => {
-          toast.error(language.error.collectRecordUnavailable)
+          const error = isNewRecord
+            ? language.error.collectRecordChoicesUnavailable
+            : language.error.collectRecordUnavailable
+
+          toast.error(error)
         })
     }
   }, [databaseSwitchboardInstance, recordId, isNewRecord])
@@ -114,8 +112,15 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
 
       databaseSwitchboardInstance
         .saveFishBelt(newRecord)
-        .then(() => toast.success(language.success.collectRecordSave))
-        .catch(() => toast.error(language.error.collectRecordSave))
+        .then((response) => {
+          toast.success(language.success.collectRecordSave)
+          if (isNewRecord) {
+            history.push(`${history.location.pathname}/${response.id}`)
+          }
+        })
+        .catch(() => {
+          toast.error(language.error.collectRecordSave)
+        })
     },
   }
 
