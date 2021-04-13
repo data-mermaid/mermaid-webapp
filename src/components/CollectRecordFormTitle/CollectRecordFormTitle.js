@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 import { getObjectById, getProtocolName } from '../../library/utilities'
 import {
-  fishBeltTransectPropType,
-  benthicTransectPropType,
+  fishBeltPropType,
   sitePropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
 
@@ -32,18 +31,11 @@ const CollectRecordFormTitle = ({ collectRecordData, sites }) => {
       ? defaultTitle
       : collectRecordTitle.join(' - ')
 
-  return (
-    <H2 id="collect-form-title" aria-label="Collect Form Title">
-      {collectRecordTitleText}
-    </H2>
-  )
+  return <H2 id="collect-form-title">{collectRecordTitleText}</H2>
 }
 
 CollectRecordFormTitle.propTypes = {
-  collectRecordData: PropTypes.oneOfType([
-    fishBeltTransectPropType,
-    benthicTransectPropType,
-  ]),
+  collectRecordData: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 

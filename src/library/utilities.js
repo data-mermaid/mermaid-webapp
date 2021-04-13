@@ -16,8 +16,8 @@ export const pluralize = (val, singularWord, pluralWord) => {
   return pluralWord
 }
 
-export const getObjectById = (options, searchId) =>
-  options.find(({ id }) => id === searchId)
+export const getObjectById = (arrayWithObjects, searchId) =>
+  arrayWithObjects.find((object) => object.id === searchId)
 
 export const getProtocolName = (protocol) => {
   switch (protocol) {

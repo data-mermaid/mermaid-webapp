@@ -7,7 +7,7 @@ import {
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import CollectRecordFormTitle from './CollectRecordFormTitle'
 
-test('CollectRecordFormTitle component renders with the expected UI elements.', () => {
+test('CollectRecordFormTitle shows the title as expected when all of site name, transect number, and label are available', () => {
   const mockCollectRecordData = {
     protocol: 'fishbelt',
     sample_event: {
@@ -26,7 +26,7 @@ test('CollectRecordFormTitle component renders with the expected UI elements.', 
     />,
   )
 
-  expect(screen.getByLabelText(/collect form title/i))
+  expect(screen.getByText('Karang Kapal - 2 - FB-2'))
 })
 
 test('CollectRecordFormTitle component renders with missing label props and shows a default title.', () => {
@@ -46,7 +46,7 @@ test('CollectRecordFormTitle component renders with missing label props and show
   expect(screen.getByText('Fish Belt'))
 })
 
-test('CollectRecordFormTitle component renders missing site name in title when site name is missing.', () => {
+test('CollectRecordFormTitle component renders properly when site name is missing', () => {
   const mockMissingSiteCollectRecordData = {
     protocol: 'fishbelt',
     sample_event: {},
@@ -66,7 +66,7 @@ test('CollectRecordFormTitle component renders missing site name in title when s
   expect(screen.getByText('2 - FB-2'))
 })
 
-test('CollectRecordFormTitle component renders missing label in title when label is missing.', () => {
+test('CollectRecordFormTitle component renders properly when label is missing.', () => {
   const mockMissingLabelCollectRecordData = {
     protocol: 'fishbelt',
     sample_event: {
@@ -87,7 +87,7 @@ test('CollectRecordFormTitle component renders missing label in title when label
   expect(screen.getByText('Karang Kapal - 2'))
 })
 
-test('CollectRecordFormTitle component renders missing transect number in title when transect number is missing.', () => {
+test('CollectRecordFormTitle component renders properly when transect number is missing.', () => {
   const mockMissingTransectNumberCollectRecordData = {
     protocol: 'fishbelt',
     sample_event: {

@@ -16,28 +16,16 @@ export const sitePropType = PropTypes.shape({
   exposure: PropTypes.string,
 })
 
-export const sampleEventPropType = PropTypes.shape({
+const sampleEventPropType = PropTypes.shape({
   site: PropTypes.string,
   management: PropTypes.string,
   sample_date: PropTypes.string,
 })
 
-export const fishBeltTransectPropType = PropTypes.shape({
+export const fishBeltPropType = PropTypes.shape({
   protocol: PropTypes.string,
   sample_event: sampleEventPropType,
   fishbelt_transect: PropTypes.shape({
-    depth: PropTypes.number,
-    label: PropTypes.string,
-    number: PropTypes.number,
-    sample_time: PropTypes.string,
-    len_surveyed: PropTypes.number,
-  }),
-})
-
-export const benthicTransectPropType = PropTypes.shape({
-  protocol: PropTypes.string,
-  sample_event: sampleEventPropType,
-  benthic_transect: PropTypes.shape({
     depth: PropTypes.number,
     label: PropTypes.string,
     number: PropTypes.number,
