@@ -280,28 +280,28 @@ const collectRecords = [
 const sites = [
   {
     id: '1',
-    name: 'Amazing Maze',
+    name: 'Site A',
     reef_type: 'patch',
     reef_zone: 'pinnacle',
     exposure: 'exposed',
   },
   {
     id: '2',
-    name: 'BU02',
+    name: 'Site B',
     reef_type: 'fringing',
     reef_zone: 'back reef',
     exposure: 'sheltered',
   },
   {
     id: '3',
-    name: '1203',
+    name: 'Site C',
     reef_type: 'patch',
     reef_zone: 'fore reef',
     exposure: 'very sheltered',
   },
   {
     id: '4',
-    name: 'Karang Kapal',
+    name: 'Site D',
     reef_type: 'patch',
     reef_zone: 'back reef',
     exposure: 'exposed',
@@ -309,9 +309,9 @@ const sites = [
 ]
 
 const managementRegimes = [
-  { id: '1', name: 'Fisheries Utilization' },
-  { id: '2', name: 'Ankivonjy no-take' },
-  { id: '3', name: 'Bureta tabu' },
+  { id: '1', name: 'Management Regimes A' },
+  { id: '2', name: 'Management Regimes B' },
+  { id: '3', name: 'Management Regimes C' },
 ]
 
 const choices = {
