@@ -65,7 +65,7 @@ test('Collect Records table sorts properly by site column', async () => {
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Karang Kapal'))
+  expect(within(tableRowsAfter[1]).getByText('Site D'))
 })
 test('Collect Records table sorts properly by management column', () => {})
 test('Collect Records table sorts properly by samplu unit # column', () => {})
