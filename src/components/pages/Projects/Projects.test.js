@@ -97,13 +97,9 @@ test('A project card shows relevant data for a project', async () => {
 
   const projectCard = screen.getAllByRole('listitem')[0]
 
-  expect(
-    within(projectCard).getByText(
-      'Karimunjawa National Park is a long name for a project, not as long as Karimunjawaawajnumirak',
-    ),
-  )
-  expect(within(projectCard).getByText('Fiji'))
-  expect(within(projectCard).getByText('23 sites'))
+  expect(within(projectCard).getByText('Project I'))
+  expect(within(projectCard).getByText('Canada'))
+  expect(within(projectCard).getByText('13 sites'))
 
   const offlineCheckbox = within(projectCard).getByRole('checkbox', {
     name: /offline ready/i,
