@@ -1,40 +1,38 @@
 const projects = [
   {
-    name:
-      'Karimunjawa National Park is a long name for a project, not as long as Karimunjawaawajnumirak',
-    countries: ['Fiji'],
-    num_sites: 23,
+    name: 'Project I',
+    countries: ['Canada'],
+    num_sites: 13,
     offlineReady: true,
     updated_on: '01/21/2020',
   },
   {
-    name: 'Gita Nada_MPA 2018',
-    countries: ['Indonesia'],
-    num_sites: 26,
+    name: 'Project II',
+    countries: ['America'],
+    num_sites: 36,
     offlineReady: true,
-    updated_on: '11/21/2021',
+    updated_on: '21/21/2021',
   },
   {
-    name:
-      'Survei Ekologi KKPD Aceh Besar, KKPD Pesisir Timur Sabang dan TWAL Pulau Weh',
-    countries: ['Albania, Indonesia, Malaysia'],
+    name: 'Project III',
+    countries: ['England, Finland'],
     num_sites: 34,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '21/21/1992',
   },
   {
-    name: "Belize Glover's Atoll 2019",
-    countries: ['Fiji, Indonesia'],
-    num_sites: 49,
+    name: 'Project IV',
+    countries: ['Canada'],
+    num_sites: 9,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '31/12/2011',
   },
   {
-    name: 'XPDC Kei Kecil 2018',
-    countries: ['Fiji'],
+    name: 'Project V',
+    countries: ['Mexico'],
     num_sites: 33,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '01/21/2001',
   },
 ]
 
