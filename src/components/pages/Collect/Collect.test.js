@@ -58,7 +58,7 @@ test('Collect Records table sorts properly by site column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('1203'))
+  expect(within(tableRows[1]).getByText('Site C'))
 
   // click twice to change to descending order
   userEvent.dblClick(within(table).getByText('Management'))

@@ -64,9 +64,9 @@ test('FishBelt form inputs are initialized with the correct values', async () =>
   )
 
   // Site select
-  expect(screen.getByDisplayValue('Karang Kapal'))
+  expect(screen.getByDisplayValue('Site D'))
   // Management select
-  expect(screen.getByDisplayValue('Bureta tabu'))
+  expect(screen.getByDisplayValue('Management C'))
   expect(screen.getByLabelText('Depth')).toHaveValue(10)
   expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-03-02')
   expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
