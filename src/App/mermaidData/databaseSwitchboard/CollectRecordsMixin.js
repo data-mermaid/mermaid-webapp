@@ -125,7 +125,6 @@ const CollectRecordsMixin = (Base) =>
       return observers
         ? observers
             .reduce((observerList, observer) => {
-              // console.log(observerList)
               observerList.push(observer.profile_name)
 
               return observerList
@@ -147,13 +146,45 @@ const CollectRecordsMixin = (Base) =>
       }
     }
 
+    filterChoices = (searchProperty, options) => {
+      const rec = options.find((item) => item.id === searchProperty)
+
+      return rec ? rec.name : null
+    }
+
+    sizeFormat = (data, choices) => {
+      let result = '-'
+      const { protocol } = data
+      const { belttransectwidths } = choices
+
+      if (protocol === FISH_BELT_TRANSECT_TYPE) {
+        const width = data?.fishbelt_transect.width || ''
+
+        const widthFilter = this.filterChoices(width, belttransectwidths.data)
+
+        const length = data.fishbelt_transect.len_surveyed
+
+        if (length && widthFilter) {
+          result = `${length}m x ${widthFilter.slice(0, -1)}m`
+        } else if (length || width) {
+          result = length || widthFilter.slice(0, -1)
+        }
+
+        return result
+      }
+      result = data.benthic_transect.len_surveyed || result
+
+      return `${result}m`
+    }
+
     getCollectRecordsForUIDisplay = () => {
       return this._isAuthenticatedAndReady
         ? Promise.all([
             this.getCollectRecords(),
             this.getSites(),
             this.getManagementRegimes(),
-          ]).then(([collectRecords, sites, managementRegimes]) => {
+            this.getChoices(),
+          ]).then(([collectRecords, sites, managementRegimes, choices]) => {
             const getSiteLabel = (searchId) =>
               sites.find((site) => site.id === searchId).name
 
@@ -170,6 +201,7 @@ const CollectRecordsMixin = (Base) =>
                 protocol: this.#collectRecordProtocolLabels[
                   record.data.protocol
                 ],
+                size: this.sizeFormat(record.data, choices),
                 sampleUnitNumber: this.getSampleUnitNumber(record.data),
                 depth: this.getDepth(record.data),
                 sampleDate: this.dateFormat(
