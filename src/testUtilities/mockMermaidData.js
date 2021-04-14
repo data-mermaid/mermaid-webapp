@@ -57,6 +57,7 @@ const collectRecords = [
       },
       observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
+    validations: null,
   },
   {
     id: '2',
@@ -80,6 +81,7 @@ const collectRecords = [
       },
       observers: [{ profile_name: 'Nick' }],
     },
+    validations: null,
   },
   {
     id: '3',
@@ -103,6 +105,7 @@ const collectRecords = [
       },
       observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
+    validations: { status: 'error' },
   },
   {
     id: '4',
@@ -126,6 +129,7 @@ const collectRecords = [
       },
       observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
+    validations: { status: 'error' },
   },
   {
     id: '5',
@@ -149,6 +153,7 @@ const collectRecords = [
       },
       observers: [{ profile_name: 'Brian' }, { profile_name: 'Melissa' }],
     },
+    validations: { status: 'ok' },
   },
   {
     id: '6',
@@ -172,6 +177,7 @@ const collectRecords = [
       },
       observers: [{ profile_name: 'Dustin' }],
     },
+    validations: { status: 'ok' },
   },
   {
     id: '7',
@@ -194,6 +200,7 @@ const collectRecords = [
       },
       observers: [{ profile_name: 'Nick' }, { profile_name: 'Dustin' }],
     },
+    validations: null,
   },
   {
     id: '8',
@@ -221,6 +228,7 @@ const collectRecords = [
         { profile_name: 'Kim' },
       ],
     },
+    validations: { status: 'warning' },
   },
   {
     id: '9',
@@ -243,6 +251,7 @@ const collectRecords = [
         len_surveyed: 5,
       },
     },
+    validations: { status: 'error' },
   },
   {
     id: '10',
@@ -265,6 +274,7 @@ const collectRecords = [
         len_surveyed: 5,
       },
     },
+    validations: null,
   },
   {
     id: '11',
@@ -287,6 +297,7 @@ const collectRecords = [
         len_surveyed: 5,
       },
     },
+    validations: { status: 'ok' },
   },
 ]
 

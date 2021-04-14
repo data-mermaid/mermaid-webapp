@@ -125,7 +125,7 @@ const Collect = ({ databaseSwitchboardInstance }) => {
         depth: uiLabels.depth,
         sampleDate: uiLabels.sampleDate,
         observers: uiLabels.observers,
-        status: 'wip',
+        status: uiLabels.status,
         synced: 'wip',
       })),
     [collectRecordsForUiDisplay, currentProjectPath],

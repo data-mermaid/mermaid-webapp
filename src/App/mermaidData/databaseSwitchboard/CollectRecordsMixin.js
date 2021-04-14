@@ -134,6 +134,19 @@ const CollectRecordsMixin = (Base) =>
         : ''
     }
 
+    getStatus = (validations) => {
+      switch (validations?.status) {
+        case 'ok':
+          return 'Valid'
+        case 'error':
+          return 'Errors'
+        case 'warning':
+          return 'Warnings'
+        default:
+          return 'Saved'
+      }
+    }
+
     getCollectRecordsForUIDisplay = () => {
       return this._isAuthenticatedAndReady
         ? Promise.all([
@@ -163,6 +176,7 @@ const CollectRecordsMixin = (Base) =>
                   record.data.sample_event.sample_date,
                 ),
                 observers: this.getObservers(record.data.observers),
+                status: this.getStatus(record.validations),
               },
             }))
           })
