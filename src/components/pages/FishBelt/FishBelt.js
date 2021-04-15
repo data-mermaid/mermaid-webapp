@@ -17,7 +17,7 @@ import language from '../../../language'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import EditCollectRecordFormTitle from '../../EditCollectRecordFormTitle'
-import { H2 } from '../../generic/text'
+import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 
 const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const [choices, setChoices] = useState({})
@@ -115,7 +115,9 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
         .then((response) => {
           toast.success(language.success.collectRecordSave)
           if (isNewRecord) {
-            history.push(`${history.location.pathname}/${response.id}`)
+            history.push(
+              `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
+            )
           }
         })
         .catch(() => {
