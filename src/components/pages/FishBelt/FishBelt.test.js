@@ -8,12 +8,12 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 
-import EditFishBelt from './EditFishBelt'
+import FishBelt from './FishBelt'
 
-test('EditFishBelt component renders with the expected UI elements', async () => {
+test('FishBelt component renders with the expected UI elements', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <EditFishBelt
+      <FishBelt
         databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
       />
     </Route>,
@@ -48,11 +48,12 @@ test('EditFishBelt component renders with the expected UI elements', async () =>
   expect(screen.getByLabelText('Notes'))
 })
 
-test('EditFishBelt form inputs are initialized with the correct values', async () => {
+test('FishBelt form inputs are initialized with the correct values', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <EditFishBelt
+      <FishBelt
         databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+        isNewRecord={false}
       />
     </Route>,
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
@@ -63,9 +64,9 @@ test('EditFishBelt form inputs are initialized with the correct values', async (
   )
 
   // Site select
-  expect(screen.getByDisplayValue('Karang Kapal'))
+  expect(screen.getByDisplayValue('Site D'))
   // Management select
-  expect(screen.getByDisplayValue('Bureta tabu'))
+  expect(screen.getByDisplayValue('Management Regimes C'))
   expect(screen.getByLabelText('Depth')).toHaveValue(10)
   expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-03-02')
   expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')

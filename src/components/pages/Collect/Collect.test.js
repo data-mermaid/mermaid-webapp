@@ -58,21 +58,21 @@ test('Collect Records table sorts properly by site column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('1203'))
+  expect(within(tableRows[1]).getByText('Site C'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Site'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('1203'))
+  expect(within(tableRowsAfter[1]).getByText('Site C'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Site'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('Karang Kapal'))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Site D'))
 })
 
 test('Collect Records table sorts properly by management column', async () => {
@@ -90,21 +90,21 @@ test('Collect Records table sorts properly by management column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('Ankivonjy no-take'))
+  expect(within(tableRows[1]).getByText('Management Regimes B'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Management'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Ankivonjy no-take'))
+  expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Management'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('Bureta tabu'))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Management Regimes C'))
 })
 
 test('Collect Records table sorts properly by sample unit # column', async () => {
