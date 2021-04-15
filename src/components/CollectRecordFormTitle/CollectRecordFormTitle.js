@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
-import { getObjectById, getProtocolName } from '../../library/utilities'
+import { getProtocolName } from '../../library/getProtocolName'
+import { getObjectById } from '../../library/getObjectById'
 import {
   fishBeltPropType,
   sitePropType,

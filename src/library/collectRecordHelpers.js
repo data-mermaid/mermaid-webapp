@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { dateFormat } from './utilities'
+import { dateFormat } from './dateFormat'
 
 const getSampleInfoInitialValues = (collectRecordData, transectType) => {
   // console.log('here', collectRecordData, transectType)
