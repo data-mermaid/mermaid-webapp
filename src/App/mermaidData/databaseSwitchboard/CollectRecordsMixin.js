@@ -94,7 +94,7 @@ const CollectRecordsMixin = (Base) =>
       if (transectNumber === '') {
         transectNumber = labelName
       } else if (labelName !== '') {
-        transectNumber += labelName
+        transectNumber += ` ${labelName}`
       }
 
       return transectNumber
