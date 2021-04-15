@@ -16,8 +16,9 @@ import { RowRight } from '../../generic/positioning'
 import language from '../../../language'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import SampleInfoInputs from '../../SampleInfoInputs'
-import CollectRecordFormTitle from '../../CollectRecordFormTitle'
+import EditCollectRecordFormTitle from '../../EditCollectRecordFormTitle'
 import { ContentPageLayout } from '../../Layout'
+import { H2 } from '../../generic/text'
 
 const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const [choices, setChoices] = useState({})
@@ -106,10 +107,14 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
           }
           toolbar={
             <>
-              <CollectRecordFormTitle
-                collectRecordData={collectRecordData}
-                sites={sites}
-              />
+              {isNewRecord && <H2>Fish Belt</H2>}
+              {collectRecordBeingEdited && !isNewRecord && (
+                <EditCollectRecordFormTitle
+                  collectRecord={collectRecordBeingEdited}
+                  sites={sites}
+                />
+              )}
+
               <RowRight>
                 <ButtonCallout
                   type="submit"
