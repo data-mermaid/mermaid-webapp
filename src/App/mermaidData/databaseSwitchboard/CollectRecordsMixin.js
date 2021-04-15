@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
@@ -17,7 +18,9 @@ const CollectRecordsMixin = (Base) =>
       const recordToSubmit = { ...record, id: idToSubmit }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        // upcoming work
+        toast.error(
+          'The online workflow for collect records heanst been built yet. If you are trying to test the offline workflow, try disabling your internet.',
+        )
       }
       if (this._isOfflineAuthenticatedAndReady) {
         return this._dexieInstance.collectRecords
