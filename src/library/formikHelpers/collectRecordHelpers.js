@@ -1,4 +1,4 @@
-import { dateFormat } from '../dateFormat'
+import { dateFormat } from '../strings/dateFormat'
 
 const getSampleInfoInitialValues = (collectRecordData, transectType) => {
   return {

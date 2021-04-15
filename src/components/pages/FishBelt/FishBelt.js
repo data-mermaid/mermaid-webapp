@@ -14,7 +14,7 @@ import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseS
 import { H2 } from '../../generic/text'
 import { RowRight } from '../../generic/positioning'
 import language from '../../../language'
-import FishBeltTransectForms from '../../FishBeltTransectForms'
+import FishBeltTransectInputs from '../../FishBeltTransectInputs'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import EditCollectRecordFormTitle from '../../EditCollectRecordFormTitle'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
@@ -142,7 +142,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
                 sites={sites}
                 managementRegimes={managementRegimes}
               />
-              <FishBeltTransectForms formik={formik} choices={choices} />
+              <FishBeltTransectInputs formik={formik} choices={choices} />
             </form>
           }
           toolbar={
