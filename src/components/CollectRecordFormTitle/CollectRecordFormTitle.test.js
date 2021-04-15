@@ -26,7 +26,7 @@ test('CollectRecordFormTitle shows the title as expected when all of site name, 
     />,
   )
 
-  expect(screen.getByText('Karang Kapal - 2 - FB-2'))
+  expect(screen.getByText('Site D - 2 - FB-2'))
 })
 
 test('CollectRecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
@@ -84,7 +84,7 @@ test('CollectRecordFormTitle component renders properly when label is missing.',
     />,
   )
 
-  expect(screen.getByText('Karang Kapal - 2'))
+  expect(screen.getByText('Site D - 2'))
 })
 
 test('CollectRecordFormTitle component renders properly when transect number is missing.', () => {
@@ -105,5 +105,5 @@ test('CollectRecordFormTitle component renders properly when transect number is 
     />,
   )
 
-  expect(screen.getByText('Karang Kapal - FB-2'))
+  expect(screen.getByText('Site D - FB-2'))
 })
