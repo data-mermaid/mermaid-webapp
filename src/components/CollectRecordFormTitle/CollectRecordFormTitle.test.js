@@ -29,7 +29,7 @@ test('CollectRecordFormTitle shows the title as expected when all of site name, 
   expect(screen.getByText('Karang Kapal - 2 - FB-2'))
 })
 
-test('CollectRecordFormTitle component renders with missing label props and shows a default title.', () => {
+test('CollectRecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
   const mockMissingLabelData = {
     protocol: 'fishbelt',
     sample_event: {},
