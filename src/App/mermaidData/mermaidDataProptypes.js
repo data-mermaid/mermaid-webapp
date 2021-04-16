@@ -16,21 +16,28 @@ export const sitePropType = PropTypes.shape({
   exposure: PropTypes.string,
 })
 
-const sampleEventPropType = PropTypes.shape({
+const _sampleEventPropType = PropTypes.shape({
   site: PropTypes.string,
   management: PropTypes.string,
   sample_date: PropTypes.string,
+  notes: PropTypes.string,
 })
 
 export const fishBeltPropType = PropTypes.shape({
-  protocol: PropTypes.string,
-  sample_event: sampleEventPropType,
-  fishbelt_transect: PropTypes.shape({
-    depth: PropTypes.number,
-    label: PropTypes.string,
-    number: PropTypes.number,
-    sample_time: PropTypes.string,
-    len_surveyed: PropTypes.number,
+  id: PropTypes.string,
+  data: PropTypes.shape({
+    protocol: PropTypes.string,
+    sample_event: _sampleEventPropType,
+    fishbelt_transect: PropTypes.shape({
+      depth: PropTypes.number,
+      label: PropTypes.string,
+      len_surveyed: PropTypes.number,
+      number: PropTypes.number,
+      reef_slope: PropTypes.string,
+      sample_time: PropTypes.string,
+      size_bin: PropTypes.string,
+      width: PropTypes.string,
+    }),
   }),
 })
 
@@ -46,7 +53,7 @@ export const currentUserPropType = PropTypes.shape({
   email: PropTypes.string,
 })
 
-export const fishSizeBinPropType = PropTypes.shape({
+const _fishSizeBinPropType = PropTypes.shape({
   name: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
@@ -57,7 +64,7 @@ export const fishSizeBinPropType = PropTypes.shape({
     }),
   ),
 })
-export const beltTransectWidthPropType = PropTypes.shape({
+const _beltTransectWidthPropType = PropTypes.shape({
   name: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
@@ -77,7 +84,7 @@ export const beltTransectWidthPropType = PropTypes.shape({
     }),
   ),
 })
-export const reefSlopePropType = PropTypes.shape({
+const _reefSlopePropType = PropTypes.shape({
   name: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
@@ -90,7 +97,7 @@ export const reefSlopePropType = PropTypes.shape({
 })
 
 export const choicesPropType = PropTypes.shape({
-  fishsizebins: fishSizeBinPropType,
-  belttransectwidths: beltTransectWidthPropType,
-  reefslopes: reefSlopePropType,
+  fishsizebins: _fishSizeBinPropType,
+  belttransectwidths: _beltTransectWidthPropType,
+  reefslopes: _reefSlopePropType,
 })
