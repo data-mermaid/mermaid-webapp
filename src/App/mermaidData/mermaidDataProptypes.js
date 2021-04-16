@@ -20,18 +20,25 @@ const sampleEventPropType = PropTypes.shape({
   site: PropTypes.string,
   management: PropTypes.string,
   sample_date: PropTypes.string,
+  notes: PropTypes.string,
 })
 
 export const fishBeltPropType = PropTypes.shape({
-  protocol: PropTypes.string,
-  sample_event: sampleEventPropType,
-  fishbelt_transect: PropTypes.shape({
-    depth: PropTypes.number,
-    label: PropTypes.string,
-    number: PropTypes.number,
-    sample_time: PropTypes.string,
-    len_surveyed: PropTypes.number,
-  }),
+  id: PropTypes.string,
+  data: {
+    protocol: PropTypes.string,
+    sample_event: sampleEventPropType,
+    fishbelt_transect: PropTypes.shape({
+      depth: PropTypes.number,
+      label: PropTypes.string,
+      len_surveyed: PropTypes.number,
+      number: PropTypes.number,
+      reef_slope: PropTypes.string,
+      sample_time: PropTypes.string,
+      size_bin: PropTypes.string,
+      width: PropTypes.string,
+    }),
+  },
 })
 
 export const managementRegimePropType = PropTypes.shape({
