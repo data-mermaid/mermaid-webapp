@@ -10,7 +10,53 @@ import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOn
 
 import FishBelt from './FishBelt'
 
-test('FishBelt component renders with the expected UI elements', async () => {
+test('FishBelt component in EDIT mode renders with the expected UI elements', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt
+        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+        isNewRecord={false}
+      />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  expect(
+    screen.getByText('Site D - 2 - FB-2', {
+      selector: 'h2',
+    }),
+  )
+
+  expect(
+    screen.getByText('Sample Info', {
+      selector: 'h2',
+    }),
+  )
+  expect(
+    screen.getByText('Transect', {
+      selector: 'h2',
+    }),
+  )
+
+  expect(screen.getByLabelText('Site'))
+  expect(screen.getByLabelText('Management'))
+  expect(screen.getByLabelText('Depth'))
+  expect(screen.getByLabelText('Sample Date'))
+  expect(screen.getByLabelText('Sample Time'))
+  expect(screen.getByLabelText('Transect Number'))
+  expect(screen.getByLabelText('Label'))
+  expect(screen.getByLabelText('Transect Length Surveyed'))
+  expect(screen.getByLabelText('Width'))
+  expect(screen.getByLabelText('Fish Size Bin'))
+  expect(screen.getByLabelText('Reef Slope'))
+  expect(screen.getByLabelText('Notes'))
+})
+
+test('FishBelt component in CREATE NEW mode renders with the expected UI elements', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt
@@ -55,7 +101,7 @@ test('FishBelt component renders with the expected UI elements', async () => {
   expect(screen.getByLabelText('Notes'))
 })
 
-test('FishBelt form inputs are initialized with the correct values', async () => {
+test('FishBelt component in EDIT mode - form inputs are initialized with the correct values', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt
