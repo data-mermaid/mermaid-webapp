@@ -16,7 +16,7 @@ export const sitePropType = PropTypes.shape({
   exposure: PropTypes.string,
 })
 
-const sampleEventPropType = PropTypes.shape({
+const _sampleEventPropType = PropTypes.shape({
   site: PropTypes.string,
   management: PropTypes.string,
   sample_date: PropTypes.string,
@@ -27,7 +27,7 @@ export const fishBeltPropType = PropTypes.shape({
   id: PropTypes.string,
   data: {
     protocol: PropTypes.string,
-    sample_event: sampleEventPropType,
+    sample_event: _sampleEventPropType,
     fishbelt_transect: PropTypes.shape({
       depth: PropTypes.number,
       label: PropTypes.string,
@@ -53,7 +53,7 @@ export const currentUserPropType = PropTypes.shape({
   email: PropTypes.string,
 })
 
-export const fishSizeBinPropType = PropTypes.shape({
+const _fishSizeBinPropType = PropTypes.shape({
   name: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
@@ -64,7 +64,7 @@ export const fishSizeBinPropType = PropTypes.shape({
     }),
   ),
 })
-export const beltTransectWidthPropType = PropTypes.shape({
+const _beltTransectWidthPropType = PropTypes.shape({
   name: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
@@ -84,7 +84,7 @@ export const beltTransectWidthPropType = PropTypes.shape({
     }),
   ),
 })
-export const reefSlopePropType = PropTypes.shape({
+const _reefSlopePropType = PropTypes.shape({
   name: PropTypes.string,
   data: PropTypes.arrayOf(
     PropTypes.shape({
@@ -97,7 +97,7 @@ export const reefSlopePropType = PropTypes.shape({
 })
 
 export const choicesPropType = PropTypes.shape({
-  fishsizebins: fishSizeBinPropType,
-  belttransectwidths: beltTransectWidthPropType,
-  reefslopes: reefSlopePropType,
+  fishsizebins: _fishSizeBinPropType,
+  belttransectwidths: _beltTransectWidthPropType,
+  reefslopes: _reefSlopePropType,
 })
