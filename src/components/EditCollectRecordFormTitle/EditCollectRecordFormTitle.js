@@ -13,7 +13,7 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
 
   const siteId = collectRecord.data?.sample_event?.site
   const transectType =
-    collectRecord.data?.protocol === 'fishbelt' ? 'fishbelt_transect' : '' 
+    collectRecord.data?.protocol === 'fishbelt' ? 'fishbelt_transect' : ''
 
   const defaultTitle =
     getProtocolName(collectRecord.data?.protocol) || 'Fish Belt'
