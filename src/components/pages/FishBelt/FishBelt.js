@@ -107,7 +107,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
           toolbar={
             <>
               <CollectRecordFormTitle
-                collectRecordData={collectRecordData}
+                collectRecord={collectRecordBeingEdited}
                 sites={sites}
               />
               <RowRight>

@@ -8,19 +8,19 @@ import {
   sitePropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
 
-const CollectRecordFormTitle = ({ collectRecordData, sites }) => {
+const CollectRecordFormTitle = ({ collectRecord, sites }) => {
   const collectRecordTitle = []
 
-  const siteId = collectRecordData?.sample_event?.site
+  const siteId = collectRecord.data?.sample_event?.site
   const transectType =
-    collectRecordData.protocol === 'fishbelt' ? 'fishbelt_transect' : ''
+    collectRecord.data?.protocol === 'fishbelt' ? 'fishbelt_transect' : ''
 
   const defaultTitle =
-    getProtocolName(collectRecordData.protocol) || 'Fish Belt'
+    getProtocolName(collectRecord.data?.protocol) || 'Fish Belt'
   const siteName =
     siteId && sites.length > 0 ? getObjectById(sites, siteId).name : ''
-  const transectNumber = collectRecordData[transectType]?.number || ''
-  const label = collectRecordData[transectType]?.label || ''
+  const transectNumber = collectRecord.data?.[transectType]?.number || ''
+  const label = collectRecord.data?.[transectType]?.label || ''
 
   if (siteName !== '') collectRecordTitle.push(siteName)
   if (transectNumber !== '') collectRecordTitle.push(transectNumber)
@@ -35,12 +35,8 @@ const CollectRecordFormTitle = ({ collectRecordData, sites }) => {
 }
 
 CollectRecordFormTitle.propTypes = {
-  collectRecordData: fishBeltPropType,
+  collectRecord: fishBeltPropType.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
-}
-
-CollectRecordFormTitle.defaultProps = {
-  collectRecordData: {},
 }
 
 export default CollectRecordFormTitle
