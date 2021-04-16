@@ -16,7 +16,7 @@ import { RowRight } from '../../generic/positioning'
 import language from '../../../language'
 import FishBeltTransectForms from '../../FishBeltTransectForms'
 import SampleInfoInputs from '../../SampleInfoInputs'
-import CollectRecordFormTitle from '../../CollectRecordFormTitle'
+import EditCollectRecordFormTitle from '../../EditCollectRecordFormTitle'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 
@@ -109,7 +109,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
             <>
               {isNewRecord && <H2>Fish Belt</H2>}
               {collectRecordBeingEdited && !isNewRecord && (
-                <CollectRecordFormTitle
+                <EditCollectRecordFormTitle
                   collectRecord={collectRecordBeingEdited}
                   sites={sites}
                 />

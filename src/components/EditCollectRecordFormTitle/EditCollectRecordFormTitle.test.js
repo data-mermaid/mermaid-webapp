@@ -5,9 +5,9 @@ import {
   screen,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
-import CollectRecordFormTitle from './CollectRecordFormTitle'
+import EditCollectRecordFormTitle from './EditCollectRecordFormTitle'
 
-test('CollectRecordFormTitle shows the title as expected when all of site name, transect number, and label are available', () => {
+test('EditCollectRecordFormTitle shows the title as expected when all of site name, transect number, and label are available', () => {
   const mockCollectRecord = {
     data: {
       protocol: 'fishbelt',
@@ -22,7 +22,7 @@ test('CollectRecordFormTitle shows the title as expected when all of site name, 
   }
 
   renderAuthenticatedOnline(
-    <CollectRecordFormTitle
+    <EditCollectRecordFormTitle
       collectRecord={mockCollectRecord}
       sites={mockMermaidData.sites}
     />,
@@ -31,13 +31,13 @@ test('CollectRecordFormTitle shows the title as expected when all of site name, 
   expect(screen.getByText('Site D - 2 - FB-2'))
 })
 
-test('CollectRecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
+test('EditCollectRecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
   const mockMissingSiteNameTransectNumberLabelCollectRecord = {
     data: { protocol: 'fishbelt', sample_event: {}, fishbelt_transect: {} },
   }
 
   renderAuthenticatedOnline(
-    <CollectRecordFormTitle
+    <EditCollectRecordFormTitle
       collectRecord={mockMissingSiteNameTransectNumberLabelCollectRecord}
       sites={mockMermaidData.sites}
     />,
@@ -46,7 +46,7 @@ test('CollectRecordFormTitle component renders a default title when site name, t
   expect(screen.getByText('Fish Belt'))
 })
 
-test('CollectRecordFormTitle component renders properly when site name is missing.', () => {
+test('EditCollectRecordFormTitle component renders properly when site name is missing.', () => {
   const mockMissingSiteCollectRecord = {
     data: {
       protocol: 'fishbelt',
@@ -59,7 +59,7 @@ test('CollectRecordFormTitle component renders properly when site name is missin
   }
 
   renderAuthenticatedOnline(
-    <CollectRecordFormTitle
+    <EditCollectRecordFormTitle
       collectRecord={mockMissingSiteCollectRecord}
       sites={mockMermaidData.sites}
     />,
@@ -68,7 +68,7 @@ test('CollectRecordFormTitle component renders properly when site name is missin
   expect(screen.getByText('2 - FB-2'))
 })
 
-test('CollectRecordFormTitle component renders properly when label is missing.', () => {
+test('EditCollectRecordFormTitle component renders properly when label is missing.', () => {
   const mockMissingLabelCollectRecord = {
     data: {
       protocol: 'fishbelt',
@@ -82,7 +82,7 @@ test('CollectRecordFormTitle component renders properly when label is missing.',
   }
 
   renderAuthenticatedOnline(
-    <CollectRecordFormTitle
+    <EditCollectRecordFormTitle
       collectRecord={mockMissingLabelCollectRecord}
       sites={mockMermaidData.sites}
     />,
@@ -91,7 +91,7 @@ test('CollectRecordFormTitle component renders properly when label is missing.',
   expect(screen.getByText('Site D - 2'))
 })
 
-test('CollectRecordFormTitle component renders properly when transect number is missing.', () => {
+test('EditCollectRecordFormTitle component renders properly when transect number is missing.', () => {
   const mockMissingTransectNumberCollectRecord = {
     data: {
       protocol: 'fishbelt',
@@ -105,7 +105,7 @@ test('CollectRecordFormTitle component renders properly when transect number is 
   }
 
   renderAuthenticatedOnline(
-    <CollectRecordFormTitle
+    <EditCollectRecordFormTitle
       collectRecord={mockMissingTransectNumberCollectRecord}
       sites={mockMermaidData.sites}
     />,

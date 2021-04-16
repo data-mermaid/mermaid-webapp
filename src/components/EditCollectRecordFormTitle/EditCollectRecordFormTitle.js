@@ -8,7 +8,7 @@ import {
   sitePropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
 
-const CollectRecordFormTitle = ({ collectRecord, sites }) => {
+const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
   const collectRecordTitle = []
 
   const siteId = collectRecord.data?.sample_event?.site
@@ -34,9 +34,9 @@ const CollectRecordFormTitle = ({ collectRecord, sites }) => {
   return <H2 id="collect-form-title">{collectRecordTitleText}</H2>
 }
 
-CollectRecordFormTitle.propTypes = {
+EditCollectRecordFormTitle.propTypes = {
   collectRecord: fishBeltPropType.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 
-export default CollectRecordFormTitle
+export default EditCollectRecordFormTitle
