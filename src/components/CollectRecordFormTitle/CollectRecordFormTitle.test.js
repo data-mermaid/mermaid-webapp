@@ -8,20 +8,22 @@ import mockMermaidData from '../../testUtilities/mockMermaidData'
 import CollectRecordFormTitle from './CollectRecordFormTitle'
 
 test('CollectRecordFormTitle shows the title as expected when all of site name, transect number, and label are available', () => {
-  const mockCollectRecordData = {
-    protocol: 'fishbelt',
-    sample_event: {
-      site: '4',
-    },
-    fishbelt_transect: {
-      label: 'FB-2',
-      number: 2,
+  const mockCollectRecord = {
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+      },
+      fishbelt_transect: {
+        label: 'FB-2',
+        number: 2,
+      },
     },
   }
 
   renderAuthenticatedOnline(
     <CollectRecordFormTitle
-      collectRecordData={mockCollectRecordData}
+      collectRecord={mockCollectRecord}
       sites={mockMermaidData.sites}
     />,
   )
@@ -30,15 +32,13 @@ test('CollectRecordFormTitle shows the title as expected when all of site name, 
 })
 
 test('CollectRecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
-  const mockMissingLabelData = {
-    protocol: 'fishbelt',
-    sample_event: {},
-    fishbelt_transect: {},
+  const mockMissingSiteNameTransectNumberLabelCollectRecord = {
+    data: { protocol: 'fishbelt', sample_event: {}, fishbelt_transect: {} },
   }
 
   renderAuthenticatedOnline(
     <CollectRecordFormTitle
-      collectRecordData={mockMissingLabelData}
+      collectRecord={mockMissingSiteNameTransectNumberLabelCollectRecord}
       sites={mockMermaidData.sites}
     />,
   )
@@ -47,18 +47,20 @@ test('CollectRecordFormTitle component renders a default title when site name, t
 })
 
 test('CollectRecordFormTitle component renders properly when site name is missing.', () => {
-  const mockMissingSiteCollectRecordData = {
-    protocol: 'fishbelt',
-    sample_event: {},
-    fishbelt_transect: {
-      label: 'FB-2',
-      number: 2,
+  const mockMissingSiteCollectRecord = {
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {},
+      fishbelt_transect: {
+        label: 'FB-2',
+        number: 2,
+      },
     },
   }
 
   renderAuthenticatedOnline(
     <CollectRecordFormTitle
-      collectRecordData={mockMissingSiteCollectRecordData}
+      collectRecord={mockMissingSiteCollectRecord}
       sites={mockMermaidData.sites}
     />,
   )
@@ -67,19 +69,21 @@ test('CollectRecordFormTitle component renders properly when site name is missin
 })
 
 test('CollectRecordFormTitle component renders properly when label is missing.', () => {
-  const mockMissingLabelCollectRecordData = {
-    protocol: 'fishbelt',
-    sample_event: {
-      site: '4',
-    },
-    fishbelt_transect: {
-      number: 2,
+  const mockMissingLabelCollectRecord = {
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+      },
+      fishbelt_transect: {
+        number: 2,
+      },
     },
   }
 
   renderAuthenticatedOnline(
     <CollectRecordFormTitle
-      collectRecordData={mockMissingLabelCollectRecordData}
+      collectRecord={mockMissingLabelCollectRecord}
       sites={mockMermaidData.sites}
     />,
   )
@@ -88,19 +92,21 @@ test('CollectRecordFormTitle component renders properly when label is missing.',
 })
 
 test('CollectRecordFormTitle component renders properly when transect number is missing.', () => {
-  const mockMissingTransectNumberCollectRecordData = {
-    protocol: 'fishbelt',
-    sample_event: {
-      site: '4',
-    },
-    fishbelt_transect: {
-      label: 'FB-2',
+  const mockMissingTransectNumberCollectRecord = {
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+      },
+      fishbelt_transect: {
+        label: 'FB-2',
+      },
     },
   }
 
   renderAuthenticatedOnline(
     <CollectRecordFormTitle
-      collectRecordData={mockMissingTransectNumberCollectRecordData}
+      collectRecord={mockMissingTransectNumberCollectRecord}
       sites={mockMermaidData.sites}
     />,
   )

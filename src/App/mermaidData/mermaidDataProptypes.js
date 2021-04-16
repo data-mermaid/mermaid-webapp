@@ -25,7 +25,7 @@ const _sampleEventPropType = PropTypes.shape({
 
 export const fishBeltPropType = PropTypes.shape({
   id: PropTypes.string,
-  data: {
+  data: PropTypes.shape({
     protocol: PropTypes.string,
     sample_event: _sampleEventPropType,
     fishbelt_transect: PropTypes.shape({
@@ -38,7 +38,7 @@ export const fishBeltPropType = PropTypes.shape({
       size_bin: PropTypes.string,
       width: PropTypes.string,
     }),
-  },
+  }),
 })
 
 export const managementRegimePropType = PropTypes.shape({
