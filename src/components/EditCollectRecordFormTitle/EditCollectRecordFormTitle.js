@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { H2 } from '../generic/text'
+import styled from 'styled-components'
 import { getProtocolName } from '../../library/getProtocolName'
 import { getObjectById } from '../../library/getObjectById'
 import {
@@ -8,9 +8,59 @@ import {
   sitePropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
 
-const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
-  const collectRecordTitle = []
+const TitleContainer = styled.div`
+  display: inline-flex;
+`
 
+const TooltipText = styled('span')({
+  visibility: 'hidden',
+  width: '120px',
+  paddingLeft: '10px',
+  backgroundColor: '#004c76',
+  color: '#fff',
+  textAlign: 'center',
+  padding: '5px 0',
+  position: 'absolute',
+  zIndex: 1,
+  top: '120%',
+  left: '50%',
+  marginLeft: '-60px',
+  ':after': {
+    content: '""',
+    position: 'absolute',
+    bottom: '100%',
+    left: '50%',
+    marginLeft: '-5px',
+    borderWidth: '5px',
+    borderStyle: 'solid',
+    borderColor: 'black transparent transparent transparent',
+    transform: 'rotate(180deg)',
+  },
+})
+
+const Tooltip = styled('div')({
+  marginRight: '10px',
+  fontSize: '3rem',
+  fontWeight: 'bold',
+  position: 'relative',
+  display: 'inline-block',
+  borderBottom: '1px dotted black',
+  ':hover span': {
+    visibility: 'visible',
+    fontSize: '1.3rem',
+  },
+})
+
+const LabelHover = ({ children, toolTipText }) => {
+  return (
+    <Tooltip>
+      {children}
+      <TooltipText>{toolTipText}</TooltipText>
+    </Tooltip>
+  )
+}
+
+const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
   const collectRecordData = collectRecord.data
   const siteId = collectRecordData.sample_event?.site
   const collectRecordProtocol = collectRecordData.protocol
@@ -24,15 +74,14 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
   const transectNumber = collectRecordData[transectType]?.number || ''
   const label = collectRecordData[transectType]?.label || ''
 
-  collectRecordTitle.push(defaultTitle)
-
-  if (siteName !== '') collectRecordTitle.push(siteName)
-  if (transectNumber !== '') collectRecordTitle.push(transectNumber)
-  if (label !== '') collectRecordTitle.push(label)
-
-  const collectRecordTitleText = collectRecordTitle.join(' ')
-
-  return <H2 id="collect-form-title">{collectRecordTitleText}</H2>
+  return (
+    <TitleContainer id="collect-form-title">
+      <LabelHover toolTipText="Protocol">{defaultTitle}</LabelHover>
+      <LabelHover toolTipText="Site Name">{siteName}</LabelHover>
+      <LabelHover toolTipText="Transect Number">{transectNumber}</LabelHover>
+      <LabelHover toolTipText="Label">{label}</LabelHover>
+    </TitleContainer>
+  )
 }
 
 EditCollectRecordFormTitle.propTypes = {
