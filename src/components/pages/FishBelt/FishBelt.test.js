@@ -26,7 +26,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
   )
 
   expect(
-    screen.getByText('Site D - 2 - FB-2', {
+    screen.getByText('Site D 2 FB-2', {
       selector: 'h2',
     }),
   )
