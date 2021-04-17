@@ -6,7 +6,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { H3 } from '../../generic/text'
-import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import {
+  reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
+} from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
 import { Table, Tr, Th, Td } from '../../generic/Table/table'
 import AddSampleUnitButton from './AddSampleUnitButton'
@@ -49,14 +52,7 @@ const Collect = ({ databaseSwitchboardInstance }) => {
       {
         Header: 'Method',
         accessor: 'method',
-        sortType: (rowA, rowB, columnId) => {
-          // this sort is different, because the data values will be children of react nodes
-          return rowA.original[columnId].props.children.localeCompare(
-            rowB.original[columnId].props.children,
-            'en',
-            { numeric: true, caseFirst: 'upper' },
-          )
-        },
+        sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Site',
