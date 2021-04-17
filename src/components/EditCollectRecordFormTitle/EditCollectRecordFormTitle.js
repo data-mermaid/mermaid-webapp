@@ -12,7 +12,7 @@ const TitleContainer = styled.div`
   display: inline-flex;
 `
 
-const tooltipText = styled('span')({
+const TooltipText = styled('span')({
   visibility: 'hidden',
   width: '120px',
   paddingLeft: '10px',
@@ -51,11 +51,11 @@ const Tooltip = styled('div')({
   },
 })
 
-const LabelHover = ({ children, tooltipText }) => {
+const LabelHover = ({ children, tooltip }) => {
   return (
     <Tooltip>
       {children}
-      <tooltipText>{tooltipText}</tooltipText>
+      <TooltipText>{tooltip}</TooltipText>
     </Tooltip>
   )
 }
@@ -76,17 +76,17 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
 
   return (
     <TitleContainer id="collect-form-title">
-      <LabelHover tooltipText="Protocol">{defaultTitle}</LabelHover>
-      <LabelHover tooltipText="Site Name">{siteName}</LabelHover>
-      <LabelHover tooltipText="Transect Number">{transectNumber}</LabelHover>
-      <LabelHover tooltipText="Label">{label}</LabelHover>
+      <LabelHover tooltip="Protocol">{defaultTitle}</LabelHover>
+      <LabelHover tooltip="Site Name">{siteName}</LabelHover>
+      <LabelHover tooltip="Transect Number">{transectNumber}</LabelHover>
+      <LabelHover tooltip="Label">{label}</LabelHover>
     </TitleContainer>
   )
 }
 
 LabelHover.propTypes = {
   children: PropTypes.string.isRequired,
-  tooltipText: PropTypes.string.isRequired,
+  tooltip: PropTypes.string.isRequired,
 }
 EditCollectRecordFormTitle.propTypes = {
   collectRecord: fishBeltPropType.isRequired,
