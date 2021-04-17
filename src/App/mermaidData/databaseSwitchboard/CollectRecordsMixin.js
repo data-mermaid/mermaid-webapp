@@ -19,7 +19,7 @@ const CollectRecordsMixin = (Base) =>
 
       if (this._isOnlineAuthenticatedAndReady) {
         toast.error(
-          'The online workflow for collect records heanst been built yet. If you are trying to test the offline workflow, try disabling your internet.',
+          "The online workflow for collect records hasn't been built yet. If you are trying to test the offline workflow, try disabling your internet.",
         )
       }
       if (this._isOfflineAuthenticatedAndReady) {
