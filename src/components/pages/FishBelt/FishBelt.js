@@ -72,7 +72,6 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
       notes,
       sample_date,
       site,
-
       depth,
       label,
       len_surveyed,
