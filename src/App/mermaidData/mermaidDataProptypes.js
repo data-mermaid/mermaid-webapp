@@ -29,10 +29,10 @@ export const fishBeltPropType = PropTypes.shape({
     protocol: PropTypes.string,
     sample_event: _sampleEventPropType,
     fishbelt_transect: PropTypes.shape({
-      depth: PropTypes.number,
+      depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       label: PropTypes.string,
-      len_surveyed: PropTypes.number,
-      number: PropTypes.number,
+      len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       reef_slope: PropTypes.string,
       sample_time: PropTypes.string,
       size_bin: PropTypes.string,
