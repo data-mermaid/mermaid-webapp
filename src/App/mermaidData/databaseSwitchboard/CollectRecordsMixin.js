@@ -152,17 +152,17 @@ const CollectRecordsMixin = (Base) =>
       return rec ? rec.name : null
     }
 
-    sizeFormat = (data, choices) => {
+    #getSize = (record, choices) => {
       let result = '-'
-      const { protocol } = data
       const { belttransectwidths } = choices
+      const isFishBelt = this.#getIsFishBelt(record)
 
-      if (protocol === FISH_BELT_TRANSECT_TYPE) {
-        const width = data?.fishbelt_transect.width || ''
+      if (isFishBelt) {
+        const width = record.data.fishbelt_transect?.width || ''
 
         const widthFilter = this.filterChoices(width, belttransectwidths.data)
 
-        const length = data.fishbelt_transect.len_surveyed
+        const length = record.data.fishbelt_transect?.len_surveyed
 
         if (length && widthFilter) {
           result = `${length}m x ${widthFilter.slice(0, -1)}m`
@@ -172,7 +172,7 @@ const CollectRecordsMixin = (Base) =>
 
         return result
       }
-      result = data.benthic_transect.len_surveyed || result
+      result = record.data.benthic_transect.len_surveyed || result
 
       return `${result}m`
     }
@@ -196,7 +196,7 @@ const CollectRecordsMixin = (Base) =>
                 protocol: this.#collectRecordProtocolLabels[
                   record.data.protocol
                 ],
-                size: this.sizeFormat(record.data, choices),
+                size: this.#getSize(record, choices),
                 sampleUnitNumber: this.#getSampleUnit(record),
                 depth: this.getDepth(record.data),
                 sampleDate: this.dateFormat(
