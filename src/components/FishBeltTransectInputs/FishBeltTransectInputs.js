@@ -2,7 +2,6 @@ import React from 'react'
 import { choicesPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../library/formikHelpers/formikPropType'
 import { H2 } from '../generic/text'
-import getValidationPropsFromFormik from '../../library/formikHelpers/getValidationPropsFromFormik'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 
@@ -33,52 +32,45 @@ const FishBeltTransectForms = ({ formik, choices }) => {
 
       <InputWithLabelAndValidation
         label="Transect Number"
-        id="transectNumber"
+        id="number"
         type="number"
-        {...formik.getFieldProps('transectNumber')}
-        {...getValidationPropsFromFormik(formik, 'transectNumber')}
+        {...formik.getFieldProps('number')}
       />
       <InputWithLabelAndValidation
         label="Label"
         id="label"
         type="text"
         {...formik.getFieldProps('label')}
-        {...getValidationPropsFromFormik(formik, 'label')}
       />
       <InputWithLabelAndValidation
         label="Transect Length Surveyed"
-        id="transectLengthSurveyed"
+        id="len_surveyed"
         type="number"
-        {...formik.getFieldProps('transectLengthSurveyed')}
-        {...getValidationPropsFromFormik(formik, 'transectLengthSurveyed')}
+        {...formik.getFieldProps('len_surveyed')}
       />
       <InputSelectWithLabelAndValidation
         label="Width"
         id="width"
         options={transectWidthSelectOptions}
         {...formik.getFieldProps('width')}
-        {...getValidationPropsFromFormik(formik, 'width')}
       />
       <InputSelectWithLabelAndValidation
         label="Fish Size Bin"
-        id="fishSizeBin"
+        id="size_bin"
         options={fishSizeBinSelectOptions}
-        {...formik.getFieldProps('fishSizeBin')}
-        {...getValidationPropsFromFormik(formik, 'fishSizeBin')}
+        {...formik.getFieldProps('size_bin')}
       />
       <InputSelectWithLabelAndValidation
         label="Reef Slope"
-        id="reefSlope"
+        id="reef_slope"
         options={reefSlopeSelectOptions}
-        {...formik.getFieldProps('reefSlope')}
-        {...getValidationPropsFromFormik(formik, 'reefSlope')}
+        {...formik.getFieldProps('reef_slope')}
       />
       <InputWithLabelAndValidation
         label="Notes"
         id="notes"
         type="text-area"
         {...formik.getFieldProps('notes')}
-        {...getValidationPropsFromFormik(formik, 'notes')}
       />
     </>
   )

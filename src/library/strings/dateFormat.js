@@ -1,4 +1,4 @@
-export default function dateFormat(dateString) {
+export const dateFormat = (dateString) => {
   if (!dateString) {
     return undefined
   }

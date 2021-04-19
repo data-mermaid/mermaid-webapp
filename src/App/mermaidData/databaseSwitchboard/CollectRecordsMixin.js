@@ -1,4 +1,6 @@
+import { toast } from 'react-toastify'
 import { createUuid } from '../../../library/createUuid'
+import { getObjectById } from '../../../library/getObjectById'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const FISH_BELT_TRANSECT_TYPE = 'fishbelt'
@@ -18,7 +20,9 @@ const CollectRecordsMixin = (Base) =>
       const recordToSubmit = { ...record, id: idToSubmit }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        // upcoming work
+        toast.error(
+          "The online workflow for collect records hasn't been built yet. If you are trying to test the offline workflow, try disabling your internet.",
+        )
       }
       if (this._isOfflineAuthenticatedAndReady) {
         return this._dexieInstance.collectRecords
@@ -185,19 +189,14 @@ const CollectRecordsMixin = (Base) =>
             this.getManagementRegimes(),
             this.getChoices(),
           ]).then(([collectRecords, sites, managementRegimes, choices]) => {
-            const getSiteLabel = (searchId) =>
-              sites.find((site) => site.id === searchId).name
-
-            const getManagementRegimeLabel = (searchId) =>
-              managementRegimes.find((regime) => regime.id === searchId).name
-
             return collectRecords.map((record) => ({
               ...record,
               uiLabels: {
-                site: getSiteLabel(record.data.sample_event.site),
-                management: getManagementRegimeLabel(
+                site: getObjectById(sites, record.data.sample_event.site).name,
+                management: getObjectById(
+                  managementRegimes,
                   record.data.sample_event.management,
-                ),
+                ).name,
                 protocol: this.#collectRecordProtocolLabels[
                   record.data.protocol
                 ],
