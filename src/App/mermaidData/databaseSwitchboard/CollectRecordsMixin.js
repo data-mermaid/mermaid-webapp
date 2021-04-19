@@ -3,8 +3,6 @@ import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
-const FISH_BELT_TRANSECT_TYPE = 'fishbelt'
-
 const CollectRecordsMixin = (Base) =>
   class extends Base {
     #collectRecordProtocolLabels = {
