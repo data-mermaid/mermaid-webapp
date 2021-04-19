@@ -33,7 +33,7 @@ const TooltipText = styled('span')({
     marginLeft: '-5px',
     borderWidth: '5px',
     borderStyle: 'solid',
-    borderColor: 'black transparent transparent transparent',
+    borderColor: '#004c76 transparent transparent transparent',
     transform: 'rotate(180deg)',
   },
 })
