@@ -15,6 +15,8 @@ const CollectRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
+    #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
+
     saveFishBelt = (record) => {
       const idToSubmit = record.id ?? createUuid()
       const recordToSubmit = { ...record, id: idToSubmit }
@@ -80,28 +82,22 @@ const CollectRecordsMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.collectRecords)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getSampleUnitNumber = (data) => {
-      let transectNumber
+    #getSampleUnit = (record) => {
+      const isFishBelt = this.#getIsFishBelt(record)
 
-      let labelName
+      const transectNumber = isFishBelt
+        ? record.data?.fishbelt_transect?.number
+        : record.data?.benthic_transect?.number
 
-      const { protocol } = data
+      const labelName = isFishBelt
+        ? record.data?.fishbelt_transect?.label
+        : record.data?.benthic_transect?.label
 
-      if (protocol === FISH_BELT_TRANSECT_TYPE) {
-        transectNumber = data?.fishbelt_transect?.number || ''
-        labelName = data?.fishbelt_transect?.label || ''
-      } else {
-        transectNumber = data?.benthic_transect?.number || ''
-        labelName = data?.benthic_transect?.label || ''
+      if (!transectNumber) {
+        return labelName || ''
       }
 
-      if (transectNumber === '') {
-        transectNumber = labelName
-      } else if (labelName !== '') {
-        transectNumber += ` ${labelName}`
-      }
-
-      return transectNumber
+      return `${transectNumber || ''} ${labelName || ''}`
     }
 
     getDepth = (data) => {
@@ -201,7 +197,7 @@ const CollectRecordsMixin = (Base) =>
                   record.data.protocol
                 ],
                 size: this.sizeFormat(record.data, choices),
-                sampleUnitNumber: this.getSampleUnitNumber(record.data),
+                sampleUnitNumber: this.#getSampleUnit(record),
                 depth: this.getDepth(record.data),
                 sampleDate: this.dateFormat(
                   record.data.sample_event.sample_date,
