@@ -29,7 +29,7 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
   const collectRecordTitleText =
     collectRecordTitle.length === 0
       ? defaultTitle
-      : collectRecordTitle.join(' - ')
+      : collectRecordTitle.join(' ')
 
   return <H2 id="collect-form-title">{collectRecordTitleText}</H2>
 }
