@@ -5,7 +5,6 @@ import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAn
 import { H2 } from '../generic/text'
 
 import { formikPropType } from '../../library/formikHelpers/formikPropType'
-import getValidationPropsFromFormik from '../../library/formikHelpers/getValidationPropsFromFormik'
 import {
   managementRegimePropType,
   sitePropType,
@@ -30,35 +29,30 @@ const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
         id="site"
         options={siteSelectOptions}
         {...formik.getFieldProps('site')}
-        {...getValidationPropsFromFormik(formik, 'site')}
       />
       <InputSelectWithLabelAndValidation
         label="Management"
         id="management"
         options={managementSelectOptions}
         {...formik.getFieldProps('management')}
-        {...getValidationPropsFromFormik(formik, 'management')}
       />
       <InputWithLabelAndValidation
         label="Depth"
         id="depth"
         type="number"
         {...formik.getFieldProps('depth')}
-        {...getValidationPropsFromFormik(formik, 'depth')}
       />
       <InputWithLabelAndValidation
         label="Sample Date"
         id="sample_date"
         type="date"
         {...formik.getFieldProps('sample_date')}
-        {...getValidationPropsFromFormik(formik, 'sample_date')}
       />
       <InputWithLabelAndValidation
         label="Sample Time"
         id="sample_time"
         type="time"
         {...formik.getFieldProps('sample_time')}
-        {...getValidationPropsFromFormik(formik, 'sample_time')}
       />
     </>
   )

@@ -2,14 +2,20 @@ const error = {
   appNotAuthenticatedOrReady:
     'Initialization error. Try reloading or reauthenticating',
   collectRecordUnavailable:
-    'Collect Record data is currently unavailable. Please try again',
+    'Collect record data is currently unavailable. Please try again',
   collectRecordChoicesUnavailable:
     'Options data for creating a collect record is currently unavailable. Please try again',
   collectRecordsUnavailable:
-    'Collect Records data is currently unavailable. Please try again',
+    'Collect records data is currently unavailable. Please try again',
   projectsUnavailable:
     'Projects data is currently unavailable. Please try again',
   userProfileUnavailable: 'The user profile is unavailable.',
+  collectRecordSave:
+    'Something went wrong. The collect record has not been saved.',
 }
 
-export default { error }
+const success = {
+  collectRecordSave: 'Collect record saved.',
+}
+
+export default { error, success }

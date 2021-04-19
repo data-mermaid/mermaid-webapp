@@ -1,24 +1,23 @@
 import { Formik } from 'formik'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
-import * as Yup from 'yup'
+import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 
 import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
-  getSampleInfoValidationInfo,
-} from '../../../library/collectRecordHelpers'
+} from '../../../library/formikHelpers/collectRecordHelpers'
 import { ButtonCallout } from '../../generic/buttons'
+import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
+import { H2 } from '../../generic/text'
 import { RowRight } from '../../generic/positioning'
 import language from '../../../language'
-import FishBeltTransectForms from '../../FishBeltTransectForms'
+import FishBeltTransectInputs from '../../FishBeltTransectInputs'
 import SampleInfoInputs from '../../SampleInfoInputs'
 import EditCollectRecordFormTitle from '../../EditCollectRecordFormTitle'
-import { ContentPageLayout } from '../../Layout'
-import { H2 } from '../../generic/text'
+import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 
 const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const [choices, setChoices] = useState({})
@@ -27,63 +26,103 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
   const { recordId } = useParams()
+  const history = useHistory()
 
   const _getSupportingData = useEffect(() => {
-    if (isNewRecord) {
-      databaseSwitchboardInstance
-        .getChoices()
-        .then((choicesResponse) => {
-          setChoices(choicesResponse)
-          setIsLoading(false)
-        })
-        .catch(() => {
-          toast.error(language.error.collectRecordChoicesUnavailable)
-        })
-    }
-    if (databaseSwitchboardInstance && recordId && !isNewRecord) {
-      Promise.all([
-        databaseSwitchboardInstance.getCollectRecord(recordId),
+    if (databaseSwitchboardInstance) {
+      const promises = [
         databaseSwitchboardInstance.getSites(),
         databaseSwitchboardInstance.getManagementRegimes(),
         databaseSwitchboardInstance.getChoices(),
-      ])
+      ]
+
+      if (recordId && !isNewRecord) {
+        promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
+      }
+      Promise.all(promises)
         .then(
           ([
-            collectRecord,
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
+            collectRecordResponse,
           ]) => {
-            setCollectRecordBeingEdited(collectRecord)
             setSites(sitesResponse)
             setManagementRegimes(managementRegimesResponse)
             setChoices(choicesResponse)
             setIsLoading(false)
+            setCollectRecordBeingEdited(collectRecordResponse)
           },
         )
         .catch(() => {
-          toast.error(language.error.collectRecordUnavailable)
+          const error = isNewRecord
+            ? language.error.collectRecordChoicesUnavailable
+            : language.error.collectRecordUnavailable
+
+          toast.error(error)
         })
     }
   }, [databaseSwitchboardInstance, recordId, isNewRecord])
 
   const collectRecordData = collectRecordBeingEdited?.data
+
+  const reformatFormValuesIntoFishBeltRecord = (values) => {
+    const {
+      management,
+      notes,
+      sample_date,
+      site,
+      depth,
+      label,
+      len_surveyed,
+      number,
+      reef_slope,
+      sample_time,
+      size_bin,
+      width,
+    } = values
+
+    return {
+      ...collectRecordBeingEdited,
+      data: {
+        fishbelt_transect: {
+          depth,
+          label,
+          len_surveyed,
+          number,
+          reef_slope,
+          sample_time,
+          size_bin,
+          width,
+        },
+        sample_event: { management, notes, sample_date, site },
+      },
+    }
+  }
   const formikOptions = {
     initialValues: {
       ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
       ...getTransectInitialValues(collectRecordData, 'fishbelt_transect'),
     },
     enableReinitialize: true,
-    validationSchema: Yup.object({
-      ...getSampleInfoValidationInfo({ sites, managementRegimes }),
-      transectNumber: Yup.number().required('Transect number is required'),
-      transectNLengthSurveyed: Yup.number().required(
-        'Transect length surveyed is required',
-      ),
-      width: Yup.string().required('Width is required'),
-      fishSizeBin: Yup.string().required('Fish size bin is required'),
-    }),
-    onSubmit: () => {},
+
+    onSubmit: (values) => {
+      const newRecord = reformatFormValuesIntoFishBeltRecord(values)
+
+      databaseSwitchboardInstance
+        .saveFishBelt(newRecord)
+        .then((response) => {
+          toast.success(language.success.collectRecordSave)
+          if (isNewRecord) {
+            history.push(
+              `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
+            )
+          }
+        })
+        .catch(() => {
+          toast.error(language.error.collectRecordSave)
+        })
+    },
   }
 
   return (
@@ -102,7 +141,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
                 sites={sites}
                 managementRegimes={managementRegimes}
               />
-              <FishBeltTransectForms formik={formik} choices={choices} />
+              <FishBeltTransectInputs formik={formik} choices={choices} />
             </form>
           }
           toolbar={
@@ -116,11 +155,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
               )}
 
               <RowRight>
-                <ButtonCallout
-                  type="submit"
-                  onSubmit={formik.handleSubmit}
-                  form="sampleinfo-form"
-                >
+                <ButtonCallout type="submit" form="fishbelt-form">
                   Save
                 </ButtonCallout>
               </RowRight>
