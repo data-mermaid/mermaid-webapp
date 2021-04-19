@@ -100,18 +100,14 @@ const CollectRecordsMixin = (Base) =>
       return `${transectNumber || ''} ${labelName || ''}`
     }
 
-    getDepth = (data) => {
-      let result
+    #getDepth = (record) => {
+      const isFishBelt = this.#getIsFishBelt(record)
 
-      const { protocol } = data
-
-      if (protocol === FISH_BELT_TRANSECT_TYPE) {
-        result = data?.fishbelt_transect?.depth || ''
-      } else {
-        result = data?.benthic_transect?.depth || ''
+      if (isFishBelt) {
+        return record.data.fishbelt_transect?.depth || ''
       }
 
-      return result
+      return record.data.benthic_transect?.depth || ''
     }
 
     dateFormat = (dateString) => {
@@ -135,7 +131,9 @@ const CollectRecordsMixin = (Base) =>
         : ''
     }
 
-    getStatus = (validations) => {
+    #getStatus = (record) => {
+      const { validations } = record
+
       switch (validations?.status) {
         case 'ok':
           return 'Valid'
@@ -200,12 +198,12 @@ const CollectRecordsMixin = (Base) =>
                 ],
                 size: this.#getSize(record, choices),
                 sampleUnitNumber: this.#getSampleUnit(record),
-                depth: this.getDepth(record.data),
+                depth: this.#getDepth(record),
                 sampleDate: this.dateFormat(
                   record.data.sample_event.sample_date,
                 ),
                 observers: this.#getObservers(record),
-                status: this.getStatus(record.validations),
+                status: this.#getStatus(record),
               },
             }))
           })
