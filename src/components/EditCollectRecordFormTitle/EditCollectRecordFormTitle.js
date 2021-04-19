@@ -78,7 +78,9 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
     <TitleContainer id="collect-form-title">
       <LabelHover tooltip="Protocol">{defaultTitle}</LabelHover>
       <LabelHover tooltip="Site Name">{siteName}</LabelHover>
-      <LabelHover tooltip="Transect Number">{transectNumber}</LabelHover>
+      <LabelHover tooltip="Transect Number">
+        {transectNumber.toString()}
+      </LabelHover>
       <LabelHover tooltip="Label">{label}</LabelHover>
     </TitleContainer>
   )

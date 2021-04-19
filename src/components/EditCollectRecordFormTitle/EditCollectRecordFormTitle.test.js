@@ -28,7 +28,10 @@ test('EditCollectRecordFormTitle shows the title as expected when all of site na
     />,
   )
 
-  expect(screen.getByText('Site D 2 FB-2'))
+  expect(screen.getByText('Fish Belt'))
+  expect(screen.getByText('Site D'))
+  expect(screen.getByText('2'))
+  expect(screen.getByText('FB-2'))
 })
 
 test('EditCollectRecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
@@ -65,7 +68,8 @@ test('EditCollectRecordFormTitle component renders properly when site name is mi
     />,
   )
 
-  expect(screen.getByText('2 FB-2'))
+  expect(screen.getByText('2'))
+  expect(screen.getByText('FB-2'))
 })
 
 test('EditCollectRecordFormTitle component renders properly when label is missing.', () => {
@@ -88,7 +92,8 @@ test('EditCollectRecordFormTitle component renders properly when label is missin
     />,
   )
 
-  expect(screen.getByText('Site D 2'))
+  expect(screen.getByText('Site D'))
+  expect(screen.getByText('2'))
 })
 
 test('EditCollectRecordFormTitle component renders properly when transect number is missing.', () => {
@@ -111,5 +116,6 @@ test('EditCollectRecordFormTitle component renders properly when transect number
     />,
   )
 
-  expect(screen.getByText('Site D FB-2'))
+  expect(screen.getByText('Site D'))
+  expect(screen.getByText('FB-2'))
 })
