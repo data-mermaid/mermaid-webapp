@@ -110,11 +110,17 @@ const CollectRecordsMixin = (Base) =>
       return record.data.benthic_transect?.depth || ''
     }
 
-    dateFormat = (dateString) => {
-      const datePieces = new Date(dateString).toDateString().split(' ')
+    #getSampleDate = (record) => {
+      const { sample_date } = record.data.sample_event
 
-      // date format DD-MMM-YYYY
-      return `${datePieces[2]}-${datePieces[1]}-${datePieces[3]}`
+      if (sample_date) {
+        const datePieces = new Date(sample_date).toDateString().split(' ')
+
+        // date format DD-MMM-YYYY
+        return `${datePieces[2]}-${datePieces[1]}-${datePieces[3]}`
+      }
+
+      return ''
     }
 
     #getObservers = (record) => {
@@ -199,9 +205,7 @@ const CollectRecordsMixin = (Base) =>
                 size: this.#getSize(record, choices),
                 sampleUnitNumber: this.#getSampleUnit(record),
                 depth: this.#getDepth(record),
-                sampleDate: this.dateFormat(
-                  record.data.sample_event.sample_date,
-                ),
+                sampleDate: this.#getSampleDate(record),
                 observers: this.#getObservers(record),
                 status: this.#getStatus(record),
               },
