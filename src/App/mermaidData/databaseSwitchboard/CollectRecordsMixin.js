@@ -121,7 +121,9 @@ const CollectRecordsMixin = (Base) =>
       return `${datePieces[2]}-${datePieces[1]}-${datePieces[3]}`
     }
 
-    getObservers = (observers) => {
+    #getObservers = (record) => {
+      const { observers } = record.data
+
       return observers
         ? observers
             .reduce((observerList, observer) => {
@@ -202,7 +204,7 @@ const CollectRecordsMixin = (Base) =>
                 sampleDate: this.dateFormat(
                   record.data.sample_event.sample_date,
                 ),
-                observers: this.getObservers(record.data.observers),
+                observers: this.#getObservers(record),
                 status: this.getStatus(record.validations),
               },
             }))
