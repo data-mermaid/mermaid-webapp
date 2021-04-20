@@ -91,11 +91,7 @@ const CollectRecordsMixin = (Base) =>
         ? record.data?.fishbelt_transect?.label
         : record.data?.benthic_transect?.label
 
-      if (!transectNumber) {
-        return labelName || ''
-      }
-
-      return `${transectNumber || ''} ${labelName || ''}`
+      return `${transectNumber ?? ''} ${labelName || ''}`
     }
 
     #getDepth = (record) => {
