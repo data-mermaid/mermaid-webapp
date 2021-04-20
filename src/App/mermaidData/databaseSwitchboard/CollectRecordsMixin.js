@@ -85,7 +85,7 @@ const CollectRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecords = async () => {
+    getCollectRecords = () => {
       if (this._isOnlineAuthenticatedAndReady) {
         toast.warn(
           'When online, this app still uses mock data for the collect record table. To interact with the offline collect edit/create workflow, and see real data, disable your network.',
