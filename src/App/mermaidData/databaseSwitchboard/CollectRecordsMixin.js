@@ -91,30 +91,30 @@ const CollectRecordsMixin = (Base) =>
         ? record.data?.fishbelt_transect?.label
         : record.data?.benthic_transect?.label
 
-      return `${transectNumber ?? ''} ${labelName || ''}`
+      const sampleUnit = `${transectNumber ?? ''} ${labelName || ''}`.trim()
+
+      return sampleUnit === '' ? undefined : sampleUnit
     }
 
     #getDepth = (record) => {
       const isFishBelt = this.#getIsFishBelt(record)
 
-      if (isFishBelt) {
-        return record.data.fishbelt_transect?.depth || ''
-      }
-
-      return record.data.benthic_transect?.depth || ''
+      return isFishBelt
+        ? record.data.fishbelt_transect?.depth
+        : record.data.benthic_transect?.depth
     }
 
-    #getSampleDate = (record) => {
+    #getSampleDateLabel = (record) => {
       const { sample_date } = record.data.sample_event
 
       if (sample_date) {
         const datePieces = new Date(sample_date).toDateString().split(' ')
 
-        // date format DD-MMM-YYYY
+        // date format DD-MMM-YYYY as 01-Jan-2010
         return `${datePieces[2]}-${datePieces[1]}-${datePieces[3]}`
       }
 
-      return ''
+      return sample_date
     }
 
     #getObservers = (record) => {
@@ -199,7 +199,7 @@ const CollectRecordsMixin = (Base) =>
                 size: this.#getSize(record, choices),
                 sampleUnitNumber: this.#getSampleUnit(record),
                 depth: this.#getDepth(record),
-                sampleDate: this.#getSampleDate(record),
+                sampleDate: this.#getSampleDateLabel(record),
                 observers: this.#getObservers(record),
                 status: this.#getStatus(record),
               },
