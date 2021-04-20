@@ -73,7 +73,7 @@ const collectRecords = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
-        number: 0,
+        number: 2,
         sample_time: '11:55',
         len_surveyed: 6,
       },
