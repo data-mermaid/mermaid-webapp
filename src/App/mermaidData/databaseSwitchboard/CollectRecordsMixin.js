@@ -80,7 +80,7 @@ const CollectRecordsMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.collectRecords)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    #getSampleUnit = (record) => {
+    #getSampleUnitLabel = (record) => {
       const isFishBelt = this.#getIsFishBelt(record)
 
       const transectNumber = isFishBelt
@@ -96,7 +96,7 @@ const CollectRecordsMixin = (Base) =>
       return sampleUnit === '' ? undefined : sampleUnit
     }
 
-    #getDepth = (record) => {
+    #getDepthLabel = (record) => {
       const isFishBelt = this.#getIsFishBelt(record)
 
       return isFishBelt
@@ -114,10 +114,10 @@ const CollectRecordsMixin = (Base) =>
         return `${datePieces[2]}-${datePieces[1]}-${datePieces[3]}`
       }
 
-      return sample_date
+      return undefined
     }
 
-    #getObservers = (record) => {
+    #getObserversLabel = (record) => {
       const { observers } = record.data
 
       return observers
@@ -128,53 +128,60 @@ const CollectRecordsMixin = (Base) =>
               return observerList
             }, [])
             .join(', ')
-        : ''
+        : undefined
     }
 
-    #getStatus = (record) => {
-      const { validations } = record
-
-      switch (validations?.status) {
-        case 'ok':
-          return 'Valid'
-        case 'error':
-          return 'Errors'
-        case 'warning':
-          return 'Warnings'
-        default:
-          return 'Saved'
-      }
+    // Nick, if you want to keep the switch, get rid of this #validationTyleLabelObject.
+    #validationTypeLabel = {
+      ok: 'Valid',
+      error: 'Errors',
+      warning: 'Warnings',
     }
 
-    filterChoices = (searchProperty, options) => {
-      const rec = options.find((item) => item.id === searchProperty)
+    // Nick, I left this here for you to decide which approach you want. Parm suggested an object lookup instead of a switch as an approach elsewhere, and I kind of like it. Switches apparently should be avoided, but I dont understand enough about why to be bossy about it.
+    // #getStatusLabel = (record) => {
+    //   const { validations } = record
 
-      return rec ? rec.name : null
-    }
+    //   switch (validations?.status) {
+    //     case 'ok':
+    //       return 'Valid'
+    //     case 'error':
+    //       return 'Errors'
+    //     case 'warning':
+    //       return 'Warnings'
+    //     default:
+    //       return 'Saved'
+    //   }
+    // }
 
-    #getSize = (record, choices) => {
-      let result = '-'
+    #getSizeLabel = (record, choices) => {
       const { belttransectwidths } = choices
       const isFishBelt = this.#getIsFishBelt(record)
+      const noSizeLabel = '-'
 
       if (isFishBelt) {
-        const width = record.data.fishbelt_transect?.width || ''
+        const widthId = record.data.fishbelt_transect?.width
 
-        const widthFilter = this.filterChoices(width, belttransectwidths.data)
+        const widthNameWithoutUnit = getObjectById(
+          belttransectwidths.data,
+          widthId,
+        )?.name.slice(0, -1)
 
         const length = record.data.fishbelt_transect?.len_surveyed
 
-        if (length && widthFilter) {
-          result = `${length}m x ${widthFilter.slice(0, -1)}m`
-        } else if (length || width) {
-          result = length || widthFilter.slice(0, -1)
+        if (length && widthNameWithoutUnit) {
+          return `${length}m x ${widthNameWithoutUnit}m`
+        }
+        if (length || widthNameWithoutUnit) {
+          return `${length || widthNameWithoutUnit}m`
         }
 
-        return result
+        return noSizeLabel
       }
-      result = record.data.benthic_transect.len_surveyed || result
 
-      return `${result}m`
+      const length = record.data.benthic_transect.len_surveyed
+
+      return length === undefined ? noSizeLabel : `${length}m`
     }
 
     getCollectRecordsForUIDisplay = () => {
@@ -196,12 +203,14 @@ const CollectRecordsMixin = (Base) =>
                 protocol: this.#collectRecordProtocolLabels[
                   record.data.protocol
                 ],
-                size: this.#getSize(record, choices),
-                sampleUnitNumber: this.#getSampleUnit(record),
-                depth: this.#getDepth(record),
+                size: this.#getSizeLabel(record, choices),
+                sampleUnitNumber: this.#getSampleUnitLabel(record),
+                depth: this.#getDepthLabel(record),
                 sampleDate: this.#getSampleDateLabel(record),
-                observers: this.#getObservers(record),
-                status: this.#getStatus(record),
+                observers: this.#getObserversLabel(record),
+                status:
+                  this.#validationTypeLabel[record.validations?.status] ??
+                  'Saved',
               },
             }))
           })

@@ -1,8 +1,9 @@
 export const reactTableNaturalSort = (rowA, rowB, columnId) => {
-  return rowA.original[columnId]
-    .toString()
-    .localeCompare(rowB.original[columnId], 'en', {
-      numeric: true,
-      caseFirst: 'upper',
-    })
+  const rowACellContents = rowA.original[columnId] ?? ''
+  const rowBCellContents = rowB.original[columnId] ?? ''
+
+  return rowACellContents.toString().localeCompare(rowBCellContents, 'en', {
+    numeric: true,
+    caseFirst: 'upper',
+  })
 }
