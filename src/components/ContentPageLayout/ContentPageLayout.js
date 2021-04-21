@@ -30,17 +30,16 @@ const NavAndContentLayout = styled('div')`
 `
 const contentStyles = css`
   background: ${theme.color.white};
-  width: calc(
-    100vw - calc(${theme.spacing.sideNavWidthDesktop}) - ${contentPadding}
-  );
+  width: calc(100vw - ${theme.spacing.sideNavWidthDesktop} - ${contentPadding});
   ${mediaQueryTabletLandscapeOnly(css`
-    width: 
-    calc( 100vw - calc(${theme.spacing.sideNavWidthTabletLandscapeOnly} + ${contentPadding}) );
+    width: calc(
+      100vw - ${theme.spacing.sideNavWidthTabletLandscapeOnly} -
+        ${contentPadding}
     );
   `)}
   ${mediaQueryPhoneOnly(css`
     width: calc(
-      100vw - calc(${theme.spacing.sideNavWidthPhoneOnly} + ${contentPadding})
+      100vw - ${theme.spacing.sideNavWidthPhoneOnly} - ${contentPadding}
     );
   `)}
 `

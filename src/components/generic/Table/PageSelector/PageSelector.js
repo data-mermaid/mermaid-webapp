@@ -35,7 +35,7 @@ const PageButton = ({ pageIndex, currentPageIndex, onGoToPage }) => {
 
   return (
     <PageNumberButtons
-      className={isCurrentPage && 'paginationCurrentPage'}
+      className={isCurrentPage ? 'paginationCurrentPage' : undefined}
       aria-current={isCurrentPage}
       onClick={() => onGoToPage(pageIndex)}
       key={`pagination-button-${pageIndex}`}
