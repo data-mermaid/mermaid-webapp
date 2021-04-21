@@ -13,6 +13,12 @@ const CollectRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
+    #validationTypeLabel = {
+      ok: 'Valid',
+      error: 'Errors',
+      warning: 'Warnings',
+    }
+
     #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
 
     saveFishBelt = (record) => {
@@ -131,28 +137,11 @@ const CollectRecordsMixin = (Base) =>
         : undefined
     }
 
-    // Nick, if you want to keep the switch, get rid of this #validationTyleLabelObject.
-    #validationTypeLabel = {
-      ok: 'Valid',
-      error: 'Errors',
-      warning: 'Warnings',
+    #getStatusLabel = (record) => {
+      const { validations } = record
+
+      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
     }
-
-    // Nick, I left this here for you to decide which approach you want. Parm suggested an object lookup instead of a switch as an approach elsewhere, and I kind of like it. Switches apparently should be avoided, but I dont understand enough about why to be bossy about it.
-    // #getStatusLabel = (record) => {
-    //   const { validations } = record
-
-    //   switch (validations?.status) {
-    //     case 'ok':
-    //       return 'Valid'
-    //     case 'error':
-    //       return 'Errors'
-    //     case 'warning':
-    //       return 'Warnings'
-    //     default:
-    //       return 'Saved'
-    //   }
-    // }
 
     #getSizeLabel = (record, choices) => {
       const { belttransectwidths } = choices
@@ -208,9 +197,7 @@ const CollectRecordsMixin = (Base) =>
                 depth: this.#getDepthLabel(record),
                 sampleDate: this.#getSampleDateLabel(record),
                 observers: this.#getObserversLabel(record),
-                status:
-                  this.#validationTypeLabel[record.validations?.status] ??
-                  'Saved',
+                status: this.#getStatusLabel(record),
               },
             }))
           })
