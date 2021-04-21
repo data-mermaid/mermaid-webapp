@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
-import theme from '../../theme'
-import { Column } from '../generic/positioning'
+import theme from '../../../../theme'
+import { Column } from '../../../generic/positioning'
 import {
   mediaQueryTabletLandscapeOnly,
   mediaQueryPhoneOnly,
-} from '../../library/styling/mediaQueries'
-import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
-import NavMenu from '../NavMenu'
-import ProjectName from '../ProjectName'
+} from '../../../../library/styling/mediaQueries'
+import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
+import NavMenu from '../../../NavMenu'
+import ProjectName from '../../../ProjectName'
 
 const contentPadding = theme.spacing.xsmall
 const MainContentPageLayout = styled('div')`
