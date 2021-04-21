@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { InputRow, ValidationMessage } from '../form'
@@ -11,10 +11,22 @@ const InputWithLabelAndValidation = ({
   validationType,
   ...restOfProps
 }) => {
+  const textFieldRef = useRef(null)
+
+  useEffect(() => {
+    const handleWheel = (e) => e.preventDefault()
+
+    textFieldRef.current.addEventListener('wheel', handleWheel)
+
+    return () => {
+      textFieldRef.current.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
+
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <input id={id} {...restOfProps} />
+      <input id={id} {...restOfProps} ref={textFieldRef} />
       {validationMessage ? (
         <RowCenter>
           <ValidationMessage validationType={validationType}>
