@@ -13,6 +13,14 @@ const CollectRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
+    #validationTypeLabel = {
+      ok: 'Valid',
+      error: 'Errors',
+      warning: 'Warnings',
+    }
+
+    #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
+
     saveFishBelt = (record) => {
       const idToSubmit = record.id ?? createUuid()
       const recordToSubmit = { ...record, id: idToSubmit }
@@ -78,13 +86,101 @@ const CollectRecordsMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.collectRecords)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
+    #getSampleUnitLabel = (record) => {
+      const isFishBelt = this.#getIsFishBelt(record)
+
+      const transectNumber = isFishBelt
+        ? record.data?.fishbelt_transect?.number
+        : record.data?.benthic_transect?.number
+
+      const labelName = isFishBelt
+        ? record.data?.fishbelt_transect?.label
+        : record.data?.benthic_transect?.label
+
+      const sampleUnit = `${transectNumber ?? ''} ${labelName || ''}`.trim()
+
+      return sampleUnit === '' ? undefined : sampleUnit
+    }
+
+    #getDepthLabel = (record) => {
+      const isFishBelt = this.#getIsFishBelt(record)
+
+      return isFishBelt
+        ? record.data.fishbelt_transect?.depth
+        : record.data.benthic_transect?.depth
+    }
+
+    #getSampleDateLabel = (record) => {
+      const { sample_date } = record.data.sample_event
+
+      if (sample_date) {
+        const datePieces = new Date(sample_date).toDateString().split(' ')
+
+        // date format DD-MMM-YYYY as 01-Jan-2010
+        return `${datePieces[2]}-${datePieces[1]}-${datePieces[3]}`
+      }
+
+      return undefined
+    }
+
+    #getObserversLabel = (record) => {
+      const { observers } = record.data
+
+      return observers
+        ? observers
+            .reduce((observerList, observer) => {
+              observerList.push(observer.profile_name)
+
+              return observerList
+            }, [])
+            .join(', ')
+        : undefined
+    }
+
+    #getStatusLabel = (record) => {
+      const { validations } = record
+
+      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
+    }
+
+    #getSizeLabel = (record, choices) => {
+      const { belttransectwidths } = choices
+      const isFishBelt = this.#getIsFishBelt(record)
+      const noSizeLabel = '-'
+
+      if (isFishBelt) {
+        const widthId = record.data.fishbelt_transect?.width
+
+        const widthNameWithoutUnit = getObjectById(
+          belttransectwidths.data,
+          widthId,
+        )?.name.slice(0, -1)
+
+        const length = record.data.fishbelt_transect?.len_surveyed
+
+        if (length && widthNameWithoutUnit) {
+          return `${length}m x ${widthNameWithoutUnit}m`
+        }
+        if (length || widthNameWithoutUnit) {
+          return `${length || widthNameWithoutUnit}m`
+        }
+
+        return noSizeLabel
+      }
+
+      const length = record.data.benthic_transect.len_surveyed
+
+      return length === undefined ? noSizeLabel : `${length}m`
+    }
+
     getCollectRecordsForUIDisplay = () => {
       return this._isAuthenticatedAndReady
         ? Promise.all([
             this.getCollectRecords(),
             this.getSites(),
             this.getManagementRegimes(),
-          ]).then(([collectRecords, sites, managementRegimes]) => {
+            this.getChoices(),
+          ]).then(([collectRecords, sites, managementRegimes, choices]) => {
             return collectRecords.map((record) => ({
               ...record,
               uiLabels: {
@@ -96,6 +192,12 @@ const CollectRecordsMixin = (Base) =>
                 protocol: this.#collectRecordProtocolLabels[
                   record.data.protocol
                 ],
+                size: this.#getSizeLabel(record, choices),
+                sampleUnitNumber: this.#getSampleUnitLabel(record),
+                depth: this.#getDepthLabel(record),
+                sampleDate: this.#getSampleDateLabel(record),
+                observers: this.#getObserversLabel(record),
+                status: this.#getStatusLabel(record),
               },
             }))
           })

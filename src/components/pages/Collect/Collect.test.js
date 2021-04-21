@@ -60,20 +60,243 @@ test('Collect Records table sorts properly by site column', async () => {
 
   expect(within(tableRows[1]).getByText('Site C'))
 
-  // click twice to change to descending order
-  userEvent.dblClick(within(table).getByText('Management'))
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Site'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Site D'))
+  expect(within(tableRowsAfter[1]).getByText('Site C'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Site'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Site D'))
 })
-test('Collect Records table sorts properly by management column', () => {})
-test('Collect Records table sorts properly by samplu unit # column', () => {})
-test('Collect Records table sorts properly by size column', () => {})
-test('Collect Records table sorts properly by depth column', () => {})
-test('Collect Records table sorts properly by sample date column', () => {})
-test('Collect Records table sorts properly by observers column', () => {})
-test('Collect Records table sorts properly by status column', () => {})
+
+test('Collect Records table sorts properly by management column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('Management Regimes B'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Management'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Management'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Management Regimes C'))
+})
+
+test('Collect Records table sorts properly by sample unit # column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('5 LIT-1'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Sample Unit #'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('2'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Sample Unit #'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('5 LIT-1'))
+})
+test('Collect Records table sorts properly by size column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('10m'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Size'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('5m x 2m'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Size'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('10m'))
+})
+test('Collect Records table sorts properly by depth column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('20'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Depth (m)'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('10'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Depth (m)'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('20'))
+})
+test('Collect Records table sorts properly by sample date column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('11-Mar-2021'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Sample Date'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('02-Mar-2021'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Sample Date'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('11-Mar-2021'))
+})
+test('Collect Records table sorts properly by observers column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('Nick, Melissa'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Observers'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  const tableCellsFromTableRowsAfter = within(tableRowsAfter[1]).getAllByRole(
+    'cell',
+  )
+
+  expect(within(tableCellsFromTableRowsAfter[7]).getByText(''))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Observers'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Nick, Melissa'))
+})
+test('Collect Records table sorts properly by status column', async () => {
+  renderAuthenticatedOnline(
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('Saved'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Status'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('Errors'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Status'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Warnings'))
+})
 test('Collect Records table sorts properly by synced column', () => {})
 
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
