@@ -16,7 +16,7 @@ afterAll(() => {
   mockMermaidApiAllSuccessful.close()
 })
 
-test('saveFishBelt offline returns saved record', async () => {
+test('saveFishBelt offline returns saved record with protocol info automatically included', async () => {
   const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess()
 
   const fishBeltToBeSaved = {
@@ -30,7 +30,12 @@ test('saveFishBelt offline returns saved record', async () => {
     fishBeltToBeSaved,
   )
 
-  expect(savedFishBeltResponse).toEqual(fishBeltToBeSaved)
+  expect(savedFishBeltResponse.id).toEqual(fishBeltToBeSaved.id)
+  expect(savedFishBeltResponse.data).toEqual({ protocol: 'fishbelt' })
+  expect(savedFishBeltResponse.profile).toEqual(fishBeltToBeSaved.profile)
+  expect(savedFishBeltResponse.randomUnexpectedProperty).toEqual(
+    fishBeltToBeSaved.randomUnexpectedProperty,
+  )
 })
 test('saveFishBelt offline replaces previous fishBelt record with same id', async () => {
   const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess()
@@ -39,12 +44,12 @@ test('saveFishBelt offline replaces previous fishBelt record with same id', asyn
     id: 'foo',
     data: {},
     profile: '1234',
-    randomUnexpectedProperty: 'whatever',
+    initialProperty: 'whatever',
   })
 
   const replacementFishbelt = {
     id: 'foo',
-    data: { a: 'A' },
+    data: { randomProperty: 'A' },
     profile: 'ABCD',
   }
 
@@ -52,7 +57,13 @@ test('saveFishBelt offline replaces previous fishBelt record with same id', asyn
 
   const savedFishBelt = await dbInstanceOffline.getFishBelt('foo')
 
-  expect(savedFishBelt).toEqual(replacementFishbelt)
+  expect(savedFishBelt.data.randomProperty).toEqual(
+    replacementFishbelt.data.randomProperty,
+  )
+  expect(savedFishBelt.profile).toEqual(replacementFishbelt.profile)
+  expect(savedFishBelt.initialProperty).toEqual(
+    replacementFishbelt.initialProperty,
+  )
 })
 test('saveFishBelt offline returns saved record including an id if one isnt supplied', async () => {
   const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess()
@@ -88,9 +99,7 @@ test('deleteFishBelt offline deletes the record', async () => {
 
   await dbInstanceOffline.saveFishBelt(fishBeltToBeDeleted)
 
-  expect(await dbInstanceOffline.getFishBelt('foo')).toEqual(
-    fishBeltToBeDeleted,
-  )
+  expect(await dbInstanceOffline.getFishBelt('foo'))
 
   await dbInstanceOffline.deleteFishBelt('foo')
 

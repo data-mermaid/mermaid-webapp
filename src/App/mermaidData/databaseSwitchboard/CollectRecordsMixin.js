@@ -23,7 +23,11 @@ const CollectRecordsMixin = (Base) =>
 
     saveFishBelt = (record) => {
       const idToSubmit = record.id ?? createUuid()
-      const recordToSubmit = { ...record, id: idToSubmit }
+      const recordToSubmit = {
+        ...record,
+        id: idToSubmit,
+        data: { ...record.data, protocol: 'fishbelt' },
+      }
 
       if (this._isOnlineAuthenticatedAndReady) {
         toast.error(
@@ -81,10 +85,21 @@ const CollectRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecords = () =>
-      this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.collectRecords)
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+    getCollectRecords = () => {
+      if (this._isOnlineAuthenticatedAndReady) {
+        toast.warn(
+          'When online, this app still uses mock data for the collect record table. To interact with the offline collect edit/create workflow, and see real data, disable your network.',
+        )
+
+        return Promise.resolve(mockMermaidData.collectRecords)
+      }
+
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexieInstance.collectRecords.toArray()
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
 
     #getSampleUnitLabel = (record) => {
       const isFishBelt = this.#getIsFishBelt(record)
@@ -184,11 +199,11 @@ const CollectRecordsMixin = (Base) =>
             return collectRecords.map((record) => ({
               ...record,
               uiLabels: {
-                site: getObjectById(sites, record.data.sample_event.site).name,
+                site: getObjectById(sites, record.data.sample_event.site)?.name,
                 management: getObjectById(
                   managementRegimes,
                   record.data.sample_event.management,
-                ).name,
+                )?.name,
                 protocol: this.#collectRecordProtocolLabels[
                   record.data.protocol
                 ],

@@ -21,6 +21,9 @@ const InputSelectWithLabelAndValidation = ({
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
       <Select id={id} {...restOfProps}>
+        <option value="" disabled>
+          Choose...
+        </option>
         {optionList}
       </Select>
       {validationMessage ? (
