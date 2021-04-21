@@ -3,7 +3,8 @@ import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useTable } from 'react-table'
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { databaseGatewayPropTypes } from '../../../App/mermaidData/DatabaseGateway'
+import { ContentPageLayout } from '../../Layout'
+import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { H3 } from '../../generic/text'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
@@ -19,7 +20,6 @@ import AddSampleUnitButton from './AddSampleUnitButton'
 import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import ContentPageLayout from '../../ContentPageLayout'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 
 const TopBar = () => (
@@ -31,14 +31,14 @@ const TopBar = () => (
   </>
 )
 
-const Collect = ({ databaseGatewayInstance }) => {
+const Collect = ({ databaseSwitchboardInstance }) => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState(
     [],
   )
   const [isLoading, setIsLoading] = useState(true)
 
   const _getCollectRecords = useEffect(() => {
-    databaseGatewayInstance
+    databaseSwitchboardInstance
       .getCollectRecordsForUIDisplay()
       .then((records) => {
         setCollectRecordsForUiDisplay(records)
@@ -47,7 +47,7 @@ const Collect = ({ databaseGatewayInstance }) => {
       .catch(() => {
         toast.error(language.error.collectRecordsUnavailable)
       })
-  }, [databaseGatewayInstance])
+  }, [databaseSwitchboardInstance])
 
   const currentProjectPath = useCurrentProjectPath()
 
@@ -231,7 +231,7 @@ const Collect = ({ databaseGatewayInstance }) => {
 }
 
 Collect.propTypes = {
-  databaseGatewayInstance: databaseGatewayPropTypes.isRequired,
+  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default Collect

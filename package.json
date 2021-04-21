@@ -29,6 +29,7 @@
     "react-toastify": "^7.0.3",
     "react-toggle": "^4.1.1",
     "styled-components": "^5.2.1",
+    "uuid": "^8.3.2",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.3",
     "workbox-broadcast-update": "^5.1.3",
@@ -41,8 +42,7 @@
     "workbox-range-requests": "^5.1.3",
     "workbox-routing": "^5.1.3",
     "workbox-strategies": "^5.1.3",
-    "workbox-streams": "^5.1.3",
-    "yup": "^0.32.9"
+    "workbox-streams": "^5.1.3"
   },
   "resolutions": {
     "styled-components": "^5"
@@ -83,6 +83,8 @@
     "@storybook/node-logger": "^6.1.16",
     "@storybook/preset-create-react-app": "^3.1.5",
     "@storybook/react": "^6.1.16",
+    "eslint-plugin-jest-dom": "^3.7.0",
+    "eslint-plugin-testing-library": "^3.10.2",
     "fake-indexeddb": "^3.1.2",
     "husky": "3.1.0",
     "msw": "^0.27.0",

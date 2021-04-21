@@ -30,8 +30,9 @@ test('App renders shows the users name from the API for an online and authentica
   expect(await screen.findByText('Projects', { selector: 'h1' }))
 
   await waitFor(() =>
-    expect(screen.queryByText('FakeFirstNameOffline')).toBeNull(),
+    expect(screen.queryByText('FakeFirstNameOffline')).not.toBeInTheDocument(),
   )
+
   expect(await screen.findByText('FakeFirstNameOnline'))
 })
 
@@ -47,7 +48,7 @@ test('App renders shows the users name from offline storage for an offline user 
     }),
   )
   await waitFor(() =>
-    expect(thing.queryByText('FakeFirstNameOnline')).toBeNull(),
+    expect(thing.queryByText('FakeFirstNameOnline')).not.toBeInTheDocument(),
   )
   expect(await thing.findByText('FakeFirstNameOffline'))
 })

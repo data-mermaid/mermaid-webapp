@@ -1,7 +1,7 @@
 import React from 'react'
 
 // import PropTypes from 'prop-types'
-import ContentPageLayout from '../../ContentPageLayout'
+import { ContentPageLayout } from '../../Layout'
 
 const Sites = () => {
   return (

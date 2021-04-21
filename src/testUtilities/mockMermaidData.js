@@ -1,40 +1,38 @@
 const projects = [
   {
-    name:
-      'Karimunjawa National Park is a long name for a project, not as long as Karimunjawaawajnumirak',
-    countries: ['Fiji'],
-    num_sites: 23,
+    name: 'Project I',
+    countries: ['Canada'],
+    num_sites: 13,
     offlineReady: true,
     updated_on: '01/21/2020',
   },
   {
-    name: 'Gita Nada_MPA 2018',
-    countries: ['Indonesia'],
-    num_sites: 26,
+    name: 'Project II',
+    countries: ['America'],
+    num_sites: 36,
     offlineReady: true,
-    updated_on: '11/21/2021',
+    updated_on: '21/21/2021',
   },
   {
-    name:
-      'Survei Ekologi KKPD Aceh Besar, KKPD Pesisir Timur Sabang dan TWAL Pulau Weh',
-    countries: ['Albania, Indonesia, Malaysia'],
+    name: 'Project III',
+    countries: ['England, Finland'],
     num_sites: 34,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '21/21/1992',
   },
   {
-    name: "Belize Glover's Atoll 2019",
-    countries: ['Fiji, Indonesia'],
-    num_sites: 49,
+    name: 'Project IV',
+    countries: ['Canada'],
+    num_sites: 9,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '31/12/2011',
   },
   {
-    name: 'XPDC Kei Kecil 2018',
-    countries: ['Fiji'],
+    name: 'Project V',
+    countries: ['Mexico'],
     num_sites: 33,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '01/21/2001',
   },
 ]
 
@@ -282,28 +280,28 @@ const collectRecords = [
 const sites = [
   {
     id: '1',
-    name: 'Amazing Maze',
+    name: 'Site A',
     reef_type: 'patch',
     reef_zone: 'pinnacle',
     exposure: 'exposed',
   },
   {
     id: '2',
-    name: 'BU02',
+    name: 'Site B',
     reef_type: 'fringing',
     reef_zone: 'back reef',
     exposure: 'sheltered',
   },
   {
     id: '3',
-    name: '1203',
+    name: 'Site C',
     reef_type: 'patch',
     reef_zone: 'fore reef',
     exposure: 'very sheltered',
   },
   {
     id: '4',
-    name: 'Karang Kapal',
+    name: 'Site D',
     reef_type: 'patch',
     reef_zone: 'back reef',
     exposure: 'exposed',
@@ -311,9 +309,9 @@ const sites = [
 ]
 
 const managementRegimes = [
-  { id: '1', name: 'Fisheries Utilization' },
-  { id: '2', name: 'Ankivonjy no-take' },
-  { id: '3', name: 'Bureta tabu' },
+  { id: '1', name: 'Management Regimes A' },
+  { id: '2', name: 'Management Regimes B' },
+  { id: '3', name: 'Management Regimes C' },
 ]
 
 const choices = {

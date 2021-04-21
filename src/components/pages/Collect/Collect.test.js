@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import mockOnlineDatabaseGatewayInstance from '../../../testUtilities/mockOnlineDatabaseGatewayInstance'
+import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import {
   renderAuthenticatedOnline,
   screen,
-  waitFor,
+  waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import Collect from './Collect'
@@ -21,11 +21,13 @@ test('Collect component renders with the expected UI elements', () => {
 
 test('Collect Records table sorts properly by method column', async () => {
   renderAuthenticatedOnline(
-    <Collect databaseGatewayInstance={mockOnlineDatabaseGatewayInstance} />,
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
   )
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -43,25 +45,27 @@ test('Collect Records table sorts properly by method column', async () => {
 })
 test('Collect Records table sorts properly by site column', async () => {
   renderAuthenticatedOnline(
-    <Collect databaseGatewayInstance={mockOnlineDatabaseGatewayInstance} />,
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
   )
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
 
   const table = screen.getByRole('table')
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('1203'))
+  expect(within(tableRows[1]).getByText('Site C'))
 
   // click twice to change to descending order
   userEvent.dblClick(within(table).getByText('Management'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Karang Kapal'))
+  expect(within(tableRowsAfter[1]).getByText('Site D'))
 })
 test('Collect Records table sorts properly by management column', () => {})
 test('Collect Records table sorts properly by samplu unit # column', () => {})
@@ -74,10 +78,12 @@ test('Collect Records table sorts properly by synced column', () => {})
 
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
   renderAuthenticatedOnline(
-    <Collect databaseGatewayInstance={mockOnlineDatabaseGatewayInstance} />,
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
   )
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
   const table = screen.getByRole('table')
 
@@ -96,10 +102,12 @@ test('Collect Records table changes number of rows visible size when pagination 
 
 test('Collect Records table change pages when different page is selected ', async () => {
   renderAuthenticatedOnline(
-    <Collect databaseGatewayInstance={mockOnlineDatabaseGatewayInstance} />,
+    <Collect
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
   )
-  await waitFor(() =>
-    expect(screen.queryByLabelText('loading indicator')).toBeNull(),
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
 
   const table = screen.getByRole('table')

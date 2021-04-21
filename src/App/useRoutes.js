@@ -10,19 +10,14 @@ import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Users from '../components/pages/Users'
 import Health from '../components/pages/Health'
-import NewFishBelt from '../components/pages/NewFishBelt'
-import NewBenthicLit from '../components/pages/NewBenthicLit'
-import NewBenthicPit from '../components/pages/NewBenthicPit'
-import NewHabitatComplexity from '../components/pages/NewHabitatComplexity'
-import NewBleaching from '../components/pages/NewBleaching'
-import EditFishBelt from '../components/pages/EditfishBelt/EditFishBelt'
+import FishBelt from '../components/pages/FishBelt/FishBelt'
 
-export const useRoutes = ({ databaseGatewayInstance }) => {
+export const useRoutes = ({ databaseSwitchboardInstance }) => {
   const routes = [
     {
       path: '/projects',
       Component: () => (
-        <Projects databaseGatewayInstance={databaseGatewayInstance} />
+        <Projects databaseSwitchboardInstance={databaseSwitchboardInstance} />
       ),
     },
     {
@@ -32,22 +27,29 @@ export const useRoutes = ({ databaseGatewayInstance }) => {
     {
       path: '/projects/:projectId/collecting',
       Component: () => (
-        <Collect databaseGatewayInstance={databaseGatewayInstance} />
+        <Collect databaseSwitchboardInstance={databaseSwitchboardInstance} />
       ),
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
-      Component: () => <NewFishBelt />,
+      Component: () => (
+        <FishBelt databaseSwitchboardInstance={databaseSwitchboardInstance} />
+      ),
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
       Component: () => (
-        <EditFishBelt databaseGatewayInstance={databaseGatewayInstance} />
+        <FishBelt
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+          isNewRecord={false}
+        />
       ),
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
-      Component: () => <NewBenthicLit />,
+      Component: () => (
+        <> Placeholder create benthic LIT collect record page </>
+      ),
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
@@ -55,15 +57,19 @@ export const useRoutes = ({ databaseGatewayInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/benthicpit/',
-      Component: () => <NewBenthicPit />,
+      Component: () => (
+        <> Placeholder create benthic PIT collect record page </>
+      ),
     },
     {
       path: '/projects/:projectId/collecting/habitatcomplexity/',
-      Component: () => <NewHabitatComplexity />,
+      Component: () => (
+        <> Placeholder create habitat complexity collect record page </>
+      ),
     },
     {
       path: '/projects/:projectId/collecting/bleaching/',
-      Component: () => <NewBleaching />,
+      Component: () => <> Placeholder create bleaching collect record page </>,
     },
     {
       path: '/projects/:projectId/data',

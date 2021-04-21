@@ -7,13 +7,15 @@ import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
 import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
-import DatabaseGateway from './mermaidData/DatabaseGateway'
-import Footer from '../components/Footer'
+import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
-import Layout from '../components/generic/Layout'
+import Footer from '../components/Footer'
+import PageNotFound from '../components/pages/PageNotFound'
+
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
+import Layout from '../components/Layout'
 
 function App({ dexieInstance }) {
   const { isOnline } = useOnlineStatus()
@@ -21,15 +23,15 @@ function App({ dexieInstance }) {
     auth0Token,
     isMermaidAuthenticated,
     logoutMermaid,
-  } = useAuthentication({})
-  const databaseGatewayInstance = useMemo(() => {
+  } = useAuthentication()
+  const databaseSwitchboardInstance = useMemo(() => {
     const apiBaseUrl = process.env.REACT_APP_MERMAID_API
     const areDependenciesReady =
       isMermaidAuthenticated && !!dexieInstance && apiBaseUrl
 
     return !areDependenciesReady
       ? undefined
-      : new DatabaseGateway({
+      : new DatabaseSwitchboard({
           apiBaseUrl,
           auth0Token,
           isMermaidAuthenticated,
@@ -39,9 +41,9 @@ function App({ dexieInstance }) {
   }, [auth0Token, isMermaidAuthenticated, isOnline, dexieInstance])
 
   const currentUser = useCurrentUser({
-    databaseGatewayInstance,
+    databaseSwitchboardInstance,
   })
-  const { routes } = useRoutes({ databaseGatewayInstance })
+  const { routes } = useRoutes({ databaseSwitchboardInstance })
 
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,
@@ -49,7 +51,7 @@ function App({ dexieInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated && currentUser && databaseGatewayInstance
+    isMermaidAuthenticated && currentUser && databaseSwitchboardInstance
 
   return (
     <ThemeProvider theme={theme}>
@@ -72,6 +74,7 @@ function App({ dexieInstance }) {
           <Route exact path="/">
             <Redirect to="/projects" />
           </Route>
+          <Route component={PageNotFound} />
         </Switch>
       )}
     </ThemeProvider>
