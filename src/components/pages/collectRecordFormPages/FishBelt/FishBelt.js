@@ -2,22 +2,23 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
-} from '../../../library/formikHelpers/collectRecordHelpers'
-import { ButtonCallout } from '../../generic/buttons'
-import { ContentPageLayout } from '../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
-import { H2 } from '../../generic/text'
-import { RowRight } from '../../generic/positioning'
-import language from '../../../language'
-import FishBeltTransectInputs from '../../FishBeltTransectInputs'
-import SampleInfoInputs from '../../SampleInfoInputs'
-import EditCollectRecordFormTitle from '../../EditCollectRecordFormTitle'
-import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
+} from '../collectRecordFormInitialValues'
+import { ButtonCallout } from '../../../generic/buttons'
+import { ContentPageLayout } from '../../../Layout'
+import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databaseSwitchboard'
+import { H2 } from '../../../generic/text'
+import { RowRight } from '../../../generic/positioning'
+import language from '../../../../language'
+import FishBeltTransectInputs from '../../../FishBeltTransectInputs'
+import SampleInfoInputs from '../../../SampleInfoInputs'
+import EditCollectRecordFormTitle from '../../../EditCollectRecordFormTitle'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
+import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 
 const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const [choices, setChoices] = useState({})
@@ -28,6 +29,26 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const { recordId } = useParams()
   const history = useHistory()
 
+  const {
+    persistUnsavedFormData,
+    clearUnsavedFormData,
+    getUnsavedFormData,
+  } = useUnsavedDirtyFormDataUtilities('unsavedFishbeltForm')
+
+  const initialFormValues = useMemo(
+    () =>
+      getUnsavedFormData() ?? {
+        ...getSampleInfoInitialValues(
+          collectRecordBeingEdited,
+          'fishbelt_transect',
+        ),
+        ...getTransectInitialValues(
+          collectRecordBeingEdited,
+          'fishbelt_transect',
+        ),
+      },
+    [collectRecordBeingEdited, getUnsavedFormData],
+  )
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance) {
       const promises = [
@@ -64,8 +85,6 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
     }
   }, [databaseSwitchboardInstance, recordId, isNewRecord])
 
-  const collectRecordData = collectRecordBeingEdited?.data
-
   const reformatFormValuesIntoFishBeltRecord = (values) => {
     const {
       management,
@@ -95,17 +114,21 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
           size_bin,
           width,
         },
-        sample_event: { management, notes, sample_date, site },
+        sample_event: {
+          management,
+          notes,
+          sample_date,
+          site,
+        },
       },
     }
   }
   const formikOptions = {
-    initialValues: {
-      ...getSampleInfoInitialValues(collectRecordData, 'fishbelt_transect'),
-      ...getTransectInitialValues(collectRecordData, 'fishbelt_transect'),
-    },
+    initialValues: initialFormValues,
     enableReinitialize: true,
-
+    validate: (values) => {
+      persistUnsavedFormData(values)
+    },
     onSubmit: (values) => {
       const newRecord = reformatFormValuesIntoFishBeltRecord(values)
 
@@ -113,6 +136,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
         .saveFishBelt(newRecord)
         .then((response) => {
           toast.success(language.success.collectRecordSave)
+          clearUnsavedFormData()
           if (isNewRecord) {
             history.push(
               `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
