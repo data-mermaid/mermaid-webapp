@@ -22,12 +22,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('2'))
   expect(screen.getByText('3'))
@@ -35,11 +31,11 @@ test('PageSelector with more than 8 pages renders as expected when the current p
 
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('4')).toBeNull()
-  expect(screen.queryByText('5')).toBeNull()
-  expect(screen.queryByText('6')).toBeNull()
-  expect(screen.queryByText('7')).toBeNull()
-  expect(screen.queryByText('8')).toBeNull()
+  expect(screen.queryByText('4')).not.toBeInTheDocument()
+  expect(screen.queryByText('5')).not.toBeInTheDocument()
+  expect(screen.queryByText('6')).not.toBeInTheDocument()
+  expect(screen.queryByText('7')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages indicates current page', () => {
@@ -73,12 +69,8 @@ test('PageSelector with more than 8 pages shows the next and previous buttons as
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeDisabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeDisabled()
 })
 test('PageSelector with more than 8 pages calls onGoToPage with the correct page when a page button is clicked', () => {
   const mockFunction = jest.fn()
@@ -160,12 +152,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('2'))
   expect(screen.getByText('3'))
@@ -173,10 +161,10 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(screen.getByText('...'))
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('5')).toBeNull()
-  expect(screen.queryByText('6')).toBeNull()
-  expect(screen.queryByText('7')).toBeNull()
-  expect(screen.queryByText('8')).toBeNull()
+  expect(screen.queryByText('5')).not.toBeInTheDocument()
+  expect(screen.queryByText('6')).not.toBeInTheDocument()
+  expect(screen.queryByText('7')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 3', () => {
@@ -192,12 +180,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('2'))
   expect(screen.getByText('3'))
@@ -206,9 +190,9 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(screen.getByText('...'))
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('6')).toBeNull()
-  expect(screen.queryByText('7')).toBeNull()
-  expect(screen.queryByText('8')).toBeNull()
+  expect(screen.queryByText('6')).not.toBeInTheDocument()
+  expect(screen.queryByText('7')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 4', () => {
@@ -224,12 +208,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('2'))
   expect(screen.getByText('3'))
@@ -239,8 +219,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(screen.getByText('...'))
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('7')).toBeNull()
-  expect(screen.queryByText('8')).toBeNull()
+  expect(screen.queryByText('7')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 5', () => {
@@ -256,12 +236,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('3'))
   expect(screen.getByText('4'))
@@ -270,8 +246,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(screen.getByText('7'))
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('2')).toBeNull()
-  expect(screen.queryByText('8')).toBeNull()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 
   expect(screen.getAllByText('...').length).toEqual(2)
 })
@@ -289,12 +265,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('4'))
   expect(screen.getByText('5'))
@@ -303,8 +275,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(screen.getByText('8'))
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('2')).toBeNull()
-  expect(screen.queryByText('3')).toBeNull()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('3')).not.toBeInTheDocument()
 
   expect(screen.getAllByText('...').length).toEqual(1)
 })
@@ -322,12 +294,8 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
 
   expect(screen.getByText('1'))
   expect(screen.getByText('5'))
@@ -336,9 +304,9 @@ test('PageSelector with more than 8 pages renders as expected when the current p
   expect(screen.getByText('8'))
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('2')).toBeNull()
-  expect(screen.queryByText('3')).toBeNull()
-  expect(screen.queryByText('4')).toBeNull()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('3')).not.toBeInTheDocument()
+  expect(screen.queryByText('4')).not.toBeInTheDocument()
 
   expect(screen.getAllByText('...').length).toEqual(1)
 })
@@ -356,22 +324,18 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('6'))
   expect(screen.getByText('7'))
   expect(screen.getByText('8'))
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('2')).toBeNull()
-  expect(screen.queryByText('3')).toBeNull()
-  expect(screen.queryByText('4')).toBeNull()
-  expect(screen.queryByText('5')).toBeNull()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('3')).not.toBeInTheDocument()
+  expect(screen.queryByText('4')).not.toBeInTheDocument()
+  expect(screen.queryByText('5')).not.toBeInTheDocument()
 
   expect(screen.getAllByText('...').length).toEqual(1)
 })
@@ -389,22 +353,18 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('7'))
   expect(screen.getByText('8'))
   expect(screen.getByText('9'))
 
-  expect(screen.queryByText('2')).toBeNull()
-  expect(screen.queryByText('3')).toBeNull()
-  expect(screen.queryByText('4')).toBeNull()
-  expect(screen.queryByText('5')).toBeNull()
-  expect(screen.queryByText('6')).toBeNull()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('3')).not.toBeInTheDocument()
+  expect(screen.queryByText('4')).not.toBeInTheDocument()
+  expect(screen.queryByText('5')).not.toBeInTheDocument()
+  expect(screen.queryByText('6')).not.toBeInTheDocument()
 
   expect(screen.getAllByText('...').length).toEqual(1)
 })

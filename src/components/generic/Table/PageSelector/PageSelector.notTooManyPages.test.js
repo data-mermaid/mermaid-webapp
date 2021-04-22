@@ -21,12 +21,8 @@ test('PageSelector with 8 or less pages renders as expected', () => {
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).not.toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).not.toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
   expect(screen.getByText('1'))
   expect(screen.getByText('2'))
   expect(screen.getByText('3'))
@@ -72,12 +68,8 @@ test('PageSelector with 8 or less pages shows the next and previous buttons as b
     />,
   )
 
-  expect(screen.getByRole('button', { name: /back/i })).toHaveAttribute(
-    'disabled',
-  )
-  expect(screen.getByRole('button', { name: /next/i })).toHaveAttribute(
-    'disabled',
-  )
+  expect(screen.getByRole('button', { name: /back/i })).toBeDisabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeDisabled()
 })
 test('PageSelector with 8 or less pages calls onGoToPage with the correct page when a page button is clicked', () => {
   const mockFunction = jest.fn()
