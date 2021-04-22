@@ -3,6 +3,7 @@ import React from 'react'
 import {
   renderAuthenticatedOnline,
   screen,
+  within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import EditCollectRecordFormTitle from './EditCollectRecordFormTitle'
@@ -28,7 +29,12 @@ test('EditCollectRecordFormTitle shows the title as expected when all of site na
     />,
   )
 
-  expect(screen.getByText('Site D 2 FB-2'))
+  const formTitle = screen.getByTestId('form-title')
+
+  expect(within(formTitle).getByText('Fish Belt'))
+  expect(within(formTitle).getByText('Site D'))
+  expect(within(formTitle).getByText('2'))
+  expect(within(formTitle).getByText('FB-2'))
 })
 
 test('EditCollectRecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
@@ -43,7 +49,9 @@ test('EditCollectRecordFormTitle component renders a default title when site nam
     />,
   )
 
-  expect(screen.getByText('Fish Belt'))
+  const formTitle = screen.getByTestId('form-title')
+
+  expect(within(formTitle).getByText('Fish Belt'))
 })
 
 test('EditCollectRecordFormTitle component renders properly when site name is missing.', () => {
@@ -65,7 +73,10 @@ test('EditCollectRecordFormTitle component renders properly when site name is mi
     />,
   )
 
-  expect(screen.getByText('2 FB-2'))
+  const formTitle = screen.getByTestId('form-title')
+
+  expect(within(formTitle).getByText('2'))
+  expect(within(formTitle).getByText('FB-2'))
 })
 
 test('EditCollectRecordFormTitle component renders properly when label is missing.', () => {
@@ -88,7 +99,10 @@ test('EditCollectRecordFormTitle component renders properly when label is missin
     />,
   )
 
-  expect(screen.getByText('Site D 2'))
+  const formTitle = screen.getByTestId('form-title')
+
+  expect(within(formTitle).getByText('Site D'))
+  expect(within(formTitle).getByText('2'))
 })
 
 test('EditCollectRecordFormTitle component renders properly when transect number is missing.', () => {
@@ -111,5 +125,8 @@ test('EditCollectRecordFormTitle component renders properly when transect number
     />,
   )
 
-  expect(screen.getByText('Site D FB-2'))
+  const formTitle = screen.getByTestId('form-title')
+
+  expect(within(formTitle).getByText('Site D'))
+  expect(within(formTitle).getByText('FB-2'))
 })
