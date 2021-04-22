@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { InputRow, ValidationMessage } from '../form'
@@ -11,10 +11,23 @@ const InputWithLabelAndValidation = ({
   validationType,
   ...restOfProps
 }) => {
+  const textFieldRef = useRef(null)
+
+  const _preventScrollingFromChangingValues = useEffect(() => {
+    const handleWheel = (e) => e.preventDefault()
+
+    textFieldRef.current.addEventListener('wheel', handleWheel)
+
+    return () => {
+      if (textFieldRef.current)
+        textFieldRef.current.removeEventListener('wheel', handleWheel)
+    }
+  }, [textFieldRef])
+
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <input id={id} {...restOfProps} />
+      <input id={id} {...restOfProps} ref={textFieldRef} />
       {validationMessage ? (
         <RowCenter>
           <ValidationMessage validationType={validationType}>
