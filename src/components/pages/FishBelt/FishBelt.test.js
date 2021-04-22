@@ -5,6 +5,7 @@ import {
   renderAuthenticatedOnline,
   screen,
   waitForElementToBeRemoved,
+  within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 
@@ -25,13 +26,11 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
     screen.queryByLabelText('loading indicator'),
   )
 
-  expect(
-    screen.getByText('Site D', {
-      selector: 'div',
-    }),
-  )
-  expect(screen.getByText('2'))
-  expect(screen.getByText('FB-2'))
+  const formTitle = screen.getByTestId('form-title')
+
+  expect(within(formTitle).getByText('Site D'))
+  expect(within(formTitle).getByText('2'))
+  expect(within(formTitle).getByText('FB-2'))
 
   expect(
     screen.getByText('Sample Info', {
