@@ -10,7 +10,7 @@ import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Users from '../components/pages/Users'
 import Health from '../components/pages/Health'
-import FishBelt from '../components/pages/FishBelt/FishBelt'
+import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 
 export const useRoutes = ({ databaseSwitchboardInstance }) => {
   const routes = [

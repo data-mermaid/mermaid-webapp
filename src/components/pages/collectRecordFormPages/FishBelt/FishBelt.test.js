@@ -6,8 +6,8 @@ import {
   screen,
   waitForElementToBeRemoved,
   within,
-} from '../../../testUtilities/testingLibraryWithHelpers'
-import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
+} from '../../../../testUtilities/testingLibraryWithHelpers'
+import mockOnlineDatabaseSwitchboardInstance from '../../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 
 import FishBelt from './FishBelt'
 

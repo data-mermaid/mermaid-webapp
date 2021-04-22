@@ -21,7 +21,7 @@ const AddSampleUnitButton = () => {
 
   return (
     <ButtonSecondaryDropdown label={label}>
-      <Column as="nav">
+      <Column as="nav" data-testid="new-sample-unit-nav">
         <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>
           Fish Belt
         </CustomNavLink>
