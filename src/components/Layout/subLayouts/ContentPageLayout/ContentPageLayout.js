@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components/macro'
-
+import styled, { css } from 'styled-components/macro'
+import theme from '../../../../theme'
 import { Column } from '../../../generic/positioning'
+import {
+  mediaQueryTabletLandscapeOnly,
+  mediaQueryPhoneOnly,
+} from '../../../../library/styling/mediaQueries'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import NavMenu from '../../../NavMenu'
 import ProjectName from '../../../ProjectName'
-import theme from '../../../../theme'
 
+const contentPadding = theme.spacing.xsmall
 const MainContentPageLayout = styled('div')`
   display: grid;
   grid-template-rows: auto 1fr;
@@ -15,18 +19,33 @@ const MainContentPageLayout = styled('div')`
   margin-top: ${theme.spacing.headerHeight};
   background: ${theme.color.white};
 `
+const ContentWrapper = styled('div')`
+  background: ${theme.color.backgroundColor};
+  padding: ${contentPadding} 0 0 ${contentPadding};
+`
 const NavAndContentLayout = styled('div')`
   display: grid;
   grid-template-columns: auto 1fr;
   height: 100%;
 `
-const ContentWrapper = styled('div')`
-  background: ${theme.color.backgroundColor};
+const contentStyles = css`
+  background: ${theme.color.white};
+  width: calc(100vw - ${theme.spacing.sideNavWidthDesktop} - ${contentPadding});
+  ${mediaQueryTabletLandscapeOnly(css`
+    width: calc(
+      100vw - ${theme.spacing.sideNavWidthTabletLandscapeOnly} -
+        ${contentPadding}
+    );
+  `)}
+  ${mediaQueryPhoneOnly(css`
+    width: calc(
+      100vw - ${theme.spacing.sideNavWidthPhoneOnly} - ${contentPadding}
+    );
+  `)}
 `
 const ContentToolbar = styled('div')`
-  margin: ${theme.spacing.small};
+  ${contentStyles};
   padding: ${theme.spacing.small} ${theme.spacing.medium};
-  background: ${theme.color.white};
   position: sticky;
   top: ${theme.spacing.headerHeight};
   border-bottom: solid ${theme.spacing.borderMedium}
@@ -34,9 +53,7 @@ const ContentToolbar = styled('div')`
   margin-bottom: 0px;
 `
 const Content = styled('div')`
-  margin: ${theme.spacing.small};
-  padding: ${theme.spacing.small} ${theme.spacing.medium};
-  background: ${theme.color.white};
+  ${contentStyles};
   margin-top: 0px;
 `
 

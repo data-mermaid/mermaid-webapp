@@ -93,7 +93,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "yarn run prettier",
-      "pre-push": "yarn run lint && yarn run test --watchAll=false --runInBand"
+      "pre-push": "yarn run lint && yarn run test --runInBand --watchAll=false"
     }
   },
   "jest": {
