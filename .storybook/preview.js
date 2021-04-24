@@ -1,6 +1,7 @@
 import { Auth0Context } from '@auth0/auth0-react'
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
+import GlobalStyle from '../src/library/styling/globalStyles'
 import theme from '../src/theme'
 
 export const parameters = {
@@ -19,6 +20,7 @@ export const decorators = [
     >
       <MemoryRouter>
         <ThemeProvider theme={theme}>
+          <GlobalStyle />
           <Story />
         </ThemeProvider>
       </MemoryRouter>

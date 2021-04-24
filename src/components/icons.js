@@ -22,9 +22,11 @@ import sortDescending from '@iconify-icons/mdi/sort-descending'
 import sortAscending from '@iconify-icons/mdi/sort-ascending'
 import plus from '@iconify-icons/mdi/plus'
 import sync from '@iconify-icons/mdi/sync'
+import closeIcon from '@iconify-icons/mdi/close'
 
 export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
 export const IconCheck = () => <InlineIcon icon={checkOutline} />
+export const IconClose = () => <InlineIcon icon={closeIcon} />
 export const IconCollect = () => <InlineIcon icon={circleEditOutline} />
 export const IconCopy = () => <InlineIcon icon={contentCopy} />
 export const IconData = () => <InlineIcon icon={checkCircleOutline} />
