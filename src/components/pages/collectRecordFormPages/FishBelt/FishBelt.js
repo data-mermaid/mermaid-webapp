@@ -24,7 +24,7 @@ import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 
 /*
-  Fishbelt component lets a user edit and delete a record as well as create a new record. 
+  Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
 
 const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
@@ -92,7 +92,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
         .deleteFishBelt(collectRecordBeingEdited.id)
         .then(() => {
           clearPersistedUnsavedFormData()
-          toast.success(language.collectRecordDelete)
+          toast.success(language.success.collectRecordDelete)
           history.push(`${ensureTrailingSlash(currentProjectPath)}collecting`)
         })
         .catch(() => {

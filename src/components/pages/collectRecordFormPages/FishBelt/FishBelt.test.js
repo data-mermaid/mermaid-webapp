@@ -55,6 +55,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
   expect(screen.getByLabelText('Fish Size Bin'))
   expect(screen.getByLabelText('Reef Slope'))
   expect(screen.getByLabelText('Notes'))
+  expect(screen.getByRole('button', { name: /Delete Record/i })).toBeEnabled()
 })
 
 test('FishBelt component in CREATE NEW mode renders with the expected UI elements', async () => {
@@ -100,6 +101,7 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
   expect(screen.getByLabelText('Fish Size Bin'))
   expect(screen.getByLabelText('Reef Slope'))
   expect(screen.getByLabelText('Notes'))
+  expect(screen.getByRole('button', { name: /Delete Record/i })).toBeDisabled()
 })
 
 test('FishBelt component in EDIT mode - form inputs are initialized with the correct values', async () => {

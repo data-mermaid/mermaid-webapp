@@ -90,7 +90,6 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
       selector: 'h1',
     }),
   )
-  // navigate to new fish belt form
   const projectCard = screen.getAllByRole('listitem')[0]
 
   userEvent.click(within(projectCard).getByText(/collecting/i))
