@@ -18,5 +18,16 @@ export const basic = () => (
     <ButtonCallout>Button Callout</ButtonCallout>
     <br />
     <ButtonCaution>Button Caution</ButtonCaution>
+    <br />
+    <br />
+    Disabled buttons:
+    <br />
+    <ButtonPrimary disabled>Button Primary</ButtonPrimary>
+    <br />
+    <ButtonSecondary disabled>Button Secondary</ButtonSecondary>
+    <br />
+    <ButtonCallout disabled>Button Callout</ButtonCallout>
+    <br />
+    <ButtonCaution disabled>Button Caution</ButtonCaution>
   </>
 )

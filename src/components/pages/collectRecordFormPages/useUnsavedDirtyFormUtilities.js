@@ -8,27 +8,31 @@ export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
     window.sessionStorage.setItem(sessionStorageName, JSON.stringify(values))
   }
 
-  const clearUnsavedFormData = useCallback(
+  const clearPersistedUnsavedFormData = useCallback(
     () => window.sessionStorage.removeItem(sessionStorageName),
     [sessionStorageName],
   )
 
-  const getUnsavedFormData = () =>
+  const getPersistedUnsavedFormData = () =>
     JSON.parse(window.sessionStorage.getItem(sessionStorageName))
 
-  const _clearUnsavedFormDataBeforeUnload = useEffect(() => {
-    window.addEventListener('beforeunload', clearUnsavedFormData)
+  const _clearPersistedUnsavedFormDataBeforeUnload = useEffect(() => {
+    window.addEventListener('beforeunload', clearPersistedUnsavedFormData)
 
     return () => {
-      window.removeEventListener('beforeunload', clearUnsavedFormData)
+      window.removeEventListener('beforeunload', clearPersistedUnsavedFormData)
     }
-  }, [clearUnsavedFormData])
+  }, [clearPersistedUnsavedFormData])
 
-  const _clearUnsavedFormDataBeforeReactRouterChange = useEffect(() => {
+  const _clearPersistedUnsavedFormDataBeforeReactRouterChange = useEffect(() => {
     history.listen(() => {
-      clearUnsavedFormData()
+      clearPersistedUnsavedFormData()
     })
-  }, [history, clearUnsavedFormData])
+  }, [history, clearPersistedUnsavedFormData])
 
-  return { persistUnsavedFormData, clearUnsavedFormData, getUnsavedFormData }
+  return {
+    persistUnsavedFormData,
+    clearPersistedUnsavedFormData,
+    getPersistedUnsavedFormData,
+  }
 }
