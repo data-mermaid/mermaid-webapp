@@ -30,7 +30,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        toast.error(
+        toast.warn(
           "The online workflow for collect records hasn't been built yet. If you are trying to test the offline workflow, try disabling your internet.",
         )
       }
@@ -63,7 +63,7 @@ const CollectRecordsMixin = (Base) =>
         Promise.reject(this._operationMissingIdParameterError)
       }
       if (this._isOnlineAuthenticatedAndReady) {
-        toast.error(
+        toast.warn(
           "The online workflow for collect records hasn't been built yet. If you are trying to test the offline workflow, try disabling your internet.",
         )
       }
