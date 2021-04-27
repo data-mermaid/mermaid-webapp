@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { Route } from 'react-router-dom'
 
 import {
   mockMermaidApiAllSuccessful,
@@ -8,10 +9,10 @@ import {
   screen,
   waitForElementToBeRemoved,
   within,
-  fireEvent,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import mockOnlineDatabaseSwitchboardInstance from '../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import Collect from '../../components/pages/Collect'
+import FishBelt from '../../components/pages/FishBelt'
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
@@ -23,11 +24,14 @@ afterAll(() => {
   mockMermaidApiAllSuccessful.close()
 })
 
-test('Clicking Add Sample Unit then click Fish Belt expects to see New Fish Belt page.', async () => {
+test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish Belt page.', async () => {
   renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
+    <Route path="/projects/:projectId/collecting">
+      <Collect
+        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+      />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting'] },
   )
 
   await waitForElementToBeRemoved(() =>
@@ -49,8 +53,22 @@ test('Clicking Add Sample Unit then click Fish Belt expects to see New Fish Belt
   })
 
   expect(fishBeltLink).toBeInTheDocument()
-  fireEvent.click(fishBeltLink, { button: 0 })
+  userEvent.click(fishBeltLink)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt">
+      <FishBelt
+        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+        isNewRecord
+      />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt'] },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
 
   // the line below doesn't work yet.
-  // expect(await screen.findByText('Fish Belt', { selector: 'h2' }))
+  expect(screen.getByText('Fish Belt', { selector: 'h2' }))
 })
