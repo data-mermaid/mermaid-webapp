@@ -3,6 +3,7 @@ import React from 'react'
 import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import {
   renderAuthenticatedOnline,
+  renderAuthenticatedOffline,
   screen,
   waitFor,
   within,
@@ -109,4 +110,80 @@ test('A project card shows relevant data for a project', async () => {
   expect(offlineCheckbox).toBeChecked()
 
   expect(within(projectCard).getByText('Updated: 01/21/2020'))
+})
+
+test('A project card shows only Collect button when offline', async () => {
+  renderAuthenticatedOffline(
+    <Projects
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitFor(() =>
+    expect(
+      screen.queryByLabelText('loading indicator'),
+    ).not.toBeInTheDocument(),
+  )
+
+  const projectCard = screen.getAllByRole('listitem')[0]
+
+  await waitFor(() =>
+    expect(
+      within(projectCard).queryByLabelText(/collect/i),
+    ).toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(
+      within(projectCard).queryByLabelText(/health/i),
+    ).not.toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(
+      within(projectCard).queryByLabelText(/data/i),
+    ).not.toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(
+      within(projectCard).queryByLabelText(/admin/i),
+    ).not.toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(
+      within(projectCard).queryByLabelText(/copy/i),
+    ).not.toBeInTheDocument(),
+  )
+})
+
+test('A project card shows all buttons in button group when online', async () => {
+  renderAuthenticatedOnline(
+    <Projects
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitFor(() =>
+    expect(
+      screen.queryByLabelText('loading indicator'),
+    ).not.toBeInTheDocument(),
+  )
+
+  const projectCard = screen.getAllByRole('listitem')[0]
+
+  await waitFor(() =>
+    expect(
+      within(projectCard).queryByLabelText(/collect/i),
+    ).toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(within(projectCard).queryByLabelText(/health/i)).toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(within(projectCard).queryByLabelText(/data/i)).toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(within(projectCard).queryByLabelText(/admin/i)).toBeInTheDocument(),
+  )
+  await waitFor(() =>
+    expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
+  )
 })

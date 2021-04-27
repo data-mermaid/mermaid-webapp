@@ -68,7 +68,7 @@ const ProjectCard = ({
         </CheckBoxLabel>
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
-      <ButtonGroups data-testid="parent-3">
+      <ButtonGroups data-testid="project-button-groups">
         <NavLinkButtonGroup projectUrl={projectUrl} />
         <OfflineHide>
           <VerticalRule />
