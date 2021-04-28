@@ -9,6 +9,7 @@ import { H3 } from '../../generic/text'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
+  reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
 import {
@@ -92,7 +93,7 @@ const Collect = ({ databaseSwitchboardInstance }) => {
       {
         Header: 'Sample Date',
         accessor: 'sampleDate',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortDates,
       },
       {
         Header: 'Observers',
