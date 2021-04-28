@@ -8,47 +8,42 @@ import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
-import { ButtonCallout } from '../../../generic/buttons'
+import { ButtonCallout, ButtonCaution } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databaseSwitchboard'
-import { H2 } from '../../../generic/text'
-import { RowRight } from '../../../generic/positioning'
-import language from '../../../../language'
-import FishBeltTransectInputs from '../../../FishBeltTransectInputs'
-import SampleInfoInputs from '../../../SampleInfoInputs'
-import EditCollectRecordFormTitle from '../../../EditCollectRecordFormTitle'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
+import { H2 } from '../../../generic/text'
+import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
+import { RowRight } from '../../../generic/positioning'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
+import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
+import EditCollectRecordFormTitle from '../../../EditCollectRecordFormTitle'
+import FishBeltTransectInputs from '../../../FishBeltTransectInputs'
+import language from '../../../../language'
+import SampleInfoInputs from '../../../SampleInfoInputs'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+
+/*
+  Fishbelt component lets a user edit and delete a record as well as create a new record.
+*/
 
 const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimes, setManagementRegimes] = useState([])
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
   const { recordId } = useParams()
+  const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
+  const showDeleteConfirmPrompt = () => {
+    setShowDeleteModal(true)
+  }
+  const closeDeleteConfirmPrompt = () => {
+    setShowDeleteModal(false)
+  }
 
-  const {
-    persistUnsavedFormData,
-    clearUnsavedFormData,
-    getUnsavedFormData,
-  } = useUnsavedDirtyFormDataUtilities('unsavedFishbeltForm')
-
-  const initialFormValues = useMemo(
-    () =>
-      getUnsavedFormData() ?? {
-        ...getSampleInfoInitialValues(
-          collectRecordBeingEdited,
-          'fishbelt_transect',
-        ),
-        ...getTransectInitialValues(
-          collectRecordBeingEdited,
-          'fishbelt_transect',
-        ),
-      },
-    [collectRecordBeingEdited, getUnsavedFormData],
-  )
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance) {
       const promises = [
@@ -85,68 +80,70 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
     }
   }, [databaseSwitchboardInstance, recordId, isNewRecord])
 
-  const reformatFormValuesIntoFishBeltRecord = (values) => {
-    const {
-      management,
-      notes,
-      sample_date,
-      site,
-      depth,
-      label,
-      len_surveyed,
-      number,
-      reef_slope,
-      sample_time,
-      size_bin,
-      width,
-    } = values
+  const {
+    persistUnsavedFormData,
+    clearPersistedUnsavedFormData,
+    getPersistedUnsavedFormData,
+  } = useUnsavedDirtyFormDataUtilities('unsavedFishbeltForm')
 
-    return {
-      ...collectRecordBeingEdited,
-      data: {
-        fishbelt_transect: {
-          depth,
-          label,
-          len_surveyed,
-          number,
-          reef_slope,
-          sample_time,
-          size_bin,
-          width,
-        },
-        sample_event: {
-          management,
-          notes,
-          sample_date,
-          site,
-        },
-      },
+  const deleteRecord = () => {
+    if (!isNewRecord) {
+      databaseSwitchboardInstance
+        .deleteFishBelt(collectRecordBeingEdited.id)
+        .then(() => {
+          clearPersistedUnsavedFormData()
+          toast.success(language.success.collectRecordDelete)
+          history.push(`${ensureTrailingSlash(currentProjectPath)}collecting`)
+        })
+        .catch(() => {
+          toast.error(language.error.collectRecordDelete)
+          closeDeleteConfirmPrompt()
+        })
     }
   }
+  const saveRecord = (formValues) => {
+    const newRecord = reformatFormValuesIntoFishBeltRecord(
+      formValues,
+      collectRecordBeingEdited,
+    )
+
+    databaseSwitchboardInstance
+      .saveFishBelt(newRecord)
+      .then((response) => {
+        toast.success(language.success.collectRecordSave)
+        clearPersistedUnsavedFormData()
+        if (isNewRecord) {
+          history.push(
+            `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
+          )
+        }
+      })
+      .catch(() => {
+        toast.error(language.error.collectRecordSave)
+      })
+  }
+
+  const initialFormValues = useMemo(
+    () =>
+      getPersistedUnsavedFormData() ?? {
+        ...getSampleInfoInitialValues(
+          collectRecordBeingEdited,
+          'fishbelt_transect',
+        ),
+        ...getTransectInitialValues(
+          collectRecordBeingEdited,
+          'fishbelt_transect',
+        ),
+      },
+    [collectRecordBeingEdited, getPersistedUnsavedFormData],
+  )
   const formikOptions = {
     initialValues: initialFormValues,
     enableReinitialize: true,
     validate: (values) => {
       persistUnsavedFormData(values)
     },
-    onSubmit: (values) => {
-      const newRecord = reformatFormValuesIntoFishBeltRecord(values)
-
-      databaseSwitchboardInstance
-        .saveFishBelt(newRecord)
-        .then((response) => {
-          toast.success(language.success.collectRecordSave)
-          clearUnsavedFormData()
-          if (isNewRecord) {
-            history.push(
-              `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
-            )
-          }
-        })
-        .catch(() => {
-          toast.error(language.error.collectRecordSave)
-        })
-    },
+    onSubmit: saveRecord,
   }
 
   return (
@@ -155,18 +152,31 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
         <ContentPageLayout
           isLoading={isLoading}
           content={
-            <form
-              id="fishbelt-form"
-              aria-labelledby="fishbelt-form-title"
-              onSubmit={formik.handleSubmit}
-            >
-              <SampleInfoInputs
-                formik={formik}
-                sites={sites}
-                managementRegimes={managementRegimes}
+            <>
+              <form
+                id="fishbelt-form"
+                aria-labelledby="fishbelt-form-title"
+                onSubmit={formik.handleSubmit}
+              >
+                <SampleInfoInputs
+                  formik={formik}
+                  sites={sites}
+                  managementRegimes={managementRegimes}
+                />
+                <FishBeltTransectInputs formik={formik} choices={choices} />
+              </form>
+              <ButtonCaution
+                onClick={showDeleteConfirmPrompt}
+                disabled={isNewRecord}
+              >
+                Delete Record
+              </ButtonCaution>
+              <DeleteRecordConfirm
+                isOpen={showDeleteModal}
+                onDismiss={closeDeleteConfirmPrompt}
+                onConfirm={deleteRecord}
               />
-              <FishBeltTransectInputs formik={formik} choices={choices} />
-            </form>
+            </>
           }
           toolbar={
             <>
