@@ -112,7 +112,7 @@ test('A project card shows relevant data for a project', async () => {
   expect(within(projectCard).getByText('Updated: 01/21/2020'))
 })
 
-test('A project card shows only Collect button when offline', async () => {
+test('A project card shows only collect button in button groups when offline', async () => {
   renderAuthenticatedOffline(
     <Projects
       databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
@@ -185,5 +185,25 @@ test('A project card shows all buttons in button group when online', async () =>
   )
   await waitFor(() =>
     expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
+  )
+})
+
+test('Hide new project button in project toolbar when offline', async () => {
+  renderAuthenticatedOffline(
+    <Projects
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitFor(() =>
+    expect(
+      screen.queryByLabelText('loading indicator'),
+    ).not.toBeInTheDocument(),
+  )
+
+  await waitFor(() =>
+    expect(
+      screen.queryByRole('button', { name: 'New Project' }),
+    ).not.toBeInTheDocument(),
   )
 })
