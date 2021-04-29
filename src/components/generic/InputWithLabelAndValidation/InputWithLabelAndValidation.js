@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { InputRow, ValidationMessage } from '../form'
+import { Input, InputRow, ValidationMessage } from '../form'
 import { RowCenter } from '../positioning'
 
 const InputWithLabelAndValidation = ({
@@ -27,7 +27,7 @@ const InputWithLabelAndValidation = ({
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <input id={id} {...restOfProps} ref={textFieldRef} />
+      <Input id={id} {...restOfProps} ref={textFieldRef} />
       {validationMessage ? (
         <RowCenter>
           <ValidationMessage validationType={validationType}>
