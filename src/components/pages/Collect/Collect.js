@@ -41,15 +41,23 @@ const Collect = ({ databaseSwitchboardInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const _getCollectRecords = useEffect(() => {
+    let isMounted = true
+
     databaseSwitchboardInstance
       .getCollectRecordsForUIDisplay()
       .then((records) => {
-        setCollectRecordsForUiDisplay(records)
-        setIsLoading(false)
+        if (isMounted) {
+          setCollectRecordsForUiDisplay(records)
+          setIsLoading(false)
+        }
       })
       .catch(() => {
         toast.error(language.error.collectRecordsUnavailable)
       })
+
+    return () => {
+      isMounted = false
+    }
   }, [databaseSwitchboardInstance])
 
   const currentProjectPath = useCurrentProjectPath()
