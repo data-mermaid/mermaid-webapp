@@ -7,6 +7,7 @@ export const FormWrapper = styled.div`
 `
 const InputTextareaSelectStyles = css`
   padding: ${theme.spacing.xsmall};
+  height: fit-content;
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
   background-color: ${theme.color.inputBackground};
   width: 100%;
@@ -53,14 +54,12 @@ export const ValidationMessage = styled.span`
   ${(props) => props.validationType === 'warning' && css``} */
 `
 export const Select = styled.select`
-  height: fit-content;
   ${InputTextareaSelectStyles}
 `
 export const Input = styled.input`
-  height: fit-content;
   ${InputTextareaSelectStyles}
 `
 export const Textarea = styled.textarea`
-  height: fit-content;
+  resize: none;
   ${InputTextareaSelectStyles}
 `

@@ -28,7 +28,7 @@ const TextareaWithLabelAndValidation = ({
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <Textarea id={id} {...restOfProps} ref={textFieldRef}></Textarea>
+      <Textarea rows="3" id={id} {...restOfProps} ref={textFieldRef}></Textarea>
       <div>
         {validationMessage ? (
           <ValidationMessage
