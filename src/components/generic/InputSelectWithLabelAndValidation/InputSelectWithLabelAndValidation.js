@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { InputRow, Select, ValidationMessage } from '../form'
-import { RowCenter } from '../positioning'
 
 const InputSelectWithLabelAndValidation = ({
   label,
@@ -17,6 +16,8 @@ const InputSelectWithLabelAndValidation = ({
     </option>
   ))
 
+  const validationRole =
+    validationType === 'error' || 'warning' ? 'alert' : undefined
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
@@ -26,13 +27,16 @@ const InputSelectWithLabelAndValidation = ({
         </option>
         {optionList}
       </Select>
-      {validationMessage ? (
-        <RowCenter>
-          <ValidationMessage validationType={validationType}>
+      <div>
+        {validationMessage ? (
+          <ValidationMessage
+            validationType={validationType}
+            role={validationRole}
+          >
             {validationMessage}
           </ValidationMessage>
-        </RowCenter>
-      ) : null}
+        ) : null}
+      </div>
     </InputRow>
   )
 }

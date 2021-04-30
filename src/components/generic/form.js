@@ -16,12 +16,18 @@ const InputTextareaSelectStyles = css`
 `
 export const InputRow = styled.div`
   display: grid;
-  grid-template-columns: 175px 2fr 1fr;
+  grid-template-columns: 0.75fr 1.5fr 1fr;
   margin: 1px 0;
   padding: ${theme.spacing.medium};
   border-width: 0 0 0 ${theme.spacing.borderXLarge};
   border-style: solid;
   border-color: ${theme.color.secondaryColor};
+  label,
+  span {
+    display: inline-block;
+    ${theme.typography.noWordBreak};
+    padding: 0 ${theme.spacing.xsmall};
+  }
   ${hoverState(css`
     background-color: ${theme.color.secondaryHover};
   `)}
@@ -40,22 +46,16 @@ export const InputRow = styled.div`
       border-color: ${theme.color.warningColor};
     `}
 `
-export const ValidationMessage = styled.div`
-  ${(props) =>
-    props.validationType === 'error' &&
-    css`
-      /* color: red; */
-    `}
-  ${(props) =>
-    props.validationType === 'warning' &&
-    css`
-      /* color: darkgoldenrod; */
-    `}
+export const ValidationMessage = styled.span`
+  /* ${(props) => props.validationType === 'error' && css``}
+  ${(props) => props.validationType === 'warning' && css``} */
 `
 export const Select = styled.select`
+  height: fit-content;
   ${InputTextareaSelectStyles}
 `
 export const Input = styled.input`
+  height: fit-content;
   ${InputTextareaSelectStyles}
 `
 export const TextArea = styled.textarea`

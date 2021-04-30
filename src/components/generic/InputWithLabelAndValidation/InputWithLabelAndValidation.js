@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { Input, InputRow, ValidationMessage } from '../form'
-import { RowCenter } from '../positioning'
 
 const InputWithLabelAndValidation = ({
   label,
@@ -24,17 +23,22 @@ const InputWithLabelAndValidation = ({
     }
   }, [textFieldRef])
 
+  const validationRole =
+    validationType === 'error' || 'warning' ? 'alert' : undefined
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
       <Input id={id} {...restOfProps} ref={textFieldRef} />
-      {validationMessage ? (
-        <RowCenter>
-          <ValidationMessage validationType={validationType}>
+      <div>
+        {validationMessage ? (
+          <ValidationMessage
+            validationType={validationType}
+            role={validationRole}
+          >
             {validationMessage}
           </ValidationMessage>
-        </RowCenter>
-      ) : null}
+        ) : null}
+      </div>
     </InputRow>
   )
 }
