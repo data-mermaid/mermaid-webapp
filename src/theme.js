@@ -68,6 +68,7 @@ const spacing = {
   sideNavWidthTabletLandscapeOnly: '8rem',
   sideNavWidthPhoneOnly: '6rem',
   sideNavWidthDesktop: '25rem',
+  borderSmall: '1px',
   borderMedium: '2px',
   borderLarge: '4px',
   borderXLarge: '8px',

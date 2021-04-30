@@ -7,13 +7,14 @@ export const FormWrapper = styled.div`
 `
 const InputTextareaSelectStyles = css`
   padding: ${theme.spacing.xsmall};
-  border: solid 1px ${theme.color.border};
+  border: solid ${theme.spacing.borderSmall} ${theme.color.border};
   background-color: ${theme.color.inputBackground};
   width: 100%;
   &:focus {
     outline: ${theme.color.outline};
   }
 `
+
 export const InputRow = styled.div`
   display: grid;
   grid-template-columns: 0.75fr 1.5fr 1fr;
@@ -26,7 +27,8 @@ export const InputRow = styled.div`
   span {
     display: inline-block;
     ${theme.typography.noWordBreak};
-    padding: 0 ${theme.spacing.xsmall};
+    padding: calc(${theme.spacing.borderSmall} + ${theme.spacing.xsmall})
+      ${theme.spacing.xsmall};
   }
   ${hoverState(css`
     background-color: ${theme.color.secondaryHover};
@@ -58,6 +60,7 @@ export const Input = styled.input`
   height: fit-content;
   ${InputTextareaSelectStyles}
 `
-export const TextArea = styled.textarea`
+export const Textarea = styled.textarea`
+  height: fit-content;
   ${InputTextareaSelectStyles}
 `

@@ -5,6 +5,7 @@ import { H2 } from '../generic/text'
 import { FormWrapper } from '../generic/form'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
+import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
 
 /**
  * Describe your component
@@ -67,10 +68,9 @@ const FishBeltTransectForms = ({ formik, choices }) => {
           options={reefSlopeSelectOptions}
           {...formik.getFieldProps('reef_slope')}
         />
-        <InputWithLabelAndValidation
+        <TextareaWithLabelAndValidation
           label="Notes"
           id="notes"
-          type="text-area"
           {...formik.getFieldProps('notes')}
         />
       </FormWrapper>
