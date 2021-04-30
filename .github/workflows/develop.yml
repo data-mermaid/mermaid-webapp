@@ -37,7 +37,7 @@ jobs:
     
     - name: Run Unit Tests
       run: |
-        yarn test
+        yarn test --runInBand
 
     - name: Yarn Build
       run: |
