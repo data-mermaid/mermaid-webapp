@@ -295,7 +295,7 @@ describe('New fishbelt', () => {
     expect(within(collectRecordRow).getByText('2m x 10m'))
     // depth
     expect(within(collectRecordRow).getByText('10'))
-    expect(within(collectRecordRow).getByText('20-Apr-2021'))
+    expect(within(collectRecordRow).getByText('April 21, 2021'))
   })
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
