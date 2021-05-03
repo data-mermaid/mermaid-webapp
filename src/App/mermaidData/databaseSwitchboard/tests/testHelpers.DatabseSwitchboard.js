@@ -6,7 +6,7 @@ import DatabaseSwitchboard from '../DatabaseSwitchboard'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-export const getDatabaseSwitchboardInstanceAuthenticatedOnline = () => {
+export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () => {
   return new DatabaseSwitchboard({
     apiBaseUrl,
     auth0Token: 'fake token',
@@ -26,7 +26,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
   })
 }
 
-export const getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess = () => {
+export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = () => {
   return new DatabaseSwitchboard({
     apiBaseUrl,
     auth0Token: 'fake token',
