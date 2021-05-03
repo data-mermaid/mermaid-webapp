@@ -12,7 +12,17 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () 
     auth0Token: 'fake token',
     isMermaidAuthenticated: true,
     isOnline: true,
-    dexieInstance: getMockDexieInstanceAllSuccess(), // doesnt get called because isOnline=true
+    dexieInstance: getMockDexieInstanceAllSuccess(),
+  })
+}
+
+export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () => {
+  return new DatabaseSwitchboard({
+    apiBaseUrl,
+    auth0Token: 'fake token',
+    isMermaidAuthenticated: true,
+    isOnline: true,
+    dexieInstance: getMockDexieInstanceThatProducesErrors(),
   })
 }
 
