@@ -4,6 +4,8 @@ import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidAp
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
+  getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess,
+  getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError,
 } from './testHelpers.DatabseSwitchboard'
 
 beforeAll(() => {
@@ -17,7 +19,79 @@ afterAll(() => {
 })
 
 describe('Save fishbelt', () => {
-  describe('Online save fishbelt', () => {})
+  describe('Online save fishbelt', () => {
+    test('saveFishBelt online returns saved record with protocol info automatically included', async () => {
+      const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+      const fishBeltToBeSaved = {
+        id: 'foo',
+        data: {},
+        profile: '1234',
+        randomUnexpectedProperty: 'whatever',
+      }
+
+      const savedFishBeltResponse = await dbInstance.saveFishBelt(
+        fishBeltToBeSaved,
+      )
+
+      expect(savedFishBeltResponse.id).toEqual(fishBeltToBeSaved.id)
+      expect(savedFishBeltResponse.data).toEqual({ protocol: 'fishbelt' })
+      expect(savedFishBeltResponse.profile).toEqual(fishBeltToBeSaved.profile)
+      expect(savedFishBeltResponse.randomUnexpectedProperty).toEqual(
+        fishBeltToBeSaved.randomUnexpectedProperty,
+      )
+    })
+    test('saveFishBelt offline replaces previous fishBelt record with same id', async () => {
+      const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+      await dbInstance.saveFishBelt({
+        id: 'foo',
+        data: {},
+        profile: '1234',
+        initialProperty: 'whatever',
+      })
+
+      const replacementFishbelt = {
+        id: 'foo',
+        data: { randomProperty: 'A' },
+        profile: 'ABCD',
+      }
+
+      await dbInstance.saveFishBelt(replacementFishbelt)
+
+      const savedFishBelt = await dbInstance.getFishBelt('foo')
+
+      expect(savedFishBelt.data.randomProperty).toEqual(
+        replacementFishbelt.data.randomProperty,
+      )
+      expect(savedFishBelt.profile).toEqual(replacementFishbelt.profile)
+      expect(savedFishBelt.initialProperty).toEqual(
+        replacementFishbelt.initialProperty,
+      )
+    })
+    test('saveFishBelt offline returns saved record including an id if one isnt supplied', async () => {
+      const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+      const savedFishBeltResponse = await dbInstance.saveFishBelt({
+        data: {},
+        profile: '1234',
+        randomUnexpectedProperty: 'whatever',
+      })
+
+      expect(validateUuid(savedFishBeltResponse.id)).toBeTruthy()
+    })
+    test('saveFishBelt online returns error message upon dexie error', async () => {
+      const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError()
+
+      expect.assertions(1)
+
+      try {
+        await dbInstance.saveFishBelt()
+      } catch (error) {
+        expect(error.message).toBeTruthy()
+      }
+    })
+  })
   describe('Offline safe fishbelt', () => {
     test('saveFishBelt offline returns saved record with protocol info automatically included', async () => {
       const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
