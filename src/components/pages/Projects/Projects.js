@@ -16,15 +16,23 @@ const Projects = ({ databaseSwitchboardInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const _getProjects = useEffect(() => {
+    let isMounted = true
+
     databaseSwitchboardInstance
       .getProjects()
       .then((projectsResponse) => {
-        setIsLoading(false)
-        setProjects(projectsResponse)
+        if (isMounted) {
+          setIsLoading(false)
+          setProjects(projectsResponse)
+        }
       })
       .catch(() => {
         toast.error(language.error.projectsUnavailable)
       })
+
+    return () => {
+      isMounted = false
+    }
   }, [databaseSwitchboardInstance])
 
   const projectList = projects.map(

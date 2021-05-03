@@ -1,16 +1,16 @@
 import '@testing-library/jest-dom/extend-expect'
+import userEvent from '@testing-library/user-event'
 import React from 'react'
 import {
-  fireEvent,
   renderAuthenticatedOnline,
+  screen,
   waitFor,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
-import theme from '../../../../theme'
 
 import PageSelector from './PageSelector'
 
 test('PageSelector with more than 8 pages renders as expected when the current page index is not near a ellipses', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={0}
       nextDisabled={false}
@@ -22,24 +22,24 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('2'))
-  expect(container.getByText('3'))
-  expect(container.getByText('...'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('2'))
+  expect(screen.getByText('3'))
+  expect(screen.getByText('...'))
 
-  expect(container.getByText('9'))
+  expect(screen.getByText('9'))
 
-  expect(container.queryByText('4')).not.toBeInTheDocument()
-  expect(container.queryByText('5')).not.toBeInTheDocument()
-  expect(container.queryByText('6')).not.toBeInTheDocument()
-  expect(container.queryByText('7')).not.toBeInTheDocument()
-  expect(container.queryByText('8')).not.toBeInTheDocument()
+  expect(screen.queryByText('4')).not.toBeInTheDocument()
+  expect(screen.queryByText('5')).not.toBeInTheDocument()
+  expect(screen.queryByText('6')).not.toBeInTheDocument()
+  expect(screen.queryByText('7')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages indicates current page', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={0}
       nextDisabled={false}
@@ -51,15 +51,13 @@ test('PageSelector with more than 8 pages indicates current page', () => {
     />,
   )
 
-  expect(container.getByText('1')).toHaveStyle(
-    `background-color: ${theme.color.primaryColor}`,
-  )
-  expect(container.getByText('2')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('3')).toHaveStyle('background-color: transparent')
-  expect(container.getByText('9')).toHaveStyle('background-color: transparent')
+  expect(screen.getByText('1')).toHaveAttribute('aria-current', 'true')
+  expect(screen.getByText('2')).not.toHaveAttribute('aria-current', 'true')
+  expect(screen.getByText('3')).not.toHaveAttribute('aria-current', 'true')
+  expect(screen.getByText('9')).not.toHaveAttribute('aria-current', 'true')
 })
 test('PageSelector with more than 8 pages shows the next and previous buttons as being disabled', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={1}
       nextDisabled
@@ -71,13 +69,13 @@ test('PageSelector with more than 8 pages shows the next and previous buttons as
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeDisabled()
-  expect(container.getByText('Next »')).toBeDisabled()
+  expect(screen.getByRole('button', { name: /back/i })).toBeDisabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeDisabled()
 })
 test('PageSelector with more than 8 pages calls onGoToPage with the correct page when a page button is clicked', () => {
   const mockFunction = jest.fn()
 
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={1}
       nextDisabled
@@ -91,16 +89,16 @@ test('PageSelector with more than 8 pages calls onGoToPage with the correct page
 
   expect(mockFunction).not.toHaveBeenCalled()
 
-  fireEvent.click(container.getByText('1'))
+  userEvent.click(screen.getByText('1'))
   expect(mockFunction).toHaveBeenCalledWith(0)
 
-  fireEvent.click(container.getByText('9'))
+  userEvent.click(screen.getByText('9'))
   expect(mockFunction).toHaveBeenCalledWith(8)
 })
 test('PageSelector with more than 8 pages calls onNextClick when the next button is clicked', async () => {
   const mockFunction = jest.fn()
 
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={1}
       nextDisabled={false}
@@ -114,14 +112,15 @@ test('PageSelector with more than 8 pages calls onNextClick when the next button
 
   expect(mockFunction).not.toHaveBeenCalled()
 
-  fireEvent.click(container.getByText('Next »'))
+  userEvent.click(screen.getByRole('button', { name: /next/i }))
+
   await waitFor(() => expect(mockFunction).toHaveBeenCalledTimes(1))
 })
 
 test('PageSelector with more than 8 pages calls onPreviousClick when the next button is clicked', () => {
   const mockFunction = jest.fn()
 
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={1}
       nextDisabled={false}
@@ -135,12 +134,13 @@ test('PageSelector with more than 8 pages calls onPreviousClick when the next bu
 
   expect(mockFunction).not.toHaveBeenCalled()
 
-  fireEvent.click(container.getByText('« Previous'))
+  userEvent.click(screen.getByRole('button', { name: /back/i }))
+
   expect(mockFunction).toHaveBeenCalledTimes(1)
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 2', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={1}
       nextDisabled={false}
@@ -152,23 +152,23 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('2'))
-  expect(container.getByText('3'))
-  expect(container.getByText('4'))
-  expect(container.getByText('...'))
-  expect(container.getByText('9'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('2'))
+  expect(screen.getByText('3'))
+  expect(screen.getByText('4'))
+  expect(screen.getByText('...'))
+  expect(screen.getByText('9'))
 
-  expect(container.queryByText('5')).not.toBeInTheDocument()
-  expect(container.queryByText('6')).not.toBeInTheDocument()
-  expect(container.queryByText('7')).not.toBeInTheDocument()
-  expect(container.queryByText('8')).not.toBeInTheDocument()
+  expect(screen.queryByText('5')).not.toBeInTheDocument()
+  expect(screen.queryByText('6')).not.toBeInTheDocument()
+  expect(screen.queryByText('7')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 3', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={2}
       nextDisabled={false}
@@ -180,23 +180,23 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('2'))
-  expect(container.getByText('3'))
-  expect(container.getByText('4'))
-  expect(container.getByText('5'))
-  expect(container.getByText('...'))
-  expect(container.getByText('9'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('2'))
+  expect(screen.getByText('3'))
+  expect(screen.getByText('4'))
+  expect(screen.getByText('5'))
+  expect(screen.getByText('...'))
+  expect(screen.getByText('9'))
 
-  expect(container.queryByText('6')).not.toBeInTheDocument()
-  expect(container.queryByText('7')).not.toBeInTheDocument()
-  expect(container.queryByText('8')).not.toBeInTheDocument()
+  expect(screen.queryByText('6')).not.toBeInTheDocument()
+  expect(screen.queryByText('7')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 4', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={3}
       nextDisabled={false}
@@ -208,23 +208,23 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('2'))
-  expect(container.getByText('3'))
-  expect(container.getByText('4'))
-  expect(container.getByText('5'))
-  expect(container.getByText('6'))
-  expect(container.getByText('...'))
-  expect(container.getByText('9'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('2'))
+  expect(screen.getByText('3'))
+  expect(screen.getByText('4'))
+  expect(screen.getByText('5'))
+  expect(screen.getByText('6'))
+  expect(screen.getByText('...'))
+  expect(screen.getByText('9'))
 
-  expect(container.queryByText('7')).not.toBeInTheDocument()
-  expect(container.queryByText('8')).not.toBeInTheDocument()
+  expect(screen.queryByText('7')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 5', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={4}
       nextDisabled={false}
@@ -236,24 +236,24 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('3'))
-  expect(container.getByText('4'))
-  expect(container.getByText('5'))
-  expect(container.getByText('6'))
-  expect(container.getByText('7'))
-  expect(container.getByText('9'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('3'))
+  expect(screen.getByText('4'))
+  expect(screen.getByText('5'))
+  expect(screen.getByText('6'))
+  expect(screen.getByText('7'))
+  expect(screen.getByText('9'))
 
-  expect(container.queryByText('2')).not.toBeInTheDocument()
-  expect(container.queryByText('8')).not.toBeInTheDocument()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('8')).not.toBeInTheDocument()
 
-  expect(container.getAllByText('...').length).toEqual(2)
+  expect(screen.getAllByText('...').length).toEqual(2)
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 6', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={5}
       nextDisabled={false}
@@ -265,24 +265,24 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('4'))
-  expect(container.getByText('5'))
-  expect(container.getByText('6'))
-  expect(container.getByText('7'))
-  expect(container.getByText('8'))
-  expect(container.getByText('9'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('4'))
+  expect(screen.getByText('5'))
+  expect(screen.getByText('6'))
+  expect(screen.getByText('7'))
+  expect(screen.getByText('8'))
+  expect(screen.getByText('9'))
 
-  expect(container.queryByText('2')).not.toBeInTheDocument()
-  expect(container.queryByText('3')).not.toBeInTheDocument()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('3')).not.toBeInTheDocument()
 
-  expect(container.getAllByText('...').length).toEqual(1)
+  expect(screen.getAllByText('...').length).toEqual(1)
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 7', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={6}
       nextDisabled={false}
@@ -294,24 +294,25 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('5'))
-  expect(container.getByText('6'))
-  expect(container.getByText('7'))
-  expect(container.getByText('8'))
-  expect(container.getByText('9'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
 
-  expect(container.queryByText('2')).not.toBeInTheDocument()
-  expect(container.queryByText('3')).not.toBeInTheDocument()
-  expect(container.queryByText('4')).not.toBeInTheDocument()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('5'))
+  expect(screen.getByText('6'))
+  expect(screen.getByText('7'))
+  expect(screen.getByText('8'))
+  expect(screen.getByText('9'))
 
-  expect(container.getAllByText('...').length).toEqual(1)
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('3')).not.toBeInTheDocument()
+  expect(screen.queryByText('4')).not.toBeInTheDocument()
+
+  expect(screen.getAllByText('...').length).toEqual(1)
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 8', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={7}
       nextDisabled={false}
@@ -323,24 +324,24 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('6'))
-  expect(container.getByText('7'))
-  expect(container.getByText('8'))
-  expect(container.getByText('9'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('6'))
+  expect(screen.getByText('7'))
+  expect(screen.getByText('8'))
+  expect(screen.getByText('9'))
 
-  expect(container.queryByText('2')).not.toBeInTheDocument()
-  expect(container.queryByText('3')).not.toBeInTheDocument()
-  expect(container.queryByText('4')).not.toBeInTheDocument()
-  expect(container.queryByText('5')).not.toBeInTheDocument()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('3')).not.toBeInTheDocument()
+  expect(screen.queryByText('4')).not.toBeInTheDocument()
+  expect(screen.queryByText('5')).not.toBeInTheDocument()
 
-  expect(container.getAllByText('...').length).toEqual(1)
+  expect(screen.getAllByText('...').length).toEqual(1)
 })
 
 test('PageSelector with more than 8 pages renders as expected when the current page is 9', () => {
-  const container = renderAuthenticatedOnline(
+  renderAuthenticatedOnline(
     <PageSelector
       currentPageIndex={8}
       nextDisabled={false}
@@ -352,18 +353,18 @@ test('PageSelector with more than 8 pages renders as expected when the current p
     />,
   )
 
-  expect(container.getByText('« Previous')).toBeEnabled()
-  expect(container.getByText('Next »')).toBeEnabled()
-  expect(container.getByText('1'))
-  expect(container.getByText('7'))
-  expect(container.getByText('8'))
-  expect(container.getByText('9'))
+  expect(screen.getByRole('button', { name: /back/i })).toBeEnabled()
+  expect(screen.getByRole('button', { name: /next/i })).toBeEnabled()
+  expect(screen.getByText('1'))
+  expect(screen.getByText('7'))
+  expect(screen.getByText('8'))
+  expect(screen.getByText('9'))
 
-  expect(container.queryByText('2')).not.toBeInTheDocument()
-  expect(container.queryByText('3')).not.toBeInTheDocument()
-  expect(container.queryByText('4')).not.toBeInTheDocument()
-  expect(container.queryByText('5')).not.toBeInTheDocument()
-  expect(container.queryByText('6')).not.toBeInTheDocument()
+  expect(screen.queryByText('2')).not.toBeInTheDocument()
+  expect(screen.queryByText('3')).not.toBeInTheDocument()
+  expect(screen.queryByText('4')).not.toBeInTheDocument()
+  expect(screen.queryByText('5')).not.toBeInTheDocument()
+  expect(screen.queryByText('6')).not.toBeInTheDocument()
 
-  expect(container.getAllByText('...').length).toEqual(1)
+  expect(screen.getAllByText('...').length).toEqual(1)
 })

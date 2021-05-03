@@ -29,7 +29,7 @@ test('EditCollectRecordFormTitle shows the title as expected when all of site na
     />,
   )
 
-  const formTitle = screen.getByTestId('form-title')
+  const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
   expect(within(formTitle).getByText('Fish Belt'))
   expect(within(formTitle).getByText('Site D'))
@@ -49,7 +49,7 @@ test('EditCollectRecordFormTitle component renders a default title when site nam
     />,
   )
 
-  const formTitle = screen.getByTestId('form-title')
+  const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
   expect(within(formTitle).getByText('Fish Belt'))
 })
@@ -73,7 +73,7 @@ test('EditCollectRecordFormTitle component renders properly when site name is mi
     />,
   )
 
-  const formTitle = screen.getByTestId('form-title')
+  const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
   expect(within(formTitle).getByText('2'))
   expect(within(formTitle).getByText('FB-2'))
@@ -99,7 +99,7 @@ test('EditCollectRecordFormTitle component renders properly when label is missin
     />,
   )
 
-  const formTitle = screen.getByTestId('form-title')
+  const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
@@ -125,7 +125,7 @@ test('EditCollectRecordFormTitle component renders properly when transect number
     />,
   )
 
-  const formTitle = screen.getByTestId('form-title')
+  const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('FB-2'))

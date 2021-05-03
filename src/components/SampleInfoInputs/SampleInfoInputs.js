@@ -4,7 +4,7 @@ import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import { H2 } from '../generic/text'
 
-import { formikPropType } from '../../library/formikHelpers/formikPropType'
+import { formikPropType } from '../../library/formikPropType'
 import {
   managementRegimePropType,
   sitePropType,

@@ -11,7 +11,14 @@ import {
   reactTableNaturalSortReactNodes,
 } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
-import { Table, Tr, Th, Td } from '../../generic/Table/table'
+import {
+  Table,
+  Tr,
+  Th,
+  Td,
+  TableOverflowWrapper,
+  TableNavigation,
+} from '../../generic/Table/table'
 import AddSampleUnitButton from './AddSampleUnitButton'
 import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
@@ -34,15 +41,23 @@ const Collect = ({ databaseSwitchboardInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const _getCollectRecords = useEffect(() => {
+    let isMounted = true
+
     databaseSwitchboardInstance
       .getCollectRecordsForUIDisplay()
       .then((records) => {
-        setCollectRecordsForUiDisplay(records)
-        setIsLoading(false)
+        if (isMounted) {
+          setCollectRecordsForUiDisplay(records)
+          setIsLoading(false)
+        }
       })
       .catch(() => {
         toast.error(language.error.collectRecordsUnavailable)
       })
+
+    return () => {
+      isMounted = false
+    }
   }, [databaseSwitchboardInstance])
 
   const currentProjectPath = useCurrentProjectPath()
@@ -155,41 +170,43 @@ const Collect = ({ databaseSwitchboardInstance }) => {
 
   const table = (
     <>
-      <Table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <Th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  isSorted={column.isSorted}
-                  isSortedDescending={column.isSortedDesc}
-                >
-                  {column.render('Header')}
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row)
-
-            return (
-              <Tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <Td {...cell.getCellProps()} align={cell.column.align}>
-                      {cell.render('Cell')}
-                    </Td>
-                  )
-                })}
+      <TableOverflowWrapper>
+        <Table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <Th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    isSorted={column.isSorted}
+                    isSortedDescending={column.isSortedDesc}
+                  >
+                    {column.render('Header')}
+                  </Th>
+                ))}
               </Tr>
-            )
-          })}
-        </tbody>
-      </Table>
-      <RowSpaceBetween>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row)
+
+              return (
+                <Tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                        {cell.render('Cell')}
+                      </Td>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
+          </tbody>
+        </Table>
+      </TableOverflowWrapper>
+      <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
@@ -204,7 +221,7 @@ const Collect = ({ databaseSwitchboardInstance }) => {
           currentPageIndex={pageIndex}
           pageCount={pageOptions.length}
         />
-      </RowSpaceBetween>
+      </TableNavigation>
     </>
   )
 

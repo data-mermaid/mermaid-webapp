@@ -18,7 +18,10 @@ export const Button = styled.button`
 `
 
 export const ButtonPrimary = styled(Button)`
-  background-color: ${theme.color.primaryColor};
+  background-color: ${(props) =>
+    props.disabled
+      ? theme.color.primaryColor.desaturate(0.9)
+      : theme.color.primaryColor};
   color: ${theme.color.primaryText};
   border-color: ${theme.color.primaryBorder};
   ${hoverState(
@@ -31,7 +34,10 @@ export const ButtonPrimary = styled(Button)`
   }
 `
 export const ButtonSecondary = styled(Button)`
-  background-color: ${theme.color.secondaryColor};
+  background-color: ${(props) =>
+    props.disabled
+      ? theme.color.secondaryColor.desaturate(0.9)
+      : theme.color.secondaryColor};
   color: ${theme.color.secondaryText};
   border-color: ${theme.color.secondaryBorder};
   &:hover {
@@ -42,7 +48,10 @@ export const ButtonSecondary = styled(Button)`
   }
 `
 export const ButtonCallout = styled(Button)`
-  background-color: ${theme.color.calloutColor};
+  background-color: ${(props) =>
+    props.disabled
+      ? theme.color.calloutColor.desaturate(0.9)
+      : theme.color.calloutColor};
   color: ${theme.color.calloutText};
   border-color: ${theme.color.calloutBorder};
   &:hover {
@@ -53,7 +62,10 @@ export const ButtonCallout = styled(Button)`
   }
 `
 export const ButtonCaution = styled(Button)`
-  background-color: ${theme.color.cautionColor};
+  background-color: ${(props) =>
+    props.disabled
+      ? theme.color.cautionColor.desaturate(0.9)
+      : theme.color.cautionColor};
   color: ${theme.color.cautionText};
   border-color: ${theme.color.cautionBorder};
   &:hover {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { choicesPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../library/formikHelpers/formikPropType'
+import { formikPropType } from '../../library/formikPropType'
 import { H2 } from '../generic/text'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'

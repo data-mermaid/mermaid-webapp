@@ -1,9 +1,9 @@
 import Dexie from 'dexie'
-import fakeIndexedDB from 'fake-indexeddb'
+import FDBFactory from 'fake-indexeddb/lib/FDBFactory'
 
 const getMockDexieInstanceAllSuccess = () => {
   const dexieInstance = new Dexie('mermaidAllSuccess', {
-    indexedDB: fakeIndexedDB,
+    indexedDB: new FDBFactory(),
   })
 
   dexieInstance.version(1).stores({

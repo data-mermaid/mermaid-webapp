@@ -1,32 +1,47 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
+import { hoverState } from '../../../../library/styling/mediaQueries'
 import { LinkButton } from '../../buttons'
+import theme from '../../../../theme'
 
-const CustomButton = styled.button(
-  (props) =>
-    css`
-      padding: 0 ${props.theme.spacing.small};
-      margin: 0 ${props.theme.spacing.xsmall};
-      border: none;
-      background-color: ${props.currentPage
-        ? props.theme.color.primaryColor
-        : 'transparent'};
-    `,
-)
-
+const PaginationButtonStyles = css`
+  border: none;
+  cursor: pointer;
+  padding: ${theme.spacing.xsmall};
+  &:disabled {
+    cursor: not-allowed;
+  }
+  &:not([disabled], .paginationCurrentPage) {
+    ${hoverState(css`
+      background: ${theme.color.secondaryHover};
+    `)}
+  }
+`
+const PageNumberButtons = styled(LinkButton)`
+  ${PaginationButtonStyles}
+  &.paginationCurrentPage {
+    background-color: ${theme.color.primaryColor};
+    color: ${theme.color.white};
+  }
+`
+const PaginationLinkButton = styled(LinkButton)`
+  ${PaginationButtonStyles}
+`
 // eslint-disable-next-line react/prop-types
 const PageButton = ({ pageIndex, currentPageIndex, onGoToPage }) => {
   const pageLabel = pageIndex + 1
+  const isCurrentPage = currentPageIndex === pageIndex
 
   return (
-    <CustomButton
-      currentPage={currentPageIndex === pageIndex}
+    <PageNumberButtons
+      className={isCurrentPage ? 'paginationCurrentPage' : undefined}
+      aria-current={isCurrentPage}
       onClick={() => onGoToPage(pageIndex)}
       key={`pagination-button-${pageIndex}`}
     >
       {pageLabel}
-    </CustomButton>
+    </PageNumberButtons>
   )
 }
 
@@ -154,13 +169,16 @@ const PageSelector = ({
 
   return (
     <div data-testid="page-control">
-      <LinkButton onClick={onPreviousClick} disabled={previousDisabled}>
-        « Previous
-      </LinkButton>
+      <PaginationLinkButton
+        onClick={onPreviousClick}
+        disabled={previousDisabled}
+      >
+        Back
+      </PaginationLinkButton>
       {pageButtons}
-      <LinkButton onClick={onNextClick} disabled={nextDisabled}>
-        Next »
-      </LinkButton>
+      <PaginationLinkButton onClick={onNextClick} disabled={nextDisabled}>
+        Next
+      </PaginationLinkButton>
     </div>
   )
 }

@@ -12,10 +12,19 @@ const error = {
   userProfileUnavailable: 'The user profile is unavailable.',
   collectRecordSave:
     'Something went wrong. The collect record has not been saved.',
+  collectRecordDelete:
+    'Something went wrong. The collect record has not been deleted.',
 }
 
 const success = {
   collectRecordSave: 'Collect record saved.',
+  collectRecordDelete: 'Collect record deleted.',
 }
 
-export default { error, success }
+const prompt = {
+  deleteCollectRecord: 'Are you sure you want to delete this record?',
+  yes: 'Yes',
+  no: 'No',
+}
+
+export default { error, success, prompt }

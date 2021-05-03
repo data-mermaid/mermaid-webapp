@@ -25,6 +25,7 @@ const NavWrapper = styled('nav')`
   flex-direction: column;
   height: 100%;
   white-space: nowrap;
+  width: ${theme.spacing.sideNavWidthDesktop};
   ${mediaQueryTabletLandscapeOnly(css`
     width: ${theme.spacing.sideNavWidthTabletLandscapeOnly};
     white-space: normal;
@@ -69,7 +70,7 @@ const NavMenu = () => {
   const projectUrl = useCurrentProjectPath()
 
   return (
-    <NavWrapper>
+    <NavWrapper data-testid="content-page-side-nav">
       <NavList>
         <li>
           <NavHeader>Project Overview</NavHeader>
