@@ -26,6 +26,7 @@ const useAuthentication = () => {
   } = useAuth0()
 
   const _initializeAuthentication = useEffect(() => {
+    let isMounted = true
     const isOffline = !isOnline
     const hasPreviouslyAuthenticated =
       localStorage.getItem('hasAuth0Authenticated') === 'true'
@@ -45,7 +46,9 @@ const useAuthentication = () => {
       setAuthenticatedStates()
       getAuth0AccessTokenSilently()
         .then((token) => {
-          setAuth0Token(token)
+          if (isMounted) {
+            setAuth0Token(token)
+          }
         })
         .catch((err) => {
           throw Error('Unable to get access token from Auth0', err)
@@ -53,6 +56,10 @@ const useAuthentication = () => {
     }
     if (isUserOfflineAndLoggedIn) {
       setIsMermaidAuthenticated(true)
+    }
+
+    return () => {
+      isMounted = false
     }
   }, [
     auth0LoginWithRedirect,

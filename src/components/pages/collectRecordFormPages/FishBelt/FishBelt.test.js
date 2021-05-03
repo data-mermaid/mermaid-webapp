@@ -26,7 +26,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
     screen.queryByLabelText('loading indicator'),
   )
 
-  const formTitle = screen.getByTestId('form-title')
+  const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
