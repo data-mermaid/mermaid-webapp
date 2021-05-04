@@ -89,7 +89,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2001-11-22',
       },
       fishbelt_transect: {
         depth: 10,
@@ -113,7 +113,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2017-4-19',
       },
       fishbelt_transect: {
         depth: 10,
@@ -137,7 +137,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2012-6-12',
       },
       fishbelt_transect: {
         depth: 10,
@@ -161,7 +161,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2016-3-7',
       },
       fishbelt_transect: {
         depth: 10,
@@ -185,7 +185,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2020-8-13',
       },
       fishbelt_transect: {
         depth: 10,
@@ -208,7 +208,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2019-5-29',
       },
       fishbelt_transect: {
         depth: 10,
@@ -236,7 +236,6 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
       },
       fishbelt_transect: {
         depth: 10,

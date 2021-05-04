@@ -43,6 +43,7 @@ test('Collect Records table sorts properly by method column', async () => {
 
   expect(within(tableRowsAfter[1]).getByText('Fish Belt'))
 })
+
 test('Collect Records table sorts properly by site column', async () => {
   renderAuthenticatedOnline(
     <Collect
@@ -138,6 +139,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 
   expect(within(tableRowsAfterFirstClick[1]).getByText('5 LIT-1'))
 })
+
 test('Collect Records table sorts properly by size column', async () => {
   renderAuthenticatedOnline(
     <Collect
@@ -169,6 +171,7 @@ test('Collect Records table sorts properly by size column', async () => {
 
   expect(within(tableRowsAfterFirstClick[1]).getByText('10m'))
 })
+
 test('Collect Records table sorts properly by depth column', async () => {
   renderAuthenticatedOnline(
     <Collect
@@ -222,15 +225,20 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('March 2, 2021'))
+  expect(within(tableRowsAfter[1]).getByText('November 22, 2001'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Sample Date'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('March 11, 2021'))
+  const tableCellsFromTableRowsAfterFirstClick = within(
+    tableRowsAfterFirstClick[1],
+  ).getAllByRole('cell')
+
+  expect(within(tableCellsFromTableRowsAfterFirstClick[6]).getByText(''))
 })
+
 test('Collect Records table sorts properly by observers column', async () => {
   renderAuthenticatedOnline(
     <Collect
@@ -266,6 +274,7 @@ test('Collect Records table sorts properly by observers column', async () => {
 
   expect(within(tableRowsAfterFirstClick[1]).getByText('Nick, Melissa'))
 })
+
 test('Collect Records table sorts properly by status column', async () => {
   renderAuthenticatedOnline(
     <Collect
@@ -297,6 +306,7 @@ test('Collect Records table sorts properly by status column', async () => {
 
   expect(within(tableRowsAfterFirstClick[1]).getByText('Warnings'))
 })
+
 test('Collect Records table sorts properly by synced column', () => {})
 
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
