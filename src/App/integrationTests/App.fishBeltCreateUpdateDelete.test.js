@@ -6,9 +6,14 @@ import {
   mockMermaidApiAllSuccessful,
   within,
   renderAuthenticatedOffline,
+  waitForElementToBeRemoved,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { Route } from 'react-router'
+import FishBelt from '../../components/pages/collectRecordFormPages/FishBelt/FishBelt'
+import mockOnlineDatabaseSwitchboardInstance from '../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
+import mockMermaidData from '../../testUtilities/mockMermaidData'
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
@@ -20,22 +25,6 @@ afterEach(() => {
 afterAll(() => {
   mockMermaidApiAllSuccessful.close()
 })
-
-const navigateToNewFishbeltForm = async () => {
-  const firstProjetcCollectingLink = screen.getAllByText('Collecting')[0]
-
-  userEvent.click(firstProjetcCollectingLink)
-
-  userEvent.click(await screen.findByText('Add Sample Unit'), {
-    selector: 'button',
-  })
-
-  const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
-
-  userEvent.click(within(sampleUnitNav).getByText('Fish Belt'), {
-    selector: 'a',
-  })
-}
 
 const saveFishbeltRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
@@ -67,21 +56,14 @@ const saveFishbeltRecord = async () => {
 
 describe('delete fishbelt', () => {
   test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
-    renderAuthenticatedOffline(
-      <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    )
+    const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
+    // make sure there is a collect record to edit in dexie
+    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
 
-    await navigateToNewFishbeltForm()
-    await saveFishbeltRecord()
-
-    // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    })
 
     userEvent.click(await screen.findByText('Delete Record'))
 
@@ -108,21 +90,14 @@ describe('delete fishbelt', () => {
   })
 
   test('Delete fishbelt prompt cancel closes prompt and does nothing (edits persisted)', async () => {
-    renderAuthenticatedOffline(
-      <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    )
+    const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
+    // make sure there is a collect record to edit in dexie
+    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
 
-    await navigateToNewFishbeltForm()
-    await saveFishbeltRecord()
-
-    // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    })
 
     // make an unsaved change
     userEvent.clear(await screen.findByLabelText('Depth'))
@@ -146,21 +121,14 @@ describe('delete fishbelt', () => {
   })
 
   test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
-    renderAuthenticatedOffline(
-      <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    )
+    const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
+    // make sure there is a collect record to edit in dexie
+    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
 
-    await navigateToNewFishbeltForm()
-    await saveFishbeltRecord()
-
-    // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    })
 
     userEvent.click(await screen.findByText('Delete Record'))
 
@@ -187,22 +155,14 @@ describe('delete fishbelt', () => {
   })
 
   test('Delete fishbelt prompt cancel closes prompt and does nothing (edits persisted)', async () => {
-    renderAuthenticatedOffline(
-      <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    )
+    const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    // maybe make this unit test, smaller dom tree
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
+    // make sure there is a collect record to edit in dexie
+    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
 
-    await navigateToNewFishbeltForm()
-    await saveFishbeltRecord()
-
-    // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    })
 
     // make an unsaved change
 
@@ -229,13 +189,11 @@ describe('New fishbelt', () => {
   test('New fishbelt save success shows toast, and navigates to edit fishbelt page for new record', async () => {
     renderAuthenticatedOffline(
       <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+      {
+        initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+      },
     )
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
-    await navigateToNewFishbeltForm()
+
     await saveFishbeltRecord()
 
     expect(await screen.findByText('Collect record saved.'))
@@ -264,13 +222,11 @@ describe('New fishbelt', () => {
   test('New fishbelt save success show new record in collecting table', async () => {
     renderAuthenticatedOffline(
       <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+      {
+        initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+      },
     )
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
-    await navigateToNewFishbeltForm()
+
     await saveFishbeltRecord()
 
     expect(await screen.findByText('Collect record saved.'))
@@ -299,14 +255,10 @@ describe('New fishbelt', () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     dexieInstance.collectRecords.put = () => Promise.reject()
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />)
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+    })
 
-    await navigateToNewFishbeltForm()
     await saveFishbeltRecord()
 
     expect(
@@ -344,22 +296,16 @@ describe('New fishbelt', () => {
 
 describe('Edit fishbelt', () => {
   test('Edit fishbelt save success shows toast message and proper record information', async () => {
-    renderAuthenticatedOffline(
-      <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    )
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
+    const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    await navigateToNewFishbeltForm()
-    await saveFishbeltRecord()
+    // make sure there is a collect record to edit in dexie
+    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
 
-    // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    })
 
-    // make an unsaved change
+    // make a change
 
     userEvent.clear(await screen.findByLabelText('Depth'))
     userEvent.type(screen.getByLabelText('Depth'), '45')
@@ -373,50 +319,41 @@ describe('Edit fishbelt', () => {
     expect(await screen.findByText('Collect record saved.'))
 
     // Site select
-    expect(screen.getByDisplayValue('Site A'))
+    expect(screen.getByDisplayValue('Site D'))
     // Management select
-    expect(screen.getByDisplayValue('Management Regimes B'))
+    expect(screen.getByDisplayValue('Management Regimes C'))
     expect(screen.getByLabelText('Depth')).toHaveValue(45)
-    expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
-    expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
-    expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
-    expect(screen.getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
+    expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-03-02')
+    expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
+    expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
+    expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
+    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
     // width select
-    expect(screen.getByDisplayValue('10m'))
+    expect(screen.getByDisplayValue('2m'))
     // fish size bin select
-    expect(screen.getByDisplayValue(1))
+    expect(screen.getByDisplayValue(5))
     // reef slope select
     expect(screen.getByDisplayValue('flat'))
-    expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
+    expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
   test('Edit fishbelt save failure shows toast message with new edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    dexieInstance.collectRecords.put = jest
-      .fn()
-      .mockImplementationOnce(dexieInstance.collectRecords.put)
-      .mockRejectedValueOnce()
+    // make sure there is a collect record to edit in dexie
+    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
 
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />)
-    expect(
-      await screen.findByText('Projects', {
-        selector: 'h1',
-      }),
-    )
+    // make sure the next save will fail
+    dexieInstance.collectRecords.put = jest.fn().mockRejectedValueOnce()
 
-    await navigateToNewFishbeltForm()
-
-    await saveFishbeltRecord()
-
-    // ensure the new form is now the edit form
-    expect(await screen.findByTestId('edit-collect-record-form-title'))
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    })
 
     // make an unsaved change
+    const depthInput = await screen.findByLabelText('Depth')
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
-
+    userEvent.clear(depthInput)
+    userEvent.type(depthInput, '45')
     userEvent.click(
       screen.getByText('Save', {
         selector: 'button',
