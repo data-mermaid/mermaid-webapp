@@ -1,3 +1,4 @@
+import styled, { css } from 'styled-components/macro'
 import React from 'react'
 import {
   ButtonCallout,
@@ -6,28 +7,28 @@ import {
   ButtonSecondary,
 } from './buttons'
 
+export const ButtonWrapper = styled.div`
+  p,
+  button {
+    margin: 10px;
+    display: block;
+  }
+`
 export default {
   title: 'Generic Buttons',
 }
 export const basic = () => (
   <>
-    <ButtonPrimary>Button Primary</ButtonPrimary>
-    <br />
-    <ButtonSecondary>Button Secondary</ButtonSecondary>
-    <br />
-    <ButtonCallout>Button Callout</ButtonCallout>
-    <br />
-    <ButtonCaution>Button Caution</ButtonCaution>
-    <br />
-    <br />
-    Disabled buttons:
-    <br />
-    <ButtonPrimary disabled>Button Primary</ButtonPrimary>
-    <br />
-    <ButtonSecondary disabled>Button Secondary</ButtonSecondary>
-    <br />
-    <ButtonCallout disabled>Button Callout</ButtonCallout>
-    <br />
-    <ButtonCaution disabled>Button Caution</ButtonCaution>
+    <ButtonWrapper>
+      <ButtonPrimary>Button Primary</ButtonPrimary>
+      <ButtonSecondary>Button Secondary</ButtonSecondary>
+      <ButtonCallout>Button Callout</ButtonCallout>
+      <ButtonCaution>Button Caution</ButtonCaution>
+      <p>Disabled buttons:</p>
+      <ButtonPrimary disabled>Button Primary</ButtonPrimary>
+      <ButtonSecondary disabled>Button Secondary</ButtonSecondary>
+      <ButtonCallout disabled>Button Callout</ButtonCallout>
+      <ButtonCaution disabled>Button Caution</ButtonCaution>
+    </ButtonWrapper>
   </>
 )
