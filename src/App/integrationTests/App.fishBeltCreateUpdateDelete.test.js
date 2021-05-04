@@ -10,8 +10,6 @@ import {
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 
-
-
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
 })
@@ -175,7 +173,13 @@ describe('delete fishbelt', () => {
     )
 
     // navigated to collect records table page
-    expect(await screen.findByText('Collect Records', { selector: 'h3' }))
+    expect(
+      await screen.findByText(
+        'Collect Records',
+        { selector: 'h3' },
+        { timeout: 2000 },
+      ),
+    )
 
     // shows toast
     expect(await screen.findByText('Collect record deleted.'))
