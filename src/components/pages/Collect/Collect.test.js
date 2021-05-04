@@ -218,25 +218,21 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('11-Mar-2021'))
+  expect(within(tableRows[1]).getByText('March 11, 2021'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Sample Date'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('21-Nov-2001'))
+  expect(within(tableRowsAfter[1]).getByText('March 2, 2021'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Sample Date'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  const tableCellsFromTableRowsAfterFirstClick = within(
-    tableRowsAfterFirstClick[1],
-  ).getAllByRole('cell')
-
-  expect(within(tableCellsFromTableRowsAfterFirstClick[6]).getByText(''))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('March 11, 2021'))
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
