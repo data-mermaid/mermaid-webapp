@@ -70,7 +70,7 @@ const NavMenu = () => {
   const projectUrl = useCurrentProjectPath()
 
   return (
-    <NavWrapper>
+    <NavWrapper data-testid="content-page-side-nav">
       <NavList>
         <li>
           <NavHeader>Project Overview</NavHeader>

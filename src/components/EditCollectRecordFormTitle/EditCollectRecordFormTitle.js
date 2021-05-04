@@ -75,7 +75,10 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
   const label = collectRecordData[transectType]?.label || ''
 
   return (
-    <TitleContainer id="collect-form-title" data-testid="form-title">
+    <TitleContainer
+      id="collect-form-title"
+      data-testid="edit-collect-record-form-title"
+    >
       <ContentWithTooltip tooltipText="Protocol">
         {defaultTitle}
       </ContentWithTooltip>
