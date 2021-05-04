@@ -10,8 +10,6 @@ import {
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 
-jest.setTimeout(20000)
-
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
 })
