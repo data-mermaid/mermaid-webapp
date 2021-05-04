@@ -1,12 +1,13 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import { Route } from 'react-router-dom'
+import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import {
   screen,
   renderAuthenticatedOnline,
   mockMermaidApiAllSuccessful,
 } from '../../testUtilities/testingLibraryWithHelpers'
-import PageNotFound from '../../components/pages/PageNotFound'
+import App from '../App'
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
@@ -18,17 +19,13 @@ afterAll(() => {
   mockMermaidApiAllSuccessful.close()
 })
 
-test('App renders shows page not found when navigate to unknown path.', () => {
+test('App renders shows page not found when navigate to unknown path.', async () => {
   renderAuthenticatedOnline(
     <Route>
-      <PageNotFound />
+      <App dexieInstance={getMockDexieInstanceAllSuccess()} />
     </Route>,
     { initialEntries: ['/thisRouteDoesNotExist'] },
   )
 
-  expect(
-    screen.getByText(/sorry, page not found/i, {
-      selector: 'h1',
-    }),
-  )
+  expect(await screen.findByText(/sorry, page not found/i))
 })
