@@ -45,6 +45,8 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   }
 
   const _getSupportingData = useEffect(() => {
+    let isMounted = true
+
     if (databaseSwitchboardInstance) {
       const promises = [
         databaseSwitchboardInstance.getSites(),
@@ -63,11 +65,13 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
             choicesResponse,
             collectRecordResponse,
           ]) => {
-            setSites(sitesResponse)
-            setManagementRegimes(managementRegimesResponse)
-            setChoices(choicesResponse)
-            setIsLoading(false)
-            setCollectRecordBeingEdited(collectRecordResponse)
+            if (isMounted) {
+              setSites(sitesResponse)
+              setManagementRegimes(managementRegimesResponse)
+              setChoices(choicesResponse)
+              setIsLoading(false)
+              setCollectRecordBeingEdited(collectRecordResponse)
+            }
           },
         )
         .catch(() => {
@@ -77,6 +81,10 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
 
           toast.error(error)
         })
+    }
+
+    return () => {
+      isMounted = false
     }
   }, [databaseSwitchboardInstance, recordId, isNewRecord])
 
@@ -137,6 +145,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
       },
     [collectRecordBeingEdited, getPersistedUnsavedFormData],
   )
+
   const formikOptions = {
     initialValues: initialFormValues,
     enableReinitialize: true,

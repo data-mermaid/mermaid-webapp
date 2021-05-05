@@ -9,6 +9,7 @@ import { H3 } from '../../generic/text'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
+  reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
 import {
@@ -41,15 +42,23 @@ const Collect = ({ databaseSwitchboardInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const _getCollectRecords = useEffect(() => {
+    let isMounted = true
+
     databaseSwitchboardInstance
       .getCollectRecordsForUIDisplay()
       .then((records) => {
-        setCollectRecordsForUiDisplay(records)
-        setIsLoading(false)
+        if (isMounted) {
+          setCollectRecordsForUiDisplay(records)
+          setIsLoading(false)
+        }
       })
       .catch(() => {
         toast.error(language.error.collectRecordsUnavailable)
       })
+
+    return () => {
+      isMounted = false
+    }
   }, [databaseSwitchboardInstance])
 
   const currentProjectPath = useCurrentProjectPath()
@@ -92,7 +101,7 @@ const Collect = ({ databaseSwitchboardInstance }) => {
       {
         Header: 'Sample Date',
         accessor: 'sampleDate',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortDates,
       },
       {
         Header: 'Observers',
