@@ -12,7 +12,6 @@ import {
 } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { RowSpaceBetween } from '../generic/positioning'
-import { useOnlineStatus } from '../../library/onlineStatusContext'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
 
