@@ -9,7 +9,9 @@ const DropdownContainer = styled.div`
   padding: 0;
   margin: 0;
   position: absolute;
-  right: 0;
+  z-index: 9;
+  left: 0;
+  min-width: 100%;
 `
 const PositionedAncestor = styled.div`
   position: relative;
@@ -29,7 +31,7 @@ const HideShow = ({ contents, button }) => {
   return (
     <PositionedAncestor>
       {buttonForRender}
-      {showItems && <DropdownContainer>{contents}</DropdownContainer>}
+      {showItems && contents}
     </PositionedAncestor>
   )
 }
@@ -39,4 +41,5 @@ HideShow.propTypes = {
   contents: PropTypes.node.isRequired,
 }
 
+export { DropdownContainer }
 export default HideShow
