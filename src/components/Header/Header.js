@@ -160,7 +160,7 @@ const Header = ({ logout, currentUser }) => {
       <Link to="/projects">
         <img src={Logo} alt="MERMAID Logo" />
       </Link>
-      <GlobalNav data-testid="global-nav">
+      <GlobalNav>
         <div className="desktop">
           <GlobalLinks />
           <HideShow
