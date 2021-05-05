@@ -41,5 +41,5 @@ HideShow.propTypes = {
   contents: PropTypes.node.isRequired,
 }
 
-export { DropdownContainer }
 export default HideShow
+export { DropdownContainer }

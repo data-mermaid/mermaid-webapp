@@ -1,3 +1,4 @@
-import HideShow from './HideShow'
+import HideShow, { DropdownContainer } from './HideShow'
 
 export default HideShow
+export { DropdownContainer }
