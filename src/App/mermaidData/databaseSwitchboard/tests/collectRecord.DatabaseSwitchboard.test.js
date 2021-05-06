@@ -19,6 +19,42 @@ afterAll(() => {
 })
 
 describe('Save fishbelt', () => {
+  test('saveFishbelt throws error if any parameters are missing', async () => {
+    const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+    expect.assertions(4)
+
+    try {
+      await dbInstance.saveFishBelt()
+    } catch (error) {
+      expect(error.message).toEqual(
+        'saveFishBelt expects record, profileId, and projectId parameters',
+      )
+    }
+    try {
+      await dbInstance.saveFishBelt({})
+    } catch (error) {
+      expect(error.message).toEqual(
+        'saveFishBelt expects record, profileId, and projectId parameters',
+      )
+    }
+
+    try {
+      await dbInstance.saveFishBelt({}, undefined, '1')
+    } catch (error) {
+      expect(error.message).toEqual(
+        'saveFishBelt expects record, profileId, and projectId parameters',
+      )
+    }
+
+    try {
+      await dbInstance.saveFishBelt({}, '1')
+    } catch (error) {
+      expect(error.message).toEqual(
+        'saveFishBelt expects record, profileId, and projectId parameters',
+      )
+    }
+  })
   describe('Online save fishbelt', () => {
     test('saveFishBelt online returns saved record with protocol info automatically included', async () => {
       const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
@@ -32,6 +68,8 @@ describe('Save fishbelt', () => {
 
       const savedFishBeltResponse = await dbInstance.saveFishBelt(
         fishBeltToBeSaved,
+        '1',
+        '1',
       )
 
       expect(savedFishBeltResponse.id).toEqual(fishBeltToBeSaved.id)
@@ -44,12 +82,16 @@ describe('Save fishbelt', () => {
     test('saveFishBelt offline replaces previous fishBelt record with same id', async () => {
       const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
-      await dbInstance.saveFishBelt({
-        id: 'foo',
-        data: {},
-        profile: '1234',
-        initialProperty: 'whatever',
-      })
+      await dbInstance.saveFishBelt(
+        {
+          id: 'foo',
+          data: {},
+          profile: '1234',
+          initialProperty: 'whatever',
+        },
+        '1',
+        '1',
+      )
 
       const replacementFishbelt = {
         id: 'foo',
@@ -57,7 +99,7 @@ describe('Save fishbelt', () => {
         profile: 'ABCD',
       }
 
-      await dbInstance.saveFishBelt(replacementFishbelt)
+      await dbInstance.saveFishBelt(replacementFishbelt, '1', '1')
 
       const savedFishBelt = await dbInstance.getFishBelt('foo')
 
@@ -72,11 +114,15 @@ describe('Save fishbelt', () => {
     test('saveFishBelt offline returns saved record including an id if one isnt supplied', async () => {
       const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
-      const savedFishBeltResponse = await dbInstance.saveFishBelt({
-        data: {},
-        profile: '1234',
-        randomUnexpectedProperty: 'whatever',
-      })
+      const savedFishBeltResponse = await dbInstance.saveFishBelt(
+        {
+          data: {},
+          profile: '1234',
+          randomUnexpectedProperty: 'whatever',
+        },
+        '1',
+        '1',
+      )
 
       expect(validateUuid(savedFishBeltResponse.id)).toBeTruthy()
     })
@@ -86,7 +132,7 @@ describe('Save fishbelt', () => {
       expect.assertions(1)
 
       try {
-        await dbInstance.saveFishBelt()
+        await dbInstance.saveFishBelt({}, '1', '1')
       } catch (error) {
         expect(error.message).toBeTruthy()
       }
@@ -105,6 +151,8 @@ describe('Save fishbelt', () => {
 
       const savedFishBeltResponse = await dbInstanceOffline.saveFishBelt(
         fishBeltToBeSaved,
+        '1',
+        '1',
       )
 
       expect(savedFishBeltResponse.id).toEqual(fishBeltToBeSaved.id)
@@ -117,12 +165,16 @@ describe('Save fishbelt', () => {
     test('saveFishBelt offline replaces previous fishBelt record with same id', async () => {
       const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
 
-      await dbInstanceOffline.saveFishBelt({
-        id: 'foo',
-        data: {},
-        profile: '1234',
-        initialProperty: 'whatever',
-      })
+      await dbInstanceOffline.saveFishBelt(
+        {
+          id: 'foo',
+          data: {},
+          profile: '1234',
+          initialProperty: 'whatever',
+        },
+        '1',
+        '1',
+      )
 
       const replacementFishbelt = {
         id: 'foo',
@@ -130,7 +182,7 @@ describe('Save fishbelt', () => {
         profile: 'ABCD',
       }
 
-      await dbInstanceOffline.saveFishBelt(replacementFishbelt)
+      await dbInstanceOffline.saveFishBelt(replacementFishbelt, '1', '1')
 
       const savedFishBelt = await dbInstanceOffline.getFishBelt('foo')
 
@@ -145,11 +197,15 @@ describe('Save fishbelt', () => {
     test('saveFishBelt offline returns saved record including an id if one isnt supplied', async () => {
       const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
 
-      const savedFishBeltResponse = await dbInstanceOffline.saveFishBelt({
-        data: {},
-        profile: '1234',
-        randomUnexpectedProperty: 'whatever',
-      })
+      const savedFishBeltResponse = await dbInstanceOffline.saveFishBelt(
+        {
+          data: {},
+          profile: '1234',
+          randomUnexpectedProperty: 'whatever',
+        },
+        '1',
+        '1',
+      )
 
       expect(validateUuid(savedFishBeltResponse.id)).toBeTruthy()
     })
@@ -159,7 +215,7 @@ describe('Save fishbelt', () => {
       expect.assertions(1)
 
       try {
-        await dbInstanceOffline.saveFishBelt()
+        await dbInstanceOffline.saveFishBelt({}, '1', '1')
       } catch (error) {
         expect(error.message).toBeTruthy()
       }
@@ -191,7 +247,7 @@ describe('Delete fishbelt', () => {
         randomUnexpectedProperty: 'whatever',
       }
 
-      await dbInstanceOffline.saveFishBelt(fishBeltToBeDeleted)
+      await dbInstanceOffline.saveFishBelt(fishBeltToBeDeleted, '1', '1')
 
       expect(await dbInstanceOffline.getFishBelt('foo'))
 

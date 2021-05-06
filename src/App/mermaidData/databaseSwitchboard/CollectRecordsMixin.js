@@ -21,11 +21,17 @@ const CollectRecordsMixin = (Base) =>
 
     #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
 
-    saveFishBelt = (record) => {
+    saveFishBelt = (record, profileId, projectId) => {
+      if (!record || !profileId || !projectId) {
+        throw new Error(
+          'saveFishBelt expects record, profileId, and projectId parameters',
+        )
+      }
       const idToSubmit = record.id ?? createUuid()
       const recordToSubmit = {
         ...record,
         id: idToSubmit,
+
         data: { ...record.data, protocol: 'fishbelt' },
       }
 
