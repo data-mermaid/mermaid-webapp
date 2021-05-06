@@ -203,14 +203,18 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
                   <IconSave />
                   Save
                 </ButtonCallout>
-                <ButtonCallout>
-                  <IconCheck />
-                  Validate
-                </ButtonCallout>
-                <ButtonCallout>
-                  <IconUpload />
-                  Submit
-                </ButtonCallout>
+                {!isNewRecord && (
+                  <>
+                    <ButtonCallout>
+                      <IconCheck />
+                      Validate
+                    </ButtonCallout>
+                    <ButtonCallout>
+                      <IconUpload />
+                      Submit
+                    </ButtonCallout>
+                  </>
+                )}
               </RowRight>
             </>
           }
