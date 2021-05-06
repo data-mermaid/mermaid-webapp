@@ -11,16 +11,16 @@ export const basic = () => (
   <>
     <ButtonSecondaryDropdown label="lil lbl">
       <div>Could be a div</div>
-      <a href="#">Could be a link</a>
-      <a href="#">with a divider</a>
+      <a href="./">Could be a link</a>
+      <a href="./">with a divider</a>
       <hr />
-      <a href="#">
+      <a href="./">
         Then a link &amp; icon <IconRefresh />
       </a>
-      <a href="#">
+      <a href="./">
         <IconRefresh /> Then a icon &amp; link
       </a>
-      <a href="#">
+      <a href="./">
         ohanotherreallylongtextlinkicantbelievehowlongthiswordiswowowowowow
       </a>
       <hr />
@@ -31,14 +31,14 @@ export const basic = () => (
 
     <br />
     <ButtonSecondaryDropdown label="A button dropdown">
-      <a href="#">Option 1</a>
-      <a href="#">Lots of little words just like a regular sentence.</a>
-      <a href="#">Option 3</a>
-      <a href="#">Option 4</a>
+      <a href="./">Option 1</a>
+      <a href="./">Lots of little words just like a regular sentence.</a>
+      <a href="./">Option 3</a>
+      <a href="./">Option 4</a>
     </ButtonSecondaryDropdown>
     <br />
     <ButtonSecondaryDropdown label="Long long button label but short options">
-      <a href="#">Link</a>
+      <a href="./">Link</a>
     </ButtonSecondaryDropdown>
     <br />
     <ButtonSecondaryDropdown label="Only Buttons">
