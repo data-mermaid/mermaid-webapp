@@ -9,7 +9,7 @@ export default {
 }
 export const basic = () => (
   <>
-    <ButtonSecondaryDropdown label="short label">
+    <ButtonSecondaryDropdown label="lil lbl">
       <div>Could be a div</div>
       <a href="#">Could be a link</a>
       <a href="#">with a divider</a>
@@ -25,22 +25,26 @@ export const basic = () => (
       </a>
       <hr />
       <p>Paragraph Text</p>
-      <ButtonPrimary>omg a button?!</ButtonPrimary>
+      <ButtonPrimary>omg a button‽</ButtonPrimary>
       <ButtonCaution>Delete Everyting</ButtonCaution>
     </ButtonSecondaryDropdown>
 
+    <br />
+    <ButtonSecondaryDropdown label="A button dropdown">
+      <a href="#">Option 1</a>
+      <a href="#">Lots of little words just like a regular sentence.</a>
+      <a href="#">Option 3</a>
+      <a href="#">Option 4</a>
+    </ButtonSecondaryDropdown>
     <br />
     <ButtonSecondaryDropdown label="Long long button label but short options">
       <a href="#">Link</a>
     </ButtonSecondaryDropdown>
     <br />
-    <ButtonSecondaryDropdown label="Button label">
-      <h3>Only buttons</h3>
+    <ButtonSecondaryDropdown label="Only Buttons">
       <ButtonSecondary>A button</ButtonSecondary>
       <ButtonSecondary>Another Button</ButtonSecondary>
       <ButtonSecondary>Button the third</ButtonSecondary>
-      <hr />
-      <p>Danger Zone</p>
       <ButtonCaution>Delete Everyting</ButtonCaution>
     </ButtonSecondaryDropdown>
   </>

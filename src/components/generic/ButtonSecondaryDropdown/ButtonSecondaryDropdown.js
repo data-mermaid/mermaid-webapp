@@ -8,7 +8,6 @@ import { ButtonSecondary } from '../buttons'
 import { IconDown } from '../../icons'
 
 const StyledDropdownContainer = styled(DropdownContainer)`
-  width: 100%;
   background-color: ${theme.color.white};
   border: solid 1px ${theme.color.border};
   h1,
