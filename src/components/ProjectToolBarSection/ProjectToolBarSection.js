@@ -7,6 +7,7 @@ import {
 } from '../../library/styling/mediaQueries'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSortDown } from '../icons'
+import OfflineHide from '../generic/OfflineHide'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -87,7 +88,9 @@ const ProjectToolBarSection = () => {
     <GlobalWrapper>
       <RowWrapper>
         <HeaderStyle>Projects</HeaderStyle>
-        <ButtonPrimary>New Project</ButtonPrimary>
+        <OfflineHide>
+          <ButtonPrimary>New Project</ButtonPrimary>
+        </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>
         <FilterLabelWrapper htmlFor="filter_projects">

@@ -20,4 +20,17 @@ const reactTableNaturalSortReactNodes = (rowA, rowB, columnId) => {
   })
 }
 
-export { reactTableNaturalSort, reactTableNaturalSortReactNodes }
+const reactTableNaturalSortDates = (rowA, rowB, columnId) => {
+  const rowACellContents = Date.parse(rowA.original[columnId]) ?? ''
+  const rowBCellContents = Date.parse(rowB.original[columnId]) ?? ''
+
+  return rowACellContents.toString().localeCompare(rowBCellContents, 'en', {
+    numeric: true,
+  })
+}
+
+export {
+  reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
+  reactTableNaturalSortDates,
+}

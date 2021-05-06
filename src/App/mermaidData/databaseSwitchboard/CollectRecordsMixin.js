@@ -128,7 +128,11 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getSampleDateLabel = (record) => {
-      const [year, month, day] = record.data.sample_event.sample_date.split('-')
+      const sampleDate = record.data.sample_event.sample_date
+
+      if (!sampleDate) return undefined
+
+      const [year, month, day] = sampleDate.split('-')
       const zeroIndexedMonth = month - 1
       const locale = navigator.language ?? 'en-US'
 
