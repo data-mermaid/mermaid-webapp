@@ -154,7 +154,7 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
     screen.queryByLabelText('loading indicator'),
   )
 
-  const collectButtonGroups = screen.getByTestId('collect-form-buttons')
+  const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
   const allButtons = within(collectButtonGroups).getAllByRole('button')
 
   expect(allButtons).toHaveLength(3)
