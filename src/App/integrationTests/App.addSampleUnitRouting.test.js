@@ -7,12 +7,13 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
-  waitForElementToBeRemoved,
+  // waitForElementToBeRemoved,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
-import mockOnlineDatabaseSwitchboardInstance from '../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
-import Collect from '../../components/pages/Collect'
-import FishBelt from '../../components/pages/FishBelt'
+// import mockOnlineDatabaseSwitchboardInstance from '../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
+// import Collect from '../../components/pages/Collect'
+import App from '../App'
+import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
@@ -25,50 +26,48 @@ afterAll(() => {
 })
 
 test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish Belt page.', async () => {
-  renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting">
-      <Collect
-        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-      />
-    </Route>,
-    { initialEntries: ['/projects/fakewhatever/collecting'] },
-  )
+  const navigateToNewFishbeltFormFromCollecting = async () => {
+    userEvent.click(
+      await screen.findByRole('button', {
+        name: /Add Sample Unit/i,
+      }),
+    )
+    const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
-  )
+    userEvent.click(
+      within(sampleUnitNav).getByRole('link', {
+        name: /fish belt/i,
+      }),
+    )
+  }
 
-  const hideShowButton = screen.getByTestId('add-sample-unit')
-
-  const addSampleUnitButton = within(hideShowButton).getByRole('button', {
-    name: 'Add Sample Unit',
-  })
-
-  expect(addSampleUnitButton)
-
-  userEvent.click(addSampleUnitButton)
-
-  const fishBeltLink = await within(hideShowButton).findByRole('link', {
-    name: 'Fish Belt',
-  })
-
-  expect(fishBeltLink).toBeInTheDocument()
-  userEvent.click(fishBeltLink)
+  // this one below doesn't work!
+  // renderAuthenticatedOnline(
+  //   <Collect
+  //     databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+  //   />,
+  //   { initialEntries: ['/projects/fakewhatever/collecting'] },
+  // )
 
   renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBelt
-        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-        isNewRecord
-      />
-    </Route>,
-    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt'] },
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+  expect(
+    await screen.findByText('Projects', {
+      selector: 'h1',
+    }),
   )
 
-  // the line below doesn't work yet.
-  expect(screen.getByText('Fish Belt', { selector: 'h2' }))
+  const projectCard = screen.getAllByRole('listitem')[0]
+
+  userEvent.click(within(projectCard).getByText(/collecting/i))
+
+  await navigateToNewFishbeltFormFromCollecting()
+
+  const newFishBeltTitle = await screen.findByText('Fish Belt', {
+    selector: 'h2',
+  })
+
+  expect(newFishBeltTitle).toBeInTheDocument()
 })
