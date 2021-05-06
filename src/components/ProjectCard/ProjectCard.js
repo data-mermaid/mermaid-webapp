@@ -16,6 +16,7 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
 import { pluralize } from '../../library/pluralize'
 import stopEventPropagation from '../../library/stopEventPropagation'
+import OfflineHide from '../generic/OfflineHide'
 
 const ProjectCard = ({
   name,
@@ -67,13 +68,15 @@ const ProjectCard = ({
         </CheckBoxLabel>
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
-      <ButtonGroups data-testid="parent-3">
+      <ButtonGroups data-testid="project-button-groups">
         <NavLinkButtonGroup projectUrl={projectUrl} />
-        <VerticalRule />
-        <ButtonSecondary onClick={handleProjectCopyClick} aria-label="Copy">
-          <IconCopy />
-          <span>Copy</span>
-        </ButtonSecondary>
+        <OfflineHide>
+          <VerticalRule />
+          <ButtonSecondary onClick={handleProjectCopyClick} aria-label="Copy">
+            <IconCopy />
+            <span>Copy</span>
+          </ButtonSecondary>
+        </OfflineHide>
       </ButtonGroups>
     </CardWrapper>
   )

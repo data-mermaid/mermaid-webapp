@@ -128,16 +128,19 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getSampleDateLabel = (record) => {
-      const { sample_date } = record.data.sample_event
+      const sampleDate = record.data.sample_event.sample_date
 
-      if (sample_date) {
-        const datePieces = new Date(sample_date).toDateString().split(' ')
+      if (!sampleDate) return undefined
 
-        // date format DD-MMM-YYYY as 01-Jan-2010
-        return `${datePieces[2]}-${datePieces[1]}-${datePieces[3]}`
-      }
+      const [year, month, day] = sampleDate.split('-')
+      const zeroIndexedMonth = month - 1
+      const locale = navigator.language ?? 'en-US'
 
-      return undefined
+      return new Date(year, zeroIndexedMonth, day).toLocaleDateString(locale, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
     }
 
     #getObserversLabel = (record) => {
