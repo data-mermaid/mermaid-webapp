@@ -23,6 +23,7 @@ import FishBeltTransectInputs from '../../../FishBeltTransectInputs'
 import language from '../../../../language'
 import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import OfflineHide from '../../../generic/OfflineHide'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -198,13 +199,13 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
                 />
               )}
 
-              <RowRight>
+              <RowRight data-testid="fishbelt-form-buttons">
                 <ButtonCallout type="submit" form="fishbelt-form">
                   <IconSave />
                   Save
                 </ButtonCallout>
                 {!isNewRecord && (
-                  <>
+                  <OfflineHide>
                     <ButtonCallout>
                       <IconCheck />
                       Validate
@@ -213,7 +214,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
                       <IconUpload />
                       Submit
                     </ButtonCallout>
-                  </>
+                  </OfflineHide>
                 )}
               </RowRight>
             </>
