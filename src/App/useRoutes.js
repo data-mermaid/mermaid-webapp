@@ -12,7 +12,7 @@ import Users from '../components/pages/Users'
 import Health from '../components/pages/Health'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 
-export const useRoutes = ({ databaseSwitchboardInstance }) => {
+export const useRoutes = ({ databaseSwitchboardInstance, currentUser }) => {
   const routes = [
     {
       path: '/projects',
@@ -33,7 +33,10 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
     {
       path: '/projects/:projectId/collecting/fishbelt',
       Component: () => (
-        <FishBelt databaseSwitchboardInstance={databaseSwitchboardInstance} />
+        <FishBelt
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+          currentUser={currentUser}
+        />
       ),
     },
     {
@@ -42,6 +45,7 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
         <FishBelt
           databaseSwitchboardInstance={databaseSwitchboardInstance}
           isNewRecord={false}
+          currentUser={currentUser}
         />
       ),
     },
