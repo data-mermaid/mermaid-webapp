@@ -2,6 +2,7 @@ import React from 'react'
 import { InlineIcon } from '@iconify/react'
 import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
 import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline'
+import checkIcon from '@iconify-icons/mdi/check'
 import checkOutline from '@iconify-icons/mdi/check-outline'
 import circleEditOutline from '@iconify-icons/mdi/circle-edit-outline'
 import checkCircleOutline from '@iconify-icons/mdi/check-circle-outline'
@@ -23,9 +24,12 @@ import sortAscending from '@iconify-icons/mdi/sort-ascending'
 import plus from '@iconify-icons/mdi/plus'
 import sync from '@iconify-icons/mdi/sync'
 import closeIcon from '@iconify-icons/mdi/close'
+import contentSave from '@iconify-icons/mdi/content-save'
+import upload from '@iconify-icons/mdi/upload'
 
 export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
-export const IconCheck = () => <InlineIcon icon={checkOutline} />
+export const IconCheck = () => <InlineIcon icon={checkIcon} />
+export const IconCheckOutline = () => <InlineIcon icon={checkOutline} />
 export const IconClose = () => <InlineIcon icon={closeIcon} />
 export const IconCollect = () => <InlineIcon icon={circleEditOutline} />
 export const IconCopy = () => <InlineIcon icon={contentCopy} />
@@ -47,3 +51,5 @@ export const IconSortDown = () => <InlineIcon icon={sortDescending} />
 export const IconSortUp = () => <InlineIcon icon={sortAscending} />
 export const IconUp = () => <InlineIcon icon={menuUp} />
 export const IconUsers = () => <InlineIcon icon={accountGroup} />
+export const IconSave = () => <InlineIcon icon={contentSave} />
+export const IconUpload = () => <InlineIcon icon={upload} />

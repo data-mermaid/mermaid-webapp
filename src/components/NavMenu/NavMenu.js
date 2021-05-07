@@ -19,6 +19,7 @@ import {
   IconHeart,
   IconSharing,
 } from '../icons'
+import OfflineHide from '../generic/OfflineHide'
 
 const NavWrapper = styled('nav')`
   display: flex;
@@ -72,16 +73,18 @@ const NavMenu = () => {
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
-        <li>
-          <NavHeader>Project Overview</NavHeader>
-          <ul>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/health`}>
-                <IconHeart /> <span>Project Health</span>
-              </NavLinkSidebar>
-            </li>
-          </ul>
-        </li>
+        <OfflineHide>
+          <li>
+            <NavHeader>Project Overview</NavHeader>
+            <ul>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/health`}>
+                  <IconHeart /> <span>Project Health</span>
+                </NavLinkSidebar>
+              </li>
+            </ul>
+          </li>
+        </OfflineHide>
         <li>
           <NavHeader>Collect</NavHeader>
           <ul>
@@ -105,52 +108,54 @@ const NavMenu = () => {
             </li>
           </ul>
         </li>
-        <li>
-          <NavHeader>Data</NavHeader>
-          <ul>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/data`}>
-                <IconData />
-                <span>Submitted</span>
-              </NavLinkSidebar>
-            </li>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
-                <IconGraph />
-                <span>Graphs and Maps</span>
-              </NavLinkSidebar>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <NavHeader>Admin</NavHeader>
-          <ul>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/admin`}>
-                <IconAdmin />
-                <span>Project Info</span>
-              </NavLinkSidebar>
-            </li>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/users`}>
-                <IconUsers />
-                <span>Users</span>
-              </NavLinkSidebar>
-            </li>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/fish-families`}>
-                <IconFish />
-                <span>Fish Families</span>
-              </NavLinkSidebar>
-            </li>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
-                <IconSharing />
-                <span>Data Sharing</span>
-              </NavLinkSidebar>
-            </li>
-          </ul>
-        </li>
+        <OfflineHide>
+          <li>
+            <NavHeader>Data</NavHeader>
+            <ul>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/data`}>
+                  <IconData />
+                  <span>Submitted</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
+                  <IconGraph />
+                  <span>Graphs and Maps</span>
+                </NavLinkSidebar>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <NavHeader>Admin</NavHeader>
+            <ul>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/admin`}>
+                  <IconAdmin />
+                  <span>Project Info</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/users`}>
+                  <IconUsers />
+                  <span>Users</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/fish-families`}>
+                  <IconFish />
+                  <span>Fish Families</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
+                  <IconSharing />
+                  <span>Data Sharing</span>
+                </NavLinkSidebar>
+              </li>
+            </ul>
+          </li>
+        </OfflineHide>
       </NavList>
     </NavWrapper>
   )
