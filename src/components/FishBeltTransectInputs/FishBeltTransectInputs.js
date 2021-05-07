@@ -2,7 +2,7 @@ import React from 'react'
 import { choicesPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../library/formikPropType'
 import { H2 } from '../generic/text'
-import { FormWrapper } from '../generic/form'
+import { InputWrapper } from '../generic/form'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
@@ -30,7 +30,7 @@ const FishBeltTransectForms = ({ formik, choices }) => {
 
   return (
     <>
-      <FormWrapper>
+      <InputWrapper>
         <H2>Transect</H2>
         <InputWithLabelAndValidation
           label="Transect Number"
@@ -73,7 +73,7 @@ const FishBeltTransectForms = ({ formik, choices }) => {
           id="notes"
           {...formik.getFieldProps('notes')}
         />
-      </FormWrapper>
+      </InputWrapper>
     </>
   )
 }

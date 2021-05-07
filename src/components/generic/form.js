@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
 import { hoverState } from '../../library/styling/mediaQueries'
 
-export const FormWrapper = styled.div`
+export const InputWrapper = styled.div`
   padding: ${theme.spacing.medium};
 `
 const InputTextareaSelectStyles = css`

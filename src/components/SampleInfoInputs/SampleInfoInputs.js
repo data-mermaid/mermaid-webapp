@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import { H2 } from '../generic/text'
-import { FormWrapper } from '../generic/form'
+import { InputWrapper } from '../generic/form'
 
 import { formikPropType } from '../../library/formikPropType'
 import {
@@ -24,7 +24,7 @@ const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
 
   return (
     <>
-      <FormWrapper>
+      <InputWrapper>
         <H2>Sample Info</H2>
         <InputSelectWithLabelAndValidation
           label="Site"
@@ -56,7 +56,7 @@ const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
           type="time"
           {...formik.getFieldProps('sample_time')}
         />
-      </FormWrapper>
+      </InputWrapper>
     </>
   )
 }
