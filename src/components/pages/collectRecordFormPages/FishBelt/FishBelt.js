@@ -9,6 +9,7 @@ import {
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
 import { ButtonCallout, ButtonCaution } from '../../../generic/buttons'
+import { IconSave, IconCheck, IconUpload } from '../../../icons'
 import { ContentPageLayout } from '../../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databaseSwitchboard'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
@@ -199,8 +200,21 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
 
               <RowRight>
                 <ButtonCallout type="submit" form="fishbelt-form">
+                  <IconSave />
                   Save
                 </ButtonCallout>
+                {!isNewRecord && (
+                  <>
+                    <ButtonCallout>
+                      <IconCheck />
+                      Validate
+                    </ButtonCallout>
+                    <ButtonCallout>
+                      <IconUpload />
+                      Submit
+                    </ButtonCallout>
+                  </>
+                )}
               </RowRight>
             </>
           }
