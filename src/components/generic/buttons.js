@@ -4,24 +4,26 @@ import theme from '../../theme'
 import { hoverState } from '../../library/styling/mediaQueries'
 
 const buttonActive = css`
-  background-color: fuchsia;
+  transition: ${theme.timing.activeTransition};
 `
 
 export const Button = styled.button`
+  transition: ${theme.timing.activeTransition};
   padding: ${theme.spacing.buttonPadding};
-  border-width: 1px;
+  border-width: ${theme.spacing.borderSmall};
   border-style: solid;
-  cursor: pointer;
+  &:disabled {
+    color: ${theme.color.disabledText};
+    border-color: ${theme.color.disabledBorder};
+    cursor: not-allowed;
+  }
   &:active {
     ${buttonActive};
   }
 `
 
 export const ButtonPrimary = styled(Button)`
-  background-color: ${(props) =>
-    props.disabled
-      ? theme.color.primaryColor.desaturate(0.9)
-      : theme.color.primaryColor};
+  background-color: ${theme.color.primaryColor};
   color: ${theme.color.primaryText};
   border-color: ${theme.color.primaryBorder};
   ${hoverState(
@@ -29,50 +31,59 @@ export const ButtonPrimary = styled(Button)`
       background-color: ${theme.color.primaryHover};
     `,
   )}
+  &:disabled {
+    background-color: ${theme.color.primaryDisabledColor};
+  }
   &:active {
-    ${buttonActive};
+    background-color: ${theme.color.primaryActive};
   }
 `
 export const ButtonSecondary = styled(Button)`
-  background-color: ${(props) =>
-    props.disabled
-      ? theme.color.secondaryColor.desaturate(0.9)
-      : theme.color.secondaryColor};
+  background-color: ${theme.color.secondaryColor};
   color: ${theme.color.secondaryText};
   border-color: ${theme.color.secondaryBorder};
-  &:hover {
-    background-color: ${theme.color.secondaryHover};
+  ${hoverState(
+    css`
+      background-color: ${theme.color.secondaryHover};
+    `,
+  )}
+  &:disabled {
+    background-color: ${theme.color.secondaryDisabledColor};
   }
   &:active {
-    ${buttonActive};
+    background-color: ${theme.color.secondaryActive};
   }
 `
 export const ButtonCallout = styled(Button)`
-  background-color: ${(props) =>
-    props.disabled
-      ? theme.color.calloutColor.desaturate(0.9)
-      : theme.color.calloutColor};
+  background-color: ${theme.color.calloutColor};
   color: ${theme.color.calloutText};
   border-color: ${theme.color.calloutBorder};
-  &:hover {
-    background-color: ${theme.color.calloutHover};
+  ${hoverState(
+    css`
+      background-color: ${theme.color.calloutHover};
+    `,
+  )}
+  &:disabled {
+    background-color: ${theme.color.calloutDisabledColor};
   }
   &:active {
-    ${buttonActive};
+    background-color: ${theme.color.calloutActive};
   }
 `
 export const ButtonCaution = styled(Button)`
-  background-color: ${(props) =>
-    props.disabled
-      ? theme.color.cautionColor.desaturate(0.9)
-      : theme.color.cautionColor};
+  background-color: ${theme.color.cautionColor};
   color: ${theme.color.cautionText};
   border-color: ${theme.color.cautionBorder};
-  &:hover {
-    background-color: ${theme.color.cautionHover};
+  ${hoverState(
+    css`
+      background-color: ${theme.color.cautionHover};
+    `,
+  )}
+  &:disabled {
+    background-color: ${theme.color.cautionDisabledColor};
   }
   &:active {
-    ${buttonActive};
+    background-color: ${theme.color.cautionActive};
   }
 `
 export const ButtonyNavLink = styled(NavLink)`
