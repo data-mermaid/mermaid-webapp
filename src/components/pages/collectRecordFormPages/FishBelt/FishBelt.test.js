@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom'
 import React from 'react'
 import {
   renderAuthenticatedOnline,
+  renderAuthenticatedOffline,
   screen,
   waitForElementToBeRemoved,
   within,
@@ -136,4 +137,70 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   // reef slope select
   expect(screen.getByDisplayValue('flat'))
   expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
+})
+
+test('FishBelt component in EDIT mode - button group shows save, validate and submit buttons when online', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt
+        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+        isNewRecord={false}
+      />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
+  const saveButton = within(collectButtonGroups).getByRole('button', {
+    name: 'Save',
+  })
+
+  const validateButton = within(collectButtonGroups).getByRole('button', {
+    name: 'Validate',
+  })
+
+  const submitButton = within(collectButtonGroups).getByRole('button', {
+    name: 'Validate',
+  })
+
+  expect(saveButton).toBeInTheDocument()
+  expect(validateButton).toBeInTheDocument()
+  expect(submitButton).toBeInTheDocument()
+})
+
+test('FishBelt component in EDIT mode - button group shows only save button when offline', async () => {
+  renderAuthenticatedOffline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt
+        databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+        isNewRecord={false}
+      />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
+  const saveButton = within(collectButtonGroups).getByRole('button', {
+    name: 'Save',
+  })
+
+  const validateButton = within(collectButtonGroups).queryByRole('button', {
+    name: 'Validate',
+  })
+
+  const submitButton = within(collectButtonGroups).queryByRole('button', {
+    name: 'Validate',
+  })
+
+  expect(saveButton).toBeInTheDocument()
+  expect(validateButton).not.toBeInTheDocument()
+  expect(submitButton).not.toBeInTheDocument()
 })
