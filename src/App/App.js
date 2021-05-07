@@ -43,7 +43,7 @@ function App({ dexieInstance }) {
   const currentUser = useCurrentUser({
     databaseSwitchboardInstance,
   })
-  const { routes } = useRoutes({ databaseSwitchboardInstance })
+  const { routes } = useRoutes({ databaseSwitchboardInstance, currentUser })
 
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,

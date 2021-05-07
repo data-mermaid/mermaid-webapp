@@ -21,7 +21,7 @@ const CollectRecordsMixin = (Base) =>
 
     #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
 
-    saveFishBelt = (record, profileId, projectId) => {
+    saveFishBelt = ({ record, profileId, projectId }) => {
       if (!record || !profileId || !projectId) {
         throw new Error(
           'saveFishBelt expects record, profileId, and projectId parameters',
@@ -36,9 +36,15 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        toast.warn(
-          "The online workflow for collect records hasn't been built yet. If you are trying to test the offline workflow, try disabling your internet.",
-        )
+        return this._authenticatedAxios
+          .post(`${this._apiBaseUrl}/push`, recordToSubmit)
+          .then((response) => {
+            const recordFromServer = response.data
+
+            return this._dexieInstance.collectRecords
+              .put(recordFromServer)
+              .then(() => recordFromServer)
+          })
       }
       if (this._isOfflineAuthenticatedAndReady) {
         return this._dexieInstance.collectRecords
