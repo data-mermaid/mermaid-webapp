@@ -1,17 +1,13 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-// import { Route } from 'react-router-dom'
 
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
-  // waitForElementToBeRemoved,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
-// import mockOnlineDatabaseSwitchboardInstance from '../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
-// import Collect from '../../components/pages/Collect'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 
@@ -41,27 +37,10 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
     )
   }
 
-  // this one below doesn't work!
-  // renderAuthenticatedOnline(
-  //   <Collect
-  //     databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-  //   />,
-  //   { initialEntries: ['/projects/fakewhatever/collecting'] },
-  // )
-
   renderAuthenticatedOnline(
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+    { initialEntries: ['/projects/fakewhatever/collecting'] },
   )
-
-  expect(
-    await screen.findByText('Projects', {
-      selector: 'h1',
-    }),
-  )
-
-  const projectCard = screen.getAllByRole('listitem')[0]
-
-  userEvent.click(within(projectCard).getByText(/collecting/i))
 
   await navigateToNewFishbeltFormFromCollecting()
 
