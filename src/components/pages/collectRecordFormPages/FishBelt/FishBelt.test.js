@@ -155,9 +155,21 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
   )
 
   const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
-  const allButtons = within(collectButtonGroups).getAllByRole('button')
+  const saveButton = within(collectButtonGroups).getByRole('button', {
+    name: 'Save',
+  })
 
-  expect(allButtons).toHaveLength(3)
+  const validateButton = within(collectButtonGroups).getByRole('button', {
+    name: 'Validate',
+  })
+
+  const submitButton = within(collectButtonGroups).getByRole('button', {
+    name: 'Validate',
+  })
+
+  expect(saveButton).toBeInTheDocument()
+  expect(validateButton).toBeInTheDocument()
+  expect(submitButton).toBeInTheDocument()
 })
 
 test('FishBelt component in EDIT mode - button group shows only save button when offline', async () => {
@@ -176,7 +188,7 @@ test('FishBelt component in EDIT mode - button group shows only save button when
   )
 
   const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
-  const saveButton = await within(collectButtonGroups).findByRole('button', {
+  const saveButton = within(collectButtonGroups).getByRole('button', {
     name: 'Save',
   })
 
