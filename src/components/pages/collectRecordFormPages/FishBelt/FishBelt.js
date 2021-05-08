@@ -104,7 +104,11 @@ const FishBelt = ({
   const deleteRecord = () => {
     if (!isNewRecord) {
       databaseSwitchboardInstance
-        .deleteFishBelt(collectRecordBeingEdited.id)
+        .deleteFishBelt({
+          record: collectRecordBeingEdited,
+          profileId: currentUser.id,
+          projectId,
+        })
         .then(() => {
           clearPersistedUnsavedFormData()
           toast.success(language.success.collectRecordDelete)

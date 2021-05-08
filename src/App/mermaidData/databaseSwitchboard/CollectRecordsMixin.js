@@ -21,25 +21,39 @@ const CollectRecordsMixin = (Base) =>
 
     #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
 
+    #formatFishbeltRecordForPush = ({ record, projectId, profileId }) => {
+      const idToSubmit = record.id ?? createUuid()
+      const profileIdToSubmit = record.profile ?? profileId
+      const projectIdToSubmit = record.project ?? projectId
+
+      return {
+        ...record,
+        id: idToSubmit,
+        data: { ...record.data, protocol: 'fishbelt' },
+        project: projectIdToSubmit,
+        profile: profileIdToSubmit,
+      }
+    }
+
     saveFishBelt = ({ record, profileId, projectId }) => {
       if (!record || !profileId || !projectId) {
         throw new Error(
           'saveFishBelt expects record, profileId, and projectId parameters',
         )
       }
-      const idToSubmit = record.id ?? createUuid()
-      const recordToSubmit = {
-        ...record,
-        id: idToSubmit,
-
-        data: { ...record.data, protocol: 'fishbelt' },
-      }
+      const recordToSubmit = this.#formatFishbeltRecordForPush({
+        record,
+        profileId,
+        projectId,
+      })
 
       if (this._isOnlineAuthenticatedAndReady) {
         return this._authenticatedAxios
-          .post(`${this._apiBaseUrl}/push`, recordToSubmit)
+          .post(`${this._apiBaseUrl}/push/`, {
+            collect_records: [recordToSubmit],
+          })
           .then((response) => {
-            const recordFromServer = response.data
+            const recordFromServer = response.data.collect_records[0]
 
             return this._dexieInstance.collectRecords
               .put(recordFromServer)
@@ -70,18 +84,33 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteFishBelt = (id) => {
-      if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+    deleteFishBelt = ({ record, profileId, projectId }) => {
+      if (!record || !profileId || !projectId) {
+        throw new Error(
+          'deleteFishBelt expects record, profileId, and projectId parameters',
+        )
       }
       if (this._isOnlineAuthenticatedAndReady) {
-        toast.warn(
-          "The online workflow for collect records hasn't been built yet. If you are trying to test the offline workflow, try disabling your internet.",
-        )
+        const recordMarkedToBeDeleted = {
+          ...this.#formatFishbeltRecordForPush({
+            record,
+            profileId,
+            projectId,
+          }),
+          _deleted: true,
+        }
+
+        return this._authenticatedAxios
+          .post(`${this._apiBaseUrl}/push/`, {
+            collect_records: [recordMarkedToBeDeleted],
+          })
+          .then(() => {
+            return this._dexieInstance.collectRecords.delete(record.id)
+          })
       }
 
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords.delete(id)
+        return this._dexieInstance.collectRecords.delete(record.id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
