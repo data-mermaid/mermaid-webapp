@@ -1,3 +1,4 @@
+import { rest } from 'msw'
 import { validate as validateUuid } from 'uuid'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 
@@ -82,7 +83,7 @@ describe('Save fishbelt', () => {
         fishBeltToBeSaved.randomUnexpectedProperty,
       )
     })
-    test('saveFishBelt online replaces previous fishBelt record with same id', async () => {
+    test('saveFishBelt online replaces previous fishBelt record with same id (acts like a put)', async () => {
       const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
       await dbInstance.saveFishBelt({
@@ -246,7 +247,83 @@ describe('Save fishbelt', () => {
 })
 
 describe('Delete fishbelt', () => {
-  describe('Online delete fishbelt', () => {})
+  describe('Online delete fishbelt', () => {
+    test('deleteFishBelt online returns error message upon dexie error', async () => {
+      const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError()
+
+      expect.assertions(1)
+
+      try {
+        await dbInstance.deleteFishBelt({
+          record: { id: 'someId' },
+          profileId: '1',
+          projectId: '1',
+        })
+      } catch (error) {
+        expect(error.message).toBeTruthy()
+      }
+    })
+    test('deleteFishBelt online deletes the record', async () => {
+      const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+      const fishBeltToBeDeleted = {
+        id: 'foo',
+        data: {},
+        profile: '1234',
+        randomUnexpectedProperty: 'whatever',
+      }
+
+      await dbInstance.saveFishBelt({
+        record: fishBeltToBeDeleted,
+        profileId: '1',
+        projectId: '1',
+      })
+
+      /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
+    We need to access indexedDb directly because we are in online mode and
+    the db switchboard's getFishBelt would try to hit the real or mocked API
+    which is boyond the scope of the test.
+     */
+      expect(await dbInstance.dexieInstance.collectRecords.get('foo'))
+
+      /** We have to put this mock api endpoint here because
+       * saveFishbelt and deleteFishbelt both use the same /push endpoint.
+       */
+      mockMermaidApiAllSuccessful.use(
+        rest.post(
+          `${process.env.REACT_APP_MERMAID_API}/push`,
+          // eslint-disable-next-line max-nested-callbacks
+          (req, res, ctx) => {
+            if (!req.body._deleted) {
+              /** the real api doesnt do this.
+               *  If you forget _deleted, you just end up updating
+               *  the record and not deleting it.
+               * But we want this test to fail if _deletes is absent*/
+
+              ctx.status(400)
+              ctx.json({
+                errorMessage: `_delete property missing in tested code intended for deletion`,
+              })
+            }
+
+            return res(ctx.json(req.body))
+          },
+        ),
+      )
+
+      await dbInstance.deleteFishBelt({
+        record: {
+          id: 'foo',
+        },
+        profileId: '1',
+        projectId: '1',
+      })
+
+      expect(
+        await dbInstance.dexieInstance.collectRecords.get('foo'),
+      ).toBeUndefined()
+    })
+  })
   describe('Offline delete fishbelt', () => {
     test('deleteFishBelt offline returns error message upon dexie error', async () => {
       const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError()
@@ -254,7 +331,11 @@ describe('Delete fishbelt', () => {
       expect.assertions(1)
 
       try {
-        await dbInstanceOffline.deleteFishBelt('someId')
+        await dbInstanceOffline.deleteFishBelt({
+          record: { id: 'someId' },
+          profileId: '1',
+          projectId: '1',
+        })
       } catch (error) {
         expect(error.message).toBeTruthy()
       }
@@ -277,7 +358,11 @@ describe('Delete fishbelt', () => {
 
       expect(await dbInstanceOffline.getFishBelt('foo'))
 
-      await dbInstanceOffline.deleteFishBelt('foo')
+      await dbInstanceOffline.deleteFishBelt({
+        record: { id: 'foo' },
+        profileId: '1',
+        projectId: '1',
+      })
 
       expect(await dbInstanceOffline.getFishBelt('foo')).toBeUndefined()
     })

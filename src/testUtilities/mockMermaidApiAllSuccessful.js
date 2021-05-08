@@ -15,4 +15,8 @@ const mockMermaidApiAllSuccessful = setupServer(
   }),
 )
 
+mockMermaidApiAllSuccessful.listen({
+  onUnhandledRequest: 'warn',
+})
+
 export default mockMermaidApiAllSuccessful

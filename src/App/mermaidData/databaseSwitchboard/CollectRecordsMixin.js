@@ -70,18 +70,26 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteFishBelt = (id) => {
-      if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+    deleteFishBelt = ({ record, profileId, projectId }) => {
+      if (!record || !profileId || !projectId) {
+        throw new Error(
+          'saveFishBelt expects record, profileId, and projectId parameters',
+        )
       }
       if (this._isOnlineAuthenticatedAndReady) {
-        toast.warn(
-          "The online workflow for collect records hasn't been built yet. If you are trying to test the offline workflow, try disabling your internet.",
-        )
+        const recordMarkedToBeDeleted = { ...record, _deleted: true }
+
+        return this.saveFishBelt({
+          record: recordMarkedToBeDeleted,
+          profileId,
+          projectId,
+        }).then(() => {
+          return this._dexieInstance.collectRecords.delete(record.id)
+        })
       }
 
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords.delete(id)
+        return this._dexieInstance.collectRecords.delete(record.id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
