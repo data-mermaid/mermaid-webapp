@@ -15,14 +15,15 @@ const InputWithLabelAndValidation = ({
 
   const _preventScrollingFromChangingValues = useEffect(() => {
     const handleWheel = (e) => e.preventDefault()
+    const snapshotOfTextFieldRef = textFieldRef.current
 
-    textFieldRef.current.addEventListener('wheel', handleWheel)
+    snapshotOfTextFieldRef.addEventListener('wheel', handleWheel)
 
     return () => {
-      if (textFieldRef.current)
-        textFieldRef.current.removeEventListener('wheel', handleWheel)
+      if (snapshotOfTextFieldRef)
+        snapshotOfTextFieldRef.removeEventListener('wheel', handleWheel)
     }
-  }, [textFieldRef])
+  }, [])
 
   return (
     <InputRow validationType={validationType}>
