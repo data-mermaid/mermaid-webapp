@@ -10,9 +10,13 @@ const mockMermaidApiAllSuccessful = setupServer(
       }),
     )
   }),
-  rest.post(`${process.env.REACT_APP_MERMAID_API}/push`, (req, res, ctx) => {
+  rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
     return res(ctx.json(req.body))
   }),
 )
+
+mockMermaidApiAllSuccessful.listen({
+  onUnhandledRequest: 'warn',
+})
 
 export default mockMermaidApiAllSuccessful
