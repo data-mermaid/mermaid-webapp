@@ -29,10 +29,7 @@ const InputWithLabelAndValidation = ({
       <Input id={id} {...restOfProps} ref={textFieldRef} />
       <div>
         {validationMessage ? (
-          <ValidationMessage
-            validationType={validationType}
-            role={validationRole}
-          >
+          <ValidationMessage validationType={validationType}>
             {validationMessage}
           </ValidationMessage>
         ) : null}

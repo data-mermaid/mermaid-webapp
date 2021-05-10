@@ -23,19 +23,13 @@ const TextareaWithLabelAndValidation = ({
     }
   }, [textFieldRef])
 
-  const validationRole =
-    validationType === 'error' || 'warning' ? 'alert' : undefined
-
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
       <Textarea rows="3" id={id} {...restOfProps} ref={textFieldRef} />
       <div>
         {validationMessage ? (
-          <ValidationMessage
-            validationType={validationType}
-            role={validationRole}
-          >
+          <ValidationMessage validationType={validationType}>
             {validationMessage}
           </ValidationMessage>
         ) : null}
