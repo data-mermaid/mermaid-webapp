@@ -17,48 +17,43 @@ export const basic = () => (
   <>
     <InputSelectWithLabelAndValidation
       onChange={action('Select Option Change')}
-      id="id"
+      id="id1"
       label="No warnings or errors"
       options={options}
     />
-    <br /> <br />
     <InputSelectWithLabelAndValidation
       onChange={action('Select Option Change')}
-      id="id"
+      id="id2"
       label="With warning"
       validationType="warning"
       options={options}
     />
-    <br /> <br />
     <InputSelectWithLabelAndValidation
       onChange={action('Select Option Change')}
-      id="id"
-      label="With error"
+      id="id3"
+      label="With error and a reallylonglonglonglonglongword word word in the label"
       validationType="error"
       options={options}
     />
-    <br /> <br />
     <InputSelectWithLabelAndValidation
       onChange={action('Select Option Change')}
-      id="id"
+      id="id4"
       label="With warning"
       validationType="warning"
       validationMessage="Validation message"
       options={options}
     />
-    <br /> <br />
     <InputSelectWithLabelAndValidation
       onChange={action('Select Option Change')}
-      id="id"
+      id="id5"
       label="With error"
       validationType="error"
-      validationMessage="Validation message"
+      validationMessage="This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message."
       options={options}
     />
-    <br /> <br />
     <InputSelectWithLabelAndValidation
       onChange={action('Select Option Change')}
-      id="id"
+      id="id6"
       label="With validation message, but a non-supported (or no) validation type"
       validationType="rainbow"
       validationMessage="Validation message"

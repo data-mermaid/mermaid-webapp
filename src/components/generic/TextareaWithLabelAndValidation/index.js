@@ -1,0 +1,3 @@
+import TextareaWithLabelAndValidation from './TextareaWithLabelAndValidation'
+
+export default TextareaWithLabelAndValidation
