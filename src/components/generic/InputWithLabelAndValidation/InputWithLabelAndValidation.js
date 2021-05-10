@@ -23,9 +23,6 @@ const InputWithLabelAndValidation = ({
     }
   }, [textFieldRef])
 
-  const validationRole =
-    validationType === 'error' || 'warning' ? 'alert' : undefined
-
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>

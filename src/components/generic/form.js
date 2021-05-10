@@ -49,7 +49,9 @@ export const InputRow = styled.div`
       border-color: ${theme.color.warningColor};
     `}
 `
-export const ValidationMessage = styled.span`
+export const ValidationMessage = styled.span.attrs((props) => ({
+  role: props.validationType === 'error' || 'warning' ? 'alert' : undefined,
+}))`
   /* ${(props) => props.validationType === 'error' && css``}
   ${(props) => props.validationType === 'warning' && css``} */
 `
