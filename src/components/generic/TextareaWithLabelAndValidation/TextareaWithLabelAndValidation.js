@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { Input, InputRow, ValidationMessage } from '../form'
+import { Textarea, InputRow, ValidationMessage } from '../form'
 
-const InputWithLabelAndValidation = ({
+const TextareaWithLabelAndValidation = ({
   label,
   id,
   validationMessage,
@@ -26,7 +26,7 @@ const InputWithLabelAndValidation = ({
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <Input id={id} {...restOfProps} ref={textFieldRef} />
+      <Textarea rows="3" id={id} {...restOfProps} ref={textFieldRef} />
       <div>
         {validationMessage ? (
           <ValidationMessage validationType={validationType}>
@@ -38,16 +38,16 @@ const InputWithLabelAndValidation = ({
   )
 }
 
-InputWithLabelAndValidation.propTypes = {
+TextareaWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   validationType: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
-InputWithLabelAndValidation.defaultProps = {
+TextareaWithLabelAndValidation.defaultProps = {
   validationType: undefined,
   validationMessage: undefined,
 }
 
-export default InputWithLabelAndValidation
+export default TextareaWithLabelAndValidation

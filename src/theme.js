@@ -5,6 +5,8 @@ const primary = colorHelper('#004c76')
 const secondary = colorHelper('#E6E6E6')
 const callout = colorHelper('#078600')
 const caution = colorHelper('#BD585A')
+const warning = colorHelper('#F0E0B6')
+const ignore = colorHelper('#D6DDE6')
 const white = primary.mix(colorHelper('white'), 0.98)
 const black = primary.mix(colorHelper('black'), 0.95)
 
@@ -17,6 +19,10 @@ const xlarge = '3.5rem'
 const color = {
   white,
   black,
+  warning,
+  ignore,
+  ignoreColor: ignore,
+  warningColor: warning,
   backgroundColor: black.mix(colorHelper(white), 0.9),
   primaryColor: primary,
   primaryHover: primary.mix(colorHelper(white), 0.1),
@@ -52,6 +58,8 @@ const color = {
   tableRowOdd: primary.mix(colorHelper(white), 0.9),
   tableRowEven: primary.mix(colorHelper(white), 0.95),
   tableRowHover: '#D7DDE2',
+  inputBackground: white,
+  outline: `solid 2px ${primary}`,
 }
 const spacing = {
   xsmall,
@@ -69,6 +77,7 @@ const spacing = {
   borderSmall: '1px',
   borderMedium: '2px',
   borderLarge: '4px',
+  borderXLarge: '8px',
 }
 
 const timing = {
