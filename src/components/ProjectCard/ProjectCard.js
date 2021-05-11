@@ -6,11 +6,11 @@ import {
   ButtonGroups,
   CardWrapper,
   CheckBoxLabel,
+  ProjectCardButtonSecondary,
   ProjectInfoWrapper,
   ProjectNameWrapper,
   VerticalRule,
 } from './ProjectCard.styles'
-import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
@@ -72,10 +72,13 @@ const ProjectCard = ({
         <NavLinkButtonGroup projectUrl={projectUrl} />
         <OfflineHide>
           <VerticalRule />
-          <ButtonSecondary onClick={handleProjectCopyClick} aria-label="Copy">
+          <ProjectCardButtonSecondary
+            onClick={handleProjectCopyClick}
+            aria-label="Copy"
+          >
             <IconCopy />
             <span>Copy</span>
-          </ButtonSecondary>
+          </ProjectCardButtonSecondary>
         </OfflineHide>
       </ButtonGroups>
     </CardWrapper>
