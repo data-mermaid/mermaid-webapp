@@ -5,7 +5,6 @@ import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 
 import {
   fireEvent,
-  mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
   renderUnauthenticatedOffline,
@@ -14,16 +13,6 @@ import {
   waitFor,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 test('App renders the initial screen as expected for an online and authenticated user', async () => {
   renderAuthenticatedOnline(

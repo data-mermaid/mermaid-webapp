@@ -1,20 +1,9 @@
 import { validate as validateUuid } from 'uuid'
-import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
 } from './testHelpers.DatabseSwitchboard'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 test('saveFishBelt offline returns saved record with protocol info automatically included', async () => {
   const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess()
