@@ -5,6 +5,7 @@ import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
+import InputRadioWithLabelAndValidation from '../generic/InputRadioWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
 
 /**
