@@ -1,0 +1,3 @@
+import InputRadioWithLabelAndValidation from './InputRadioWithLabelAndValidation'
+
+export default InputRadioWithLabelAndValidation
