@@ -26,7 +26,7 @@ const StyledDialog = styled('div')`
   align-self: center;
   justify-self: center;
   max-width: calc(100vw - ${theme.spacing.medium});
-  width: 900px;
+  width: 90rem;
   background: ${theme.color.white};
 `
 const ModalTitle = styled.div`
@@ -55,6 +55,8 @@ const ModalTitle = styled.div`
   }
 `
 const ModalContent = styled.div`
+  overflow: auto;
+  max-height: 50vh;
   padding: ${theme.spacing.medium};
 `
 const ModalFooter = styled.div`
@@ -92,17 +94,18 @@ const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent }) => {
     isOpen && (
       <StyledDialogOverlay>
         <StyledDialog
-          // id="dialog-content"
+          role="dialog"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-content"
           onDismiss={onDismiss}
-          aria-labelledby="dialog-content"
         >
           <ModalTitle>
-            <h2>{title}</h2>
+            <h2 id="modal-title">{title}</h2>
             <button type="button" className="close-button" onClick={onDismiss}>
               <IconClose aria-label="close" />
             </button>
           </ModalTitle>
-          <ModalContent>{mainContent}</ModalContent>
+          <ModalContent id="modal-content">{mainContent}</ModalContent>
           <ModalFooter>{footerContent}</ModalFooter>
         </StyledDialog>
       </StyledDialogOverlay>
