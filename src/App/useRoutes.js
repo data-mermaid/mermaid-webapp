@@ -22,7 +22,9 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
     },
     {
       path: '/projects/:projectId/health',
-      Component: Health,
+      Component: () => (
+        <Health databaseSwitchboardInstance={databaseSwitchboardInstance} />
+      ),
     },
     {
       path: '/projects/:projectId/collecting',

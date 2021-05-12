@@ -1,12 +1,21 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { H3 } from '../../generic/text'
-// import PropTypes from 'prop-types'
 import { ContentPageLayout } from '../../Layout'
+import PageUnavailableOffline from '../PageUnavailableOffline'
 
-const Health = () => {
+const Health = ({ databaseSwitchboardInstance }) => {
+  const { _isOnlineAuthenticatedAndReady } = databaseSwitchboardInstance
+
+  const content = _isOnlineAuthenticatedAndReady ? (
+    <>Project Health Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Project Health Placeholder</>}
+      content={content}
       toolbar={
         <>
           <H3>Project Health</H3>
@@ -16,6 +25,10 @@ const Health = () => {
   )
 }
 
-Health.propTypes = {}
+Health.propTypes = {
+  databaseSwitchboardInstance: PropTypes.shape({
+    _isOnlineAuthenticatedAndReady: PropTypes.bool,
+  }).isRequired,
+}
 
 export default Health
