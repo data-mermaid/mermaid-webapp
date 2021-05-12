@@ -19,6 +19,12 @@ const CollectRecordsMixin = (Base) =>
       warning: 'Warnings',
     }
 
+    #getIsRecordStatusCodeSuccessful = (recordFromServer) => {
+      const statusCode = recordFromServer.status_code
+
+      return statusCode >= 200 && statusCode < 300
+    }
+
     #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
 
     #formatFishbeltRecordForPush = ({ record, projectId, profileId }) => {
@@ -54,9 +60,11 @@ const CollectRecordsMixin = (Base) =>
           })
           .then((response) => {
             const recordFromServer = response.data.collect_records[0]
-            const recordStatusSuccess = recordFromServer.status_code < 300
+            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+              recordFromServer,
+            )
 
-            if (recordStatusSuccess) {
+            if (isRecordStatusCodeSuccessful) {
               return this._dexieInstance.collectRecords
                 .put(recordFromServer)
                 .then(() => recordFromServer)
@@ -115,9 +123,11 @@ const CollectRecordsMixin = (Base) =>
           })
           .then((response) => {
             const recordFromServer = response.data.collect_records[0]
-            const recordStatusSuccess = recordFromServer.status_code < 300
+            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+              recordFromServer,
+            )
 
-            if (recordStatusSuccess) {
+            if (isRecordStatusCodeSuccessful) {
               return this._dexieInstance.collectRecords.delete(record.id)
             }
 
