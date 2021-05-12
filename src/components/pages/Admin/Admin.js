@@ -1,20 +1,34 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
+import PageUnavailableOffline from '../PageUnavailableOffline'
 
-// import PropTypes from 'prop-types'
+const Admin = ({ databaseSwitchboardInstance }) => {
+  const { _isOnlineAuthenticatedAndReady } = databaseSwitchboardInstance
 
-/**
- * Project Admin Page
- */
-const Admin = () => {
+  const content = _isOnlineAuthenticatedAndReady ? (
+    <>Project Info Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Admin Placeholder</>}
-      toolbar={<>Sub layout top bar</>}
+      content={content}
+      toolbar={
+        <>
+          <H2>Project Info</H2>
+        </>
+      }
     />
   )
 }
 
-Admin.propTypes = {}
+Admin.propTypes = {
+  databaseSwitchboardInstance: PropTypes.shape({
+    _isOnlineAuthenticatedAndReady: PropTypes.bool,
+  }).isRequired,
+}
 
 export default Admin

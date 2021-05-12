@@ -1,17 +1,34 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
+import PageUnavailableOffline from '../PageUnavailableOffline'
 
-// import PropTypes from 'prop-types'
+const FishFamilies = ({ databaseSwitchboardInstance }) => {
+  const { _isOnlineAuthenticatedAndReady } = databaseSwitchboardInstance
 
-const FishFamilies = () => {
+  const content = _isOnlineAuthenticatedAndReady ? (
+    <>Fish Families Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Fish Families Placeholder</>}
-      toolbar={<>Sub layout top bar</>}
+      content={content}
+      toolbar={
+        <>
+          <H2>Fish Families</H2>
+        </>
+      }
     />
   )
 }
 
-// FishFamilies.propTypes = {}
+FishFamilies.propTypes = {
+  databaseSwitchboardInstance: PropTypes.shape({
+    _isOnlineAuthenticatedAndReady: PropTypes.bool,
+  }).isRequired,
+}
 
 export default FishFamilies

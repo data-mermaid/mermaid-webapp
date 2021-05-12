@@ -1,16 +1,34 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
-// import PropTypes from 'prop-types'
+import PageUnavailableOffline from '../PageUnavailableOffline'
 
-const Users = () => {
+const Users = ({ databaseSwitchboardInstance }) => {
+  const { _isOnlineAuthenticatedAndReady } = databaseSwitchboardInstance
+
+  const content = _isOnlineAuthenticatedAndReady ? (
+    <>Users Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Users Placeholder</>}
-      toolbar={<>Sub layout top bar</>}
+      content={content}
+      toolbar={
+        <>
+          <H2>Users</H2>
+        </>
+      }
     />
   )
 }
 
-// Users.propTypes = {}
+Users.propTypes = {
+  databaseSwitchboardInstance: PropTypes.shape({
+    _isOnlineAuthenticatedAndReady: PropTypes.bool,
+  }).isRequired,
+}
 
 export default Users

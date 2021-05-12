@@ -81,13 +81,17 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
     },
     {
       path: '/projects/:projectId/admin',
-      Component: Admin,
+      Component: () => (
+        <Admin databaseSwitchboardInstance={databaseSwitchboardInstance} />
+      ),
     },
 
     {
       path: '/projects/:projectId/graphs-and-maps',
       Component: () => (
-        <GraphsAndMaps databaseSwitchboardInstance={databaseSwitchboardInstance} />
+        <GraphsAndMaps
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+        />
       ),
     },
 
@@ -102,15 +106,25 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
     },
     {
       path: '/projects/:projectId/users',
-      Component: Users,
+      Component: () => (
+        <Users databaseSwitchboardInstance={databaseSwitchboardInstance} />
+      ),
     },
     {
       path: '/projects/:projectId/fish-families',
-      Component: FishFamilies,
+      Component: () => (
+        <FishFamilies
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+        />
+      ),
     },
     {
       path: '/projects/:projectId/data-sharing',
-      Component: DataSharing,
+      Component: () => (
+        <DataSharing
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+        />
+      ),
     },
   ]
 
