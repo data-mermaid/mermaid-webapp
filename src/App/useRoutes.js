@@ -75,7 +75,9 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
     },
     {
       path: '/projects/:projectId/data',
-      Component: Data,
+      Component: () => (
+        <Data databaseSwitchboardInstance={databaseSwitchboardInstance} />
+      ),
     },
     {
       path: '/projects/:projectId/admin',

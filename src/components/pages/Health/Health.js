@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { H3 } from '../../generic/text'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 
@@ -18,7 +18,7 @@ const Health = ({ databaseSwitchboardInstance }) => {
       content={content}
       toolbar={
         <>
-          <H3>Project Health</H3>
+          <H2>Project Health</H2>
         </>
       }
     />

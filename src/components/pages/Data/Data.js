@@ -1,20 +1,34 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
+import PageUnavailableOffline from '../PageUnavailableOffline'
 
-// import PropTypes from 'prop-types'
+const Data = ({ databaseSwitchboardInstance }) => {
+  const { _isOnlineAuthenticatedAndReady } = databaseSwitchboardInstance
 
-/**
- * Project Data Page
- */
-const Data = () => {
+  const content = _isOnlineAuthenticatedAndReady ? (
+    <>Submitted Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Data Placeholder</>}
-      toolbar={<>Sub layout top bar</>}
+      content={content}
+      toolbar={
+        <>
+          <H2>Submitted</H2>
+        </>
+      }
     />
   )
 }
 
-Data.propTypes = {}
+Data.propTypes = {
+  databaseSwitchboardInstance: PropTypes.shape({
+    _isOnlineAuthenticatedAndReady: PropTypes.bool,
+  }).isRequired,
+}
 
 export default Data
