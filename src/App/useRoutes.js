@@ -86,7 +86,9 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
 
     {
       path: '/projects/:projectId/graphs-and-maps',
-      Component: GraphsAndMaps,
+      Component: () => (
+        <GraphsAndMaps databaseSwitchboardInstance={databaseSwitchboardInstance} />
+      ),
     },
 
     {
