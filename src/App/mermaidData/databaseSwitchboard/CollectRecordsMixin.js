@@ -54,10 +54,19 @@ const CollectRecordsMixin = (Base) =>
           })
           .then((response) => {
             const recordFromServer = response.data.collect_records[0]
+            const recordStatusSuccess = recordFromServer.status_code < 300
 
-            return this._dexieInstance.collectRecords
-              .put(recordFromServer)
-              .then(() => recordFromServer)
+            if (recordStatusSuccess) {
+              return this._dexieInstance.collectRecords
+                .put(recordFromServer)
+                .then(() => recordFromServer)
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API record returned from saveFishBelt doesnt have a succussful status code',
+              ),
+            )
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
@@ -104,8 +113,19 @@ const CollectRecordsMixin = (Base) =>
           .post(`${this._apiBaseUrl}/push/`, {
             collect_records: [recordMarkedToBeDeleted],
           })
-          .then(() => {
-            return this._dexieInstance.collectRecords.delete(record.id)
+          .then((response) => {
+            const recordFromServer = response.data.collect_records[0]
+            const recordStatusSuccess = recordFromServer.status_code < 300
+
+            if (recordStatusSuccess) {
+              return this._dexieInstance.collectRecords.delete(record.id)
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API record returned from deletFishBelt doesnt have a succussful status code',
+              ),
+            )
           })
       }
 
