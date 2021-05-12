@@ -1,8 +1,6 @@
-import Dialog from '@reach/dialog'
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
-import '@reach/dialog/styles.css'
 import { IconClose } from '../../icons'
 import theme from '../../../theme'
 import {
@@ -10,13 +8,28 @@ import {
   mediaQueryPhoneOnly,
 } from '../../../library/styling/mediaQueries'
 
-const StyledDialog = styled(Dialog)`
+const StyledDialogOverlay = styled('div')`
+  background: rgba(0, 0, 0, 0.5);
+  width: ${theme.spacing.fullViewportWidth};
+  height: 100vh;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  position: fixed;
+  display: grid;
+  grid-template-columns: 1fr;
+  z-index: 10001;
+`
+const StyledDialog = styled('div')`
   padding: 0;
-  max-width: calc(100% - 1em);
+  margin: 0;
+  align-self: center;
+  justify-self: center;
+  max-width: calc(100vw - ${theme.spacing.medium});
   width: 900px;
   background: ${theme.color.white};
 `
-const TitleStyling = styled.div`
+const ModalTitle = styled.div`
   padding: ${theme.spacing.medium};
   display: grid;
   grid-template-columns: auto auto;
@@ -44,7 +57,7 @@ const TitleStyling = styled.div`
 const ModalContent = styled.div`
   padding: ${theme.spacing.medium};
 `
-const ModalActions = styled.div`
+const ModalFooter = styled.div`
   padding: ${theme.spacing.medium};
   display: grid;
   grid-auto-columns: auto auto;
@@ -74,27 +87,31 @@ const RightFooter = styled('div')`
   justify-self: end;
 `
 
-const Modal = ({ title, mainContent, isOpen, onDismiss, bottomRowContent }) => {
+const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent }) => {
   return (
     isOpen && (
-      <StyledDialog onDismiss={onDismiss} aria-labelledby="dialog-content">
-        <div id="dialog-content">
-          <TitleStyling>
+      <StyledDialogOverlay>
+        <StyledDialog
+          // id="dialog-content"
+          onDismiss={onDismiss}
+          aria-labelledby="dialog-content"
+        >
+          <ModalTitle>
             <h2>{title}</h2>
             <button type="button" className="close-button" onClick={onDismiss}>
               <IconClose aria-label="close" />
             </button>
-          </TitleStyling>
+          </ModalTitle>
           <ModalContent>{mainContent}</ModalContent>
-          <ModalActions>{bottomRowContent}</ModalActions>
-        </div>
-      </StyledDialog>
+          <ModalFooter>{footerContent}</ModalFooter>
+        </StyledDialog>
+      </StyledDialogOverlay>
     )
   )
 }
 
 Modal.propTypes = {
-  bottomRowContent: PropTypes.node.isRequired,
+  footerContent: PropTypes.node.isRequired,
   isOpen: PropTypes.bool.isRequired,
   mainContent: PropTypes.node.isRequired,
   onDismiss: PropTypes.func.isRequired,
