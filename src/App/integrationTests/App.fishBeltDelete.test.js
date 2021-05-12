@@ -37,7 +37,7 @@ describe('Offline', () => {
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
     userEvent.click(
-      screen.getByText('Yes', {
+      screen.getByText('Delete Record', {
         selector: 'button',
       }),
     )
@@ -75,7 +75,7 @@ describe('Offline', () => {
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
     userEvent.click(
-      screen.getByText('No', {
+      screen.getByText('Cancel', {
         selector: 'button',
       }),
     )
@@ -102,7 +102,7 @@ describe('Offline', () => {
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
     userEvent.click(
-      screen.getByText('Yes', {
+      screen.getByText('Delete Record', {
         selector: 'button',
       }),
     )
@@ -140,7 +140,7 @@ describe('Offline', () => {
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
-    userEvent.click(screen.getByText('No'), {
+    userEvent.click(screen.getByText('Cancel'), {
       selector: 'button',
     })
 
