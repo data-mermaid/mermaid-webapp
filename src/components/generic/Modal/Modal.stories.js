@@ -18,7 +18,7 @@ export const OneButton = () => {
   const open = () => setShowDialog(true)
   const close = () => setShowDialog(false)
   const mainContent = <>main content</>
-  const bottomRowContent = (
+  const footerContent = (
     <>
       <RightFooter>
         <ButtonPrimary type="button">one button</ButtonPrimary>
@@ -36,7 +36,7 @@ export const OneButton = () => {
         onDismiss={close}
         title="I'm a title"
         mainContent={mainContent}
-        bottomRowContent={bottomRowContent}
+        footerContent={footerContent}
       />
     </>
   )
@@ -47,7 +47,7 @@ export const Basic = () => {
   const open = () => setShowDialog(true)
   const close = () => setShowDialog(false)
   const mainContent = <p>Send a message to your pal!</p>
-  const bottomRowContent = (
+  const footerContent = (
     <>
       <RightFooter>
         <ButtonSecondary type="button">Cancel</ButtonSecondary>
@@ -66,7 +66,7 @@ export const Basic = () => {
         onDismiss={close}
         title="I'm a long title. Here I go being really really long. I can't stop!"
         mainContent={mainContent}
-        bottomRowContent={bottomRowContent}
+        footerContent={footerContent}
       />
     </>
   )
@@ -81,7 +81,7 @@ export const MultipleButtons = () => {
       If you have this many buttons in a modal, you probably need a redesign.
     </p>
   )
-  const bottomRowContent = (
+  const footerContent = (
     <RowSpaceBetween>
       <LeftFooter>
         <ButtonCallout type="button">LOOK!</ButtonCallout>
@@ -106,7 +106,7 @@ export const MultipleButtons = () => {
         onDismiss={close}
         title="I'm a title"
         mainContent={mainContent}
-        bottomRowContent={bottomRowContent}
+        footerContent={footerContent}
       />
     </>
   )
@@ -133,7 +133,7 @@ export const ButtonsAndText = () => {
     </>
   )
 
-  const bottomRowContent = (
+  const footerContent = (
     <RowSpaceBetween>
       <LeftFooter>
         <p>Clicking buttons does stuff</p>
@@ -155,7 +155,7 @@ export const ButtonsAndText = () => {
         onDismiss={close}
         title="I'm a title"
         mainContent={mainContent}
-        bottomRowContent={bottomRowContent}
+        footerContent={footerContent}
       />
     </>
   )
