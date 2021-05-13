@@ -1,40 +1,38 @@
 const projects = [
   {
-    name:
-      'Karimunjawa National Park is a long name for a project, not as long as Karimunjawaawajnumirak',
-    countries: ['Fiji'],
-    num_sites: 23,
+    name: 'Project I',
+    countries: ['Canada'],
+    num_sites: 13,
     offlineReady: true,
     updated_on: '01/21/2020',
   },
   {
-    name: 'Gita Nada_MPA 2018',
-    countries: ['Indonesia'],
-    num_sites: 26,
+    name: 'Project II',
+    countries: ['America'],
+    num_sites: 36,
     offlineReady: true,
-    updated_on: '11/21/2021',
+    updated_on: '21/21/2021',
   },
   {
-    name:
-      'Survei Ekologi KKPD Aceh Besar, KKPD Pesisir Timur Sabang dan TWAL Pulau Weh',
-    countries: ['Albania, Indonesia, Malaysia'],
+    name: 'Project III',
+    countries: ['England, Finland'],
     num_sites: 34,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '21/21/1992',
   },
   {
-    name: "Belize Glover's Atoll 2019",
-    countries: ['Fiji, Indonesia'],
-    num_sites: 49,
+    name: 'Project IV',
+    countries: ['Canada'],
+    num_sites: 9,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '31/12/2011',
   },
   {
-    name: 'XPDC Kei Kecil 2018',
-    countries: ['Fiji'],
+    name: 'Project V',
+    countries: ['Mexico'],
     num_sites: 33,
     offlineReady: false,
-    updated_on: '11/21/2021',
+    updated_on: '01/21/2001',
   },
 ]
 
@@ -55,7 +53,9 @@ const collectRecords = [
         sample_time: '22:55',
         len_surveyed: 10,
       },
+      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
+    validations: null,
   },
   {
     id: '2',
@@ -77,7 +77,9 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 6,
       },
+      observers: [{ profile_name: 'Nick' }],
     },
+    validations: null,
   },
   {
     id: '3',
@@ -87,7 +89,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2001-11-22',
       },
       fishbelt_transect: {
         depth: 10,
@@ -99,7 +101,9 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
+    validations: { status: 'error' },
   },
   {
     id: '4',
@@ -109,7 +113,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2017-4-19',
       },
       fishbelt_transect: {
         depth: 10,
@@ -121,7 +125,9 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
     },
+    validations: { status: 'error' },
   },
   {
     id: '5',
@@ -131,7 +137,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2012-6-12',
       },
       fishbelt_transect: {
         depth: 10,
@@ -143,7 +149,9 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Brian' }, { profile_name: 'Melissa' }],
     },
+    validations: { status: 'ok' },
   },
   {
     id: '6',
@@ -153,7 +161,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2016-3-7',
       },
       fishbelt_transect: {
         depth: 10,
@@ -165,7 +173,9 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Dustin' }],
     },
+    validations: { status: 'ok' },
   },
   {
     id: '7',
@@ -175,11 +185,10 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2020-8-13',
       },
       fishbelt_transect: {
         depth: 10,
-        label: 'FB-2',
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
@@ -187,7 +196,9 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [{ profile_name: 'Nick' }, { profile_name: 'Dustin' }],
     },
+    validations: null,
   },
   {
     id: '8',
@@ -197,7 +208,7 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
+        sample_date: '2019-5-29',
       },
       fishbelt_transect: {
         depth: 10,
@@ -209,7 +220,13 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [
+        { profile_name: 'AL' },
+        { profile_name: 'Dustin' },
+        { profile_name: 'Kim' },
+      ],
     },
+    validations: { status: 'warning' },
   },
   {
     id: '9',
@@ -219,7 +236,6 @@ const collectRecords = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
-        sample_date: '2021-3-2',
       },
       fishbelt_transect: {
         depth: 10,
@@ -232,6 +248,7 @@ const collectRecords = [
         len_surveyed: 5,
       },
     },
+    validations: { status: 'error' },
   },
   {
     id: '10',
@@ -254,6 +271,7 @@ const collectRecords = [
         len_surveyed: 5,
       },
     },
+    validations: null,
   },
   {
     id: '11',
@@ -276,34 +294,35 @@ const collectRecords = [
         len_surveyed: 5,
       },
     },
+    validations: { status: 'ok' },
   },
 ]
 
 const sites = [
   {
     id: '1',
-    name: 'Amazing Maze',
+    name: 'Site A',
     reef_type: 'patch',
     reef_zone: 'pinnacle',
     exposure: 'exposed',
   },
   {
     id: '2',
-    name: 'BU02',
+    name: 'Site B',
     reef_type: 'fringing',
     reef_zone: 'back reef',
     exposure: 'sheltered',
   },
   {
     id: '3',
-    name: '1203',
+    name: 'Site C',
     reef_type: 'patch',
     reef_zone: 'fore reef',
     exposure: 'very sheltered',
   },
   {
     id: '4',
-    name: 'Karang Kapal',
+    name: 'Site D',
     reef_type: 'patch',
     reef_zone: 'back reef',
     exposure: 'exposed',
@@ -311,9 +330,9 @@ const sites = [
 ]
 
 const managementRegimes = [
-  { id: '1', name: 'Fisheries Utilization' },
-  { id: '2', name: 'Ankivonjy no-take' },
-  { id: '3', name: 'Bureta tabu' },
+  { id: '1', name: 'Management Regimes A' },
+  { id: '2', name: 'Management Regimes B' },
+  { id: '3', name: 'Management Regimes C' },
 ]
 
 const choices = {

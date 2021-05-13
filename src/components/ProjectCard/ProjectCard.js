@@ -6,16 +6,17 @@ import {
   ButtonGroups,
   CardWrapper,
   CheckBoxLabel,
+  ProjectCardButtonSecondary,
   ProjectInfoWrapper,
   ProjectNameWrapper,
   VerticalRule,
 } from './ProjectCard.styles'
-import { ButtonSecondary } from '../generic/buttons'
 import { IconCopy } from '../icons'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
-import pluralize from '../../library/pluralize'
+import { pluralize } from '../../library/pluralize'
 import stopEventPropagation from '../../library/stopEventPropagation'
+import OfflineHide from '../generic/OfflineHide'
 
 const ProjectCard = ({
   name,
@@ -47,8 +48,8 @@ const ProjectCard = ({
   }
 
   return (
-    <CardWrapper onClick={handleCardClick}>
-      <ProjectNameWrapper {...restOfProps}>
+    <CardWrapper onClick={handleCardClick} {...restOfProps}>
+      <ProjectNameWrapper>
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
@@ -67,13 +68,18 @@ const ProjectCard = ({
         </CheckBoxLabel>
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
-      <ButtonGroups>
+      <ButtonGroups data-testid="project-button-groups">
         <NavLinkButtonGroup projectUrl={projectUrl} />
-        <VerticalRule />
-        <ButtonSecondary onClick={handleProjectCopyClick} aria-label="Copy">
-          <IconCopy />
-          <span>Copy</span>
-        </ButtonSecondary>
+        <OfflineHide>
+          <VerticalRule />
+          <ProjectCardButtonSecondary
+            onClick={handleProjectCopyClick}
+            aria-label="Copy"
+          >
+            <IconCopy />
+            <span>Copy</span>
+          </ProjectCardButtonSecondary>
+        </OfflineHide>
       </ButtonGroups>
     </CardWrapper>
   )

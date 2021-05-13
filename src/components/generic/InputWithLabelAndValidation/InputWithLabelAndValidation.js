@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { InputRow, ValidationMessage } from '../form'
-import { RowCenter } from '../positioning'
+import { Input, InputRow, ValidationMessage } from '../form'
 
 const InputWithLabelAndValidation = ({
   label,
@@ -11,17 +10,30 @@ const InputWithLabelAndValidation = ({
   validationType,
   ...restOfProps
 }) => {
+  const textFieldRef = useRef(null)
+
+  const _preventScrollingFromChangingValues = useEffect(() => {
+    const handleWheel = (e) => e.preventDefault()
+
+    textFieldRef.current.addEventListener('wheel', handleWheel)
+
+    return () => {
+      if (textFieldRef.current)
+        textFieldRef.current.removeEventListener('wheel', handleWheel)
+    }
+  }, [textFieldRef])
+
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <input id={id} {...restOfProps} />
-      {validationMessage ? (
-        <RowCenter>
+      <Input id={id} {...restOfProps} ref={textFieldRef} />
+      <div>
+        {validationMessage ? (
           <ValidationMessage validationType={validationType}>
             {validationMessage}
           </ValidationMessage>
-        </RowCenter>
-      ) : null}
+        ) : null}
+      </div>
     </InputRow>
   )
 }

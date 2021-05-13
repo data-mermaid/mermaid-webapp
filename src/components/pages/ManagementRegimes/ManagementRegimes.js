@@ -1,10 +1,10 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import SubLayout2 from '../../SubLayout2'
+import { ContentPageLayout } from '../../Layout'
 
 const ManagementRegimes = () => {
   return (
-    <SubLayout2
+    <ContentPageLayout
       content={<>Management Regimes Placeholder</>}
       toolbar={<>Sub layout top bar</>}
     />

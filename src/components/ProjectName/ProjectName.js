@@ -14,12 +14,10 @@ const ProjectNameWrapper = styled('div')`
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
-  border-bottom: 1px solid ${theme.color.border};
   h2 {
     overflow-x: scroll;
     white-space: nowrap;
-    padding: ${theme.spacing.medium} ${theme.spacing.small}
-      ${theme.spacing.medium} 0;
+    padding: ${theme.spacing.medium} 0;
     height: 100%;
     margin: 0;
   }
@@ -46,7 +44,6 @@ const ProjectNameWrapper = styled('div')`
       font-size: smaller;
       padding: ${theme.spacing.small} ${theme.spacing.xsmall}
         ${theme.spacing.small} 0;
-
     }
     a {
       font-size: initial;

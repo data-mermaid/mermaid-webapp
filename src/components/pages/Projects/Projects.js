@@ -2,11 +2,11 @@ import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
+import { HomePageLayout } from '../../Layout'
 import language from '../../../language'
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
-import SubLayout1 from '../../SubLayout1'
 
 /**
  * All Projects page (lists projects)
@@ -16,15 +16,23 @@ const Projects = ({ databaseSwitchboardInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const _getProjects = useEffect(() => {
+    let isMounted = true
+
     databaseSwitchboardInstance
       .getProjects()
       .then((projectsResponse) => {
-        setIsLoading(false)
-        setProjects(projectsResponse)
+        if (isMounted) {
+          setIsLoading(false)
+          setProjects(projectsResponse)
+        }
       })
       .catch(() => {
         toast.error(language.error.projectsUnavailable)
       })
+
+    return () => {
+      isMounted = false
+    }
   }, [databaseSwitchboardInstance])
 
   const projectList = projects.map(
@@ -44,7 +52,7 @@ const Projects = ({ databaseSwitchboardInstance }) => {
   return isLoading ? (
     <LoadingIndicator />
   ) : (
-    <SubLayout1
+    <HomePageLayout
       topRow={<ProjectToolBarSection />}
       bottomRow={<div role="list">{projectList}</div>}
     />

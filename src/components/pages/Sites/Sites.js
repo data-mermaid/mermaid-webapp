@@ -1,11 +1,11 @@
 import React from 'react'
 
 // import PropTypes from 'prop-types'
-import SubLayout2 from '../../SubLayout2'
+import { ContentPageLayout } from '../../Layout'
 
 const Sites = () => {
   return (
-    <SubLayout2
+    <ContentPageLayout
       content={<>Sites Placeholder</>}
       toolbar={<>Sub layout top bar</>}
     />

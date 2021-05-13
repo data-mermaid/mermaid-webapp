@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
     body {
         background: ${theme.color.backgroundColor};
     }
-    body, select, input, textarea, p, a{
+    body, select, input, textarea, button, p, a{
         font-family: ${theme.typography.fontStack};
         font-size: ${theme.typography.defaultFontSize};
     

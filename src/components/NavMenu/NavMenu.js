@@ -19,25 +19,34 @@ import {
   IconHeart,
   IconSharing,
 } from '../icons'
+import OfflineHide from '../generic/OfflineHide'
 
 const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
-  border-right: solid 1px ${theme.color.border};
   height: 100%;
+  white-space: nowrap;
+  width: ${theme.spacing.sideNavWidthDesktop};
   ${mediaQueryTabletLandscapeOnly(css`
     width: ${theme.spacing.sideNavWidthTabletLandscapeOnly};
+    white-space: normal;
   `)}
   ${mediaQueryPhoneOnly(css`
     width: ${theme.spacing.sideNavWidthPhoneOnly};
+    white-space: auto;
   `)}
 `
 const NavList = styled('ul')`
+  position: sticky;
+  top: ${theme.spacing.headerHeight};
   margin-top: -1px;
   &,
   & ul {
     padding: 0;
     li {
+      a {
+        color: ${theme.color.black};
+      }
       ${mediaQueryPhoneOnly(css`
         a {
           font-size: smaller;
@@ -48,34 +57,34 @@ const NavList = styled('ul')`
   }
 `
 const NavHeader = styled('p')`
-  text-transform: uppercase;
-  font-weight: 900;
   margin: 0;
-  border-top: solid 1px ${theme.color.border};
-  letter-spacing: 2px;
+  color: ${theme.color.black};
   padding: ${theme.spacing.small};
-  padding-top: ${theme.spacing.medium};
+  padding-top: ${theme.spacing.large};
   ${mediaQueryTabletLandscapeOnly(css`
     display: none;
   `)}
+  ${theme.typography.upperCase};
 `
 
 const NavMenu = () => {
   const projectUrl = useCurrentProjectPath()
 
   return (
-    <NavWrapper>
+    <NavWrapper data-testid="content-page-side-nav">
       <NavList>
-        <li>
-          <NavHeader>Project Overview</NavHeader>
-          <ul>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/health`}>
-                <IconHeart /> <span>Project Health</span>
-              </NavLinkSidebar>
-            </li>
-          </ul>
-        </li>
+        <OfflineHide>
+          <li>
+            <NavHeader>Project Overview</NavHeader>
+            <ul>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/health`}>
+                  <IconHeart /> <span>Project Health</span>
+                </NavLinkSidebar>
+              </li>
+            </ul>
+          </li>
+        </OfflineHide>
         <li>
           <NavHeader>Collect</NavHeader>
           <ul>
@@ -99,52 +108,54 @@ const NavMenu = () => {
             </li>
           </ul>
         </li>
-        <li>
-          <NavHeader>Data</NavHeader>
-          <ul>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/data`}>
-                <IconData />
-                <span>Submitted</span>
-              </NavLinkSidebar>
-            </li>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
-                <IconGraph />
-                <span>Graphs and Maps</span>
-              </NavLinkSidebar>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <NavHeader>Admin</NavHeader>
-          <ul>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/admin`}>
-                <IconAdmin />
-                <span>Project Info</span>
-              </NavLinkSidebar>
-            </li>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/users`}>
-                <IconUsers />
-                <span>Users</span>
-              </NavLinkSidebar>
-            </li>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/fish-families`}>
-                <IconFish />
-                <span>Fish Families</span>
-              </NavLinkSidebar>
-            </li>
-            <li>
-              <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
-                <IconSharing />
-                <span>Data Sharing</span>
-              </NavLinkSidebar>
-            </li>
-          </ul>
-        </li>
+        <OfflineHide>
+          <li>
+            <NavHeader>Data</NavHeader>
+            <ul>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/data`}>
+                  <IconData />
+                  <span>Submitted</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
+                  <IconGraph />
+                  <span>Graphs and Maps</span>
+                </NavLinkSidebar>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <NavHeader>Admin</NavHeader>
+            <ul>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/admin`}>
+                  <IconAdmin />
+                  <span>Project Info</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/users`}>
+                  <IconUsers />
+                  <span>Users</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/fish-families`}>
+                  <IconFish />
+                  <span>Fish Families</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
+                  <IconSharing />
+                  <span>Data Sharing</span>
+                </NavLinkSidebar>
+              </li>
+            </ul>
+          </li>
+        </OfflineHide>
       </NavList>
     </NavWrapper>
   )

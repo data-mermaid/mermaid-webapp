@@ -1,13 +1,14 @@
 import Dexie from 'dexie'
-import fakeIndexedDB from 'fake-indexeddb'
+import FDBFactory from 'fake-indexeddb/lib/FDBFactory'
 
 const getMockDexieInstanceAllSuccess = () => {
   const dexieInstance = new Dexie('mermaidAllSuccess', {
-    indexedDB: fakeIndexedDB,
+    indexedDB: new FDBFactory(),
   })
 
   dexieInstance.version(1).stores({
-    currentUser: 'id, first_name, last_name, full_name, email',
+    currentUser: 'id',
+    collectRecords: 'id',
   })
 
   dexieInstance.currentUser
@@ -24,16 +25,15 @@ const getMockDexieInstanceAllSuccess = () => {
 
   return dexieInstance
 }
-const getMockDexieInstanceNoData = () => {
-  const dexieInstance = new Dexie('mermaidNoData', {
-    indexedDB: fakeIndexedDB,
+const getMockDexieInstanceThatProducesErrors = () => {
+  // produces an error in all cases so far because there are no stores defined
+  // leaving indexedDb as undefined is extra assurance
+  return new Dexie('mermaidError', {
+    indexedDB: undefined,
   })
-
-  dexieInstance.version(1).stores({
-    currentUser: 'id, first_name, last_name, full_name, email',
-  })
-
-  return dexieInstance
 }
 
-export { getMockDexieInstanceAllSuccess, getMockDexieInstanceNoData }
+export {
+  getMockDexieInstanceAllSuccess,
+  getMockDexieInstanceThatProducesErrors,
+}

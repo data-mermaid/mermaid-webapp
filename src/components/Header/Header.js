@@ -12,15 +12,15 @@ import {
 } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { RowSpaceBetween } from '../generic/positioning'
-import { useOnlineStatus } from '../../library/onlineStatusContext'
 import HideShow from '../generic/HideShow'
+import OfflineHide from '../generic/OfflineHide'
 
 /**
  * Mermaid Header
  */
 
 const StyledHeader = styled(RowSpaceBetween)`
-  background-color: ${theme.color.black};
+  background-color: ${theme.color.headerColor};
   color: ${theme.color.white};
   align-items: flex-start;
   position: fixed;
@@ -135,25 +135,24 @@ const UserMenuButton = styled.button`
 const GlobalLinks = () => (
   <>
     <StyledNavLink to="/projects">Projects</StyledNavLink>
-    <StyledNavLink to="/#">Reports</StyledNavLink>
+    <OfflineHide>
+      <StyledNavLink to="/#">Reports</StyledNavLink>
+    </OfflineHide>
     <StyledNavLink to="/#">Reference</StyledNavLink>
-    <StyledNavLink to="/#">Global Dashboard</StyledNavLink>
+    <OfflineHide>
+      <StyledNavLink to="/#">Global Dashboard</StyledNavLink>
+    </OfflineHide>
   </>
 )
 
 const Header = ({ logout, currentUser }) => {
-  const { isOnline } = useOnlineStatus()
   const UserMenuDropDownContent = () => (
-    <div>
-      {isOnline && (
-        <>
-          <Link to="/#">Profile</Link>
-          <UserMenuButton type="button" onClick={logout}>
-            Logout
-          </UserMenuButton>
-        </>
-      )}
-    </div>
+    <OfflineHide>
+      <Link to="/#">Profile</Link>
+      <UserMenuButton type="button" onClick={logout}>
+        Logout
+      </UserMenuButton>
+    </OfflineHide>
   )
 
   return (
