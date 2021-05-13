@@ -52,7 +52,7 @@ OfflineIndicator.propTypes = { children: PropTypes.node.isRequired }
 const Layout = ({ children, footer, header }) => {
   return (
     <LayoutContainer>
-      <OfflineIndicator></OfflineIndicator>
+      <OfflineIndicator />
       {header}
       <main>{children}</main>
       {footer}
