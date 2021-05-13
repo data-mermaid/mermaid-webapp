@@ -7,9 +7,6 @@ import InputRadioWithLabelAndValidation from '../generic/InputRadioWithLabelAndV
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
 
-/**
- * Describe your component
- */
 const FishBeltTransectForms = ({ formik, choices }) => {
   const { belttransectwidths, fishsizebins, reefslopes } = choices
 
