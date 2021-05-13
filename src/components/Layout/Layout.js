@@ -1,7 +1,7 @@
+import styled, { css } from 'styled-components/macro'
 import PropTypes from 'prop-types'
 import React from 'react'
 import theme from '../../theme'
-import styled, { css } from 'styled-components/macro'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 import { Column } from '../generic/positioning'
