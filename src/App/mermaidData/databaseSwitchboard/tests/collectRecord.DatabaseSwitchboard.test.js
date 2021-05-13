@@ -447,7 +447,7 @@ describe('Delete fishbelt', () => {
         await dbInstance.dexieInstance.collectRecords.get('foo'),
       ).toBeUndefined()
     })
-    test('deleteFishBelt online returns a rejected promise if the status code from the API for the record isn not successful', async () => {
+    test('deleteFishBelt online returns a rejected promise if the status code from the API for the record is not successful', async () => {
       mockMermaidApiAllSuccessful.use(
         rest.post(
           `${process.env.REACT_APP_MERMAID_API}/push/`,
@@ -526,7 +526,7 @@ describe('Delete fishbelt', () => {
 
         .catch((error) => {
           expect(error.message).toEqual(
-            'the API record returned from deletFishBelt doesnt have a succussful status code',
+            'the API record returned from deleteFishBelt doesnt have a succussful status code',
           )
         })
     })

@@ -133,7 +133,7 @@ const CollectRecordsMixin = (Base) =>
 
             return Promise.reject(
               new Error(
-                'the API record returned from deletFishBelt doesnt have a succussful status code',
+                'the API record returned from deleteFishBelt doesnt have a succussful status code',
               ),
             )
           })
