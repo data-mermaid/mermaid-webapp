@@ -7,7 +7,7 @@ import { configure } from '@testing-library/react'
 
 jest.setTimeout(30000)
 
-configure({ asyncUtilTimeout: 3000 })
+configure({ asyncUtilTimeout: 4000 })
 beforeEach(() => {
   window.sessionStorage.clear()
 })
