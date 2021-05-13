@@ -4,6 +4,7 @@ import { formikPropType } from '../../library/formikPropType'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
+import InputRadioWithLabelAndValidation from '../generic/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
 
@@ -50,19 +51,19 @@ const FishBeltTransectForms = ({ formik, choices }) => {
           type="number"
           {...formik.getFieldProps('len_surveyed')}
         />
-        <InputSelectWithLabelAndValidation
+        <InputRadioWithLabelAndValidation
           label="Width"
           id="width"
           options={transectWidthSelectOptions}
           {...formik.getFieldProps('width')}
         />
-        <InputSelectWithLabelAndValidation
+        <InputRadioWithLabelAndValidation
           label="Fish Size Bin"
           id="size_bin"
           options={fishSizeBinSelectOptions}
           {...formik.getFieldProps('size_bin')}
         />
-        <InputSelectWithLabelAndValidation
+        <InputRadioWithLabelAndValidation
           label="Reef Slope"
           id="reef_slope"
           options={reefSlopeSelectOptions}
