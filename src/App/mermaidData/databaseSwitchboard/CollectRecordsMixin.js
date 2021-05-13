@@ -101,21 +101,23 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteFishBelt = ({ record, profileId, projectId }) => {
+    deleteFishBelt = async ({ record, profileId, projectId }) => {
       if (!record || !profileId || !projectId) {
         throw new Error(
           'deleteFishBelt expects record, profileId, and projectId parameters',
         )
       }
+      const recordMarkedToBeDeleted = {
+        ...this.#formatFishbeltRecordForPush({
+          record,
+          profileId,
+          projectId,
+        }),
+        _deleted: true,
+      }
+
       if (this._isOnlineAuthenticatedAndReady) {
-        const recordMarkedToBeDeleted = {
-          ...this.#formatFishbeltRecordForPush({
-            record,
-            profileId,
-            projectId,
-          }),
-          _deleted: true,
-        }
+        await this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
 
         return this._authenticatedAxios
           .post(`${this._apiBaseUrl}/push/`, {
@@ -140,6 +142,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOfflineAuthenticatedAndReady) {
+        // this is wrong! M190 will fix
         return this._dexieInstance.collectRecords.delete(record.id)
       }
 

@@ -177,3 +177,75 @@ test('deleteFishBelt online returns a rejected promise if the status code from t
       )
     })
 })
+test('deleteFishBelt online marks a record in indexedDB with _deleted in the case of a network error', async () => {
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (req, res, ctx) => {
+        // this call captures the first part of this test which is
+        // to save a fishbelt in order to then delete it
+        const collectRecord = req.body.collect_records[0]
+
+        const response = {
+          collect_records: [
+            {
+              ...collectRecord,
+              status_code: 200,
+              _last_revision_num: 1000,
+            },
+          ],
+        }
+
+        return res.once(ctx.json(response))
+      },
+    ),
+
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (_req, res, _ctx) => {
+        return res.networkError()
+      },
+    ),
+  )
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+  const fishBeltToBeDeleted = {
+    id: 'foo',
+    data: {},
+    profile: '1234',
+    randomUnexpectedProperty: 'whatever',
+  }
+
+  await dbInstance.saveFishBelt({
+    record: fishBeltToBeDeleted,
+    profileId: '1',
+    projectId: '1',
+  })
+
+  expect.assertions(3)
+
+  /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
+    We need to access indexedDb directly because we are in online mode and
+    the db switchboard's getFishBelt would try to hit the real or mocked API
+    which is boyond the scope of the test.
+     */
+  expect(
+    (await dbInstance.dexieInstance.collectRecords.get('foo'))._deleted,
+  ).toBeFalsy()
+
+  await dbInstance
+    .deleteFishBelt({
+      record: {
+        id: 'foo',
+      },
+      profileId: '1',
+      projectId: '1',
+    })
+    .catch((error) => expect(error.message).toEqual('Network Error'))
+
+  expect(
+    (await dbInstance.dexieInstance.collectRecords.get('foo'))._deleted,
+  ).toBeTruthy()
+})
