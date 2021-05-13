@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import theme from '../../theme'
+import { hoverState } from '../../library/styling/mediaQueries'
 import styled, { css } from 'styled-components/macro'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 
@@ -26,28 +27,35 @@ const OfflineIndicatorStyles = styled.div`
       height: 100vh;
       z-index: 9998;
       position: fixed;
+      span {
+        background: ${theme.color.cautionColor};
+        color: ${theme.color.white};
+        position: absolute;
+        bottom: 0;
+        left: 10px;
+        padding: ${theme.spacing.xsmall} ${theme.spacing.small};
+        font-size: smaller;
+        transition: ${theme.timing.hoverTransition};
+      }
     `}
 `
-
 const OfflineIndicator = ({ children }) => {
   const { isOnline } = useOnlineStatus()
 
   return (
     <OfflineIndicatorStyles isOnline={isOnline}>
-      {children} {!isOnline && <>LABEL</>}
+      {children} {!isOnline && <span>You're offline</span>}
     </OfflineIndicatorStyles>
   )
 }
 
 OfflineIndicator.propTypes = { children: PropTypes.node.isRequired }
-
 const Layout = ({ children, footer, header }) => {
   return (
     <LayoutContainer>
       <OfflineIndicator></OfflineIndicator>
       {header}
       <main>{children}</main>
-
       {footer}
     </LayoutContainer>
   )
