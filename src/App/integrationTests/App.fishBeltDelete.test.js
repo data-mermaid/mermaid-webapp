@@ -5,6 +5,7 @@ import {
   screen,
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
+  within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
@@ -22,7 +23,7 @@ afterAll(() => {
 })
 
 describe('Offline', () => {
-  test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
+  test.only('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     // make sure there is a collect record to edit in dexie
@@ -36,8 +37,10 @@ describe('Offline', () => {
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
+    const modal = screen.getByLabelText('Delete Record')
+
     userEvent.click(
-      screen.getByText('Delete Record', {
+      within(modal).getByText('Delete Record', {
         selector: 'button',
       }),
     )
@@ -101,8 +104,10 @@ describe('Offline', () => {
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
+    const modal = screen.getByLabelText('Delete Record')
+
     userEvent.click(
-      screen.getByText('Delete Record', {
+      within(modal).getByText('Delete Record', {
         selector: 'button',
       }),
     )
