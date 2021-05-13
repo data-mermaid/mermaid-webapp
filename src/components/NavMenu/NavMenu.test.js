@@ -2,23 +2,12 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 
 import {
-  mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
   screen,
   waitFor,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import NavMenu from '.'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 test('NavMenu component shows project overview, collect, data, admin links when online', () => {
   renderAuthenticatedOnline(<NavMenu />)

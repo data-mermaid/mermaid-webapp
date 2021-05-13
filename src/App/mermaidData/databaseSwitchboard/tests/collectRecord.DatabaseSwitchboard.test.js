@@ -1,23 +1,12 @@
 import { rest } from 'msw'
 import { validate as validateUuid } from 'uuid'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
-
 import {
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
   getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError,
 } from './testHelpers.DatabseSwitchboard'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 describe('Save fishbelt', () => {
   test('saveFishbelt throws error if any parameters are missing', async () => {

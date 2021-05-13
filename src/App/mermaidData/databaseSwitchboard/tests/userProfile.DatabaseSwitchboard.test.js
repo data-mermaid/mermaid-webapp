@@ -6,15 +6,6 @@ import {
   getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess,
 } from './testHelpers.DatabseSwitchboard'
 
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('getUserProfile online returns data from the API', async () => {
