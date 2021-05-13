@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import theme from '../../theme'
-import { hoverState } from '../../library/styling/mediaQueries'
 import styled, { css } from 'styled-components/macro'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 

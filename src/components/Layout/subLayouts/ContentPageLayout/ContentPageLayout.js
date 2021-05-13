@@ -3,10 +3,6 @@ import React from 'react'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../../../theme'
 import { Column } from '../../../generic/positioning'
-import {
-  mediaQueryTabletLandscapeOnly,
-  mediaQueryPhoneOnly,
-} from '../../../../library/styling/mediaQueries'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import NavMenu from '../../../NavMenu'
 import ProjectName from '../../../ProjectName'
