@@ -1,15 +1,15 @@
 import { rest } from 'msw'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import {
-  getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess,
+  getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess,
   getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError,
-  getDatabaseSwitchboardInstanceAuthenticatedOnline,
+  getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess,
 } from './testHelpers.DatabseSwitchboard'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('getUserProfile online returns data from the API', async () => {
-  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnline()
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
   const userProfile = await dbInstance.getUserProfile()
 
   expect(userProfile).toEqual({
@@ -24,7 +24,7 @@ test('getUserProfile online returns error message upon API error', async () => {
     }),
   )
 
-  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnline()
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   expect.assertions(1)
 
@@ -35,7 +35,7 @@ test('getUserProfile online returns error message upon API error', async () => {
   }
 })
 test('getUserProfile offline returns data from local storage', async () => {
-  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess()
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
 
   const userProfile = await dbInstance.getUserProfile()
 
