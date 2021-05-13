@@ -19,18 +19,14 @@ const saveFishbeltRecord = async () => {
   userEvent.type(screen.getByLabelText('Transect Number'), '56')
   userEvent.type(screen.getByLabelText('Label'), 'some label')
   userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
-  userEvent.selectOptions(
-    screen.getByLabelText('Width'),
-    '228c932d-b5da-4464-b0df-d15a05c05c02',
-  )
-  userEvent.selectOptions(
-    screen.getByLabelText('Fish Size Bin'),
-    '67c1356f-e0a7-4383-8034-77b2f36e1a49',
-  )
-  userEvent.selectOptions(
-    screen.getByLabelText('Reef Slope'),
-    'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
-  )
+  // user clicks Width radio value 1
+  userEvent.click(screen.getByLabelText('10m'))
+
+  // user clicks on Fish Size Bin radio value 1
+  userEvent.click(screen.getByLabelText('1'))
+
+  // user clicks on Reef Slope radio value flat
+  userEvent.click(screen.getByLabelText('flat'))
 
   userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
@@ -63,12 +59,12 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    // width select
-    expect(screen.getByDisplayValue('10m'))
-    // fish size bin select
-    expect(screen.getByDisplayValue(1))
-    // reef slope select
-    expect(screen.getByDisplayValue('flat'))
+    // width radio checked on 1
+    expect(screen.getByLabelText('10m')).toBeChecked()
+    // fish size bin radio checked on 1
+    expect(screen.getByLabelText('1')).toBeChecked()
+    // reef slope radio checked on flat
+    expect(screen.getByLabelText('flat')).toBeChecked()
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
   test('New fishbelt save success show new record in collecting table', async () => {
@@ -136,12 +132,13 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    // width select
-    expect(screen.getByDisplayValue('10m'))
-    // fish size bin select
-    expect(screen.getByDisplayValue(1))
-    // reef slope select
-    expect(screen.getByDisplayValue('flat'))
+    // width radio checked on 1
+    expect(screen.getByLabelText('10m')).toBeChecked()
+    // fish size bin radio checked on 1
+    expect(screen.getByLabelText('1')).toBeChecked()
+    // reef slope radio checked on flat value
+    expect(screen.getByLabelText('flat')).toBeChecked()
+
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
 })

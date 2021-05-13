@@ -43,12 +43,12 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
-    // width select
-    expect(screen.getByDisplayValue('2m'))
-    // fish size bin select
-    expect(screen.getByDisplayValue(5))
-    // reef slope select
-    expect(screen.getByDisplayValue('flat'))
+    // width radio
+    expect(screen.getByLabelText('2m')).toBeChecked()
+    // fish size bin radio
+    expect(screen.getByLabelText('5')).toBeChecked()
+    // reef slope radio
+    expect(screen.getByLabelText('flat')).toBeChecked()
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
   test('Edit fishbelt save failure shows toast message with new edits persisting', async () => {
