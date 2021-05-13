@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const OfflineHide = ({ children }) => {
-  const { isOnline: isAppOnline } = useOnlineStatus()
+  const { isOnline } = useOnlineStatus()
 
-  return isAppOnline && <>{children}</>
+  return isOnline && <>{children}</>
 }
 
 OfflineHide.propTypes = {
