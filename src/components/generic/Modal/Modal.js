@@ -97,7 +97,6 @@ const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent }) => {
           role="dialog"
           aria-labelledby="modal-title"
           aria-describedby="modal-content"
-          onDismiss={onDismiss}
         >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
