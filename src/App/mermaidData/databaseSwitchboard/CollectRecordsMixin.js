@@ -41,6 +41,96 @@ const CollectRecordsMixin = (Base) =>
       }
     }
 
+    #getSampleUnitLabel = (record) => {
+      const isFishBelt = this.#getIsFishBelt(record)
+
+      const transectNumber = isFishBelt
+        ? record.data?.fishbelt_transect?.number
+        : record.data?.benthic_transect?.number
+
+      const labelName = isFishBelt
+        ? record.data?.fishbelt_transect?.label
+        : record.data?.benthic_transect?.label
+
+      const sampleUnit = `${transectNumber ?? ''} ${labelName || ''}`.trim()
+
+      return sampleUnit === '' ? undefined : sampleUnit
+    }
+
+    #getDepthLabel = (record) => {
+      const isFishBelt = this.#getIsFishBelt(record)
+
+      return isFishBelt
+        ? record.data.fishbelt_transect?.depth
+        : record.data.benthic_transect?.depth
+    }
+
+    #getSampleDateLabel = (record) => {
+      const sampleDate = record.data.sample_event.sample_date
+
+      if (!sampleDate) return undefined
+
+      const [year, month, day] = sampleDate.split('-')
+      const zeroIndexedMonth = month - 1
+      const locale = navigator.language ?? 'en-US'
+
+      return new Date(year, zeroIndexedMonth, day).toLocaleDateString(locale, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    }
+
+    #getObserversLabel = (record) => {
+      const { observers } = record.data
+
+      return observers
+        ? observers
+            .reduce((observerList, observer) => {
+              observerList.push(observer.profile_name)
+
+              return observerList
+            }, [])
+            .join(', ')
+        : undefined
+    }
+
+    #getStatusLabel = (record) => {
+      const { validations } = record
+
+      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
+    }
+
+    #getSizeLabel = (record, choices) => {
+      const { belttransectwidths } = choices
+      const isFishBelt = this.#getIsFishBelt(record)
+      const noSizeLabel = '-'
+
+      if (isFishBelt) {
+        const widthId = record.data.fishbelt_transect?.width
+
+        const widthNameWithoutUnit = getObjectById(
+          belttransectwidths.data,
+          widthId,
+        )?.name.slice(0, -1)
+
+        const length = record.data.fishbelt_transect?.len_surveyed
+
+        if (length && widthNameWithoutUnit) {
+          return `${length}m x ${widthNameWithoutUnit}m`
+        }
+        if (length || widthNameWithoutUnit) {
+          return `${length || widthNameWithoutUnit}m`
+        }
+
+        return noSizeLabel
+      }
+
+      const length = record.data.benthic_transect.len_surveyed
+
+      return length === undefined ? noSizeLabel : `${length}m`
+    }
+
     saveFishBelt = async ({ record, profileId, projectId }) => {
       if (!record || !profileId || !projectId) {
         throw new Error(
@@ -176,96 +266,6 @@ const CollectRecordsMixin = (Base) =>
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    #getSampleUnitLabel = (record) => {
-      const isFishBelt = this.#getIsFishBelt(record)
-
-      const transectNumber = isFishBelt
-        ? record.data?.fishbelt_transect?.number
-        : record.data?.benthic_transect?.number
-
-      const labelName = isFishBelt
-        ? record.data?.fishbelt_transect?.label
-        : record.data?.benthic_transect?.label
-
-      const sampleUnit = `${transectNumber ?? ''} ${labelName || ''}`.trim()
-
-      return sampleUnit === '' ? undefined : sampleUnit
-    }
-
-    #getDepthLabel = (record) => {
-      const isFishBelt = this.#getIsFishBelt(record)
-
-      return isFishBelt
-        ? record.data.fishbelt_transect?.depth
-        : record.data.benthic_transect?.depth
-    }
-
-    #getSampleDateLabel = (record) => {
-      const sampleDate = record.data.sample_event.sample_date
-
-      if (!sampleDate) return undefined
-
-      const [year, month, day] = sampleDate.split('-')
-      const zeroIndexedMonth = month - 1
-      const locale = navigator.language ?? 'en-US'
-
-      return new Date(year, zeroIndexedMonth, day).toLocaleDateString(locale, {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    }
-
-    #getObserversLabel = (record) => {
-      const { observers } = record.data
-
-      return observers
-        ? observers
-            .reduce((observerList, observer) => {
-              observerList.push(observer.profile_name)
-
-              return observerList
-            }, [])
-            .join(', ')
-        : undefined
-    }
-
-    #getStatusLabel = (record) => {
-      const { validations } = record
-
-      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
-    }
-
-    #getSizeLabel = (record, choices) => {
-      const { belttransectwidths } = choices
-      const isFishBelt = this.#getIsFishBelt(record)
-      const noSizeLabel = '-'
-
-      if (isFishBelt) {
-        const widthId = record.data.fishbelt_transect?.width
-
-        const widthNameWithoutUnit = getObjectById(
-          belttransectwidths.data,
-          widthId,
-        )?.name.slice(0, -1)
-
-        const length = record.data.fishbelt_transect?.len_surveyed
-
-        if (length && widthNameWithoutUnit) {
-          return `${length}m x ${widthNameWithoutUnit}m`
-        }
-        if (length || widthNameWithoutUnit) {
-          return `${length || widthNameWithoutUnit}m`
-        }
-
-        return noSizeLabel
-      }
-
-      const length = record.data.benthic_transect.len_surveyed
-
-      return length === undefined ? noSizeLabel : `${length}m`
     }
 
     getCollectRecordsForUIDisplay = () => {
