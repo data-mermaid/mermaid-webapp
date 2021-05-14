@@ -41,7 +41,7 @@ const CollectRecordsMixin = (Base) =>
       }
     }
 
-    saveFishBelt = ({ record, profileId, projectId }) => {
+    saveFishBelt = async ({ record, profileId, projectId }) => {
       if (!record || !profileId || !projectId) {
         throw new Error(
           'saveFishBelt expects record, profileId, and projectId parameters',
@@ -54,6 +54,8 @@ const CollectRecordsMixin = (Base) =>
       })
 
       if (this._isOnlineAuthenticatedAndReady) {
+        await this._dexieInstance.collectRecords.put(recordToSubmit)
+
         return this._authenticatedAxios
           .post(`${this._apiBaseUrl}/push/`, {
             collect_records: [recordToSubmit],
@@ -142,7 +144,6 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOfflineAuthenticatedAndReady) {
-        // this is wrong! M190 will fix
         return this._dexieInstance.collectRecords.delete(record.id)
       }
 
