@@ -144,6 +144,7 @@ const CollectRecordsMixin = (Base) =>
       })
 
       if (this._isOnlineAuthenticatedAndReady) {
+        // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.collectRecords.put(recordToSubmit)
 
         return this._authenticatedAxios
@@ -199,6 +200,8 @@ const CollectRecordsMixin = (Base) =>
           'deleteFishBelt expects record, profileId, and projectId parameters',
         )
       }
+      const isThereACorrespondingRecordInTheApi = !!record._last_revision_num
+
       const recordMarkedToBeDeleted = {
         ...this.#formatFishbeltRecordForPush({
           record,
@@ -208,7 +211,11 @@ const CollectRecordsMixin = (Base) =>
         _deleted: true,
       }
 
-      if (this._isOnlineAuthenticatedAndReady) {
+      if (
+        this._isOnlineAuthenticatedAndReady &&
+        isThereACorrespondingRecordInTheApi
+      ) {
+        // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
 
         return this._authenticatedAxios
@@ -222,7 +229,9 @@ const CollectRecordsMixin = (Base) =>
             )
 
             if (isRecordStatusCodeSuccessful) {
-              return this._dexieInstance.collectRecords.delete(record.id)
+              return this._dexieInstance.collectRecords
+                .delete(record.id)
+                .then(() => response)
             }
 
             return Promise.reject(
@@ -233,7 +242,11 @@ const CollectRecordsMixin = (Base) =>
           })
       }
 
-      if (this._isOfflineAuthenticatedAndReady) {
+      if (
+        this._isOfflineAuthenticatedAndReady ||
+        (this._isOnlineAuthenticatedAndReady &&
+          !isThereACorrespondingRecordInTheApi)
+      ) {
         return this._dexieInstance.collectRecords.delete(record.id)
       }
 
