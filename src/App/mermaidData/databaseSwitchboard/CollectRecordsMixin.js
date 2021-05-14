@@ -212,8 +212,8 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (
-        this._isOnlineAuthenticatedAndReady &&
-        isThereACorrespondingRecordInTheApi
+        isThereACorrespondingRecordInTheApi &&
+        this._isOnlineAuthenticatedAndReady
       ) {
         // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
@@ -241,11 +241,16 @@ const CollectRecordsMixin = (Base) =>
             )
           })
       }
-
       if (
-        this._isOfflineAuthenticatedAndReady ||
-        (this._isOnlineAuthenticatedAndReady &&
-          !isThereACorrespondingRecordInTheApi)
+        isThereACorrespondingRecordInTheApi &&
+        this._isOfflineAuthenticatedAndReady
+      ) {
+        return this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
+      }
+      if (
+        !isThereACorrespondingRecordInTheApi &&
+        (this._isOnlineAuthenticatedAndReady ||
+          this._isOfflineAuthenticatedAndReady)
       ) {
         return this._dexieInstance.collectRecords.delete(record.id)
       }
