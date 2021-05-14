@@ -20,7 +20,7 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
     const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
 
     userEvent.click(
-      within(sampleUnitNav).getByRole('link', {
+      within(sampleUnitNav).getByRole('button', {
         name: /fish belt/i,
       }),
     )
