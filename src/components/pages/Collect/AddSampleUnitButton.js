@@ -1,17 +1,17 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
+import { useHistory } from 'react-router-dom'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import { Column } from '../../generic/positioning'
+import { ButtonSecondary } from '../../generic/buttons'
 import { IconPlus } from '../../icons'
 
-const CustomNavLink = styled(NavLink)`
-  padding: ${(props) => props.theme.spacing.xsmall};
-`
-
 const AddSampleUnitButton = () => {
+  const history = useHistory()
   const currentProjectPath = useCurrentProjectPath()
+
+  const routeChange = (transect) =>
+    history.push(`${currentProjectPath}/collecting/${transect}`)
 
   const label = (
     <>
@@ -22,23 +22,24 @@ const AddSampleUnitButton = () => {
   return (
     <ButtonSecondaryDropdown label={label}>
       <Column as="nav" data-testid="new-sample-unit-nav">
-        <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>
+        <ButtonSecondary onClick={() => routeChange('fishbelt')}>
           Fish Belt
-        </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/benthiclit`}>
+        </ButtonSecondary>
+        <ButtonSecondary onClick={() => routeChange('benthiclit')} disabled>
           Benthic LIT
-        </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/benthicpit`}>
+        </ButtonSecondary>
+        <ButtonSecondary onClick={() => routeChange('benthiclit')} disabled>
           Benthic PIT
-        </CustomNavLink>
-        <CustomNavLink
-          to={`${currentProjectPath}/collecting/habitatcomplexity`}
+        </ButtonSecondary>
+        <ButtonSecondary
+          onClick={() => routeChange('habitatcomplexity')}
+          disabled
         >
           Habitat Complexity
-        </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/bleaching`}>
+        </ButtonSecondary>
+        <ButtonSecondary onClick={() => routeChange('bleaching')} disabled>
           Bleaching
-        </CustomNavLink>
+        </ButtonSecondary>
       </Column>
     </ButtonSecondaryDropdown>
   )
