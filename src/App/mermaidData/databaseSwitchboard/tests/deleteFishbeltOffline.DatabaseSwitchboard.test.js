@@ -20,7 +20,7 @@ describe('Offline delete fishbelt', () => {
       expect(error.message).toBeTruthy()
     }
   })
-  test('deleteFishBelt offline deletes the record', async () => {
+  test('deleteFishBelt offline deletes the record if there is no corresponding server record', async () => {
     const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
 
     const fishBeltToBeDeleted = {
@@ -28,22 +28,44 @@ describe('Offline delete fishbelt', () => {
       data: {},
       profile: '1234',
       randomUnexpectedProperty: 'whatever',
+      _last_revision_num: undefined, // indicates that there is no server copy of the record
     }
 
-    await dbInstanceOffline.saveFishBelt({
+    // save a record in IDB so we can delete it
+    await dbInstanceOffline.dexieInstance.collectRecords.put(
+      fishBeltToBeDeleted,
+    )
+
+    await dbInstanceOffline.deleteFishBelt({
       record: fishBeltToBeDeleted,
       profileId: '1',
       projectId: '1',
     })
 
-    expect(await dbInstanceOffline.getFishBelt('foo'))
+    expect(await dbInstanceOffline.getFishBelt('foo')).toBeUndefined()
+  })
+  test('deleteFishBelt offline marks the record with a _deleted property if there is a corresponding server record', async () => {
+    const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
+
+    const fishBeltToBeDeleted = {
+      id: 'foo',
+      data: {},
+      profile: '1234',
+      randomUnexpectedProperty: 'whatever',
+      _last_revision_num: 1, // indicates that there is a server copy of the record
+    }
+
+    // save a record in IDB so we can delete it
+    await dbInstanceOffline.dexieInstance.collectRecords.put(
+      fishBeltToBeDeleted,
+    )
 
     await dbInstanceOffline.deleteFishBelt({
-      record: { id: 'foo' },
+      record: fishBeltToBeDeleted,
       profileId: '1',
       projectId: '1',
     })
 
-    expect(await dbInstanceOffline.getFishBelt('foo')).toBeUndefined()
+    expect((await dbInstanceOffline.getFishBelt('foo'))._deleted).toBeTruthy()
   })
 })
