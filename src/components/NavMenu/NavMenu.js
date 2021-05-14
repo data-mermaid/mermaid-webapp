@@ -20,6 +20,7 @@ import {
   IconSharing,
 } from '../icons'
 import OfflineHide from '../generic/OfflineHide'
+import CollectRecordsCount from '../CollectRecordsCount'
 
 const NavWrapper = styled('nav')`
   display: flex;
@@ -92,6 +93,7 @@ const NavMenu = () => {
               <NavLinkSidebar to={`${projectUrl}/collecting`}>
                 <IconCollect />
                 <span>Collecting</span>
+                <CollectRecordsCount />
               </NavLinkSidebar>
             </li>
             <li>
