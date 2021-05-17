@@ -5,6 +5,7 @@ import OfflineToggle from '../OfflineToggle'
 import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
+import OfflineHide from '../generic/OfflineHide'
 
 const StyledFooter = styled('footer')`
   display: grid;
@@ -59,17 +60,20 @@ const Footer = () => {
             </>
           ) : (
             <>
-              You&apos;re <strong>OFFLINE</strong>
+              You&apos;re <strong>OFFLINE</strong>. Some contents may be out of
+              date.
             </>
           )}
         </label>
       </OfflineToggleWrapper>
       <FooterNav>
         <Link to="/#">Help</Link>
-        <Link to="/#">Terms</Link>
-        <Link to="/#">Contact</Link>
-        <Link to="/#">Changelog</Link>
-        <Link to="/#">Credits</Link>
+        <OfflineHide>
+          <Link to="/#">Terms</Link>
+          <Link to="/#">Contact</Link>
+          <Link to="/#">Changelog</Link>
+          <Link to="/#">Credits</Link>
+        </OfflineHide>
       </FooterNav>
       <Copyright>&copy; 2021 Mermaid Version v1.0.0</Copyright>
     </StyledFooter>
