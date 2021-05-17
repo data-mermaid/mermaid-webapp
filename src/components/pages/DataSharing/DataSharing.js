@@ -1,13 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
-const DataSharing = ({ databaseSwitchboardInstance }) => {
-  const { _isOnlineAuthenticatedAndReady } = databaseSwitchboardInstance
+const DataSharing = () => {
+  const { isOnline } = useOnlineStatus()
 
-  const content = _isOnlineAuthenticatedAndReady ? (
+  const content = isOnline ? (
     <>Data Sharing Placeholder</>
   ) : (
     <PageUnavailableOffline />
@@ -23,12 +23,6 @@ const DataSharing = ({ databaseSwitchboardInstance }) => {
       }
     />
   )
-}
-
-DataSharing.propTypes = {
-  databaseSwitchboardInstance: PropTypes.shape({
-    _isOnlineAuthenticatedAndReady: PropTypes.bool,
-  }).isRequired,
 }
 
 export default DataSharing

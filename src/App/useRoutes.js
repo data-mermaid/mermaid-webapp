@@ -22,9 +22,7 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
     },
     {
       path: '/projects/:projectId/health',
-      Component: () => (
-        <Health databaseSwitchboardInstance={databaseSwitchboardInstance} />
-      ),
+      Component: Health,
     },
     {
       path: '/projects/:projectId/collecting',
@@ -75,24 +73,16 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
     },
     {
       path: '/projects/:projectId/data',
-      Component: () => (
-        <Data databaseSwitchboardInstance={databaseSwitchboardInstance} />
-      ),
+      Component: Data,
     },
     {
       path: '/projects/:projectId/admin',
-      Component: () => (
-        <Admin databaseSwitchboardInstance={databaseSwitchboardInstance} />
-      ),
+      Component: Admin,
     },
 
     {
       path: '/projects/:projectId/graphs-and-maps',
-      Component: () => (
-        <GraphsAndMaps
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-        />
-      ),
+      Component: GraphsAndMaps,
     },
 
     {
@@ -106,25 +96,15 @@ export const useRoutes = ({ databaseSwitchboardInstance }) => {
     },
     {
       path: '/projects/:projectId/users',
-      Component: () => (
-        <Users databaseSwitchboardInstance={databaseSwitchboardInstance} />
-      ),
+      Component: Users,
     },
     {
       path: '/projects/:projectId/fish-families',
-      Component: () => (
-        <FishFamilies
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-        />
-      ),
+      Component: FishFamilies,
     },
     {
       path: '/projects/:projectId/data-sharing',
-      Component: () => (
-        <DataSharing
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-        />
-      ),
+      Component: DataSharing,
     },
   ]
 
