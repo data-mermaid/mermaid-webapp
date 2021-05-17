@@ -1,16 +1,28 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
+import PageUnavailableOffline from '../PageUnavailableOffline'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const GraphsAndMaps = () => {
+  const { isOnline } = useOnlineStatus()
+
+  const content = isOnline ? (
+    <>Graphs and Maps Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Graphs and Maps Placeholder</>}
-      toolbar={<>Sub layout top bar</>}
+      content={content}
+      toolbar={
+        <>
+          <H2>Graphs and Maps</H2>
+        </>
+      }
     />
   )
 }
-
-GraphsAndMaps.propTypes = {}
 
 export default GraphsAndMaps

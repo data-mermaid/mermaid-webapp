@@ -1,21 +1,28 @@
 import React from 'react'
-import { H3 } from '../../generic/text'
-// import PropTypes from 'prop-types'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
+import PageUnavailableOffline from '../PageUnavailableOffline'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const Health = () => {
+  const { isOnline } = useOnlineStatus()
+
+  const content = isOnline ? (
+    <>Project Health Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Project Health Placeholder</>}
+      content={content}
       toolbar={
         <>
-          <H3>Project Health</H3>
+          <H2>Project Health</H2>
         </>
       }
     />
   )
 }
-
-Health.propTypes = {}
 
 export default Health

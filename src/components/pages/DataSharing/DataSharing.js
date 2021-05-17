@@ -1,17 +1,28 @@
 import React from 'react'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
-
-// import PropTypes from 'prop-types'
+import PageUnavailableOffline from '../PageUnavailableOffline'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const DataSharing = () => {
+  const { isOnline } = useOnlineStatus()
+
+  const content = isOnline ? (
+    <>Data Sharing Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Data Sharing Placeholder</>}
-      toolbar={<>Sub layout top bar</>}
+      content={content}
+      toolbar={
+        <>
+          <H2>Data Sharing</H2>
+        </>
+      }
     />
   )
 }
-
-// DataSharing.propTypes = {}
 
 export default DataSharing
