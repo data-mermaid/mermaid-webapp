@@ -71,6 +71,9 @@ const NavHeader = styled('p')`
 const NavMenu = () => {
   const projectUrl = useCurrentProjectPath()
 
+  // I spend quite amount of time to figure out which way to get a count and enable communication between data and navigation menu, but we may not have a syncing piece to fully enabling this feature, I will leave this as a placeholder at this moment
+  const collectRecordCount = 11
+
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
@@ -93,7 +96,7 @@ const NavMenu = () => {
               <NavLinkSidebar to={`${projectUrl}/collecting`}>
                 <IconCollect />
                 <span>Collecting</span>
-                <CollectRecordsCount />
+                <CollectRecordsCount collectRecordCount={collectRecordCount} />
               </NavLinkSidebar>
             </li>
             <li>
