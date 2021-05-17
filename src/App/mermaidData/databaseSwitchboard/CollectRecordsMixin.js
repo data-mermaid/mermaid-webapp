@@ -148,9 +148,17 @@ const CollectRecordsMixin = (Base) =>
         await this._dexieInstance.collectRecords.put(recordToSubmit)
 
         return this._authenticatedAxios
-          .post(`${this._apiBaseUrl}/push/`, {
-            collect_records: [recordToSubmit],
-          })
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              collect_records: [recordToSubmit],
+            },
+            {
+              params: {
+                force: true,
+              },
+            },
+          )
           .then((response) => {
             const recordFromServer = response.data.collect_records[0]
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
@@ -219,9 +227,17 @@ const CollectRecordsMixin = (Base) =>
         await this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
 
         return this._authenticatedAxios
-          .post(`${this._apiBaseUrl}/push/`, {
-            collect_records: [recordMarkedToBeDeleted],
-          })
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              collect_records: [recordMarkedToBeDeleted],
+            },
+            {
+              params: {
+                force: true,
+              },
+            },
+          )
           .then((response) => {
             const recordFromServer = response.data.collect_records[0]
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
