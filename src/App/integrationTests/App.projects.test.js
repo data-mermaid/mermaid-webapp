@@ -48,7 +48,7 @@ test('Clicking anywhere on a project card navigates to the project health page w
 
   expect(
     await screen.findByText('Project Health', {
-      selector: 'h3',
+      selector: 'h2',
     }),
   )
 })

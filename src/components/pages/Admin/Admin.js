@@ -1,20 +1,28 @@
 import React from 'react'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
+import PageUnavailableOffline from '../PageUnavailableOffline'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
-// import PropTypes from 'prop-types'
-
-/**
- * Project Admin Page
- */
 const Admin = () => {
+  const { isOnline } = useOnlineStatus()
+
+  const content = isOnline ? (
+    <>Project Info Placeholder</>
+  ) : (
+    <PageUnavailableOffline />
+  )
+
   return (
     <ContentPageLayout
-      content={<>Admin Placeholder</>}
-      toolbar={<>Sub layout top bar</>}
+      content={content}
+      toolbar={
+        <>
+          <H2>Project Info</H2>
+        </>
+      }
     />
   )
 }
-
-Admin.propTypes = {}
 
 export default Admin

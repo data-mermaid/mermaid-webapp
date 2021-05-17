@@ -1,16 +1,24 @@
 import React from 'react'
+import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
-// import PropTypes from 'prop-types'
+import PageUnavailableOffline from '../PageUnavailableOffline'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const Users = () => {
+  const { isOnline } = useOnlineStatus()
+
+  const content = isOnline ? <>Users Placeholder</> : <PageUnavailableOffline />
+
   return (
     <ContentPageLayout
-      content={<>Users Placeholder</>}
-      toolbar={<>Sub layout top bar</>}
+      content={content}
+      toolbar={
+        <>
+          <H2>Users</H2>
+        </>
+      }
     />
   )
 }
-
-// Users.propTypes = {}
 
 export default Users
