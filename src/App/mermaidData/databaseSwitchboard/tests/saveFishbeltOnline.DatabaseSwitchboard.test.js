@@ -54,9 +54,11 @@ test('saveFishBelt online sends properties that the API expects to function prop
 
       (req, res, ctx) => {
         const { profile, project } = req.body.collect_records[0]
+        const force = req.url.searchParams.get('force')
 
-        if (!profile || !project) {
-          // this causes a test failure if the saveFishBelt function fails to send the api profile and project info
+        if (!profile || !project || !force) {
+          // this causes a test failure if the saveFishBelt
+          // function fails to send the api: force=true, profile and project info
 
           return res.once(ctx.status(400))
         }
