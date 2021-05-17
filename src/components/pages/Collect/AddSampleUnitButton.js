@@ -17,6 +17,10 @@ const CustomNavLink = styled(NavLink)`
     `}
 `
 
+const TemporarySpanStyling = styled.span`
+  color: grey;
+`
+
 const AddSampleUnitButton = () => {
   const currentProjectPath = useCurrentProjectPath()
   const label = (
@@ -31,11 +35,8 @@ const AddSampleUnitButton = () => {
         <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>
           Fish Belt
         </CustomNavLink>
-        <CustomNavLink
-          to={`${currentProjectPath}/collecting/benthiclit`}
-          disabled
-        >
-          Benthic LIT
+        <CustomNavLink to={`${currentProjectPath}/collecting/benthiclit`}>
+          <TemporarySpanStyling>Benthic LIT</TemporarySpanStyling>
         </CustomNavLink>
         <CustomNavLink
           to={`${currentProjectPath}/collecting/benthicpit`}
