@@ -12,10 +12,16 @@ const CollectRecordsCountWrapper = styled.span`
   font-size: 1.4rem;
 `
 
-const CollectRecordsCount = () => {
-  return <CollectRecordsCountWrapper>15</CollectRecordsCountWrapper>
+const CollectRecordsCount = ({ collectRecordCount }) => {
+  return (
+    <CollectRecordsCountWrapper>
+      {collectRecordCount}
+    </CollectRecordsCountWrapper>
+  )
 }
 
-CollectRecordsCount.propTypes = {}
+CollectRecordsCount.propTypes = {
+  collectRecordCount: PropTypes.number.isRequired,
+}
 
 export default CollectRecordsCount
