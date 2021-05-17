@@ -60,9 +60,11 @@ test('deleteFishBelt online deletes the record if there is a corresponding copy 
 
       (req, res, ctx) => {
         const { _deleted, profile, project } = req.body.collect_records[0]
+        const force = req.url.searchParams.get('force')
 
-        if (!_deleted || !profile || !project) {
-          // this causes the test to fail if deleteFishBelt doesnt send the api _deleted, profile of project info
+        if (!_deleted || !profile || !project || !force) {
+          // this causes the test to fail if deleteFishBelt doesnt
+          // send the api: force=true, _deleted, profile or project info
 
           return res.once(ctx.status(400))
         }
