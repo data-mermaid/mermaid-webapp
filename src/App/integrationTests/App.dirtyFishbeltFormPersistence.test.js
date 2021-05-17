@@ -51,7 +51,7 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
   expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
 
   // nav away
-  userEvent.click(screen.getByRole('link', { name: 'Collecting' }))
+  userEvent.click(screen.getByRole('link', { name: /collecting/i }))
 
   await navigateToNewFishbeltFormFromCollecting()
   const formAfterNav = await screen.findByRole('form')
@@ -101,7 +101,7 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   // nav away
   userEvent.click(
     screen.getByRole('link', {
-      name: 'Collecting',
+      name: /collecting/i,
     }),
   )
 
