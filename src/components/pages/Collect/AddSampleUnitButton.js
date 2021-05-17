@@ -10,9 +10,13 @@ const CustomNavLink = styled(NavLink)`
   padding: ${(props) => props.theme.spacing.xsmall};
 `
 
+const TemporarySpanStyling = styled.span`
+  color: grey;
+  padding: 0.5rem 1rem;
+`
+
 const AddSampleUnitButton = () => {
   const currentProjectPath = useCurrentProjectPath()
-
   const label = (
     <>
       <IconPlus /> Add Sample Unit
@@ -25,20 +29,10 @@ const AddSampleUnitButton = () => {
         <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>
           Fish Belt
         </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/benthiclit`}>
-          Benthic LIT
-        </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/benthicpit`}>
-          Benthic PIT
-        </CustomNavLink>
-        <CustomNavLink
-          to={`${currentProjectPath}/collecting/habitatcomplexity`}
-        >
-          Habitat Complexity
-        </CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/bleaching`}>
-          Bleaching
-        </CustomNavLink>
+        <TemporarySpanStyling>Benthic LIT</TemporarySpanStyling>
+        <TemporarySpanStyling>Benthic PIT</TemporarySpanStyling>
+        <TemporarySpanStyling>Habitat Complexity</TemporarySpanStyling>
+        <TemporarySpanStyling>Bleaching</TemporarySpanStyling>
       </Column>
     </ButtonSecondaryDropdown>
   )
