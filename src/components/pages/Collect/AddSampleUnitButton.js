@@ -1,18 +1,24 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import styled, { css } from 'styled-components'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import { Column } from '../../generic/positioning'
-import { ButtonSecondary } from '../../generic/buttons'
 import { IconPlus } from '../../icons'
 
+const CustomNavLink = styled(NavLink)`
+  padding: ${(props) => props.theme.spacing.xsmall};
+
+  ${(props) =>
+    props.disabled &&
+    css`
+      pointer-events: none;
+      color: grey;
+    `}
+`
+
 const AddSampleUnitButton = () => {
-  const history = useHistory()
   const currentProjectPath = useCurrentProjectPath()
-
-  const routeChange = (transect) =>
-    history.push(`${currentProjectPath}/collecting/${transect}`)
-
   const label = (
     <>
       <IconPlus /> Add Sample Unit
@@ -22,24 +28,33 @@ const AddSampleUnitButton = () => {
   return (
     <ButtonSecondaryDropdown label={label}>
       <Column as="nav" data-testid="new-sample-unit-nav">
-        <ButtonSecondary onClick={() => routeChange('fishbelt')}>
+        <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>
           Fish Belt
-        </ButtonSecondary>
-        <ButtonSecondary onClick={() => routeChange('benthiclit')} disabled>
+        </CustomNavLink>
+        <CustomNavLink
+          to={`${currentProjectPath}/collecting/benthiclit`}
+          disabled
+        >
           Benthic LIT
-        </ButtonSecondary>
-        <ButtonSecondary onClick={() => routeChange('benthiclit')} disabled>
+        </CustomNavLink>
+        <CustomNavLink
+          to={`${currentProjectPath}/collecting/benthicpit`}
+          disabled
+        >
           Benthic PIT
-        </ButtonSecondary>
-        <ButtonSecondary
-          onClick={() => routeChange('habitatcomplexity')}
+        </CustomNavLink>
+        <CustomNavLink
+          to={`${currentProjectPath}/collecting/habitatcomplexity`}
           disabled
         >
           Habitat Complexity
-        </ButtonSecondary>
-        <ButtonSecondary onClick={() => routeChange('bleaching')} disabled>
+        </CustomNavLink>
+        <CustomNavLink
+          to={`${currentProjectPath}/collecting/bleaching`}
+          disabled
+        >
           Bleaching
-        </ButtonSecondary>
+        </CustomNavLink>
       </Column>
     </ButtonSecondaryDropdown>
   )

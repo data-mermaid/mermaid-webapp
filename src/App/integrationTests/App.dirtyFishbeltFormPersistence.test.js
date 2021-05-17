@@ -19,7 +19,7 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
     const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
 
     userEvent.click(
-      within(sampleUnitNav).getByRole('button', {
+      within(sampleUnitNav).getByRole('link', {
         name: /fish belt/i,
       }),
     )
