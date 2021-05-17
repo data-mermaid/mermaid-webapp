@@ -6,13 +6,28 @@ import DatabaseSwitchboard from '../DatabaseSwitchboard'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-export const getDatabaseSwitchboardInstanceAuthenticatedOnline = () => {
+export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const dbInstance = new DatabaseSwitchboard({
+    apiBaseUrl,
+    auth0Token: 'fake token',
+    isMermaidAuthenticated: true,
+    isOnline: true,
+    dexieInstance,
+  })
+
+  dbInstance.dexieInstance = dexieInstance
+
+  return dbInstance
+}
+
+export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () => {
   return new DatabaseSwitchboard({
     apiBaseUrl,
     auth0Token: 'fake token',
     isMermaidAuthenticated: true,
     isOnline: true,
-    dexieInstance: getMockDexieInstanceAllSuccess(), // doesnt get called because isOnline=true
+    dexieInstance: getMockDexieInstanceThatProducesErrors(),
   })
 }
 
@@ -26,7 +41,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
   })
 }
 
-export const getDatabaseSwitchboardInstanceAuthenticatedOfflineAllSuccess = () => {
+export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = () => {
   return new DatabaseSwitchboard({
     apiBaseUrl,
     auth0Token: 'fake token',

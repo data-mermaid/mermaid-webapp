@@ -4,10 +4,19 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
+import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
 
 jest.setTimeout(30000)
 
 configure({ asyncUtilTimeout: 3000 })
-beforeEach(() => {
+
+beforeAll(() => {
+  mockMermaidApiAllSuccessful.listen()
+})
+afterEach(() => {
+  mockMermaidApiAllSuccessful.resetHandlers()
   window.sessionStorage.clear()
+})
+afterAll(() => {
+  mockMermaidApiAllSuccessful.close()
 })

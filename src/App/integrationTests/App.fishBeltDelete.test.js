@@ -3,23 +3,11 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 import {
   screen,
-  mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 describe('Offline', () => {
   test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {

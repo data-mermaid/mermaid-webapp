@@ -12,12 +12,18 @@ import mockOnlineDatabaseSwitchboardInstance from '../../../../testUtilities/moc
 
 import FishBelt from './FishBelt'
 
+const fakeCurrentUser = {
+  id: 'fake-id',
+  first_name: 'FakeFirstName',
+}
+
 test('FishBelt component in EDIT mode renders with the expected UI elements', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt
         databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
         isNewRecord={false}
+        currentUser={fakeCurrentUser}
       />
     </Route>,
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
@@ -64,6 +70,7 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt
         databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+        currentUser={fakeCurrentUser}
       />
     </Route>,
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
@@ -111,6 +118,7 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
       <FishBelt
         databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
         isNewRecord={false}
+        currentUser={fakeCurrentUser}
       />
     </Route>,
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
@@ -145,6 +153,7 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
       <FishBelt
         databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
         isNewRecord={false}
+        currentUser={fakeCurrentUser}
       />
     </Route>,
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
@@ -178,6 +187,7 @@ test('FishBelt component in EDIT mode - button group shows only save button when
       <FishBelt
         databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
         isNewRecord={false}
+        currentUser={fakeCurrentUser}
       />
     </Route>,
     { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
