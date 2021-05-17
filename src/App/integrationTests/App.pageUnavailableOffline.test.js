@@ -5,19 +5,8 @@ import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import {
   screen,
   renderAuthenticatedOffline,
-  mockMermaidApiAllSuccessful,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 test('App renders show page unavailable offline when navigate to Project Health page while offline.', async () => {
   renderAuthenticatedOffline(
