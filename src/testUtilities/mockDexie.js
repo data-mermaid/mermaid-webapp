@@ -9,6 +9,7 @@ const getMockDexieInstanceAllSuccess = () => {
   dexieInstance.version(1).stores({
     currentUser: 'id',
     collectRecords: 'id',
+    lastRevisionNumbersPulled: 'id',
   })
 
   dexieInstance.currentUser
