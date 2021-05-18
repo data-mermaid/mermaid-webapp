@@ -38,17 +38,16 @@ const OfflineIndicatorStyles = styled.div`
       }
     `}
 `
-const OfflineIndicator = ({ children }) => {
+const OfflineIndicator = () => {
   const { isOnline } = useOnlineStatus()
 
   return (
     <OfflineIndicatorStyles isOnline={isOnline}>
-      {children} {!isOnline && <span>You're offline</span>}
+      {!isOnline && <span>You're offline</span>}
     </OfflineIndicatorStyles>
   )
 }
 
-OfflineIndicator.propTypes = { children: PropTypes.node.isRequired }
 const Layout = ({ children, footer, header }) => {
   return (
     <LayoutContainer>
