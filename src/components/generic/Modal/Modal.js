@@ -17,14 +17,13 @@ const StyledDialogOverlay = styled('div')`
   bottom: 0;
   position: fixed;
   display: grid;
+  place-items: center;
   grid-template-columns: 1fr;
   z-index: 10001;
 `
 const StyledDialog = styled('div')`
   padding: 0;
   margin: 0;
-  align-self: center;
-  justify-self: center;
   max-width: calc(100vw - ${theme.spacing.medium});
   width: 90rem;
   background: ${theme.color.white};
