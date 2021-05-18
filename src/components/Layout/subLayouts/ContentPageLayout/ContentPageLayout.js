@@ -3,10 +3,6 @@ import React from 'react'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../../../theme'
 import { Column } from '../../../generic/positioning'
-import {
-  mediaQueryTabletLandscapeOnly,
-  mediaQueryPhoneOnly,
-} from '../../../../library/styling/mediaQueries'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import NavMenu from '../../../NavMenu'
 import ProjectName from '../../../ProjectName'
@@ -30,18 +26,7 @@ const NavAndContentLayout = styled('div')`
 `
 const contentStyles = css`
   background: ${theme.color.white};
-  width: calc(100vw - ${theme.spacing.sideNavWidthDesktop} - ${contentPadding});
-  ${mediaQueryTabletLandscapeOnly(css`
-    width: calc(
-      100vw - ${theme.spacing.sideNavWidthTabletLandscapeOnly} -
-        ${contentPadding}
-    );
-  `)}
-  ${mediaQueryPhoneOnly(css`
-    width: calc(
-      100vw - ${theme.spacing.sideNavWidthPhoneOnly} - ${contentPadding}
-    );
-  `)}
+  width: ${theme.spacing.fullViewportWidth};
 `
 const ContentToolbar = styled('div')`
   ${contentStyles};
