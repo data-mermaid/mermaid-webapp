@@ -208,7 +208,7 @@ const CollectRecordsMixin = (Base) =>
           'deleteFishBelt expects record, profileId, and projectId parameters',
         )
       }
-      const isThereACorrespondingRecordInTheApi = !!record._last_revision_num
+      const hasCorrespondingRecordInTheApi = !!record._last_revision_num
 
       const recordMarkedToBeDeleted = {
         ...this.#formatFishbeltRecordForPush({
@@ -220,7 +220,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (
-        isThereACorrespondingRecordInTheApi &&
+        hasCorrespondingRecordInTheApi &&
         this._isOnlineAuthenticatedAndReady
       ) {
         // put it in IDB just in case the network craps out before the API can return
@@ -258,13 +258,13 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (
-        isThereACorrespondingRecordInTheApi &&
+        hasCorrespondingRecordInTheApi &&
         this._isOfflineAuthenticatedAndReady
       ) {
         return this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
       }
       if (
-        !isThereACorrespondingRecordInTheApi &&
+        !hasCorrespondingRecordInTheApi &&
         (this._isOnlineAuthenticatedAndReady ||
           this._isOfflineAuthenticatedAndReady)
       ) {
