@@ -3,10 +3,8 @@ import React from 'react'
 import styled, { css } from 'styled-components/macro'
 import { IconClose } from '../../icons'
 import theme from '../../../theme'
-import {
-  hoverState,
-  mediaQueryPhoneOnly,
-} from '../../../library/styling/mediaQueries'
+import { CloseButton } from '../buttons'
+import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
@@ -38,19 +36,8 @@ const ModalTitle = styled.div`
     margin: 0;
   }
   button {
-    border-radius: 100%;
-    background: transparent;
-    border: none;
-    padding: 0;
-    line-height: 0;
-    width: 4rem;
-    height: 4rem;
     align-self: top;
     justify-self: end;
-    transition: ${theme.timing.hoverTransition};
-    ${hoverState(css`
-      background: ${theme.color.secondaryHover};
-    `)}
   }
 `
 const ModalContent = styled.div`
@@ -99,9 +86,13 @@ const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent }) => {
         >
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
-            <button type="button" className="close-button" onClick={onDismiss}>
+            <CloseButton
+              type="button"
+              className="close-button"
+              onClick={onDismiss}
+            >
               <IconClose aria-label="close" />
-            </button>
+            </CloseButton>
           </ModalTitle>
           <ModalContent id="modal-content">{mainContent}</ModalContent>
           <ModalFooter>{footerContent}</ModalFooter>
