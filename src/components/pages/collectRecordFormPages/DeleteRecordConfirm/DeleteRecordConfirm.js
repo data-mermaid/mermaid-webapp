@@ -1,9 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Modal, {
-  ModalRightAlignedButtonSpacing,
-} from '../../../generic/Modal/Modal'
-import { ButtonSecondary } from '../../../generic/buttons'
+import Modal, { RightFooter } from '../../../generic/Modal/Modal'
+import { ButtonSecondary, ButtonCaution } from '../../../generic/buttons'
 import language from '../../../../language'
 
 const DeleteRecordConfirm = ({ isOpen, onDismiss, onConfirm }) => {
@@ -13,15 +11,15 @@ const DeleteRecordConfirm = ({ isOpen, onDismiss, onConfirm }) => {
       isOpen={isOpen}
       onDismiss={onDismiss}
       mainContent={language.prompt.deleteCollectRecordPrompt}
-      bottomRowContent={
-        <ModalRightAlignedButtonSpacing>
-          <ButtonSecondary onClick={onConfirm}>
-            {language.prompt.yes}
-          </ButtonSecondary>
+      footerContent={
+        <RightFooter>
           <ButtonSecondary onClick={onDismiss}>
             {language.prompt.no}
           </ButtonSecondary>
-        </ModalRightAlignedButtonSpacing>
+          <ButtonCaution onClick={onConfirm}>
+            {language.prompt.yes}
+          </ButtonCaution>
+        </RightFooter>
       }
     />
   )
