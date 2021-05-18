@@ -3,23 +3,12 @@ import React from 'react'
 
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import {
-  mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
   screen,
   waitFor,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 test('App renders shows the users name from the API for an online and authenticated user', async () => {
   renderAuthenticatedOnline(
