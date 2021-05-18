@@ -23,7 +23,7 @@ afterAll(() => {
 })
 
 describe('Offline', () => {
-  test.only('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
+  test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     // make sure there is a collect record to edit in dexie
