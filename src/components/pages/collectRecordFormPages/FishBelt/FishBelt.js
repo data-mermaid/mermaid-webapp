@@ -15,7 +15,8 @@ import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databa
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { H2 } from '../../../generic/text'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
-import { RowRight } from '../../../generic/positioning'
+import styled from 'styled-components/macro'
+import theme from '../../../../theme'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EditCollectRecordFormTitle from '../../../EditCollectRecordFormTitle'
@@ -169,6 +170,12 @@ const FishBelt = ({
     },
     onSubmit: saveRecord,
   }
+  const SVSButtonWrapper = styled('div')`
+    text-align: right;
+    button {
+      margin-left: ${theme.spacing.buttonSpacing};
+    }
+  `
 
   return (
     <Formik {...formikOptions}>
@@ -212,7 +219,7 @@ const FishBelt = ({
                 />
               )}
 
-              <RowRight data-testid="fishbelt-form-buttons">
+              <SVSButtonWrapper data-testid="fishbelt-form-buttons">
                 <ButtonCallout type="submit" form="fishbelt-form">
                   <IconSave />
                   Save
@@ -229,7 +236,7 @@ const FishBelt = ({
                     </ButtonCallout>
                   </OfflineHide>
                 )}
-              </RowRight>
+              </SVSButtonWrapper>
             </>
           }
         />
