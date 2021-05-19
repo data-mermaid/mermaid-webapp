@@ -1,13 +1,161 @@
 import '@testing-library/jest-dom/extend-expect'
-// import React from 'react'
-// import {
-//   renderAuthenticatedOnline,
-//   screen,
-// } from '../../../testUtilities/testingLibraryWithHelpers'
+import userEvent from '@testing-library/user-event'
+import React from 'react'
+import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
+import {
+  renderAuthenticatedOnline,
+  screen,
+  waitForElementToBeRemoved,
+  within,
+} from '../../../testUtilities/testingLibraryWithHelpers'
 
-// import Sites from './Sites'
+import Sites from './Sites'
 
-test('Sites component renders with the expected UI elements', () => {
-  // const utilities = renderAuthenticatedOnline(<Sites />)
-  // expect(screen.getByText('I should fail'))
+test('Site component renders with the expected headers', async () => {
+  renderAuthenticatedOnline(
+    <Sites
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[0]).getByText('Name'))
+  expect(within(tableRows[0]).getByText('Reef Type'))
+  expect(within(tableRows[0]).getByText('Reef Zone'))
+  expect(within(tableRows[0]).getByText('Exposure'))
+})
+
+test('Site Records table sorts properly by Name column', async () => {
+  renderAuthenticatedOnline(
+    <Sites
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('Site A'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Name'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('Site A'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Name'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Site D'))
+})
+
+test('Site Records table sorts properly by Reef Type column', async () => {
+  renderAuthenticatedOnline(
+    <Sites
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('fringing'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Reef Type'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('atoll'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Reef Type'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('lagoon'))
+})
+
+test('Site Records table sorts properly by Reef Zone column', async () => {
+  renderAuthenticatedOnline(
+    <Sites
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('fore reef'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Reef Zone'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('back reef'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Reef Zone'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('pinnacle'))
+})
+
+test('Site Records table sorts properly by Exposure column', async () => {
+  renderAuthenticatedOnline(
+    <Sites
+      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
+    />,
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const table = screen.getByRole('table')
+
+  const tableRows = within(table).getAllByRole('row')
+
+  expect(within(tableRows[1]).getByText('exposed'))
+
+  // click once to change to ascending order
+  userEvent.click(within(table).getByText('Exposure'))
+
+  const tableRowsAfter = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfter[1]).getByText('exposed'))
+
+  // // click again to change to descending order
+  userEvent.click(within(table).getByText('Exposure'))
+
+  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterFirstClick[1]).getByText('very sheltered'))
 })
