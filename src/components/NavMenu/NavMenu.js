@@ -73,7 +73,7 @@ const NavMenu = () => {
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
-        <OfflineHide>
+        {/* <OfflineHide>
           <li>
             <NavHeader>Project Overview</NavHeader>
             <ul>
@@ -84,7 +84,7 @@ const NavMenu = () => {
               </li>
             </ul>
           </li>
-        </OfflineHide>
+        </OfflineHide> */}
         <li>
           <NavHeader>Collect</NavHeader>
           <ul>
@@ -118,12 +118,12 @@ const NavMenu = () => {
                   <span>Submitted</span>
                 </NavLinkSidebar>
               </li>
-              <li>
+              {/* <li>
                 <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
                   <IconGraph />
                   <span>Graphs and Maps</span>
                 </NavLinkSidebar>
-              </li>
+              </li> */}
             </ul>
           </li>
           <li>
@@ -141,12 +141,12 @@ const NavMenu = () => {
                   <span>Users</span>
                 </NavLinkSidebar>
               </li>
-              <li>
+              {/* <li>
                 <NavLinkSidebar to={`${projectUrl}/fish-families`}>
                   <IconFish />
                   <span>Fish Families</span>
                 </NavLinkSidebar>
-              </li>
+              </li> */}
               <li>
                 <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
                   <IconSharing />
