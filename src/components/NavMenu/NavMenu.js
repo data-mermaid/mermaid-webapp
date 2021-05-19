@@ -71,7 +71,7 @@ const NavHeader = styled('p')`
 const NavMenu = () => {
   const projectUrl = useCurrentProjectPath()
 
-  // I spend quite amount of time to figure out which way to get a count and enable communication between data and navigation menu, but we may not have a syncing piece to fully enabling this feature, I will leave this as a placeholder at this moment
+  // this number is a hardcoded temporary placeholder. Will be resolved in M196
   const collectRecordCount = 11
 
   return (
