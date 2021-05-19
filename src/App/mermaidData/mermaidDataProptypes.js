@@ -101,3 +101,30 @@ export const choicesPropType = PropTypes.shape({
   belttransectwidths: _beltTransectWidthPropType,
   reefslopes: _reefSlopePropType,
 })
+
+export const tableColumnPropType = PropTypes.shape({
+  Header: PropTypes.string,
+  accessor: PropTypes.string,
+  sortType: PropTypes.func,
+  align: PropTypes.string,
+})
+
+export const collectTableCellPropType = PropTypes.shape({
+  method: PropTypes.string,
+  site: PropTypes.string,
+  management: PropTypes.string,
+  sampleUnitNumber: PropTypes.string,
+  size: PropTypes.string,
+  depth: PropTypes.string,
+  sampleDate: PropTypes.string,
+  observers: PropTypes.string,
+  status: PropTypes.string,
+  synced: PropTypes.string,
+})
+
+export const siteTableCellPropType = PropTypes.shape({
+  site: PropTypes.string,
+  reefType: PropTypes.string,
+  reefZone: PropTypes.string,
+  exposure: PropTypes.string,
+})
