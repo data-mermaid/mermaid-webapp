@@ -41,139 +41,6 @@ const CollectRecordsMixin = (Base) =>
       }
     }
 
-    saveFishBelt = ({ record, profileId, projectId }) => {
-      if (!record || !profileId || !projectId) {
-        throw new Error(
-          'saveFishBelt expects record, profileId, and projectId parameters',
-        )
-      }
-      const recordToSubmit = this.#formatFishbeltRecordForPush({
-        record,
-        profileId,
-        projectId,
-      })
-
-      if (this._isOnlineAuthenticatedAndReady) {
-        return this._authenticatedAxios
-          .post(`${this._apiBaseUrl}/push/`, {
-            collect_records: [recordToSubmit],
-          })
-          .then((response) => {
-            const recordFromServer = response.data.collect_records[0]
-            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordFromServer,
-            )
-
-            if (isRecordStatusCodeSuccessful) {
-              return this._dexieInstance.collectRecords
-                .put(recordFromServer)
-                .then(() => recordFromServer)
-            }
-
-            return Promise.reject(
-              new Error(
-                'the API record returned from saveFishBelt doesnt have a succussful status code',
-              ),
-            )
-          })
-      }
-      if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords
-          .put(recordToSubmit)
-          .then(() => recordToSubmit)
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    getFishBelt = (id) => {
-      if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
-      }
-      if (this._isOnlineAuthenticatedAndReady) {
-        // upcoming work
-      }
-
-      if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords.get(id)
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    deleteFishBelt = ({ record, profileId, projectId }) => {
-      if (!record || !profileId || !projectId) {
-        throw new Error(
-          'deleteFishBelt expects record, profileId, and projectId parameters',
-        )
-      }
-      if (this._isOnlineAuthenticatedAndReady) {
-        const recordMarkedToBeDeleted = {
-          ...this.#formatFishbeltRecordForPush({
-            record,
-            profileId,
-            projectId,
-          }),
-          _deleted: true,
-        }
-
-        return this._authenticatedAxios
-          .post(`${this._apiBaseUrl}/push/`, {
-            collect_records: [recordMarkedToBeDeleted],
-          })
-          .then((response) => {
-            const recordFromServer = response.data.collect_records[0]
-            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordFromServer,
-            )
-
-            if (isRecordStatusCodeSuccessful) {
-              return this._dexieInstance.collectRecords.delete(record.id)
-            }
-
-            return Promise.reject(
-              new Error(
-                'the API record returned from deleteFishBelt doesnt have a succussful status code',
-              ),
-            )
-          })
-      }
-
-      if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords.delete(record.id)
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    getCollectRecord = (id) => {
-      if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
-      }
-
-      return this._isAuthenticatedAndReady
-        ? this.getCollectRecords().then((records) =>
-            records.find((record) => record.id === id),
-          )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    getCollectRecords = () => {
-      if (this._isOnlineAuthenticatedAndReady) {
-        toast.warn(
-          'When online, this app still uses mock data for the collect record table. To interact with the offline collect edit/create workflow, and see real data, disable your network.',
-        )
-
-        return Promise.resolve(mockMermaidData.collectRecords)
-      }
-
-      if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords.toArray()
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
     #getSampleUnitLabel = (record) => {
       const isFishBelt = this.#getIsFishBelt(record)
 
@@ -262,6 +129,177 @@ const CollectRecordsMixin = (Base) =>
       const length = record.data.benthic_transect.len_surveyed
 
       return length === undefined ? noSizeLabel : `${length}m`
+    }
+
+    saveFishBelt = async ({ record, profileId, projectId }) => {
+      if (!record || !profileId || !projectId) {
+        throw new Error(
+          'saveFishBelt expects record, profileId, and projectId parameters',
+        )
+      }
+      const recordToSubmit = this.#formatFishbeltRecordForPush({
+        record,
+        profileId,
+        projectId,
+      })
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        // put it in IDB just in case the network craps out before the API can return
+        await this._dexieInstance.collectRecords.put(recordToSubmit)
+
+        return this._authenticatedAxios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              collect_records: [recordToSubmit],
+            },
+            {
+              params: {
+                force: true,
+              },
+            },
+          )
+          .then((response) => {
+            const recordFromServer = response.data.collect_records[0]
+            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+              recordFromServer,
+            )
+
+            if (isRecordStatusCodeSuccessful) {
+              return this._dexieInstance.collectRecords
+                .put(recordFromServer)
+                .then(() => recordFromServer)
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API record returned from saveFishBelt doesnt have a succussful status code',
+              ),
+            )
+          })
+      }
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexieInstance.collectRecords
+          .put(recordToSubmit)
+          .then(() => recordToSubmit)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getFishBelt = (id) => {
+      if (!id) {
+        Promise.reject(this._operationMissingIdParameterError)
+      }
+      if (this._isOnlineAuthenticatedAndReady) {
+        // upcoming work
+      }
+
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexieInstance.collectRecords.get(id)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    deleteFishBelt = async ({ record, profileId, projectId }) => {
+      if (!record || !profileId || !projectId) {
+        throw new Error(
+          'deleteFishBelt expects record, profileId, and projectId parameters',
+        )
+      }
+      const isThereACorrespondingRecordInTheApi = !!record._last_revision_num
+
+      const recordMarkedToBeDeleted = {
+        ...this.#formatFishbeltRecordForPush({
+          record,
+          profileId,
+          projectId,
+        }),
+        _deleted: true,
+      }
+
+      if (
+        isThereACorrespondingRecordInTheApi &&
+        this._isOnlineAuthenticatedAndReady
+      ) {
+        // put it in IDB just in case the network craps out before the API can return
+        await this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
+
+        return this._authenticatedAxios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              collect_records: [recordMarkedToBeDeleted],
+            },
+            {
+              params: {
+                force: true,
+              },
+            },
+          )
+          .then((response) => {
+            const recordFromServer = response.data.collect_records[0]
+            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+              recordFromServer,
+            )
+
+            if (isRecordStatusCodeSuccessful) {
+              return this._dexieInstance.collectRecords
+                .delete(record.id)
+                .then(() => response)
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API record returned from deleteFishBelt doesnt have a succussful status code',
+              ),
+            )
+          })
+      }
+      if (
+        isThereACorrespondingRecordInTheApi &&
+        this._isOfflineAuthenticatedAndReady
+      ) {
+        return this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
+      }
+      if (
+        !isThereACorrespondingRecordInTheApi &&
+        (this._isOnlineAuthenticatedAndReady ||
+          this._isOfflineAuthenticatedAndReady)
+      ) {
+        return this._dexieInstance.collectRecords.delete(record.id)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getCollectRecord = (id) => {
+      if (!id) {
+        Promise.reject(this._operationMissingIdParameterError)
+      }
+
+      return this._isAuthenticatedAndReady
+        ? this.getCollectRecords().then((records) =>
+            records.find((record) => record.id === id),
+          )
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getCollectRecords = () => {
+      if (this._isOnlineAuthenticatedAndReady) {
+        toast.warn(
+          'When online, this app still uses mock data for the collect record table. To interact with the offline collect edit/create workflow, and see real data, disable your network.',
+        )
+
+        return Promise.resolve(mockMermaidData.collectRecords)
+      }
+
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexieInstance.collectRecords.toArray()
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getCollectRecordsForUIDisplay = () => {

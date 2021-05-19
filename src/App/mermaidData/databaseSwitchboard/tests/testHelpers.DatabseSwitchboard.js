@@ -42,11 +42,17 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
 }
 
 export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = () => {
-  return new DatabaseSwitchboard({
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  const dbInstance = new DatabaseSwitchboard({
     apiBaseUrl,
     auth0Token: 'fake token',
     isMermaidAuthenticated: true,
     isOnline: false,
     dexieInstance: getMockDexieInstanceAllSuccess(),
   })
+
+  dbInstance.dexieInstance = dexieInstance
+
+  return dbInstance
 }

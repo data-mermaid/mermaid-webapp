@@ -54,9 +54,11 @@ test('saveFishBelt online sends properties that the API expects to function prop
 
       (req, res, ctx) => {
         const { profile, project } = req.body.collect_records[0]
+        const force = req.url.searchParams.get('force')
 
-        if (!profile || !project) {
-          // this causes a test failure if the saveFishBelt function fails to send the api profile and project info
+        if (!profile || !project || !force) {
+          // this causes a test failure if the saveFishBelt
+          // function fails to send the api: force=true, profile and project info
 
           return res.once(ctx.status(400))
         }
@@ -146,7 +148,7 @@ test('saveFishBelt online returns a rejected promise if the status code from the
      */
   expect(await dbInstance.dexieInstance.collectRecords.get('foo'))
 })
-test('saveFishBelt online returns saved record with protocol info automatically included', async () => {
+test('saveFishBelt online returns saved record with protocol info automatically included and stores it ', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   const fishBeltToBeSaved = {
@@ -168,6 +170,15 @@ test('saveFishBelt online returns saved record with protocol info automatically 
   expect(savedFishBeltResponse.randomUnexpectedProperty).toEqual(
     fishBeltToBeSaved.randomUnexpectedProperty,
   )
+
+  const recordStoredInDexie = await dbInstance.dexieInstance.collectRecords.get(
+    'foo',
+  )
+
+  expect(recordStoredInDexie.profile).toEqual('1234')
+  expect(recordStoredInDexie.project).toEqual('1')
+  // _last_revision_num proves that the record comes from the server
+  expect(recordStoredInDexie._last_revision_num).toBeDefined()
 })
 test('saveFishBelt online replaces previous fishBelt record with same id (acts like a put)', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
@@ -210,7 +221,7 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
     replacementFishbelt.initialProperty,
   )
 })
-test('saveFishBelt online returns saved record including id, project, profile if those properties dont exist on the record', async () => {
+test('saveFishBelt online returns and stores saved record including id, project, profile, if those properties dont exist on the record', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   const savedFishBeltResponse = await dbInstance.saveFishBelt({
@@ -225,8 +236,17 @@ test('saveFishBelt online returns saved record including id, project, profile if
   expect(validateUuid(savedFishBeltResponse.id)).toBeTruthy()
   expect(savedFishBeltResponse.profile).toEqual('1')
   expect(savedFishBeltResponse.project).toEqual('1')
+
+  const recordStoredInDexie = await dbInstance.dexieInstance.collectRecords.get(
+    savedFishBeltResponse.id,
+  )
+
+  expect(recordStoredInDexie.profile).toEqual('1')
+  expect(recordStoredInDexie.project).toEqual('1')
+  // _last_revision_num proves that the record comes from the server
+  expect(recordStoredInDexie._last_revision_num).toBeDefined()
 })
-test('saveFishBelt online returns saved record including existing id, project, profile ', async () => {
+test('saveFishBelt online returns and stores a saved record including existing id, project, profile,', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   const savedFishBeltResponse = await dbInstance.saveFishBelt({
@@ -243,6 +263,15 @@ test('saveFishBelt online returns saved record including existing id, project, p
   expect(validateUuid(savedFishBeltResponse.id)).toBeTruthy()
   expect(savedFishBeltResponse.profile).toEqual('1234')
   expect(savedFishBeltResponse.project).toEqual('4321')
+
+  const recordStoredInDexie = await dbInstance.dexieInstance.collectRecords.get(
+    savedFishBeltResponse.id,
+  )
+
+  expect(recordStoredInDexie.profile).toEqual('1234')
+  expect(recordStoredInDexie.project).toEqual('4321')
+  // _last_revision_num proves that the record comes from the server
+  expect(recordStoredInDexie._last_revision_num).toBeDefined()
 })
 test('saveFishBelt online returns error message upon dexie error', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError()
@@ -254,4 +283,45 @@ test('saveFishBelt online returns error message upon dexie error', async () => {
   } catch (error) {
     expect(error.message).toBeTruthy()
   }
+})
+test('saveFishBelt online saves the record in indexeddb in the case of network error', async () => {
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (_req, res, _ctx) => {
+        return res.networkError()
+      },
+    ),
+  )
+
+  expect.assertions(6)
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+  const fishBeltToBeSaved = {
+    id: 'foo',
+    data: {},
+    profile: '1234',
+    randomUnexpectedProperty: 'whatever',
+  }
+
+  await dbInstance
+    .saveFishBelt({
+      record: fishBeltToBeSaved,
+      profileId: '1',
+      projectId: '1',
+    })
+    .catch((error) => expect(error.message).toEqual('Network Error'))
+
+  const recordStoredInDexie = await dbInstance.dexieInstance.collectRecords.get(
+    'foo',
+  )
+
+  expect(recordStoredInDexie).toBeDefined()
+  expect(recordStoredInDexie.data).toBeDefined()
+  expect(recordStoredInDexie.profile).toEqual(fishBeltToBeSaved.profile)
+  expect(recordStoredInDexie.randomUnexpectedProperty).toEqual(
+    fishBeltToBeSaved.randomUnexpectedProperty,
+  )
+  expect(recordStoredInDexie._last_revision_num).not.toBeDefined()
 })
