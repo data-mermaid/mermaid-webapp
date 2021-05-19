@@ -3,9 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
-import {
-  reactTableNaturalSort,
-} from '../../generic/Table/reactTableNaturalSort'
+import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import language from '../../../language'
 import PaginatedTable from '../../generic/Table/PaginatedTable'
 
@@ -36,7 +34,7 @@ const Sites = ({ databaseSwitchboardInstance }) => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Site',
+        Header: 'Name',
         accessor: 'site',
         sortType: reactTableNaturalSort,
       },
