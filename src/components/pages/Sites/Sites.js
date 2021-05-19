@@ -5,7 +5,6 @@ import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import {
   reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
 } from '../../generic/Table/reactTableNaturalSort'
 import language from '../../../language'
 import PaginatedTable from '../../generic/Table/PaginatedTable'
