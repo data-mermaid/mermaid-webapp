@@ -7,6 +7,23 @@ const buttonActive = css`
   transition: ${theme.timing.activeTransition};
 `
 
+export const CloseButton = styled.button`
+  background-color: ${theme.color.secondaryColor};
+  color: ${theme.color.secondaryText};
+  border-color: ${theme.color.secondaryBorder};
+  border-radius: 100%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  line-height: 0;
+  width: 4rem;
+  height: 4rem;
+  transition: ${theme.timing.hoverTransition};
+  ${hoverState(css`
+    background: ${theme.color.secondaryHover};
+  `)}
+`
+
 export const Button = styled.button`
   transition: ${theme.timing.activeTransition};
   padding: ${theme.spacing.buttonPadding};

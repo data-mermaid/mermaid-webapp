@@ -4,21 +4,10 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOnline,
-  mockMermaidApiAllSuccessful,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 test('Unsaved NEW fishbelt form edits clear when the user navigates away and back', async () => {
   const navigateToNewFishbeltFormFromCollecting = async () => {
