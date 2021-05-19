@@ -21,45 +21,14 @@ test('deleteFishBelt online returns error message upon dexie error', async () =>
     expect(error.message).toBeTruthy()
   }
 })
-test('deleteFishBelt online deletes the record', async () => {
+test('deleteFishBelt online deletes the IDB record if there is no corresponding record on the server', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
       `${process.env.REACT_APP_MERMAID_API}/push/`,
 
       (req, res, ctx) => {
-        // this call captures the first part of this test which is
-        // to save a fishbelt in order to then delete it
-        const collectRecord = req.body.collect_records[0]
-
-        const response = {
-          collect_records: [
-            {
-              ...collectRecord,
-              status_code: 200,
-              _last_revision_num: 1000,
-            },
-          ],
-        }
-
-        return res.once(ctx.json(response))
-      },
-    ),
-
-    rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
-
-      (req, res, ctx) => {
-        const { _deleted, profile, project } = req.body.collect_records[0]
-
-        if (!_deleted || !profile || !project) {
-          // this causes the test to fail if deleteFishBelt doesnt send the api _deleted, profile of project info
-
-          return res.once(ctx.status(400))
-        }
-
-        const response = { collect_records: [{ status_code: 204 }] }
-
-        return res.once(ctx.json(response))
+        // proves that the api call is skipped, otherwise the test will fail
+        return res.once(ctx.status(400))
       },
     ),
   )
@@ -72,23 +41,10 @@ test('deleteFishBelt online deletes the record', async () => {
     randomUnexpectedProperty: 'whatever',
   }
 
-  await dbInstance.saveFishBelt({
-    record: fishBeltToBeDeleted,
-    profileId: '1',
-    projectId: '1',
-  })
-
-  /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
-    We need to access indexedDb directly because we are in online mode and
-    the db switchboard's getFishBelt would try to hit the real or mocked API
-    which is boyond the scope of the test.
-     */
-  expect(await dbInstance.dexieInstance.collectRecords.get('foo'))
+  await dbInstance.dexieInstance.collectRecords.put(fishBeltToBeDeleted)
 
   await dbInstance.deleteFishBelt({
-    record: {
-      id: 'foo',
-    },
+    record: fishBeltToBeDeleted, // doesnt have a  _last_revision_num property, which means the API call get skipped
     profileId: '1',
     projectId: '1',
   })
@@ -97,26 +53,57 @@ test('deleteFishBelt online deletes the record', async () => {
     await dbInstance.dexieInstance.collectRecords.get('foo'),
   ).toBeUndefined()
 })
+test('deleteFishBelt online deletes the record if there is a corresponding copy on the server', async () => {
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (req, res, ctx) => {
+        const { _deleted, profile, project } = req.body.collect_records[0]
+        const force = req.url.searchParams.get('force')
+
+        if (!_deleted || !profile || !project || !force) {
+          // this causes the test to fail if deleteFishBelt doesnt
+          // send the api: force=true, _deleted, profile or project info
+
+          return res.once(ctx.status(400))
+        }
+
+        const response = {
+          collect_records: [{ status_code: 204 }],
+          proofOfServerCall: true,
+        }
+
+        return res.once(ctx.json(response))
+      },
+    ),
+  )
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+  const fishBeltToBeDeleted = {
+    id: 'foo',
+    data: {},
+    profile: '1234',
+    randomUnexpectedProperty: 'whatever',
+    _last_revision_num: 1, // indicate that there is a server copy
+  }
+
+  // save a record in IDB so we can delete it
+  await dbInstance.dexieInstance.collectRecords.put(fishBeltToBeDeleted)
+
+  const serverResponse = await dbInstance.deleteFishBelt({
+    record: fishBeltToBeDeleted,
+    profileId: '1',
+    projectId: '1',
+  })
+
+  expect(
+    await dbInstance.dexieInstance.collectRecords.get('foo'),
+  ).toBeUndefined()
+  expect(serverResponse.data.proofOfServerCall).toBeTruthy()
+})
 test('deleteFishBelt online returns a rejected promise if the status code from the API for the record is not successful', async () => {
   mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
-      // this call captures the first part of this test which is
-      // to save a fishbelt in order to then delete it
-      const collectRecord = req.body.collect_records[0]
-
-      const response = {
-        collect_records: [
-          {
-            ...collectRecord,
-            status_code: 200,
-            _last_revision_num: 1000,
-          },
-        ],
-      }
-
-      return res.once(ctx.json(response))
-    }),
-
     rest.post(
       `${process.env.REACT_APP_MERMAID_API}/push/`,
 
@@ -140,40 +127,70 @@ test('deleteFishBelt online returns a rejected promise if the status code from t
   )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
+  expect.assertions(1)
+
   const fishBeltToBeDeleted = {
     id: 'foo',
     data: {},
     profile: '1234',
     randomUnexpectedProperty: 'whatever',
+    _last_revision_num: 1, // indicate that there is a server copy
   }
 
-  await dbInstance.saveFishBelt({
-    record: fishBeltToBeDeleted,
-    profileId: '1',
-    projectId: '1',
-  })
-
-  /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
-    We need to access indexedDb directly because we are in online mode and
-    the db switchboard's getFishBelt would try to hit the real or mocked API
-    which is boyond the scope of the test.
-     */
-  expect(await dbInstance.dexieInstance.collectRecords.get('foo'))
-
-  expect.assertions(1)
+  // save a record in IDB so we can delete it
+  await dbInstance.dexieInstance.collectRecords.put(fishBeltToBeDeleted)
 
   await dbInstance
     .deleteFishBelt({
       record: {
         id: 'foo',
+        _last_revision_num: 1,
       },
       profileId: '1',
       projectId: '1',
     })
-
     .catch((error) => {
       expect(error.message).toEqual(
         'the API record returned from deleteFishBelt doesnt have a succussful status code',
       )
     })
+})
+test('deleteFishBelt online marks a record in indexedDB with _deleted in the case of a network error', async () => {
+  expect.assertions(2)
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (_req, res, _ctx) => {
+        return res.networkError()
+      },
+    ),
+  )
+  const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
+
+  const fishBeltToBeDeleted = {
+    id: 'foo',
+    data: {},
+    profile: '1234',
+    randomUnexpectedProperty: 'whatever',
+    _last_revision_num: 1, // indicate that there is a server copy
+  }
+
+  // save a record in IDB so we can delete it
+  await dbInstance.dexieInstance.collectRecords.put(fishBeltToBeDeleted)
+
+  await dbInstance
+    .deleteFishBelt({
+      record: {
+        id: 'foo',
+        _last_revision_num: 1,
+      },
+      profileId: '1',
+      projectId: '1',
+    })
+    .catch((error) => expect(error.message).toEqual('Network Error'))
+
+  expect(
+    (await dbInstance.dexieInstance.collectRecords.get('foo'))._deleted,
+  ).toBeTruthy()
 })
