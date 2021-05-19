@@ -91,7 +91,9 @@ export const useRoutes = ({ databaseSwitchboardInstance, currentUser }) => {
 
     {
       path: '/projects/:projectId/sites/:workflow?',
-      Component: Sites,
+      Component: () => (
+        <Sites databaseSwitchboardInstance={databaseSwitchboardInstance} />
+      ),
     },
 
     {
