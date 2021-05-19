@@ -24,10 +24,10 @@ export const CustomToastContainer = styled(ToastContainer).attrs({
     }
     transition: ${theme.timing.hoverTransition};
     background: ${theme.color.white};
-    border: solid 1px;// ${theme.spacing.borderSmall};
+    border: solid ${theme.spacing.borderSmall};
     border-color: ${theme.color.border};
     border-left-color: ${theme.color.primaryColor};
-    border-left-width: 8px;//${theme.spacing.borderXLarge};
+    border-left-width: ${theme.spacing.borderXLarge};
     border-radius: 0;
     &:hover {
       transition: ${theme.timing.hoverTransition};
