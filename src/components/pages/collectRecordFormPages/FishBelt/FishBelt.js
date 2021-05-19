@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useEffect, useMemo, useState } from 'react'
 
+import styled from 'styled-components/macro'
 import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
@@ -15,7 +16,6 @@ import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databa
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { H2 } from '../../../generic/text'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
-import styled from 'styled-components/macro'
 import theme from '../../../../theme'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
