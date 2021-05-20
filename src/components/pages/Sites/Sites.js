@@ -35,7 +35,7 @@ const Sites = ({ databaseSwitchboardInstance }) => {
     () => [
       {
         Header: 'Name',
-        accessor: 'site',
+        accessor: 'name',
         sortType: reactTableNaturalSort,
       },
       {
@@ -59,7 +59,7 @@ const Sites = ({ databaseSwitchboardInstance }) => {
 
   const tableCellData = useMemo(() =>
     siteRecordsForUiDisplay.map(({ uiLabels }) => ({
-      site: uiLabels.site,
+      name: uiLabels.name,
       reefType: uiLabels.reefType,
       reefZone: uiLabels.reefZone,
       exposure: uiLabels.exposure,

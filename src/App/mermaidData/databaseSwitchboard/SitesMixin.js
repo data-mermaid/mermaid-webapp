@@ -18,7 +18,7 @@ const SitesMixin = (Base) =>
                 return {
                   ...record,
                   uiLabels: {
-                    site: record.name,
+                    name: record.name,
                     reefType: getObjectById(reeftypes.data, record.reef_type)
                       .name,
                     reefZone: getObjectById(reefzones.data, record.reef_zone)
