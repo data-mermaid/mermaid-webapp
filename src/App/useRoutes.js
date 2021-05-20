@@ -98,7 +98,11 @@ export const useRoutes = ({ databaseSwitchboardInstance, currentUser }) => {
 
     {
       path: '/projects/:projectId/management-regimes/:workflow?',
-      Component: ManagementRegimes,
+      Component: () => (
+        <ManagementRegimes
+          databaseSwitchboardInstance={databaseSwitchboardInstance}
+        />
+      ),
     },
     {
       path: '/projects/:projectId/users',
