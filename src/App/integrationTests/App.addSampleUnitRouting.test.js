@@ -3,23 +3,12 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 
 import {
-  mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish Belt page.', async () => {
   const navigateToNewFishbeltFormFromCollecting = async () => {

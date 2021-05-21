@@ -3,23 +3,11 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 import {
   screen,
-  mockMermaidApiAllSuccessful,
   within,
   renderAuthenticatedOffline,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 const saveFishbeltRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')

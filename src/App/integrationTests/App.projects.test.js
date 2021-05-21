@@ -3,22 +3,11 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import {
-  mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
   screen,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 test('Clicking anywhere on a project card navigates to the project collect page when offline', async () => {
   renderAuthenticatedOffline(
@@ -59,7 +48,7 @@ test('Clicking anywhere on a project card navigates to the project health page w
 
   expect(
     await screen.findByText('Project Health', {
-      selector: 'h3',
+      selector: 'h2',
     }),
   )
 })

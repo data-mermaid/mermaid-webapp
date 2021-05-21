@@ -3,23 +3,12 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 import {
   screen,
-  mockMermaidApiAllSuccessful,
   renderAuthenticatedOffline,
+  within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
-
-beforeAll(() => {
-  mockMermaidApiAllSuccessful.listen()
-})
-
-afterEach(() => {
-  mockMermaidApiAllSuccessful.resetHandlers()
-})
-afterAll(() => {
-  mockMermaidApiAllSuccessful.close()
-})
 
 describe('Offline', () => {
   test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
@@ -36,8 +25,10 @@ describe('Offline', () => {
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
+    const modal = screen.getByLabelText('Delete Record')
+
     userEvent.click(
-      screen.getByText('Yes', {
+      within(modal).getByText('Delete Record', {
         selector: 'button',
       }),
     )
@@ -75,7 +66,7 @@ describe('Offline', () => {
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
     userEvent.click(
-      screen.getByText('No', {
+      screen.getByText('Cancel', {
         selector: 'button',
       }),
     )
@@ -101,8 +92,10 @@ describe('Offline', () => {
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
+    const modal = screen.getByLabelText('Delete Record')
+
     userEvent.click(
-      screen.getByText('Yes', {
+      within(modal).getByText('Delete Record', {
         selector: 'button',
       }),
     )
@@ -140,7 +133,7 @@ describe('Offline', () => {
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
-    userEvent.click(screen.getByText('No'), {
+    userEvent.click(screen.getByText('Cancel'), {
       selector: 'button',
     })
 

@@ -1,6 +1,8 @@
+import styled, { css } from 'styled-components/macro'
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components/macro'
+import theme from '../../theme'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 import { Column } from '../generic/positioning'
 
@@ -14,10 +16,42 @@ const LayoutContainer = styled(Column)`
   }
   height: 100vh;
 `
+const OfflineIndicatorStyles = styled.div`
+  ${(props) =>
+    !props.isOnline &&
+    css`
+      border: solid ${theme.spacing.borderXLarge} ${theme.color.cautionColor};
+      pointer-events: none;
+      width: ${theme.spacing.fullViewportWidth};
+      height: 100vh;
+      z-index: 9998;
+      position: fixed;
+      span {
+        background: ${theme.color.cautionColor};
+        color: ${theme.color.white};
+        position: absolute;
+        bottom: 0;
+        left: 10px;
+        padding: ${theme.spacing.xsmall} ${theme.spacing.small};
+        font-size: smaller;
+        transition: ${theme.timing.hoverTransition};
+      }
+    `}
+`
+const OfflineIndicator = () => {
+  const { isOnline } = useOnlineStatus()
+
+  return (
+    <OfflineIndicatorStyles isOnline={isOnline}>
+      {!isOnline && <span>You're offline</span>}
+    </OfflineIndicatorStyles>
+  )
+}
 
 const Layout = ({ children, footer, header }) => {
   return (
     <LayoutContainer>
+      <OfflineIndicator />
       {header}
       <main>{children}</main>
       {footer}

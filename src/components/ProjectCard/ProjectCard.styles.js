@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
+import { ButtonSecondary } from '../generic/buttons'
 import {
   mediaQueryPhoneOnly,
   hoverState,
@@ -9,6 +10,9 @@ import {
 
 const borderWidth = '2px'
 
+export const ProjectCardButtonSecondary = styled(ButtonSecondary)`
+  transition: 0s;
+`
 export const stylesForNoHover = css`
   display: grid;
   grid-template-columns: repeat(5, 1fr);

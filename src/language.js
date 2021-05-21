@@ -22,9 +22,10 @@ const success = {
 }
 
 const prompt = {
-  deleteCollectRecord: 'Are you sure you want to delete this record?',
-  yes: 'Yes',
-  no: 'No',
+  deleteCollectRecordTitle: 'Delete Record',
+  deleteCollectRecordPrompt: 'Are you sure you want to delete this record?',
+  yes: 'Delete Record',
+  no: 'Cancel',
 }
 
 export default { error, success, prompt }

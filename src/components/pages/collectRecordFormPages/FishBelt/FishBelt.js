@@ -24,19 +24,24 @@ import language from '../../../../language'
 import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import OfflineHide from '../../../generic/OfflineHide'
+import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
 
-const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
+const FishBelt = ({
+  databaseSwitchboardInstance,
+  isNewRecord,
+  currentUser,
+}) => {
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
-  const { recordId } = useParams()
+  const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const showDeleteConfirmPrompt = () => {
@@ -99,7 +104,11 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
   const deleteRecord = () => {
     if (!isNewRecord) {
       databaseSwitchboardInstance
-        .deleteFishBelt(collectRecordBeingEdited.id)
+        .deleteFishBelt({
+          record: collectRecordBeingEdited,
+          profileId: currentUser.id,
+          projectId,
+        })
         .then(() => {
           clearPersistedUnsavedFormData()
           toast.success(language.success.collectRecordDelete)
@@ -118,7 +127,11 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
     )
 
     databaseSwitchboardInstance
-      .saveFishBelt(newRecord)
+      .saveFishBelt({
+        record: newRecord,
+        profileId: currentUser.id,
+        projectId,
+      })
       .then((response) => {
         toast.success(language.success.collectRecordSave)
         clearPersistedUnsavedFormData()
@@ -226,6 +239,7 @@ const FishBelt = ({ databaseSwitchboardInstance, isNewRecord }) => {
 }
 
 FishBelt.propTypes = {
+  currentUser: currentUserPropType.isRequired,
   databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
   isNewRecord: PropTypes.bool,
 }
