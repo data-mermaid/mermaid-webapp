@@ -22,7 +22,6 @@ export const CustomToastContainer = styled(ToastContainer).attrs({
     .Toastify__close-button {
       color: ${theme.color.black};
     }
-    transition: ${theme.timing.hoverTransition};
     background: ${theme.color.white};
     border: solid ${theme.spacing.borderSmall};
     border-color: ${theme.color.border};
