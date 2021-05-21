@@ -4,6 +4,7 @@ import { formikPropType } from '../../library/formikPropType'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import InputRadioWithLabelAndValidation from '../generic/InputRadioWithLabelAndValidation'
+import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
 
