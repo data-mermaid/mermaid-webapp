@@ -102,7 +102,7 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
 
   // nav away
   const sideNav = screen.getByTestId('content-page-side-nav')
-  
+
   userEvent.click(within(sideNav).getByRole('link', { name: /collecting/i }))
 
   // nav back
