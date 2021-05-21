@@ -20,6 +20,7 @@ import {
   IconSharing,
 } from '../icons'
 import OfflineHide from '../generic/OfflineHide'
+import CollectRecordsCount from '../CollectRecordsCount'
 
 const NavWrapper = styled('nav')`
   display: flex;
@@ -70,6 +71,9 @@ const NavHeader = styled('p')`
 const NavMenu = () => {
   const projectUrl = useCurrentProjectPath()
 
+  // this number is a hardcoded temporary placeholder. Will be resolved in M196
+  const collectRecordCount = 11
+
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
@@ -92,6 +96,7 @@ const NavMenu = () => {
               <NavLinkSidebar to={`${projectUrl}/collecting`}>
                 <IconCollect />
                 <span>Collecting</span>
+                <CollectRecordsCount collectRecordCount={collectRecordCount} />
               </NavLinkSidebar>
             </li>
             <li>
