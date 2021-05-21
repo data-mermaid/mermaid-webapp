@@ -1,11 +1,21 @@
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { usePagination, useSortBy, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import language from '../../../language'
-import PaginatedTable from '../../generic/Table/PaginatedTable'
+import {
+  Table,
+  Tr,
+  Th,
+  Td,
+  TableOverflowWrapper,
+  TableNavigation,
+} from '../../generic/Table/table'
+import PageSelector from '../../generic/Table/PageSelector'
+import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 
 const Sites = ({ databaseSwitchboardInstance }) => {
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
@@ -57,24 +67,105 @@ const Sites = ({ databaseSwitchboardInstance }) => {
     [],
   )
 
-  const tableCellData = useMemo(() =>
-    siteRecordsForUiDisplay.map(({ uiLabels }) => ({
-      name: uiLabels.name,
-      reefType: uiLabels.reefType,
-      reefZone: uiLabels.reefZone,
-      exposure: uiLabels.exposure,
-    })),
+  const tableCellData = useMemo(
+    () =>
+      siteRecordsForUiDisplay.map(({ uiLabels }) => ({
+        name: uiLabels.name,
+        reefType: uiLabels.reefType,
+        reefZone: uiLabels.reefZone,
+        exposure: uiLabels.exposure,
+      })),
+    [siteRecordsForUiDisplay],
+  )
+
+  const {
+    canNextPage,
+    canPreviousPage,
+    getTableBodyProps,
+    getTableProps,
+    gotoPage,
+    headerGroups,
+    nextPage,
+    page,
+    pageOptions,
+    prepareRow,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns: tableColumns,
+      data: tableCellData,
+      initialState: { pageSize: 10 },
+    },
+    useSortBy,
+    usePagination,
+  )
+  const handleRowsNumberChange = (e) => {
+    setPageSize(Number(e.target.value))
+  }
+
+  const table = (
+    <>
+      <TableOverflowWrapper>
+        <Table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <Th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    isSorted={column.isSorted}
+                    isSortedDescending={column.isSortedDesc}
+                  >
+                    {column.render('Header')}
+                  </Th>
+                ))}
+              </Tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row)
+
+              return (
+                <Tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                        {cell.render('Cell')}
+                      </Td>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
+          </tbody>
+        </Table>
+      </TableOverflowWrapper>
+      <TableNavigation>
+        <PageSizeSelector
+          onChange={handleRowsNumberChange}
+          pageSize={pageSize}
+          pageSizeOptions={[10, 50, 100]}
+        />
+        <PageSelector
+          onPreviousClick={previousPage}
+          previousDisabled={!canPreviousPage}
+          onNextClick={nextPage}
+          nextDisabled={!canNextPage}
+          onGoToPage={gotoPage}
+          currentPageIndex={pageIndex}
+          pageCount={pageOptions.length}
+        />
+      </TableNavigation>
+    </>
   )
 
   return (
     <ContentPageLayout
       toolbar={<>Sub layout top bar</>}
-      content={
-        <PaginatedTable
-          tableColumns={tableColumns}
-          tableCellData={tableCellData}
-        />
-      }
+      content={table}
       isLoading={isLoading}
     />
   )

@@ -10,7 +10,6 @@ const InputTextareaSelectStyles = css`
   height: fit-content;
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
   background-color: ${theme.color.inputBackground};
-  /* width: 100%; */
   &:focus {
     outline: ${theme.color.outline};
   }
