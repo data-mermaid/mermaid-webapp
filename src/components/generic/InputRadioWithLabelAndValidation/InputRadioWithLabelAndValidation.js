@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Field } from 'formik'
 import { InputRow, ValidationMessage } from '../form'
 
 const InputRadioWithLabelAndValidation = ({
@@ -11,38 +10,29 @@ const InputRadioWithLabelAndValidation = ({
   validationType,
   ...restOfProps
 }) => {
-  const validationRole =
-    validationType === 'error' || 'warning' ? 'alert' : undefined
+  const optionsList = (field) => {
+    return options.map(({ label: optionLabel, value }) => {
+      return (
+        <div key={value}>
+          <input
+            type="radio"
+            {...field}
+            value={value}
+            checked={field.value === value}
+          />
+          <label htmlFor={value}>{optionLabel}</label>
+        </div>
+      )
+    })
+  }
 
   return (
-    <InputRow>
+    <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <div>
-        <Field name={id} {...restOfProps}>
-          {({ field }) =>
-            options.map(({ label: optionLabel, value }) => {
-              return (
-                <div key={value}>
-                  <input
-                    type="radio"
-                    id={value}
-                    {...field}
-                    value={value}
-                    checked={field.value === value}
-                  />
-                  <label htmlFor={value}>{optionLabel}</label>
-                </div>
-              )
-            })
-          }
-        </Field>
-      </div>
+      <div>{optionsList(restOfProps)}</div>
       <div>
         {validationMessage ? (
-          <ValidationMessage
-            validationType={validationType}
-            role={validationRole}
-          >
+          <ValidationMessage validationType={validationType}>
             {validationMessage}
           </ValidationMessage>
         ) : null}
