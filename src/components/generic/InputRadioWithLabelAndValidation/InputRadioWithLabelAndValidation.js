@@ -10,27 +10,25 @@ const InputRadioWithLabelAndValidation = ({
   validationType,
   ...restOfProps
 }) => {
-  const optionsList = (field) => {
-    return options.map(({ label: optionLabel, value }) => {
-      return (
-        <div key={value}>
-          <input
-            type="radio"
-            id={value}
-            {...field}
-            value={value}
-            checked={field.value === value}
-          />
-          <label htmlFor={value}>{optionLabel}</label>
-        </div>
-      )
-    })
-  }
+  const optionsList = options.map(({ label: optionLabel, value }) => {
+    return (
+      <div key={value}>
+        <input
+          type="radio"
+          id={value}
+          {...restOfProps}
+          value={value}
+          checked={restOfProps.value === value}
+        />
+        <label htmlFor={value}>{optionLabel}</label>
+      </div>
+    )
+  })
 
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <div>{optionsList(restOfProps)}</div>
+      <div>{optionsList}</div>
       <div>
         {validationMessage ? (
           <ValidationMessage validationType={validationType}>
