@@ -4,7 +4,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
+import { H2 } from '../../generic/text'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import { RowSpaceBetween } from '../../generic/positioning'
 import language from '../../../language'
 import {
   Table,
@@ -16,6 +18,28 @@ import {
 } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import { ButtonSecondary } from '../../generic/buttons'
+import { IconPlus, IconCopy, IconDownload } from '../../icons'
+
+const TopBar = () => (
+  <>
+    <H2>Sites</H2>
+    <RowSpaceBetween>
+      <div>Future filter</div>{' '}
+      <div>
+        <ButtonSecondary>
+          <IconPlus /> New Site
+        </ButtonSecondary>
+        <ButtonSecondary>
+          <IconCopy /> Copy sites from other projects
+        </ButtonSecondary>
+        <ButtonSecondary>
+          <IconDownload /> Export sites
+        </ButtonSecondary>
+      </div>
+    </RowSpaceBetween>
+  </>
+)
 
 const Sites = ({ databaseSwitchboardInstance }) => {
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
@@ -164,7 +188,7 @@ const Sites = ({ databaseSwitchboardInstance }) => {
 
   return (
     <ContentPageLayout
-      toolbar={<>Sub layout top bar</>}
+      toolbar={<TopBar />}
       content={table}
       isLoading={isLoading}
     />
