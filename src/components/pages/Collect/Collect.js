@@ -5,7 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
-import { H3 } from '../../generic/text'
+import { H2 } from '../../generic/text'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -28,7 +28,7 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 
 const TopBar = () => (
   <>
-    <H3>Collect Records</H3>
+    <H2>Collect Records</H2>
     <RowSpaceBetween>
       <div>Future filter</div> <AddSampleUnitButton />
     </RowSpaceBetween>
