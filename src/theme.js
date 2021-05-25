@@ -67,6 +67,7 @@ const spacing = {
   medium,
   large,
   xlarge,
+  buttonSpacing: `${small}`,
   buttonPadding: `${small} ${medium}`,
   width: '90vw',
   maxWidth: '1200px',
