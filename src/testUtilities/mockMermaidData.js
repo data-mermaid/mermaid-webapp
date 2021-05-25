@@ -302,30 +302,30 @@ const sites = [
   {
     id: '1',
     name: 'Site A',
-    reef_type: 'patch',
-    reef_zone: 'pinnacle',
-    exposure: 'exposed',
+    reef_type: '19534716-b138-49b1-bbd8-420df9243413',
+    reef_zone: '0e5ac2d0-d1cc-4f04-a696-f6d3db2b9ca8',
+    exposure: '997c6cb3-c5e5-4df6-9cfa-5814a58a7b9e',
   },
   {
     id: '2',
     name: 'Site B',
-    reef_type: 'fringing',
-    reef_zone: 'back reef',
-    exposure: 'sheltered',
+    reef_type: '16a0a961-df6d-42a5-86b8-bc30f87bab42',
+    reef_zone: '06ea17cd-5d1d-46ae-a654-64901e2a9f96',
+    exposure: 'baa54e1d-4263-4273-80f5-35812304b592',
   },
   {
     id: '3',
     name: 'Site C',
-    reef_type: 'patch',
-    reef_zone: 'fore reef',
-    exposure: 'very sheltered',
+    reef_type: 'dc3aa6d3-2795-42bb-9771-39fbcdd3029d',
+    reef_zone: 'bc188a4f-76ae-4701-a021-26297efc9a92',
+    exposure: '85b26198-4e3b-459c-868c-4e0706828cce',
   },
   {
     id: '4',
     name: 'Site D',
-    reef_type: 'patch',
-    reef_zone: 'back reef',
-    exposure: 'exposed',
+    reef_type: '2b99cdf4-9566-4e60-8700-4ec3b9c7e322',
+    reef_zone: '49c85161-99ee-4bc3-b6c4-09b5810da0a8',
+    exposure: '051c7545-eea8-48f6-bc82-3ef66bfdfe75',
   },
 ]
 
@@ -502,6 +502,90 @@ const choices = {
         name: 'crest',
         updated_on: '2020-07-10T00:13:52.699137Z',
         val: 4,
+      },
+    ],
+  },
+  reeftypes: {
+    name: 'reeftypes',
+    data: [
+      {
+        id: '16a0a961-df6d-42a5-86b8-bc30f87bab42',
+        name: 'atoll',
+        updated_on: '2017-09-27T19:51:10.454154Z',
+      },
+      {
+        id: '2b99cdf4-9566-4e60-8700-4ec3b9c7e322',
+        name: 'barrier',
+        updated_on: '2017-09-27T19:51:10.454194Z',
+      },
+      {
+        id: '19534716-b138-49b1-bbd8-420df9243413',
+        name: 'fringing',
+        updated_on: '2017-09-27T19:51:10.454216Z',
+      },
+      {
+        id: 'dc3aa6d3-2795-42bb-9771-39fbcdd3029d',
+        name: 'lagoon',
+        updated_on: '2017-09-27T19:51:10.454260Z',
+      },
+      {
+        id: '7085ee02-2a2e-4b42-b61e-18a78f1b8d03',
+        name: 'patch',
+        updated_on: '2017-09-27T19:51:10.454238Z',
+      },
+    ],
+  },
+  reefzones: {
+    name: 'reefzones',
+    data: [
+      {
+        id: '06ea17cd-5d1d-46ae-a654-64901e2a9f96',
+        name: 'back reef',
+        updated_on: '2018-03-07T22:13:10.372889Z',
+      },
+      {
+        id: '49c85161-99ee-4bc3-b6c4-09b5810da0a8',
+        name: 'crest',
+        updated_on: '2018-03-07T22:12:48.381180Z',
+      },
+      {
+        id: '0e5ac2d0-d1cc-4f04-a696-f6d3db2b9ca8',
+        name: 'fore reef',
+        updated_on: '2018-03-07T22:12:58.912071Z',
+      },
+      {
+        id: 'bc188a4f-76ae-4701-a021-26297efc9a92',
+        name: 'pinnacle',
+        updated_on: '2019-05-17T02:59:10.753523Z',
+      },
+    ],
+  },
+  reefexposures: {
+    name: 'reefexposures',
+    data: [
+      {
+        id: 'baa54e1d-4263-4273-80f5-35812304b592',
+        name: 'very sheltered',
+        updated_on: '2017-09-27T19:51:10.499033Z',
+        val: 0,
+      },
+      {
+        id: '051c7545-eea8-48f6-bc82-3ef66bfdfe75',
+        name: 'sheltered',
+        updated_on: '2017-09-27T19:51:10.499071Z',
+        val: 1,
+      },
+      {
+        id: '85b26198-4e3b-459c-868c-4e0706828cce',
+        name: 'semi-exposed',
+        updated_on: '2017-09-27T19:51:10.499098Z',
+        val: 2,
+      },
+      {
+        id: '997c6cb3-c5e5-4df6-9cfa-5814a58a7b9e',
+        name: 'exposed',
+        updated_on: '2017-09-27T19:51:10.499123Z',
+        val: 3,
       },
     ],
   },
