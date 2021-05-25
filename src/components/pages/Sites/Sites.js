@@ -28,7 +28,7 @@ const TopBar = () => (
       <div>Future filter</div>{' '}
       <div>
         <ButtonSecondary>
-          <IconPlus /> New Site
+          <IconPlus /> New site
         </ButtonSecondary>
         <ButtonSecondary>
           <IconCopy /> Copy sites from other projects
