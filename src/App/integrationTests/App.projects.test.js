@@ -26,7 +26,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 
   expect(
     await screen.findByText('Collect Records', {
-      selector: 'h3',
+      selector: 'h2',
     }),
   )
 })

@@ -34,7 +34,7 @@ describe('Offline', () => {
     )
 
     // navigated to collect records table page
-    expect(await screen.findByText('Collect Records', { selector: 'h3' }))
+    expect(await screen.findByText('Collect Records', { selector: 'h2' }))
 
     // shows toast
     expect(await screen.findByText('Collect record deleted.'))
@@ -101,7 +101,7 @@ describe('Offline', () => {
     )
 
     // navigated to collect records table page
-    expect(await screen.findByText('Collect Records', { selector: 'h3' }))
+    expect(await screen.findByText('Collect Records', { selector: 'h2' }))
 
     // shows toast
     expect(await screen.findByText('Collect record deleted.'))
