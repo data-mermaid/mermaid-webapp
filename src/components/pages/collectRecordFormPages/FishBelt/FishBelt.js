@@ -170,7 +170,7 @@ const FishBelt = ({
     },
     onSubmit: saveRecord,
   }
-  const SVSButtonWrapper = styled('div')`
+  const SaveValidateSubmitButtonWrapper = styled('div')`
     text-align: right;
     button {
       margin-left: ${theme.spacing.buttonSpacing};
@@ -219,7 +219,7 @@ const FishBelt = ({
                 />
               )}
 
-              <SVSButtonWrapper data-testid="fishbelt-form-buttons">
+              <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
                 <ButtonCallout type="submit" form="fishbelt-form">
                   <IconSave />
                   Save
@@ -236,7 +236,7 @@ const FishBelt = ({
                     </ButtonCallout>
                   </OfflineHide>
                 )}
-              </SVSButtonWrapper>
+              </SaveValidateSubmitButtonWrapper>
             </>
           }
         />
