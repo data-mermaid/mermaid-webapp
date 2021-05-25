@@ -8,6 +8,7 @@ import GraphsAndMaps from '../components/pages/GraphsAndMaps'
 import ManagementRegimes from '../components/pages/ManagementRegimes'
 import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
+import Site from '../components/pages/Site'
 import Users from '../components/pages/Users'
 import Health from '../components/pages/Health'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
@@ -90,14 +91,17 @@ export const useRoutes = ({ databaseSwitchboardInstance, currentUser }) => {
     },
 
     {
-      path: '/projects/:projectId/sites/:workflow?',
+      path: '/projects/:projectId/sites/',
       Component: () => (
         <Sites databaseSwitchboardInstance={databaseSwitchboardInstance} />
       ),
     },
-
     {
-      path: '/projects/:projectId/management-regimes/:workflow?',
+      path: '/projects/:projectId/sites/:siteId',
+      Component: () => <Site />,
+    },
+    {
+      path: '/projects/:projectId/management-regimes/',
       Component: () => (
         <ManagementRegimes
           databaseSwitchboardInstance={databaseSwitchboardInstance}
