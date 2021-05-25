@@ -330,9 +330,45 @@ const sites = [
 ]
 
 const managementRegimes = [
-  { id: '1', name: 'Management Regimes A' },
-  { id: '2', name: 'Management Regimes B' },
-  { id: '3', name: 'Management Regimes C' },
+  {
+    id: '1',
+    name: 'Management Regimes A',
+    est_year: 2021,
+    compliance: null,
+    no_take: true,
+    periodic_closure: false,
+    open_access: true,
+    size_limits: false,
+    gear_restriction: true,
+    species_restriction: false,
+    access_restriction: false,
+  },
+  {
+    id: '2',
+    name: 'Management Regimes B',
+    est_year: null,
+    compliance: '812e9833-c6dd-4dc9-a841-29167cbe7b7e',
+    no_take: true,
+    periodic_closure: false,
+    open_access: false,
+    size_limits: true,
+    gear_restriction: false,
+    species_restriction: true,
+    access_restriction: true,
+  },
+  {
+    id: '3',
+    name: 'Management Regimes C',
+    est_year: 2017,
+    compliance: 'f76d7866-5b0d-428d-928c-738c2912d6e0',
+    no_take: false,
+    periodic_closure: true,
+    open_access: false,
+    size_limits: true,
+    gear_restriction: false,
+    species_restriction: false,
+    access_restriction: false,
+  },
 ]
 
 const choices = {
@@ -502,6 +538,31 @@ const choices = {
         name: 'crest',
         updated_on: '2020-07-10T00:13:52.699137Z',
         val: 4,
+      },
+    ],
+  },
+  managementcompliances: {
+    name: 'managementcompliances',
+    data: [
+      {
+        id: '1579b2df-a572-4f88-a07a-593cc573317a',
+        name: 'full',
+        updated_on: '2017-09-27T19:51:10.371527Z',
+      },
+      {
+        id: '92c3734d-659f-4610-a474-25ca569ec05d',
+        name: 'low',
+        updated_on: '2019-07-03T17:54:18.905154Z',
+      },
+      {
+        id: '812e9833-c6dd-4dc9-a841-29167cbe7b7e',
+        name: 'none',
+        updated_on: '2017-09-27T19:51:10.371577Z',
+      },
+      {
+        id: 'f76d7866-5b0d-428d-928c-738c2912d6e0',
+        name: 'somewhat',
+        updated_on: '2017-09-27T19:51:10.371556Z',
       },
     ],
   },
