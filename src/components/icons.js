@@ -26,6 +26,7 @@ import sync from '@iconify-icons/mdi/sync'
 import closeIcon from '@iconify-icons/mdi/close'
 import contentSave from '@iconify-icons/mdi/content-save'
 import upload from '@iconify-icons/mdi/upload'
+import download from '@iconify-icons/mdi/download'
 
 export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
 export const IconCheck = () => <InlineIcon icon={checkIcon} />
@@ -53,3 +54,4 @@ export const IconUp = () => <InlineIcon icon={menuUp} />
 export const IconUsers = () => <InlineIcon icon={accountGroup} />
 export const IconSave = () => <InlineIcon icon={contentSave} />
 export const IconUpload = () => <InlineIcon icon={upload} />
+export const IconDownload = () => <InlineIcon icon={download} />
