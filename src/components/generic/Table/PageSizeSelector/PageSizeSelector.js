@@ -1,12 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components/macro'
 import { Select } from '../../form'
+
+const PageSizeSelect = styled(Select)`
+  width: auto;
+`
 
 const PageSizeSelector = ({ pageSize, pageSizeOptions, onChange }) => {
   return (
     <label htmlFor="page-size-selector">
       Show{' '}
-      <Select
+      <PageSizeSelect
         value={pageSize}
         onChange={onChange}
         id="page-size-selector"
@@ -17,7 +22,7 @@ const PageSizeSelector = ({ pageSize, pageSizeOptions, onChange }) => {
             {size}
           </option>
         ))}
-      </Select>{' '}
+      </PageSizeSelect>{' '}
       rows
     </label>
   )

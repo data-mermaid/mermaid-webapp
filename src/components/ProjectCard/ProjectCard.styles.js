@@ -8,8 +8,6 @@ import {
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 
-const borderWidth = '2px'
-
 export const ProjectCardButtonSecondary = styled(ButtonSecondary)`
   transition: 0s;
 `
@@ -33,7 +31,7 @@ export const ButtonGroups = styled('div')`
   a {
     display: inline-block;
     position: relative;
-    margin-right: ${theme.spacing.small};
+    margin-right: ${theme.spacing.buttonSpacing};
     span {
       display: none;
     }
@@ -59,7 +57,7 @@ export const ButtonGroups = styled('div')`
   }
   @media (hover: none) {
     ${stylesForNoHover};
-    margin: ${theme.spacing.medium};
+    margin: ${theme.spacing.buttonSpacing};
   }
   ${mediaQueryTabletLandscapeOnly(css`
     ${stylesForNoHover};
@@ -89,11 +87,11 @@ export const CardWrapper = styled('div')`
   width: ${theme.spacing.width};
   max-width: ${theme.spacing.maxWidth};
   background: ${theme.color.white};
-  border: solid ${borderWidth} transparent;
+  border: solid ${theme.spacing.borderMedium} transparent;
   cursor: pointer;
   ${hoverState(css`
     transition: ${theme.timing.hoverTransition};
-    border: solid ${borderWidth} ${theme.color.primaryColor};
+    border: solid ${theme.spacing.borderMedium} ${theme.color.primaryColor};
     ${ButtonGroups} {
       visibility: visible;
     }

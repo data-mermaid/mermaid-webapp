@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { usePagination, useSortBy, useTable } from 'react-table'
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { usePagination, useSortBy, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { H3 } from '../../generic/text'
@@ -12,6 +12,9 @@ import {
   reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
+import AddSampleUnitButton from './AddSampleUnitButton'
+import language from '../../../language'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import {
   Table,
   Tr,
@@ -20,11 +23,8 @@ import {
   TableOverflowWrapper,
   TableNavigation,
 } from '../../generic/Table/table'
-import AddSampleUnitButton from './AddSampleUnitButton'
-import language from '../../../language'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 
 const TopBar = () => (
   <>
@@ -142,6 +142,7 @@ const Collect = ({ databaseSwitchboardInstance }) => {
       })),
     [collectRecordsForUiDisplay, currentProjectPath],
   )
+
   const {
     canNextPage,
     canPreviousPage,
