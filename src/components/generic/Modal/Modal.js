@@ -43,10 +43,10 @@ const ModalTitle = styled.div`
 const ModalContent = styled.div`
   overflow: auto;
   max-height: 50vh;
-  padding: ${theme.spacing.medium};
+  padding: ${theme.spacing.buttonSpacing};
 `
 const ModalFooter = styled.div`
-  padding: ${theme.spacing.medium};
+  padding: ${theme.spacing.buttonSpacing};
   display: grid;
   grid-auto-columns: auto auto;
   ${mediaQueryPhoneOnly(css`
@@ -55,13 +55,13 @@ const ModalFooter = styled.div`
       text-align: center;
     }
     * > button {
-      margin-top: ${theme.spacing.small};
-      margin-bottom: ${theme.spacing.small};
+      margin-top: ${theme.spacing.buttonSpacing};
+      margin-bottom: ${theme.spacing.buttonSpacing};
     }
   `)}
   * > button {
     &:not(:last-child) {
-      margin-right: ${theme.spacing.small};
+      margin-right: ${theme.spacing.buttonSpacing};
     }
     &:first-child {
       margin-left: 0;
