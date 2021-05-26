@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOffline,
+  within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
@@ -24,14 +25,16 @@ describe('Offline', () => {
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
+    const modal = screen.getByLabelText('Delete Record')
+
     userEvent.click(
-      screen.getByText('Yes', {
+      within(modal).getByText('Delete Record', {
         selector: 'button',
       }),
     )
 
     // navigated to collect records table page
-    expect(await screen.findByText('Collect Records', { selector: 'h3' }))
+    expect(await screen.findByText('Collect Records', { selector: 'h2' }))
 
     // shows toast
     expect(await screen.findByText('Collect record deleted.'))
@@ -63,9 +66,13 @@ describe('Offline', () => {
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
-    userEvent.click(screen.getByText('No'), {
-      selector: 'button',
-    })
+    const modal = screen.getByLabelText('Delete Record')
+
+    userEvent.click(
+      within(modal).getByText('Cancel', {
+        selector: 'button',
+      }),
+    )
 
     expect(
       screen.queryByText('Are you sure you want to delete this record?'),
