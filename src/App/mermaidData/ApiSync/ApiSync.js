@@ -51,8 +51,23 @@ const ApiSync = class {
       })
       .then(async (response) => {
         await this.#persistLastRevisionNumbersPulled(response.data)
-        // WIP adding updates to idb
-        // WIP removing deletes from idb
+        const collectRecordUpdates =
+          response.data.collect_records?.updates ?? []
+        const collectRecordDeletes =
+          response.data.collect_records?.deletes ?? []
+
+        await this._dexieInstance.transaction(
+          'rw',
+          this._dexieInstance.collectRecords,
+          () => {
+            collectRecordUpdates.forEach((updatedRecord) => {
+              this._dexieInstance.collectRecords.put(updatedRecord)
+            })
+            collectRecordDeletes.forEach(({ id }) => {
+              this._dexieInstance.collectRecords.delete(id)
+            })
+          },
+        )
 
         return response
       })

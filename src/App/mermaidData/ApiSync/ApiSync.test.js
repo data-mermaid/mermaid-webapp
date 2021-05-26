@@ -1,6 +1,7 @@
 import { rest } from 'msw'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
+import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import ApiSync from './ApiSync'
 
 test('pullChangesWithChoices hits the api with the correct config', async () => {
@@ -61,7 +62,8 @@ test('pullChangesWithChoices keeps track of returned last_revision_nums and send
         hasFirstPullCallHappened
       ) {
         // pullChangesWithChoices shouldnt be sending nulls after
-        // it has received a response from the server so we want to cause the test to fail here
+        // it has received a response from the server so we want
+        // to cause the test to fail here
         return res(ctx.status(400))
       }
 
@@ -81,4 +83,50 @@ test('pullChangesWithChoices keeps track of returned last_revision_nums and send
 
   // second pull from api should have last revision numbers
   await apiSync.pullChangesWithChoices({ profileId: '1', projectId: '1' })
+})
+
+test('pullChangeWithChoices updates IDB with API data', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const apiSync = new ApiSync({
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+    dexieInstance,
+  })
+
+  // add records to IDB that will be updated/deleted with mock api response
+  await dexieInstance.transaction('rw', dexieInstance.collectRecords, () => {
+    dexieInstance.collectRecords.put({
+      ...mockMermaidData.collectRecords[1],
+      somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
+    })
+    dexieInstance.collectRecords.put(mockMermaidData.collectRecords[0])
+  })
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+      const response = {
+        collect_records: {
+          updates: [mockMermaidData.collectRecords[1]],
+          deletes: [mockMermaidData.collectRecords[0]],
+          last_revision_num: 17,
+        },
+      }
+
+      return res(ctx.json(response))
+    }),
+  )
+
+  expect.assertions(2)
+  await apiSync
+    .pullChangesWithChoices({ profileId: '1', projectId: '1' })
+    .then(async () => {
+      const collectRecordsStored = await dexieInstance.collectRecords.toArray()
+
+      expect(
+        collectRecordsStored[0]
+          .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+      ).not.toBeDefined()
+      // expect second stored record to get deleted
+      expect(collectRecordsStored.length).toEqual(1)
+    })
 })
