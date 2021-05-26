@@ -32,10 +32,10 @@ const ApiSync = class {
       : undefined
   }
 
-  pullChangesWithChoices = async ({ projectId, profileId }) => {
+  pullApiDataMinimal = async ({ projectId, profileId }) => {
     if (!profileId || !projectId) {
       throw new Error(
-        'pullChangesWithChoices expects profileId, and projectId parameters',
+        'pullApiDataMinimal expects profileId, and projectId parameters',
       )
     }
 
