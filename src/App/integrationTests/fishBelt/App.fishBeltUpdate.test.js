@@ -4,10 +4,10 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOffline,
-} from '../../testUtilities/testingLibraryWithHelpers'
-import App from '../App'
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
-import mockMermaidData from '../../testUtilities/mockMermaidData'
+} from '../../../testUtilities/testingLibraryWithHelpers'
+import App from '../../App'
+import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 describe('Offline', () => {
   test('Edit fishbelt save success shows toast message and proper record information', async () => {

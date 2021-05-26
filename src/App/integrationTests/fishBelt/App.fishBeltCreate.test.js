@@ -5,9 +5,9 @@ import {
   screen,
   within,
   renderAuthenticatedOffline,
-} from '../../testUtilities/testingLibraryWithHelpers'
-import App from '../App'
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+} from '../../../testUtilities/testingLibraryWithHelpers'
+import App from '../../App'
+import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 
 const saveFishbeltRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
