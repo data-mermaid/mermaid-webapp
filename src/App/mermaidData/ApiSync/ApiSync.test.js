@@ -4,7 +4,7 @@ import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAl
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import ApiSync from './ApiSync'
 
-test('pullChangesWithChoices hits the api with the correct config', async () => {
+test('pullApiDataMinimal hits the api with the correct config', async () => {
   const apiSync = new ApiSync({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
@@ -32,12 +32,12 @@ test('pullChangesWithChoices hits the api with the correct config', async () => 
   expect.assertions(1)
 
   await apiSync
-    .pullChangesWithChoices({ profileId: '1', projectId: '1' })
+    .pullApiDataMinimal({ profileId: '1', projectId: '1' })
     .then((response) => {
       expect(response.status).toEqual(200)
     })
 })
-test('pullChangesWithChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pullApiDataMinimal keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -61,7 +61,7 @@ test('pullChangesWithChoices keeps track of returned last_revision_nums and send
         collectRecordLastRevisionNumber === null &&
         hasFirstPullCallHappened
       ) {
-        // pullChangesWithChoices shouldnt be sending nulls after
+        // pullApiDataMinimal shouldnt be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
         return res(ctx.status(400))
@@ -79,10 +79,10 @@ test('pullChangesWithChoices keeps track of returned last_revision_nums and send
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pullChangesWithChoices({ profileId: '1', projectId: '1' })
+  await apiSync.pullApiDataMinimal({ profileId: '1', projectId: '1' })
 
   // second pull from api should have last revision numbers
-  await apiSync.pullChangesWithChoices({ profileId: '1', projectId: '1' })
+  await apiSync.pullApiDataMinimal({ profileId: '1', projectId: '1' })
 })
 
 test('pullChangeWithChoices updates IDB with API data', async () => {
@@ -118,7 +118,7 @@ test('pullChangeWithChoices updates IDB with API data', async () => {
 
   expect.assertions(2)
   await apiSync
-    .pullChangesWithChoices({ profileId: '1', projectId: '1' })
+    .pullApiDataMinimal({ profileId: '1', projectId: '1' })
     .then(async () => {
       const collectRecordsStored = await dexieInstance.collectRecords.toArray()
 
