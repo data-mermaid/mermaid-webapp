@@ -58,9 +58,9 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
   expect(screen.getByLabelText('Transect Number'))
   expect(screen.getByLabelText('Label'))
   expect(screen.getByLabelText('Transect Length Surveyed'))
-  expect(screen.getByLabelText('Width'))
-  expect(screen.getByLabelText('Fish Size Bin'))
-  expect(screen.getByLabelText('Reef Slope'))
+  expect(screen.getByText(/width/i))
+  expect(screen.getByText(/fish size bin/i))
+  expect(screen.getByText(/reef slope/i))
   expect(screen.getByLabelText('Notes'))
   expect(screen.getByRole('button', { name: /Delete Record/i })).toBeEnabled()
 })
@@ -105,9 +105,9 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
   expect(screen.getByLabelText('Transect Number'))
   expect(screen.getByLabelText('Label'))
   expect(screen.getByLabelText('Transect Length Surveyed'))
-  expect(screen.getByLabelText('Width'))
-  expect(screen.getByLabelText('Fish Size Bin'))
-  expect(screen.getByLabelText('Reef Slope'))
+  expect(screen.getByText(/width/i))
+  expect(screen.getByText(/fish size bin/i))
+  expect(screen.getByText(/reef slope/i))
   expect(screen.getByLabelText('Notes'))
   expect(screen.getByRole('button', { name: /Delete Record/i })).toBeDisabled()
 })
@@ -138,12 +138,12 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
   expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
   expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
-  // width select
-  expect(screen.getByDisplayValue('2m'))
-  // fish size bin select
-  expect(screen.getByDisplayValue(5))
-  // reef slope select
-  expect(screen.getByDisplayValue('flat'))
+  // width radio
+  expect(screen.getByLabelText('2m')).toBeChecked()
+  // fish size bin radio
+  expect(screen.getByLabelText('5')).toBeChecked()
+  // reef slope radio
+  expect(screen.getByLabelText('flat')).toBeChecked()
   expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
 })
 
