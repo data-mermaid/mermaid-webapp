@@ -19,8 +19,8 @@ const CollectRecordsMixin = (Base) =>
       warning: 'Warnings',
     }
 
-    #getIsRecordStatusCodeSuccessful = (recordFromServer) => {
-      const statusCode = recordFromServer.status_code
+    #getIsRecordStatusCodeSuccessful = (recordReturnedFromServerPush) => {
+      const statusCode = recordReturnedFromServerPush.status_code
 
       return statusCode >= 200 && statusCode < 300
     }
@@ -160,15 +160,20 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
-            const recordFromServer = response.data.collect_records[0]
+            const recordReturnedFromServerPush =
+              response.data.collect_records[0]
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordFromServer,
+              recordReturnedFromServerPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
-              return this._dexieInstance.collectRecords
-                .put(recordFromServer)
-                .then(() => recordFromServer)
+              // do a pull of data related to collect records
+              // to make sure it is all in-sync in IDB
+              return this._apiSyncInstance
+                .pullApiDataMinimal({ profileId, projectId })
+                .then(() => {
+                  return recordReturnedFromServerPush
+                })
             }
 
             return Promise.reject(
@@ -239,9 +244,10 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
-            const recordFromServer = response.data.collect_records[0]
+            const recordReturnedFromServerPush =
+              response.data.collect_records[0]
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordFromServer,
+              recordReturnedFromServerPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
