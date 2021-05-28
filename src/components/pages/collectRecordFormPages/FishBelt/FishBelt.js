@@ -30,6 +30,12 @@ import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProp
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
+const SaveValidateSubmitButtonWrapper = styled('div')`
+  text-align: right;
+  button {
+    margin-left: ${theme.spacing.buttonSpacing};
+  }
+`
 
 const FishBelt = ({
   databaseSwitchboardInstance,
@@ -170,12 +176,6 @@ const FishBelt = ({
     },
     onSubmit: saveRecord,
   }
-  const SaveValidateSubmitButtonWrapper = styled('div')`
-    text-align: right;
-    button {
-      margin-left: ${theme.spacing.buttonSpacing};
-    }
-  `
 
   return (
     <Formik {...formikOptions}>
