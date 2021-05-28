@@ -17,6 +17,7 @@ import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import Layout from '../components/Layout'
 import ApiSync from './mermaidData/ApiSync/ApiSync'
+import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 function App({ dexieInstance }) {
   const { isOnline } = useOnlineStatus()
@@ -60,7 +61,7 @@ function App({ dexieInstance }) {
   const currentUser = useCurrentUser({
     databaseSwitchboardInstance,
   })
-  const { routes } = useRoutes({ databaseSwitchboardInstance, currentUser })
+  const { routes } = useRoutes({ currentUser })
 
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,
@@ -72,28 +73,30 @@ function App({ dexieInstance }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <CustomToastContainer />
-      {isMermaidAuthenticatedAndReady && (
-        <Switch>
-          {routes.map(({ path, Component }) => (
-            <Route
-              exact
-              path={path}
-              key={path}
-              render={() => (
-                <Layout {...layoutProps}>
-                  <Component />
-                </Layout>
-              )}
-            />
-          ))}
-          <Route exact path="/">
-            <Redirect to="/projects" />
-          </Route>
-          <Route component={PageNotFound} />
-        </Switch>
-      )}
+      <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
+        <GlobalStyle />
+        <CustomToastContainer />
+        {isMermaidAuthenticatedAndReady && (
+          <Switch>
+            {routes.map(({ path, Component }) => (
+              <Route
+                exact
+                path={path}
+                key={path}
+                render={() => (
+                  <Layout {...layoutProps}>
+                    <Component />
+                  </Layout>
+                )}
+              />
+            ))}
+            <Route exact path="/">
+              <Redirect to="/projects" />
+            </Route>
+            <Route component={PageNotFound} />
+          </Switch>
+        )}
+      </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
   )
 }

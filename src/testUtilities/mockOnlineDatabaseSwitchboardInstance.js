@@ -12,4 +12,16 @@ const mockOnlineDatabaseSwitchboardInstance = new DatabaseSwitchboard({
   apiSyncInstance: new ApiSync(dexieInstance),
 })
 
-export default mockOnlineDatabaseSwitchboardInstance
+const mockOfflineDatabaseSwitchboardInstance = new DatabaseSwitchboard({
+  apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+  auth0Token: 'token',
+  isMermaidAuthenticated: true,
+  isOnline: false,
+  dexieInstance,
+  apiSyncInstance: new ApiSync(dexieInstance),
+})
+
+export {
+  mockOnlineDatabaseSwitchboardInstance,
+  mockOfflineDatabaseSwitchboardInstance,
+}
