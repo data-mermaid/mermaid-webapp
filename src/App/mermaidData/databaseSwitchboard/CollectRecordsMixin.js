@@ -19,8 +19,8 @@ const CollectRecordsMixin = (Base) =>
       warning: 'Warnings',
     }
 
-    #getIsRecordStatusCodeSuccessful = (recordReturnedFromServerPush) => {
-      const statusCode = recordReturnedFromServerPush.status_code
+    #getIsRecordStatusCodeSuccessful = (recordFromServer) => {
+      const statusCode = recordFromServer.status_code
 
       return statusCode >= 200 && statusCode < 300
     }
@@ -168,7 +168,7 @@ const CollectRecordsMixin = (Base) =>
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
-              // to make sure it is all in-sync in IDB
+              // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pullApiDataMinimal({ profileId, projectId })
                 .then(() => {
@@ -243,17 +243,24 @@ const CollectRecordsMixin = (Base) =>
               },
             },
           )
-          .then((response) => {
+          .then((pushResponse) => {
             const recordReturnedFromServerPush =
-              response.data.collect_records[0]
+              pushResponse.data.collect_records[0]
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
               recordReturnedFromServerPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
-              return this._dexieInstance.collectRecords
-                .delete(record.id)
-                .then(() => response)
+              // do a pull of data related to collect records
+              // to make sure it is all updated/deleted in IDB
+              return this._apiSyncInstance
+                .pullApiDataMinimal({
+                  profileId,
+                  projectId,
+                })
+                .then(() => {
+                  return pushResponse
+                })
             }
 
             return Promise.reject(

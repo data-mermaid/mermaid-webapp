@@ -54,6 +54,14 @@ test('deleteFishBelt online deletes the IDB record if there is no corresponding 
   ).toBeUndefined()
 })
 test('deleteFishBelt online deletes the record if there is a corresponding copy on the server', async () => {
+  const fishBeltToBeDeleted = {
+    id: 'foo',
+    data: {},
+    profile: '1234',
+    randomUnexpectedProperty: 'whatever',
+    _last_revision_num: 1, // indicate that there is a server copy
+  }
+
   mockMermaidApiAllSuccessful.use(
     rest.post(
       `${process.env.REACT_APP_MERMAID_API}/push/`,
@@ -77,16 +85,22 @@ test('deleteFishBelt online deletes the record if there is a corresponding copy 
         return res.once(ctx.json(response))
       },
     ),
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+
+      (req, res, ctx) => {
+        return res(
+          ctx.json({
+            collect_records: {
+              updates: [],
+              deletes: [fishBeltToBeDeleted],
+            },
+          }),
+        )
+      },
+    ),
   )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
-
-  const fishBeltToBeDeleted = {
-    id: 'foo',
-    data: {},
-    profile: '1234',
-    randomUnexpectedProperty: 'whatever',
-    _last_revision_num: 1, // indicate that there is a server copy
-  }
 
   // save a record in IDB so we can delete it
   await dbInstance.dexieInstance.collectRecords.put(fishBeltToBeDeleted)
