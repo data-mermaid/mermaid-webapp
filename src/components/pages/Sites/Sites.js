@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { H2 } from '../../generic/text'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
@@ -20,6 +19,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { ButtonSecondary } from '../../generic/buttons'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const TopBar = () => (
   <>
@@ -41,7 +41,9 @@ const TopBar = () => (
   </>
 )
 
-const Sites = ({ databaseSwitchboardInstance }) => {
+const Sites = () => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -193,10 +195,6 @@ const Sites = ({ databaseSwitchboardInstance }) => {
       isLoading={isLoading}
     />
   )
-}
-
-Sites.propTypes = {
-  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default Sites

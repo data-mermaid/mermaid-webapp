@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -12,11 +11,7 @@ import {
 import ManagementRegimes from './ManagementRegimes'
 
 test('ManagementRegimes component renders with the expected headers', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -39,11 +34,7 @@ test('ManagementRegimes component renders with the expected headers', async () =
 })
 
 test('Management Regime Records table sorts properly by Name column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -71,11 +62,7 @@ test('Management Regime Records table sorts properly by Name column', async () =
 })
 
 test('Management Regime Records table sorts properly by Year Est. column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -107,11 +94,7 @@ test('Management Regime Records table sorts properly by Year Est. column', async
 })
 
 test('Management Regime Records table sorts properly by Compliance column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -145,11 +128,7 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
 })
 
 test('Management Regime Records table sorts properly by Open Access column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -177,11 +156,7 @@ test('Management Regime Records table sorts properly by Open Access column', asy
 })
 
 test('Management Regime Records table sorts properly by Access Restrictions column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -209,11 +184,7 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
 })
 
 test('Management Regime Records table sorts properly by Periodic Closure column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -241,11 +212,7 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
 })
 
 test('Management Regime Records table sorts properly by Size Limits column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -273,11 +240,7 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
 })
 
 test('Management Regime Records table sorts properly by Gear Restrictions column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -305,11 +268,7 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
 })
 
 test('Management Regime Records table sorts properly by Species Restrictions column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -337,11 +296,7 @@ test('Management Regime Records table sorts properly by Species Restrictions col
 })
 
 test('Management Regime Records table sorts properly by No Take column', async () => {
-  renderAuthenticatedOnline(
-    <ManagementRegimes
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<ManagementRegimes />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
