@@ -1,6 +1,7 @@
 import React from 'react'
 import { choicesPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../library/formikPropType'
+import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import InputAutocomplete from '../generic/InputAutocomplete'
 import { InputWrapper } from '../generic/form'
 
@@ -12,6 +13,12 @@ const SiteInputs = ({ formik, choices }) => {
 
   return (
     <InputWrapper>
+      <InputWithLabelAndValidation
+        label="Name"
+        id="name"
+        type="text"
+        {...formik.getFieldProps('name')}
+      />
       <InputAutocomplete
         label="Country"
         id="country"
