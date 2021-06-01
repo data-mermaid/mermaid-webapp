@@ -71,25 +71,38 @@ const InputAutocomplete = ({ label, id, options }) => {
             <MenuList>
               {isOpen ? (
                 <>
-                  {getItems(inputValue).map((item, index) => (
-                    <MenuListItem
-                      {...getItemProps({
-                        key: item.value,
-                        index,
-                        item,
-                        style: {
-                          backgroundColor:
-                            highlightedIndex === index
-                              ? theme.color.primaryColor
-                              : 'white',
-                          color: highlightedIndex === index ? 'white' : 'black',
-                          fontWeight: selectedItem === item ? 'bold' : 'normal',
-                        },
-                      })}
+                  {getItems(inputValue).length > 0 ? (
+                    getItems(inputValue).map((item, index) => (
+                      <MenuListItem
+                        {...getItemProps({
+                          key: item.value,
+                          index,
+                          item,
+                          style: {
+                            backgroundColor:
+                              highlightedIndex === index
+                                ? theme.color.primaryColor
+                                : 'white',
+                            color:
+                              highlightedIndex === index ? 'white' : 'black',
+                            fontWeight:
+                              selectedItem === item ? 'bold' : 'normal',
+                          },
+                        })}
+                      >
+                        {item.label}
+                      </MenuListItem>
+                    ))
+                  ) : (
+                    <li
+                      style={{
+                        backgroundColor: 'white',
+                        padding: '4px 10px',
+                      }}
                     >
-                      {item.label}
-                    </MenuListItem>
-                  ))}
+                      No Results
+                    </li>
+                  )}
                 </>
               ) : null}
             </MenuList>
