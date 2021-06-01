@@ -1,26 +1,34 @@
 import { Formik } from 'formik'
 import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 
-import { H2 } from '../../generic/text'
-import { ContentPageLayout } from '../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
-import SiteInputs from '../../SiteInputs'
+import { getSiteInitialValues } from '../siteRecordFormInitialValues'
+import { H2 } from '../../../generic/text'
+import { ContentPageLayout } from '../../../Layout'
+import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databaseSwitchboard'
+import SiteInputs from '../../../SiteInputs'
 
 const Site = ({ databaseSwitchboardInstance }) => {
   const [choices, setChoices] = useState({})
+  const [siteBeingEdited, setSiteBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const { siteId } = useParams()
 
   const _getSupportingData = useEffect(() => {
     let isMounted = true
 
     if (databaseSwitchboardInstance) {
-      const promises = [databaseSwitchboardInstance.getChoices()]
+      const promises = [
+        databaseSwitchboardInstance.getSite(siteId),
+        databaseSwitchboardInstance.getChoices(),
+      ]
 
       Promise.all(promises)
-        .then(([choicesResponse]) => {
+        .then(([siteResponse, choicesResponse]) => {
           if (isMounted) {
             setChoices(choicesResponse)
+            setSiteBeingEdited(siteResponse)
             setIsLoading(false)
           }
         })
@@ -33,10 +41,15 @@ const Site = ({ databaseSwitchboardInstance }) => {
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, siteId])
+
+  const initialFromValues = useMemo(
+    () => getSiteInitialValues(siteBeingEdited),
+    [siteBeingEdited],
+  )
 
   const formikOptions = {
-    initialValues: {},
+    initialValues: initialFromValues,
     enableReinitialize: true,
   }
 
