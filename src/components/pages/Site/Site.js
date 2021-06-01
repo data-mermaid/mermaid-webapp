@@ -1,13 +1,14 @@
+import { Formik } from 'formik'
 import { toast } from 'react-toastify'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 
 import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
 import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
-import InputAutocomplete from '../../generic/InputAutocomplete'
+import SiteInputs from '../../SiteInputs'
 
 const Site = ({ databaseSwitchboardInstance }) => {
-  const [countryData, setCountryData] = useState([])
+  const [choices, setChoices] = useState({})
   const [isLoading, setIsLoading] = useState(true)
 
   const _getSupportingData = useEffect(() => {
@@ -19,7 +20,7 @@ const Site = ({ databaseSwitchboardInstance }) => {
       Promise.all(promises)
         .then(([choicesResponse]) => {
           if (isMounted) {
-            setCountryData(choicesResponse.countries.data)
+            setChoices(choicesResponse)
             setIsLoading(false)
           }
         })
@@ -29,29 +30,31 @@ const Site = ({ databaseSwitchboardInstance }) => {
     }
   })
 
-  const countryOptions = countryData.map(({ name, id }) => ({
-    label: name,
-    value: id,
-  }))
+  const formikOptions = {
+    initialValues: {},
+    enableReinitialize: true,
+  }
 
   return (
-    <ContentPageLayout
-      isLoading={isLoading}
-      content={
-        <>
-          <InputAutocomplete
-            label="Country"
-            id="country"
-            options={countryOptions}
-          />
-        </>
-      }
-      toolbar={
-        <>
-          <H2>Site Name</H2>
-        </>
-      }
-    />
+    <Formik {...formikOptions}>
+      {(formik) => (
+        <ContentPageLayout
+          isLoading={isLoading}
+          content={
+            <>
+              <form id="site-form">
+                <SiteInputs formik={formik} choices={choices} />
+              </form>
+            </>
+          }
+          toolbar={
+            <>
+              <H2>Site Name</H2>
+            </>
+          }
+        />
+      )}
+    </Formik>
   )
 }
 
