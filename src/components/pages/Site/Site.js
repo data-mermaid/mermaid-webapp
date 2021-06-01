@@ -11,7 +11,7 @@ const Site = ({ databaseSwitchboardInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const _getSupportingData = useEffect(() => {
-    const isMounted = true
+    let isMounted = true
 
     if (databaseSwitchboardInstance) {
       const promises = [databaseSwitchboardInstance.getChoices()]
@@ -24,10 +24,15 @@ const Site = ({ databaseSwitchboardInstance }) => {
           }
         })
         .catch(() => {
+          // Will update language file when adding user workflow like save/delete site to page.
           toast.error(`site error`)
         })
     }
-  })
+
+    return () => {
+      isMounted = false
+    }
+  }, [databaseSwitchboardInstance])
 
   const countryOptions = countryData.map(({ name, id }) => ({
     label: name,
