@@ -26,10 +26,7 @@ const TypeAHeadInput = styled.input`
 `
 
 const stateReducer = (state, changes) => {
-  if (
-    !changes.inputValue ||
-    (changes.inputValue && changes.inputValue.length < 3)
-  )
+  if (changes.inputValue && changes.inputValue.length < 3)
     return { ...changes, isOpen: false }
 
   return changes
