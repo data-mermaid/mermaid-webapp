@@ -12,7 +12,6 @@ import {
 import { ButtonCallout, ButtonCaution } from '../../../generic/buttons'
 import { IconSave, IconCheck, IconUpload } from '../../../icons'
 import { ContentPageLayout } from '../../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databaseSwitchboard'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { H2 } from '../../../generic/text'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
@@ -26,16 +25,21 @@ import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import OfflineHide from '../../../generic/OfflineHide'
 import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
+const SaveValidateSubmitButtonWrapper = styled('div')`
+  text-align: right;
+  button {
+    margin-left: ${theme.spacing.buttonSpacing};
+  }
+`
 
-const FishBelt = ({
-  databaseSwitchboardInstance,
-  isNewRecord,
-  currentUser,
-}) => {
+const FishBelt = ({ isNewRecord, currentUser }) => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
@@ -170,12 +174,6 @@ const FishBelt = ({
     },
     onSubmit: saveRecord,
   }
-  const SaveValidateSubmitButtonWrapper = styled('div')`
-    text-align: right;
-    button {
-      margin-left: ${theme.spacing.buttonSpacing};
-    }
-  `
 
   return (
     <Formik {...formikOptions}>
@@ -247,7 +245,6 @@ const FishBelt = ({
 
 FishBelt.propTypes = {
   currentUser: currentUserPropType.isRequired,
-  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
   isNewRecord: PropTypes.bool,
 }
 

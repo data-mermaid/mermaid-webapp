@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -12,11 +11,7 @@ import {
 import Sites from './Sites'
 
 test('Site component renders with the expected headers', async () => {
-  renderAuthenticatedOnline(
-    <Sites
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Sites />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -33,11 +28,7 @@ test('Site component renders with the expected headers', async () => {
 })
 
 test('Site Records table sorts properly by Name column', async () => {
-  renderAuthenticatedOnline(
-    <Sites
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Sites />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -65,11 +56,7 @@ test('Site Records table sorts properly by Name column', async () => {
 })
 
 test('Site Records table sorts properly by Reef Type column', async () => {
-  renderAuthenticatedOnline(
-    <Sites
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Sites />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -97,11 +84,7 @@ test('Site Records table sorts properly by Reef Type column', async () => {
 })
 
 test('Site Records table sorts properly by Reef Zone column', async () => {
-  renderAuthenticatedOnline(
-    <Sites
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Sites />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -129,11 +112,7 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
 })
 
 test('Site Records table sorts properly by Exposure column', async () => {
-  renderAuthenticatedOnline(
-    <Sites
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Sites />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),

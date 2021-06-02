@@ -4,6 +4,8 @@ import language from '../../../language'
 const DatabaseSwitchboardState = class {
   _apiBaseUrl
 
+  _apiSyncInstance
+
   _authenticatedAxios
 
   _isAuthenticatedAndReady
@@ -26,12 +28,14 @@ const DatabaseSwitchboardState = class {
 
   constructor({
     apiBaseUrl,
+    apiSyncInstance,
     auth0Token,
+    dexieInstance,
     isMermaidAuthenticated,
     isOnline,
-    dexieInstance,
   }) {
     this._apiBaseUrl = apiBaseUrl
+    this._apiSyncInstance = apiSyncInstance
     this._dexieInstance = dexieInstance
     this._isAuthenticatedAndReady = isMermaidAuthenticated && !!dexieInstance
     this._authenticatedAxios = auth0Token

@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react'
 
 import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard'
 import InputAutocomplete from '../../generic/InputAutocomplete'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
-const Site = ({ databaseSwitchboardInstance }) => {
+const Site = () => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
   const [countryData, setCountryData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -58,10 +60,6 @@ const Site = ({ databaseSwitchboardInstance }) => {
       }
     />
   )
-}
-
-Site.propTypes = {
-  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default Site

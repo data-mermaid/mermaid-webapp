@@ -13,13 +13,11 @@ import Users from '../components/pages/Users'
 import Health from '../components/pages/Health'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 
-export const useRoutes = ({ databaseSwitchboardInstance, currentUser }) => {
+export const useRoutes = ({ currentUser }) => {
   const routes = [
     {
       path: '/projects',
-      Component: () => (
-        <Projects databaseSwitchboardInstance={databaseSwitchboardInstance} />
-      ),
+      Component: Projects,
     },
     {
       path: '/projects/:projectId/health',
@@ -27,27 +25,16 @@ export const useRoutes = ({ databaseSwitchboardInstance, currentUser }) => {
     },
     {
       path: '/projects/:projectId/collecting',
-      Component: () => (
-        <Collect databaseSwitchboardInstance={databaseSwitchboardInstance} />
-      ),
+      Component: Collect,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
-      Component: () => (
-        <FishBelt
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-          currentUser={currentUser}
-        />
-      ),
+      Component: () => <FishBelt currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
       Component: () => (
-        <FishBelt
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-          isNewRecord={false}
-          currentUser={currentUser}
-        />
+        <FishBelt isNewRecord={false} currentUser={currentUser} />
       ),
     },
     {
@@ -91,24 +78,16 @@ export const useRoutes = ({ databaseSwitchboardInstance, currentUser }) => {
     },
 
     {
-      path: '/projects/:projectId/sites/',
-      Component: () => (
-        <Sites databaseSwitchboardInstance={databaseSwitchboardInstance} />
-      ),
+      path: '/projects/:projectId/sites',
+      Component: Sites,
     },
     {
       path: '/projects/:projectId/sites/:siteId',
-      Component: () => (
-        <Site databaseSwitchboardInstance={databaseSwitchboardInstance} />
-      ),
+      Component: Site,
     },
     {
-      path: '/projects/:projectId/management-regimes/',
-      Component: () => (
-        <ManagementRegimes
-          databaseSwitchboardInstance={databaseSwitchboardInstance}
-        />
-      ),
+      path: '/projects/:projectId/management-regimes',
+      Component: ManagementRegimes,
     },
     {
       path: '/projects/:projectId/users',

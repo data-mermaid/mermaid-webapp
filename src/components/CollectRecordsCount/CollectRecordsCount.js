@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import theme from '../../theme'
+import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const CollectRecordsCountWrapper = styled.span`
   background: ${theme.color.cautionColor};
@@ -12,16 +12,32 @@ const CollectRecordsCountWrapper = styled.span`
   font-size: 1.4rem;
 `
 
-const CollectRecordsCount = ({ collectRecordCount }) => {
-  return (
-    <CollectRecordsCountWrapper>
-      {collectRecordCount}
-    </CollectRecordsCountWrapper>
-  )
-}
+const CollectRecordsCount = () => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
-CollectRecordsCount.propTypes = {
-  collectRecordCount: PropTypes.number.isRequired,
+  const [collectRecordsCount, setCollectRecordsCount] = useState(0)
+
+  const _getCollectRecordCount = useEffect(() => {
+    let isMounted = true
+
+    databaseSwitchboardInstance.getCollectRecords().then((collectRecords) => {
+      if (isMounted) {
+        setCollectRecordsCount(collectRecords.length)
+      }
+    })
+
+    return () => {
+      isMounted = false
+    }
+  }, [databaseSwitchboardInstance])
+
+  return (
+    !!collectRecordsCount && (
+      <CollectRecordsCountWrapper>
+        {collectRecordsCount}
+      </CollectRecordsCountWrapper>
+    )
+  )
 }
 
 export default CollectRecordsCount
