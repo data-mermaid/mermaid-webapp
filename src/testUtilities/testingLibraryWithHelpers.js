@@ -7,6 +7,11 @@ import React from 'react'
 
 import theme from '../theme'
 import { OnlineStatusProvider } from '../library/onlineStatusContext'
+import { DatabaseSwitchboardInstanceProvider } from '../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import {
+  mockOnlineDatabaseSwitchboardInstance,
+  mockOfflineDatabaseSwitchboardInstance,
+} from './mockOnlineDatabaseSwitchboardInstance'
 
 const AuthenticatedProviders = ({ children, initialEntries }) => (
   <Auth0Context.Provider
@@ -55,9 +60,13 @@ const renderAuthenticatedOnline = (
   const wrapper = ({ children }) => {
     return (
       <AuthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isOnline: true }}>
-          {children}
-        </OnlineStatusProvider>
+        <DatabaseSwitchboardInstanceProvider
+          value={mockOnlineDatabaseSwitchboardInstance}
+        >
+          <OnlineStatusProvider value={{ isOnline: true }}>
+            {children}
+          </OnlineStatusProvider>
+        </DatabaseSwitchboardInstanceProvider>
       </AuthenticatedProviders>
     )
   }
@@ -92,9 +101,13 @@ const renderAuthenticatedOffline = (
   const wrapper = ({ children }) => {
     return (
       <AuthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isOnline: false }}>
-          {children}
-        </OnlineStatusProvider>
+        <DatabaseSwitchboardInstanceProvider
+          value={mockOfflineDatabaseSwitchboardInstance}
+        >
+          <OnlineStatusProvider value={{ isOnline: false }}>
+            {children}
+          </OnlineStatusProvider>
+        </DatabaseSwitchboardInstanceProvider>
       </AuthenticatedProviders>
     )
   }

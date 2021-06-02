@@ -160,15 +160,19 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
-            const recordFromServer = response.data.collect_records[0]
+            const [recordReturnedFromApiPush] = response.data.collect_records
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordFromServer,
+              recordReturnedFromApiPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
-              return this._dexieInstance.collectRecords
-                .put(recordFromServer)
-                .then(() => recordFromServer)
+              // do a pull of data related to collect records
+              // to make sure it is all updated/deleted in IDB
+              return this._apiSyncInstance
+                .pullApiDataMinimal({ profileId, projectId })
+                .then((_dataSetsReturnedFromApiPull) => {
+                  return recordReturnedFromApiPush
+                })
             }
 
             return Promise.reject(
@@ -208,7 +212,7 @@ const CollectRecordsMixin = (Base) =>
           'deleteFishBelt expects record, profileId, and projectId parameters',
         )
       }
-      const isThereACorrespondingRecordInTheApi = !!record._last_revision_num
+      const hasCorrespondingRecordInTheApi = !!record._last_revision_num
 
       const recordMarkedToBeDeleted = {
         ...this.#formatFishbeltRecordForPush({
@@ -220,7 +224,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (
-        isThereACorrespondingRecordInTheApi &&
+        hasCorrespondingRecordInTheApi &&
         this._isOnlineAuthenticatedAndReady
       ) {
         // put it in IDB just in case the network craps out before the API can return
@@ -238,16 +242,22 @@ const CollectRecordsMixin = (Base) =>
               },
             },
           )
-          .then((response) => {
-            const recordFromServer = response.data.collect_records[0]
+          .then((apiPushResponse) => {
+            const recordReturnedFromApiPush =
+              apiPushResponse.data.collect_records[0]
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordFromServer,
+              recordReturnedFromApiPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
-              return this._dexieInstance.collectRecords
-                .delete(record.id)
-                .then(() => response)
+              // do a pull of data related to collect records
+              // to make sure it is all updated/deleted in IDB
+              return this._apiSyncInstance
+                .pullApiDataMinimal({
+                  profileId,
+                  projectId,
+                })
+                .then((_apiPullResponse) => apiPushResponse)
             }
 
             return Promise.reject(
@@ -258,13 +268,13 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (
-        isThereACorrespondingRecordInTheApi &&
+        hasCorrespondingRecordInTheApi &&
         this._isOfflineAuthenticatedAndReady
       ) {
         return this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
       }
       if (
-        !isThereACorrespondingRecordInTheApi &&
+        !hasCorrespondingRecordInTheApi &&
         (this._isOnlineAuthenticatedAndReady ||
           this._isOfflineAuthenticatedAndReady)
       ) {

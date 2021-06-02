@@ -6,10 +6,12 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { getSiteInitialValues } from '../siteRecordFormInitialValues'
 import { H2 } from '../../../generic/text'
 import { ContentPageLayout } from '../../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../../App/mermaidData/databaseSwitchboard'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import SiteInputs from '../../../SiteInputs'
 
-const Site = ({ databaseSwitchboardInstance }) => {
+const Site = () => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
   const [choices, setChoices] = useState({})
   const [siteBeingEdited, setSiteBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
@@ -74,10 +76,6 @@ const Site = ({ databaseSwitchboardInstance }) => {
       )}
     </Formik>
   )
-}
-
-Site.propTypes = {
-  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default Site
