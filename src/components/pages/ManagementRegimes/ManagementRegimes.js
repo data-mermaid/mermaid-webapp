@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { H2 } from '../../generic/text'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
@@ -20,6 +19,7 @@ import {
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { ButtonSecondary } from '../../generic/buttons'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const TopBar = () => (
   <>
@@ -40,7 +40,9 @@ const TopBar = () => (
     </RowSpaceBetween>
   </>
 )
-const ManagementRegimes = ({ databaseSwitchboardInstance }) => {
+const ManagementRegimes = () => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
   const [
     managementRegimeRecordsForUiDisplay,
     setManagementRegimeRecordsForUiDisplay,
@@ -233,10 +235,6 @@ const ManagementRegimes = ({ databaseSwitchboardInstance }) => {
       isLoading={isLoading}
     />
   )
-}
-
-ManagementRegimes.propTypes = {
-  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default ManagementRegimes

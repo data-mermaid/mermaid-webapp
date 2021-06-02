@@ -9,33 +9,33 @@ import {
 } from '../../testUtilities/testingLibraryWithHelpers'
 import NavMenu from '.'
 
-test('NavMenu component shows project overview, collect, data, admin links when online', () => {
+test('NavMenu component shows project overview, collect, data, admin links when online', async () => {
   renderAuthenticatedOnline(<NavMenu />)
 
-  expect(screen.getByText(/project overview/i)).toBeInTheDocument()
-  expect(screen.getByText(/project health/i)).toBeInTheDocument()
+  expect(await screen.findByText('Project Overview')).toBeInTheDocument()
+  expect(screen.getByText('Project Health')).toBeInTheDocument()
   expect(screen.getByText('Collect')).toBeInTheDocument()
   expect(screen.getByText('Collecting')).toBeInTheDocument()
-  expect(screen.getByText(/sites/i)).toBeInTheDocument()
-  expect(screen.getByText(/management regimes/i)).toBeInTheDocument()
+  expect(screen.getByText('Sites')).toBeInTheDocument()
+  expect(screen.getByText('Management Regimes')).toBeInTheDocument()
   expect(screen.getByText('Data')).toBeInTheDocument()
-  expect(screen.getByText(/submitted/i)).toBeInTheDocument()
-  expect(screen.getByText(/admin/i)).toBeInTheDocument()
-  expect(screen.getByText(/project info/i)).toBeInTheDocument()
-  expect(screen.getByText(/users/i)).toBeInTheDocument()
-  expect(screen.getByText(/fish families/i)).toBeInTheDocument()
-  expect(screen.getByText(/data sharing/i)).toBeInTheDocument()
+  expect(screen.getByText('Submitted')).toBeInTheDocument()
+  expect(screen.getByText('Admin')).toBeInTheDocument()
+  expect(screen.getByText('Project Info')).toBeInTheDocument()
+  expect(screen.getByText('Users')).toBeInTheDocument()
+  expect(screen.getByText('Fish Families')).toBeInTheDocument()
+  expect(screen.getByText('Data Sharing')).toBeInTheDocument()
 })
 
 test('NavMenu component shows collect links; and hide project overview, data, admin links when offline', async () => {
   renderAuthenticatedOffline(<NavMenu />)
 
   await waitFor(() => {
-    expect(screen.queryByText(/project overview/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('Project Overview')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
-    expect(screen.queryByText(/project health/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('Project Health')).not.toBeInTheDocument()
   })
 
   expect(screen.getByText('Collect')).toBeInTheDocument()
@@ -44,34 +44,34 @@ test('NavMenu component shows collect links; and hide project overview, data, ad
   expect(screen.getByText('Management Regimes')).toBeInTheDocument()
 
   await waitFor(() => {
-    expect(screen.queryByText(/data/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('Data')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
-    expect(screen.queryByText(/submitted/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('Submitted')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
-    expect(screen.queryByText(/graphs and maps/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('graphs and maps')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
-    expect(screen.queryByText(/admin/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('admin')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
-    expect(screen.queryByText(/project info/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('project info')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
-    expect(screen.queryByText(/users/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('users')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
-    expect(screen.queryByText(/fish families/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('fish families')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
-    expect(screen.queryByText(/data sharing/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('data sharing')).not.toBeInTheDocument()
   })
 })

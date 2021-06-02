@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
-import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import {
   renderAuthenticatedOnline,
   renderAuthenticatedOffline,
@@ -14,11 +13,7 @@ test('Projects component renders with the expected UI elements', async () => {
   // const utilities = renderAuthenticatedOnline(<Projects />)
   // expect(screen.getByText('I should fail'))
   // a new ticket will be made for these tests
-  renderAuthenticatedOnline(
-    <Projects
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Projects />)
 
   await waitFor(() =>
     expect(
@@ -55,11 +50,7 @@ test('Projects component renders with the expected UI elements', async () => {
 })
 
 test('A project card renders with the expected UI elements for button groups', async () => {
-  renderAuthenticatedOnline(
-    <Projects
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Projects />)
 
   await waitFor(() =>
     expect(
@@ -84,11 +75,7 @@ test('A project card renders with the expected UI elements for button groups', a
 
 test('A project card shows relevant data for a project', async () => {
   // test the things that are wired in from data. (title, country, etc)
-  renderAuthenticatedOnline(
-    <Projects
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Projects />)
 
   await waitFor(() =>
     expect(
@@ -113,11 +100,7 @@ test('A project card shows relevant data for a project', async () => {
 })
 
 test('A project card shows only collect button in button groups when offline', async () => {
-  renderAuthenticatedOffline(
-    <Projects
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOffline(<Projects />)
 
   await waitFor(() =>
     expect(
@@ -155,11 +138,7 @@ test('A project card shows only collect button in button groups when offline', a
 })
 
 test('A project card shows all buttons in button group when online', async () => {
-  renderAuthenticatedOnline(
-    <Projects
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Projects />)
 
   await waitFor(() =>
     expect(
@@ -189,11 +168,7 @@ test('A project card shows all buttons in button group when online', async () =>
 })
 
 test('Hide new project button in project toolbar when offline', async () => {
-  renderAuthenticatedOffline(
-    <Projects
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOffline(<Projects />)
 
   await waitFor(() =>
     expect(

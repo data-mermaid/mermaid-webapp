@@ -10,36 +10,12 @@ import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 
 test('Unsaved NEW fishbelt form edits clear when the user navigates away and back', async () => {
-  const navigateToNewFishbeltFormFromCollecting = async () => {
-    userEvent.click(
-      await screen.findByRole('button', {
-        name: /Add Sample Unit/i,
-      }),
-    )
-    const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
-
-    userEvent.click(
-      within(sampleUnitNav).getByRole('link', {
-        name: /fish belt/i,
-      }),
-    )
-  }
-
   renderAuthenticatedOnline(
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+    },
   )
-
-  expect(
-    await screen.findByText('Projects', {
-      selector: 'h1',
-    }),
-  )
-
-  const projectCard = screen.getAllByRole('listitem')[0]
-
-  userEvent.click(within(projectCard).getByText(/collecting/i))
-
-  await navigateToNewFishbeltFormFromCollecting()
 
   const form = await screen.findByRole('form')
 
@@ -51,41 +27,35 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
   expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
 
   // nav away
-  const sideNav = screen.getByTestId('content-page-side-nav')
+  const sideNav = await screen.findByTestId('content-page-side-nav')
 
   userEvent.click(within(sideNav).getByRole('link', { name: /collecting/i }))
+  // nav back
+  userEvent.click(
+    await screen.findByRole('button', {
+      name: /Add Sample Unit/i,
+    }),
+  )
+  const sampleUnitNav = await screen.findByTestId('new-sample-unit-nav')
 
-  await navigateToNewFishbeltFormFromCollecting()
+  userEvent.click(
+    within(sampleUnitNav).getByRole('link', {
+      name: /fish belt/i,
+    }),
+  )
+
   const formAfterNav = await screen.findByRole('form')
 
   expect(within(formAfterNav).getByLabelText(/depth/i)).not.toHaveValue()
 })
 
 test('Unsaved EDIT fishbelt form edits clear when the user navigates away and back', async () => {
-  const navigateToEditFormFromCollecting = async () => {
-    const table = await screen.findByRole('table')
-
-    userEvent.click(
-      within(table).getAllByRole('link', {
-        name: /fish belt/i,
-      })[0],
-    )
-  }
-
   renderAuthenticatedOnline(
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
   )
-
-  expect(
-    await screen.findByText('Projects', {
-      selector: 'h1',
-    }),
-  )
-  const projectCard = screen.getAllByRole('listitem')[0]
-
-  userEvent.click(within(projectCard).getByText(/collecting/i))
-
-  await navigateToEditFormFromCollecting()
 
   const form = await screen.findByRole('form')
 
@@ -106,7 +76,14 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   userEvent.click(within(sideNav).getByRole('link', { name: /collecting/i }))
 
   // nav back
-  await navigateToEditFormFromCollecting()
+  const table = await screen.findByRole('table')
+
+  userEvent.click(
+    within(table).getAllByRole('link', {
+      name: /fish belt/i,
+    })[0],
+  )
+
   const formAfterNav = await screen.findByRole('form')
 
   // initial unedited depth value

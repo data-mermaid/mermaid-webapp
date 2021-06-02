@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { H2 } from '../../generic/text'
 import {
   reactTableNaturalSort,
@@ -25,6 +24,7 @@ import {
 } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const TopBar = () => (
   <>
@@ -35,7 +35,8 @@ const TopBar = () => (
   </>
 )
 
-const Collect = ({ databaseSwitchboardInstance }) => {
+const Collect = () => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState(
     [],
   )
@@ -234,10 +235,6 @@ const Collect = ({ databaseSwitchboardInstance }) => {
       isLoading={isLoading}
     />
   )
-}
-
-Collect.propTypes = {
-  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default Collect

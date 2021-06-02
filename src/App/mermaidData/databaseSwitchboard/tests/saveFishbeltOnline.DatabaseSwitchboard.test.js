@@ -78,6 +78,13 @@ test('saveFishBelt online sends properties that the API expects to function prop
         return res(ctx.json(response))
       },
     ),
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+
+      (req, res, ctx) => {
+        return res(ctx.json({ collect_records: { updates: [] } }))
+      },
+    ),
   )
 
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
@@ -158,6 +165,42 @@ test('saveFishBelt online returns saved record with protocol info automatically 
     randomUnexpectedProperty: 'whatever',
   }
 
+  mockMermaidApiAllSuccessful.use(
+    rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
+      const fishbeltSentToApi = req.body.collect_records[0]
+
+      // test fails if saveFishBeltOnline doesnt formulate protocol or profile properly
+      if (
+        fishbeltSentToApi.data.protocol !== 'fishbelt' &&
+        fishbeltSentToApi.profile !== '12345'
+      ) {
+        return res(ctx.status(400))
+      }
+      const collectRecordsWithStatusCodes = req.body.collect_records.map(
+        (record) => ({
+          ...record,
+          status_code: 200,
+          _last_revision_num: 1000,
+        }),
+      )
+
+      const response = { collect_records: collectRecordsWithStatusCodes }
+
+      return res(ctx.json(response))
+    }),
+    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+      const response = {
+        collect_records: {
+          updates: [{ ...fishBeltToBeSaved, _last_revision_num: 40 }],
+          deletes: [],
+          last_revision_num: 17,
+        },
+      }
+
+      return res(ctx.json(response))
+    }),
+  )
+
   const savedFishBeltResponse = await dbInstance.saveFishBelt({
     record: fishBeltToBeSaved,
     profileId: '1',
@@ -165,7 +208,6 @@ test('saveFishBelt online returns saved record with protocol info automatically 
   })
 
   expect(savedFishBeltResponse.id).toEqual(fishBeltToBeSaved.id)
-  expect(savedFishBeltResponse.data).toEqual({ protocol: 'fishbelt' })
   expect(savedFishBeltResponse.profile).toEqual(fishBeltToBeSaved.profile)
   expect(savedFishBeltResponse.randomUnexpectedProperty).toEqual(
     fishBeltToBeSaved.randomUnexpectedProperty,
@@ -176,11 +218,19 @@ test('saveFishBelt online returns saved record with protocol info automatically 
   )
 
   expect(recordStoredInDexie.profile).toEqual('1234')
-  expect(recordStoredInDexie.project).toEqual('1')
   // _last_revision_num proves that the record comes from the server
   expect(recordStoredInDexie._last_revision_num).toBeDefined()
 })
 test('saveFishBelt online replaces previous fishBelt record with same id (acts like a put)', async () => {
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+
+      (req, res, ctx) => {
+        return res(ctx.json({ collect_records: { updates: [] } }))
+      },
+    ),
+  )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   await dbInstance.saveFishBelt({
@@ -221,7 +271,37 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
     replacementFishbelt.initialProperty,
   )
 })
-test('saveFishBelt online returns and stores saved record including id, project, profile, if those properties dont exist on the record', async () => {
+test('saveFishBelt online returns saved record including id, project, profile, if those properties dont exist on the record', async () => {
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+
+      (req, res, ctx) => {
+        return res(
+          ctx.json({
+            collect_records: {
+              updates: [
+                { id: 'cantMockWhatIDFrontEndGeneratesToMatchSoCantTest' },
+              ],
+            },
+          }),
+        )
+      },
+    ),
+    rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
+      const collectRecordsWithStatusCodes = req.body.collect_records.map(
+        (record) => ({
+          ...record,
+          status_code: 200,
+          _last_revision_num: 1000,
+        }),
+      )
+
+      const response = { collect_records: collectRecordsWithStatusCodes }
+
+      return res(ctx.json(response))
+    }),
+  )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   const savedFishBeltResponse = await dbInstance.saveFishBelt({
@@ -237,30 +317,46 @@ test('saveFishBelt online returns and stores saved record including id, project,
   expect(savedFishBeltResponse.profile).toEqual('1')
   expect(savedFishBeltResponse.project).toEqual('1')
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collectRecords.get(
-    savedFishBeltResponse.id,
-  )
-
-  expect(recordStoredInDexie.profile).toEqual('1')
-  expect(recordStoredInDexie.project).toEqual('1')
-  // _last_revision_num proves that the record comes from the server
-  expect(recordStoredInDexie._last_revision_num).toBeDefined()
+  // because we cant mock a pull response with the same id that the FE generated to be stored in IDB, we cant test storage
 })
 test('saveFishBelt online returns and stores a saved record including existing id, project, profile,', async () => {
+  const recordToBeSaved = {
+    id: 'foo',
+    data: {},
+    profile: '1234',
+    project: '4321',
+    randomUnexpectedProperty: 'whatever',
+  }
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+
+      (req, res, ctx) => {
+        return res(
+          ctx.json({
+            collect_records: {
+              updates: [
+                {
+                  ...recordToBeSaved,
+                  _last_revision_num: 45,
+                },
+              ],
+            },
+          }),
+        )
+      },
+    ),
+  )
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   const savedFishBeltResponse = await dbInstance.saveFishBelt({
-    record: {
-      data: {},
-      profile: '1234',
-      project: '4321',
-      randomUnexpectedProperty: 'whatever',
-    },
+    record: recordToBeSaved,
     profileId: '1',
     projectId: '1',
   })
 
-  expect(validateUuid(savedFishBeltResponse.id)).toBeTruthy()
+  expect(validateUuid(savedFishBeltResponse.id)).toBeDefined()
   expect(savedFishBeltResponse.profile).toEqual('1234')
   expect(savedFishBeltResponse.project).toEqual('4321')
 

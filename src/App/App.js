@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import { CustomToastContainer } from '../components/generic/toast'
 import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
@@ -16,6 +16,8 @@ import PageNotFound from '../components/pages/PageNotFound'
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import Layout from '../components/Layout'
+import ApiSync from './mermaidData/ApiSync/ApiSync'
+import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 function App({ dexieInstance }) {
   const { isOnline } = useOnlineStatus()
@@ -24,8 +26,16 @@ function App({ dexieInstance }) {
     isMermaidAuthenticated,
     logoutMermaid,
   } = useAuthentication()
+  const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+  const { current: apiSyncInstance } = useRef(
+    new ApiSync({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
+  )
+
   const databaseSwitchboardInstance = useMemo(() => {
-    const apiBaseUrl = process.env.REACT_APP_MERMAID_API
     const areDependenciesReady =
       isMermaidAuthenticated && !!dexieInstance && apiBaseUrl
 
@@ -37,13 +47,21 @@ function App({ dexieInstance }) {
           isMermaidAuthenticated,
           isOnline,
           dexieInstance,
+          apiSyncInstance,
         })
-  }, [auth0Token, isMermaidAuthenticated, isOnline, dexieInstance])
+  }, [
+    auth0Token,
+    isMermaidAuthenticated,
+    isOnline,
+    dexieInstance,
+    apiBaseUrl,
+    apiSyncInstance,
+  ])
 
   const currentUser = useCurrentUser({
     databaseSwitchboardInstance,
   })
-  const { routes } = useRoutes({ databaseSwitchboardInstance, currentUser })
+  const { routes } = useRoutes({ currentUser })
 
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,
@@ -55,28 +73,30 @@ function App({ dexieInstance }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <CustomToastContainer />
-      {isMermaidAuthenticatedAndReady && (
-        <Switch>
-          {routes.map(({ path, Component }) => (
-            <Route
-              exact
-              path={path}
-              key={path}
-              render={() => (
-                <Layout {...layoutProps}>
-                  <Component />
-                </Layout>
-              )}
-            />
-          ))}
-          <Route exact path="/">
-            <Redirect to="/projects" />
-          </Route>
-          <Route component={PageNotFound} />
-        </Switch>
-      )}
+      <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
+        <GlobalStyle />
+        <CustomToastContainer />
+        {isMermaidAuthenticatedAndReady && (
+          <Switch>
+            {routes.map(({ path, Component }) => (
+              <Route
+                exact
+                path={path}
+                key={path}
+                render={() => (
+                  <Layout {...layoutProps}>
+                    <Component />
+                  </Layout>
+                )}
+              />
+            ))}
+            <Route exact path="/">
+              <Redirect to="/projects" />
+            </Route>
+            <Route component={PageNotFound} />
+          </Switch>
+        )}
+      </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
   )
 }

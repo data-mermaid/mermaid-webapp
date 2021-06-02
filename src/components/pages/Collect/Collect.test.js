@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import mockOnlineDatabaseSwitchboardInstance from '../../../testUtilities/mockOnlineDatabaseSwitchboardInstance'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -20,11 +19,7 @@ test('Collect component renders with the expected UI elements', () => {
 })
 
 test('Collect Records table sorts properly by method column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -45,11 +40,7 @@ test('Collect Records table sorts properly by method column', async () => {
 })
 
 test('Collect Records table sorts properly by site column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -77,11 +68,7 @@ test('Collect Records table sorts properly by site column', async () => {
 })
 
 test('Collect Records table sorts properly by management column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -109,11 +96,7 @@ test('Collect Records table sorts properly by management column', async () => {
 })
 
 test('Collect Records table sorts properly by sample unit # column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -141,11 +124,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 })
 
 test('Collect Records table sorts properly by size column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -173,11 +152,7 @@ test('Collect Records table sorts properly by size column', async () => {
 })
 
 test('Collect Records table sorts properly by depth column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -204,11 +179,7 @@ test('Collect Records table sorts properly by depth column', async () => {
   expect(within(tableRowsAfterFirstClick[1]).getByText('20'))
 })
 test('Collect Records table sorts properly by sample date column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -240,11 +211,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -276,11 +243,7 @@ test('Collect Records table sorts properly by observers column', async () => {
 })
 
 test('Collect Records table sorts properly by status column', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -310,11 +273,7 @@ test('Collect Records table sorts properly by status column', async () => {
 test('Collect Records table sorts properly by synced column', () => {})
 
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
   )
@@ -334,11 +293,7 @@ test('Collect Records table changes number of rows visible size when pagination 
 })
 
 test('Collect Records table change pages when different page is selected ', async () => {
-  renderAuthenticatedOnline(
-    <Collect
-      databaseSwitchboardInstance={mockOnlineDatabaseSwitchboardInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<Collect />)
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
   )
