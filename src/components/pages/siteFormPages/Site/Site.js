@@ -45,13 +45,13 @@ const Site = () => {
     }
   }, [databaseSwitchboardInstance, siteId])
 
-  const initialFromValues = useMemo(
+  const initialFormValues = useMemo(
     () => getSiteInitialValues(siteBeingEdited),
     [siteBeingEdited],
   )
 
   const formikOptions = {
-    initialValues: initialFromValues,
+    initialValues: initialFormValues,
     enableReinitialize: true,
   }
 

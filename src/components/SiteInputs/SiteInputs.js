@@ -4,6 +4,7 @@ import { formikPropType } from '../../library/formikPropType'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../generic/InputRadioWithLabelAndValidation'
 import InputAutocomplete from '../generic/InputAutocomplete'
+import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
 import { InputWrapper } from '../generic/form'
 
 const SiteInputs = ({ formik, choices }) => {
@@ -56,6 +57,11 @@ const SiteInputs = ({ formik, choices }) => {
         id="reef_zone"
         options={reefZoneOptions}
         {...formik.getFieldProps('reef_zone')}
+      />
+      <TextareaWithLabelAndValidation
+        label="Notes"
+        id="notes"
+        {...formik.getFieldProps('notes')}
       />
     </InputWrapper>
   )
