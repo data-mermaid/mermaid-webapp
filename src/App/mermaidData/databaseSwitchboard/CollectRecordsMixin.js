@@ -160,10 +160,9 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
-            const recordReturnedFromServerPush =
-              response.data.collect_records[0]
+            const [recordReturnedFromApiPush] = response.data.collect_records
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordReturnedFromServerPush,
+              recordReturnedFromApiPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
@@ -171,8 +170,8 @@ const CollectRecordsMixin = (Base) =>
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pullApiDataMinimal({ profileId, projectId })
-                .then(() => {
-                  return recordReturnedFromServerPush
+                .then((_dataSetsReturnedFromApiPull) => {
+                  return recordReturnedFromApiPush
                 })
             }
 
@@ -243,11 +242,11 @@ const CollectRecordsMixin = (Base) =>
               },
             },
           )
-          .then((pushResponse) => {
-            const recordReturnedFromServerPush =
-              pushResponse.data.collect_records[0]
+          .then((apiPushResponse) => {
+            const recordReturnedFromApiPush =
+              apiPushResponse.data.collect_records[0]
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordReturnedFromServerPush,
+              recordReturnedFromApiPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
@@ -258,9 +257,7 @@ const CollectRecordsMixin = (Base) =>
                   profileId,
                   projectId,
                 })
-                .then(() => {
-                  return pushResponse
-                })
+                .then((_apiPullResponse) => apiPushResponse)
             }
 
             return Promise.reject(
