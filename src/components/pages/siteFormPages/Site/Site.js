@@ -7,12 +7,20 @@ import { getSiteInitialValues } from '../siteRecordFormInitialValues'
 import { H2 } from '../../../generic/text'
 import { ContentPageLayout } from '../../../Layout'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import SiteInputs from '../../../SiteInputs'
+import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
+import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
+import InputAutocomplete from '../../../generic/InputAutocomplete'
+import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import { InputWrapper } from '../../../generic/form'
+import { getOptions } from '../../../../library/getOptions'
 
 const Site = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
-  const [choices, setChoices] = useState({})
+  const [countryOptions, setCountryOptions] = useState([])
+  const [exposureOptions, setExposureOptions] = useState([])
+  const [reefTypeOptions, setReefTypeOptions] = useState([])
+  const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [siteBeingEdited, setSiteBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const { siteId } = useParams()
@@ -29,7 +37,10 @@ const Site = () => {
       Promise.all(promises)
         .then(([siteResponse, choicesResponse]) => {
           if (isMounted) {
-            setChoices(choicesResponse)
+            setCountryOptions(getOptions(choicesResponse.countries))
+            setExposureOptions(getOptions(choicesResponse.reefexposures))
+            setReefTypeOptions(getOptions(choicesResponse.reeftypes))
+            setReefZoneOptions(getOptions(choicesResponse.reefzones))
             setSiteBeingEdited(siteResponse)
             setIsLoading(false)
           }
@@ -63,7 +74,46 @@ const Site = () => {
           content={
             <>
               <form id="site-form">
-                <SiteInputs formik={formik} choices={choices} />
+                <InputWrapper>
+                  <InputWithLabelAndValidation
+                    label="Name"
+                    id="name"
+                    type="text"
+                    {...formik.getFieldProps('name')}
+                  />
+                  <InputAutocomplete
+                    label="Country"
+                    id="country"
+                    options={countryOptions}
+                    value={formik.getFieldProps('country').value}
+                    onChange={(selectedItem) =>
+                      formik.setFieldValue('country', selectedItem.value)
+                    }
+                  />
+                  <InputRadioWithLabelAndValidation
+                    label="Exposure"
+                    id="exposure"
+                    options={exposureOptions}
+                    {...formik.getFieldProps('exposure')}
+                  />
+                  <InputRadioWithLabelAndValidation
+                    label="Reef Type"
+                    id="reef_type"
+                    options={reefTypeOptions}
+                    {...formik.getFieldProps('reef_type')}
+                  />
+                  <InputRadioWithLabelAndValidation
+                    label="Reef Zone"
+                    id="reef_zone"
+                    options={reefZoneOptions}
+                    {...formik.getFieldProps('reef_zone')}
+                  />
+                  <TextareaWithLabelAndValidation
+                    label="Notes"
+                    id="notes"
+                    {...formik.getFieldProps('notes')}
+                  />
+                </InputWrapper>
               </form>
             </>
           }
