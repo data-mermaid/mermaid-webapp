@@ -38,7 +38,8 @@ const SiteInputs = ({ formik, choices }) => {
         label="Country"
         id="country"
         options={countryOptions}
-        {...formik.getFieldProps('country')}
+        value={formik.getFieldProps('country').value}
+        onChange={(selectedItem) => formik.setFieldValue('country', selectedItem.value)}
       />
       <InputRadioWithLabelAndValidation
         label="Exposure"
