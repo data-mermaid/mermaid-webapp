@@ -90,6 +90,18 @@ const Site = () => {
                       formik.setFieldValue('country', selectedItem.value)
                     }
                   />
+                  <InputWithLabelAndValidation
+                    label="Latitude"
+                    id="latitude"
+                    type="number"
+                    {...formik.getFieldProps('latitude')}
+                  />
+                  <InputWithLabelAndValidation
+                    label="Longitude"
+                    id="longitude"
+                    type="number"
+                    {...formik.getFieldProps('longitude')}
+                  />
                   <InputRadioWithLabelAndValidation
                     label="Exposure"
                     id="exposure"
