@@ -8,6 +8,18 @@ const SitesMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.sites)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
+    getSite = (id) => {
+      if (!id) {
+        Promise.reject(this._operationMissingIdParameterError)
+      }
+
+      return this._isAuthenticatedAndReady
+        ? this.getSites().then((records) =>
+            records.find((record) => record.id === id),
+          )
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     getSiteRecordsForUIDisplay = () => {
       return this._isAuthenticatedAndReady
         ? Promise.all([this.getSites(), this.getChoices()]).then(

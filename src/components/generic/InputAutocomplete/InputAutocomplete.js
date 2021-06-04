@@ -1,115 +1,45 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import Downshift from 'downshift'
+
+import Select from 'react-select'
 import { matchSorter } from 'match-sorter'
-import theme from '../../../theme'
 import { InputRow } from '../form'
+import language from '../../../language'
 
-const MenuList = styled.ul`
-  margin-top: 10px;
-  padding: 0;
-  border-top: 0;
-  background: 'white';
-  list-style: none;
-  position: absolute;
-  height: 196px;
-  overflow-y: scroll;
-`
+const InputAutocomplete = ({ label, id, options, value, onChange }) => {
+  const [customOptions, setCustomOptions] = useState(options)
+  const [menuOpen, setMenuOpen] = useState(false)
 
-const MenuListItem = styled.li`
-  padding: 4px 10px;
-`
+  const initialValue = options.find((option) => option.value === value) ?? ''
 
-const TypeAHeadInput = styled.input`
-  width: 100%;
-`
+  const handleInputChange = (inputValue) => {
+    if (inputValue.length > 2) setMenuOpen(true)
+    else setMenuOpen(false)
 
-const stateReducer = (state, changes) => {
-  if (changes.inputValue && changes.inputValue.length < 3)
-    return { ...changes, isOpen: false }
-
-  return changes
-}
-
-const InputAutocomplete = ({ label, id, options }) => {
-  const getItems = (value) =>
-    value ? matchSorter(options, value, { keys: ['label', 'value'] }) : options
+    setCustomOptions(
+      matchSorter(options, inputValue, {
+        keys: ['label'],
+      }),
+    )
+  }
 
   return (
-    <Downshift
-      stateReducer={stateReducer}
-      itemToString={(item) => {
-        return item ? item.label : ''
-      }}
-    >
-      {({
-        getLabelProps,
-        getInputProps,
-        getRootProps,
-        getItemProps,
-        clearSelection,
-        isOpen,
-        inputValue,
-        highlightedIndex,
-        selectedItem,
-      }) => (
-        <InputRow>
-          <label htmlFor={id} {...getLabelProps()}>
-            {label}
-          </label>
-          <div {...getRootProps({}, { suppressRefError: true })}>
-            <TypeAHeadInput
-              {...getInputProps({
-                onChange: (e) => {
-                  if (e.target.value === '') {
-                    clearSelection()
-                  }
-                },
-              })}
-            />
-            <MenuList>
-              {isOpen ? (
-                <>
-                  {getItems(inputValue).length > 0 ? (
-                    getItems(inputValue).map((item, index) => (
-                      <MenuListItem
-                        {...getItemProps({
-                          key: item.value,
-                          index,
-                          item,
-                          style: {
-                            backgroundColor:
-                              highlightedIndex === index
-                                ? theme.color.primaryColor
-                                : 'white',
-                            color:
-                              highlightedIndex === index ? 'white' : 'black',
-                            fontWeight:
-                              selectedItem === item ? 'bold' : 'normal',
-                          },
-                        })}
-                      >
-                        {item.label}
-                      </MenuListItem>
-                    ))
-                  ) : (
-                    <li
-                      style={{
-                        backgroundColor: 'white',
-                        padding: '4px 10px',
-                      }}
-                    >
-                      No Results
-                    </li>
-                  )}
-                </>
-              ) : null}
-            </MenuList>
-          </div>
-        </InputRow>
-      )}
-    </Downshift>
+    <InputRow>
+      <label htmlFor={id}>{label}</label>
+      <Select
+        menuIsOpen={menuOpen}
+        value={initialValue}
+        noOptionsMessage={() => language.prompt.autocompleteNoResultsMessage}
+        options={customOptions}
+        onChange={onChange}
+        onInputChange={handleInputChange}
+        filterOption={() => true}
+        components={{
+          DropdownIndicator: () => null,
+          IndicatorSeparator: () => null,
+        }}
+      />
+    </InputRow>
   )
 }
 
@@ -122,6 +52,8 @@ InputAutocomplete.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default InputAutocomplete

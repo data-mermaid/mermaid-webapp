@@ -6,24 +6,13 @@ import { InputWrapper } from '../generic/form'
 import InputRadioWithLabelAndValidation from '../generic/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
+import { getOptions } from '../../library/getOptions'
 
 const FishBeltTransectForms = ({ formik, choices }) => {
   const { belttransectwidths, fishsizebins, reefslopes } = choices
-
-  const transectWidthSelectOptions = belttransectwidths.data.map(
-    ({ name, id }) => ({
-      label: name,
-      value: id,
-    }),
-  )
-  const fishSizeBinSelectOptions = fishsizebins.data.map(({ name, id }) => ({
-    label: name,
-    value: id,
-  }))
-  const reefSlopeSelectOptions = reefslopes.data.map(({ name, id }) => ({
-    label: name,
-    value: id,
-  }))
+  const transectWidthSelectOptions = getOptions(belttransectwidths)
+  const fishSizeBinSelectOptions = getOptions(fishsizebins)
+  const reefSlopeSelectOptions = getOptions(reefslopes)
 
   return (
     <>
