@@ -1,13 +1,14 @@
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
-import { databaseSwitchboardPropTypes } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import { H2 } from '../../generic/text'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
 import language from '../../../language'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import {
   Table,
   Tr,
@@ -20,6 +21,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { ButtonSecondary } from '../../generic/buttons'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const TopBar = () => (
   <>
@@ -41,7 +43,9 @@ const TopBar = () => (
   </>
 )
 
-const Sites = ({ databaseSwitchboardInstance }) => {
+const Sites = () => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -64,6 +68,8 @@ const Sites = ({ databaseSwitchboardInstance }) => {
       isMounted = false
     }
   }, [databaseSwitchboardInstance])
+
+  const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
@@ -93,13 +99,15 @@ const Sites = ({ databaseSwitchboardInstance }) => {
 
   const tableCellData = useMemo(
     () =>
-      siteRecordsForUiDisplay.map(({ uiLabels }) => ({
-        name: uiLabels.name,
+      siteRecordsForUiDisplay.map(({ id, uiLabels }) => ({
+        name: (
+          <Link to={`${currentProjectPath}/sites/${id}`}>{uiLabels.name}</Link>
+        ),
         reefType: uiLabels.reefType,
         reefZone: uiLabels.reefZone,
         exposure: uiLabels.exposure,
       })),
-    [siteRecordsForUiDisplay],
+    [siteRecordsForUiDisplay, currentProjectPath],
   )
 
   const {
@@ -193,10 +201,6 @@ const Sites = ({ databaseSwitchboardInstance }) => {
       isLoading={isLoading}
     />
   )
-}
-
-Sites.propTypes = {
-  databaseSwitchboardInstance: databaseSwitchboardPropTypes.isRequired,
 }
 
 export default Sites

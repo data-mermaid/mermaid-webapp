@@ -4,23 +4,17 @@ import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
 import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
-
 import { formikPropType } from '../../library/formikPropType'
 import {
   managementRegimePropType,
   sitePropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
+import { getOptions } from '../../library/getOptions'
 
 const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
-  const siteSelectOptions = sites.map((site) => ({
-    label: site.name,
-    value: site.id,
-  }))
-
-  const managementSelectOptions = managementRegimes.map((regime) => ({
-    label: regime.name,
-    value: regime.id,
-  }))
+  const hasData = false
+  const siteSelectOptions = getOptions(sites, hasData)
+  const managementSelectOptions = getOptions(managementRegimes, hasData)
 
   return (
     <>

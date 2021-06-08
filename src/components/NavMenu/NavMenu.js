@@ -69,9 +69,6 @@ const NavHeader = styled('p')`
 const NavMenu = () => {
   const projectUrl = useCurrentProjectPath()
 
-  // this number is a hardcoded temporary placeholder. Will be resolved in M196
-  const collectRecordCount = 11
-
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
@@ -94,7 +91,7 @@ const NavMenu = () => {
               <NavLinkSidebar to={`${projectUrl}/collecting`}>
                 <IconCollect />
                 <span>Collecting</span>
-                <CollectRecordsCount collectRecordCount={collectRecordCount} />
+                <CollectRecordsCount />
               </NavLinkSidebar>
             </li>
             <li>
