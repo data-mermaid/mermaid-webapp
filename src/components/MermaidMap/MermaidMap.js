@@ -43,7 +43,7 @@ const MermaidMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
 
-  useEffect(() => {
+  const _initializeMap = useEffect(() => {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: satelliteBaseMap,
@@ -61,18 +61,19 @@ const MermaidMap = ({
     return () => map.current.remove()
   }, [])
 
-  useEffect(() => {
-    recordMarker.remove()
+  const _handleMapMarker = useEffect(() => {
     if (!map.current) return
 
-    if (
+    recordMarker.remove()
+    const outOfRangeLatLng =
       formLatitudeValue > 90 ||
       formLatitudeValue < -90 ||
       formLongitudeValue > 180 ||
       formLongitudeValue < -180
-    ) {
-      // set default center marker when new site is being created or lat/lng values are undefined or out of range.
-      recordMarker.setLngLat(defaultCenter).addTo(map.current)
+
+    if (outOfRangeLatLng) {
+      // remove marker when lat/lng values are undefined or out of range.
+      recordMarker.remove()
     } else {
       recordMarker
         .setLngLat([formLongitudeValue, formLatitudeValue])
@@ -86,7 +87,11 @@ const MermaidMap = ({
       handleLongitudeChange(lngLat.lng)
     })
 
-    if (formLatitudeValue !== undefined && formLongitudeValue !== undefined) {
+    if (
+      formLatitudeValue !== undefined &&
+      formLongitudeValue !== undefined &&
+      !outOfRangeLatLng
+    ) {
       map.current.jumpTo({
         center: [formLongitudeValue, formLatitudeValue],
         zoom: defaultZoom,
