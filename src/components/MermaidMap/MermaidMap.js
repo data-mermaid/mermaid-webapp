@@ -55,7 +55,13 @@ const MermaidMap = ({
         'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
     })
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-left')
+    map.current.addControl(
+      new mapboxgl.NavigationControl({
+        showCompass: false,
+        showZoom: true,
+      }),
+      'top-left',
+    )
 
     // clean up on unmount
     return () => map.current.remove()
