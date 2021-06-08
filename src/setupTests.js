@@ -7,6 +7,7 @@ import { configure } from '@testing-library/react'
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
 
 jest.setTimeout(30000)
+window.URL.createObjectURL = () => {}
 
 configure({ asyncUtilTimeout: 3000 })
 
