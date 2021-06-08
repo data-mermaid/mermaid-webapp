@@ -9,7 +9,7 @@ const GlobalStyle = createGlobalStyle`
     ${toastifyCss}
     :root {
         font-size: 62.5%;
-        color: ${theme.color.black};
+        color: ${theme.color.primaryColor};
     }
     body {
         background: ${theme.color.backgroundColor};

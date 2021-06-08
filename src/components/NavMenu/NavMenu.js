@@ -41,19 +41,17 @@ const NavList = styled('ul')`
   position: sticky;
   top: ${theme.spacing.headerHeight};
   margin-top: -1px;
-  &,
+  padding: 0;
   & ul {
     padding: 0;
     li {
       a {
         color: ${theme.color.black};
-      }
-      ${mediaQueryPhoneOnly(css`
-        a {
+        ${mediaQueryPhoneOnly(css`
           font-size: smaller;
           padding: ${theme.spacing.small} ${theme.spacing.xsmall};
-        }
-      `)}
+        `)}
+      }
     }
   }
 `
