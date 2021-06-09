@@ -8,13 +8,20 @@ const UserProfileMixin = (Base) =>
         return this._authenticatedAxios
           .get(`${this._apiBaseUrl}/me`)
           .then((apiResults) => {
-            const user = apiResults.data
+            const userFromApi = apiResults.data
 
-            if (!user) {
+            if (!userFromApi) {
               throw Error('User Profile not returned from API')
             }
 
-            return this._dexieInstance.currentUser.put(user).then(() => user)
+            const userToStore = {
+              id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
+              user: userFromApi,
+            }
+
+            return this._dexieInstance.currentUser
+              .put(userToStore)
+              .then(() => userFromApi)
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
