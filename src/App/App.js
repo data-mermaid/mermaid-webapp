@@ -25,7 +25,7 @@ function App({ dexieInstance }) {
     auth0Token,
     isMermaidAuthenticated,
     logoutMermaid,
-  } = useAuthentication()
+  } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const { current: apiSyncInstance } = useRef(
     new ApiSync({
