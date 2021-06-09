@@ -307,6 +307,10 @@ const sites = [
     reef_zone: '0e5ac2d0-d1cc-4f04-a696-f6d3db2b9ca8',
     exposure: '997c6cb3-c5e5-4df6-9cfa-5814a58a7b9e',
     notes: '',
+    location: {
+      type: 'Point',
+      coordinates: [179.4206, -17.3774],
+    },
   },
   {
     id: '2',
@@ -316,6 +320,10 @@ const sites = [
     reef_zone: '06ea17cd-5d1d-46ae-a654-64901e2a9f96',
     exposure: 'baa54e1d-4263-4273-80f5-35812304b592',
     notes: 'Testing Notes',
+    location: {
+      type: 'Point',
+      coordinates: [177.621112, -17.398367],
+    },
   },
   {
     id: '3',
@@ -325,6 +333,10 @@ const sites = [
     reef_zone: 'bc188a4f-76ae-4701-a021-26297efc9a92',
     exposure: '85b26198-4e3b-459c-868c-4e0706828cce',
     notes: 'Notes 1, 2, 3',
+    location: {
+      type: 'Point',
+      coordinates: [81.621112, -17.398367],
+    },
   },
   {
     id: '4',
@@ -334,6 +346,10 @@ const sites = [
     reef_zone: '49c85161-99ee-4bc3-b6c4-09b5810da0a8',
     exposure: '051c7545-eea8-48f6-bc82-3ef66bfdfe75',
     notes: 'Walalalal',
+    location: {
+      type: 'Point',
+      coordinates: [150.621112, 17.3987],
+    },
   },
 ]
 

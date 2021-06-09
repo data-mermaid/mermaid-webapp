@@ -11,6 +11,7 @@ import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValid
 import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import MermaidMap from '../../../MermaidMap'
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 
@@ -89,6 +90,28 @@ const Site = () => {
                     onChange={(selectedItem) =>
                       formik.setFieldValue('country', selectedItem.value)
                     }
+                  />
+                  <InputWithLabelAndValidation
+                    label="Latitude"
+                    id="latitude"
+                    type="number"
+                    {...formik.getFieldProps('latitude')}
+                  />
+                  <InputWithLabelAndValidation
+                    label="Longitude"
+                    id="longitude"
+                    type="number"
+                    {...formik.getFieldProps('longitude')}
+                  />
+                  <MermaidMap
+                    formLatitudeValue={formik.getFieldProps('latitude').value}
+                    formLongitudeValue={formik.getFieldProps('longitude').value}
+                    handleLatitudeChange={(value) => {
+                      formik.setFieldValue('latitude', value)
+                    }}
+                    handleLongitudeChange={(value) => {
+                      formik.setFieldValue('longitude', value)
+                    }}
                   />
                   <InputRadioWithLabelAndValidation
                     label="Exposure"
