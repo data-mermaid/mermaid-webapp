@@ -3,10 +3,18 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import mapboxgl from 'mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
 import theme from '../../theme'
+import LegendSlider from '../LegendSlider'
 
 const MapWrapper = styled.div`
   height: 400px;
-  border: ${theme.spacing.borderXLarge} solid ${theme.color.secondaryColor};
+  border-top: ${theme.spacing.borderXLarge} solid ${theme.color.secondaryColor};
+  border-bottom: ${theme.spacing.borderXLarge} solid
+    ${theme.color.secondaryColor};
+`
+
+const MapContainer = styled.div`
+  position: relative;
+  overflow: hidden;
 `
 
 const satelliteBaseMap = {
@@ -106,9 +114,10 @@ const MermaidMap = ({
   }, [formLatitudeValue, formLongitudeValue])
 
   return (
-    <div>
+    <MapContainer>
       <MapWrapper ref={mapContainer} />
-    </div>
+      <LegendSlider />
+    </MapContainer>
   )
 }
 
