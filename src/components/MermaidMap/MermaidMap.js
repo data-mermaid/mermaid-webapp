@@ -1,8 +1,11 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
-import theme from '../../theme'
+import mapboxgl from 'mapbox-gl'
+import theme from '../../theme' // This is a dependency of react-map-gl even if you didn't explicitly install it
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default
 
 const MapWrapper = styled.div`
   height: 400px;

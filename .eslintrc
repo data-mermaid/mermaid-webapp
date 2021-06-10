@@ -7,7 +7,6 @@
   ],
   "plugins": ["react-hooks"],
   "rules": {
-    "no-webpack-loader-syntax": "on",
     "no-underscore-dangle": "off",
     "react/jsx-props-no-spreading": "off",
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
