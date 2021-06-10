@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import mapboxgl from '!mapbox-gl' //eslint-disable-line
+import * as mapboxgl from 'mapbox-gl'
 import theme from '../../theme'
 
 const MapWrapper = styled.div`
