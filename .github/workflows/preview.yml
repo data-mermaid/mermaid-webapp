@@ -20,51 +20,51 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-        
+
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Cache Node Modules
-      id: yarn_cache
-      uses: actions/cache@v2
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-v1-${{ hashFiles('yarn.lock') }}
+      - name: Cache Node Modules
+        id: yarn_cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-v1-${{ hashFiles('yarn.lock') }}
 
-    - name: Yarn Install
-      if: steps.yarn_cache.outputs.cache-hit != 'true'
-      run: |
-        yarn install
+      - name: Yarn Install
+        if: steps.yarn_cache.outputs.cache-hit != 'true'
+        run: |
+          yarn install
 
-    - name: SED Add homepage route based on PR Number
-      run: |
-        find . -name 'package.json' -exec sed -i "s/\"homepage\": \"\"/\"homepage\": \"${PR_NUMBER}\"/g" {} +
+      - name: SED Add homepage route based on PR Number
+        run: |
+          find . -name 'package.json' -exec sed -i "s/\"homepage\": \"\"/\"homepage\": \"${PR_NUMBER}\"/g" {} +
 
-    - name: Run Unit Tests
-      run: |
-        yarn test
+      - name: Run Unit Tests
+        run: |
+          yarn test
 
-    - name: yarn Build
-      run: |
-        yarn build
+      - name: yarn Build
+        run: |
+          yarn build
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-    - name: Upload files to S3 with AWS CLI
-      run: |
-        aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete
+      - name: Upload files to S3 with AWS CLI
+        run: |
+          aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete
 
-    - name: 'PR Preview Comment'
-      uses: actions/github-script@0.3.0
-      if: github.event.action == 'opened'
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-          var msg = `**Here is a preview of this pull request:** <br> https://${process.env.S3_BUCKET}/${issue_number}`
-          github.issues.createComment({ issue_number, owner, repo, body: msg });
+      - name: 'PR Preview Comment'
+        uses: actions/github-script@0.3.0
+        if: github.event.action == 'opened'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+            var msg = `**Here is a preview of this pull request:** <br> https://${process.env.S3_BUCKET}/${issue_number}`
+            github.issues.createComment({ issue_number, owner, repo, body: msg });

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import mapboxgl from 'mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
+import maplibregl from 'maplibre-gl'
 import theme from '../../theme'
 import LegendSlider from '../LegendSlider'
 
@@ -37,8 +37,7 @@ const satelliteBaseMap = {
   ],
 }
 
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN
-const recordMarker = new mapboxgl.Marker({ draggable: true })
+const recordMarker = new maplibregl.Marker({ draggable: true })
 const defaultCenter = [0, 0]
 const defaultZoom = 11
 
@@ -52,7 +51,7 @@ const MermaidMap = ({
   const map = useRef(null)
 
   const _initializeMap = useEffect(() => {
-    map.current = new mapboxgl.Map({
+    map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: satelliteBaseMap,
       center: defaultCenter,
@@ -64,7 +63,7 @@ const MermaidMap = ({
     })
 
     map.current.addControl(
-      new mapboxgl.NavigationControl({
+      new maplibregl.NavigationControl({
         showCompass: false,
         showZoom: true,
       }),
