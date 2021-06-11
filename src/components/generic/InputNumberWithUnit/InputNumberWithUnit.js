@@ -1,0 +1,37 @@
+import PropTypes from 'prop-types'
+import React from 'react'
+import styled from 'styled-components'
+
+import { InputTextareaSelectStyles } from '../form'
+import theme from '../../../theme'
+
+const InputContainer = styled.div`
+  ${InputTextareaSelectStyles}
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+`
+
+const UnitContainer = styled.span`
+  background: magenta;
+  padding: ${theme.spacing.xsmall};
+`
+
+const InnerInput = styled.input`
+  width: 100%;
+  border: none;
+  padding: ${theme.spacing.xsmall};
+`
+
+const InputNumberWithUnit = ({ unit, ...restOfProps }) => {
+  return (
+    <InputContainer>
+      <InnerInput type="number" {...restOfProps} />
+      <UnitContainer>{unit}</UnitContainer>
+    </InputContainer>
+  )
+}
+
+InputNumberWithUnit.propTypes = { unit: PropTypes.string.isRequired }
+
+export default InputNumberWithUnit
