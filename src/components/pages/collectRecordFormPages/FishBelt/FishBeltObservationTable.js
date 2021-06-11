@@ -93,37 +93,44 @@ const FishBeltObservationTable = ({ collectRecord }) => {
     })
   }
 
-  const observationsRows = observationsState.map(({ id, count, size }) => (
-    <tr key={id}>
-      <td>Species placeholder</td>
-      <td>
-        <InputNumberWithUnit
-          type="number"
-          min="0"
-          value={size}
-          onChange={(event) => handleUpdateSize(event, id)}
-          unit="cm"
-        />
-      </td>
-      <td>
-        <Input
-          type="number"
-          min="0"
-          value={count}
-          onChange={(event) => handleUpdateCount(event, id)}
-        />
-      </td>
-      <td>Biomass placeholder</td>
-      <td>
-        <ButtonCaution
-          type="button"
-          onClick={() => handleDeleteObservation(id)}
-        >
-          <IconClose />
-        </ButtonCaution>
-      </td>
-    </tr>
-  ))
+  const observationsRows = observationsState.map(
+    ({ id, count, size }, index) => {
+      const rowNumber = index + 1
+
+      return (
+        <tr key={id}>
+          <td>{rowNumber}</td>
+          <td>Species placeholder</td>
+          <td>
+            <InputNumberWithUnit
+              type="number"
+              min="0"
+              value={size}
+              onChange={(event) => handleUpdateSize(event, id)}
+              unit="cm"
+            />
+          </td>
+          <td>
+            <Input
+              type="number"
+              min="0"
+              value={count}
+              onChange={(event) => handleUpdateCount(event, id)}
+            />
+          </td>
+          <td>Biomass placeholder</td>
+          <td>
+            <ButtonCaution
+              type="button"
+              onClick={() => handleDeleteObservation(id)}
+            >
+              <IconClose />
+            </ButtonCaution>
+          </td>
+        </tr>
+      )
+    },
+  )
 
   return (
     <InputWrapper>
@@ -131,6 +138,7 @@ const FishBeltObservationTable = ({ collectRecord }) => {
       <table>
         <thead>
           <tr>
+            <th> </th>
             <th>Fish Name</th>
             <th>Size</th>
             <th>Count</th>
