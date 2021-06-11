@@ -23,7 +23,7 @@ const reducer = (state, action) => {
     }
 
     case 'addObservation':
-      return [...state, { id: createUuid() }]
+      return [...state, { id: createUuid(), count: 0, size: 0 }]
     case 'updateCount':
       return state.map((observation) => {
         const isObservationToUpdate =
@@ -33,7 +33,15 @@ const reducer = (state, action) => {
           ? { ...observation, count: action.payload.newCount }
           : observation
       })
+    case 'updateSize':
+      return state.map((observation) => {
+        const isObservationToUpdate =
+          observation.id === action.payload.observationId
 
+        return isObservationToUpdate
+          ? { ...observation, size: action.payload.newSize }
+          : observation
+      })
     default:
       throw new Error('This action isn supported by the reducer')
   }
@@ -77,10 +85,24 @@ const FishBeltObservationTable = ({ collectRecord }) => {
     })
   }
 
-  const observationsRows = observationsState.map(({ id, count }) => (
+  const handleUpdateSize = (event, observationId) => {
+    observationsDispatch({
+      type: 'updateSize',
+      payload: { newSize: event.target.value, observationId },
+    })
+  }
+
+  const observationsRows = observationsState.map(({ id, count, size }) => (
     <tr key={id}>
       <td>Species placeholder</td>
-      <td>Size placeholder</td>
+      <td>
+        <Input
+          type="number"
+          min="0"
+          value={size}
+          onChange={(event) => handleUpdateSize(event, id)}
+        />
+      </td>
       <td>
         <Input
           type="number"
