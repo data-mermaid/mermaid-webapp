@@ -10,22 +10,24 @@ import {
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
 import { ButtonCallout, ButtonCaution } from '../../../generic/buttons'
-import { IconSave, IconCheck, IconUpload } from '../../../icons'
 import { ContentPageLayout } from '../../../Layout'
+import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { H2 } from '../../../generic/text'
+import { IconSave, IconCheck, IconUpload } from '../../../icons'
+import { InputWrapper } from '../../../generic/form'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
-import theme from '../../../../theme'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EditCollectRecordFormTitle from '../../../EditCollectRecordFormTitle'
+import FishBeltObservationTable from './FishBeltObservationTable'
 import FishBeltTransectInputs from '../../../FishBeltTransectInputs'
 import language from '../../../../language'
-import SampleInfoInputs from '../../../SampleInfoInputs'
-import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import OfflineHide from '../../../generic/OfflineHide'
-import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import SampleInfoInputs from '../../../SampleInfoInputs'
+import theme from '../../../../theme'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -193,6 +195,15 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                   managementRegimes={managementRegimes}
                 />
                 <FishBeltTransectInputs formik={formik} choices={choices} />
+                <InputWrapper>
+                  <H2>Observers Placeholder</H2>
+                  <br />
+                  <br />
+                  <br />
+                </InputWrapper>
+                <FishBeltObservationTable
+                  collectRecord={collectRecordBeingEdited}
+                />
               </form>
               <ButtonCaution
                 onClick={showDeleteConfirmPrompt}
