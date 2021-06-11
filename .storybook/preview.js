@@ -1,5 +1,6 @@
 import { Auth0Context } from '@auth0/auth0-react'
 import { MemoryRouter } from 'react-router-dom'
+import { OnlineStatusProvider } from '../src/library/onlineStatusContext'
 import { ThemeProvider } from 'styled-components'
 import GlobalStyle from '../src/library/styling/globalStyles'
 import theme from '../src/theme'
@@ -20,8 +21,10 @@ export const decorators = [
     >
       <MemoryRouter>
         <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <Story />
+          <OnlineStatusProvider value={{ isOnline: true }}>
+            <GlobalStyle />
+            <Story />
+          </OnlineStatusProvider>
         </ThemeProvider>
       </MemoryRouter>
     </Auth0Context.Provider>
