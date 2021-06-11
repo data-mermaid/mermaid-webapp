@@ -5,7 +5,7 @@ import { createUuid } from '../../../../library/createUuid'
 import { fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
-import { InputWrapper } from '../../../generic/form'
+import { Input, InputWrapper } from '../../../generic/form'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,6 +24,15 @@ const reducer = (state, action) => {
 
     case 'addObservation':
       return [...state, { id: createUuid() }]
+    case 'updateCount':
+      return state.map((observation) => {
+        const isObservationToUpdate =
+          observation.id === action.payload.observationId
+
+        return isObservationToUpdate
+          ? { ...observation, count: action.payload.newCount }
+          : observation
+      })
 
     default:
       throw new Error('This action isn supported by the reducer')
@@ -53,19 +62,33 @@ const FishBeltObservationTable = ({ collectRecord }) => {
     }
   })
 
-  const handleDeleteObservation = (id) => {
-    observationsDispatch({ type: 'deleteObservation', payload: id })
+  const handleDeleteObservation = (observationId) => {
+    observationsDispatch({ type: 'deleteObservation', payload: observationId })
   }
 
   const handleAddObservation = () => {
     observationsDispatch({ type: 'addObservation' })
   }
 
-  const observationsRows = observationsState.map(({ id }) => (
+  const handleUpdateCount = (event, observationId) => {
+    observationsDispatch({
+      type: 'updateCount',
+      payload: { newCount: event.target.value, observationId },
+    })
+  }
+
+  const observationsRows = observationsState.map(({ id, count }) => (
     <tr key={id}>
       <td>Species placeholder</td>
       <td>Size placeholder</td>
-      <td>Count placeholder </td>
+      <td>
+        <Input
+          type="number"
+          min="0"
+          value={count}
+          onChange={(event) => handleUpdateCount(event, id)}
+        />
+      </td>
       <td>Biomass placeholder</td>
       <td>
         <ButtonCaution
