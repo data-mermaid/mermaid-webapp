@@ -25,6 +25,19 @@ const observationReducer = (state, action) => {
 
     case 'addObservation':
       return [...state, { id: createUuid(), count: 0, size: 0 }]
+    case 'addNewObservationBelow': {
+      const observationsWithInsertedRow = [...state]
+      const indexToInsertAt = action.payload + 1
+
+      observationsWithInsertedRow.splice(indexToInsertAt, 0, {
+        id: createUuid(),
+        count: 0,
+        size: 0,
+      })
+
+      return observationsWithInsertedRow
+    }
+
     case 'duplicateLastObservation': {
       const observationWithNewId = {
         ...action.payload.observation,
@@ -104,14 +117,22 @@ const FishBeltObservationTable = ({ collectRecord }) => {
     })
   }
 
-  const handleCountKeyDown = ({ event, index, observation }) => {
+  const handleKeyDown = ({ event, index, observation, isCount }) => {
     const isTabKey = event.code === 'Tab' && !event.shiftKey
+    const isEnterKey = event.code === 'Enter'
     const isLastRow = index === observationsState.length - 1
 
-    if (isTabKey && isLastRow) {
+    if (isTabKey && isLastRow && isCount) {
       observationsDispatch({
         type: 'duplicateLastObservation',
         payload: { observation },
+      })
+    }
+
+    if (isEnterKey) {
+      observationsDispatch({
+        type: 'addNewObservationBelow',
+        payload: index,
       })
     }
   }
@@ -129,8 +150,14 @@ const FishBeltObservationTable = ({ collectRecord }) => {
             type="number"
             min="0"
             value={size}
-            onChange={(event) => handleUpdateSize(event, id)}
             unit="cm"
+            step="any"
+            onChange={(event) => {
+              handleUpdateSize(event, id)
+            }}
+            onKeyDown={(event) => {
+              handleKeyDown({ event, index, observation })
+            }}
           />
         </td>
         <td>
@@ -138,9 +165,12 @@ const FishBeltObservationTable = ({ collectRecord }) => {
             type="number"
             min="0"
             value={count}
-            onChange={(event) => handleUpdateCount(event, id)}
+            step="any"
+            onChange={(event) => {
+              handleUpdateCount(event, id)
+            }}
             onKeyDown={(event) => {
-              handleCountKeyDown({ event, index, observation })
+              handleKeyDown({ event, index, observation, isCount: true })
             }}
           />
         </td>
