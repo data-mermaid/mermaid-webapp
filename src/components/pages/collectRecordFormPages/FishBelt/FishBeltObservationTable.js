@@ -6,6 +6,7 @@ import { fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptyp
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { Input, InputWrapper } from '../../../generic/form'
+import InputNumberWithUnit from '../../../generic/InputNumberWithUnit/InputNumberWithUnit'
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -96,11 +97,12 @@ const FishBeltObservationTable = ({ collectRecord }) => {
     <tr key={id}>
       <td>Species placeholder</td>
       <td>
-        <Input
+        <InputNumberWithUnit
           type="number"
           min="0"
           value={size}
           onChange={(event) => handleUpdateSize(event, id)}
+          unit="cm"
         />
       </td>
       <td>
