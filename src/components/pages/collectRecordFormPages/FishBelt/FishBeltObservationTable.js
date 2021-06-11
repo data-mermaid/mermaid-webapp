@@ -8,7 +8,7 @@ import { IconClose, IconPlus } from '../../../icons'
 import { Input, InputWrapper } from '../../../generic/form'
 import InputNumberWithUnit from '../../../generic/InputNumberWithUnit/InputNumberWithUnit'
 
-const reducer = (state, action) => {
+const observationReducer = (state, action) => {
   switch (action.type) {
     case 'loadObservationsFromApi':
       return [...action.payload]
@@ -25,6 +25,14 @@ const reducer = (state, action) => {
 
     case 'addObservation':
       return [...state, { id: createUuid(), count: 0, size: 0 }]
+    case 'duplicateLastObservation': {
+      const observationWithNewId = {
+        ...action.payload.observation,
+        id: createUuid(),
+      }
+
+      return [...state, observationWithNewId]
+    }
     case 'updateCount':
       return state.map((observation) => {
         const isObservationToUpdate =
@@ -44,12 +52,15 @@ const reducer = (state, action) => {
           : observation
       })
     default:
-      throw new Error('This action isn supported by the reducer')
+      throw new Error("This action isn't supported by the observationReducer")
   }
 }
 
 const FishBeltObservationTable = ({ collectRecord }) => {
-  const [observationsState, observationsDispatch] = useReducer(reducer, [])
+  const [observationsState, observationsDispatch] = useReducer(
+    observationReducer,
+    [],
+  )
   const haveApiObservationsBeenLoaded = useRef(false)
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
@@ -93,44 +104,58 @@ const FishBeltObservationTable = ({ collectRecord }) => {
     })
   }
 
-  const observationsRows = observationsState.map(
-    ({ id, count, size }, index) => {
-      const rowNumber = index + 1
+  const handleCountKeyDown = ({ event, index, observation }) => {
+    const isTabKey = event.code === 'Tab' && !event.shiftKey
+    const isLastRow = index === observationsState.length - 1
 
-      return (
-        <tr key={id}>
-          <td>{rowNumber}</td>
-          <td>Species placeholder</td>
-          <td>
-            <InputNumberWithUnit
-              type="number"
-              min="0"
-              value={size}
-              onChange={(event) => handleUpdateSize(event, id)}
-              unit="cm"
-            />
-          </td>
-          <td>
-            <Input
-              type="number"
-              min="0"
-              value={count}
-              onChange={(event) => handleUpdateCount(event, id)}
-            />
-          </td>
-          <td>Biomass placeholder</td>
-          <td>
-            <ButtonCaution
-              type="button"
-              onClick={() => handleDeleteObservation(id)}
-            >
-              <IconClose />
-            </ButtonCaution>
-          </td>
-        </tr>
-      )
-    },
-  )
+    if (isTabKey && isLastRow) {
+      observationsDispatch({
+        type: 'duplicateLastObservation',
+        payload: { observation },
+      })
+    }
+  }
+
+  const observationsRows = observationsState.map((observation, index) => {
+    const { id, count, size } = observation
+    const rowNumber = index + 1
+
+    return (
+      <tr key={id}>
+        <td>{rowNumber}</td>
+        <td>Species placeholder</td>
+        <td>
+          <InputNumberWithUnit
+            type="number"
+            min="0"
+            value={size}
+            onChange={(event) => handleUpdateSize(event, id)}
+            unit="cm"
+          />
+        </td>
+        <td>
+          <Input
+            type="number"
+            min="0"
+            value={count}
+            onChange={(event) => handleUpdateCount(event, id)}
+            onKeyDown={(event) => {
+              handleCountKeyDown({ event, index, observation })
+            }}
+          />
+        </td>
+        <td>Biomass placeholder</td>
+        <td>
+          <ButtonCaution
+            type="button"
+            onClick={() => handleDeleteObservation(id)}
+          >
+            <IconClose />
+          </ButtonCaution>
+        </td>
+      </tr>
+    )
+  })
 
   return (
     <InputWrapper>
