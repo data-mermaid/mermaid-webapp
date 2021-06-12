@@ -1,12 +1,12 @@
 import React from 'react'
-import { choicesPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../library/formikPropType'
-import { H2 } from '../generic/text'
-import { InputWrapper } from '../generic/form'
-import InputRadioWithLabelAndValidation from '../generic/InputRadioWithLabelAndValidation'
-import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
-import TextareaWithLabelAndValidation from '../generic/TextareaWithLabelAndValidation'
-import { getOptions } from '../../library/getOptions'
+import { choicesPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { formikPropType } from '../../../../library/formikPropType'
+import { H2 } from '../../../generic/text'
+import { InputWrapper } from '../../../generic/form'
+import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
+import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
+import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import { getOptions } from '../../../../library/getOptions'
 
 const FishBeltTransectForms = ({ formik, choices }) => {
   const { belttransectwidths, fishsizebins, reefslopes } = choices

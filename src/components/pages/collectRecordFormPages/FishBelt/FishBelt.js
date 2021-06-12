@@ -22,7 +22,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilitie
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EditCollectRecordFormTitle from '../../../EditCollectRecordFormTitle'
 import FishBeltObservationTable from './FishBeltObservationTable'
-import FishBeltTransectInputs from '../../../FishBeltTransectInputs'
+import FishBeltTransectInputs from './FishBeltTransectInputs'
 import language from '../../../../language'
 import OfflineHide from '../../../generic/OfflineHide'
 import SampleInfoInputs from '../../../SampleInfoInputs'
