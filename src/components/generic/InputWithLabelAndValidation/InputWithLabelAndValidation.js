@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { Input, InputRow, ValidationMessage } from '../form'
+import { useNoInputScrolling } from '../../../library/useNoInputScrolling'
 
 const InputWithLabelAndValidation = ({
   label,
@@ -10,19 +11,9 @@ const InputWithLabelAndValidation = ({
   validationType,
   ...restOfProps
 }) => {
-  const textFieldRef = useRef(null)
+  const textFieldRef = useRef()
 
-  const _preventScrollingFromChangingValues = useEffect(() => {
-    const handleWheel = (e) => e.preventDefault()
-    const snapshotOfTextFieldRef = textFieldRef.current
-
-    snapshotOfTextFieldRef.addEventListener('wheel', handleWheel)
-
-    return () => {
-      if (snapshotOfTextFieldRef)
-        snapshotOfTextFieldRef.removeEventListener('wheel', handleWheel)
-    }
-  }, [])
+  useNoInputScrolling(textFieldRef)
 
   return (
     <InputRow validationType={validationType}>

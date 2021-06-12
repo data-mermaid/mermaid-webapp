@@ -5,8 +5,9 @@ import { createUuid } from '../../../../library/createUuid'
 import { fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
-import { Input, InputWrapper } from '../../../generic/form'
-import InputNumberWithUnit from '../../../generic/InputNumberWithUnit/InputNumberWithUnit'
+import { InputWrapper } from '../../../generic/form'
+
+import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 
 const observationReducer = (state, action) => {
   switch (action.type) {
@@ -146,7 +147,7 @@ const FishBeltObservationTable = ({ collectRecord }) => {
         <td>{rowNumber}</td>
         <td>Species placeholder</td>
         <td>
-          <InputNumberWithUnit
+          <InputNumberNoScroll
             type="number"
             min="0"
             value={size}
@@ -161,7 +162,7 @@ const FishBeltObservationTable = ({ collectRecord }) => {
           />
         </td>
         <td>
-          <Input
+          <InputNumberNoScroll
             type="number"
             min="0"
             value={count}
