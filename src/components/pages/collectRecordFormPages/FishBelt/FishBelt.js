@@ -2,7 +2,7 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useReducer, useState } from 'react'
 
 import styled from 'styled-components/macro'
 import {
@@ -28,6 +28,7 @@ import OfflineHide from '../../../generic/OfflineHide'
 import SampleInfoInputs from '../../../SampleInfoInputs'
 import theme from '../../../../theme'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import fishbeltObservationReducer from './fishbeltObservationReducer'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -57,6 +58,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const closeDeleteConfirmPrompt = () => {
     setShowDeleteModal(false)
   }
+  const observationsReducer = useReducer(fishbeltObservationReducer, [])
+  const [observationsState] = observationsReducer
 
   const _getSupportingData = useEffect(() => {
     let isMounted = true
@@ -127,9 +130,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         })
     }
   }
-  const saveRecord = (formValues) => {
+  const saveRecord = (formikValues) => {
     const newRecord = reformatFormValuesIntoFishBeltRecord(
-      formValues,
+      formikValues,
+      observationsState,
       collectRecordBeingEdited,
     )
 
@@ -205,6 +209,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                   collectRecord={collectRecordBeingEdited}
                   fishBinSelected={formik.values.size_bin}
                   choices={choices}
+                  observationsReducer={observationsReducer}
                 />
               </form>
               <ButtonCaution
