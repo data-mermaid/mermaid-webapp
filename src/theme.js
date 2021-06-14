@@ -101,7 +101,6 @@ const typography = {
   smallFontSize: '1.2rem',
   xSmallFontSize: '1rem',
   lineHeight: '1.2',
-  fontStack: 'Helvetica Neue, Helvetica, Arial, sans-serif',
   smallIconSize: '1rem',
   defaultIconSize: '1.8rem',
   largeIconSize: '3.5rem',
