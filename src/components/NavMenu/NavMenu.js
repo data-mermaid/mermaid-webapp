@@ -23,6 +23,7 @@ import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 
 const NavWrapper = styled('nav')`
+  background: ${theme.color.white};
   display: flex;
   flex-direction: column;
   height: 100%;

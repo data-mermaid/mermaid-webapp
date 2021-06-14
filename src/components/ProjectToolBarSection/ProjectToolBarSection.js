@@ -5,7 +5,7 @@ import {
   mediaQueryPhoneOnly,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
-import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
+import { ButtonCallout, ButtonSecondary } from '../generic/buttons'
 import { IconSortDown } from '../icons'
 import OfflineHide from '../generic/OfflineHide'
 
@@ -89,7 +89,7 @@ const ProjectToolBarSection = () => {
       <RowWrapper>
         <HeaderStyle>Projects</HeaderStyle>
         <OfflineHide>
-          <ButtonPrimary>New Project</ButtonPrimary>
+          <ButtonCallout>New Project</ButtonCallout>
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>

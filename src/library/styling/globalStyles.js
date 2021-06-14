@@ -9,14 +9,14 @@ const GlobalStyle = createGlobalStyle`
     ${toastifyCss}
     :root {
         font-size: 62.5%;
-        color: ${theme.color.primaryColor};
     }
     body {
-        background: ${theme.color.backgroundColor};
+        background-color: ${theme.color.backgroundColor};
     }
     body, select, input, textarea, button, p, a{
         font-family: ${theme.typography.fontStack};
         font-size: ${theme.typography.defaultFontSize};
+        color: ${theme.color.textColor};
     
     }
     select, input, textarea, p, a{
@@ -31,7 +31,6 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     } 
     a{
-        color: ${theme.color.black};
         text-decoration: underline;
         ${hoverState(css`
           text-decoration: none;

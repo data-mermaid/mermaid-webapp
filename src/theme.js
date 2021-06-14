@@ -2,13 +2,14 @@ import { css } from 'styled-components/macro'
 import colorHelper from 'color'
 
 const primary = colorHelper('#1c124a') // depths
-const secondary = colorHelper('#ECECEF')
+const secondary = colorHelper('#DDDCE4')
 const callout = colorHelper('#fe472f') // coral
 const caution = colorHelper('#BB1600')
 const warning = colorHelper('#FEDD2F')
 const ignore = colorHelper('#D6DDE6')
-const white = colorHelper('#fff') // primary.mix(colorHelper('white'), 0.98)
+const white = colorHelper('#fff')
 const black = primary.mix(colorHelper('black'), 0.95)
+const textColor = primary
 
 const xsmall = '0.5rem'
 const small = '1rem'
@@ -17,13 +18,14 @@ const large = '2.5rem'
 const xlarge = '3.5rem'
 
 const color = {
+  textColor,
   white,
   black,
   warning,
   ignore,
   ignoreColor: ignore,
   warningColor: warning,
-  backgroundColor: black.mix(colorHelper(white), 0.9),
+  backgroundColor: secondary,
 
   primaryColor: primary,
   primaryHover: primary.mix(colorHelper(white), 0.1),
@@ -61,9 +63,10 @@ const color = {
   sideBarColor: black.mix(colorHelper(white), 0.9),
   headerColor: primary,
   footerColor: white,
-  tableRowOdd: primary.mix(colorHelper(white), 0.9),
-  tableRowEven: primary.mix(colorHelper(white), 0.95),
-  tableRowHover: '#D7DDE2',
+  tableRowOdd: '#fdfdfe',
+  tableRowEven: '#f8f8fa',
+  tableRowHover: '#f1f1f4',
+  focusWithin: '#def2de', // foam
   inputBackground: white,
   outline: `solid 2px ${primary}`,
 }

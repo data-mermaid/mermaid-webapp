@@ -13,10 +13,8 @@ const MainContentPageLayout = styled('div')`
   grid-template-rows: auto 1fr;
   height: calc(100% - ${theme.spacing.headerHeight});
   margin-top: ${theme.spacing.headerHeight};
-  background: ${theme.color.white};
 `
 const ContentWrapper = styled('div')`
-  background: ${theme.color.backgroundColor};
   padding: ${contentPadding} 0 0 ${contentPadding};
 `
 const NavAndContentLayout = styled('div')`

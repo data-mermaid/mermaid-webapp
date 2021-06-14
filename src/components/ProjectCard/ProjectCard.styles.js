@@ -32,24 +32,6 @@ export const ButtonGroups = styled('div')`
     display: inline-block;
     position: relative;
     margin-right: ${theme.spacing.buttonSpacing};
-    span {
-      display: none;
-    }
-    ${mediaQueryForTabletLandscapeUp(css`
-      ${hoverState(css`
-        span {
-          display: block;
-          position: absolute;
-          top: 4.3rem;
-          left: 0;
-          color: ${theme.color.white};
-          background-color: ${theme.color.black};
-          text-align: center;
-          padding: ${theme.spacing.small};
-          text-transform: uppercase;
-        }
-      `)}
-    `)}
   }
 
   @media (hover: hover) {

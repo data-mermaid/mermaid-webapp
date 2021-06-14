@@ -34,7 +34,7 @@ export const InputRow = styled.div`
     background-color: ${theme.color.secondaryHover};
   `)}
   &:focus-within {
-    background-color: ${theme.color.tableRowHover};
+    background-color: ${theme.color.focusWithin};
   }
 
   ${(props) =>
