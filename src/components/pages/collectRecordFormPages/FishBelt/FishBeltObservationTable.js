@@ -11,7 +11,7 @@ import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper } from '../../../generic/form'
 
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
-import InputNumberWithUnit from '../../../generic/InputNumberWithUnit/InputNumberWithUnit'
+import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import { getObjectById } from '../../../../library/getObjectById'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 
@@ -98,7 +98,7 @@ const FishBeltObservationTable = ({
     const showNumericSizeInput = fishBinSelectedLabel === '1' ?? true
 
     const sizeInput = showNumericSizeInput ? (
-      <InputNumberWithUnit
+      <InputNumberNoScrollWithUnit
         type="number"
         min="0"
         value={size}
