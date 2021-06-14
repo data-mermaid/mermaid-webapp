@@ -102,7 +102,7 @@
   "jest": {
     "restoreMocks": true,
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!@iconify-icons/.*)(?!@reach/.*)"
+      "<rootDir>/node_modules/(?!@iconify-icons/.*)(?!@reach/.*)(?!@fontsource/.*)"
     ]
   }
 }
