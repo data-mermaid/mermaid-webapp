@@ -66,7 +66,7 @@ const color = {
   tableRowOdd: '#fdfdfe',
   tableRowEven: '#f8f8fa',
   tableRowHover: '#f1f1f4',
-  focusWithin: '#def2de', // foam
+  focusWithin: secondary,
   inputBackground: white,
   outline: `solid 2px ${primary}`,
 }

@@ -4,7 +4,6 @@ import { ButtonSecondary } from '../generic/buttons'
 import {
   mediaQueryPhoneOnly,
   hoverState,
-  mediaQueryForTabletLandscapeUp,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 

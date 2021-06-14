@@ -7,13 +7,10 @@ import {
 } from '../../library/styling/mediaQueries'
 
 export const NavLinkButtonish = styled(NavLink)`
-  padding: ${theme.spacing.buttonPadding};
-  border-width: 1px;
-  border-style: solid;
   text-decoration: none;
+  padding: ${theme.spacing.buttonPadding};
   background-color: ${theme.color.secondaryColor};
   color: ${theme.color.secondaryText};
-  border-color: ${theme.color.secondaryBorder};
   ${hoverState(css`
     background-color: ${theme.color.secondaryHover};
   `)}
@@ -23,11 +20,6 @@ export const NavLinkButtonish = styled(NavLink)`
 `
 export const NavLinkButtonishIcon = styled(NavLinkButtonish)``
 
-const activeStyle = css`
-  background-color: ${theme.color.primaryColor};
-  color: ${theme.color.white};
-`
-
 export const NavLinkSidebar = styled(NavLink)`
   padding: ${theme.spacing.small};
   text-decoration: none;
@@ -36,14 +28,15 @@ export const NavLinkSidebar = styled(NavLink)`
     background-color: ${theme.color.primaryHover};
     color: ${theme.color.white};
   `)}
-  :active {
+  &:active {
     background-color: ${theme.color.primaryActive};
   }
   & > svg {
     margin: 0 ${theme.spacing.small};
   }
   &.active {
-    ${activeStyle};
+    background-color: ${theme.color.primaryColor};
+    color: ${theme.color.white};
   }
   ${mediaQueryTabletLandscapeOnly(css`
     text-align: center;
