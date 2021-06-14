@@ -39,17 +39,28 @@ const geomorphicColors = {
 const geomorphicArray = Object.keys(geomorphicColors)
 const benthicArray = Object.keys(benthicColors)
 
-const InputCheckbox = ({ labelName, bgColor, fullWidth }) => {
+const InputCheckbox = ({
+  labelName,
+  checked,
+  bgColor,
+  fullWidth,
+  handleCheckboxChange,
+}) => {
   return (
     <CheckBoxLabel htmlFor={labelName} fullWidth={fullWidth}>
-      <input id={labelName} type="checkbox" />
+      <input
+        id={labelName}
+        type="checkbox"
+        checked={checked}
+        onChange={handleCheckboxChange}
+      />
       {labelName}
       {bgColor && <LegendColor bgColor={bgColor} />}
     </CheckBoxLabel>
   )
 }
 
-const LegendSlider = () => {
+const LegendSlider = ({ coralMosaicChecked, handleCoralMosaicChecked }) => {
   const [navbarOpen, setNavbarOpen] = useState(true)
 
   const handleNavbarOpen = () => {
@@ -99,7 +110,11 @@ const LegendSlider = () => {
           </a>
         </LegendHeader>
         <LegendBody>
-          <InputCheckbox labelName="Satellite Coral Reef Mosaic" />
+          <InputCheckbox
+            labelName="Satellite Coral Reef Mosaic"
+            checked={coralMosaicChecked}
+            handleCheckboxChange={handleCoralMosaicChecked}
+          />
           <details open>
             <summary>
               <InputCheckbox labelName="Geomorphic Analysis" />
@@ -118,15 +133,24 @@ const LegendSlider = () => {
   )
 }
 
+LegendSlider.propTypes = {
+  coralMosaicChecked: PropTypes.number.isRequired,
+  handleCoralMosaicChecked: PropTypes.func.isRequired,
+}
+
 InputCheckbox.propTypes = {
   labelName: PropTypes.string.isRequired,
+  checked: PropTypes.bool,
   bgColor: PropTypes.string,
   fullWidth: PropTypes.bool,
+  handleCheckboxChange: PropTypes.func,
 }
 
 InputCheckbox.defaultProps = {
+  checked: false,
   bgColor: '',
   fullWidth: false,
+  handleCheckboxChange: () => {},
 }
 LegendSlider.propTypes = {}
 

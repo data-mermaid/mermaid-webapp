@@ -1,9 +1,10 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
 import theme from '../../theme'
 import LegendSlider from '../LegendSlider'
+import { satelliteBaseMap, loadACALayers } from '../../library/mapService'
 
 const MapWrapper = styled.div`
   height: 400px;
@@ -17,26 +18,6 @@ const MapContainer = styled.div`
   overflow: hidden;
 `
 
-const satelliteBaseMap = {
-  version: 8,
-  name: 'World Map',
-  sources: {
-    worldmap: {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      ],
-    },
-  },
-  layers: [
-    {
-      id: 'base-map',
-      type: 'raster',
-      source: 'worldmap',
-    },
-  ],
-}
-
 const recordMarker = new maplibregl.Marker({ draggable: true })
 const defaultCenter = [0, 0]
 const defaultZoom = 11
@@ -47,6 +28,16 @@ const MermaidMap = ({
   handleLatitudeChange,
   handleLongitudeChange,
 }) => {
+  const coralMosaicLocalStorage = localStorage.getItem('coral_mosaic')
+  const [coralMosaicLayer, setCoralMosaicLayer] = useState(
+    coralMosaicLocalStorage !== null ? JSON.parse(coralMosaicLocalStorage) : 1,
+  )
+  const [coralMosaicChecked, setCoralMosaicChecked] = useState(
+    coralMosaicLocalStorage !== null
+      ? JSON.parse(coralMosaicLocalStorage) === 1
+      : true,
+  )
+
   const mapContainer = useRef(null)
   const map = useRef(null)
 
@@ -69,10 +60,30 @@ const MermaidMap = ({
       }),
       'top-left',
     )
+    map.current.dragRotate.disable()
+    map.current.touchZoomRotate.disableRotation()
+
+    const mapOpts = { rasterOpacityExpression: coralMosaicLayer }
+
+    map.current.on('load', () => {
+      loadACALayers(map.current, mapOpts)
+    })
 
     // clean up on unmount
     return () => map.current.remove()
   }, [])
+
+  const _loadMapLayers = useEffect(() => {
+    if (!map.current) return
+
+    if (map.current.getLayer('atlas-planet') !== undefined) {
+      map.current.setPaintProperty(
+        'atlas-planet',
+        'raster-opacity',
+        coralMosaicLayer,
+      )
+    }
+  }, [coralMosaicLayer])
 
   const _handleMapMarker = useEffect(() => {
     if (!map.current) return
@@ -112,10 +123,21 @@ const MermaidMap = ({
     }
   }, [formLatitudeValue, formLongitudeValue])
 
+  const handleCoralMosaicChecked = () => {
+    const coralMosaicResult = coralMosaicChecked ? 0 : 1
+
+    localStorage.setItem('coral_mosaic', coralMosaicResult)
+    setCoralMosaicLayer(coralMosaicResult)
+    setCoralMosaicChecked(!coralMosaicChecked)
+  }
+
   return (
     <MapContainer>
       <MapWrapper ref={mapContainer} />
-      <LegendSlider />
+      <LegendSlider
+        coralMosaicChecked={coralMosaicChecked}
+        handleCoralMosaicChecked={handleCoralMosaicChecked}
+      />
     </MapContainer>
   )
 }
