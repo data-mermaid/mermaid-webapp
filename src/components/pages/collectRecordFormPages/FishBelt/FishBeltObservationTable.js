@@ -1,16 +1,29 @@
 import React, { useEffect, useReducer, useRef } from 'react'
-
+import PropTypes from 'prop-types'
 import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
 import { createUuid } from '../../../../library/createUuid'
-import { fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import {
+  choicesPropType,
+  fishBeltPropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper } from '../../../generic/form'
 
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberWithUnit from '../../../generic/InputNumberWithUnit/InputNumberWithUnit'
+import { getObjectById } from '../../../../library/getObjectById'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 
+const FishBeltObservationTable = ({
+  collectRecord,
+  fishBinSelected,
+  choices,
+}) => {
+  const fishBinSelectedLabel = getObjectById(
+    choices?.fishsizebins.data,
+    fishBinSelected,
+  )?.name
 
   const [observationsState, observationsDispatch] = useReducer(
     fishbeltObservationReducer,
@@ -82,26 +95,31 @@ import fishbeltObservationReducer from './fishbeltObservationReducer'
   const observationsRows = observationsState.map((observation, index) => {
     const { id, count, size } = observation
     const rowNumber = index + 1
+    const showNumericSizeInput = fishBinSelectedLabel === '1' ?? true
+
+    const sizeInput = showNumericSizeInput ? (
+      <InputNumberWithUnit
+        type="number"
+        min="0"
+        value={size}
+        unit="cm"
+        step="any"
+        onChange={(event) => {
+          handleUpdateSize(event, id)
+        }}
+        onKeyDown={(event) => {
+          handleKeyDown({ event, index, observation })
+        }}
+      />
+    ) : (
+      <> temp placeholder for size dropdown </>
+    )
 
     return (
       <tr key={id}>
         <td>{rowNumber}</td>
         <td>Species placeholder</td>
-        <td>
-          <InputNumberWithUnit
-            type="number"
-            min="0"
-            value={size}
-            unit="cm"
-            step="any"
-            onChange={(event) => {
-              handleUpdateSize(event, id)
-            }}
-            onKeyDown={(event) => {
-              handleKeyDown({ event, index, observation })
-            }}
-          />
-        </td>
+        <td>{sizeInput}</td>
         <td>
           <InputNumberNoScroll
             type="number"
@@ -155,8 +173,13 @@ import fishbeltObservationReducer from './fishbeltObservationReducer'
 
 FishBeltObservationTable.propTypes = {
   collectRecord: fishBeltPropType,
+  fishBinSelected: PropTypes.string,
+  choices: choicesPropType.isRequired,
 }
 
-FishBeltObservationTable.defaultProps = { collectRecord: undefined }
+FishBeltObservationTable.defaultProps = {
+  collectRecord: undefined,
+  fishBinSelected: undefined,
+}
 
 export default FishBeltObservationTable

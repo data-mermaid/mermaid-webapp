@@ -203,6 +203,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 </InputWrapper>
                 <FishBeltObservationTable
                   collectRecord={collectRecordBeingEdited}
+                  fishBinSelected={formik.values.size_bin}
+                  choices={choices}
                 />
               </form>
               <ButtonCaution
