@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { InputTextareaSelectStyles } from '../form'
 import theme from '../../../theme'
+import InputNumberNoScroll from '../../InputNumberNoScroll/InputNumberNoScroll'
 
 const InputContainer = styled.div`
   ${InputTextareaSelectStyles}
@@ -17,7 +18,7 @@ const UnitContainer = styled.span`
   padding: ${theme.spacing.xsmall};
 `
 
-const InnerInput = styled.input`
+const InnerInput = styled(InputNumberNoScroll)`
   width: 100%;
   border: none;
   padding: ${theme.spacing.xsmall};
@@ -26,7 +27,7 @@ const InnerInput = styled.input`
 const InputNumberWithUnit = ({ unit, ...restOfProps }) => {
   return (
     <InputContainer>
-      <InnerInput type="number" {...restOfProps} />
+      <InnerInput {...restOfProps} />
       <UnitContainer>{unit}</UnitContainer>
     </InputContainer>
   )

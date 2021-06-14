@@ -8,6 +8,7 @@ import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper } from '../../../generic/form'
 
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberWithUnit from '../../../generic/InputNumberWithUnit/InputNumberWithUnit'
 
 const observationReducer = (state, action) => {
   switch (action.type) {
@@ -147,7 +148,7 @@ const FishBeltObservationTable = ({ collectRecord }) => {
         <td>{rowNumber}</td>
         <td>Species placeholder</td>
         <td>
-          <InputNumberNoScroll
+          <InputNumberWithUnit
             type="number"
             min="0"
             value={size}
