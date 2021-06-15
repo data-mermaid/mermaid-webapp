@@ -11,33 +11,7 @@ import {
   CheckBoxLabel,
 } from './LegendSlider.styles'
 import { IconExternalLink } from '../icons'
-
-const benthicColors = {
-  'Coral/Algae': 'rgb(255, 97, 97)',
-  'Benthic Microalgae': 'rgb(155, 204, 79)',
-  Rock: 'rgb(177, 156, 58)',
-  Rubble: 'rgb(224, 208, 94)',
-  Sand: 'rgb(255, 255, 190)',
-  Seagrass: 'rgb(102, 132, 56)',
-}
-
-const geomorphicColors = {
-  'Back Reef Slope': 'rgb(190, 251, 255)',
-  'Deep Lagoon': 'rgb(44, 162, 249)',
-  'Inner Reef Flat': 'rgb(197, 167, 203)',
-  'Outer Reef Flat': 'rgb(146, 115, 157)',
-  'Patch Reefs': 'rgb(255, 186, 21)',
-  Plateau: 'rgb(205, 104, 18)',
-  'Reef Crest': 'rgb(97, 66, 114)',
-  'Reef Slope': 'rgb(40, 132, 113)',
-  'Shallow Lagoon': 'rgb(119, 208, 252)',
-  'Sheltered Reef Slope': 'rgb(16, 189, 166)',
-  'Small Reef': 'rgb(230, 145, 19)',
-  'Terrestrial Reef Flat': 'rgb(251, 222, 251)',
-}
-
-const geomorphicArray = Object.keys(geomorphicColors)
-const benthicArray = Object.keys(benthicColors)
+import { geomorphicColors, benthicColors } from '../../library/mapService'
 
 const InputCheckbox = ({
   labelName,
@@ -51,6 +25,7 @@ const InputCheckbox = ({
       <input
         id={labelName}
         type="checkbox"
+        value={checked}
         checked={checked}
         onChange={handleCheckboxChange}
       />
@@ -60,34 +35,45 @@ const InputCheckbox = ({
   )
 }
 
-const LegendSlider = ({ coralMosaicChecked, handleCoralMosaicChecked }) => {
+const LegendSlider = ({
+  coralMosaicChecked,
+  geomorphicLayer,
+  allGeomorphicLayersChecked,
+  benthicLayer,
+  allBenthicLayersChecked,
+  handleGeomorphicOption,
+  handleCoralMosaicChecked,
+  handleSelectAllGeomorphicLayers,
+  handleBenthicOption,
+  handleSelectAllBenthicLayers,
+}) => {
   const [navbarOpen, setNavbarOpen] = useState(true)
 
   const handleNavbarOpen = () => {
     setNavbarOpen(!navbarOpen)
   }
 
-  const geomorphicList = geomorphicArray.map((value) => {
-    const geomorphicObj = { name: value, selected: true }
-
+  const geomorphicList = geomorphicLayer.map((geomorphicObj) => {
     return (
       <InputCheckbox
         key={geomorphicObj.name}
+        bgColor={geomorphicColors[geomorphicObj.name]}
         labelName={geomorphicObj.name}
-        bgColor={geomorphicColors[value]}
+        checked={geomorphicObj.selected}
+        handleCheckboxChange={() => handleGeomorphicOption(geomorphicObj)}
         fullWidth
       />
     )
   })
 
-  const benthicOptions = benthicArray.map((value) => {
-    const benthicObj = { name: value, selected: true }
-
+  const benthicOptions = benthicLayer.map((benthicObj) => {
     return (
       <InputCheckbox
         key={benthicObj.name}
+        bgColor={benthicColors[benthicObj.name]}
         labelName={benthicObj.name}
-        bgColor={benthicColors[value]}
+        checked={benthicObj.selected}
+        handleCheckboxChange={() => handleBenthicOption(benthicObj)}
         fullWidth
       />
     )
@@ -117,13 +103,21 @@ const LegendSlider = ({ coralMosaicChecked, handleCoralMosaicChecked }) => {
           />
           <details open>
             <summary>
-              <InputCheckbox labelName="Geomorphic Analysis" />
+              <InputCheckbox
+                labelName="Geomorphic Analysis"
+                checked={allGeomorphicLayersChecked}
+                handleCheckboxChange={handleSelectAllGeomorphicLayers}
+              />
             </summary>
             {geomorphicList}
           </details>
           <details open>
             <summary>
-              <InputCheckbox labelName="Benthic Analysis" />
+              <InputCheckbox
+                labelName="Benthic Analysis"
+                checked={allBenthicLayersChecked}
+                handleCheckboxChange={handleSelectAllBenthicLayers}
+              />
             </summary>
             {benthicOptions}
           </details>
@@ -135,7 +129,19 @@ const LegendSlider = ({ coralMosaicChecked, handleCoralMosaicChecked }) => {
 
 LegendSlider.propTypes = {
   coralMosaicChecked: PropTypes.number.isRequired,
+  geomorphicLayer: PropTypes.arrayOf(
+    PropTypes.shape({ name: PropTypes.string, selected: PropTypes.bool }),
+  ).isRequired,
+  allGeomorphicLayersChecked: PropTypes.bool.isRequired,
+  benthicLayer: PropTypes.arrayOf(
+    PropTypes.shape({ name: PropTypes.string, selected: PropTypes.bool }),
+  ).isRequired,
+  allBenthicLayersChecked: PropTypes.bool.isRequired,
   handleCoralMosaicChecked: PropTypes.func.isRequired,
+  handleGeomorphicOption: PropTypes.func.isRequired,
+  handleSelectAllGeomorphicLayers: PropTypes.func.isRequired,
+  handleBenthicOption: PropTypes.func.isRequired,
+  handleSelectAllBenthicLayers: PropTypes.func.isRequired,
 }
 
 InputCheckbox.propTypes = {
