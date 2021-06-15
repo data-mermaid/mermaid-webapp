@@ -36,13 +36,13 @@ const InputCheckbox = ({
 }
 
 const LegendSlider = ({
-  coralMosaicChecked,
+  coralMosaicLayer,
   geomorphicLayer,
   allGeomorphicLayersChecked,
   benthicLayer,
   allBenthicLayersChecked,
   handleGeomorphicOption,
-  handleCoralMosaicChecked,
+  handleCoralMosaicLayer,
   handleSelectAllGeomorphicLayers,
   handleBenthicOption,
   handleSelectAllBenthicLayers,
@@ -98,8 +98,8 @@ const LegendSlider = ({
         <LegendBody>
           <InputCheckbox
             labelName="Satellite Coral Reef Mosaic"
-            checked={coralMosaicChecked}
-            handleCheckboxChange={handleCoralMosaicChecked}
+            checked={coralMosaicLayer === 1}
+            handleCheckboxChange={handleCoralMosaicLayer}
           />
           <details open>
             <summary>
@@ -128,7 +128,7 @@ const LegendSlider = ({
 }
 
 LegendSlider.propTypes = {
-  coralMosaicChecked: PropTypes.number.isRequired,
+  coralMosaicLayer: PropTypes.number.isRequired,
   geomorphicLayer: PropTypes.arrayOf(
     PropTypes.shape({ name: PropTypes.string, selected: PropTypes.bool }),
   ).isRequired,
@@ -137,7 +137,7 @@ LegendSlider.propTypes = {
     PropTypes.shape({ name: PropTypes.string, selected: PropTypes.bool }),
   ).isRequired,
   allBenthicLayersChecked: PropTypes.bool.isRequired,
-  handleCoralMosaicChecked: PropTypes.func.isRequired,
+  handleCoralMosaicLayer: PropTypes.func.isRequired,
   handleGeomorphicOption: PropTypes.func.isRequired,
   handleSelectAllGeomorphicLayers: PropTypes.func.isRequired,
   handleBenthicOption: PropTypes.func.isRequired,

@@ -24,8 +24,8 @@ const MapContainer = styled.div`
   overflow: hidden;
 `
 
-const geomorphicArray = Object.keys(geomorphicColors)
-const benthicArray = Object.keys(benthicColors)
+const geomorphicKeyNameArray = Object.keys(geomorphicColors)
+const benthicKeyNameArray = Object.keys(benthicColors)
 
 const recordMarker = new maplibregl.Marker({ draggable: true })
 const defaultCenter = [0, 0]
@@ -61,20 +61,21 @@ const MermaidMap = ({
   const [coralMosaicLayer, setCoralMosaicLayer] = useState(
     coralMosaicLocalStorage !== null ? coralMosaicLocalStorage : 1,
   )
-  const [coralMosaicChecked, setCoralMosaicChecked] = useState(
-    coralMosaicLocalStorage !== null ? coralMosaicLocalStorage === 1 : true,
-  )
   const [geomorphicLayer, setGeomorphicLayer] = useState(
-    loadLegendArrayLayer(geomorphicLocalStorage, geomorphicArray),
+    loadLegendArrayLayer(geomorphicLocalStorage, geomorphicKeyNameArray),
   )
   const [allGeomorphicLayersChecked, setAllGeomorphicLayersChecked] = useState(
-    geomorphicLocalStorage ? geomorphicLocalStorage.length === 12 : true,
+    geomorphicLocalStorage
+      ? geomorphicLocalStorage.length === geomorphicKeyNameArray.length
+      : true,
   )
   const [benthicLayer, setBenthicLayer] = useState(
-    loadLegendArrayLayer(benthicLocalStorage, benthicArray),
+    loadLegendArrayLayer(benthicLocalStorage, benthicKeyNameArray),
   )
   const [allBenthicLayersChecked, setAllBenthicLayersChecked] = useState(
-    benthicLocalStorage ? benthicLocalStorage.length === 6 : true,
+    benthicLocalStorage
+      ? benthicLocalStorage.length === benthicKeyNameArray.length
+      : true,
   )
 
   const mapContainer = useRef(null)
@@ -184,90 +185,105 @@ const MermaidMap = ({
     }
   }, [formLatitudeValue, formLongitudeValue])
 
-  const handleCoralMosaicChecked = () => {
-    const coralMosaicResult = coralMosaicChecked ? 0 : 1
+  const getUpdatedLayerOption = (layer, item) => {
+    return layer.map((value) => {
+      if (value.name === item.name) {
+        return { ...value, selected: !item.selected }
+      }
+
+      return value
+    })
+  }
+
+  const getFilterSelectedOption = (updatedLayer) =>
+    updatedLayer.filter(({ selected }) => selected).map(({ name }) => name)
+
+  const handleCoralMosaicLayer = () => {
+    const coralMosaicResult = coralMosaicLayer ? 0 : 1
 
     localStorage.setItem('coral_mosaic', coralMosaicResult)
     setCoralMosaicLayer(coralMosaicResult)
-    setCoralMosaicChecked(!coralMosaicChecked)
   }
 
   const handleGeomorphicOption = (item) => {
     const legendMaxLength = geomorphicLayer.length
-    const newOptions = [...geomorphicLayer].map((value) => {
-      if (value.name === item.name) {
-        return { ...value, selected: !item.selected }
-      }
+    const updatedLayerOption = getUpdatedLayerOption(geomorphicLayer, item)
 
-      return value
-    })
+    const filterSelectedLayerOption = getFilterSelectedOption(
+      updatedLayerOption,
+    )
 
-    const newArray = newOptions
-      .filter(({ selected }) => selected)
-      .map(({ name }) => name)
-
-    localStorage.setItem('geomorphic_legend', JSON.stringify(newArray))
-    setAllGeomorphicLayersChecked(newArray.length === legendMaxLength)
-    setGeomorphicLayer(newOptions)
+    localStorage.setItem(
+      'geomorphic_legend',
+      JSON.stringify(filterSelectedLayerOption),
+    )
+    setAllGeomorphicLayersChecked(
+      filterSelectedLayerOption.length === legendMaxLength,
+    )
+    setGeomorphicLayer(updatedLayerOption)
   }
 
   const handleBenthicOption = (item) => {
     const legendMaxLength = benthicLayer.length
-    const newOptions = [...benthicLayer].map((value) => {
-      if (value.name === item.name) {
-        return { ...value, selected: !item.selected }
-      }
+    const updatedLayerOption = getUpdatedLayerOption(benthicLayer, item)
+    const filterSelectedLayerOption = getFilterSelectedOption(
+      updatedLayerOption,
+    )
 
-      return value
-    })
-
-    const newArray = newOptions
-      .filter(({ selected }) => selected)
-      .map(({ name }) => name)
-
-    localStorage.setItem('benthic_legend', JSON.stringify(newArray))
-    setAllBenthicLayersChecked(newArray.length === legendMaxLength)
-    setBenthicLayer(newOptions)
+    localStorage.setItem(
+      'benthic_legend',
+      JSON.stringify(filterSelectedLayerOption),
+    )
+    setAllBenthicLayersChecked(
+      filterSelectedLayerOption.length === legendMaxLength,
+    )
+    setBenthicLayer(updatedLayerOption)
   }
 
   const handleSelectAllGeomorphicLayers = () => {
-    const newOptions = [...geomorphicLayer].map((value) => {
+    const updatedLayerOption = geomorphicLayer.map((value) => {
       return { ...value, selected: !allGeomorphicLayersChecked }
     })
 
-    const newArray = newOptions
-      .filter(({ selected }) => selected)
-      .map(({ name }) => name)
+    const filterSelectedLayerOption = getFilterSelectedOption(
+      updatedLayerOption,
+    )
 
-    localStorage.setItem('geomorphic_legend', JSON.stringify(newArray))
+    localStorage.setItem(
+      'geomorphic_legend',
+      JSON.stringify(filterSelectedLayerOption),
+    )
     setAllGeomorphicLayersChecked(!allGeomorphicLayersChecked)
-    setGeomorphicLayer(newOptions)
+    setGeomorphicLayer(updatedLayerOption)
   }
 
   const handleSelectAllBenthicLayers = () => {
-    const newOptions = [...benthicLayer].map((value) => {
+    const updatedLayerOption = benthicLayer.map((value) => {
       return { ...value, selected: !allBenthicLayersChecked }
     })
 
-    const newArray = newOptions
-      .filter(({ selected }) => selected)
-      .map(({ name }) => name)
+    const filterSelectedLayerOption = getFilterSelectedOption(
+      updatedLayerOption,
+    )
 
-    localStorage.setItem('benthic_legend', JSON.stringify(newArray))
+    localStorage.setItem(
+      'benthic_legend',
+      JSON.stringify(filterSelectedLayerOption),
+    )
     setAllBenthicLayersChecked(!allBenthicLayersChecked)
-    setBenthicLayer(newOptions)
+    setBenthicLayer(updatedLayerOption)
   }
 
   return (
     <MapContainer>
       <MapWrapper ref={mapContainer} />
       <LegendSlider
-        coralMosaicChecked={coralMosaicChecked}
+        coralMosaicLayer={coralMosaicLayer}
         geomorphicLayer={geomorphicLayer}
         allGeomorphicLayersChecked={allGeomorphicLayersChecked}
         benthicLayer={benthicLayer}
         allBenthicLayersChecked={allBenthicLayersChecked}
-        handleCoralMosaicChecked={handleCoralMosaicChecked}
+        handleCoralMosaicLayer={handleCoralMosaicLayer}
         handleGeomorphicOption={handleGeomorphicOption}
         handleSelectAllGeomorphicLayers={handleSelectAllGeomorphicLayers}
         handleBenthicOption={handleBenthicOption}
