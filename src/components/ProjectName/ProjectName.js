@@ -11,6 +11,7 @@ import { NavLinkButtonishIcon } from '../generic/links'
 import { IconHome } from '../icons'
 
 const ProjectNameWrapper = styled('div')`
+  background: ${theme.color.white};
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;

@@ -5,7 +5,7 @@ import { hoverState } from '../../library/styling/mediaQueries'
 export const InputWrapper = styled.div`
   padding: ${theme.spacing.medium};
 `
-const InputTextareaSelectStyles = css`
+export const InputTextareaSelectStyles = css`
   padding: ${theme.spacing.xsmall};
   height: fit-content;
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
@@ -34,7 +34,7 @@ export const InputRow = styled.div`
     background-color: ${theme.color.secondaryHover};
   `)}
   &:focus-within {
-    background-color: ${theme.color.tableRowHover};
+    background-color: ${theme.color.focusWithin};
   }
 
   ${(props) =>

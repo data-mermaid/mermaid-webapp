@@ -27,11 +27,9 @@ export const CloseButton = styled.button`
 export const Button = styled.button`
   transition: ${theme.timing.activeTransition};
   padding: ${theme.spacing.buttonPadding};
-  border-width: ${theme.spacing.borderSmall};
-  border-style: solid;
+  border-width: 0;
   &:disabled {
     color: ${theme.color.disabledText};
-    border-color: ${theme.color.disabledBorder};
     cursor: not-allowed;
   }
   &:active {
@@ -42,7 +40,6 @@ export const Button = styled.button`
 export const ButtonPrimary = styled(Button)`
   background-color: ${theme.color.primaryColor};
   color: ${theme.color.primaryText};
-  border-color: ${theme.color.primaryBorder};
   ${hoverState(
     css`
       background-color: ${theme.color.primaryHover};
@@ -58,7 +55,6 @@ export const ButtonPrimary = styled(Button)`
 export const ButtonSecondary = styled(Button)`
   background-color: ${theme.color.secondaryColor};
   color: ${theme.color.secondaryText};
-  border-color: ${theme.color.secondaryBorder};
   ${hoverState(
     css`
       background-color: ${theme.color.secondaryHover};
@@ -74,7 +70,6 @@ export const ButtonSecondary = styled(Button)`
 export const ButtonCallout = styled(Button)`
   background-color: ${theme.color.calloutColor};
   color: ${theme.color.calloutText};
-  border-color: ${theme.color.calloutBorder};
   ${hoverState(
     css`
       background-color: ${theme.color.calloutHover};
@@ -90,7 +85,6 @@ export const ButtonCallout = styled(Button)`
 export const ButtonCaution = styled(Button)`
   background-color: ${theme.color.cautionColor};
   color: ${theme.color.cautionText};
-  border-color: ${theme.color.cautionBorder};
   ${hoverState(
     css`
       background-color: ${theme.color.cautionHover};

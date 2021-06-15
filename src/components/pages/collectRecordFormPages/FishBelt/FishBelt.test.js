@@ -7,6 +7,8 @@ import {
   screen,
   waitForElementToBeRemoved,
   within,
+  userEvent,
+  fireEvent,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 
 import FishBelt from './FishBelt'
@@ -193,4 +195,164 @@ test('FishBelt component in EDIT mode - button group shows only save button when
   expect(saveButton).toBeInTheDocument()
   expect(validateButton).not.toBeInTheDocument()
   expect(submitButton).not.toBeInTheDocument()
+})
+
+test('Fishbelt observations: add row button adds a row', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const formBeforeAdd = screen.getByRole('form')
+
+  expect(within(formBeforeAdd).getAllByRole('row').length).toEqual(4)
+
+  userEvent.click(
+    within(formBeforeAdd).getByRole('button', { name: 'Add Row' }),
+  )
+
+  const formAfterAdd = screen.getByRole('form')
+
+  expect(within(formAfterAdd).getAllByRole('row').length).toEqual(5)
+})
+
+test('Fishbelt observations: delete observation button deleted observation', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const formBeforeDelete = screen.getByRole('form')
+  const observationsTableBeforeDelete = within(formBeforeDelete).getByRole(
+    'table',
+  )
+
+  expect(
+    within(observationsTableBeforeDelete).getAllByRole('row').length,
+  ).toEqual(4)
+  expect(within(observationsTableBeforeDelete).getByDisplayValue(2))
+
+  userEvent.click(
+    within(observationsTableBeforeDelete).getAllByLabelText(
+      'Delete Observation',
+    )[1],
+  )
+
+  const formAfterDelete = screen.getByRole('form')
+  const observationsTableAfterDelete = within(formAfterDelete).getByRole(
+    'table',
+  )
+
+  expect(
+    within(observationsTableAfterDelete).getAllByRole('row').length,
+  ).toEqual(3)
+  expect(
+    within(observationsTableAfterDelete).queryByDisplayValue(2),
+  ).not.toBeInTheDocument()
+})
+
+test('Fishbelt observations: tab in count input on last row duplicates row', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const formBeforeTab = screen.getByRole('form')
+  const observationsTableBeforeEnterKey = within(formBeforeTab).getByRole(
+    'table',
+  )
+
+  expect(
+    within(observationsTableBeforeEnterKey).getAllByRole('row').length,
+  ).toEqual(4)
+
+  const lastCountInput = within(
+    observationsTableBeforeEnterKey,
+  ).getByDisplayValue(4)
+
+  // userEvent doesnt work as expected for tab
+  fireEvent.keyDown(lastCountInput, { key: 'Tab', code: 'Tab' })
+
+  const formAfterTab = screen.getByRole('form')
+  const observationsTableAfterTab = within(formAfterTab).getByRole('table')
+
+  expect(within(observationsTableAfterTab).getAllByRole('row').length).toEqual(
+    5,
+  )
+
+  expect(
+    within(observationsTableAfterTab).getAllByDisplayValue(4).length,
+  ).toEqual(2)
+})
+test.only('Fishbelt observations: enter key adds a new empty row below row where key pressed', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const formBeforeEnterKey = screen.getByRole('form')
+  const observationsTableBeforeEnterKey = within(formBeforeEnterKey).getByRole(
+    'table',
+  )
+
+  expect(
+    within(observationsTableBeforeEnterKey).getAllByRole('row').length,
+  ).toEqual(4)
+  expect(
+    within(observationsTableBeforeEnterKey).queryByDisplayValue(0),
+  ).not.toBeInTheDocument()
+
+  const firstCountInput = within(
+    observationsTableBeforeEnterKey,
+  ).getByDisplayValue(1)
+
+  // userEvent doesnt work as expected for Enter
+  fireEvent.keyDown(firstCountInput, { key: 'Enter', code: 'Enter' })
+
+  const formAfterEnterKey = screen.getByRole('form')
+  const observationsTableAfterEnterKey = within(formAfterEnterKey).getByRole(
+    'table',
+  )
+
+  expect(
+    within(observationsTableAfterEnterKey).getAllByRole('row').length,
+  ).toEqual(5)
+
+  // 0 is the headers
+  const secondObservationRow = within(
+    observationsTableAfterEnterKey,
+  ).getAllByRole('row')[2]
+
+  const isNewRowEmpty =
+    within(secondObservationRow).getAllByDisplayValue(0).length === 2
+
+  expect(isNewRowEmpty)
 })
