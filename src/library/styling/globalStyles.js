@@ -2,6 +2,8 @@ import { createGlobalStyle, css } from 'styled-components'
 import raw from 'raw.macro'
 import theme from '../../theme'
 import { hoverState } from './mediaQueries'
+import '@fontsource/open-sans'
+import '@fontsource/open-sans/700.css'
 
 const toastifyCss = raw('react-toastify/dist/ReactToastify.css')
 
@@ -9,14 +11,15 @@ const GlobalStyle = createGlobalStyle`
     ${toastifyCss}
     :root {
         font-size: 62.5%;
-        color: ${theme.color.black};
     }
     body {
-        background: ${theme.color.backgroundColor};
+        background-color: ${theme.color.backgroundColor};
     }
     body, select, input, textarea, button, p, a{
-        font-family: ${theme.typography.fontStack};
+         font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'; 
         font-size: ${theme.typography.defaultFontSize};
+        color: ${theme.color.textColor};
+        -webkit-font-smoothing: antialiased;
     
     }
     select, input, textarea, p, a{
@@ -31,7 +34,6 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     } 
     a{
-        color: ${theme.color.black};
         text-decoration: underline;
         ${hoverState(css`
           text-decoration: none;

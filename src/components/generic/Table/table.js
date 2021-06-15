@@ -31,7 +31,8 @@ export const TableOverflowWrapper = styled.div`
 
 export const Table = styled.table`
   table-layout: fixed;
-  border-collapse: collapse;
+  background: ${theme.color.secondaryColor};
+  min-width: 100%;
 `
 export const Th = styled.th(
   (props) => css`
