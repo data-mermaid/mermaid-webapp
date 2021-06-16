@@ -9,7 +9,7 @@ import { ContentPageLayout } from '../../../Layout'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
-import InputAutocomplete from '../../../generic/InputAutocomplete'
+import InputDownshift from '../../../generic/InputDownshift'
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
 import MermaidMap from '../../../MermaidMap'
 import { InputWrapper } from '../../../generic/form'
@@ -82,10 +82,11 @@ const Site = () => {
                     type="text"
                     {...formik.getFieldProps('name')}
                   />
-                  <InputAutocomplete
+                  <InputDownshift
                     label="Country"
                     id="country"
                     options={countryOptions}
+                    placeholder="Enter a country"
                     value={formik.getFieldProps('country').value}
                     onChange={(selectedItem) =>
                       formik.setFieldValue('country', selectedItem.value)
