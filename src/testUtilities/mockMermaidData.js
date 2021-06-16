@@ -380,7 +380,9 @@ const managementRegimes = [
   {
     id: '1',
     name: 'Management Regimes A',
+    name_secondary: 'Management Regimes 1',
     est_year: 2021,
+    size: 123,
     compliance: null,
     no_take: true,
     periodic_closure: false,
@@ -389,11 +391,14 @@ const managementRegimes = [
     gear_restriction: true,
     species_restriction: false,
     access_restriction: false,
+    notes: 'Mermaid Management Regimes Notes',
   },
   {
     id: '2',
     name: 'Management Regimes B',
+    name_secondary: 'Management Regimes 2',
     est_year: null,
+    size: 10,
     compliance: '812e9833-c6dd-4dc9-a841-29167cbe7b7e',
     no_take: true,
     periodic_closure: false,
@@ -402,11 +407,14 @@ const managementRegimes = [
     gear_restriction: false,
     species_restriction: true,
     access_restriction: true,
+    notes: 'Some notes',
   },
   {
     id: '3',
     name: 'Management Regimes C',
+    name_secondary: 'Management Regimes 3',
     est_year: 2017,
+    size: null,
     compliance: 'f76d7866-5b0d-428d-928c-738c2912d6e0',
     no_take: false,
     periodic_closure: true,
@@ -415,6 +423,7 @@ const managementRegimes = [
     gear_restriction: false,
     species_restriction: false,
     access_restriction: false,
+    notes: '',
   },
 ]
 
