@@ -8,6 +8,18 @@ const ManagementRegimesMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.managementRegimes)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
+    getManagementRegime = (id) => {
+      if (!id) {
+        Promise.reject(this._operationMissingIdParameterError)
+      }
+
+      return this._isAuthenticatedAndReady
+        ? this.getManagementRegimes().then((records) =>
+            records.find((record) => record.id === id),
+          )
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     getManagementRegimeRecordsForUiDisplay = () => {
       return this._isAuthenticatedAndReady
         ? Promise.all([this.getManagementRegimes(), this.getChoices()]).then(

@@ -588,6 +588,31 @@ const choices = {
       },
     ],
   },
+  managementparties: {
+    name: 'managementparties',
+    data: [
+      {
+        id: 'c1baac4b-6ca2-4a1b-8d74-ec7836629c42',
+        name: 'community/local government',
+        updated_on: '2017-09-27T19:51:10.379499Z',
+      },
+      {
+        id: 'c2035972-572e-43fe-b261-4536793856b5',
+        name: 'government',
+        updated_on: '2017-09-27T19:51:10.379530Z',
+      },
+      {
+        id: 'd9dcb7ea-5d7d-4a29-aa4e-8a59233cbef1',
+        name: 'NGO',
+        updated_on: '2017-09-27T19:51:10.379552Z',
+      },
+      {
+        id: '9dd644f0-886e-49fa-9e98-914297b9f24f',
+        name: 'private sector',
+        updated_on: '2017-09-27T19:51:10.379574Z',
+      },
+    ],
+  },
   managementcompliances: {
     name: 'managementcompliances',
     data: [
