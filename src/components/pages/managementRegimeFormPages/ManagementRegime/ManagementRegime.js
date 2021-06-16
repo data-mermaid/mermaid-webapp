@@ -16,7 +16,7 @@ import { getOptions } from '../../../../library/getOptions'
 const ManagementRegime = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
-  const [managementParties, setManagementParties] = useState([])
+  // const [managementParties, setManagementParties] = useState([])
   const [managementCompliances, setManagementCompliances] = useState([])
   const [
     managementRegimeBeingEdited,
@@ -37,7 +37,7 @@ const ManagementRegime = () => {
       Promise.all(promises)
         .then(([managementRegimeResponse, choicesResponse]) => {
           if (isMounted) {
-            setManagementParties(getOptions(choicesResponse.managementparties))
+            // setManagementParties(getOptions(choicesResponse.managementparties))
             setManagementCompliances(
               getOptions(choicesResponse.managementcompliances),
             )
