@@ -1,45 +1,97 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-
-import Select from 'react-select'
+import styled from 'styled-components'
+import Downshift from 'downshift'
 import { matchSorter } from 'match-sorter'
-import { InputRow } from '../form'
-import language from '../../../language'
+import { Menu, Item } from './InputAutocomplete.styles'
+import { InputRow, Input } from '../form'
 
-const InputAutocomplete = ({ label, id, options, value, onChange }) => {
-  const [customOptions, setCustomOptions] = useState(options)
+const InputWrapper = styled(Input)`
+  width: 100%;
+`
+
+const InputAutocomplete = ({
+  label,
+  id,
+  options,
+  placeholder,
+  value,
+  onChange,
+}) => {
+  const initialValue = options.find((option) => option.value === value) ?? ''
+  const [selectedValue, setSelectedValue] = useState(initialValue.label)
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const initialValue = options.find((option) => option.value === value) ?? ''
+  const getItems = (filter) =>
+    filter
+      ? matchSorter(options, filter, {
+          keys: ['label'],
+        })
+      : options
 
-  const handleInputChange = (inputValue) => {
-    if (inputValue.length > 2) setMenuOpen(true)
-    else setMenuOpen(false)
+  const getStringItems = (filter) =>
+    getItems(filter).map(({ label: itemLabel }) => itemLabel)
 
-    setCustomOptions(
-      matchSorter(options, inputValue, {
-        keys: ['label'],
-      }),
-    )
+  const handleStateChange = (changes) => {
+    if (Object.prototype.hasOwnProperty.call(changes, 'selectedItem')) {
+      setSelectedValue(changes.selectedItem)
+      onChange(changes.selectedItem)
+      setMenuOpen(false)
+    } else if (Object.prototype.hasOwnProperty.call(changes, 'inputValue')) {
+      if (changes.inputValue.length < 3) {
+        setMenuOpen(false)
+      } else if (changes.inputValue === selectedValue) {
+        setMenuOpen(false)
+      } else setMenuOpen(true)
+    }
   }
 
   return (
-    <InputRow>
-      <label htmlFor={id}>{label}</label>
-      <Select
-        menuIsOpen={menuOpen}
-        value={initialValue}
-        noOptionsMessage={() => language.prompt.autocompleteNoResultsMessage}
-        options={customOptions}
-        onChange={onChange}
-        onInputChange={handleInputChange}
-        filterOption={() => true}
-        components={{
-          DropdownIndicator: () => null,
-          IndicatorSeparator: () => null,
-        }}
-      />
-    </InputRow>
+    <Downshift selectedItem={selectedValue} onStateChange={handleStateChange}>
+      {({
+        getRootProps,
+        getInputProps,
+        getMenuProps,
+        getItemProps,
+        selectedItem,
+        inputValue,
+        highlightedIndex,
+      }) => (
+        <InputRow>
+          <label htmlFor={id}>{label}</label>
+          <div
+            {...getRootProps(undefined, {
+              suppressRefError: true,
+            })}
+          >
+            <InputWrapper
+              {...getInputProps({
+                placeholder,
+              })}
+            />
+            <Menu {...getMenuProps({ isOpen: menuOpen })}>
+              {menuOpen
+                ? getStringItems(inputValue).map((item, index) => {
+                    return (
+                      <Item
+                        key={item}
+                        {...getItemProps({
+                          item,
+                          index,
+                          isActive: highlightedIndex === index,
+                          isSelected: selectedItem === item,
+                        })}
+                      >
+                        {item}
+                      </Item>
+                    )
+                  })
+                : null}
+            </Menu>
+          </div>
+        </InputRow>
+      )}
+    </Downshift>
   )
 }
 
@@ -52,8 +104,14 @@ InputAutocomplete.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
-  value: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+}
+
+InputAutocomplete.defaultProps = {
+  value: '',
+  placeholder: 'Search...',
 }
 
 export default InputAutocomplete
