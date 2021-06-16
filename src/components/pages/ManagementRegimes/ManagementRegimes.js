@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState } from 'react'
 
@@ -7,6 +8,7 @@ import { H2 } from '../../generic/text'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { RowSpaceBetween } from '../../generic/positioning'
 import language from '../../../language'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
 import {
   Table,
@@ -69,6 +71,7 @@ const ManagementRegimes = () => {
     }
   }, [databaseSwitchboardInstance])
 
+  const currentProjectPath = useCurrentProjectPath()
   const getIconCheckLabel = (property) => property && <IconCheck />
 
   const tableColumns = useMemo(
@@ -129,8 +132,12 @@ const ManagementRegimes = () => {
 
   const tableCellData = useMemo(
     () =>
-      managementRegimeRecordsForUiDisplay.map(({ uiLabels }) => ({
-        name: uiLabels.name,
+      managementRegimeRecordsForUiDisplay.map(({ id, uiLabels }) => ({
+        name: (
+          <Link to={`${currentProjectPath}/management-regimes/${id}`}>
+            {uiLabels.name}
+          </Link>
+        ),
         estYear: uiLabels.estYear,
         compliance: uiLabels.compliance,
         openAccess: getIconCheckLabel(uiLabels.openAccess),

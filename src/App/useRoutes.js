@@ -6,6 +6,7 @@ import DataSharing from '../components/pages/DataSharing'
 import FishFamilies from '../components/pages/FishFamilies'
 import GraphsAndMaps from '../components/pages/GraphsAndMaps'
 import ManagementRegimes from '../components/pages/ManagementRegimes'
+import ManagementRegime from '../components/pages/ManagementRegime'
 import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Site from '../components/pages/siteFormPages/Site/Site'
@@ -88,6 +89,10 @@ export const useRoutes = ({ currentUser }) => {
     {
       path: '/projects/:projectId/management-regimes',
       Component: ManagementRegimes,
+    },
+    {
+      path: '/projects/:projectId/management-regimes/:managementRegimeId',
+      Component: ManagementRegime,
     },
     {
       path: '/projects/:projectId/users',
