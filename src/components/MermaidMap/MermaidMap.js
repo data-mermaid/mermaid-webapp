@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
 import theme from '../../theme'
-import LegendSlider from '../LegendSlider'
+import LegendSlider from './LegendSlider'
 import {
   satelliteBaseMap,
   applyOpacityExpression,
   loadACALayers,
   geomorphicColors,
   benthicColors,
-} from '../../library/mapService'
+} from './mapService'
 
 const MapWrapper = styled.div`
   height: 400px;
