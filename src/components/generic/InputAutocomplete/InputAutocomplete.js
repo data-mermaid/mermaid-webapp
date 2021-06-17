@@ -29,7 +29,7 @@ const InputAutocomplete = ({
         })
       : options
 
-    filteredItems.map((item) => item.label)
+    return filteredItems.map(({ label: itemLabel }) => itemLabel)
   }
 
   const handleStateChange = (changes) => {
