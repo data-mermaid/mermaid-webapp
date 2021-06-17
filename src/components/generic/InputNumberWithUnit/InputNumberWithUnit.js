@@ -19,6 +19,7 @@ const UnitContainer = styled.span`
 `
 
 const InnerInput = styled(InputNumberNoScroll)`
+  min-width: 50%;
   width: 100%;
   border: none;
   padding: ${theme.spacing.xsmall};

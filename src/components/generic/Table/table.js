@@ -87,4 +87,7 @@ export const Tr = styled.tr`
   ${hoverState(css`
     background-color: ${theme.color.tableRowHover};
   `)}
+  &:focus-within {
+    background-color: ${theme.color.focusWithin};
+  }
 `

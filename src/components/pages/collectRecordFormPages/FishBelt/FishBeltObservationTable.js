@@ -1,12 +1,17 @@
 import React, { useEffect, useReducer, useRef } from 'react'
-
 import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
 import { createUuid } from '../../../../library/createUuid'
 import { fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper } from '../../../generic/form'
-
+import {
+  Table,
+  TableOverflowWrapper,
+  Tr,
+  Td,
+  Th,
+} from '../../../generic/Table/table'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberWithUnit from '../../../generic/InputNumberWithUnit/InputNumberWithUnit'
 
@@ -144,10 +149,10 @@ const FishBeltObservationTable = ({ collectRecord }) => {
     const rowNumber = index + 1
 
     return (
-      <tr key={id}>
-        <td>{rowNumber}</td>
-        <td>Species placeholder</td>
-        <td>
+      <Tr key={id}>
+        <Td>{rowNumber}</Td>
+        <Td>Species placeholder</Td>
+        <Td>
           <InputNumberWithUnit
             type="number"
             min="0"
@@ -161,8 +166,8 @@ const FishBeltObservationTable = ({ collectRecord }) => {
               handleKeyDown({ event, index, observation })
             }}
           />
-        </td>
-        <td>
+        </Td>
+        <Td>
           <InputNumberNoScroll
             type="number"
             min="0"
@@ -175,37 +180,40 @@ const FishBeltObservationTable = ({ collectRecord }) => {
               handleKeyDown({ event, index, observation, isCount: true })
             }}
           />
-        </td>
-        <td>Biomass placeholder</td>
-        <td>
+        </Td>
+        <Td>Biomass placeholder</Td>
+        <Td>
           <ButtonCaution
+            tabIndex="-1"
             type="button"
             onClick={() => handleDeleteObservation(id)}
           >
             <IconClose />
           </ButtonCaution>
-        </td>
-      </tr>
+        </Td>
+      </Tr>
     )
   })
 
   return (
     <InputWrapper>
       <H2>Observations</H2>
-      <table>
-        <thead>
-          <tr>
-            <th> </th>
-            <th>Fish Name</th>
-            <th>Size</th>
-            <th>Count</th>
-            <th>Biomass (kg/ha)</th>
-            <th> </th>
-          </tr>
-        </thead>
+      <TableOverflowWrapper>
+        <Table>
+          <thead>
+            <Tr>
+              <Th> </Th>
+              <Th>Fish Name</Th>
+              <Th>Size</Th>
+              <Th>Count</Th>
+              <Th>Biomass (kg/ha)</Th>
+              <Th> </Th>
+            </Tr>
+          </thead>
 
-        <tbody>{observationsRows}</tbody>
-      </table>
+          <tbody>{observationsRows}</tbody>
+        </Table>
+      </TableOverflowWrapper>
       <ButtonPrimary type="button" onClick={handleAddObservation}>
         <IconPlus /> Add Row
       </ButtonPrimary>
