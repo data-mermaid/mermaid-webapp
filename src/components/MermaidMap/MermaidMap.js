@@ -37,6 +37,9 @@ const MermaidMap = ({
   handleLatitudeChange,
   handleLongitudeChange,
 }) => {
+  // MermaidMap 'remembers' for each machine (doesnt care about multi user)
+  // which layers were selected in the legend and visible on the map from the last visit
+  // using local storage
   const coralMosaicLocalStorage = JSON.parse(
     localStorage.getItem('coral_mosaic'),
   )
