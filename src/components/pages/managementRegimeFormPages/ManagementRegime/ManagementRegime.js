@@ -9,6 +9,7 @@ import { ContentPageLayout } from '../../../Layout'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
+import InputCheckboxWithLabel from '../../../generic/InputCheckboxWithLabel'
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
@@ -16,7 +17,7 @@ import { getOptions } from '../../../../library/getOptions'
 const ManagementRegime = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
-  // const [managementParties, setManagementParties] = useState([])
+  const [managementParties, setManagementParties] = useState([])
   const [managementCompliances, setManagementCompliances] = useState([])
   const [
     managementRegimeBeingEdited,
@@ -37,7 +38,7 @@ const ManagementRegime = () => {
       Promise.all(promises)
         .then(([managementRegimeResponse, choicesResponse]) => {
           if (isMounted) {
-            // setManagementParties(getOptions(choicesResponse.managementparties))
+            setManagementParties(getOptions(choicesResponse.managementparties))
             setManagementCompliances(
               getOptions(choicesResponse.managementcompliances),
             )
@@ -98,6 +99,15 @@ const ManagementRegime = () => {
                     id="size"
                     type="number"
                     {...formik.getFieldProps('size')}
+                  />
+                  <InputCheckboxWithLabel
+                    label="Parties"
+                    id="parties"
+                    options={managementParties}
+                    value={formik.getFieldProps('parties').value}
+                    onChange={(selectedItems) => {
+                      formik.setFieldValue('parties', selectedItems)
+                    }}
                   />
                   <InputRadioWithLabelAndValidation
                     label="Compliance"

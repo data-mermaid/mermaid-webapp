@@ -4,6 +4,7 @@ const getManagementRegimeInitialValues = (managementRegimeRecord) => {
     name_secondary: managementRegimeRecord?.name_secondary ?? '',
     est_year: managementRegimeRecord?.est_year ?? '',
     size: managementRegimeRecord?.size ?? '',
+    parties: managementRegimeRecord?.parties ?? [],
     compliance: managementRegimeRecord?.compliance ?? '',
     notes: managementRegimeRecord?.notes ?? '',
   }
