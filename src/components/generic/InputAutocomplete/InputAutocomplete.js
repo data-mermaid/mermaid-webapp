@@ -22,28 +22,28 @@ const InputAutocomplete = ({
   const [selectedValue, setSelectedValue] = useState(initialValue.label)
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const getItems = (filter) =>
-    filter
-      ? matchSorter(options, filter, {
+  const getfilteredMenuOptions = (inputValue) => {
+    const filteredItems = inputValue
+      ? matchSorter(options, inputValue, {
           keys: ['label'],
         })
       : options
 
-  const getStringItems = (filter) =>
-    getItems(filter).map(({ label: itemLabel }) => itemLabel)
+    return filteredItems.map(({ label: itemLabel }) => itemLabel)
+  }
 
   const handleStateChange = (changes) => {
-    console.log(changes)
-    if (Object.prototype.hasOwnProperty.call(changes, 'selectedItem')) {
-      setSelectedValue(changes.selectedItem)
-      onChange(changes.selectedItem)
+    const { selectedItem, inputValue } = changes
+    const shouldMenuBeOpen =
+      inputValue?.length >= 3 && inputValue !== selectedValue
+
+    if (selectedItem) {
+      setSelectedValue(selectedItem)
+      onChange(selectedItem)
       setMenuOpen(false)
-    } else if (Object.prototype.hasOwnProperty.call(changes, 'inputValue')) {
-      if (changes.inputValue.length < 3) {
-        setMenuOpen(false)
-      } else if (changes.inputValue === selectedValue) {
-        setMenuOpen(false)
-      } else setMenuOpen(true)
+    }
+    if (!selectedItem && inputValue) {
+      setMenuOpen(shouldMenuBeOpen)
     }
   }
 
@@ -72,7 +72,7 @@ const InputAutocomplete = ({
             />
             <Menu {...getMenuProps({ isOpen: menuOpen })}>
               {menuOpen
-                ? getStringItems(inputValue).map((item, index) => {
+                ? getfilteredMenuOptions(inputValue).map((item, index) => {
                     return (
                       <Item
                         key={item}
