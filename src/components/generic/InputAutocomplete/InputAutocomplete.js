@@ -33,6 +33,7 @@ const InputAutocomplete = ({
     getItems(filter).map(({ label: itemLabel }) => itemLabel)
 
   const handleStateChange = (changes) => {
+    console.log(changes)
     if (Object.prototype.hasOwnProperty.call(changes, 'selectedItem')) {
       setSelectedValue(changes.selectedItem)
       onChange(changes.selectedItem)
