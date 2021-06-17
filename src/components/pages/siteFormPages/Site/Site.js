@@ -86,6 +86,7 @@ const Site = () => {
                     label="Country"
                     id="country"
                     options={countryOptions}
+                    placeholder="Enter a country"
                     value={formik.getFieldProps('country').value}
                     onChange={(selectedItem) =>
                       formik.setFieldValue('country', selectedItem.value)
