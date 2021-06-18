@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { Select } from '../../../generic/form'
 import { fishBeltBins } from './fishBeltBins'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
+import { getClosestNumberInArray } from '../../../../library/arrays/getClosestNumberInArray'
 
 export const FishBeltObservationSizeSelect = ({
   onChange,
@@ -13,8 +14,12 @@ export const FishBeltObservationSizeSelect = ({
 }) => {
   const binsToUse = fishBeltBins[fishBinSelectedLabel] ?? []
   const isValue50OrMore = value >= 50
-  const optionSelected = isValue50OrMore ? 50 : value
-  console.log(optionSelected, binsToUse, fishBinSelectedLabel)
+  const optionValues = binsToUse.map((bin) => bin.value)
+
+  const optionValueToSelect = isValue50OrMore
+    ? 50
+    : getClosestNumberInArray(value, optionValues)
+
   const [show50PlusInput, setShow50PlusInput] = useState(isValue50OrMore)
   const [plus50Value, setPlus50Value] = useState(value >= 50 ? value : 50)
 
@@ -38,7 +43,7 @@ export const FishBeltObservationSizeSelect = ({
     <>
       <Select
         onChange={handleSelectOnChange}
-        defaultValue={optionSelected}
+        value={optionValueToSelect}
         aria-labelledby={labelledBy}
       >
         {binsToUse.map(({ value: optionValue, label }) => {

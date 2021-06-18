@@ -159,7 +159,7 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   expect(within(observationRows[3]).getByDisplayValue('0 - 5'))
   expect(within(observationRows[3]).getByDisplayValue('4'))
 })
-test.only('FishBelt component in EDIT mode - form inputs are initialized with the correct values, binsize = 10', async () => {
+test('FishBelt component in EDIT mode - form inputs are initialized with the correct values, binsize = 10', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
@@ -187,7 +187,7 @@ test.only('FishBelt component in EDIT mode - form inputs are initialized with th
   expect(within(observationRows[1]).getByDisplayValue('53'))
 
   // observation record #2
-  expect(within(observationRows[2]).getByDisplayValue('10 - 20'))
+  expect(await within(observationRows[2]).findByDisplayValue('10 - 20'))
 
   // observation record #3
   expect(within(observationRows[3]).getByDisplayValue('0 - 10'))
@@ -221,7 +221,7 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   expect(within(observationRows[1]).getByDisplayValue('53'))
 
   // observation record #2
-  expect(within(observationRows[2]).getByDisplayValue('11 - 20'))
+  expect(await within(observationRows[2]).findByDisplayValue('11 - 20'))
 
   // observation record #3
   expect(within(observationRows[3]).getByDisplayValue('0 - 5'))
@@ -257,7 +257,7 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   expect(within(observationRows[1]).getByDisplayValue('53'))
 
   // observation record #2
-  expect(within(observationRows[2]).getByDisplayValue('12.5'))
+  expect(await within(observationRows[2]).findByDisplayValue('12.5'))
 
   // observation record #3
   expect(within(observationRows[3]).getByDisplayValue('2.5'))
