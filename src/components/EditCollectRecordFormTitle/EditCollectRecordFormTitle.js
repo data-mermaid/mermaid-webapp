@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { H2 } from '../generic/text'
 import { getProtocolName } from '../../library/getProtocolName'
-import { getObjectById } from '../../library/getObjectById'
+import { getObjectById } from '../../library/arrays/getObjectById'
 import {
   fishBeltPropType,
   sitePropType,

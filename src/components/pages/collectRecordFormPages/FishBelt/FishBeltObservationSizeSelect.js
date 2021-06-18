@@ -14,6 +14,7 @@ export const FishBeltObservationSizeSelect = ({
   const binsToUse = fishBeltBins[fishBinSelectedLabel] ?? []
   const isValue50OrMore = value >= 50
   const optionSelected = isValue50OrMore ? 50 : value
+  console.log(optionSelected, binsToUse, fishBinSelectedLabel)
   const [show50PlusInput, setShow50PlusInput] = useState(isValue50OrMore)
   const [plus50Value, setPlus50Value] = useState(value >= 50 ? value : 50)
 

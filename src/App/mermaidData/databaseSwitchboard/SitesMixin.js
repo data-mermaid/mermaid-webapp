@@ -1,4 +1,4 @@
-import { getObjectById } from '../../../library/getObjectById'
+import { getObjectById } from '../../../library/arrays/getObjectById'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const SitesMixin = (Base) =>

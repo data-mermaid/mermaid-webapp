@@ -8,7 +8,7 @@ import {
 import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
-import { getObjectById } from '../../../../library/getObjectById'
+import { getObjectById } from '../../../../library/arrays/getObjectById'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus, IconRequired } from '../../../icons'
 import { InputWrapper } from '../../../generic/form'
