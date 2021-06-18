@@ -107,7 +107,7 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
   expect(screen.getByRole('button', { name: /Delete Record/i })).toBeDisabled()
 })
 
-test('FishBelt component in EDIT mode - form inputs are initialized with the correct values', async () => {
+test('FishBelt component in EDIT mode - form inputs are initialized with the correct values, binsize = 5', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
@@ -158,6 +158,109 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   // observation record #3
   expect(within(observationRows[3]).getByDisplayValue('0 - 5'))
   expect(within(observationRows[3]).getByDisplayValue('4'))
+})
+test.only('FishBelt component in EDIT mode - form inputs are initialized with the correct values, binsize = 10', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+  const fishbeltForm = screen.getByRole('form')
+
+  const radioToSelect = within(fishbeltForm).getByLabelText('10')
+
+  userEvent.click(radioToSelect)
+
+  const observationsTable = screen.getByLabelText('Observations')
+
+  const observationRows = within(observationsTable).getAllByRole('row')
+
+  // observation record #1
+  expect(within(observationRows[1]).getByDisplayValue('50+'))
+  expect(within(observationRows[1]).getByDisplayValue('53'))
+
+  // observation record #2
+  expect(within(observationRows[2]).getByDisplayValue('10 - 20'))
+
+  // observation record #3
+  expect(within(observationRows[3]).getByDisplayValue('0 - 10'))
+})
+test('FishBelt component in EDIT mode - form inputs are initialized with the correct values, binsize = AGRRA', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const fishbeltForm = screen.getByRole('form')
+
+  const radioToSelect = within(fishbeltForm).getByLabelText('AGRRA')
+
+  userEvent.click(radioToSelect)
+
+  const observationsTable = screen.getByLabelText('Observations')
+
+  const observationRows = within(observationsTable).getAllByRole('row')
+
+  // observation record #1
+  expect(within(observationRows[1]).getByDisplayValue('50+'))
+  expect(within(observationRows[1]).getByDisplayValue('53'))
+
+  // observation record #2
+  expect(within(observationRows[2]).getByDisplayValue('11 - 20'))
+
+  // observation record #3
+  expect(within(observationRows[3]).getByDisplayValue('0 - 5'))
+})
+test('FishBelt component in EDIT mode - form inputs are initialized with the correct values, binsize = 1', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+  const fishbeltForm = screen.getByRole('form')
+
+  const radioToSelect = within(fishbeltForm).getByLabelText('1')
+
+  userEvent.click(radioToSelect)
+
+  const observationsTable = screen.getByLabelText('Observations')
+
+  const observationRows = within(observationsTable).getAllByRole('row')
+
+  // three rows + one header row = 4
+  expect(observationRows.length).toEqual(4)
+
+  // observation record #1
+
+  expect(within(observationRows[1]).getByDisplayValue('53'))
+
+  // observation record #2
+  expect(within(observationRows[2]).getByDisplayValue('12.5'))
+
+  // observation record #3
+  expect(within(observationRows[3]).getByDisplayValue('2.5'))
 })
 
 test('FishBelt component in EDIT mode - button group shows save, validate and submit buttons when online', async () => {
