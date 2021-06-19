@@ -18,7 +18,6 @@ const CheckBoxLabel = styled.label`
   width: 100%;
   display: inline-block;
   input {
-    margin: 0 ${theme.spacing.xsmall} 0 0;
     cursor: pointer;
   }
 `
@@ -29,6 +28,11 @@ const RadioLabel = styled.label`
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
     cursor: pointer;
+  }
+  span {
+    display: block;
+    font-size: x-small;
+    padding-left: ${theme.spacing.medium};
   }
 `
 
@@ -108,7 +112,7 @@ const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
           checked={managementRulesStates.includes(item)}
           onChange={handlePartialRestrictionChoicesChange}
         />
-        <label htmlFor={item}>{partial_restriction_choices[item]}</label>
+        <span htmlFor={item}>{partial_restriction_choices[item]}</span>
       </CheckBoxLabel>
     ))
 
@@ -116,16 +120,19 @@ const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
     <InputRow>
       <label htmlFor={id}>{label}</label>
       <div>
-        <RadioLabel htmlFor="open-access">
-          <input
-            type="radio"
-            id="open-access"
-            value="open_access"
-            checked={managementRulesStates.includes('open_access')}
-            onChange={handleManagementRulesChange}
-          />
-          Open Access
-        </RadioLabel>
+        <div>
+          <RadioLabel htmlFor="open-access">
+            <input
+              type="radio"
+              id="open-access"
+              value="open_access"
+              checked={managementRulesStates.includes('open_access')}
+              onChange={handleManagementRulesChange}
+            />
+            Open Access
+            <span>Open for fishing and entering</span>
+          </RadioLabel>
+        </div>
         <div>
           <RadioLabel htmlFor="no-take">
             <input
@@ -136,6 +143,7 @@ const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
               onChange={handleManagementRulesChange}
             />
             No Take
+            <span>Total extraction ban</span>
           </RadioLabel>
         </div>
         <div>
@@ -148,6 +156,10 @@ const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
               onChange={handleManagementRulesChange}
             />
             Partial Restrictions
+            <span>
+              e.g. periodic closures, size limits, gear restrictions, species
+              restrictions
+            </span>
           </RadioLabel>
           {showPartialRestrictionChoices}
         </div>
