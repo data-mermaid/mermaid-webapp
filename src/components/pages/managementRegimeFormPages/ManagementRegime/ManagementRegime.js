@@ -11,6 +11,7 @@ import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValid
 import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
 import InputCheckboxWithLabel from '../../../generic/InputCheckboxWithLabel'
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import ManagementRulesInput from '../ManagementRulesInput'
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 
@@ -107,6 +108,12 @@ const ManagementRegime = () => {
                     value={formik.getFieldProps('parties').value}
                     onChange={(selectedItems) => {
                       formik.setFieldValue('parties', selectedItems)
+                    }}
+                  />
+                  <ManagementRulesInput
+                    managementRulesObj={formik.getFieldProps('rules').value}
+                    onChange={(selectedItems) => {
+                      formik.setFieldValue('rules', selectedItems)
                     }}
                   />
                   <InputRadioWithLabelAndValidation
