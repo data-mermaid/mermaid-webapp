@@ -1,8 +1,32 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import theme from '../../../theme'
 
-import { Input, InputRow, ValidationMessage } from '../form'
+import {
+  Input,
+  InputRow,
+  InputTextareaSelectStyles,
+  ValidationMessage,
+} from '../form'
 import { useNoInputScrolling } from '../../../library/useNoInputScrolling'
+
+const InputNumberWithUnit = styled.div`
+  ${InputTextareaSelectStyles}
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+`
+
+const InnerInput = styled(Input)`
+  border: none;
+  padding: ${theme.spacing.xsmall};
+`
+
+const UnitContainer = styled.span`
+  background: #eeeeee;
+  padding: ${theme.spacing.xsmall};
+`
 
 const InputWithLabelAndValidation = ({
   label,
@@ -11,14 +35,25 @@ const InputWithLabelAndValidation = ({
   validationType,
   ...restOfProps
 }) => {
+  const { type, unit } = restOfProps
   const textFieldRef = useRef()
 
   useNoInputScrolling(textFieldRef)
 
+  const inputType =
+    type === 'number' ? (
+      <InputNumberWithUnit>
+        <InnerInput id={id} {...restOfProps} ref={textFieldRef} />
+        {unit && <UnitContainer>ha</UnitContainer>}
+      </InputNumberWithUnit>
+    ) : (
+      <Input id={id} {...restOfProps} ref={textFieldRef} />
+    )
+
   return (
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
-      <Input id={id} {...restOfProps} ref={textFieldRef} />
+      {inputType}
       <div>
         {validationMessage ? (
           <ValidationMessage validationType={validationType}>

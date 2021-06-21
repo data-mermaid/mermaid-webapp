@@ -98,6 +98,7 @@ const ManagementRegime = () => {
                     label="Area"
                     id="size"
                     type="number"
+                    unit="ha"
                     {...formik.getFieldProps('size')}
                   />
                   <InputCheckboxWithLabel
