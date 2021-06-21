@@ -9,11 +9,11 @@ import {
   LegendBody,
   LegendColor,
   CheckBoxLabel,
-} from './LegendSlider.styles'
+} from './LegendDrawer.styles'
 import { IconExternalLink } from '../icons'
 import { geomorphicColors, benthicColors } from '../../library/mapService'
 
-const InputCheckbox = ({
+const LegendCheckbox = ({
   labelName,
   checked,
   bgColor,
@@ -35,7 +35,7 @@ const InputCheckbox = ({
   )
 }
 
-const LegendSlider = ({
+const LegendDrawer = ({
   coralMosaicLayer,
   geomorphicLayer,
   allGeomorphicLayersChecked,
@@ -55,7 +55,7 @@ const LegendSlider = ({
 
   const geomorphicList = geomorphicLayer.map((geomorphicObj) => {
     return (
-      <InputCheckbox
+      <LegendCheckbox
         key={geomorphicObj.name}
         bgColor={geomorphicColors[geomorphicObj.name]}
         labelName={geomorphicObj.name}
@@ -68,7 +68,7 @@ const LegendSlider = ({
 
   const benthicOptions = benthicLayer.map((benthicObj) => {
     return (
-      <InputCheckbox
+      <LegendCheckbox
         key={benthicObj.name}
         bgColor={benthicColors[benthicObj.name]}
         labelName={benthicObj.name}
@@ -80,11 +80,11 @@ const LegendSlider = ({
   })
 
   return (
-    <SliderContainer open={navbarOpen}>
+    <SliderContainer isOpen={navbarOpen}>
       <SliderHandler onClick={handleNavbarOpen}>
         <SliderHandlerName>Allen&nbsp;Coral&nbsp;Atlas</SliderHandlerName>
       </SliderHandler>
-      <SliderLegendPanel open={navbarOpen}>
+      <SliderLegendPanel isOpen={navbarOpen}>
         <LegendHeader>
           Allen Coral Atlas{' '}
           <a
@@ -96,14 +96,14 @@ const LegendSlider = ({
           </a>
         </LegendHeader>
         <LegendBody>
-          <InputCheckbox
+          <LegendCheckbox
             labelName="Satellite Coral Reef Mosaic"
             checked={coralMosaicLayer === 1}
             handleCheckboxChange={handleCoralMosaicLayer}
           />
           <details open>
             <summary>
-              <InputCheckbox
+              <LegendCheckbox
                 labelName="Geomorphic Analysis"
                 checked={allGeomorphicLayersChecked}
                 handleCheckboxChange={handleSelectAllGeomorphicLayers}
@@ -113,7 +113,7 @@ const LegendSlider = ({
           </details>
           <details open>
             <summary>
-              <InputCheckbox
+              <LegendCheckbox
                 labelName="Benthic Analysis"
                 checked={allBenthicLayersChecked}
                 handleCheckboxChange={handleSelectAllBenthicLayers}
@@ -127,7 +127,7 @@ const LegendSlider = ({
   )
 }
 
-LegendSlider.propTypes = {
+LegendDrawer.propTypes = {
   coralMosaicLayer: PropTypes.number.isRequired,
   geomorphicLayer: PropTypes.arrayOf(
     PropTypes.shape({ name: PropTypes.string, selected: PropTypes.bool }),
@@ -144,7 +144,7 @@ LegendSlider.propTypes = {
   handleSelectAllBenthicLayers: PropTypes.func.isRequired,
 }
 
-InputCheckbox.propTypes = {
+LegendCheckbox.propTypes = {
   labelName: PropTypes.string.isRequired,
   checked: PropTypes.bool,
   bgColor: PropTypes.string,
@@ -152,12 +152,12 @@ InputCheckbox.propTypes = {
   handleCheckboxChange: PropTypes.func,
 }
 
-InputCheckbox.defaultProps = {
+LegendCheckbox.defaultProps = {
   checked: false,
   bgColor: '',
   fullWidth: false,
   handleCheckboxChange: () => {},
 }
-LegendSlider.propTypes = {}
+LegendDrawer.propTypes = {}
 
-export default LegendSlider
+export default LegendDrawer

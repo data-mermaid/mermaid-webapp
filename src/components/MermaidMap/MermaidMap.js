@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
 import theme from '../../theme'
-import LegendSlider from '../LegendSlider'
+import LegendSlider from '../LegendDrawer'
 import {
   satelliteBaseMap,
   applyOpacityExpression,
@@ -24,8 +24,8 @@ const MapContainer = styled.div`
   overflow: hidden;
 `
 
-const geomorphicKeyNameArray = Object.keys(geomorphicColors)
-const benthicKeyNameArray = Object.keys(benthicColors)
+const geomorphicKeyNames = Object.keys(geomorphicColors)
+const benthicKeyNames = Object.keys(benthicColors)
 
 const recordMarker = new maplibregl.Marker({ draggable: true })
 const defaultCenter = [0, 0]
@@ -62,19 +62,19 @@ const MermaidMap = ({
     coralMosaicLocalStorage !== null ? coralMosaicLocalStorage : 1,
   )
   const [geomorphicLayer, setGeomorphicLayer] = useState(
-    loadLegendArrayLayer(geomorphicLocalStorage, geomorphicKeyNameArray),
+    loadLegendArrayLayer(geomorphicLocalStorage, geomorphicKeyNames),
   )
   const [allGeomorphicLayersChecked, setAllGeomorphicLayersChecked] = useState(
     geomorphicLocalStorage
-      ? geomorphicLocalStorage.length === geomorphicKeyNameArray.length
+      ? geomorphicLocalStorage.length === geomorphicKeyNames.length
       : true,
   )
   const [benthicLayer, setBenthicLayer] = useState(
-    loadLegendArrayLayer(benthicLocalStorage, benthicKeyNameArray),
+    loadLegendArrayLayer(benthicLocalStorage, benthicKeyNames),
   )
   const [allBenthicLayersChecked, setAllBenthicLayersChecked] = useState(
     benthicLocalStorage
-      ? benthicLocalStorage.length === benthicKeyNameArray.length
+      ? benthicLocalStorage.length === benthicKeyNames.length
       : true,
   )
 
