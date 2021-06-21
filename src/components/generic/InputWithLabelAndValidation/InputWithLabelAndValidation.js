@@ -21,9 +21,11 @@ const InputNumberWithUnit = styled.div`
 const InnerInput = styled(Input)`
   border: none;
   padding: ${theme.spacing.xsmall};
+  flex-grow: 1;
 `
 
 const UnitContainer = styled.span`
+  width: 32px;
   background: #eeeeee;
   padding: ${theme.spacing.xsmall};
 `
@@ -35,20 +37,19 @@ const InputWithLabelAndValidation = ({
   validationType,
   ...restOfProps
 }) => {
-  const { type, unit } = restOfProps
+  const { unit } = restOfProps
   const textFieldRef = useRef()
 
   useNoInputScrolling(textFieldRef)
 
-  const inputType =
-    type === 'number' ? (
-      <InputNumberWithUnit>
-        <InnerInput id={id} {...restOfProps} ref={textFieldRef} />
-        {unit && <UnitContainer>ha</UnitContainer>}
-      </InputNumberWithUnit>
-    ) : (
-      <Input id={id} {...restOfProps} ref={textFieldRef} />
-    )
+  const inputType = unit ? (
+    <InputNumberWithUnit>
+      <InnerInput id={id} {...restOfProps} ref={textFieldRef} />
+      <UnitContainer>ha</UnitContainer>
+    </InputNumberWithUnit>
+  ) : (
+    <Input id={id} {...restOfProps} ref={textFieldRef} />
+  )
 
   return (
     <InputRow validationType={validationType}>
