@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
 import theme from '../../theme'
-import LegendSlider from '../LegendDrawer'
+import LegendDrawer from './LegendDrawer'
 import {
   satelliteBaseMap,
   applyOpacityExpression,
   loadACALayers,
   geomorphicColors,
   benthicColors,
-} from '../../library/mapService'
+} from './mapService'
 
 const MapWrapper = styled.div`
   height: 400px;
@@ -37,6 +37,9 @@ const MermaidMap = ({
   handleLatitudeChange,
   handleLongitudeChange,
 }) => {
+  // MermaidMap 'remembers' for each machine (doesnt care about multi user)
+  // which layers were selected in the legend and visible on the map from the last visit
+  // using local storage
   const coralMosaicLocalStorage = JSON.parse(
     localStorage.getItem('coral_mosaic'),
   )
@@ -277,7 +280,7 @@ const MermaidMap = ({
   return (
     <MapContainer>
       <MapWrapper ref={mapContainer} />
-      <LegendSlider
+      <LegendDrawer
         coralMosaicLayer={coralMosaicLayer}
         geomorphicLayer={geomorphicLayer}
         allGeomorphicLayersChecked={allGeomorphicLayersChecked}

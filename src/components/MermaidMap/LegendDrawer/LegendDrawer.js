@@ -10,8 +10,8 @@ import {
   LegendColor,
   CheckBoxLabel,
 } from './LegendDrawer.styles'
-import { IconExternalLink } from '../icons'
-import { geomorphicColors, benthicColors } from '../../library/mapService'
+import { IconExternalLink } from '../../icons'
+import { geomorphicColors, benthicColors } from '../mapService'
 
 const LegendCheckbox = ({
   labelName,
