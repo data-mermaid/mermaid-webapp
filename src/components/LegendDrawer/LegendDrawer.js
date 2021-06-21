@@ -47,10 +47,10 @@ const LegendDrawer = ({
   handleBenthicOption,
   handleSelectAllBenthicLayers,
 }) => {
-  const [navbarOpen, setNavbarOpen] = useState(true)
+  const [drawerOpen, setDrawerOpen] = useState(true)
 
-  const handleNavbarOpen = () => {
-    setNavbarOpen(!navbarOpen)
+  const handleLegendVisibilityToggle = () => {
+    setDrawerOpen(!drawerOpen)
   }
 
   const geomorphicList = geomorphicLayer.map((geomorphicObj) => {
@@ -80,11 +80,11 @@ const LegendDrawer = ({
   })
 
   return (
-    <SliderContainer isOpen={navbarOpen}>
-      <SliderHandler onClick={handleNavbarOpen}>
+    <SliderContainer isOpen={drawerOpen}>
+      <SliderHandler onClick={handleLegendVisibilityToggle}>
         <SliderHandlerName>Allen&nbsp;Coral&nbsp;Atlas</SliderHandlerName>
       </SliderHandler>
-      <SliderLegendPanel isOpen={navbarOpen}>
+      <SliderLegendPanel isOpen={drawerOpen}>
         <LegendHeader>
           Allen Coral Atlas{' '}
           <a
