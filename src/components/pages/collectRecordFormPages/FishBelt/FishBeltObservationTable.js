@@ -152,7 +152,7 @@ const FishBeltObservationTable = ({ collectRecord }) => {
       <Tr key={id}>
         <Td>{rowNumber}</Td>
         <Td>Species placeholder</Td>
-        <Td>
+        <Td align="right">
           <InputNumberWithUnit
             type="number"
             min="0"
@@ -167,7 +167,7 @@ const FishBeltObservationTable = ({ collectRecord }) => {
             }}
           />
         </Td>
-        <Td>
+        <Td align="right">
           <InputNumberNoScroll
             type="number"
             min="0"
@@ -204,8 +204,8 @@ const FishBeltObservationTable = ({ collectRecord }) => {
             <Tr>
               <Th> </Th>
               <Th>Fish Name</Th>
-              <Th>Size</Th>
-              <Th>Count</Th>
+              <Th align="right">Size</Th>
+              <Th align="right">Count</Th>
               <Th>Biomass (kg/ha)</Th>
               <Th> </Th>
             </Tr>

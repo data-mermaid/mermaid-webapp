@@ -10,9 +10,17 @@ export const InputTextareaSelectStyles = css`
   height: fit-content;
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
   background-color: ${theme.color.inputBackground};
+  text-align: inherit;
+  min-width: 50%;
+  width: 100%;
   &:focus {
     outline: ${theme.color.outline};
   }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  -moz-appearance: textfield;
 `
 
 export const InputRow = styled.div`

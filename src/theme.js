@@ -67,6 +67,7 @@ const color = {
   tableRowEven: '#f8f8fa',
   tableRowHover: '#f1f1f4',
   focusWithin: secondary,
+  unitBackground: white.mix(colorHelper(black), 0.1),
   inputBackground: white,
   outline: `solid 2px ${primary}`,
 }
