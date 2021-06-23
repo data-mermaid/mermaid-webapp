@@ -61,6 +61,7 @@ const InputAutocomplete = ({
         <InputRow>
           <label htmlFor={id}>{label}</label>
           <div
+            style={{ position: 'relative' }}
             {...getRootProps(undefined, {
               suppressRefError: true,
             })}

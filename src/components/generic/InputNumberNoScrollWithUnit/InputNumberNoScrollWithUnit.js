@@ -15,13 +15,14 @@ const InputContainer = styled.div`
 
 const UnitContainer = styled.span`
   width: 33px;
-  background: magenta;
+  background: ${theme.color.unitBackground};
   padding: ${theme.spacing.xsmall};
+  margin: 0 0 0 ${theme.spacing.borderMedium};
 `
 
 const InnerInput = styled(InputNumberNoScroll)`
-  width: 100%;
   border: none;
+  text-align: inherit;
   padding: ${theme.spacing.xsmall};
 `
 
