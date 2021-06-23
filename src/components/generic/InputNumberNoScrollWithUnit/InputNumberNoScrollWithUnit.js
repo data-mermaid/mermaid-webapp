@@ -14,17 +14,19 @@ const InputContainer = styled.div`
 `
 
 const UnitContainer = styled.span`
-  background: magenta;
+  width: 33px;
+  background: ${theme.color.unitBackground};
   padding: ${theme.spacing.xsmall};
+  margin: 0 0 0 ${theme.spacing.borderMedium};
 `
 
 const InnerInput = styled(InputNumberNoScroll)`
-  width: 100%;
   border: none;
+  text-align: inherit;
   padding: ${theme.spacing.xsmall};
 `
 
-const InputNumberWithUnit = ({ unit, ...restOfProps }) => {
+const InputNumberNoScrollWithUnit = ({ unit, ...restOfProps }) => {
   return (
     <InputContainer>
       <InnerInput {...restOfProps} />
@@ -33,6 +35,6 @@ const InputNumberWithUnit = ({ unit, ...restOfProps }) => {
   )
 }
 
-InputNumberWithUnit.propTypes = { unit: PropTypes.string.isRequired }
+InputNumberNoScrollWithUnit.propTypes = { unit: PropTypes.string.isRequired }
 
-export default InputNumberWithUnit
+export default InputNumberNoScrollWithUnit

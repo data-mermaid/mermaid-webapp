@@ -80,7 +80,7 @@ const collectRecords = [
       observers: [{ profile_name: 'Nick' }],
       obs_belt_fishes: [
         {
-          size: 12.5,
+          size: 53,
           count: 1,
           alt_size: 12.5,
           size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',

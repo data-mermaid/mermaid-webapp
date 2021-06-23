@@ -18,14 +18,14 @@ const CheckBoxLabel = styled.label`
 const InputCheckboxWithLabel = ({ label, id, options, value, onChange }) => {
   const [checkboxItems, setCheckboxItems] = useState(value)
 
-  const handleCheckboxGroupChange = (temp) => {
+  const handleCheckboxGroupChange = (itemValue) => {
     const updateCheckboxItems = [...checkboxItems]
-    const foundItemIndex = updateCheckboxItems.indexOf(temp)
+    const foundItemIndex = updateCheckboxItems.indexOf(itemValue)
 
     if (foundItemIndex > -1) {
       updateCheckboxItems.splice(foundItemIndex, 1)
     } else {
-      updateCheckboxItems.push(temp)
+      updateCheckboxItems.push(itemValue)
     }
 
     setCheckboxItems(updateCheckboxItems)

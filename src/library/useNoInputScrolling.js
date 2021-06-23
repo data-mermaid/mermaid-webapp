@@ -7,7 +7,7 @@ export const useNoInputScrolling = (inputRef) => {
     // on unmount
     const snapshotOfRef = inputRef.current
 
-    snapshotOfRef.addEventListener('wheel', handleWheel)
+    if (snapshotOfRef) snapshotOfRef.addEventListener('wheel', handleWheel)
 
     return () => {
       if (snapshotOfRef) snapshotOfRef.removeEventListener('wheel', handleWheel)
