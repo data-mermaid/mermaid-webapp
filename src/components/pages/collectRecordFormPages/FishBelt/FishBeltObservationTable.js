@@ -12,6 +12,13 @@ import { getObjectById } from '../../../../library/getObjectById'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus, IconRequired } from '../../../icons'
 import { InputWrapper } from '../../../generic/form'
+import {
+  Table,
+  TableOverflowWrapper,
+  Tr,
+  Td,
+  Th,
+} from '../../../generic/Table/table'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 
@@ -134,11 +141,11 @@ const FishBeltObservationTable = ({
     )
 
     return (
-      <tr key={observationId}>
-        <td>{rowNumber}</td>
-        <td>Species placeholder</td>
-        <td>{sizeInput}</td>
-        <td>
+      <Tr key={observationId}>
+        <Td>{rowNumber}</Td>
+        <Td>Species placeholder</Td>
+        <Td align="right">{sizeInput}</Td>
+        <Td align="right">
           <InputNumberNoScroll
             type="number"
             min="0"
@@ -151,44 +158,47 @@ const FishBeltObservationTable = ({
               handleKeyDown({ event, index, observation, isCount: true })
             }}
           />
-        </td>
-        <td>Biomass placeholder</td>
-        <td>
+        </Td>
+        <Td>Biomass placeholder</Td>
+        <Td>
           <ButtonCaution
+            tabIndex="-1"
             type="button"
             onClick={() => handleDeleteObservation(observationId)}
             aria-label="Delete Observation"
           >
             <IconClose />
           </ButtonCaution>
-        </td>
-      </tr>
+        </Td>
+      </Tr>
     )
   })
 
   return (
     <InputWrapper>
       <H2 id="table-label">Observations</H2>
-      <table aria-labelledby="table-label">
-        <thead>
-          <tr>
-            <th> </th>
-            <th id="species-label">
-              Fish Name <IconRequired />
-            </th>
-            <th id="fish-size-label">
-              Size <IconRequired />
-            </th>
-            <th id="fish-count-label">
-              Count <IconRequired />
-            </th>
-            <th>Biomass (kg/ha)</th>
-            <th> </th>
-          </tr>
-        </thead>
+      <TableOverflowWrapper>
+        <Table aria-labelledby="table-label">
+          <thead>
+            <Tr>
+              <Th> </Th>
+              <Th id="species-label">
+                Fish Name <IconRequired />
+              </Th>
+              <Th align="right" id="fish-size-label">
+                Size <IconRequired />
+              </Th>
+              <Th align="right" id="fish-count-label">
+                Count <IconRequired />
+              </Th>
+              <Th>Biomass (kg/ha)</Th>
+              <Th> </Th>
+            </Tr>
+          </thead>
 
-        <tbody>{observationsRows}</tbody>
-      </table>
+          <tbody>{observationsRows}</tbody>
+        </Table>
+      </TableOverflowWrapper>
       <ButtonPrimary type="button" onClick={handleAddObservation}>
         <IconPlus /> Add Row
       </ButtonPrimary>
