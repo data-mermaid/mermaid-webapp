@@ -25,7 +25,7 @@ const InnerInput = styled(InputNumberNoScroll)`
   padding: ${theme.spacing.xsmall};
 `
 
-const InputNumberWithUnit = ({ unit, ...restOfProps }) => {
+const InputNumberNoScrollWithUnit = ({ unit, ...restOfProps }) => {
   return (
     <InputContainer>
       <InnerInput {...restOfProps} />
@@ -34,6 +34,6 @@ const InputNumberWithUnit = ({ unit, ...restOfProps }) => {
   )
 }
 
-InputNumberWithUnit.propTypes = { unit: PropTypes.string.isRequired }
+InputNumberNoScrollWithUnit.propTypes = { unit: PropTypes.string.isRequired }
 
-export default InputNumberWithUnit
+export default InputNumberNoScrollWithUnit

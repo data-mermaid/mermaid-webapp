@@ -1,17 +1,18 @@
 import '@testing-library/jest-dom/extend-expect'
 import { Route } from 'react-router-dom'
 import React from 'react'
+import userEvent from '@testing-library/user-event'
+
 import {
   renderAuthenticatedOnline,
   renderAuthenticatedOffline,
   screen,
   waitForElementToBeRemoved,
   within,
-  userEvent,
   fireEvent,
-} from '../../../../testUtilities/testingLibraryWithHelpers'
+} from '../../../../../testUtilities/testingLibraryWithHelpers'
 
-import FishBelt from './FishBelt'
+import FishBelt from '../FishBelt'
 
 const fakeCurrentUser = {
   id: 'fake-id',
@@ -111,7 +112,9 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
-    { initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'] },
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
   )
 
   await waitForElementToBeRemoved(() =>
@@ -135,6 +138,26 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   // reef slope radio
   expect(screen.getByLabelText('flat')).toBeChecked()
   expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
+
+  const observationsTable = screen.getByLabelText('Observations')
+
+  const observationRows = within(observationsTable).getAllByRole('row')
+
+  // three rows + one header row = 4
+  expect(observationRows.length).toEqual(4)
+
+  // observation record #1
+  expect(within(observationRows[1]).getByDisplayValue('50+'))
+  expect(within(observationRows[1]).getByDisplayValue('53'))
+  expect(within(observationRows[1]).getByDisplayValue('1'))
+
+  // observation record #2
+  expect(within(observationRows[2]).getByDisplayValue('10 - 15'))
+  expect(within(observationRows[2]).getByDisplayValue('2'))
+
+  // observation record #3
+  expect(within(observationRows[3]).getByDisplayValue('0 - 5'))
+  expect(within(observationRows[3]).getByDisplayValue('4'))
 })
 
 test('FishBelt component in EDIT mode - button group shows save, validate and submit buttons when online', async () => {
@@ -304,7 +327,7 @@ test('Fishbelt observations: tab in count input on last row duplicates row', asy
     within(observationsTableAfterTab).getAllByDisplayValue(4).length,
   ).toEqual(2)
 })
-test.only('Fishbelt observations: enter key adds a new empty row below row where key pressed', async () => {
+test('Fishbelt observations: enter key adds a new empty row below row where key pressed', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
