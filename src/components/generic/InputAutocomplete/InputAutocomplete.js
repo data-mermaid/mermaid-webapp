@@ -4,23 +4,22 @@ import styled from 'styled-components'
 import Downshift from 'downshift'
 import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'
-import { InputRow, Input } from '../form'
+import { Input } from '../form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
-const InputWrapper = styled(Input)`
+const AutoCompleteInput = styled(Input)`
   width: 100%;
 `
 
 const InputAutocomplete = ({
-  label,
-  id,
   options,
   placeholder,
   value,
   onChange,
+  ...restOfProps
 }) => {
   const initialValue = options.find((option) => option.value === value) ?? ''
-  const [selectedValue, setSelectedValue] = useState(initialValue.label)
+  const [selectedValue, setSelectedValue] = useState(initialValue)
   const [menuOpen, setMenuOpen] = useState(false)
 
   const getfilteredMenuOptions = (inputValue) => {
@@ -30,7 +29,7 @@ const InputAutocomplete = ({
         })
       : options
 
-    return filteredItems.map(({ label: itemLabel }) => itemLabel)
+    return filteredItems
   }
 
   const handleStateChange = (changes) => {
@@ -49,7 +48,11 @@ const InputAutocomplete = ({
   }
 
   return (
-    <Downshift selectedItem={selectedValue} onStateChange={handleStateChange}>
+    <Downshift
+      selectedItem={selectedValue}
+      onStateChange={handleStateChange}
+      itemToString={(item) => (item ? item.label : '')}
+    >
       {({
         getRootProps,
         getInputProps,
@@ -59,48 +62,44 @@ const InputAutocomplete = ({
         inputValue,
         highlightedIndex,
       }) => (
-        <InputRow>
-          <label htmlFor={id}>{label}</label>
-          <div
-            style={{ position: 'relative' }}
-            {...getRootProps(undefined, {
-              suppressRefError: true,
+        <div
+          style={{ position: 'relative' }}
+          {...getRootProps(undefined, {
+            suppressRefError: true,
+          })}
+        >
+          <AutoCompleteInput
+            {...getInputProps({
+              placeholder,
             })}
-          >
-            <InputWrapper
-              {...getInputProps({
-                placeholder,
-              })}
-            />
-            <Menu {...getMenuProps({ isOpen: menuOpen })}>
-              {menuOpen
-                ? getfilteredMenuOptions(inputValue).map((item, index) => {
-                    return (
-                      <Item
-                        key={item}
-                        {...getItemProps({
-                          item,
-                          index,
-                          isActive: highlightedIndex === index,
-                          isSelected: selectedItem === item,
-                        })}
-                      >
-                        {item}
-                      </Item>
-                    )
-                  })
-                : null}
-            </Menu>
-          </div>
-        </InputRow>
+            {...restOfProps}
+          />
+          <Menu {...getMenuProps({ isOpen: menuOpen })}>
+            {menuOpen
+              ? getfilteredMenuOptions(inputValue).map((item, index) => {
+                  return (
+                    <Item
+                      key={item.label}
+                      {...getItemProps({
+                        item,
+                        index,
+                        isActive: highlightedIndex === index,
+                        isSelected: selectedItem === item,
+                      })}
+                    >
+                      {item.label}
+                    </Item>
+                  )
+                })
+              : null}
+          </Menu>
+        </div>
       )}
     </Downshift>
   )
 }
 
 InputAutocomplete.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string,
@@ -109,7 +108,7 @@ InputAutocomplete.propTypes = {
 
 InputAutocomplete.defaultProps = {
   value: '',
-  placeholder: 'Search...',
+  placeholder: undefined,
 }
 
 export default InputAutocomplete
