@@ -19,6 +19,7 @@ import stopEventPropagation from '../../library/stopEventPropagation'
 import OfflineHide from '../generic/OfflineHide'
 
 const ProjectCard = ({
+  id,
   name,
   countries,
   num_sites,
@@ -29,7 +30,7 @@ const ProjectCard = ({
   const history = useHistory()
   const { isOnline: isAppOnline } = useOnlineStatus()
   const [projectOfflineStatus, setProjectOfflineStatus] = useState(offlineReady)
-  const projectUrl = `projects/${name}`
+  const projectUrl = `projects/${id}`
 
   const handleProjectOfflineReadyClick = (e) => {
     setProjectOfflineStatus(e.target.checked)
@@ -86,6 +87,7 @@ const ProjectCard = ({
 }
 
 ProjectCard.propTypes = {
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   countries: PropTypes.arrayOf(PropTypes.string).isRequired,
   num_sites: PropTypes.number.isRequired,
