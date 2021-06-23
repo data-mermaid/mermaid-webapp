@@ -1,9 +1,16 @@
-import React, { useEffect, useReducer, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+
+import {
+  choicesPropType,
+  fishBeltPropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
 import { createUuid } from '../../../../library/createUuid'
-import { fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
+import { getObjectById } from '../../../../library/getObjectById'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus } from '../../../icons'
+import { IconClose, IconPlus, IconRequired } from '../../../icons'
 import { InputWrapper } from '../../../generic/form'
 import {
   Table,
@@ -13,74 +20,20 @@ import {
   Th,
 } from '../../../generic/Table/table'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
-import InputNumberWithUnit from '../../../generic/InputNumberWithUnit/InputNumberWithUnit'
+import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 
-const observationReducer = (state, action) => {
-  switch (action.type) {
-    case 'loadObservationsFromApi':
-      return [...action.payload]
+const FishBeltObservationTable = ({
+  collectRecord,
+  fishBinSelected,
+  choices,
+  observationsReducer,
+}) => {
+  const fishBinSelectedLabel = getObjectById(
+    choices?.fishsizebins.data,
+    fishBinSelected,
+  )?.name
 
-    case 'deleteObservation': {
-      const idOfRemovee = action.payload
-
-      const observationsWithTheRightOneRemoved = state.filter(
-        (observation) => observation.id !== idOfRemovee,
-      )
-
-      return observationsWithTheRightOneRemoved
-    }
-
-    case 'addObservation':
-      return [...state, { id: createUuid(), count: 0, size: 0 }]
-    case 'addNewObservationBelow': {
-      const observationsWithInsertedRow = [...state]
-      const indexToInsertAt = action.payload + 1
-
-      observationsWithInsertedRow.splice(indexToInsertAt, 0, {
-        id: createUuid(),
-        count: 0,
-        size: 0,
-      })
-
-      return observationsWithInsertedRow
-    }
-
-    case 'duplicateLastObservation': {
-      const observationWithNewId = {
-        ...action.payload.observation,
-        id: createUuid(),
-      }
-
-      return [...state, observationWithNewId]
-    }
-    case 'updateCount':
-      return state.map((observation) => {
-        const isObservationToUpdate =
-          observation.id === action.payload.observationId
-
-        return isObservationToUpdate
-          ? { ...observation, count: action.payload.newCount }
-          : observation
-      })
-    case 'updateSize':
-      return state.map((observation) => {
-        const isObservationToUpdate =
-          observation.id === action.payload.observationId
-
-        return isObservationToUpdate
-          ? { ...observation, size: action.payload.newSize }
-          : observation
-      })
-    default:
-      throw new Error("This action isn't supported by the observationReducer")
-  }
-}
-
-const FishBeltObservationTable = ({ collectRecord }) => {
-  const [observationsState, observationsDispatch] = useReducer(
-    observationReducer,
-    [],
-  )
+  const [observationsState, observationsDispatch] = observationsReducer
   const haveApiObservationsBeenLoaded = useRef(false)
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
@@ -117,10 +70,15 @@ const FishBeltObservationTable = ({ collectRecord }) => {
     })
   }
 
-  const handleUpdateSize = (event, observationId) => {
+  const handleUpdateSize = (eventOrValue, observationId) => {
+    // rather than have the size select onChange emit a modified/fake event,
+    // we just pass a value instead. The numeric input will pass an event
+    const isEvent = !!eventOrValue.target
+    const newSize = isEvent ? eventOrValue.target.value : eventOrValue
+
     observationsDispatch({
       type: 'updateSize',
-      payload: { newSize: event.target.value, observationId },
+      payload: { newSize, observationId },
     })
   }
 
@@ -145,28 +103,48 @@ const FishBeltObservationTable = ({ collectRecord }) => {
   }
 
   const observationsRows = observationsState.map((observation, index) => {
-    const { id, count, size } = observation
+    const { id: observationId, count, size } = observation
     const rowNumber = index + 1
 
+    const showNumericSizeInput =
+      fishBinSelectedLabel?.toString() === '1' ||
+      typeof fishBinSelectedLabel === 'undefined'
+
+    const sizeSelect = !showNumericSizeInput && (
+      <FishBeltObservationSizeSelect
+        onChange={(value) => {
+          handleUpdateSize(value, observationId)
+        }}
+        fishBinSelectedLabel={fishBinSelectedLabel}
+        value={size}
+        labelledBy="fish-size-label"
+      />
+    )
+
+    const sizeInput = showNumericSizeInput ? (
+      <InputNumberNoScrollWithUnit
+        type="number"
+        min="0"
+        value={size}
+        unit="cm"
+        step="any"
+        aria-labelledby="fish-size-label"
+        onChange={(event) => {
+          handleUpdateSize(event, observationId)
+        }}
+        onKeyDown={(event) => {
+          handleKeyDown({ event, index, observation })
+        }}
+      />
+    ) : (
+      <> {sizeSelect} </>
+    )
+
     return (
-      <Tr key={id}>
+      <Tr key={observationId}>
         <Td>{rowNumber}</Td>
         <Td>Species placeholder</Td>
-        <Td align="right">
-          <InputNumberWithUnit
-            type="number"
-            min="0"
-            value={size}
-            unit="cm"
-            step="any"
-            onChange={(event) => {
-              handleUpdateSize(event, id)
-            }}
-            onKeyDown={(event) => {
-              handleKeyDown({ event, index, observation })
-            }}
-          />
-        </Td>
+        <Td align="right">{sizeInput}</Td>
         <Td align="right">
           <InputNumberNoScroll
             type="number"
@@ -174,7 +152,7 @@ const FishBeltObservationTable = ({ collectRecord }) => {
             value={count}
             step="any"
             onChange={(event) => {
-              handleUpdateCount(event, id)
+              handleUpdateCount(event, observationId)
             }}
             onKeyDown={(event) => {
               handleKeyDown({ event, index, observation, isCount: true })
@@ -186,7 +164,8 @@ const FishBeltObservationTable = ({ collectRecord }) => {
           <ButtonCaution
             tabIndex="-1"
             type="button"
-            onClick={() => handleDeleteObservation(id)}
+            onClick={() => handleDeleteObservation(observationId)}
+            aria-label="Delete Observation"
           >
             <IconClose />
           </ButtonCaution>
@@ -197,15 +176,21 @@ const FishBeltObservationTable = ({ collectRecord }) => {
 
   return (
     <InputWrapper>
-      <H2>Observations</H2>
+      <H2 id="table-label">Observations</H2>
       <TableOverflowWrapper>
-        <Table>
+        <Table aria-labelledby="table-label">
           <thead>
             <Tr>
               <Th> </Th>
-              <Th>Fish Name</Th>
-              <Th align="right">Size</Th>
-              <Th align="right">Count</Th>
+              <Th id="species-label">
+                Fish Name <IconRequired />
+              </Th>
+              <Th align="right" id="fish-size-label">
+                Size <IconRequired />
+              </Th>
+              <Th align="right" id="fish-count-label">
+                Count <IconRequired />
+              </Th>
               <Th>Biomass (kg/ha)</Th>
               <Th> </Th>
             </Tr>
@@ -223,8 +208,14 @@ const FishBeltObservationTable = ({ collectRecord }) => {
 
 FishBeltObservationTable.propTypes = {
   collectRecord: fishBeltPropType,
+  fishBinSelected: PropTypes.string,
+  choices: choicesPropType.isRequired,
+  observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
 }
 
-FishBeltObservationTable.defaultProps = { collectRecord: undefined }
+FishBeltObservationTable.defaultProps = {
+  collectRecord: undefined,
+  fishBinSelected: undefined,
+}
 
 export default FishBeltObservationTable
