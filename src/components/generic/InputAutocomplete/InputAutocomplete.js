@@ -5,6 +5,7 @@ import Downshift from 'downshift'
 import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'
 import { InputRow, Input } from '../form'
+import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
 const InputWrapper = styled(Input)`
   width: 100%;
@@ -100,12 +101,7 @@ const InputAutocomplete = ({
 InputAutocomplete.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    }),
-  ).isRequired,
+  options: inputOptionsPropTypes.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
