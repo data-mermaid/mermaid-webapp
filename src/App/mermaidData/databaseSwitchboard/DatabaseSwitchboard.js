@@ -7,12 +7,15 @@ import UserProfileMixin from './UserProfileMixin'
 import ChoicesMixin from './ChoicesMixin'
 import ProjectsMixin from './ProjectsMixin'
 import SitesMixin from './SitesMixin'
+import ProjectTagsMixin from './ProjectTagsMixin'
 
 class DatabaseSwitchboard extends SitesMixin(
   ProjectsMixin(
-    ChoicesMixin(
-      ManagementRegimesMixin(
-        CollectRecordsMixin(UserProfileMixin(DatabaseSwitchboardState)),
+    ProjectTagsMixin(
+      ChoicesMixin(
+        ManagementRegimesMixin(
+          CollectRecordsMixin(UserProfileMixin(DatabaseSwitchboardState)),
+        ),
       ),
     ),
   ),
@@ -27,6 +30,8 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getManagementRegimes: PropTypes.func,
   getManagementRegimeRecordsForUiDisplay: PropTypes.func,
   getProjects: PropTypes.func,
+  getProject: PropTypes.func,
+  getProjectTags: PropTypes.func,
   getSites: PropTypes.func,
   getSite: PropTypes.func,
   getSiteRecordsForUIDisplay: PropTypes.func,
