@@ -14,6 +14,7 @@ const InputContainer = styled.div`
 `
 
 const UnitContainer = styled.span`
+  width: 33px;
   background: magenta;
   padding: ${theme.spacing.xsmall};
 `
