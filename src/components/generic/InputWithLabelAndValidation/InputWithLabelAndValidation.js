@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { Input, InputRow, ValidationMessage } from '../form'
-import InputNumberWithUnit from '../InputNumberWithUnit/InputNumberWithUnit'
+import InputNumberNoScrollWithUnit from '../InputNumberNoScrollWithUnit'
 import { useNoInputScrolling } from '../../../library/useNoInputScrolling'
 
 const InputWithLabelAndValidation = ({
@@ -18,7 +18,7 @@ const InputWithLabelAndValidation = ({
   useNoInputScrolling(textFieldRef)
 
   const inputType = unit ? (
-    <InputNumberWithUnit id={id} {...restOfProps} />
+    <InputNumberNoScrollWithUnit id={id} {...restOfProps} />
   ) : (
     <Input id={id} {...restOfProps} ref={textFieldRef} />
   )
