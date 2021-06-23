@@ -100,7 +100,7 @@ const FishBeltObservationTable = ({
     const rowNumber = index + 1
 
     const showNumericSizeInput =
-      fishBinSelectedLabel === '1' ||
+      fishBinSelectedLabel?.toString() === '1' ||
       typeof fishBinSelectedLabel === 'undefined'
 
     const sizeSelect = !showNumericSizeInput && (
