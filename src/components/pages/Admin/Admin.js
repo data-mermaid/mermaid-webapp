@@ -2,6 +2,9 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
+import PropTypes from 'prop-types'
+import styled, { css } from 'styled-components'
+import { hoverState } from '../../../library/styling/mediaQueries'
 
 import { getProjectInitialValues } from './projectRecordInitialFormValue'
 import { H2 } from '../../generic/text'
@@ -14,13 +17,56 @@ import InputAutocomplete from '../../generic/InputAutocomplete'
 import TextareaWithLabelAndValidation from '../../generic/TextareaWithLabelAndValidation'
 import { InputWrapper } from '../../generic/form'
 import { getOptions } from '../../../library/getOptions'
+import { IconClose } from '../../icons'
+import { CloseButton } from '../../generic/buttons'
+import theme from '../../../theme'
+
+const TagStyleWrapper = styled.ul`
+  padding: 0;
+`
+
+const ClearTagButton = styled(CloseButton)`
+  color: white;
+  visibility: hidden;
+`
+
+const TagStyle = styled.li`
+  color: white;
+  border-radius: 50px;
+  background-color: ${theme.color.calloutColor};
+  padding-right: 30px;
+  margin: 10px 5px;
+  display: inline-block;
+  ${hoverState(css`
+    ${ClearTagButton} {
+      visibility: visible;
+    }
+  `)}
+`
+
+const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
+  return (
+    <TagStyleWrapper>
+      {organizations.map((item) => (
+        <TagStyle key={item}>
+          <ClearTagButton
+            type="button"
+            onClick={() => handleOrganizationsChange(item)}
+          >
+            <IconClose />
+          </ClearTagButton>
+          {item}
+        </TagStyle>
+      ))}
+    </TagStyleWrapper>
+  )
+}
 
 const Admin = () => {
   const { isOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const [projectTagOptions, setProjectTagOptions] = useState([])
-  const [projectTags, setProjectTags] = useState([])
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const { projectId } = useParams()
@@ -37,9 +83,7 @@ const Admin = () => {
       Promise.all(promises)
         .then(([projectResponse, projectTagsResponse]) => {
           if (isMounted) {
-            console.log(projectResponse)
             setProjectBeingEdited(projectResponse)
-            setProjectTags(projectResponse.tags)
             setProjectTagOptions(getOptions(projectTagsResponse.results, false))
             setIsLoading(false)
           }
@@ -65,11 +109,6 @@ const Admin = () => {
     enableReinitialize: true,
   }
 
-  const organizationList =
-    isOnline &&
-    projectTags.length > 0 &&
-    projectTags.map((item) => <div key={item}>{item}</div>)
-
   const content = isOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
@@ -90,9 +129,25 @@ const Admin = () => {
             id="organizations"
             options={projectTagOptions}
             placeholder="Search for an organization"
-            onChange={() => {}}
+            valueIsArray
+            value={formik.getFieldProps('tags').value}
+            onChange={(selectedItems) => {
+              formik.setFieldValue('tags', selectedItems)
+            }}
           />
-          <div>{organizationList}</div>
+          <OrganizationList
+            organizations={formik.getFieldProps('tags').value}
+            handleOrganizationsChange={(item) => {
+              const updatedOrganizations = [
+                ...formik.getFieldProps('tags').value,
+              ]
+              const foundItemIndex = updatedOrganizations.indexOf(item)
+
+              updatedOrganizations.splice(foundItemIndex, 1)
+
+              formik.setFieldValue('tags', updatedOrganizations)
+            }}
+          />
         </InputWrapper>
       )}
     </Formik>
@@ -111,6 +166,11 @@ const Admin = () => {
       }
     />
   )
+}
+
+OrganizationList.propTypes = {
+  organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  handleOrganizationsChange: PropTypes.func.isRequired,
 }
 
 export default Admin
