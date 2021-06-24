@@ -1,33 +1,31 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
 import theme from '../../theme'
+import LegendDrawer from './LegendDrawer'
+import {
+  satelliteBaseMap,
+  applyOpacityExpression,
+  loadACALayers,
+  geomorphicColors,
+  benthicColors,
+} from './mapService'
 
 const MapWrapper = styled.div`
   height: 400px;
-  border: ${theme.spacing.borderXLarge} solid ${theme.color.secondaryColor};
+  border-top: ${theme.spacing.borderXLarge} solid ${theme.color.secondaryColor};
+  border-bottom: ${theme.spacing.borderXLarge} solid
+    ${theme.color.secondaryColor};
 `
 
-const satelliteBaseMap = {
-  version: 8,
-  name: 'World Map',
-  sources: {
-    worldmap: {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      ],
-    },
-  },
-  layers: [
-    {
-      id: 'base-map',
-      type: 'raster',
-      source: 'worldmap',
-    },
-  ],
-}
+const MapContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+`
+
+const geomorphicKeyNames = Object.keys(geomorphicColors)
+const benthicKeyNames = Object.keys(benthicColors)
 
 const recordMarker = new maplibregl.Marker({ draggable: true })
 const defaultCenter = [0, 0]
@@ -39,6 +37,50 @@ const MermaidMap = ({
   handleLatitudeChange,
   handleLongitudeChange,
 }) => {
+  // MermaidMap 'remembers' for each machine (doesnt care about multi user)
+  // which layers were selected in the legend and visible on the map from the last visit
+  // using local storage
+  const coralMosaicLocalStorage = JSON.parse(
+    localStorage.getItem('coral_mosaic'),
+  )
+  const geomorphicLocalStorage = JSON.parse(
+    localStorage.getItem('geomorphic_legend'),
+  )
+  const benthicLocalStorage = JSON.parse(localStorage.getItem('benthic_legend'))
+
+  const loadLegendArrayLayer = (storageArray, legendKeyNameArray) => {
+    const legendArray = storageArray || legendKeyNameArray
+
+    return legendKeyNameArray.map((value) => {
+      const updatedGeomorphic = {
+        name: value,
+        selected: legendArray.includes(value),
+      }
+
+      return updatedGeomorphic
+    })
+  }
+
+  const [coralMosaicLayer, setCoralMosaicLayer] = useState(
+    coralMosaicLocalStorage !== null ? coralMosaicLocalStorage : 1,
+  )
+  const [geomorphicLayer, setGeomorphicLayer] = useState(
+    loadLegendArrayLayer(geomorphicLocalStorage, geomorphicKeyNames),
+  )
+  const [allGeomorphicLayersChecked, setAllGeomorphicLayersChecked] = useState(
+    geomorphicLocalStorage
+      ? geomorphicLocalStorage.length === geomorphicKeyNames.length
+      : true,
+  )
+  const [benthicLayer, setBenthicLayer] = useState(
+    loadLegendArrayLayer(benthicLocalStorage, benthicKeyNames),
+  )
+  const [allBenthicLayersChecked, setAllBenthicLayersChecked] = useState(
+    benthicLocalStorage
+      ? benthicLocalStorage.length === benthicKeyNames.length
+      : true,
+  )
+
   const mapContainer = useRef(null)
   const map = useRef(null)
 
@@ -61,10 +103,52 @@ const MermaidMap = ({
       }),
       'top-left',
     )
+    map.current.dragRotate.disable()
+    map.current.touchZoomRotate.disableRotation()
+
+    map.current.on('load', () => {
+      loadACALayers(map.current)
+    })
 
     // clean up on unmount
     return () => map.current.remove()
   }, [])
+
+  const _updateCoralMosaicLayer = useEffect(() => {
+    if (!map.current) return
+
+    if (map.current.getLayer('atlas-planet') !== undefined) {
+      map.current.setPaintProperty(
+        'atlas-planet',
+        'raster-opacity',
+        coralMosaicLayer,
+      )
+    }
+  }, [coralMosaicLayer])
+
+  const _updateGeomorphicLayers = useEffect(() => {
+    if (!map.current) return
+
+    if (map.current.getLayer('atlas-geomorphic') !== undefined) {
+      map.current.setPaintProperty(
+        'atlas-geomorphic',
+        'fill-opacity',
+        applyOpacityExpression(geomorphicLocalStorage),
+      )
+    }
+  }, [geomorphicLocalStorage])
+
+  const _updateBenthicLayers = useEffect(() => {
+    if (!map.current) return
+
+    if (map.current.getLayer('atlas-benthic') !== undefined) {
+      map.current.setPaintProperty(
+        'atlas-benthic',
+        'fill-opacity',
+        applyOpacityExpression(benthicLocalStorage),
+      )
+    }
+  }, [benthicLocalStorage])
 
   const _handleMapMarker = useEffect(() => {
     if (!map.current) return
@@ -104,10 +188,111 @@ const MermaidMap = ({
     }
   }, [formLatitudeValue, formLongitudeValue])
 
+  const getUpdatedLayerOption = (layer, item) => {
+    return layer.map((value) => {
+      if (value.name === item.name) {
+        return { ...value, selected: !item.selected }
+      }
+
+      return value
+    })
+  }
+
+  const getFilterSelectedOption = (updatedLayer) =>
+    updatedLayer.filter(({ selected }) => selected).map(({ name }) => name)
+
+  const handleCoralMosaicLayer = () => {
+    const coralMosaicResult = coralMosaicLayer ? 0 : 1
+
+    localStorage.setItem('coral_mosaic', coralMosaicResult)
+    setCoralMosaicLayer(coralMosaicResult)
+  }
+
+  const handleGeomorphicOption = (item) => {
+    const legendMaxLength = geomorphicLayer.length
+    const updatedLayerOption = getUpdatedLayerOption(geomorphicLayer, item)
+
+    const filterSelectedLayerOption = getFilterSelectedOption(
+      updatedLayerOption,
+    )
+
+    localStorage.setItem(
+      'geomorphic_legend',
+      JSON.stringify(filterSelectedLayerOption),
+    )
+    setAllGeomorphicLayersChecked(
+      filterSelectedLayerOption.length === legendMaxLength,
+    )
+    setGeomorphicLayer(updatedLayerOption)
+  }
+
+  const handleBenthicOption = (item) => {
+    const legendMaxLength = benthicLayer.length
+    const updatedLayerOption = getUpdatedLayerOption(benthicLayer, item)
+    const filterSelectedLayerOption = getFilterSelectedOption(
+      updatedLayerOption,
+    )
+
+    localStorage.setItem(
+      'benthic_legend',
+      JSON.stringify(filterSelectedLayerOption),
+    )
+    setAllBenthicLayersChecked(
+      filterSelectedLayerOption.length === legendMaxLength,
+    )
+    setBenthicLayer(updatedLayerOption)
+  }
+
+  const handleSelectAllGeomorphicLayers = () => {
+    const updatedLayerOption = geomorphicLayer.map((value) => {
+      return { ...value, selected: !allGeomorphicLayersChecked }
+    })
+
+    const filterSelectedLayerOption = getFilterSelectedOption(
+      updatedLayerOption,
+    )
+
+    localStorage.setItem(
+      'geomorphic_legend',
+      JSON.stringify(filterSelectedLayerOption),
+    )
+    setAllGeomorphicLayersChecked(!allGeomorphicLayersChecked)
+    setGeomorphicLayer(updatedLayerOption)
+  }
+
+  const handleSelectAllBenthicLayers = () => {
+    const updatedLayerOption = benthicLayer.map((value) => {
+      return { ...value, selected: !allBenthicLayersChecked }
+    })
+
+    const filterSelectedLayerOption = getFilterSelectedOption(
+      updatedLayerOption,
+    )
+
+    localStorage.setItem(
+      'benthic_legend',
+      JSON.stringify(filterSelectedLayerOption),
+    )
+    setAllBenthicLayersChecked(!allBenthicLayersChecked)
+    setBenthicLayer(updatedLayerOption)
+  }
+
   return (
-    <div>
+    <MapContainer>
       <MapWrapper ref={mapContainer} />
-    </div>
+      <LegendDrawer
+        coralMosaicLayer={coralMosaicLayer}
+        geomorphicLayer={geomorphicLayer}
+        allGeomorphicLayersChecked={allGeomorphicLayersChecked}
+        benthicLayer={benthicLayer}
+        allBenthicLayersChecked={allBenthicLayersChecked}
+        handleCoralMosaicLayer={handleCoralMosaicLayer}
+        handleGeomorphicOption={handleGeomorphicOption}
+        handleSelectAllGeomorphicLayers={handleSelectAllGeomorphicLayers}
+        handleBenthicOption={handleBenthicOption}
+        handleSelectAllBenthicLayers={handleSelectAllBenthicLayers}
+      />
+    </MapContainer>
   )
 }
 
