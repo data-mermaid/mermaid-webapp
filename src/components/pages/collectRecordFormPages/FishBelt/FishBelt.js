@@ -26,17 +26,20 @@ import FishBeltTransectInputs from './FishBeltTransectInputs'
 import language from '../../../../language'
 import OfflineHide from '../../../generic/OfflineHide'
 import SampleInfoInputs from '../../../SampleInfoInputs'
-import theme from '../../../../theme'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
+const CollectRecordToolbarWrapper = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
 const SaveValidateSubmitButtonWrapper = styled('div')`
-  text-align: right;
   button {
-    margin-left: ${theme.spacing.buttonSpacing};
+    margin-left: 1px;
   }
 `
 
@@ -226,7 +229,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             </>
           }
           toolbar={
-            <>
+            <CollectRecordToolbarWrapper>
               {isNewRecord && <H2>Fish Belt</H2>}
               {collectRecordBeingEdited && !isNewRecord && (
                 <EditCollectRecordFormTitle
@@ -253,7 +256,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                   </OfflineHide>
                 )}
               </SaveValidateSubmitButtonWrapper>
-            </>
+            </CollectRecordToolbarWrapper>
           }
         />
       )}

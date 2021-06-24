@@ -19,7 +19,7 @@ import {
 } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import { ButtonSecondary } from '../../generic/buttons'
+import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
@@ -28,7 +28,7 @@ const TopBar = () => (
     <H2>Sites</H2>
     <RowSpaceBetween>
       <div>Future filter</div>{' '}
-      <div>
+      <ToolbarButtonWrapper>
         <ButtonSecondary>
           <IconPlus /> New site
         </ButtonSecondary>
@@ -38,7 +38,7 @@ const TopBar = () => (
         <ButtonSecondary>
           <IconDownload /> Export sites
         </ButtonSecondary>
-      </div>
+      </ToolbarButtonWrapper>
     </RowSpaceBetween>
   </>
 )
