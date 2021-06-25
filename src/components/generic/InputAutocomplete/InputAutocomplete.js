@@ -84,7 +84,7 @@ const InputAutocomplete = ({
                         item,
                         index,
                         isActive: highlightedIndex === index,
-                        isSelected: selectedItem === item,
+                        isSelected: selectedItem.label === item.label,
                       })}
                     >
                       {item.label}
