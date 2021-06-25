@@ -1,65 +1,40 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Downshift from 'downshift'
 import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'
-import { InputRow, Input } from '../form'
+import { Input } from '../form'
 
-const InputWrapper = styled(Input)`
+const AutoCompleteInput = styled(Input)`
   width: 100%;
 `
 
-const InputAutocomplete = ({
-  label,
-  id,
-  options,
-  placeholder,
-  valueIsArray,
-  value,
-  onChange,
-}) => {
-  const foundOptionValue =
-    options.find((option) => option.value === value) ?? ''
-  const initialValue = valueIsArray ? value : foundOptionValue.label
+const InputAutocomplete = ({ options, value, onChange, ...restOfProps }) => {
+  const initialValue = options.find((option) => option.value === value) ?? ''
 
-  const [selectedValue, setSelectedValue] = useState('')
+  const [selectedValue, setSelectedValue] = useState(initialValue)
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const _loadInitialSelectedValue = useEffect(() => {
-    if (initialValue) setSelectedValue(initialValue)
-  }, [initialValue])
-
-  const getFilteredMenuOptions = (inputValue) => {
+  const getfilteredMenuOptions = (inputValue) => {
     const filteredItems = inputValue
       ? matchSorter(options, inputValue, {
           keys: ['label'],
         })
       : options
 
-    return filteredItems.map(({ label: itemLabel }) => itemLabel)
+    return filteredItems
   }
 
   const handleStateChange = (changes) => {
     const { selectedItem, inputValue } = changes
+
     const shouldMenuBeOpen =
       inputValue?.length >= 3 && inputValue !== selectedValue
 
     if (selectedItem) {
-      const updateSelectedValue = valueIsArray
-        ? [...selectedValue]
-        : selectedItem
-
-      if (valueIsArray) {
-        const foundItemIndex = updateSelectedValue.indexOf(selectedItem)
-
-        if (foundItemIndex === -1) {
-          updateSelectedValue.push(selectedItem)
-        }
-      }
-
-      setSelectedValue(updateSelectedValue)
-      onChange(updateSelectedValue)
+      setSelectedValue(selectedItem)
+      onChange(selectedItem)
       setMenuOpen(false)
     }
     if (!selectedItem && inputValue) {
@@ -69,8 +44,9 @@ const InputAutocomplete = ({
 
   return (
     <Downshift
-      selectedItem={valueIsArray ? '' : selectedValue}
+      selectedItem={selectedValue}
       onStateChange={handleStateChange}
+      itemToString={(item) => (item ? item.label : '')}
     >
       {({
         getRootProps,
@@ -81,67 +57,51 @@ const InputAutocomplete = ({
         inputValue,
         highlightedIndex,
       }) => (
-        <InputRow>
-          <label htmlFor={id}>{label}</label>
-          <div
-            style={{ position: 'relative' }}
-            {...getRootProps(undefined, {
-              suppressRefError: true,
-            })}
-          >
-            <InputWrapper
-              {...getInputProps({
-                placeholder,
-              })}
-            />
-            <Menu {...getMenuProps({ isOpen: menuOpen })}>
-              {menuOpen
-                ? getFilteredMenuOptions(inputValue).map((item, index) => {
-                    return (
-                      <Item
-                        key={item}
-                        {...getItemProps({
-                          item,
-                          index,
-                          isActive: highlightedIndex === index,
-                          isSelected: selectedItem === item,
-                        })}
-                      >
-                        {item}
-                      </Item>
-                    )
-                  })
-                : null}
-            </Menu>
-          </div>
-        </InputRow>
+        <div
+          style={{ position: 'relative' }}
+          {...getRootProps(undefined, {
+            suppressRefError: true,
+          })}
+        >
+          <AutoCompleteInput {...getInputProps({})} {...restOfProps} />
+          <Menu {...getMenuProps({ isOpen: menuOpen })}>
+            {menuOpen
+              ? getfilteredMenuOptions(inputValue).map((item, index) => {
+                  return (
+                    <Item
+                      key={item.label}
+                      {...getItemProps({
+                        item,
+                        index,
+                        isActive: highlightedIndex === index,
+                        isSelected: selectedItem === item,
+                      })}
+                    >
+                      {item.label}
+                    </Item>
+                  )
+                })
+              : null}
+          </Menu>
+        </div>
       )}
     </Downshift>
   )
 }
 
 InputAutocomplete.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
-  placeholder: PropTypes.string,
-  valueIsArray: PropTypes.bool,
-  value: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 }
 
 InputAutocomplete.defaultProps = {
   value: '',
-  placeholder: 'Search...',
-  valueIsArray: false,
 }
 
 export default InputAutocomplete
