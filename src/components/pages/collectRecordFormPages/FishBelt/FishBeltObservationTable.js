@@ -61,15 +61,29 @@ const FishBeltObservationTable = ({
   }, [collectRecord, observationsDispatch])
 
   const _loadFishNameOptions = useEffect(() => {
-    databaseSwitchboardInstance.getSpecies().then((species) => {
-      const speciesOptions = species.results.map(({ id, display_name }) => ({
-        label: display_name,
-        value: id,
-      }))
+    if (databaseSwitchboardInstance) {
+      Promise.all([
+        databaseSwitchboardInstance.getSpecies(),
+        databaseSwitchboardInstance.getGenera(),
+        databaseSwitchboardInstance.getFamilies(),
+      ]).then(([species, genera, families]) => {
+        const speciesOptions = species.results.map(({ id, display_name }) => ({
+          label: display_name,
+          value: id,
+        }))
 
-      setFishNameOptions(speciesOptions)
-    })
-  }, [])
+        const generaAndFamiliesOptions = [
+          ...genera.results,
+          ...families.results,
+        ].map(({ id, name }) => ({
+          label: name,
+          value: id,
+        }))
+
+        setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
+      })
+    }
+  }, [databaseSwitchboardInstance])
 
   const handleDeleteObservation = (observationId) => {
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
