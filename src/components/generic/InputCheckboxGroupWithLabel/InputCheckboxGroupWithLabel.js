@@ -15,7 +15,7 @@ const CheckBoxLabel = styled.label`
   }
 `
 
-const InputCheckboxWithLabel = ({ label, id, options, value, onChange }) => {
+const InputCheckboxGroupWithLabel = ({ label, id, options, value, onChange }) => {
   const [checkboxItems, setCheckboxItems] = useState(value)
 
   const handleCheckboxGroupChange = (itemValue) => {
@@ -53,7 +53,7 @@ const InputCheckboxWithLabel = ({ label, id, options, value, onChange }) => {
   )
 }
 
-InputCheckboxWithLabel.propTypes = {
+InputCheckboxGroupWithLabel.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   options: PropTypes.arrayOf(
@@ -66,4 +66,4 @@ InputCheckboxWithLabel.propTypes = {
   onChange: PropTypes.func.isRequired,
 }
 
-export default InputCheckboxWithLabel
+export default InputCheckboxGroupWithLabel
