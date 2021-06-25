@@ -7,12 +7,15 @@ import UserProfileMixin from './UserProfileMixin'
 import ChoicesMixin from './ChoicesMixin'
 import ProjectsMixin from './ProjectsMixin'
 import SitesMixin from './SitesMixin'
+import FishNameMixin from './FishNamesMixin'
 
-class DatabaseSwitchboard extends SitesMixin(
-  ProjectsMixin(
-    ChoicesMixin(
-      ManagementRegimesMixin(
-        CollectRecordsMixin(UserProfileMixin(DatabaseSwitchboardState)),
+class DatabaseSwitchboard extends FishNameMixin(
+  SitesMixin(
+    ProjectsMixin(
+      ChoicesMixin(
+        ManagementRegimesMixin(
+          CollectRecordsMixin(UserProfileMixin(DatabaseSwitchboardState)),
+        ),
       ),
     ),
   ),

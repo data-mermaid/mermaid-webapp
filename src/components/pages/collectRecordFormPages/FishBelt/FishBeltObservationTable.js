@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+/* eslint-disable camelcase */
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -21,6 +22,8 @@ import {
 } from '../../../generic/Table/table'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import InputAutocomplete from '../../../generic/InputAutocomplete'
 
 const FishBeltObservationTable = ({
   collectRecord,
@@ -32,9 +35,11 @@ const FishBeltObservationTable = ({
     choices?.fishsizebins.data,
     fishBinSelected,
   )?.name
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const [observationsState, observationsDispatch] = observationsReducer
   const haveApiObservationsBeenLoaded = useRef(false)
+  const [fishNameOptions, setFishNameOptions] = useState([])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded.current && collectRecord) {
@@ -53,7 +58,32 @@ const FishBeltObservationTable = ({
 
       haveApiObservationsBeenLoaded.current = true
     }
-  })
+  }, [collectRecord, observationsDispatch])
+
+  const _loadFishNameOptions = useEffect(() => {
+    if (databaseSwitchboardInstance) {
+      Promise.all([
+        databaseSwitchboardInstance.getSpecies(),
+        databaseSwitchboardInstance.getGenera(),
+        databaseSwitchboardInstance.getFamilies(),
+      ]).then(([species, genera, families]) => {
+        const speciesOptions = species.results.map(({ id, display_name }) => ({
+          label: display_name,
+          value: id,
+        }))
+
+        const generaAndFamiliesOptions = [
+          ...genera.results,
+          ...families.results,
+        ].map(({ id, name }) => ({
+          label: name,
+          value: id,
+        }))
+
+        setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
+      })
+    }
+  }, [databaseSwitchboardInstance])
 
   const handleDeleteObservation = (observationId) => {
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
@@ -70,15 +100,20 @@ const FishBeltObservationTable = ({
     })
   }
 
-  const handleUpdateSize = (eventOrValue, observationId) => {
-    // rather than have the size select onChange emit a modified/fake event,
-    // we just pass a value instead. The numeric input will pass an event
-    const isEvent = !!eventOrValue.target
-    const newSize = isEvent ? eventOrValue.target.value : eventOrValue
-
+  const handleUpdateSize = (newSize, observationId) => {
     observationsDispatch({
       type: 'updateSize',
       payload: { newSize, observationId },
+    })
+  }
+
+  const handleFishNameChange = (newFishName, observationId) => {
+    observationsDispatch({
+      type: 'updateFishName',
+      payload: {
+        newFishName,
+        observationId,
+      },
     })
   }
 
@@ -103,7 +138,8 @@ const FishBeltObservationTable = ({
   }
 
   const observationsRows = observationsState.map((observation, index) => {
-    const { id: observationId, count, size } = observation
+    const { id: observationId, count, size, fish_attribute } = observation
+
     const rowNumber = index + 1
 
     const showNumericSizeInput =
@@ -130,7 +166,7 @@ const FishBeltObservationTable = ({
         step="any"
         aria-labelledby="fish-size-label"
         onChange={(event) => {
-          handleUpdateSize(event, observationId)
+          handleUpdateSize(event.target.value, observationId)
         }}
         onKeyDown={(event) => {
           handleKeyDown({ event, index, observation })
@@ -143,7 +179,16 @@ const FishBeltObservationTable = ({
     return (
       <Tr key={observationId}>
         <Td>{rowNumber}</Td>
-        <Td>Species placeholder</Td>
+        <Td>
+          <InputAutocomplete
+            aria-labelledby="fish-name-label"
+            options={fishNameOptions}
+            onChange={(selectedOption) =>
+              handleFishNameChange(selectedOption.value, observationId)
+            }
+            value={fish_attribute}
+          />
+        </Td>
         <Td align="right">{sizeInput}</Td>
         <Td align="right">
           <InputNumberNoScroll
@@ -182,7 +227,7 @@ const FishBeltObservationTable = ({
           <thead>
             <Tr>
               <Th> </Th>
-              <Th id="species-label">
+              <Th id="fish-name-label">
                 Fish Name <IconRequired />
               </Th>
               <Th align="right" id="fish-size-label">
