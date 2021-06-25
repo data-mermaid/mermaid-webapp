@@ -8,17 +8,17 @@ import { useNoInputScrolling } from '../../../library/useNoInputScrolling'
 const InputWithLabelAndValidation = ({
   label,
   id,
+  unit,
   validationMessage,
   validationType,
   ...restOfProps
 }) => {
-  const { unit } = restOfProps
   const textFieldRef = useRef()
 
   useNoInputScrolling(textFieldRef)
 
   const inputType = unit ? (
-    <InputNumberNoScrollWithUnit id={id} {...restOfProps} />
+    <InputNumberNoScrollWithUnit id={id} unit={unit} {...restOfProps} />
   ) : (
     <Input id={id} {...restOfProps} ref={textFieldRef} />
   )
@@ -41,11 +41,13 @@ const InputWithLabelAndValidation = ({
 InputWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  unit: PropTypes.string,
   validationType: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 InputWithLabelAndValidation.defaultProps = {
+  unit: undefined,
   validationType: undefined,
   validationMessage: undefined,
 }

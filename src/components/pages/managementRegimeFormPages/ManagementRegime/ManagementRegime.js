@@ -9,9 +9,9 @@ import { ContentPageLayout } from '../../../Layout'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
-import InputCheckboxWithLabel from '../../../generic/InputCheckboxWithLabel'
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
 import ManagementRulesInput from '../ManagementRulesInput'
+import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWithLabel'
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 
@@ -102,7 +102,7 @@ const ManagementRegime = () => {
                     unit="ha"
                     {...formik.getFieldProps('size')}
                   />
-                  <InputCheckboxWithLabel
+                  <InputCheckboxGroupWithLabel
                     label="Parties"
                     id="parties"
                     options={managementParties}
