@@ -380,7 +380,10 @@ const managementRegimes = [
   {
     id: '1',
     name: 'Management Regimes A',
+    name_secondary: 'Management Regimes 1',
     est_year: 2021,
+    size: 123,
+    parties: ['c1baac4b-6ca2-4a1b-8d74-ec7836629c42'],
     compliance: null,
     no_take: true,
     periodic_closure: false,
@@ -389,11 +392,18 @@ const managementRegimes = [
     gear_restriction: true,
     species_restriction: false,
     access_restriction: false,
+    notes: 'Mermaid Management Regimes Notes',
   },
   {
     id: '2',
     name: 'Management Regimes B',
+    name_secondary: 'Management Regimes 2',
     est_year: null,
+    size: 10,
+    parties: [
+      'c2035972-572e-43fe-b261-4536793856b5',
+      'c2035972-572e-43fe-b261-4536793856b5',
+    ],
     compliance: '812e9833-c6dd-4dc9-a841-29167cbe7b7e',
     no_take: true,
     periodic_closure: false,
@@ -402,11 +412,19 @@ const managementRegimes = [
     gear_restriction: false,
     species_restriction: true,
     access_restriction: true,
+    notes: 'Some notes',
   },
   {
     id: '3',
     name: 'Management Regimes C',
+    name_secondary: 'Management Regimes 3',
     est_year: 2017,
+    size: null,
+    parties: [
+      'c1baac4b-6ca2-4a1b-8d74-ec7836629c42',
+      'd9dcb7ea-5d7d-4a29-aa4e-8a59233cbef1',
+      '9dd644f0-886e-49fa-9e98-914297b9f24f',
+    ],
     compliance: 'f76d7866-5b0d-428d-928c-738c2912d6e0',
     no_take: false,
     periodic_closure: true,
@@ -415,6 +433,7 @@ const managementRegimes = [
     gear_restriction: false,
     species_restriction: false,
     access_restriction: false,
+    notes: '',
   },
 ]
 
@@ -585,6 +604,31 @@ const choices = {
         name: 'crest',
         updated_on: '2020-07-10T00:13:52.699137Z',
         val: 4,
+      },
+    ],
+  },
+  managementparties: {
+    name: 'managementparties',
+    data: [
+      {
+        id: 'c1baac4b-6ca2-4a1b-8d74-ec7836629c42',
+        name: 'community/local government',
+        updated_on: '2017-09-27T19:51:10.379499Z',
+      },
+      {
+        id: 'c2035972-572e-43fe-b261-4536793856b5',
+        name: 'government',
+        updated_on: '2017-09-27T19:51:10.379530Z',
+      },
+      {
+        id: 'd9dcb7ea-5d7d-4a29-aa4e-8a59233cbef1',
+        name: 'NGO',
+        updated_on: '2017-09-27T19:51:10.379552Z',
+      },
+      {
+        id: '9dd644f0-886e-49fa-9e98-914297b9f24f',
+        name: 'private sector',
+        updated_on: '2017-09-27T19:51:10.379574Z',
       },
     ],
   },
