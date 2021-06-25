@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { H2 } from '../generic/text'
+import theme from '../../theme'
 import { getProtocolName } from '../../library/getProtocolName'
 import { getObjectById } from '../../library/getObjectById'
 import {
@@ -9,53 +9,55 @@ import {
   sitePropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
 
-const TitleContainer = styled(H2)`
-  display: inline-flex;
+const TitleContainer = styled('div')`
+  display: flex;
+  flex-wrap: wrap;
 `
 
-const TooltipText = styled('span')({
-  visibility: 'hidden',
-  width: '120px',
-  paddingLeft: '10px',
-  backgroundColor: '#004c76',
-  color: '#fff',
-  textAlign: 'center',
-  padding: '5px 0',
-  position: 'absolute',
-  zIndex: 1,
-  top: '120%',
-  left: '50%',
-  marginLeft: '-60px',
-  ':after': {
-    content: '""',
-    position: 'absolute',
-    bottom: '100%',
-    left: '50%',
-    marginLeft: '-5px',
-    borderWidth: '5px',
-    borderStyle: 'solid',
-    borderColor: '#004c76 transparent transparent transparent',
-    transform: 'rotate(180deg)',
-  },
-})
+const Tooltip = styled('h2')`
+  margin-right: ${theme.spacing.medium};
+  white-space: nowrap;
+  border-style: dotted;
+  border-width: 0 0 ${theme.spacing.borderMedium} 0;
+  position: relative;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  &:hover span,
+  &:focus span {
+    transition: ${theme.timing.hoverTransition};
+    opacity: 1;
+  }
+`
+const TooltipText = styled('span')`
+  opacity: 0;
+  background: ${theme.color.primaryColor};
+  color: ${theme.color.white};
+  position: absolute;
+  font-size: ${theme.typography.smallFontSize};
+  text-align: center;
+  clip-path: polygon(
+    calc(50% - 10px) 20%,
+    50% 0,
+    calc(50% + 10px) 20%,
+    100% 20%,
+    100% 100%,
+    0 100%,
+    0 20%
+  );
+  padding: ${theme.spacing.small};
+  padding-top: ${theme.spacing.medium};
+  top: 4rem;
+  ${theme.typography.upperCase}
+`
 
-const Tooltip = styled('div')({
-  marginRight: '10px',
-  fontSize: '3rem',
-  position: 'relative',
-  display: 'inline-block',
-  borderBottom: '1px dotted black',
-  ':hover span': {
-    visibility: 'visible',
-    fontSize: '1.3rem',
-  },
-})
-
-const ContentWithTooltip = ({ children, tooltipText }) => {
+const ContentWithTooltip = ({ children, tooltipText, ariaId }) => {
   return (
-    <Tooltip>
+    <Tooltip tabIndex="0" id={ariaId}>
       {children}
-      <TooltipText>{tooltipText}</TooltipText>
+      <TooltipText role="tooltip" aria-labelledby={ariaId}>
+        {tooltipText}
+      </TooltipText>
     </Tooltip>
   )
 }
@@ -79,16 +81,21 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
       id="collect-form-title"
       data-testid="edit-collect-record-form-title"
     >
-      <ContentWithTooltip tooltipText="Protocol">
+      <ContentWithTooltip tooltipText="Protocol" ariaId="protocol-tooltip">
         {defaultTitle}
       </ContentWithTooltip>
-      <ContentWithTooltip tooltipText="Site Name">
+      <ContentWithTooltip tooltipText="Site Name" ariaId="site-name-tooltip">
         {siteName}
       </ContentWithTooltip>
-      <ContentWithTooltip tooltipText="Transect Number">
+      <ContentWithTooltip
+        tooltipText="Transect Number"
+        ariaId="transect-number-tooltip"
+      >
         {transectNumber}
       </ContentWithTooltip>
-      <ContentWithTooltip tooltipText="Label">{label}</ContentWithTooltip>
+      <ContentWithTooltip tooltipText="Label" ariaId="label-tooltip">
+        {label}
+      </ContentWithTooltip>
     </TitleContainer>
   )
 }
@@ -97,6 +104,7 @@ ContentWithTooltip.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
   tooltipText: PropTypes.string.isRequired,
+  ariaId: PropTypes.string.isRequired,
 }
 EditCollectRecordFormTitle.propTypes = {
   collectRecord: fishBeltPropType.isRequired,

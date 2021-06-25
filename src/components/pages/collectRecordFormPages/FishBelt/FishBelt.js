@@ -33,12 +33,14 @@ import fishbeltObservationReducer from './fishbeltObservationReducer'
   Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
 const CollectRecordToolbarWrapper = styled('div')`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
 `
 const SaveValidateSubmitButtonWrapper = styled('div')`
+  justify-self: end;
   button {
+    white-space: nowrap;
     margin-left: 1px;
   }
 `
