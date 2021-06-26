@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { InputRow, ValidationMessage } from '../form'
+import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
 const InputRadioWithLabelAndValidation = ({
   id,
@@ -43,12 +44,7 @@ const InputRadioWithLabelAndValidation = ({
 InputRadioWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    }),
-  ).isRequired,
+  options: inputOptionsPropTypes.isRequired,
   validationType: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }

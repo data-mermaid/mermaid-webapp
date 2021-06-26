@@ -12,7 +12,7 @@ import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLab
 import InputAutocomplete from '../../../generic/InputAutocomplete'
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
 import MermaidMap from '../../../MermaidMap'
-import { InputWrapper } from '../../../generic/form'
+import { InputRow, InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 
 const Site = () => {
@@ -82,16 +82,19 @@ const Site = () => {
                     type="text"
                     {...formik.getFieldProps('name')}
                   />
-                  <InputAutocomplete
-                    label="Country"
-                    id="country"
-                    options={countryOptions}
-                    placeholder="Enter a country"
-                    value={formik.getFieldProps('country').value}
-                    onChange={(selectedItem) =>
-                      formik.setFieldValue('country', selectedItem.value)
-                    }
-                  />
+                  <InputRow>
+                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                    <label htmlFor="country">Country</label>
+                    <InputAutocomplete
+                      id="country"
+                      options={countryOptions}
+                      placeholder="Enter a country"
+                      value={formik.values.country}
+                      onChange={(selectedItem) => {
+                        formik.setFieldValue('country', selectedItem.value)
+                      }}
+                    />
+                  </InputRow>
                   <InputWithLabelAndValidation
                     label="Latitude"
                     id="latitude"

@@ -5,6 +5,7 @@ import Downshift from 'downshift'
 import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'
 import { Input } from '../form'
+import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
 const AutoCompleteInput = styled(Input)`
   width: 100%;
@@ -12,7 +13,6 @@ const AutoCompleteInput = styled(Input)`
 
 const InputAutocomplete = ({ options, value, onChange, ...restOfProps }) => {
   const initialValue = options.find((option) => option.value === value) ?? ''
-
   const [selectedValue, setSelectedValue] = useState(initialValue)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -63,7 +63,7 @@ const InputAutocomplete = ({ options, value, onChange, ...restOfProps }) => {
             suppressRefError: true,
           })}
         >
-          <AutoCompleteInput {...getInputProps({})} {...restOfProps} />
+          <AutoCompleteInput {...getInputProps()} {...restOfProps} />
           <Menu {...getMenuProps({ isOpen: menuOpen })}>
             {menuOpen
               ? getfilteredMenuOptions(inputValue).map((item, index) => {
@@ -74,7 +74,7 @@ const InputAutocomplete = ({ options, value, onChange, ...restOfProps }) => {
                         item,
                         index,
                         isActive: highlightedIndex === index,
-                        isSelected: selectedItem === item,
+                        isSelected: selectedItem.label === item.label,
                       })}
                     >
                       {item.label}
@@ -90,12 +90,7 @@ const InputAutocomplete = ({ options, value, onChange, ...restOfProps }) => {
 }
 
 InputAutocomplete.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    }),
-  ).isRequired,
+  options: inputOptionsPropTypes.isRequired,
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 }

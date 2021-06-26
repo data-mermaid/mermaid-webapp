@@ -56,6 +56,18 @@ const fishbeltObservationReducer = (state, action) => {
           ? { ...observation, size: action.payload.newSize }
           : observation
       })
+    case 'updateFishName':
+      return state.map((observation) => {
+        const isObservationToUpdate =
+          observation.id === action.payload.observationId
+
+        return isObservationToUpdate
+          ? {
+              ...observation,
+              fish_attribute: action.payload.newFishName,
+            }
+          : observation
+      })
     default:
       throw new Error("This action isn't supported by the observationReducer")
   }

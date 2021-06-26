@@ -14,6 +14,7 @@ const InputContainer = styled.div`
 `
 
 const UnitContainer = styled.span`
+  width: 33px;
   background: ${theme.color.unitBackground};
   padding: ${theme.spacing.xsmall};
   margin: 0 0 0 ${theme.spacing.borderMedium};
