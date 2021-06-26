@@ -26,7 +26,10 @@ const prompt = {
   deleteCollectRecordPrompt: 'Are you sure you want to delete this record?',
   yes: 'Delete Record',
   no: 'Cancel',
-  autocompleteNoResultsMessage: 'No Results',
 }
 
-export default { error, success, prompt }
+const autocomplete = {
+  noResultsDefault: 'No Results',
+}
+
+export default { error, success, prompt, autocomplete }
