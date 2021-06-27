@@ -32,4 +32,10 @@ const autocomplete = {
   noResultsDefault: 'No Results',
 }
 
-export default { error, success, prompt, autocomplete }
+const pages = {
+  collectRecord: {
+    newFishNameLink: 'Propose New Species...',
+  },
+}
+
+export default { error, success, prompt, autocomplete, pages }
