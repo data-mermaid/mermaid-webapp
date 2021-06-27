@@ -29,13 +29,13 @@ import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
-import Modal from '../../../generic/Modal/Modal'
 
 const FishBeltObservationTable = ({
   collectRecord,
   fishBinSelected,
   choices,
   observationsReducer,
+  openNewFishNameModal,
 }) => {
   const fishBinSelectedLabel = getObjectById(
     choices?.fishsizebins.data,
@@ -46,10 +46,6 @@ const FishBeltObservationTable = ({
   const [observationsState, observationsDispatch] = observationsReducer
   const haveApiObservationsBeenLoaded = useRef(false)
   const [fishNameOptions, setFishNameOptions] = useState([])
-
-  const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
-  const openNewFishNameModal = () => setIsNewFishNameModalOpen(true)
-  const closeNewFishNameModal = () => setIsNewFishNameModalOpen(false)
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded.current && collectRecord) {
@@ -149,7 +145,7 @@ const FishBeltObservationTable = ({
 
   const noFishNameResults = (
     <ButtonLink type="button" onClick={openNewFishNameModal}>
-      {language.pages.collectRecord.newFishNameLink}
+      {language.pages.collectRecord.newFishSpeciesLink}
     </ButtonLink>
   )
 
@@ -266,13 +262,6 @@ const FishBeltObservationTable = ({
           <IconPlus /> Add Row
         </ButtonPrimary>
       </InputWrapper>
-      <Modal
-        isOpen={isNewFishNameModalOpen}
-        onDismiss={closeNewFishNameModal}
-        title="placeholder"
-        mainContent={<>placeholcer</>}
-        footerContent={<>placeholcer</>}
-      />
     </>
   )
 }
@@ -282,6 +271,7 @@ FishBeltObservationTable.propTypes = {
   fishBinSelected: PropTypes.string,
   choices: choicesPropType.isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
+  openNewFishNameModal: PropTypes.func.isRequired,
 }
 
 FishBeltObservationTable.defaultProps = {

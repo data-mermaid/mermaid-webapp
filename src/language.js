@@ -14,6 +14,7 @@ const error = {
     'Something went wrong. The collect record has not been saved.',
   collectRecordDelete:
     'Something went wrong. The collect record has not been deleted.',
+  formValidation: { required: 'This field is required' },
 }
 
 const success = {
@@ -28,14 +29,33 @@ const deleteCollectRecord = {
   no: 'Cancel',
 }
 
+const createFishSpecies = {
+  title: 'Add New Fish Species',
+  genus: 'Genus',
+  species: 'Species',
+  goToView2: 'Propose new species',
+  cancel: 'Cancel',
+  confirmMessage:
+    'Your proposed new species will be reviewed by the MERMAID team, who will either approve it for inclusion in the taxonomy of contact you to follow up.',
+  back: 'Back',
+  submit: 'Send to MERMAID for review',
+}
+
 const autocomplete = {
   noResultsDefault: 'No Results',
 }
 
 const pages = {
   collectRecord: {
-    newFishNameLink: 'Propose New Species...',
+    newFishSpeciesLink: 'Propose New Species...',
   },
 }
 
-export default { error, success, prompt, autocomplete, pages }
+export default {
+  error,
+  success,
+  deleteCollectRecord,
+  autocomplete,
+  pages,
+  createFishSpecies,
+}
