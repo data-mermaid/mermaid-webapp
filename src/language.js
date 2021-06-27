@@ -14,6 +14,8 @@ const error = {
     'Something went wrong. The collect record has not been saved.',
   collectRecordDelete:
     'Something went wrong. The collect record has not been deleted.',
+  generaUnavailable:
+    'Fish genera data is currently unavailable. Please try again',
   formValidation: { required: 'This field is required' },
 }
 
@@ -33,7 +35,7 @@ const createFishSpecies = {
   title: 'Add New Fish Species',
   genus: 'Genus',
   species: 'Species',
-  goToView2: 'Propose new species',
+  goToPage2: 'Propose new species',
   cancel: 'Cancel',
   confirmMessage:
     'Your proposed new species will be reviewed by the MERMAID team, who will either approve it for inclusion in the taxonomy of contact you to follow up.',

@@ -267,9 +267,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       <NewFishSpeciesModal
         isOpen={isNewFishNameModalOpen}
         onDismiss={closeNewFishNameModal}
-        onSubmit={() => {
-          console.log('submit species')
-        }}
+        onSubmit={() => {}}
       />
     </>
   )
