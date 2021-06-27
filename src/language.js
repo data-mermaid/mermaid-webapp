@@ -21,9 +21,9 @@ const success = {
   collectRecordDelete: 'Collect record deleted.',
 }
 
-const prompt = {
-  deleteCollectRecordTitle: 'Delete Record',
-  deleteCollectRecordPrompt: 'Are you sure you want to delete this record?',
+const deleteCollectRecord = {
+  title: 'Delete Record',
+  prompt: 'Are you sure you want to delete this record?',
   yes: 'Delete Record',
   no: 'Cancel',
 }
