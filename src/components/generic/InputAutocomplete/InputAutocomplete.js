@@ -53,11 +53,9 @@ const InputAutocomplete = ({
     }
   }
 
-  const noResults = noResultsDisplay ? (
-    <NoResultsContainer>{noResultsDisplay}</NoResultsContainer>
-  ) : (
+  const noResults = (
     <NoResultsContainer>
-      {language.autocomplete.noResultsDefault}
+      {noResultsDisplay || language.autocomplete.noResultsDefault}
     </NoResultsContainer>
   )
 
@@ -113,7 +111,7 @@ const InputAutocomplete = ({
               {...restOfProps}
             />
             <Menu {...getMenuProps({ isOpen: menuOpen })}>
-              {menuOpen ? getMenuContents(downshiftObject) : null}
+              {menuOpen && getMenuContents(downshiftObject)}
             </Menu>
           </div>
         )
