@@ -6,7 +6,11 @@ import {
   choicesPropType,
   fishBeltPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
+import {
+  ButtonCaution,
+  ButtonLink,
+  ButtonPrimary,
+} from '../../../generic/buttons'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { getObjectById } from '../../../../library/getObjectById'
@@ -20,10 +24,12 @@ import {
   Td,
   Th,
 } from '../../../generic/Table/table'
-import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
-import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
+import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
+import language from '../../../../language'
+import Modal from '../../../generic/Modal/Modal'
 
 const FishBeltObservationTable = ({
   collectRecord,
@@ -40,6 +46,10 @@ const FishBeltObservationTable = ({
   const [observationsState, observationsDispatch] = observationsReducer
   const haveApiObservationsBeenLoaded = useRef(false)
   const [fishNameOptions, setFishNameOptions] = useState([])
+
+  const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
+  const openNewFishNameModal = () => setIsNewFishNameModalOpen(true)
+  const closeNewFishNameModal = () => setIsNewFishNameModalOpen(false)
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded.current && collectRecord) {
@@ -137,6 +147,12 @@ const FishBeltObservationTable = ({
     }
   }
 
+  const noFishNameResults = (
+    <ButtonLink type="button" onClick={openNewFishNameModal}>
+      {language.pages.collectRecord.newFishNameLink}
+    </ButtonLink>
+  )
+
   const observationsRows = observationsState.map((observation, index) => {
     const { id: observationId, count, size, fish_attribute } = observation
 
@@ -187,6 +203,7 @@ const FishBeltObservationTable = ({
               handleFishNameChange(selectedOption.value, observationId)
             }
             value={fish_attribute}
+            noResultsDisplay={noFishNameResults}
           />
         </Td>
         <Td align="right">{sizeInput}</Td>
@@ -220,34 +237,43 @@ const FishBeltObservationTable = ({
   })
 
   return (
-    <InputWrapper>
-      <H2 id="table-label">Observations</H2>
-      <TableOverflowWrapper>
-        <Table aria-labelledby="table-label">
-          <thead>
-            <Tr>
-              <Th> </Th>
-              <Th id="fish-name-label">
-                Fish Name <IconRequired />
-              </Th>
-              <Th align="right" id="fish-size-label">
-                Size <IconRequired />
-              </Th>
-              <Th align="right" id="fish-count-label">
-                Count <IconRequired />
-              </Th>
-              <Th>Biomass (kg/ha)</Th>
-              <Th> </Th>
-            </Tr>
-          </thead>
+    <>
+      <InputWrapper>
+        <H2 id="table-label">Observations</H2>
+        <TableOverflowWrapper>
+          <Table aria-labelledby="table-label">
+            <thead>
+              <Tr>
+                <Th> </Th>
+                <Th id="fish-name-label">
+                  Fish Name <IconRequired />
+                </Th>
+                <Th align="right" id="fish-size-label">
+                  Size <IconRequired />
+                </Th>
+                <Th align="right" id="fish-count-label">
+                  Count <IconRequired />
+                </Th>
+                <Th>Biomass (kg/ha)</Th>
+                <Th> </Th>
+              </Tr>
+            </thead>
 
-          <tbody>{observationsRows}</tbody>
-        </Table>
-      </TableOverflowWrapper>
-      <ButtonPrimary type="button" onClick={handleAddObservation}>
-        <IconPlus /> Add Row
-      </ButtonPrimary>
-    </InputWrapper>
+            <tbody>{observationsRows}</tbody>
+          </Table>
+        </TableOverflowWrapper>
+        <ButtonPrimary type="button" onClick={handleAddObservation}>
+          <IconPlus /> Add Row
+        </ButtonPrimary>
+      </InputWrapper>
+      <Modal
+        isOpen={isNewFishNameModalOpen}
+        onDismiss={closeNewFishNameModal}
+        title="placeholder"
+        mainContent={<>placeholcer</>}
+        footerContent={<>placeholcer</>}
+      />
+    </>
   )
 }
 

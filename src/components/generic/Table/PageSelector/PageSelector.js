@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { hoverState } from '../../../../library/styling/mediaQueries'
-import { LinkButton } from '../../buttons'
+import { ButtonLink } from '../../buttons'
 import theme from '../../../../theme'
 
 const PaginationButtonStyles = css`
@@ -18,14 +18,14 @@ const PaginationButtonStyles = css`
     `)}
   }
 `
-const PageNumberButtons = styled(LinkButton)`
+const PageNumberButtons = styled(ButtonLink)`
   ${PaginationButtonStyles}
   &.paginationCurrentPage {
     background-color: ${theme.color.primaryColor};
     color: ${theme.color.white};
   }
 `
-const PaginationLinkButton = styled(LinkButton)`
+const PaginationLinkButton = styled(ButtonLink)`
   ${PaginationButtonStyles}
 `
 // eslint-disable-next-line react/prop-types
