@@ -40,6 +40,13 @@ const createFishSpecies = {
   confirmMessage:
     'Your proposed new species will be reviewed by the MERMAID team, who will either approve it for inclusion in the taxonomy of contact you to follow up.',
   back: 'Back',
+  getSummaryText1: ({ speciesName }) =>
+    `I'd like to propose a new species called ${speciesName}.`,
+  details: 'Details',
+  user: 'User:',
+  project: 'Project:',
+  summaryText2:
+    'Your proposed new species will be reviewed by the MERMAID team who will either approve it for inclusion in the taxonomy or contact you to follow up.',
   submit: 'Send to MERMAID for review',
 }
 
