@@ -103,7 +103,7 @@ export const ButtonyNavLink = styled(NavLink)`
 `
 export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
 
-export const LinkButton = styled('button')`
+export const ButtonLink = styled('button')`
   font-size: inherit;
   background: none;
   margin: 0;
