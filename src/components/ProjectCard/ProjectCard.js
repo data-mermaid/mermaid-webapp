@@ -17,19 +17,14 @@ import NavLinkButtonGroup from '../NavLinkButtonGroup'
 import { pluralize } from '../../library/pluralize'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import OfflineHide from '../generic/OfflineHide'
+import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 
-const ProjectCard = ({
-  name,
-  countries,
-  num_sites,
-  offlineReady,
-  updated_on,
-  ...restOfProps
-}) => {
+const ProjectCard = ({ project, ...restOfProps }) => {
+  const { name, countries, num_sites, offlineReady, updated_on, id } = project
   const history = useHistory()
   const { isOnline: isAppOnline } = useOnlineStatus()
   const [projectOfflineStatus, setProjectOfflineStatus] = useState(offlineReady)
-  const projectUrl = `projects/${name}`
+  const projectUrl = `projects/${id}`
 
   const handleProjectOfflineReadyClick = (e) => {
     setProjectOfflineStatus(e.target.checked)
@@ -86,11 +81,7 @@ const ProjectCard = ({
 }
 
 ProjectCard.propTypes = {
-  name: PropTypes.string.isRequired,
-  countries: PropTypes.arrayOf(PropTypes.string).isRequired,
-  num_sites: PropTypes.number.isRequired,
-  offlineReady: PropTypes.bool.isRequired,
-  updated_on: PropTypes.string.isRequired,
+  project: projectPropType.isRequired,
 }
 
 export default ProjectCard
