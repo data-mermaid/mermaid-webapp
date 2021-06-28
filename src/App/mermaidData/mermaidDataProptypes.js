@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 
 export const projectPropType = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   name: PropTypes.string,
   countries: PropTypes.arrayOf(PropTypes.string),
   num_sites: PropTypes.number,

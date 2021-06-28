@@ -44,8 +44,14 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
 const FishBelt = ({ isNewRecord, currentUser }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
-  const openNewFishNameModal = () => setIsNewFishNameModalOpen(true)
-  const closeNewFishNameModal = () => setIsNewFishNameModalOpen(false)
+  const [observationToAddSpeciesTo, setObservationToAddSpeciesTo] = useState()
+  const openNewFishNameModal = (observationId) => {
+    setObservationToAddSpeciesTo(observationId)
+    setIsNewFishNameModalOpen(true)
+  }
+  const closeNewFishNameModal = () => {
+    setIsNewFishNameModalOpen(false)
+  }
 
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
@@ -267,7 +273,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       <NewFishSpeciesModal
         isOpen={isNewFishNameModalOpen}
         onDismiss={closeNewFishNameModal}
-        onSubmit={() => {}}
+        onSubmit={({ genus, species }) => {
+          console.log(genus, species, observationToAddSpeciesTo)
+          // TODO: tests, make observation get new species, update dexie
+          // do nickss PRS
+          return Promise.resolve()
+        }}
+        currentUser={currentUser}
+        projectId={projectId}
       />
     </>
   )

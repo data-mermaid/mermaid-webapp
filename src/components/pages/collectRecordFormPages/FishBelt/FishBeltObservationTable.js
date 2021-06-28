@@ -143,12 +143,6 @@ const FishBeltObservationTable = ({
     }
   }
 
-  const noFishNameResults = (
-    <ButtonLink type="button" onClick={openNewFishNameModal}>
-      {language.pages.collectRecord.newFishSpeciesLink}
-    </ButtonLink>
-  )
-
   const observationsRows = observationsState.map((observation, index) => {
     const { id: observationId, count, size, fish_attribute } = observation
 
@@ -199,7 +193,14 @@ const FishBeltObservationTable = ({
               handleFishNameChange(selectedOption.value, observationId)
             }
             value={fish_attribute}
-            noResultsDisplay={noFishNameResults}
+            noResultsDisplay={
+              <ButtonLink
+                type="button"
+                onClick={() => openNewFishNameModal(observationId)}
+              >
+                {language.pages.collectRecord.newFishSpeciesLink}
+              </ButtonLink>
+            }
           />
         </Td>
         <Td align="right">{sizeInput}</Td>
