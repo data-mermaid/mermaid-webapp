@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types'
 
-export const projectsPropType = PropTypes.arrayOf(
-  PropTypes.shape({
-    name: PropTypes.string,
-    countries: PropTypes.arrayOf(PropTypes.string),
-    num_sites: PropTypes.number,
-    updated_on: PropTypes.string,
-  }),
-)
+export const projectPropType = PropTypes.shape({
+  name: PropTypes.string,
+  countries: PropTypes.arrayOf(PropTypes.string),
+  num_sites: PropTypes.number,
+  updated_on: PropTypes.string,
+})
+
+export const projectsPropType = PropTypes.arrayOf(projectPropType)
 export const sitePropType = PropTypes.shape({
   id: PropTypes.string,
   name: PropTypes.string,

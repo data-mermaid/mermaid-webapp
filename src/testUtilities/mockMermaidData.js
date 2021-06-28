@@ -1,5 +1,6 @@
 const projects = [
   {
+    id: '1',
     name: 'Project I',
     countries: ['Canada'],
     num_sites: 13,
@@ -7,6 +8,7 @@ const projects = [
     updated_on: '01/21/2020',
   },
   {
+    id: '2',
     name: 'Project II',
     countries: ['America'],
     num_sites: 36,
@@ -14,6 +16,7 @@ const projects = [
     updated_on: '21/21/2021',
   },
   {
+    id: '3',
     name: 'Project III',
     countries: ['England, Finland'],
     num_sites: 34,
@@ -21,6 +24,7 @@ const projects = [
     updated_on: '21/21/1992',
   },
   {
+    id: '4',
     name: 'Project IV',
     countries: ['Canada'],
     num_sites: 9,
@@ -28,6 +32,7 @@ const projects = [
     updated_on: '31/12/2011',
   },
   {
+    id: '5',
     name: 'Project V',
     countries: ['Mexico'],
     num_sites: 33,
