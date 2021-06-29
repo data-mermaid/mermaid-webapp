@@ -112,9 +112,9 @@ const ManagementRegime = () => {
                     }}
                   />
                   <ManagementRulesInput
-                    managementRulesObj={formik.getFieldProps('rules').value}
-                    onChange={(selectedItems) => {
-                      formik.setFieldValue('rules', selectedItems)
+                    managementFormValues={formik.values}
+                    onChange={(property, selectedItems) => {
+                      formik.setFieldValue(property, selectedItems)
                     }}
                   />
                   <InputRadioWithLabelAndValidation

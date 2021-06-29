@@ -4,14 +4,15 @@ import styled from 'styled-components'
 
 import theme from '../../../../theme'
 import { InputRow } from '../../../generic/form'
+import { managementRegimePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 
-const partial_restriction_choices = {
-  periodic_closure: 'Periodic Closure',
-  size_limits: 'Size Limits',
-  gear_restriction: 'Gear Restriction',
-  species_restriction: 'Species Restriction',
-  access_restriction: 'Access Restriction',
-}
+const partialRestrictionOptions = [
+  { value: 'periodic_closure', label: 'Periodic Closure' },
+  { value: 'size_limits', label: 'Size Limits' },
+  { value: 'gear_restriction', label: 'Gear Restriction' },
+  { value: 'species_restriction', label: 'Species Restriction' },
+  { value: 'access_restriction', label: 'Access Restriction' },
+]
 
 const CheckBoxLabel = styled.label`
   padding-left: ${theme.spacing.xlarge} !important;
@@ -36,83 +37,114 @@ const RadioLabel = styled.label`
   }
 `
 
-const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
-  const managementRulesArray = Object.entries(managementRulesObj)
-  const getManagementRulesStates = (rules) => {
-    return rules.filter((item) => item[1]).map((filterItem) => filterItem[0])
+const ManagementRulesInput = ({
+  id,
+  label,
+  managementFormValues,
+  onChange,
+}) => {
+  const getManagementRulesRadioInputValue = (rules) => {
+    return {
+      open_access: rules.open_access,
+      no_take: rules.no_take,
+      partial_restrictions:
+        rules.access_restriction ||
+        rules.periodic_closure ||
+        rules.size_limits ||
+        rules.gear_restriction ||
+        rules.species_restriction,
+    }
   }
 
-  const [managementRulesStates, setManagementRulesStates] = useState(
-    getManagementRulesStates(managementRulesArray),
-  )
-  const [partialRestrictionSelected, setPartialRestrictionSelected] = useState(
-    !managementRulesObj.open_access && !managementRulesObj.no_take,
-  )
+  const getPartialRestrictionCheckboxValues = (rules) => {
+    return {
+      access_restriction: rules.access_restriction,
+      periodic_closure: rules.periodic_closure,
+      size_limits: rules.size_limits,
+      gear_restriction: rules.gear_restriction,
+      species_restriction: rules.species_restriction,
+    }
+  }
 
-  const handleManagementRulesChange = (e) => {
-    const currentSelectedRadioValue = e.target.value
+  const [
+    managementRulesRadioInputValue,
+    setManagementRulesRadioInputValue,
+  ] = useState(getManagementRulesRadioInputValue(managementFormValues))
 
-    if (currentSelectedRadioValue === 'partial_restrictions')
-      setPartialRestrictionSelected(true)
-    else setPartialRestrictionSelected(false)
+  const [
+    partialRestrictionCheckboxValues,
+    setPartialRestrictionCheckboxValues,
+  ] = useState(getPartialRestrictionCheckboxValues(managementFormValues))
 
-    const updatedManagementRulesArray = managementRulesArray.map((item) => [
-      item[0],
-      item[0] === currentSelectedRadioValue,
-    ])
-
-    const updatedManagementRules = getManagementRulesStates(
-      updatedManagementRulesArray,
+  const resetPartialRestrictionProperties = () => {
+    const updatedValues = { ...partialRestrictionCheckboxValues }
+    const partiRestrictionOptionValues = partialRestrictionOptions.map(
+      (item) => item.value,
     )
 
-    setManagementRulesStates(updatedManagementRules)
+    for (let i = 0; i < partiRestrictionOptionValues.length; i++) {
+      updatedValues[partiRestrictionOptionValues[i]] = false
 
-    const selectedManagementRulesItemsToForm = Object.fromEntries(
-      updatedManagementRulesArray,
-    )
+      onChange(partiRestrictionOptionValues[i], false)
+    }
 
-    onChange(selectedManagementRulesItemsToForm)
+    setPartialRestrictionCheckboxValues(updatedValues)
+  }
+
+  const handleOpenAccessChange = () => {
+    setManagementRulesRadioInputValue({
+      open_access: true,
+      no_take: false,
+      partial_restrictions: false,
+    })
+    onChange('open_access', true)
+    onChange('no_take', false)
+    resetPartialRestrictionProperties()
+  }
+
+  const handleNoTakeChange = () => {
+    setManagementRulesRadioInputValue({
+      open_access: false,
+      no_take: true,
+      partial_restrictions: false,
+    })
+    onChange('open_access', false)
+    onChange('no_take', true)
+    resetPartialRestrictionProperties()
+  }
+
+  const handlePartialRestrictionChange = () => {
+    setManagementRulesRadioInputValue({
+      open_access: false,
+      no_take: false,
+      partial_restrictions: true,
+    })
   }
 
   const handlePartialRestrictionChoicesChange = (e) => {
-    const currentSelectedCheckboxValue = e.target.value
-    const partialRestrictedChoices = [...managementRulesStates]
-    const foundIndex = partialRestrictedChoices.indexOf(
-      currentSelectedCheckboxValue,
-    )
+    const value = e.target.checked
+    const property = e.target.value
 
-    if (foundIndex > -1) {
-      partialRestrictedChoices.splice(foundIndex, 1)
-    } else {
-      partialRestrictedChoices.push(currentSelectedCheckboxValue)
-    }
+    const updateValues = { ...partialRestrictionCheckboxValues }
 
-    const updatedManagementRulesArray = managementRulesArray.map((item) => [
-      item[0],
-      partialRestrictedChoices.includes(item[0]),
-    ])
+    updateValues[property] = value
 
-    setManagementRulesStates(partialRestrictedChoices)
-
-    const selectedManagementRulesItemsToForm = Object.fromEntries(
-      updatedManagementRulesArray,
-    )
-
-    onChange(selectedManagementRulesItemsToForm)
+    setPartialRestrictionCheckboxValues(updateValues)
+    onChange(property, value)
   }
 
   const showPartialRestrictionChoices =
-    partialRestrictionSelected &&
-    Object.keys(partial_restriction_choices).map((item) => (
-      <CheckBoxLabel key={item}>
+    managementRulesRadioInputValue.partial_restrictions &&
+    partialRestrictionOptions.map(({ value, label: optionLabel }) => (
+      <CheckBoxLabel key={value}>
         <input
-          id={item}
+          id={value}
           type="checkbox"
-          value={item}
-          checked={managementRulesStates.includes(item)}
+          value={value}
+          checked={partialRestrictionCheckboxValues[value]}
           onChange={handlePartialRestrictionChoicesChange}
         />
-        <span htmlFor={item}>{partial_restriction_choices[item]}</span>
+        <span htmlFor={value}>{optionLabel}</span>
       </CheckBoxLabel>
     ))
 
@@ -126,8 +158,8 @@ const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
               type="radio"
               id="open-access"
               value="open_access"
-              checked={managementRulesStates.includes('open_access')}
-              onChange={handleManagementRulesChange}
+              checked={managementRulesRadioInputValue.open_access}
+              onChange={handleOpenAccessChange}
             />
             Open Access
             <span>Open for fishing and entering</span>
@@ -139,8 +171,8 @@ const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
               type="radio"
               id="no-take"
               value="no_take"
-              checked={managementRulesStates.includes('no_take')}
-              onChange={handleManagementRulesChange}
+              checked={managementRulesRadioInputValue.no_take}
+              onChange={handleNoTakeChange}
             />
             No Take
             <span>Total extraction ban</span>
@@ -151,9 +183,8 @@ const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
             <input
               type="radio"
               id="partial-restrictions"
-              value="partial_restrictions"
-              checked={partialRestrictionSelected}
-              onChange={handleManagementRulesChange}
+              checked={managementRulesRadioInputValue.partial_restrictions}
+              onChange={handlePartialRestrictionChange}
             />
             Partial Restrictions
             <span>
@@ -171,21 +202,14 @@ const ManagementRulesInput = ({ id, label, managementRulesObj, onChange }) => {
 ManagementRulesInput.propTypes = {
   id: PropTypes.string,
   label: PropTypes.string,
-  managementRulesObj: PropTypes.shape({
-    open_access: PropTypes.bool,
-    no_take: PropTypes.bool,
-    access_restriction: PropTypes.bool,
-    periodic_closure: PropTypes.bool,
-    size_limits: PropTypes.bool,
-    gear_restriction: PropTypes.bool,
-    species_restriction: PropTypes.bool,
-  }).isRequired,
+  managementFormValues: managementRegimePropType,
   onChange: PropTypes.func.isRequired,
 }
 
 ManagementRulesInput.defaultProps = {
   id: 'rules',
   label: 'Rules',
+  managementFormValues: {},
 }
 
 export default ManagementRulesInput
