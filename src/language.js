@@ -29,12 +29,15 @@ const prompt = {
 }
 
 const autocomplete = {
-  noResultsDefault: 'No Results',
+  noResultsDefault: 'No Results!',
 }
 
 const pages = {
   collectRecord: {
     newFishNameLink: 'Propose New Species...',
+  },
+  projectInfo: {
+    newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
   },
 }
 
