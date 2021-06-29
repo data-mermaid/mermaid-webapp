@@ -25,11 +25,11 @@ test('InputAutocomplete: default no results view', () => {
     <InputAutocomplete options={options} onChange={() => {}} />,
   )
 
-  expect(screen.queryByText('No Results')).not.toBeInTheDocument()
+  expect(screen.queryByText('No Results!')).not.toBeInTheDocument()
 
   userEvent.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
 
-  expect(screen.getByText('No Results')).toBeInTheDocument()
+  expect(screen.getByText('No Results!')).toBeInTheDocument()
 })
 
 test('InputAutocomplete: custom no results view', () => {
@@ -41,11 +41,10 @@ test('InputAutocomplete: custom no results view', () => {
     />,
   )
 
-  expect(screen.queryByText('No Results')).not.toBeInTheDocument()
+  expect(screen.queryByText('No Results!')).not.toBeInTheDocument()
   expect(screen.queryByText('Custom View')).not.toBeInTheDocument()
 
   userEvent.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
 
-  expect(screen.getByText('Custom View')).toBeInTheDocument()
-  expect(screen.queryByText('No Results')).not.toBeInTheDocument()
+  expect(screen.getByText('No Results! Custom View')).toBeInTheDocument()
 })
