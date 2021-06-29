@@ -18,8 +18,9 @@ import TextareaWithLabelAndValidation from '../../generic/TextareaWithLabelAndVa
 import { InputWrapper, InputRow } from '../../generic/form'
 import { getOptions } from '../../../library/getOptions'
 import { IconClose } from '../../icons'
-import { CloseButton } from '../../generic/buttons'
+import { CloseButton, ButtonLink } from '../../generic/buttons'
 import theme from '../../../theme'
+import language from '../../../language'
 
 const TagStyleWrapper = styled.ul`
   padding: 0;
@@ -42,6 +43,10 @@ const TagStyle = styled.li`
       visibility: visible;
     }
   `)}
+`
+
+const InputAutocompleteWrapper = styled(InputRow)`
+  height: 100px;
 `
 
 const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
@@ -111,6 +116,17 @@ const Admin = () => {
     enableReinitialize: true,
   }
 
+  const noOrganizationResult = (
+    <ButtonLink
+      type="button"
+      onClick={() => {
+        console.log('you click')
+      }}
+    >
+      {language.pages.projectInfo.newOrganizationNameLink}
+    </ButtonLink>
+  )
+
   const content = isOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
@@ -126,7 +142,7 @@ const Admin = () => {
             id="notes"
             {...formik.getFieldProps('notes')}
           />
-          <InputRow>
+          <InputAutocompleteWrapper>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label htmlFor="organizations">Organizations</label>
             <InputAutocomplete
@@ -149,8 +165,9 @@ const Admin = () => {
                   ])
                 }
               }}
+              noResultsDisplay={noOrganizationResult}
             />
-          </InputRow>
+          </InputAutocompleteWrapper>
           <OrganizationList
             organizations={formik.getFieldProps('tags').value}
             handleOrganizationsChange={(item) => {

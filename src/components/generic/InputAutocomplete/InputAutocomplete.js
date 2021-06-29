@@ -12,8 +12,8 @@ const AutoCompleteInput = styled(Input)`
   width: 100%;
 `
 
-const NoResultsContainer = styled.div`
-  background: magenta;
+const NoResultSection = styled.div`
+  padding-top: 10px;
 `
 
 const InputAutocomplete = ({
@@ -41,7 +41,7 @@ const InputAutocomplete = ({
     const { selectedItem, inputValue } = changes
 
     const shouldMenuBeOpen =
-      inputValue?.length >= 3 && inputValue !== selectedValue
+      inputValue?.length >= 3 && inputValue !== selectedValue.label
 
     if (selectedItem) {
       setSelectedValue(selectedItem)
@@ -52,14 +52,6 @@ const InputAutocomplete = ({
       setMenuOpen(shouldMenuBeOpen)
     }
   }
-
-  const noResults = noResultsDisplay ? (
-    <NoResultsContainer>{noResultsDisplay}</NoResultsContainer>
-  ) : (
-    <NoResultsContainer>
-      {language.autocomplete.noResultsDefault}
-    </NoResultsContainer>
-  )
 
   const getMenuContents = (downshiftObject) => {
     const {
@@ -87,7 +79,7 @@ const InputAutocomplete = ({
             </Item>
           )
         })
-      : noResults
+      : null
   }
 
   return (
@@ -97,7 +89,12 @@ const InputAutocomplete = ({
       itemToString={(item) => (item ? item.label : '')}
     >
       {(downshiftObject) => {
-        const { getRootProps, getInputProps, getMenuProps } = downshiftObject
+        const {
+          getRootProps,
+          getInputProps,
+          getMenuProps,
+          inputValue,
+        } = downshiftObject
 
         return (
           <div
@@ -110,6 +107,11 @@ const InputAutocomplete = ({
             <Menu {...getMenuProps({ isOpen: menuOpen })}>
               {menuOpen ? getMenuContents(downshiftObject) : null}
             </Menu>
+            {getMatchingMenuItems(inputValue).length === 0 && (
+              <NoResultSection>
+                {language.autocomplete.noResultsDefault} {noResultsDisplay}
+              </NoResultSection>
+            )}
           </div>
         )
       }}
