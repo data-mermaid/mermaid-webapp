@@ -21,6 +21,7 @@ import { IconClose } from '../../icons'
 import { CloseButton, ButtonLink } from '../../generic/buttons'
 import theme from '../../../theme'
 import language from '../../../language'
+import Modal from '../../generic/Modal/Modal'
 
 const TagStyleWrapper = styled.ul`
   padding: 0;
@@ -78,6 +79,15 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { projectId } = useParams()
 
+  const [
+    IsNewOrganizationNameModalOpen,
+    setIsNewOrganizationNameModalOpen,
+  ] = useState(false)
+  const openNewOrganizationNameModal = () =>
+    setIsNewOrganizationNameModalOpen(true)
+  const closeNewOrganizationNameModal = () =>
+    setIsNewOrganizationNameModalOpen(false)
+
   const _getSupportingData = useEffect(() => {
     let isMounted = true
 
@@ -117,12 +127,7 @@ const Admin = () => {
   }
 
   const noOrganizationResult = (
-    <ButtonLink
-      type="button"
-      onClick={() => {
-        console.log('you click')
-      }}
-    >
+    <ButtonLink type="button" onClick={openNewOrganizationNameModal}>
       {language.pages.projectInfo.newOrganizationNameLink}
     </ButtonLink>
   )
@@ -130,58 +135,67 @@ const Admin = () => {
   const content = isOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
-        <InputWrapper>
-          <InputWithLabelAndValidation
-            label="Name"
-            id="name"
-            type="text"
-            {...formik.getFieldProps('name')}
-          />
-          <TextareaWithLabelAndValidation
-            label="Notes"
-            id="notes"
-            {...formik.getFieldProps('notes')}
-          />
-          <InputAutocompleteWrapper>
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label htmlFor="organizations">Organizations</label>
-            <InputAutocomplete
-              id="organizations"
-              options={projectTagOptions}
-              onChange={(selectedItem) => {
-                const { label: selectedItemLabel } = selectedItem
+        <>
+          <InputWrapper>
+            <InputWithLabelAndValidation
+              label="Name"
+              id="name"
+              type="text"
+              {...formik.getFieldProps('name')}
+            />
+            <TextareaWithLabelAndValidation
+              label="Notes"
+              id="notes"
+              {...formik.getFieldProps('notes')}
+            />
+            <InputAutocompleteWrapper>
+              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+              <label htmlFor="organizations">Organizations</label>
+              <InputAutocomplete
+                id="organizations"
+                options={projectTagOptions}
+                onChange={(selectedItem) => {
+                  const { label: selectedItemLabel } = selectedItem
+                  const existingOrganizations = [
+                    ...formik.getFieldProps('tags').value,
+                  ]
+
+                  const doesTagAlreadyExist = existingOrganizations.find(
+                    (item) => selectedItemLabel === item,
+                  )
+
+                  if (!doesTagAlreadyExist) {
+                    formik.setFieldValue('tags', [
+                      ...existingOrganizations,
+                      selectedItemLabel,
+                    ])
+                  }
+                }}
+                noResultsDisplay={noOrganizationResult}
+              />
+            </InputAutocompleteWrapper>
+            <OrganizationList
+              organizations={formik.getFieldProps('tags').value}
+              handleOrganizationsChange={(item) => {
                 const existingOrganizations = [
                   ...formik.getFieldProps('tags').value,
                 ]
+                const foundItemIndex = existingOrganizations.indexOf(item)
 
-                const doesTagAlreadyExist = existingOrganizations.find(
-                  (item) => selectedItemLabel === item,
-                )
+                existingOrganizations.splice(foundItemIndex, 1)
 
-                if (!doesTagAlreadyExist) {
-                  formik.setFieldValue('tags', [
-                    ...existingOrganizations,
-                    selectedItemLabel,
-                  ])
-                }
+                formik.setFieldValue('tags', existingOrganizations)
               }}
-              noResultsDisplay={noOrganizationResult}
             />
-          </InputAutocompleteWrapper>
-          <OrganizationList
-            organizations={formik.getFieldProps('tags').value}
-            handleOrganizationsChange={(item) => {
-              const existingOrganizations = [
-                ...formik.getFieldProps('tags').value,
-              ]
-              const foundItemIndex = existingOrganizations.indexOf(item)
-
-              existingOrganizations.splice(foundItemIndex, 1)
-
-              formik.setFieldValue('tags', existingOrganizations)
-            }}
+          </InputWrapper>
+          <Modal
+            isOpen={IsNewOrganizationNameModalOpen}
+            onDismiss={closeNewOrganizationNameModal}
+            title="placeholder"
+            mainContent={<>placeholcer</>}
+            footerContent={<>placeholcer</>}
           />
-        </InputWrapper>
+        </>
       )}
     </Formik>
   ) : (
