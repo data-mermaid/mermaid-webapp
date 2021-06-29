@@ -113,4 +113,5 @@ export const ButtonLink = styled('button')`
   cursor: pointer;
   overflow: visible; /* IE hack */
   width: auto; /* IE hack */
+  color: blue;
 `
