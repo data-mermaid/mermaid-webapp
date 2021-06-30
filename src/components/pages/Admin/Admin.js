@@ -91,6 +91,29 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   )
 }
 
+const ModalButtonGroup = ({
+  suggestionOrganization,
+  handleSuggestionModalChange,
+  closeNewOrganizationNameModal,
+  onChange,
+}) => (
+  <ModalFooterContent>
+    <ButtonCallout
+      onClick={() => {
+        onChange(suggestionOrganization)
+        handleSuggestionModalChange()
+        closeNewOrganizationNameModal()
+      }}
+    >
+      <IconSend />
+      Send to MERMAID for review
+    </ButtonCallout>
+    <ButtonSecondary onClick={closeNewOrganizationNameModal}>
+      Cancel
+    </ButtonSecondary>
+  </ModalFooterContent>
+)
+
 const Admin = () => {
   const { isOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -138,6 +161,11 @@ const Admin = () => {
     }
   }, [databaseSwitchboardInstance, projectId])
 
+  const handleSuggestionModalChange = () => {
+    setSuggestionOrganization('')
+    toast.success(language.success.newOrganizationAdd)
+  }
+
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
     [projectBeingEdited],
@@ -172,24 +200,6 @@ const Admin = () => {
     </>
   )
 
-  const ModalButton = ({ onChange }) => (
-    <ModalFooterContent>
-      <ButtonCallout
-        onClick={() => {
-          closeNewOrganizationNameModal()
-          onChange(suggestionOrganization)
-          toast.success(language.success.newOrganizationAdd)
-        }}
-      >
-        <IconSend />
-        Send to MERMAID for review
-      </ButtonCallout>
-      <ButtonSecondary onClick={closeNewOrganizationNameModal}>
-        Cancel
-      </ButtonSecondary>
-    </ModalFooterContent>
-  )
-  
   const content = isOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
@@ -252,7 +262,10 @@ const Admin = () => {
             title="Suggest a new organization"
             mainContent={modalContent}
             footerContent={
-              <ModalButton
+              <ModalButtonGroup
+                suggestionOrganization={suggestionOrganization}
+                handleSuggestionModalChange={handleSuggestionModalChange}
+                closeNewOrganizationNameModal={closeNewOrganizationNameModal}
                 onChange={(selectedItemLabel) => {
                   const existingOrganizations = [
                     ...formik.getFieldProps('tags').value,
@@ -289,6 +302,13 @@ const Admin = () => {
 OrganizationList.propTypes = {
   organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleOrganizationsChange: PropTypes.func.isRequired,
+}
+
+ModalButtonGroup.propTypes = {
+  suggestionOrganization: PropTypes.string.isRequired,
+  handleSuggestionModalChange: PropTypes.func.isRequired,
+  closeNewOrganizationNameModal: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
 
 export default Admin
