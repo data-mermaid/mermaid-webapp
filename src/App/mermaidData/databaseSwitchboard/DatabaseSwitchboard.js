@@ -31,6 +31,8 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getManagementRegime: PropTypes.func,
   getManagementRegimeRecordsForUiDisplay: PropTypes.func,
   getProjects: PropTypes.func,
+  getProject: PropTypes.func,
+  getProjectTags: PropTypes.func,
   getSites: PropTypes.func,
   getSite: PropTypes.func,
   getSiteRecordsForUIDisplay: PropTypes.func,

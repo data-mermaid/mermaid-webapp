@@ -37,10 +37,11 @@ const Projects = () => {
   }, [databaseSwitchboardInstance])
 
   const projectList = projects.map(
-    ({ name, countries, num_sites, offlineReady, updated_on }) => (
+    ({ id, name, countries, num_sites, offlineReady, updated_on }) => (
       <ProjectCard
         role="listitem"
-        key={name}
+        key={id}
+        id={id}
         name={name}
         countries={countries}
         num_sites={num_sites}
