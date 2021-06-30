@@ -105,7 +105,7 @@ const InputAutocomplete = ({
           >
             <AutoCompleteInput {...getInputProps()} {...restOfProps} />
             <Menu {...getMenuProps({ isOpen: menuOpen })}>
-              {menuOpen ? getMenuContents(downshiftObject) : null}
+              {menuOpen && getMenuContents(downshiftObject)}
             </Menu>
             {getMatchingMenuItems(inputValue).length === 0 && (
               <NoResultSection>
