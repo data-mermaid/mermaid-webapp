@@ -19,6 +19,7 @@ const error = {
 const success = {
   collectRecordSave: 'Collect record saved.',
   collectRecordDelete: 'Collect record deleted.',
+  newOrganizationAdd: 'Organization added.'
 }
 
 const prompt = {
@@ -38,6 +39,7 @@ const pages = {
   },
   projectInfo: {
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
+    suggestionOrganizationInputText: `If your organization is approved, it'll be automatically added to your project.`,
   },
 }
 

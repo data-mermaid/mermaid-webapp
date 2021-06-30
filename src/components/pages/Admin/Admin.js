@@ -15,10 +15,15 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import InputWithLabelAndValidation from '../../generic/InputWithLabelAndValidation'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import TextareaWithLabelAndValidation from '../../generic/TextareaWithLabelAndValidation'
-import { InputWrapper, InputRow } from '../../generic/form'
+import { InputWrapper, InputRow, Input } from '../../generic/form'
 import { getOptions } from '../../../library/getOptions'
-import { IconClose } from '../../icons'
-import { CloseButton, ButtonLink } from '../../generic/buttons'
+import { IconClose, IconSend } from '../../icons'
+import {
+  CloseButton,
+  ButtonLink,
+  ButtonCallout,
+  ButtonSecondary,
+} from '../../generic/buttons'
 import theme from '../../../theme'
 import language from '../../../language'
 import Modal from '../../generic/Modal/Modal'
@@ -50,6 +55,22 @@ const InputAutocompleteWrapper = styled(InputRow)`
   height: 100px;
 `
 
+const ModalMainContent = styled(InputRow)`
+  grid-template-columns: auto 1fr;
+`
+
+const ModalFooterContent = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+
+const SubText = styled.div`
+  grid-column: 1/2;
+  font-size: small;
+  color: grey;
+  padding-top: 5px;
+`
+
 const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   return (
     organizations && (
@@ -77,6 +98,7 @@ const Admin = () => {
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const [suggestionOrganization, setSuggestionOrganization] = useState('')
   const { projectId } = useParams()
 
   const [
@@ -132,6 +154,42 @@ const Admin = () => {
     </ButtonLink>
   )
 
+  const modalContent = (
+    <>
+      <ModalMainContent>
+        <Input
+          id="add-new-organization"
+          type="text"
+          value={suggestionOrganization}
+          onChange={(e) => {
+            setSuggestionOrganization(e.target.value)
+          }}
+        />
+        <SubText>
+          {language.pages.projectInfo.suggestionOrganizationInputText}
+        </SubText>
+      </ModalMainContent>
+    </>
+  )
+
+  const ModalButton = ({ onChange }) => (
+    <ModalFooterContent>
+      <ButtonCallout
+        onClick={() => {
+          closeNewOrganizationNameModal()
+          onChange(suggestionOrganization)
+          toast.success(language.success.newOrganizationAdd)
+        }}
+      >
+        <IconSend />
+        Send to MERMAID for review
+      </ButtonCallout>
+      <ButtonSecondary onClick={closeNewOrganizationNameModal}>
+        Cancel
+      </ButtonSecondary>
+    </ModalFooterContent>
+  )
+  
   const content = isOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
@@ -191,9 +249,22 @@ const Admin = () => {
           <Modal
             isOpen={IsNewOrganizationNameModalOpen}
             onDismiss={closeNewOrganizationNameModal}
-            title="placeholder"
-            mainContent={<>placeholcer</>}
-            footerContent={<>placeholcer</>}
+            title="Suggest a new organization"
+            mainContent={modalContent}
+            footerContent={
+              <ModalButton
+                onChange={(selectedItemLabel) => {
+                  const existingOrganizations = [
+                    ...formik.getFieldProps('tags').value,
+                  ]
+
+                  formik.setFieldValue('tags', [
+                    ...existingOrganizations,
+                    selectedItemLabel,
+                  ])
+                }}
+              />
+            }
           />
         </>
       )}
