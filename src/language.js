@@ -36,6 +36,9 @@ const pages = {
   collectRecord: {
     newFishNameLink: 'Propose New Species...',
   },
+  projectInfo: {
+    newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
+  },
 }
 
 export default { error, success, prompt, autocomplete, pages }
