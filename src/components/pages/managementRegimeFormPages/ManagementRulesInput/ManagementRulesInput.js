@@ -78,15 +78,15 @@ const ManagementRulesInput = ({
 
   const resetPartialRestrictionProperties = () => {
     const updatedValues = { ...partialRestrictionCheckboxValues }
-    const partiRestrictionOptionValues = partialRestrictionOptions.map(
+    const partialRestrictionOptionValues = partialRestrictionOptions.map(
       (item) => item.value,
     )
 
-    for (let i = 0; i < partiRestrictionOptionValues.length; i++) {
-      updatedValues[partiRestrictionOptionValues[i]] = false
+    partialRestrictionOptionValues.forEach((item) => {
+      updatedValues[item] = false
 
-      onChange(partiRestrictionOptionValues[i], false)
-    }
+      onChange(item, false)
+    })
 
     setPartialRestrictionCheckboxValues(updatedValues)
   }
