@@ -113,7 +113,7 @@ const InputAutocomplete = ({
             </Menu>
             {getMatchingMenuItems(inputValue).length === 0 && (
               <NoResultSection>
-                {language.autocomplete.noResultsDefault} {noResultsDisplay}
+                {noResultsDisplay || language.autocomplete.noResultsDefault}
               </NoResultSection>
             )}
           </div>
