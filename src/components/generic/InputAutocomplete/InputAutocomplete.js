@@ -18,7 +18,6 @@ const NoResultsContainer = styled.div`
 
 const InputAutocomplete = ({
   options,
-  placeholder,
   value,
   onChange,
   noResultsDisplay,
@@ -40,6 +39,7 @@ const InputAutocomplete = ({
 
   const handleStateChange = (changes) => {
     const { selectedItem, inputValue } = changes
+
     const shouldMenuBeOpen =
       inputValue?.length >= 3 && inputValue !== selectedValue
 
@@ -106,12 +106,7 @@ const InputAutocomplete = ({
               suppressRefError: true,
             })}
           >
-            <AutoCompleteInput
-              {...getInputProps({
-                placeholder,
-              })}
-              {...restOfProps}
-            />
+            <AutoCompleteInput {...getInputProps()} {...restOfProps} />
             <Menu {...getMenuProps({ isOpen: menuOpen })}>
               {menuOpen ? getMenuContents(downshiftObject) : null}
             </Menu>
@@ -126,13 +121,11 @@ InputAutocomplete.propTypes = {
   noResultsDisplay: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  placeholder: PropTypes.string,
   value: PropTypes.string,
 }
 
 InputAutocomplete.defaultProps = {
   noResultsDisplay: undefined,
-  placeholder: undefined,
   value: '',
 }
 

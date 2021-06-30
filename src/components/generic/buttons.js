@@ -18,6 +18,7 @@ export const CloseButton = styled.button`
   line-height: 0;
   width: 4rem;
   height: 4rem;
+  cursor: pointer;
   transition: ${theme.timing.hoverTransition};
   ${hoverState(css`
     background: ${theme.color.secondaryHover};
