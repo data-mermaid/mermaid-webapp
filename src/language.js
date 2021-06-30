@@ -19,7 +19,7 @@ const error = {
 const success = {
   collectRecordSave: 'Collect record saved.',
   collectRecordDelete: 'Collect record deleted.',
-  newOrganizationAdd: 'Organization added.'
+  newOrganizationAdd: 'Organization added.',
 }
 
 const prompt = {
