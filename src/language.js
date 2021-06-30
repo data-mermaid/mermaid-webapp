@@ -29,7 +29,7 @@ const prompt = {
 }
 
 const autocomplete = {
-  noResultsDefault: 'No Results!',
+  noResultsDefault: 'No Results',
 }
 
 const pages = {
