@@ -9,8 +9,9 @@ import { ContentPageLayout } from '../../../Layout'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
-import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWithLabel'
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import ManagementRulesInput from '../ManagementRulesInput'
+import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWithLabel'
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 
@@ -108,6 +109,12 @@ const ManagementRegime = () => {
                     value={formik.getFieldProps('parties').value}
                     onChange={(selectedItems) => {
                       formik.setFieldValue('parties', selectedItems)
+                    }}
+                  />
+                  <ManagementRulesInput
+                    managementFormValues={formik.values}
+                    onChange={(property, selectedItems) => {
+                      formik.setFieldValue(property, selectedItems)
                     }}
                   />
                   <InputRadioWithLabelAndValidation

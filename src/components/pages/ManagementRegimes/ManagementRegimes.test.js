@@ -145,7 +145,7 @@ test('Management Regime Records table sorts properly by Open Access column', asy
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
+  expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Open Access'))
@@ -173,14 +173,14 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
+  expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Access Restrictions'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('Management Regimes C'))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Management Regimes B'))
 })
 
 test('Management Regime Records table sorts properly by Periodic Closure column', async () => {
@@ -229,14 +229,14 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
+  expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Size Limits'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('Management Regimes A'))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Management Regimes B'))
 })
 
 test('Management Regime Records table sorts properly by Gear Restrictions column', async () => {
@@ -285,7 +285,7 @@ test('Management Regime Records table sorts properly by Species Restrictions col
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
+  expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Species Restrictions'))
