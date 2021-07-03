@@ -59,6 +59,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
+  const [reloadFishNameOptions, setReloadFishNameOptions] = useState()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
@@ -69,7 +70,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     setShowDeleteModal(false)
   }
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
-  const [observationsState] = observationsReducer
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const _getSupportingData = useEffect(() => {
     let isMounted = true
@@ -222,6 +223,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                     fishBinSelected={formik.values.size_bin}
                     choices={choices}
                     observationsReducer={observationsReducer}
+                    reloadFishNameOptions={reloadFishNameOptions}
                   />
                 </form>
                 <ButtonCaution
@@ -270,18 +272,35 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           />
         )}
       </Formik>
-      <NewFishSpeciesModal
-        isOpen={isNewFishNameModalOpen}
-        onDismiss={closeNewFishNameModal}
-        onSubmit={({ genus, species }) => {
-          console.log(genus, species, observationToAddSpeciesTo)
-          // TODO: tests, make observation get new species, update dexie
-          // do nickss PRS
-          return Promise.resolve()
-        }}
-        currentUser={currentUser}
-        projectId={projectId}
-      />
+      {!!projectId && !!currentUser && (
+        <NewFishSpeciesModal
+          isOpen={isNewFishNameModalOpen}
+          onDismiss={closeNewFishNameModal}
+          onSubmit={({ genusId, genusName, speciesName }) => {
+            databaseSwitchboardInstance
+              .addFishSpecies({
+                genusId,
+                genusName,
+                speciesName,
+              })
+              .then((newFishSpecies) => {
+                observationsDispatch({
+                  type: 'updateFishName',
+                  payload: {
+                    observationId: observationToAddSpeciesTo,
+                    newFishName: newFishSpecies.id,
+                  },
+                })
+                setReloadFishNameOptions(newFishSpecies.id)
+              })
+              .catch(() => toast.error(language.error.fishSpeciesSave))
+
+            return Promise.resolve()
+          }}
+          currentUser={currentUser}
+          projectId={projectId}
+        />
+      )}
     </>
   )
 }

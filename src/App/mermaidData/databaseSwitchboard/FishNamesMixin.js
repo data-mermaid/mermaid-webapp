@@ -1,8 +1,9 @@
+import { createUuid } from '../../../library/createUuid'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const FishNameMixin = (Base) =>
   class extends Base {
-    getSpecies = () => {
+    getFishSpecies = () => {
       if (this._isAuthenticatedAndReady) {
         return this._dexieInstance.fishSpecies.toArray()
       }
@@ -10,12 +11,25 @@ const FishNameMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getGenera = () =>
+    addFishSpecies = ({ genusId, genusName, speciesName }) => {
+      const newFishObject = {
+        id: createUuid(),
+        display_name: `${genusName} ${speciesName}`,
+        name: speciesName,
+        genus: genusId,
+      }
+
+      return this._dexieInstance.fishSpecies
+        .put(newFishObject)
+        .then(() => newFishObject)
+    }
+
+    getFishGenera = () =>
       this._isAuthenticatedAndReady
         ? Promise.resolve(mockMermaidData.fishGenera)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getFamilies = () =>
+    getFishFamilies = () =>
       this._isAuthenticatedAndReady
         ? Promise.resolve(mockMermaidData.fishFamilies)
         : Promise.reject(this._notAuthenticatedAndReadyError)
