@@ -39,6 +39,7 @@ const FishBeltObservationTable = ({
   choices,
   observationsReducer,
   openNewFishNameModal,
+  reloadFishNameOptions,
 }) => {
   const isMounted = useIsMounted()
   const fishBinSelectedLabel = getObjectById(
@@ -73,9 +74,9 @@ const FishBeltObservationTable = ({
   const _loadFishNameOptions = useEffect(() => {
     if (databaseSwitchboardInstance) {
       Promise.all([
-        databaseSwitchboardInstance.getSpecies(),
-        databaseSwitchboardInstance.getGenera(),
-        databaseSwitchboardInstance.getFamilies(),
+        databaseSwitchboardInstance.getFishSpecies(),
+        databaseSwitchboardInstance.getFishGenera(),
+        databaseSwitchboardInstance.getFishFamilies(),
       ]).then(([species, genera, families]) => {
         const speciesOptions = species.map(({ id, display_name }) => ({
           label: display_name,
@@ -94,7 +95,7 @@ const FishBeltObservationTable = ({
         }
       })
     }
-  }, [databaseSwitchboardInstance, isMounted])
+  }, [databaseSwitchboardInstance, isMounted, reloadFishNameOptions])
 
   const handleDeleteObservation = (observationId) => {
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
@@ -191,25 +192,27 @@ const FishBeltObservationTable = ({
       <Tr key={observationId}>
         <Td>{rowNumber}</Td>
         <Td>
-          {!!fishNameOptions.length ? (
-            <InputAutocomplete
-              aria-labelledby="fish-name-label"
-              options={fishNameOptions}
-              onChange={(selectedOption) =>
-                handleFishNameChange(selectedOption.value, observationId)
-              }
-              value={fish_attribute}
-              noResultsDisplay={
-                <ButtonLink
-                  type="button"
-                  onClick={() => openNewFishNameModal(observationId)}
-                >
-                  {language.pages.collectRecord.newFishSpeciesLink}
-                </ButtonLink>
-              }
-            />
+          {fishNameOptions.length ? (
+            <>
+              <InputAutocomplete
+                aria-labelledby="fish-name-label"
+                options={fishNameOptions}
+                onChange={(selectedOption) =>
+                  handleFishNameChange(selectedOption.value, observationId)
+                }
+                value={fish_attribute}
+                noResultsDisplay={
+                  <ButtonLink
+                    type="button"
+                    onClick={() => openNewFishNameModal(observationId)}
+                  >
+                    {language.pages.collectRecord.newFishSpeciesLink}
+                  </ButtonLink>
+                }
+              />
+            </>
           ) : (
-            <LoadingIndicator />
+            <LoadingIndicator aria-label="fish name loading indicator" />
           )}
         </Td>
         <Td align="right">{sizeInput}</Td>
@@ -251,14 +254,17 @@ const FishBeltObservationTable = ({
             <thead>
               <Tr>
                 <Th> </Th>
-                <Th id="fish-name-label">
-                  Fish Name <IconRequired />
+                <Th align="right" id="fish-name-label">
+                  Fish Name
+                  <IconRequired />
                 </Th>
                 <Th align="right" id="fish-size-label">
-                  Size <IconRequired />
+                  Size
+                  <IconRequired />
                 </Th>
                 <Th align="right" id="fish-count-label">
-                  Count <IconRequired />
+                  Count
+                  <IconRequired />
                 </Th>
                 <Th>Biomass (kg/ha)</Th>
                 <Th> </Th>

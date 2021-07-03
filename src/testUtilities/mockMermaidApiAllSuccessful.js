@@ -7,6 +7,8 @@ const mockMermaidApiAllSuccessful = setupServer(
       ctx.json({
         id: 'fake-id',
         first_name: 'FakeFirstNameOnline',
+        last_name: 'FakeLastNameOnline',
+        full_name: 'FakeFirstNameOnline FakeLastNameOnline',
       }),
     )
   }),

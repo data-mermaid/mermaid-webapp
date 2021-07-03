@@ -15,6 +15,7 @@ import language from '../../language'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import useIsMounted from '../../library/useIsMounted'
 
 const MainContentContainer = styled.div`
   border: solid thick magenta;
@@ -31,10 +32,12 @@ const NewFishSpeciesModal = ({
   projectId,
   currentUser,
 }) => {
+  const isMounted = useIsMounted()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [generaOptions, setGeneraOptions] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [projectName, setProjectName] = useState()
+  const [genusName, setGenusName] = useState()
   const goToPage2 = () => {
     setCurrentPage(2)
   }
@@ -47,10 +50,10 @@ const NewFishSpeciesModal = ({
 
     if (databaseSwitchboardInstance && isMounted) {
       databaseSwitchboardInstance
-        .getGenera()
+        .getFishGenera()
         .then((genera) => {
           setGeneraOptions(
-            genera.map((genus) => ({ label: genus.name, value: genus.name })),
+            genera.map((genus) => ({ label: genus.name, value: genus.id })),
           )
         })
         .catch(() => {
@@ -64,9 +67,7 @@ const NewFishSpeciesModal = ({
   }, [databaseSwitchboardInstance])
 
   const _getProjectName = useEffect(() => {
-    let isMounted = true
-
-    if (databaseSwitchboardInstance && isMounted) {
+    if (databaseSwitchboardInstance && isMounted.current) {
       databaseSwitchboardInstance
         .getProject(projectId)
         .then((project) => {
@@ -76,16 +77,12 @@ const NewFishSpeciesModal = ({
           toast.error(language.error.projectsUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, projectId])
+  }, [databaseSwitchboardInstance, projectId, isMounted])
 
   const formikPage1 = useFormik({
-    initialValues: { genus: '', species: '' },
+    initialValues: { genusId: '', species: '' },
     validationSchema: Yup.object().shape({
-      genus: Yup.string().required(language.error.formValidation.required),
+      genusId: Yup.string().required(language.error.formValidation.required),
       species: Yup.string().required(language.error.formValidation.required),
     }),
     validateOnBlur: false,
@@ -102,10 +99,15 @@ const NewFishSpeciesModal = ({
     onDismiss()
   }
 
+  const handleSpeciesChange = (event) => {
+    formikPage1.setFieldValue('species', event.target.value.toLowerCase())
+  }
+
   const handleOnSubmit = () => {
     onSubmit({
-      genus: formikPage1.values.genus,
-      species: formikPage1.values.species,
+      genusId: formikPage1.values.genusId,
+      genusName,
+      speciesName: formikPage1.values.species,
     }).then(() => {
       resetAndCloseModal()
     })
@@ -115,15 +117,18 @@ const NewFishSpeciesModal = ({
     <form id="form-page-1" onSubmit={formikPage1.handleSubmit}>
       <Row>
         <InputContainer>
-          <label htmlFor="genus">
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label id="genus-label">
             {language.createFishSpecies.genus} <IconRequired />
           </label>
           <InputAutocomplete
             id="genus"
+            aria-labelledby="genus-label"
             options={generaOptions}
-            value={formikPage1.values.genus}
+            value={formikPage1.values.genusId}
             onChange={(selectedItem) => {
-              formikPage1.setFieldValue('genus', selectedItem.value)
+              formikPage1.setFieldValue('genusId', selectedItem.value)
+              setGenusName(selectedItem.label)
             }}
           />
           {formikPage1.errors.genus && <div>{formikPage1.errors.genus}</div>}
@@ -132,7 +137,11 @@ const NewFishSpeciesModal = ({
           <label htmlFor="species">
             {language.createFishSpecies.species} <IconRequired />
           </label>
-          <Input id="species" {...formikPage1.getFieldProps('species')} />
+          <Input
+            id="species"
+            value={formikPage1.values.species}
+            onChange={handleSpeciesChange}
+          />
           {formikPage1.errors.species && (
             <div>{formikPage1.errors.species}</div>
           )}
@@ -146,15 +155,15 @@ const NewFishSpeciesModal = ({
       <div>
         <div>
           {language.createFishSpecies.getSummaryText1({
-            speciesName: `${formikPage1.values.genus} ${formikPage1.values.species}`,
+            speciesName: `${genusName} ${formikPage1.values.species}`,
           })}
         </div>
         <h5>{language.createFishSpecies.details}</h5>
         <dl>
-          <dt>{language.createFishSpecies.user}</dt>
-          <dd>{currentUser.full_name}</dd>
-          <dt>{language.createFishSpecies.project}</dt>
-          <dd>{projectName}</dd>
+          <dt id="user-label">{language.createFishSpecies.user}</dt>
+          <dd aria-labelledby="user-label">{currentUser.full_name}</dd>
+          <dt id="project-label">{language.createFishSpecies.project}</dt>
+          <dd aria-labelledby="project-label">{projectName}</dd>
         </dl>
       </div>
       <div>{language.createFishSpecies.summaryText2}</div>

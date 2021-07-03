@@ -18,6 +18,8 @@ const error = {
     'Something went wrong. The collect record has not been deleted.',
   generaUnavailable:
     'Fish genera data is currently unavailable. Please try again',
+  fishSpeciesSave:
+    'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
   formValidation: { required: 'This field is required' },
 }
 

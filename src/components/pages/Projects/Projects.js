@@ -37,7 +37,7 @@ const Projects = () => {
   }, [databaseSwitchboardInstance])
 
   const projectList = projects.map((project) => (
-    <ProjectCard role="listitem" project={project} />
+    <ProjectCard role="listitem" project={project} key={project.id} />
   ))
 
   return isLoading ? (
