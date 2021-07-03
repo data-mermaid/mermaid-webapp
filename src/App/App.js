@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import React, { useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { CustomToastContainer } from '../components/generic/toast'
 import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
@@ -18,8 +18,13 @@ import useAuthentication from './useAuthentication'
 import Layout from '../components/Layout'
 import ApiSync from './mermaidData/ApiSync/ApiSync'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { initiallyHydrateOfflineStorageWithApiData } from './initiallyHydrateOfflineStorageWithApiData'
+import { toast } from 'react-toastify'
+import language from '../language'
+import useIsMounted from '../library/useIsMounted'
 
 function App({ dexieInstance }) {
+  const isMounted = useIsMounted()
   const { isOnline } = useOnlineStatus()
   const {
     auth0Token,
@@ -27,6 +32,15 @@ function App({ dexieInstance }) {
     logoutMermaid,
   } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(true)
+
+  const _initiallyHydrateOfflineStorageWithApiData = useEffect(() => {
+    if (dexieInstance && isMounted.current) {
+      initiallyHydrateOfflineStorageWithApiData(dexieInstance)
+        .then(setIsOfflineStorageHydrated(true))
+        .catch(() => toast.error(language.error.initialApiDataPull))
+    }
+  }, [dexieInstance, isMounted])
   const { current: apiSyncInstance } = useRef(
     new ApiSync({
       dexieInstance,
@@ -69,7 +83,10 @@ function App({ dexieInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated && currentUser && databaseSwitchboardInstance
+    isMermaidAuthenticated &&
+    currentUser &&
+    databaseSwitchboardInstance &&
+    isOfflineStorageHydrated
 
   return (
     <ThemeProvider theme={theme}>

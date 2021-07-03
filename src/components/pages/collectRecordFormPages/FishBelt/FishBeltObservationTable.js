@@ -29,6 +29,9 @@ import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
+import mockMermaidData from '../../../../testUtilities/mockMermaidData'
+import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
+import useIsMounted from '../../../../library/useIsMounted'
 
 const FishBeltObservationTable = ({
   collectRecord,
@@ -37,6 +40,7 @@ const FishBeltObservationTable = ({
   observationsReducer,
   openNewFishNameModal,
 }) => {
+  const isMounted = useIsMounted()
   const fishBinSelectedLabel = getObjectById(
     choices?.fishsizebins.data,
     fishBinSelected,
@@ -73,23 +77,24 @@ const FishBeltObservationTable = ({
         databaseSwitchboardInstance.getGenera(),
         databaseSwitchboardInstance.getFamilies(),
       ]).then(([species, genera, families]) => {
-        const speciesOptions = species.results.map(({ id, display_name }) => ({
+        const speciesOptions = species.map(({ id, display_name }) => ({
           label: display_name,
           value: id,
         }))
 
-        const generaAndFamiliesOptions = [
-          ...genera.results,
-          ...families.results,
-        ].map(({ id, name }) => ({
-          label: name,
-          value: id,
-        }))
+        const generaAndFamiliesOptions = [...genera, ...families].map(
+          ({ id, name }) => ({
+            label: name,
+            value: id,
+          }),
+        )
 
-        setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
+        if (isMounted.current) {
+          setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
+        }
       })
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, isMounted])
 
   const handleDeleteObservation = (observationId) => {
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
@@ -186,22 +191,26 @@ const FishBeltObservationTable = ({
       <Tr key={observationId}>
         <Td>{rowNumber}</Td>
         <Td>
-          <InputAutocomplete
-            aria-labelledby="fish-name-label"
-            options={fishNameOptions}
-            onChange={(selectedOption) =>
-              handleFishNameChange(selectedOption.value, observationId)
-            }
-            value={fish_attribute}
-            noResultsDisplay={
-              <ButtonLink
-                type="button"
-                onClick={() => openNewFishNameModal(observationId)}
-              >
-                {language.pages.collectRecord.newFishSpeciesLink}
-              </ButtonLink>
-            }
-          />
+          {!!fishNameOptions.length ? (
+            <InputAutocomplete
+              aria-labelledby="fish-name-label"
+              options={fishNameOptions}
+              onChange={(selectedOption) =>
+                handleFishNameChange(selectedOption.value, observationId)
+              }
+              value={fish_attribute}
+              noResultsDisplay={
+                <ButtonLink
+                  type="button"
+                  onClick={() => openNewFishNameModal(observationId)}
+                >
+                  {language.pages.collectRecord.newFishSpeciesLink}
+                </ButtonLink>
+              }
+            />
+          ) : (
+            <LoadingIndicator />
+          )}
         </Td>
         <Td align="right">{sizeInput}</Td>
         <Td align="right">
