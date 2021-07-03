@@ -51,11 +51,11 @@ const TooltipText = styled('span')`
   ${theme.typography.upperCase}
 `
 
-const ContentWithTooltip = ({ children, tooltipText, ariaId }) => {
+const ContentWithTooltip = ({ children, tooltipText, ariaLabelledBy }) => {
   return (
-    <Tooltip tabIndex="0" id={ariaId}>
+    <Tooltip tabIndex="0" id={ariaLabelledBy}>
       {children}
-      <TooltipText role="tooltip" aria-labelledby={ariaId}>
+      <TooltipText role="tooltip" aria-labelledby={ariaLabelledBy}>
         {tooltipText}
       </TooltipText>
     </Tooltip>
@@ -81,19 +81,25 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
       id="collect-form-title"
       data-testid="edit-collect-record-form-title"
     >
-      <ContentWithTooltip tooltipText="Protocol" ariaId="protocol-tooltip">
+      <ContentWithTooltip
+        tooltipText="Protocol"
+        ariaLabelledBy="protocol-tooltip"
+      >
         {defaultTitle}
       </ContentWithTooltip>
-      <ContentWithTooltip tooltipText="Site Name" ariaId="site-name-tooltip">
+      <ContentWithTooltip
+        tooltipText="Site Name"
+        ariaLabelledBy="site-name-tooltip"
+      >
         {siteName}
       </ContentWithTooltip>
       <ContentWithTooltip
         tooltipText="Transect Number"
-        ariaId="transect-number-tooltip"
+        ariaLabelledBy="transect-number-tooltip"
       >
         {transectNumber}
       </ContentWithTooltip>
-      <ContentWithTooltip tooltipText="Label" ariaId="label-tooltip">
+      <ContentWithTooltip tooltipText="Label" ariaLabelledBy="label-tooltip">
         {label}
       </ContentWithTooltip>
     </TitleContainer>
@@ -104,7 +110,7 @@ ContentWithTooltip.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
   tooltipText: PropTypes.string.isRequired,
-  ariaId: PropTypes.string.isRequired,
+  ariaLabelledBy: PropTypes.string.isRequired,
 }
 EditCollectRecordFormTitle.propTypes = {
   collectRecord: fishBeltPropType.isRequired,
