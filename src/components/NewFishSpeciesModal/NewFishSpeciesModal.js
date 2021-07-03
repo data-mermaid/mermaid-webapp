@@ -48,7 +48,7 @@ const NewFishSpeciesModal = ({
     if (databaseSwitchboardInstance && isMounted) {
       databaseSwitchboardInstance
         .getGenera()
-        .then(({ results: genera }) => {
+        .then((genera) => {
           setGeneraOptions(
             genera.map((genus) => ({ label: genus.name, value: genus.name })),
           )
