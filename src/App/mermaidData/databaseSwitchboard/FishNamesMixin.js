@@ -11,10 +11,34 @@ const FishNameMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addFishSpecies = ({ genusId, genusName, speciesName }) => {
+    addFishSpecies = async ({ genusId, genusName, speciesName }) => {
+      if (!genusId || !genusName || !speciesName) {
+        Promise.reject(
+          new Error('addFishSpecies was implemented with missing parameters'),
+        )
+      }
+
+      const proposedDisplayName = `${genusName} ${speciesName}`
+
+      const existingSpecies = await this.getFishSpecies()
+      const existingMatchingSpecies = existingSpecies.filter(
+        (specie) => specie.display_name === proposedDisplayName,
+      )
+      const isProposedSpeciesAlreadyExisting =
+        existingMatchingSpecies.length > 0
+
+      if (isProposedSpeciesAlreadyExisting) {
+        const speciesExistsException = {
+          message: 'Species already exists',
+          existingSpecies: existingMatchingSpecies[0],
+        }
+
+        return Promise.reject(speciesExistsException)
+      }
+
       const newFishObject = {
         id: createUuid(),
-        display_name: `${genusName} ${speciesName}`,
+        display_name: proposedDisplayName,
         name: speciesName,
         genus: genusId,
       }

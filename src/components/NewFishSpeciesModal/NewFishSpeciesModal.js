@@ -46,9 +46,7 @@ const NewFishSpeciesModal = ({
   }
 
   const _loadGenera = useEffect(() => {
-    let isMounted = true
-
-    if (databaseSwitchboardInstance && isMounted) {
+    if (databaseSwitchboardInstance && isMounted.current) {
       databaseSwitchboardInstance
         .getFishGenera()
         .then((genera) => {
@@ -60,11 +58,7 @@ const NewFishSpeciesModal = ({
           toast.error(language.error.generaUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, isMounted])
 
   const _getProjectName = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted.current) {

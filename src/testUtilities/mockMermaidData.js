@@ -2000,6 +2000,34 @@ const choices = {
 
 const fishSpecies = [
   {
+    id: '03561adc-7c66-45d5-bfab-88598b74b432',
+    updated_by: null,
+    status: 90,
+    display_name: 'Hologymnosus longipes',
+    biomass_constant_a: 0.0049,
+    biomass_constant_b: 3.11,
+    biomass_constant_c: 1.0,
+    climate_score: null,
+    created_on: '2018-10-12T15:22:12.638855Z',
+    updated_on: '2020-02-17T19:10:40.808463Z',
+    name: 'longipes',
+    vulnerability: 38.0,
+    max_length: 40.0,
+    trophic_level: 4.0,
+    max_length_type: 'total length',
+    notes: '',
+    created_by: null,
+    genus: '07f95e30-c9e1-42c2-b0e5-6aeef458bbbe',
+    group_size: '239e669e-f42b-454d-a5ea-d2adf7198a51',
+    trophic_group: '2dda0d31-dd2c-4ffa-8ea5-99c01f49802f',
+    functional_group: '4d268d15-a189-4925-b51f-fc7bddff5e47',
+    regions: [
+      '983267a0-7349-4d3e-a23e-fb9353ca8ba5',
+      '0ba3cc10-eefc-4a68-a195-d6cfd3a58644',
+      '1d31d9ea-e78d-438b-8667-0d63d1aba257',
+    ],
+  },
+  {
     id: '0006e6d8-7501-4c2d-9cda-263194f8e58b',
     updated_by: null,
     status: 90,
@@ -2088,6 +2116,24 @@ const fishSpecies = [
 ]
 
 const fishGenera = [
+  {
+    id: '07f95e30-c9e1-42c2-b0e5-6aeef458bbbe',
+    updated_by: null,
+    status: 90,
+    biomass_constant_a: 0.0049,
+    biomass_constant_b: 3.11,
+    biomass_constant_c: 1.0,
+    regions: [
+      '0ba3cc10-eefc-4a68-a195-d6cfd3a58644',
+      '1d31d9ea-e78d-438b-8667-0d63d1aba257',
+      '983267a0-7349-4d3e-a23e-fb9353ca8ba5',
+    ],
+    created_on: '2018-04-04T19:04:20.360073Z',
+    updated_on: '2018-04-04T19:04:20.360091Z',
+    name: 'Hologymnosus',
+    created_by: null,
+    family: '0880aab2-f8ff-49da-a7d2-983ab4233fb4',
+  },
   {
     id: '00b8d1bd-b873-400f-bf81-6abddf0d13ce',
     updated_by: null,

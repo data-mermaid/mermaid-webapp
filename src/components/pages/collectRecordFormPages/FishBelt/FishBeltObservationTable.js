@@ -29,7 +29,6 @@ import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
-import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import useIsMounted from '../../../../library/useIsMounted'
 
@@ -39,7 +38,7 @@ const FishBeltObservationTable = ({
   choices,
   observationsReducer,
   openNewFishNameModal,
-  reloadFishNameOptions,
+  reloadFishNameOptionsHack,
 }) => {
   const isMounted = useIsMounted()
   const fishBinSelectedLabel = getObjectById(
@@ -95,7 +94,7 @@ const FishBeltObservationTable = ({
         }
       })
     }
-  }, [databaseSwitchboardInstance, isMounted, reloadFishNameOptions])
+  }, [databaseSwitchboardInstance, isMounted, reloadFishNameOptionsHack])
 
   const handleDeleteObservation = (observationId) => {
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
@@ -288,11 +287,13 @@ FishBeltObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
+  reloadFishNameOptionsHack: PropTypes.string,
 }
 
 FishBeltObservationTable.defaultProps = {
   collectRecord: undefined,
   fishBinSelected: undefined,
+  reloadFishNameOptionsHack: undefined,
 }
 
 export default FishBeltObservationTable
