@@ -20,12 +20,16 @@ const error = {
     'Fish genera data is currently unavailable. Please try again',
   fishSpeciesSave:
     'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
+  fishSpeciesAlreadyExists:
+    'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   formValidation: { required: 'This field is required' },
 }
 
 const success = {
   collectRecordSave: 'Collect record saved.',
   collectRecordDelete: 'Collect record deleted.',
+  fishSpeciesSave:
+    'Proposed fish species saved. The observation has been edited to show it selected.',
 }
 
 const deleteCollectRecord = {

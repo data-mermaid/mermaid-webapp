@@ -59,7 +59,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
-  const [reloadFishNameOptions, setReloadFishNameOptions] = useState()
+  const [reloadFishNameOptionsHack, setreloadFishNameOptionsHack] = useState()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
@@ -168,6 +168,44 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
   }
 
+  const handleNewFishSpeciesOnSubmit = ({
+    genusId,
+    genusName,
+    speciesName,
+  }) => {
+    const addSpeciesSelectionToObservation = (speciesId) => {
+      observationsDispatch({
+        type: 'updateFishName',
+        payload: {
+          observationId: observationToAddSpeciesTo,
+          newFishName: speciesId,
+        },
+      })
+      setreloadFishNameOptionsHack(speciesId)
+    }
+
+    databaseSwitchboardInstance
+      .addFishSpecies({
+        genusId,
+        genusName,
+        speciesName,
+      })
+      .then((newFishSpecies) => {
+        addSpeciesSelectionToObservation(newFishSpecies.id)
+        toast.success(language.success.fishSpeciesSave)
+      })
+      .catch((error) => {
+        if (error.message === 'Species already exists') {
+          toast.warning(language.error.fishSpeciesAlreadyExists)
+          addSpeciesSelectionToObservation(error.existingSpecies.id)
+        } else {
+          toast.error(language.error.fishSpeciesSave)
+        }
+      })
+
+    return Promise.resolve()
+  }
+
   const initialFormValues = useMemo(
     () =>
       getPersistedUnsavedFormData() ?? {
@@ -223,7 +261,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                     fishBinSelected={formik.values.size_bin}
                     choices={choices}
                     observationsReducer={observationsReducer}
-                    reloadFishNameOptions={reloadFishNameOptions}
+                    reloadFishNameOptionsHack={reloadFishNameOptionsHack}
                   />
                 </form>
                 <ButtonCaution
@@ -276,27 +314,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         <NewFishSpeciesModal
           isOpen={isNewFishNameModalOpen}
           onDismiss={closeNewFishNameModal}
-          onSubmit={({ genusId, genusName, speciesName }) => {
-            databaseSwitchboardInstance
-              .addFishSpecies({
-                genusId,
-                genusName,
-                speciesName,
-              })
-              .then((newFishSpecies) => {
-                observationsDispatch({
-                  type: 'updateFishName',
-                  payload: {
-                    observationId: observationToAddSpeciesTo,
-                    newFishName: newFishSpecies.id,
-                  },
-                })
-                setReloadFishNameOptions(newFishSpecies.id)
-              })
-              .catch(() => toast.error(language.error.fishSpeciesSave))
-
-            return Promise.resolve()
-          }}
+          onSubmit={handleNewFishSpeciesOnSubmit}
           currentUser={currentUser}
           projectId={projectId}
         />

@@ -97,10 +97,114 @@ test('Fishbelt observations add new species - filling out new species form adds 
     await within(fishbeltFormAfterSubmit).findByDisplayValue('Nebrius ridens'),
   )
 
+  const proposedSpeciesSavedToast = await screen.findByText(
+    'Proposed fish species saved. The observation has been edited to show it selected.',
+  )
+
+  expect(proposedSpeciesSavedToast).toBeInTheDocument()
+
   const updatedSpeciesInOfflineStorage = await dexieInstance.fishSpecies.toArray()
   const nameOfLastSpeciesInOfflineStorage =
     updatedSpeciesInOfflineStorage[updatedSpeciesInOfflineStorage.length - 1]
       .display_name
 
   expect(nameOfLastSpeciesInOfflineStorage).toEqual('Nebrius ridens')
+})
+
+test('Fishbelt observations add new species - proposing new species that already exists results in no added species, and a toast message warning.', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/2'],
+  })
+
+  // loading indicator is weird in integration tests, so we wait for the page title
+
+  await screen.findByTestId('edit-collect-record-form-title')
+
+  const fishbeltForm = screen.getByRole('form')
+  const observationsTable = await within(fishbeltForm).findByRole('table')
+
+  await waitFor(() =>
+    expect(
+      screen.queryAllByLabelText('fish name loading indicator').length,
+    ).toEqual(0),
+  )
+
+  // need to wait until app loaded and offline storage hydration before getting species count
+  const speciesInOfflineStorageCount = (
+    await dexieInstance.fishSpecies.toArray()
+  ).length
+
+  expect(speciesInOfflineStorageCount).toEqual(4)
+
+  const firstFishNameInput = within(observationsTable).getByDisplayValue(
+    'Lethrinus rubrioperculatus',
+  )
+
+  userEvent.type(firstFishNameInput, 'supercalifragilistic')
+
+  const noResultsButton = await screen.findByRole('button', {
+    name: 'Propose New Species...',
+  })
+
+  userEvent.click(noResultsButton)
+
+  const modal = screen.getByLabelText('Add New Fish Species')
+
+  const genusInput = await within(modal).findByLabelText('Genus')
+  const speciesInput = within(modal).getByLabelText('Species')
+
+  userEvent.type(genusInput, 'holo')
+
+  const genusAutocompleteList = within(modal).getByRole('listbox')
+
+  const hologymnosusOption = within(modal).getByRole('option', {
+    name: 'Hologymnosus',
+  })
+
+  userEvent.selectOptions(genusAutocompleteList, hologymnosusOption)
+
+  // note uppercase first letter. Species names must be transformed to lowercase
+  userEvent.type(speciesInput, 'Longipes')
+
+  const nextScreenButton = within(modal).getByRole('button', {
+    name: 'Propose new species',
+  })
+
+  userEvent.click(nextScreenButton)
+
+  const submitButton = await within(modal).findByRole('button', {
+    name: 'Send to MERMAID for review',
+  })
+
+  userEvent.click(submitButton)
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('Add New Fish Species'),
+  )
+  const fishbeltFormAfterSubmit = screen.getByRole('form')
+
+  // input display value is updated with *existing* species selected
+  expect(
+    await within(fishbeltFormAfterSubmit).findByDisplayValue(
+      'Hologymnosus longipes',
+    ),
+  )
+
+  const proposedSpeciesIsDuplicateToast = await screen.findByText(
+    'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
+  )
+
+  expect(proposedSpeciesIsDuplicateToast).toBeInTheDocument()
+
+  const speciesInOfflineStorageCountAfterRedundantNewSpeciesSubmit = (
+    await dexieInstance.fishSpecies.toArray()
+  ).length
+
+  const isSpeciesInOfflineStorageUnchanged =
+    speciesInOfflineStorageCountAfterRedundantNewSpeciesSubmit ===
+    speciesInOfflineStorageCount
+
+  expect(isSpeciesInOfflineStorageUnchanged).toBeTruthy()
 })
