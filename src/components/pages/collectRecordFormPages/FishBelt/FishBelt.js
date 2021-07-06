@@ -2,7 +2,13 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useReducer, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from 'react'
 
 import styled from 'styled-components/macro'
 import {
@@ -29,6 +35,7 @@ import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
+import useIsMounted from '../../../../library/useIsMounted'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -60,14 +67,16 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
+  const [fishNameOptions, setFishNameOptions] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
-  const [reloadFishNameOptionsHack, setreloadFishNameOptionsHack] = useState()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
+  const isMounted = useIsMounted()
+
   const showDeleteConfirmPrompt = () => {
     setShowDeleteModal(true)
   }
@@ -77,9 +86,37 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
-  const _getSupportingData = useEffect(() => {
-    let isMounted = true
+  const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
+    if (databaseSwitchboardInstance) {
+      Promise.all([
+        databaseSwitchboardInstance.getFishSpecies(),
+        databaseSwitchboardInstance.getFishGenera(),
+        databaseSwitchboardInstance.getFishFamilies(),
+      ]).then(([species, genera, families]) => {
+        const speciesOptions = species.map(({ id, display_name }) => ({
+          label: display_name,
+          value: id,
+        }))
 
+        const generaAndFamiliesOptions = [...genera, ...families].map(
+          ({ id, name }) => ({
+            label: name,
+            value: id,
+          }),
+        )
+
+        if (isMounted.current) {
+          setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
+        }
+      })
+    }
+  }, [databaseSwitchboardInstance, isMounted])
+
+  const _initiallyLoadFishNameOptions = useEffect(() => {
+    updateFishNameOptionsStateWithOfflineStorageData()
+  }, [updateFishNameOptionsStateWithOfflineStorageData])
+
+  const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance) {
       const promises = [
         databaseSwitchboardInstance.getSites(),
@@ -98,7 +135,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             choicesResponse,
             collectRecordResponse,
           ]) => {
-            if (isMounted) {
+            if (isMounted.current) {
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
@@ -115,11 +152,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           toast.error(error)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, recordId, isNewRecord])
+  }, [databaseSwitchboardInstance, recordId, isNewRecord, isMounted])
 
   const {
     persistUnsavedFormData,
@@ -186,7 +219,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           newFishName: speciesId,
         },
       })
-      setreloadFishNameOptionsHack(speciesId)
+      updateFishNameOptionsStateWithOfflineStorageData()
     }
 
     databaseSwitchboardInstance
@@ -266,7 +299,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                     fishBinSelected={formik.values.size_bin}
                     choices={choices}
                     observationsReducer={observationsReducer}
-                    reloadFishNameOptionsHack={reloadFishNameOptionsHack}
+                    fishNameOptions={fishNameOptions}
                   />
                 </form>
                 <ButtonCaution

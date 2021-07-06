@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -24,13 +24,12 @@ import {
   Td,
   Th,
 } from '../../../generic/Table/table'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
-import useIsMounted from '../../../../library/useIsMounted'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 
 const FishBeltObservationTable = ({
   collectRecord,
@@ -38,18 +37,16 @@ const FishBeltObservationTable = ({
   choices,
   observationsReducer,
   openNewFishNameModal,
-  reloadFishNameOptionsHack,
+  fishNameOptions,
 }) => {
-  const isMounted = useIsMounted()
   const fishBinSelectedLabel = getObjectById(
     choices?.fishsizebins.data,
     fishBinSelected,
   )?.name
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const [observationsState, observationsDispatch] = observationsReducer
   const haveApiObservationsBeenLoaded = useRef(false)
-  const [fishNameOptions, setFishNameOptions] = useState([])
+  // const [fishNameOptions, setFishNameOptions] = useState([])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded.current && collectRecord) {
@@ -69,32 +66,6 @@ const FishBeltObservationTable = ({
       haveApiObservationsBeenLoaded.current = true
     }
   }, [collectRecord, observationsDispatch])
-
-  const _loadFishNameOptions = useEffect(() => {
-    if (databaseSwitchboardInstance) {
-      Promise.all([
-        databaseSwitchboardInstance.getFishSpecies(),
-        databaseSwitchboardInstance.getFishGenera(),
-        databaseSwitchboardInstance.getFishFamilies(),
-      ]).then(([species, genera, families]) => {
-        const speciesOptions = species.map(({ id, display_name }) => ({
-          label: display_name,
-          value: id,
-        }))
-
-        const generaAndFamiliesOptions = [...genera, ...families].map(
-          ({ id, name }) => ({
-            label: name,
-            value: id,
-          }),
-        )
-
-        if (isMounted.current) {
-          setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
-        }
-      })
-    }
-  }, [databaseSwitchboardInstance, isMounted, reloadFishNameOptionsHack])
 
   const handleDeleteObservation = (observationId) => {
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
@@ -287,13 +258,12 @@ FishBeltObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
-  reloadFishNameOptionsHack: PropTypes.string,
+  fishNameOptions: inputOptionsPropTypes.isRequired,
 }
 
 FishBeltObservationTable.defaultProps = {
   collectRecord: undefined,
   fishBinSelected: undefined,
-  reloadFishNameOptionsHack: undefined,
 }
 
 export default FishBeltObservationTable
