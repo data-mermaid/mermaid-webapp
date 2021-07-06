@@ -8,7 +8,7 @@ import {
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import {
   ButtonCaution,
-  ButtonLink,
+  ButtonThatLooksLikeLink,
   ButtonPrimary,
 } from '../../../generic/buttons'
 import { createUuid } from '../../../../library/createUuid'
@@ -172,12 +172,12 @@ const FishBeltObservationTable = ({
                 }
                 value={fish_attribute}
                 noResultsDisplay={
-                  <ButtonLink
+                  <ButtonThatLooksLikeLink
                     type="button"
                     onClick={() => openNewFishNameModal(observationId)}
                   >
                     {language.pages.collectRecord.newFishSpeciesLink}
-                  </ButtonLink>
+                  </ButtonThatLooksLikeLink>
                 }
               />
             </>

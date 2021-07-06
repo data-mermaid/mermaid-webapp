@@ -5,7 +5,11 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { ButtonLink, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
+import {
+  ButtonThatLooksLikeLink,
+  ButtonPrimary,
+  ButtonSecondary,
+} from '../generic/buttons'
 import { IconArrowBack, IconRequired, IconSend } from '../icons'
 import { Input } from '../generic/form'
 import { Column, Row, RowSpaceBetween } from '../generic/positioning'
@@ -187,9 +191,9 @@ const NewFishSpeciesModal = ({
   const footerPage2 = (
     <RowSpaceBetween>
       <LeftFooter>
-        <ButtonLink type="button" onClick={goToPage1}>
+        <ButtonThatLooksLikeLink type="button" onClick={goToPage1}>
           <IconArrowBack /> {language.createFishSpecies.back}
-        </ButtonLink>
+        </ButtonThatLooksLikeLink>
       </LeftFooter>
 
       <RightFooter>
