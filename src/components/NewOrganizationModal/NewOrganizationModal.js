@@ -43,10 +43,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
         <Input
           id="add-new-organization"
           type="text"
-          value={formik.values.newOrganizationSuggestion}
-          onChange={(e) => {
-            formik.setFieldValue('newOrganizationSuggestion', e.target.value)
-          }}
+          {...formik.getFieldProps('newOrganizationSuggestion')}
         />
         <SubText>
           {language.pages.projectInfo.suggestionOrganizationInputText}
