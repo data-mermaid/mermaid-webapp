@@ -43,7 +43,21 @@ export const fishBeltPropType = PropTypes.shape({
 })
 
 export const managementRegimePropType = PropTypes.shape({
+  id: PropTypes.string,
   name: PropTypes.string,
+  name_secondary: PropTypes.string,
+  est_year: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  parties: PropTypes.arrayOf(PropTypes.string),
+  compliance: PropTypes.string,
+  open_access: PropTypes.bool,
+  no_take: PropTypes.bool,
+  access_restriction: PropTypes.bool,
+  periodic_closure: PropTypes.bool,
+  size_limits: PropTypes.bool,
+  gear_restriction: PropTypes.bool,
+  species_restriction: PropTypes.bool,
+  notes: PropTypes.string,
 })
 
 export const currentUserPropType = PropTypes.shape({

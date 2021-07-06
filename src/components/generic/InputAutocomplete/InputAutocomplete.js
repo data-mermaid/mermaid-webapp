@@ -12,13 +12,12 @@ const AutoCompleteInput = styled(Input)`
   width: 100%;
 `
 
-const NoResultsContainer = styled.div`
-  background: magenta;
+const NoResultSection = styled.div`
+  padding-top: 10px;
 `
 
 const InputAutocomplete = ({
   options,
-  placeholder,
   value,
   onChange,
   noResultsDisplay,
@@ -49,6 +48,7 @@ const InputAutocomplete = ({
 
   const handleStateChange = (changes) => {
     const { selectedItem, inputValue } = changes
+
     const shouldMenuBeOpen =
       inputValue?.length >= 3 && inputValue !== selectedValue.label
 
@@ -61,12 +61,6 @@ const InputAutocomplete = ({
       setIsMenuOpen(shouldMenuBeOpen)
     }
   }
-
-  const noResults = (
-    <NoResultsContainer>
-      {noResultsDisplay || language.autocomplete.noResultsDefault}
-    </NoResultsContainer>
-  )
 
   const getMenuContents = (downshiftObject) => {
     const {
@@ -94,7 +88,7 @@ const InputAutocomplete = ({
             </Item>
           )
         })
-      : noResults
+      : null
   }
 
   return (
@@ -104,7 +98,12 @@ const InputAutocomplete = ({
       itemToString={(item) => (item ? item.label : '')}
     >
       {(downshiftObject) => {
-        const { getRootProps, getInputProps, getMenuProps } = downshiftObject
+        const {
+          getRootProps,
+          getInputProps,
+          getMenuProps,
+          inputValue,
+        } = downshiftObject
 
         return (
           <div
@@ -113,15 +112,15 @@ const InputAutocomplete = ({
               suppressRefError: true,
             })}
           >
-            <AutoCompleteInput
-              {...getInputProps({
-                placeholder,
-              })}
-              {...restOfProps}
-            />
+            <AutoCompleteInput {...getInputProps()} {...restOfProps} />
             <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
               {isMenuOpen && getMenuContents(downshiftObject)}
             </Menu>
+            {getMatchingMenuItems(inputValue).length === 0 && (
+              <NoResultSection>
+                {noResultsDisplay || language.autocomplete.noResultsDefault}
+              </NoResultSection>
+            )}
           </div>
         )
       }}
@@ -133,13 +132,11 @@ InputAutocomplete.propTypes = {
   noResultsDisplay: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  placeholder: PropTypes.string,
   value: PropTypes.string,
 }
 
 InputAutocomplete.defaultProps = {
   noResultsDisplay: undefined,
-  placeholder: undefined,
   value: '',
 }
 

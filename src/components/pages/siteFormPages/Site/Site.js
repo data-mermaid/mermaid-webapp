@@ -88,7 +88,6 @@ const Site = () => {
                     <InputAutocomplete
                       id="country"
                       options={countryOptions}
-                      placeholder="Enter a country"
                       value={formik.values.country}
                       onChange={(selectedItem) => {
                         formik.setFieldValue('country', selectedItem.value)

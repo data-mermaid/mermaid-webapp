@@ -1,4 +1,3 @@
-import { getObjectById } from '../../../library/getObjectById'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const ProjectsMixin = (Base) =>
@@ -8,8 +7,22 @@ const ProjectsMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.projects)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getProject = (id) =>
-      this.getProjects().then((projects) => getObjectById(projects, id))
+    getProject = (id) => {
+      if (!id) {
+        Promise.reject(this._operationMissingIdParameterError)
+      }
+
+      return this._isAuthenticatedAndReady
+        ? this.getProjects().then((records) =>
+            records.find((record) => record.id === id),
+          )
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getProjectTags = () =>
+      this._isAuthenticatedAndReady
+        ? Promise.resolve(mockMermaidData.projecttags)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
   }
 
 export default ProjectsMixin

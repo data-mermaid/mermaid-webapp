@@ -20,7 +20,7 @@ import {
 } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import { ButtonSecondary } from '../../generic/buttons'
+import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const TopBar = () => (
@@ -28,7 +28,7 @@ const TopBar = () => (
     <H2>Management Regimes</H2>
     <RowSpaceBetween>
       <div>Future filter</div>{' '}
-      <div>
+      <ToolbarButtonWrapper>
         <ButtonSecondary>
           <IconPlus /> New MR
         </ButtonSecondary>
@@ -38,7 +38,7 @@ const TopBar = () => (
         <ButtonSecondary>
           <IconDownload /> Export MRs
         </ButtonSecondary>
-      </div>
+      </ToolbarButtonWrapper>
     </RowSpaceBetween>
   </>
 )

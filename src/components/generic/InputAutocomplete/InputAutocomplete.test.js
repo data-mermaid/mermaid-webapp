@@ -47,5 +47,4 @@ test('InputAutocomplete: custom no results view', () => {
   userEvent.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
 
   expect(screen.getByText('Custom View')).toBeInTheDocument()
-  expect(screen.queryByText('No Results')).not.toBeInTheDocument()
 })

@@ -18,6 +18,7 @@ export const CloseButton = styled.button`
   line-height: 0;
   width: 4rem;
   height: 4rem;
+  cursor: pointer;
   transition: ${theme.timing.hoverTransition};
   ${hoverState(css`
     background: ${theme.color.secondaryHover};
@@ -53,8 +54,9 @@ export const ButtonPrimary = styled(Button)`
   }
 `
 export const ButtonSecondary = styled(Button)`
-  background-color: ${theme.color.secondaryColor};
+  background-color: ${theme.color.white};
   color: ${theme.color.secondaryText};
+  border: solid 1px ${theme.color.secondaryBorder};
   ${hoverState(
     css`
       background-color: ${theme.color.secondaryHover};
@@ -112,4 +114,11 @@ export const ButtonLink = styled('button')`
   cursor: pointer;
   overflow: visible; /* IE hack */
   width: auto; /* IE hack */
+  color: blue;
+`
+export const ToolbarButtonWrapper = styled('div')`
+  button {
+    padding: ${theme.spacing.toolbarButtonPadding};
+    margin: 0 -1px;
+  }
 `
