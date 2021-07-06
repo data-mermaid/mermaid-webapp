@@ -61,6 +61,10 @@ const InputAutocomplete = ({
     if (!selectedItem && inputValue) {
       setIsMenuOpen(shouldMenuBeOpen)
     }
+
+    if (inputValue === '') {
+      setIsMenuOpen(false)
+    }
   }
 
   const getMenuContents = (downshiftObject) => {

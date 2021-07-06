@@ -28,6 +28,7 @@ const error = {
 const success = {
   collectRecordSave: 'Collect record saved.',
   collectRecordDelete: 'Collect record deleted.',
+  newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
     'Proposed fish species saved. The observation has been edited to show it selected.',
 }
@@ -68,6 +69,8 @@ const pages = {
   },
   projectInfo: {
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
+    createOrganizationTitle: 'Suggest a new organization',
+    suggestionOrganizationInputText: `If your organization is approved, it'll be automatically added to your project.`,
   },
 }
 

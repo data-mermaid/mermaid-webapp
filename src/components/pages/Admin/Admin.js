@@ -21,7 +21,7 @@ import { IconClose } from '../../icons'
 import { CloseButton, ButtonThatLooksLikeLink } from '../../generic/buttons'
 import theme from '../../../theme'
 import language from '../../../language'
-import Modal from '../../generic/Modal/Modal'
+import NewOrganizationModal from '../../NewOrganizationModal'
 
 const TagStyleWrapper = styled.ul`
   padding: 0;
@@ -191,12 +191,19 @@ const Admin = () => {
               }}
             />
           </InputWrapper>
-          <Modal
+          <NewOrganizationModal
             isOpen={IsNewOrganizationNameModalOpen}
             onDismiss={closeNewOrganizationNameModal}
-            title="placeholder"
-            mainContent={<>placeholcer</>}
-            footerContent={<>placeholcer</>}
+            onSubmit={(selectedItemLabel) => {
+              const existingOrganizations = [
+                ...formik.getFieldProps('tags').value,
+              ]
+
+              formik.setFieldValue('tags', [
+                ...existingOrganizations,
+                selectedItemLabel,
+              ])
+            }}
           />
         </>
       )}
