@@ -62,7 +62,7 @@ const InputAutocomplete = ({
     }
 
     if (inputValue === '') {
-      setMenuOpen(false)
+      setIsMenuOpen(false)
     }
   }
 
