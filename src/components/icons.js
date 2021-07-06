@@ -30,6 +30,7 @@ import sortAscending from '@iconify-icons/mdi/sort-ascending'
 import sortDescending from '@iconify-icons/mdi/sort-descending'
 import sync from '@iconify-icons/mdi/sync'
 import upload from '@iconify-icons/mdi/upload'
+import libraryBooks from '@iconify-icons/mdi/library-books'
 
 export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
 export const IconArrowBack = () => <InlineIcon icon={arrowBack} />
@@ -47,6 +48,7 @@ export const IconFish = () => <InlineIcon icon={fish} />
 export const IconGraph = () => <InlineIcon icon={chartBar} />
 export const IconHeart = () => <InlineIcon icon={heartOutline} />
 export const IconHome = () => <InlineIcon icon={homeOutline} />
+export const IconLibraryBooks = () => <InlineIcon icon={libraryBooks} />
 export const IconMenu = () => <InlineIcon icon={menu} />
 export const IconMgmt = () => <InlineIcon icon={fileMultipleOutline} />
 export const IconPlus = () => <InlineIcon icon={plus} />

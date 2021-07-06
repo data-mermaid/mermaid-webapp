@@ -7,7 +7,7 @@ import {
   mediaQueryTabletLandscapeOnly,
   mediaQueryPhoneOnly,
 } from '../../library/styling/mediaQueries'
-import { NavLinkButtonishIcon } from '../generic/links'
+import { NavLinkThatLooksLikeButtonIcon } from '../generic/links'
 import { IconHome } from '../icons'
 
 const ProjectNameWrapper = styled('div')`
@@ -59,9 +59,9 @@ const ProjectNameWrapper = styled('div')`
 const ProjectName = ({ pageTitle }) => {
   return (
     <ProjectNameWrapper>
-      <NavLinkButtonishIcon to="/">
+      <NavLinkThatLooksLikeButtonIcon to="/">
         <IconHome />
-      </NavLinkButtonishIcon>
+      </NavLinkThatLooksLikeButtonIcon>
       <H2>{pageTitle}</H2>
     </ProjectNameWrapper>
   )

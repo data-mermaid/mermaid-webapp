@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import React, { useEffect, useRef } from 'react'
+import styled from 'styled-components'
 
 import {
   choicesPropType,
@@ -8,15 +9,15 @@ import {
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import {
   ButtonCaution,
-  ButtonLink,
+  ButtonThatLooksLikeLink,
   ButtonPrimary,
 } from '../../../generic/buttons'
-import { createUuid } from '../../../../library/createUuid'
-import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
-import { getObjectById } from '../../../../library/getObjectById'
-import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus, IconRequired } from '../../../icons'
-import { InputWrapper } from '../../../generic/form'
+import {
+  IconClose,
+  IconLibraryBooks,
+  IconPlus,
+  IconRequired,
+} from '../../../icons'
 import {
   Table,
   TableOverflowWrapper,
@@ -24,12 +25,36 @@ import {
   Td,
   Th,
 } from '../../../generic/Table/table'
+import { createUuid } from '../../../../library/createUuid'
+import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
+import { getObjectById } from '../../../../library/getObjectById'
+import { H2 } from '../../../generic/text'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
+import { inputTextareaSelectStyles, InputWrapper } from '../../../generic/form'
+import { LinkThatLooksLikeButton } from '../../../generic/links'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
-import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
+import theme from '../../../../theme'
+
+const FishNameAutocomplete = styled(InputAutocomplete)`
+  & input {
+    border: none;
+  }
+  width: 100%;
+  text-align: inherit;
+  padding: ${theme.spacing.xsmall};
+`
+
+const InputAutocompleteContainer = styled.div`
+  ${inputTextareaSelectStyles}
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  border: solid thin magenta;
+`
 
 const FishBeltObservationTable = ({
   collectRecord,
@@ -163,8 +188,8 @@ const FishBeltObservationTable = ({
         <Td>{rowNumber}</Td>
         <Td>
           {fishNameOptions.length ? (
-            <>
-              <InputAutocomplete
+            <InputAutocompleteContainer>
+              <FishNameAutocomplete
                 aria-labelledby="fish-name-label"
                 options={fishNameOptions}
                 onChange={(selectedOption) =>
@@ -172,15 +197,24 @@ const FishBeltObservationTable = ({
                 }
                 value={fish_attribute}
                 noResultsDisplay={
-                  <ButtonLink
+                  <ButtonThatLooksLikeLink
                     type="button"
                     onClick={() => openNewFishNameModal(observationId)}
                   >
                     {language.pages.collectRecord.newFishSpeciesLink}
-                  </ButtonLink>
+                  </ButtonThatLooksLikeLink>
                 }
               />
-            </>
+              {fish_attribute && (
+                <LinkThatLooksLikeButton
+                  aria-label="fish name reference"
+                  target="_blank"
+                  href={`https://dev-collect.datamermaid.org/#/reference/fishattributes/species/${fish_attribute}`}
+                >
+                  <IconLibraryBooks />
+                </LinkThatLooksLikeButton>
+              )}
+            </InputAutocompleteContainer>
           ) : (
             <LoadingIndicator aria-label="fish name loading indicator" />
           )}

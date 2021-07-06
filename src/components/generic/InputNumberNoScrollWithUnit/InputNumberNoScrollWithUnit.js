@@ -2,12 +2,12 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 
-import { InputTextareaSelectStyles } from '../form'
+import { inputTextareaSelectStyles } from '../form'
 import theme from '../../../theme'
 import InputNumberNoScroll from '../../InputNumberNoScroll/InputNumberNoScroll'
 
 const InputContainer = styled.div`
-  ${InputTextareaSelectStyles}
+  ${inputTextareaSelectStyles}
   display: flex;
   justify-content: space-between;
   padding: 0;

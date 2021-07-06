@@ -18,7 +18,7 @@ import TextareaWithLabelAndValidation from '../../generic/TextareaWithLabelAndVa
 import { InputWrapper, InputRow } from '../../generic/form'
 import { getOptions } from '../../../library/getOptions'
 import { IconClose } from '../../icons'
-import { CloseButton, ButtonLink } from '../../generic/buttons'
+import { CloseButton, ButtonThatLooksLikeLink } from '../../generic/buttons'
 import theme from '../../../theme'
 import language from '../../../language'
 import Modal from '../../generic/Modal/Modal'
@@ -127,9 +127,12 @@ const Admin = () => {
   }
 
   const noOrganizationResult = (
-    <ButtonLink type="button" onClick={openNewOrganizationNameModal}>
+    <ButtonThatLooksLikeLink
+      type="button"
+      onClick={openNewOrganizationNameModal}
+    >
       {language.pages.projectInfo.newOrganizationNameLink}
-    </ButtonLink>
+    </ButtonThatLooksLikeLink>
   )
 
   const content = isOnline ? (

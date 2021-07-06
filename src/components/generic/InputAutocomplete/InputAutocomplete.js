@@ -17,10 +17,11 @@ const NoResultSection = styled.div`
 `
 
 const InputAutocomplete = ({
+  className,
+  noResultsDisplay,
+  onChange,
   options,
   value,
-  onChange,
-  noResultsDisplay,
   ...restOfProps
 }) => {
   const optionMatchingValueProp = useMemo(
@@ -111,6 +112,7 @@ const InputAutocomplete = ({
             {...getRootProps(undefined, {
               suppressRefError: true,
             })}
+            className={className}
           >
             <AutoCompleteInput {...getInputProps()} {...restOfProps} />
             <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
@@ -129,6 +131,7 @@ const InputAutocomplete = ({
 }
 
 InputAutocomplete.propTypes = {
+  className: PropTypes.string,
   noResultsDisplay: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   options: inputOptionsPropTypes.isRequired,
@@ -136,6 +139,7 @@ InputAutocomplete.propTypes = {
 }
 
 InputAutocomplete.defaultProps = {
+  className: undefined,
   noResultsDisplay: undefined,
   value: '',
 }

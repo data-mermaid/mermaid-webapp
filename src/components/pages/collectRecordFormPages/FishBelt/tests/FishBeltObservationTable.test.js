@@ -154,3 +154,32 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 
   await waitFor(() => expect(sizeInputs.length).toEqual(2))
 })
+
+test('Fishbelt observations hide and show fish name reference link appropriately', async () => {
+  renderAuthenticatedOnline(
+    <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
+  )
+
+  userEvent.click(await screen.findByRole('button', { name: 'Add Row' }))
+
+  // wait for new row to show up
+  await screen.findByLabelText('Size')
+
+  expect(screen.queryByLabelText('fish name reference')).not.toBeInTheDocument()
+
+  const fishNameInput = await screen.findByLabelText('Fish Name')
+
+  userEvent.type(fishNameInput, 'neb')
+
+  const fishNameList = screen.getByRole('listbox')
+
+  const nebriusOption = screen.getByRole('option', {
+    name: 'Nebrius',
+  })
+
+  userEvent.selectOptions(fishNameList, nebriusOption)
+
+  expect(
+    await screen.findByLabelText('fish name reference'),
+  ).toBeInTheDocument()
+})
