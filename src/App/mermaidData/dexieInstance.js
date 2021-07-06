@@ -6,10 +6,12 @@ const dexieInstance = new Dexie('mermaid')
 dexieInstance.version(1).stores({
   currentUser: 'id, first_name, last_name, full_name, email',
 })
-dexieInstance.version(3).stores({
+dexieInstance.version(4).stores({
   currentUser: 'id',
   collectRecords: 'id',
   lastRevisionNumbersPulled: 'id',
+  fishSpecies: 'id',
+  hasInitialApiHydrationCompleted: 'id',
 })
 
 // If This were TypeScript, types would be easy to obtain for Dexie

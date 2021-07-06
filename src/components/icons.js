@@ -1,5 +1,6 @@
 import { InlineIcon } from '@iconify/react'
 import accountGroup from '@iconify-icons/mdi/account-group'
+import arrowBack from '@iconify-icons/mdi/arrow-back'
 import asterisk from '@iconify-icons/mdi/asterisk'
 import chartBar from '@iconify-icons/mdi/chart-bar'
 import checkCircleOutline from '@iconify-icons/mdi/check-circle-outline'
@@ -23,6 +24,7 @@ import menuDown from '@iconify-icons/mdi/menu-down'
 import menuUp from '@iconify-icons/mdi/menu-up'
 import plus from '@iconify-icons/mdi/plus'
 import React from 'react'
+import send from '@iconify-icons/mdi/send'
 import shareVariantOutline from '@iconify-icons/mdi/share-variant-outline'
 import sortAscending from '@iconify-icons/mdi/sort-ascending'
 import sortDescending from '@iconify-icons/mdi/sort-descending'
@@ -30,6 +32,7 @@ import sync from '@iconify-icons/mdi/sync'
 import upload from '@iconify-icons/mdi/upload'
 
 export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
+export const IconArrowBack = () => <InlineIcon icon={arrowBack} />
 export const IconCheck = () => <InlineIcon icon={checkIcon} />
 export const IconCheckOutline = () => <InlineIcon icon={checkOutline} />
 export const IconClose = () => <InlineIcon icon={closeIcon} />
@@ -50,6 +53,7 @@ export const IconPlus = () => <InlineIcon icon={plus} />
 export const IconRefresh = () => <InlineIcon icon={sync} />
 export const IconRequired = () => <InlineIcon icon={asterisk} color="magenta" />
 export const IconSave = () => <InlineIcon icon={contentSave} />
+export const IconSend = () => <InlineIcon icon={send} />
 export const IconSharing = () => <InlineIcon icon={shareVariantOutline} />
 export const IconSites = () => <InlineIcon icon={mapMarkerRadiusOutline} />
 export const IconSortDown = () => <InlineIcon icon={sortDescending} />

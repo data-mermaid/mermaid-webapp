@@ -28,6 +28,7 @@ import OfflineHide from '../../../generic/OfflineHide'
 import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
+import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -47,6 +48,15 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
 
 const FishBelt = ({ isNewRecord, currentUser }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
+  const [observationToAddSpeciesTo, setObservationToAddSpeciesTo] = useState()
+  const openNewFishNameModal = (observationId) => {
+    setObservationToAddSpeciesTo(observationId)
+    setIsNewFishNameModalOpen(true)
+  }
+  const closeNewFishNameModal = () => {
+    setIsNewFishNameModalOpen(false)
+  }
 
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
@@ -54,6 +64,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
+  const [reloadFishNameOptionsHack, setreloadFishNameOptionsHack] = useState()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
@@ -64,7 +75,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     setShowDeleteModal(false)
   }
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
-  const [observationsState] = observationsReducer
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const _getSupportingData = useEffect(() => {
     let isMounted = true
@@ -162,6 +173,44 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
   }
 
+  const handleNewFishSpeciesOnSubmit = ({
+    genusId,
+    genusName,
+    speciesName,
+  }) => {
+    const addSpeciesSelectionToObservation = (speciesId) => {
+      observationsDispatch({
+        type: 'updateFishName',
+        payload: {
+          observationId: observationToAddSpeciesTo,
+          newFishName: speciesId,
+        },
+      })
+      setreloadFishNameOptionsHack(speciesId)
+    }
+
+    databaseSwitchboardInstance
+      .addFishSpecies({
+        genusId,
+        genusName,
+        speciesName,
+      })
+      .then((newFishSpecies) => {
+        addSpeciesSelectionToObservation(newFishSpecies.id)
+        toast.success(language.success.fishSpeciesSave)
+      })
+      .catch((error) => {
+        if (error.message === 'Species already exists') {
+          toast.warning(language.error.fishSpeciesAlreadyExists)
+          addSpeciesSelectionToObservation(error.existingSpecies.id)
+        } else {
+          toast.error(language.error.fishSpeciesSave)
+        }
+      })
+
+    return Promise.resolve()
+  }
+
   const initialFormValues = useMemo(
     () =>
       getPersistedUnsavedFormData() ?? {
@@ -187,82 +236,95 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }
 
   return (
-    <Formik {...formikOptions}>
-      {(formik) => (
-        <ContentPageLayout
-          isLoading={isLoading}
-          content={
-            <>
-              <form
-                id="fishbelt-form"
-                aria-labelledby="fishbelt-form-title"
-                onSubmit={formik.handleSubmit}
-              >
-                <SampleInfoInputs
-                  formik={formik}
-                  sites={sites}
-                  managementRegimes={managementRegimes}
+    <>
+      <Formik {...formikOptions}>
+        {(formik) => (
+          <ContentPageLayout
+            isLoading={isLoading}
+            content={
+              <>
+                <form
+                  id="fishbelt-form"
+                  aria-labelledby="fishbelt-form-title"
+                  onSubmit={formik.handleSubmit}
+                >
+                  <SampleInfoInputs
+                    formik={formik}
+                    sites={sites}
+                    managementRegimes={managementRegimes}
+                  />
+                  <FishBeltTransectInputs formik={formik} choices={choices} />
+                  <InputWrapper>
+                    <H2>Observers Placeholder</H2>
+                    <br />
+                    <br />
+                    <br />
+                  </InputWrapper>
+                  <FishBeltObservationTable
+                    openNewFishNameModal={openNewFishNameModal}
+                    collectRecord={collectRecordBeingEdited}
+                    fishBinSelected={formik.values.size_bin}
+                    choices={choices}
+                    observationsReducer={observationsReducer}
+                    reloadFishNameOptionsHack={reloadFishNameOptionsHack}
+                  />
+                </form>
+                <ButtonCaution
+                  onClick={showDeleteConfirmPrompt}
+                  disabled={isNewRecord}
+                >
+                  Delete Record
+                </ButtonCaution>
+                <DeleteRecordConfirm
+                  isOpen={showDeleteModal}
+                  onDismiss={closeDeleteConfirmPrompt}
+                  onConfirm={deleteRecord}
                 />
-                <FishBeltTransectInputs formik={formik} choices={choices} />
-                <InputWrapper>
-                  <H2>Observers Placeholder</H2>
-                  <br />
-                  <br />
-                  <br />
-                </InputWrapper>
-                <FishBeltObservationTable
-                  collectRecord={collectRecordBeingEdited}
-                  fishBinSelected={formik.values.size_bin}
-                  choices={choices}
-                  observationsReducer={observationsReducer}
-                />
-              </form>
-              <ButtonCaution
-                onClick={showDeleteConfirmPrompt}
-                disabled={isNewRecord}
-              >
-                Delete Record
-              </ButtonCaution>
-              <DeleteRecordConfirm
-                isOpen={showDeleteModal}
-                onDismiss={closeDeleteConfirmPrompt}
-                onConfirm={deleteRecord}
-              />
-            </>
-          }
-          toolbar={
-            <CollectRecordToolbarWrapper>
-              {isNewRecord && <H2>Fish Belt</H2>}
-              {collectRecordBeingEdited && !isNewRecord && (
-                <EditCollectRecordFormTitle
-                  collectRecord={collectRecordBeingEdited}
-                  sites={sites}
-                />
-              )}
-
-              <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
-                <ButtonCallout type="submit" form="fishbelt-form">
-                  <IconSave />
-                  Save
-                </ButtonCallout>
-                {!isNewRecord && (
-                  <OfflineHide>
-                    <ButtonCallout>
-                      <IconCheck />
-                      Validate
-                    </ButtonCallout>
-                    <ButtonCallout>
-                      <IconUpload />
-                      Submit
-                    </ButtonCallout>
-                  </OfflineHide>
+              </>
+            }
+            toolbar={
+              <CollectRecordToolbarWrapper>
+                {isNewRecord && <H2>Fish Belt</H2>}
+                {collectRecordBeingEdited && !isNewRecord && (
+                  <EditCollectRecordFormTitle
+                    collectRecord={collectRecordBeingEdited}
+                    sites={sites}
+                  />
                 )}
-              </SaveValidateSubmitButtonWrapper>
-            </CollectRecordToolbarWrapper>
-          }
+
+                <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
+                  <ButtonCallout type="submit" form="fishbelt-form">
+                    <IconSave />
+                    Save
+                  </ButtonCallout>
+                  {!isNewRecord && (
+                    <OfflineHide>
+                      <ButtonCallout>
+                        <IconCheck />
+                        Validate
+                      </ButtonCallout>
+                      <ButtonCallout>
+                        <IconUpload />
+                        Submit
+                      </ButtonCallout>
+                    </OfflineHide>
+                  )}
+                </SaveValidateSubmitButtonWrapper>
+              </CollectRecordToolbarWrapper>
+            }
+          />
+        )}
+      </Formik>
+      {!!projectId && !!currentUser && (
+        <NewFishSpeciesModal
+          isOpen={isNewFishNameModalOpen}
+          onDismiss={closeNewFishNameModal}
+          onSubmit={handleNewFishSpeciesOnSubmit}
+          currentUser={currentUser}
+          projectId={projectId}
         />
       )}
-    </Formik>
+    </>
   )
 }
 
