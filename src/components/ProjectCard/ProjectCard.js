@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import PropTypes from 'prop-types'
 
 import {
   ButtonGroups,
@@ -17,16 +16,10 @@ import NavLinkButtonGroup from '../NavLinkButtonGroup'
 import { pluralize } from '../../library/pluralize'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import OfflineHide from '../generic/OfflineHide'
+import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 
-const ProjectCard = ({
-  id,
-  name,
-  countries,
-  num_sites,
-  offlineReady,
-  updated_on,
-  ...restOfProps
-}) => {
+const ProjectCard = ({ project, ...restOfProps }) => {
+  const { name, countries, num_sites, offlineReady, updated_on, id } = project
   const history = useHistory()
   const { isOnline: isAppOnline } = useOnlineStatus()
   const [projectOfflineStatus, setProjectOfflineStatus] = useState(offlineReady)
@@ -87,12 +80,7 @@ const ProjectCard = ({
 }
 
 ProjectCard.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  countries: PropTypes.arrayOf(PropTypes.string).isRequired,
-  num_sites: PropTypes.number.isRequired,
-  offlineReady: PropTypes.bool.isRequired,
-  updated_on: PropTypes.string.isRequired,
+  project: projectPropType.isRequired,
 }
 
 export default ProjectCard

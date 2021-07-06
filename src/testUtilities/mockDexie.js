@@ -10,12 +10,16 @@ const getMockDexieInstanceAllSuccess = () => {
     currentUser: 'id',
     collectRecords: 'id',
     lastRevisionNumbersPulled: 'id',
+    fishSpecies: 'id',
+    hasInitialApiHydrationCompleted: 'id',
   })
 
   dexieInstance.currentUser
     .put({
       id: 'fake-id',
       first_name: 'FakeFirstNameOffline',
+      last_name: 'FakeLastNameOffline',
+      full_name: 'FakeFirstNameOffline FakeLastNameOffline',
     })
     .catch((error) =>
       console.error(

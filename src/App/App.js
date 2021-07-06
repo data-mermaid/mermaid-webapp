@@ -1,25 +1,29 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import React, { useMemo, useRef } from 'react'
+import { toast } from 'react-toastify'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { CustomToastContainer } from '../components/generic/toast'
+import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
+import { initiallyHydrateOfflineStorageWithApiData } from './initiallyHydrateOfflineStorageWithApiData'
 import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
+import ApiSync from './mermaidData/ApiSync/ApiSync'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
+import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
-import Footer from '../components/Footer'
+import language from '../language'
+import Layout from '../components/Layout'
 import PageNotFound from '../components/pages/PageNotFound'
-
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
-import Layout from '../components/Layout'
-import ApiSync from './mermaidData/ApiSync/ApiSync'
-import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useIsMounted from '../library/useIsMounted'
 
 function App({ dexieInstance }) {
+  const isMounted = useIsMounted()
   const { isOnline } = useOnlineStatus()
   const {
     auth0Token,
@@ -27,6 +31,15 @@ function App({ dexieInstance }) {
     logoutMermaid,
   } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(true)
+
+  const _initiallyHydrateOfflineStorageWithApiData = useEffect(() => {
+    if (dexieInstance && isMounted.current && isOnline) {
+      initiallyHydrateOfflineStorageWithApiData(dexieInstance)
+        .then(setIsOfflineStorageHydrated(true))
+        .catch(() => toast.error(language.error.initialApiDataPull))
+    }
+  }, [dexieInstance, isMounted, isOnline])
   const { current: apiSyncInstance } = useRef(
     new ApiSync({
       dexieInstance,
@@ -69,7 +82,10 @@ function App({ dexieInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated && currentUser && databaseSwitchboardInstance
+    isMermaidAuthenticated &&
+    currentUser &&
+    databaseSwitchboardInstance &&
+    isOfflineStorageHydrated
 
   return (
     <ThemeProvider theme={theme}>
