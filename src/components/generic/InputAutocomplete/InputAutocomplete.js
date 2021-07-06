@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Downshift from 'downshift'
@@ -17,15 +17,25 @@ const NoResultSection = styled.div`
 `
 
 const InputAutocomplete = ({
+  className,
+  noResultsDisplay,
+  onChange,
   options,
   value,
-  onChange,
-  noResultsDisplay,
   ...restOfProps
 }) => {
-  const initialValue = options.find((option) => option.value === value) ?? ''
-  const [selectedValue, setSelectedValue] = useState(initialValue)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const optionMatchingValueProp = useMemo(
+    () => options.find((option) => option.value === value) ?? '',
+    [options, value],
+  )
+
+  const [selectedValue, setSelectedValue] = useState(optionMatchingValueProp)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const _updateSelectedValueWhenPropsChange = useEffect(() => {
+    setIsMenuOpen(false)
+    setSelectedValue(optionMatchingValueProp)
+  }, [optionMatchingValueProp])
 
   const getMatchingMenuItems = (inputValue) => {
     const matchingOptions = inputValue
@@ -46,10 +56,14 @@ const InputAutocomplete = ({
     if (selectedItem) {
       setSelectedValue(selectedItem)
       onChange(selectedItem)
-      setMenuOpen(false)
+      setIsMenuOpen(false)
     }
     if (!selectedItem && inputValue) {
-      setMenuOpen(shouldMenuBeOpen)
+      setIsMenuOpen(shouldMenuBeOpen)
+    }
+
+    if (inputValue === '') {
+      setIsMenuOpen(false)
     }
   }
 
@@ -67,7 +81,7 @@ const InputAutocomplete = ({
       ? matchingMenuItems.map((item, index) => {
           return (
             <Item
-              key={item.label}
+              key={item.value}
               {...getItemProps({
                 item,
                 index,
@@ -102,10 +116,11 @@ const InputAutocomplete = ({
             {...getRootProps(undefined, {
               suppressRefError: true,
             })}
+            className={className}
           >
             <AutoCompleteInput {...getInputProps()} {...restOfProps} />
-            <Menu {...getMenuProps({ isOpen: menuOpen })}>
-              {menuOpen && getMenuContents(downshiftObject)}
+            <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
+              {isMenuOpen && getMenuContents(downshiftObject)}
             </Menu>
             {getMatchingMenuItems(inputValue).length === 0 && (
               <NoResultSection>
@@ -120,6 +135,7 @@ const InputAutocomplete = ({
 }
 
 InputAutocomplete.propTypes = {
+  className: PropTypes.string,
   noResultsDisplay: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   options: inputOptionsPropTypes.isRequired,
@@ -127,6 +143,7 @@ InputAutocomplete.propTypes = {
 }
 
 InputAutocomplete.defaultProps = {
+  className: undefined,
   noResultsDisplay: undefined,
   value: '',
 }

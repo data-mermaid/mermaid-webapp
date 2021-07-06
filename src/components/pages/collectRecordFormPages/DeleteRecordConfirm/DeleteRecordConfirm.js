@@ -7,17 +7,17 @@ import language from '../../../../language'
 const DeleteRecordConfirm = ({ isOpen, onDismiss, onConfirm }) => {
   return (
     <Modal
-      title={language.prompt.deleteCollectRecordTitle}
+      title={language.deleteCollectRecord.title}
       isOpen={isOpen}
       onDismiss={onDismiss}
-      mainContent={language.prompt.deleteCollectRecordPrompt}
+      mainContent={language.deleteCollectRecord.prompt}
       footerContent={
         <RightFooter>
           <ButtonSecondary onClick={onDismiss}>
-            {language.prompt.no}
+            {language.deleteCollectRecord.no}
           </ButtonSecondary>
           <ButtonCaution onClick={onConfirm}>
-            {language.prompt.yes}
+            {language.deleteCollectRecord.yes}
           </ButtonCaution>
         </RightFooter>
       }

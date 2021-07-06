@@ -5,7 +5,7 @@ import { hoverState } from '../../library/styling/mediaQueries'
 export const InputWrapper = styled.div`
   padding: ${theme.spacing.medium};
 `
-export const InputTextareaSelectStyles = css`
+export const inputTextareaSelectStyles = css`
   padding: ${theme.spacing.xsmall};
   height: fit-content;
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
@@ -63,12 +63,12 @@ export const ValidationMessage = styled.span.attrs((props) => ({
   ${(props) => props.validationType === 'warning' && css``} */
 `
 export const Select = styled.select`
-  ${InputTextareaSelectStyles}
+  ${inputTextareaSelectStyles}
 `
 export const Input = styled.input`
-  ${InputTextareaSelectStyles}
+  ${inputTextareaSelectStyles}
 `
 export const Textarea = styled.textarea`
   resize: none;
-  ${InputTextareaSelectStyles}
+  ${inputTextareaSelectStyles}
 `

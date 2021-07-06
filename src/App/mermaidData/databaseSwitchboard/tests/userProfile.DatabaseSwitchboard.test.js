@@ -15,6 +15,8 @@ test('getUserProfile online returns data from the API', async () => {
   expect(userProfile).toEqual({
     id: 'fake-id',
     first_name: 'FakeFirstNameOnline',
+    last_name: 'FakeLastNameOnline',
+    full_name: 'FakeFirstNameOnline FakeLastNameOnline',
   })
 })
 test('getUserProfile online returns error message upon API error', async () => {
@@ -42,6 +44,8 @@ test('getUserProfile offline returns data from local storage', async () => {
   expect(userProfile).toEqual({
     id: 'fake-id',
     first_name: 'FakeFirstNameOffline',
+    last_name: 'FakeLastNameOffline',
+    full_name: 'FakeFirstNameOffline FakeLastNameOffline',
   })
 })
 test('getUserProfile offline returns error message upon dexie error', async () => {

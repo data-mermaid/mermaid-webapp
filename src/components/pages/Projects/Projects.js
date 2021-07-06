@@ -36,20 +36,9 @@ const Projects = () => {
     }
   }, [databaseSwitchboardInstance])
 
-  const projectList = projects.map(
-    ({ id, name, countries, num_sites, offlineReady, updated_on }) => (
-      <ProjectCard
-        role="listitem"
-        key={id}
-        id={id}
-        name={name}
-        countries={countries}
-        num_sites={num_sites}
-        offlineReady={offlineReady}
-        updated_on={updated_on}
-      />
-    ),
-  )
+  const projectList = projects.map((project) => (
+    <ProjectCard role="listitem" project={project} key={project.id} />
+  ))
 
   return isLoading ? (
     <LoadingIndicator />

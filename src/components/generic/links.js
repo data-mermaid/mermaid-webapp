@@ -6,7 +6,7 @@ import {
   hoverState,
 } from '../../library/styling/mediaQueries'
 
-export const NavLinkButtonish = styled(NavLink)`
+const linkThatLooksLikeButtonStyles = css`
   text-decoration: none;
   padding: ${theme.spacing.buttonPadding};
   background-color: ${theme.color.secondaryColor};
@@ -18,7 +18,17 @@ export const NavLinkButtonish = styled(NavLink)`
     background-color: ${theme.color.secondaryActive};
   }
 `
-export const NavLinkButtonishIcon = styled(NavLinkButtonish)``
+
+export const NavLinkThatLooksLikeButton = styled(NavLink)`
+  ${linkThatLooksLikeButtonStyles}
+`
+export const LinkThatLooksLikeButton = styled.a`
+  ${linkThatLooksLikeButtonStyles}
+`
+
+export const NavLinkThatLooksLikeButtonIcon = styled(
+  NavLinkThatLooksLikeButton,
+)``
 
 export const NavLinkSidebar = styled(NavLink)`
   padding: ${theme.spacing.small};
