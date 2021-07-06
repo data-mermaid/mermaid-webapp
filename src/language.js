@@ -69,6 +69,7 @@ const pages = {
   },
   projectInfo: {
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
+    createOrganizationTitle: 'Suggest a new organization',
     suggestionOrganizationInputText: `If your organization is approved, it'll be automatically added to your project.`,
   },
 }
