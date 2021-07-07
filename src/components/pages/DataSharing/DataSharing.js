@@ -2,6 +2,7 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { getProjectInitialValues } from '../Admin/projectRecordInitialFormValue'
@@ -12,7 +13,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { InputWrapper } from '../../generic/form'
-import { getOptions } from '../../../library/getOptions'
+import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
 import { IconInfo } from '../../icons'
 import theme from '../../../theme'
 import language from '../../../language'
@@ -21,6 +22,7 @@ const TextStyleWrapper = styled.div`
   padding: 0 10px;
   border-left: 10px solid rgb(221, 220, 228);
   margin-bottom: 20px;
+  margin-right: 20%;
 `
 
 const DataSelectGridWrapper = styled.div`
@@ -62,6 +64,42 @@ const CheckBoxLabel = styled.label`
   }
 `
 
+const Tooltip = styled.div`
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+  &:hover span,
+  &:focus span {
+    transition: ${theme.timing.hoverTransition};
+    visibility: visible;
+  }
+`
+
+const TooltipText = styled.span`
+  visibility: hidden;
+  background-color: ${theme.color.primaryColor};
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  position: absolute;
+  display: block;
+  z-index: 1;
+  width: 330px;
+  top: 30px;
+  font-size: 15px;
+`
+
+const ContentWithTooltip = ({ children, tooltipText, ariaLabelledBy }) => {
+  return (
+    <Tooltip tabIndex="0" id={ariaLabelledBy}>
+      {children}
+      <TooltipText role="tooltip" aria-labelledby={ariaLabelledBy}>
+        {tooltipText}
+      </TooltipText>
+    </Tooltip>
+  )
+}
+
 const DataSharing = () => {
   const { isOnline } = useOnlineStatus()
 
@@ -84,7 +122,9 @@ const DataSharing = () => {
         .then(([projectResponse, choicesResponse]) => {
           if (isMounted) {
             setProjectBeingEdited(projectResponse)
-            setDataPolicyOptions(getOptions(choicesResponse.datapolicies))
+            setDataPolicyOptions(
+              getDataSharingOptions(choicesResponse.datapolicies),
+            )
             setIsLoading(false)
           }
         })
@@ -109,6 +149,9 @@ const DataSharing = () => {
     enableReinitialize: true,
   }
 
+  const findToolTipDescription = (policy) =>
+    dataPolicyOptions.find(({ label }) => label === policy).description
+
   const content = isOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
@@ -123,9 +166,30 @@ const DataSharing = () => {
             </ButtonPrimary>
             <DataSelectGridWrapper>
               <ItemGridStyle />
-              <ItemGridStyle>Private</ItemGridStyle>
-              <ItemGridStyle>Public</ItemGridStyle>
-              <ItemGridStyle>Public Summary</ItemGridStyle>
+              <ItemGridStyle>
+                <ContentWithTooltip
+                  tooltipText={findToolTipDescription('Private')}
+                  ariaLabelledBy="private-tooltip"
+                >
+                  Private
+                </ContentWithTooltip>
+              </ItemGridStyle>
+              <ItemGridStyle>
+                <ContentWithTooltip
+                  tooltipText={findToolTipDescription('Public Summary')}
+                  ariaLabelledBy="public-summary-tooltip"
+                >
+                  Public Summary
+                </ContentWithTooltip>
+              </ItemGridStyle>
+              <ItemGridStyle>
+                <ContentWithTooltip
+                  tooltipText={findToolTipDescription('Public')}
+                  ariaLabelledBy="public-tooltip"
+                >
+                  Public
+                </ContentWithTooltip>
+              </ItemGridStyle>
               <RowItemGridStyle>Fish Belt</RowItemGridStyle>
               {dataPolicyOptions.map((item) => (
                 <InputItemGridStyle key={item.value}>
@@ -200,7 +264,7 @@ const DataSharing = () => {
               <input id="test-project-toggle" type="checkbox" /> This is a test
               project
             </CheckBoxLabel>
-            <div>{language.pages.dataSharing.testProjectNote}</div>
+            <div>{language.pages.dataSharing.testProjectHelperText}</div>
           </InputWrapper>
         </>
       )}
@@ -220,6 +284,13 @@ const DataSharing = () => {
       }
     />
   )
+}
+
+ContentWithTooltip.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
+  tooltipText: PropTypes.string.isRequired,
+  ariaLabelledBy: PropTypes.string.isRequired,
 }
 
 export default DataSharing
