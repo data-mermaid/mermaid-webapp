@@ -14,6 +14,7 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { InputWrapper } from '../../generic/form'
 import { getOptions } from '../../../library/getOptions'
 import { IconInfo } from '../../icons'
+import theme from '../../../theme'
 import language from '../../../language'
 
 const TextStyleWrapper = styled.div`
@@ -27,7 +28,7 @@ const DataSelectGridWrapper = styled.div`
   grid-template-columns: 2fr repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr);
   grid-row-gap: 5px;
-  margin-top: 20px;
+  margin: 20px 0;
   margin-right: 20%;
   border: 10px solid rgb(221, 220, 228);
 `
@@ -51,6 +52,14 @@ const RowItemGridStyle = styled.div`
   display: flex;
   align-items: center;
   padding-left: 10px;
+`
+
+const CheckBoxLabel = styled.label`
+  display: inline-block;
+  input {
+    margin: 0 ${theme.spacing.xsmall} 0 0;
+    cursor: pointer;
+  }
 `
 
 const DataSharing = () => {
@@ -187,6 +196,11 @@ const DataSharing = () => {
                 </InputItemGridStyle>
               ))}
             </DataSelectGridWrapper>
+            <CheckBoxLabel>
+              <input id="test-project-toggle" type="checkbox" /> This is a test
+              project
+            </CheckBoxLabel>
+            <div>{language.pages.dataSharing.testProjectNote}</div>
           </InputWrapper>
         </>
       )}
