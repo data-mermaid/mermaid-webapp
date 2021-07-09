@@ -533,9 +533,7 @@ const managementRegimes = [
     name_secondary: 'Management Regimes 2',
     est_year: null,
     size: 10,
-    parties: [
-      'c2035972-572e-43fe-b261-4536793856b5',
-    ],
+    parties: ['c2035972-572e-43fe-b261-4536793856b5'],
     compliance: '812e9833-c6dd-4dc9-a841-29167cbe7b7e',
     no_take: false,
     periodic_closure: false,
