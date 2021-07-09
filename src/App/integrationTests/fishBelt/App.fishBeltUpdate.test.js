@@ -51,6 +51,136 @@ describe('Offline', () => {
     expect(screen.getByLabelText('flat')).toBeChecked()
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
+  test('Edit fishbelt save stores properly formatted collect record in dexie', async () => {
+    const dexieInstance = getMockDexieInstanceAllSuccess()
+
+    // make sure there is a collect record to edit in dexie
+    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
+
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    })
+
+    // make a change
+
+    userEvent.clear(await screen.findByLabelText('Depth'))
+    userEvent.type(screen.getByLabelText('Depth'), '45')
+
+    // test all observers format too
+    const addObservationButton = await screen.findByRole('button', {
+      name: 'Add Row',
+    })
+
+    userEvent.click(addObservationButton)
+
+    const observationRows = await screen.findAllByRole('row')
+
+    // 4 observations + 1 header row
+    expect(observationRows.length).toEqual(5)
+
+    const newFishNameInput = screen.getAllByLabelText('Fish Name')[3]
+    // the first record technically has two size inputs (because its 50+), so this one is at index 4
+    const newSizeInput = screen.getAllByLabelText('Size')[4]
+    const newCountInput = screen.getAllByLabelText('Count')[3]
+
+    userEvent.type(newFishNameInput, 'neb')
+
+    const fishNameList = screen.getAllByRole('listbox')[3]
+
+    const nebriusOption = screen.getByRole('option', {
+      name: 'Nebrius',
+    })
+
+    userEvent.selectOptions(fishNameList, nebriusOption)
+
+    userEvent.selectOptions(newSizeInput, '37.5')
+
+    userEvent.type(newCountInput, '88')
+
+    userEvent.click(
+      screen.getByText('Save', {
+        selector: 'button',
+      }),
+    )
+
+    expect(await screen.findByText('Collect record saved.'))
+    const savedCollectRecord = await dexieInstance.collectRecords.toArray()
+    const newObservation = savedCollectRecord[0].data.obs_belt_fishes[3]
+
+    expect(newObservation.fish_attribute).toEqual(
+      '018c6b47-9e6f-456d-8db2-ce1c91e8e1c4',
+    )
+    expect(newObservation.count).toEqual('88')
+    expect(newObservation.size).toEqual('37.5')
+  })
+  test('Edit fishbelt save stores properly formatted collect record in dexie for 50+ size input', async () => {
+    const dexieInstance = getMockDexieInstanceAllSuccess()
+
+    // make sure there is a collect record to edit in dexie
+    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
+
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    })
+
+    // make a change
+
+    userEvent.clear(await screen.findByLabelText('Depth'))
+    userEvent.type(screen.getByLabelText('Depth'), '45')
+
+    // test all observers format too
+    const addObservationButton = await screen.findByRole('button', {
+      name: 'Add Row',
+    })
+
+    userEvent.click(addObservationButton)
+
+    const observationRows = await screen.findAllByRole('row')
+
+    // 4 observations + 1 header row
+    expect(observationRows.length).toEqual(5)
+
+    const newFishNameInput = screen.getAllByLabelText('Fish Name')[3]
+    // the first record technically has two size inputs (because its 50+), so this one is at index 4
+    const newSizeInput = screen.getAllByLabelText('Size')[4]
+    const newCountInput = screen.getAllByLabelText('Count')[3]
+
+    userEvent.type(newFishNameInput, 'neb')
+
+    const fishNameList = screen.getAllByRole('listbox')[3]
+
+    const nebriusOption = screen.getByRole('option', {
+      name: 'Nebrius',
+    })
+
+    userEvent.selectOptions(fishNameList, nebriusOption)
+
+    userEvent.selectOptions(newSizeInput, '50')
+
+    const newSizePlus50Input = screen.getAllByLabelText('Size')[5]
+
+    // we cant use userEvent.clear or {backspace} for whatever reason here. Maybe related to this issue https://github.com/testing-library/user-event/issues/356
+    // so this typing is just appending to the existing '50' in the input.
+    userEvent.type(newSizePlus50Input, '367')
+
+    userEvent.type(newCountInput, '88')
+
+    userEvent.click(
+      screen.getByText('Save', {
+        selector: 'button',
+      }),
+    )
+
+    expect(await screen.findByText('Collect record saved.'))
+    const savedCollectRecord = await dexieInstance.collectRecords.toArray()
+    const newObservation = savedCollectRecord[0].data.obs_belt_fishes[3]
+
+    expect(newObservation.fish_attribute).toEqual(
+      '018c6b47-9e6f-456d-8db2-ce1c91e8e1c4',
+    )
+    expect(newObservation.count).toEqual('88')
+    expect(newObservation.size).toEqual('50367')
+  })
   test('Edit fishbelt save failure shows toast message with new edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 

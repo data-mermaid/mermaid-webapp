@@ -37,6 +37,7 @@ import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 import useIsMounted from '../../../../library/useIsMounted'
+import { getFishBinLabel } from './fishBeltBins'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -55,9 +56,22 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
 `
 
 const FishBelt = ({ isNewRecord, currentUser }) => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [choices, setChoices] = useState({})
+  const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
+  const [fishNameOptions, setFishNameOptions] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
+  const [managementRegimes, setManagementRegimes] = useState([])
   const [observationToAddSpeciesTo, setObservationToAddSpeciesTo] = useState()
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [sites, setSites] = useState([])
+  const [observerProfiles, setObserverProfiles] = useState([])
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { recordId, projectId } = useParams()
+  const currentProjectPath = useCurrentProjectPath()
+  const history = useHistory()
+  const isMounted = useIsMounted()
+
   const openNewFishNameModal = (observationId) => {
     setObservationToAddSpeciesTo(observationId)
     setIsNewFishNameModalOpen(true)
@@ -65,19 +79,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const closeNewFishNameModal = () => {
     setIsNewFishNameModalOpen(false)
   }
-
-  const [choices, setChoices] = useState({})
-  const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-  const [fishNameOptions, setFishNameOptions] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [managementRegimes, setManagementRegimes] = useState([])
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [sites, setSites] = useState([])
-  const [observerProfiles, setObserverProfiles] = useState([])
-  const { recordId, projectId } = useParams()
-  const currentProjectPath = useCurrentProjectPath()
-  const history = useHistory()
-  const isMounted = useIsMounted()
 
   const showDeleteConfirmPrompt = () => {
     setShowDeleteModal(true)
@@ -185,7 +186,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }
   const saveRecord = (formikValues) => {
-    const newRecord = reformatFormValuesIntoFishBeltRecord(
+    const recordToSubmit = reformatFormValuesIntoFishBeltRecord(
       formikValues,
       observationsState,
       collectRecordBeingEdited,
@@ -193,7 +194,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     databaseSwitchboardInstance
       .saveFishBelt({
-        record: newRecord,
+        record: recordToSubmit,
         profileId: currentUser.id,
         projectId,
       })
@@ -265,6 +266,16 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     [collectRecordBeingEdited, getPersistedUnsavedFormData],
   )
 
+  const handleSizeBinChange = (sizeBinId) => {
+    const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
+
+    const isSizeBinATypeThatRequiresSizeResetting = fishBinSelectedLabel !== '1'
+
+    if (isSizeBinATypeThatRequiresSizeResetting) {
+      observationsDispatch({ type: 'resetFishSizes' })
+    }
+  }
+
   const formikOptions = {
     initialValues: initialFormValues,
     enableReinitialize: true,
@@ -292,11 +303,21 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                     sites={sites}
                     managementRegimes={managementRegimes}
                   />
-                  <FishBeltTransectInputs formik={formik} choices={choices} />
+                  <FishBeltTransectInputs
+                    formik={formik}
+                    choices={choices}
+                    onSizeBinChange={handleSizeBinChange}
+                  />
                   <ObserversInput
                     formik={formik}
                     observers={observerProfiles}
                   />
+                  <InputWrapper>
+                    <H2>Observers Placeholder</H2>
+                    <br />
+                    <br />
+                    <br />
+                  </InputWrapper>
                   <FishBeltObservationTable
                     openNewFishNameModal={openNewFishNameModal}
                     collectRecord={collectRecordBeingEdited}
