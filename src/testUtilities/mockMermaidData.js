@@ -72,7 +72,16 @@ const collectRecords = [
         sample_time: '22:55',
         len_surveyed: 10,
       },
-      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
+      observers: [
+        {
+          profile: '9d48bef5-728b-489e-8cb5-dc47c6452ef4',
+          profile_name: 'Al Leonard',
+        },
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+      ],
     },
     validations: null,
   },
@@ -96,7 +105,32 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 6,
       },
-      observers: [{ profile_name: 'Nick' }],
+      observers: [
+        {
+          profile: '9d48bef5-728b-489e-8cb5-dc47c6452ef4',
+          profile_name: 'Al Leonard',
+        },
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+          profile_name: 'Nick Hoang',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+        {
+          profile: '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
+          profile_name: 'Dustin Sampson',
+        },
+        {
+          profile: '3918d74a-7736-4cb9-b2ba-9db959779770',
+          profile_name: 'Parmvir Thind',
+        },
+      ],
       obs_belt_fishes: [
         {
           size: 53,
@@ -143,7 +177,16 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
-      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
+      observers: [
+        {
+          profile: '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
+          profile_name: 'Dustin Sampson',
+        },
+        {
+          profile: '3918d74a-7736-4cb9-b2ba-9db959779770',
+          profile_name: 'Parmvir Thind',
+        },
+      ],
     },
     validations: { status: 'error' },
   },
@@ -167,7 +210,20 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
-      observers: [{ profile_name: 'Nick' }, { profile_name: 'Melissa' }],
+      observers: [
+        {
+          profile: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+          profile_name: 'Nick Hoang',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+        {
+          profile: '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
+          profile_name: 'Dustin Sampson',
+        },
+      ],
     },
     validations: { status: 'error' },
   },
@@ -191,7 +247,24 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
-      observers: [{ profile_name: 'Brian' }, { profile_name: 'Melissa' }],
+      observers: [
+        {
+          profile: '9d48bef5-728b-489e-8cb5-dc47c6452ef4',
+          profile_name: 'Al Leonard',
+        },
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+          profile_name: 'Nick Hoang',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
     },
     validations: { status: 'ok' },
   },
@@ -215,7 +288,16 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
-      observers: [{ profile_name: 'Dustin' }],
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+          profile_name: 'Nick Hoang',
+        },
+      ],
     },
     validations: { status: 'ok' },
   },
@@ -238,7 +320,12 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
-      observers: [{ profile_name: 'Nick' }, { profile_name: 'Dustin' }],
+      observers: [
+        {
+          profile: '9d48bef5-728b-489e-8cb5-dc47c6452ef4',
+          profile_name: 'Al Leonard',
+        },
+      ],
     },
     validations: null,
   },
@@ -263,9 +350,10 @@ const collectRecords = [
         len_surveyed: 5,
       },
       observers: [
-        { profile_name: 'AL' },
-        { profile_name: 'Dustin' },
-        { profile_name: 'Kim' },
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
       ],
     },
     validations: { status: 'warning' },
@@ -289,6 +377,16 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
     },
     validations: { status: 'error' },
   },
@@ -312,6 +410,12 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
     },
     validations: null,
   },
@@ -335,6 +439,16 @@ const collectRecords = [
         sample_time: '11:55',
         len_surveyed: 5,
       },
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
     },
     validations: { status: 'ok' },
   },
@@ -420,7 +534,6 @@ const managementRegimes = [
     est_year: null,
     size: 10,
     parties: [
-      'c2035972-572e-43fe-b261-4536793856b5',
       'c2035972-572e-43fe-b261-4536793856b5',
     ],
     compliance: '812e9833-c6dd-4dc9-a841-29167cbe7b7e',
@@ -2639,6 +2752,90 @@ const fishFamilies = [
     created_by: null,
   },
 ]
+
+const project_profiles = {
+  results: [
+    {
+      id: '0515dc7f-f5f4-4b64-a1e3-9f3c49291ecd',
+      updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      profile_name: 'Al Leonard',
+      is_collector: true,
+      is_admin: true,
+      created_on: '2021-03-15T19:41:02.890045Z',
+      updated_on: '2021-03-15T19:41:02.890078Z',
+      role: 90,
+      created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
+      profile: '9d48bef5-728b-489e-8cb5-dc47c6452ef4',
+    },
+    {
+      id: '1404addd-ed2f-4ca1-b342-c3cc05267efa',
+      updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      profile_name: 'Melissa Nunes',
+      is_collector: true,
+      is_admin: true,
+      created_on: '2021-03-15T19:41:02.943921Z',
+      updated_on: '2021-03-15T19:41:02.943955Z',
+      role: 90,
+      created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
+      profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+    },
+    {
+      id: '84ab520c-1d92-4884-bc9a-a37183a9fa5c',
+      updated_by: null,
+      profile_name: 'Nick Hoang',
+      is_collector: true,
+      is_admin: true,
+      created_on: '2021-03-15T19:41:02.861947Z',
+      updated_on: '2021-03-15T19:41:02.861972Z',
+      role: 90,
+      created_by: null,
+      project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
+      profile: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+    },
+    {
+      id: 'b11f3747-a66c-4a38-bf5d-df6c867a0334',
+      updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      profile_name: 'Dustin Sampson',
+      is_collector: true,
+      is_admin: true,
+      created_on: '2021-03-15T19:41:02.927161Z',
+      updated_on: '2021-03-15T19:41:02.927194Z',
+      role: 90,
+      created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
+      profile: '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
+    },
+    {
+      id: 'df122a22-fcf8-4e5e-a3b8-677653a0c066',
+      updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      profile_name: 'Kim Fisher',
+      is_collector: true,
+      is_admin: false,
+      created_on: '2021-03-15T19:41:02.959747Z',
+      updated_on: '2021-03-15T19:41:02.959780Z',
+      role: 50,
+      created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
+      profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+    },
+    {
+      id: 'f76f8949-bf5c-4156-a32a-9b668b27f394',
+      updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      profile_name: 'Parmvir Thind',
+      is_collector: true,
+      is_admin: true,
+      created_on: '2021-03-15T19:41:02.909372Z',
+      updated_on: '2021-03-15T19:41:02.909406Z',
+      role: 90,
+      created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
+      profile: '3918d74a-7736-4cb9-b2ba-9db959779770',
+    },
+  ],
+}
+
 const mockMermaidData = {
   collectRecords,
   fishFamilies,
@@ -2649,6 +2846,7 @@ const mockMermaidData = {
   projecttags,
   projects,
   sites,
+  project_profiles,
   getCollectRecord: (searchId) =>
     collectRecords.find((record) => record.id === searchId),
 }
