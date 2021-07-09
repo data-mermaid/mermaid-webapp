@@ -152,6 +152,14 @@ const DataSharing = () => {
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy).description
 
+  const handleBenthicPolicyChange = (event, form) => {
+    const updatedValue = parseInt(event.target.value, 10)
+
+    form.setFieldValue('data_policy_benthiclit', updatedValue)
+    form.setFieldValue('data_policy_benthicpit', updatedValue)
+    form.setFieldValue('data_policy_habitatcomplexity', updatedValue)
+  }
+
   const content = isOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
@@ -200,10 +208,10 @@ const DataSharing = () => {
                       formik.getFieldProps('data_policy_beltfish').value ===
                       item.value
                     }
-                    onChange={(e) => {
+                    onChange={(event) => {
                       formik.setFieldValue(
                         'data_policy_beltfish',
-                        parseInt(e.target.value, 10),
+                        parseInt(event.target.value, 10),
                       )
                     }}
                   />
@@ -221,22 +229,9 @@ const DataSharing = () => {
                       formik.getFieldProps('data_policy_benthiclit').value ===
                       item.value
                     }
-                    onChange={(e) => {
-                      const updatedValue = parseInt(e.target.value, 10)
-
-                      formik.setFieldValue(
-                        'data_policy_benthiclit',
-                        updatedValue,
-                      )
-                      formik.setFieldValue(
-                        'data_policy_benthicpit',
-                        updatedValue,
-                      )
-                      formik.setFieldValue(
-                        'data_policy_habitatcomplexity',
-                        updatedValue,
-                      )
-                    }}
+                    onChange={(event) =>
+                      handleBenthicPolicyChange(event, formik)
+                    }
                   />
                 </InputItemGridStyle>
               ))}
@@ -250,10 +245,10 @@ const DataSharing = () => {
                       formik.getFieldProps('data_policy_bleachingqc').value ===
                       item.value
                     }
-                    onChange={(e) => {
+                    onChange={(event) => {
                       formik.setFieldValue(
                         'data_policy_bleachingqc',
-                        parseInt(e.target.value, 10),
+                        parseInt(event.target.value, 10),
                       )
                     }}
                   />
