@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import theme from '../../../theme'
 import { InputRow } from '../form'
-import { getObserverNames } from '../../../library/observerHelpers'
 
 const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.xsmall};
@@ -26,9 +25,7 @@ const InputCheckboxGroupWithLabel = ({
   const [checkboxItems, setCheckboxItems] = useState([])
 
   const _loadCheckboxItems = useEffect(() => {
-    const initialValue = id === 'observers' ? getObserverNames(value) : value
-
-    setCheckboxItems(initialValue)
+    setCheckboxItems(value)
   }, [value])
 
   const handleCheckboxGroupChange = (itemValue) => {

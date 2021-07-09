@@ -11,8 +11,12 @@ import { getObserverNameOptions } from '../../library/observerHelpers'
 const ObserversInput = ({ formik, observers }) => {
   const observerNameOptions = getObserverNameOptions(observers)
 
-  const filterObserverNames = (observerIds) =>
-    [...observers].filter((item) => observerIds.includes(item.profile))
+  const observerNameValues = formik.values.observers.map(
+    ({ profile }) => profile,
+  )
+
+  const filterObserverProfiles = (observerIds) =>
+    [...observers].filter(({ profile }) => observerIds.includes(profile))
 
   return (
     <InputWrapper>
@@ -21,9 +25,9 @@ const ObserversInput = ({ formik, observers }) => {
         label="Observers"
         id="observers"
         options={observerNameOptions}
-        value={formik.values.observers}
+        value={observerNameValues}
         onChange={(selectedItems) => {
-          const updateSelectedItems = filterObserverNames(selectedItems)
+          const updateSelectedItems = filterObserverProfiles(selectedItems)
 
           formik.setFieldValue('observers', updateSelectedItems)
         }}
