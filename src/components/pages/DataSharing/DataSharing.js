@@ -17,6 +17,7 @@ import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
 import { IconInfo } from '../../icons'
 import theme from '../../../theme'
 import language from '../../../language'
+import DataSharingInfoModal from '../../DataSharingInfoModal'
 
 const TextStyleWrapper = styled.div`
   padding: 0 10px;
@@ -109,6 +110,12 @@ const DataSharing = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { projectId } = useParams()
 
+  const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(
+    false,
+  )
+  const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
+  const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
+
   const _getSupportingData = useEffect(() => {
     let isMounted = true
 
@@ -169,7 +176,7 @@ const DataSharing = () => {
             <TextStyleWrapper>
               {language.pages.dataSharing.introductionParagraph}
             </TextStyleWrapper>
-            <ButtonPrimary type="button" onClick={() => {}}>
+            <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
               <IconInfo /> Learn more about how your data is shared
             </ButtonPrimary>
             <DataSelectGridWrapper>
@@ -260,6 +267,10 @@ const DataSharing = () => {
               project
             </CheckBoxLabel>
             <div>{language.pages.dataSharing.testProjectHelperText}</div>
+            <DataSharingInfoModal
+              isOpen={issDataSharingInfoModalOpen}
+              onDismiss={closeDataSharingInfoModal}
+            />
           </InputWrapper>
         </>
       )}
