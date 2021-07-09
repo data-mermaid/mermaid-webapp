@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import theme from '../../../theme'
 import { InputRow } from '../form'
+import { getObserverNames } from '../../../library/observerHelpers'
 
 const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.xsmall};
@@ -15,8 +16,20 @@ const CheckBoxLabel = styled.label`
   }
 `
 
-const InputCheckboxGroupWithLabel = ({ label, id, options, value, onChange }) => {
-  const [checkboxItems, setCheckboxItems] = useState(value)
+const InputCheckboxGroupWithLabel = ({
+  label,
+  id,
+  options,
+  value,
+  onChange,
+}) => {
+  const [checkboxItems, setCheckboxItems] = useState([])
+
+  const _loadCheckboxItems = useEffect(() => {
+    const initialValue = id === 'observers' ? getObserverNames(value) : value
+
+    setCheckboxItems(initialValue)
+  }, [value])
 
   const handleCheckboxGroupChange = (itemValue) => {
     const updateCheckboxItems = [...checkboxItems]
@@ -62,7 +75,15 @@ InputCheckboxGroupWithLabel.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
-  value: PropTypes.arrayOf(PropTypes.string).isRequired,
+  value: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        profile: PropTypes.string,
+        profile_name: PropTypes.string,
+      }),
+    ]),
+  ).isRequired,
   onChange: PropTypes.func.isRequired,
 }
 
