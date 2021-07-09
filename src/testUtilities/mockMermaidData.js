@@ -8,6 +8,11 @@ const projects = [
     offlineReady: true,
     updated_on: '01/21/2020',
     notes: 'Fish are recorded',
+    data_policy_beltfish: 10,
+    data_policy_benthiclit: 50,
+    data_policy_benthicpit: 50,
+    data_policy_bleachingqc: 100,
+    data_policy_habitatcomplexity: 50,
   },
   {
     id: '2',
@@ -22,6 +27,11 @@ const projects = [
     offlineReady: true,
     updated_on: '21/21/2021',
     notes: '',
+    data_policy_beltfish: 50,
+    data_policy_benthiclit: 10,
+    data_policy_benthicpit: 10,
+    data_policy_bleachingqc: 100,
+    data_policy_habitatcomplexity: 10,
   },
   {
     id: '3',
@@ -32,6 +42,11 @@ const projects = [
     offlineReady: false,
     updated_on: '21/21/1992',
     notes: '',
+    data_policy_beltfish: 50,
+    data_policy_benthiclit: 50,
+    data_policy_benthicpit: 50,
+    data_policy_bleachingqc: 10,
+    data_policy_habitatcomplexity: 50,
   },
   {
     id: '4',
@@ -42,6 +57,11 @@ const projects = [
     offlineReady: false,
     updated_on: '31/12/2011',
     notes: '',
+    data_policy_beltfish: 100,
+    data_policy_benthiclit: 50,
+    data_policy_benthicpit: 50,
+    data_policy_bleachingqc: 10,
+    data_policy_habitatcomplexity: 50,
   },
   {
     id: '5',
@@ -52,6 +72,11 @@ const projects = [
     offlineReady: false,
     updated_on: '01/21/2001',
     notes: '',
+    data_policy_beltfish: 50,
+    data_policy_benthiclit: 100,
+    data_policy_benthicpit: 100,
+    data_policy_bleachingqc: 10,
+    data_policy_habitatcomplexity: 100,
   },
 ]
 
@@ -2118,6 +2143,31 @@ const choices = {
         id: 'c2fc7ffc-0143-44ac-b0d9-b40aaa1612ad',
         name: 'Zimbabwe',
         updated_on: '2017-09-27T19:51:10.412361Z',
+      },
+    ],
+  },
+  datapolicies: {
+    name: 'datapolicies',
+    data: [
+      {
+        updated_on: '2019-02-02T00:00:00Z',
+        id: 10,
+        name: 'Private',
+        description:
+          'Collected observations and site-level summary statistics are private, but metadata for project, protocol and site, including site location and type and count of sample unit at each site, are public.',
+      },
+      {
+        updated_on: '2019-02-02T00:00:00Z',
+        id: 50,
+        name: 'Public Summary',
+        description:
+          'Collected observations are private, but site-level summary statistics are public, along with metadata for project, protocol and site. This option is the default.',
+      },
+      {
+        updated_on: '2019-02-02T00:00:00Z',
+        id: 100,
+        name: 'Public',
+        description: 'All collected observations are public.',
       },
     ],
   },
