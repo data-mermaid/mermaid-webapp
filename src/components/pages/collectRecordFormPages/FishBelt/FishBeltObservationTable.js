@@ -35,7 +35,6 @@ import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
-import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
 
@@ -188,7 +187,7 @@ const FishBeltObservationTable = ({
       <Tr key={observationId}>
         <Td>{rowNumber}</Td>
         <Td>
-          {fishNameOptions.length ? (
+          {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
                 aria-labelledby="fish-name-label"
@@ -216,8 +215,6 @@ const FishBeltObservationTable = ({
                 </LinkThatLooksLikeButton>
               )}
             </InputAutocompleteContainer>
-          ) : (
-            <LoadingIndicator aria-label="fish name loading indicator" />
           )}
         </Td>
         <Td align="right">{sizeInput}</Td>

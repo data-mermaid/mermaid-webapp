@@ -90,6 +90,27 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
+  const updateFishNameOptionsState = useCallback(
+    ({ species, genera, families }) => {
+      const speciesOptions = species.map(({ id, display_name }) => ({
+        label: display_name,
+        value: id,
+      }))
+
+      const generaAndFamiliesOptions = [...genera, ...families].map(
+        ({ id, name }) => ({
+          label: name,
+          value: id,
+        }),
+      )
+
+      if (isMounted.current) {
+        setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
+      }
+    },
+    [isMounted],
+  )
+
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       Promise.all([
@@ -97,28 +118,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
       ]).then(([species, genera, families]) => {
-        const speciesOptions = species.map(({ id, display_name }) => ({
-          label: display_name,
-          value: id,
-        }))
-
-        const generaAndFamiliesOptions = [...genera, ...families].map(
-          ({ id, name }) => ({
-            label: name,
-            value: id,
-          }),
-        )
-
-        if (isMounted.current) {
-          setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
-        }
+        updateFishNameOptionsState({ species, genera, families })
       })
     }
-  }, [databaseSwitchboardInstance, isMounted])
-
-  const _initiallyLoadFishNameOptions = useEffect(() => {
-    updateFishNameOptionsStateWithOfflineStorageData()
-  }, [updateFishNameOptionsStateWithOfflineStorageData])
+  }, [updateFishNameOptionsState, databaseSwitchboardInstance])
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance) {
@@ -127,6 +130,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         databaseSwitchboardInstance.getManagementRegimes(),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(),
+        databaseSwitchboardInstance.getFishSpecies(),
+        databaseSwitchboardInstance.getFishGenera(),
+        databaseSwitchboardInstance.getFishFamilies(),
       ]
 
       if (recordId && !isNewRecord) {
@@ -139,6 +145,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             managementRegimesResponse,
             choicesResponse,
             projectProfilesResponse,
+            species,
+            genera,
+            families,
+
+            // collectRecord needs to be last in array because its pushed to the promise array conditionally
             collectRecordResponse,
           ]) => {
             if (isMounted.current) {
@@ -146,8 +157,13 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setObserverProfiles(projectProfilesResponse.results)
-              setIsLoading(false)
               setCollectRecordBeingEdited(collectRecordResponse)
+              updateFishNameOptionsState({
+                species,
+                genera,
+                families,
+              })
+              setIsLoading(false)
             }
           },
         )
@@ -159,7 +175,13 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           toast.error(error)
         })
     }
-  }, [databaseSwitchboardInstance, recordId, isNewRecord, isMounted])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isNewRecord,
+    recordId,
+    updateFishNameOptionsState,
+  ])
 
   const {
     persistUnsavedFormData,

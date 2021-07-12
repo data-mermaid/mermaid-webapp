@@ -10,7 +10,6 @@ import {
   waitForElementToBeRemoved,
   within,
   fireEvent,
-  waitFor,
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
 import FishBelt from '../FishBelt'
@@ -120,12 +119,6 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
-  )
-
-  await waitFor(() =>
-    expect(
-      screen.queryAllByLabelText('fish name loading indicator').length,
-    ).toEqual(0),
   )
 
   // Site select
@@ -379,7 +372,7 @@ test('Fishbelt observations: enter key adds a new empty row below row where key 
 
   expect(
     within(secondObservationRow).queryAllByDisplayValue('').length,
-  ).toEqual(2)
+  ).toEqual(3)
 })
 
 test('FishBelt component in EDIT mode - when change binsize = 10, fish size values is not selected/null', async () => {
