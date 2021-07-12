@@ -114,7 +114,7 @@ const Data = () => {
 
   const tableCellData = useMemo(
     () =>
-      submittedRecordsForUiDisplay.map(({ id, protocol, uiLabels }) => ({
+      submittedRecordsForUiDisplay.map(({ uiLabels }) => ({
         method: uiLabels.protocol,
         site: uiLabels.site,
         management: uiLabels.management,
