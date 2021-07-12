@@ -12,6 +12,7 @@ import React, {
 
 import styled from 'styled-components/macro'
 import {
+  getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
@@ -21,7 +22,6 @@ import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProp
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { H2 } from '../../../generic/text'
 import { IconSave, IconCheck, IconUpload } from '../../../icons'
-import { InputWrapper } from '../../../generic/form'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
@@ -32,6 +32,7 @@ import FishBeltTransectInputs from './FishBeltTransectInputs'
 import language from '../../../../language'
 import OfflineHide from '../../../generic/OfflineHide'
 import SampleInfoInputs from '../../../SampleInfoInputs'
+import ObserversInput from '../../../ObserversInput'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
@@ -72,6 +73,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
+  const [observerProfiles, setObserverProfiles] = useState([])
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
@@ -122,6 +124,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         databaseSwitchboardInstance.getSites(),
         databaseSwitchboardInstance.getManagementRegimes(),
         databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getProjectProfiles(),
       ]
 
       if (recordId && !isNewRecord) {
@@ -133,12 +136,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
+            projectProfilesResponse,
             collectRecordResponse,
           ]) => {
             if (isMounted.current) {
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
+              setObserverProfiles(projectProfilesResponse.results)
               setIsLoading(false)
               setCollectRecordBeingEdited(collectRecordResponse)
             }
@@ -247,6 +252,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const initialFormValues = useMemo(
     () =>
       getPersistedUnsavedFormData() ?? {
+        ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(
           collectRecordBeingEdited,
           'fishbelt_transect',
@@ -287,12 +293,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                     managementRegimes={managementRegimes}
                   />
                   <FishBeltTransectInputs formik={formik} choices={choices} />
-                  <InputWrapper>
-                    <H2>Observers Placeholder</H2>
-                    <br />
-                    <br />
-                    <br />
-                  </InputWrapper>
+                  <ObserversInput
+                    formik={formik}
+                    observers={observerProfiles}
+                  />
                   <FishBeltObservationTable
                     openNewFishNameModal={openNewFishNameModal}
                     collectRecord={collectRecordBeingEdited}

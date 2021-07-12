@@ -23,6 +23,11 @@ const ProjectsMixin = (Base) =>
       this._isAuthenticatedAndReady
         ? Promise.resolve(mockMermaidData.projecttags)
         : Promise.reject(this._notAuthenticatedAndReadyError)
+
+    getProjectProfiles = () =>
+      this._isAuthenticatedAndReady
+        ? Promise.resolve(mockMermaidData.project_profiles)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
   }
 
 export default ProjectsMixin

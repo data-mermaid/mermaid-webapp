@@ -221,7 +221,7 @@ test('Collect Records table sorts properly by observers column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('Nick, Melissa'))
+  expect(within(tableRows[1]).getByText('Al Leonard, Melissa Nunes'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Observers'))
@@ -232,14 +232,18 @@ test('Collect Records table sorts properly by observers column', async () => {
     'cell',
   )
 
-  expect(within(tableCellsFromTableRowsAfter[7]).getByText(''))
+  expect(within(tableCellsFromTableRowsAfter[7]).getByText('Al Leonard'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Observers'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('Nick, Melissa'))
+  expect(
+    within(tableRowsAfterFirstClick[1]).getByText(
+      'Nick Hoang, Kim Fisher, Dustin Sampson',
+    ),
+  )
 })
 
 test('Collect Records table sorts properly by status column', async () => {
