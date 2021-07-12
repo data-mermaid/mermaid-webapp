@@ -80,6 +80,77 @@ const projects = [
   },
 ]
 
+const submittedRecords = [
+  {
+    id: 'eac7d813-118e-433b-ba08-7d0caaa9927f',
+    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+    protocol: 'benthiclit',
+    site_name: 'GUZFR1',
+    site: '9f49cd6f-aaba-40e4-a188-5ba89958a63a',
+    management_name: "A'a Island - Exclusive access",
+    management: '8ef6e818-894e-4d07-b608-8a782cd380b4',
+    depth: 15.0,
+    sample_date: '2021-07-01',
+    sample_unit_number: 3,
+    size: {
+      len_surveyed: 25.0,
+      len_surveyed_units: 'm',
+    },
+    size_display: '25.0m',
+    observers: ['Al Leonard', 'Kim Fisher', 'Nick Hoang'],
+    created_on: '2021-07-12T19:35:45.532295Z',
+    updated_on: '2021-07-12T19:35:45.532338Z',
+    collect_record_id: null,
+    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+  },
+  {
+    id: '57c0203f-1167-4571-9676-387f714cd899',
+    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+    protocol: 'habitatcomplexity',
+    site_name: 'GUZFR1',
+    site: '9f49cd6f-aaba-40e4-a188-5ba89958a63a',
+    management_name: 'Ahus 10 - Fished',
+    management: '1d5f1545-ee80-46c6-b315-8c98291327d7',
+    depth: 10.0,
+    sample_date: '2021-07-04',
+    sample_unit_number: 1,
+    size: {
+      len_surveyed: 10.0,
+      len_surveyed_units: 'm',
+    },
+    size_display: '10.0m',
+    observers: ['Al Leonard', 'Melissa Nunes'],
+    created_on: '2021-07-12T18:14:13.222595Z',
+    updated_on: '2021-07-12T18:14:13.222620Z',
+    collect_record_id: null,
+    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+  },
+  {
+    id: 'cbe69d6c-6b0d-4b3c-bba9-8817615d696a',
+    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+    protocol: 'fishbelt',
+    site_name: 'Zaira 4',
+    site: '43a90239-ce96-480d-a3cf-ebd2d510d5dd',
+    management_name: 'Ahus 3 - MPA 2009',
+    management: 'ba8e723e-e1ce-4464-9b1f-d07443ba6b9b',
+    depth: 25.0,
+    sample_date: '2021-07-04',
+    sample_unit_number: 2,
+    size: {
+      width: '7722daa4-58a2-43a8-96a2-584591ebb059',
+      width_units: 'm',
+      len_surveyed: 25.0,
+      len_surveyed_units: 'm',
+    },
+    size_display: '25.0m x 20m',
+    observers: ['Dustin Sampson', 'Parmvir Thind'],
+    created_on: '2021-07-12T19:27:41.059902Z',
+    updated_on: '2021-07-12T19:27:41.059943Z',
+    collect_record_id: null,
+    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+  },
+]
+
 const collectRecords = [
   {
     id: '1',
@@ -2886,6 +2957,7 @@ const project_profiles = {
 
 const mockMermaidData = {
   collectRecords,
+  submittedRecords,
   fishFamilies,
   fishGenera,
   fishSpecies,
