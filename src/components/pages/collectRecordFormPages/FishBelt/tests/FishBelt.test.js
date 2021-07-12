@@ -10,6 +10,7 @@ import {
   waitForElementToBeRemoved,
   within,
   fireEvent,
+  waitFor,
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
 import FishBelt from '../FishBelt'
@@ -121,6 +122,12 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
     screen.queryByLabelText('loading indicator'),
   )
 
+  await waitFor(() =>
+    expect(
+      screen.queryAllByLabelText('fish name loading indicator').length,
+    ).toEqual(0),
+  )
+
   // Site select
   expect(screen.getByDisplayValue('Site D'))
   // Management select
@@ -146,7 +153,6 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   // three rows + one header row = 4
   expect(observationRows.length).toEqual(4)
 
-  // observation record #1
   expect(within(observationRows[1]).getByDisplayValue('50+'))
   expect(within(observationRows[1]).getByDisplayValue('53'))
   expect(within(observationRows[1]).getByDisplayValue('1'))
@@ -349,9 +355,6 @@ test('Fishbelt observations: enter key adds a new empty row below row where key 
   expect(
     within(observationsTableBeforeEnterKey).getAllByRole('row').length,
   ).toEqual(4)
-  expect(
-    within(observationsTableBeforeEnterKey).queryByDisplayValue(0),
-  ).not.toBeInTheDocument()
 
   const firstCountInput = within(
     observationsTableBeforeEnterKey,
@@ -374,8 +377,112 @@ test('Fishbelt observations: enter key adds a new empty row below row where key 
     observationsTableAfterEnterKey,
   ).getAllByRole('row')[2]
 
-  const isNewRowEmpty =
-    within(secondObservationRow).getAllByDisplayValue(0).length === 2
+  expect(
+    within(secondObservationRow).queryAllByDisplayValue('').length,
+  ).toEqual(2)
+})
 
-  expect(isNewRowEmpty)
+test('FishBelt component in EDIT mode - when change binsize = 10, fish size values is not selected/null', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const fishbeltForm = screen.getByRole('form')
+
+  const radioToSelect = within(fishbeltForm).getByLabelText('10')
+
+  userEvent.click(radioToSelect)
+
+  const observationsTable = await screen.findByLabelText('Observations')
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[0],
+  ).not.toHaveValue()
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[1],
+  ).not.toHaveValue()
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[2],
+  ).not.toHaveValue()
+})
+test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size values is not selected/null', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+
+  const fishbeltForm = screen.getByRole('form')
+
+  const radioToSelect = within(fishbeltForm).getByLabelText('AGRRA')
+
+  userEvent.click(radioToSelect)
+
+  const observationsTable = await screen.findByLabelText('Observations')
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[0],
+  ).not.toHaveValue()
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[1],
+  ).not.toHaveValue()
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[2],
+  ).not.toHaveValue()
+})
+test('FishBelt component in EDIT mode - when change binsize = 1, fish size values get transfered to numeric inputs', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
+  )
+  const fishbeltForm = screen.getByRole('form')
+
+  const radioToSelect = within(fishbeltForm).getByLabelText('1')
+
+  userEvent.click(radioToSelect)
+
+  const observationsTable = screen.getByLabelText('Observations')
+
+  const observationRows = within(observationsTable).getAllByRole('row')
+
+  // three rows + one header row = 4
+  expect(observationRows.length).toEqual(4)
+
+  // observation record #1
+
+  expect(within(observationRows[1]).getByDisplayValue('53'))
+
+  // observation record #2
+  expect(await within(observationRows[2]).findByDisplayValue('12.5'))
+
+  // observation record #3
+  expect(within(observationRows[3]).getByDisplayValue('2.5'))
 })

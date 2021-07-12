@@ -1,4 +1,6 @@
+import PropTypes from 'prop-types'
 import React from 'react'
+
 import { choicesPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { H2 } from '../../../generic/text'
@@ -8,7 +10,7 @@ import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValid
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
 import { getOptions } from '../../../../library/getOptions'
 
-const FishBeltTransectForms = ({ formik, choices }) => {
+const FishBeltTransectForms = ({ formik, choices, onSizeBinChange }) => {
   const { belttransectwidths, fishsizebins, reefslopes } = choices
   const transectWidthSelectOptions = getOptions(belttransectwidths)
   const fishSizeBinSelectOptions = getOptions(fishsizebins)
@@ -46,7 +48,11 @@ const FishBeltTransectForms = ({ formik, choices }) => {
           label="Fish Size Bin"
           id="size_bin"
           options={fishSizeBinSelectOptions}
-          {...formik.getFieldProps('size_bin')}
+          value={formik.values.size_bin}
+          onChange={(event) => {
+            formik.setFieldValue('size_bin', event.target.value)
+            onSizeBinChange(event.target.value)
+          }}
         />
         <InputRadioWithLabelAndValidation
           label="Reef Slope"
@@ -67,6 +73,7 @@ const FishBeltTransectForms = ({ formik, choices }) => {
 FishBeltTransectForms.propTypes = {
   formik: formikPropType.isRequired,
   choices: choicesPropType.isRequired,
+  onSizeBinChange: PropTypes.func.isRequired,
 }
 
 export default FishBeltTransectForms
