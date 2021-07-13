@@ -132,14 +132,14 @@ const FishBeltObservationTable = ({
     if (isTabKey && isLastRow && isCount) {
       observationsDispatch({
         type: 'duplicateLastObservation',
-        payload: { observation },
+        payload: { referenceObservation: observation },
       })
     }
 
     if (isEnterKey) {
       observationsDispatch({
         type: 'addNewObservationBelow',
-        payload: index,
+        payload: { referenceObservation: observation, index },
       })
     }
   }
