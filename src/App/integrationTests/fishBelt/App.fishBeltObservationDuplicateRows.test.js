@@ -54,6 +54,12 @@ test('Fishbelt observations: tab in count input on last row duplicates row', asy
     within(observationsTableAfterTab).getAllByDisplayValue('Tylosurus choram')
       .length,
   ).toEqual(2)
+
+  const newFishNameInput = within(
+    observationsTableAfterTab,
+  ).getAllByDisplayValue('Tylosurus choram')[1]
+
+  expect(newFishNameInput).toHaveFocus()
 })
 test('Fishbelt observations: enter key adds a new empty row below row where key pressed', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -95,11 +101,12 @@ test('Fishbelt observations: enter key adds a new empty row below row where key 
     observationsTableAfterEnterKey,
   ).getAllByRole('row')[2]
 
-  expect(
-    await within(secondObservationRow).findByDisplayValue(
-      'Lethrinus rubrioperculatus',
-    ),
-  ).toBeInTheDocument()
+  const newFishNameInput = await within(
+    secondObservationRow,
+  ).findByDisplayValue('Lethrinus rubrioperculatus')
+
+  expect(newFishNameInput).toBeInTheDocument()
+  expect(newFishNameInput).toHaveFocus()
   expect(
     within(secondObservationRow).queryAllByDisplayValue('').length,
   ).toEqual(2)

@@ -130,6 +130,7 @@ const FishBeltObservationTable = ({
     const isLastRow = index === observationsState.length - 1
 
     if (isTabKey && isLastRow && isCount) {
+      event.preventDefault()
       observationsDispatch({
         type: 'duplicateLastObservation',
         payload: { referenceObservation: observation },
@@ -137,9 +138,13 @@ const FishBeltObservationTable = ({
     }
 
     if (isEnterKey) {
+      event.preventDefault()
       observationsDispatch({
         type: 'addNewObservationBelow',
-        payload: { referenceObservation: observation, index },
+        payload: {
+          referenceObservation: observation,
+          referenceObservationIndex: index,
+        },
       })
     }
   }
@@ -190,6 +195,7 @@ const FishBeltObservationTable = ({
           {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
+                autoFocus
                 aria-labelledby="fish-name-label"
                 options={fishNameOptions}
                 onChange={(selectedOption) =>
