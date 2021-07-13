@@ -56,7 +56,7 @@ const Data = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.collectRecordsUnavailable)
+          toast.error(language.error.submittedRecordsUnavailable)
         })
     }
   }, [databaseSwitchboardInstance, isMounted])
