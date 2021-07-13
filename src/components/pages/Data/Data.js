@@ -1,14 +1,17 @@
 import { toast } from 'react-toastify'
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
-import { usePagination, useSortBy, useTable } from 'react-table'
+import { matchSorter } from 'match-sorter'
+import {
+  usePagination,
+  useSortBy,
+  useGlobalFilter,
+  useTable,
+} from 'react-table'
 import { ContentPageLayout } from '../../Layout'
-import { H2 } from '../../generic/text'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { RowSpaceBetween } from '../../generic/positioning'
 import language from '../../../language'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import {
   Table,
   Tr,
@@ -25,15 +28,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useIsMounted from '../../../library/useIsMounted'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-
-const TopBar = () => (
-  <>
-    <H2>Submitted</H2>
-    <RowSpaceBetween>
-      <div>Future filter</div>
-    </RowSpaceBetween>
-  </>
-)
+import DataToolbarSection from './DataToolbarSection'
 
 const Data = () => {
   const isMounted = useIsMounted()
@@ -44,6 +39,7 @@ const Data = () => {
   ] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { isOnline } = useOnlineStatus()
+  const [filterInputValue, setFilterInputValue] = useState('')
 
   const _getSubmittedRecords = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted) {
@@ -60,8 +56,6 @@ const Data = () => {
         })
     }
   }, [databaseSwitchboardInstance, isMounted])
-
-  const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
@@ -124,8 +118,16 @@ const Data = () => {
         sampleDate: uiLabels.sampleDate,
         observers: uiLabels.observers,
       })),
-    [submittedRecordsForUiDisplay, currentProjectPath],
+    [submittedRecordsForUiDisplay],
   )
+
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const filterTerms = ['method', 'site', 'management', 'observers']
+
+    return matchSorter(rows, query, {
+      keys: filterTerms.map((columnName) => `values.${columnName}`),
+    })
+  }, [])
 
   const {
     canNextPage,
@@ -141,18 +143,32 @@ const Data = () => {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
+    setGlobalFilter,
   } = useTable(
     {
       columns: tableColumns,
       data: tableCellData,
       initialState: { pageSize: 10 },
+      globalFilter: tableGlobalFilters,
     },
+    useGlobalFilter,
     useSortBy,
     usePagination,
   )
+
   const handleRowsNumberChange = (e) => {
     setPageSize(Number(e.target.value))
   }
+
+  const handleFilterChange = (e) => {
+    const { value } = e.target
+
+    setFilterInputValue(value)
+  }
+
+  const _setGlobalFilterValue = useEffect(() => {
+    setGlobalFilter(filterInputValue)
+  }, [filterInputValue, setGlobalFilter])
 
   const table = (
     <>
@@ -216,7 +232,12 @@ const Data = () => {
   return (
     <ContentPageLayout
       content={content}
-      toolbar={<TopBar />}
+      toolbar={
+        <DataToolbarSection
+          filterInputValue={filterInputValue}
+          handleFilterChange={handleFilterChange}
+        />
+      }
       isLoading={isLoading}
     />
   )

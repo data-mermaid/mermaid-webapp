@@ -80,6 +80,10 @@ const pages = {
       'Data for a test project will be omitted from all public reporting',
     moreInfoTitle: 'Data sharing',
   },
+  submittedTable: {
+    filterToolbarText:
+      'Filter sample units by method, site, management, or observer',
+  },
 }
 
 export default {
