@@ -1,3 +1,5 @@
+import { getObjectById } from '../../../../library/getObjectById'
+
 export const fishBeltBins = {
   5: [
     { label: '0 - 5', value: 2.5 },
@@ -30,3 +32,6 @@ export const fishBeltBins = {
     { label: '50+', value: 50 },
   ],
 }
+
+export const getFishBinLabel = (choices, fishBinId) =>
+  getObjectById(choices?.fishsizebins.data, fishBinId)?.name

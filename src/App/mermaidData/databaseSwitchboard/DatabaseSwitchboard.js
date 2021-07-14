@@ -33,6 +33,7 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getProjects: PropTypes.func,
   getProject: PropTypes.func,
   getProjectTags: PropTypes.func,
+  getProjectProfiles: PropTypes.func,
   getSites: PropTypes.func,
   getSite: PropTypes.func,
   getSiteRecordsForUIDisplay: PropTypes.func,

@@ -116,3 +116,17 @@ export const choicesPropType = PropTypes.shape({
   belttransectwidths: _beltTransectWidthPropType,
   reefslopes: _reefSlopePropType,
 })
+
+export const observersPropType = PropTypes.shape({
+  id: PropTypes.string,
+  updated_by: PropTypes.string,
+  profile_name: PropTypes.string,
+  is_collector: PropTypes.bool,
+  is_admin: PropTypes.bool,
+  created_on: PropTypes.string,
+  updated_on: PropTypes.string,
+  role: PropTypes.number,
+  created_by: PropTypes.string,
+  project: PropTypes.string,
+  profile: PropTypes.string,
+})

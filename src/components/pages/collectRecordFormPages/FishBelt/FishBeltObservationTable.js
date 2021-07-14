@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import PropTypes from 'prop-types'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -27,7 +27,6 @@ import {
 } from '../../../generic/Table/table'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
-import { getObjectById } from '../../../../library/getObjectById'
 import { H2 } from '../../../generic/text'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { inputTextareaSelectStyles, InputWrapper } from '../../../generic/form'
@@ -36,8 +35,8 @@ import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
-import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import theme from '../../../../theme'
+import { getFishBinLabel } from './fishBeltBins'
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -64,21 +63,22 @@ const FishBeltObservationTable = ({
   openNewFishNameModal,
   fishNameOptions,
 }) => {
-  const fishBinSelectedLabel = getObjectById(
-    choices?.fishsizebins.data,
-    fishBinSelected,
-  )?.name
+  const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
 
   const [observationsState, observationsDispatch] = observationsReducer
-  const haveApiObservationsBeenLoaded = useRef(false)
-  // const [fishNameOptions, setFishNameOptions] = useState([])
+  const [
+    haveApiObservationsBeenLoaded,
+    setHaveApiObservationsBeenLoaded,
+  ] = useState(false)
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
-    if (!haveApiObservationsBeenLoaded.current && collectRecord) {
+    if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
       const observationsFromApiWithIds = observationsFromApi.map(
         (observation) => ({
           ...observation,
+          // id exists on observations just for the sake of the front end logic
+          // (adding rows, adding new species to observation, etc)
           id: createUuid(),
         }),
       )
@@ -88,9 +88,9 @@ const FishBeltObservationTable = ({
         payload: observationsFromApiWithIds,
       })
 
-      haveApiObservationsBeenLoaded.current = true
+      setHaveApiObservationsBeenLoaded(true)
     }
-  }, [collectRecord, observationsDispatch])
+  }, [collectRecord, observationsDispatch, haveApiObservationsBeenLoaded])
 
   const handleDeleteObservation = (observationId) => {
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
@@ -187,7 +187,7 @@ const FishBeltObservationTable = ({
       <Tr key={observationId}>
         <Td>{rowNumber}</Td>
         <Td>
-          {fishNameOptions.length ? (
+          {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
                 aria-labelledby="fish-name-label"
@@ -215,8 +215,6 @@ const FishBeltObservationTable = ({
                 </LinkThatLooksLikeButton>
               )}
             </InputAutocompleteContainer>
-          ) : (
-            <LoadingIndicator aria-label="fish name loading indicator" />
           )}
         </Td>
         <Td align="right">{sizeInput}</Td>
@@ -226,6 +224,7 @@ const FishBeltObservationTable = ({
             min="0"
             value={count}
             step="any"
+            aria-labelledby="fish-count-label"
             onChange={(event) => {
               handleUpdateCount(event, observationId)
             }}
