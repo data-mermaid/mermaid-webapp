@@ -2,17 +2,17 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { getProjectInitialValues } from '../Admin/projectRecordInitialFormValue'
-import { H2 } from '../../generic/text'
+import { H2, P } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
 import { ButtonPrimary } from '../../generic/buttons'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { InputWrapper } from '../../generic/form'
+import { MaxWidthInputWrapper } from '../../generic/form'
+import { TooltipWithText } from '../../generic/tooltip'
 import {
   Table,
   Tr,
@@ -47,43 +47,6 @@ const CheckBoxLabel = styled.label`
     cursor: pointer;
   }
 `
-
-const Tooltip = styled.div`
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-  &:hover span,
-  &:focus span {
-    transition: ${theme.timing.hoverTransition};
-    visibility: visible;
-  }
-`
-
-const TooltipText = styled.span`
-  visibility: hidden;
-  background-color: ${theme.color.primaryColor};
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-  position: absolute;
-  display: block;
-  z-index: 1;
-  width: 330px;
-  top: 30px;
-  font-size: 15px;
-`
-
-const ContentWithTooltip = ({ children, tooltipText, ariaLabelledBy }) => {
-  return (
-    <Tooltip tabIndex="0" id={ariaLabelledBy}>
-      {children}
-      <TooltipText role="tooltip" aria-labelledby={ariaLabelledBy}>
-        {tooltipText}
-      </TooltipText>
-    </Tooltip>
-  )
-}
-
 const DataSharing = () => {
   const { isOnline } = useOnlineStatus()
 
@@ -154,9 +117,9 @@ const DataSharing = () => {
     <Formik {...formikOptions}>
       {(formik) => (
         <>
-          <InputWrapper>
+          <MaxWidthInputWrapper>
             <h3>Data is much more powerful when shared.</h3>
-            <p>{language.pages.dataSharing.introductionParagraph}</p>
+            <P>{language.pages.dataSharing.introductionParagraph}</P>
             <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
               <IconInfo /> Learn more about how your data is shared...
             </ButtonPrimary>
@@ -166,28 +129,25 @@ const DataSharing = () => {
                   <Tr>
                     <Th>&nbsp;</Th>
                     <Th>
-                      <ContentWithTooltip
+                      <TooltipWithText
                         tooltipText={findToolTipDescription('Private')}
-                        ariaLabelledBy="private-tooltip"
-                      >
-                        Private
-                      </ContentWithTooltip>
+                        text={<>Private</>}
+                        id="private-tooltip"
+                      />
                     </Th>
                     <Th>
-                      <ContentWithTooltip
+                      <TooltipWithText
                         tooltipText={findToolTipDescription('Public Summary')}
-                        ariaLabelledBy="public-summary-tooltip"
-                      >
-                        Public Summary
-                      </ContentWithTooltip>
+                        text={<>Public Summary</>}
+                        id="public-summary-tooltip"
+                      />
                     </Th>
                     <Th>
-                      <ContentWithTooltip
+                      <TooltipWithText
                         tooltipText={findToolTipDescription('Public')}
-                        ariaLabelledBy="public-tooltip"
-                      >
-                        Public
-                      </ContentWithTooltip>
+                        text={<>Public</>}
+                        id="public-tooltip"
+                      />
                     </Th>
                   </Tr>
                 </thead>
@@ -271,12 +231,12 @@ const DataSharing = () => {
               <input id="test-project-toggle" type="checkbox" /> This is a test
               project
             </CheckBoxLabel>
-            <div>{language.pages.dataSharing.testProjectHelperText}</div>
+            <P>{language.pages.dataSharing.testProjectHelperText}</P>
             <DataSharingInfoModal
               isOpen={issDataSharingInfoModalOpen}
               onDismiss={closeDataSharingInfoModal}
             />
-          </InputWrapper>
+          </MaxWidthInputWrapper>
         </>
       )}
     </Formik>
@@ -295,13 +255,6 @@ const DataSharing = () => {
       }
     />
   )
-}
-
-ContentWithTooltip.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
-  tooltipText: PropTypes.string.isRequired,
-  ariaLabelledBy: PropTypes.string.isRequired,
 }
 
 export default DataSharing
