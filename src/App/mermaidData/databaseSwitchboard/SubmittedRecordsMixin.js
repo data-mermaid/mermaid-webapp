@@ -1,4 +1,5 @@
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
+import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
@@ -8,22 +9,6 @@ const SubmittedRecordsMixin = (Base) =>
       benthicpit: 'Benthic PIT',
       habitatcomplexity: 'Habitat Complexity',
       bleachingqc: 'Bleaching',
-    }
-
-    #getSampleDateLabel = (record) => {
-      const { sample_date } = record
-
-      if (!sample_date) return undefined
-
-      const [year, month, day] = sample_date.split('-')
-      const zeroIndexedMonth = month - 1
-      const locale = navigator.language ?? 'en-US'
-
-      return new Date(year, zeroIndexedMonth, day).toLocaleDateString(locale, {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
     }
 
     getSubmittedRecords = () =>
@@ -55,7 +40,7 @@ const SubmittedRecordsMixin = (Base) =>
                 sampleUnitNumber: record.sample_unit_number,
                 size: record.size_display,
                 depth: record.depth,
-                sampleDate: this.#getSampleDateLabel(record),
+                sampleDate: getSampleDateLabel(record.sample_date),
                 observers: record.observers.join(', '),
               },
             }))
