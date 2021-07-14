@@ -16,15 +16,17 @@ const fishbeltObservationReducer = (state, action) => {
     }
 
     case 'addObservation':
-      return [...state, { id: createUuid(), count: 0, size: 0 }]
+      return [...state, { id: createUuid(), count: '', size: '' }]
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
-      const indexToInsertAt = action.payload + 1
+      const { referenceObservationIndex, referenceObservation } = action.payload
+      const indexToInsertAt = referenceObservationIndex + 1
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
         id: createUuid(),
-        count: 0,
-        size: 0,
+        fish_attribute: referenceObservation.fish_attribute,
+        count: '',
+        size: '',
       })
 
       return observationsWithInsertedRow
@@ -32,7 +34,7 @@ const fishbeltObservationReducer = (state, action) => {
 
     case 'duplicateLastObservation': {
       const observationWithNewId = {
-        ...action.payload.observation,
+        ...action.payload.referenceObservation,
         id: createUuid(),
       }
 
@@ -68,6 +70,9 @@ const fishbeltObservationReducer = (state, action) => {
             }
           : observation
       })
+    case 'resetFishSizes': {
+      return state.map((observation) => ({ ...observation, size: '' }))
+    }
     default:
       throw new Error("This action isn't supported by the observationReducer")
   }

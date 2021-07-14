@@ -9,7 +9,6 @@ import {
   screen,
   waitForElementToBeRemoved,
   within,
-  fireEvent,
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
 import FishBelt from '../FishBelt'
@@ -146,7 +145,6 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   // three rows + one header row = 4
   expect(observationRows.length).toEqual(4)
 
-  // observation record #1
   expect(within(observationRows[1]).getByDisplayValue('50+'))
   expect(within(observationRows[1]).getByDisplayValue('53'))
   expect(within(observationRows[1]).getByDisplayValue('1'))
@@ -286,7 +284,7 @@ test('Fishbelt observations: delete observation button deleted observation', asy
   ).not.toBeInTheDocument()
 })
 
-test('Fishbelt observations: tab in count input on last row duplicates row', async () => {
+test('FishBelt component in EDIT mode - when change binsize = 10, fish size values is not selected/null', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
@@ -300,34 +298,27 @@ test('Fishbelt observations: tab in count input on last row duplicates row', asy
     screen.queryByLabelText('loading indicator'),
   )
 
-  const formBeforeTab = screen.getByRole('form')
-  const observationsTableBeforeEnterKey = within(formBeforeTab).getByRole(
-    'table',
-  )
+  const fishbeltForm = screen.getByRole('form')
+
+  const radioToSelect = within(fishbeltForm).getByLabelText('10')
+
+  userEvent.click(radioToSelect)
+
+  const observationsTable = await screen.findByLabelText('Observations')
 
   expect(
-    within(observationsTableBeforeEnterKey).getAllByRole('row').length,
-  ).toEqual(4)
-
-  const lastCountInput = within(
-    observationsTableBeforeEnterKey,
-  ).getByDisplayValue(4)
-
-  // userEvent doesnt work as expected for tab
-  fireEvent.keyDown(lastCountInput, { key: 'Tab', code: 'Tab' })
-
-  const formAfterTab = screen.getByRole('form')
-  const observationsTableAfterTab = within(formAfterTab).getByRole('table')
-
-  expect(within(observationsTableAfterTab).getAllByRole('row').length).toEqual(
-    5,
-  )
+    within(observationsTable).getAllByLabelText('Size')[0],
+  ).not.toHaveValue()
 
   expect(
-    within(observationsTableAfterTab).getAllByDisplayValue(4).length,
-  ).toEqual(2)
+    within(observationsTable).getAllByLabelText('Size')[1],
+  ).not.toHaveValue()
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[2],
+  ).not.toHaveValue()
 })
-test('Fishbelt observations: enter key adds a new empty row below row where key pressed', async () => {
+test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size values is not selected/null', async () => {
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
@@ -341,41 +332,59 @@ test('Fishbelt observations: enter key adds a new empty row below row where key 
     screen.queryByLabelText('loading indicator'),
   )
 
-  const formBeforeEnterKey = screen.getByRole('form')
-  const observationsTableBeforeEnterKey = within(formBeforeEnterKey).getByRole(
-    'table',
+  const fishbeltForm = screen.getByRole('form')
+
+  const radioToSelect = within(fishbeltForm).getByLabelText('AGRRA')
+
+  userEvent.click(radioToSelect)
+
+  const observationsTable = await screen.findByLabelText('Observations')
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[0],
+  ).not.toHaveValue()
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[1],
+  ).not.toHaveValue()
+
+  expect(
+    within(observationsTable).getAllByLabelText('Size')[2],
+  ).not.toHaveValue()
+})
+test('FishBelt component in EDIT mode - when change binsize = 1, fish size values get transfered to numeric inputs', async () => {
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
+      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+    },
   )
 
-  expect(
-    within(observationsTableBeforeEnterKey).getAllByRole('row').length,
-  ).toEqual(4)
-  expect(
-    within(observationsTableBeforeEnterKey).queryByDisplayValue(0),
-  ).not.toBeInTheDocument()
-
-  const firstCountInput = within(
-    observationsTableBeforeEnterKey,
-  ).getByDisplayValue(1)
-
-  // userEvent doesnt work as expected for Enter
-  fireEvent.keyDown(firstCountInput, { key: 'Enter', code: 'Enter' })
-
-  const formAfterEnterKey = screen.getByRole('form')
-  const observationsTableAfterEnterKey = within(formAfterEnterKey).getByRole(
-    'table',
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('loading indicator'),
   )
+  const fishbeltForm = screen.getByRole('form')
 
-  expect(
-    within(observationsTableAfterEnterKey).getAllByRole('row').length,
-  ).toEqual(5)
+  const radioToSelect = within(fishbeltForm).getByLabelText('1')
 
-  // 0 is the headers
-  const secondObservationRow = within(
-    observationsTableAfterEnterKey,
-  ).getAllByRole('row')[2]
+  userEvent.click(radioToSelect)
 
-  const isNewRowEmpty =
-    within(secondObservationRow).getAllByDisplayValue(0).length === 2
+  const observationsTable = screen.getByLabelText('Observations')
 
-  expect(isNewRowEmpty)
+  const observationRows = within(observationsTable).getAllByRole('row')
+
+  // three rows + one header row = 4
+  expect(observationRows.length).toEqual(4)
+
+  // observation record #1
+
+  expect(within(observationRows[1]).getByDisplayValue('53'))
+
+  // observation record #2
+  expect(await within(observationRows[2]).findByDisplayValue('12.5'))
+
+  // observation record #3
+  expect(within(observationRows[3]).getByDisplayValue('2.5'))
 })

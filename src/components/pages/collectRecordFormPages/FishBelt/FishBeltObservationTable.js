@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import PropTypes from 'prop-types'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -27,7 +27,6 @@ import {
 } from '../../../generic/Table/table'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
-import { getObjectById } from '../../../../library/getObjectById'
 import { H2 } from '../../../generic/text'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { inputTextareaSelectStyles, InputWrapper } from '../../../generic/form'
@@ -36,8 +35,8 @@ import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
-import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import theme from '../../../../theme'
+import { getFishBinLabel } from './fishBeltBins'
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -64,21 +63,22 @@ const FishBeltObservationTable = ({
   openNewFishNameModal,
   fishNameOptions,
 }) => {
-  const fishBinSelectedLabel = getObjectById(
-    choices?.fishsizebins.data,
-    fishBinSelected,
-  )?.name
-
+  const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
+  const [
+    haveApiObservationsBeenLoaded,
+    setHaveApiObservationsBeenLoaded,
+  ] = useState(false)
+  const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
-  const haveApiObservationsBeenLoaded = useRef(false)
-  // const [fishNameOptions, setFishNameOptions] = useState([])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
-    if (!haveApiObservationsBeenLoaded.current && collectRecord) {
+    if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
       const observationsFromApiWithIds = observationsFromApi.map(
         (observation) => ({
           ...observation,
+          // id exists on observations just for the sake of the front end logic
+          // (adding rows, adding new species to observation, etc)
           id: createUuid(),
         }),
       )
@@ -88,15 +88,16 @@ const FishBeltObservationTable = ({
         payload: observationsFromApiWithIds,
       })
 
-      haveApiObservationsBeenLoaded.current = true
+      setHaveApiObservationsBeenLoaded(true)
     }
-  }, [collectRecord, observationsDispatch])
+  }, [collectRecord, observationsDispatch, haveApiObservationsBeenLoaded])
 
   const handleDeleteObservation = (observationId) => {
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
   }
 
   const handleAddObservation = () => {
+    setIsAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -130,16 +131,23 @@ const FishBeltObservationTable = ({
     const isLastRow = index === observationsState.length - 1
 
     if (isTabKey && isLastRow && isCount) {
+      event.preventDefault()
+      setIsAutoFocusAllowed(true)
       observationsDispatch({
         type: 'duplicateLastObservation',
-        payload: { observation },
+        payload: { referenceObservation: observation },
       })
     }
 
     if (isEnterKey) {
+      event.preventDefault()
+      setIsAutoFocusAllowed(true)
       observationsDispatch({
         type: 'addNewObservationBelow',
-        payload: index,
+        payload: {
+          referenceObservation: observation,
+          referenceObservationIndex: index,
+        },
       })
     }
   }
@@ -187,9 +195,16 @@ const FishBeltObservationTable = ({
       <Tr key={observationId}>
         <Td>{rowNumber}</Td>
         <Td>
-          {fishNameOptions.length ? (
+          {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
+                // we only want autofocus to take over focus after the user adds
+                // new observations, not before. Otherwise initial page load focus
+                // is on the most recently painted observation instead of default focus.
+                // This approach seems easier than handling a list of refs for each observation
+                // and the logic to focus on the right one. in react autoFocus just focuses
+                // the newest element with the autoFocus tag
+                autoFocus={isAutoFocusAllowed}
                 aria-labelledby="fish-name-label"
                 options={fishNameOptions}
                 onChange={(selectedOption) =>
@@ -215,8 +230,6 @@ const FishBeltObservationTable = ({
                 </LinkThatLooksLikeButton>
               )}
             </InputAutocompleteContainer>
-          ) : (
-            <LoadingIndicator aria-label="fish name loading indicator" />
           )}
         </Td>
         <Td align="right">{sizeInput}</Td>
@@ -226,6 +239,7 @@ const FishBeltObservationTable = ({
             min="0"
             value={count}
             step="any"
+            aria-labelledby="fish-count-label"
             onChange={(event) => {
               handleUpdateCount(event, observationId)
             }}

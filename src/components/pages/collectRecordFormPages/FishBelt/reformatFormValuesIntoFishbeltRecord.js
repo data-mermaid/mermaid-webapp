@@ -1,3 +1,9 @@
+const getObservationsWithEmptySizeStringsNulled = (observations) =>
+  observations.map((observation) => ({
+    ...observation,
+    size: observation.size === '' ? null : observation.size,
+  }))
+
 export const reformatFormValuesIntoFishBeltRecord = (
   formikValues,
   observationsValues,
@@ -37,7 +43,9 @@ export const reformatFormValuesIntoFishBeltRecord = (
         sample_date,
         site,
       },
-      obs_belt_fishes: observationsValues,
+      obs_belt_fishes: getObservationsWithEmptySizeStringsNulled(
+        observationsValues,
+      ),
     },
   }
 }
