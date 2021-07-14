@@ -9,7 +9,6 @@ import {
   screen,
   waitForElementToBeRemoved,
   within,
-  fireEvent,
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
 import FishBelt from '../FishBelt'
@@ -283,96 +282,6 @@ test('Fishbelt observations: delete observation button deleted observation', asy
   expect(
     within(observationsTableAfterDelete).queryByDisplayValue(2),
   ).not.toBeInTheDocument()
-})
-
-test('Fishbelt observations: tab in count input on last row duplicates row', async () => {
-  renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
-    </Route>,
-    {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
-    },
-  )
-
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
-  )
-
-  const formBeforeTab = screen.getByRole('form')
-  const observationsTableBeforeEnterKey = within(formBeforeTab).getByRole(
-    'table',
-  )
-
-  expect(
-    within(observationsTableBeforeEnterKey).getAllByRole('row').length,
-  ).toEqual(4)
-
-  const lastCountInput = within(
-    observationsTableBeforeEnterKey,
-  ).getByDisplayValue(4)
-
-  // userEvent doesnt work as expected for tab
-  fireEvent.keyDown(lastCountInput, { key: 'Tab', code: 'Tab' })
-
-  const formAfterTab = screen.getByRole('form')
-  const observationsTableAfterTab = within(formAfterTab).getByRole('table')
-
-  expect(within(observationsTableAfterTab).getAllByRole('row').length).toEqual(
-    5,
-  )
-
-  expect(
-    within(observationsTableAfterTab).getAllByDisplayValue(4).length,
-  ).toEqual(2)
-})
-test('Fishbelt observations: enter key adds a new empty row below row where key pressed', async () => {
-  renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
-    </Route>,
-    {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
-    },
-  )
-
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
-  )
-
-  const formBeforeEnterKey = screen.getByRole('form')
-  const observationsTableBeforeEnterKey = within(formBeforeEnterKey).getByRole(
-    'table',
-  )
-
-  expect(
-    within(observationsTableBeforeEnterKey).getAllByRole('row').length,
-  ).toEqual(4)
-
-  const firstCountInput = within(
-    observationsTableBeforeEnterKey,
-  ).getByDisplayValue(1)
-
-  // userEvent doesnt work as expected for Enter
-  fireEvent.keyDown(firstCountInput, { key: 'Enter', code: 'Enter' })
-
-  const formAfterEnterKey = screen.getByRole('form')
-  const observationsTableAfterEnterKey = within(formAfterEnterKey).getByRole(
-    'table',
-  )
-
-  expect(
-    within(observationsTableAfterEnterKey).getAllByRole('row').length,
-  ).toEqual(5)
-
-  // 0 is the headers
-  const secondObservationRow = within(
-    observationsTableAfterEnterKey,
-  ).getAllByRole('row')[2]
-
-  expect(
-    within(secondObservationRow).queryAllByDisplayValue('').length,
-  ).toEqual(3)
 })
 
 test('FishBelt component in EDIT mode - when change binsize = 10, fish size values is not selected/null', async () => {
