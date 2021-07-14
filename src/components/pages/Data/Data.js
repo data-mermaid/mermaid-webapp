@@ -123,6 +123,20 @@ const Data = () => {
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const filterTerms = ['method', 'site', 'management', 'observers']
+    const queryLength = query.length
+
+    if (queryLength > 1 && query.startsWith(`"`) && query.endsWith(`"`)) {
+      const quotedQuery = query.substring(1, queryLength - 1)
+
+      return matchSorter(rows, quotedQuery, {
+        keys: filterTerms.map((columnName) => {
+          return {
+            threshold: matchSorter.rankings.CONTAINS,
+            key: `values.${columnName}`,
+          }
+        }),
+      })
+    }
 
     return matchSorter(rows, query, {
       keys: filterTerms.map((columnName) => `values.${columnName}`),
