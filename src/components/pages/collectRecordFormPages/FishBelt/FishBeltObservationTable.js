@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -37,6 +36,7 @@ import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWit
 import language from '../../../../language'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
+import { getObservationBiomass } from './fishbeltBiomas'
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -56,12 +56,15 @@ const InputAutocompleteContainer = styled.div`
 `
 
 const FishBeltObservationTable = ({
+  choices,
   collectRecord,
   fishBinSelected,
-  choices,
+  fishNameConstants,
+  fishNameOptions,
   observationsReducer,
   openNewFishNameModal,
-  fishNameOptions,
+  transectLengthSurveyed,
+  widthId,
 }) => {
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const [
@@ -194,6 +197,17 @@ const FishBeltObservationTable = ({
       <> {sizeSelect} </>
     )
 
+    const observationBiomass =
+      Math.round(
+        getObservationBiomass({
+          choices,
+          fishNameConstants,
+          observation,
+          transectLengthSurveyed,
+          widthId,
+        }) * 10,
+      ) / 10
+
     return (
       <Tr key={observationId}>
         <Td>{rowNumber}</Td>
@@ -254,7 +268,7 @@ const FishBeltObservationTable = ({
             }}
           />
         </Td>
-        <Td>Biomass placeholder</Td>
+        <Td align="right">{observationBiomass ?? <> - </>}</Td>
         <Td>
           <ButtonCaution
             tabIndex="-1"
@@ -290,7 +304,7 @@ const FishBeltObservationTable = ({
                   Count
                   <IconRequired />
                 </Th>
-                <Th>Biomass (kg/ha)</Th>
+                <Th align="right">Biomass (kg/ha)</Th>
                 <Th> </Th>
               </Tr>
             </thead>
@@ -307,17 +321,32 @@ const FishBeltObservationTable = ({
 }
 
 FishBeltObservationTable.propTypes = {
+  choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   fishBinSelected: PropTypes.string,
-  choices: choicesPropType.isRequired,
+  fishNameConstants: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      biomass_constant_a: PropTypes.number,
+      biomass_constant_b: PropTypes.number,
+      biomass_constant_c: PropTypes.number,
+    }),
+  ).isRequired,
+  fishNameOptions: inputOptionsPropTypes.isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
-  fishNameOptions: inputOptionsPropTypes.isRequired,
+  transectLengthSurveyed: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
+  widthId: PropTypes.string,
 }
 
 FishBeltObservationTable.defaultProps = {
   collectRecord: undefined,
   fishBinSelected: undefined,
+  transectLengthSurveyed: undefined,
+  widthId: undefined,
 }
 
 export default FishBeltObservationTable
