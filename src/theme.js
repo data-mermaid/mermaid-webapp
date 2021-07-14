@@ -102,7 +102,7 @@ const typography = {
   defaultFontSize: '1.8rem',
   smallFontSize: '1.2rem',
   xSmallFontSize: '1rem',
-  lineHeight: '1.2',
+  lineHeight: '1.5',
   smallIconSize: '1rem',
   defaultIconSize: '1.8rem',
   largeIconSize: '3.5rem',
