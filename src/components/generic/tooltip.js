@@ -14,11 +14,14 @@ const Tooltip = styled('p')`
   &:hover span,
   &:focus span {
     transition: ${theme.timing.hoverTransition};
-    opacity: 1;
+    display: block;
   }
 `
 const TooltipPopup = styled('span')`
-  opacity: 0;
+  display: none;
+  min-width: 26ch;
+  width: 100%;
+  max-width: 52ch;
   background: ${theme.color.primaryColor};
   color: ${theme.color.white};
   position: absolute;
