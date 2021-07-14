@@ -1,8 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { getProtocolName } from '../../library/getProtocolName'
 import { getObjectById } from '../../library/getObjectById'
 import { TooltipWithText } from '../generic/tooltip'
+import {
+  fishBeltPropType,
+  sitePropType,
+} from '../../App/mermaidData/mermaidDataProptypes'
+
 const TitleContainer = styled('div')`
   display: flex;
   flex-wrap: wrap;
@@ -54,6 +60,11 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
       />
     </TitleContainer>
   )
+}
+
+EditCollectRecordFormTitle.propTypes = {
+  collectRecord: fishBeltPropType.isRequired,
+  sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 
 export default EditCollectRecordFormTitle
