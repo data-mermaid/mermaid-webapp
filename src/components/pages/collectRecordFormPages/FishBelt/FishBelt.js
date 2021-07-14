@@ -60,6 +60,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [fishNameOptions, setFishNameOptions] = useState([])
+  const [fishNameConstants, setFishNameConstants] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
@@ -106,6 +107,31 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
       if (isMounted.current) {
         setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
+      }
+    },
+    [isMounted],
+  )
+
+  const updateFishNameConstantsState = useCallback(
+    ({ species, genera, families }) => {
+      const fishNameMungedObject = [...species, ...genera, ...families]
+
+      const fishNameMungedConstants = fishNameMungedObject.map(
+        ({
+          id,
+          biomass_constant_a,
+          biomass_constant_b,
+          biomass_constant_c,
+        }) => ({
+          id,
+          biomass_constant_a,
+          biomass_constant_b,
+          biomass_constant_c,
+        }),
+      )
+
+      if (isMounted.current) {
+        setFishNameConstants(fishNameMungedConstants)
       }
     },
     [isMounted],
@@ -163,6 +189,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 genera,
                 families,
               })
+              updateFishNameConstantsState({ species, genera, families })
               setIsLoading(false)
             }
           },
@@ -180,6 +207,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     isMounted,
     isNewRecord,
     recordId,
+    updateFishNameConstantsState,
     updateFishNameOptionsState,
   ])
 
@@ -272,8 +300,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     return Promise.resolve()
   }
-
-  const initialFormValues = useMemo(
+  // note: observations doesnt use formik
+  const initialFormikFormValues = useMemo(
     () =>
       getPersistedUnsavedFormData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
@@ -300,7 +328,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }
 
   const formikOptions = {
-    initialValues: initialFormValues,
+    initialValues: initialFormikFormValues,
     enableReinitialize: true,
     validate: (values) => {
       persistUnsavedFormData(values)
@@ -342,12 +370,15 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                     <br />
                   </InputWrapper>
                   <FishBeltObservationTable
-                    openNewFishNameModal={openNewFishNameModal}
+                    choices={choices}
                     collectRecord={collectRecordBeingEdited}
                     fishBinSelected={formik.values.size_bin}
-                    choices={choices}
-                    observationsReducer={observationsReducer}
+                    fishNameConstants={fishNameConstants}
                     fishNameOptions={fishNameOptions}
+                    observationsReducer={observationsReducer}
+                    openNewFishNameModal={openNewFishNameModal}
+                    transectLengthSurveyed={formik.values.len_surveyed}
+                    widthId={formik.values.width}
                   />
                 </form>
                 <ButtonCaution
