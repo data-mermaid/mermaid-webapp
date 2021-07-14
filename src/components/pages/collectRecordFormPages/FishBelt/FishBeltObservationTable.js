@@ -166,6 +166,9 @@ const FishBeltObservationTable = ({
         onChange={(value) => {
           handleUpdateSize(value, observationId)
         }}
+        onKeyDown={(event) => {
+          handleKeyDown({ event, index, observation })
+        }}
         fishBinSelectedLabel={fishBinSelectedLabel}
         value={size}
         labelledBy="fish-size-label"
@@ -210,6 +213,9 @@ const FishBeltObservationTable = ({
                 onChange={(selectedOption) =>
                   handleFishNameChange(selectedOption.value, observationId)
                 }
+                onKeyDown={(event) => {
+                  handleKeyDown({ event, index, observation })
+                }}
                 value={fish_attribute}
                 noResultsDisplay={
                   <ButtonThatLooksLikeLink

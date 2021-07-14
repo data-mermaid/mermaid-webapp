@@ -10,6 +10,7 @@ export const FishBeltObservationSizeSelect = ({
   fishBinSelectedLabel,
   value,
   labelledBy,
+  ...restOfProps
 }) => {
   const binsToUse = fishBeltBins[fishBinSelectedLabel] ?? []
   const isValue50OrMore = value >= 50
@@ -46,6 +47,7 @@ export const FishBeltObservationSizeSelect = ({
         onChange={handleSelectOnChange}
         value={optionSelected}
         aria-labelledby={labelledBy}
+        {...restOfProps}
       >
         <option value=""> </option>
         {binsToUse.map(({ value: optionValue, label }) => {
