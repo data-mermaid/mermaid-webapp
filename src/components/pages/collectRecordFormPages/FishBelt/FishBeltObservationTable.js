@@ -64,12 +64,12 @@ const FishBeltObservationTable = ({
   fishNameOptions,
 }) => {
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
-
-  const [observationsState, observationsDispatch] = observationsReducer
   const [
     haveApiObservationsBeenLoaded,
     setHaveApiObservationsBeenLoaded,
   ] = useState(false)
+  const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded && collectRecord) {
@@ -97,6 +97,7 @@ const FishBeltObservationTable = ({
   }
 
   const handleAddObservation = () => {
+    setIsAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -131,6 +132,7 @@ const FishBeltObservationTable = ({
 
     if (isTabKey && isLastRow && isCount) {
       event.preventDefault()
+      setIsAutoFocusAllowed(true)
       observationsDispatch({
         type: 'duplicateLastObservation',
         payload: { referenceObservation: observation },
@@ -139,6 +141,7 @@ const FishBeltObservationTable = ({
 
     if (isEnterKey) {
       event.preventDefault()
+      setIsAutoFocusAllowed(true)
       observationsDispatch({
         type: 'addNewObservationBelow',
         payload: {
@@ -195,7 +198,13 @@ const FishBeltObservationTable = ({
           {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
-                autoFocus
+                // we only want autofocus to take over focus after the user adds
+                // new observations, not before. Otherwise initial page load focus
+                // is on the most recently painted observation instead of default focus.
+                // This approach seems easier than handling a list of refs for each observation
+                // and the logic to focus on the right one. in react autoFocus just focuses
+                // the newest element with the autoFocus tag
+                autoFocus={isAutoFocusAllowed}
                 aria-labelledby="fish-name-label"
                 options={fishNameOptions}
                 onChange={(selectedOption) =>
