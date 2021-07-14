@@ -23,6 +23,8 @@ const error = {
   fishSpeciesAlreadyExists:
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   formValidation: { required: 'This field is required' },
+  submittedRecordsUnavailable:
+    'Submitted record data is currently unavailable. Please try again',
 }
 
 const success = {
@@ -74,8 +76,7 @@ const pages = {
   },
   dataSharing: {
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
-    testProjectHelperText:
-      'Data for a test project will be omitted from all public reporting.',
+    testProjectHelperText: 'Data for a test project will be omitted from all public reporting.',
     moreInfoTitle: 'Data sharing',
   },
 }

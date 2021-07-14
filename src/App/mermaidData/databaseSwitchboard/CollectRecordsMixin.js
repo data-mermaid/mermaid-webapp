@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
+import { getSampleDateLabel } from '../getSampleDateLabel'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const CollectRecordsMixin = (Base) =>
@@ -63,22 +64,6 @@ const CollectRecordsMixin = (Base) =>
       return isFishBelt
         ? record.data.fishbelt_transect?.depth
         : record.data.benthic_transect?.depth
-    }
-
-    #getSampleDateLabel = (record) => {
-      const sampleDate = record.data.sample_event.sample_date
-
-      if (!sampleDate) return undefined
-
-      const [year, month, day] = sampleDate.split('-')
-      const zeroIndexedMonth = month - 1
-      const locale = navigator.language ?? 'en-US'
-
-      return new Date(year, zeroIndexedMonth, day).toLocaleDateString(locale, {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
     }
 
     #getObserversLabel = (record) => {
@@ -334,7 +319,9 @@ const CollectRecordsMixin = (Base) =>
                 size: this.#getSizeLabel(record, choices),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 depth: this.#getDepthLabel(record),
-                sampleDate: this.#getSampleDateLabel(record),
+                sampleDate: getSampleDateLabel(
+                  record.data.sample_event.sample_date,
+                ),
                 observers: this.#getObserversLabel(record),
                 status: this.#getStatusLabel(record),
               },
