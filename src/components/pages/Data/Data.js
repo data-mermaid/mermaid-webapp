@@ -121,26 +121,34 @@ const Data = () => {
     [submittedRecordsForUiDisplay],
   )
 
+  // This method will check for double quotes in string.
+  // It returns an array of split strings by a space delimiter.
+  // example A: splitSearchQueryStrings(`"to the" dustin`).
+  // Also supports multi quotes in string.
+  // example B: splitSearchQueryStrings(`"to the" dustin "kim"`)
+  const splitSearchQueryStrings = (words) =>
+    (words.match(/[^\s"]+|"([^"]*)"/gi) || []).map((word) =>
+      word.replace(/^"(.+(?="$))"$/, '$1'),
+    )
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const filterTerms = ['method', 'site', 'management', 'observers']
-    const queryLength = query.length
+    const keys = [
+      'values.method',
+      { threshold: matchSorter.rankings.CONTAINS, key: 'values.site' },
+      { threshold: matchSorter.rankings.CONTAINS, key: 'values.management' },
+      { threshold: matchSorter.rankings.CONTAINS, key: 'values.observers' },
+    ]
 
-    if (queryLength > 1 && query.startsWith(`"`) && query.endsWith(`"`)) {
-      const quotedQuery = query.substring(1, queryLength - 1)
+    const queryTerms = splitSearchQueryStrings(query)
 
-      return matchSorter(rows, quotedQuery, {
-        keys: filterTerms.map((columnName) => {
-          return {
-            threshold: matchSorter.rankings.CONTAINS,
-            key: `values.${columnName}`,
-          }
-        }),
-      })
+    if (!queryTerms) {
+      return rows
     }
 
-    return matchSorter(rows, query, {
-      keys: filterTerms.map((columnName) => `values.${columnName}`),
-    })
+    return queryTerms.reduce(
+      (results, term) => matchSorter(results, term, { keys }),
+      rows,
+    )
   }, [])
 
   const {
