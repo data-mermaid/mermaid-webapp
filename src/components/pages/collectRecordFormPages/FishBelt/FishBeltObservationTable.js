@@ -37,6 +37,9 @@ import language from '../../../../language'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
+import { getObjectById } from '../../../../library/getObjectById'
+import { RowRight } from '../../../generic/positioning'
+import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -52,6 +55,10 @@ const InputAutocompleteContainer = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0;
+  border: solid thin magenta;
+`
+
+const ObservationsSummaryStats = styled.table`
   border: solid thin magenta;
 `
 
@@ -154,6 +161,40 @@ const FishBeltObservationTable = ({
       })
     }
   }
+  const observationsBiomass = observationsState.map((observation) => ({
+    id: observation.id,
+    biomass: getObservationBiomass({
+      choices,
+      fishNameConstants,
+      observation,
+      transectLengthSurveyed,
+      widthId,
+    }),
+  }))
+
+  const summarizeArrayObjectValuesByProperty = (
+    arrayOfObjects,
+    objectPropertyName,
+  ) => {
+    const summaryReducer = (accumulator, object) => {
+      const property = object[objectPropertyName]
+        ? parseFloat(object[objectPropertyName])
+        : 0
+
+      return accumulator + property
+    }
+
+    return arrayOfObjects.reduce(summaryReducer, 0)
+  }
+
+  const totalBiomass = roundToOneDecimal(
+    summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
+  )
+
+  const totalAbundance = summarizeArrayObjectValuesByProperty(
+    observationsState,
+    'count',
+  )
 
   const observationsRows = observationsState.map((observation, index) => {
     const { id: observationId, count, size, fish_attribute } = observation
@@ -197,16 +238,9 @@ const FishBeltObservationTable = ({
       <> {sizeSelect} </>
     )
 
-    const observationBiomass =
-      Math.round(
-        getObservationBiomass({
-          choices,
-          fishNameConstants,
-          observation,
-          transectLengthSurveyed,
-          widthId,
-        }) * 10,
-      ) / 10
+    const observationBiomass = roundToOneDecimal(
+      getObjectById(observationsBiomass, observationId).biomass,
+    )
 
     return (
       <Tr key={observationId}>
@@ -312,6 +346,21 @@ const FishBeltObservationTable = ({
             <tbody>{observationsRows}</tbody>
           </Table>
         </TableOverflowWrapper>
+        <RowRight>
+          <ObservationsSummaryStats>
+            <tbody>
+              <Tr>
+                <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
+                <Td>{totalBiomass}</Td>
+              </Tr>
+              <Tr>
+                <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
+                <Td>{totalAbundance}</Td>
+              </Tr>
+            </tbody>
+          </ObservationsSummaryStats>
+        </RowRight>
+
         <ButtonPrimary type="button" onClick={handleAddObservation}>
           <IconPlus /> Add Row
         </ButtonPrimary>
