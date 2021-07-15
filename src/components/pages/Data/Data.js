@@ -178,15 +178,9 @@ const Data = () => {
     usePagination,
   )
 
-  const handleRowsNumberChange = (e) => {
-    setPageSize(Number(e.target.value))
-  }
+  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
 
-  const handleFilterChange = (e) => {
-    const { value } = e.target
-
-    setFilterInputValue(value)
-  }
+  const handleFilterChange = (value) => setFilterInputValue(value)
 
   const _setGlobalFilterValue = useEffect(() => {
     setGlobalFilter(filterInputValue)

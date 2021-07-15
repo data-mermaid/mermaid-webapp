@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useAsyncDebounce } from 'react-table'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import theme from '../../../theme'
@@ -42,6 +43,12 @@ const ToolbarRowWrapper = styled(Row)`
 `
 
 const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
+  const [value, setValue] = useState(filterInputValue)
+
+  const onInputFilterChange = useAsyncDebounce((inputValue) => {
+    handleFilterChange(inputValue || undefined)
+  }, 1000)
+
   const label = (
     <>
       <IconDownload /> Export To CSV
@@ -57,8 +64,11 @@ const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
           <input
             type="text"
             id="filter_projects"
-            value={filterInputValue}
-            onChange={handleFilterChange}
+            value={value || ''}
+            onChange={(event) => {
+              setValue(event.target.value)
+              onInputFilterChange(event.target.value)
+            }}
           />
         </FilterLabelWrapper>
         <ButtonSecondaryDropdown label={label}>
