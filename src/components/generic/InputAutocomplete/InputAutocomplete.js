@@ -149,6 +149,8 @@ const InputAutocomplete = ({
 
 InputAutocomplete.propTypes = {
   className: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  helperText: PropTypes.string,
   noResultsDisplay: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   options: inputOptionsPropTypes.isRequired,
@@ -158,6 +160,7 @@ InputAutocomplete.propTypes = {
 InputAutocomplete.defaultProps = {
   className: undefined,
   noResultsDisplay: undefined,
+  helperText: undefined,
   value: '',
 }
 

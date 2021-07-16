@@ -43,11 +43,13 @@ TextareaWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   validationType: PropTypes.string,
+  helperText: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 TextareaWithLabelAndValidation.defaultProps = {
   validationType: undefined,
+  helperText: undefined,
   validationMessage: undefined,
 }
 
