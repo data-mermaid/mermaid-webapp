@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { InputRow, Select, ValidationMessage } from '../form'
+import { InputRow, Select, ValidationMessage, HelperText } from '../form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
 const InputSelectWithLabelAndValidation = ({
   label,
   id,
   options,
+  helperText,
   validationMessage,
   validationType,
   ...restOfProps
@@ -22,13 +23,25 @@ const InputSelectWithLabelAndValidation = ({
 
   return (
     <InputRow validationType={validationType}>
-      <label htmlFor={id}>{label}</label>
-      <Select id={id} {...restOfProps}>
-        <option value="" disabled>
-          Choose...
-        </option>
-        {optionList}
-      </Select>
+      <label id={`aria-label${id}`} htmlFor={id}>
+        {label}
+      </label>
+      <div>
+        <Select
+          aria-labelledby={`aria-label${id}`}
+          aria-describedby={`aria-descp${id}`}
+          id={id}
+          {...restOfProps}
+        >
+          <option value="" disabled>
+            Choose...
+          </option>
+          {optionList}
+        </Select>
+        {helperText && (
+          <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
+        )}
+      </div>
       <div>
         {validationMessage ? (
           <ValidationMessage
@@ -48,11 +61,13 @@ InputSelectWithLabelAndValidation.propTypes = {
   label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
   validationType: PropTypes.string,
+  helperText: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 InputSelectWithLabelAndValidation.defaultProps = {
   validationType: undefined,
   validationMessage: undefined,
+  helperText: undefined,
 }
 export default InputSelectWithLabelAndValidation
