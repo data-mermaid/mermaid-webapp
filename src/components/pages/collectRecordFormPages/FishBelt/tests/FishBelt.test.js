@@ -230,17 +230,15 @@ test('Fishbelt observations: add row button adds a row', async () => {
     screen.queryByLabelText('loading indicator'),
   )
 
-  const formBeforeAdd = screen.getByRole('form')
+  const observationsBeforeAdd = screen.getAllByRole('table')[0]
 
-  expect(within(formBeforeAdd).getAllByRole('row').length).toEqual(4)
+  expect(within(observationsBeforeAdd).getAllByRole('row').length).toEqual(4)
 
-  userEvent.click(
-    within(formBeforeAdd).getByRole('button', { name: 'Add Row' }),
-  )
+  userEvent.click(screen.getByRole('button', { name: 'Add Row' }))
 
-  const formAfterAdd = screen.getByRole('form')
+  const observationsAfterAdd = screen.getAllByRole('table')[0]
 
-  expect(within(formAfterAdd).getAllByRole('row').length).toEqual(5)
+  expect(within(observationsAfterAdd).getAllByRole('row').length).toEqual(5)
 })
 
 test('Fishbelt observations: delete observation button deleted observation', async () => {
@@ -256,9 +254,9 @@ test('Fishbelt observations: delete observation button deleted observation', asy
   )
 
   const formBeforeDelete = screen.getByRole('form')
-  const observationsTableBeforeDelete = within(formBeforeDelete).getByRole(
+  const observationsTableBeforeDelete = within(formBeforeDelete).getAllByRole(
     'table',
-  )
+  )[0]
 
   expect(
     within(observationsTableBeforeDelete).getAllByRole('row').length,
@@ -272,9 +270,9 @@ test('Fishbelt observations: delete observation button deleted observation', asy
   )
 
   const formAfterDelete = screen.getByRole('form')
-  const observationsTableAfterDelete = within(formAfterDelete).getByRole(
+  const observationsTableAfterDelete = within(formAfterDelete).getAllByRole(
     'table',
-  )
+  )[0]
 
   expect(
     within(observationsTableAfterDelete).getAllByRole('row').length,

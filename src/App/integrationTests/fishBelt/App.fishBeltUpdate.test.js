@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOffline,
+  within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
@@ -68,7 +69,9 @@ describe('Offline', () => {
 
     userEvent.click(addObservationButton)
 
-    const observationRows = await screen.findAllByRole('row')
+    const observationsTable = (await screen.findAllByRole('table'))[0]
+
+    const observationRows = await within(observationsTable).findAllByRole('row')
 
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)
@@ -125,7 +128,9 @@ describe('Offline', () => {
 
     userEvent.click(addObservationButton)
 
-    const observationRows = await screen.findAllByRole('row')
+    const observationsTable = (await screen.findAllByRole('table'))[0]
+
+    const observationRows = await within(observationsTable).findAllByRole('row')
 
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)

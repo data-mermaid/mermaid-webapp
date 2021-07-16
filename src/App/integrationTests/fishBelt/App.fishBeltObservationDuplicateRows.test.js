@@ -22,9 +22,9 @@ test('Fishbelt observations: tab in count input on last row duplicates row', asy
   await screen.findByTestId('edit-collect-record-form-title')
 
   const formBeforeTab = screen.getByRole('form')
-  const observationsTableBeforeEnterKey = within(formBeforeTab).getByRole(
+  const observationsTableBeforeEnterKey = within(formBeforeTab).getAllByRole(
     'table',
-  )
+  )[0]
 
   expect(
     within(observationsTableBeforeEnterKey).getAllByRole('row').length,
@@ -38,7 +38,9 @@ test('Fishbelt observations: tab in count input on last row duplicates row', asy
   fireEvent.keyDown(lastCountInput, { key: 'Tab', code: 'Tab' })
 
   const formAfterTab = screen.getByRole('form')
-  const observationsTableAfterTab = within(formAfterTab).getByRole('table')
+  const observationsTableAfterTab = within(formAfterTab).getAllByRole(
+    'table',
+  )[0]
 
   expect(within(observationsTableAfterTab).getAllByRole('row').length).toEqual(
     5,
@@ -72,9 +74,9 @@ test('Fishbelt observations: enter key adds a new empty row below row where key 
   await screen.findByTestId('edit-collect-record-form-title')
 
   const formBeforeEnterKey = screen.getByRole('form')
-  const observationsTableBeforeEnterKey = within(formBeforeEnterKey).getByRole(
-    'table',
-  )
+  const observationsTableBeforeEnterKey = within(
+    formBeforeEnterKey,
+  ).getAllByRole('table')[0]
 
   expect(
     within(observationsTableBeforeEnterKey).getAllByRole('row').length,
@@ -88,9 +90,9 @@ test('Fishbelt observations: enter key adds a new empty row below row where key 
   fireEvent.keyDown(firstCountInput, { key: 'Enter', code: 'Enter' })
 
   const formAfterEnterKey = screen.getByRole('form')
-  const observationsTableAfterEnterKey = within(formAfterEnterKey).getByRole(
+  const observationsTableAfterEnterKey = within(formAfterEnterKey).getAllByRole(
     'table',
-  )
+  )[0]
 
   expect(
     within(observationsTableAfterEnterKey).getAllByRole('row').length,

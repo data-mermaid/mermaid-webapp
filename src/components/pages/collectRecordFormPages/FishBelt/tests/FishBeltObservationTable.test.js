@@ -28,7 +28,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 
   userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
-  const observationsTable = within(fishbeltForm).getByRole('table')
+  const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = within(observationsTable).getByLabelText('Size')
 
@@ -50,7 +50,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 
   userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
-  const observationsTable = within(fishbeltForm).getByRole('table')
+  const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = await within(observationsTable).findByLabelText('Size')
 
@@ -72,7 +72,7 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
 
   userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
-  const observationsTable = within(fishbeltForm).getByRole('table')
+  const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = await within(observationsTable).findByLabelText('Size')
 
@@ -96,7 +96,7 @@ test('FishBelt observations size shows a select input when fish bin size is 10',
 
   userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
-  const observationsTable = within(fishbeltForm).getByRole('table')
+  const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = await within(observationsTable).findByLabelText('Size')
 
@@ -120,7 +120,7 @@ test('FishBelt observations size shows a select input when fish bin size is AGRR
 
   userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
-  const observationsTable = within(fishbeltForm).getByRole('table')
+  const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = await within(observationsTable).findByLabelText('Size')
 
@@ -144,7 +144,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 
   userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
-  const observationsTable = within(fishbeltForm).getByRole('table')
+  const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = await within(observationsTable).findByLabelText('Size')
 
