@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo } from 'react'
 
@@ -114,8 +115,12 @@ const Data = () => {
 
   const tableCellData = useMemo(
     () =>
-      submittedRecordsForUiDisplay.map(({ uiLabels }) => ({
-        method: uiLabels.protocol,
+      submittedRecordsForUiDisplay.map(({ id, protocol, uiLabels }) => ({
+        method: (
+          <Link to={`${currentProjectPath}/data/${protocol}/${id}`}>
+            {uiLabels.protocol}
+          </Link>
+        ),
         site: uiLabels.site,
         management: uiLabels.management,
         sampleUnitNumber: uiLabels.sampleUnitNumber,
