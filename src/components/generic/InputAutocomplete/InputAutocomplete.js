@@ -123,10 +123,10 @@ const InputAutocomplete = ({
             <div>
               <AutoCompleteInput
                 {...getInputProps()}
-                {...restOfProps}
                 aria-labelledby={`aria-label${id}`}
                 aria-describedby={`aria-descp${id}`}
                 id={id}
+                {...restOfProps}
               />
               {helperText && (
                 <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
