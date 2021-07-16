@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
@@ -37,6 +36,10 @@ import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWit
 import language from '../../../../language'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
+import { getObservationBiomass } from './fishbeltBiomas'
+import { getObjectById } from '../../../../library/getObjectById'
+import { RowRight } from '../../../generic/positioning'
+import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -55,13 +58,20 @@ const InputAutocompleteContainer = styled.div`
   border: solid thin magenta;
 `
 
+const ObservationsSummaryStats = styled.table`
+  border: solid thin magenta;
+`
+
 const FishBeltObservationTable = ({
+  choices,
   collectRecord,
   fishBinSelected,
-  choices,
+  fishNameConstants,
+  fishNameOptions,
   observationsReducer,
   openNewFishNameModal,
-  fishNameOptions,
+  transectLengthSurveyed,
+  widthId,
 }) => {
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const [
@@ -151,6 +161,40 @@ const FishBeltObservationTable = ({
       })
     }
   }
+  const observationsBiomass = observationsState.map((observation) => ({
+    id: observation.id,
+    biomass: getObservationBiomass({
+      choices,
+      fishNameConstants,
+      observation,
+      transectLengthSurveyed,
+      widthId,
+    }),
+  }))
+
+  const summarizeArrayObjectValuesByProperty = (
+    arrayOfObjects,
+    objectPropertyName,
+  ) => {
+    const summaryReducer = (accumulator, object) => {
+      const property = object[objectPropertyName]
+        ? parseFloat(object[objectPropertyName])
+        : 0
+
+      return accumulator + property
+    }
+
+    return arrayOfObjects.reduce(summaryReducer, 0)
+  }
+
+  const totalBiomass = roundToOneDecimal(
+    summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
+  )
+
+  const totalAbundance = summarizeArrayObjectValuesByProperty(
+    observationsState,
+    'count',
+  )
 
   const observationsRows = observationsState.map((observation, index) => {
     const { id: observationId, count, size, fish_attribute } = observation
@@ -165,6 +209,9 @@ const FishBeltObservationTable = ({
       <FishBeltObservationSizeSelect
         onChange={(value) => {
           handleUpdateSize(value, observationId)
+        }}
+        onKeyDown={(event) => {
+          handleKeyDown({ event, index, observation })
         }}
         fishBinSelectedLabel={fishBinSelectedLabel}
         value={size}
@@ -191,6 +238,10 @@ const FishBeltObservationTable = ({
       <> {sizeSelect} </>
     )
 
+    const observationBiomass = roundToOneDecimal(
+      getObjectById(observationsBiomass, observationId).biomass,
+    )
+
     return (
       <Tr key={observationId}>
         <Td>{rowNumber}</Td>
@@ -210,6 +261,9 @@ const FishBeltObservationTable = ({
                 onChange={(selectedOption) =>
                   handleFishNameChange(selectedOption.value, observationId)
                 }
+                onKeyDown={(event) => {
+                  handleKeyDown({ event, index, observation })
+                }}
                 value={fish_attribute}
                 noResultsDisplay={
                   <ButtonThatLooksLikeLink
@@ -248,7 +302,7 @@ const FishBeltObservationTable = ({
             }}
           />
         </Td>
-        <Td>Biomass placeholder</Td>
+        <Td align="right">{observationBiomass ?? <> - </>}</Td>
         <Td>
           <ButtonCaution
             tabIndex="-1"
@@ -284,7 +338,7 @@ const FishBeltObservationTable = ({
                   Count
                   <IconRequired />
                 </Th>
-                <Th>Biomass (kg/ha)</Th>
+                <Th align="right">Biomass (kg/ha)</Th>
                 <Th> </Th>
               </Tr>
             </thead>
@@ -292,6 +346,21 @@ const FishBeltObservationTable = ({
             <tbody>{observationsRows}</tbody>
           </Table>
         </TableOverflowWrapper>
+        <RowRight>
+          <ObservationsSummaryStats>
+            <tbody>
+              <Tr>
+                <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
+                <Td>{totalBiomass}</Td>
+              </Tr>
+              <Tr>
+                <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
+                <Td>{totalAbundance}</Td>
+              </Tr>
+            </tbody>
+          </ObservationsSummaryStats>
+        </RowRight>
+
         <ButtonPrimary type="button" onClick={handleAddObservation}>
           <IconPlus /> Add Row
         </ButtonPrimary>
@@ -301,17 +370,32 @@ const FishBeltObservationTable = ({
 }
 
 FishBeltObservationTable.propTypes = {
+  choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   fishBinSelected: PropTypes.string,
-  choices: choicesPropType.isRequired,
+  fishNameConstants: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      biomass_constant_a: PropTypes.number,
+      biomass_constant_b: PropTypes.number,
+      biomass_constant_c: PropTypes.number,
+    }),
+  ).isRequired,
+  fishNameOptions: inputOptionsPropTypes.isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
-  fishNameOptions: inputOptionsPropTypes.isRequired,
+  transectLengthSurveyed: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]),
+  widthId: PropTypes.string,
 }
 
 FishBeltObservationTable.defaultProps = {
   collectRecord: undefined,
   fishBinSelected: undefined,
+  transectLengthSurveyed: undefined,
+  widthId: undefined,
 }
 
 export default FishBeltObservationTable

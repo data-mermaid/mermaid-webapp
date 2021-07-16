@@ -68,6 +68,8 @@ const autocomplete = {
 const pages = {
   collectRecord: {
     newFishSpeciesLink: 'Propose New Species...',
+    totalAbundanceLabel: 'Total Abundance',
+    totalBiomassLabel: 'Total Biomass (kg/ha)',
   },
   projectInfo: {
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',

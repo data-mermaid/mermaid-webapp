@@ -24,7 +24,9 @@ test('Fishbelt observations add new species - filling out new species form adds 
   await screen.findByTestId('edit-collect-record-form-title')
 
   const fishbeltForm = screen.getByRole('form')
-  const observationsTable = await within(fishbeltForm).findByRole('table')
+  const observationsTable = (
+    await within(fishbeltForm).findAllByRole('table')
+  )[0]
 
   await waitFor(() =>
     expect(
@@ -123,7 +125,9 @@ test('Fishbelt observations add new species - proposing new species that already
   await screen.findByTestId('edit-collect-record-form-title')
 
   const fishbeltForm = screen.getByRole('form')
-  const observationsTable = await within(fishbeltForm).findByRole('table')
+  const observationsTable = (
+    await within(fishbeltForm).findAllByRole('table')
+  )[0]
 
   await waitFor(() =>
     expect(
