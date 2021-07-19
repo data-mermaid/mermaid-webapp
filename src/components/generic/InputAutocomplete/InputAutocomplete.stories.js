@@ -22,7 +22,12 @@ const options = [
 ]
 
 export const noInitialValue = () => (
-  <InputAutocomplete options={options} onChange={action('on change')} />
+  <InputAutocomplete
+    id="autoComplete"
+    options={options}
+    onChange={action('on change')}
+    helperText="I'm here to help. I'm helper text"
+  />
 )
 
 export const initialValue = () => (
