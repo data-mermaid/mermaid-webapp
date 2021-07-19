@@ -64,12 +64,12 @@ const FishBeltObservationTable = ({
   fishNameOptions,
 }) => {
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
-
-  const [observationsState, observationsDispatch] = observationsReducer
   const [
     haveApiObservationsBeenLoaded,
     setHaveApiObservationsBeenLoaded,
   ] = useState(false)
+  const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded && collectRecord) {
@@ -97,6 +97,7 @@ const FishBeltObservationTable = ({
   }
 
   const handleAddObservation = () => {
+    setIsAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -130,16 +131,23 @@ const FishBeltObservationTable = ({
     const isLastRow = index === observationsState.length - 1
 
     if (isTabKey && isLastRow && isCount) {
+      event.preventDefault()
+      setIsAutoFocusAllowed(true)
       observationsDispatch({
         type: 'duplicateLastObservation',
-        payload: { observation },
+        payload: { referenceObservation: observation },
       })
     }
 
     if (isEnterKey) {
+      event.preventDefault()
+      setIsAutoFocusAllowed(true)
       observationsDispatch({
         type: 'addNewObservationBelow',
-        payload: index,
+        payload: {
+          referenceObservation: observation,
+          referenceObservationIndex: index,
+        },
       })
     }
   }
@@ -157,6 +165,9 @@ const FishBeltObservationTable = ({
       <FishBeltObservationSizeSelect
         onChange={(value) => {
           handleUpdateSize(value, observationId)
+        }}
+        onKeyDown={(event) => {
+          handleKeyDown({ event, index, observation })
         }}
         fishBinSelectedLabel={fishBinSelectedLabel}
         value={size}
@@ -190,11 +201,21 @@ const FishBeltObservationTable = ({
           {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
+                // we only want autofocus to take over focus after the user adds
+                // new observations, not before. Otherwise initial page load focus
+                // is on the most recently painted observation instead of default focus.
+                // This approach seems easier than handling a list of refs for each observation
+                // and the logic to focus on the right one. in react autoFocus just focuses
+                // the newest element with the autoFocus tag
+                autoFocus={isAutoFocusAllowed}
                 aria-labelledby="fish-name-label"
                 options={fishNameOptions}
                 onChange={(selectedOption) =>
                   handleFishNameChange(selectedOption.value, observationId)
                 }
+                onKeyDown={(event) => {
+                  handleKeyDown({ event, index, observation })
+                }}
                 value={fish_attribute}
                 noResultsDisplay={
                   <ButtonThatLooksLikeLink
