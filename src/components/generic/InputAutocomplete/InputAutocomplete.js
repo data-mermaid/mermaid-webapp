@@ -123,7 +123,6 @@ const InputAutocomplete = ({
             <div>
               <AutoCompleteInput
                 {...getInputProps()}
-                aria-labelledby={`aria-label${id}`}
                 aria-describedby={`aria-descp${id}`}
                 id={id}
                 {...restOfProps}
