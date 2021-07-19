@@ -37,7 +37,6 @@ import language from '../../../../language'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
-import { getObjectById } from '../../../../library/getObjectById'
 import { RowRight } from '../../../generic/positioning'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 
@@ -89,7 +88,7 @@ const FishBeltObservationTable = ({
           ...observation,
           // id exists on observations just for the sake of the front end logic
           // (adding rows, adding new species to observation, etc)
-          id: createUuid(),
+          uiId: createUuid(),
         }),
       )
 
@@ -162,7 +161,7 @@ const FishBeltObservationTable = ({
     }
   }
   const observationsBiomass = observationsState.map((observation) => ({
-    id: observation.id,
+    uiId: observation.uiId,
     biomass: getObservationBiomass({
       choices,
       fishNameConstants,
@@ -197,7 +196,7 @@ const FishBeltObservationTable = ({
   )
 
   const observationsRows = observationsState.map((observation, index) => {
-    const { id: observationId, count, size, fish_attribute } = observation
+    const { uiId: observationId, count, size, fish_attribute } = observation
 
     const rowNumber = index + 1
 
@@ -239,7 +238,8 @@ const FishBeltObservationTable = ({
     )
 
     const observationBiomass = roundToOneDecimal(
-      getObjectById(observationsBiomass, observationId).biomass,
+      observationsBiomass.find((object) => object.uiId === observationId)
+        .biomass,
     )
 
     return (
@@ -249,6 +249,7 @@ const FishBeltObservationTable = ({
           {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
+                id={`observation-${observationId}`}
                 // we only want autofocus to take over focus after the user adds
                 // new observations, not before. Otherwise initial page load focus
                 // is on the most recently painted observation instead of default focus.
