@@ -14,11 +14,14 @@ const Tooltip = styled('p')`
   &:hover span,
   &:focus span {
     transition: ${theme.timing.hoverTransition};
-    opacity: 1;
+    display: block;
   }
 `
 const TooltipPopup = styled('span')`
-  opacity: 0;
+  display: none;
+  min-width: 26ch;
+  width: 100%;
+  max-width: 52ch;
   background: ${theme.color.primaryColor};
   color: ${theme.color.white};
   position: absolute;
@@ -52,6 +55,7 @@ export const TooltipWithText = ({ text, tooltipText, id, ...restOfProps }) => {
 
 TooltipWithText.propTypes = {
   text: PropTypes.node.isRequired,
-  tooltipText: PropTypes.node.isRequired,
+  tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+    .isRequired,
   id: PropTypes.string.isRequired,
 }

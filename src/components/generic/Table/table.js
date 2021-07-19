@@ -27,7 +27,8 @@ export const TableOverflowWrapper = styled.div`
   `)}
   overflow-x: auto;
   height: 100%;
-  & + button {
+  & + button,
+  button + & {
     margin: ${theme.spacing.medium} 0;
   }
 `

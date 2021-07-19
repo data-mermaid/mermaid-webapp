@@ -82,6 +82,7 @@ const spacing = {
   toolbarButtonPadding: `${xsmall} ${small}`,
   width: '90vw',
   maxWidth: '1200px',
+  maxTextWidth: '78ch',
   fullViewportWidth: 'calc(100vw - (100vw - 100%))',
   headerHeight: '4.4rem',
   sideNavWidthTabletLandscapeOnly: '8rem',
