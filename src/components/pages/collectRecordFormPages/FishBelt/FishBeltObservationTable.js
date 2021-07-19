@@ -69,6 +69,7 @@ const FishBeltObservationTable = ({
   fishNameOptions,
   observationsReducer,
   openNewFishNameModal,
+  persistUnsavedObservationsUtilities,
   transectLengthSurveyed,
   widthId,
 }) => {
@@ -77,18 +78,38 @@ const FishBeltObservationTable = ({
     haveApiObservationsBeenLoaded,
     setHaveApiObservationsBeenLoaded,
   ] = useState(false)
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(
+    false,
+  )
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
+  const {
+    persistUnsavedFormData: persistUnsavedObservationsData,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
+  } = persistUnsavedObservationsUtilities
+
+  const _ensureUnsavedObservationsArePersisted = useEffect(() => {
+    if (areObservationsInputsDirty) {
+      persistUnsavedObservationsData(observationsState)
+    }
+  }, [
+    areObservationsInputsDirty,
+    observationsState,
+    persistUnsavedObservationsData,
+  ])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
-      const observationsFromApiWithIds = observationsFromApi.map(
+      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
+      const initialObservationsToLoad =
+        persistedUnsavedObservations ?? observationsFromApi
+      const observationsFromApiWithIds = initialObservationsToLoad.map(
         (observation) => ({
           ...observation,
           // id exists on observations just for the sake of the front end logic
           // (adding rows, adding new species to observation, etc)
-          uiId: createUuid(),
+          uiId: observation.uuId ?? createUuid(),
         }),
       )
 
@@ -102,15 +123,18 @@ const FishBeltObservationTable = ({
   }, [collectRecord, observationsDispatch, haveApiObservationsBeenLoaded])
 
   const handleDeleteObservation = (observationId) => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
   }
 
   const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
     setIsAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
   const handleUpdateCount = (event, observationId) => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'updateCount',
       payload: { newCount: event.target.value, observationId },
@@ -118,6 +142,7 @@ const FishBeltObservationTable = ({
   }
 
   const handleUpdateSize = (newSize, observationId) => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'updateSize',
       payload: { newSize, observationId },
@@ -125,6 +150,7 @@ const FishBeltObservationTable = ({
   }
 
   const handleFishNameChange = (newFishName, observationId) => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'updateFishName',
       payload: {
@@ -385,6 +411,11 @@ FishBeltObservationTable.propTypes = {
   fishNameOptions: inputOptionsPropTypes.isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
+  persistUnsavedObservationsUtilities: PropTypes.shape({
+    persistUnsavedFormData: PropTypes.func,
+    clearPersistedUnsavedFormData: PropTypes.func,
+    getPersistedUnsavedFormData: PropTypes.func,
+  }).isRequired,
   transectLengthSurveyed: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
