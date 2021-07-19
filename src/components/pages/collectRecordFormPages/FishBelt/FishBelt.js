@@ -212,10 +212,18 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   ])
 
   const {
-    persistUnsavedFormData,
-    clearPersistedUnsavedFormData,
-    getPersistedUnsavedFormData,
-  } = useUnsavedDirtyFormDataUtilities('unsavedFishbeltForm')
+    persistUnsavedFormData: persistUnsavedFormikData,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
+    getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
+  } = useUnsavedDirtyFormDataUtilities('unsavedFishbeltFormik')
+
+  const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
+    'unsavedFishbeltObservations',
+  )
+
+  const {
+    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
+  } = persistUnsavedObservationsUtilities
 
   const deleteRecord = () => {
     if (!isNewRecord) {
@@ -226,7 +234,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           projectId,
         })
         .then(() => {
-          clearPersistedUnsavedFormData()
+          clearPersistedUnsavedFormikData()
+          clearPersistedUnsavedObservationsData()
           toast.success(language.success.collectRecordDelete)
           history.push(`${ensureTrailingSlash(currentProjectPath)}collecting`)
         })
@@ -251,7 +260,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
       .then((response) => {
         toast.success(language.success.collectRecordSave)
-        clearPersistedUnsavedFormData()
+        clearPersistedUnsavedFormikData()
+        clearPersistedUnsavedObservationsData()
         if (isNewRecord) {
           history.push(
             `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
@@ -300,10 +310,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     return Promise.resolve()
   }
-  // note: observations doesnt use formik
+  // note: observations doesnt use formik, maybe it could have
   const initialFormikFormValues = useMemo(
     () =>
-      getPersistedUnsavedFormData() ?? {
+      getPersistedUnsavedFormikData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(
           collectRecordBeingEdited,
@@ -314,7 +324,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           'fishbelt_transect',
         ),
       },
-    [collectRecordBeingEdited, getPersistedUnsavedFormData],
+    [collectRecordBeingEdited, getPersistedUnsavedFormikData],
   )
 
   const handleSizeBinChange = (sizeBinId) => {
@@ -331,7 +341,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     initialValues: initialFormikFormValues,
     enableReinitialize: true,
     validate: (values) => {
-      persistUnsavedFormData(values)
+      persistUnsavedFormikData(values)
     },
     onSubmit: saveRecord,
   }
@@ -379,6 +389,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                     openNewFishNameModal={openNewFishNameModal}
                     transectLengthSurveyed={formik.values.len_surveyed}
                     widthId={formik.values.width}
+                    persistUnsavedObservationsUtilities={
+                      persistUnsavedObservationsUtilities
+                    }
                   />
                 </form>
                 <ButtonCaution
