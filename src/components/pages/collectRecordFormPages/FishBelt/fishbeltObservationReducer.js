@@ -9,21 +9,21 @@ const fishbeltObservationReducer = (state, action) => {
       const idOfRemovee = action.payload
 
       const observationsWithTheRightOneRemoved = state.filter(
-        (observation) => observation.id !== idOfRemovee,
+        (observation) => observation.uiId !== idOfRemovee,
       )
 
       return observationsWithTheRightOneRemoved
     }
 
     case 'addObservation':
-      return [...state, { id: createUuid(), count: '', size: '' }]
+      return [...state, { uiId: createUuid(), count: '', size: '' }]
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
       const { referenceObservationIndex, referenceObservation } = action.payload
       const indexToInsertAt = referenceObservationIndex + 1
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
-        id: createUuid(),
+        uiId: createUuid(),
         fish_attribute: referenceObservation.fish_attribute,
         count: '',
         size: '',
@@ -35,7 +35,7 @@ const fishbeltObservationReducer = (state, action) => {
     case 'duplicateLastObservation': {
       const observationWithNewId = {
         ...action.payload.referenceObservation,
-        id: createUuid(),
+        uiId: createUuid(),
       }
 
       return [...state, observationWithNewId]
@@ -43,25 +43,25 @@ const fishbeltObservationReducer = (state, action) => {
     case 'updateCount':
       return state.map((observation) => {
         const isObservationToUpdate =
-          observation.id === action.payload.observationId
+          observation.uiId === action.payload.observationId
 
         return isObservationToUpdate
-          ? { ...observation, count: action.payload.newCount }
+          ? { ...observation, count: parseFloat(action.payload.newCount) }
           : observation
       })
     case 'updateSize':
       return state.map((observation) => {
         const isObservationToUpdate =
-          observation.id === action.payload.observationId
+          observation.uiId === action.payload.observationId
 
         return isObservationToUpdate
-          ? { ...observation, size: action.payload.newSize }
+          ? { ...observation, size: parseFloat(action.payload.newSize) }
           : observation
       })
     case 'updateFishName':
       return state.map((observation) => {
         const isObservationToUpdate =
-          observation.id === action.payload.observationId
+          observation.uiId === action.payload.observationId
 
         return isObservationToUpdate
           ? {
