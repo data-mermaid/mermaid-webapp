@@ -9,8 +9,8 @@ import theme from '../theme'
 import { OnlineStatusProvider } from '../library/onlineStatusContext'
 import { DatabaseSwitchboardInstanceProvider } from '../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import {
-  mockOnlineDatabaseSwitchboardInstance,
-  mockOfflineDatabaseSwitchboardInstance,
+  getMockOnlineDatabaseSwitchboardInstance,
+  getMockOfflineDatabaseSwitchboardInstance,
 } from './mockOnlineDatabaseSwitchboardInstance'
 
 const AuthenticatedProviders = ({ children, initialEntries }) => (
@@ -55,13 +55,13 @@ UnauthenticatedProviders.defaultProps = {
 
 const renderAuthenticatedOnline = (
   ui,
-  { renderOptions, initialEntries } = {},
+  { renderOptions, initialEntries, dexieInstance } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
       <AuthenticatedProviders initialEntries={initialEntries}>
         <DatabaseSwitchboardInstanceProvider
-          value={mockOnlineDatabaseSwitchboardInstance}
+          value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
         >
           <OnlineStatusProvider value={{ isOnline: true }}>
             {children}
@@ -96,13 +96,13 @@ const renderUnauthenticatedOnline = (
 
 const renderAuthenticatedOffline = (
   ui,
-  { renderOptions, initialEntries } = {},
+  { renderOptions, initialEntries, dexieInstance } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
       <AuthenticatedProviders initialEntries={initialEntries}>
         <DatabaseSwitchboardInstanceProvider
-          value={mockOfflineDatabaseSwitchboardInstance}
+          value={getMockOfflineDatabaseSwitchboardInstance(dexieInstance)}
         >
           <OnlineStatusProvider value={{ isOnline: false }}>
             {children}

@@ -1,8 +1,6 @@
-import { toast } from 'react-toastify'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
 import { getSampleDateLabel } from '../getSampleDateLabel'
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
@@ -282,15 +280,7 @@ const CollectRecordsMixin = (Base) =>
     }
 
     getCollectRecords = () => {
-      if (this._isOnlineAuthenticatedAndReady) {
-        toast.warn(
-          'When online, this app still uses mock data for the collect record table. To interact with the offline collect edit/create workflow, and see real data, disable your network.',
-        )
-
-        return Promise.resolve(mockMermaidData.collectRecords)
-      }
-
-      if (this._isOfflineAuthenticatedAndReady) {
+      if (this._isAuthenticatedAndReady) {
         return this._dexieInstance.collectRecords.toArray()
       }
 
