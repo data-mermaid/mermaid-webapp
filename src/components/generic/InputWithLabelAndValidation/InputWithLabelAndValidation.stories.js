@@ -15,9 +15,10 @@ export const basic = () => (
       validationType="warning"
     />
     <InputWithLabelAndValidation
-      id="id3"
+      id="myid"
       label="With error"
       validationType="error"
+      helperText="this is some helper text right here"
     />
     <InputWithLabelAndValidation
       id="id4"

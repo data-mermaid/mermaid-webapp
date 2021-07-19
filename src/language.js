@@ -68,6 +68,8 @@ const autocomplete = {
 const pages = {
   collectRecord: {
     newFishSpeciesLink: 'Propose New Species...',
+    totalAbundanceLabel: 'Total Abundance',
+    totalBiomassLabel: 'Total Biomass (kg/ha)',
   },
   projectInfo: {
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
@@ -78,6 +80,10 @@ const pages = {
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
     testProjectHelperText: 'Data for a test project will be omitted from all public reporting.',
     moreInfoTitle: 'Data sharing',
+  },
+  submittedTable: {
+    filterToolbarText:
+      'Filter sample units by method, site, management, or observer',
   },
 }
 

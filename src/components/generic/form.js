@@ -8,6 +8,11 @@ export const InputWrapper = styled.div`
 export const MaxWidthInputWrapper = styled(InputWrapper)`
   max-width: ${theme.spacing.maxWidth};
 `
+export const HelperText = styled.span`
+  font-size: ${theme.typography.smallFontSize};
+  color: ${theme.color.textColor};
+  display: block;
+`
 export const inputTextareaSelectStyles = css`
   padding: ${theme.spacing.xsmall};
   height: fit-content;

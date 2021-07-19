@@ -32,6 +32,7 @@ export const basic = () => (
       onChange={action('Select Option Change')}
       id="id3"
       label="With error and a reallylonglonglonglonglongword word word in the label"
+      helperText="Here's a message to help you with this select input"
       validationType="error"
       options={options}
     />
