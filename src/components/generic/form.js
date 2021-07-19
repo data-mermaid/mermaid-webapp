@@ -5,6 +5,14 @@ import { hoverState } from '../../library/styling/mediaQueries'
 export const InputWrapper = styled.div`
   padding: ${theme.spacing.medium};
 `
+export const MaxWidthInputWrapper = styled(InputWrapper)`
+  max-width: ${theme.spacing.maxWidth};
+`
+export const HelperText = styled.span`
+  font-size: ${theme.typography.smallFontSize};
+  color: ${theme.color.textColor};
+  display: block;
+`
 export const inputTextareaSelectStyles = css`
   padding: ${theme.spacing.xsmall};
   height: fit-content;

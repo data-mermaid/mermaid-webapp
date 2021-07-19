@@ -1,12 +1,13 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { Input, InputRow, ValidationMessage } from '../form'
+import { Input, InputRow, HelperText, ValidationMessage } from '../form'
 import InputNumberNoScrollWithUnit from '../InputNumberNoScrollWithUnit'
 import { useNoInputScrolling } from '../../../library/useNoInputScrolling'
 
 const InputWithLabelAndValidation = ({
   label,
+  helperText,
   id,
   unit,
   validationMessage,
@@ -18,15 +19,34 @@ const InputWithLabelAndValidation = ({
   useNoInputScrolling(textFieldRef)
 
   const inputType = unit ? (
-    <InputNumberNoScrollWithUnit id={id} unit={unit} {...restOfProps} />
+    <InputNumberNoScrollWithUnit
+      aria-labelledby={`aria-label${id}`}
+      aria-describedby={`aria-descp${id}`}
+      id={id}
+      unit={unit}
+      {...restOfProps}
+    />
   ) : (
-    <Input id={id} {...restOfProps} ref={textFieldRef} />
+    <Input
+      aria-labelledby={`aria-label${id}`}
+      aria-describedby={`aria-descp${id}`}
+      id={id}
+      {...restOfProps}
+      ref={textFieldRef}
+    />
   )
 
   return (
     <InputRow validationType={validationType}>
-      <label htmlFor={id}>{label}</label>
-      {inputType}
+      <label id={`aria-label${id}`} htmlFor={id}>
+        {label}
+      </label>
+      <div>
+        {inputType}
+        {helperText && (
+          <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
+        )}
+      </div>
       <div>
         {validationMessage ? (
           <ValidationMessage validationType={validationType}>
@@ -42,12 +62,14 @@ InputWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   unit: PropTypes.string,
+  helperText: PropTypes.string,
   validationType: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 InputWithLabelAndValidation.defaultProps = {
   unit: undefined,
+  helperText: undefined,
   validationType: undefined,
   validationMessage: undefined,
 }

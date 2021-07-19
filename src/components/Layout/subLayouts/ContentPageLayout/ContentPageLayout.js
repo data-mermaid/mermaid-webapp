@@ -34,7 +34,7 @@ const ContentToolbar = styled('div')`
   border-bottom: solid ${theme.spacing.borderMedium}
     ${theme.color.backgroundColor};
   margin-bottom: 0px;
-  z-index: 2;
+  z-index: 3;
 `
 const Content = styled('div')`
   ${contentStyles};

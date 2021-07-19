@@ -2,61 +2,44 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { getProjectInitialValues } from '../Admin/projectRecordInitialFormValue'
-import { H2, H4 } from '../../generic/text'
+import { H2, P } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
 import { ButtonPrimary } from '../../generic/buttons'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { InputWrapper } from '../../generic/form'
+import { MaxWidthInputWrapper } from '../../generic/form'
+import { TooltipWithText } from '../../generic/tooltip'
+import {
+  Table,
+  Tr,
+  Th,
+  Td,
+  TableOverflowWrapper,
+} from '../../generic/Table/table'
 import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
 import { IconInfo } from '../../icons'
 import theme from '../../../theme'
 import language from '../../../language'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
 
-const TextStyleWrapper = styled.div`
-  padding: 0 10px;
-  border-left: 10px solid rgb(221, 220, 228);
-  margin-bottom: 20px;
-  margin-right: 20%;
+const DataSharingTable = styled(Table)`
+  td {
+    position: relative;
+    label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
 `
-
-const DataSelectGridWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  grid-row-gap: 5px;
-  margin: 20px 0;
-  margin-right: 20%;
-  border: 10px solid rgb(221, 220, 228);
-`
-
-const ItemGridStyle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(221, 220, 228);
-  align-items: center;
-  padding: 10px;
-`
-
-const InputItemGridStyle = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const RowItemGridStyle = styled.div`
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
-`
-
 const CheckBoxLabel = styled.label`
   display: inline-block;
   input {
@@ -64,43 +47,6 @@ const CheckBoxLabel = styled.label`
     cursor: pointer;
   }
 `
-
-const Tooltip = styled.div`
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-  &:hover span,
-  &:focus span {
-    transition: ${theme.timing.hoverTransition};
-    visibility: visible;
-  }
-`
-
-const TooltipText = styled.span`
-  visibility: hidden;
-  background-color: ${theme.color.primaryColor};
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-  position: absolute;
-  display: block;
-  z-index: 1;
-  width: 330px;
-  top: 30px;
-  font-size: 15px;
-`
-
-const ContentWithTooltip = ({ children, tooltipText, ariaLabelledBy }) => {
-  return (
-    <Tooltip tabIndex="0" id={ariaLabelledBy}>
-      {children}
-      <TooltipText role="tooltip" aria-labelledby={ariaLabelledBy}>
-        {tooltipText}
-      </TooltipText>
-    </Tooltip>
-  )
-}
-
 const DataSharing = () => {
   const { isOnline } = useOnlineStatus()
 
@@ -171,107 +117,126 @@ const DataSharing = () => {
     <Formik {...formikOptions}>
       {(formik) => (
         <>
-          <InputWrapper>
-            <H4>Data is much more powerful when shared</H4>
-            <TextStyleWrapper>
-              {language.pages.dataSharing.introductionParagraph}
-            </TextStyleWrapper>
+          <MaxWidthInputWrapper>
+            <h3>Data is much more powerful when shared.</h3>
+            <P>{language.pages.dataSharing.introductionParagraph}</P>
             <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
-              <IconInfo /> Learn more about how your data is shared
+              <IconInfo /> Learn more about how your data is shared...
             </ButtonPrimary>
-            <DataSelectGridWrapper>
-              <ItemGridStyle />
-              <ItemGridStyle>
-                <ContentWithTooltip
-                  tooltipText={findToolTipDescription('Private')}
-                  ariaLabelledBy="private-tooltip"
-                >
-                  Private
-                </ContentWithTooltip>
-              </ItemGridStyle>
-              <ItemGridStyle>
-                <ContentWithTooltip
-                  tooltipText={findToolTipDescription('Public Summary')}
-                  ariaLabelledBy="public-summary-tooltip"
-                >
-                  Public Summary
-                </ContentWithTooltip>
-              </ItemGridStyle>
-              <ItemGridStyle>
-                <ContentWithTooltip
-                  tooltipText={findToolTipDescription('Public')}
-                  ariaLabelledBy="public-tooltip"
-                >
-                  Public
-                </ContentWithTooltip>
-              </ItemGridStyle>
-              <RowItemGridStyle>Fish Belt</RowItemGridStyle>
-              {dataPolicyOptions.map((item) => (
-                <InputItemGridStyle key={item.value}>
-                  <input
-                    type="radio"
-                    value={item.value}
-                    checked={
-                      formik.getFieldProps('data_policy_beltfish').value ===
-                      item.value
-                    }
-                    onChange={(event) => {
-                      formik.setFieldValue(
-                        'data_policy_beltfish',
-                        parseInt(event.target.value, 10),
-                      )
-                    }}
-                  />
-                </InputItemGridStyle>
-              ))}
-              <RowItemGridStyle>
-                Benthic: PIT, LIT, and Habitat Complexity
-              </RowItemGridStyle>
-              {dataPolicyOptions.map((item) => (
-                <InputItemGridStyle key={item.value}>
-                  <input
-                    type="radio"
-                    value={item.value}
-                    checked={
-                      formik.getFieldProps('data_policy_benthiclit').value ===
-                      item.value
-                    }
-                    onChange={(event) =>
-                      handleBenthicPolicyChange(event, formik)
-                    }
-                  />
-                </InputItemGridStyle>
-              ))}
-              <RowItemGridStyle>Bleaching</RowItemGridStyle>
-              {dataPolicyOptions.map((item) => (
-                <InputItemGridStyle key={item.value}>
-                  <input
-                    type="radio"
-                    value={item.value}
-                    checked={
-                      formik.getFieldProps('data_policy_bleachingqc').value ===
-                      item.value
-                    }
-                    onChange={(event) => {
-                      formik.setFieldValue(
-                        'data_policy_bleachingqc',
-                        parseInt(event.target.value, 10),
-                      )
-                    }}
-                  />
-                </InputItemGridStyle>
-              ))}
-            </DataSelectGridWrapper>
+            <TableOverflowWrapper>
+              <DataSharingTable>
+                <thead>
+                  <Tr>
+                    <Th>&nbsp;</Th>
+                    <Th>
+                      <TooltipWithText
+                        tooltipText={findToolTipDescription('Private')}
+                        text={<>Private</>}
+                        id="private-tooltip"
+                      />
+                    </Th>
+                    <Th>
+                      <TooltipWithText
+                        tooltipText={findToolTipDescription('Public Summary')}
+                        text={<>Public Summary</>}
+                        id="public-summary-tooltip"
+                      />
+                    </Th>
+                    <Th>
+                      <TooltipWithText
+                        tooltipText={findToolTipDescription('Public')}
+                        text={<>Public</>}
+                        id="public-tooltip"
+                      />
+                    </Th>
+                  </Tr>
+                </thead>
+                <tbody>
+                  <Tr>
+                    <Td>Fish Belt</Td>
+                    {dataPolicyOptions.map((item) => (
+                      <Td key={item.value}>
+                        <label htmlFor={`fish-belt${item.value}`}>
+                          <input
+                            type="radio"
+                            value={item.value}
+                            name="fish-belt"
+                            id={`fish-belt${item.value}`}
+                            checked={
+                              formik.getFieldProps('data_policy_beltfish')
+                                .value === item.value
+                            }
+                            onChange={(event) => {
+                              formik.setFieldValue(
+                                'data_policy_beltfish',
+                                parseInt(event.target.value, 10),
+                              )
+                            }}
+                          />
+                        </label>
+                      </Td>
+                    ))}
+                  </Tr>
+                  <Tr>
+                    <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
+                    {dataPolicyOptions.map((item) => (
+                      <Td key={item.value}>
+                        <label htmlFor={`benthic${item.value}`}>
+                          <input
+                            type="radio"
+                            value={item.value}
+                            name="benthic"
+                            id={`benthic${item.value}`}
+                            checked={
+                              formik.getFieldProps('data_policy_benthiclit')
+                                .value === item.value
+                            }
+                            onChange={(event) =>
+                              handleBenthicPolicyChange(event, formik)
+                            }
+                          />
+                        </label>
+                      </Td>
+                    ))}
+                  </Tr>
+                  <Tr>
+                    <Td>Bleaching</Td>
+                    {dataPolicyOptions.map((item) => (
+                      <Td key={item.value}>
+                        <label htmlFor={`bleaching${item.value}`}>
+                          <input
+                            type="radio"
+                            name="bleaching"
+                            id={`bleaching${item.value}`}
+                            value={item.value}
+                            checked={
+                              formik.getFieldProps('data_policy_bleachingqc')
+                                .value === item.value
+                            }
+                            onChange={(event) => {
+                              formik.setFieldValue(
+                                'data_policy_bleachingqc',
+                                parseInt(event.target.value, 10),
+                              )
+                            }}
+                          />
+                        </label>
+                      </Td>
+                    ))}
+                  </Tr>
+                </tbody>
+              </DataSharingTable>
+            </TableOverflowWrapper>
             <CheckBoxLabel>
               <input id="test-project-toggle" type="checkbox" /> This is a test
               project
             </CheckBoxLabel>
-            <div>{language.pages.dataSharing.testProjectHelperText}</div>
+            <P>{language.pages.dataSharing.testProjectHelperText}</P>
             <DataSharingInfoModal
               isOpen={issDataSharingInfoModalOpen}
               onDismiss={closeDataSharingInfoModal}
             />
-          </InputWrapper>
+          </MaxWidthInputWrapper>
         </>
       )}
     </Formik>
@@ -290,13 +255,6 @@ const DataSharing = () => {
       }
     />
   )
-}
-
-ContentWithTooltip.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
-  tooltipText: PropTypes.string.isRequired,
-  ariaLabelledBy: PropTypes.string.isRequired,
 }
 
 export default DataSharing

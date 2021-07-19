@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Downshift from 'downshift'
 import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'
-import { Input } from '../form'
+import { Input, HelperText } from '../form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import language from '../../../language'
 
@@ -19,6 +19,8 @@ const NoResultSection = styled.div`
 const InputAutocomplete = ({
   className,
   noResultsDisplay,
+  id,
+  helperText,
   onChange,
   options,
   value,
@@ -118,7 +120,17 @@ const InputAutocomplete = ({
             })}
             className={className}
           >
-            <AutoCompleteInput {...getInputProps()} {...restOfProps} />
+            <div>
+              <AutoCompleteInput
+                {...getInputProps()}
+                aria-describedby={`aria-descp${id}`}
+                id={id}
+                {...restOfProps}
+              />
+              {helperText && (
+                <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
+              )}
+            </div>
             <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
               {isMenuOpen && getMenuContents(downshiftObject)}
             </Menu>
@@ -136,6 +148,8 @@ const InputAutocomplete = ({
 
 InputAutocomplete.propTypes = {
   className: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  helperText: PropTypes.string,
   noResultsDisplay: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   options: inputOptionsPropTypes.isRequired,
@@ -145,6 +159,7 @@ InputAutocomplete.propTypes = {
 InputAutocomplete.defaultProps = {
   className: undefined,
   noResultsDisplay: undefined,
+  helperText: undefined,
   value: '',
 }
 
