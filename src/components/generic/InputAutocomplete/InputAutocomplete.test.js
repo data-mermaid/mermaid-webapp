@@ -35,6 +35,7 @@ test('InputAutocomplete: default no results view', () => {
 test('InputAutocomplete: custom no results view', () => {
   renderAuthenticatedOffline(
     <InputAutocomplete
+      id="someId"
       options={options}
       onChange={() => {}}
       noResultsDisplay={<>Custom View</>}

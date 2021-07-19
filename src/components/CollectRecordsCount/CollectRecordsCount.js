@@ -1,7 +1,10 @@
+import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import theme from '../../theme'
+
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import language from '../../language'
+import theme from '../../theme'
 
 const CollectRecordsCountWrapper = styled.span`
   background: ${theme.color.cautionColor};
@@ -20,11 +23,16 @@ const CollectRecordsCount = () => {
   const _getCollectRecordCount = useEffect(() => {
     let isMounted = true
 
-    databaseSwitchboardInstance.getCollectRecords().then((collectRecords) => {
-      if (isMounted) {
-        setCollectRecordsCount(collectRecords.length)
-      }
-    })
+    databaseSwitchboardInstance
+      .getCollectRecords()
+      .then((collectRecords) => {
+        if (isMounted) {
+          setCollectRecordsCount(collectRecords.length)
+        }
+      })
+      .catch(() => {
+        toast.warn(language.error.collectRecordsUnavailable)
+      })
 
     return () => {
       isMounted = false

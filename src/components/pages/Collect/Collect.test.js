@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -9,17 +11,12 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import Collect from './Collect'
 
-test('Collect component renders with the expected UI elements', () => {
-  // renderAuthenticatedOnline(<Collect />)
-  // expect sample unit button exists
-  // expect within form to have table headers with proper text for each column
-  // can ignore testing title. Its logic will come later
-  // expect page size selector (review M76 App.OnlineStatusMessage.test.js for inspiration on testing broken up text)
-  // expect page selector. (ignore how many pages, maybe look for previous and next text)
-})
-
 test('Collect Records table sorts properly by method column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -40,7 +37,11 @@ test('Collect Records table sorts properly by method column', async () => {
 })
 
 test('Collect Records table sorts properly by site column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -68,7 +69,11 @@ test('Collect Records table sorts properly by site column', async () => {
 })
 
 test('Collect Records table sorts properly by management column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -96,7 +101,11 @@ test('Collect Records table sorts properly by management column', async () => {
 })
 
 test('Collect Records table sorts properly by sample unit # column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -124,7 +133,11 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 })
 
 test('Collect Records table sorts properly by size column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -152,7 +165,11 @@ test('Collect Records table sorts properly by size column', async () => {
 })
 
 test('Collect Records table sorts properly by depth column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -179,7 +196,11 @@ test('Collect Records table sorts properly by depth column', async () => {
   expect(within(tableRowsAfterFirstClick[1]).getByText('20'))
 })
 test('Collect Records table sorts properly by sample date column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -211,7 +232,11 @@ test('Collect Records table sorts properly by sample date column', async () => {
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -247,7 +272,11 @@ test('Collect Records table sorts properly by observers column', async () => {
 })
 
 test('Collect Records table sorts properly by status column', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
@@ -277,7 +306,11 @@ test('Collect Records table sorts properly by status column', async () => {
 test('Collect Records table sorts properly by synced column', () => {})
 
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
   )
@@ -297,7 +330,11 @@ test('Collect Records table changes number of rows visible size when pagination 
 })
 
 test('Collect Records table change pages when different page is selected ', async () => {
-  renderAuthenticatedOnline(<Collect />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(<Collect />, { dexieInstance })
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('loading indicator'),
   )
