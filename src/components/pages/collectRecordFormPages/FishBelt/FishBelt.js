@@ -310,7 +310,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     return Promise.resolve()
   }
-  // note: observations doesnt use formik, maybe it could have
+  // note: observations doesn't use formik, maybe it could have
   const initialFormikFormValues = useMemo(
     () =>
       getPersistedUnsavedFormikData() ?? {

@@ -24,6 +24,7 @@ const InputAutocomplete = ({
   onChange,
   options,
   value,
+  onKeyDown,
   ...restOfProps
 }) => {
   const optionMatchingValueProp = useMemo(
@@ -122,7 +123,7 @@ const InputAutocomplete = ({
           >
             <div>
               <AutoCompleteInput
-                {...getInputProps()}
+                {...getInputProps({ onKeyDown })}
                 aria-describedby={`aria-descp${id}`}
                 id={id}
                 {...restOfProps}
@@ -148,18 +149,20 @@ const InputAutocomplete = ({
 
 InputAutocomplete.propTypes = {
   className: PropTypes.string,
-  id: PropTypes.string.isRequired,
   helperText: PropTypes.string,
+  id: PropTypes.string.isRequired,
   noResultsDisplay: PropTypes.node,
   onChange: PropTypes.func.isRequired,
+  onKeyDown: PropTypes.func,
   options: inputOptionsPropTypes.isRequired,
   value: PropTypes.string,
 }
 
 InputAutocomplete.defaultProps = {
   className: undefined,
-  noResultsDisplay: undefined,
   helperText: undefined,
+  noResultsDisplay: undefined,
+  onKeyDown: undefined,
   value: '',
 }
 
