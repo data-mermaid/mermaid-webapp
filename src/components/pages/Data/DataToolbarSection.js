@@ -57,7 +57,7 @@ const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
           <input
             type="text"
             id="filter_projects"
-            value={filterInputValue}
+            value={filterInputValue || ''}
             onChange={handleFilterChange}
           />
         </FilterLabelWrapper>

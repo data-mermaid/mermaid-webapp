@@ -121,12 +121,34 @@ const Data = () => {
     [submittedRecordsForUiDisplay],
   )
 
-  const tableGlobalFilters = useCallback((rows, id, query) => {
-    const filterTerms = ['method', 'site', 'management', 'observers']
+  // This method will check for double quotes in string.
+  // It returns an array of split strings by a space delimiter.
+  // example A: splitSearchQueryStrings(`"to the" dustin`).
+  // Also supports multi quotes in string.
+  // example B: splitSearchQueryStrings(`"to the" dustin "kim"`)
+  const splitSearchQueryStrings = (words) =>
+    (words.match(/[^\s"]+|"([^"]*)"/gi) || []).map((word) =>
+      word.replace(/^"(.+(?="$))"$/, '$1'),
+    )
 
-    return matchSorter(rows, query, {
-      keys: filterTerms.map((columnName) => `values.${columnName}`),
-    })
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = [
+      'values.method',
+      'values.site',
+      'values.management',
+      'values.observers',
+    ]
+
+    const queryTerms = splitSearchQueryStrings(query)
+
+    if (!queryTerms) {
+      return rows
+    }
+
+    return queryTerms.reduce(
+      (results, term) => matchSorter(results, term, { keys }),
+      rows,
+    )
   }, [])
 
   const {
@@ -156,9 +178,7 @@ const Data = () => {
     usePagination,
   )
 
-  const handleRowsNumberChange = (e) => {
-    setPageSize(Number(e.target.value))
-  }
+  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
 
   const handleFilterChange = (e) => {
     const { value } = e.target
