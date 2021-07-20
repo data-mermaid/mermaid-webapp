@@ -23,7 +23,7 @@ test('App renders show page unavailable offline when navigate to Submitted page 
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
     { initialEntries: ['/projects/fakewhatever/data'] },
   )
-  expect(screen.queryByText('This page is unavailable when offline'))
+  expect(screen.findByText('This page is unavailable when offline'))
 })
 
 test('App renders show page unavailable offline when navigate to Graphs and Maps page while offline.', async () => {

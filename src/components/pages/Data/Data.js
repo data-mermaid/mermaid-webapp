@@ -134,9 +134,9 @@ const Data = () => {
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
       'values.method',
-      { threshold: matchSorter.rankings.CONTAINS, key: 'values.site' },
-      { threshold: matchSorter.rankings.CONTAINS, key: 'values.management' },
-      { threshold: matchSorter.rankings.CONTAINS, key: 'values.observers' },
+      'values.site',
+      'values.management',
+      'values.observers',
     ]
 
     const queryTerms = splitSearchQueryStrings(query)
@@ -180,7 +180,11 @@ const Data = () => {
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
 
-  const handleFilterChange = (value) => setFilterInputValue(value)
+  const handleFilterChange = (e) => {
+    const { value } = e.target
+
+    setFilterInputValue(value)
+  }
 
   const _setGlobalFilterValue = useEffect(() => {
     setGlobalFilter(filterInputValue)
