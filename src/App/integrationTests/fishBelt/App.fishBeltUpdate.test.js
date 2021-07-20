@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOffline,
+  within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
@@ -68,7 +69,9 @@ describe('Offline', () => {
 
     userEvent.click(addObservationButton)
 
-    const observationRows = await screen.findAllByRole('row')
+    const observationsTable = (await screen.findAllByRole('table'))[0]
+
+    const observationRows = await within(observationsTable).findAllByRole('row')
 
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)
@@ -105,8 +108,8 @@ describe('Offline', () => {
     expect(newObservation.fish_attribute).toEqual(
       '018c6b47-9e6f-456d-8db2-ce1c91e8e1c4',
     )
-    expect(newObservation.count).toEqual('88')
-    expect(newObservation.size).toEqual('37.5')
+    expect(newObservation.count).toEqual(88)
+    expect(newObservation.size).toEqual(37.5)
   })
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie for 50+ observation size input', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -125,7 +128,9 @@ describe('Offline', () => {
 
     userEvent.click(addObservationButton)
 
-    const observationRows = await screen.findAllByRole('row')
+    const observationsTable = (await screen.findAllByRole('table'))[0]
+
+    const observationRows = await within(observationsTable).findAllByRole('row')
 
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)
@@ -151,7 +156,7 @@ describe('Offline', () => {
     const savedCollectRecord = await dexieInstance.collectRecords.toArray()
     const newObservation = savedCollectRecord[0].data.obs_belt_fishes[3]
 
-    expect(newObservation.size).toEqual('50367')
+    expect(newObservation.size).toEqual(50367)
   })
   test('Edit fishbelt save failure shows toast message with new edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()

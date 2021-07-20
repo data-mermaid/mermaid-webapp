@@ -1,19 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Textarea, InputRow, ValidationMessage } from '../form'
+import { Textarea, InputRow, ValidationMessage, HelperText } from '../form'
 
 const TextareaWithLabelAndValidation = ({
   label,
   id,
+  helperText,
   validationMessage,
   validationType,
   ...restOfProps
 }) => {
   return (
     <InputRow validationType={validationType}>
-      <label htmlFor={id}>{label}</label>
-      <Textarea rows="3" id={id} {...restOfProps} />
+      <label id={`aria-label${id}`} htmlFor={id}>
+        {label}
+      </label>
+      <div>
+        <Textarea
+          aria-labelledby={`aria-label${id}`}
+          aria-describedby={`aria-descp${id}`}
+          rows="3"
+          id={id}
+          {...restOfProps}
+        />
+        {helperText && (
+          <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
+        )}
+      </div>
       <div>
         {validationMessage ? (
           <ValidationMessage validationType={validationType}>
@@ -29,11 +43,13 @@ TextareaWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   validationType: PropTypes.string,
+  helperText: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 TextareaWithLabelAndValidation.defaultProps = {
   validationType: undefined,
+  helperText: undefined,
   validationMessage: undefined,
 }
 

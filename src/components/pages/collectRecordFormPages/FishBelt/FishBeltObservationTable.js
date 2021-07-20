@@ -37,6 +37,8 @@ import language from '../../../../language'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
+import { RowRight } from '../../../generic/positioning'
+import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -55,6 +57,10 @@ const InputAutocompleteContainer = styled.div`
   border: solid thin magenta;
 `
 
+const ObservationsSummaryStats = styled.table`
+  border: solid thin magenta;
+`
+
 const FishBeltObservationTable = ({
   choices,
   collectRecord,
@@ -63,6 +69,7 @@ const FishBeltObservationTable = ({
   fishNameOptions,
   observationsReducer,
   openNewFishNameModal,
+  persistUnsavedObservationsUtilities,
   transectLengthSurveyed,
   widthId,
 }) => {
@@ -71,18 +78,38 @@ const FishBeltObservationTable = ({
     haveApiObservationsBeenLoaded,
     setHaveApiObservationsBeenLoaded,
   ] = useState(false)
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(
+    false,
+  )
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
+  const {
+    persistUnsavedFormData: persistUnsavedObservationsData,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
+  } = persistUnsavedObservationsUtilities
+
+  const _ensureUnsavedObservationsArePersisted = useEffect(() => {
+    if (areObservationsInputsDirty) {
+      persistUnsavedObservationsData(observationsState)
+    }
+  }, [
+    areObservationsInputsDirty,
+    observationsState,
+    persistUnsavedObservationsData,
+  ])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
-      const observationsFromApiWithIds = observationsFromApi.map(
+      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
+      const initialObservationsToLoad =
+        persistedUnsavedObservations ?? observationsFromApi
+      const observationsFromApiWithIds = initialObservationsToLoad.map(
         (observation) => ({
           ...observation,
           // id exists on observations just for the sake of the front end logic
           // (adding rows, adding new species to observation, etc)
-          id: createUuid(),
+          uiId: observation.uuId ?? createUuid(),
         }),
       )
 
@@ -96,15 +123,18 @@ const FishBeltObservationTable = ({
   }, [collectRecord, observationsDispatch, haveApiObservationsBeenLoaded])
 
   const handleDeleteObservation = (observationId) => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
   }
 
   const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
     setIsAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
   const handleUpdateCount = (event, observationId) => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'updateCount',
       payload: { newCount: event.target.value, observationId },
@@ -112,6 +142,7 @@ const FishBeltObservationTable = ({
   }
 
   const handleUpdateSize = (newSize, observationId) => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'updateSize',
       payload: { newSize, observationId },
@@ -119,6 +150,7 @@ const FishBeltObservationTable = ({
   }
 
   const handleFishNameChange = (newFishName, observationId) => {
+    setAreObservationsInputsDirty(true)
     observationsDispatch({
       type: 'updateFishName',
       payload: {
@@ -128,7 +160,13 @@ const FishBeltObservationTable = ({
     })
   }
 
-  const handleKeyDown = ({ event, index, observation, isCount }) => {
+  const handleKeyDown = ({
+    event,
+    index,
+    observation,
+    isCount,
+    isFishName,
+  }) => {
     const isTabKey = event.code === 'Tab' && !event.shiftKey
     const isEnterKey = event.code === 'Enter'
     const isLastRow = index === observationsState.length - 1
@@ -142,7 +180,7 @@ const FishBeltObservationTable = ({
       })
     }
 
-    if (isEnterKey) {
+    if (isEnterKey && !isFishName) {
       event.preventDefault()
       setIsAutoFocusAllowed(true)
       observationsDispatch({
@@ -154,9 +192,43 @@ const FishBeltObservationTable = ({
       })
     }
   }
+  const observationsBiomass = observationsState.map((observation) => ({
+    uiId: observation.uiId,
+    biomass: getObservationBiomass({
+      choices,
+      fishNameConstants,
+      observation,
+      transectLengthSurveyed,
+      widthId,
+    }),
+  }))
+
+  const summarizeArrayObjectValuesByProperty = (
+    arrayOfObjects,
+    objectPropertyName,
+  ) => {
+    const summaryReducer = (accumulator, object) => {
+      const property = object[objectPropertyName]
+        ? parseFloat(object[objectPropertyName])
+        : 0
+
+      return accumulator + property
+    }
+
+    return arrayOfObjects.reduce(summaryReducer, 0)
+  }
+
+  const totalBiomass = roundToOneDecimal(
+    summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
+  )
+
+  const totalAbundance = summarizeArrayObjectValuesByProperty(
+    observationsState,
+    'count',
+  )
 
   const observationsRows = observationsState.map((observation, index) => {
-    const { id: observationId, count, size, fish_attribute } = observation
+    const { uiId: observationId, count, size, fish_attribute } = observation
 
     const rowNumber = index + 1
 
@@ -197,16 +269,10 @@ const FishBeltObservationTable = ({
       <> {sizeSelect} </>
     )
 
-    const observationBiomass =
-      Math.round(
-        getObservationBiomass({
-          choices,
-          fishNameConstants,
-          observation,
-          transectLengthSurveyed,
-          widthId,
-        }) * 10,
-      ) / 10
+    const observationBiomass = roundToOneDecimal(
+      observationsBiomass.find((object) => object.uiId === observationId)
+        .biomass,
+    )
 
     return (
       <Tr key={observationId}>
@@ -215,6 +281,7 @@ const FishBeltObservationTable = ({
           {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
+                id={`observation-${observationId}`}
                 // we only want autofocus to take over focus after the user adds
                 // new observations, not before. Otherwise initial page load focus
                 // is on the most recently painted observation instead of default focus.
@@ -228,7 +295,7 @@ const FishBeltObservationTable = ({
                   handleFishNameChange(selectedOption.value, observationId)
                 }
                 onKeyDown={(event) => {
-                  handleKeyDown({ event, index, observation })
+                  handleKeyDown({ event, index, observation, isFishName: true })
                 }}
                 value={fish_attribute}
                 noResultsDisplay={
@@ -312,6 +379,21 @@ const FishBeltObservationTable = ({
             <tbody>{observationsRows}</tbody>
           </Table>
         </TableOverflowWrapper>
+        <RowRight>
+          <ObservationsSummaryStats>
+            <tbody>
+              <Tr>
+                <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
+                <Td>{totalBiomass}</Td>
+              </Tr>
+              <Tr>
+                <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
+                <Td>{totalAbundance}</Td>
+              </Tr>
+            </tbody>
+          </ObservationsSummaryStats>
+        </RowRight>
+
         <ButtonPrimary type="button" onClick={handleAddObservation}>
           <IconPlus /> Add Row
         </ButtonPrimary>
@@ -335,6 +417,11 @@ FishBeltObservationTable.propTypes = {
   fishNameOptions: inputOptionsPropTypes.isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
+  persistUnsavedObservationsUtilities: PropTypes.shape({
+    persistUnsavedFormData: PropTypes.func,
+    clearPersistedUnsavedFormData: PropTypes.func,
+    getPersistedUnsavedFormData: PropTypes.func,
+  }).isRequired,
   transectLengthSurveyed: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,

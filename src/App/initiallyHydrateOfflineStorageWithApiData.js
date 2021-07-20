@@ -1,4 +1,4 @@
-import mockMermaidData from '../testUtilities/mockMermaidData'
+import { initiallyHydrateOfflineStorageWithMockData } from '../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 export const initiallyHydrateOfflineStorageWithApiData = (dexieInstance) => {
   /** this is very WIP.
@@ -16,18 +16,9 @@ export const initiallyHydrateOfflineStorageWithApiData = (dexieInstance) => {
       const isAlreadyInitialiazed = !!(
         await dexieInstance.hasInitialApiHydrationCompleted.toArray()
       ).length
-      const temporaryForDevelopmentFishSpecies = mockMermaidData.fishSpecies
-      const temporaryForDevelopmentCollectRecords =
-        mockMermaidData.collectRecords
 
       if (!isAlreadyInitialiazed) {
-        temporaryForDevelopmentFishSpecies.forEach((specie) => {
-          dexieInstance.fishSpecies.put(specie)
-        })
-
-        temporaryForDevelopmentCollectRecords.forEach((record) => {
-          dexieInstance.collectRecords.put(record)
-        })
+        initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
         dexieInstance.hasInitialApiHydrationCompleted.put({
           id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
