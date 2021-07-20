@@ -1,3 +1,5 @@
+import { extraObservationsForPerformanceTesting } from './fishbeltObservationsPerformanceTestingData'
+
 const projects = [
   {
     id: '1',
@@ -249,6 +251,7 @@ const collectRecords = [
           size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
           fish_attribute: '03635b1f-95c2-4a80-be46-208152a69138',
         },
+        ...extraObservationsForPerformanceTesting,
       ],
     },
     validations: null,
