@@ -160,7 +160,13 @@ const FishBeltObservationTable = ({
     })
   }
 
-  const handleKeyDown = ({ event, index, observation, isCount }) => {
+  const handleKeyDown = ({
+    event,
+    index,
+    observation,
+    isCount,
+    isFishName,
+  }) => {
     const isTabKey = event.code === 'Tab' && !event.shiftKey
     const isEnterKey = event.code === 'Enter'
     const isLastRow = index === observationsState.length - 1
@@ -174,7 +180,7 @@ const FishBeltObservationTable = ({
       })
     }
 
-    if (isEnterKey) {
+    if (isEnterKey && !isFishName) {
       event.preventDefault()
       setIsAutoFocusAllowed(true)
       observationsDispatch({
@@ -289,7 +295,7 @@ const FishBeltObservationTable = ({
                   handleFishNameChange(selectedOption.value, observationId)
                 }
                 onKeyDown={(event) => {
-                  handleKeyDown({ event, index, observation })
+                  handleKeyDown({ event, index, observation, isFishName: true })
                 }}
                 value={fish_attribute}
                 noResultsDisplay={
