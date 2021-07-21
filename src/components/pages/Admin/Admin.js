@@ -31,39 +31,92 @@ const TagStyleWrapper = styled.ul`
   padding: 0;
 `
 const ClearTagButton = styled(CloseButton)`
-  color: white;
-  visibility: hidden;
+  position: relative;
+  color: ${theme.color.textColor};
+  opacity: 0;
+  transition: 0;
+  &:focus {
+    opacity: 1;
+  }
+  &:hover,
+  &:focus {
+    & + span {
+      display: block;
+    }
+  }
 `
 const TagStyle = styled.li`
-  color: white;
+  position: relative;
+  color: ${theme.color.textColor};
   border-radius: 50px;
-  background-color: ${theme.color.calloutColor};
-  padding-right: 30px;
-  margin: 10px 5px;
+  background-color: ${theme.color.white};
+  padding-right: 4rem;
+  margin: 1rem 0.5rem;
+  border: solid ${theme.spacing.borderMedium} ${theme.color.primaryColor};
   display: inline-block;
+  &:focus {
+    ${ClearTagButton} {
+      opacity: 1;
+    }
+  }
   ${hoverState(css`
     ${ClearTagButton} {
-      visibility: visible;
+      opacity: 1;
     }
   `)}
+  @media (hover: none) {
+    ${ClearTagButton} {
+      opacity: 1;
+    }
+  }
 `
 
+const TooltipPopup = styled('span')`
+  display: none;
+  background: ${theme.color.primaryColor};
+  color: ${theme.color.white};
+  position: absolute;
+  font-size: ${theme.typography.smallFontSize};
+  clip-path: polygon(
+    calc(20px - 10px) 15px,
+    20px 0,
+    calc(20px + 10px) 15px,
+    100% 15px,
+    100% 100%,
+    0 100%,
+    0 15px
+  );
+  padding: ${theme.spacing.small};
+  padding-top: calc(4rem - 15px);
+  top: 4rem;
+  white-space: normal;
+  text-align: start;
+  line-height: ${theme.typography.lineHeight};
+  z-index: 1000;
+  ${theme.typography.upperCase};
+`
 const InputAutocompleteWrapper = styled(InputRow)`
   height: 100px;
 `
 
+let uid = 0
 const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   return (
     organizations && (
       <TagStyleWrapper>
         {organizations.map((item) => (
-          <TagStyle key={item}>
+          <TagStyle tabIndex="0" key={item}>
             <ClearTagButton
               type="button"
               onClick={() => handleOrganizationsChange(item)}
+              id={`remove-button-${++uid}`}
+              aria-labelledby={`aria-tooltip-label${uid}`}
             >
               <IconClose />
             </ClearTagButton>
+            <TooltipPopup id={`aria-tooltip-label${uid}`}>
+              {language.pages.projectInfo.removeOrganization}
+            </TooltipPopup>
             {item}
           </TagStyle>
         ))}
