@@ -1,24 +1,13 @@
 import axios from 'axios'
+import {
+  getLastRevisionNumbersPulled,
+  persistLastRevisionNumbersPulled,
+} from '../lastRevisionNumbers'
 
 const ApiSync = class {
   _apiBaseUrl
 
   _dexieInstance
-
-  #persistLastRevisionNumbersPulled = (apiData) => {
-    const objectToStore = {
-      id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
-      lastRevisionNumbers: {
-        collectRecords: apiData.collect_records?.last_revision_num,
-      },
-    }
-
-    return this._dexieInstance.lastRevisionNumbersPulled.put(objectToStore)
-  }
-
-  #getLastRevisionNumbersPulled = async () =>
-    (await this._dexieInstance.lastRevisionNumbersPulled.toArray())[0]
-      ?.lastRevisionNumbers
 
   constructor({ dexieInstance, apiBaseUrl, auth0Token }) {
     this._dexieInstance = dexieInstance
@@ -39,7 +28,9 @@ const ApiSync = class {
       )
     }
 
-    const lastRevisionNumbersPulled = await this.#getLastRevisionNumbersPulled()
+    const lastRevisionNumbersPulled = await getLastRevisionNumbersPulled({
+      dexieInstance: this._dexieInstance,
+    })
 
     return this._authenticatedAxios
       .post(`${this._apiBaseUrl}/pull/`, {
@@ -50,7 +41,10 @@ const ApiSync = class {
         },
       })
       .then(async (response) => {
-        await this.#persistLastRevisionNumbersPulled(response.data)
+        await persistLastRevisionNumbersPulled({
+          dexieInstance: this._dexieInstance,
+          apiData: response.data,
+        })
         const collectRecordUpdates =
           response.data.collect_records?.updates ?? []
         const collectRecordDeletes =
