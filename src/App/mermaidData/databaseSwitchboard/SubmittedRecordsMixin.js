@@ -11,6 +11,11 @@ const SubmittedRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
+    getSubmittedRecordsTable = () =>
+      this._isAuthenticatedAndReady
+        ? Promise.resolve(mockMermaidData.submittedRecordsTable)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+
     getSubmittedRecords = () =>
       this._isAuthenticatedAndReady
         ? Promise.resolve(mockMermaidData.submittedRecords)
@@ -28,9 +33,9 @@ const SubmittedRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedRecordsForUIDisplay = () => {
+    getSubmittedRecordsTableForUIDisplay = () => {
       return this._isAuthenticatedAndReady
-        ? this.getSubmittedRecords().then((submittedRecords) => {
+        ? this.getSubmittedRecordsTable().then((submittedRecords) => {
             return submittedRecords.map((record) => ({
               ...record,
               uiLabels: {
