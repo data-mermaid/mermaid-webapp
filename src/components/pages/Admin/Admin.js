@@ -18,20 +18,22 @@ import TextareaWithLabelAndValidation from '../../generic/TextareaWithLabelAndVa
 import { InputWrapper, InputRow } from '../../generic/form'
 import { getOptions } from '../../../library/getOptions'
 import { IconClose } from '../../icons'
-import { CloseButton, ButtonThatLooksLikeLink } from '../../generic/buttons'
+import { CloseButton, ButtonSecondary } from '../../generic/buttons'
 import theme from '../../../theme'
 import language from '../../../language'
 import NewOrganizationModal from '../../NewOrganizationModal'
 
+const SuggestNewOrganizationButton = styled(ButtonSecondary)`
+  font-size: smaller;
+  text-align: start;
+`
 const TagStyleWrapper = styled.ul`
   padding: 0;
 `
-
 const ClearTagButton = styled(CloseButton)`
   color: white;
   visibility: hidden;
 `
-
 const TagStyle = styled.li`
   color: white;
   border-radius: 50px;
@@ -127,12 +129,15 @@ const Admin = () => {
   }
 
   const noOrganizationResult = (
-    <ButtonThatLooksLikeLink
-      type="button"
-      onClick={openNewOrganizationNameModal}
-    >
-      {language.pages.projectInfo.newOrganizationNameLink}
-    </ButtonThatLooksLikeLink>
+    <>
+      <p>{language.pages.projectInfo.noOrganizationFound}</p>
+      <SuggestNewOrganizationButton
+        type="button"
+        onClick={openNewOrganizationNameModal}
+      >
+        {language.pages.projectInfo.newOrganizationNameLink}
+      </SuggestNewOrganizationButton>
+    </>
   )
 
   const content = isOnline ? (
@@ -141,7 +146,7 @@ const Admin = () => {
         <>
           <InputWrapper>
             <InputWithLabelAndValidation
-              label="Name"
+              label="Project Name"
               id="name"
               type="text"
               {...formik.getFieldProps('name')}
@@ -157,6 +162,7 @@ const Admin = () => {
               <InputAutocomplete
                 id="organizations"
                 options={projectTagOptions}
+                helperText={language.pages.projectInfo.organizationsHelperText}
                 onChange={(selectedItem) => {
                   const { label: selectedItemLabel } = selectedItem
                   const existingOrganizations = [

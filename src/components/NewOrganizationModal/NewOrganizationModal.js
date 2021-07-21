@@ -6,21 +6,16 @@ import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
-import { Input, InputRow } from '../generic/form'
+import { Input, InputRow, HelperText } from '../generic/form'
 import language from '../../language'
+import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
-const ModalMainContent = styled(InputRow)`
-  grid-template-columns: auto 1fr;
+const ModalInputRow = styled(InputRow)`
+  background: ${theme.color.white};
+  display: block;
+  border: none;
 `
-
-const SubText = styled.div`
-  grid-column: 1/2;
-  font-size: small;
-  color: grey;
-  padding-top: 5px;
-`
-
 const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
   const formik = useFormik({
     initialValues: { newOrganizationSuggestion: '' },
@@ -37,18 +32,25 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
     toast.success(language.success.newOrganizationAdd)
   }
 
+  const id = 'modalInputId'
+  const helperText = language.pages.projectInfo.suggestionOrganizationHelperText
   const modalContent = (
     <>
-      <ModalMainContent>
-        <Input
-          id="add-new-organization"
-          type="text"
-          {...formik.getFieldProps('newOrganizationSuggestion')}
-        />
-        <SubText>
-          {language.pages.projectInfo.suggestionOrganizationInputText}
-        </SubText>
-      </ModalMainContent>
+      <ModalInputRow>
+        <label id={`aria-label${id}`} htmlFor={id}>
+          New Organization Name
+        </label>
+        <div>
+          <Input
+            aria-labelledby={`aria-label${id}`}
+            aria-describedby={`aria-descsp${id}`}
+            id={id}
+          />
+          {helperText && (
+            <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
+          )}
+        </div>
+      </ModalInputRow>
     </>
   )
 
