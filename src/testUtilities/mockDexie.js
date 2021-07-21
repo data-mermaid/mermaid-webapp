@@ -11,7 +11,6 @@ const getMockDexieInstanceAllSuccess = () => {
     collectRecords: 'id',
     lastRevisionNumbersPulled: 'id',
     fishSpecies: 'id',
-    hasInitialApiHydrationCompleted: 'id',
   })
 
   dexieInstance.currentUser

@@ -4,7 +4,6 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
   return dexieInstance.transaction(
     'rw',
     dexieInstance.fishSpecies,
-    dexieInstance.hasInitialApiHydrationCompleted,
     dexieInstance.collectRecords,
     async () => {
       mockMermaidData.fishSpecies.forEach((specie) => {

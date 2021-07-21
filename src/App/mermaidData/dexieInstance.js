@@ -11,7 +11,6 @@ dexieInstance.version(4).stores({
   collectRecords: 'id',
   lastRevisionNumbersPulled: 'id',
   fishSpecies: 'id',
-  hasInitialApiHydrationCompleted: 'id',
 })
 
 // If This were TypeScript, types would be easy to obtain for Dexie
