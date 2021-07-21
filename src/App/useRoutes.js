@@ -71,9 +71,7 @@ export const useRoutes = ({ currentUser }) => {
     },
     {
       path: '/projects/:projectId/data/fishbelt/:recordId',
-      Component: () => (
-        <SubmittedFishBelt isNewRecord={false} currentUser={currentUser} />
-      ),
+      Component: () => <SubmittedFishBelt currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/admin',
