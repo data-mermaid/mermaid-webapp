@@ -1,95 +1,85 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components/macro'
-import { Table, Tr, TableOverflowWrapper } from '../../../generic/Table/table'
+import { Formik } from 'formik'
+import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
+import React, { useState, useEffect, useMemo } from 'react'
+import { getSubmittedRecordDataInitialValues } from '../submittedRecordFormInitialValues'
 import { H2 } from '../../../generic/text'
-import { InputWrapper } from '../../../generic/form'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { ContentPageLayout } from '../../../Layout'
-import theme from '../../../../theme'
+import SubmittedFishBeltInfo from '../../../SubmittedFishBeltInfo'
+import useIsMounted from '../../../../library/useIsMounted'
+import language from '../../../../language'
 
-const Tcell = styled.td`
-  padding: 10px;
-  text-align: left;
-  ${(props) =>
-    props.cellWithText &&
-    css`
-      font-weight: bold;
-      width: 250px;
-      background: #f1f1f4;
-    `};
-`
 const SubmittedFishBelt = () => {
+  const [choices, setChoices] = useState({})
+  const [submittedRecord, setSubmittedRecord] = useState()
+  const [sites, setSites] = useState([])
+  const [managementRegimes, setManagementRegimes] = useState([])
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { recordId } = useParams()
+  const [isLoading, setIsLoading] = useState(true)
+  const isMounted = useIsMounted()
+
+  const _getSupportingData = useEffect(() => {
+    if (databaseSwitchboardInstance) {
+      const promises = [
+        databaseSwitchboardInstance.getSites(),
+        databaseSwitchboardInstance.getManagementRegimes(),
+        databaseSwitchboardInstance.getChoices(),
+      ]
+
+      if (recordId) {
+        promises.push(databaseSwitchboardInstance.getSubmittedRecord(recordId))
+      }
+
+      Promise.all(promises)
+        .then(
+          ([
+            sitesResponse,
+            managementRegimesResponse,
+            choicesResponse,
+            submittedRecordResponse,
+          ]) => {
+            if (isMounted.current) {
+              setSites(sitesResponse)
+              setManagementRegimes(managementRegimesResponse)
+              setChoices(choicesResponse)
+              setSubmittedRecord(submittedRecordResponse)
+              setIsLoading(false)
+            }
+          },
+        )
+        .catch(() => {
+          toast.error(language.error.submittedRecordsUnavailable)
+        })
+    }
+  }, [databaseSwitchboardInstance, isMounted, recordId])
+
+  const initialFormValues = useMemo(
+    () =>
+      getSubmittedRecordDataInitialValues(submittedRecord, 'fishbelt_transect'),
+    [submittedRecord],
+  )
+
+  const formikOptions = {
+    initialValues: initialFormValues,
+    enableReinitialize: true,
+  }
+
   return (
     <ContentPageLayout
+      isLoading={isLoading}
       content={
-        <InputWrapper>
-          <TableOverflowWrapper>
-            <Table>
-              <tbody>
-                <Tr>
-                  <Tcell cellWithText>Site</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Management</Tcell>
-                  <Tcell>Management Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Sample Date Time</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Depth</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Transect Number</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Label</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Transect Length Surveyed</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Width</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Fish Size Bin</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Reef Slope</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Visibility</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Current</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Relative Depth</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Tide</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-                <Tr>
-                  <Tcell cellWithText>Notes</Tcell>
-                  <Tcell>Site Name</Tcell>
-                </Tr>
-              </tbody>
-            </Table>
-          </TableOverflowWrapper>
-        </InputWrapper>
+        <Formik {...formikOptions}>
+          {(formik) => (
+            <SubmittedFishBeltInfo
+              formik={formik}
+              choices={choices}
+              sites={sites}
+              managementRegimes={managementRegimes}
+            />
+          )}
+        </Formik>
       }
       toolbar={
         <>

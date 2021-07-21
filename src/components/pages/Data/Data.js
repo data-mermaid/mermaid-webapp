@@ -13,6 +13,7 @@ import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import {
   Table,
   Tr,
@@ -45,7 +46,7 @@ const Data = () => {
   const _getSubmittedRecords = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted) {
       databaseSwitchboardInstance
-        .getSubmittedRecordsForUIDisplay()
+        .getSubmittedRecordsTableForUIDisplay()
         .then((records) => {
           if (isMounted) {
             setSubmittedRecordsForUiDisplay(records)
@@ -57,6 +58,7 @@ const Data = () => {
         })
     }
   }, [databaseSwitchboardInstance, isMounted])
+  const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
