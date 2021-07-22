@@ -26,7 +26,6 @@ const TableRowItem = ({ title, options, value }) => (
 
 const SubmittedFishBeltInfo = ({
   formik,
-  submittedRecord,
   sites,
   managementRegimes,
   choices,
