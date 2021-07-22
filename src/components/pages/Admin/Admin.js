@@ -50,10 +50,11 @@ const TagStyle = styled.li`
   color: ${theme.color.textColor};
   border-radius: 50px;
   background-color: ${theme.color.white};
-  padding-right: 4rem;
+  padding: 0 4rem 0 0;
   margin: 1rem 0.5rem;
   border: solid ${theme.spacing.borderMedium} ${theme.color.primaryColor};
   display: inline-block;
+  white-space: nowrap;
   &:focus {
     ${ClearTagButton} {
       opacity: 1;
