@@ -16,6 +16,7 @@ const getSubmittedRecordDataInitialValues = (submittedRecord, transectType) => {
     visibility: submittedRecord?.[transectType]?.visibility ?? '',
     relative_depth: submittedRecord?.[transectType]?.relative_depth ?? '',
     tide: submittedRecord?.[transectType]?.tide ?? '',
+    obs_belt_fishes: submittedRecord?.obs_belt_fishes ?? [],
   }
 }
 

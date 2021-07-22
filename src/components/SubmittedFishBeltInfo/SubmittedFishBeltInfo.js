@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components/macro'
-import { Table, Tr, TableOverflowWrapper } from '../generic/Table/table'
+import styled from 'styled-components/macro'
+import { Table, Tr, Td, TableOverflowWrapper } from '../generic/Table/table'
 import { InputWrapper } from '../generic/form'
 import {
   managementRegimePropType,
@@ -11,55 +11,44 @@ import {
 import { formikPropType } from '../../library/formikPropType'
 import { getObjectById } from '../../library/getObjectById'
 
-const Tcell = styled.td`
-  padding: 10px;
-  text-align: left;
-  ${(props) =>
-    props.cellWithText &&
-    css`
-      font-weight: bold;
-      width: 250px;
-      background: #f1f1f4;
-    `};
+const TdKey = styled(Td)`
+  font-weight: bold;
+  background: #f1f1f4;
+  width: 250px;
 `
 
 const TableRowItem = ({ title, options, value }) => (
   <Tr>
-    <Tcell cellWithText>{title}</Tcell>
-    {options ? (
-      <Tcell>{getObjectById(options, value).name}</Tcell>
-    ) : (
-      <Tcell>{value}</Tcell>
-    )}
+    <TdKey>{title}</TdKey>
+    {options ? <Td>{getObjectById(options, value).name}</Td> : <Td>{value}</Td>}
   </Tr>
 )
 
 const SubmittedFishBeltInfo = ({
   formik,
+  submittedRecord,
   sites,
   managementRegimes,
   choices,
 }) => {
   const {
-    values: {
-      site,
-      management,
-      sample_date,
-      sample_time,
-      depth,
-      number,
-      label,
-      len_surveyed,
-      width,
-      size_bin,
-      reef_slope,
-      visibility,
-      current,
-      relative_depth,
-      tide,
-      notes,
-    },
-  } = formik
+    site,
+    management,
+    sample_date,
+    sample_time,
+    depth,
+    number,
+    label,
+    len_surveyed,
+    width,
+    size_bin,
+    reef_slope,
+    visibility,
+    current,
+    relative_depth,
+    tide,
+    notes,
+  } = formik.values
 
   const {
     belttransectwidths,

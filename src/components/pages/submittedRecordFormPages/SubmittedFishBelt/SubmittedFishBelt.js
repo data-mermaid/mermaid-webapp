@@ -7,14 +7,19 @@ import { H2 } from '../../../generic/text'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { ContentPageLayout } from '../../../Layout'
 import SubmittedFishBeltInfo from '../../../SubmittedFishBeltInfo'
+import SubmittedFishBeltObservations from '../../../SubmittedFishBeltObservations'
 import useIsMounted from '../../../../library/useIsMounted'
 import language from '../../../../language'
+import { getFishNameObjectById } from '../../../../App/mermaidData/getFishNameObjectById'
+import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
   const [submittedRecord, setSubmittedRecord] = useState()
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
+  const [fishNameOptions, setFishNameOptions] = useState([])
+  const [fishNameConstants, setFishNameConstants] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { recordId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
@@ -26,6 +31,9 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getSites(),
         databaseSwitchboardInstance.getManagementRegimes(),
         databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getFishSpecies(),
+        databaseSwitchboardInstance.getFishGenera(),
+        databaseSwitchboardInstance.getFishFamilies(),
       ]
 
       if (recordId) {
@@ -38,13 +46,32 @@ const SubmittedFishBelt = () => {
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
+            species,
+            genera,
+            families,
+
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
+              const updateFishNameOptions = getFishNameObjectById({
+                species,
+                genera,
+                families,
+              })
+
+              const updateFishNameConstants = getFishNameConstants({
+                species,
+                genera,
+                families,
+              })
+
               setSites(sitesResponse)
+
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setSubmittedRecord(submittedRecordResponse)
+              setFishNameOptions(updateFishNameOptions)
+              setFishNameConstants(updateFishNameConstants)
               setIsLoading(false)
             }
           },
@@ -72,12 +99,20 @@ const SubmittedFishBelt = () => {
       content={
         <Formik {...formikOptions}>
           {(formik) => (
-            <SubmittedFishBeltInfo
-              formik={formik}
-              choices={choices}
-              sites={sites}
-              managementRegimes={managementRegimes}
-            />
+            <>
+              <SubmittedFishBeltInfo
+                formik={formik}
+                choices={choices}
+                sites={sites}
+                managementRegimes={managementRegimes}
+              />
+              <SubmittedFishBeltObservations
+                formik={formik}
+                choices={choices}
+                fishNameOptions={fishNameOptions}
+                fishNameConstants={fishNameConstants}
+              />
+            </>
           )}
         </Formik>
       }
