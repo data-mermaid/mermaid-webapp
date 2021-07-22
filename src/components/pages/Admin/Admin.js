@@ -22,6 +22,7 @@ import { CloseButton, ButtonSecondary } from '../../generic/buttons'
 import theme from '../../../theme'
 import language from '../../../language'
 import NewOrganizationModal from '../../NewOrganizationModal'
+import { createUuid } from '../../../library/createUuid'
 
 const SuggestNewOrganizationButton = styled(ButtonSecondary)`
   font-size: smaller;
@@ -100,27 +101,30 @@ const InputAutocompleteWrapper = styled(InputRow)`
   height: 100px;
 `
 
-let uid = 0
 const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   return (
     organizations && (
       <TagStyleWrapper>
-        {organizations.map((item) => (
-          <TagStyle tabIndex="0" key={item}>
-            <ClearTagButton
-              type="button"
-              onClick={() => handleOrganizationsChange(item)}
-              id={`remove-button-${++uid}`}
-              aria-labelledby={`aria-tooltip-label${uid}`}
-            >
-              <IconClose />
-            </ClearTagButton>
-            <TooltipPopup id={`aria-tooltip-label${uid}`}>
-              {language.pages.projectInfo.removeOrganization}
-            </TooltipPopup>
-            {item}
-          </TagStyle>
-        ))}
+        {organizations.map((item) => {
+          const uid = createUuid()
+
+          return (
+            <TagStyle tabIndex="0" key={item}>
+              <ClearTagButton
+                type="button"
+                onClick={() => handleOrganizationsChange(item)}
+                id={`remove-button-${uid}`}
+                aria-labelledby={`aria-tooltip-label${uid}`}
+              >
+                <IconClose />
+              </ClearTagButton>
+              <TooltipPopup id={`aria-tooltip-label${uid}`}>
+                {language.pages.projectInfo.removeOrganization}
+              </TooltipPopup>
+              {item}
+            </TagStyle>
+          )
+        })}
       </TagStyleWrapper>
     )
   )
