@@ -2,12 +2,17 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
+import styled from 'styled-components/macro'
 import { getSubmittedRecordDataInitialValues } from '../submittedRecordFormInitialValues'
 import { H2 } from '../../../generic/text'
+import { IconPen } from '../../../icons'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { ContentPageLayout } from '../../../Layout'
+import { ButtonSecondary } from '../../../generic/buttons'
+import { RowSpaceBetween } from '../../../generic/positioning'
 import SubmittedFishBeltInfo from '../../../SubmittedFishBeltInfo'
 import SubmittedFishBeltObservations from '../../../SubmittedFishBeltObservations'
+import SubmittedRecordFormTitle from '../../../SubmittedRecordFormTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import language from '../../../../language'
 import { getFishNameObjectById } from '../../../../App/mermaidData/getFishNameObjectById'
@@ -118,7 +123,20 @@ const SubmittedFishBelt = () => {
       }
       toolbar={
         <>
-          <H2>Submitted Record</H2>
+          {submittedRecord && (
+            <SubmittedRecordFormTitle
+              submittedRecord={submittedRecord}
+              sites={sites}
+            />
+          )}
+
+          <RowSpaceBetween>
+            <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>{' '}
+            <ButtonSecondary>
+              <IconPen />
+              Edit Sample Unit - move to collect
+            </ButtonSecondary>
+          </RowSpaceBetween>
         </>
       }
     />
