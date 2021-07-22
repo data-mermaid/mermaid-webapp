@@ -7,11 +7,17 @@ import { inputOptionsPropTypes } from '../../library/miscPropTypes'
 import { choicesPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../library/formikPropType'
 import { Table, TableOverflowWrapper, Tr, Td, Th } from '../generic/Table/table'
+import { RowRight } from '../generic/positioning'
 import { getObservationBiomass } from '../pages/collectRecordFormPages/FishBelt/fishbeltBiomas'
 import { roundToOneDecimal } from '../../library/Numbers/roundToOneDecimal'
+import language from '../../language'
 
 const TheadItem = styled(Th)`
   background: #f1f1f4;
+`
+
+const ObservationsSummaryStats = styled.table`
+  border: solid thin magenta;
 `
 
 const SubmittedFishBeltObservations = ({
@@ -22,6 +28,41 @@ const SubmittedFishBeltObservations = ({
 }) => {
   const { obs_belt_fishes, width, len_surveyed } = formik.values
 
+  const observationsBiomass = obs_belt_fishes.map((observation) => ({
+    uiId: observation.id,
+    biomass: getObservationBiomass({
+      choices,
+      fishNameConstants,
+      observation,
+      transectLengthSurveyed: len_surveyed,
+      widthId: width,
+    }),
+  }))
+
+  const summarizeArrayObjectValuesByProperty = (
+    arrayOfObjects,
+    objectPropertyName,
+  ) => {
+    const summaryReducer = (accumulator, object) => {
+      const property = object[objectPropertyName]
+        ? parseFloat(object[objectPropertyName])
+        : 0
+
+      return accumulator + property
+    }
+
+    return arrayOfObjects.reduce(summaryReducer, 0)
+  }
+
+  const totalBiomass = roundToOneDecimal(
+    summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
+  )
+
+  const totalAbundance = summarizeArrayObjectValuesByProperty(
+    obs_belt_fishes,
+    'count',
+  )
+
   const getFishName = (fishAttributeId) => {
     const foundFishName = fishNameOptions.find(
       (fish) => fish.value === fishAttributeId,
@@ -30,16 +71,12 @@ const SubmittedFishBeltObservations = ({
     return foundFishName ? foundFishName.label : ''
   }
 
-  const getFishBiomass = (observation) => {
-    const observationBiomass = getObservationBiomass({
-      choices,
-      fishNameConstants,
-      observation,
-      transectLengthSurveyed: len_surveyed,
-      widthId: width,
-    })
+  const getFishBiomass = (observationId) => {
+    const fishBiomass = observationsBiomass.find(
+      (fish) => fish.uiId === observationId,
+    ).biomass
 
-    return roundToOneDecimal(observationBiomass)
+    return roundToOneDecimal(fishBiomass)
   }
 
   const observationBeltFish = obs_belt_fishes.map((item, index) => (
@@ -48,7 +85,7 @@ const SubmittedFishBeltObservations = ({
       <Td align="center">{getFishName(item.fish_attribute)}</Td>
       <Td align="center">{item.size}</Td>
       <Td align="center">{item.count}</Td>
-      <Td align="center">{getFishBiomass(item)}</Td>
+      <Td align="center">{getFishBiomass(item.id)}</Td>
     </Tr>
   ))
 
@@ -69,6 +106,20 @@ const SubmittedFishBeltObservations = ({
           <tbody>{observationBeltFish}</tbody>
         </Table>
       </TableOverflowWrapper>
+      <RowRight>
+        <ObservationsSummaryStats>
+          <tbody>
+            <Tr>
+              <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
+              <Td>{totalBiomass}</Td>
+            </Tr>
+            <Tr>
+              <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
+              <Td>{totalAbundance}</Td>
+            </Tr>
+          </tbody>
+        </ObservationsSummaryStats>
+      </RowRight>
     </InputWrapper>
   )
 }
