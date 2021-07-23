@@ -28,6 +28,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useIsMounted from '../../../library/useIsMounted'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import DataToolbarSection from './DataToolbarSection'
 
 const Data = () => {
@@ -120,16 +121,6 @@ const Data = () => {
       })),
     [submittedRecordsForUiDisplay],
   )
-
-  // This method will check for double quotes in string.
-  // It returns an array of split strings by a space delimiter.
-  // example A: splitSearchQueryStrings(`"to the" dustin`).
-  // Also supports multi quotes in string.
-  // example B: splitSearchQueryStrings(`"to the" dustin "kim"`)
-  const splitSearchQueryStrings = (words) =>
-    (words.match(/[^\s"]+|"([^"]*)"/gi) || []).map((word) =>
-      word.replace(/^"(.+(?="$))"$/, '$1'),
-    )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
