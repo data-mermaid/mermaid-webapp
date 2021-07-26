@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-
+import styled, { css } from 'styled-components'
+import { hoverState } from '../../../../library/styling/mediaQueries'
 import {
   choicesPropType,
   fishBeltPropType,
@@ -46,7 +46,7 @@ const FishNameAutocomplete = styled(InputAutocomplete)`
   }
   width: 100%;
   text-align: inherit;
-  padding: ${theme.spacing.xsmall};
+  padding: 0;
 `
 
 const InputAutocompleteContainer = styled.div`
@@ -54,11 +54,85 @@ const InputAutocompleteContainer = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 0;
+  border: none;
+  background: transparent;
+`
+const IconRequiredWrapper = styled.span`
+  color: ${theme.color.cautionHover};
+  svg {
+    width: ${theme.typography.smallIconSize};
+  }
+`
+const ObservationsSummaryStats = styled(Table)`
   border: solid thin magenta;
 `
-
-const ObservationsSummaryStats = styled.table`
-  border: solid thin magenta;
+const ButtonRemoveRow = styled(ButtonCaution)`
+  display: none;
+  padding: 0;
+`
+const StyledLinkThatLooksLikeButtonToReference = styled(
+  LinkThatLooksLikeButton,
+)`
+  padding: 0.5rem 1rem 0 1rem;
+  background: transparent;
+`
+const StyledOverflowWrapper = styled(TableOverflowWrapper)`
+  overflow: visible;
+`
+const StyledColgroup = styled('colgroup')`
+  col {
+    &:nth-child(1) {
+      // count
+      width: 6rem;
+    }
+    &:nth-child(2) {
+      // Fish name
+      width: auto;
+    }
+    &:nth-child(3) {
+      // Size
+      width: 15%;
+    }
+    &:nth-child(4) {
+      // Count
+      width: 10rem;
+    }
+    &:nth-child(5) {
+      // Biomass
+      width: 15%;
+    }
+    &:nth-child(6) {
+      // remove
+      width: 6rem;
+    }
+  }
+`
+const StyledFishBeltObservationTable = styled(Table)`
+  table-layout: auto;
+  font-variant: tabular-nums;
+  font-feature-settings: 'tnum';
+  tr {
+    &:focus-within button,
+    &:hover button {
+      display: inline;
+    }
+    th {
+      padding: ${theme.spacing.small};
+    }
+    td {
+      padding: 0rem;
+      input,
+      select {
+        background: transparent;
+        border: none; //solid 1px rgba(255, 255, 255, 0.7);
+        padding: 1px 3px;
+        height: 4rem;
+        ${hoverState(css`
+          outline: ${theme.color.outline};
+        `)}
+      }
+    }
+  }
 `
 
 const FishBeltObservationTable = ({
@@ -276,8 +350,8 @@ const FishBeltObservationTable = ({
 
     return (
       <Tr key={observationId}>
-        <Td>{rowNumber}</Td>
-        <Td>
+        <Td align="center">{rowNumber}</Td>
+        <Td align="left">
           {fishNameOptions.length && (
             <InputAutocompleteContainer>
               <FishNameAutocomplete
@@ -308,13 +382,14 @@ const FishBeltObservationTable = ({
                 }
               />
               {fish_attribute && (
-                <LinkThatLooksLikeButton
+                <StyledLinkThatLooksLikeButtonToReference
                   aria-label="fish name reference"
                   target="_blank"
+                  tabIndex="-1"
                   href={`https://dev-collect.datamermaid.org/#/reference/fishattributes/species/${fish_attribute}`}
                 >
                   <IconLibraryBooks />
-                </LinkThatLooksLikeButton>
+                </StyledLinkThatLooksLikeButtonToReference>
               )}
             </InputAutocompleteContainer>
           )}
@@ -336,15 +411,15 @@ const FishBeltObservationTable = ({
           />
         </Td>
         <Td align="right">{observationBiomass ?? <> - </>}</Td>
-        <Td>
-          <ButtonCaution
+        <Td align="center">
+          <ButtonRemoveRow
             tabIndex="-1"
             type="button"
             onClick={() => handleDeleteObservation(observationId)}
             aria-label="Delete Observation"
           >
             <IconClose />
-          </ButtonCaution>
+          </ButtonRemoveRow>
         </Td>
       </Tr>
     )
@@ -354,22 +429,36 @@ const FishBeltObservationTable = ({
     <>
       <InputWrapper>
         <H2 id="table-label">Observations</H2>
-        <TableOverflowWrapper>
-          <Table aria-labelledby="table-label">
+        <StyledOverflowWrapper>
+          <StyledFishBeltObservationTable aria-labelledby="table-label">
+            <StyledColgroup>
+              <col />
+              <col />
+              <col />
+              <col />
+              <col />
+              <col />
+            </StyledColgroup>
             <thead>
               <Tr>
                 <Th> </Th>
-                <Th align="right" id="fish-name-label">
+                <Th align="left" id="fish-name-label">
                   Fish Name
-                  <IconRequired />
+                  <IconRequiredWrapper>
+                    <IconRequired />
+                  </IconRequiredWrapper>
                 </Th>
                 <Th align="right" id="fish-size-label">
                   Size
-                  <IconRequired />
+                  <IconRequiredWrapper>
+                    <IconRequired />
+                  </IconRequiredWrapper>
                 </Th>
                 <Th align="right" id="fish-count-label">
                   Count
-                  <IconRequired />
+                  <IconRequiredWrapper>
+                    <IconRequired />
+                  </IconRequiredWrapper>
                 </Th>
                 <Th align="right">Biomass (kg/ha)</Th>
                 <Th> </Th>
@@ -377,8 +466,8 @@ const FishBeltObservationTable = ({
             </thead>
 
             <tbody>{observationsRows}</tbody>
-          </Table>
-        </TableOverflowWrapper>
+          </StyledFishBeltObservationTable>
+        </StyledOverflowWrapper>
         <RowRight>
           <ObservationsSummaryStats>
             <tbody>
