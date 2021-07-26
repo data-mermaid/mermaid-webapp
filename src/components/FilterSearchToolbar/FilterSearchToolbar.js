@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
-import language from '../../language'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 const inputStyles = css`
