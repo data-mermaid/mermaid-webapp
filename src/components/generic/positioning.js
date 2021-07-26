@@ -20,6 +20,10 @@ export const RowLeft = styled(Row)`
   justify-content: flex-start;
 `
 
+export const RowBottom = styled(Row)`
+  align-items: flex-end;
+`
+
 export const Column = styled.div`
   display: flex;
   flex-direction: column;

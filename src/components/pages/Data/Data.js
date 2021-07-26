@@ -245,6 +245,7 @@ const Data = () => {
       content={content}
       toolbar={
         <DataToolbarSection
+          name={language.pages.submittedTable.filterToolbarText}
           filterInputValue={filterInputValue}
           handleFilterChange={handleFilterChange}
         />

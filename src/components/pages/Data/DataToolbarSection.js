@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { H2 } from '../../generic/text'
-import { Row, Column } from '../../generic/positioning'
+import { Column, RowBottom } from '../../generic/positioning'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 
@@ -17,10 +17,6 @@ const DropdownItemStyle = styled.span`
   padding: 0.5rem 1rem;
 `
 
-const ToolbarRowWrapper = styled(Row)`
-  align-items: flex-end;
-`
-
 const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
   const label = (
     <>
@@ -31,7 +27,7 @@ const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
   return (
     <>
       <H2>Submitted</H2>
-      <ToolbarRowWrapper>
+      <RowBottom>
         <FilterSearchToolbar
           filterInputValue={filterInputValue}
           handleFilterChange={handleFilterChange}
@@ -46,7 +42,7 @@ const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
             <TemporarySpanStyling>Quadrat Percentage</TemporarySpanStyling>
           </Column>
         </ButtonSecondaryDropdown>
-      </ToolbarRowWrapper>
+      </RowBottom>
     </>
   )
 }

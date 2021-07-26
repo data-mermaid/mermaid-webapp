@@ -16,7 +16,7 @@ import {
   reactTableNaturalSortReactNodes,
   reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
-import { RowSpaceBetween } from '../../generic/positioning'
+import { RowBottom } from '../../generic/positioning'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import AddSampleUnitButton from './AddSampleUnitButton'
 import language from '../../../language'
@@ -266,13 +266,14 @@ const Collect = () => {
       toolbar={
         <>
           <H2>Collect Records</H2>
-          <RowSpaceBetween>
+          <RowBottom>
             <FilterSearchToolbar
+              name={language.pages.collectTable.filterToolbarText}
               filterInputValue={filterInputValue}
               handleFilterChange={handleFilterChange}
             />
             <AddSampleUnitButton />
-          </RowSpaceBetween>
+          </RowBottom>
         </>
       }
       content={table}

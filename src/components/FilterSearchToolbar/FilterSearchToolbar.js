@@ -23,10 +23,14 @@ const FilterLabelWrapper = styled.label`
   }
 `
 
-const FilterSearchToolbar = ({ filterInputValue, handleFilterChange }) => {
+const FilterSearchToolbar = ({
+  name,
+  filterInputValue,
+  handleFilterChange,
+}) => {
   return (
     <FilterLabelWrapper htmlFor="filter-search">
-      {language.pages.submittedTable.filterToolbarText}
+      {name}
       <input
         type="text"
         id="filter-search"
@@ -38,6 +42,7 @@ const FilterSearchToolbar = ({ filterInputValue, handleFilterChange }) => {
 }
 
 FilterSearchToolbar.propTypes = {
+  name: PropTypes.string.isRequired,
   filterInputValue: PropTypes.string.isRequired,
   handleFilterChange: PropTypes.func.isRequired,
 }
