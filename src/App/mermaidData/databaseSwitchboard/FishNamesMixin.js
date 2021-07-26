@@ -5,7 +5,7 @@ const FishNameMixin = (Base) =>
   class extends Base {
     getFishSpecies = () => {
       if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.fishSpecies.toArray()
+        return this._dexieInstance.fish_species.toArray()
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -43,7 +43,7 @@ const FishNameMixin = (Base) =>
         genus: genusId,
       }
 
-      return this._dexieInstance.fishSpecies
+      return this._dexieInstance.fish_species
         .put(newFishObject)
         .then(() => newFishObject)
     }

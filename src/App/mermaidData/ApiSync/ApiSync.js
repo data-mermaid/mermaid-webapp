@@ -37,7 +37,7 @@ const ApiSync = class {
         collect_records: {
           project: projectId,
           profile: profileId,
-          last_revision: lastRevisionNumbersPulled?.collectRecords ?? null,
+          last_revision: lastRevisionNumbersPulled?.collect_records ?? null,
         },
       })
       .then(async (response) => {
@@ -52,13 +52,13 @@ const ApiSync = class {
 
         await this._dexieInstance.transaction(
           'rw',
-          this._dexieInstance.collectRecords,
+          this._dexieInstance.collect_records,
           () => {
             collectRecordUpdates.forEach((updatedRecord) => {
-              this._dexieInstance.collectRecords.put(updatedRecord)
+              this._dexieInstance.collect_records.put(updatedRecord)
             })
             collectRecordDeletes.forEach(({ id }) => {
-              this._dexieInstance.collectRecords.delete(id)
+              this._dexieInstance.collect_records.delete(id)
             })
           },
         )

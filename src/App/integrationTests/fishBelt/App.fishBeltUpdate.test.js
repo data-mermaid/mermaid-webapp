@@ -15,10 +15,11 @@ describe('Offline', () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     // make sure there is a collect record to edit in dexie
-    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
+    await dexieInstance.collect_records.put(mockMermaidData.collectRecords[1])
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      dexieInstance,
     })
 
     // make a change
@@ -56,10 +57,11 @@ describe('Offline', () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     // make sure there is a collect record to edit in dexie
-    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
+    await dexieInstance.collect_records.put(mockMermaidData.collectRecords[1])
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      dexieInstance,
     })
 
     // test all observers format too
@@ -102,7 +104,7 @@ describe('Offline', () => {
     )
 
     expect(await screen.findByText('Collect record saved.'))
-    const savedCollectRecord = await dexieInstance.collectRecords.toArray()
+    const savedCollectRecord = await dexieInstance.collect_records.toArray()
     const newObservation = savedCollectRecord[0].data.obs_belt_fishes[3]
 
     expect(newObservation.fish_attribute).toEqual(
@@ -115,10 +117,11 @@ describe('Offline', () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     // make sure there is a collect record to edit in dexie
-    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
+    await dexieInstance.collect_records.put(mockMermaidData.collectRecords[1])
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      dexieInstance,
     })
 
     // test all observers format too
@@ -153,7 +156,7 @@ describe('Offline', () => {
     )
 
     expect(await screen.findByText('Collect record saved.'))
-    const savedCollectRecord = await dexieInstance.collectRecords.toArray()
+    const savedCollectRecord = await dexieInstance.collect_records.toArray()
     const newObservation = savedCollectRecord[0].data.obs_belt_fishes[3]
 
     expect(newObservation.size).toEqual(50367)
@@ -162,13 +165,14 @@ describe('Offline', () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     // make sure there is a collect record to edit in dexie
-    await dexieInstance.collectRecords.put(mockMermaidData.collectRecords[1])
+    await dexieInstance.collect_records.put(mockMermaidData.collectRecords[1])
 
     // make sure the next save will fail
-    dexieInstance.collectRecords.put = jest.fn().mockRejectedValueOnce()
+    dexieInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      dexieInstance,
     })
 
     // make an unsaved change

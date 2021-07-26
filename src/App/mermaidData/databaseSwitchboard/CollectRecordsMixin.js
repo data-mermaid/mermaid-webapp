@@ -128,7 +128,7 @@ const CollectRecordsMixin = (Base) =>
 
       if (this._isOnlineAuthenticatedAndReady) {
         // put it in IDB just in case the network craps out before the API can return
-        await this._dexieInstance.collectRecords.put(recordToSubmit)
+        await this._dexieInstance.collect_records.put(recordToSubmit)
 
         return this._authenticatedAxios
           .post(
@@ -166,7 +166,7 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords
+        return this._dexieInstance.collect_records
           .put(recordToSubmit)
           .then(() => recordToSubmit)
       }
@@ -183,7 +183,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords.get(id)
+        return this._dexieInstance.collect_records.get(id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -211,7 +211,7 @@ const CollectRecordsMixin = (Base) =>
         this._isOnlineAuthenticatedAndReady
       ) {
         // put it in IDB just in case the network craps out before the API can return
-        await this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
+        await this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
 
         return this._authenticatedAxios
           .post(
@@ -254,14 +254,14 @@ const CollectRecordsMixin = (Base) =>
         hasCorrespondingRecordInTheApi &&
         this._isOfflineAuthenticatedAndReady
       ) {
-        return this._dexieInstance.collectRecords.put(recordMarkedToBeDeleted)
+        return this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
       }
       if (
         !hasCorrespondingRecordInTheApi &&
         (this._isOnlineAuthenticatedAndReady ||
           this._isOfflineAuthenticatedAndReady)
       ) {
-        return this._dexieInstance.collectRecords.delete(record.id)
+        return this._dexieInstance.collect_records.delete(record.id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -281,7 +281,7 @@ const CollectRecordsMixin = (Base) =>
 
     getCollectRecords = () => {
       if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.collectRecords.toArray()
+        return this._dexieInstance.collect_records.toArray()
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)

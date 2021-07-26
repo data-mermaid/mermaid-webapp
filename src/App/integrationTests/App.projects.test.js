@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOffline,
@@ -10,9 +11,13 @@ import {
 import App from '../App'
 
 test('Clicking anywhere on a project card navigates to the project collect page when offline', async () => {
-  renderAuthenticatedOffline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-  )
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    dexieInstance,
+  })
 
   expect(
     await screen.findByText('Projects', {
