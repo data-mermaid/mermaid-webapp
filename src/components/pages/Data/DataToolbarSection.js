@@ -17,7 +17,7 @@ const DropdownItemStyle = styled.span`
   padding: 0.5rem 1rem;
 `
 
-const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
+const DataToolbarSection = ({ name, filterInputValue, handleFilterChange }) => {
   const label = (
     <>
       <IconDownload /> Export To CSV
@@ -29,6 +29,7 @@ const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
       <H2>Submitted</H2>
       <RowBottom>
         <FilterSearchToolbar
+          name={name}
           filterInputValue={filterInputValue}
           handleFilterChange={handleFilterChange}
         />
@@ -48,6 +49,7 @@ const DataToolbarSection = ({ filterInputValue, handleFilterChange }) => {
 }
 
 DataToolbarSection.propTypes = {
+  name: PropTypes.string.isRequired,
   filterInputValue: PropTypes.string.isRequired,
   handleFilterChange: PropTypes.func.isRequired,
 }
