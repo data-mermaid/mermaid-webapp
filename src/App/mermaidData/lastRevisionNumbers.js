@@ -1,17 +1,43 @@
 const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData }) => {
-  const objectToStore = {
-    id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
-    lastRevisionNumbers: {
-      collectRecords: apiData.collect_records?.last_revision_num,
-    },
-  }
+  return dexieInstance.transaction(
+    'rw',
+    dexieInstance.lastRevisionNumbersPulled,
+    async () => {
+      const dataNames = [
+        'benthic_attributes',
+        'choices',
+        'collect_records',
+        'fish_families',
+        'fish_genera',
+        'fish_species',
+        'projects',
+      ]
 
-  return dexieInstance.lastRevisionNumbersPulled.put(objectToStore)
+      dataNames.forEach((dataName) => {
+        if (apiData[dataName]) {
+          dexieInstance.lastRevisionNumbersPulled.put({
+            id: dataName,
+            lastRevisionNumber: apiData[dataName].last_revision_num,
+          })
+        }
+      })
+    },
+  )
 }
 
 const getLastRevisionNumbersPulled = async ({ dexieInstance }) => {
-  return (await dexieInstance.lastRevisionNumbersPulled.toArray())[0]
-    ?.lastRevisionNumbers
+  const lastRevisionNumberDexieRecords = await dexieInstance.lastRevisionNumbersPulled.toArray()
+
+  const lastRevisionNumbersObject = lastRevisionNumberDexieRecords.reduce(
+    (accumulator, lastRevisionNumberRecord) => ({
+      ...accumulator,
+      [lastRevisionNumberRecord.id]:
+        lastRevisionNumberRecord.lastRevisionNumber,
+    }),
+    {},
+  )
+
+  return lastRevisionNumbersObject
 }
 
 export { persistLastRevisionNumbersPulled, getLastRevisionNumbersPulled }

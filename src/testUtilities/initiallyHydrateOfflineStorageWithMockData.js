@@ -3,15 +3,15 @@ import mockMermaidData from './mockMermaidData'
 export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
   return dexieInstance.transaction(
     'rw',
-    dexieInstance.fishSpecies,
-    dexieInstance.collectRecords,
+    dexieInstance.fish_species,
+    dexieInstance.collect_records,
     async () => {
       mockMermaidData.fishSpecies.forEach((specie) => {
-        dexieInstance.fishSpecies.put(specie)
+        dexieInstance.fish_species.put(specie)
       })
 
       mockMermaidData.collectRecords.forEach((record) => {
-        dexieInstance.collectRecords.put(record)
+        dexieInstance.collect_records.put(record)
       })
     },
   )

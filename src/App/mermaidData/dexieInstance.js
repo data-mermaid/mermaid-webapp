@@ -4,13 +4,15 @@ import PropTypes from 'prop-types'
 const dexieInstance = new Dexie('mermaid')
 
 dexieInstance.version(1).stores({
-  currentUser: 'id, first_name, last_name, full_name, email',
-})
-dexieInstance.version(4).stores({
+  benthic_attributes: 'id',
+  choices: 'id',
+  collect_records: 'id',
   currentUser: 'id',
-  collectRecords: 'id',
+  fish_families: 'id',
+  fish_genera: 'id',
+  fish_species: 'id',
   lastRevisionNumbersPulled: 'id',
-  fishSpecies: 'id',
+  projects: 'id',
 })
 
 // If This were TypeScript, types would be easy to obtain for Dexie

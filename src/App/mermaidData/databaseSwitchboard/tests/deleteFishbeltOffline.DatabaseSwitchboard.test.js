@@ -32,7 +32,7 @@ describe('Offline delete fishbelt', () => {
     }
 
     // save a record in IDB so we can delete it
-    await dbInstanceOffline.dexieInstance.collectRecords.put(
+    await dbInstanceOffline.dexieInstance.collect_records.put(
       fishBeltToBeDeleted,
     )
 
@@ -56,7 +56,7 @@ describe('Offline delete fishbelt', () => {
     }
 
     // save a record in IDB so we can delete it
-    await dbInstanceOffline.dexieInstance.collectRecords.put(
+    await dbInstanceOffline.dexieInstance.collect_records.put(
       fishBeltToBeDeleted,
     )
 

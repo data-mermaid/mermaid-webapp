@@ -31,15 +31,38 @@ function App({ dexieInstance }) {
     logoutMermaid,
   } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(true)
+  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(
+    false,
+  )
 
   const _initiallyHydrateOfflineStorageWithApiData = useEffect(() => {
-    if (dexieInstance && isMounted.current && isOnline) {
-      initiallyHydrateOfflineStorageWithApiData(dexieInstance)
-        .then(setIsOfflineStorageHydrated(true))
-        .catch(() => toast.error(language.error.initialApiDataPull))
+    const isOnlineAndReadyForHydration =
+      apiBaseUrl && auth0Token && dexieInstance && isMounted.current && isOnline
+
+    const isOfflineAndReadyAndAlreadyHydrated =
+      apiBaseUrl &&
+      !auth0Token &&
+      dexieInstance &&
+      isMounted.current &&
+      !isOnline
+
+    if (isOnlineAndReadyForHydration) {
+      initiallyHydrateOfflineStorageWithApiData({
+        dexieInstance,
+        apiBaseUrl,
+        auth0Token,
+      })
+        .then(() => {
+          setIsOfflineStorageHydrated(true)
+        })
+        .catch(() => {
+          toast.error(language.error.initialApiDataPull)
+        })
     }
-  }, [dexieInstance, isMounted, isOnline])
+    if (isOfflineAndReadyAndAlreadyHydrated) {
+      setIsOfflineStorageHydrated(true)
+    }
+  }, [dexieInstance, isMounted, isOnline, apiBaseUrl, auth0Token])
   const { current: apiSyncInstance } = useRef(
     new ApiSync({
       dexieInstance,

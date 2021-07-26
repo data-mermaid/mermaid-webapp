@@ -153,7 +153,7 @@ test('saveFishBelt online returns a rejected promise if the status code from the
     the db switchboard's getFishBelt would try to hit the real or mocked API
     which is boyond the scope of the test.
      */
-  expect(await dbInstance.dexieInstance.collectRecords.get('foo'))
+  expect(await dbInstance.dexieInstance.collect_records.get('foo'))
 })
 test('saveFishBelt online returns saved record with protocol info automatically included and stores it ', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
@@ -213,7 +213,7 @@ test('saveFishBelt online returns saved record with protocol info automatically 
     fishBeltToBeSaved.randomUnexpectedProperty,
   )
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collectRecords.get(
+  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get(
     'foo',
   )
 
@@ -261,7 +261,9 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
       the db switchboard's getFishBelt would try to hit the real or mocked API
       which is boyond the scope of the test.
      */
-  const savedFishBelt = await dbInstance.dexieInstance.collectRecords.get('foo')
+  const savedFishBelt = await dbInstance.dexieInstance.collect_records.get(
+    'foo',
+  )
 
   expect(savedFishBelt.data.randomProperty).toEqual(
     replacementFishbelt.data.randomProperty,
@@ -360,7 +362,7 @@ test('saveFishBelt online returns and stores a saved record including existing i
   expect(savedFishBeltResponse.profile).toEqual('1234')
   expect(savedFishBeltResponse.project).toEqual('4321')
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collectRecords.get(
+  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get(
     savedFishBeltResponse.id,
   )
 
@@ -409,7 +411,7 @@ test('saveFishBelt online saves the record in indexeddb in the case of network e
     })
     .catch((error) => expect(error.message).toEqual('Network Error'))
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collectRecords.get(
+  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get(
     'foo',
   )
 
