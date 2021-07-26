@@ -223,7 +223,7 @@ const Sites = () => {
           <H2>Sites</H2>
           <RowBottom>
             <FilterSearchToolbar
-            name={language.pages.siteTable.filterToolbarText}
+              name={language.pages.siteTable.filterToolbarText}
               filterInputValue={filterInputValue}
               handleFilterChange={handleFilterChange}
             />

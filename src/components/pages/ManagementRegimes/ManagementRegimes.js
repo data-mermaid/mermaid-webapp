@@ -1,12 +1,19 @@
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
-import { usePagination, useSortBy, useTable } from 'react-table'
+import { matchSorter } from 'match-sorter'
+import {
+  usePagination,
+  useSortBy,
+  useGlobalFilter,
+  useTable,
+} from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-import { RowSpaceBetween } from '../../generic/positioning'
+import { RowBottom } from '../../generic/positioning'
+import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import language from '../../../language'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
@@ -21,27 +28,9 @@ import {
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
-const TopBar = () => (
-  <>
-    <H2>Management Regimes</H2>
-    <RowSpaceBetween>
-      <div>Future filter</div>{' '}
-      <ToolbarButtonWrapper>
-        <ButtonSecondary>
-          <IconPlus /> New MR
-        </ButtonSecondary>
-        <ButtonSecondary>
-          <IconCopy /> Copy MRs from other projects
-        </ButtonSecondary>
-        <ButtonSecondary>
-          <IconDownload /> Export MRs
-        </ButtonSecondary>
-      </ToolbarButtonWrapper>
-    </RowSpaceBetween>
-  </>
-)
 const ManagementRegimes = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
@@ -50,6 +39,7 @@ const ManagementRegimes = () => {
     setManagementRegimeRecordsForUiDisplay,
   ] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [filterInputValue, setFilterInputValue] = useState('')
 
   const _getManagementRegimeRecords = useEffect(() => {
     let isMounted = true
@@ -148,8 +138,23 @@ const ManagementRegimes = () => {
         speciesRestriction: getIconCheckLabel(uiLabels.speciesRestriction),
         noTake: getIconCheckLabel(uiLabels.noTake),
       })),
-    [managementRegimeRecordsForUiDisplay],
+    [managementRegimeRecordsForUiDisplay, currentProjectPath],
   )
+
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = ['values.name.props.children', 'values.estYear']
+
+    const queryTerms = splitSearchQueryStrings(query)
+
+    if (!queryTerms) {
+      return rows
+    }
+
+    return queryTerms.reduce(
+      (results, term) => matchSorter(results, term, { keys }),
+      rows,
+    )
+  }, [])
 
   const {
     canNextPage,
@@ -165,12 +170,15 @@ const ManagementRegimes = () => {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
+    setGlobalFilter,
   } = useTable(
     {
       columns: tableColumns,
       data: tableCellData,
       initialState: { pageSize: 10 },
+      globalFilter: tableGlobalFilters,
     },
+    useGlobalFilter,
     useSortBy,
     usePagination,
   )
@@ -178,6 +186,15 @@ const ManagementRegimes = () => {
     setPageSize(Number(e.target.value))
   }
 
+  const handleFilterChange = (e) => {
+    const { value } = e.target
+
+    setFilterInputValue(value)
+  }
+
+  const _setGlobalFilterValue = useEffect(() => {
+    setGlobalFilter(filterInputValue)
+  }, [filterInputValue, setGlobalFilter])
   const table = (
     <>
       <TableOverflowWrapper>
@@ -237,7 +254,29 @@ const ManagementRegimes = () => {
 
   return (
     <ContentPageLayout
-      toolbar={<TopBar />}
+      toolbar={
+        <>
+          <H2>Management Regimes</H2>
+          <RowBottom>
+            <FilterSearchToolbar
+              name={language.pages.managementRegimeTable.filterToolbarText}
+              filterInputValue={filterInputValue}
+              handleFilterChange={handleFilterChange}
+            />
+            <ToolbarButtonWrapper>
+              <ButtonSecondary>
+                <IconPlus /> New MR
+              </ButtonSecondary>
+              <ButtonSecondary>
+                <IconCopy /> Copy MRs from other projects
+              </ButtonSecondary>
+              <ButtonSecondary>
+                <IconDownload /> Export MRs
+              </ButtonSecondary>
+            </ToolbarButtonWrapper>
+          </RowBottom>
+        </>
+      }
       content={table}
       isLoading={isLoading}
     />

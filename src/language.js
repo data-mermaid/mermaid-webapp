@@ -93,6 +93,10 @@ const pages = {
   siteTable: {
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
   },
+  managementRegimeTable: {
+    filterToolbarText:
+      'Filter management regimes by name, or year',
+  },
 }
 
 export default {
