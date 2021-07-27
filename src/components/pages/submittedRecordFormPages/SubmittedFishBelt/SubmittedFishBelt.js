@@ -11,7 +11,7 @@ import SubmittedFishBeltObservations from '../../../SubmittedFishBeltObservation
 import SubmittedRecordFormTitle from '../../../SubmittedRecordFormTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import language from '../../../../language'
-import { getFishNameObjectById } from '../../../../App/mermaidData/getFishNameObjectById'
+import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
 import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
 
 const SubmittedFishBelt = () => {
@@ -50,7 +50,7 @@ const SubmittedFishBelt = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
-              const updateFishNameOptions = getFishNameObjectById({
+              const updateFishNameOptions = getFishNameOptions({
                 species,
                 genera,
                 families,
