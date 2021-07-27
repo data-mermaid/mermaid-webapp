@@ -7,13 +7,24 @@ import { Menu, Item } from './InputAutocomplete.styles'
 import { Input, HelperText } from '../form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import language from '../../../language'
+import theme from '../../../theme'
 
 const AutoCompleteInput = styled(Input)`
   width: 100%;
 `
-
+const AutoCompleteResultsWrapper = styled.div`
+  position: relative;
+  z-index: 1001;
+`
 const NoResultSection = styled.div`
-  padding-top: 10px;
+  position: absolute;
+  top: 4rem;
+  outline: ${theme.color.outline};
+  background: ${theme.color.white};
+  padding: ${theme.spacing.small};
+  p {
+    margin: ${theme.spacing.small} 0;
+  }
 `
 
 const InputAutocomplete = ({
@@ -114,8 +125,7 @@ const InputAutocomplete = ({
         } = downshiftObject
 
         return (
-          <div
-            style={{ position: 'relative' }}
+          <AutoCompleteResultsWrapper
             {...getRootProps(undefined, {
               suppressRefError: true,
             })}
@@ -140,7 +150,7 @@ const InputAutocomplete = ({
                 {noResultsDisplay || language.autocomplete.noResultsDefault}
               </NoResultSection>
             )}
-          </div>
+          </AutoCompleteResultsWrapper>
         )
       }}
     </Downshift>
