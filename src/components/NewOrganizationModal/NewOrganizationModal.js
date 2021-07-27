@@ -32,23 +32,22 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
     toast.success(language.success.newOrganizationAdd)
   }
 
-  const id = 'modalInputId'
   const helperText = language.pages.projectInfo.suggestionOrganizationHelperText
   const modalContent = (
     <>
       <ModalInputRow>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label id={`aria-label${id}`} htmlFor={id}>
+        <label id="modal-input-for-org-label" htmlFor="modal-input-for-org">
           New Organization Name
         </label>
         <div>
           <Input
-            aria-labelledby={`aria-label${id}`}
-            aria-describedby={`aria-descsp${id}`}
-            id={id}
+            aria-labelledby="modal-input-for-org-label"
+            aria-describedby="modal-input-for-org-descp"
+            id="modal-input-for-org"
           />
           {helperText && (
-            <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
+            <HelperText id="modal-input-for-org-descp">{helperText}</HelperText>
           )}
         </div>
       </ModalInputRow>
