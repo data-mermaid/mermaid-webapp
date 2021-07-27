@@ -21,6 +21,7 @@ import PageNotFound from '../components/pages/PageNotFound'
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
+import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
@@ -115,7 +116,7 @@ function App({ dexieInstance }) {
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <GlobalStyle />
         <CustomToastContainer />
-        {isMermaidAuthenticatedAndReady && (
+        {isMermaidAuthenticatedAndReady ? (
           <Switch>
             {routes.map(({ path, Component }) => (
               <Route
@@ -134,6 +135,8 @@ function App({ dexieInstance }) {
             </Route>
             <Route component={PageNotFound} />
           </Switch>
+        ) : (
+          <LoadingIndicator />
         )}
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
