@@ -39,6 +39,7 @@ import OfflineHide from '../../../generic/OfflineHide'
 import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -112,31 +113,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     [isMounted],
   )
 
-  const updateFishNameConstantsState = useCallback(
-    ({ species, genera, families }) => {
-      const fishNameMungedObject = [...species, ...genera, ...families]
-
-      const fishNameMungedConstants = fishNameMungedObject.map(
-        ({
-          id,
-          biomass_constant_a,
-          biomass_constant_b,
-          biomass_constant_c,
-        }) => ({
-          id,
-          biomass_constant_a,
-          biomass_constant_b,
-          biomass_constant_c,
-        }),
-      )
-
-      if (isMounted.current) {
-        setFishNameConstants(fishNameMungedConstants)
-      }
-    },
-    [isMounted],
-  )
-
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       Promise.all([
@@ -179,17 +155,23 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             collectRecordResponse,
           ]) => {
             if (isMounted.current) {
+              const updateFishNameConstants = getFishNameConstants({
+                species,
+                genera,
+                families,
+              })
+
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setObserverProfiles(projectProfilesResponse.results)
               setCollectRecordBeingEdited(collectRecordResponse)
+              setFishNameConstants(updateFishNameConstants)
               updateFishNameOptionsState({
                 species,
                 genera,
                 families,
               })
-              updateFishNameConstantsState({ species, genera, families })
               setIsLoading(false)
             }
           },
@@ -207,7 +189,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     isMounted,
     isNewRecord,
     recordId,
-    updateFishNameConstantsState,
     updateFishNameOptionsState,
   ])
 
