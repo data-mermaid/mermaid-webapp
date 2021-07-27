@@ -1,8 +1,6 @@
-import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import React, { useState, useEffect, useMemo } from 'react'
-import { getSubmittedRecordDataInitialValues } from '../submittedRecordFormInitialValues'
+import React, { useState, useEffect } from 'react'
 import { IconPen } from '../../../icons'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { ContentPageLayout } from '../../../Layout'
@@ -37,11 +35,8 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
+        databaseSwitchboardInstance.getSubmittedFishBeltRecord(recordId),
       ]
-
-      if (recordId) {
-        promises.push(databaseSwitchboardInstance.getSubmittedRecord(recordId))
-      }
 
       Promise.all(promises)
         .then(
@@ -52,7 +47,6 @@ const SubmittedFishBelt = () => {
             species,
             genera,
             families,
-
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
@@ -69,7 +63,6 @@ const SubmittedFishBelt = () => {
               })
 
               setSites(sitesResponse)
-
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setSubmittedRecord(submittedRecordResponse)
@@ -85,49 +78,31 @@ const SubmittedFishBelt = () => {
     }
   }, [databaseSwitchboardInstance, isMounted, recordId])
 
-  const initialFormValues = useMemo(
-    () =>
-      getSubmittedRecordDataInitialValues(submittedRecord, 'fishbelt_transect'),
-    [submittedRecord],
-  )
-
-  const formikOptions = {
-    initialValues: initialFormValues,
-    enableReinitialize: true,
-  }
-
   return (
     <ContentPageLayout
       isLoading={isLoading}
       content={
-        <Formik {...formikOptions}>
-          {(formik) => (
-            <>
-              <SubmittedFishBeltInfo
-                formik={formik}
-                choices={choices}
-                sites={sites}
-                managementRegimes={managementRegimes}
-              />
-              <SubmittedFishBeltObservations
-                formik={formik}
-                choices={choices}
-                fishNameOptions={fishNameOptions}
-                fishNameConstants={fishNameConstants}
-              />
-            </>
-          )}
-        </Formik>
+        <>
+          <SubmittedFishBeltInfo
+            choices={choices}
+            sites={sites}
+            managementRegimes={managementRegimes}
+            submittedRecord={submittedRecord}
+          />
+          <SubmittedFishBeltObservations
+            choices={choices}
+            fishNameOptions={fishNameOptions}
+            fishNameConstants={fishNameConstants}
+            submittedRecord={submittedRecord}
+          />
+        </>
       }
       toolbar={
         <>
-          {submittedRecord && (
-            <SubmittedRecordFormTitle
-              submittedRecord={submittedRecord}
-              sites={sites}
-            />
-          )}
-
+          <SubmittedRecordFormTitle
+            submittedRecord={submittedRecord}
+            sites={sites}
+          />
           <RowSpaceBetween>
             <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>{' '}
             <ButtonSecondary>

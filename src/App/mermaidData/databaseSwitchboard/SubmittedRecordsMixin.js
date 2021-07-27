@@ -11,31 +11,31 @@ const SubmittedRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
-    getSubmittedRecordsTable = () =>
-      this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.submittedRecordsTable)
-        : Promise.reject(this._notAuthenticatedAndReadyError)
-
     getSubmittedRecords = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.submittedRecords)
+        ? Promise.resolve(mockMermaidData.sampleUnitMethods)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getSubmittedRecord = (id) => {
+    getFishBeltTransectRecords = () =>
+      this._isAuthenticatedAndReady
+        ? Promise.resolve(mockMermaidData.fishBeltTransectMethods)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+
+    getSubmittedFishBeltRecord = (id) => {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getSubmittedRecords().then((records) =>
+        ? this.getFishBeltTransectRecords().then((records) =>
             records.find((record) => record.id === id),
           )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedRecordsTableForUIDisplay = () => {
+    getSubmittedRecordsForUIDisplay = () => {
       return this._isAuthenticatedAndReady
-        ? this.getSubmittedRecordsTable().then((submittedRecords) => {
+        ? this.getSubmittedRecords().then((submittedRecords) => {
             return submittedRecords.map((record) => ({
               ...record,
               uiLabels: {

@@ -24,60 +24,34 @@ const _sampleEventPropType = PropTypes.shape({
   notes: PropTypes.string,
 })
 
+const _fishBeltTransectPropType = PropTypes.shape({
+  depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  label: PropTypes.string,
+  len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  reef_slope: PropTypes.string,
+  sample_time: PropTypes.string,
+  size_bin: PropTypes.string,
+  width: PropTypes.string,
+  visibility: PropTypes.string,
+  current: PropTypes.string,
+  relative_depth: PropTypes.string,
+  tide: PropTypes.string,
+})
+
 export const fishBeltPropType = PropTypes.shape({
   id: PropTypes.string,
   data: PropTypes.shape({
     protocol: PropTypes.string,
     sample_event: _sampleEventPropType,
-    fishbelt_transect: PropTypes.shape({
-      depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      label: PropTypes.string,
-      len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      reef_slope: PropTypes.string,
-      sample_time: PropTypes.string,
-      size_bin: PropTypes.string,
-      width: PropTypes.string,
-    }),
+    fishbelt_transect: _fishBeltTransectPropType,
   }),
 })
 
 export const submittedFishBeltPropType = PropTypes.shape({
   id: PropTypes.string,
-  updated_by: PropTypes.string,
-  sample_event: PropTypes.shape({
-    id: PropTypes.string,
-    updated_by: PropTypes.string,
-    created_on: PropTypes.string,
-    updated_on: PropTypes.string,
-    sample_date: PropTypes.string,
-    notes: PropTypes.string,
-    created_by: PropTypes.string,
-    site: PropTypes.string,
-    management: PropTypes.string,
-  }),
-  fishbelt_transect: PropTypes.shape({
-    id: PropTypes.string,
-    updated_by: PropTypes.string,
-    depth: PropTypes.number,
-    created_on: PropTypes.string,
-    updated_on: PropTypes.string,
-    notes: PropTypes.string,
-    collect_record_id: PropTypes.string,
-    sample_time: PropTypes.string,
-    len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    label: PropTypes.string,
-    created_by: PropTypes.string,
-    sample_event: PropTypes.string,
-    visibility: PropTypes.string,
-    current: PropTypes.string,
-    relative_depth: PropTypes.string,
-    tide: PropTypes.string,
-    reef_slope: PropTypes.string,
-    width: PropTypes.string,
-    size_bin: PropTypes.string,
-  }),
+  sample_event: _sampleEventPropType,
+  fishbelt_transect: _fishBeltTransectPropType,
   observers: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -106,11 +80,6 @@ export const submittedFishBeltPropType = PropTypes.shape({
       fish_attribute: PropTypes.string,
     }),
   ),
-  created_on: PropTypes.string,
-  updated_on: PropTypes.string,
-  collect_record_id: PropTypes.string,
-  created_by: PropTypes.string,
-  transect: PropTypes.string,
 })
 
 export const managementRegimePropType = PropTypes.shape({

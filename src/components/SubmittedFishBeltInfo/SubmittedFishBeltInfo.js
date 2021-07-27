@@ -7,8 +7,8 @@ import {
   managementRegimePropType,
   sitePropType,
   choicesPropType,
+  submittedFishBeltPropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../library/formikPropType'
 import { getObjectById } from '../../library/getObjectById'
 
 const TdKey = styled(Td)`
@@ -25,15 +25,13 @@ const TableRowItem = ({ title, options, value }) => (
 )
 
 const SubmittedFishBeltInfo = ({
-  formik,
   sites,
   managementRegimes,
   choices,
+  submittedRecord,
 }) => {
+  const { site, management, sample_date, notes } = submittedRecord.sample_event
   const {
-    site,
-    management,
-    sample_date,
     sample_time,
     depth,
     number,
@@ -46,8 +44,7 @@ const SubmittedFishBeltInfo = ({
     current,
     relative_depth,
     tide,
-    notes,
-  } = formik.values
+  } = submittedRecord.fishbelt_transect
 
   const {
     belttransectwidths,
@@ -135,10 +132,14 @@ TableRowItem.defaultProps = {
 }
 
 SubmittedFishBeltInfo.propTypes = {
-  formik: formikPropType.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   choices: choicesPropType.isRequired,
+  submittedRecord: submittedFishBeltPropType,
+}
+
+SubmittedFishBeltInfo.defaultProps = {
+  submittedRecord: undefined,
 }
 
 export default SubmittedFishBeltInfo

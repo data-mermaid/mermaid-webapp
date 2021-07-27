@@ -57,8 +57,12 @@ const SubmittedRecordFormTitle = ({ submittedRecord, sites }) => {
 }
 
 SubmittedRecordFormTitle.propTypes = {
-  submittedRecord: submittedFishBeltPropType.isRequired,
+  submittedRecord: submittedFishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
+}
+
+SubmittedRecordFormTitle.defaultProps = {
+  submittedRecord: undefined,
 }
 
 export default SubmittedRecordFormTitle

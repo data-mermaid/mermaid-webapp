@@ -46,7 +46,7 @@ const Data = () => {
   const _getSubmittedRecords = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted) {
       databaseSwitchboardInstance
-        .getSubmittedRecordsTableForUIDisplay()
+        .getSubmittedRecordsForUIDisplay()
         .then((records) => {
           if (isMounted) {
             setSubmittedRecordsForUiDisplay(records)

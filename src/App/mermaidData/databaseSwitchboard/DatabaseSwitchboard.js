@@ -41,10 +41,10 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getSite: PropTypes.func,
   getSiteRecordsForUIDisplay: PropTypes.func,
   getUserProfile: PropTypes.func,
-  getSubmittedRecordsTable: PropTypes.func,
   getSubmittedRecords: PropTypes.func,
-  getSubmittedRecord: PropTypes.func,
-  getSubmittedRecordsTableForUIDisplay: PropTypes.func,
+  getFishBeltTransectRecords: PropTypes.func,
+  getSubmittedFishBeltRecord: PropTypes.func,
+  getSubmittedRecordsForUIDisplay: PropTypes.func,
   saveFishBelt: PropTypes.func,
   deleteFishBelt: PropTypes.func,
 })

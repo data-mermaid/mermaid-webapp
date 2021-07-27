@@ -4,8 +4,10 @@ import styled from 'styled-components/macro'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import { inputOptionsPropTypes } from '../../library/miscPropTypes'
-import { choicesPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { formikPropType } from '../../library/formikPropType'
+import {
+  choicesPropType,
+  submittedFishBeltPropType,
+} from '../../App/mermaidData/mermaidDataProptypes'
 import { Table, TableOverflowWrapper, Tr, Td, Th } from '../generic/Table/table'
 import { RowRight } from '../generic/positioning'
 import { getObservationBiomass } from '../pages/collectRecordFormPages/FishBelt/fishbeltBiomas'
@@ -21,12 +23,13 @@ const ObservationsSummaryStats = styled.table`
 `
 
 const SubmittedFishBeltObservations = ({
-  formik,
   choices,
   fishNameOptions,
   fishNameConstants,
+  submittedRecord,
 }) => {
-  const { obs_belt_fishes, width, len_surveyed } = formik.values
+  const { obs_belt_fishes } = submittedRecord
+  const { width, len_surveyed } = submittedRecord.fishbelt_transect
 
   const observationsBiomass = obs_belt_fishes.map((observation) => ({
     uiId: observation.id,
@@ -125,7 +128,6 @@ const SubmittedFishBeltObservations = ({
 }
 
 SubmittedFishBeltObservations.propTypes = {
-  formik: formikPropType.isRequired,
   choices: choicesPropType.isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   fishNameConstants: PropTypes.arrayOf(
@@ -136,6 +138,11 @@ SubmittedFishBeltObservations.propTypes = {
       biomass_constant_c: PropTypes.number,
     }),
   ).isRequired,
+  submittedRecord: submittedFishBeltPropType,
+}
+
+SubmittedFishBeltObservations.defaultProps = {
+  submittedRecord: undefined,
 }
 
 export default SubmittedFishBeltObservations
