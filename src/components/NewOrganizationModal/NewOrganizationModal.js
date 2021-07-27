@@ -37,7 +37,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
   const modalContent = (
     <>
       <ModalInputRow>
-        // eslint-disable-next-line jsx-a11y/label-has-associated-control
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label id={`aria-label${id}`} htmlFor={id}>
           New Organization Name
         </label>
