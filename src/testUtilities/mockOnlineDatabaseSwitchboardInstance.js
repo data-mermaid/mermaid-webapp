@@ -11,6 +11,7 @@ const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) =>
     isOnline: true,
     dexieInstance: dexieInstance ?? defaultDexieInstance,
     apiSyncInstance: new ApiSync(defaultDexieInstance),
+    isOfflineStorageHydrated: true,
   })
 
 const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) =>
@@ -21,6 +22,7 @@ const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) =>
     isOnline: false,
     dexieInstance: dexieInstance ?? defaultDexieInstance,
     apiSyncInstance: new ApiSync(defaultDexieInstance),
+    isOfflineStorageHydrated: true,
   })
 
 export {
