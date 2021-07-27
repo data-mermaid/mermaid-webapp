@@ -13,7 +13,7 @@ import Site from '../components/pages/siteFormPages/Site/Site'
 import Users from '../components/pages/Users'
 import Health from '../components/pages/Health'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
-import SubmittedFishBelt from '../components/pages/submittedRecordFormPages/SubmittedFishBelt/SubmittedFishBelt'
+import SubmittedFishBelt from '../components/pages/SubmittedFishBelt/SubmittedFishBelt'
 
 export const useRoutes = ({ currentUser }) => {
   const routes = [
