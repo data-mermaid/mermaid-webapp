@@ -64,7 +64,15 @@ const IconRequiredWrapper = styled.span`
   }
 `
 const ObservationsSummaryStats = styled(Table)`
-  border: solid thin magenta;
+  width: 25%;
+  table-layout: auto;
+  min-width: auto;
+  max-width: 40rem;
+  float: right;
+  tr:nth-child(even),
+  tr:nth-child(odd) {
+    background-color: ${theme.color.white};
+  }
 `
 const ButtonRemoveRow = styled(ButtonCaution)`
   display: none;
@@ -133,6 +141,11 @@ const StyledFishBeltObservationTable = styled(Table)`
       }
     }
   }
+`
+const UnderTableRow = styled(RowRight)`
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: ${theme.spacing.medium};
 `
 
 const FishBeltObservationTable = ({
@@ -468,7 +481,10 @@ const FishBeltObservationTable = ({
             <tbody>{observationsRows}</tbody>
           </StyledFishBeltObservationTable>
         </StyledOverflowWrapper>
-        <RowRight>
+        <UnderTableRow>
+          <ButtonPrimary type="button" onClick={handleAddObservation}>
+            <IconPlus /> Add Row
+          </ButtonPrimary>
           <ObservationsSummaryStats>
             <tbody>
               <Tr>
@@ -481,11 +497,7 @@ const FishBeltObservationTable = ({
               </Tr>
             </tbody>
           </ObservationsSummaryStats>
-        </RowRight>
-
-        <ButtonPrimary type="button" onClick={handleAddObservation}>
-          <IconPlus /> Add Row
-        </ButtonPrimary>
+        </UnderTableRow>
       </InputWrapper>
     </>
   )
