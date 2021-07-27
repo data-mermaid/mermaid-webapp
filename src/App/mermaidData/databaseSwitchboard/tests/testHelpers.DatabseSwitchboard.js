@@ -12,11 +12,12 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () 
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const dbInstance = new DatabaseSwitchboard({
     apiBaseUrl,
-    auth0Token,
-    isMermaidAuthenticated: true,
-    isOnline: true,
-    dexieInstance,
     apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    auth0Token,
+    dexieInstance,
+    isMermaidAuthenticated: true,
+    isOfflineStorageHydrated: true,
+    isOnline: true,
   })
 
   dbInstance.dexieInstance = dexieInstance
@@ -58,11 +59,12 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = ()
 
   const dbInstance = new DatabaseSwitchboard({
     apiBaseUrl,
-    auth0Token,
-    isMermaidAuthenticated: true,
-    isOnline: false,
-    dexieInstance,
     apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    auth0Token,
+    dexieInstance,
+    isMermaidAuthenticated: true,
+    isOfflineStorageHydrated: true,
+    isOnline: false,
   })
 
   dbInstance.dexieInstance = dexieInstance

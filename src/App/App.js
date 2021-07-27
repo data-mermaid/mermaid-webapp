@@ -74,17 +74,21 @@ function App({ dexieInstance }) {
 
   const databaseSwitchboardInstance = useMemo(() => {
     const areDependenciesReady =
-      isMermaidAuthenticated && !!dexieInstance && apiBaseUrl
+      !!dexieInstance &&
+      apiBaseUrl &&
+      isMermaidAuthenticated &&
+      !!isOfflineStorageHydrated
 
     return !areDependenciesReady
       ? undefined
       : new DatabaseSwitchboard({
           apiBaseUrl,
-          auth0Token,
-          isMermaidAuthenticated,
-          isOnline,
-          dexieInstance,
           apiSyncInstance,
+          auth0Token,
+          dexieInstance,
+          isMermaidAuthenticated,
+          isOfflineStorageHydrated,
+          isOnline,
         })
   }, [
     auth0Token,
@@ -93,6 +97,7 @@ function App({ dexieInstance }) {
     dexieInstance,
     apiBaseUrl,
     apiSyncInstance,
+    isOfflineStorageHydrated,
   ])
 
   const currentUser = useCurrentUser({

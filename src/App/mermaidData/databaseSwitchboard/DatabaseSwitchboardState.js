@@ -32,12 +32,15 @@ const DatabaseSwitchboardState = class {
     auth0Token,
     dexieInstance,
     isMermaidAuthenticated,
+    isOfflineStorageHydrated,
     isOnline,
   }) {
     this._apiBaseUrl = apiBaseUrl
     this._apiSyncInstance = apiSyncInstance
     this._dexieInstance = dexieInstance
-    this._isAuthenticatedAndReady = isMermaidAuthenticated && !!dexieInstance
+    this._isAuthenticatedAndReady =
+      isMermaidAuthenticated && !!dexieInstance && isOfflineStorageHydrated
+
     this._authenticatedAxios = auth0Token
       ? axios.create({
           headers: {
