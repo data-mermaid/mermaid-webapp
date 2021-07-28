@@ -24,7 +24,7 @@ const TableRowItem = ({ title, options, value }) => (
   </Tr>
 )
 
-const SubmittedFishBeltInfo = ({
+const SubmittedFishBeltInfoTable = ({
   sites,
   managementRegimes,
   choices,
@@ -131,15 +131,15 @@ TableRowItem.defaultProps = {
   options: undefined,
 }
 
-SubmittedFishBeltInfo.propTypes = {
+SubmittedFishBeltInfoTable.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   choices: choicesPropType.isRequired,
   submittedRecord: submittedFishBeltPropType,
 }
 
-SubmittedFishBeltInfo.defaultProps = {
+SubmittedFishBeltInfoTable.defaultProps = {
   submittedRecord: undefined,
 }
 
-export default SubmittedFishBeltInfo
+export default SubmittedFishBeltInfoTable

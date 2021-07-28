@@ -14,16 +14,29 @@ import { getObservationBiomass } from '../pages/collectRecordFormPages/FishBelt/
 import { roundToOneDecimal } from '../../library/Numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../library/summarizeArrayObjectValuesByProperty'
 import language from '../../language'
+import theme from '../../theme'
 
 const TheadItem = styled(Th)`
   background: #f1f1f4;
 `
 
-const ObservationsSummaryStats = styled.table`
-  border: solid thin magenta;
+const ObservationsSummaryStats = styled(Table)`
+  width: 25%;
+  table-layout: auto;
+  min-width: auto;
+  max-width: 40rem;
+  float: right;
+  tr:nth-child(even),
+  tr:nth-child(odd) {
+    background-color: ${theme.color.white};
+  }
 `
 
-const SubmittedFishBeltObservations = ({
+const UnderTableRow = styled(RowRight)`
+  margin-top: ${theme.spacing.medium};
+`
+
+const SubmittedFishBeltObservationTable = ({
   choices,
   fishNameOptions,
   fishNameConstants,
@@ -95,7 +108,7 @@ const SubmittedFishBeltObservations = ({
           <tbody>{observationBeltFish}</tbody>
         </Table>
       </TableOverflowWrapper>
-      <RowRight>
+      <UnderTableRow>
         <ObservationsSummaryStats>
           <tbody>
             <Tr>
@@ -108,12 +121,12 @@ const SubmittedFishBeltObservations = ({
             </Tr>
           </tbody>
         </ObservationsSummaryStats>
-      </RowRight>
+      </UnderTableRow>
     </InputWrapper>
   )
 }
 
-SubmittedFishBeltObservations.propTypes = {
+SubmittedFishBeltObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   fishNameConstants: PropTypes.arrayOf(
@@ -127,8 +140,8 @@ SubmittedFishBeltObservations.propTypes = {
   submittedRecord: submittedFishBeltPropType,
 }
 
-SubmittedFishBeltObservations.defaultProps = {
+SubmittedFishBeltObservationTable.defaultProps = {
   submittedRecord: undefined,
 }
 
-export default SubmittedFishBeltObservations
+export default SubmittedFishBeltObservationTable

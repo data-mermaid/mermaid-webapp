@@ -6,8 +6,8 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { ContentPageLayout } from '../../Layout'
 import { ButtonSecondary } from '../../generic/buttons'
 import { RowSpaceBetween } from '../../generic/positioning'
-import SubmittedFishBeltInfo from '../../SubmittedFishBeltInfo'
-import SubmittedFishBeltObservations from '../../SubmittedFishBeltObservations'
+import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
+import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
 import RecordFormTitle from '../../RecordFormTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import language from '../../../language'
@@ -83,13 +83,13 @@ const SubmittedFishBelt = () => {
       isLoading={isLoading}
       content={
         <>
-          <SubmittedFishBeltInfo
+          <SubmittedFishBeltInfoTable
             choices={choices}
             sites={sites}
             managementRegimes={managementRegimes}
             submittedRecord={submittedRecord}
           />
-          <SubmittedFishBeltObservations
+          <SubmittedFishBeltObservationTable
             choices={choices}
             fishNameOptions={fishNameOptions}
             fishNameConstants={fishNameConstants}
