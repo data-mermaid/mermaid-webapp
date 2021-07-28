@@ -8,6 +8,7 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 const saveFishbeltRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
@@ -35,11 +36,16 @@ const saveFishbeltRecord = async () => {
 
 describe('Offline', () => {
   test('New fishbelt save success shows toast, and navigates to edit fishbelt page for new record', async () => {
+    const dexieInstance = getMockDexieInstanceAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
     renderAuthenticatedOffline(
-      <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+      <App dexieInstance={dexieInstance} />,
       {
         initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
       },
+      dexieInstance,
     )
 
     await saveFishbeltRecord()
@@ -102,9 +108,12 @@ describe('Offline', () => {
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    dexieInstance.collectRecords.put = () => Promise.reject()
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+    dexieInstance.collect_records.put = () => Promise.reject()
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+      dexieInstance,
     })
 
     await saveFishbeltRecord()

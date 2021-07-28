@@ -6,21 +6,16 @@ import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
-import { Input, InputRow } from '../generic/form'
+import { Input, InputRow, HelperText } from '../generic/form'
 import language from '../../language'
+import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
-const ModalMainContent = styled(InputRow)`
-  grid-template-columns: auto 1fr;
+const ModalInputRow = styled(InputRow)`
+  background: ${theme.color.white};
+  display: block;
+  border: none;
 `
-
-const SubText = styled.div`
-  grid-column: 1/2;
-  font-size: small;
-  color: grey;
-  padding-top: 5px;
-`
-
 const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
   const formik = useFormik({
     initialValues: { newOrganizationSuggestion: '' },
@@ -37,18 +32,25 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
     toast.success(language.success.newOrganizationAdd)
   }
 
+  const helperText = language.pages.projectInfo.suggestionOrganizationHelperText
   const modalContent = (
     <>
-      <ModalMainContent>
-        <Input
-          id="add-new-organization"
-          type="text"
-          {...formik.getFieldProps('newOrganizationSuggestion')}
-        />
-        <SubText>
-          {language.pages.projectInfo.suggestionOrganizationInputText}
-        </SubText>
-      </ModalMainContent>
+      <ModalInputRow>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label id="modal-input-for-org-label" htmlFor="modal-input-for-org">
+          New Organization Name
+        </label>
+        <div>
+          <Input
+            aria-labelledby="modal-input-for-org-label"
+            aria-describedby="modal-input-for-org-descp"
+            id="modal-input-for-org"
+          />
+          {helperText && (
+            <HelperText id="modal-input-for-org-descp">{helperText}</HelperText>
+          )}
+        </div>
+      </ModalInputRow>
     </>
   )
 

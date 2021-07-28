@@ -55,7 +55,7 @@ export const IconMenu = () => <InlineIcon icon={menu} />
 export const IconMgmt = () => <InlineIcon icon={fileMultipleOutline} />
 export const IconPlus = () => <InlineIcon icon={plus} />
 export const IconRefresh = () => <InlineIcon icon={sync} />
-export const IconRequired = () => <InlineIcon icon={asterisk} color="magenta" />
+export const IconRequired = () => <InlineIcon icon={asterisk} />
 export const IconSave = () => <InlineIcon icon={contentSave} />
 export const IconSend = () => <InlineIcon icon={send} />
 export const IconSharing = () => <InlineIcon icon={shareVariantOutline} />

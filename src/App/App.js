@@ -21,6 +21,7 @@ import PageNotFound from '../components/pages/PageNotFound'
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
+import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
@@ -31,15 +32,38 @@ function App({ dexieInstance }) {
     logoutMermaid,
   } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(true)
+  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(
+    false,
+  )
 
   const _initiallyHydrateOfflineStorageWithApiData = useEffect(() => {
-    if (dexieInstance && isMounted.current && isOnline) {
-      initiallyHydrateOfflineStorageWithApiData(dexieInstance)
-        .then(setIsOfflineStorageHydrated(true))
-        .catch(() => toast.error(language.error.initialApiDataPull))
+    const isOnlineAndReadyForHydration =
+      apiBaseUrl && auth0Token && dexieInstance && isMounted.current && isOnline
+
+    const isOfflineAndReadyAndAlreadyHydrated =
+      apiBaseUrl &&
+      !auth0Token &&
+      dexieInstance &&
+      isMounted.current &&
+      !isOnline
+
+    if (isOnlineAndReadyForHydration) {
+      initiallyHydrateOfflineStorageWithApiData({
+        dexieInstance,
+        apiBaseUrl,
+        auth0Token,
+      })
+        .then(() => {
+          setIsOfflineStorageHydrated(true)
+        })
+        .catch(() => {
+          toast.error(language.error.initialApiDataPull)
+        })
     }
-  }, [dexieInstance, isMounted, isOnline])
+    if (isOfflineAndReadyAndAlreadyHydrated) {
+      setIsOfflineStorageHydrated(true)
+    }
+  }, [dexieInstance, isMounted, isOnline, apiBaseUrl, auth0Token])
   const { current: apiSyncInstance } = useRef(
     new ApiSync({
       dexieInstance,
@@ -92,7 +116,7 @@ function App({ dexieInstance }) {
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <GlobalStyle />
         <CustomToastContainer />
-        {isMermaidAuthenticatedAndReady && (
+        {isMermaidAuthenticatedAndReady ? (
           <Switch>
             {routes.map(({ path, Component }) => (
               <Route
@@ -111,6 +135,8 @@ function App({ dexieInstance }) {
             </Route>
             <Route component={PageNotFound} />
           </Switch>
+        ) : (
+          <LoadingIndicator />
         )}
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>

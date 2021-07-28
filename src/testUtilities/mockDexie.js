@@ -7,11 +7,15 @@ const getMockDexieInstanceAllSuccess = () => {
   })
 
   dexieInstance.version(1).stores({
+    benthic_attributes: 'id',
+    choices: 'id',
+    collect_records: 'id',
     currentUser: 'id',
-    collectRecords: 'id',
+    fish_families: 'id',
+    fish_genera: 'id',
+    fish_species: 'id',
     lastRevisionNumbersPulled: 'id',
-    fishSpecies: 'id',
-    hasInitialApiHydrationCompleted: 'id',
+    projects: 'id',
   })
 
   dexieInstance.currentUser

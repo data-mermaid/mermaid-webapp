@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event'
 import {
   renderAuthenticatedOnline,
   screen,
-  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
@@ -27,12 +26,6 @@ test('Fishbelt observations add new species - filling out new species form adds 
   const observationsTable = (
     await within(fishbeltForm).findAllByRole('table')
   )[0]
-
-  await waitFor(() =>
-    expect(
-      screen.queryAllByLabelText('fish name loading indicator').length,
-    ).toEqual(0),
-  )
 
   const firstFishNameInput = within(observationsTable).getByDisplayValue(
     'Lethrinus rubrioperculatus',
@@ -105,7 +98,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
 
   expect(proposedSpeciesSavedToast).toBeInTheDocument()
 
-  const updatedSpeciesInOfflineStorage = await dexieInstance.fishSpecies.toArray()
+  const updatedSpeciesInOfflineStorage = await dexieInstance.fish_species.toArray()
   const nameOfLastSpeciesInOfflineStorage =
     updatedSpeciesInOfflineStorage[updatedSpeciesInOfflineStorage.length - 1]
       .display_name
@@ -129,15 +122,9 @@ test('Fishbelt observations add new species - proposing new species that already
     await within(fishbeltForm).findAllByRole('table')
   )[0]
 
-  await waitFor(() =>
-    expect(
-      screen.queryAllByLabelText('fish name loading indicator').length,
-    ).toEqual(0),
-  )
-
   // need to wait until app loaded and offline storage hydration before getting species count
   const speciesInOfflineStorageCount = (
-    await dexieInstance.fishSpecies.toArray()
+    await dexieInstance.fish_species.toArray()
   ).length
 
   expect(speciesInOfflineStorageCount).toEqual(4)
@@ -203,7 +190,7 @@ test('Fishbelt observations add new species - proposing new species that already
   expect(proposedSpeciesIsDuplicateToast).toBeInTheDocument()
 
   const speciesInOfflineStorageCountAfterRedundantNewSpeciesSubmit = (
-    await dexieInstance.fishSpecies.toArray()
+    await dexieInstance.fish_species.toArray()
   ).length
 
   const isSpeciesInOfflineStorageUnchanged =
