@@ -17,7 +17,7 @@ const DropdownItemStyle = styled.span`
   padding: 0.5rem 1rem;
 `
 
-const DataToolbarSection = ({ name, filterInputValue, handleFilterChange }) => {
+const DataToolbarSection = ({ name, handleGlobalFilterChange }) => {
   const label = (
     <>
       <IconDownload /> Export To CSV
@@ -30,8 +30,7 @@ const DataToolbarSection = ({ name, filterInputValue, handleFilterChange }) => {
       <RowBottom>
         <FilterSearchToolbar
           name={name}
-          filterInputValue={filterInputValue}
-          handleFilterChange={handleFilterChange}
+          handleGlobalFilterChange={handleGlobalFilterChange}
         />
         <ButtonSecondaryDropdown label={label}>
           <Column as="nav" data-testid="export-to-csv">
@@ -50,8 +49,7 @@ const DataToolbarSection = ({ name, filterInputValue, handleFilterChange }) => {
 
 DataToolbarSection.propTypes = {
   name: PropTypes.string.isRequired,
-  filterInputValue: PropTypes.string.isRequired,
-  handleFilterChange: PropTypes.func.isRequired,
+  handleGlobalFilterChange: PropTypes.func.isRequired,
 }
 
 export default DataToolbarSection

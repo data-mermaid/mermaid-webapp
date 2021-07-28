@@ -39,7 +39,6 @@ const ManagementRegimes = () => {
     setManagementRegimeRecordsForUiDisplay,
   ] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [filterInputValue, setFilterInputValue] = useState('')
 
   const _getManagementRegimeRecords = useEffect(() => {
     let isMounted = true
@@ -186,15 +185,8 @@ const ManagementRegimes = () => {
     setPageSize(Number(e.target.value))
   }
 
-  const handleFilterChange = (e) => {
-    const { value } = e.target
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-    setFilterInputValue(value)
-  }
-
-  const _setGlobalFilterValue = useEffect(() => {
-    setGlobalFilter(filterInputValue)
-  }, [filterInputValue, setGlobalFilter])
   const table = (
     <>
       <TableOverflowWrapper>
@@ -260,8 +252,7 @@ const ManagementRegimes = () => {
           <RowBottom>
             <FilterSearchToolbar
               name={language.pages.managementRegimeTable.filterToolbarText}
-              filterInputValue={filterInputValue}
-              handleFilterChange={handleFilterChange}
+              handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <ToolbarButtonWrapper>
               <ButtonSecondary>

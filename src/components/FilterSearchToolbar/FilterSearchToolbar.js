@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
@@ -22,18 +22,23 @@ const FilterLabelWrapper = styled.label`
   }
 `
 
-const FilterSearchToolbar = ({
-  name,
-  filterInputValue,
-  handleFilterChange,
-}) => {
+const FilterSearchToolbar = ({ name, handleGlobalFilterChange }) => {
+  const [filterInputValue, setFilterInputValue] = useState('')
+
+  const handleFilterChange = (event) => {
+    const { value } = event.target
+
+    setFilterInputValue(value)
+    handleGlobalFilterChange(value)
+  }
+
   return (
     <FilterLabelWrapper htmlFor="filter-search">
       {name}
       <input
         type="text"
         id="filter-search"
-        value={filterInputValue || ''}
+        value={filterInputValue}
         onChange={handleFilterChange}
       />
     </FilterLabelWrapper>
@@ -42,8 +47,7 @@ const FilterSearchToolbar = ({
 
 FilterSearchToolbar.propTypes = {
   name: PropTypes.string.isRequired,
-  filterInputValue: PropTypes.string.isRequired,
-  handleFilterChange: PropTypes.func.isRequired,
+  handleGlobalFilterChange: PropTypes.func.isRequired,
 }
 
 export default FilterSearchToolbar

@@ -40,7 +40,6 @@ const Data = () => {
   ] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { isOnline } = useOnlineStatus()
-  const [filterInputValue, setFilterInputValue] = useState('')
 
   const _getSubmittedRecords = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted) {
@@ -171,15 +170,7 @@ const Data = () => {
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
 
-  const handleFilterChange = (e) => {
-    const { value } = e.target
-
-    setFilterInputValue(value)
-  }
-
-  const _setGlobalFilterValue = useEffect(() => {
-    setGlobalFilter(filterInputValue)
-  }, [filterInputValue, setGlobalFilter])
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const table = (
     <>
@@ -246,8 +237,7 @@ const Data = () => {
       toolbar={
         <DataToolbarSection
           name={language.pages.submittedTable.filterToolbarText}
-          filterInputValue={filterInputValue}
-          handleFilterChange={handleFilterChange}
+          handleGlobalFilterChange={handleGlobalFilterChange}
         />
       }
       isLoading={isLoading}
