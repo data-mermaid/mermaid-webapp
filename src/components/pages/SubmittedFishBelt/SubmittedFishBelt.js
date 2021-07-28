@@ -8,7 +8,7 @@ import { ButtonSecondary } from '../../generic/buttons'
 import { RowSpaceBetween } from '../../generic/positioning'
 import SubmittedFishBeltInfo from '../../SubmittedFishBeltInfo'
 import SubmittedFishBeltObservations from '../../SubmittedFishBeltObservations'
-import SubmittedRecordFormTitle from '../../SubmittedRecordFormTitle'
+import RecordFormTitle from '../../RecordFormTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import language from '../../../language'
 import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
@@ -99,10 +99,7 @@ const SubmittedFishBelt = () => {
       }
       toolbar={
         <>
-          <SubmittedRecordFormTitle
-            submittedRecord={submittedRecord}
-            sites={sites}
-          />
+          <RecordFormTitle record={submittedRecord} sites={sites} />
           <RowSpaceBetween>
             <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>{' '}
             <ButtonSecondary>

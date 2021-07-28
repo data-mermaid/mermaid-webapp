@@ -16,7 +16,7 @@ const SubmittedRecordsMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.sampleUnitMethods)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getFishBeltTransectRecords = () =>
+    getSubmittedFishBeltTransectRecords = () =>
       this._isAuthenticatedAndReady
         ? Promise.resolve(mockMermaidData.fishBeltTransectMethods)
         : Promise.reject(this._notAuthenticatedAndReadyError)
@@ -27,7 +27,7 @@ const SubmittedRecordsMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getFishBeltTransectRecords().then((records) =>
+        ? this.getSubmittedFishBeltTransectRecords().then((records) =>
             records.find((record) => record.id === id),
           )
         : Promise.reject(this._notAuthenticatedAndReadyError)

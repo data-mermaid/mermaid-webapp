@@ -12,6 +12,7 @@ import { Table, TableOverflowWrapper, Tr, Td, Th } from '../generic/Table/table'
 import { RowRight } from '../generic/positioning'
 import { getObservationBiomass } from '../pages/collectRecordFormPages/FishBelt/fishbeltBiomas'
 import { roundToOneDecimal } from '../../library/Numbers/roundToOneDecimal'
+import { summarizeArrayObjectValuesByProperty } from '../../library/summarizeArrayObjectValuesByProperty'
 import language from '../../language'
 
 const TheadItem = styled(Th)`
@@ -41,21 +42,6 @@ const SubmittedFishBeltObservations = ({
       widthId: width,
     }),
   }))
-
-  const summarizeArrayObjectValuesByProperty = (
-    arrayOfObjects,
-    objectPropertyName,
-  ) => {
-    const summaryReducer = (accumulator, object) => {
-      const property = object[objectPropertyName]
-        ? parseFloat(object[objectPropertyName])
-        : 0
-
-      return accumulator + property
-    }
-
-    return arrayOfObjects.reduce(summaryReducer, 0)
-  }
 
   const totalBiomass = roundToOneDecimal(
     summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
