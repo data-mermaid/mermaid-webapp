@@ -35,7 +35,7 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
-        databaseSwitchboardInstance.getSubmittedFishBeltRecord(recordId),
+        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(recordId),
       ]
 
       Promise.all(promises)

@@ -21,7 +21,7 @@ const SubmittedRecordsMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.fishBeltTransectMethods)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getSubmittedFishBeltRecord = (id) => {
+    getSubmittedFishBeltTransectRecord = (id) => {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
