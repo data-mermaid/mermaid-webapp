@@ -43,7 +43,7 @@ const InputCheckboxGroupWithLabel = ({
   }
 
   const checkboxGroup = options.map((item) => (
-    <CheckBoxLabel htmlFor="checkbox-groups" key={item.value}>
+    <CheckBoxLabel htmlFor={item.value} key={item.value}>
       <input
         id={item.value}
         type="checkbox"
