@@ -32,7 +32,7 @@ import sync from '@iconify-icons/mdi/sync'
 import upload from '@iconify-icons/mdi/upload'
 import informationIcon from '@iconify-icons/mdi/information'
 import libraryBooks from '@iconify-icons/mdi/library-books'
-import accountCircle from '@iconify-icons/mdi/account-circle';
+import accountCircle from '@iconify-icons/mdi/account-circle'
 import accountConvert from '@iconify-icons/mdi/account-convert'
 import accountRemove from '@iconify-icons/mdi/account-remove'
 
