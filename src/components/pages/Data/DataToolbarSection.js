@@ -32,7 +32,8 @@ const FilterLabelWrapper = styled.label`
   flex-direction: column;
   flex-grow: 2;
   margin-right: 10px;
-  > input {
+  > div,
+  input {
     ${inputStyles}
   }
 `

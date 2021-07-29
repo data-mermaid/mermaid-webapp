@@ -1,5 +1,7 @@
 const getProjectProfilesInitialValues = (profileRecord) => {
-  return {}
+  return {
+    project_profiles: profileRecord || [],
+  }
 }
 
 export { getProjectProfilesInitialValues }
