@@ -157,6 +157,7 @@ const ManagementRulesInput = ({
             <input
               type="radio"
               id="open-access"
+              name="rules"
               value="open_access"
               checked={managementRulesRadioInputValue.open_access}
               onChange={handleOpenAccessChange}
@@ -170,6 +171,7 @@ const ManagementRulesInput = ({
             <input
               type="radio"
               id="no-take"
+              name="rules"
               value="no_take"
               checked={managementRulesRadioInputValue.no_take}
               onChange={handleNoTakeChange}
@@ -183,6 +185,7 @@ const ManagementRulesInput = ({
             <input
               type="radio"
               id="partial-restrictions"
+              name="rules"
               checked={managementRulesRadioInputValue.partial_restrictions}
               onChange={handlePartialRestrictionChange}
             />

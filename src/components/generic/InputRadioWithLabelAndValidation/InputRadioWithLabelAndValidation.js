@@ -17,6 +17,7 @@ const InputRadioWithLabelAndValidation = ({
         <input
           type="radio"
           id={value}
+          name={optionLabel}
           {...restOfProps}
           value={value}
           checked={restOfProps.value === value}
