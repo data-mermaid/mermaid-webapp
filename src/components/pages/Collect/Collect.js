@@ -1,8 +1,14 @@
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
-import { usePagination, useSortBy, useTable } from 'react-table'
+import { matchSorter } from 'match-sorter'
+import {
+  usePagination,
+  useSortBy,
+  useGlobalFilter,
+  useTable,
+} from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import {
@@ -10,7 +16,8 @@ import {
   reactTableNaturalSortReactNodes,
   reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
-import { RowSpaceBetween } from '../../generic/positioning'
+import { RowBottom } from '../../generic/positioning'
+import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import AddSampleUnitButton from './AddSampleUnitButton'
 import language from '../../../language'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
@@ -24,16 +31,8 @@ import {
 } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-
-const TopBar = () => (
-  <>
-    <H2>Collect Records</H2>
-    <RowSpaceBetween>
-      <div>Future filter</div> <AddSampleUnitButton />
-    </RowSpaceBetween>
-  </>
-)
 
 const Collect = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -144,6 +143,26 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = [
+      'values.method.props.children',
+      'values.site',
+      'values.management',
+      'values.observers',
+    ]
+
+    const queryTerms = splitSearchQueryStrings(query)
+
+    if (!queryTerms) {
+      return rows
+    }
+
+    return queryTerms.reduce(
+      (results, term) => matchSorter(results, term, { keys }),
+      rows,
+    )
+  }, [])
+
   const {
     canNextPage,
     canPreviousPage,
@@ -158,18 +177,23 @@ const Collect = () => {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
+    setGlobalFilter,
   } = useTable(
     {
       columns: tableColumns,
       data: tableCellData,
       initialState: { pageSize: 10 },
+      globalFilter: tableGlobalFilters,
     },
+    useGlobalFilter,
     useSortBy,
     usePagination,
   )
   const handleRowsNumberChange = (e) => {
     setPageSize(Number(e.target.value))
   }
+
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const table = (
     <>
@@ -230,7 +254,18 @@ const Collect = () => {
 
   return (
     <ContentPageLayout
-      toolbar={<TopBar />}
+      toolbar={
+        <>
+          <H2>Collect Records</H2>
+          <RowBottom>
+            <FilterSearchToolbar
+              name={language.pages.collectTable.filterToolbarText}
+              handleGlobalFilterChange={handleGlobalFilterChange}
+            />
+            <AddSampleUnitButton />
+          </RowBottom>
+        </>
+      }
       content={table}
       isLoading={isLoading}
     />

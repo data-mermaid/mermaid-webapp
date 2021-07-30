@@ -92,6 +92,16 @@ const pages = {
   submittedFishBeltForm: {
     toolbarLabel: 'Submitted sample units are read-only',
   },
+  collectTable: {
+    filterToolbarText:
+      'Filter sample units by method, site, management, or observer',
+  },
+  siteTable: {
+    filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
+  },
+  managementRegimeTable: {
+    filterToolbarText: 'Filter management regimes by name, or year',
+  },
 }
 
 export default {
