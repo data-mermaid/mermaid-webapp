@@ -161,7 +161,7 @@ const Admin = () => {
         .then(([projectResponse, projectTagsResponse]) => {
           if (isMounted) {
             setProjectBeingEdited(projectResponse)
-            setProjectTagOptions(getOptions(projectTagsResponse.results, false))
+            setProjectTagOptions(getOptions(projectTagsResponse, false))
             setIsLoading(false)
           }
         })

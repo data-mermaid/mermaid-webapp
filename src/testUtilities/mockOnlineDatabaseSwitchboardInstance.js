@@ -3,27 +3,44 @@ import DatabaseSwitchboard from '../App/mermaidData/databaseSwitchboard/Database
 import ApiSync from '../App/mermaidData/ApiSync/ApiSync'
 
 const defaultDexieInstance = getMockDexieInstanceAllSuccess()
-const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) =>
-  new DatabaseSwitchboard({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'token',
+const auth0Token = 'token'
+const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+
+const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) => {
+  const dexieInstanceToUse = dexieInstance ?? defaultDexieInstance
+
+  return new DatabaseSwitchboard({
+    apiBaseUrl,
+    auth0Token,
     isMermaidAuthenticated: true,
     isOnline: true,
-    dexieInstance: dexieInstance ?? defaultDexieInstance,
-    apiSyncInstance: new ApiSync(defaultDexieInstance),
+    dexieInstance: dexieInstanceToUse,
+    apiSyncInstance: new ApiSync({
+      dexieInstance: dexieInstanceToUse,
+      apiBaseUrl,
+      auth0Token,
+    }),
     isOfflineStorageHydrated: true,
   })
+}
 
-const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) =>
-  new DatabaseSwitchboard({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'token',
+const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) => {
+  const dexieInstanceToUse = dexieInstance ?? defaultDexieInstance
+
+  return new DatabaseSwitchboard({
+    apiBaseUrl,
+    auth0Token,
     isMermaidAuthenticated: true,
     isOnline: false,
-    dexieInstance: dexieInstance ?? defaultDexieInstance,
-    apiSyncInstance: new ApiSync(defaultDexieInstance),
+    dexieInstance: dexieInstanceToUse,
+    apiSyncInstance: new ApiSync({
+      dexieInstance: dexieInstanceToUse,
+      apiBaseUrl,
+      auth0Token,
+    }),
     isOfflineStorageHydrated: true,
   })
+}
 
 export {
   getMockOnlineDatabaseSwitchboardInstance,

@@ -1,27 +1,25 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import { toast } from 'react-toastify'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
-import { initiallyHydrateOfflineStorageWithApiData } from './mermaidData/initiallyHydrateOfflineStorageWithApiData'
 import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
+import { useSyncApiData } from './mermaidData/useSyncApiData'
 import ApiSync from './mermaidData/ApiSync/ApiSync'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
-import language from '../language'
 import Layout from '../components/Layout'
+import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import PageNotFound from '../components/pages/PageNotFound'
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
-import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
@@ -32,38 +30,15 @@ function App({ dexieInstance }) {
     logoutMermaid,
   } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(
-    false,
-  )
 
-  const _initiallyHydrateOfflineStorageWithApiData = useEffect(() => {
-    const isOnlineAndReadyForHydration =
-      apiBaseUrl && auth0Token && dexieInstance && isMounted.current && isOnline
+  const { isOfflineStorageHydrated } = useSyncApiData({
+    apiBaseUrl,
+    auth0Token,
+    dexieInstance,
+    isMounted,
+    isOnline,
+  })
 
-    const isOfflineAndReadyAndAlreadyHydrated =
-      apiBaseUrl &&
-      !auth0Token &&
-      dexieInstance &&
-      isMounted.current &&
-      !isOnline
-
-    if (isOnlineAndReadyForHydration) {
-      initiallyHydrateOfflineStorageWithApiData({
-        dexieInstance,
-        apiBaseUrl,
-        auth0Token,
-      })
-        .then(() => {
-          setIsOfflineStorageHydrated(true)
-        })
-        .catch(() => {
-          toast.error(language.error.initialApiDataPull)
-        })
-    }
-    if (isOfflineAndReadyAndAlreadyHydrated) {
-      setIsOfflineStorageHydrated(true)
-    }
-  }, [dexieInstance, isMounted, isOnline, apiBaseUrl, auth0Token])
   const { current: apiSyncInstance } = useRef(
     new ApiSync({
       dexieInstance,
@@ -77,7 +52,7 @@ function App({ dexieInstance }) {
       !!dexieInstance &&
       apiBaseUrl &&
       isMermaidAuthenticated &&
-      !!isOfflineStorageHydrated
+      isOfflineStorageHydrated
 
     return !areDependenciesReady
       ? undefined

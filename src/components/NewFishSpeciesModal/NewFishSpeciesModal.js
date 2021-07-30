@@ -54,9 +54,11 @@ const NewFishSpeciesModal = ({
       databaseSwitchboardInstance
         .getFishGenera()
         .then((genera) => {
-          setGeneraOptions(
-            genera.map((genus) => ({ label: genus.name, value: genus.id })),
-          )
+          if (isMounted.current) {
+            setGeneraOptions(
+              genera.map((genus) => ({ label: genus.name, value: genus.id })),
+            )
+          }
         })
         .catch(() => {
           toast.error(language.error.generaUnavailable)
@@ -69,7 +71,9 @@ const NewFishSpeciesModal = ({
       databaseSwitchboardInstance
         .getProject(projectId)
         .then((project) => {
-          setProjectName(project.name)
+          if (isMounted.current) {
+            setProjectName(project.name)
+          }
         })
         .catch(() => {
           toast.error(language.error.projectsUnavailable)
