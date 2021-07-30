@@ -35,7 +35,9 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
-        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(recordId),
+        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(
+          recordId,
+        ),
       ]
 
       Promise.all(promises)
@@ -99,7 +101,10 @@ const SubmittedFishBelt = () => {
       }
       toolbar={
         <>
-          <RecordFormTitle record={submittedRecord} sites={sites} />
+          <RecordFormTitle
+            submittedRecordOrCollectRecordDataProperty={submittedRecord}
+            sites={sites}
+          />
           <RowSpaceBetween>
             <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>{' '}
             <ButtonSecondary>

@@ -14,14 +14,19 @@ const TitleContainer = styled('div')`
   gap: 1rem;
 `
 
-const RecordFormTitle = ({ record, sites }) => {
+const RecordFormTitle = ({
+  submittedRecordOrCollectRecordDataProperty,
+  sites,
+}) => {
   const defaultTitle = 'Fish Belt'
-  const siteId = record.sample_event?.site
+  const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
 
   const siteName =
     siteId && sites.length > 0 ? getObjectById(sites, siteId).name : ''
-  const transectNumber = record.fishbelt_transect?.number || ''
-  const label = record.fishbelt_transect?.label || ''
+  const transectNumber =
+    submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.number || ''
+  const label =
+    submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.label || ''
 
   return (
     <TitleContainer
@@ -57,12 +62,12 @@ const RecordFormTitle = ({ record, sites }) => {
 }
 
 RecordFormTitle.propTypes = {
-  record: fishBeltPropType,
+  submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 
 RecordFormTitle.defaultProps = {
-  record: undefined,
+  submittedRecordOrCollectRecordDataProperty: undefined,
 }
 
 export default RecordFormTitle

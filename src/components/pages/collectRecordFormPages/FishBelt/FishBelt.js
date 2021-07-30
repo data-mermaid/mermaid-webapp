@@ -375,7 +375,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 {isNewRecord && <H2>Fish Belt</H2>}
                 {collectRecordBeingEdited && !isNewRecord && (
                   <RecordFormTitle
-                    record={collectRecordBeingEdited.data}
+                    submittedRecordOrCollectRecordDataProperty={
+                      collectRecordBeingEdited.data
+                    }
                     sites={sites}
                   />
                 )}
