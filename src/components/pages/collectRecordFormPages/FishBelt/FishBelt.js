@@ -156,7 +156,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
-              setObserverProfiles(projectProfilesResponse.results)
+              setObserverProfiles(projectProfilesResponse)
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)

@@ -9,6 +9,7 @@ export const pullApiData = async ({
   auth0Token,
   apiBaseUrl,
   apiDataNamesToPull,
+  projectId,
 }) => {
   const lastRevisionNumbersPulled = await getLastRevisionNumbersPulled({
     dexieInstance,
@@ -19,6 +20,7 @@ export const pullApiData = async ({
       ...accumulator,
       [apiDataName]: {
         last_revision: lastRevisionNumbersPulled?.[apiDataName] ?? null,
+        project: projectId ?? null,
       },
     }),
     {},
@@ -49,6 +51,9 @@ export const pullApiData = async ({
     dexieInstance.fish_families,
     dexieInstance.fish_genera,
     dexieInstance.fish_species,
+    dexieInstance.project_managements,
+    dexieInstance.project_profiles,
+    dexieInstance.project_sites,
     dexieInstance.projects,
     async () => {
       apiDataNamesToPull.forEach((apiDataType) => {
@@ -65,8 +70,8 @@ export const pullApiData = async ({
           const updates = apiData[apiDataType]?.updates ?? []
           const deletes = apiData[apiDataType]?.deletes ?? []
 
-          updates.forEach((specie) => {
-            dexieInstance[apiDataType].put(specie)
+          updates.forEach((updatedItem) => {
+            dexieInstance[apiDataType].put(updatedItem)
           })
           deletes.deletes?.forEach(({ id }) => {
             dexieInstance[apiDataType].delete(id)

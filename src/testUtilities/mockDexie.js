@@ -15,6 +15,9 @@ const getMockDexieInstanceAllSuccess = () => {
     fish_genera: 'id',
     fish_species: 'id',
     lastRevisionNumbersPulled: 'id',
+    project_managements: 'id',
+    project_profiles: 'id',
+    project_sites: 'id',
     projects: 'id',
   })
 
