@@ -22,7 +22,7 @@ const options = [
 
 test('InputAutocomplete: default no results view', () => {
   renderAuthenticatedOffline(
-    <InputAutocomplete options={options} onChange={() => {}} />,
+    <InputAutocomplete options={options} onChange={() => {}} id="someId" />,
   )
 
   expect(screen.queryByText('No Results')).not.toBeInTheDocument()
