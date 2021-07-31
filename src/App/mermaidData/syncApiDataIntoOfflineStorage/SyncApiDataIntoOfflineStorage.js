@@ -5,7 +5,7 @@ import {
 } from '../lastRevisionNumbers'
 import { pullApiData } from '../pullApiData'
 
-const ApiSync = class {
+const SyncApiDataIntoOfflineStorage = class {
   _apiBaseUrl
 
   _dexieInstance
@@ -134,4 +134,4 @@ const ApiSync = class {
   }
 }
 
-export default ApiSync
+export default SyncApiDataIntoOfflineStorage

@@ -2,10 +2,10 @@ import { rest } from 'msw'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
-import ApiSync from './ApiSync'
+import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 
 test('pullApiDataMinimal hits the api with the correct config', async () => {
-  const apiSync = new ApiSync({
+  const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
     dexieInstance: getMockDexieInstanceAllSuccess(),
@@ -72,7 +72,7 @@ test('pullApiDataMinimal keeps track of returned last_revision_nums and sends th
   )
 
   const dexieInstance = getMockDexieInstanceAllSuccess()
-  const apiSync = new ApiSync({
+  const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
     dexieInstance,
@@ -87,7 +87,7 @@ test('pullApiDataMinimal keeps track of returned last_revision_nums and sends th
 
 test('pullChangeWithChoices updates IDB with API data', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
-  const apiSync = new ApiSync({
+  const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
     dexieInstance,

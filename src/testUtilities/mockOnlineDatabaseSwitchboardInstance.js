@@ -1,6 +1,6 @@
 import { getMockDexieInstanceAllSuccess } from './mockDexie'
 import DatabaseSwitchboard from '../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
-import ApiSync from '../App/mermaidData/ApiSync/ApiSync'
+import SyncApiDataIntoOfflineStorage from '../App/mermaidData/SyncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 
 const defaultDexieInstance = getMockDexieInstanceAllSuccess()
 const auth0Token = 'token'
@@ -15,7 +15,7 @@ const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) => {
     isMermaidAuthenticated: true,
     isOnline: true,
     dexieInstance: dexieInstanceToUse,
-    apiSyncInstance: new ApiSync({
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance: dexieInstanceToUse,
       apiBaseUrl,
       auth0Token,
@@ -33,7 +33,7 @@ const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) => {
     isMermaidAuthenticated: true,
     isOnline: false,
     dexieInstance: dexieInstanceToUse,
-    apiSyncInstance: new ApiSync({
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance: dexieInstanceToUse,
       apiBaseUrl,
       auth0Token,

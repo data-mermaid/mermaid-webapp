@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import language from '../../language'
-import ApiSync from './ApiSync/ApiSync'
+import language from '../../../language'
+import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 
 const getProjectIdFromLocation = (location) => {
   const { pathname } = location
@@ -28,7 +28,7 @@ export const useSyncApiData = ({
   const isPageReload = useRef(true)
   const apiSync = useMemo(
     () =>
-      new ApiSync({
+      new SyncApiDataIntoOfflineStorage({
         dexieInstance,
         apiBaseUrl,
         auth0Token,
