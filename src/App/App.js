@@ -8,8 +8,7 @@ import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
 import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
-import { useSyncApiData } from './mermaidData/useSyncApiData'
-import ApiSync from './mermaidData/ApiSync/ApiSync'
+import { useSyncApiData } from './mermaidData/syncApiDataIntoOfflineStorage/useSyncApiDataIntoOfflineStorage'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
@@ -17,6 +16,7 @@ import Header from '../components/Header'
 import Layout from '../components/Layout'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import PageNotFound from '../components/pages/PageNotFound'
+import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
@@ -40,7 +40,7 @@ function App({ dexieInstance }) {
   })
 
   const { current: apiSyncInstance } = useRef(
-    new ApiSync({
+    new SyncApiDataIntoOfflineStorage({
       dexieInstance,
       apiBaseUrl,
       auth0Token,

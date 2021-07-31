@@ -2,7 +2,7 @@ import {
   getMockDexieInstanceAllSuccess,
   getMockDexieInstanceThatProducesErrors,
 } from '../../../../testUtilities/mockDexie'
-import ApiSync from '../../ApiSync/ApiSync'
+import SyncApiDataIntoOfflineStorage from '../../SyncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import DatabaseSwitchboard from '../DatabaseSwitchboard'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
@@ -12,7 +12,11 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () 
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const dbInstance = new DatabaseSwitchboard({
     apiBaseUrl,
-    apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
     auth0Token,
     dexieInstance,
     isMermaidAuthenticated: true,
@@ -35,7 +39,11 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () =>
     isMermaidAuthenticated: true,
     isOnline: true,
     dexieInstance,
-    apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
   })
 }
 
@@ -49,7 +57,11 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
     isMermaidAuthenticated: true,
     isOnline: false,
     dexieInstance,
-    apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
   })
 }
 
@@ -59,7 +71,11 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = ()
 
   const dbInstance = new DatabaseSwitchboard({
     apiBaseUrl,
-    apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
     auth0Token,
     dexieInstance,
     isMermaidAuthenticated: true,
