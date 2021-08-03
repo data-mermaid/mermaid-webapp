@@ -68,7 +68,6 @@ const InputAutocomplete = ({
       inputValue?.length >= 3 && inputValue !== selectedValue.label
 
     if (selectedItem) {
-      setSelectedValue(selectedItem)
       onChange(selectedItem)
       setIsMenuOpen(false)
     }
