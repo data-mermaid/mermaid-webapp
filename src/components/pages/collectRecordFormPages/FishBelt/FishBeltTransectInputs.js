@@ -47,6 +47,7 @@ const FishBeltTransectForms = ({ formik, choices, onSizeBinChange }) => {
         <InputRadioWithLabelAndValidation
           label="Fish Size Bin"
           id="size_bin"
+          name="fish-size-bin"
           options={fishSizeBinSelectOptions}
           value={formik.values.size_bin}
           onChange={(event) => {
