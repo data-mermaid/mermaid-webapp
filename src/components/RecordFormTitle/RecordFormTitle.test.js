@@ -6,9 +6,9 @@ import {
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
-import EditCollectRecordFormTitle from './EditCollectRecordFormTitle'
+import RecordFormTitle from './RecordFormTitle'
 
-test('EditCollectRecordFormTitle shows the title as expected when all of site name, transect number, and label are available', () => {
+test('RecordFormTitle shows the title as expected when all of site name, transect number, and label are available', () => {
   const mockCollectRecord = {
     data: {
       protocol: 'fishbelt',
@@ -23,8 +23,8 @@ test('EditCollectRecordFormTitle shows the title as expected when all of site na
   }
 
   renderAuthenticatedOnline(
-    <EditCollectRecordFormTitle
-      collectRecord={mockCollectRecord}
+    <RecordFormTitle
+      submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.sites}
     />,
   )
@@ -37,14 +37,16 @@ test('EditCollectRecordFormTitle shows the title as expected when all of site na
   expect(within(formTitle).getByText('FB-2'))
 })
 
-test('EditCollectRecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
+test('RecordFormTitle component renders a default title when site name, transect number, and label are unavailable', () => {
   const mockMissingSiteNameTransectNumberLabelCollectRecord = {
     data: { protocol: 'fishbelt', sample_event: {}, fishbelt_transect: {} },
   }
 
   renderAuthenticatedOnline(
-    <EditCollectRecordFormTitle
-      collectRecord={mockMissingSiteNameTransectNumberLabelCollectRecord}
+    <RecordFormTitle
+      submittedRecordOrCollectRecordDataProperty={
+        mockMissingSiteNameTransectNumberLabelCollectRecord.data
+      }
       sites={mockMermaidData.sites}
     />,
   )
@@ -54,7 +56,7 @@ test('EditCollectRecordFormTitle component renders a default title when site nam
   expect(within(formTitle).getByText('Fish Belt'))
 })
 
-test('EditCollectRecordFormTitle component renders properly when site name is missing.', () => {
+test('RecordFormTitle component renders properly when site name is missing.', () => {
   const mockMissingSiteCollectRecord = {
     data: {
       protocol: 'fishbelt',
@@ -67,8 +69,10 @@ test('EditCollectRecordFormTitle component renders properly when site name is mi
   }
 
   renderAuthenticatedOnline(
-    <EditCollectRecordFormTitle
-      collectRecord={mockMissingSiteCollectRecord}
+    <RecordFormTitle
+      submittedRecordOrCollectRecordDataProperty={
+        mockMissingSiteCollectRecord.data
+      }
       sites={mockMermaidData.sites}
     />,
   )
@@ -79,7 +83,7 @@ test('EditCollectRecordFormTitle component renders properly when site name is mi
   expect(within(formTitle).getByText('FB-2'))
 })
 
-test('EditCollectRecordFormTitle component renders properly when label is missing.', () => {
+test('RecordFormTitle component renders properly when label is missing.', () => {
   const mockMissingLabelCollectRecord = {
     data: {
       protocol: 'fishbelt',
@@ -93,8 +97,10 @@ test('EditCollectRecordFormTitle component renders properly when label is missin
   }
 
   renderAuthenticatedOnline(
-    <EditCollectRecordFormTitle
-      collectRecord={mockMissingLabelCollectRecord}
+    <RecordFormTitle
+      submittedRecordOrCollectRecordDataProperty={
+        mockMissingLabelCollectRecord.data
+      }
       sites={mockMermaidData.sites}
     />,
   )
@@ -105,7 +111,7 @@ test('EditCollectRecordFormTitle component renders properly when label is missin
   expect(within(formTitle).getByText('2'))
 })
 
-test('EditCollectRecordFormTitle component renders properly when transect number is missing.', () => {
+test('RecordFormTitle component renders properly when transect number is missing.', () => {
   const mockMissingTransectNumberCollectRecord = {
     data: {
       protocol: 'fishbelt',
@@ -119,8 +125,10 @@ test('EditCollectRecordFormTitle component renders properly when transect number
   }
 
   renderAuthenticatedOnline(
-    <EditCollectRecordFormTitle
-      collectRecord={mockMissingTransectNumberCollectRecord}
+    <RecordFormTitle
+      submittedRecordOrCollectRecordDataProperty={
+        mockMissingTransectNumberCollectRecord.data
+      }
       sites={mockMermaidData.sites}
     />,
   )

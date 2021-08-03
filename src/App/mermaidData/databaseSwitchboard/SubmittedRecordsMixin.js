@@ -13,16 +13,21 @@ const SubmittedRecordsMixin = (Base) =>
 
     getSubmittedRecords = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.submittedRecords)
+        ? Promise.resolve(mockMermaidData.sampleUnitMethods)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getSubmittedRecord = (id) => {
+    getSubmittedFishBeltTransectRecords = () =>
+      this._isAuthenticatedAndReady
+        ? Promise.resolve(mockMermaidData.fishBeltTransectMethods)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+
+    getSubmittedFishBeltTransectRecord = (id) => {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getSubmittedRecords().then((records) =>
+        ? this.getSubmittedFishBeltTransectRecords().then((records) =>
             records.find((record) => record.id === id),
           )
         : Promise.reject(this._notAuthenticatedAndReadyError)

@@ -44,6 +44,7 @@ const InputRadioWithLabelAndValidation = ({
 InputRadioWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
   validationType: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
