@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { getProtocolName } from '../../library/getProtocolName'
 import { getObjectById } from '../../library/getObjectById'
-import { TooltipWithText } from '../generic/tooltip'
+import { TooltipWithText, TooltipPopup } from '../generic/tooltip'
 import {
   fishBeltPropType,
   sitePropType,
@@ -14,7 +14,12 @@ const TitleContainer = styled('div')`
   flex-wrap: wrap;
   gap: 1rem;
 `
-
+const ProjectTooltip = styled(TooltipWithText)`
+  ${TooltipPopup} {
+    min-width: max-content;
+    text-align: center;
+  }
+`
 const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
   const collectRecordData = collectRecord.data
   const siteId = collectRecordData.sample_event?.site
@@ -34,26 +39,26 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
       id="collect-form-title"
       data-testid="edit-collect-record-form-title"
     >
-      <TooltipWithText
-        as="h2"
+      <ProjectTooltip
+        forwardedAs="h2"
         text={defaultTitle}
         tooltipText="Protocol"
         id="protocol-tooltip"
       />
-      <TooltipWithText
-        as="h2"
+      <ProjectTooltip
+        forwardedAs="h2"
         text={siteName}
         tooltipText="Site Name"
         id="site-name-tooltip"
       />
-      <TooltipWithText
-        as="h2"
+      <ProjectTooltip
+        forwardedAs="h2"
         text={transectNumber}
         tooltipText="Transect Number"
         id="transect-number-tooltip"
       />
-      <TooltipWithText
-        as="h2"
+      <ProjectTooltip
+        forwardedAs="h2"
         text={label}
         tooltipText="Label"
         id="label-tooltip"
