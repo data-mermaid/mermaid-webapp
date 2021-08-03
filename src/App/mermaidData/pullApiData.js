@@ -26,8 +26,6 @@ export const pullApiData = async ({
     {},
   )
 
-  // were not using the apiDataNames here to create a request body
-  // for the purposes of maintainability and troubleshooting.
   const { data: apiData } = await axios.post(
     `${apiBaseUrl}/pull/`,
     pullRequestBody,

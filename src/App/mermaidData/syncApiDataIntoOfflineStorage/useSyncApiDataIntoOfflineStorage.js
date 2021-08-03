@@ -26,7 +26,7 @@ export const useSyncApiData = ({
     false,
   )
   const isPageReload = useRef(true)
-  const apiSync = useMemo(
+  const syncApiDataIntoOfflineStorage = useMemo(
     () =>
       new SyncApiDataIntoOfflineStorage({
         dexieInstance,
@@ -63,20 +63,19 @@ export const useSyncApiData = ({
     }
 
     if (isInitialLoadOnNonProjectPage) {
-      apiSync
+      syncApiDataIntoOfflineStorage
         .pullEverythingButProjectRelated()
         .then(() => {
           setIsOfflineStorageHydrated(true)
           isPageReload.current = false
         })
-        .catch((error) => {
-          console.error(error)
+        .catch(() => {
           toast.error(language.error.apiDataPull)
         })
     }
 
     if (isInitialLoadOnProjectPage) {
-      apiSync
+      syncApiDataIntoOfflineStorage
         .pullEverything(projectId)
         .then(() => {
           setIsOfflineStorageHydrated(true)
@@ -87,9 +86,11 @@ export const useSyncApiData = ({
         })
     }
     if (isNotInitialLoadOnProjectPage) {
-      apiSync.pullEverythingButChoices(projectId).catch(() => {
-        toast.error(language.error.apiDataPull)
-      })
+      syncApiDataIntoOfflineStorage
+        .pullEverythingButChoices(projectId)
+        .catch(() => {
+          toast.error(language.error.apiDataPull)
+        })
     }
   }, [
     isOnline,
@@ -98,7 +99,7 @@ export const useSyncApiData = ({
     dexieInstance,
     isMounted,
     location,
-    apiSync,
+    syncApiDataIntoOfflineStorage,
   ])
 
   return { isOfflineStorageHydrated }

@@ -86,7 +86,7 @@ const SyncApiDataIntoOfflineStorage = class {
     })
   }
 
-  // prob rename this (upcoming ticket)
+  // DEPRECATED. Will be refactored away in upcoming work (M212)
   pullApiDataMinimal = async ({ projectId, profileId }) => {
     if (!profileId || !projectId) {
       throw new Error(

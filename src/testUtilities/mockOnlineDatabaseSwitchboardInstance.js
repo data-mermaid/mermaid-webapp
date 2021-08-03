@@ -1,6 +1,6 @@
 import { getMockDexieInstanceAllSuccess } from './mockDexie'
 import DatabaseSwitchboard from '../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
-import SyncApiDataIntoOfflineStorage from '../App/mermaidData/SyncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
+import SyncApiDataIntoOfflineStorage from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 
 const defaultDexieInstance = getMockDexieInstanceAllSuccess()
 const auth0Token = 'token'

@@ -50,12 +50,12 @@ const FishNameMixin = (Base) =>
 
     getFishGenera = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.fishGenera)
+        ? Promise.resolve(mockMermaidData.fish_genera)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
     getFishFamilies = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.fishFamilies)
+        ? Promise.resolve(mockMermaidData.fish_families)
         : Promise.reject(this._notAuthenticatedAndReadyError)
   }
 

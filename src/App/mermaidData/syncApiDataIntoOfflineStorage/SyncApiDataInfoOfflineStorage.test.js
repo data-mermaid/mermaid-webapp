@@ -96,18 +96,18 @@ test('pullChangeWithChoices updates IDB with API data', async () => {
   // add records to IDB that will be updated/deleted with mock api response
   await dexieInstance.transaction('rw', dexieInstance.collect_records, () => {
     dexieInstance.collect_records.put({
-      ...mockMermaidData.collectRecords[1],
+      ...mockMermaidData.collect_records[1],
       somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
     })
-    dexieInstance.collect_records.put(mockMermaidData.collectRecords[0])
+    dexieInstance.collect_records.put(mockMermaidData.collect_records[0])
   })
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
       const response = {
         collect_records: {
-          updates: [mockMermaidData.collectRecords[1]],
-          deletes: [mockMermaidData.collectRecords[0]],
+          updates: [mockMermaidData.collect_records[1]],
+          deletes: [mockMermaidData.collect_records[0]],
           last_revision_num: 17,
         },
       }
