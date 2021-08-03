@@ -32,6 +32,7 @@ import sync from '@iconify-icons/mdi/sync'
 import upload from '@iconify-icons/mdi/upload'
 import informationIcon from '@iconify-icons/mdi/information'
 import libraryBooks from '@iconify-icons/mdi/library-books'
+import pencilIcon from '@iconify-icons/mdi/pencil'
 
 export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
 export const IconArrowBack = () => <InlineIcon icon={arrowBack} />
@@ -65,3 +66,4 @@ export const IconUp = () => <InlineIcon icon={menuUp} />
 export const IconUpload = () => <InlineIcon icon={upload} />
 export const IconUsers = () => <InlineIcon icon={accountGroup} />
 export const IconInfo = () => <InlineIcon icon={informationIcon} />
+export const IconPen = () => <InlineIcon icon={pencilIcon} />

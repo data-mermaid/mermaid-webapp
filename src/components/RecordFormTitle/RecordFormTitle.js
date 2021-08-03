@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { getProtocolName } from '../../library/getProtocolName'
 import { getObjectById } from '../../library/getObjectById'
 import { TooltipWithText } from '../generic/tooltip'
 import {
@@ -15,19 +14,19 @@ const TitleContainer = styled('div')`
   gap: 1rem;
 `
 
-const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
-  const collectRecordData = collectRecord.data
-  const siteId = collectRecordData.sample_event?.site
-  const collectRecordProtocol = collectRecordData.protocol
+const RecordFormTitle = ({
+  submittedRecordOrCollectRecordDataProperty,
+  sites,
+}) => {
+  const defaultTitle = 'Fish Belt'
+  const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
 
-  const transectType =
-    collectRecordProtocol === 'fishbelt' ? 'fishbelt_transect' : undefined
-
-  const defaultTitle = getProtocolName(collectRecordProtocol) || 'Fish Belt'
   const siteName =
     siteId && sites.length > 0 ? getObjectById(sites, siteId).name : ''
-  const transectNumber = collectRecordData[transectType]?.number || ''
-  const label = collectRecordData[transectType]?.label || ''
+  const transectNumber =
+    submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.number || ''
+  const label =
+    submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.label || ''
 
   return (
     <TitleContainer
@@ -62,9 +61,13 @@ const EditCollectRecordFormTitle = ({ collectRecord, sites }) => {
   )
 }
 
-EditCollectRecordFormTitle.propTypes = {
-  collectRecord: fishBeltPropType.isRequired,
+RecordFormTitle.propTypes = {
+  submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 
-export default EditCollectRecordFormTitle
+RecordFormTitle.defaultProps = {
+  submittedRecordOrCollectRecordDataProperty: undefined,
+}
+
+export default RecordFormTitle

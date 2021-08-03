@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
@@ -12,6 +13,7 @@ import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import {
   Table,
   Tr,
@@ -56,6 +58,7 @@ const Data = () => {
         })
     }
   }, [databaseSwitchboardInstance, isMounted])
+  const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
@@ -108,8 +111,12 @@ const Data = () => {
 
   const tableCellData = useMemo(
     () =>
-      submittedRecordsForUiDisplay.map(({ uiLabels }) => ({
-        method: uiLabels.protocol,
+      submittedRecordsForUiDisplay.map(({ id, protocol, uiLabels }) => ({
+        method: (
+          <Link to={`${currentProjectPath}/data/${protocol}/${id}`}>
+            {uiLabels.protocol}
+          </Link>
+        ),
         site: uiLabels.site,
         management: uiLabels.management,
         sampleUnitNumber: uiLabels.sampleUnitNumber,

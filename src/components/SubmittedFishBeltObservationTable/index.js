@@ -1,0 +1,3 @@
+import SubmittedFishBeltObservationTable from './SubmittedFishBeltObservationTable'
+
+export default SubmittedFishBeltObservationTable

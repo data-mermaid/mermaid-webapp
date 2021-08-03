@@ -28,7 +28,7 @@ import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFi
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
-import EditCollectRecordFormTitle from '../../../EditCollectRecordFormTitle'
+import RecordFormTitle from '../../../RecordFormTitle'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
 import FishBeltTransectInputs from './FishBeltTransectInputs'
@@ -39,6 +39,8 @@ import OfflineHide from '../../../generic/OfflineHide'
 import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
+import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -91,52 +93,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
-  const updateFishNameOptionsState = useCallback(
-    ({ species, genera, families }) => {
-      const speciesOptions = species.map(({ id, display_name }) => ({
-        label: display_name,
-        value: id,
-      }))
-
-      const generaAndFamiliesOptions = [...genera, ...families].map(
-        ({ id, name }) => ({
-          label: name,
-          value: id,
-        }),
-      )
-
-      if (isMounted.current) {
-        setFishNameOptions([...speciesOptions, ...generaAndFamiliesOptions])
-      }
-    },
-    [isMounted],
-  )
-
-  const updateFishNameConstantsState = useCallback(
-    ({ species, genera, families }) => {
-      const fishNameMungedObject = [...species, ...genera, ...families]
-
-      const fishNameMungedConstants = fishNameMungedObject.map(
-        ({
-          id,
-          biomass_constant_a,
-          biomass_constant_b,
-          biomass_constant_c,
-        }) => ({
-          id,
-          biomass_constant_a,
-          biomass_constant_b,
-          biomass_constant_c,
-        }),
-      )
-
-      if (isMounted.current) {
-        setFishNameConstants(fishNameMungedConstants)
-      }
-    },
-    [isMounted],
-  )
-
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       Promise.all([
@@ -144,10 +100,16 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
       ]).then(([species, genera, families]) => {
-        updateFishNameOptionsState({ species, genera, families })
+        const updateFishNameOptions = getFishNameOptions({
+          species,
+          genera,
+          families,
+        })
+
+        setFishNameOptions(updateFishNameOptions)
       })
     }
-  }, [updateFishNameOptionsState, databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance])
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance) {
@@ -179,17 +141,25 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             collectRecordResponse,
           ]) => {
             if (isMounted.current) {
+              const updateFishNameConstants = getFishNameConstants({
+                species,
+                genera,
+                families,
+              })
+
+              const updateFishNameOptions = getFishNameOptions({
+                species,
+                genera,
+                families,
+              })
+
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setObserverProfiles(projectProfilesResponse.results)
               setCollectRecordBeingEdited(collectRecordResponse)
-              updateFishNameOptionsState({
-                species,
-                genera,
-                families,
-              })
-              updateFishNameConstantsState({ species, genera, families })
+              setFishNameConstants(updateFishNameConstants)
+              setFishNameOptions(updateFishNameOptions)
               setIsLoading(false)
             }
           },
@@ -202,14 +172,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           toast.error(error)
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    isNewRecord,
-    recordId,
-    updateFishNameConstantsState,
-    updateFishNameOptionsState,
-  ])
+  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId])
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
@@ -411,8 +374,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               <CollectRecordToolbarWrapper>
                 {isNewRecord && <H2>Fish Belt</H2>}
                 {collectRecordBeingEdited && !isNewRecord && (
-                  <EditCollectRecordFormTitle
-                    collectRecord={collectRecordBeingEdited}
+                  <RecordFormTitle
+                    submittedRecordOrCollectRecordDataProperty={
+                      collectRecordBeingEdited.data
+                    }
                     sites={sites}
                   />
                 )}
