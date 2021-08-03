@@ -5,7 +5,7 @@ const ManagementRegimesMixin = (Base) =>
   class extends Base {
     getManagementRegimes = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.managementRegimes)
+        ? Promise.resolve(mockMermaidData.management_regimes)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
     getManagementRegime = (id) => {

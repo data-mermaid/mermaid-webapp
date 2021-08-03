@@ -2,7 +2,7 @@ import {
   getMockDexieInstanceAllSuccess,
   getMockDexieInstanceThatProducesErrors,
 } from '../../../../testUtilities/mockDexie'
-import SyncApiDataIntoOfflineStorage from '../../SyncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
+import SyncApiDataIntoOfflineStorage from '../../syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import DatabaseSwitchboard from '../DatabaseSwitchboard'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
