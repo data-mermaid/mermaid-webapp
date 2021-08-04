@@ -10,11 +10,9 @@ import {
   useGlobalFilter,
   useTable,
 } from 'react-table'
-import { getProjectProfilesInitialValues } from './projectProfileInitialFormValues'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
 import {
-  IconAccount,
   IconAccountConvert,
   IconAccountRemove,
   IconSave,
@@ -153,26 +151,16 @@ const Users = () => {
       },
       {
         Header: 'Transfer Sample Units',
-        Cell: ({ row }) => (
-          <ButtonSecondary
-            type="button"
-            onClick={() => {
-              console.log(row)
-            }}
-          >
+        Cell: () => (
+          <ButtonSecondary type="button" onClick={() => {}}>
             <IconAccountConvert />
           </ButtonSecondary>
         ),
       },
       {
         Header: 'Remove From Projects',
-        Cell: ({ row }) => (
-          <ButtonSecondary
-            type="button"
-            onClick={() => {
-              console.log(row)
-            }}
-          >
+        Cell: () => (
+          <ButtonSecondary type="button" onClick={() => {}}>
             <IconAccountRemove />
           </ButtonSecondary>
         ),
