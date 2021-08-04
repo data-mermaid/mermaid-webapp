@@ -1,11 +1,11 @@
 import React, { useRef } from 'react'
 import { Input } from '../generic/form'
-import { useNoInputScrolling } from '../../library/useNoInputScrolling'
+import { useStopInputScrollingIncrementNumber } from '../../library/useStopInputScrollingIncrementNumber'
 
 const InputNumberNoScroll = (props) => {
   const textFieldRef = useRef()
 
-  useNoInputScrolling(textFieldRef)
+  useStopInputScrollingIncrementNumber(textFieldRef)
 
   return <Input {...props} ref={textFieldRef} />
 }

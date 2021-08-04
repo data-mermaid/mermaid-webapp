@@ -7,7 +7,7 @@ const error = {
     'Options data for creating a collect record is currently unavailable. Please try again',
   collectRecordsUnavailable:
     'Collect records data is currently unavailable. Please try again',
-  initialApiDataPull:
+  apiDataPull:
     'The app was not able to pull and store data from the API. Please try again.',
   projectsUnavailable:
     'Projects data is currently unavailable. Please try again',
@@ -91,7 +91,20 @@ const pages = {
   },
   userTable: {
     filterToolbarText: 'Filter users by name, or role',
-    searchEmailToolbarText: 'Enter email address of user to add'
+    searchEmailToolbarText: 'Enter email address of user to add',
+  },
+  submittedFishBeltForm: {
+    toolbarLabel: 'Submitted sample units are read-only',
+  },
+  collectTable: {
+    filterToolbarText:
+      'Filter sample units by method, site, management, or observer',
+  },
+  siteTable: {
+    filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
+  },
+  managementRegimeTable: {
+    filterToolbarText: 'Filter management regimes by name, or year',
   },
 }
 

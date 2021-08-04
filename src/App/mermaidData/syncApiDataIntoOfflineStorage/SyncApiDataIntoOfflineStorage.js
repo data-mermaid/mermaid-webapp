@@ -3,8 +3,9 @@ import {
   getLastRevisionNumbersPulled,
   persistLastRevisionNumbersPulled,
 } from '../lastRevisionNumbers'
+import { pullApiData } from '../pullApiData'
 
-const ApiSync = class {
+const SyncApiDataIntoOfflineStorage = class {
   _apiBaseUrl
 
   _dexieInstance
@@ -12,6 +13,7 @@ const ApiSync = class {
   constructor({ dexieInstance, apiBaseUrl, auth0Token }) {
     this._dexieInstance = dexieInstance
     this._apiBaseUrl = apiBaseUrl
+    this._auth0Token = auth0Token
     this._authenticatedAxios = auth0Token
       ? axios.create({
           headers: {
@@ -21,6 +23,70 @@ const ApiSync = class {
       : undefined
   }
 
+  pullEverythingButProjectRelated = () => {
+    const apiDataNamesToPullNonProject = [
+      'benthic_attributes',
+      'choices',
+      'fish_families',
+      'fish_genera',
+      'fish_species',
+      'projects',
+    ]
+
+    return pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: apiDataNamesToPullNonProject,
+    })
+  }
+
+  pullEverything = (projectId) => {
+    const apiDataNamesToPullNonProject = [
+      'benthic_attributes',
+      'choices',
+      'collect_records',
+      'fish_families',
+      'fish_genera',
+      'fish_species',
+      'project_managements',
+      'project_profiles',
+      'project_sites',
+      'projects',
+    ]
+
+    return pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: apiDataNamesToPullNonProject,
+      projectId,
+    })
+  }
+
+  pullEverythingButChoices = (projectId) => {
+    const apiDataNamesToPullNonProject = [
+      'benthic_attributes',
+      'collect_records',
+      'fish_families',
+      'fish_genera',
+      'fish_species',
+      'project_managements',
+      'project_profiles',
+      'project_sites',
+      'projects',
+    ]
+
+    return pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: apiDataNamesToPullNonProject,
+      projectId,
+    })
+  }
+
+  // DEPRECATED. Will be refactored away in upcoming work (M212)
   pullApiDataMinimal = async ({ projectId, profileId }) => {
     if (!profileId || !projectId) {
       throw new Error(
@@ -68,4 +134,4 @@ const ApiSync = class {
   }
 }
 
-export default ApiSync
+export default SyncApiDataIntoOfflineStorage

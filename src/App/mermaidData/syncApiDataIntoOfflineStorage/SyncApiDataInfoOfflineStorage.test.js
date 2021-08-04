@@ -2,10 +2,10 @@ import { rest } from 'msw'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
-import ApiSync from './ApiSync'
+import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 
 test('pullApiDataMinimal hits the api with the correct config', async () => {
-  const apiSync = new ApiSync({
+  const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
     dexieInstance: getMockDexieInstanceAllSuccess(),
@@ -72,7 +72,7 @@ test('pullApiDataMinimal keeps track of returned last_revision_nums and sends th
   )
 
   const dexieInstance = getMockDexieInstanceAllSuccess()
-  const apiSync = new ApiSync({
+  const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
     dexieInstance,
@@ -87,7 +87,7 @@ test('pullApiDataMinimal keeps track of returned last_revision_nums and sends th
 
 test('pullChangeWithChoices updates IDB with API data', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
-  const apiSync = new ApiSync({
+  const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
     dexieInstance,
@@ -96,18 +96,18 @@ test('pullChangeWithChoices updates IDB with API data', async () => {
   // add records to IDB that will be updated/deleted with mock api response
   await dexieInstance.transaction('rw', dexieInstance.collect_records, () => {
     dexieInstance.collect_records.put({
-      ...mockMermaidData.collectRecords[1],
+      ...mockMermaidData.collect_records[1],
       somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
     })
-    dexieInstance.collect_records.put(mockMermaidData.collectRecords[0])
+    dexieInstance.collect_records.put(mockMermaidData.collect_records[0])
   })
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
       const response = {
         collect_records: {
-          updates: [mockMermaidData.collectRecords[1]],
-          deletes: [mockMermaidData.collectRecords[0]],
+          updates: [mockMermaidData.collect_records[1]],
+          deletes: [mockMermaidData.collect_records[0]],
           last_revision_num: 17,
         },
       }

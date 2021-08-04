@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import theme from '../../theme'
 
-const Tooltip = styled('p')`
+export const Tooltip = styled('p')`
   white-space: nowrap;
   border-style: dotted;
   border-width: 0 0 ${theme.spacing.borderMedium} 0;
@@ -17,7 +17,7 @@ const Tooltip = styled('p')`
     display: block;
   }
 `
-const TooltipPopup = styled('span')`
+export const TooltipPopup = styled('span')`
   display: none;
   min-width: 26ch;
   width: 100%;

@@ -2,7 +2,7 @@ import {
   getMockDexieInstanceAllSuccess,
   getMockDexieInstanceThatProducesErrors,
 } from '../../../../testUtilities/mockDexie'
-import ApiSync from '../../ApiSync/ApiSync'
+import SyncApiDataIntoOfflineStorage from '../../syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import DatabaseSwitchboard from '../DatabaseSwitchboard'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
@@ -12,11 +12,16 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () 
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const dbInstance = new DatabaseSwitchboard({
     apiBaseUrl,
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
     auth0Token,
-    isMermaidAuthenticated: true,
-    isOnline: true,
     dexieInstance,
-    apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    isMermaidAuthenticated: true,
+    isOfflineStorageHydrated: true,
+    isOnline: true,
   })
 
   dbInstance.dexieInstance = dexieInstance
@@ -34,7 +39,11 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () =>
     isMermaidAuthenticated: true,
     isOnline: true,
     dexieInstance,
-    apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
   })
 }
 
@@ -48,7 +57,11 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
     isMermaidAuthenticated: true,
     isOnline: false,
     dexieInstance,
-    apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
   })
 }
 
@@ -58,11 +71,16 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = ()
 
   const dbInstance = new DatabaseSwitchboard({
     apiBaseUrl,
+    apiSyncInstance: new SyncApiDataIntoOfflineStorage({
+      dexieInstance,
+      apiBaseUrl,
+      auth0Token,
+    }),
     auth0Token,
-    isMermaidAuthenticated: true,
-    isOnline: false,
     dexieInstance,
-    apiSyncInstance: new ApiSync({ dexieInstance, apiBaseUrl, auth0Token }),
+    isMermaidAuthenticated: true,
+    isOfflineStorageHydrated: true,
+    isOnline: false,
   })
 
   dbInstance.dexieInstance = dexieInstance

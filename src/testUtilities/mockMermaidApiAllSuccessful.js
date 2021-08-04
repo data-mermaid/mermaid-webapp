@@ -30,10 +30,14 @@ const mockMermaidApiAllSuccessful = setupServer(
   rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
     const response = {
       benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-      fish_families: { updates: mockMermaidData.fishFamilies },
-      fish_genera: { updates: mockMermaidData.fishGenera },
-      fish_species: { updates: mockMermaidData.fishSpecies },
       choices: { updates: mockMermaidData.choices },
+      collect_records: { updates: mockMermaidData.collect_records },
+      fish_families: { updates: mockMermaidData.fish_families },
+      fish_genera: { updates: mockMermaidData.fish_genera },
+      fish_species: { updates: mockMermaidData.fish_species },
+      project_managements: { updates: mockMermaidData.project_managements },
+      project_profiles: { updates: mockMermaidData.project_profiles },
+      project_sites: { updates: mockMermaidData.project_sites },
       projects: { updates: mockMermaidData.projects },
     }
 

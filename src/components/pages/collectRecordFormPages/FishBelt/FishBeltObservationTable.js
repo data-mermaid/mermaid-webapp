@@ -39,6 +39,7 @@ import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
 import { RowRight } from '../../../generic/positioning'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
+import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -289,21 +290,6 @@ const FishBeltObservationTable = ({
       widthId,
     }),
   }))
-
-  const summarizeArrayObjectValuesByProperty = (
-    arrayOfObjects,
-    objectPropertyName,
-  ) => {
-    const summaryReducer = (accumulator, object) => {
-      const property = object[objectPropertyName]
-        ? parseFloat(object[objectPropertyName])
-        : 0
-
-      return accumulator + property
-    }
-
-    return arrayOfObjects.reduce(summaryReducer, 0)
-  }
 
   const totalBiomass = roundToOneDecimal(
     summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),

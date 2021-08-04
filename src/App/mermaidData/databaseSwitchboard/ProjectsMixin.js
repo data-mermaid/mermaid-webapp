@@ -4,7 +4,7 @@ const ProjectsMixin = (Base) =>
   class extends Base {
     getProjects = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.projects)
+        ? this._dexieInstance.projects.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
     getProject = (id) => {

@@ -108,7 +108,7 @@ const Users = () => {
         .getProjectProfiles()
         .then((projectProfilesResponse) => {
           if (isMounted.current) {
-            setObserverProfiles(projectProfilesResponse.results)
+            setObserverProfiles(projectProfilesResponse)
             setIsLoading(false)
           }
         })

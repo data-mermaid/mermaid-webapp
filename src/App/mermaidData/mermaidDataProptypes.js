@@ -24,22 +24,62 @@ const _sampleEventPropType = PropTypes.shape({
   notes: PropTypes.string,
 })
 
+const _fishBeltTransectPropType = PropTypes.shape({
+  depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  label: PropTypes.string,
+  len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  reef_slope: PropTypes.string,
+  sample_time: PropTypes.string,
+  size_bin: PropTypes.string,
+  width: PropTypes.string,
+  visibility: PropTypes.string,
+  current: PropTypes.string,
+  relative_depth: PropTypes.string,
+  tide: PropTypes.string,
+})
+
 export const fishBeltPropType = PropTypes.shape({
   id: PropTypes.string,
   data: PropTypes.shape({
     protocol: PropTypes.string,
     sample_event: _sampleEventPropType,
-    fishbelt_transect: PropTypes.shape({
-      depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      label: PropTypes.string,
-      len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      reef_slope: PropTypes.string,
-      sample_time: PropTypes.string,
-      size_bin: PropTypes.string,
-      width: PropTypes.string,
-    }),
+    fishbelt_transect: _fishBeltTransectPropType,
   }),
+})
+
+export const submittedFishBeltPropType = PropTypes.shape({
+  id: PropTypes.string,
+  sample_event: _sampleEventPropType,
+  fishbelt_transect: _fishBeltTransectPropType,
+  observers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      updated_by: PropTypes.string,
+      profile_name: PropTypes.string,
+      created_on: PropTypes.string,
+      updated_on: PropTypes.string,
+      rank: PropTypes.number,
+      created_by: PropTypes.string,
+      transectmethod: PropTypes.string,
+      profile: PropTypes.string,
+    }),
+  ),
+  obs_belt_fishes: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      updated_by: PropTypes.string,
+      size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      created_on: PropTypes.string,
+      updated_on: PropTypes.string,
+      count: PropTypes.number,
+      include: PropTypes.bool,
+      notes: PropTypes.string,
+      created_by: PropTypes.string,
+      beltfish: PropTypes.string,
+      fish_attribute: PropTypes.string,
+    }),
+  ),
 })
 
 export const managementRegimePropType = PropTypes.shape({

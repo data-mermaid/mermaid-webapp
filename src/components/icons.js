@@ -35,6 +35,7 @@ import libraryBooks from '@iconify-icons/mdi/library-books'
 import accountCircle from '@iconify-icons/mdi/account-circle'
 import accountConvert from '@iconify-icons/mdi/account-convert'
 import accountRemove from '@iconify-icons/mdi/account-remove'
+import pencilIcon from '@iconify-icons/mdi/pencil'
 
 export const IconAdmin = () => <InlineIcon icon={fileAccountOutline} />
 export const IconArrowBack = () => <InlineIcon icon={arrowBack} />
@@ -71,3 +72,4 @@ export const IconInfo = () => <InlineIcon icon={informationIcon} />
 export const IconAccount = () => <InlineIcon icon={accountCircle} />
 export const IconAccountConvert = () => <InlineIcon icon={accountConvert} />
 export const IconAccountRemove = () => <InlineIcon icon={accountRemove} />
+export const IconPen = () => <InlineIcon icon={pencilIcon} />

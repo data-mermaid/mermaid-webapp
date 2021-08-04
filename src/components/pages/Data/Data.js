@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
@@ -12,6 +13,7 @@ import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import {
   Table,
   Tr,
@@ -28,6 +30,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useIsMounted from '../../../library/useIsMounted'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import DataToolbarSection from './DataToolbarSection'
 
 const Data = () => {
@@ -39,7 +42,6 @@ const Data = () => {
   ] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { isOnline } = useOnlineStatus()
-  const [filterInputValue, setFilterInputValue] = useState('')
 
   const _getSubmittedRecords = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted) {
@@ -56,6 +58,7 @@ const Data = () => {
         })
     }
   }, [databaseSwitchboardInstance, isMounted])
+  const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
     () => [
@@ -108,8 +111,12 @@ const Data = () => {
 
   const tableCellData = useMemo(
     () =>
-      submittedRecordsForUiDisplay.map(({ uiLabels }) => ({
-        method: uiLabels.protocol,
+      submittedRecordsForUiDisplay.map(({ id, protocol, uiLabels }) => ({
+        method: (
+          <Link to={`${currentProjectPath}/data/${protocol}/${id}`}>
+            {uiLabels.protocol}
+          </Link>
+        ),
         site: uiLabels.site,
         management: uiLabels.management,
         sampleUnitNumber: uiLabels.sampleUnitNumber,
@@ -121,19 +128,9 @@ const Data = () => {
     [submittedRecordsForUiDisplay],
   )
 
-  // This method will check for double quotes in string.
-  // It returns an array of split strings by a space delimiter.
-  // example A: splitSearchQueryStrings(`"to the" dustin`).
-  // Also supports multi quotes in string.
-  // example B: splitSearchQueryStrings(`"to the" dustin "kim"`)
-  const splitSearchQueryStrings = (words) =>
-    (words.match(/[^\s"]+|"([^"]*)"/gi) || []).map((word) =>
-      word.replace(/^"(.+(?="$))"$/, '$1'),
-    )
-
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
-      'values.method',
+      'values.method.props.children',
       'values.site',
       'values.management',
       'values.observers',
@@ -180,15 +177,7 @@ const Data = () => {
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
 
-  const handleFilterChange = (e) => {
-    const { value } = e.target
-
-    setFilterInputValue(value)
-  }
-
-  const _setGlobalFilterValue = useEffect(() => {
-    setGlobalFilter(filterInputValue)
-  }, [filterInputValue, setGlobalFilter])
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const table = (
     <>
@@ -254,8 +243,8 @@ const Data = () => {
       content={content}
       toolbar={
         <DataToolbarSection
-          filterInputValue={filterInputValue}
-          handleFilterChange={handleFilterChange}
+          name={language.pages.submittedTable.filterToolbarText}
+          handleGlobalFilterChange={handleGlobalFilterChange}
         />
       }
       isLoading={isLoading}
