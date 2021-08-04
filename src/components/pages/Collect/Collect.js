@@ -267,7 +267,7 @@ const Collect = () => {
         </>
       }
       content={table}
-      isLoading={isLoading}
+      isPageContentLoading={isLoading}
     />
   )
 }

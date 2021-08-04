@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import theme from '../../../../theme'
 import { Column } from '../../../generic/positioning'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
@@ -41,9 +42,11 @@ const Content = styled('div')`
   margin-top: 0px;
 `
 
-const ContentPageLayout = ({ content, toolbar, isLoading }) => {
+const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
   // I don't see the point of passing pageTitle to every components using this layout, leave as constant for now.
   const pageTitle = 'Project Name Placeholder'
+
+  const { isSyncInProgress } = useSyncStatus()
 
   return (
     <>
@@ -55,8 +58,8 @@ const ContentPageLayout = ({ content, toolbar, isLoading }) => {
             <NavMenu />
           </Column>
           <ContentWrapper>
-            {isLoading ? (
-              <LoadingIndicator />
+            {isPageContentLoading || isSyncInProgress ? (
+              <LoadingIndicator aria-label="project pages loading indicator" />
             ) : (
               <>
                 <ContentToolbar>{toolbar}</ContentToolbar>
@@ -72,12 +75,12 @@ const ContentPageLayout = ({ content, toolbar, isLoading }) => {
 
 ContentPageLayout.propTypes = {
   content: PropTypes.node.isRequired,
-  isLoading: PropTypes.bool,
+  isPageContentLoading: PropTypes.bool,
   toolbar: PropTypes.node.isRequired,
 }
 
 ContentPageLayout.defaultProps = {
-  isLoading: false,
+  isPageContentLoading: false,
 }
 
 export default ContentPageLayout

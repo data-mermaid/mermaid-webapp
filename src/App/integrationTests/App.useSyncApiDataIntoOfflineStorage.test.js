@@ -10,6 +10,7 @@ import {
   renderAuthenticatedOnline,
   screen,
   waitForElementToBeRemoved,
+  within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
@@ -101,9 +102,11 @@ test('Sync: initial page load on project page', async () => {
     initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
   })
 
+  await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
+
   expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(
     mockMermaidData.benthic_attributes.length,
   )
@@ -135,9 +138,6 @@ test('Sync: initial page load on project page', async () => {
     mockMermaidData.project_sites.length,
   )
 })
-// immediately upcoming ticket to create loader for syncing due to navigation (M310).
-// Cant test nav syncs until user has indication that sync is done via loading
-// indicator disappearing (otherwise there is race condition in test)
 
 test('Sync: initial page load already done, navigate to non project page', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -151,14 +151,14 @@ test('Sync: initial page load already done, navigate to non project page', async
   )
 
   /**
-   because of the other landing page initial load sync test,
-   we can rely on that data already being here and focus on the
-   the data that hasn't yet been synced. A project page nav sync
-   will technically pull more than this
-   (the stuff that gets pulled on a non project page load minus choices),
-   but we are going to just test the data that hasn't already been pulled
-    to balance ROI. Ignoring choices for the same reason as its exclusion
-    is for performance optimization, and it being pulled or not will not cause bugs
+   * because of the other landing page initial load sync test,
+   * we can rely on that data already being here and focus on the
+   * the data that hasn't yet been synced. A project page nav sync
+   * will technically pull more than this
+   * (the stuff that gets pulled on a non project page load minus choices),
+   * but we are going to just test the data that hasn't already been pulled
+   * to balance ROI. Ignoring choices for the same reason as its exclusion
+   * is for performance optimization, and it being pulled or not will not cause bugs
    */
   expect((await dexieInstance.collect_records.toArray()).length).toEqual(0)
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(0)
@@ -169,20 +169,34 @@ test('Sync: initial page load already done, navigate to non project page', async
 
   userEvent.click(firstProjectListed)
 
-  // await waitForElementToBeRemoved(() =>
-  //   screen.queryByLabelText('loading indicator'),
-  // )
+  /**
+   * api syncing can cause the loading indicator to initially be absent,
+   * and then show up. for the test to work, we need to wait for
+   * the loading indicator to show first before we wait for it to disappear
+   */
 
-  // expect((await dexieInstance.collect_records.toArray()).length).toEqual(
-  //   mockMermaidData.collect_records.length,
-  // )
-  // expect((await dexieInstance.project_managements.toArray()).length).toEqual(
-  //   mockMermaidData.project_managements.length,
-  // )
-  // expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
-  //   mockMermaidData.project_profiles.length,
-  // )
-  // expect((await dexieInstance.project_sites.toArray()).length).toEqual(
-  //   mockMermaidData.project_sites.length,
-  // )
+  await screen.findByLabelText('project pages loading indicator')
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('project pages loading indicator'),
+  )
+
+  // this makes the act errors disappear.
+  expect(
+    within(await screen.findByTestId('collect-record-count')).getByText(
+      mockMermaidData.collect_records.length,
+    ),
+  )
+
+  expect((await dexieInstance.collect_records.toArray()).length).toEqual(
+    mockMermaidData.collect_records.length,
+  )
+  expect((await dexieInstance.project_managements.toArray()).length).toEqual(
+    mockMermaidData.project_managements.length,
+  )
+  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
+    mockMermaidData.project_profiles.length,
+  )
+  expect((await dexieInstance.project_sites.toArray()).length).toEqual(
+    mockMermaidData.project_sites.length,
+  )
 })

@@ -12,8 +12,13 @@ import {
   getMockOnlineDatabaseSwitchboardInstance,
   getMockOfflineDatabaseSwitchboardInstance,
 } from './mockOnlineDatabaseSwitchboardInstance'
+import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
-const AuthenticatedProviders = ({ children, initialEntries }) => (
+const AuthenticatedProviders = ({
+  children,
+  initialEntries,
+  isSyncInProgressOverride,
+}) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
@@ -23,7 +28,13 @@ const AuthenticatedProviders = ({ children, initialEntries }) => (
     }}
   >
     <MemoryRouter initialEntries={initialEntries}>
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <SyncStatusProvider
+          value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}
+        >
+          {children}
+        </SyncStatusProvider>
+      </ThemeProvider>
     </MemoryRouter>
   </Auth0Context.Provider>
 )
@@ -33,7 +44,9 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
     value={{ isAuthenticated: false, loginWithRedirect: () => {} }}
   >
     <MemoryRouter initialEntries={initialEntries}>
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <SyncStatusProvider>{children}</SyncStatusProvider>
+      </ThemeProvider>
     </MemoryRouter>
   </Auth0Context.Provider>
 )
@@ -41,9 +54,11 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
 AuthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
   initialEntries: PropTypes.arrayOf(PropTypes.string),
+  isSyncInProgressOverride: PropTypes.bool,
 }
 AuthenticatedProviders.defaultProps = {
   initialEntries: undefined,
+  isSyncInProgressOverride: false,
 }
 UnauthenticatedProviders.propTypes = {
   children: PropTypes.node.isRequired,
@@ -55,11 +70,19 @@ UnauthenticatedProviders.defaultProps = {
 
 const renderAuthenticatedOnline = (
   ui,
-  { renderOptions, initialEntries, dexieInstance } = {},
+  {
+    renderOptions,
+    initialEntries,
+    dexieInstance,
+    isSyncInProgressOverride,
+  } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
-      <AuthenticatedProviders initialEntries={initialEntries}>
+      <AuthenticatedProviders
+        initialEntries={initialEntries}
+        isSyncInProgressOverride={isSyncInProgressOverride}
+      >
         <DatabaseSwitchboardInstanceProvider
           value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
         >
@@ -96,11 +119,19 @@ const renderUnauthenticatedOnline = (
 
 const renderAuthenticatedOffline = (
   ui,
-  { renderOptions, initialEntries, dexieInstance } = {},
+  {
+    renderOptions,
+    initialEntries,
+    dexieInstance,
+    isSyncInProgressOverride,
+  } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
-      <AuthenticatedProviders initialEntries={initialEntries}>
+      <AuthenticatedProviders
+        initialEntries={initialEntries}
+        isSyncInProgressOverride={isSyncInProgressOverride}
+      >
         <DatabaseSwitchboardInstanceProvider
           value={getMockOfflineDatabaseSwitchboardInstance(dexieInstance)}
         >

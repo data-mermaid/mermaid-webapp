@@ -16,10 +16,13 @@ test('Collect Records table sorts properly by method column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -41,10 +44,13 @@ test('Collect Records table sorts properly by site column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -73,10 +79,13 @@ test('Collect Records table sorts properly by management column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -105,10 +114,13 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -137,10 +149,13 @@ test('Collect Records table sorts properly by size column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -169,10 +184,13 @@ test('Collect Records table sorts properly by depth column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -200,10 +218,13 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -236,10 +257,13 @@ test('Collect Records table sorts properly by observers column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -276,10 +300,13 @@ test('Collect Records table sorts properly by status column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -310,9 +337,12 @@ test('Collect Records table changes number of rows visible size when pagination 
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
   const table = screen.getByRole('table')
 
@@ -334,9 +364,12 @@ test('Collect Records table change pages when different page is selected ', asyn
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, { dexieInstance })
+  renderAuthenticatedOnline(<Collect />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')

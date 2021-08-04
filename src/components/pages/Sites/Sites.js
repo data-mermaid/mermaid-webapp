@@ -232,7 +232,7 @@ const Sites = () => {
         </>
       }
       content={table}
-      isLoading={isLoading}
+      isPageContentLoading={isLoading}
     />
   )
 }

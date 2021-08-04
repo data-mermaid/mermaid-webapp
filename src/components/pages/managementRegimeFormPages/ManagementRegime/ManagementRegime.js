@@ -72,7 +72,7 @@ const ManagementRegime = () => {
     <Formik {...formikOptions}>
       {(formik) => (
         <ContentPageLayout
-          isLoading={isLoading}
+          isPageContentLoading={isLoading}
           content={
             <>
               <form id="management-regime-id">
