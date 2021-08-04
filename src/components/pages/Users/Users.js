@@ -1,8 +1,15 @@
-import { Formik } from 'formik'
 import { toast } from 'react-toastify'
-import React, { useState, useEffect, useMemo } from 'react'
+import PropTypes from 'prop-types'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 
+import { matchSorter } from 'match-sorter'
+import {
+  usePagination,
+  useSortBy,
+  useGlobalFilter,
+  useTable,
+} from 'react-table'
 import { getProjectProfilesInitialValues } from './projectProfileInitialFormValues'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
@@ -24,51 +31,22 @@ import {
   Th,
   Td,
   TableOverflowWrapper,
+  TableNavigation,
 } from '../../generic/Table/table'
+import PageSelector from '../../generic/Table/PageSelector'
+import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { Row, RowSpaceBetween } from '../../generic/positioning'
 import theme from '../../../theme'
 import language from '../../../language'
 import useIsMounted from '../../../library/useIsMounted'
-
-const UsersTable = styled(Table)`
-  td {
-    position: relative;
-    label {
-      position: absolute;
-      top: 0;
-      left: 0;
-      display: grid;
-      place-items: center;
-      width: 100%;
-      height: 100%;
-    }
-  }
-`
-
-const ProfileNameCell = styled.div`
-  display: flex;
-  width: 200px;
-  svg {
-    margin-right: 10px;
-  }
-`
+import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
   ${mediaQueryPhoneOnly(css`
     padding: ${theme.spacing.xsmall};
   `)}
-`
-
-const FilterLabelWrapper = styled.label`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  margin-right: 10px;
-  > input {
-    ${inputStyles}
-    width: 50%;
-  }
 `
 
 const SearchEmailSectionWrapper = styled.div`
@@ -94,6 +72,7 @@ const ToolbarRowWrapper = styled(Row)`
 const AddUserButton = styled(ButtonSecondary)`
   margin-top: 20px;
 `
+
 const Users = () => {
   const { isOnline } = useOnlineStatus()
 
@@ -118,139 +97,204 @@ const Users = () => {
     }
   }, [databaseSwitchboardInstance, isMounted])
 
-  const initialFormValues = useMemo(
-    () => getProjectProfilesInitialValues(observerProfiles),
+  const tableColumns = useMemo(() => {
+    const getObserverRole = (name) =>
+      observerProfiles.find((profile) => profile.profile_name === name).role
+
+    const tableRadioCell = (rowValues, value) => {
+      return (
+        <label htmlFor={`observer-${rowValues.name}`}>
+          <input
+            type="radio"
+            value={value}
+            name={rowValues.name}
+            id={`observer-${rowValues.name}`}
+            checked={getObserverRole(rowValues.name) === value}
+            onChange={(event) => {
+              const observers = [...observerProfiles]
+
+              const foundObserver = observers.find(
+                (profile) => profile.profile_name === rowValues.name,
+              )
+
+              foundObserver.role = parseInt(event.target.value, 10)
+
+              setObserverProfiles(observers)
+            }}
+          />
+        </label>
+      )
+    }
+
+    return [
+      {
+        Header: 'Name',
+        accessor: 'name',
+      },
+      {
+        Header: 'Email',
+        accessor: 'email',
+      },
+      {
+        Header: 'Admin',
+        Cell: ({ row: { values } }) => tableRadioCell(values, 90),
+      },
+      {
+        Header: 'Collector',
+        Cell: ({ row: { values } }) => tableRadioCell(values, 50),
+      },
+      {
+        Header: 'Read-Only',
+        Cell: ({ row: { values } }) => tableRadioCell(values, 10),
+      },
+      {
+        Header: 'Active Sample Units',
+        accessor: 'active',
+      },
+      {
+        Header: 'Transfer Sample Units',
+        Cell: ({ row }) => (
+          <ButtonSecondary
+            type="button"
+            onClick={() => {
+              console.log(row)
+            }}
+          >
+            <IconAccountConvert />
+          </ButtonSecondary>
+        ),
+      },
+      {
+        Header: 'Remove From Projects',
+        Cell: ({ row }) => (
+          <ButtonSecondary
+            type="button"
+            onClick={() => {
+              console.log(row)
+            }}
+          >
+            <IconAccountRemove />
+          </ButtonSecondary>
+        ),
+      },
+    ]
+  }, [observerProfiles])
+
+  const tableCellData = useMemo(
+    () =>
+      observerProfiles.map((observer) => {
+        return {
+          name: observer.profile_name,
+          email: 'WIP',
+          active: 'WIP',
+        }
+      }),
     [observerProfiles],
   )
 
-  const formikOptions = {
-    initialValues: initialFormValues,
-    enableReinitialize: true,
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = ['values.name', 'values.email']
+
+    const queryTerms = splitSearchQueryStrings(query)
+
+    if (!queryTerms) {
+      return rows
+    }
+
+    return queryTerms.reduce(
+      (results, term) => matchSorter(results, term, { keys }),
+      rows,
+    )
+  }, [])
+
+  const {
+    canNextPage,
+    canPreviousPage,
+    getTableBodyProps,
+    getTableProps,
+    gotoPage,
+    headerGroups,
+    nextPage,
+    page,
+    pageOptions,
+    prepareRow,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns: tableColumns,
+      data: tableCellData,
+      initialState: { pageSize: 10 },
+      globalFilter: tableGlobalFilters,
+    },
+    useGlobalFilter,
+    useSortBy,
+    usePagination,
+  )
+
+  const handleRowsNumberChange = (e) => {
+    setPageSize(Number(e.target.value))
   }
 
-  const handleProfileRoleChange = (profiles, id, value) => {
-    const foundObserver = profiles.find((profile) => profile.id === id)
-
-    foundObserver.role = parseInt(value, 10)
-
-    return profiles
-  }
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const table = (
-    <Formik {...formikOptions}>
-      {(formik) => (
-        <TableOverflowWrapper>
-          <UsersTable>
-            <thead>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Email</Th>
-                <Th>Admin</Th>
-                <Th>Collector</Th>
-                <Th>Read-Only</Th>
-                <Th>Active Sample Units</Th>
-                <Th>Transfer Sample Units</Th>
-                <Th>Remove From Projects</Th>
-              </Tr>
-            </thead>
-            <tbody>
-              {observerProfiles &&
-                observerProfiles.map((observer) => (
-                  <Tr key={observer.id}>
-                    <Td>
-                      <ProfileNameCell>
-                        <IconAccount />
-                        {observer.profile_name}
-                      </ProfileNameCell>
-                    </Td>
-                    <Td>WIP</Td>
-                    <Td>
-                      <label htmlFor={`observer-${observer.profile_name}`}>
-                        <input
-                          type="radio"
-                          value={90}
-                          name={observer.profile_name}
-                          id={`observer-${observer.profile_name}`}
-                          checked={observer.role === 90}
-                          onChange={(event) => {
-                            const updatedProfile = handleProfileRoleChange(
-                              formik.values.project_profiles,
-                              observer.id,
-                              event.target.value,
-                            )
-
-                            formik.setFieldValue(
-                              'project_profiles',
-                              updatedProfile,
-                            )
-                          }}
-                        />
-                      </label>{' '}
-                    </Td>
-                    <Td>
-                      <label htmlFor={`observer-${observer.profile_name}`}>
-                        <input
-                          type="radio"
-                          value={50}
-                          name={observer.profile_name}
-                          id={`observer-${observer.profile_name}`}
-                          checked={observer.role === 50}
-                          onChange={(event) => {
-                            const updatedProfile = handleProfileRoleChange(
-                              formik.values.project_profiles,
-                              observer.id,
-                              event.target.value,
-                            )
-
-                            formik.setFieldValue(
-                              'project_profiles',
-                              updatedProfile,
-                            )
-                          }}
-                        />
-                      </label>{' '}
-                    </Td>
-                    <Td>
-                      <label htmlFor={`observer-${observer.profile_name}`}>
-                        <input
-                          type="radio"
-                          value={10}
-                          name={observer.profile_name}
-                          id={`observer-${observer.profile_name}`}
-                          checked={observer.role === 10}
-                          onChange={(event) => {
-                            const updatedProfile = handleProfileRoleChange(
-                              formik.values.project_profiles,
-                              observer.id,
-                              event.target.value,
-                            )
-
-                            formik.setFieldValue(
-                              'project_profiles',
-                              updatedProfile,
-                            )
-                          }}
-                        />
-                      </label>{' '}
-                    </Td>
-                    <Td>WIP</Td>
-                    <Td align="center">
-                      <ButtonSecondary type="button">
-                        <IconAccountConvert />
-                      </ButtonSecondary>
-                    </Td>
-                    <Td align="center">
-                      <ButtonSecondary type="button">
-                        <IconAccountRemove />
-                      </ButtonSecondary>
-                    </Td>
-                  </Tr>
+    <>
+      <TableOverflowWrapper>
+        <Table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <Th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    isSorted={column.isSorted}
+                    isSortedDescending={column.isSortedDesc}
+                  >
+                    {column.render('Header')}
+                  </Th>
                 ))}
-            </tbody>
-          </UsersTable>
-        </TableOverflowWrapper>
-      )}
-    </Formik>
+              </Tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row)
+
+              return (
+                <Tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                        {cell.render('Cell')}
+                      </Td>
+                    )
+                  })}
+                </Tr>
+              )
+            })}
+          </tbody>
+        </Table>
+      </TableOverflowWrapper>
+      <TableNavigation>
+        <PageSizeSelector
+          onChange={handleRowsNumberChange}
+          pageSize={pageSize}
+          pageSizeOptions={[10, 50, 100]}
+        />
+        <PageSelector
+          onPreviousClick={previousPage}
+          previousDisabled={!canPreviousPage}
+          onNextClick={nextPage}
+          nextDisabled={!canNextPage}
+          onGoToPage={gotoPage}
+          currentPageIndex={pageIndex}
+          pageCount={pageOptions.length}
+        />
+      </TableNavigation>
+    </>
   )
 
   const content = isOnline ? <> {table}</> : <PageUnavailableOffline />
@@ -269,15 +313,10 @@ const Users = () => {
             </ButtonSecondary>
           </RowSpaceBetween>
           <ToolbarRowWrapper>
-            <FilterLabelWrapper htmlFor="filter_projects">
-              {language.pages.userTable.filterToolbarText}
-              <input
-                type="text"
-                id="search-emails"
-                value=""
-                onChange={() => {}}
-              />
-            </FilterLabelWrapper>
+            <FilterSearchToolbar
+              name={language.pages.userTable.filterToolbarText}
+              handleGlobalFilterChange={handleGlobalFilterChange}
+            />
             <SearchEmailSectionWrapper>
               <SearchEmailLabelWrapper htmlFor="filter_projects">
                 {language.pages.userTable.searchEmailToolbarText}
@@ -298,6 +337,18 @@ const Users = () => {
       }
     />
   )
+}
+
+Users.propTypes = {
+  row: PropTypes.shape({
+    original: PropTypes.shape({
+      name: PropTypes.string,
+    }),
+  }),
+}
+
+Users.defaultProps = {
+  row: undefined,
 }
 
 export default Users

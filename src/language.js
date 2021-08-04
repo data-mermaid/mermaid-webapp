@@ -90,7 +90,7 @@ const pages = {
       'Filter sample units by method, site, management, or observer',
   },
   userTable: {
-    filterToolbarText: 'Filter users by name, or role',
+    filterToolbarText: 'Filter users by name, or email',
     searchEmailToolbarText: 'Enter email address of user to add',
   },
   submittedFishBeltForm: {
