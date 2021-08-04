@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Input, InputRow, HelperText, ValidationMessage } from '../form'
 import InputNumberNoScrollWithUnit from '../InputNumberNoScrollWithUnit'
-import { useNoInputScrolling } from '../../../library/useNoInputScrolling'
+import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
 
 const InputWithLabelAndValidation = ({
   label,
@@ -16,7 +16,7 @@ const InputWithLabelAndValidation = ({
 }) => {
   const textFieldRef = useRef()
 
-  useNoInputScrolling(textFieldRef)
+  useStopInputScrollingIncrementNumber(textFieldRef)
 
   const inputType = unit ? (
     <InputNumberNoScrollWithUnit
