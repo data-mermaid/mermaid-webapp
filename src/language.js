@@ -92,6 +92,7 @@ const pages = {
   userTable: {
     filterToolbarText: 'Filter users by name, or email',
     searchEmailToolbarText: 'Enter email address of user to add',
+    warningBadgeMessage: `Some Sample Units can't be submitted because the user is in read-only mode.`,
   },
   submittedFishBeltForm: {
     toolbarLabel: 'Submitted sample units are read-only',

@@ -12,7 +12,9 @@ import {
 } from 'react-table'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
+import { InputRow } from '../../generic/form'
 import {
+  IconAccount,
   IconAccountConvert,
   IconAccountRemove,
   IconSave,
@@ -71,11 +73,31 @@ const AddUserButton = styled(ButtonSecondary)`
   margin-top: 20px;
 `
 
+const WarningBadgeWrapper = styled('div')`
+  padding: 10px 0;
+`
+
+const WarningTextStyle = styled(InputRow)`
+  grid-template-columns: 1fr;
+  ${(props) =>
+    props.validationType === 'warning' &&
+    css`
+      border-color: ${theme.color.warningColor};
+      background: #f0e0b3;
+    `}
+`
+
+const NameCellStyle = styled('div')`
+  display: flex;
+  width: 250px;
+`
+
 const Users = () => {
   const { isOnline } = useOnlineStatus()
 
   const [observerProfiles, setObserverProfiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [isReadonlyUserWithActiveSampleUnits] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
 
@@ -161,7 +183,11 @@ const Users = () => {
 
     return observerProfiles.map(({ profile_name }) => {
       return {
-        name: profile_name,
+        name: (
+          <NameCellStyle>
+            <IconAccount /> {profile_name}
+          </NameCellStyle>
+        ),
         email: 'WIP',
         admin: observerRoleRadioCell(profile_name, 90),
         collector: observerRoleRadioCell(profile_name, 50),
@@ -223,9 +249,7 @@ const Users = () => {
     usePagination,
   )
 
-  const handleRowsNumberChange = (e) => {
-    setPageSize(Number(e.target.value))
-  }
+  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
@@ -322,6 +346,13 @@ const Users = () => {
               </AddUserButton>
             </SearchEmailSectionWrapper>
           </ToolbarRowWrapper>
+          {isReadonlyUserWithActiveSampleUnits && (
+            <WarningBadgeWrapper>
+              <WarningTextStyle validationType="warning">
+                {language.pages.userTable.warningBadgeMessage}
+              </WarningTextStyle>
+            </WarningBadgeWrapper>
+          )}
         </>
       }
     />
