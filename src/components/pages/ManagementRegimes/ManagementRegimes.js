@@ -66,7 +66,7 @@ const ManagementRegimes = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'Management Regime Name',
         accessor: 'name',
         sortType: reactTableNaturalSort,
       },

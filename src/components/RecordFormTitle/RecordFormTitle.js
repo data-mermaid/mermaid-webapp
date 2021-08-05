@@ -27,7 +27,7 @@ const RecordFormTitle = ({
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
 
   const siteName =
-    siteId && sites.length > 0 ? getObjectById(sites, siteId).name : ''
+    siteId && sites.length > 0 ? getObjectById(sites, siteId)?.name : ''
   const transectNumber =
     submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.number || ''
   const label =
