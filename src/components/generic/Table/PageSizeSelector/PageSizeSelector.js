@@ -5,6 +5,7 @@ import { Select } from '../../form'
 
 const PageSizeSelect = styled(Select)`
   width: auto;
+  min-width: auto;
 `
 
 const PageSizeSelector = ({ pageSize, pageSizeOptions, onChange }) => {

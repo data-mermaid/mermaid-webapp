@@ -47,7 +47,7 @@ const ProjectCard = ({ project, ...restOfProps }) => {
         <h2>{name}</h2>
       </ProjectNameWrapper>
       <ProjectInfoWrapper>
-        <p>{countries.join(',')}</p>
+        <p>{countries.join(', ')}</p>
         <p>
           {num_sites} {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
