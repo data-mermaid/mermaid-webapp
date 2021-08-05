@@ -26,7 +26,7 @@ export const pullApiData = async ({
     {},
   )
 
-  const { data: apiData } = await axios.post(
+  const pullResponse = await axios.post(
     `${apiBaseUrl}/pull/`,
     pullRequestBody,
     {
@@ -36,12 +36,14 @@ export const pullApiData = async ({
     },
   )
 
+  const apiData = pullResponse.data
+
   await persistLastRevisionNumbersPulled({
     dexieInstance,
     apiData,
   })
 
-  return dexieInstance.transaction(
+  await dexieInstance.transaction(
     'rw',
     dexieInstance.benthic_attributes,
     dexieInstance.choices,
@@ -71,11 +73,13 @@ export const pullApiData = async ({
           updates.forEach((updatedItem) => {
             dexieInstance[apiDataType].put(updatedItem)
           })
-          deletes.deletes?.forEach(({ id }) => {
+          deletes.forEach(({ id }) => {
             dexieInstance[apiDataType].delete(id)
           })
         }
       })
     },
   )
+
+  return pullResponse
 }
