@@ -80,7 +80,7 @@ const GlobalNav = styled('nav')`
       position: absolute;
       top: ${theme.spacing.headerHeight};
       right: 0;
-      background-color: ${theme.color.black};
+      background-color: ${theme.color.primaryColor};
       border-style: solid;
       border-width: 0 1px 1px 1px;
       border-color: ${theme.color.border};
@@ -97,7 +97,7 @@ const GlobalNav = styled('nav')`
       background: none;
     }
     .menuDropdown {
-      background-color: ${theme.color.black};
+      background-color: ${theme.color.primaryColor};
     }
     a,
     div p,

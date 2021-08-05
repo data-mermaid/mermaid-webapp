@@ -114,7 +114,9 @@ export const ButtonThatLooksLikeLink = styled('button')`
   cursor: pointer;
   overflow: visible; /* IE hack */
   width: auto; /* IE hack */
-  color: blue;
+  &:disabled {
+    color: ${theme.color.disabledText};
+  }
 `
 export const ToolbarButtonWrapper = styled('div')`
   button {
