@@ -27,17 +27,17 @@ const HideShow = ({ contents, button }) => {
   }
 
   useEffect(() => {
-    const snapShotRef = buttonRef.current
+    const currentButtonRef = buttonRef.current
 
     window.addEventListener('click', (ev) => {
-      if (!(snapShotRef && snapShotRef.contains(ev.target))) {
+      if (!(currentButtonRef && currentButtonRef.contains(ev.target))) {
         setShowItems(false)
       }
     })
 
     return () => {
       window.removeEventListener('click', (ev) => {
-        if (!(snapShotRef && snapShotRef.contains(ev.target))) {
+        if (!(currentButtonRef && currentButtonRef.contains(ev.target))) {
           setShowItems(false)
         }
       })
