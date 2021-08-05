@@ -82,7 +82,7 @@ const SubmittedFishBelt = () => {
 
   return (
     <ContentPageLayout
-      isLoading={isLoading}
+      isPageContentLoading={isLoading}
       content={
         <>
           <SubmittedFishBeltInfoTable

@@ -314,7 +314,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       <Formik {...formikOptions}>
         {(formik) => (
           <ContentPageLayout
-            isLoading={isLoading}
+            isPageContentLoading={isLoading}
             content={
               <>
                 <form

@@ -11,6 +11,7 @@ import reportWebVitals from './reportWebVitals'
 import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
 import dexieInstance from './App/mermaidData/dexieInstance'
+import { SyncStatusProvider } from './App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -23,7 +24,9 @@ ReactDOM.render(
     >
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <OnlineStatusProvider>
-          <App dexieInstance={dexieInstance} />
+          <SyncStatusProvider>
+            <App dexieInstance={dexieInstance} />
+          </SyncStatusProvider>
         </OnlineStatusProvider>
       </BrowserRouter>
     </Auth0Provider>

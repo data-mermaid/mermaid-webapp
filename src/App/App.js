@@ -8,7 +8,7 @@ import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
 import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
-import { useSyncApiData } from './mermaidData/syncApiDataIntoOfflineStorage/useSyncApiDataIntoOfflineStorage'
+import { useSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useSyncApiDataIntoOfflineStorage'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
@@ -31,7 +31,7 @@ function App({ dexieInstance }) {
   } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-  const { isOfflineStorageHydrated } = useSyncApiData({
+  const { isOfflineStorageHydrated } = useSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
     auth0Token,
     dexieInstance,

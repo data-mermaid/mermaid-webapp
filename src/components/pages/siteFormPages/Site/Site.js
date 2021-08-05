@@ -71,7 +71,7 @@ const Site = () => {
     <Formik {...formikOptions}>
       {(formik) => (
         <ContentPageLayout
-          isLoading={isLoading}
+          isPageContentLoading={isLoading}
           content={
             <>
               <form id="site-form">

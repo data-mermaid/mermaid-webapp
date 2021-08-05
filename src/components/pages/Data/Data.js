@@ -247,7 +247,7 @@ const Data = () => {
           handleGlobalFilterChange={handleGlobalFilterChange}
         />
       }
-      isLoading={isLoading}
+      isPageContentLoading={isLoading}
     />
   )
 }
