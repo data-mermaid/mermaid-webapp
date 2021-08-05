@@ -32,11 +32,12 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
@@ -83,11 +84,12 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   expect(
@@ -134,11 +136,12 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   // Site select
@@ -191,11 +194,12 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
@@ -228,11 +232,12 @@ test('FishBelt component in EDIT mode - button group shows only save button when
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
@@ -265,11 +270,12 @@ test('Fishbelt observations: add row button adds a row', async () => {
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const observationsBeforeAdd = screen.getAllByRole('table')[0]
@@ -295,11 +301,12 @@ test('Fishbelt observations: delete observation button deleted observation', asy
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const formBeforeDelete = screen.getByRole('form')
@@ -342,11 +349,12 @@ test('FishBelt component in EDIT mode - when change binsize = 10, fish size valu
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const fishbeltForm = screen.getByRole('form')
@@ -380,11 +388,12 @@ test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size v
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const fishbeltForm = screen.getByRole('form')
@@ -418,11 +427,12 @@ test('FishBelt component in EDIT mode - when change binsize = 1, fish size value
     {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
       dexieInstance,
+      isSyncInProgressOverride: true,
     },
   )
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
   const fishbeltForm = screen.getByRole('form')
 

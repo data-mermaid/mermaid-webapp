@@ -11,10 +11,10 @@ import {
 import Sites from './Sites'
 
 test('Site component renders with the expected headers', async () => {
-  renderAuthenticatedOnline(<Sites />)
+  renderAuthenticatedOnline(<Sites />, { isSyncInProgressOverride: true })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -28,10 +28,10 @@ test('Site component renders with the expected headers', async () => {
 })
 
 test('Site Records table sorts properly by Name column', async () => {
-  renderAuthenticatedOnline(<Sites />)
+  renderAuthenticatedOnline(<Sites />, { isSyncInProgressOverride: true })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -56,10 +56,10 @@ test('Site Records table sorts properly by Name column', async () => {
 })
 
 test('Site Records table sorts properly by Reef Type column', async () => {
-  renderAuthenticatedOnline(<Sites />)
+  renderAuthenticatedOnline(<Sites />, { isSyncInProgressOverride: true })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -84,10 +84,10 @@ test('Site Records table sorts properly by Reef Type column', async () => {
 })
 
 test('Site Records table sorts properly by Reef Zone column', async () => {
-  renderAuthenticatedOnline(<Sites />)
+  renderAuthenticatedOnline(<Sites />, { isSyncInProgressOverride: true })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')
@@ -112,10 +112,10 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
 })
 
 test('Site Records table sorts properly by Exposure column', async () => {
-  renderAuthenticatedOnline(<Sites />)
+  renderAuthenticatedOnline(<Sites />, { isSyncInProgressOverride: true })
 
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   const table = screen.getByRole('table')

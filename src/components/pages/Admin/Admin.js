@@ -278,7 +278,7 @@ const Admin = () => {
 
   return (
     <ContentPageLayout
-      isLoading={isLoading}
+      isPageContentLoading={isLoading}
       content={content}
       toolbar={
         <>

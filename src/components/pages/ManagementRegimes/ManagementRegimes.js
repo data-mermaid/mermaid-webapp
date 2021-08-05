@@ -269,7 +269,7 @@ const ManagementRegimes = () => {
         </>
       }
       content={table}
-      isLoading={isLoading}
+      isPageContentLoading={isLoading}
     />
   )
 }

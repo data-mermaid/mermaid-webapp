@@ -6,6 +6,7 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import language from '../../language'
 import theme from '../../theme'
 import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
+import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const CollectRecordsCountWrapper = styled.strong`
   background: ${theme.color.calloutColor};
@@ -25,31 +26,34 @@ const CollectRecordsCountWrapper = styled.strong`
 
 const CollectRecordsCount = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
 
   const [collectRecordsCount, setCollectRecordsCount] = useState(0)
 
   const _getCollectRecordCount = useEffect(() => {
     let isMounted = true
 
-    databaseSwitchboardInstance
-      .getCollectRecords()
-      .then((collectRecords) => {
-        if (isMounted) {
-          setCollectRecordsCount(collectRecords.length)
-        }
-      })
-      .catch(() => {
-        toast.warn(language.error.collectRecordsUnavailable)
-      })
+    if (!isSyncInProgress) {
+      databaseSwitchboardInstance
+        .getCollectRecords()
+        .then((collectRecords) => {
+          if (isMounted) {
+            setCollectRecordsCount(collectRecords.length)
+          }
+        })
+        .catch(() => {
+          toast.warn(language.error.collectRecordsUnavailable)
+        })
+    }
 
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, isSyncInProgress])
 
   return (
     !!collectRecordsCount && (
-      <CollectRecordsCountWrapper>
+      <CollectRecordsCountWrapper data-testid="collect-record-count">
         {collectRecordsCount}
       </CollectRecordsCountWrapper>
     )

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import language from '../../../language'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
+import { useSyncStatus } from './SyncStatusContext'
 
 const getProjectIdFromLocation = (location) => {
   const { pathname } = location
@@ -14,7 +15,7 @@ const getProjectIdFromLocation = (location) => {
   return projectId
 }
 
-export const useSyncApiData = ({
+export const useSyncApiDataIntoOfflineStorage = ({
   apiBaseUrl,
   auth0Token,
   dexieInstance,
@@ -35,6 +36,7 @@ export const useSyncApiData = ({
       }),
     [dexieInstance, apiBaseUrl, auth0Token],
   )
+  const { setIsSyncInProgress } = useSyncStatus()
 
   const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {
     const isOnlineAndReady =
@@ -60,13 +62,16 @@ export const useSyncApiData = ({
 
     if (isOfflineAndReadyAndAlreadyInitiated) {
       setIsOfflineStorageHydrated(true)
+      setIsSyncInProgress(false)
     }
 
     if (isInitialLoadOnNonProjectPage) {
+      setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverythingButProjectRelated()
         .then(() => {
           setIsOfflineStorageHydrated(true)
+          setIsSyncInProgress(false)
           isPageReload.current = false
         })
         .catch(() => {
@@ -75,10 +80,12 @@ export const useSyncApiData = ({
     }
 
     if (isInitialLoadOnProjectPage) {
+      setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverything(projectId)
         .then(() => {
           setIsOfflineStorageHydrated(true)
+          setIsSyncInProgress(false)
           isPageReload.current = false
         })
         .catch(() => {
@@ -86,19 +93,24 @@ export const useSyncApiData = ({
         })
     }
     if (isNotInitialLoadOnProjectPage) {
+      setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverythingButChoices(projectId)
+        .then(() => {
+          setIsSyncInProgress(false)
+        })
         .catch(() => {
           toast.error(language.error.apiDataPull)
         })
     }
   }, [
-    isOnline,
     apiBaseUrl,
     auth0Token,
     dexieInstance,
     isMounted,
+    isOnline,
     location,
+    setIsSyncInProgress,
     syncApiDataIntoOfflineStorage,
   ])
 

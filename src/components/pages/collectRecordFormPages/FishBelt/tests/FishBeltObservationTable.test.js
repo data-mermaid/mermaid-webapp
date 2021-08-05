@@ -20,9 +20,10 @@ const fakeCurrentUser = {
 test('FishBelt observations size shows a numeric input when fish bin size is undefined', async () => {
   renderAuthenticatedOnline(
     <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
+    { isSyncInProgressOverride: true },
   )
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
   const fishbeltForm = screen.getByRole('form')
 
@@ -38,9 +39,10 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 test('FishBelt observations size shows a numeric input when fish bin size is undefined', async () => {
   renderAuthenticatedOnline(
     <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
+    { isSyncInProgressOverride: true },
   )
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
   const fishbeltForm = screen.getByRole('form')
 
@@ -60,9 +62,10 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 test('FishBelt observations size shows a select input when fish bin size is 5', async () => {
   renderAuthenticatedOnline(
     <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
+    { isSyncInProgressOverride: true },
   )
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
   const fishbeltForm = screen.getByRole('form')
 
@@ -84,9 +87,10 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
 test('FishBelt observations size shows a select input when fish bin size is 10', async () => {
   renderAuthenticatedOnline(
     <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
+    { isSyncInProgressOverride: true },
   )
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
   const fishbeltForm = screen.getByRole('form')
 
@@ -108,9 +112,10 @@ test('FishBelt observations size shows a select input when fish bin size is 10',
 test('FishBelt observations size shows a select input when fish bin size is AGRRA', async () => {
   renderAuthenticatedOnline(
     <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
+    { isSyncInProgressOverride: true },
   )
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
   const fishbeltForm = screen.getByRole('form')
 
@@ -132,9 +137,10 @@ test('FishBelt observations size shows a select input when fish bin size is AGRR
 test('Fishbelt observations shows extra input for sizes over 50', async () => {
   renderAuthenticatedOnline(
     <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
+    { isSyncInProgressOverride: true },
   )
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('project pages loading indicator'),
   )
   const fishbeltForm = screen.getByRole('form')
 
@@ -158,6 +164,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 test('Fishbelt observations hide and show fish name reference link appropriately', async () => {
   renderAuthenticatedOnline(
     <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
+    { isSyncInProgressOverride: true },
   )
 
   userEvent.click(await screen.findByRole('button', { name: 'Add Row' }))

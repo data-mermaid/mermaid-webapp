@@ -208,7 +208,12 @@ const FishBeltObservationTable = ({
 
       setHaveApiObservationsBeenLoaded(true)
     }
-  }, [collectRecord, observationsDispatch, haveApiObservationsBeenLoaded])
+  }, [
+    collectRecord,
+    getPersistedUnsavedObservationsData,
+    haveApiObservationsBeenLoaded,
+    observationsDispatch,
+  ])
 
   const handleDeleteObservation = (observationId) => {
     setAreObservationsInputsDirty(true)
