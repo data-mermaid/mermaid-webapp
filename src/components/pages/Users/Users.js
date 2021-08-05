@@ -97,7 +97,7 @@ const Users = () => {
 
   const [observerProfiles, setObserverProfiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [isReadonlyUserWithActiveSampleUnits] = useState(true)
+  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
 
