@@ -96,34 +96,6 @@ const Users = () => {
   }, [databaseSwitchboardInstance, isMounted])
 
   const tableColumns = useMemo(() => {
-    const getObserverRole = (name) =>
-      observerProfiles.find((profile) => profile.profile_name === name).role
-
-    const tableRadioCell = (rowValues, value) => {
-      return (
-        <label htmlFor={`observer-${rowValues.name}`}>
-          <input
-            type="radio"
-            value={value}
-            name={rowValues.name}
-            id={`observer-${rowValues.name}`}
-            checked={getObserverRole(rowValues.name) === value}
-            onChange={(event) => {
-              const observers = [...observerProfiles]
-
-              const foundObserver = observers.find(
-                (profile) => profile.profile_name === rowValues.name,
-              )
-
-              foundObserver.role = parseInt(event.target.value, 10)
-
-              setObserverProfiles(observers)
-            }}
-          />
-        </label>
-      )
-    }
-
     return [
       {
         Header: 'Name',
@@ -135,15 +107,15 @@ const Users = () => {
       },
       {
         Header: 'Admin',
-        Cell: ({ row: { values } }) => tableRadioCell(values, 90),
+        accessor: 'admin',
       },
       {
         Header: 'Collector',
-        Cell: ({ row: { values } }) => tableRadioCell(values, 50),
+        accessor: 'collector',
       },
       {
         Header: 'Read-Only',
-        Cell: ({ row: { values } }) => tableRadioCell(values, 10),
+        accessor: 'readonly',
       },
       {
         Header: 'Active Sample Units',
@@ -151,34 +123,63 @@ const Users = () => {
       },
       {
         Header: 'Transfer Sample Units',
-        Cell: () => (
+        accessor: 'transfer',
+      },
+      {
+        Header: 'Remove From Projects',
+        accessor: 'remove',
+      },
+    ]
+  }, [])
+
+  const tableCellData = useMemo(() => {
+    const getObserverRole = (name) =>
+      observerProfiles.find((profile) => profile.profile_name === name).role
+
+    const observerRoleRadioCell = (name, value) => (
+      <label htmlFor={`observer-${name}`}>
+        <input
+          type="radio"
+          value={value}
+          name={name}
+          id={`observer-${name}`}
+          checked={getObserverRole(name) === value}
+          onChange={(event) => {
+            const observers = [...observerProfiles]
+
+            const foundObserver = observers.find(
+              ({ profile_name }) => profile_name === name,
+            )
+
+            foundObserver.role = parseInt(event.target.value, 10)
+
+            setObserverProfiles(observers)
+          }}
+        />
+      </label>
+    )
+
+    return observerProfiles.map(({ profile_name }) => {
+      return {
+        name: profile_name,
+        email: 'WIP',
+        admin: observerRoleRadioCell(profile_name, 90),
+        collector: observerRoleRadioCell(profile_name, 50),
+        readonly: observerRoleRadioCell(profile_name, 10),
+        active: 'WIP',
+        transfer: (
           <ButtonSecondary type="button" onClick={() => {}}>
             <IconAccountConvert />
           </ButtonSecondary>
         ),
-      },
-      {
-        Header: 'Remove From Projects',
-        Cell: () => (
+        remove: (
           <ButtonSecondary type="button" onClick={() => {}}>
             <IconAccountRemove />
           </ButtonSecondary>
         ),
-      },
-    ]
+      }
+    })
   }, [observerProfiles])
-
-  const tableCellData = useMemo(
-    () =>
-      observerProfiles.map((observer) => {
-        return {
-          name: observer.profile_name,
-          email: 'WIP',
-          active: 'WIP',
-        }
-      }),
-    [observerProfiles],
-  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name', 'values.email']
