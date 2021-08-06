@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 
@@ -20,11 +20,32 @@ const PositionedAncestor = styled.div`
 
 const HideShow = ({ contents, button }) => {
   const [showItems, setShowItems] = useState(false)
+  const buttonRef = useRef(null)
+
   const toggleShowItems = () => {
     setShowItems(!showItems)
   }
 
+  useEffect(() => {
+    const currentButtonRef = buttonRef.current
+
+    window.addEventListener('click', (event) => {
+      if (!(currentButtonRef && currentButtonRef.contains(event.target))) {
+        setShowItems(false)
+      }
+    })
+
+    return () => {
+      window.removeEventListener('click', (event) => {
+        if (!(currentButtonRef && currentButtonRef.contains(event.target))) {
+          setShowItems(false)
+        }
+      })
+    }
+  }, [buttonRef, showItems])
+
   const buttonForRender = React.cloneElement(button, {
+    ref: buttonRef,
     onClick: toggleShowItems,
   })
 
