@@ -243,13 +243,10 @@ test('Collect Records table sorts properly by sample date column', async () => {
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Sample Date'))
 
-  const tableRowsAfterFirstClick = within(table).getAllByRole('row')
+  const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
-  const tableCellsFromTableRowsAfterFirstClick = within(
-    tableRowsAfterFirstClick[1],
-  ).getAllByRole('cell')
-
-  expect(within(tableCellsFromTableRowsAfterFirstClick[6]).getByText(''))
+  //test last row. (heads up, this is a multi page table)
+  expect(within(tableRowsAfterSecondClick[10]).getByText('June 12, 2012'))
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
