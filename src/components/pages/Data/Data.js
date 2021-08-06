@@ -21,6 +21,7 @@ import {
   Td,
   TableOverflowWrapper,
   TableNavigation,
+  InnerCell,
 } from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
@@ -207,7 +208,7 @@ const Data = () => {
                   {row.cells.map((cell) => {
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
-                        {cell.render('Cell')}
+                        <InnerCell>{cell.render('Cell')}</InnerCell>
                       </Td>
                     )
                   })}

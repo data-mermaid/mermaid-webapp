@@ -96,3 +96,7 @@ export const Tr = styled.tr`
     background-color: ${theme.color.focusWithin};
   }
 `
+export const InnerCell = styled.span`
+  background: #789;
+  display: inline-block;
+`
