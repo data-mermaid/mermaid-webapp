@@ -34,7 +34,6 @@ export const TableOverflowWrapper = styled.div`
 `
 
 export const Table = styled.table`
-  table-layout: fixed;
   background: ${theme.color.secondaryColor};
   min-width: 100%;
 `
@@ -71,7 +70,7 @@ export const Td = styled.td(
     text-align: ${props.align || 'left'};
     padding: ${theme.spacing.medium};
     border-width: 0 thin;
-    min-width: 26ch;
+    min-width: 10rem;
     border-color: rgba(255, 255, 255, 0.5);
     border-style: solid;
     ${mediaQueryTabletLandscapeOnly(css`
@@ -97,6 +96,7 @@ export const Tr = styled.tr`
   }
 `
 export const InnerCell = styled.span`
-  background: #789;
   display: inline-block;
+  width: max-content;
+  max-width: 26ch;
 `
