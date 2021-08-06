@@ -23,7 +23,7 @@ test('ManagementRegimes component renders with the expected headers', async () =
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[0]).getByText('Name'))
+  expect(within(tableRows[0]).getByText('Management Regime Name'))
   expect(within(tableRows[0]).getByText('Year Est.'))
   expect(within(tableRows[0]).getByText('Compliance'))
   expect(within(tableRows[0]).getByText('Open Access'))
@@ -51,14 +51,14 @@ test('Management Regime Records table sorts properly by Name column', async () =
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Name'))
+  userEvent.click(within(table).getByText('Management Regime Name'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // // click again to change to descending order
-  userEvent.click(within(table).getByText('Name'))
+  userEvent.click(within(table).getByText('Management Regime Name'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
