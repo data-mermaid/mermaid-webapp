@@ -5,10 +5,12 @@ import {
   screen,
   renderAuthenticatedOffline,
   within,
+  waitForElementToBeRemoved,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 describe('Offline', () => {
   test('Edit fishbelt save success shows toast message and proper record information', async () => {
@@ -56,8 +58,7 @@ describe('Offline', () => {
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    // make sure there is a collect record to edit in dexie
-    await dexieInstance.collect_records.put(mockMermaidData.collect_records[1])
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
@@ -104,8 +105,13 @@ describe('Offline', () => {
     )
 
     expect(await screen.findByText('Collect record saved.'))
-    const savedCollectRecord = await dexieInstance.collect_records.toArray()
-    const newObservation = savedCollectRecord[0].data.obs_belt_fishes[3]
+    const savedCollectRecords = await dexieInstance.collect_records.toArray()
+
+    const updatedCollectRecord = savedCollectRecords.filter(
+      (record) => record.id === '2',
+    )[0]
+
+    const newObservation = updatedCollectRecord.data.obs_belt_fishes[3]
 
     expect(newObservation.fish_attribute).toEqual(
       '018c6b47-9e6f-456d-8db2-ce1c91e8e1c4',
