@@ -11,6 +11,8 @@ import {
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
 import FishBelt from '../FishBelt'
+import { getMockDexieInstanceAllSuccess } from '../../../../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 const fakeCurrentUser = {
   id: 'fake-id',
@@ -162,9 +164,17 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 })
 
 test('Fishbelt observations hide and show fish name reference link appropriately', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
   renderAuthenticatedOnline(
     <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />,
-    { isSyncInProgressOverride: true },
+    { isSyncInProgressOverride: true, dexieInstance },
+  )
+
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   userEvent.click(await screen.findByRole('button', { name: 'Add Row' }))
