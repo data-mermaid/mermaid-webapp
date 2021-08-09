@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { Route } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -16,10 +17,16 @@ test('Collect Records table sorts properly by method column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -44,10 +51,16 @@ test('Collect Records table sorts properly by site column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -79,10 +92,16 @@ test('Collect Records table sorts properly by management column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -114,10 +133,16 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -149,10 +174,16 @@ test('Collect Records table sorts properly by size column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -184,10 +215,16 @@ test('Collect Records table sorts properly by depth column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -218,10 +255,16 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -254,10 +297,16 @@ test('Collect Records table sorts properly by observers column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -297,10 +346,16 @@ test('Collect Records table sorts properly by status column', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -327,17 +382,21 @@ test('Collect Records table sorts properly by status column', async () => {
   expect(within(tableRowsAfterFirstClick[1]).getByText('Warnings'))
 })
 
-test('Collect Records table sorts properly by synced column', () => {})
-
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
   )
@@ -361,10 +420,16 @@ test('Collect Records table change pages when different page is selected ', asyn
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOnline(<Collect />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting">
+      <Collect />
+    </Route>,
+    {
+      dexieInstance,
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/collecting'],
+    },
+  )
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
   )

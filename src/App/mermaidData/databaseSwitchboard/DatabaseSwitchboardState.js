@@ -26,6 +26,10 @@ const DatabaseSwitchboardState = class {
     'This operation requires an id to be supplied',
   )
 
+  _operationMissingParameterError = new Error(
+    "This operation requires a parameter that isn't being supplied",
+  )
+
   constructor({
     apiBaseUrl,
     apiSyncInstance,

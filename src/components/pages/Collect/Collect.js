@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -41,26 +41,29 @@ const Collect = () => {
     [],
   )
   const [isLoading, setIsLoading] = useState(true)
+  const { projectId } = useParams()
 
   const _getCollectRecords = useEffect(() => {
     let isMounted = true
 
-    databaseSwitchboardInstance
-      .getCollectRecordsForUIDisplay()
-      .then((records) => {
-        if (isMounted) {
-          setCollectRecordsForUiDisplay(records)
-          setIsLoading(false)
-        }
-      })
-      .catch(() => {
-        toast.error(language.error.collectRecordsUnavailable)
-      })
+    if (databaseSwitchboardInstance && projectId) {
+      databaseSwitchboardInstance
+        .getCollectRecordsForUIDisplay(projectId)
+        .then((records) => {
+          if (isMounted) {
+            setCollectRecordsForUiDisplay(records)
+            setIsLoading(false)
+          }
+        })
+        .catch((error) => {
+          toast.error(language.error.collectRecordsUnavailable)
+        })
+    }
 
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, projectId])
 
   const currentProjectPath = useCurrentProjectPath()
 
