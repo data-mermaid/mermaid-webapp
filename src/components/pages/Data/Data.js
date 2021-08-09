@@ -125,7 +125,7 @@ const Data = () => {
         sampleDate: uiLabels.sampleDate,
         observers: uiLabels.observers,
       })),
-    [submittedRecordsForUiDisplay],
+    [submittedRecordsForUiDisplay, currentProjectPath],
   )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
