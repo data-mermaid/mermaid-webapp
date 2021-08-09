@@ -23,7 +23,7 @@ test('ManagementRegimes component renders with the expected headers', async () =
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[0]).getByText('Name'))
+  expect(within(tableRows[0]).getByText('Management Regime Name'))
   expect(within(tableRows[0]).getByText('Year Est.'))
   expect(within(tableRows[0]).getByText('Compliance'))
   expect(within(tableRows[0]).getByText('Open Access'))
@@ -51,14 +51,14 @@ test('Management Regime Records table sorts properly by Name column', async () =
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Name'))
+  userEvent.click(within(table).getByText('Management Regime Name'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
   // // click again to change to descending order
-  userEvent.click(within(table).getByText('Name'))
+  userEvent.click(within(table).getByText('Management Regime Name'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
@@ -85,11 +85,8 @@ test('Management Regime Records table sorts properly by Year Est. column', async
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  const tableCellsFromTableRowsAfter = within(tableRowsAfter[1]).getAllByRole(
-    'cell',
-  )
-
-  expect(within(tableCellsFromTableRowsAfter[1]).getByText(''))
+  // we test last row because it will have a non empty value which is easier to query
+  expect(within(tableRowsAfter[3]).getByText('2021'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Year Est.'))
@@ -111,21 +108,16 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
   const table = screen.getByRole('table')
 
   const tableRows = within(table).getAllByRole('row')
+  // we test last row because it will have a non empty value which is easier to query
 
-  const tableCellsFromTableRows = within(tableRows[1]).getAllByRole('cell')
-
-  expect(within(tableCellsFromTableRows[2]).getByText(''))
+  expect(within(tableRows[3]).getByText('somewhat'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Compliance'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  const tableCellsFromTableRowAfter = within(tableRowsAfter[1]).getAllByRole(
-    'cell',
-  )
-
-  expect(within(tableCellsFromTableRowAfter[2]).getByText(''))
+  expect(within(tableRowsAfter[3]).getByText('somewhat'))
 
   // // click again to change to descending order
   userEvent.click(within(table).getByText('Compliance'))
