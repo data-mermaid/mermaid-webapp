@@ -27,7 +27,6 @@ const MapContainer = styled.div`
 const geomorphicKeyNames = Object.keys(geomorphicColors)
 const benthicKeyNames = Object.keys(benthicColors)
 
-// const recordMarker = new maplibregl.Marker({ draggable: true })
 const defaultCenter = [0, 0]
 const defaultZoom = 11
 
