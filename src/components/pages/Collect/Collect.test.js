@@ -245,7 +245,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
-  //test last row. (heads up, this is a multi page table)
+  // test last row. (heads up, this is a multi page table)
   expect(within(tableRowsAfterSecondClick[10]).getByText('June 12, 2012'))
 })
 
