@@ -111,10 +111,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }, [databaseSwitchboardInstance])
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && projectId) {
       const promises = [
         databaseSwitchboardInstance.getSites(),
-        databaseSwitchboardInstance.getManagementRegimes(),
+        databaseSwitchboardInstance.getManagementRegimes(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(),
         databaseSwitchboardInstance.getFishSpecies(),
@@ -171,7 +171,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           toast.error(error)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId])
+  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId, projectId])
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,

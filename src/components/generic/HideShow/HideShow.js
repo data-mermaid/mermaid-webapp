@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
+import useIsMounted from '../../../library/useIsMounted'
 
 /**
  * Button that shows content in drop down on click
@@ -21,6 +22,7 @@ const PositionedAncestor = styled.div`
 const HideShow = ({ contents, button }) => {
   const [showItems, setShowItems] = useState(false)
   const buttonRef = useRef(null)
+  const isMounted = useIsMounted()
 
   const toggleShowItems = () => {
     setShowItems(!showItems)
@@ -31,7 +33,9 @@ const HideShow = ({ contents, button }) => {
 
     window.addEventListener('click', (event) => {
       if (!(currentButtonRef && currentButtonRef.contains(event.target))) {
-        setShowItems(false)
+        if (isMounted.current) {
+          setShowItems(false)
+        }
       }
     })
 
@@ -42,7 +46,7 @@ const HideShow = ({ contents, button }) => {
         }
       })
     }
-  }, [buttonRef, showItems])
+  }, [buttonRef, showItems, isMounted])
 
   const buttonForRender = React.cloneElement(button, {
     ref: buttonRef,

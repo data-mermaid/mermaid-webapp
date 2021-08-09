@@ -25,14 +25,17 @@ const ManagementRegime = () => {
     setManagementRegimeBeingEdited,
   ] = useState()
   const [isLoading, setIsLoading] = useState(true)
-  const { managementRegimeId } = useParams()
+  const { managementRegimeId, projectId } = useParams()
 
   const _getSupportingData = useEffect(() => {
     let isMounted = true
 
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && projectId) {
       const promises = [
-        databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
+        databaseSwitchboardInstance.getManagementRegime({
+          id: managementRegimeId,
+          projectId,
+        }),
         databaseSwitchboardInstance.getChoices(),
       ]
 
@@ -56,7 +59,7 @@ const ManagementRegime = () => {
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance, managementRegimeId])
+  }, [databaseSwitchboardInstance, managementRegimeId, projectId])
 
   const initialFormValues = useMemo(
     () => getManagementRegimeInitialValues(managementRegimeBeingEdited),

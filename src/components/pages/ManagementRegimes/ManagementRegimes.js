@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -34,6 +34,7 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 
 const ManagementRegimes = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { projectId } = useParams()
 
   const [
     managementRegimeRecordsForUiDisplay,
@@ -44,22 +45,24 @@ const ManagementRegimes = () => {
   const _getManagementRegimeRecords = useEffect(() => {
     let isMounted = true
 
-    databaseSwitchboardInstance
-      .getManagementRegimeRecordsForUiDisplay()
-      .then((records) => {
-        if (isMounted) {
-          setManagementRegimeRecordsForUiDisplay(records)
-          setIsLoading(false)
-        }
-      })
-      .catch(() => {
-        toast.error(language.error.collectRecordsUnavailable)
-      })
+    if (databaseSwitchboardInstance && projectId) {
+      databaseSwitchboardInstance
+        .getManagementRegimeRecordsForUiDisplay(projectId)
+        .then((records) => {
+          if (isMounted) {
+            setManagementRegimeRecordsForUiDisplay(records)
+            setIsLoading(false)
+          }
+        })
+        .catch(() => {
+          toast.error(language.error.collectRecordsUnavailable)
+        })
+    }
 
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, projectId])
 
   const currentProjectPath = useCurrentProjectPath()
   const getIconCheckLabel = (property) => property && <IconCheck />

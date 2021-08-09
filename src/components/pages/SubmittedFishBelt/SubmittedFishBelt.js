@@ -22,7 +22,7 @@ const SubmittedFishBelt = () => {
   const [fishNameOptions, setFishNameOptions] = useState([])
   const [fishNameConstants, setFishNameConstants] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { recordId } = useParams()
+  const { recordId, projectId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
 
@@ -30,7 +30,7 @@ const SubmittedFishBelt = () => {
     if (databaseSwitchboardInstance) {
       const promises = [
         databaseSwitchboardInstance.getSites(),
-        databaseSwitchboardInstance.getManagementRegimes(),
+        databaseSwitchboardInstance.getManagementRegimes(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),

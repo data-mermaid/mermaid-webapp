@@ -38,7 +38,7 @@ const SyncApiDataIntoOfflineStorage = class {
   }
 
   pullEverything = (projectId) => {
-    const apiDataNamesToPullNonProject = [
+    const allTheDataNames = [
       'benthic_attributes',
       'choices',
       'collect_records',
@@ -55,7 +55,7 @@ const SyncApiDataIntoOfflineStorage = class {
       dexieInstance: this._dexieInstance,
       auth0Token: this._auth0Token,
       apiBaseUrl: this._apiBaseUrl,
-      apiDataNamesToPull: apiDataNamesToPullNonProject,
+      apiDataNamesToPull: allTheDataNames,
       projectId,
     })
   }
