@@ -54,6 +54,7 @@ test('Site Records table sorts properly by Name column', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
+      dexieInstance,
     },
   )
 
@@ -94,6 +95,7 @@ test('Site Records table sorts properly by Reef Type column', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
+      dexieInstance,
     },
   )
 
@@ -134,6 +136,7 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
+      dexieInstance,
     },
   )
 
@@ -174,6 +177,7 @@ test('Site Records table sorts properly by Exposure column', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
+      dexieInstance,
     },
   )
 
