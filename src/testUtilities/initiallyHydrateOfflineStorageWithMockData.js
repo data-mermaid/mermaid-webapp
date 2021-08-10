@@ -3,28 +3,34 @@ import mockMermaidData from './mockMermaidData'
 export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
   return dexieInstance.transaction(
     'rw',
-    dexieInstance.fish_species,
-    dexieInstance.fish_genera,
-    dexieInstance.fish_families,
+    dexieInstance.benthic_attributes,
+    dexieInstance.choices,
     dexieInstance.collect_records,
+    dexieInstance.fish_families,
+    dexieInstance.fish_genera,
+    dexieInstance.fish_species,
+    dexieInstance.project_managements,
+    dexieInstance.project_profiles,
+    dexieInstance.project_sites,
     dexieInstance.projects,
     async () => {
-      mockMermaidData.fish_species.forEach((specie) => {
-        dexieInstance.fish_species.put(specie)
-      })
-      mockMermaidData.fish_genera.forEach((genera) => {
-        dexieInstance.fish_genera.put(genera)
-      })
-      mockMermaidData.fish_families.forEach((specie) => {
-        dexieInstance.fish_families.put(specie)
-      })
+      // choices is not an array, so not like th others
+      const allThePullableDataNamesButChoices = [
+        'benthic_attributes',
+        'collect_records',
+        'fish_families',
+        'fish_genera',
+        'fish_species',
+        'project_managements',
+        'project_profiles',
+        'project_sites',
+        'projects',
+      ]
 
-      mockMermaidData.collect_records.forEach((record) => {
-        dexieInstance.collect_records.put(record)
-      })
-
-      mockMermaidData.projects.forEach((project) => {
-        dexieInstance.projects.put(project)
+      allThePullableDataNamesButChoices.forEach((dataType) => {
+        mockMermaidData[dataType].forEach((record) => {
+          dexieInstance[dataType].put(record)
+        })
       })
     },
   )

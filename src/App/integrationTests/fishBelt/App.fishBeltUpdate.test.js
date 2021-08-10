@@ -17,10 +17,11 @@ describe('Offline', () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     // make sure there is a collect record to edit in dexie
-    await dexieInstance.collect_records.put(mockMermaidData.collect_records[1])
+    // await dexieInstance.collect_records.put(mockMermaidData.collect_records[1])
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
     })
 

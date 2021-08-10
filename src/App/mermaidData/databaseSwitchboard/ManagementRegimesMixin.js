@@ -9,8 +9,7 @@ const ManagementRegimesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? // ? this._dexieInstance.project_managements.toArray()
-          Promise.resolve(mockMermaidData.management_regimes)
+        ? this._dexieInstance.project_managements.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -20,9 +19,9 @@ const ManagementRegimesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getManagementRegimes().then((records) =>
-            records.find((record) => record.id === id),
-          )
+        ? this._dexieInstance.project_managements
+            .toArray()
+            .then((records) => records.find((record) => record.id === id))
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
