@@ -28,6 +28,7 @@ import {
   Td,
   TableOverflowWrapper,
   TableNavigation,
+  InnerCell,
 } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -223,7 +224,7 @@ const Collect = () => {
                   {row.cells.map((cell) => {
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
-                        {cell.render('Cell')}
+                        <InnerCell>{cell.render('Cell')}</InnerCell>
                       </Td>
                     )
                   })}

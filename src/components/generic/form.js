@@ -19,7 +19,6 @@ export const inputTextareaSelectStyles = css`
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
   background-color: ${theme.color.inputBackground};
   text-align: inherit;
-  min-width: 50%;
   width: 100%;
   &:focus {
     outline: ${theme.color.outline};
