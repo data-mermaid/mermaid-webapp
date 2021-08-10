@@ -187,8 +187,7 @@ const MermaidMap = ({
       handleLatitudeChange(lngLat.lat)
       handleLongitudeChange(lngLat.lng)
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [handleLatitudeChange, handleLongitudeChange])
 
   const getUpdatedLayerOption = (layer, item) => {
     return layer.map((value) => {
