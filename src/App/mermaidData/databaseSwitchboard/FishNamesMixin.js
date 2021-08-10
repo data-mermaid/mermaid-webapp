@@ -1,5 +1,4 @@
 import { createUuid } from '../../../library/createUuid'
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const FishNameMixin = (Base) =>
   class extends Base {

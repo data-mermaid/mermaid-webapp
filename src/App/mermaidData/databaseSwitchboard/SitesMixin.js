@@ -3,13 +3,13 @@ import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const SitesMixin = (Base) =>
   class extends Base {
-    getSites = (projectId) => {
+    getSites = async (projectId) => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.project_sites)
+        ? this._dexieInstance.project_sites.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
