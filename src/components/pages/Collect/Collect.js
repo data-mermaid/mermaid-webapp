@@ -55,7 +55,7 @@ const Collect = () => {
             setIsLoading(false)
           }
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(language.error.collectRecordsUnavailable)
         })
     }

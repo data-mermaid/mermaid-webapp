@@ -3,26 +3,35 @@ import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const SitesMixin = (Base) =>
   class extends Base {
-    getSites = () =>
-      this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.sites)
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+    getSites = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
 
-    getSite = (id) => {
-      if (!id) {
+      return this._isAuthenticatedAndReady
+        ? Promise.resolve(mockMermaidData.project_sites)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getSite = ({ id, projectId }) => {
+      if (!id || !projectId) {
         Promise.reject(this._operationMissingIdParameterError)
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getSites().then((records) =>
+        ? this.getSites(projectId).then((records) =>
             records.find((record) => record.id === id),
           )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSiteRecordsForUIDisplay = () => {
+    getSiteRecordsForUIDisplay = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
       return this._isAuthenticatedAndReady
-        ? Promise.all([this.getSites(), this.getChoices()]).then(
+        ? Promise.all([this.getSites(projectId), this.getChoices()]).then(
             ([sites, choices]) => {
               const { reeftypes, reefzones, reefexposures } = choices
 

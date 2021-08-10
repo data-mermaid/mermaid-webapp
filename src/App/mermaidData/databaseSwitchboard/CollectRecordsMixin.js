@@ -292,12 +292,10 @@ const CollectRecordsMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? Promise.all([
             this.getCollectRecords(),
-            this.getSites(),
+            this.getSites(projectId),
             this.getManagementRegimes(projectId),
             this.getChoices(),
           ]).then(([collectRecords, sites, managementRegimes, choices]) => {
-           
-
             return collectRecords.map((record) => ({
               ...record,
               uiLabels: {

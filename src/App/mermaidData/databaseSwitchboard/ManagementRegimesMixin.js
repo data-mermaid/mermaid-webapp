@@ -1,5 +1,4 @@
 import { getObjectById } from '../../../library/getObjectById'
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -36,26 +36,29 @@ const Sites = () => {
 
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const { projectId } = useParams()
 
   const _getSiteRecords = useEffect(() => {
     let isMounted = true
 
-    databaseSwitchboardInstance
-      .getSiteRecordsForUIDisplay()
-      .then((records) => {
-        if (isMounted) {
-          setSiteRecordsForUiDisplay(records)
-          setIsLoading(false)
-        }
-      })
-      .catch(() => {
-        toast.error(language.error.collectRecordsUnavailable)
-      })
+    if (databaseSwitchboardInstance && projectId) {
+      databaseSwitchboardInstance
+        .getSiteRecordsForUIDisplay(projectId)
+        .then((records) => {
+          if (isMounted) {
+            setSiteRecordsForUiDisplay(records)
+            setIsLoading(false)
+          }
+        })
+        .catch(() => {
+          toast.error(language.error.collectRecordsUnavailable)
+        })
+    }
 
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, projectId])
 
   const currentProjectPath = useCurrentProjectPath()
 
