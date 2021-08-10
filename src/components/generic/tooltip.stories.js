@@ -10,7 +10,7 @@ export const basic = () => (
       text={<>AI</>}
       tooltipText={
         <>
-          looks like AL, but it's actually ai which stands for{' '}
+          looks like AL, but it&apos;s actually ai which stands for{' '}
           <strike>Alan Leonard</strike>, I mean artificial intelligence
         </>
       }
@@ -18,17 +18,17 @@ export const basic = () => (
     />
     <hr />
     <TooltipWithText
-      text={<>What's all this then?</>}
-      tooltipText={<>hi, I'm a tootlip</>}
+      text={<>What&apos;s all this then?</>}
+      tooltipText={<>hi, I&apos;m a tootlip</>}
       id="anotherID"
     />
     <hr />
     <TooltipWithText
       as="h2"
-      text={<>What's all this then?</>}
+      text={<>What&apos;s all this then?</>}
       tooltipText={
         <>
-          hi, I'm
+          hi, I&apos;m
           <br />a tootlip
         </>
       }

@@ -43,7 +43,7 @@ const OfflineIndicator = () => {
 
   return (
     <OfflineIndicatorStyles isOnline={isOnline}>
-      {!isOnline && <span>You're offline</span>}
+      {!isOnline && <span>You&apos;re offline</span>}
     </OfflineIndicatorStyles>
   )
 }

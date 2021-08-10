@@ -1,7 +1,7 @@
-import { Formik } from 'formik'
+import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { getSiteInitialValues } from '../siteRecordFormInitialValues'
 import { H2 } from '../../../generic/text'
@@ -62,95 +62,103 @@ const Site = () => {
     [siteBeingEdited],
   )
 
-  const formikOptions = {
+  const formik = useFormik({
     initialValues: initialFormValues,
     enableReinitialize: true,
-  }
+  })
+
+  const { setFieldValue: formikSetFieldValue } = formik
+
+  const handleLatitudeChange = useCallback(
+    (value) => {
+      formikSetFieldValue('latitude', value)
+    },
+    [formikSetFieldValue],
+  )
+
+  const handleLongitudeChange = useCallback(
+    (value) => {
+      formikSetFieldValue('longitude', value)
+    },
+    [formikSetFieldValue],
+  )
 
   return (
-    <Formik {...formikOptions}>
-      {(formik) => (
-        <ContentPageLayout
-          isPageContentLoading={isLoading}
-          content={
-            <>
-              <form id="site-form">
-                <InputWrapper>
-                  <InputWithLabelAndValidation
-                    label="Name"
-                    id="name"
-                    type="text"
-                    {...formik.getFieldProps('name')}
-                  />
-                  <InputRow>
-                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                    <label htmlFor="country">Country</label>
-                    <InputAutocomplete
-                      id="country"
-                      options={countryOptions}
-                      value={formik.values.country}
-                      onChange={(selectedItem) => {
-                        formik.setFieldValue('country', selectedItem.value)
-                      }}
-                    />
-                  </InputRow>
-                  <InputWithLabelAndValidation
-                    label="Latitude"
-                    id="latitude"
-                    type="number"
-                    {...formik.getFieldProps('latitude')}
-                  />
-                  <InputWithLabelAndValidation
-                    label="Longitude"
-                    id="longitude"
-                    type="number"
-                    {...formik.getFieldProps('longitude')}
-                  />
-                  <MermaidMap
-                    formLatitudeValue={formik.getFieldProps('latitude').value}
-                    formLongitudeValue={formik.getFieldProps('longitude').value}
-                    handleLatitudeChange={(value) => {
-                      formik.setFieldValue('latitude', value)
-                    }}
-                    handleLongitudeChange={(value) => {
-                      formik.setFieldValue('longitude', value)
-                    }}
-                  />
-                  <InputRadioWithLabelAndValidation
-                    label="Exposure"
-                    id="exposure"
-                    options={exposureOptions}
-                    {...formik.getFieldProps('exposure')}
-                  />
-                  <InputRadioWithLabelAndValidation
-                    label="Reef Type"
-                    id="reef_type"
-                    options={reefTypeOptions}
-                    {...formik.getFieldProps('reef_type')}
-                  />
-                  <InputRadioWithLabelAndValidation
-                    label="Reef Zone"
-                    id="reef_zone"
-                    options={reefZoneOptions}
-                    {...formik.getFieldProps('reef_zone')}
-                  />
-                  <TextareaWithLabelAndValidation
-                    label="Notes"
-                    id="notes"
-                    {...formik.getFieldProps('notes')}
-                  />
-                </InputWrapper>
-              </form>
-            </>
-          }
-          toolbar={
-            <>
-              <H2>Site Name</H2>
-            </>
-          }
-        />
-      )}
-    </Formik>
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={
+        <>
+          <form id="site-form">
+            <InputWrapper>
+              <InputWithLabelAndValidation
+                label="Name"
+                id="name"
+                type="text"
+                {...formik.getFieldProps('name')}
+              />
+              <InputRow>
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                <label htmlFor="country">Country</label>
+                <InputAutocomplete
+                  id="country"
+                  options={countryOptions}
+                  value={formik.values.country}
+                  onChange={(selectedItem) => {
+                    formik.setFieldValue('country', selectedItem.value)
+                  }}
+                />
+              </InputRow>
+              <InputWithLabelAndValidation
+                label="Latitude"
+                id="latitude"
+                type="number"
+                {...formik.getFieldProps('latitude')}
+              />
+              <InputWithLabelAndValidation
+                label="Longitude"
+                id="longitude"
+                type="number"
+                {...formik.getFieldProps('longitude')}
+              />
+              <MermaidMap
+                formLatitudeValue={formik.getFieldProps('latitude').value}
+                formLongitudeValue={formik.getFieldProps('longitude').value}
+                handleLatitudeChange={handleLatitudeChange}
+                handleLongitudeChange={handleLongitudeChange}
+              />
+              <InputRadioWithLabelAndValidation
+                label="Exposure"
+                id="exposure"
+                options={exposureOptions}
+                {...formik.getFieldProps('exposure')}
+              />
+              <InputRadioWithLabelAndValidation
+                label="Reef Type"
+                id="reef_type"
+                options={reefTypeOptions}
+                {...formik.getFieldProps('reef_type')}
+              />
+              <InputRadioWithLabelAndValidation
+                label="Reef Zone"
+                id="reef_zone"
+                options={reefZoneOptions}
+                {...formik.getFieldProps('reef_zone')}
+              />
+              <TextareaWithLabelAndValidation
+                label="Notes"
+                id="notes"
+                {...formik.getFieldProps('notes')}
+              />
+            </InputWrapper>
+          </form>
+        </>
+      }
+      toolbar={
+        <>
+          <H2>Site Name</H2>
+        </>
+      }
+    />
   )
 }
 
