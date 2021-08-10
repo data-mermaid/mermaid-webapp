@@ -113,7 +113,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
       const promises = [
-        databaseSwitchboardInstance.getSites(),
+        databaseSwitchboardInstance.getSites(projectId),
         databaseSwitchboardInstance.getManagementRegimes(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(),
