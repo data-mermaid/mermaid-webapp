@@ -130,10 +130,18 @@ const StyledFishBeltObservationTable = styled(Table)`
     }
     td {
       padding: 0rem;
+      & > div {
+        background: transparent;
+        border: none;
+        span {
+          line-height: 1.6;
+          background: rgba(255, 255, 255, 0.5);
+        }
+      }
       input,
       select {
         background: transparent;
-        border: none; //solid 1px rgba(255, 255, 255, 0.7);
+        border: none;
         padding: 1px 3px;
         height: 4rem;
         ${hoverState(css`

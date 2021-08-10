@@ -27,7 +27,6 @@ const MapContainer = styled.div`
 const geomorphicKeyNames = Object.keys(geomorphicColors)
 const benthicKeyNames = Object.keys(benthicColors)
 
-const recordMarker = new maplibregl.Marker({ draggable: true })
 const defaultCenter = [0, 0]
 const defaultZoom = 11
 
@@ -83,6 +82,7 @@ const MermaidMap = ({
 
   const mapContainer = useRef(null)
   const map = useRef(null)
+  const recordMarker = useRef(null)
 
   const _initializeMap = useEffect(() => {
     map.current = new maplibregl.Map({
@@ -95,6 +95,8 @@ const MermaidMap = ({
       customAttribution:
         'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
     })
+
+    recordMarker.current = new maplibregl.Marker({ draggable: true })
 
     map.current.addControl(
       new maplibregl.NavigationControl({
@@ -111,7 +113,10 @@ const MermaidMap = ({
     })
 
     // clean up on unmount
-    return () => map.current.remove()
+    return () => {
+      map.current.remove()
+      recordMarker.current.remove()
+    }
   }, [])
 
   const _updateCoralMosaicLayer = useEffect(() => {
@@ -153,33 +158,20 @@ const MermaidMap = ({
   const _handleMapMarker = useEffect(() => {
     if (!map.current) return
 
-    recordMarker.remove()
-    const outOfRangeLatLng =
-      formLatitudeValue > 90 ||
-      formLatitudeValue < -90 ||
-      formLongitudeValue > 180 ||
-      formLongitudeValue < -180
+    const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
 
-    if (outOfRangeLatLng) {
-      // remove marker when lat/lng values are undefined or out of range.
-      recordMarker.remove()
+    if (outOfRangeLatitude) {
+      recordMarker.current.remove()
     } else {
-      recordMarker
+      recordMarker.current
         .setLngLat([formLongitudeValue, formLatitudeValue])
         .addTo(map.current)
     }
 
-    recordMarker.on('dragend', () => {
-      const lngLat = recordMarker.getLngLat()
-
-      handleLatitudeChange(lngLat.lat)
-      handleLongitudeChange(lngLat.lng)
-    })
-
     if (
       formLatitudeValue !== undefined &&
       formLongitudeValue !== undefined &&
-      !outOfRangeLatLng
+      !outOfRangeLatitude
     ) {
       map.current.jumpTo({
         center: [formLongitudeValue, formLatitudeValue],
@@ -187,6 +179,15 @@ const MermaidMap = ({
       })
     }
   }, [formLatitudeValue, formLongitudeValue])
+
+  const _handleMapMarkerOnDrag = useEffect(() => {
+    recordMarker.current.on('dragend', () => {
+      const lngLat = recordMarker.current.getLngLat()
+
+      handleLatitudeChange(lngLat.lat)
+      handleLongitudeChange(lngLat.lng)
+    })
+  }, [handleLatitudeChange, handleLongitudeChange])
 
   const getUpdatedLayerOption = (layer, item) => {
     return layer.map((value) => {

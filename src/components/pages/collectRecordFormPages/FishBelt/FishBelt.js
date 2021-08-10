@@ -23,7 +23,6 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import { getFishBinLabel } from './fishBeltBins'
 import { H2 } from '../../../generic/text'
 import { IconSave, IconCheck, IconUpload } from '../../../icons'
-import { InputWrapper } from '../../../generic/form'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
@@ -336,12 +335,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                     formik={formik}
                     observers={observerProfiles}
                   />
-                  <InputWrapper>
-                    <H2>Observers Placeholder</H2>
-                    <br />
-                    <br />
-                    <br />
-                  </InputWrapper>
                   <FishBeltObservationTable
                     choices={choices}
                     collectRecord={collectRecordBeingEdited}
