@@ -17,7 +17,7 @@ export const Menu = styled('ul')(
     borderWidth: '0 1px 1px 1px',
     borderStyle: 'solid',
     color: `${theme.color.textColor}`,
-    zIndex: '1',
+    zIndex: '9999',
     top: '4rem',
   },
   ({ isOpen }) => ({
