@@ -14,7 +14,6 @@ const AutoCompleteInput = styled(Input)`
 `
 const AutoCompleteResultsWrapper = styled.div`
   position: relative;
-  z-index: 1001;
 `
 const NoResultSection = styled.div`
   position: absolute;
