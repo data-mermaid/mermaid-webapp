@@ -8,51 +8,13 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 // test suite cut up into 2 parts for performance reasons
 describe('Offline', () => {
-  test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
-
-    // make sure there is a collect record to edit in dexie
-    await dexieInstance.collect_records.put(mockMermaidData.collect_records[1])
-
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
-      dexieInstance,
-    })
-
-    userEvent.click(await screen.findByText('Delete Record'))
-
-    expect(screen.getByText('Are you sure you want to delete this record?'))
-
-    const modal = screen.getByLabelText('Delete Record')
-
-    userEvent.click(
-      within(modal).getByText('Delete Record', {
-        selector: 'button',
-      }),
-    )
-
-    // navigated to collect records table page
-    expect(await screen.findByText('Collect Records', { selector: 'h2' }))
-
-    // shows toast
-    expect(await screen.findByText('Collect record deleted.'))
-
-    // row length = 1 because of header row. Expect there to be no records.
-    expect(
-      screen.getAllByRole('row', {
-        hidden: true,
-      }).length,
-    ).toEqual(1)
-  })
-
   test('Delete fishbelt prompt cancel closes prompt and does nothing (edits persisted)', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    // make sure there is a collect record to edit in dexie
-    await dexieInstance.collect_records.put(mockMermaidData.collect_records[1])
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],

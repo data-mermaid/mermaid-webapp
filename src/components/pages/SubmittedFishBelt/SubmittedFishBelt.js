@@ -78,7 +78,7 @@ const SubmittedFishBelt = () => {
           toast.error(language.error.submittedRecordsUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, recordId])
+  }, [databaseSwitchboardInstance, isMounted, recordId, projectId])
 
   return (
     <ContentPageLayout

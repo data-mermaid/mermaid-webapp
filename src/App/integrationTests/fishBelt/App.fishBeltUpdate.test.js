@@ -5,12 +5,10 @@ import {
   screen,
   renderAuthenticatedOffline,
   within,
-  waitForElementToBeRemoved,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import App from '../../App'
 
 describe('Offline', () => {
   test('Edit fishbelt save success shows toast message and proper record information', async () => {
@@ -123,8 +121,7 @@ describe('Offline', () => {
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie for 50+ observation size input', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    // make sure there is a collect record to edit in dexie
-    await dexieInstance.collect_records.put(mockMermaidData.collect_records[1])
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
@@ -163,22 +160,24 @@ describe('Offline', () => {
     )
 
     expect(await screen.findByText('Collect record saved.'))
-    const savedCollectRecord = await dexieInstance.collect_records.toArray()
-    const newObservation = savedCollectRecord[0].data.obs_belt_fishes[3]
+    const savedCollectRecord = (
+      await dexieInstance.collect_records.toArray()
+    ).find((record) => record.id === '2')
+
+    const newObservation = savedCollectRecord.data.obs_belt_fishes[3]
 
     expect(newObservation.size).toEqual(50367)
   })
   test('Edit fishbelt save failure shows toast message with new edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    // make sure there is a collect record to edit in dexie
-    await dexieInstance.collect_records.put(mockMermaidData.collect_records[1])
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     // make sure the next save will fail
     dexieInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
     })
 

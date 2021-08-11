@@ -25,6 +25,7 @@ test('Site component renders with the expected headers', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
+      dexieInstance,
     },
   )
 

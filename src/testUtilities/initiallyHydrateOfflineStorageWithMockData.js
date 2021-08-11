@@ -32,6 +32,11 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
           dexieInstance[dataType].put(record)
         })
       })
+
+      dexieInstance.choices.put({
+        id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
+        choices: mockMermaidData.choices,
+      })
     },
   )
 }

@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
+import { Route } from 'react-router-dom'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
@@ -13,7 +14,6 @@ import {
 import FishBelt from '../FishBelt'
 import { getMockDexieInstanceAllSuccess } from '../../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { Route } from 'react-router-dom'
 
 const fakeCurrentUser = {
   id: 'fake-id',
