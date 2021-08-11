@@ -26,12 +26,11 @@ const RecordFormTitle = ({
   const defaultTitle = 'Fish Belt'
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
 
-  const siteName =
-    siteId && sites.length > 0 ? getObjectById(sites, siteId)?.name : ''
+  const siteName = getObjectById(sites, siteId)?.name ?? ''
   const transectNumber =
-    submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.number || ''
+    submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.number ?? ''
   const label =
-    submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.label || ''
+    submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.label ?? ''
 
   return (
     <TitleContainer
