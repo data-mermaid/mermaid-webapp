@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   screen,
@@ -37,9 +38,14 @@ test('App renders show page unavailable offline when navigate to Fish Families p
 })
 
 test('App renders show page unavailable offline when navigate to Data Sharing page while offline.', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
   renderAuthenticatedOffline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    { initialEntries: ['/projects/fakewhatever/data-sharing'] },
+    <App dexieInstance={dexieInstance} />,
+    { initialEntries: ['/projects/5/data-sharing'] },
+    dexieInstance,
   )
 
   expect(await screen.findByText('This page is unavailable when offline'))
