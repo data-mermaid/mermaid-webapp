@@ -24,7 +24,6 @@ import language from '../../../language'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import { createUuid } from '../../../library/createUuid'
 
-
 const SuggestNewOrganizationButton = styled(ButtonSecondary)`
   font-size: smaller;
   text-align: start;
