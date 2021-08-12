@@ -41,6 +41,7 @@ import language from '../../../language'
 import useIsMounted from '../../../library/useIsMounted'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
+import { useParams } from 'react-router-dom'
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -124,11 +125,12 @@ const Users = () => {
   const [isReadonlyUserWithActiveSampleUnits] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
+  const { projectId } = useParams()
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getProjectProfiles()
+        .getProjectProfiles(projectId)
         .then((projectProfilesResponse) => {
           if (isMounted.current) {
             setObserverProfiles(projectProfilesResponse)
@@ -139,7 +141,7 @@ const Users = () => {
           toast.error(`users error`)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted])
+  }, [databaseSwitchboardInstance, isMounted, projectId])
 
   const tableColumns = useMemo(() => {
     return [
