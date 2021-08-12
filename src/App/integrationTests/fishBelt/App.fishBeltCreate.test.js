@@ -43,7 +43,7 @@ describe('Offline', () => {
     renderAuthenticatedOffline(
       <App dexieInstance={dexieInstance} />,
       {
-        initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
       dexieInstance,
     )
@@ -81,7 +81,7 @@ describe('Offline', () => {
     renderAuthenticatedOffline(
       <App dexieInstance={dexieInstance} />,
       {
-        initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
       dexieInstance,
     )
@@ -116,7 +116,7 @@ describe('Offline', () => {
 
     dexieInstance.collect_records.put = () => Promise.reject()
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
       dexieInstance,
     })
 

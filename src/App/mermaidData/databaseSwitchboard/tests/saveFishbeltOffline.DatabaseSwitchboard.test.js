@@ -94,7 +94,10 @@ test('saveFishBelt offline replaces previous fishBelt record with same id', asyn
     projectId: '1',
   })
 
-  const savedFishBelt = await dbInstanceOffline.getFishBelt('foo')
+  const savedFishBelt = await dbInstanceOffline.getCollectRecord({
+    id: 'foo',
+    projectId: '1',
+  })
 
   expect(savedFishBelt.data.randomProperty).toEqual(
     replacementFishbelt.data.randomProperty,

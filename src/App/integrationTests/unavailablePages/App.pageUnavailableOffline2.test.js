@@ -13,7 +13,7 @@ import App from '../../App'
 test('App renders show page unavailable offline when navigate to Admin page while offline.', async () => {
   renderAuthenticatedOffline(
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    { initialEntries: ['/projects/fakewhatever/admin'] },
+    { initialEntries: ['/projects/5/admin'] },
   )
 
   expect(await screen.findByText('This page is unavailable when offline'))
@@ -22,7 +22,7 @@ test('App renders show page unavailable offline when navigate to Admin page whil
 test('App renders show page unavailable offline when navigate to Users page while offline.', async () => {
   renderAuthenticatedOffline(
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    { initialEntries: ['/projects/fakewhatever/users'] },
+    { initialEntries: ['/projects/5/users'] },
   )
 
   expect(await screen.findByText('This page is unavailable when offline'))
@@ -31,7 +31,7 @@ test('App renders show page unavailable offline when navigate to Users page whil
 test('App renders show page unavailable offline when navigate to Fish Families page while offline.', async () => {
   renderAuthenticatedOffline(
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    { initialEntries: ['/projects/fakewhatever/fish-families'] },
+    { initialEntries: ['/projects/5/fish-families'] },
   )
 
   expect(await screen.findByText('This page is unavailable when offline'))
