@@ -102,6 +102,10 @@ const ProfileImage = styled.div`
   height: 35px;
 `
 
+const DefaultPendingProfileImage = styled(IconAccount)`
+  font-size: 500;
+`
+
 const NameCellStyle = styled('div')`
   display: flex;
   width: 250px;
@@ -202,19 +206,19 @@ const Users = () => {
     )
 
     return observerProfiles.map(
-      ({ profile_name, picture, num_active_sample_units }) => {
+      ({ profile_name, email, picture, num_active_sample_units }) => {
         return {
           name: (
             <NameCellStyle>
               {picture ? (
                 <ProfileImage img={picture} />
               ) : (
-                <IconAccount style={{ fontSize: 500 }} />
+                <DefaultPendingProfileImage />
               )}{' '}
               {profile_name}
             </NameCellStyle>
           ),
-          email: 'WIP',
+          email,
           admin: observerRoleRadioCell(profile_name, 90),
           collector: observerRoleRadioCell(profile_name, 50),
           readonly: observerRoleRadioCell(profile_name, 10),
