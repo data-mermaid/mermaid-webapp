@@ -123,7 +123,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       ]
 
       if (recordId && !isNewRecord) {
-        promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
+        promises.push(
+          databaseSwitchboardInstance.getCollectRecord({
+            id: recordId,
+            projectId,
+          }),
+        )
       }
       Promise.all(promises)
         .then(

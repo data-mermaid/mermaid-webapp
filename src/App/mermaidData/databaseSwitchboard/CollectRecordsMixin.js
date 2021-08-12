@@ -174,21 +174,6 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getFishBelt = (id) => {
-      if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
-      }
-      if (this._isOnlineAuthenticatedAndReady) {
-        // upcoming work
-      }
-
-      if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.get(id)
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
     deleteFishBelt = async ({ record, profileId, projectId }) => {
       if (!record || !profileId || !projectId) {
         throw new Error(
@@ -264,21 +249,29 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecord = (id) => {
+    getCollectRecord = ({ id, projectId }) => {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getCollectRecords().then((records) =>
+        ? this.getCollectRecords(projectId).then((records) =>
             records.find((record) => record.id === id),
           )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecords = () => {
+    getCollectRecords = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
       if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.toArray()
+        return this._dexieInstance.collect_records
+          .toArray()
+          .then((records) =>
+            records.filter((record) => record.project === projectId),
+          )
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -291,7 +284,7 @@ const CollectRecordsMixin = (Base) =>
 
       return this._isAuthenticatedAndReady
         ? Promise.all([
-            this.getCollectRecords(),
+            this.getCollectRecords(projectId),
             this.getSites(projectId),
             this.getManagementRegimes(projectId),
             this.getChoices(),

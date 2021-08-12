@@ -60,7 +60,7 @@ describe('Offline', () => {
     await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
     })
 
@@ -124,7 +124,7 @@ describe('Offline', () => {
     await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
     })
 
