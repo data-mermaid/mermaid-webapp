@@ -10,7 +10,7 @@ const DropdownContainer = styled.div`
   padding: 0;
   margin: 0;
   position: absolute;
-  z-index: 9;
+  z-index: 101;
   left: 0;
   min-width: 100%;
 `
