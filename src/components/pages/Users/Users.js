@@ -41,6 +41,7 @@ import language from '../../../language'
 import useIsMounted from '../../../library/useIsMounted'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
+import NewUserModal from '../../NewUserModal'
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -122,8 +123,15 @@ const Users = () => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [isReadonlyUserWithActiveSampleUnits] = useState(false)
+  const [newUserProfile, setNewUserProfile] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
+
+  const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
+    false,
+  )
+  const openNewUserProfileModal = () => setIsNewUserProfileModalOpen(true)
+  const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance) {
@@ -284,6 +292,9 @@ const Users = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleNewUserProfileAdd = (event) =>
+    setNewUserProfile(event.target.value)
+
   const table = (
     <>
       <TableOverflowWrapper>
@@ -338,6 +349,11 @@ const Users = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
+      <NewUserModal
+        isOpen={isNewUserProfileModalOpen}
+        onDismiss={closeNewUserProfileModal}
+        newUser={newUserProfile}
+      />
     </>
   )
 
@@ -367,11 +383,11 @@ const Users = () => {
                 <input
                   type="text"
                   id="search-emails"
-                  value=""
-                  onChange={() => {}}
+                  value={newUserProfile}
+                  onChange={handleNewUserProfileAdd}
                 />
               </SearchEmailLabelWrapper>
-              <AddUserButton>
+              <AddUserButton onClick={openNewUserProfileModal}>
                 <IconPlus />
                 Add User
               </AddUserButton>

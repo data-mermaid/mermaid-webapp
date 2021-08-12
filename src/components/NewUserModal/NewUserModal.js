@@ -1,13 +1,9 @@
-import { toast } from 'react-toastify'
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
-import { Input, InputRow, HelperText } from '../generic/form'
 import language from '../../language'
-import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
 const NewUserModal = ({ isOpen, onDismiss, newUser }) => {
