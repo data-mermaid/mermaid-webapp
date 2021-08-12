@@ -107,6 +107,7 @@ const typography = {
   smallIconSize: '1rem',
   defaultIconSize: '1.8rem',
   largeIconSize: '3.5rem',
+  xLargeIconSize: '4rem',
   noWordBreak: css`
     overflow-wrap: break-word;
     word-wrap: break-word;

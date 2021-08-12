@@ -26,7 +26,7 @@ const ProjectsMixin = (Base) =>
 
     getProjectProfiles = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.project_profiles)
+        ? this._dexieInstance.project_profiles.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
   }
 

@@ -87,9 +87,33 @@ const WarningTextStyle = styled(InputRow)`
     `}
 `
 
+const ProfileImage = styled.div`
+  border: 1px solid #000;
+  border-radius: 50%;
+  ${(props) =>
+    props.img &&
+    css`
+      background-image: url(${props.img});
+      background-position: center center;
+      background-size: 35px;
+      margin-right: 5px;
+    `}
+  width: 35px;
+  height: 35px;
+`
+
+const DefaultPendingProfileImage = styled(IconAccount)`
+  font-size: 500;
+`
+
 const NameCellStyle = styled('div')`
   display: flex;
   width: 250px;
+  align-items: center;
+  svg {
+    width: ${(props) => props.theme.typography.xLargeIconSize};
+    height: ${(props) => props.theme.typography.xLargeIconSize};
+  }
 `
 
 const Users = () => {
@@ -181,34 +205,41 @@ const Users = () => {
       </label>
     )
 
-    return observerProfiles.map(({ profile_name }) => {
-      return {
-        name: (
-          <NameCellStyle>
-            <IconAccount /> {profile_name}
-          </NameCellStyle>
-        ),
-        email: 'WIP',
-        admin: observerRoleRadioCell(profile_name, 90),
-        collector: observerRoleRadioCell(profile_name, 50),
-        readonly: observerRoleRadioCell(profile_name, 10),
-        active: 'WIP',
-        transfer: (
-          <ButtonSecondary type="button" onClick={() => {}}>
-            <IconAccountConvert />
-          </ButtonSecondary>
-        ),
-        remove: (
-          <ButtonSecondary type="button" onClick={() => {}}>
-            <IconAccountRemove />
-          </ButtonSecondary>
-        ),
-      }
-    })
+    return observerProfiles.map(
+      ({ profile_name, email, picture, num_active_sample_units }) => {
+        return {
+          name: (
+            <NameCellStyle>
+              {picture ? (
+                <ProfileImage img={picture} />
+              ) : (
+                <DefaultPendingProfileImage />
+              )}{' '}
+              {profile_name}
+            </NameCellStyle>
+          ),
+          email,
+          admin: observerRoleRadioCell(profile_name, 90),
+          collector: observerRoleRadioCell(profile_name, 50),
+          readonly: observerRoleRadioCell(profile_name, 10),
+          active: num_active_sample_units,
+          transfer: (
+            <ButtonSecondary type="button" onClick={() => {}}>
+              <IconAccountConvert />
+            </ButtonSecondary>
+          ),
+          remove: (
+            <ButtonSecondary type="button" onClick={() => {}}>
+              <IconAccountRemove />
+            </ButtonSecondary>
+          ),
+        }
+      },
+    )
   }, [observerProfiles])
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.name', 'values.email']
+    const keys = ['values.name.props.children', 'values.email']
 
     const queryTerms = splitSearchQueryStrings(query)
 
