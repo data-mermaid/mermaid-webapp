@@ -116,7 +116,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         databaseSwitchboardInstance.getSites(projectId),
         databaseSwitchboardInstance.getManagementRegimes(projectId),
         databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getProjectProfiles(),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),

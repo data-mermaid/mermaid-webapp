@@ -24,10 +24,21 @@ const ProjectsMixin = (Base) =>
         ? Promise.resolve(mockMermaidData.projecttags)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getProjectProfiles = () =>
-      this._isAuthenticatedAndReady
-        ? this._dexieInstance.project_profiles.toArray()
+    getProjectProfiles = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      return this._isAuthenticatedAndReady
+        ? this._dexieInstance.project_profiles
+            .toArray()
+            .then((projectProfiles) =>
+              projectProfiles.filter(
+                (projectProfile) => projectProfile.project === projectId,
+              ),
+            )
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default ProjectsMixin
