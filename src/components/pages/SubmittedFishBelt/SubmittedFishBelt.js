@@ -22,15 +22,15 @@ const SubmittedFishBelt = () => {
   const [fishNameOptions, setFishNameOptions] = useState([])
   const [fishNameConstants, setFishNameConstants] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { recordId } = useParams()
+  const { recordId, projectId } = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance) {
       const promises = [
-        databaseSwitchboardInstance.getSites(),
-        databaseSwitchboardInstance.getManagementRegimes(),
+        databaseSwitchboardInstance.getSites(projectId),
+        databaseSwitchboardInstance.getManagementRegimes(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
@@ -78,7 +78,7 @@ const SubmittedFishBelt = () => {
           toast.error(language.error.submittedRecordsUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, recordId])
+  }, [databaseSwitchboardInstance, isMounted, recordId, projectId])
 
   return (
     <ContentPageLayout

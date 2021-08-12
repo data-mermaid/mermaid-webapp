@@ -1,6 +1,9 @@
 import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { Route } from 'react-router-dom'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -11,9 +14,20 @@ import {
 import ManagementRegimes from './ManagementRegimes'
 
 test('ManagementRegimes component renders with the expected headers', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -36,9 +50,20 @@ test('ManagementRegimes component renders with the expected headers', async () =
 })
 
 test('Management Regime Records table sorts properly by Name column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -66,9 +91,20 @@ test('Management Regime Records table sorts properly by Name column', async () =
 })
 
 test('Management Regime Records table sorts properly by Year Est. column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -97,9 +133,20 @@ test('Management Regime Records table sorts properly by Year Est. column', async
 })
 
 test('Management Regime Records table sorts properly by Compliance column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -128,9 +175,20 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
 })
 
 test('Management Regime Records table sorts properly by Open Access column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -158,9 +216,20 @@ test('Management Regime Records table sorts properly by Open Access column', asy
 })
 
 test('Management Regime Records table sorts properly by Access Restrictions column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -188,9 +257,20 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
 })
 
 test('Management Regime Records table sorts properly by Periodic Closure column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -218,9 +298,20 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
 })
 
 test('Management Regime Records table sorts properly by Size Limits column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -248,9 +339,20 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
 })
 
 test('Management Regime Records table sorts properly by Gear Restrictions column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -278,9 +380,20 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
 })
 
 test('Management Regime Records table sorts properly by Species Restrictions column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
@@ -308,9 +421,20 @@ test('Management Regime Records table sorts properly by Species Restrictions col
 })
 
 test('Management Regime Records table sorts properly by No Take column', async () => {
-  renderAuthenticatedOnline(<ManagementRegimes />, {
-    isSyncInProgressOverride: true,
-  })
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/management-regimes">
+      <ManagementRegimes />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      initialEntries: ['/projects/5/management-regimes'],
+      dexieInstance,
+    },
+  )
 
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),

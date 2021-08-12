@@ -24,7 +24,7 @@ const OfflineIndicatorStyles = styled.div`
       pointer-events: none;
       width: ${theme.spacing.fullViewportWidth};
       height: 100vh;
-      z-index: 9998;
+      z-index: 101;
       position: fixed;
       span {
         background: ${theme.color.cautionColor};
@@ -43,7 +43,7 @@ const OfflineIndicator = () => {
 
   return (
     <OfflineIndicatorStyles isOnline={isOnline}>
-      {!isOnline && <span>You&apos;re offline</span>}
+      {!isOnline && <span>You&rsquo;re offline</span>}
     </OfflineIndicatorStyles>
   )
 }

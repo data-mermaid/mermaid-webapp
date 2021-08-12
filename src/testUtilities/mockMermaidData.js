@@ -826,7 +826,7 @@ const collect_records = [
   },
 ]
 
-const sites = [
+const project_sites = [
   {
     id: '1',
     name: 'Site A',
@@ -881,7 +881,7 @@ const sites = [
   },
 ]
 
-const management_regimes = [
+const project_managements = [
   {
     id: '1',
     name: 'Management Regimes A',
@@ -898,6 +898,7 @@ const management_regimes = [
     species_restriction: false,
     access_restriction: false,
     notes: 'Mermaid Management Regimes Notes',
+    project: '5',
   },
   {
     id: '2',
@@ -915,6 +916,7 @@ const management_regimes = [
     species_restriction: false,
     access_restriction: false,
     notes: 'Some notes',
+    project: '5',
   },
   {
     id: '3',
@@ -936,6 +938,7 @@ const management_regimes = [
     species_restriction: false,
     access_restriction: true,
     notes: '',
+    project: '5',
   },
 ]
 
@@ -3338,252 +3341,6 @@ const project_profiles = [
   },
 ]
 
-const project_managements = [
-  {
-    id: '0f57c222-902b-4042-b528-2128628f2a59',
-    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    size: null,
-    created_on: '2021-03-15T19:41:04.283841Z',
-    updated_on: '2021-03-15T19:41:04.286632Z',
-    data: null,
-    name: 'AlAqah - MPA',
-    name_secondary: '',
-    est_year: null,
-    notes: '',
-    boundary: null,
-    no_take: true,
-    periodic_closure: false,
-    open_access: false,
-    size_limits: false,
-    gear_restriction: false,
-    species_restriction: false,
-    access_restriction: false,
-    validations: {
-      status: 'ok',
-      results: {
-        _root_: {
-          validate_exists: {
-            status: 'ok',
-            message: '',
-          },
-          validate_similar: {
-            status: 'ok',
-            message: '',
-          },
-        },
-      },
-      last_validated: '2021-03-15 19:41:04.286632+00:00',
-    },
-    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
-    compliance: null,
-    predecessor: '7b161a00-93c6-44fa-b0b7-21e7f0a8c3d4',
-    parties: [],
-  },
-  {
-    id: '1d5f1545-ee80-46c6-b315-8c98291327d7',
-    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    size: null,
-    created_on: '2021-03-15T19:41:04.107398Z',
-    updated_on: '2021-03-15T19:41:04.113662Z',
-    data: null,
-    name: 'Ahus 10 - Fished',
-    name_secondary: '',
-    est_year: null,
-    notes: '',
-    boundary: null,
-    no_take: false,
-    periodic_closure: false,
-    open_access: true,
-    size_limits: false,
-    gear_restriction: false,
-    species_restriction: false,
-    access_restriction: false,
-    validations: {
-      status: 'ok',
-      results: {
-        _root_: {
-          validate_exists: {
-            status: 'ok',
-            message: '',
-          },
-          validate_similar: {
-            status: 'ok',
-            message: '',
-          },
-        },
-      },
-      last_validated: '2021-03-15 19:41:04.113662+00:00',
-    },
-    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
-    compliance: null,
-    predecessor: '5e8fb032-d560-4ae9-8289-f29d359315b1',
-    parties: [],
-  },
-  {
-    id: '8ef6e818-894e-4d07-b608-8a782cd380b4',
-    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    size: 398.0,
-    created_on: '2021-03-15T19:41:03.921433Z',
-    updated_on: '2021-03-15T19:41:03.921486Z',
-    data: null,
-    name: "A'a Island - Exclusive access",
-    name_secondary: 'Special Management Area',
-    est_year: 2017,
-    notes: '',
-    boundary: null,
-    no_take: false,
-    periodic_closure: true,
-    open_access: false,
-    size_limits: false,
-    gear_restriction: false,
-    species_restriction: false,
-    access_restriction: false,
-    validations: {
-      status: 'ok',
-      results: {
-        _root_: {
-          validate_exists: {
-            status: 'ok',
-            message: '',
-          },
-          validate_similar: {
-            status: 'ok',
-            message: '',
-          },
-        },
-      },
-      last_validated: '2020-12-17 19:39:55.137330+00:00',
-    },
-    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
-    compliance: '1579b2df-a572-4f88-a07a-593cc573317a',
-    predecessor: '91bf6350-21f0-4246-8a22-d3e5ff02e54c',
-    parties: [
-      'c1baac4b-6ca2-4a1b-8d74-ec7836629c42',
-      'c2035972-572e-43fe-b261-4536793856b5',
-    ],
-  },
-  {
-    id: 'ba8e723e-e1ce-4464-9b1f-d07443ba6b9b',
-    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    size: null,
-    created_on: '2021-03-15T19:41:04.178549Z',
-    updated_on: '2021-03-15T19:41:04.183194Z',
-    data: null,
-    name: 'Ahus 3 - MPA 2009',
-    name_secondary: '',
-    est_year: null,
-    notes: '',
-    boundary: null,
-    no_take: false,
-    periodic_closure: false,
-    open_access: false,
-    size_limits: false,
-    gear_restriction: true,
-    species_restriction: false,
-    access_restriction: false,
-    validations: {
-      status: 'ok',
-      results: {
-        _root_: {
-          validate_exists: {
-            status: 'ok',
-            message: '',
-          },
-          validate_similar: {
-            status: 'ok',
-            message: '',
-          },
-        },
-      },
-      last_validated: '2021-03-15 19:41:04.183194+00:00',
-    },
-    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
-    compliance: 'f76d7866-5b0d-428d-928c-738c2912d6e0',
-    predecessor: 'd6d69c36-5e10-482b-b705-9a570b53e037',
-    parties: ['c1baac4b-6ca2-4a1b-8d74-ec7836629c42'],
-  },
-]
-
-const project_sites = [
-  {
-    id: '2531f9b3-2a95-4189-abd6-a250e33b1974',
-    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    created_on: '2021-03-15T19:41:03.450277Z',
-    updated_on: '2021-03-15T19:41:03.450344Z',
-    data: null,
-    name: 'NT2',
-    location: {
-      type: 'Point',
-      coordinates: [179.4206, -17.3774],
-    },
-    notes:
-      "MR: Nakodu_tabu (as of 2.2020)\nChanged 'semi-exposed' to 'exposed' (YNand, 2.20.2020).",
-    validations: {
-      status: 'ok',
-      results: {
-        _root_: {
-          validate_exists: {
-            status: 'ok',
-            message: '',
-          },
-          validate_similar: {
-            status: 'ok',
-            message: '',
-          },
-        },
-      },
-      last_validated: '2020-02-20 03:34:31.169676+00:00',
-    },
-    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
-    country: 'dd865c41-6f84-4e47-8fd7-8a6de436881f',
-    reef_type: '19534716-b138-49b1-bbd8-420df9243413',
-    reef_zone: '0e5ac2d0-d1cc-4f04-a696-f6d3db2b9ca8',
-    exposure: '997c6cb3-c5e5-4df6-9cfa-5814a58a7b9e',
-    predecessor: '0b79c60f-4df8-4263-8f14-311b5edb2d33',
-  },
-  {
-    id: 'a9c8b3e0-0e3b-4db8-8b51-daccef1ab030',
-    updated_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    created_on: '2021-03-15T19:41:03.549363Z',
-    updated_on: '2021-03-15T19:41:03.549422Z',
-    data: null,
-    name: 'BA03',
-    location: {
-      type: 'Point',
-      coordinates: [177.621112, -17.398367],
-    },
-    notes: '',
-    validations: {
-      status: 'ok',
-      results: {
-        _root_: {
-          validate_exists: {
-            status: 'ok',
-            message: '',
-          },
-          validate_similar: {
-            status: 'ok',
-            message: '',
-          },
-        },
-      },
-      last_validated: '2020-06-01 11:00:54.959856+00:00',
-    },
-    created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-    project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
-    country: 'dd865c41-6f84-4e47-8fd7-8a6de436881f',
-    reef_type: '16a0a961-df6d-42a5-86b8-bc30f87bab42',
-    reef_zone: '06ea17cd-5d1d-46ae-a654-64901e2a9f96',
-    exposure: 'baa54e1d-4263-4273-80f5-35812304b592',
-    predecessor: '03e5576e-8a1e-4e6d-9999-d2c02d4c193c',
-  },
-]
-
 const benthic_attributes = [
   {
     id: 'fcf25ee3-701b-4d15-9a17-71f40406db4c',
@@ -3631,14 +3388,12 @@ const mockMermaidData = {
   fish_genera,
   fish_species,
   fishBeltTransectMethods,
-  management_regimes,
   project_managements,
   project_profiles,
   project_sites,
   projects,
   projecttags,
   sampleUnitMethods,
-  sites,
 }
 
 export default mockMermaidData

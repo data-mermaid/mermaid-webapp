@@ -24,14 +24,14 @@ const Site = () => {
   const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [siteBeingEdited, setSiteBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
-  const { siteId } = useParams()
+  const { siteId, projectId } = useParams()
 
   const _getSupportingData = useEffect(() => {
     let isMounted = true
 
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && siteId && projectId) {
       const promises = [
-        databaseSwitchboardInstance.getSite(siteId),
+        databaseSwitchboardInstance.getSite({ id: siteId, projectId }),
         databaseSwitchboardInstance.getChoices(),
       ]
 
@@ -55,7 +55,7 @@ const Site = () => {
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance, siteId])
+  }, [databaseSwitchboardInstance, siteId, projectId])
 
   const initialFormValues = useMemo(
     () => getSiteInitialValues(siteBeingEdited),

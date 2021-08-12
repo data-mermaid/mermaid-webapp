@@ -11,10 +11,12 @@ import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 
 test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish Belt page.', async () => {
-  renderAuthenticatedOnline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    { initialEntries: ['/projects/fakewhatever/collecting'] },
-  )
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/collecting'],
+    dexieInstance,
+  })
 
   userEvent.click(
     await screen.findByRole('button', {

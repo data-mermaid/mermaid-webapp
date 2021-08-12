@@ -111,10 +111,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }, [databaseSwitchboardInstance])
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && projectId) {
       const promises = [
-        databaseSwitchboardInstance.getSites(),
-        databaseSwitchboardInstance.getManagementRegimes(),
+        databaseSwitchboardInstance.getSites(projectId),
+        databaseSwitchboardInstance.getManagementRegimes(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(),
         databaseSwitchboardInstance.getFishSpecies(),
@@ -171,7 +171,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           toast.error(error)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId])
+  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId, projectId])
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
@@ -240,17 +240,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     genusName,
     speciesName,
   }) => {
-    const addSpeciesSelectionToObservation = (speciesId) => {
-      observationsDispatch({
-        type: 'updateFishName',
-        payload: {
-          observationId: observationToAddSpeciesTo,
-          newFishName: speciesId,
-        },
-      })
-      updateFishNameOptionsStateWithOfflineStorageData()
-    }
-
     databaseSwitchboardInstance
       .addFishSpecies({
         genusId,
@@ -258,13 +247,27 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         speciesName,
       })
       .then((newFishSpecies) => {
-        addSpeciesSelectionToObservation(newFishSpecies.id)
+        observationsDispatch({
+          type: 'updateFishName',
+          payload: {
+            observationId: observationToAddSpeciesTo,
+            newFishName: newFishSpecies.id,
+          },
+        })
+        updateFishNameOptionsStateWithOfflineStorageData()
         toast.success(language.success.fishSpeciesSave)
       })
       .catch((error) => {
         if (error.message === 'Species already exists') {
           toast.warning(language.error.fishSpeciesAlreadyExists)
-          addSpeciesSelectionToObservation(error.existingSpecies.id)
+
+          observationsDispatch({
+            type: 'updateFishName',
+            payload: {
+              observationId: observationToAddSpeciesTo,
+              newFishName: error.existingSpecies.id,
+            },
+          })
         } else {
           toast.error(language.error.fishSpeciesSave)
         }

@@ -64,11 +64,11 @@ export const InputRow = styled.div`
     `}
 `
 export const ValidationMessage = styled.span.attrs((props) => ({
-  role: props.validationType === 'error' || 'warning' ? 'alert' : undefined,
-}))`
-  /* ${(props) => props.validationType === 'error' && css``}
-  ${(props) => props.validationType === 'warning' && css``} */
-`
+  role:
+    props.validationType === 'error' || props.validationType === 'warning'
+      ? 'alert'
+      : undefined,
+}))``
 export const Select = styled.select`
   ${inputTextareaSelectStyles}
 `

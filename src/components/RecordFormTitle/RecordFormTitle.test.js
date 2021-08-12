@@ -25,7 +25,7 @@ test('RecordFormTitle shows the title as expected when all of site name, transec
   renderAuthenticatedOnline(
     <RecordFormTitle
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
-      sites={mockMermaidData.sites}
+      sites={mockMermaidData.project_sites}
     />,
   )
 
@@ -47,7 +47,7 @@ test('RecordFormTitle component renders a default title when site name, transect
       submittedRecordOrCollectRecordDataProperty={
         mockMissingSiteNameTransectNumberLabelCollectRecord.data
       }
-      sites={mockMermaidData.sites}
+      sites={mockMermaidData.project_sites}
     />,
   )
 
@@ -73,7 +73,7 @@ test('RecordFormTitle component renders properly when site name is missing.', ()
       submittedRecordOrCollectRecordDataProperty={
         mockMissingSiteCollectRecord.data
       }
-      sites={mockMermaidData.sites}
+      sites={mockMermaidData.project_sites}
     />,
   )
 
@@ -101,7 +101,7 @@ test('RecordFormTitle component renders properly when label is missing.', () => 
       submittedRecordOrCollectRecordDataProperty={
         mockMissingLabelCollectRecord.data
       }
-      sites={mockMermaidData.sites}
+      sites={mockMermaidData.project_sites}
     />,
   )
 
@@ -129,7 +129,7 @@ test('RecordFormTitle component renders properly when transect number is missing
       submittedRecordOrCollectRecordDataProperty={
         mockMissingTransectNumberCollectRecord.data
       }
-      sites={mockMermaidData.sites}
+      sites={mockMermaidData.project_sites}
     />,
   )
 

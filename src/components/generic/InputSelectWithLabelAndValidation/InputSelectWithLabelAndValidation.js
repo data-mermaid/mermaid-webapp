@@ -19,7 +19,9 @@ const InputSelectWithLabelAndValidation = ({
   ))
 
   const validationRole =
-    validationType === 'error' || 'warning' ? 'alert' : undefined
+    validationType === 'error' || validationType === 'warning'
+      ? 'alert'
+      : undefined
 
   return (
     <InputRow validationType={validationType}>

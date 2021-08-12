@@ -26,7 +26,7 @@ const StyledHeader = styled(RowSpaceBetween)`
   position: fixed;
   width: 100%;
   top: 0;
-  z-index: 10;
+  z-index: 102;
   height: ${theme.spacing.headerHeight};
   img {
     height: calc(${theme.spacing.headerHeight} - 10px);

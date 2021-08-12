@@ -284,12 +284,16 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecordsForUIDisplay = () => {
+    getCollectRecordsForUIDisplay = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
       return this._isAuthenticatedAndReady
         ? Promise.all([
             this.getCollectRecords(),
-            this.getSites(),
-            this.getManagementRegimes(),
+            this.getSites(projectId),
+            this.getManagementRegimes(projectId),
             this.getChoices(),
           ]).then(([collectRecords, sites, managementRegimes, choices]) => {
             return collectRecords.map((record) => ({

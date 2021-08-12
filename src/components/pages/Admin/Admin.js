@@ -94,7 +94,7 @@ const TooltipPopup = styled('span')`
   white-space: normal;
   text-align: start;
   line-height: ${theme.typography.lineHeight};
-  z-index: 1000;
+  z-index: 101;
   ${theme.typography.upperCase};
 `
 const InputAutocompleteWrapper = styled(InputRow)`
