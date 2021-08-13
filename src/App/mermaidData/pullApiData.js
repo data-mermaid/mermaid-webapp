@@ -69,13 +69,10 @@ export const pullApiData = async ({
         if (apiDataType !== 'choices') {
           const updates = apiData[apiDataType]?.updates ?? []
           const deletes = apiData[apiDataType]?.deletes ?? []
+          const deleteIds = deletes.map(({ id }) => id)
 
-          updates.forEach((updatedItem) => {
-            dexieInstance[apiDataType].put(updatedItem)
-          })
-          deletes.forEach(({ id }) => {
-            dexieInstance[apiDataType].delete(id)
-          })
+          dexieInstance[apiDataType].bulkPut(updates)
+          dexieInstance[apiDataType].bulkDelete(deleteIds)
         }
       })
     },

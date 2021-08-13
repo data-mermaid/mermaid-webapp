@@ -28,9 +28,7 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
       ]
 
       allThePullableDataNamesButChoices.forEach((dataType) => {
-        mockMermaidData[dataType].forEach((record) => {
-          dexieInstance[dataType].put(record)
-        })
+        dexieInstance[dataType].bulkPut(mockMermaidData[dataType])
       })
 
       dexieInstance.choices.put({

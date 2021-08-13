@@ -1,16 +1,17 @@
-import { toast } from 'react-toastify'
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import styled, { css } from 'styled-components'
-
-import { matchSorter } from 'match-sorter'
 import {
   usePagination,
   useSortBy,
   useGlobalFilter,
   useTable,
 } from 'react-table'
+import { matchSorter } from 'match-sorter'
+import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import styled, { css } from 'styled-components'
 import { useCurrentUser } from '../../../App/mermaidData/useCurrentUser'
+
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
 import { InputRow } from '../../generic/form'
@@ -126,6 +127,7 @@ const Users = () => {
   const [userTransferFrom, setUserTransferFrom] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
+  const { projectId } = useParams()
 
   const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
     false,
@@ -145,9 +147,9 @@ const Users = () => {
     setIsTransferSampleUnitsModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getProjectProfiles()
+        .getProjectProfiles(projectId)
         .then((projectProfilesResponse) => {
           if (isMounted.current) {
             setObserverProfiles(projectProfilesResponse)
@@ -158,7 +160,7 @@ const Users = () => {
           toast.error(`users error`)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted])
+  }, [databaseSwitchboardInstance, isMounted, projectId])
 
   const tableColumns = useMemo(() => {
     return [

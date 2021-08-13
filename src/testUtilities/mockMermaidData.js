@@ -430,6 +430,7 @@ const fishBeltTransectMethods = [
 const collect_records = [
   {
     id: '1',
+    project: '5',
     data: {
       protocol: 'benthiclit',
       sample_event: {
@@ -459,6 +460,7 @@ const collect_records = [
   },
   {
     id: '2',
+    project: '5',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -531,6 +533,7 @@ const collect_records = [
   },
   {
     id: '3',
+    project: '5',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -564,6 +567,7 @@ const collect_records = [
   },
   {
     id: '4',
+    project: '5',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -600,6 +604,7 @@ const collect_records = [
     validations: { status: 'error' },
   },
   {
+    project: '5',
     id: '5',
     data: {
       protocol: 'fishbelt',
@@ -642,6 +647,7 @@ const collect_records = [
   },
   {
     id: '6',
+    project: '5',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -675,6 +681,7 @@ const collect_records = [
   },
   {
     id: '7',
+    project: '5',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -703,6 +710,7 @@ const collect_records = [
   },
   {
     id: '8',
+    project: '5',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -732,6 +740,7 @@ const collect_records = [
   },
   {
     id: '9',
+    project: '5',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -764,6 +773,7 @@ const collect_records = [
   },
   {
     id: '10',
+    project: '5',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -793,6 +803,41 @@ const collect_records = [
   },
   {
     id: '11',
+    project: '5',
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+        notes: 'some lit notes',
+        management: '3',
+        sample_date: '2021-3-2',
+      },
+      fishbelt_transect: {
+        depth: 10,
+        label: 'FB-2',
+        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
+        size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        number: 2,
+        sample_time: '11:55',
+        len_surveyed: 5,
+      },
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
+    },
+    validations: { status: 'ok' },
+  },
+  {
+    id: '12',
+    project: 'shouldgetfilteredout',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -829,6 +874,7 @@ const collect_records = [
 const project_sites = [
   {
     id: '1',
+    project: '5',
     name: 'Site A',
     country: 'c570ff86-4992-4fa1-939a-3ce433f80dcb',
     reef_type: '19534716-b138-49b1-bbd8-420df9243413',
@@ -842,6 +888,7 @@ const project_sites = [
   },
   {
     id: '2',
+    project: '5',
     name: 'Site B',
     country: '7fcb8835-8015-4c22-808a-f9326c4a6e3a',
     reef_type: '16a0a961-df6d-42a5-86b8-bc30f87bab42',
@@ -855,6 +902,7 @@ const project_sites = [
   },
   {
     id: '3',
+    project: '5',
     name: 'Site C',
     country: '09249190-38db-424a-98ce-d7e01af37118',
     reef_type: 'dc3aa6d3-2795-42bb-9771-39fbcdd3029d',
@@ -868,6 +916,7 @@ const project_sites = [
   },
   {
     id: '4',
+    project: '5',
     name: 'Site D',
     country: '34991b8f-f8e5-4654-b5f1-a43d28adfe05',
     reef_type: '2b99cdf4-9566-4e60-8700-4ec3b9c7e322',

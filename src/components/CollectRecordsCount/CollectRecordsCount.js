@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -25,17 +26,17 @@ const CollectRecordsCountWrapper = styled.strong`
 `
 
 const CollectRecordsCount = () => {
+  const [collectRecordsCount, setCollectRecordsCount] = useState(0)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
-
-  const [collectRecordsCount, setCollectRecordsCount] = useState(0)
+  const { projectId } = useParams()
 
   const _getCollectRecordCount = useEffect(() => {
     let isMounted = true
 
-    if (!isSyncInProgress) {
+    if (!isSyncInProgress && databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getCollectRecords()
+        .getCollectRecords(projectId)
         .then((collectRecords) => {
           if (isMounted) {
             setCollectRecordsCount(collectRecords.length)
@@ -49,7 +50,7 @@ const CollectRecordsCount = () => {
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance, isSyncInProgress])
+  }, [databaseSwitchboardInstance, isSyncInProgress, projectId])
 
   return (
     !!collectRecordsCount && (
