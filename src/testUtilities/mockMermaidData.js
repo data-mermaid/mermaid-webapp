@@ -874,6 +874,7 @@ const collect_records = [
 const project_sites = [
   {
     id: '1',
+    project: '5',
     name: 'Site A',
     country: 'c570ff86-4992-4fa1-939a-3ce433f80dcb',
     reef_type: '19534716-b138-49b1-bbd8-420df9243413',
@@ -887,6 +888,7 @@ const project_sites = [
   },
   {
     id: '2',
+    project: '5',
     name: 'Site B',
     country: '7fcb8835-8015-4c22-808a-f9326c4a6e3a',
     reef_type: '16a0a961-df6d-42a5-86b8-bc30f87bab42',
@@ -900,6 +902,7 @@ const project_sites = [
   },
   {
     id: '3',
+    project: '5',
     name: 'Site C',
     country: '09249190-38db-424a-98ce-d7e01af37118',
     reef_type: 'dc3aa6d3-2795-42bb-9771-39fbcdd3029d',
@@ -913,6 +916,7 @@ const project_sites = [
   },
   {
     id: '4',
+    project: '5',
     name: 'Site D',
     country: '34991b8f-f8e5-4654-b5f1-a43d28adfe05',
     reef_type: '2b99cdf4-9566-4e60-8700-4ec3b9c7e322',

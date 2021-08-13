@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -7,7 +8,6 @@ import language from '../../language'
 import theme from '../../theme'
 import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useParams } from 'react-router-dom'
 
 const CollectRecordsCountWrapper = styled.strong`
   background: ${theme.color.calloutColor};

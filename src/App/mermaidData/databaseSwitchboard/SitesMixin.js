@@ -8,7 +8,9 @@ const SitesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.project_sites.toArray()
+        ? this._dexieInstance.project_sites
+            .toArray()
+            .then((sites) => sites.filter((site) => site.project === projectId))
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
