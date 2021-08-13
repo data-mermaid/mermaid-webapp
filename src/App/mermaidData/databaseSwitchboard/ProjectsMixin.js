@@ -19,10 +19,17 @@ const ProjectsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getProjectTags = () =>
-      this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.projecttags)
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+    getProjectTags = () => {
+      if (this._isOnlineAuthenticatedAndReady) {
+        return this._authenticatedAxios
+          .get(`${this._apiBaseUrl}/projecttags`)
+          .then((apiResults) => {
+            return apiResults.data.results
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
 
     getProjectProfiles = (projectId) => {
       if (!projectId) {
