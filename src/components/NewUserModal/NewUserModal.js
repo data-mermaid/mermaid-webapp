@@ -2,21 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
-import { IconSend } from '../icons'
 import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
 const NewUserModal = ({ isOpen, onDismiss, newUser }) => {
-  const modalBodyText = `{ ${newUser} } ${language.pages.userTable.newUserText}`
+  const modalBodyText = `{ ${newUser} } ${language.pages.userTable.newUserModalText}`
   const modalContent = <div>{modalBodyText}</div>
 
   const footerContent = (
     <RightFooter>
-      <ButtonPrimary onClick={onDismiss}>
-        <IconSend />
-        Send email
-      </ButtonPrimary>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
+      <ButtonPrimary onClick={onDismiss}>Send email</ButtonPrimary>
     </RightFooter>
   )
 
