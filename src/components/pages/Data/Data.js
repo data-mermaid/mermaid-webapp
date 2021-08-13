@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
@@ -43,11 +43,12 @@ const Data = () => {
   ] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { isOnline } = useOnlineStatus()
+  const { projectId } = useParams()
 
   const _getSubmittedRecords = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted) {
       databaseSwitchboardInstance
-        .getSubmittedRecordsForUIDisplay()
+        .getSubmittedRecordsForUIDisplay(projectId)
         .then((records) => {
           if (isMounted) {
             setSubmittedRecordsForUiDisplay(records)

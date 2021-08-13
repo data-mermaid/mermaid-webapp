@@ -1,5 +1,3 @@
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
-
 const ProjectsMixin = (Base) =>
   class extends Base {
     getProjects = () =>

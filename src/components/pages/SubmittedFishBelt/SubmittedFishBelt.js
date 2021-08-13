@@ -36,6 +36,7 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
         databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(
+          projectId,
           recordId,
         ),
       ]

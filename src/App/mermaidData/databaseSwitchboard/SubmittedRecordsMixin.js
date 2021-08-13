@@ -1,4 +1,3 @@
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const SubmittedRecordsMixin = (Base) =>
@@ -11,31 +10,47 @@ const SubmittedRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
-    getSubmittedRecords = () =>
-      this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.sampleUnitMethods)
-        : Promise.reject(this._notAuthenticatedAndReadyError)
-
-    getSubmittedFishBeltTransectRecords = () =>
-      this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.fishBeltTransectMethods)
-        : Promise.reject(this._notAuthenticatedAndReadyError)
-
-    getSubmittedFishBeltTransectRecord = (id) => {
-      if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+    getSubmittedRecords = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
       }
 
-      return this._isAuthenticatedAndReady
-        ? this.getSubmittedFishBeltTransectRecords().then((records) =>
-            records.find((record) => record.id === id),
-          )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (this._isOnlineAuthenticatedAndReady) {
+        return this._authenticatedAxios
+          .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
+            params: {
+              protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
+            },
+          })
+          .then((apiResults) => {
+            return apiResults.data.results
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedRecordsForUIDisplay = () => {
+    getSubmittedFishBeltTransectRecord = (projectId, id) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        return this._authenticatedAxios
+          .get(
+            `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
+          )
+          .then((apiResults) => {
+            return apiResults.data
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getSubmittedRecordsForUIDisplay = (projectId) => {
       return this._isAuthenticatedAndReady
-        ? this.getSubmittedRecords().then((submittedRecords) => {
+        ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
             return submittedRecords.map((record) => ({
               ...record,
               uiLabels: {
