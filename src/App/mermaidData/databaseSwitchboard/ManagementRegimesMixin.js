@@ -8,7 +8,13 @@ const ManagementRegimesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.project_managements.toArray()
+        ? this._dexieInstance.project_managements
+            .toArray()
+            .then((managementRegimes) =>
+              managementRegimes.filter(
+                (managementRegime) => managementRegime.project === projectId,
+              ),
+            )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -18,9 +24,9 @@ const ManagementRegimesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.project_managements
-            .toArray()
-            .then((records) => records.find((record) => record.id === id))
+        ? this.getManagementRegimes(projectId).then((records) => {
+            return records.find((record) => record.id === id)
+          })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
