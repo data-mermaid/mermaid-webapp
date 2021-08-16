@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -39,13 +39,13 @@ function App({ dexieInstance }) {
     isOnline,
   })
 
-  const { current: apiSyncInstance } = useRef(
-    new SyncApiDataIntoOfflineStorage({
+  const apiSyncInstance = useMemo(() => {
+    return new SyncApiDataIntoOfflineStorage({
       dexieInstance,
       apiBaseUrl,
       auth0Token,
-    }),
-  )
+    })
+  }, [dexieInstance, apiBaseUrl, auth0Token])
 
   const databaseSwitchboardInstance = useMemo(() => {
     const areDependenciesReady =
