@@ -18,8 +18,8 @@ const CollectRecordsMixin = (Base) =>
       warning: 'Warnings',
     }
 
-    #getIsRecordStatusCodeSuccessful = (recordFromServer) => {
-      const statusCode = recordFromServer.status_code
+    #getIsRecordStatusCodeSuccessful = (recordResponseFromServer) => {
+      const statusCode = recordResponseFromServer.status_code
 
       return statusCode >= 200 && statusCode < 300
     }
@@ -109,7 +109,7 @@ const CollectRecordsMixin = (Base) =>
         return noSizeLabel
       }
 
-      const length = record.data.benthic_transect.len_surveyed
+      const length = record.data.benthic_transect?.len_surveyed
 
       return length === undefined ? noSizeLabel : `${length}m`
     }
@@ -143,9 +143,9 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
-            const [recordReturnedFromApiPush] = response.data.collect_records
+            const [recordResponseFromApiPush] = response.data.collect_records
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordReturnedFromApiPush,
+              recordResponseFromApiPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
@@ -154,7 +154,10 @@ const CollectRecordsMixin = (Base) =>
               return this._apiSyncInstance
                 .pullEverythingButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
-                  return recordReturnedFromApiPush
+                  const recordReturnedFromServer =
+                    recordResponseFromApiPush.data
+
+                  return recordReturnedFromServer
                 })
             }
 
