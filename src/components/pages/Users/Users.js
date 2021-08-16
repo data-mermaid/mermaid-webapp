@@ -343,7 +343,7 @@ const Users = () => {
     </>
   )
 
-  const content = isOnline ? <> {table}</> : <PageUnavailableOffline />
+  const content = isOnline ? <>{table}</> : <PageUnavailableOffline />
 
   return (
     <ContentPageLayout

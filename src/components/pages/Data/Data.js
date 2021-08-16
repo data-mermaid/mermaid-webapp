@@ -46,11 +46,13 @@ const Data = () => {
   const { projectId } = useParams()
 
   const _getSubmittedRecords = useEffect(() => {
-    if (databaseSwitchboardInstance && isMounted) {
+    if (!isOnline) setIsLoading(false)
+
+    if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getSubmittedRecordsForUIDisplay(projectId)
         .then((records) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setSubmittedRecordsForUiDisplay(records)
             setIsLoading(false)
           }
@@ -59,7 +61,7 @@ const Data = () => {
           toast.error(language.error.submittedRecordsUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isOnline])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(

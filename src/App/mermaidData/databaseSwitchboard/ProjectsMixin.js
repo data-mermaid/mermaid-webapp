@@ -17,17 +17,18 @@ const ProjectsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getProjectTags = () => {
-      if (this._isOnlineAuthenticatedAndReady) {
-        return this._authenticatedAxios
-          .get(`${this._apiBaseUrl}/projecttags`)
-          .then((apiResults) => {
-            return apiResults.data.results
-          })
-      }
+    getProjectTags = () =>
+      this._isOnlineAuthenticatedAndReady
+        ? this._authenticatedAxios
+            .get(`${this._apiBaseUrl}/projecttags`)
+            .then((apiResults) => {
+              const dataFromApi = apiResults.data.results
 
-      return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
+              if (!dataFromApi) throw Error('project tags not available')
+
+              return dataFromApi
+            })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
 
     getProjectProfiles = (projectId) => {
       if (!projectId) {

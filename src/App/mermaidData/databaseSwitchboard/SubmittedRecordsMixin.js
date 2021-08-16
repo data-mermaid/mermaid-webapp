@@ -15,37 +15,45 @@ const SubmittedRecordsMixin = (Base) =>
         Promise.reject(this._operationMissingParameterError)
       }
 
-      if (this._isOnlineAuthenticatedAndReady) {
-        return this._authenticatedAxios
-          .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
-            params: {
-              protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
-            },
-          })
-          .then((apiResults) => {
-            return apiResults.data.results
-          })
-      }
+      return this._isOnlineAuthenticatedAndReady
+        ? this._authenticatedAxios
+            .get(
+              `${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`,
+              {
+                params: {
+                  protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
+                },
+              },
+            )
+            .then((apiResults) => {
+              const dataFromApi = apiResults.data.results
 
-      return Promise.reject(this._notAuthenticatedAndReadyError)
+              if (!dataFromApi) throw Error('submitted records not available')
+
+              return dataFromApi
+            })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getSubmittedFishBeltTransectRecord = (projectId, id) => {
-      if (!projectId) {
+      if (!(id || projectId)) {
         Promise.reject(this._operationMissingParameterError)
       }
 
-      if (this._isOnlineAuthenticatedAndReady) {
-        return this._authenticatedAxios
-          .get(
-            `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
-          )
-          .then((apiResults) => {
-            return apiResults.data
-          })
-      }
+      return this._isOnlineAuthenticatedAndReady
+        ? this._authenticatedAxios
+            .get(
+              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
+            )
+            .then((apiResults) => {
+              const dataFromApi = apiResults.data
 
-      return Promise.reject(this._notAuthenticatedAndReadyError)
+              if (!dataFromApi)
+                throw Error('submitted fish belt transect not available')
+
+              return dataFromApi
+            })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getSubmittedRecordsForUIDisplay = (projectId) => {

@@ -23,6 +23,7 @@ import theme from '../../../theme'
 import language from '../../../language'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import { createUuid } from '../../../library/createUuid'
+import useIsMounted from '../../../library/useIsMounted'
 
 const SuggestNewOrganizationButton = styled(ButtonSecondary)`
   font-size: smaller;
@@ -137,6 +138,7 @@ const Admin = () => {
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const isMounted = useIsMounted()
   const { projectId } = useParams()
 
   const [
@@ -149,9 +151,9 @@ const Admin = () => {
     setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    let isMounted = true
+    if (!isOnline) setIsLoading(false)
 
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && projectId) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
@@ -159,22 +161,17 @@ const Admin = () => {
 
       Promise.all(promises)
         .then(([projectResponse, projectTagsResponse]) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setProjectBeingEdited(projectResponse)
             setProjectTagOptions(getOptions(projectTagsResponse, false))
             setIsLoading(false)
           }
         })
         .catch(() => {
-          // Will update language file when adding user workflow like save/delete site to page.
-          toast.error(`project error`)
+          toast.error('project error')
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, projectId])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isOnline])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
