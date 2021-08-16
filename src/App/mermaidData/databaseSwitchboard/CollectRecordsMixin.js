@@ -280,6 +280,24 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    getCollectRecordsWithoutOfflineDeleted = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isAuthenticatedAndReady) {
+        return this._dexieInstance.collect_records
+          .toArray()
+          .then((records) =>
+            records.filter(
+              (record) => record.project === projectId && !record._deleted,
+            ),
+          )
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     getCollectRecordsForUIDisplay = (projectId) => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
@@ -287,7 +305,7 @@ const CollectRecordsMixin = (Base) =>
 
       return this._isAuthenticatedAndReady
         ? Promise.all([
-            this.getCollectRecords(projectId),
+            this.getCollectRecordsWithoutOfflineDeleted(projectId),
             this.getSites(projectId),
             this.getManagementRegimes(projectId),
             this.getChoices(),
