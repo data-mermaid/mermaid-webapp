@@ -14,23 +14,24 @@ import ManagementRulesInput from '../ManagementRulesInput'
 import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWithLabel'
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const ManagementRegime = () => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-
-  const [managementParties, setManagementParties] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [managementCompliances, setManagementCompliances] = useState([])
+  const [managementParties, setManagementParties] = useState([])
   const [
     managementRegimeBeingEdited,
     setManagementRegimeBeingEdited,
   ] = useState()
-  const [isLoading, setIsLoading] = useState(true)
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
 
   const _getSupportingData = useEffect(() => {
     let isMounted = true
 
-    if (databaseSwitchboardInstance && projectId) {
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getManagementRegime({
           id: managementRegimeId,
@@ -59,7 +60,12 @@ const ManagementRegime = () => {
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance, managementRegimeId, projectId])
+  }, [
+    databaseSwitchboardInstance,
+    managementRegimeId,
+    projectId,
+    isSyncInProgress,
+  ])
 
   const initialFormValues = useMemo(
     () => getManagementRegimeInitialValues(managementRegimeBeingEdited),

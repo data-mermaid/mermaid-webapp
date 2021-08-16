@@ -14,22 +14,28 @@ import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAn
 import MermaidMap from '../../../MermaidMap'
 import { InputRow, InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const Site = () => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-
   const [countryOptions, setCountryOptions] = useState([])
   const [exposureOptions, setExposureOptions] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [reefTypeOptions, setReefTypeOptions] = useState([])
   const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [siteBeingEdited, setSiteBeingEdited] = useState()
-  const [isLoading, setIsLoading] = useState(true)
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
   const { siteId, projectId } = useParams()
 
   const _getSupportingData = useEffect(() => {
     let isMounted = true
 
-    if (databaseSwitchboardInstance && siteId && projectId) {
+    if (
+      databaseSwitchboardInstance &&
+      siteId &&
+      projectId &&
+      !isSyncInProgress
+    ) {
       const promises = [
         databaseSwitchboardInstance.getSite({ id: siteId, projectId }),
         databaseSwitchboardInstance.getChoices(),
@@ -55,7 +61,7 @@ const Site = () => {
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance, siteId, projectId])
+  }, [databaseSwitchboardInstance, siteId, projectId, isSyncInProgress])
 
   const initialFormValues = useMemo(
     () => getSiteInitialValues(siteBeingEdited),
