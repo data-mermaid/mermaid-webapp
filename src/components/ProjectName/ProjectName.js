@@ -65,11 +65,11 @@ const ProjectName = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const _getProjectName = useEffect(() => {
-    if (databaseSwitchboardInstance && isMounted) {
+    if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance
         .getProject(projectId)
         .then((projectResponse) => {
-          setProjectName(projectResponse.name)
+          if (isMounted.current) setProjectName(projectResponse.name)
         })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
