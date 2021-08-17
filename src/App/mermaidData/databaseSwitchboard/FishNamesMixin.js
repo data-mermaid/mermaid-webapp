@@ -40,6 +40,7 @@ const FishNameMixin = (Base) =>
         display_name: proposedDisplayName,
         name: speciesName,
         genus: genusId,
+        _pushToApi: true,
       }
 
       return this._dexieInstance.fish_species
