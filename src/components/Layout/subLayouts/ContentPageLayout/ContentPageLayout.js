@@ -43,15 +43,12 @@ const Content = styled('div')`
 `
 
 const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
-  // I don't see the point of passing pageTitle to every components using this layout, leave as constant for now.
-  const pageTitle = 'Project Name Placeholder'
-
   const { isSyncInProgress } = useSyncStatus()
 
   return (
     <>
       <MainContentPageLayout>
-        <ProjectName pageTitle={pageTitle} />
+        <ProjectName />
 
         <NavAndContentLayout>
           <Column>

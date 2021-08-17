@@ -1,5 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import { useParams } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
 import { H2 } from '../generic/text'
@@ -9,6 +9,8 @@ import {
 } from '../../library/styling/mediaQueries'
 import { NavLinkThatLooksLikeButtonIcon } from '../generic/links'
 import { IconHome } from '../icons'
+import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useIsMounted from '../../library/useIsMounted'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
@@ -56,19 +58,30 @@ const ProjectNameWrapper = styled('div')`
   `)}
 `
 // const StyledIconHome = styled(IconHome)``
-const ProjectName = ({ pageTitle }) => {
+const ProjectName = () => {
+  const [projectName, setProjectName] = useState('')
+  const isMounted = useIsMounted()
+  const { projectId } = useParams()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+
+  const _getProjectName = useEffect(() => {
+    if (databaseSwitchboardInstance && isMounted) {
+      databaseSwitchboardInstance
+        .getProject(projectId)
+        .then((projectResponse) => {
+          setProjectName(projectResponse.name)
+        })
+    }
+  }, [databaseSwitchboardInstance, isMounted, projectId])
+
   return (
     <ProjectNameWrapper>
       <NavLinkThatLooksLikeButtonIcon to="/">
         <IconHome />
       </NavLinkThatLooksLikeButtonIcon>
-      <H2>{pageTitle}</H2>
+      <H2>{projectName}</H2>
     </ProjectNameWrapper>
   )
-}
-
-ProjectName.propTypes = {
-  pageTitle: PropTypes.string.isRequired,
 }
 
 export default ProjectName
