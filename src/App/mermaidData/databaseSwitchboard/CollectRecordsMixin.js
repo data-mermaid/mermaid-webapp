@@ -37,6 +37,7 @@ const CollectRecordsMixin = (Base) =>
         data: { ...record.data, protocol: 'fishbelt' },
         project: projectIdToSubmit,
         profile: profileIdToSubmit,
+        _pushToApi: true,
       }
     }
 
@@ -258,13 +259,13 @@ const CollectRecordsMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getCollectRecords(projectId).then((records) =>
+        ? this.getCollectRecordsWithOfflineDeleted(projectId).then((records) =>
             records.find((record) => record.id === id),
           )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecords = (projectId) => {
+    getCollectRecordsWithOfflineDeleted = (projectId) => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }

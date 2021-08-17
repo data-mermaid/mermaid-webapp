@@ -27,7 +27,8 @@ class DatabaseSwitchboard extends FishNameMixin(
 const databaseSwitchboardPropTypes = PropTypes.shape({
   getChoices: PropTypes.func,
   getCollectRecord: PropTypes.func,
-  getCollectRecords: PropTypes.func,
+  getCollectRecordsWithOfflineDeleted: PropTypes.func,
+  getCollectRecordsWithoutOfflineDeleted: PropTypes.func,
   getCollectRecordsForUIDisplay: PropTypes.func,
   getFishBelt: PropTypes.func,
   getManagementRegimes: PropTypes.func,
