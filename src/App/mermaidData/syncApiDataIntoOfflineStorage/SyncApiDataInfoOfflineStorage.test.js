@@ -1,5 +1,6 @@
 import { rest } from 'msw'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
@@ -779,4 +780,115 @@ test('PullEverythingButProjectRelated updates IDB with API data', async () => {
       },
     )
   })
+})
+test('pushChanges includes the force flag', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const apiSync = new SyncApiDataIntoOfflineStorage({
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+    dexieInstance,
+  })
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (req, res, ctx) => {
+        const force = req.url.searchParams.get('force')
+
+        if (!force) {
+          // this causes a test failure if the pushChanges
+          // function fails to send the api: force=true
+
+          return res.once(ctx.status(400))
+        }
+
+        return res(ctx.status(200))
+      },
+    ),
+  )
+  expect.assertions(1)
+  const response = await apiSync.pushChanges()
+
+  expect(response).not.toBeUndefined()
+})
+
+test('pushChanges includes the expected modified data', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  // add a _pushToApi flag to one of each data type to simulate it being edited/created
+  await dexieInstance.benthic_attributes.put({
+    ...(await dexieInstance.benthic_attributes.toArray())[0],
+    _pushToApi: true,
+  })
+  await dexieInstance.collect_records.put({
+    ...(await dexieInstance.collect_records.toArray())[0],
+    _pushToApi: true,
+  })
+  await dexieInstance.fish_species.put({
+    ...(await dexieInstance.fish_species.toArray())[0],
+    _pushToApi: true,
+  })
+
+  await dexieInstance.project_managements.put({
+    ...(await dexieInstance.project_managements.toArray())[0],
+    _pushToApi: true,
+  })
+
+  await dexieInstance.project_profiles.put({
+    ...(await dexieInstance.project_profiles.toArray())[0],
+    _pushToApi: true,
+  })
+
+  await dexieInstance.project_sites.put({
+    ...(await dexieInstance.project_sites.toArray())[0],
+    _pushToApi: true,
+  })
+  await dexieInstance.projects.put({
+    ...(await dexieInstance.projects.toArray())[0],
+    _pushToApi: true,
+  })
+  const apiSync = new SyncApiDataIntoOfflineStorage({
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+    dexieInstance,
+  })
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (req, res, ctx) => {
+        const {
+          benthic_attributes,
+          collect_records,
+          fish_species,
+          project_managements,
+          project_profiles,
+          project_sites,
+          projects,
+        } = req.body
+
+        if (
+          !benthic_attributes.length === 1 ||
+          !collect_records.length === 1 ||
+          !fish_species.length === 1 ||
+          !project_managements.length === 1 ||
+          !project_profiles.length === 1 ||
+          !project_sites.length === 1 ||
+          !projects.length === 1
+        ) {
+          return res(ctx.status(400))
+        }
+
+        return res(ctx.status(200))
+      },
+    ),
+  )
+  expect.assertions(1)
+  const response = await apiSync.pushChanges()
+
+  expect(response).not.toBeUndefined()
 })

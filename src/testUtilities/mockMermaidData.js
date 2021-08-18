@@ -431,6 +431,7 @@ const collect_records = [
   {
     id: '1',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'benthiclit',
       sample_event: {
@@ -461,6 +462,7 @@ const collect_records = [
   {
     id: '2',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -534,6 +536,7 @@ const collect_records = [
   {
     id: '3',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -568,6 +571,7 @@ const collect_records = [
   {
     id: '4',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -606,6 +610,7 @@ const collect_records = [
   {
     project: '5',
     id: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -648,6 +653,7 @@ const collect_records = [
   {
     id: '6',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -682,6 +688,7 @@ const collect_records = [
   {
     id: '7',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -711,6 +718,7 @@ const collect_records = [
   {
     id: '8',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -741,6 +749,7 @@ const collect_records = [
   {
     id: '9',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -774,6 +783,7 @@ const collect_records = [
   {
     id: '10',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -804,6 +814,7 @@ const collect_records = [
   {
     id: '11',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -837,6 +848,7 @@ const collect_records = [
   },
   {
     id: '12',
+    profile: 'fake',
     project: 'shouldgetfilteredout',
     data: {
       protocol: 'fishbelt',

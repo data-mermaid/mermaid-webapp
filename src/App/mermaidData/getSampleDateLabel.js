@@ -1,5 +1,5 @@
 export const getSampleDateLabel = (sampleDate) => {
-  if (!sampleDate) return undefined
+  if (!sampleDate) { return undefined }
 
   const [year, month, day] = sampleDate.split('-')
   const zeroIndexedMonth = month - 1

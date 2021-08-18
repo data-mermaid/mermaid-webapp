@@ -15,6 +15,7 @@ import MermaidMap from '../../../MermaidMap'
 import { InputRow, InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../../library/useIsMounted'
 
 const Site = () => {
   const [countryOptions, setCountryOptions] = useState([])
@@ -26,10 +27,9 @@ const Site = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { siteId, projectId } = useParams()
+  const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
-    let isMounted = true
-
     if (
       databaseSwitchboardInstance &&
       siteId &&
@@ -43,7 +43,7 @@ const Site = () => {
 
       Promise.all(promises)
         .then(([siteResponse, choicesResponse]) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setCountryOptions(getOptions(choicesResponse.countries))
             setExposureOptions(getOptions(choicesResponse.reefexposures))
             setReefTypeOptions(getOptions(choicesResponse.reeftypes))
@@ -57,11 +57,13 @@ const Site = () => {
           toast.error(`site error`)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, siteId, projectId, isSyncInProgress])
+  }, [
+    databaseSwitchboardInstance,
+    siteId,
+    projectId,
+    isMounted,
+    isSyncInProgress,
+  ])
 
   const initialFormValues = useMemo(
     () => getSiteInitialValues(siteBeingEdited),
@@ -161,7 +163,7 @@ const Site = () => {
       }
       toolbar={
         <>
-          <H2>Site Name</H2>
+          <H2>{formik.values.name}</H2>
         </>
       }
     />
