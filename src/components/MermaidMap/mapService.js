@@ -135,7 +135,7 @@ export const satelliteBaseMap = {
 }
 
 export const applyOpacityExpression = (array) => {
-  if (array === null) return 0
+  if (array === null) { return 0 }
 
   const arrayExp = array.flatMap((item) => {
     const equalBenthic = [['==', ['get', 'class_name']], 1]
