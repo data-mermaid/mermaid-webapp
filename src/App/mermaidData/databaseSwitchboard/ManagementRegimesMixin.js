@@ -2,7 +2,7 @@ import { getObjectById } from '../../../library/getObjectById'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
-    getManagementRegimes = (projectId) => {
+    getManagementRegimesWithoutOfflineDeleted = (projectId) => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -12,7 +12,9 @@ const ManagementRegimesMixin = (Base) =>
             .toArray()
             .then((managementRegimes) =>
               managementRegimes.filter(
-                (managementRegime) => managementRegime.project === projectId,
+                (managementRegime) =>
+                  managementRegime.project === projectId &&
+                  !managementRegime._deleted,
               ),
             )
         : Promise.reject(this._notAuthenticatedAndReadyError)
@@ -24,9 +26,11 @@ const ManagementRegimesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getManagementRegimes(projectId).then((records) => {
-            return records.find((record) => record.id === id)
-          })
+        ? this.getManagementRegimesWithoutOfflineDeleted(projectId).then(
+            (records) => {
+              return records.find((record) => record.id === id)
+            },
+          )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -37,7 +41,7 @@ const ManagementRegimesMixin = (Base) =>
 
       return this._isAuthenticatedAndReady
         ? Promise.all([
-            this.getManagementRegimes(projectId),
+            this.getManagementRegimesWithoutOfflineDeleted(projectId),
             this.getChoices(),
           ]).then(([managementRegimes, choices]) => {
             const { managementcompliances } = choices

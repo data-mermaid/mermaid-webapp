@@ -8,7 +8,7 @@ test('getSites only returns profiles for a given project', async () => {
     { id: 'bar', project: '5' },
     { id: 'baz', project: 'shouldGetFilteredOut' },
   ])
-  const sites = await dbSwitchboardInstance.getSites('5')
+  const sites = await dbSwitchboardInstance.getSitesWithoutOfflineDeleted('5')
 
   expect(sites.length).toEqual(2)
   expect(

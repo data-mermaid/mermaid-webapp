@@ -72,7 +72,7 @@ describe('Offline delete fishbelt', () => {
     })
 
     expect(
-      (await dbInstanceOffline.getCollectRecord({ id: 'foo', projectId: '1' }))
+      (await dbInstanceOffline.dexieInstance.collect_records.get('foo'))
         ._deleted,
     ).toBeTruthy()
   })
