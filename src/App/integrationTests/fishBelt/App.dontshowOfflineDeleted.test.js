@@ -40,3 +40,67 @@ test('Collect page only shows records that arent marked to be deleted next sync'
 
   expect(rows).toHaveLength(11)
 })
+
+test('Sites page only shows records that arent marked to be deleted next sync', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  const aRecordToMarkAsDeleted = (
+    await dexieInstance.project_sites.toArray()
+  )[0]
+
+  await dexieInstance.project_sites.put({
+    ...aRecordToMarkAsDeleted,
+    _deleted: true,
+  })
+
+  renderAuthenticatedOffline(
+    <App dexieInstance={dexieInstance} />,
+    {
+      initialEntries: ['/projects/5/sites/'],
+    },
+    dexieInstance,
+  )
+
+  userEvent.selectOptions(
+    await screen.findByTestId('page-size-selector'),
+    '100',
+  )
+
+  const rows = await screen.findAllByRole('row')
+
+  expect(rows).toHaveLength(4)
+})
+
+test('Management Regimes page only shows records that arent marked to be deleted next sync', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  const aRecordToMarkAsDeleted = (
+    await dexieInstance.project_managements.toArray()
+  )[0]
+
+  await dexieInstance.project_managements.put({
+    ...aRecordToMarkAsDeleted,
+    _deleted: true,
+  })
+
+  renderAuthenticatedOffline(
+    <App dexieInstance={dexieInstance} />,
+    {
+      initialEntries: ['/projects/5/management-regimes/'],
+    },
+    dexieInstance,
+  )
+
+  userEvent.selectOptions(
+    await screen.findByTestId('page-size-selector'),
+    '100',
+  )
+
+  const rows = await screen.findAllByRole('row')
+
+  expect(rows).toHaveLength(3)
+})

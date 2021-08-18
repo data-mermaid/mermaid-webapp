@@ -259,26 +259,10 @@ const CollectRecordsMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getCollectRecordsWithOfflineDeleted(projectId).then((records) =>
-            records.find((record) => record.id === id),
-          )
+        ? this.getCollectRecordsWithoutOfflineDeleted(
+            projectId,
+          ).then((records) => records.find((record) => record.id === id))
         : Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    getCollectRecordsWithOfflineDeleted = (projectId) => {
-      if (!projectId) {
-        Promise.reject(this._operationMissingParameterError)
-      }
-
-      if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records
-          .toArray()
-          .then((records) =>
-            records.filter((record) => record.project === projectId),
-          )
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getCollectRecordsWithoutOfflineDeleted = (projectId) => {
@@ -307,8 +291,8 @@ const CollectRecordsMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? Promise.all([
             this.getCollectRecordsWithoutOfflineDeleted(projectId),
-            this.getSites(projectId),
-            this.getManagementRegimes(projectId),
+            this.getSitesWithoutOfflineDeleted(projectId),
+            this.getManagementRegimesWithoutOfflineDeleted(projectId),
             this.getChoices(),
           ]).then(([collectRecords, sites, managementRegimes, choices]) => {
             return collectRecords.map((record) => ({
