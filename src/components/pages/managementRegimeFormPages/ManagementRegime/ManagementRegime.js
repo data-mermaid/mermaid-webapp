@@ -27,16 +27,13 @@ const ManagementRegime = () => {
   ] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
-  const { managementRegimeId, projectId } = useParams()
+  const { managementRegimeId } = useParams()
   const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (databaseSwitchboardInstance && !isSyncInProgress) {
       const promises = [
-        databaseSwitchboardInstance.getManagementRegime({
-          id: managementRegimeId,
-          projectId,
-        }),
+        databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
         databaseSwitchboardInstance.getChoices(),
       ]
 
@@ -59,7 +56,6 @@ const ManagementRegime = () => {
   }, [
     databaseSwitchboardInstance,
     managementRegimeId,
-    projectId,
     isMounted,
     isSyncInProgress,
   ])

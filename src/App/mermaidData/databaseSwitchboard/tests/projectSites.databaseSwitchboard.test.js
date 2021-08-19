@@ -15,17 +15,3 @@ test('getSites only returns profiles for a given project', async () => {
     sites.find((profile) => profile.project === 'shouldGetFilteredOut'),
   ).toBeUndefined()
 })
-
-test('getSite only returns profiles for a given project', async () => {
-  const dbSwitchboardInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
-
-  await dbSwitchboardInstance.dexieInstance.project_managements.bulkPut([
-    { id: 'foo', project: 'shouldGetFilteredOut' },
-  ])
-  const site = await dbSwitchboardInstance.getSite({
-    id: 'foo',
-    projectId: '5',
-  })
-
-  expect(site).toBeUndefined()
-})

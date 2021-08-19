@@ -20,18 +20,16 @@ const ManagementRegimesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getManagementRegime = ({ id, projectId }) => {
-      if (!id || !projectId) {
+    getManagementRegime = (id) => {
+      if (!id) {
         Promise.reject(this._operationMissingParameterError)
       }
 
-      return this._isAuthenticatedAndReady
-        ? this.getManagementRegimesWithoutOfflineDeleted(projectId).then(
-            (records) => {
-              return records.find((record) => record.id === id)
-            },
-          )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isAuthenticatedAndReady) {
+        Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      return this._dexieInstance.project_managements.get(id)
     }
 
     getManagementRegimeRecordsForUiDisplay = (projectId) => {

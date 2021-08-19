@@ -18,16 +18,16 @@ const SitesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSite = ({ id, projectId }) => {
-      if (!id || !projectId) {
+    getSite = (id) => {
+      if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
 
-      return this._isAuthenticatedAndReady
-        ? this.getSitesWithoutOfflineDeleted(projectId).then((records) =>
-            records.find((record) => record.id === id),
-          )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isAuthenticatedAndReady) {
+        Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      return this._dexieInstance.project_sites.get(id)
     }
 
     getSiteRecordsForUIDisplay = (projectId) => {
