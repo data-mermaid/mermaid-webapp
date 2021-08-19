@@ -12,7 +12,7 @@ const NewUserModal = ({ isOpen, onDismiss, newUser }) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={onDismiss}>Send email</ButtonPrimary>
+      <ButtonPrimary onClick={() => {}}>Send email</ButtonPrimary>
     </RightFooter>
   )
 

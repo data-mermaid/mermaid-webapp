@@ -125,6 +125,7 @@ const Users = () => {
   const [newUserProfile, setNewUserProfile] = useState('')
   const currentUser = useCurrentUser({ databaseSwitchboardInstance })
   const [userTransferFrom, setUserTransferFrom] = useState('')
+  const [userTransferTo, setUserTransferTo] = useState(currentUser)
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
   const { projectId } = useParams()
@@ -307,6 +308,8 @@ const Users = () => {
   const handleNewUserProfileAdd = (event) =>
     setNewUserProfile(event.target.value)
 
+  const handleTransferSampleUnitChange = (name) => setUserTransferTo(name)
+
   const table = (
     <>
       <TableOverflowWrapper>
@@ -369,9 +372,10 @@ const Users = () => {
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
         onDismiss={closeTransferSampleUnitsModal}
-        currentUser={currentUser}
+        userTransferTo={userTransferTo}
         userTransferFrom={userTransferFrom}
         userOptions={observerProfiles}
+        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
       />
     </>
   )

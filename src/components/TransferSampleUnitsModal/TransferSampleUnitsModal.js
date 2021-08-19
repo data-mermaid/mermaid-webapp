@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -36,11 +36,12 @@ const ModalBodyContainer = styled.div`
 const TransferSampleUnitsModal = ({
   isOpen,
   onDismiss,
-  currentUser,
+  userTransferTo,
   userTransferFrom,
   userOptions,
+  handleTransferSampleUnitChange,
 }) => {
-  const currentUserName = currentUser && currentUser.full_name
+  const userTransferToName = userTransferTo && userTransferTo.full_name
 
   const optionList = userOptions
     .filter(({ profile_name }) => profile_name !== userTransferFrom)
@@ -51,39 +52,41 @@ const TransferSampleUnitsModal = ({
     ))
 
   const modalContent = (
-    <ModalBodyContainer>
-      <ModalBoxItem>
-        <InputLabel
-          id="modal-transfer-units-from-label"
-          htmlFor="modal-transfer-units-from"
-        >
-          Transfer unsubmitted Sample Unit from:
-        </InputLabel>
-        <strong>{userTransferFrom}</strong>
-      </ModalBoxItem>
-      <IconArrowRight />
-      <ModalBoxItem>
-        <InputLabel
-          id="modal-transfer-units-to-label"
-          htmlFor="modal-transfer-units-to"
-        >
-          Transfer sample units to
-        </InputLabel>
-        <div>
-          <Select
-            aria-labelledby="aria-label-select-users"
-            aria-describedby="aria-descp-select-users"
-            value={currentUserName}
-            onChange={() => {}}
+    <form>
+      <ModalBodyContainer>
+        <ModalBoxItem>
+          <InputLabel as="div">
+            Transfer unsubmitted Sample Unit from:
+          </InputLabel>
+          <strong>{userTransferFrom}</strong>
+        </ModalBoxItem>
+        <IconArrowRight />
+        <ModalBoxItem>
+          <InputLabel
+            id="modal-transfer-units-to-label"
+            htmlFor="modal-transfer-units-to"
           >
-            <option value="" disabled>
-              Choose...
-            </option>
-            {optionList}
-          </Select>
-        </div>
-      </ModalBoxItem>
-    </ModalBodyContainer>
+            Transfer sample units to
+          </InputLabel>
+          <div>
+            <Select
+              id="modal-transfer-units-to"
+              aria-labelledby="aria-label-select-users"
+              aria-describedby="aria-descp-select-users"
+              value={userTransferToName}
+              onChange={(event) =>
+                handleTransferSampleUnitChange(event.target.value)
+              }
+            >
+              <option value="" disabled>
+                Choose...
+              </option>
+              {optionList}
+            </Select>
+          </div>
+        </ModalBoxItem>
+      </ModalBodyContainer>
+    </form>
   )
 
   const footerContent = (
@@ -107,7 +110,7 @@ const TransferSampleUnitsModal = ({
 TransferSampleUnitsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  currentUser: currentUserPropType,
+  userTransferTo: PropTypes.string,
   userTransferFrom: PropTypes.string.isRequired,
   userOptions: PropTypes.arrayOf(
     PropTypes.shape({
@@ -115,10 +118,11 @@ TransferSampleUnitsModal.propTypes = {
       profile_name: PropTypes.string,
     }),
   ).isRequired,
+  handleTransferSampleUnitChange: PropTypes.func.isRequired,
 }
 
 TransferSampleUnitsModal.defaultProps = {
-  currentUser: undefined,
+  userTransferTo: undefined,
 }
 
 export default TransferSampleUnitsModal
