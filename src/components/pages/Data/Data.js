@@ -46,7 +46,9 @@ const Data = () => {
   const { projectId } = useParams()
 
   const _getSubmittedRecords = useEffect(() => {
-    if (!isOnline) setIsLoading(false)
+    if (!isOnline) {
+      setIsLoading(false)
+    }
 
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance

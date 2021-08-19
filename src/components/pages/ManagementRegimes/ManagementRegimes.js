@@ -32,7 +32,7 @@ import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import useIsMounted from '../../../../library/useIsMounted'
+import useIsMounted from '../../../library/useIsMounted'
 
 const ManagementRegimes = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
