@@ -4,6 +4,9 @@ import {
   persistLastRevisionNumbersPulled,
 } from './lastRevisionNumbers'
 
+const resetPushToApiTagFromItems = (items) =>
+  items.map((item) => ({ ...item, _pushToApi: false }))
+
 export const pullApiData = async ({
   dexieInstance,
   auth0Token,
@@ -61,17 +64,20 @@ export const pullApiData = async ({
           // choices deletes property will always be empty, so we just ignore it
           // additionally the updates property is an object, not an array, so we just store it directly
 
-          dexieInstance[apiDataType].put({
+          dexieInstance.choices.put({
             id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
-            choices: apiData[apiDataType]?.updates,
+            choices: { ...apiData.choices?.updates, _pushToApi: false },
           })
         }
         if (apiDataType !== 'choices') {
           const updates = apiData[apiDataType]?.updates ?? []
+          const updatesWithPushToApiTagReset = resetPushToApiTagFromItems(
+            updates,
+          )
           const deletes = apiData[apiDataType]?.deletes ?? []
           const deleteIds = deletes.map(({ id }) => id)
 
-          dexieInstance[apiDataType].bulkPut(updates)
+          dexieInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
           dexieInstance[apiDataType].bulkDelete(deleteIds)
         }
       })

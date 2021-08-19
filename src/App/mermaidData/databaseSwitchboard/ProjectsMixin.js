@@ -10,11 +10,11 @@ const ProjectsMixin = (Base) =>
         Promise.reject(this._operationMissingIdParameterError)
       }
 
-      return this._isAuthenticatedAndReady
-        ? this.getProjects().then((records) =>
-            records.find((record) => record.id === id),
-          )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isAuthenticatedAndReady) {
+        Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      return this._dexieInstance.projects.get(id)
     }
 
     getProjectTags = () =>

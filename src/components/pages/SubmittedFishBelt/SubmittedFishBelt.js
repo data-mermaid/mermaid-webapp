@@ -29,8 +29,10 @@ const SubmittedFishBelt = () => {
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance) {
       const promises = [
-        databaseSwitchboardInstance.getSites(projectId),
-        databaseSwitchboardInstance.getManagementRegimes(projectId),
+        databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(
+          projectId,
+        ),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),

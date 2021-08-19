@@ -36,7 +36,7 @@ const CollectRecordsCount = () => {
 
     if (!isSyncInProgress && databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getCollectRecords(projectId)
+        .getCollectRecordsWithoutOfflineDeleted(projectId)
         .then((collectRecords) => {
           if (isMounted) {
             setCollectRecordsCount(collectRecords.length)

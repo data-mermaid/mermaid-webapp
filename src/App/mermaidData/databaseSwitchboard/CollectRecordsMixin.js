@@ -18,8 +18,8 @@ const CollectRecordsMixin = (Base) =>
       warning: 'Warnings',
     }
 
-    #getIsRecordStatusCodeSuccessful = (recordFromServer) => {
-      const statusCode = recordFromServer.status_code
+    #getIsRecordStatusCodeSuccessful = (recordResponseFromServer) => {
+      const statusCode = recordResponseFromServer.status_code
 
       return statusCode >= 200 && statusCode < 300
     }
@@ -37,6 +37,7 @@ const CollectRecordsMixin = (Base) =>
         data: { ...record.data, protocol: 'fishbelt' },
         project: projectIdToSubmit,
         profile: profileIdToSubmit,
+        _pushToApi: true,
       }
     }
 
@@ -109,7 +110,7 @@ const CollectRecordsMixin = (Base) =>
         return noSizeLabel
       }
 
-      const length = record.data.benthic_transect.len_surveyed
+      const length = record.data.benthic_transect?.len_surveyed
 
       return length === undefined ? noSizeLabel : `${length}m`
     }
@@ -143,9 +144,9 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
-            const [recordReturnedFromApiPush] = response.data.collect_records
+            const [recordResponseFromApiPush] = response.data.collect_records
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordReturnedFromApiPush,
+              recordResponseFromApiPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
@@ -154,7 +155,10 @@ const CollectRecordsMixin = (Base) =>
               return this._apiSyncInstance
                 .pullEverythingButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
-                  return recordReturnedFromApiPush
+                  const recordReturnedFromServer =
+                    recordResponseFromApiPush.data
+
+                  return recordReturnedFromServer
                 })
             }
 
@@ -249,19 +253,19 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecord = ({ id, projectId }) => {
+    getCollectRecord = (id) => {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
 
-      return this._isAuthenticatedAndReady
-        ? this.getCollectRecords(projectId).then((records) =>
-            records.find((record) => record.id === id),
-          )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isAuthenticatedAndReady) {
+        Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      return this._dexieInstance.collect_records.get(id)
     }
 
-    getCollectRecords = (projectId) => {
+    getCollectRecordsWithoutOfflineDeleted = (projectId) => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -270,7 +274,9 @@ const CollectRecordsMixin = (Base) =>
         return this._dexieInstance.collect_records
           .toArray()
           .then((records) =>
-            records.filter((record) => record.project === projectId),
+            records.filter(
+              (record) => record.project === projectId && !record._deleted,
+            ),
           )
       }
 
@@ -284,9 +290,9 @@ const CollectRecordsMixin = (Base) =>
 
       return this._isAuthenticatedAndReady
         ? Promise.all([
-            this.getCollectRecords(projectId),
-            this.getSites(projectId),
-            this.getManagementRegimes(projectId),
+            this.getCollectRecordsWithoutOfflineDeleted(projectId),
+            this.getSitesWithoutOfflineDeleted(projectId),
+            this.getManagementRegimesWithoutOfflineDeleted(projectId),
             this.getChoices(),
           ]).then(([collectRecords, sites, managementRegimes, choices]) => {
             return collectRecords.map((record) => ({

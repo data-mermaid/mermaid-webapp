@@ -31,10 +31,12 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const ManagementRegimes = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
+  const { isSyncInProgress } = useSyncStatus()
 
   const [
     managementRegimeRecordsForUiDisplay,
@@ -45,7 +47,7 @@ const ManagementRegimes = () => {
   const _getManagementRegimeRecords = useEffect(() => {
     let isMounted = true
 
-    if (databaseSwitchboardInstance && projectId) {
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       databaseSwitchboardInstance
         .getManagementRegimeRecordsForUiDisplay(projectId)
         .then((records) => {
@@ -62,7 +64,7 @@ const ManagementRegimes = () => {
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance, projectId])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress])
 
   const currentProjectPath = useCurrentProjectPath()
   const getIconCheckLabel = (property) => property && <IconCheck />
