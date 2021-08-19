@@ -40,6 +40,7 @@ import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
 import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -60,16 +61,17 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
 const FishBelt = ({ isNewRecord, currentUser }) => {
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-  const [fishNameOptions, setFishNameOptions] = useState([])
   const [fishNameConstants, setFishNameConstants] = useState([])
+  const [fishNameOptions, setFishNameOptions] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [observationToAddSpeciesTo, setObservationToAddSpeciesTo] = useState()
+  const [observerProfiles, setObserverProfiles] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
-  const [observerProfiles, setObserverProfiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
@@ -111,10 +113,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }, [databaseSwitchboardInstance])
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId) {
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
-        databaseSwitchboardInstance.getSites(projectId),
-        databaseSwitchboardInstance.getManagementRegimes(projectId),
+        databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(
+          projectId,
+        ),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getFishSpecies(),
@@ -123,12 +127,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       ]
 
       if (recordId && !isNewRecord) {
-        promises.push(
-          databaseSwitchboardInstance.getCollectRecord({
-            id: recordId,
-            projectId,
-          }),
-        )
+        promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
       }
       Promise.all(promises)
         .then(
@@ -176,7 +175,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           toast.error(error)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId, projectId])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isNewRecord,
+    recordId,
+    projectId,
+    isSyncInProgress,
+  ])
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,

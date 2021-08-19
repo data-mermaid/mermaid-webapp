@@ -120,7 +120,7 @@ const MermaidMap = ({
   }, [])
 
   const _updateCoralMosaicLayer = useEffect(() => {
-    if (!map.current) return
+    if (!map.current) { return }
 
     if (map.current.getLayer('atlas-planet') !== undefined) {
       map.current.setPaintProperty(
@@ -132,7 +132,7 @@ const MermaidMap = ({
   }, [coralMosaicLayer])
 
   const _updateGeomorphicLayers = useEffect(() => {
-    if (!map.current) return
+    if (!map.current) { return }
 
     if (map.current.getLayer('atlas-geomorphic') !== undefined) {
       map.current.setPaintProperty(
@@ -144,7 +144,7 @@ const MermaidMap = ({
   }, [geomorphicLocalStorage])
 
   const _updateBenthicLayers = useEffect(() => {
-    if (!map.current) return
+    if (!map.current) { return }
 
     if (map.current.getLayer('atlas-benthic') !== undefined) {
       map.current.setPaintProperty(
@@ -156,7 +156,7 @@ const MermaidMap = ({
   }, [benthicLocalStorage])
 
   const _handleMapMarker = useEffect(() => {
-    if (!map.current) return
+    if (!map.current) { return }
 
     const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
 

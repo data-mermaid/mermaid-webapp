@@ -14,34 +14,32 @@ import ManagementRulesInput from '../ManagementRulesInput'
 import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWithLabel'
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../../library/useIsMounted'
 
 const ManagementRegime = () => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-
-  const [managementParties, setManagementParties] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [managementCompliances, setManagementCompliances] = useState([])
+  const [managementParties, setManagementParties] = useState([])
   const [
     managementRegimeBeingEdited,
     setManagementRegimeBeingEdited,
   ] = useState()
-  const [isLoading, setIsLoading] = useState(true)
-  const { managementRegimeId, projectId } = useParams()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { managementRegimeId } = useParams()
+  const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
-    let isMounted = true
-
-    if (databaseSwitchboardInstance && projectId) {
+    if (databaseSwitchboardInstance && !isSyncInProgress) {
       const promises = [
-        databaseSwitchboardInstance.getManagementRegime({
-          id: managementRegimeId,
-          projectId,
-        }),
+        databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
         databaseSwitchboardInstance.getChoices(),
       ]
 
       Promise.all(promises)
         .then(([managementRegimeResponse, choicesResponse]) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setManagementParties(getOptions(choicesResponse.managementparties))
             setManagementCompliances(
               getOptions(choicesResponse.managementcompliances),
@@ -55,11 +53,12 @@ const ManagementRegime = () => {
           toast.error(`management regime error`)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, managementRegimeId, projectId])
+  }, [
+    databaseSwitchboardInstance,
+    managementRegimeId,
+    isMounted,
+    isSyncInProgress,
+  ])
 
   const initialFormValues = useMemo(
     () => getManagementRegimeInitialValues(managementRegimeBeingEdited),
@@ -137,7 +136,7 @@ const ManagementRegime = () => {
           }
           toolbar={
             <>
-              <H2>Management Regime Name</H2>
+              <H2>{formik.values.name}</H2>
             </>
           }
         />

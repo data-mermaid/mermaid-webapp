@@ -178,9 +178,8 @@ test('saveFishBelt online returns saved record with protocol info automatically 
       }
       const collectRecordsWithStatusCodes = req.body.collect_records.map(
         (record) => ({
-          ...record,
+          data: { ...record, _last_revision_num: 1000 },
           status_code: 200,
-          _last_revision_num: 1000,
         }),
       )
 
@@ -293,9 +292,8 @@ test('saveFishBelt online returns saved record including id, project, profile, i
     rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
       const collectRecordsWithStatusCodes = req.body.collect_records.map(
         (record) => ({
-          ...record,
+          data: { ...record, _last_revision_num: 1000 },
           status_code: 200,
-          _last_revision_num: 1000,
         }),
       )
 
