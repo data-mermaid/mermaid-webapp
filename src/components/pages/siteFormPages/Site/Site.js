@@ -26,18 +26,13 @@ const Site = () => {
   const [siteBeingEdited, setSiteBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
-  const { siteId, projectId } = useParams()
+  const { siteId } = useParams()
   const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
-    if (
-      databaseSwitchboardInstance &&
-      siteId &&
-      projectId &&
-      !isSyncInProgress
-    ) {
+    if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
       const promises = [
-        databaseSwitchboardInstance.getSite({ id: siteId, projectId }),
+        databaseSwitchboardInstance.getSite(siteId),
         databaseSwitchboardInstance.getChoices(),
       ]
 
@@ -57,13 +52,7 @@ const Site = () => {
           toast.error(`site error`)
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    siteId,
-    projectId,
-    isMounted,
-    isSyncInProgress,
-  ])
+  }, [databaseSwitchboardInstance, siteId, isMounted, isSyncInProgress])
 
   const initialFormValues = useMemo(
     () => getSiteInitialValues(siteBeingEdited),
