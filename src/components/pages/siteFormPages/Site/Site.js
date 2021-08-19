@@ -16,6 +16,7 @@ import { InputRow, InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import useIsMounted from '../../../../library/useIsMounted'
+import language from '../../../../language'
 
 const Site = () => {
   const [countryOptions, setCountryOptions] = useState([])
@@ -26,8 +27,8 @@ const Site = () => {
   const [siteBeingEdited, setSiteBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
-  const { siteId } = useParams()
   const isMounted = useIsMounted()
+  const { siteId } = useParams()
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
@@ -48,11 +49,10 @@ const Site = () => {
           }
         })
         .catch(() => {
-          // Will update language file when adding user workflow like save/delete site to page.
-          toast.error(`site error`)
+          toast.error(language.error.siteRecordUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, siteId, isMounted, isSyncInProgress])
+  }, [databaseSwitchboardInstance, siteId, isSyncInProgress, isMounted])
 
   const initialFormValues = useMemo(
     () => getSiteInitialValues(siteBeingEdited),

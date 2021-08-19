@@ -25,13 +25,7 @@ const SubmittedRecordsMixin = (Base) =>
                 },
               },
             )
-            .then((apiResults) => {
-              const dataFromApi = apiResults.data.results
-
-              if (!dataFromApi) throw Error('submitted records not available')
-
-              return dataFromApi
-            })
+            .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -45,18 +39,15 @@ const SubmittedRecordsMixin = (Base) =>
             .get(
               `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
             )
-            .then((apiResults) => {
-              const dataFromApi = apiResults.data
-
-              if (!dataFromApi)
-                throw Error('submitted fish belt transect not available')
-
-              return dataFromApi
-            })
+            .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getSubmittedRecordsForUIDisplay = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
       return this._isAuthenticatedAndReady
         ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
             return submittedRecords.map((record) => ({

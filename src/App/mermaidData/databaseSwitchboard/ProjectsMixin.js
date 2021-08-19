@@ -21,13 +21,7 @@ const ProjectsMixin = (Base) =>
       this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
             .get(`${this._apiBaseUrl}/projecttags`)
-            .then((apiResults) => {
-              const dataFromApi = apiResults.data.results
-
-              if (!dataFromApi) throw Error('project tags not available')
-
-              return dataFromApi
-            })
+            .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
     getProjectProfiles = (projectId) => {

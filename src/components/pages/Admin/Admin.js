@@ -151,7 +151,9 @@ const Admin = () => {
     setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (!isOnline) setIsLoading(false)
+    if (!isOnline) {
+      setIsLoading(false)
+    }
 
     if (databaseSwitchboardInstance && projectId) {
       const promises = [
@@ -168,7 +170,7 @@ const Admin = () => {
           }
         })
         .catch(() => {
-          toast.error('project error')
+          toast.error(language.error.projectsUnavailable)
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isOnline])
