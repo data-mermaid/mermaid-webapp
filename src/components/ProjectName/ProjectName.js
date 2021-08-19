@@ -69,9 +69,7 @@ const ProjectName = () => {
       databaseSwitchboardInstance
         .getProject(projectId)
         .then((projectResponse) => {
-          if (isMounted.current) {
-            setProjectName(projectResponse.name)
-          }
+          if (isMounted.current) { setProjectName(projectResponse.name) }
         })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])

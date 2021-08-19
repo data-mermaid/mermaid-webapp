@@ -8,7 +8,7 @@ test('getManagementRegimes only returns profiles for a given project', async () 
     { id: 'bar', project: '5' },
     { id: 'baz', project: 'shouldGetFilteredOut' },
   ])
-  const managementRegimes = await dbSwitchboardInstance.getManagementRegimes(
+  const managementRegimes = await dbSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(
     '5',
   )
 
@@ -18,18 +18,4 @@ test('getManagementRegimes only returns profiles for a given project', async () 
       (profile) => profile.project === 'shouldGetFilteredOut',
     ),
   ).toBeUndefined()
-})
-
-test('getManagementRegime only returns profiles for a given project', async () => {
-  const dbSwitchboardInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
-
-  await dbSwitchboardInstance.dexieInstance.project_managements.bulkPut([
-    { id: 'foo', project: 'shouldGetFilteredOut' },
-  ])
-  const managementRegime = await dbSwitchboardInstance.getManagementRegime({
-    id: 'foo',
-    projectId: '5',
-  })
-
-  expect(managementRegime).toBeUndefined()
 })

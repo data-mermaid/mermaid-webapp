@@ -115,8 +115,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
-        databaseSwitchboardInstance.getSites(projectId),
-        databaseSwitchboardInstance.getManagementRegimes(projectId),
+        databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(
+          projectId,
+        ),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getFishSpecies(),
@@ -125,12 +127,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       ]
 
       if (recordId && !isNewRecord) {
-        promises.push(
-          databaseSwitchboardInstance.getCollectRecord({
-            id: recordId,
-            projectId,
-          }),
-        )
+        promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
       }
       Promise.all(promises)
         .then(
