@@ -16,7 +16,7 @@ const fishbeltObservationReducer = (state, action) => {
     }
 
     case 'addObservation':
-      return [...state, { uiId: createUuid(), count: '', size: '' }]
+      return [...state, { uiId: createUuid(), count: null, size: null }]
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
       const { referenceObservationIndex, referenceObservation } = action.payload
@@ -25,8 +25,8 @@ const fishbeltObservationReducer = (state, action) => {
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
         uiId: createUuid(),
         fish_attribute: referenceObservation.fish_attribute,
-        count: '',
-        size: '',
+        count: null,
+        size: null,
       })
 
       return observationsWithInsertedRow
@@ -45,17 +45,28 @@ const fishbeltObservationReducer = (state, action) => {
         const isObservationToUpdate =
           observation.uiId === action.payload.observationId
 
+        const { newCount } = action.payload
+
+        const newCountToUse =
+          Number.isNaN(newCount) || newCount === ''
+            ? null
+            : parseFloat(newCount)
+
         return isObservationToUpdate
-          ? { ...observation, count: parseFloat(action.payload.newCount) }
+          ? { ...observation, count: newCountToUse }
           : observation
       })
     case 'updateSize':
       return state.map((observation) => {
         const isObservationToUpdate =
           observation.uiId === action.payload.observationId
+        const { newSize } = action.payload
+
+        const newSizeToUse =
+          Number.isNaN(newSize) || newSize === '' ? null : parseFloat(newSize)
 
         return isObservationToUpdate
-          ? { ...observation, size: parseFloat(action.payload.newSize) }
+          ? { ...observation, size: newSizeToUse }
           : observation
       })
     case 'updateFishName':

@@ -318,6 +318,9 @@ const FishBeltObservationTable = ({
 
     const rowNumber = index + 1
 
+    const sizeOrEmptyStringToAvoidInputValueErrors = size ?? ''
+    const countOrEmptyStringToAvoidInputValueErrors = count ?? ''
+
     const showNumericSizeInput =
       fishBinSelectedLabel?.toString() === '1' ||
       typeof fishBinSelectedLabel === 'undefined'
@@ -331,7 +334,7 @@ const FishBeltObservationTable = ({
           handleKeyDown({ event, index, observation })
         }}
         fishBinSelectedLabel={fishBinSelectedLabel}
-        value={size}
+        value={sizeOrEmptyStringToAvoidInputValueErrors}
         labelledBy="fish-size-label"
       />
     )
@@ -340,7 +343,7 @@ const FishBeltObservationTable = ({
       <InputNumberNoScrollWithUnit
         type="number"
         min="0"
-        value={size}
+        value={sizeOrEmptyStringToAvoidInputValueErrors}
         unit="cm"
         step="any"
         aria-labelledby="fish-size-label"
@@ -411,7 +414,7 @@ const FishBeltObservationTable = ({
           <InputNumberNoScroll
             type="number"
             min="0"
-            value={count}
+            value={countOrEmptyStringToAvoidInputValueErrors}
             step="any"
             aria-labelledby="fish-count-label"
             onChange={(event) => {
