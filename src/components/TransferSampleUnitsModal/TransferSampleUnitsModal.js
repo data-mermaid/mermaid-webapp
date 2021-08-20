@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -110,7 +110,7 @@ const TransferSampleUnitsModal = ({
 TransferSampleUnitsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  userTransferTo: PropTypes.string,
+  userTransferTo: currentUserPropType,
   userTransferFrom: PropTypes.string.isRequired,
   userOptions: PropTypes.arrayOf(
     PropTypes.shape({
