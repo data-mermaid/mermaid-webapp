@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components'
+import { useCurrentUser } from '../../../App/mermaidData/useCurrentUser'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
@@ -42,6 +43,8 @@ import language from '../../../language'
 import useIsMounted from '../../../library/useIsMounted'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
+import NewUserModal from '../../NewUserModal'
+import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -103,10 +106,6 @@ const ProfileImage = styled.div`
   height: 35px;
 `
 
-const DefaultPendingProfileImage = styled(IconAccount)`
-  font-size: 500;
-`
-
 const NameCellStyle = styled('div')`
   display: flex;
   width: 250px;
@@ -123,9 +122,30 @@ const Users = () => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [isReadonlyUserWithActiveSampleUnits] = useState(false)
+  const [newUserProfile, setNewUserProfile] = useState('')
+  const currentUser = useCurrentUser({ databaseSwitchboardInstance })
+  const [userTransferFrom, setUserTransferFrom] = useState('')
+  const [userTransferTo, setUserTransferTo] = useState(currentUser)
   const [isLoading, setIsLoading] = useState(true)
   const isMounted = useIsMounted()
   const { projectId } = useParams()
+
+  const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
+    false,
+  )
+  const openNewUserProfileModal = () => setIsNewUserProfileModalOpen(true)
+  const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
+
+  const [
+    isTransferSampleUnitsModalOpen,
+    setIsTransferSampleUnitsModalOpen,
+  ] = useState(false)
+  const openTransferSampleUnitsModal = (name) => {
+    setUserTransferFrom(name)
+    setIsTransferSampleUnitsModalOpen(true)
+  }
+  const closeTransferSampleUnitsModal = () =>
+    setIsTransferSampleUnitsModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
@@ -212,11 +232,7 @@ const Users = () => {
         return {
           name: (
             <NameCellStyle>
-              {picture ? (
-                <ProfileImage img={picture} />
-              ) : (
-                <DefaultPendingProfileImage />
-              )}{' '}
+              {picture ? <ProfileImage img={picture} /> : <IconAccount />}{' '}
               {profile_name}
             </NameCellStyle>
           ),
@@ -226,7 +242,10 @@ const Users = () => {
           readonly: observerRoleRadioCell(profile_name, 10),
           active: num_active_sample_units,
           transfer: (
-            <ButtonSecondary type="button" onClick={() => {}}>
+            <ButtonSecondary
+              type="button"
+              onClick={() => openTransferSampleUnitsModal(profile_name)}
+            >
               <IconAccountConvert />
             </ButtonSecondary>
           ),
@@ -286,6 +305,11 @@ const Users = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleNewUserProfileAdd = (event) =>
+    setNewUserProfile(event.target.value)
+
+  const handleTransferSampleUnitChange = (name) => setUserTransferTo(name)
+
   const table = (
     <>
       <TableOverflowWrapper>
@@ -340,6 +364,19 @@ const Users = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
+      <NewUserModal
+        isOpen={isNewUserProfileModalOpen}
+        onDismiss={closeNewUserProfileModal}
+        newUser={newUserProfile}
+      />
+      <TransferSampleUnitsModal
+        isOpen={isTransferSampleUnitsModalOpen}
+        onDismiss={closeTransferSampleUnitsModal}
+        userTransferTo={userTransferTo}
+        userTransferFrom={userTransferFrom}
+        userOptions={observerProfiles}
+        handleTransferSampleUnitChange={handleTransferSampleUnitChange}
+      />
     </>
   )
 
@@ -369,11 +406,11 @@ const Users = () => {
                 <input
                   type="text"
                   id="search-emails"
-                  value=""
-                  onChange={() => {}}
+                  value={newUserProfile}
+                  onChange={handleNewUserProfileAdd}
                 />
               </SearchEmailLabelWrapper>
-              <AddUserButton>
+              <AddUserButton onClick={openNewUserProfileModal}>
                 <IconPlus />
                 Add User
               </AddUserButton>
