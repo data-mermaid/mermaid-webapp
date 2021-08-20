@@ -324,7 +324,7 @@ const FishBeltObservationTable = ({
 
     const sizeSelect = !showNumericSizeInput && (
       <FishBeltObservationSizeSelect
-        onChange={(value) => {
+        onValueEntered={(value) => {
           handleUpdateSize(value, observationId)
         }}
         onKeyDown={(event) => {
