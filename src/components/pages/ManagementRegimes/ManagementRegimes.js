@@ -32,11 +32,13 @@ import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../library/useIsMounted'
 
 const ManagementRegimes = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
+  const isMounted = useIsMounted()
 
   const [
     managementRegimeRecordsForUiDisplay,
@@ -45,26 +47,20 @@ const ManagementRegimes = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const _getManagementRegimeRecords = useEffect(() => {
-    let isMounted = true
-
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       databaseSwitchboardInstance
         .getManagementRegimeRecordsForUiDisplay(projectId)
         .then((records) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setManagementRegimeRecordsForUiDisplay(records)
             setIsLoading(false)
           }
         })
         .catch(() => {
-          toast.error(language.error.collectRecordsUnavailable)
+          toast.error(language.error.managementRegimeRecordsUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
   const getIconCheckLabel = (property) => property && <IconCheck />

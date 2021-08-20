@@ -1,5 +1,3 @@
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
-
 const ProjectsMixin = (Base) =>
   class extends Base {
     getProjects = () =>
@@ -20,8 +18,10 @@ const ProjectsMixin = (Base) =>
     }
 
     getProjectTags = () =>
-      this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.projecttags)
+      this._isOnlineAuthenticatedAndReady
+        ? this._authenticatedAxios
+            .get(`${this._apiBaseUrl}/projecttags`)
+            .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
     getProjectProfiles = (projectId) => {

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
@@ -43,13 +43,18 @@ const Data = () => {
   ] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { isOnline } = useOnlineStatus()
+  const { projectId } = useParams()
 
   const _getSubmittedRecords = useEffect(() => {
-    if (databaseSwitchboardInstance && isMounted) {
+    if (!isOnline) {
+      setIsLoading(false)
+    }
+
+    if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getSubmittedRecordsForUIDisplay()
+        .getSubmittedRecordsForUIDisplay(projectId)
         .then((records) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setSubmittedRecordsForUiDisplay(records)
             setIsLoading(false)
           }
@@ -58,7 +63,7 @@ const Data = () => {
           toast.error(language.error.submittedRecordsUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isOnline])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(

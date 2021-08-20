@@ -23,8 +23,18 @@ const error = {
   fishSpeciesAlreadyExists:
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   formValidation: { required: 'This field is required' },
-  submittedRecordsUnavailable:
+  submittedRecordUnavailable:
     'Submitted record data is currently unavailable. Please try again',
+  submittedRecordsUnavailable:
+    'Submitted records data is currently unavailable. Please try again',
+  siteRecordUnavailable:
+    'Site record data is currently unavailable. Please try again',
+  siteRecordsUnavailable:
+    'Site records data is currently unavailable. Please try again',
+  managementRegimeRecordUnavailable:
+    'Management Regime record data is currently unavailable. Please try again',
+  managementRegimeRecordsUnavailable:
+    'Management Regime records data is currently unavailable. Please try again',
 }
 
 const success = {

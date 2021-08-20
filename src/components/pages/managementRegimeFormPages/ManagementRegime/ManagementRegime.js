@@ -15,6 +15,7 @@ import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWith
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import language from '../../../../language'
 import useIsMounted from '../../../../library/useIsMounted'
 
 const ManagementRegime = () => {
@@ -49,8 +50,7 @@ const ManagementRegime = () => {
           }
         })
         .catch(() => {
-          // Will update language file when adding user workflow like save/delete site to page.
-          toast.error(`management regime error`)
+          toast.error(language.error.managementRegimeRecordUnavailable)
         })
     }
   }, [
