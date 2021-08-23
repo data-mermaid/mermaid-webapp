@@ -40,6 +40,7 @@ import { getObservationBiomass } from './fishbeltBiomas'
 import { RowRight } from '../../../generic/positioning'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
+import InputValidationAlert from '../../../InputValidationAlert'
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -178,6 +179,7 @@ const FishBeltObservationTable = ({
     false,
   )
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
+  const [hasValidations] = useState(false) // this is a temporary setup, set 'true' to see the validation messages
   const [observationsState, observationsDispatch] = observationsReducer
   const {
     persistUnsavedFormData: persistUnsavedObservationsData,
@@ -444,6 +446,7 @@ const FishBeltObservationTable = ({
     <>
       <InputWrapper>
         <H2 id="table-label">Observations</H2>
+        {hasValidations && <InputValidationAlert />}
         <StyledOverflowWrapper>
           <StyledFishBeltObservationTable aria-labelledby="table-label">
             <StyledColgroup>
