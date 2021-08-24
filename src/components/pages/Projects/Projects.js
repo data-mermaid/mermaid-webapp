@@ -8,18 +8,20 @@ import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../library/useIsMounted'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 /**
  * All Projects page (lists projects)
  */
 const Projects = () => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [projects, setProjects] = useState([])
+  const { isSyncInProgress } = useSyncStatus()
   const [isLoading, setIsLoading] = useState(true)
+  const [projects, setProjects] = useState([])
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const isMounted = useIsMounted()
 
   const _getProjects = useEffect(() => {
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && !isSyncInProgress) {
       databaseSwitchboardInstance
         .getProjects()
         .then((projectsResponse) => {
@@ -32,7 +34,7 @@ const Projects = () => {
           toast.error(language.error.projectsUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted])
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
 
   const projectList = projects.map((project) => (
     <ProjectCard role="listitem" project={project} key={project.id} />

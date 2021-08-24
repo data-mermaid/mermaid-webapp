@@ -96,28 +96,40 @@ function App({ dexieInstance }) {
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <GlobalStyle />
         <CustomToastContainer />
-        {isMermaidAuthenticatedAndReady ? (
-          <Switch>
-            {routes.map(({ path, Component }) => (
-              <Route
-                exact
-                path={path}
-                key={path}
-                render={() => (
-                  <Layout {...layoutProps}>
-                    <Component />
-                  </Layout>
-                )}
-              />
-            ))}
-            <Route exact path="/">
-              <Redirect to="/projects" />
-            </Route>
-            <Route component={PageNotFound} />
-          </Switch>
-        ) : (
-          <LoadingIndicator />
-        )}
+        {
+          /** The isMermaidAuthenticated is needed here to prevent an
+           * infinite log in loop with authentication. The projects list route
+           * and project workflow pages will trigger a sync when they are routed to making
+           * isOfflineStorageHydrated = true, which is needed for there to be a database switchboard instanc
+           */
+
+          isMermaidAuthenticated ? (
+            <Switch>
+              {routes.map(({ path, Component }) => (
+                <Route
+                  exact
+                  path={path}
+                  key={path}
+                  render={() =>
+                    isMermaidAuthenticatedAndReady ? (
+                      <Layout {...layoutProps}>
+                        <Component />
+                      </Layout>
+                    ) : (
+                      <LoadingIndicator />
+                    )
+                  }
+                />
+              ))}
+              <Route exact path="/">
+                <Redirect to="/projects" />
+              </Route>
+              <Route component={PageNotFound} />
+            </Switch>
+          ) : (
+            <LoadingIndicator />
+          )
+        }
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
   )
