@@ -70,7 +70,6 @@ export const useSyncApiDataIntoOfflineStorage = ({
     }
 
     if (isInitialLoadOrReloadOnProjectsListPage) {
-      console.log('sync: initial non proj')
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverythingButProjectRelated()
@@ -87,7 +86,6 @@ export const useSyncApiDataIntoOfflineStorage = ({
     }
 
     if (isInitialLoadOnProjectPage) {
-      console.log('sync: initial yes proj')
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverything(projectId)
@@ -103,7 +101,6 @@ export const useSyncApiDataIntoOfflineStorage = ({
         })
     }
     if (isNotInitialLoadOnProjectPage) {
-      console.log('sync: nav to  proj')
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverythingButChoices(projectId)
