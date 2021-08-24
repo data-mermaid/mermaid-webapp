@@ -1,16 +1,33 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../../language'
+import getUserProfile from '../getUserProfile'
 
-export const useCurrentUser = ({ databaseSwitchboardInstance }) => {
+export const useCurrentUser = ({
+  apiBaseUrl,
+  auth0Token,
+  dexieInstance,
+  isMermaidAuthenticated,
+  isOnline,
+}) => {
   const [currentUser, setCurrentUser] = useState()
 
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
 
-    if (databaseSwitchboardInstance) {
-      databaseSwitchboardInstance
-        .getUserProfile()
+    if (
+      isMermaidAuthenticated &&
+      apiBaseUrl &&
+      dexieInstance &&
+      isMermaidAuthenticated
+    ) {
+      getUserProfile({
+        apiBaseUrl,
+        auth0Token,
+        dexieInstance,
+        isMermaidAuthenticated,
+        isOnline,
+      })
         .then((user) => {
           if (isMounted && user) {
             setCurrentUser(user)
@@ -24,7 +41,7 @@ export const useCurrentUser = ({ databaseSwitchboardInstance }) => {
     return () => {
       isMounted = false
     }
-  }, [databaseSwitchboardInstance])
+  }, [apiBaseUrl, auth0Token, dexieInstance, isMermaidAuthenticated, isOnline])
 
   return currentUser
 }
