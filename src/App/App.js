@@ -76,7 +76,11 @@ function App({ dexieInstance }) {
   ])
 
   const currentUser = useCurrentUser({
-    databaseSwitchboardInstance,
+    apiBaseUrl,
+    auth0Token,
+    dexieInstance,
+    isMermaidAuthenticated,
+    isOnline,
   })
   const { routes } = useRoutes({ currentUser })
 
