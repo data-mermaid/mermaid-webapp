@@ -15,7 +15,10 @@ test('Projects component renders with the expected UI elements', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects />, { dexieInstance })
+  renderAuthenticatedOnline(<Projects />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
@@ -55,7 +58,10 @@ test('A project card renders with the expected UI elements for button groups', a
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects />, { dexieInstance })
+  renderAuthenticatedOnline(<Projects />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
@@ -82,7 +88,10 @@ test('A project card shows relevant data for a project', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects />, { dexieInstance })
+  renderAuthenticatedOnline(<Projects />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
@@ -111,7 +120,10 @@ test('A project card shows only collect button in button groups when offline', a
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOffline(<Projects />, { dexieInstance })
+  renderAuthenticatedOffline(<Projects />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
@@ -152,7 +164,10 @@ test('A project card shows all buttons in button group when online', async () =>
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects />, { dexieInstance })
+  renderAuthenticatedOnline(<Projects />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
@@ -182,7 +197,13 @@ test('A project card shows all buttons in button group when online', async () =>
 })
 
 test('Hide new project button in project toolbar when offline', async () => {
-  renderAuthenticatedOffline(<Projects />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  renderAuthenticatedOffline(<Projects />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
