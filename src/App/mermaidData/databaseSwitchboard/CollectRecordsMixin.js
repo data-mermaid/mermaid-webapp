@@ -19,7 +19,8 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getIsRecordStatusCodeSuccessful = (recordResponseFromServer) => {
-      const statusCode = recordResponseFromServer.status_code
+      const statusCode =
+        recordResponseFromServer.status_code || recordResponseFromServer.status
 
       return statusCode >= 200 && statusCode < 300
     }
@@ -144,6 +145,7 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
+            console.log('response from save ', response)
             const [recordResponseFromApiPush] = response.data.collect_records
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
               recordResponseFromApiPush,
@@ -251,6 +253,34 @@ const CollectRecordsMixin = (Base) =>
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    validateFishBelt = async ({ recordId, projectId }) => {
+      if (!recordId || !projectId) {
+        throw new Error(
+          'validateFishBelt expects record, profileId, and projectId parameters',
+        )
+      }
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        return this._authenticatedAxios
+          .post(
+            `${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`,
+            { ids: [recordId] },
+          )
+          .then((response) => {
+            console.log(response)
+            const recordResponseFromApiValidate = response.data[recordId]
+            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+              recordResponseFromApiValidate,
+            )
+
+            console.log(
+              'isRecordStatusCodeSuccessful ',
+              isRecordStatusCodeSuccessful,
+            )
+          })
+      }
     }
 
     getCollectRecord = (id) => {

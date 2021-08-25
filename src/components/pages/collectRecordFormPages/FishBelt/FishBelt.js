@@ -41,6 +41,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import StagedButton from '../../../StagedButton'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -57,6 +58,15 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
     margin-left: 1px;
   }
 `
+
+const FishBeltFormButtonStage = {
+  saving: 3,
+  saved: 5,
+  validating: 10,
+  validated: 15,
+  submitting: 20,
+  submitted: 25,
+}
 
 const FishBelt = ({ isNewRecord, currentUser }) => {
   const [choices, setChoices] = useState({})
@@ -76,6 +86,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
+
+  const [validateButtonState, setValidateButtonState] = useState(
+    FishBeltFormButtonStage.saved,
+  )
 
   const openNewFishNameModal = (observationId) => {
     setObservationToAddSpeciesTo(observationId)
@@ -246,6 +260,19 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
   }
 
+  const validateRecord = () => {
+    // const recordIds = [recordId]
+
+    // setValidateButtonState(FishBeltFormButtonStage.validating)
+
+    databaseSwitchboardInstance
+      .validateFishBelt({ recordId, projectId })
+      .then((response) => {
+        // setValidateButtonState(FishBeltFormButtonStage.validated)
+        console.log(response)
+      })
+  }
+
   const handleNewFishSpeciesOnSubmit = ({
     genusId,
     genusName,
@@ -396,10 +423,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                   </ButtonCallout>
                   {!isNewRecord && (
                     <OfflineHide>
-                      <ButtonCallout>
+                      {/* <ButtonCallout onClick={validateRecord}>
                         <IconCheck />
                         Validate
-                      </ButtonCallout>
+                      </ButtonCallout> */}
+                      <StagedButton
+                        buttonState={validateButtonState}
+                        handleButtonChange={validateRecord}
+                      />
                       <ButtonCallout>
                         <IconUpload />
                         Submit
