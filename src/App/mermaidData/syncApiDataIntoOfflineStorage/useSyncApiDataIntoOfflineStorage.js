@@ -53,8 +53,12 @@ export const useSyncApiDataIntoOfflineStorage = ({
       isMounted.current &&
       !isOnline
 
-    const isInitialLoadOnNonProjectPage =
-      isPageReload.current && !isProjectPage && isOnlineAndReady
+    const isProjectsListPage =
+      location.pathname === '/projects' || location.pathname === '/projects/'
+
+    const isInitialLoadOrReloadOnProjectsListPage =
+      isProjectsListPage && isOnlineAndReady
+
     const isInitialLoadOnProjectPage =
       isPageReload.current && isProjectPage && isOnlineAndReady
     const isNotInitialLoadOnProjectPage =
@@ -65,14 +69,16 @@ export const useSyncApiDataIntoOfflineStorage = ({
       setIsSyncInProgress(false)
     }
 
-    if (isInitialLoadOnNonProjectPage) {
+    if (isInitialLoadOrReloadOnProjectsListPage) {
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverythingButProjectRelated()
         .then(() => {
-          setIsOfflineStorageHydrated(true)
-          setIsSyncInProgress(false)
-          isPageReload.current = false
+          if (isMounted.current) {
+            setIsOfflineStorageHydrated(true)
+            setIsSyncInProgress(false)
+            isPageReload.current = false
+          }
         })
         .catch(() => {
           toast.error(language.error.apiDataPull)
@@ -84,9 +90,11 @@ export const useSyncApiDataIntoOfflineStorage = ({
       syncApiDataIntoOfflineStorage
         .pullEverything(projectId)
         .then(() => {
-          setIsOfflineStorageHydrated(true)
-          setIsSyncInProgress(false)
-          isPageReload.current = false
+          if (isMounted.current) {
+            setIsOfflineStorageHydrated(true)
+            setIsSyncInProgress(false)
+            isPageReload.current = false
+          }
         })
         .catch(() => {
           toast.error(language.error.apiDataPull)
@@ -97,7 +105,9 @@ export const useSyncApiDataIntoOfflineStorage = ({
       syncApiDataIntoOfflineStorage
         .pullEverythingButChoices(projectId)
         .then(() => {
-          setIsSyncInProgress(false)
+          if (isMounted.current) {
+            setIsSyncInProgress(false)
+          }
         })
         .catch(() => {
           toast.error(language.error.apiDataPull)

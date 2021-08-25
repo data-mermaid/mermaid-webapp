@@ -9,6 +9,20 @@ const reformatObservationsForFishBeltRecord = (observations) =>
     }
   })
 
+const removeEmptyProperty = (formValues) => {
+  const result = []
+
+  for (const [key, value] of Object.entries(formValues)) {
+    if (value !== '') {
+      result.push(key)
+    }
+  }
+
+  return result.reduce((obj, item) => {
+    return { ...obj, [item]: formValues[item] }
+  }, {})
+}
+
 export const reformatFormValuesIntoFishBeltRecord = (
   formikValues,
   observationsValues,
@@ -29,25 +43,29 @@ export const reformatFormValuesIntoFishBeltRecord = (
     width,
   } = formikValues
 
+  const fishBeltTransectData = removeEmptyProperty({
+    depth,
+    label,
+    len_surveyed,
+    number,
+    reef_slope,
+    sample_time,
+    size_bin,
+    width,
+  })
+
+  const sampleEventData = removeEmptyProperty({
+    management,
+    notes,
+    sample_date,
+    site,
+  })
+
   return {
     ...collectRecordBeingEdited,
     data: {
-      fishbelt_transect: {
-        depth,
-        label,
-        len_surveyed,
-        number,
-        reef_slope,
-        sample_time,
-        size_bin,
-        width,
-      },
-      sample_event: {
-        management,
-        notes,
-        sample_date,
-        site,
-      },
+      fishbelt_transect: fishBeltTransectData,
+      sample_event: sampleEventData,
       obs_belt_fishes: reformatObservationsForFishBeltRecord(
         observationsValues,
       ),
