@@ -92,7 +92,7 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  pullEverything = (projectId) => {
+  pullEverything = async (projectId) => {
     const allTheDataNames = [
       'benthic_attributes',
       'choices',
@@ -106,18 +106,24 @@ const SyncApiDataIntoOfflineStorage = class {
       'projects',
     ]
 
-    return this.pushChanges().then(() =>
-      pullApiData({
-        dexieInstance: this._dexieInstance,
-        auth0Token: this._auth0Token,
-        apiBaseUrl: this._apiBaseUrl,
-        apiDataNamesToPull: allTheDataNames,
-        projectId,
-      }),
-    )
+    await this.pushChanges()
+
+    const pullResponse = await pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: allTheDataNames,
+      projectId,
+    })
+
+    await this._dexieInstance.uiState_offlineReadyProjects.put({
+      id: projectId,
+    })
+
+    return pullResponse
   }
 
-  pullEverythingButChoices = (projectId) => {
+  pullEverythingButChoices = async (projectId) => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'collect_records',
@@ -130,15 +136,21 @@ const SyncApiDataIntoOfflineStorage = class {
       'projects',
     ]
 
-    return this.pushChanges().then(() =>
-      pullApiData({
-        dexieInstance: this._dexieInstance,
-        auth0Token: this._auth0Token,
-        apiBaseUrl: this._apiBaseUrl,
-        apiDataNamesToPull: apiDataNamesToPullNonProject,
-        projectId,
-      }),
-    )
+    await this.pushChanges()
+
+    const pullResponse = await pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: apiDataNamesToPullNonProject,
+      projectId,
+    })
+
+    await this._dexieInstance.uiState_offlineReadyProjects.put({
+      id: projectId,
+    })
+
+    return pullResponse
   }
 }
 

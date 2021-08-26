@@ -16,6 +16,7 @@ dexieInstance.version(1).stores({
   project_profiles: 'id',
   project_sites: 'id',
   projects: 'id',
+  uiState_offlineReadyProjects: 'id',
 })
 
 // If This were TypeScript, types would be easy to obtain for Dexie
