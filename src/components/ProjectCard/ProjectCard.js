@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   ButtonGroups,
@@ -43,15 +43,16 @@ const ProjectCard = ({
       apiSyncInstance
         .pullEverythingButChoices(project.id)
         .then(() => {
+          // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            language.success.getProjectSetOfflineReadySuccess(project.name),
+            <div data-testid="foo">
+              {language.success.getProjectSetOfflineReadySuccess(name)}
+            </div>,
           )
         })
         .catch(() => {
-          toast.error(
-            language.error.getProjectSetOfflineReadyFailure(project.name),
-          )
+          toast.error(language.error.getProjectSetOfflineReadyFailure(name))
         })
     }
   }
