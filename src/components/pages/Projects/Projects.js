@@ -58,7 +58,7 @@ const Projects = ({ apiSyncInstance }) => {
   ))
 
   return isLoading ? (
-    <LoadingIndicator />
+    <LoadingIndicator aria-label="projects list loading indicator" />
   ) : (
     <HomePageLayout
       topRow={<ProjectToolBarSection />}

@@ -62,8 +62,9 @@ test('Sync: initial page load on non project page', async () => {
     dexieInstance,
   })
 
+  await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('projects list loading indicator'),
   )
 
   expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(
@@ -147,8 +148,9 @@ test('Sync: initial page load already done, navigate to non project page', async
     dexieInstance,
   })
 
+  await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('projects list loading indicator'),
   )
 
   /**
