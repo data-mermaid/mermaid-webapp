@@ -21,26 +21,33 @@ import NavLinkButtonGroup from '../NavLinkButtonGroup'
 import OfflineHide from '../generic/OfflineHide'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import SyncApiDataIntoOfflineStorage from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
+import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
-const ProjectCard = ({ project, apiSyncInstance, ...restOfProps }) => {
-  const { name, countries, num_sites, offlineReady, updated_on, id } = project
-  const history = useHistory()
+const ProjectCard = ({
+  project,
+  apiSyncInstance,
+  isOfflineReady,
+  ...restOfProps
+}) => {
   const { isOnline: isAppOnline } = useOnlineStatus()
-  const [projectOfflineStatus, setProjectOfflineStatus] = useState(offlineReady)
+  const { name, countries, num_sites, updated_on, id } = project
+  const { setIsSyncInProgress } = useSyncStatus()
+  const history = useHistory()
   const projectUrl = `projects/${id}`
 
   const handleProjectOfflineReadyClick = (event) => {
     const isChecked = event.target.checked
 
-    setProjectOfflineStatus(isChecked)
     if (isChecked) {
+      setIsSyncInProgress(true)
       apiSyncInstance
         .pullEverythingButChoices(project.id)
-        .then(() =>
+        .then(() => {
+          setIsSyncInProgress(false)
           toast.success(
             language.success.getProjectSetOfflineReadySuccess(project.name),
-          ),
-        )
+          )
+        })
         .catch(() => {
           toast.error(
             language.error.getProjectSetOfflineReadyFailure(project.name),
@@ -75,7 +82,7 @@ const ProjectCard = ({ project, apiSyncInstance, ...restOfProps }) => {
           <input
             id="offline-toggle"
             type="checkbox"
-            checked={projectOfflineStatus}
+            checked={isOfflineReady}
             onChange={handleProjectOfflineReadyClick}
           />
           {language.pages.projectsList.offlineReadyCheckboxLabel}
@@ -103,6 +110,7 @@ ProjectCard.propTypes = {
   apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage)
     .isRequired,
   project: projectPropType.isRequired,
+  isOfflineReady: PropTypes.bool.isRequired,
 }
 
 export default ProjectCard
