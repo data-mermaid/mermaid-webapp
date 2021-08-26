@@ -35,6 +35,8 @@ const error = {
     'Management Regime record data is currently unavailable. Please try again',
   managementRegimeRecordsUnavailable:
     'Management Regime records data is currently unavailable. Please try again',
+  getProjectSetOfflineReadyFailure: (projectName) =>
+    `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
 }
 
 const success = {
@@ -43,6 +45,8 @@ const success = {
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
     'Proposed fish species saved. The observation has been edited to show it selected.',
+  getProjectSetOfflineReadySuccess: (projectName) =>
+    `The project, ${projectName}, is now offline ready`,
 }
 
 const deleteCollectRecord = {
@@ -76,6 +80,7 @@ const autocomplete = {
 }
 
 const pages = {
+  projectsList: { offlineReadyCheckboxLabel: 'Offline Ready' },
   collectRecord: {
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',

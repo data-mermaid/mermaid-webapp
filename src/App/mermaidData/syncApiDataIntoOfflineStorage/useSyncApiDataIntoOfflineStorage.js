@@ -56,12 +56,11 @@ export const useSyncApiDataIntoOfflineStorage = ({
     const isProjectsListPage =
       location.pathname === '/projects' || location.pathname === '/projects/'
 
-    const isInitialLoadOrReloadOnProjectsListPage =
-      isProjectsListPage && isOnlineAndReady
+    const isProjectsListPageAndOnline = isProjectsListPage && isOnlineAndReady
 
-    const isInitialLoadOnProjectPage =
+    const isInitialLoadOnProjectPageAndOnline =
       isPageReload.current && isProjectPage && isOnlineAndReady
-    const isNotInitialLoadOnProjectPage =
+    const isNotInitialLoadOnProjectPageAndOnline =
       !isPageReload.current && isProjectPage && isOnlineAndReady
 
     if (isOfflineAndReadyAndAlreadyInitiated) {
@@ -69,7 +68,8 @@ export const useSyncApiDataIntoOfflineStorage = ({
       setIsSyncInProgress(false)
     }
 
-    if (isInitialLoadOrReloadOnProjectsListPage) {
+    if (isProjectsListPageAndOnline) {
+      // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverythingButProjectRelated()
@@ -85,7 +85,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
         })
     }
 
-    if (isInitialLoadOnProjectPage) {
+    if (isInitialLoadOnProjectPageAndOnline) {
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverything(projectId)
@@ -100,7 +100,8 @@ export const useSyncApiDataIntoOfflineStorage = ({
           toast.error(language.error.apiDataPull)
         })
     }
-    if (isNotInitialLoadOnProjectPage) {
+    if (isNotInitialLoadOnProjectPageAndOnline) {
+      // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
         .pullEverythingButChoices(projectId)
