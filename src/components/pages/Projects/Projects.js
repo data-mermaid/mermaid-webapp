@@ -19,16 +19,20 @@ const Projects = ({ apiSyncInstance }) => {
   const { isSyncInProgress } = useSyncStatus()
   const [isLoading, setIsLoading] = useState(true)
   const [projects, setProjects] = useState([])
+  const [offlineReadyProjects, setOfflineReadyProjects] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const isMounted = useIsMounted()
 
-  const _getProjects = useEffect(() => {
+  const _getProjectsInfo = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
-      databaseSwitchboardInstance
-        .getProjects()
-        .then((projectsResponse) => {
+      Promise.all([
+        databaseSwitchboardInstance.getProjects(),
+        databaseSwitchboardInstance.getOfflineReadyProjects(),
+      ])
+        .then(([projectsResponse, offlineReadyProjectsResponse]) => {
           if (isMounted.current) {
             setProjects(projectsResponse)
+            setOfflineReadyProjects(offlineReadyProjectsResponse)
             setIsLoading(false)
           }
         })
@@ -38,12 +42,18 @@ const Projects = ({ apiSyncInstance }) => {
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
 
+  const getIsProjectOffline = (projectId) =>
+    !!offlineReadyProjects.find(
+      (offlineProject) => offlineProject.id === projectId,
+    )
+
   const projectList = projects.map((project) => (
     <ProjectCard
       role="listitem"
       project={project}
       key={project.id}
       apiSyncInstance={apiSyncInstance}
+      isOfflineReady={getIsProjectOffline(project.id)}
     />
   ))
 

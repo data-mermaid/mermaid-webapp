@@ -13,6 +13,7 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
     dexieInstance.project_profiles,
     dexieInstance.project_sites,
     dexieInstance.projects,
+    dexieInstance.uiState_offlineReadyProjects,
     async () => {
       // choices is not an array, so not like th others
       const allThePullableDataNamesButChoices = [
@@ -34,6 +35,10 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
       dexieInstance.choices.put({
         id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
         choices: mockMermaidData.choices,
+      })
+
+      dexieInstance.uiState_offlineReadyProjects.put({
+        id: '1',
       })
     },
   )

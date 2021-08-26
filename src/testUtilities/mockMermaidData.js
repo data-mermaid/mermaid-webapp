@@ -5,7 +5,7 @@ const projects = [
     countries: ['Canada'],
     tags: ['WCS Fiji', 'WCS Kenya'],
     num_sites: 13,
-    offlineReady: true,
+
     updated_on: '01/21/2020',
     notes: 'Fish are recorded',
     data_policy_beltfish: 10,
@@ -24,7 +24,7 @@ const projects = [
       'Land and Marine Environment Resource Group Pvt Ltd',
     ],
     num_sites: 36,
-    offlineReady: true,
+
     updated_on: '21/21/2021',
     notes: '',
     data_policy_beltfish: 50,
@@ -39,7 +39,7 @@ const projects = [
     countries: ['England, Finland'],
     tags: ['California Academy of Sciences'],
     num_sites: 34,
-    offlineReady: false,
+
     updated_on: '21/21/1992',
     notes: '',
     data_policy_beltfish: 50,
@@ -54,7 +54,7 @@ const projects = [
     countries: ['Canada'],
     tags: [],
     num_sites: 9,
-    offlineReady: false,
+
     updated_on: '31/12/2011',
     notes: '',
     data_policy_beltfish: 100,
@@ -69,7 +69,7 @@ const projects = [
     countries: ['Mexico'],
     tags: [],
     num_sites: 33,
-    offlineReady: false,
+
     updated_on: '01/21/2001',
     notes: '',
     data_policy_beltfish: 50,
