@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify'
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 import { HomePageLayout } from '../../Layout'
 import language from '../../../language'
@@ -9,11 +10,12 @@ import ProjectToolBarSection from '../../ProjectToolBarSection'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../library/useIsMounted'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 
 /**
  * All Projects page (lists projects)
  */
-const Projects = () => {
+const Projects = ({ apiSyncInstance }) => {
   const { isSyncInProgress } = useSyncStatus()
   const [isLoading, setIsLoading] = useState(true)
   const [projects, setProjects] = useState([])
@@ -37,7 +39,12 @@ const Projects = () => {
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
 
   const projectList = projects.map((project) => (
-    <ProjectCard role="listitem" project={project} key={project.id} />
+    <ProjectCard
+      role="listitem"
+      project={project}
+      key={project.id}
+      apiSyncInstance={apiSyncInstance}
+    />
   ))
 
   return isLoading ? (
@@ -48,6 +55,11 @@ const Projects = () => {
       bottomRow={<div role="list">{projectList}</div>}
     />
   )
+}
+
+Projects.propTypes = {
+  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage)
+    .isRequired,
 }
 
 export default Projects
