@@ -5,7 +5,8 @@ import React from 'react'
 import colorHelper from 'color'
 import theme from '../../theme'
 import Logo from '../../assets/mermaid-logo.svg'
-import { IconMenu, IconDown } from '../icons'
+import { ButtonThatLooksLikeLink } from '../generic/buttons'
+import { IconBell, IconMenu, IconDown } from '../icons'
 import {
   hoverState,
   mediaQueryTabletLandscapeOnly,
@@ -19,10 +20,11 @@ import OfflineHide from '../generic/OfflineHide'
  * Mermaid Header
  */
 
-const StyledHeader = styled(RowSpaceBetween)`
+const StyledHeader = styled('header')`
   background-color: ${theme.color.headerColor};
+  display: flex;
+  justify-content: space-between;
   color: ${theme.color.white};
-  align-items: flex-start;
   position: fixed;
   width: 100%;
   top: 0;
@@ -43,26 +45,43 @@ const linkStyles = css`
   cursor: pointer;
   border-bottom: solid ${theme.spacing.borderLarge} transparent;
   text-decoration: none;
-  margin: 0;
+  position: relative;
+  margin: 0 ${theme.spacing.small};
   padding: ${theme.spacing.small};
   ${hoverState(
     css`
-      border-bottom: solid ${theme.spacing.borderLarge} ${theme.color.white};
-      opacity: 1;
+      border-bottom: solid 3px ${theme.color.callout};
     `,
   )}
   &:active {
-    background: ${theme.color.black.mix(colorHelper('white'), 0.2)};
+    /* background: ${theme.color.black.mix(colorHelper('white'), 0.2)}; */
   }
+`
+const BellButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
+  ${linkStyles}
 `
 const dropdownLinkStyles = css`
   ${linkStyles};
-  border-width: 0 0 ${theme.spacing.borderLarge} 0;
+  border-width: 0 0 3px 0;
   background: none;
   display: block;
-  color: ${theme.color.white};
+  margin: 0;
   padding: ${theme.spacing.small} ${theme.spacing.large};
   width: 100%;
+  ${hoverState(
+    css`
+      &:after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: ${theme.spacing.borderSmall};
+        background: ${theme.color.callout};
+        bottom: 0;
+        left: ${theme.spacing.large};
+      }
+      border-color: transparent;
+    `,
+  )}
 `
 const StyledNavLink = styled(Link)`
   ${linkStyles}
@@ -78,12 +97,10 @@ const GlobalNav = styled('nav')`
     }
     .desktopUserMenu {
       position: absolute;
-      top: ${theme.spacing.headerHeight};
+      top: calc(${theme.spacing.headerHeight} + ${theme.spacing.small});
       right: 0;
-      background-color: ${theme.color.primaryColor};
-      border-style: solid;
-      border-width: 0 1px 1px 1px;
-      border-color: ${theme.color.border};
+      background-color: ${theme.color.headerDropdownMenuBackground};
+      border-radius: 8px 0 8px 8px;
       a {
         ${dropdownLinkStyles}
       }
@@ -97,7 +114,8 @@ const GlobalNav = styled('nav')`
       background: none;
     }
     .menuDropdown {
-      background-color: ${theme.color.primaryColor};
+      background-color: ${theme.color.headerDropdownMenuBackground};
+      border-radius: 8px 0 8px 8px;
     }
     a,
     div p,
@@ -163,6 +181,9 @@ const Header = ({ logout, currentUser }) => {
       <GlobalNav>
         <div className="desktop">
           <GlobalLinks />
+          <BellButtonThatLooksLikeLink>
+            <IconBell />
+          </BellButtonThatLooksLikeLink>
           <HideShow
             button={
               <p>
