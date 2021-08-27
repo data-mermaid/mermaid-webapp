@@ -37,6 +37,7 @@ const CollectRecordsMixin = (Base) =>
         data: { ...record.data, protocol: 'fishbelt' },
         project: projectIdToSubmit,
         profile: profileIdToSubmit,
+        _pushToApi: true,
       }
     }
 
@@ -252,32 +253,16 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecord = ({ id, projectId }) => {
+    getCollectRecord = (id) => {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
 
-      return this._isAuthenticatedAndReady
-        ? this.getCollectRecords(projectId).then((records) =>
-            records.find((record) => record.id === id),
-          )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    getCollectRecords = (projectId) => {
-      if (!projectId) {
-        Promise.reject(this._operationMissingParameterError)
+      if (!this._isAuthenticatedAndReady) {
+        Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records
-          .toArray()
-          .then((records) =>
-            records.filter((record) => record.project === projectId),
-          )
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
+      return this._dexieInstance.collect_records.get(id)
     }
 
     getCollectRecordsWithoutOfflineDeleted = (projectId) => {
@@ -306,8 +291,8 @@ const CollectRecordsMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? Promise.all([
             this.getCollectRecordsWithoutOfflineDeleted(projectId),
-            this.getSites(projectId),
-            this.getManagementRegimes(projectId),
+            this.getSitesWithoutOfflineDeleted(projectId),
+            this.getManagementRegimesWithoutOfflineDeleted(projectId),
             this.getChoices(),
           ]).then(([collectRecords, sites, managementRegimes, choices]) => {
             return collectRecords.map((record) => ({

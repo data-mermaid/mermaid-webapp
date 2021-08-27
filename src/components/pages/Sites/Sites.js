@@ -31,35 +31,31 @@ import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../library/useIsMounted'
 
 const Sites = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
+  const isMounted = useIsMounted()
   const { projectId } = useParams()
 
   const _getSiteRecords = useEffect(() => {
-    let isMounted = true
-
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       databaseSwitchboardInstance
         .getSiteRecordsForUIDisplay(projectId)
         .then((records) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setSiteRecordsForUiDisplay(records)
             setIsLoading(false)
           }
         })
         .catch(() => {
-          toast.error(language.error.collectRecordsUnavailable)
+          toast.error(language.error.siteRecordsUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
 

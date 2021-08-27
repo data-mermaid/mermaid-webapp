@@ -35,6 +35,7 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../library/useIsMounted'
 
 const Collect = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -44,15 +45,14 @@ const Collect = () => {
     [],
   )
   const [isLoading, setIsLoading] = useState(true)
+  const isMounted = useIsMounted()
 
   const _getCollectRecords = useEffect(() => {
-    let isMounted = true
-
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       databaseSwitchboardInstance
         .getCollectRecordsForUIDisplay(projectId)
         .then((records) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setCollectRecordsForUiDisplay(records)
             setIsLoading(false)
           }
@@ -61,11 +61,7 @@ const Collect = () => {
           toast.error(language.error.collectRecordsUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
 

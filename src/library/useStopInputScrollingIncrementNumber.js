@@ -8,10 +8,14 @@ export const useStopInputScrollingIncrementNumber = (inputRef) => {
     // on unmount
     const snapshotOfRef = inputRef.current
 
-    if (snapshotOfRef) snapshotOfRef.addEventListener('wheel', handleWheel)
+    if (snapshotOfRef) {
+      snapshotOfRef.addEventListener('wheel', handleWheel)
+    }
 
     return () => {
-      if (snapshotOfRef) snapshotOfRef.removeEventListener('wheel', handleWheel)
+      if (snapshotOfRef) {
+        snapshotOfRef.removeEventListener('wheel', handleWheel)
+      }
     }
   }, [inputRef])
 }

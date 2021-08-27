@@ -15,6 +15,8 @@ import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWith
 import { InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import language from '../../../../language'
+import useIsMounted from '../../../../library/useIsMounted'
 
 const ManagementRegime = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -26,23 +28,19 @@ const ManagementRegime = () => {
   ] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
-  const { managementRegimeId, projectId } = useParams()
+  const { managementRegimeId } = useParams()
+  const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
-    let isMounted = true
-
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (databaseSwitchboardInstance && !isSyncInProgress) {
       const promises = [
-        databaseSwitchboardInstance.getManagementRegime({
-          id: managementRegimeId,
-          projectId,
-        }),
+        databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
         databaseSwitchboardInstance.getChoices(),
       ]
 
       Promise.all(promises)
         .then(([managementRegimeResponse, choicesResponse]) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setManagementParties(getOptions(choicesResponse.managementparties))
             setManagementCompliances(
               getOptions(choicesResponse.managementcompliances),
@@ -52,18 +50,13 @@ const ManagementRegime = () => {
           }
         })
         .catch(() => {
-          // Will update language file when adding user workflow like save/delete site to page.
-          toast.error(`management regime error`)
+          toast.error(language.error.managementRegimeRecordUnavailable)
         })
-    }
-
-    return () => {
-      isMounted = false
     }
   }, [
     databaseSwitchboardInstance,
     managementRegimeId,
-    projectId,
+    isMounted,
     isSyncInProgress,
   ])
 
@@ -143,7 +136,7 @@ const ManagementRegime = () => {
           }
           toolbar={
             <>
-              <H2>Management Regime Name</H2>
+              <H2>{formik.values.name}</H2>
             </>
           }
         />

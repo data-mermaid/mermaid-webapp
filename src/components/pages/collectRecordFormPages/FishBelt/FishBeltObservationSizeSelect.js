@@ -6,7 +6,7 @@ import { fishBeltBins } from './fishBeltBins'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 
 export const FishBeltObservationSizeSelect = ({
-  onChange,
+  onValueEntered,
   fishBinSelectedLabel,
   value,
   labelledBy,
@@ -31,14 +31,15 @@ export const FishBeltObservationSizeSelect = ({
     const valueToSubmit = isSelectedValue50 ? plus50Value : selectedValue
 
     setShow50PlusInput(isSelectedValue50)
-    onChange(valueToSubmit)
+    onValueEntered(valueToSubmit)
   }
 
   const handlePlus50OnChange = (event) => {
-    const targetValue = event.target.value
+    setPlus50Value(event.target.value)
+  }
 
-    setPlus50Value(targetValue)
-    onChange(targetValue)
+  const handlePlus50OnBlur = (event) => {
+    onValueEntered(event.target.value)
   }
 
   return (
@@ -62,6 +63,7 @@ export const FishBeltObservationSizeSelect = ({
         <InputNumberNoScrollWithUnit
           value={plus50Value}
           onChange={handlePlus50OnChange}
+          onBlur={handlePlus50OnBlur}
           type="number"
           min="50"
           unit="cm"
@@ -74,7 +76,7 @@ export const FishBeltObservationSizeSelect = ({
 }
 
 FishBeltObservationSizeSelect.propTypes = {
-  onChange: PropTypes.func.isRequired,
+  onValueEntered: PropTypes.func.isRequired,
   fishBinSelectedLabel: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   labelledBy: PropTypes.string,

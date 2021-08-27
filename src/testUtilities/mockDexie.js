@@ -19,6 +19,7 @@ const getMockDexieInstanceAllSuccess = () => {
     project_profiles: 'id',
     project_sites: 'id',
     projects: 'id',
+    uiState_offlineReadyProjects: 'id',
   })
 
   dexieInstance.currentUser

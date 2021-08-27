@@ -23,8 +23,20 @@ const error = {
   fishSpeciesAlreadyExists:
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   formValidation: { required: 'This field is required' },
-  submittedRecordsUnavailable:
+  submittedRecordUnavailable:
     'Submitted record data is currently unavailable. Please try again',
+  submittedRecordsUnavailable:
+    'Submitted records data is currently unavailable. Please try again',
+  siteRecordUnavailable:
+    'Site record data is currently unavailable. Please try again',
+  siteRecordsUnavailable:
+    'Site records data is currently unavailable. Please try again',
+  managementRegimeRecordUnavailable:
+    'Management Regime record data is currently unavailable. Please try again',
+  managementRegimeRecordsUnavailable:
+    'Management Regime records data is currently unavailable. Please try again',
+  getProjectSetOfflineReadyFailure: (projectName) =>
+    `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
 }
 
 const success = {
@@ -33,6 +45,8 @@ const success = {
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
     'Proposed fish species saved. The observation has been edited to show it selected.',
+  getProjectSetOfflineReadySuccess: (projectName) =>
+    `The project, ${projectName}, is now offline ready`,
 }
 
 const deleteCollectRecord = {
@@ -66,6 +80,7 @@ const autocomplete = {
 }
 
 const pages = {
+  projectsList: { offlineReadyCheckboxLabel: 'Offline Ready' },
   collectRecord: {
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
@@ -93,6 +108,9 @@ const pages = {
     filterToolbarText: 'Filter users by name, or email',
     searchEmailToolbarText: 'Enter email address of user to add',
     warningBadgeMessage: `Some Sample Units can't be submitted because the user is in read-only mode.`,
+    newUserModalTitle: `Invite new user`,
+    newUserModalText: `will need to sign up because they're not already a MERMAID user. After they've signed up, they'll be added to this project`,
+    transferSampleUnitsModalTitle: `Transfer Sample Units`,
   },
   submittedFishBeltForm: {
     toolbarLabel: 'Submitted sample units are read-only',

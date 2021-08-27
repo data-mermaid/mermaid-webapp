@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
+import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -14,12 +15,21 @@ import Projects from './Projects'
 test('Projects component renders with the expected UI elements', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+  })
+
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects />, { dexieInstance })
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
-      screen.queryByLabelText('loading indicator'),
+      screen.queryByLabelText('projects list loading indicator'),
     ).not.toBeInTheDocument(),
   )
   // expect count of projects renders is the same as the count in mock data
@@ -54,12 +64,21 @@ test('Projects component renders with the expected UI elements', async () => {
 test('A project card renders with the expected UI elements for button groups', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+  })
+
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects />, { dexieInstance })
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
-      screen.queryByLabelText('loading indicator'),
+      screen.queryByLabelText('projects list loading indicator'),
     ).not.toBeInTheDocument(),
   )
 
@@ -81,12 +100,21 @@ test('A project card renders with the expected UI elements for button groups', a
 test('A project card shows relevant data for a project', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+  })
+
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects />, { dexieInstance })
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
-      screen.queryByLabelText('loading indicator'),
+      screen.queryByLabelText('projects list loading indicator'),
     ).not.toBeInTheDocument(),
   )
 
@@ -111,11 +139,20 @@ test('A project card shows only collect button in button groups when offline', a
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  renderAuthenticatedOffline(<Projects />, { dexieInstance })
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+  })
+
+  renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
-      screen.queryByLabelText('loading indicator'),
+      screen.queryByLabelText('projects list loading indicator'),
     ).not.toBeInTheDocument(),
   )
 
@@ -152,11 +189,21 @@ test('A project card shows all buttons in button group when online', async () =>
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects />, { dexieInstance })
+
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+  })
+
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
-      screen.queryByLabelText('loading indicator'),
+      screen.queryByLabelText('projects list loading indicator'),
     ).not.toBeInTheDocument(),
   )
 
@@ -182,11 +229,24 @@ test('A project card shows all buttons in button group when online', async () =>
 })
 
 test('Hide new project button in project toolbar when offline', async () => {
-  renderAuthenticatedOffline(<Projects />)
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    auth0Token: 'fake token',
+  })
+
+  renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
 
   await waitFor(() =>
     expect(
-      screen.queryByLabelText('loading indicator'),
+      screen.queryByLabelText('projects list loading indicator'),
     ).not.toBeInTheDocument(),
   )
 

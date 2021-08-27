@@ -15,6 +15,8 @@ import MermaidMap from '../../../MermaidMap'
 import { InputRow, InputWrapper } from '../../../generic/form'
 import { getOptions } from '../../../../library/getOptions'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../../library/useIsMounted'
+import language from '../../../../language'
 
 const Site = () => {
   const [countryOptions, setCountryOptions] = useState([])
@@ -25,25 +27,19 @@ const Site = () => {
   const [siteBeingEdited, setSiteBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
-  const { siteId, projectId } = useParams()
+  const isMounted = useIsMounted()
+  const { siteId } = useParams()
 
   const _getSupportingData = useEffect(() => {
-    let isMounted = true
-
-    if (
-      databaseSwitchboardInstance &&
-      siteId &&
-      projectId &&
-      !isSyncInProgress
-    ) {
+    if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
       const promises = [
-        databaseSwitchboardInstance.getSite({ id: siteId, projectId }),
+        databaseSwitchboardInstance.getSite(siteId),
         databaseSwitchboardInstance.getChoices(),
       ]
 
       Promise.all(promises)
         .then(([siteResponse, choicesResponse]) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setCountryOptions(getOptions(choicesResponse.countries))
             setExposureOptions(getOptions(choicesResponse.reefexposures))
             setReefTypeOptions(getOptions(choicesResponse.reeftypes))
@@ -53,15 +49,10 @@ const Site = () => {
           }
         })
         .catch(() => {
-          // Will update language file when adding user workflow like save/delete site to page.
-          toast.error(`site error`)
+          toast.error(language.error.siteRecordUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, siteId, projectId, isSyncInProgress])
+  }, [databaseSwitchboardInstance, siteId, isSyncInProgress, isMounted])
 
   const initialFormValues = useMemo(
     () => getSiteInitialValues(siteBeingEdited),
@@ -161,7 +152,7 @@ const Site = () => {
       }
       toolbar={
         <>
-          <H2>Site Name</H2>
+          <H2>{formik.values.name}</H2>
         </>
       }
     />

@@ -5,7 +5,7 @@ const projects = [
     countries: ['Canada'],
     tags: ['WCS Fiji', 'WCS Kenya'],
     num_sites: 13,
-    offlineReady: true,
+
     updated_on: '01/21/2020',
     notes: 'Fish are recorded',
     data_policy_beltfish: 10,
@@ -24,7 +24,7 @@ const projects = [
       'Land and Marine Environment Resource Group Pvt Ltd',
     ],
     num_sites: 36,
-    offlineReady: true,
+
     updated_on: '21/21/2021',
     notes: '',
     data_policy_beltfish: 50,
@@ -39,7 +39,7 @@ const projects = [
     countries: ['England, Finland'],
     tags: ['California Academy of Sciences'],
     num_sites: 34,
-    offlineReady: false,
+
     updated_on: '21/21/1992',
     notes: '',
     data_policy_beltfish: 50,
@@ -54,7 +54,7 @@ const projects = [
     countries: ['Canada'],
     tags: [],
     num_sites: 9,
-    offlineReady: false,
+
     updated_on: '31/12/2011',
     notes: '',
     data_policy_beltfish: 100,
@@ -69,7 +69,7 @@ const projects = [
     countries: ['Mexico'],
     tags: [],
     num_sites: 33,
-    offlineReady: false,
+
     updated_on: '01/21/2001',
     notes: '',
     data_policy_beltfish: 50,
@@ -431,6 +431,7 @@ const collect_records = [
   {
     id: '1',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'benthiclit',
       sample_event: {
@@ -461,6 +462,7 @@ const collect_records = [
   {
     id: '2',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -534,6 +536,7 @@ const collect_records = [
   {
     id: '3',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -568,6 +571,7 @@ const collect_records = [
   {
     id: '4',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -606,6 +610,7 @@ const collect_records = [
   {
     project: '5',
     id: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -648,6 +653,7 @@ const collect_records = [
   {
     id: '6',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -682,6 +688,7 @@ const collect_records = [
   {
     id: '7',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -711,6 +718,7 @@ const collect_records = [
   {
     id: '8',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -741,6 +749,7 @@ const collect_records = [
   {
     id: '9',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -774,6 +783,7 @@ const collect_records = [
   {
     id: '10',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -804,6 +814,7 @@ const collect_records = [
   {
     id: '11',
     project: '5',
+    profile: 'fake',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -837,6 +848,7 @@ const collect_records = [
   },
   {
     id: '12',
+    profile: 'fake',
     project: 'shouldgetfilteredout',
     data: {
       protocol: 'fishbelt',
