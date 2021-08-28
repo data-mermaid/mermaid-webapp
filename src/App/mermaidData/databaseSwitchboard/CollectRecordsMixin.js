@@ -145,7 +145,6 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
-            console.log('response from save ', response)
             const [recordResponseFromApiPush] = response.data.collect_records
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
               recordResponseFromApiPush,
@@ -166,7 +165,7 @@ const CollectRecordsMixin = (Base) =>
 
             return Promise.reject(
               new Error(
-                'the API record returned from saveFishBelt doesnt have a succussful status code',
+                'the API record returned from saveFishBelt doesnt have a successful status code',
               ),
             )
           })
@@ -233,7 +232,7 @@ const CollectRecordsMixin = (Base) =>
 
             return Promise.reject(
               new Error(
-                'the API record returned from deleteFishBelt doesnt have a succussful status code',
+                'the API record returned from deleteFishBelt doesnt have a successful status code',
               ),
             )
           })
@@ -255,7 +254,7 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    validateFishBelt = async ({ recordId, projectId }) => {
+    validateFishBelt = ({ recordId, projectId }) => {
       if (!recordId || !projectId) {
         throw new Error(
           'validateFishBelt expects record, profileId, and projectId parameters',
@@ -269,18 +268,30 @@ const CollectRecordsMixin = (Base) =>
             { ids: [recordId] },
           )
           .then((response) => {
-            console.log(response)
-            const recordResponseFromApiValidate = response.data[recordId]
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordResponseFromApiValidate,
+              response,
             )
 
-            console.log(
-              'isRecordStatusCodeSuccessful ',
-              isRecordStatusCodeSuccessful,
+            if (isRecordStatusCodeSuccessful) {
+              return this._apiSyncInstance
+                .pullEverythingButChoices(projectId)
+                .then((_dataSetsReturnedFromApiPull) => {
+                  const validatedData =
+                    _dataSetsReturnedFromApiPull.data.collect_records.updates[0]
+
+                  return validatedData
+                })
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API record returned from validateFishBelt doesnt have a successful status code',
+              ),
             )
           })
       }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getCollectRecord = (id) => {
