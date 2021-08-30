@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import React from 'react'
-import colorHelper from 'color'
 import theme from '../../theme'
 import Logo from '../../assets/mermaid-logo.svg'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
@@ -12,7 +11,6 @@ import {
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { RowSpaceBetween } from '../generic/positioning'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
 
@@ -24,6 +22,7 @@ const StyledHeader = styled('header')`
   background-color: ${theme.color.headerColor};
   display: flex;
   justify-content: space-between;
+  align-items: stretch;
   color: ${theme.color.white};
   position: fixed;
   width: 100%;
@@ -42,20 +41,20 @@ const StyledHeader = styled('header')`
 `
 const linkStyles = css`
   color: ${theme.color.white};
+  height: ${theme.spacing.headerHeight};
   cursor: pointer;
   border-bottom: solid ${theme.spacing.borderLarge} transparent;
   text-decoration: none;
   position: relative;
   margin: 0 ${theme.spacing.small};
-  padding: ${theme.spacing.small};
+  display: inline-block;
+  padding: 0;
+  line-height: ${theme.spacing.headerHeight};
   ${hoverState(
     css`
       border-bottom: solid 3px ${theme.color.callout};
     `,
   )}
-  &:active {
-    /* background: ${theme.color.black.mix(colorHelper('white'), 0.2)}; */
-  }
 `
 const BellButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
   ${linkStyles}
@@ -64,7 +63,7 @@ const dropdownLinkStyles = css`
   ${linkStyles};
   border-width: 0 0 3px 0;
   background: none;
-  display: block;
+  display: inline-block;
   margin: 0;
   padding: ${theme.spacing.small} ${theme.spacing.large};
   width: 100%;
@@ -88,6 +87,8 @@ const StyledNavLink = styled(Link)`
 `
 const GlobalNav = styled('nav')`
   .desktop {
+    display: flex;
+    align-items: stretch;
     div,
     div p {
       display: inline-block;
@@ -95,7 +96,8 @@ const GlobalNav = styled('nav')`
     div p {
       ${linkStyles}
     }
-    .desktopUserMenu {
+    .desktopUserMenu,
+    .mobileUserMenu {
       position: absolute;
       top: calc(${theme.spacing.headerHeight} + ${theme.spacing.small});
       right: 0;
@@ -108,6 +110,7 @@ const GlobalNav = styled('nav')`
   }
   .mobile {
     display: none;
+    align-items: stretch;
     button.trigger {
       border: none;
       font-size: larger;
@@ -116,6 +119,9 @@ const GlobalNav = styled('nav')`
     .menuDropdown {
       background-color: ${theme.color.headerDropdownMenuBackground};
       border-radius: 8px 0 8px 8px;
+      top: calc(${theme.spacing.headerHeight} + 1px);
+      right: 1px;
+      position: absolute;
     }
     a,
     div p,
@@ -129,10 +135,13 @@ const GlobalNav = styled('nav')`
       width: 100%;
       white-space: nowrap;
       font-size: smaller;
-    }
-    .mobileMenu {
-      top: ${theme.spacing.headerHeight};
-      right: 0;
+      line-height: 1;
+      &:hover {
+        border: none;
+        &:after {
+          display: none;
+        }
+      }
     }
     .loggedInAs {
       background: ${theme.color.primaryColor};
@@ -143,7 +152,7 @@ const GlobalNav = styled('nav')`
       display: none;
     }
     .mobile {
-      display: block;
+      display: flex;
     }
   `)}
 `
@@ -198,6 +207,9 @@ const Header = ({ logout, currentUser }) => {
           />
         </div>
         <div className="mobile">
+          <BellButtonThatLooksLikeLink>
+            <IconBell />
+          </BellButtonThatLooksLikeLink>
           <HideShow
             button={
               <button className="trigger" type="button">
