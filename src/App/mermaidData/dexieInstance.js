@@ -7,15 +7,15 @@ dexieInstance.version(1).stores({
   benthic_attributes: 'id',
   choices: 'id',
   collect_records: 'id',
-  currentUser: 'id',
   fish_families: 'id',
   fish_genera: 'id',
   fish_species: 'id',
-  lastRevisionNumbersPulled: 'id',
   project_managements: 'id',
   project_profiles: 'id',
   project_sites: 'id',
   projects: 'id',
+  uiState_currentUser: 'id',
+  uiState_lastRevisionNumbersPulled: 'id',
   uiState_offlineReadyProjects: 'id',
 })
 
