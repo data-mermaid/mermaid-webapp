@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {
-  getLastRevisionNumbersPulled,
+  getLastRevisionNumbersPulledForAProject,
   persistLastRevisionNumbersPulled,
 } from './lastRevisionNumbers'
 
@@ -14,9 +14,12 @@ export const pullApiData = async ({
   apiDataNamesToPull,
   projectId,
 }) => {
-  const lastRevisionNumbersPulled = await getLastRevisionNumbersPulled({
-    dexieInstance,
-  })
+  const lastRevisionNumbersPulled = await getLastRevisionNumbersPulledForAProject(
+    {
+      dexieInstance,
+      projectId,
+    },
+  )
 
   const pullRequestBody = apiDataNamesToPull.reduce(
     (accumulator, apiDataName) => ({
@@ -44,6 +47,7 @@ export const pullApiData = async ({
   await persistLastRevisionNumbersPulled({
     dexieInstance,
     apiData,
+    projectId,
   })
 
   await dexieInstance.transaction(

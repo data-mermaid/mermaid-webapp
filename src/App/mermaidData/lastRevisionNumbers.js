@@ -1,9 +1,13 @@
-const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData }) => {
+const persistLastRevisionNumbersPulled = ({
+  dexieInstance,
+  apiData,
+  projectId,
+}) => {
   return dexieInstance.transaction(
     'rw',
     dexieInstance.uiState_lastRevisionNumbersPulled,
     async () => {
-      const dataNames = [
+      const dataTypes = [
         'benthic_attributes',
         'choices',
         'collect_records',
@@ -16,11 +20,22 @@ const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData }) => {
         'projects',
       ]
 
-      dataNames.forEach((dataName) => {
-        if (apiData[dataName]) {
+      dataTypes.forEach((dataType) => {
+        if (apiData[dataType]) {
+          const isDataTypeProjectAssociated =
+            dataType === 'collect_records' ||
+            dataType === 'project_managements' ||
+            dataType === 'project_profiles' ||
+            dataType === 'project_sites'
+
+          const projectIdToUse = isDataTypeProjectAssociated
+            ? projectId ?? 'n/a' // this hedges against the api sending more dataTypes than were asked for, eg in tests
+            : 'n/a'
+
           dexieInstance.uiState_lastRevisionNumbersPulled.put({
-            id: dataName,
-            lastRevisionNumber: apiData[dataName].last_revision_num,
+            dataType,
+            projectId: projectIdToUse,
+            lastRevisionNumber: apiData[dataType].last_revision_num,
           })
         }
       })
@@ -28,13 +43,19 @@ const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData }) => {
   )
 }
 
-const getLastRevisionNumbersPulled = async ({ dexieInstance }) => {
-  const lastRevisionNumberDexieRecords = await dexieInstance.uiState_lastRevisionNumbersPulled.toArray()
+const getLastRevisionNumbersPulledForAProject = async ({
+  dexieInstance,
+  projectId,
+}) => {
+  const lastRevisionNumberDexieRecords = await dexieInstance.uiState_lastRevisionNumbersPulled
+    .where('projectId')
+    .anyOf(projectId, 'n/a')
+    .toArray()
 
   const lastRevisionNumbersObject = lastRevisionNumberDexieRecords.reduce(
     (accumulator, lastRevisionNumberRecord) => ({
       ...accumulator,
-      [lastRevisionNumberRecord.id]:
+      [lastRevisionNumberRecord.dataType]:
         lastRevisionNumberRecord.lastRevisionNumber,
     }),
     {},
@@ -43,4 +64,7 @@ const getLastRevisionNumbersPulled = async ({ dexieInstance }) => {
   return lastRevisionNumbersObject
 }
 
-export { persistLastRevisionNumbersPulled, getLastRevisionNumbersPulled }
+export {
+  persistLastRevisionNumbersPulled,
+  getLastRevisionNumbersPulledForAProject,
+}
