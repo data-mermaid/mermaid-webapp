@@ -1,9 +1,11 @@
 import Dexie from 'dexie'
 import FDBFactory from 'fake-indexeddb/lib/FDBFactory'
+import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange'
 
 const getMockDexieInstanceAllSuccess = () => {
   const dexieInstance = new Dexie('mermaidAllSuccess', {
     indexedDB: new FDBFactory(),
+    IDBKeyRange,
   })
 
   dexieInstance.version(1).stores({
@@ -18,7 +20,7 @@ const getMockDexieInstanceAllSuccess = () => {
     project_sites: 'id',
     projects: 'id',
     uiState_currentUser: 'id',
-    uiState_lastRevisionNumbersPulled: 'id',
+    uiState_lastRevisionNumbersPulled: '[dataType+projectId], projectId',
     uiState_offlineReadyProjects: 'id',
   })
 

@@ -15,7 +15,7 @@ dexieInstance.version(1).stores({
   project_sites: 'id',
   projects: 'id',
   uiState_currentUser: 'id',
-  uiState_lastRevisionNumbersPulled: 'id',
+  uiState_lastRevisionNumbersPulled: '[dataType+projectId], projectId',
   uiState_offlineReadyProjects: 'id',
 })
 

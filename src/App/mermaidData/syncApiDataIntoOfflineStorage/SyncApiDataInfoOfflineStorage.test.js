@@ -236,10 +236,10 @@ test('pushThenPullEverythingButProjectRelated keeps track of returned last_revis
         req.body.fish_species.last_revision === null &&
         req.body.projects.last_revision
 
-      if (areLastRevisionNumbersNull === null && !hasFirstPullCallHappened) {
+      if (areLastRevisionNumbersNull && !hasFirstPullCallHappened) {
         hasFirstPullCallHappened = true
         const response = {
-          collect_records: { updates: [], deletes: [], last_revision_num: 17 },
+          choices: { updates: [], deletes: [], last_revision_num: 17 },
         }
 
         return res(ctx.json(response))
