@@ -72,7 +72,7 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  pullEverythingButProjectRelated = () => {
+  pushThenPullEverythingButProjectRelated = () => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'choices',
@@ -92,7 +92,7 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  pullEverything = async (projectId) => {
+  pushThenPullEverything = async (projectId) => {
     const allTheDataNames = [
       'benthic_attributes',
       'choices',
@@ -123,7 +123,7 @@ const SyncApiDataIntoOfflineStorage = class {
     return pullResponse
   }
 
-  pullEverythingButChoices = async (projectId) => {
+  pushThenPullEverythingButChoices = async (projectId) => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'collect_records',
