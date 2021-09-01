@@ -37,7 +37,7 @@ const CollectRecordsMixin = (Base) =>
         data: { ...record.data, protocol: 'fishbelt' },
         project: projectIdToSubmit,
         profile: profileIdToSubmit,
-        _pushToApi: true,
+        uiState_pushToApi: true,
       }
     }
 
