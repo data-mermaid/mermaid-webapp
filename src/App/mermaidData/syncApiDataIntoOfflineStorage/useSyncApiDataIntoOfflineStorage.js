@@ -72,7 +72,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
       // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pullEverythingButProjectRelated()
+        .pushThenPullEverythingButProjectRelated()
         .then(() => {
           if (isMounted.current) {
             setIsOfflineStorageHydrated(true)
@@ -88,7 +88,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
     if (isInitialLoadOnProjectPageAndOnline) {
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pullEverything(projectId)
+        .pushThenPullEverything(projectId)
         .then(() => {
           if (isMounted.current) {
             setIsOfflineStorageHydrated(true)
@@ -104,7 +104,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
       // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pullEverythingButChoices(projectId)
+        .pushThenPullEverythingButChoices(projectId)
         .then(() => {
           if (isMounted.current) {
             setIsSyncInProgress(false)

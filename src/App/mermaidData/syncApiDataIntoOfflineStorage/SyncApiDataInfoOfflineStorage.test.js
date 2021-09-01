@@ -5,7 +5,7 @@ import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAl
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 
-test('pullEverythingButChoices hits the api with the correct config', async () => {
+test('pushThenPullEverythingButChoices hits the api with the correct config', async () => {
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
@@ -40,11 +40,11 @@ test('pullEverythingButChoices hits the api with the correct config', async () =
 
   expect.assertions(1)
 
-  await apiSync.pullEverythingButChoices('1').then((response) => {
+  await apiSync.pushThenPullEverythingButChoices('1').then((response) => {
     expect(response.status).toEqual(200)
   })
 })
-test('pullEverything hits the api with the correct config', async () => {
+test('pushThenPullEverything hits the api with the correct config', async () => {
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
@@ -80,12 +80,12 @@ test('pullEverything hits the api with the correct config', async () => {
 
   expect.assertions(1)
 
-  await apiSync.pullEverything('1').then((response) => {
+  await apiSync.pushThenPullEverything('1').then((response) => {
     expect(response.status).toEqual(200)
   })
 })
 
-test('pullEverythingButProjectRelated hits the api with the correct config', async () => {
+test('pushThenPullEverythingButProjectRelated hits the api with the correct config', async () => {
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
@@ -117,12 +117,12 @@ test('pullEverythingButProjectRelated hits the api with the correct config', asy
 
   expect.assertions(1)
 
-  await apiSync.pullEverythingButProjectRelated().then((response) => {
+  await apiSync.pushThenPullEverythingButProjectRelated().then((response) => {
     expect(response.status).toEqual(200)
   })
 })
 
-test('pullEverythingButChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pushThenPullEverythingButChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -148,7 +148,7 @@ test('pullEverythingButChoices keeps track of returned last_revision_nums and se
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
-        // pullEverythingButChoices shouldn't be sending nulls after
+        // pushThenPullEverythingButChoices shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
         return res(ctx.status(400))
@@ -166,13 +166,13 @@ test('pullEverythingButChoices keeps track of returned last_revision_nums and se
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pullEverythingButChoices('1')
+  await apiSync.pushThenPullEverythingButChoices('1')
 
   // second pull from api should have last revision numbers
-  await apiSync.pullEverythingButChoices('1')
+  await apiSync.pushThenPullEverythingButChoices('1')
 })
 
-test('pullEverything keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pushThenPullEverything keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -199,7 +199,7 @@ test('pullEverything keeps track of returned last_revision_nums and sends them w
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
-        // pullEverything shouldn't be sending nulls after
+        // pushThenPullEverything shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
         return res(ctx.status(400))
@@ -217,13 +217,13 @@ test('pullEverything keeps track of returned last_revision_nums and sends them w
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pullEverything('1')
+  await apiSync.pushThenPullEverything('1')
 
   // second pull from api should have last revision numbers
-  await apiSync.pullEverything('1')
+  await apiSync.pushThenPullEverything('1')
 })
 
-test('pullEverythingButProjectRelated keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pushThenPullEverythingButProjectRelated keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -246,7 +246,7 @@ test('pullEverythingButProjectRelated keeps track of returned last_revision_nums
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
-        // pullEverythingButProjectRelated shouldn't be sending nulls after
+        // pushThenPullEverythingButProjectRelated shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
         return res(ctx.status(400))
@@ -264,13 +264,13 @@ test('pullEverythingButProjectRelated keeps track of returned last_revision_nums
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pullEverythingButProjectRelated()
+  await apiSync.pushThenPullEverythingButProjectRelated()
 
   // second pull from api should have last revision numbers
-  await apiSync.pullEverythingButProjectRelated()
+  await apiSync.pushThenPullEverythingButProjectRelated()
 })
 
-test('pullEverythingButChoices updates IDB with API data', async () => {
+test('pushThenPullEverythingButChoices updates IDB with API data', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -370,7 +370,7 @@ test('pullEverythingButChoices updates IDB with API data', async () => {
   )
 
   expect.assertions(18)
-  await apiSync.pullEverythingButChoices('1').then(async () => {
+  await apiSync.pushThenPullEverythingButChoices('1').then(async () => {
     await Promise.all([
       dexieInstance.benthic_attributes.toArray(),
       dexieInstance.collect_records.toArray(),
@@ -451,7 +451,7 @@ test('pullEverythingButChoices updates IDB with API data', async () => {
   })
 })
 
-test('PullEverything updates IDB with API data', async () => {
+test('pushThenPullEverything updates IDB with API data', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -565,7 +565,7 @@ test('PullEverything updates IDB with API data', async () => {
   )
 
   expect.assertions(20)
-  await apiSync.pullEverything('1').then(async () => {
+  await apiSync.pushThenPullEverything('1').then(async () => {
     await Promise.all([
       dexieInstance.benthic_attributes.toArray(),
       dexieInstance.choices.toArray(),
@@ -644,7 +644,7 @@ test('PullEverything updates IDB with API data', async () => {
   })
 })
 
-test('PullEverythingButProjectRelated updates IDB with API data', async () => {
+test('pushThenPullEverythingButProjectRelated updates IDB with API data', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -730,7 +730,7 @@ test('PullEverythingButProjectRelated updates IDB with API data', async () => {
   )
 
   expect.assertions(12)
-  await apiSync.pullEverything('1').then(async () => {
+  await apiSync.pushThenPullEverything('1').then(async () => {
     await Promise.all([
       dexieInstance.benthic_attributes.toArray(),
       dexieInstance.choices.toArray(),

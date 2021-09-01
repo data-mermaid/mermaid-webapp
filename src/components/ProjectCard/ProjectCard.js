@@ -41,7 +41,7 @@ const ProjectCard = ({
     if (isChecked) {
       setIsSyncInProgress(true)
       apiSyncInstance
-        .pullEverythingButChoices(project.id)
+        .pushThenPullEverythingButChoices(project.id)
         .then(() => {
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
