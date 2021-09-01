@@ -1,7 +1,7 @@
 const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData }) => {
   return dexieInstance.transaction(
     'rw',
-    dexieInstance.lastRevisionNumbersPulled,
+    dexieInstance.uiState_lastRevisionNumbersPulled,
     async () => {
       const dataNames = [
         'benthic_attributes',
@@ -18,7 +18,7 @@ const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData }) => {
 
       dataNames.forEach((dataName) => {
         if (apiData[dataName]) {
-          dexieInstance.lastRevisionNumbersPulled.put({
+          dexieInstance.uiState_lastRevisionNumbersPulled.put({
             id: dataName,
             lastRevisionNumber: apiData[dataName].last_revision_num,
           })
@@ -29,7 +29,7 @@ const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData }) => {
 }
 
 const getLastRevisionNumbersPulled = async ({ dexieInstance }) => {
-  const lastRevisionNumberDexieRecords = await dexieInstance.lastRevisionNumbersPulled.toArray()
+  const lastRevisionNumberDexieRecords = await dexieInstance.uiState_lastRevisionNumbersPulled.toArray()
 
   const lastRevisionNumbersObject = lastRevisionNumberDexieRecords.reduce(
     (accumulator, lastRevisionNumberRecord) => ({
