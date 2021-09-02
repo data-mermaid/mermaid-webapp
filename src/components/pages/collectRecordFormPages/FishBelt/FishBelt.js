@@ -1,4 +1,4 @@
-import { Formik } from 'formik'
+import { Formik, useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -218,33 +218,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         })
     }
   }
-  const saveRecord = (formikValues) => {
-    const recordToSubmit = reformatFormValuesIntoFishBeltRecord(
-      formikValues,
-      observationsState,
-      collectRecordBeingEdited,
-    )
-
-    databaseSwitchboardInstance
-      .saveFishBelt({
-        record: recordToSubmit,
-        profileId: currentUser.id,
-        projectId,
-      })
-      .then((response) => {
-        toast.success(language.success.collectRecordSave)
-        clearPersistedUnsavedFormikData()
-        clearPersistedUnsavedObservationsData()
-        if (isNewRecord) {
-          history.push(
-            `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
-          )
-        }
-      })
-      .catch(() => {
-        toast.error(language.error.collectRecordSave)
-      })
-  }
 
   const handleNewFishSpeciesOnSubmit = ({
     genusId,
@@ -287,8 +260,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     return Promise.resolve()
   }
   // note: observations doesn't use formik, maybe it could have
-  const initialFormikFormValues = useMemo(
-    () =>
+  const initialFormikFormValues = useMemo(() => {
+    return (
       getPersistedUnsavedFormikData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(
@@ -299,9 +272,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           collectRecordBeingEdited,
           'fishbelt_transect',
         ),
-      },
-    [collectRecordBeingEdited, getPersistedUnsavedFormikData],
-  )
+      }
+    )
+  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
   const handleSizeBinChange = (sizeBinId) => {
     const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
@@ -313,105 +286,141 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }
 
-  const formikOptions = {
-    initialValues: initialFormikFormValues,
-    enableReinitialize: true,
-    validate: (values) => {
-      persistUnsavedFormikData(values)
-    },
-    onSubmit: saveRecord,
-  }
+  const formikOptions = useMemo(() => {
+    const saveRecord = (formikValues) => {
+      const recordToSubmit = reformatFormValuesIntoFishBeltRecord(
+        formikValues,
+        observationsState,
+        collectRecordBeingEdited,
+      )
+
+      databaseSwitchboardInstance
+        .saveFishBelt({
+          record: recordToSubmit,
+          profileId: currentUser.id,
+          projectId,
+        })
+        .then((response) => {
+          toast.success(language.success.collectRecordSave)
+          clearPersistedUnsavedFormikData()
+          clearPersistedUnsavedObservationsData()
+          if (isNewRecord) {
+            history.push(
+              `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
+            )
+          }
+        })
+        .catch(() => {
+          toast.error(language.error.collectRecordSave)
+        })
+    }
+
+    return {
+      initialValues: initialFormikFormValues,
+      enableReinitialize: true,
+      validate: persistUnsavedFormikData,
+      onSubmit: saveRecord,
+    }
+  }, [
+    clearPersistedUnsavedFormikData,
+    clearPersistedUnsavedObservationsData,
+    collectRecordBeingEdited,
+    currentUser.id,
+    databaseSwitchboardInstance,
+    history,
+    initialFormikFormValues,
+    isNewRecord,
+    observationsState,
+    persistUnsavedFormikData,
+    projectId,
+  ])
+
+  const formik = useFormik(formikOptions)
 
   return (
     <>
-      <Formik {...formikOptions}>
-        {(formik) => (
-          <ContentPageLayout
-            isPageContentLoading={isLoading}
-            content={
-              <>
-                <form
-                  id="fishbelt-form"
-                  aria-labelledby="fishbelt-form-title"
-                  onSubmit={formik.handleSubmit}
-                >
-                  <SampleInfoInputs
-                    formik={formik}
-                    sites={sites}
-                    managementRegimes={managementRegimes}
-                  />
-                  <FishBeltTransectInputs
-                    formik={formik}
-                    choices={choices}
-                    onSizeBinChange={handleSizeBinChange}
-                  />
-                  <ObserversInput
-                    formik={formik}
-                    observers={observerProfiles}
-                  />
-                  <FishBeltObservationTable
-                    choices={choices}
-                    collectRecord={collectRecordBeingEdited}
-                    fishBinSelected={formik.values.size_bin}
-                    fishNameConstants={fishNameConstants}
-                    fishNameOptions={fishNameOptions}
-                    observationsReducer={observationsReducer}
-                    openNewFishNameModal={openNewFishNameModal}
-                    transectLengthSurveyed={formik.values.len_surveyed}
-                    widthId={formik.values.width}
-                    persistUnsavedObservationsUtilities={
-                      persistUnsavedObservationsUtilities
-                    }
-                  />
-                </form>
-                <ButtonCaution
-                  onClick={showDeleteConfirmPrompt}
-                  disabled={isNewRecord}
-                >
-                  Delete Record
-                </ButtonCaution>
-                <DeleteRecordConfirm
-                  isOpen={showDeleteModal}
-                  onDismiss={closeDeleteConfirmPrompt}
-                  onConfirm={deleteRecord}
-                />
-              </>
-            }
-            toolbar={
-              <CollectRecordToolbarWrapper>
-                {isNewRecord && <H2>Fish Belt</H2>}
-                {collectRecordBeingEdited && !isNewRecord && (
-                  <RecordFormTitle
-                    submittedRecordOrCollectRecordDataProperty={
-                      collectRecordBeingEdited.data
-                    }
-                    sites={sites}
-                  />
-                )}
+      <ContentPageLayout
+        isPageContentLoading={isLoading}
+        content={
+          <>
+            <form
+              id="fishbelt-form"
+              aria-labelledby="fishbelt-form-title"
+              onSubmit={formik.handleSubmit}
+            >
+              <SampleInfoInputs
+                formik={formik}
+                sites={sites}
+                managementRegimes={managementRegimes}
+              />
+              <FishBeltTransectInputs
+                formik={formik}
+                choices={choices}
+                onSizeBinChange={handleSizeBinChange}
+              />
+              <ObserversInput formik={formik} observers={observerProfiles} />
+              <FishBeltObservationTable
+                choices={choices}
+                collectRecord={collectRecordBeingEdited}
+                fishBinSelected={formik.values.size_bin}
+                fishNameConstants={fishNameConstants}
+                fishNameOptions={fishNameOptions}
+                observationsReducer={observationsReducer}
+                openNewFishNameModal={openNewFishNameModal}
+                transectLengthSurveyed={formik.values.len_surveyed}
+                widthId={formik.values.width}
+                persistUnsavedObservationsUtilities={
+                  persistUnsavedObservationsUtilities
+                }
+              />
+            </form>
+            <ButtonCaution
+              onClick={showDeleteConfirmPrompt}
+              disabled={isNewRecord}
+            >
+              Delete Record
+            </ButtonCaution>
+            <DeleteRecordConfirm
+              isOpen={showDeleteModal}
+              onDismiss={closeDeleteConfirmPrompt}
+              onConfirm={deleteRecord}
+            />
+          </>
+        }
+        toolbar={
+          <CollectRecordToolbarWrapper>
+            {isNewRecord && <H2>Fish Belt</H2>}
+            {collectRecordBeingEdited && !isNewRecord && (
+              <RecordFormTitle
+                submittedRecordOrCollectRecordDataProperty={
+                  collectRecordBeingEdited.data
+                }
+                sites={sites}
+              />
+            )}
 
-                <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
-                  <ButtonCallout type="submit" form="fishbelt-form">
-                    <IconSave />
-                    Save
+            <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
+              <ButtonCallout type="submit" form="fishbelt-form">
+                <IconSave />
+                Save
+              </ButtonCallout>
+              {!isNewRecord && (
+                <OfflineHide>
+                  <ButtonCallout>
+                    <IconCheck />
+                    Validate
                   </ButtonCallout>
-                  {!isNewRecord && (
-                    <OfflineHide>
-                      <ButtonCallout>
-                        <IconCheck />
-                        Validate
-                      </ButtonCallout>
-                      <ButtonCallout>
-                        <IconUpload />
-                        Submit
-                      </ButtonCallout>
-                    </OfflineHide>
-                  )}
-                </SaveValidateSubmitButtonWrapper>
-              </CollectRecordToolbarWrapper>
-            }
-          />
-        )}
-      </Formik>
+                  <ButtonCallout>
+                    <IconUpload />
+                    Submit
+                  </ButtonCallout>
+                </OfflineHide>
+              )}
+            </SaveValidateSubmitButtonWrapper>
+          </CollectRecordToolbarWrapper>
+        }
+      />
+
       {!!projectId && !!currentUser && (
         <NewFishSpeciesModal
           isOpen={isNewFishNameModalOpen}
