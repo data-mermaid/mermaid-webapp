@@ -74,6 +74,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     buttonGroupStage.saved,
   )
 
+  const setButtonGroupWhenFormDirty = () =>
+    setFishBeltButtonsState(buttonGroupStage.unsaved)
+
   const openNewFishNameModal = (observationId) => {
     setObservationToAddSpeciesTo(observationId)
     setIsNewFishNameModalOpen(true)
@@ -405,6 +408,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                   isNewRecord={isNewRecord}
                   fishBeltButtonsState={fishBeltButtonsState}
                   validateRecord={validateRecord}
+                  setButtonGroupWhenFormDirty={setButtonGroupWhenFormDirty}
                 />
               </CollectRecordToolbarWrapper>
             }

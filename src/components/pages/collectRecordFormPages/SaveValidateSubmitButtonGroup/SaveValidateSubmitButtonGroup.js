@@ -20,76 +20,77 @@ const SaveValidateSubmitButtonGroup = ({
   isNewRecord,
   fishBeltButtonsState,
   validateRecord,
+  setButtonGroupWhenFormDirty,
 }) => {
   const { dirty: formDirty } = useFormikContext()
-  const [currentButtonsState, setCurrentButtonsState] = useState(
-    fishBeltButtonsState,
-  )
-
-  const _updateButtonState = useEffect(() => {
-    setCurrentButtonsState(fishBeltButtonsState)
-  }, [fishBeltButtonsState])
 
   const _inputChangeSetPageUnsaved = useEffect(() => {
     if (formDirty) {
-      setCurrentButtonsState(buttonGroupStage.unsaved)
+      setButtonGroupWhenFormDirty()
     }
-  }, [formDirty])
+  }, [formDirty, setButtonGroupWhenFormDirty])
 
-  const buttonSavingOrSaved = () =>
-    currentButtonsState === buttonGroupStage.saving ? (
-      <ButtonPrimary disabled>
+  const saveButtonSwitch = () => {
+    if (fishBeltButtonsState === buttonGroupStage.saving) {
+      return (
+        <ButtonPrimary disabled>
+          <IconSave />
+          Saving
+        </ButtonPrimary>
+      )
+    }
+    if (
+      fishBeltButtonsState === buttonGroupStage.saved ||
+      fishBeltButtonsState === buttonGroupStage.validating
+    ) {
+      return (
+        <ButtonPrimary disabled>
+          <IconSave />
+          Saved
+        </ButtonPrimary>
+      )
+    }
+
+    return (
+      <ButtonCallout type="submit" form="fishbelt-form">
         <IconSave />
-        Saving
-      </ButtonPrimary>
-    ) : (
-      <ButtonPrimary disabled>
-        <IconSave />
-        Saved
-      </ButtonPrimary>
+        Save
+      </ButtonCallout>
     )
-
-  const saveButton = formDirty ? (
-    <ButtonCallout type="submit" form="fishbelt-form">
-      <IconSave />
-      Save
-    </ButtonCallout>
-  ) : (
-    buttonSavingOrSaved()
-  )
+  }
 
   const validateButtonSwitch = () => {
-    switch (currentButtonsState) {
-      case buttonGroupStage.validating:
-        return (
-          <ButtonPrimary disabled>
-            <IconCheck />
-            Validating
-          </ButtonPrimary>
-        )
-      case buttonGroupStage.validated:
-        return (
-          <ButtonPrimary disabled>
-            <IconCheck />
-            Validated
-          </ButtonPrimary>
-        )
-      default:
-        return (
-          <ButtonCallout
-            onClick={validateRecord}
-            disabled={currentButtonsState !== buttonGroupStage.saved}
-          >
-            <IconCheck />
-            Validate
-          </ButtonCallout>
-        )
+    if (fishBeltButtonsState === buttonGroupStage.validating) {
+      return (
+        <ButtonPrimary disabled>
+          <IconCheck />
+          Validating
+        </ButtonPrimary>
+      )
     }
+    if (fishBeltButtonsState === buttonGroupStage.validated) {
+      return (
+        <ButtonPrimary disabled>
+          <IconCheck />
+          Validated
+        </ButtonPrimary>
+      )
+    }
+
+    return (
+      <ButtonCallout
+        onClick={validateRecord}
+        disabled={fishBeltButtonsState !== buttonGroupStage.saved}
+      >
+        <IconCheck />
+        Validate
+      </ButtonCallout>
+    )
   }
 
   const submitButton = (
     <ButtonCallout
-      disabled={currentButtonsState !== buttonGroupStage.validated}
+      disabled={fishBeltButtonsState !== buttonGroupStage.validated}
     >
       <IconUpload />
       Submit
@@ -98,7 +99,7 @@ const SaveValidateSubmitButtonGroup = ({
 
   return (
     <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
-      {saveButton}
+      {saveButtonSwitch()}
       {!isNewRecord && (
         <OfflineHide>
           {validateButtonSwitch()}
@@ -111,8 +112,9 @@ const SaveValidateSubmitButtonGroup = ({
 
 SaveValidateSubmitButtonGroup.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
-  fishBeltButtonsState: PropTypes.number.isRequired,
+  fishBeltButtonsState: PropTypes.string.isRequired,
   validateRecord: PropTypes.func.isRequired,
+  setButtonGroupWhenFormDirty: PropTypes.func.isRequired,
 }
 
 export default SaveValidateSubmitButtonGroup
