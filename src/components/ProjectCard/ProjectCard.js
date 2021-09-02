@@ -46,13 +46,26 @@ const ProjectCard = ({
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            <div data-testid="foo">
-              {language.success.getProjectSetOfflineReadySuccess(name)}
-            </div>,
+            language.success.getProjectTurnOnOfflineReadySuccess(name),
           )
         })
         .catch(() => {
-          toast.error(language.error.getProjectSetOfflineReadyFailure(name))
+          toast.error(language.error.getProjectTurnOnOfflineReadyFailure(name))
+        })
+    }
+    if (!isChecked) {
+      setIsSyncInProgress(true)
+      apiSyncInstance
+        .pushThenRemoveProjectFromOfflineStorage(project.id)
+        .then(() => {
+          // we need to clear the sync status even if component no longer mounted
+          setIsSyncInProgress(false)
+          toast.success(
+            language.success.getProjectTurnOffOfflineReadySuccess(name),
+          )
+        })
+        .catch(() => {
+          toast.error(language.error.getProjectTurnOffOfflineReadyFailure(name))
         })
     }
   }
