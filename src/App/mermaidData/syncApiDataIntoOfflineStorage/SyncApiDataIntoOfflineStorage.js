@@ -152,6 +152,43 @@ const SyncApiDataIntoOfflineStorage = class {
 
     return pullResponse
   }
+
+  pushThenRemoveProjectFromOfflineStorage = async (projectId) => {
+    await this.pushChanges()
+
+    return this._dexieInstance.transaction(
+      'rw',
+      this._dexieInstance.collect_records,
+      this._dexieInstance.project_managements,
+      this._dexieInstance.project_profiles,
+      this._dexieInstance.project_sites,
+      this._dexieInstance.uiState_offlineReadyProjects,
+      this._dexieInstance.uiState_lastRevisionNumbersPulled,
+      async () => {
+        this._dexieInstance.uiState_offlineReadyProjects.delete(projectId)
+
+        this._dexieInstance.uiState_lastRevisionNumbersPulled
+          .where('[dataType+projectId]')
+          .anyOf([
+            ['collect_records', projectId],
+            ['project_managements', projectId],
+            ['Project_Profiles', projectId],
+            ['project_sites', projectId],
+          ])
+          .delete()
+        this._dexieInstance.collect_records
+          .where({ project: projectId })
+          .delete()
+        this._dexieInstance.project_managements
+          .where({ project: projectId })
+          .delete()
+        this._dexieInstance.project_profiles
+          .where({ project: projectId })
+          .delete()
+        this._dexieInstance.project_sites.where({ project: projectId }).delete()
+      },
+    )
+  }
 }
 
 export default SyncApiDataIntoOfflineStorage

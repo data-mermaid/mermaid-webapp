@@ -70,11 +70,11 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
   expect((await dexieInstance.project_profiles.toArray()).length).toEqual(0)
   expect((await dexieInstance.project_sites.toArray()).length).toEqual(0)
 
-  const project5OfflineCheckbox = within(
+  const project5OfflineCheckboxBeforeFirstClick = within(
     screen.getAllByRole('listitem')[4],
   ).getByRole('checkbox')
 
-  userEvent.click(project5OfflineCheckbox)
+  userEvent.click(project5OfflineCheckboxBeforeFirstClick)
 
   expect(
     await screen.findByText('The project, Project V, is now offline ready'),
@@ -95,5 +95,72 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
   )
   expect((await dexieInstance.project_sites.toArray()).length).toEqual(
     mockMermaidData.project_sites.length,
+  )
+})
+test('Sync: select project to NOT be offline ready, shows toast, removes data, shows project as not selected', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    dexieInstance,
+  })
+  /**
+   * api syncing can cause the loading indicator to initially be absent,
+   * and then show up. for the test to work, we need to wait for
+   * the loading indicator to show first before we wait for it to disappear
+   */
+  await screen.findByLabelText('projects list loading indicator')
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('projects list loading indicator'),
+  )
+
+  const project5OfflineCheckboxBeforeFirstClick = within(
+    screen.getAllByRole('listitem')[4],
+  ).getByRole('checkbox')
+
+  userEvent.click(project5OfflineCheckboxBeforeFirstClick)
+
+  expect(
+    await screen.findByText('The project, Project V, is now offline ready'),
+  )
+
+  await screen.findByLabelText('projects list loading indicator')
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('projects list loading indicator'),
+  )
+
+  const project5OfflineCheckboxAfterFirstClick = within(
+    screen.getAllByRole('listitem')[4],
+  ).getByRole('checkbox')
+
+  userEvent.click(project5OfflineCheckboxAfterFirstClick)
+
+  expect(
+    await screen.findByText(
+      'The project, Project V, has been removed from being offline ready',
+    ),
+  )
+
+  const project5OfflineCheckboxAfterProjectSetOffline = within(
+    (await screen.findAllByRole('listitem'))[4],
+  ).getByRole('checkbox')
+
+  expect(project5OfflineCheckboxAfterProjectSetOffline).not.toBeChecked()
+
+  expect((await dexieInstance.collect_records.toArray()).length).toEqual(
+    mockMermaidData.collect_records.filter((record) => record.project !== '5')
+      .length,
+  )
+  expect((await dexieInstance.project_managements.toArray()).length).toEqual(
+    mockMermaidData.project_managements.filter(
+      (managementRegime) => managementRegime.project !== '5',
+    ).length,
+  )
+  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
+    mockMermaidData.project_profiles.filter(
+      (profile) => profile.project !== '5',
+    ).length,
+  )
+  expect((await dexieInstance.project_sites.toArray()).length).toEqual(
+    mockMermaidData.project_sites.filter((site) => site.project !== '5').length,
   )
 })
