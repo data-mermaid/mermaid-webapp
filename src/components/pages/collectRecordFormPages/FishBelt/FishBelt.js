@@ -1,4 +1,4 @@
-import { Formik, useFormik } from 'formik'
+import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -59,10 +59,15 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
 `
 
 const FishBelt = ({ isNewRecord, currentUser }) => {
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(
+    false,
+  )
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
+  // eslint-disable-next-line no-unused-vars
+  const [isFishBeltFormDirty, setIsFishBeltFormDirty] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
@@ -287,7 +292,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }
 
   const formikOptions = useMemo(() => {
-    const saveRecord = (formikValues) => {
+    const saveRecord = (formikValues, formikActions) => {
       const recordToSubmit = reformatFormValuesIntoFishBeltRecord(
         formikValues,
         observationsState,
@@ -304,6 +309,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           toast.success(language.success.collectRecordSave)
           clearPersistedUnsavedFormikData()
           clearPersistedUnsavedObservationsData()
+          setAreObservationsInputsDirty(false)
+          formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
+
           if (isNewRecord) {
             history.push(
               `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
@@ -333,9 +341,19 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     observationsState,
     persistUnsavedFormikData,
     projectId,
+    setAreObservationsInputsDirty,
   ])
 
   const formik = useFormik(formikOptions)
+
+  const _manageWholeFormDirtyState = useEffect(() => {
+    if (formik.dirty || areObservationsInputsDirty) {
+      setIsFishBeltFormDirty(true)
+    }
+    if (!formik.dirty && !areObservationsInputsDirty) {
+      setIsFishBeltFormDirty(false)
+    }
+  }, [formik.dirty, areObservationsInputsDirty])
 
   return (
     <>
@@ -372,6 +390,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 persistUnsavedObservationsUtilities={
                   persistUnsavedObservationsUtilities
                 }
+                areObservationsInputsDirty={areObservationsInputsDirty}
+                setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               />
             </form>
             <ButtonCaution

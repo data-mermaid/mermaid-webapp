@@ -158,6 +158,7 @@ const UnderTableRow = styled(RowRight)`
 `
 
 const FishBeltObservationTable = ({
+  areObservationsInputsDirty,
   choices,
   collectRecord,
   fishBinSelected,
@@ -166,17 +167,23 @@ const FishBeltObservationTable = ({
   observationsReducer,
   openNewFishNameModal,
   persistUnsavedObservationsUtilities,
+  setAreObservationsInputsDirty,
   transectLengthSurveyed,
   widthId,
 }) => {
+  /** IMPORTANT! for other forms with observations,
+   *  instead of copying this logic that uses a reducer,
+   *  using formik for form state is strongly suggested
+   *  to reduce inconsistency in the way different parts
+   *  of the fishbelt form are handled.
+   *  Not using formik here was an oversight.*/
+
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const [
     haveApiObservationsBeenLoaded,
     setHaveApiObservationsBeenLoaded,
   ] = useState(false)
-  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(
-    false,
-  )
+
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const {
@@ -506,6 +513,7 @@ const FishBeltObservationTable = ({
 }
 
 FishBeltObservationTable.propTypes = {
+  areObservationsInputsDirty: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   fishBinSelected: PropTypes.string,
@@ -525,6 +533,7 @@ FishBeltObservationTable.propTypes = {
     clearPersistedUnsavedFormData: PropTypes.func,
     getPersistedUnsavedFormData: PropTypes.func,
   }).isRequired,
+  setAreObservationsInputsDirty: PropTypes.func.isRequired,
   transectLengthSurveyed: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
