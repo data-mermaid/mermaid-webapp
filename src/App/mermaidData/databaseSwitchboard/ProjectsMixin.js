@@ -1,5 +1,8 @@
 const ProjectsMixin = (Base) =>
   class extends Base {
+    getOfflineReadyProjects = () =>
+      this._dexieInstance.uiState_offlineReadyProjects.toArray()
+
     getProjects = () =>
       this._isAuthenticatedAndReady
         ? this._dexieInstance.projects.toArray()

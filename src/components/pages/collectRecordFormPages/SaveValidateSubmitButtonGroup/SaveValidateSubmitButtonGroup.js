@@ -1,5 +1,4 @@
-import { useFormikContext } from 'formik'
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 
@@ -20,16 +19,7 @@ const SaveValidateSubmitButtonGroup = ({
   isNewRecord,
   fishBeltButtonsState,
   validateRecord,
-  setButtonGroupWhenFormDirty,
 }) => {
-  const { dirty: formDirty } = useFormikContext()
-
-  const _inputChangeSetPageUnsaved = useEffect(() => {
-    if (formDirty) {
-      setButtonGroupWhenFormDirty()
-    }
-  }, [formDirty, setButtonGroupWhenFormDirty])
-
   const saveButtonSwitch = () => {
     if (fishBeltButtonsState === buttonGroupStage.saving) {
       return (
@@ -114,7 +104,6 @@ SaveValidateSubmitButtonGroup.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
   fishBeltButtonsState: PropTypes.string.isRequired,
   validateRecord: PropTypes.func.isRequired,
-  setButtonGroupWhenFormDirty: PropTypes.func.isRequired,
 }
 
 export default SaveValidateSubmitButtonGroup

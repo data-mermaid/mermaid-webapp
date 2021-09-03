@@ -38,7 +38,7 @@ const CollectRecordsMixin = (Base) =>
         data: { ...record.data, protocol: 'fishbelt' },
         project: projectIdToSubmit,
         profile: profileIdToSubmit,
-        _pushToApi: true,
+        uiState_pushToApi: true,
       }
     }
 
@@ -154,7 +154,7 @@ const CollectRecordsMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pullEverythingButChoices(projectId)
+                .pushThenPullEverythingButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const recordReturnedFromServer =
                     recordResponseFromApiPush.data
@@ -226,7 +226,7 @@ const CollectRecordsMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pullEverythingButChoices(projectId)
+                .pushThenPullEverythingButChoices(projectId)
                 .then((_apiPullResponse) => apiPushResponse)
             }
 
@@ -274,7 +274,7 @@ const CollectRecordsMixin = (Base) =>
 
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance
-                .pullEverythingButChoices(projectId)
+                .pushThenPullEverythingButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const validatedData =
                     _dataSetsReturnedFromApiPull.data.collect_records.updates[0]

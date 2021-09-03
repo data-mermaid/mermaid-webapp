@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import {
   ButtonGroups,
@@ -11,22 +13,61 @@ import {
   VerticalRule,
 } from './ProjectCard.styles'
 import { IconCopy } from '../icons'
-import { useOnlineStatus } from '../../library/onlineStatusContext'
-import NavLinkButtonGroup from '../NavLinkButtonGroup'
 import { pluralize } from '../../library/pluralize'
-import stopEventPropagation from '../../library/stopEventPropagation'
-import OfflineHide from '../generic/OfflineHide'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
+import language from '../../language'
+import NavLinkButtonGroup from '../NavLinkButtonGroup'
+import OfflineHide from '../generic/OfflineHide'
+import stopEventPropagation from '../../library/stopEventPropagation'
+import SyncApiDataIntoOfflineStorage from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
+import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
-const ProjectCard = ({ project, ...restOfProps }) => {
-  const { name, countries, num_sites, offlineReady, updated_on, id } = project
-  const history = useHistory()
+const ProjectCard = ({
+  project,
+  apiSyncInstance,
+  isOfflineReady,
+  ...restOfProps
+}) => {
   const { isOnline: isAppOnline } = useOnlineStatus()
-  const [projectOfflineStatus, setProjectOfflineStatus] = useState(offlineReady)
+  const { name, countries, num_sites, updated_on, id } = project
+  const { setIsSyncInProgress } = useSyncStatus()
+  const history = useHistory()
   const projectUrl = `projects/${id}`
 
-  const handleProjectOfflineReadyClick = (e) => {
-    setProjectOfflineStatus(e.target.checked)
+  const handleProjectOfflineReadyClick = (event) => {
+    const isChecked = event.target.checked
+
+    if (isChecked) {
+      setIsSyncInProgress(true)
+      apiSyncInstance
+        .pushThenPullEverythingButChoices(project.id)
+        .then(() => {
+          // we need to clear the sync status even if component no longer mounted
+          setIsSyncInProgress(false)
+          toast.success(
+            language.success.getProjectTurnOnOfflineReadySuccess(name),
+          )
+        })
+        .catch(() => {
+          toast.error(language.error.getProjectTurnOnOfflineReadyFailure(name))
+        })
+    }
+    if (!isChecked) {
+      setIsSyncInProgress(true)
+      apiSyncInstance
+        .pushThenRemoveProjectFromOfflineStorage(project.id)
+        .then(() => {
+          // we need to clear the sync status even if component no longer mounted
+          setIsSyncInProgress(false)
+          toast.success(
+            language.success.getProjectTurnOffOfflineReadySuccess(name),
+          )
+        })
+        .catch(() => {
+          toast.error(language.error.getProjectTurnOffOfflineReadyFailure(name))
+        })
+    }
   }
 
   const handleCardClick = () => {
@@ -55,10 +96,10 @@ const ProjectCard = ({ project, ...restOfProps }) => {
           <input
             id="offline-toggle"
             type="checkbox"
-            checked={projectOfflineStatus}
+            checked={isOfflineReady}
             onChange={handleProjectOfflineReadyClick}
           />
-          Offline Ready
+          {language.pages.projectsList.offlineReadyCheckboxLabel}
         </CheckBoxLabel>
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
@@ -80,7 +121,10 @@ const ProjectCard = ({ project, ...restOfProps }) => {
 }
 
 ProjectCard.propTypes = {
+  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage)
+    .isRequired,
   project: projectPropType.isRequired,
+  isOfflineReady: PropTypes.bool.isRequired,
 }
 
 export default ProjectCard

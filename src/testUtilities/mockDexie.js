@@ -1,27 +1,30 @@
 import Dexie from 'dexie'
 import FDBFactory from 'fake-indexeddb/lib/FDBFactory'
+import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange'
 
 const getMockDexieInstanceAllSuccess = () => {
   const dexieInstance = new Dexie('mermaidAllSuccess', {
     indexedDB: new FDBFactory(),
+    IDBKeyRange,
   })
 
   dexieInstance.version(1).stores({
     benthic_attributes: 'id',
     choices: 'id',
-    collect_records: 'id',
-    currentUser: 'id',
+    collect_records: 'id, project',
     fish_families: 'id',
     fish_genera: 'id',
     fish_species: 'id',
-    lastRevisionNumbersPulled: 'id',
-    project_managements: 'id',
-    project_profiles: 'id',
-    project_sites: 'id',
+    project_managements: 'id, project',
+    project_profiles: 'id, project',
+    project_sites: 'id, project',
     projects: 'id',
+    uiState_currentUser: 'id',
+    uiState_lastRevisionNumbersPulled: '[dataType+projectId], projectId',
+    uiState_offlineReadyProjects: 'id',
   })
 
-  dexieInstance.currentUser
+  dexieInstance.uiState_currentUser
     .put({
       id: 'fake-id',
       first_name: 'FakeFirstNameOffline',

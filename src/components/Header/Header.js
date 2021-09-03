@@ -2,16 +2,15 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import React from 'react'
-import colorHelper from 'color'
 import theme from '../../theme'
 import Logo from '../../assets/mermaid-logo.svg'
-import { IconMenu, IconDown } from '../icons'
+import { ButtonThatLooksLikeLink } from '../generic/buttons'
+import { IconBell, IconMenu, IconDown } from '../icons'
 import {
   hoverState,
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { RowSpaceBetween } from '../generic/positioning'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
 
@@ -19,10 +18,12 @@ import OfflineHide from '../generic/OfflineHide'
  * Mermaid Header
  */
 
-const StyledHeader = styled(RowSpaceBetween)`
+const StyledHeader = styled('header')`
   background-color: ${theme.color.headerColor};
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
   color: ${theme.color.white};
-  align-items: flex-start;
   position: fixed;
   width: 100%;
   top: 0;
@@ -40,35 +41,54 @@ const StyledHeader = styled(RowSpaceBetween)`
 `
 const linkStyles = css`
   color: ${theme.color.white};
+  height: ${theme.spacing.headerHeight};
   cursor: pointer;
   border-bottom: solid ${theme.spacing.borderLarge} transparent;
   text-decoration: none;
-  margin: 0;
-  padding: ${theme.spacing.small};
+  position: relative;
+  margin: 0 ${theme.spacing.small};
+  display: inline-block;
+  padding: 0;
+  line-height: ${theme.spacing.headerHeight};
   ${hoverState(
     css`
-      border-bottom: solid ${theme.spacing.borderLarge} ${theme.color.white};
-      opacity: 1;
+      border-bottom: solid 3px ${theme.color.callout};
     `,
   )}
-  &:active {
-    background: ${theme.color.black.mix(colorHelper('white'), 0.2)};
-  }
+`
+const BellButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
+  ${linkStyles}
 `
 const dropdownLinkStyles = css`
   ${linkStyles};
-  border-width: 0 0 ${theme.spacing.borderLarge} 0;
+  border-width: 0 0 3px 0;
   background: none;
-  display: block;
-  color: ${theme.color.white};
+  display: inline-block;
+  margin: 0;
   padding: ${theme.spacing.small} ${theme.spacing.large};
   width: 100%;
+  ${hoverState(
+    css`
+      &:after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: ${theme.spacing.borderSmall};
+        background: ${theme.color.callout};
+        bottom: 0;
+        left: ${theme.spacing.large};
+      }
+      border-color: transparent;
+    `,
+  )}
 `
 const StyledNavLink = styled(Link)`
   ${linkStyles}
 `
 const GlobalNav = styled('nav')`
   .desktop {
+    display: flex;
+    align-items: stretch;
     div,
     div p {
       display: inline-block;
@@ -76,14 +96,13 @@ const GlobalNav = styled('nav')`
     div p {
       ${linkStyles}
     }
-    .desktopUserMenu {
+    .desktopUserMenu,
+    .mobileUserMenu {
       position: absolute;
-      top: ${theme.spacing.headerHeight};
+      top: calc(${theme.spacing.headerHeight} + ${theme.spacing.small});
       right: 0;
-      background-color: ${theme.color.primaryColor};
-      border-style: solid;
-      border-width: 0 1px 1px 1px;
-      border-color: ${theme.color.border};
+      background-color: ${theme.color.headerDropdownMenuBackground};
+      border-radius: 8px 0 8px 8px;
       a {
         ${dropdownLinkStyles}
       }
@@ -91,13 +110,18 @@ const GlobalNav = styled('nav')`
   }
   .mobile {
     display: none;
+    align-items: stretch;
     button.trigger {
       border: none;
       font-size: larger;
       background: none;
     }
     .menuDropdown {
-      background-color: ${theme.color.primaryColor};
+      background-color: ${theme.color.headerDropdownMenuBackground};
+      border-radius: 8px 0 8px 8px;
+      top: calc(${theme.spacing.headerHeight} + 1px);
+      right: 1px;
+      position: absolute;
     }
     a,
     div p,
@@ -111,10 +135,13 @@ const GlobalNav = styled('nav')`
       width: 100%;
       white-space: nowrap;
       font-size: smaller;
-    }
-    .mobileMenu {
-      top: ${theme.spacing.headerHeight};
-      right: 0;
+      line-height: 1;
+      &:hover {
+        border: none;
+        &:after {
+          display: none;
+        }
+      }
     }
     .loggedInAs {
       background: ${theme.color.primaryColor};
@@ -125,7 +152,7 @@ const GlobalNav = styled('nav')`
       display: none;
     }
     .mobile {
-      display: block;
+      display: flex;
     }
   `)}
 `
@@ -163,6 +190,9 @@ const Header = ({ logout, currentUser }) => {
       <GlobalNav>
         <div className="desktop">
           <GlobalLinks />
+          <BellButtonThatLooksLikeLink>
+            <IconBell />
+          </BellButtonThatLooksLikeLink>
           <HideShow
             button={
               <p>
@@ -177,6 +207,9 @@ const Header = ({ logout, currentUser }) => {
           />
         </div>
         <div className="mobile">
+          <BellButtonThatLooksLikeLink>
+            <IconBell />
+          </BellButtonThatLooksLikeLink>
           <HideShow
             button={
               <button className="trigger" type="button">

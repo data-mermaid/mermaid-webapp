@@ -7,8 +7,8 @@ const SyncApiDataIntoOfflineStorage = class {
   _dexieInstance
 
   #getOnlyModifiedAndDeletedItems = (dataList) => {
-    // new, edited, and deleted items will all have a _pushToApi flag locally
-    return dataList.filter((item) => item._pushToApi)
+    // new, edited, and deleted items will all have a uiState_pushToApi flag locally
+    return dataList.filter((item) => item.uiState_pushToApi)
   }
 
   constructor({ dexieInstance, apiBaseUrl, auth0Token }) {
@@ -72,7 +72,7 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  pullEverythingButProjectRelated = () => {
+  pushThenPullEverythingButProjectRelated = () => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'choices',
@@ -92,7 +92,7 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  pullEverything = (projectId) => {
+  pushThenPullEverything = async (projectId) => {
     const allTheDataNames = [
       'benthic_attributes',
       'choices',
@@ -106,18 +106,24 @@ const SyncApiDataIntoOfflineStorage = class {
       'projects',
     ]
 
-    return this.pushChanges().then(() =>
-      pullApiData({
-        dexieInstance: this._dexieInstance,
-        auth0Token: this._auth0Token,
-        apiBaseUrl: this._apiBaseUrl,
-        apiDataNamesToPull: allTheDataNames,
-        projectId,
-      }),
-    )
+    await this.pushChanges()
+
+    const pullResponse = await pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: allTheDataNames,
+      projectId,
+    })
+
+    await this._dexieInstance.uiState_offlineReadyProjects.put({
+      id: projectId,
+    })
+
+    return pullResponse
   }
 
-  pullEverythingButChoices = (projectId) => {
+  pushThenPullEverythingButChoices = async (projectId) => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'collect_records',
@@ -130,14 +136,57 @@ const SyncApiDataIntoOfflineStorage = class {
       'projects',
     ]
 
-    return this.pushChanges().then(() =>
-      pullApiData({
-        dexieInstance: this._dexieInstance,
-        auth0Token: this._auth0Token,
-        apiBaseUrl: this._apiBaseUrl,
-        apiDataNamesToPull: apiDataNamesToPullNonProject,
-        projectId,
-      }),
+    await this.pushChanges()
+
+    const pullResponse = await pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: apiDataNamesToPullNonProject,
+      projectId,
+    })
+
+    await this._dexieInstance.uiState_offlineReadyProjects.put({
+      id: projectId,
+    })
+
+    return pullResponse
+  }
+
+  pushThenRemoveProjectFromOfflineStorage = async (projectId) => {
+    await this.pushChanges()
+
+    return this._dexieInstance.transaction(
+      'rw',
+      this._dexieInstance.collect_records,
+      this._dexieInstance.project_managements,
+      this._dexieInstance.project_profiles,
+      this._dexieInstance.project_sites,
+      this._dexieInstance.uiState_offlineReadyProjects,
+      this._dexieInstance.uiState_lastRevisionNumbersPulled,
+      async () => {
+        this._dexieInstance.uiState_offlineReadyProjects.delete(projectId)
+
+        this._dexieInstance.uiState_lastRevisionNumbersPulled
+          .where('[dataType+projectId]')
+          .anyOf([
+            ['collect_records', projectId],
+            ['project_managements', projectId],
+            ['Project_Profiles', projectId],
+            ['project_sites', projectId],
+          ])
+          .delete()
+        this._dexieInstance.collect_records
+          .where({ project: projectId })
+          .delete()
+        this._dexieInstance.project_managements
+          .where({ project: projectId })
+          .delete()
+        this._dexieInstance.project_profiles
+          .where({ project: projectId })
+          .delete()
+        this._dexieInstance.project_sites.where({ project: projectId }).delete()
+      },
     )
   }
 }

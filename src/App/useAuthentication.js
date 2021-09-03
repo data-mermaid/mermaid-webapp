@@ -74,7 +74,7 @@ const useAuthentication = ({ dexieInstance }) => {
       // this isnt necessary to make logout to work, but is here to make sure users.
       // cant see profile data from the last logged in user if they go searching in dev tools.
       // databaseSwitcboard isnt used because that would create circular dependencies (it depends on the output of this hook)
-      dexieInstance.currentUser.delete(
+      dexieInstance.uiState_currentUser.delete(
         'enforceOnlyOneRecordEverStoredAndOverwritten',
       )
       auth0Logout({ returnTo: window.location.origin })

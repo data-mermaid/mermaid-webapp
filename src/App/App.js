@@ -82,7 +82,7 @@ function App({ dexieInstance }) {
     isMermaidAuthenticated,
     isOnline,
   })
-  const { routes } = useRoutes({ currentUser })
+  const { routes } = useRoutes({ currentUser, apiSyncInstance })
 
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,

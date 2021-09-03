@@ -5,6 +5,7 @@ import React from 'react'
 import {
   renderAuthenticatedOnline,
   screen,
+  waitForElementToBeRemoved,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
@@ -17,6 +18,11 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
     initialEntries: ['/projects/5/collecting'],
     dexieInstance,
   })
+
+  await screen.findByLabelText('project pages loading indicator')
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('project pages loading indicator'),
+  )
 
   userEvent.click(
     await screen.findByRole('button', {

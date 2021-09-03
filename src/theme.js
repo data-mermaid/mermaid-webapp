@@ -1,15 +1,15 @@
 import { css } from 'styled-components/macro'
 import colorHelper from 'color'
 
-const primary = colorHelper('#1c124a') // depths
+const primary = colorHelper('#174b82')
 const secondary = colorHelper('#DDDCE4')
-const callout = colorHelper('#fe472f') // coral
+const callout = colorHelper('#fe472f')
 const caution = colorHelper('#BB1600')
 const warning = colorHelper('#FEDD2F')
 const ignore = colorHelper('#D6DDE6')
 const white = colorHelper('#fff')
 const black = primary.mix(colorHelper('black'), 0.95)
-const textColor = primary
+const textColor = colorHelper('#13124A')
 
 const xsmall = '0.5rem'
 const small = '1rem'
@@ -22,6 +22,7 @@ const color = {
   white,
   black,
   warning,
+  callout,
   ignore,
   ignoreColor: ignore,
   warningColor: warning,
@@ -70,6 +71,7 @@ const color = {
   unitBackground: white.mix(colorHelper(black), 0.1),
   inputBackground: white,
   outline: `solid 2px ${primary}`,
+  headerDropdownMenuBackground: `rgba(0,0,0,0.8)`,
 }
 const spacing = {
   xsmall,
@@ -84,7 +86,7 @@ const spacing = {
   maxWidth: '1200px',
   maxTextWidth: '78ch',
   fullViewportWidth: 'calc(100vw - (100vw - 100%))',
-  headerHeight: '4.4rem',
+  headerHeight: '4.9rem',
   sideNavWidthTabletLandscapeOnly: '8rem',
   sideNavWidthPhoneOnly: '6rem',
   sideNavWidthDesktop: '25rem',
