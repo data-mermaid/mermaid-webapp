@@ -64,10 +64,6 @@ describe('Offline', () => {
       dexieInstance,
     })
 
-    // we put the cart before the horse and this user event is here to make this test pass, but also still fail when it should. These lines arent essential to the feature functionality, rather an imperative trick to make a test pass while specific work is still undone. They can likely be removed at a later date.
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
-
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
       name: 'Add Row',
@@ -131,10 +127,6 @@ describe('Offline', () => {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
     })
-
-    // we put the cart before the horse and this user event is here to make this test pass, but also still fail when it should. These lines arent essential to the feature functionality, rather an imperative trick to make a test pass while specific work is still undone. They can likely be removed at a later date.
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
 
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
