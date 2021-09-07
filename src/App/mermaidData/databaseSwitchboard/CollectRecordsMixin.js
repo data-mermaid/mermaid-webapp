@@ -153,7 +153,7 @@ const CollectRecordsMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pushThenPullEverythingButChoices(projectId)
+                .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const recordReturnedFromServer =
                     recordResponseFromApiPush.data
@@ -225,7 +225,7 @@ const CollectRecordsMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pushThenPullEverythingButChoices(projectId)
+                .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_apiPullResponse) => apiPushResponse)
             }
 
