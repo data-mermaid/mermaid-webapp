@@ -7,8 +7,8 @@ const error = {
     'Options data for creating a collect record is currently unavailable. Please try again',
   collectRecordsUnavailable:
     'Collect records data is currently unavailable. Please try again',
-  apiDataPull:
-    'The app was not able to pull and store data from the API. Please try again.',
+  apiDataSync:
+    'the app was not able to sync data with the API. Please try again.',
   projectsUnavailable:
     'Projects data is currently unavailable. Please try again',
   userProfileUnavailable: 'The user profile is unavailable.',
