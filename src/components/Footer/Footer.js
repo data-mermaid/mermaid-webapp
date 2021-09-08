@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components/macro'
 import { Link } from 'react-router-dom'
 import OfflineToggle from '../OfflineToggle'
@@ -44,17 +44,26 @@ const Copyright = styled.p`
 `
 
 const Footer = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
+
+  const [offlineToggleState, setOfflineToggleState] = useState(!isAppOnline)
+
+  useEffect(() => {
+    setOfflineToggleState(!isAppOnline)
+  }, [isAppOnline])
 
   return (
     <StyledFooter>
       <OfflineToggleWrapper>
-        <OfflineToggle />
+        <OfflineToggle
+          offlineToggleState={offlineToggleState}
+          handleToggleChange={setOfflineToggleState}
+        />
         <label
           htmlFor="offline-toggle-switch"
           data-testid="offline-toggle-switch-label"
         >
-          {isOnline ? (
+          {isAppOnline ? (
             <>
               You&apos;re <strong>ONLINE</strong>
             </>
