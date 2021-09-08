@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types'
 import raw from 'raw.macro'
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 import Toggle from 'react-toggle'
 import theme from '../../theme'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 const ToggleCss = raw('react-toggle/style.css')
 
@@ -37,9 +38,20 @@ const ToggleWrapper = styled.div`
   }
 `
 
-const OfflineToggle = ({ onChange }) => {
+const OfflineToggle = ({ offlineToggleState, handleToggleChange }) => {
+  const { ping, stopPing, isOnline } = useOnlineStatus()
+
   const handleChange = (event) => {
-    onChange(event.target.checked)
+    const checkedValue = event.target.checked
+
+    handleToggleChange(checkedValue)
+    if (checkedValue) {
+      localStorage.setItem('offline-toggle', true)
+      stopPing()
+    } else {
+      localStorage.removeItem('offline-toggle')
+      ping()
+    }
   }
 
   return (
@@ -47,14 +59,18 @@ const OfflineToggle = ({ onChange }) => {
       <Toggle
         id="offline-toggle-switch"
         aria-label="offline-toggle-switch"
+        checked={offlineToggleState}
         onChange={handleChange}
         icons={false}
+        disabled={!isOnline}
       />
     </ToggleWrapper>
   )
 }
 
-OfflineToggle.propTypes = { onChange: PropTypes.func }
-OfflineToggle.defaultProps = { onChange: () => {} }
+OfflineToggle.propTypes = {
+  offlineToggleState: PropTypes.bool.isRequired,
+  handleToggleChange: PropTypes.func.isRequired,
+}
 
 export default OfflineToggle
