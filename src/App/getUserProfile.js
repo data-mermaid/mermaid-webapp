@@ -6,7 +6,7 @@ const getUserProfile = ({
   auth0Token,
   dexieInstance,
   isMermaidAuthenticated,
-  isOnline,
+  isAppOnline,
 }) => {
   if (!apiBaseUrl) {
     throw new Error('getUserProfile needs an API base url')
@@ -23,10 +23,10 @@ const getUserProfile = ({
     : undefined
   const isAuthenticatedAndReady = isMermaidAuthenticated
   const isOnlineAuthenticatedAndLoading =
-    isAuthenticatedAndReady && isOnline && !authenticatedAxios
+    isAuthenticatedAndReady && isAppOnline && !authenticatedAxios
   const isOnlineAuthenticatedAndReady =
-    isAuthenticatedAndReady && isOnline && !!authenticatedAxios
-  const isOfflineAuthenticatedAndReady = isAuthenticatedAndReady && !isOnline
+    isAuthenticatedAndReady && isAppOnline && !!authenticatedAxios
+  const isOfflineAuthenticatedAndReady = isAuthenticatedAndReady && !isAppOnline
 
   if (isOnlineAuthenticatedAndLoading) {
     return Promise.resolve(undefined)

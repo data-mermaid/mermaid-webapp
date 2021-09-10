@@ -23,7 +23,7 @@ import useIsMounted from '../library/useIsMounted'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
   const {
     auth0Token,
     isMermaidAuthenticated,
@@ -36,7 +36,7 @@ function App({ dexieInstance }) {
     auth0Token,
     dexieInstance,
     isMounted,
-    isOnline,
+    isAppOnline,
   })
 
   const apiSyncInstance = useMemo(() => {
@@ -63,12 +63,12 @@ function App({ dexieInstance }) {
           dexieInstance,
           isMermaidAuthenticated,
           isOfflineStorageHydrated,
-          isOnline,
+          isAppOnline,
         })
   }, [
     auth0Token,
     isMermaidAuthenticated,
-    isOnline,
+    isAppOnline,
     dexieInstance,
     apiBaseUrl,
     apiSyncInstance,
@@ -80,9 +80,9 @@ function App({ dexieInstance }) {
     auth0Token,
     dexieInstance,
     isMermaidAuthenticated,
-    isOnline,
+    isAppOnline,
   })
-  const { routes } = useRoutes({ currentUser, apiSyncInstance })
+  const { routes } = useRoutes()
 
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,
@@ -113,20 +113,28 @@ function App({ dexieInstance }) {
 
             isMermaidAuthenticated ? (
               <Switch>
-                {routes.map(({ path, Component }) => (
-                  <Route
-                    exact
-                    path={path}
-                    key={path}
-                    render={() =>
-                      isMermaidAuthenticatedAndReady ? (
-                        <Component />
-                      ) : (
-                        <LoadingIndicator />
-                      )
-                    }
-                  />
-                ))}
+                {routes.map(({ path, Component }) => {
+                  const checkNewRecordPath = path.includes('recordId')
+
+                  return (
+                    <Route
+                      exact
+                      path={path}
+                      key={path}
+                      render={() =>
+                        isMermaidAuthenticatedAndReady ? (
+                          <Component
+                            apiSyncInstance={apiSyncInstance}
+                            currentUser={currentUser}
+                            isNewRecord={!checkNewRecordPath}
+                          />
+                        ) : (
+                          <LoadingIndicator />
+                        )
+                      }
+                    />
+                  )
+                })}
                 <Route exact path="/">
                   <Redirect to="/projects" />
                 </Route>

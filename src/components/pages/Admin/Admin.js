@@ -132,7 +132,7 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
 }
 
 const Admin = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const [projectTagOptions, setProjectTagOptions] = useState([])
@@ -151,7 +151,7 @@ const Admin = () => {
     setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (!isOnline) {
+    if (!isAppOnline) {
       setIsLoading(false)
     }
 
@@ -173,7 +173,7 @@ const Admin = () => {
           toast.error(language.error.projectsUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -197,7 +197,7 @@ const Admin = () => {
     </>
   )
 
-  const content = isOnline ? (
+  const content = isAppOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
         <>
