@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import raw from 'raw.macro'
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components/macro'
 import Toggle from 'react-toggle'
 import theme from '../../theme'
@@ -39,7 +39,7 @@ const ToggleWrapper = styled.div`
 `
 
 const OfflineToggle = ({ offlineToggleState, handleToggleChange }) => {
-  const { ping, stopPing, isOnline } = useOnlineStatus()
+  const { ping, stopPing, pingState, isOnline } = useOnlineStatus()
 
   const handleChange = (event) => {
     const checkedValue = event.target.checked
@@ -62,7 +62,7 @@ const OfflineToggle = ({ offlineToggleState, handleToggleChange }) => {
         checked={offlineToggleState}
         onChange={handleChange}
         icons={false}
-        disabled={!isOnline}
+        disabled={pingState === false || (pingState === null && !isOnline)}
       />
     </ToggleWrapper>
   )

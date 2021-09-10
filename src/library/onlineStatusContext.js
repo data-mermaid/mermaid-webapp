@@ -12,7 +12,7 @@ const OnlineStatusContext = createContext()
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 const OnlineStatusProvider = ({ children, value }) => {
-  const pingInterval = 7000
+  const pingInterval = 5000
   const offlineToggleValueLocalStorage = JSON.parse(
     localStorage.getItem('offline-toggle'),
   )
@@ -22,20 +22,16 @@ const OnlineStatusProvider = ({ children, value }) => {
   const isAppOnline =
     pingState === true && isOnline && offlineToggleValueLocalStorage !== true
 
-  console.log('PING state ', pingState)
-
   const stopPing = useCallback(() => {
-    console.log('Stop Ping runs')
     if (pingId !== null) {
-      const pingIdWhenClear = clearTimeout(pingId)
+      const pingIdWhenClear = window.clearTimeout(pingId)
 
       setPingId(pingIdWhenClear)
     }
-    setPingState(false)
+    setPingState(null)
   }, [pingId, setPingId, setPingState])
 
   const ping = useCallback(() => {
-    console.log('Ping runs')
     axios
       .get(`${apiBaseUrl}/health/`, {
         cache: false,
@@ -50,7 +46,7 @@ const OnlineStatusProvider = ({ children, value }) => {
         },
       )
       .finally(() => {
-        const pingIdUpdatePeriodically = setTimeout(() => {
+        const pingIdUpdatePeriodically = window.setTimeout(() => {
           ping()
         }, pingInterval)
 
@@ -58,12 +54,13 @@ const OnlineStatusProvider = ({ children, value }) => {
       })
   }, [])
 
-  useEffect(() => {
+  const _startPingCheck = useEffect(() => {
     if (isAppOnline) {
       ping()
     } else {
       stopPing()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -75,6 +72,7 @@ const OnlineStatusProvider = ({ children, value }) => {
       setIsOnline(false)
       stopPing()
     }
+
     const cleanup = () => {
       window.removeEventListener('offline', handleOffline)
       window.removeEventListener('online', handleOnline)
@@ -89,7 +87,7 @@ const OnlineStatusProvider = ({ children, value }) => {
   return (
     // the value prop spread here allows for online status to be mocked for testing
     <OnlineStatusContext.Provider
-      value={{ isOnline, isAppOnline, ping, stopPing, ...value }}
+      value={{ isOnline, isAppOnline, pingState, ping, stopPing, ...value }}
     >
       {children}
     </OnlineStatusContext.Provider>
