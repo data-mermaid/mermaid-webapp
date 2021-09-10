@@ -29,7 +29,7 @@ const ProjectCard = ({
   isOfflineReady,
   ...restOfProps
 }) => {
-  const { isOnline: isAppOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
   const { name, countries, num_sites, updated_on, id } = project
   const { setIsSyncInProgress } = useSyncStatus()
   const history = useHistory()

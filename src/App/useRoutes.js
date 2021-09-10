@@ -15,11 +15,11 @@ import Health from '../components/pages/Health'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 import SubmittedFishBelt from '../components/pages/SubmittedFishBelt/SubmittedFishBelt'
 
-export const useRoutes = ({ currentUser, apiSyncInstance }) => {
+export const useRoutes = () => {
   const routes = [
     {
       path: '/projects',
-      Component: () => <Projects apiSyncInstance={apiSyncInstance} />,
+      Component: Projects,
     },
     {
       path: '/projects/:projectId/health',
@@ -31,13 +31,11 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
-      Component: () => <FishBelt currentUser={currentUser} />,
+      Component: FishBelt,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      Component: () => (
-        <FishBelt isNewRecord={false} currentUser={currentUser} />
-      ),
+      Component: FishBelt,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
@@ -71,7 +69,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/data/fishbelt/:recordId',
-      Component: () => <SubmittedFishBelt currentUser={currentUser} />,
+      Component: SubmittedFishBelt,
     },
     {
       path: '/projects/:projectId/admin',

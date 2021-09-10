@@ -41,15 +41,11 @@ const Data = () => {
     submittedRecordsForUiDisplay,
     setSubmittedRecordsForUiDisplay,
   ] = useState([])
+  const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
-  const { isOnline } = useOnlineStatus()
   const { projectId } = useParams()
 
   const _getSubmittedRecords = useEffect(() => {
-    if (!isOnline) {
-      setIsLoading(false)
-    }
-
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getSubmittedRecordsForUIDisplay(projectId)
@@ -63,7 +59,7 @@ const Data = () => {
           toast.error(language.error.submittedRecordsUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
@@ -242,7 +238,7 @@ const Data = () => {
     </>
   )
 
-  const content = isOnline ? <>{table}</> : <PageUnavailableOffline />
+  const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
 
   return (
     <ContentPageLayout

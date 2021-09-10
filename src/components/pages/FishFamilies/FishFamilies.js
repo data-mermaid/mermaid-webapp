@@ -5,9 +5,9 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const FishFamilies = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
 
-  const content = isOnline ? (
+  const content = isAppOnline ? (
     <>Fish Families Placeholder</>
   ) : (
     <PageUnavailableOffline />

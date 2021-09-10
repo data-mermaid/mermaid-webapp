@@ -2,7 +2,7 @@ import { getObjectById } from '../../../library/getObjectById'
 
 const SitesMixin = (Base) =>
   class extends Base {
-    getSitesWithoutOfflineDeleted = async (projectId) => {
+    getSitesWithoutOfflineDeleted = (projectId) => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
