@@ -1,4 +1,4 @@
-export const buttonGroupStage = {
+export const possibleCollectButtonGroupStates = {
   unsaved: 'unsaved',
   saving: 'saving',
   saved: 'saved',

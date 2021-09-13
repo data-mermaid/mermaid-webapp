@@ -23,7 +23,7 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import { getFishBinLabel } from './fishBeltBins'
 import { H2 } from '../../../generic/text'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
-import { buttonGroupStage } from '../buttonGroupStage'
+import { possibleCollectButtonGroupStates } from '../possibleCollectButtonGroupStates'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
@@ -74,7 +74,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const isMounted = useIsMounted()
 
   const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
-    buttonGroupStage.saved,
+    possibleCollectButtonGroupStates.saved,
   )
 
   const openNewFishNameModal = (observationId) => {
@@ -220,15 +220,22 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }
 
   const validateRecord = () => {
-    setFishBeltButtonsState(buttonGroupStage.validating)
+    setFishBeltButtonsState(possibleCollectButtonGroupStates.validating)
 
     databaseSwitchboardInstance
       .validateFishBelt({ recordId, projectId })
       .then((recordResponse) => {
-        if (recordResponse.validations.status === 'ok') {
-          setFishBeltButtonsState(buttonGroupStage.validated)
+        if (
+          recordResponse !== undefined &&
+          recordResponse.validations.status === 'ok'
+        ) {
+          setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
         }
-        setFishBeltButtonsState(buttonGroupStage.saved)
+        setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
+      })
+      .catch(() => {
+        toast.error(language.error.collectRecordFailedValidation)
+        setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
       })
   }
 
@@ -307,7 +314,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         collectRecordBeingEdited,
       )
 
-      setFishBeltButtonsState(buttonGroupStage.saving)
+      setFishBeltButtonsState(possibleCollectButtonGroupStates.saving)
 
       databaseSwitchboardInstance
         .saveFishBelt({
@@ -320,7 +327,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           clearPersistedUnsavedFormikData()
           clearPersistedUnsavedObservationsData()
           setAreObservationsInputsDirty(false)
-          setFishBeltButtonsState(buttonGroupStage.saved)
+          setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
           if (isNewRecord) {
@@ -360,7 +367,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const _setCollectButtonsUnsaved = useEffect(() => {
     if (formik.dirty || areObservationsInputsDirty) {
-      setFishBeltButtonsState(buttonGroupStage.unsaved)
+      setFishBeltButtonsState(possibleCollectButtonGroupStates.unsaved)
     }
   }, [formik.dirty, areObservationsInputsDirty])
 

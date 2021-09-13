@@ -4,7 +4,7 @@ import styled from 'styled-components/macro'
 
 import { ButtonCallout, ButtonPrimary } from '../../../generic/buttons'
 import { IconSave, IconCheck, IconUpload } from '../../../icons'
-import { buttonGroupStage } from '../buttonGroupStage'
+import { possibleCollectButtonGroupStates } from '../possibleCollectButtonGroupStates'
 import OfflineHide from '../../../generic/OfflineHide'
 
 const SaveValidateSubmitButtonWrapper = styled('div')`
@@ -21,7 +21,7 @@ const SaveValidateSubmitButtonGroup = ({
   validateRecord,
 }) => {
   const saveButtonSwitch = () => {
-    if (fishBeltButtonsState === buttonGroupStage.saving) {
+    if (fishBeltButtonsState === possibleCollectButtonGroupStates.saving) {
       return (
         <ButtonPrimary disabled>
           <IconSave />
@@ -30,8 +30,8 @@ const SaveValidateSubmitButtonGroup = ({
       )
     }
     if (
-      fishBeltButtonsState === buttonGroupStage.saved ||
-      fishBeltButtonsState === buttonGroupStage.validating
+      fishBeltButtonsState === possibleCollectButtonGroupStates.saved ||
+      fishBeltButtonsState === possibleCollectButtonGroupStates.validating
     ) {
       return (
         <ButtonPrimary disabled>
@@ -50,7 +50,7 @@ const SaveValidateSubmitButtonGroup = ({
   }
 
   const validateButtonSwitch = () => {
-    if (fishBeltButtonsState === buttonGroupStage.validating) {
+    if (fishBeltButtonsState === possibleCollectButtonGroupStates.validating) {
       return (
         <ButtonPrimary disabled>
           <IconCheck />
@@ -58,7 +58,7 @@ const SaveValidateSubmitButtonGroup = ({
         </ButtonPrimary>
       )
     }
-    if (fishBeltButtonsState === buttonGroupStage.validated) {
+    if (fishBeltButtonsState === possibleCollectButtonGroupStates.validated) {
       return (
         <ButtonPrimary disabled>
           <IconCheck />
@@ -70,7 +70,7 @@ const SaveValidateSubmitButtonGroup = ({
     return (
       <ButtonCallout
         onClick={validateRecord}
-        disabled={fishBeltButtonsState !== buttonGroupStage.saved}
+        disabled={fishBeltButtonsState !== possibleCollectButtonGroupStates.saved}
       >
         <IconCheck />
         Validate
@@ -80,7 +80,7 @@ const SaveValidateSubmitButtonGroup = ({
 
   const submitButton = (
     <ButtonCallout
-      disabled={fishBeltButtonsState !== buttonGroupStage.validated}
+      disabled={fishBeltButtonsState !== possibleCollectButtonGroupStates.validated}
     >
       <IconUpload />
       Submit
