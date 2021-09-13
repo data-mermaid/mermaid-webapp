@@ -21,7 +21,7 @@ export const decorators = [
     >
       <MemoryRouter>
         <ThemeProvider theme={theme}>
-          <OnlineStatusProvider value={{ isOnline: true }}>
+          <OnlineStatusProvider value={{ isAppOnline: true }}>
             <GlobalStyle />
             <Story />
           </OnlineStatusProvider>

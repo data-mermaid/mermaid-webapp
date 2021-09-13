@@ -16,11 +16,11 @@ const OnlineStatusProvider = ({ children, value }) => {
   const offlineToggleValueLocalStorage = JSON.parse(
     localStorage.getItem('offline-toggle'),
   )
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
+  const [isWifiOn, setIsWifiOn] = useState(navigator.onLine)
   const [pingId, setPingId] = useState(null)
   const [pingState, setPingState] = useState(true)
   const isAppOnline =
-    pingState === true && isOnline && offlineToggleValueLocalStorage !== true
+    pingState === true && isWifiOn && offlineToggleValueLocalStorage !== true
 
   const stopPing = useCallback(() => {
     if (pingId !== null) {
@@ -65,11 +65,11 @@ const OnlineStatusProvider = ({ children, value }) => {
 
   useEffect(() => {
     const handleOnline = () => {
-      setIsOnline(true)
+      setIsWifiOn(true)
       ping()
     }
     const handleOffline = () => {
-      setIsOnline(false)
+      setIsWifiOn(false)
       stopPing()
     }
 
@@ -87,7 +87,7 @@ const OnlineStatusProvider = ({ children, value }) => {
   return (
     // the value prop spread here allows for online status to be mocked for testing
     <OnlineStatusContext.Provider
-      value={{ isOnline, isAppOnline, pingState, ping, stopPing, ...value }}
+      value={{ isWifiOn, isAppOnline, pingState, ping, stopPing, ...value }}
     >
       {children}
     </OnlineStatusContext.Provider>
@@ -108,7 +108,7 @@ const useOnlineStatus = () => {
 
 OnlineStatusProvider.propTypes = {
   children: PropTypes.node.isRequired,
-  value: PropTypes.shape({ isOnline: PropTypes.bool }),
+  value: PropTypes.shape({ isWifiOn: PropTypes.bool }),
 }
 
 OnlineStatusProvider.defaultProps = { value: {} }
