@@ -86,7 +86,7 @@ const renderAuthenticatedOnline = (
         <DatabaseSwitchboardInstanceProvider
           value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
         >
-          <OnlineStatusProvider value={{ isOnline: true }}>
+          <OnlineStatusProvider value={{ isAppOnline: true }}>
             {children}
           </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -107,7 +107,7 @@ const renderUnauthenticatedOnline = (
   const wrapper = ({ children }) => {
     return (
       <UnauthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isOnline: true }}>
+        <OnlineStatusProvider value={{ isAppOnline: true }}>
           {children}
         </OnlineStatusProvider>
       </UnauthenticatedProviders>
@@ -135,7 +135,9 @@ const renderAuthenticatedOffline = (
         <DatabaseSwitchboardInstanceProvider
           value={getMockOfflineDatabaseSwitchboardInstance(dexieInstance)}
         >
-          <OnlineStatusProvider value={{ isOnline: false }}>
+          <OnlineStatusProvider
+            value={{ isWifiOn: false, isAppOnline: false, pingState: false }}
+          >
             {children}
           </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -156,7 +158,7 @@ const renderUnauthenticatedOffline = (
   const wrapper = ({ children }) => {
     return (
       <UnauthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isOnline: false }}>
+        <OnlineStatusProvider value={{ isAppOnline: false }}>
           {children}
         </OnlineStatusProvider>
       </UnauthenticatedProviders>

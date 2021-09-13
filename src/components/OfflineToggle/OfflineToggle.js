@@ -39,7 +39,7 @@ const ToggleWrapper = styled.div`
 `
 
 const OfflineToggle = ({ offlineToggleState, handleToggleChange }) => {
-  const { ping, stopPing, pingState, isOnline } = useOnlineStatus()
+  const { ping, stopPing, pingState, isWifiOn } = useOnlineStatus()
 
   const handleChange = (event) => {
     const checkedValue = event.target.checked
@@ -62,7 +62,7 @@ const OfflineToggle = ({ offlineToggleState, handleToggleChange }) => {
         checked={offlineToggleState}
         onChange={handleChange}
         icons={false}
-        disabled={pingState === false || (pingState === null && !isOnline)}
+        disabled={pingState === false || (pingState === null && !isWifiOn)}
       />
     </ToggleWrapper>
   )

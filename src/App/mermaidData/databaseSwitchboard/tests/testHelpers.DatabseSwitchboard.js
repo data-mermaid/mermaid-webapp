@@ -21,7 +21,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () 
     dexieInstance,
     isMermaidAuthenticated: true,
     isOfflineStorageHydrated: true,
-    isOnline: true,
+    isAppOnline: true,
   })
 
   dbInstance.dexieInstance = dexieInstance
@@ -37,7 +37,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () =>
     apiBaseUrl,
     auth0Token,
     isMermaidAuthenticated: true,
-    isOnline: true,
+    isAppOnline: true,
     dexieInstance,
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance,
@@ -55,7 +55,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
     apiBaseUrl,
     auth0Token,
     isMermaidAuthenticated: true,
-    isOnline: false,
+    isAppOnline: false,
     dexieInstance,
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance,
@@ -80,7 +80,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = ()
     dexieInstance,
     isMermaidAuthenticated: true,
     isOfflineStorageHydrated: true,
-    isOnline: false,
+    isAppOnline: false,
   })
 
   dbInstance.dexieInstance = dexieInstance
