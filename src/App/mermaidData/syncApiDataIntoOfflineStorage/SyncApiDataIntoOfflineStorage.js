@@ -24,6 +24,47 @@ const SyncApiDataIntoOfflineStorage = class {
       : undefined
   }
 
+  #pullEverythingButProjectRelated = () => {
+    const apiDataNamesToPullNonProject = [
+      'benthic_attributes',
+      'choices',
+      'fish_families',
+      'fish_genera',
+      'fish_species',
+      'projects',
+    ]
+
+    return pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: apiDataNamesToPullNonProject,
+    })
+  }
+
+  #pullOfflineProjects = async () => {
+    const offlineReadyProjects = await this._dexieInstance.uiState_offlineReadyProjects.toArray()
+
+    const apiDataNamesToPullNonProject = [
+      'collect_records',
+      'project_managements',
+      'project_profiles',
+      'project_sites',
+    ]
+
+    const pullProjectPromises = offlineReadyProjects.map((project) =>
+      pullApiData({
+        dexieInstance: this._dexieInstance,
+        auth0Token: this._auth0Token,
+        apiBaseUrl: this._apiBaseUrl,
+        apiDataNamesToPull: apiDataNamesToPullNonProject,
+        projectId: project.id,
+      }),
+    )
+
+    return Promise.all(pullProjectPromises)
+  }
+
   pushChanges = async () => {
     return Promise.all([
       this._dexieInstance.benthic_attributes.toArray(),
@@ -72,47 +113,6 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  #pullEverythingButProjectRelated = () => {
-    const apiDataNamesToPullNonProject = [
-      'benthic_attributes',
-      'choices',
-      'fish_families',
-      'fish_genera',
-      'fish_species',
-      'projects',
-    ]
-
-    return pullApiData({
-      dexieInstance: this._dexieInstance,
-      auth0Token: this._auth0Token,
-      apiBaseUrl: this._apiBaseUrl,
-      apiDataNamesToPull: apiDataNamesToPullNonProject,
-    })
-  }
-
-  #pullOfflineProjects = async () => {
-    const offlineReadyProjects = await this._dexieInstance.uiState_offlineReadyProjects.toArray()
-
-    const apiDataNamesToPullNonProject = [
-      'collect_records',
-      'project_managements',
-      'project_profiles',
-      'project_sites',
-    ]
-
-    const pullProjectPromises = offlineReadyProjects.map((project) =>
-      pullApiData({
-        dexieInstance: this._dexieInstance,
-        auth0Token: this._auth0Token,
-        apiBaseUrl: this._apiBaseUrl,
-        apiDataNamesToPull: apiDataNamesToPullNonProject,
-        projectId: project.id,
-      }),
-    )
-
-    return Promise.all(pullProjectPromises)
-  }
-
   pushThenPullEverything = async () => {
     await this.pushChanges()
 
@@ -120,6 +120,17 @@ const SyncApiDataIntoOfflineStorage = class {
       this.#pullEverythingButProjectRelated(),
       this.#pullOfflineProjects(),
     ])
+  }
+
+  pushThenPullSpecies = async () => {
+    await this.pushChanges()
+
+    return pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: ['fish_species'],
+    })
   }
 
   pushThenPullEverythingForAProject = async (projectId) => {
