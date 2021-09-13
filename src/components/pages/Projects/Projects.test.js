@@ -134,7 +134,7 @@ test('A project card shows relevant data for a project', async () => {
   expect(within(projectCard).getByText('Updated: 01/21/2020'))
 })
 
-test('A project card shows only collect button in button groups when offline', async () => {
+test('A project card renders appropriately when offline', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -183,9 +183,11 @@ test('A project card shows only collect button in button groups when offline', a
       within(projectCard).queryByLabelText(/copy/i),
     ).not.toBeInTheDocument(),
   )
+
+  expect(screen.getByLabelText('Offline Ready')).toBeDisabled()
 })
 
-test('A project card shows all buttons in button group when online', async () => {
+test('A project card renders appropriately when online', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -226,6 +228,14 @@ test('A project card shows all buttons in button group when online', async () =>
   await waitFor(() =>
     expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
   )
+
+  const offlineReadyCheckboxes = screen.getAllByLabelText('Offline Ready')
+
+  expect(offlineReadyCheckboxes[0]).toBeEnabled()
+  expect(offlineReadyCheckboxes[1]).toBeEnabled()
+  expect(offlineReadyCheckboxes[2]).toBeEnabled()
+  expect(offlineReadyCheckboxes[3]).toBeEnabled()
+  expect(offlineReadyCheckboxes[4]).toBeEnabled()
 })
 
 test('Hide new project button in project toolbar when offline', async () => {

@@ -92,12 +92,17 @@ const ProjectCard = ({
         <p>
           {num_sites} {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
-        <CheckBoxLabel htmlFor="offline-toggle" onClick={stopEventPropagation}>
+        <CheckBoxLabel
+          htmlFor="offline-toggle"
+          onClick={stopEventPropagation}
+          disabled={!isAppOnline}
+        >
           <input
             id="offline-toggle"
             type="checkbox"
             checked={isOfflineReady}
             onChange={handleProjectOfflineReadyClick}
+            disabled={!isAppOnline}
           />
           {language.pages.projectsList.offlineReadyCheckboxLabel}
         </CheckBoxLabel>
