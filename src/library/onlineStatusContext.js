@@ -54,7 +54,7 @@ const OnlineStatusProvider = ({ children, value }) => {
       })
   }, [])
 
-  const _startPingCheck = useEffect(() => {
+  const _startPingCheckWhenComponentMount = useEffect(() => {
     if (isAppOnline) {
       ping()
     } else {

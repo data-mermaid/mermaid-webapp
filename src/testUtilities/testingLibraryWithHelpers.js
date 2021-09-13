@@ -135,9 +135,7 @@ const renderAuthenticatedOffline = (
         <DatabaseSwitchboardInstanceProvider
           value={getMockOfflineDatabaseSwitchboardInstance(dexieInstance)}
         >
-          <OnlineStatusProvider
-            value={{ isWifiOn: false, isAppOnline: false, pingState: false }}
-          >
+          <OnlineStatusProvider value={{ isAppOnline: false }}>
             {children}
           </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
