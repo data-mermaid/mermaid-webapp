@@ -358,7 +358,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const formik = useFormik(formikOptions)
 
-  const _manageWholeFormDirtyState = useEffect(() => {
+  const _setCollectButtonsUnsaved = useEffect(() => {
     if (formik.dirty || areObservationsInputsDirty) {
       setFishBeltButtonsState(buttonGroupStage.unsaved)
     }
