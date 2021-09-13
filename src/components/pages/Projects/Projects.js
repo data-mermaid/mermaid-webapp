@@ -11,28 +11,31 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import useIsMounted from '../../../library/useIsMounted'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { getObjectById } from '../../../library/getObjectById'
 
 /**
  * All Projects page (lists projects)
  */
 const Projects = ({ apiSyncInstance }) => {
-  const { isSyncInProgress } = useSyncStatus()
   const [isLoading, setIsLoading] = useState(true)
+  const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
   const [projects, setProjects] = useState([])
-  const [offlineReadyProjects, setOfflineReadyProjects] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isOnline } = useOnlineStatus()
+  const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
 
   const _getProjectsInfo = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
       Promise.all([
         databaseSwitchboardInstance.getProjects(),
-        databaseSwitchboardInstance.getOfflineReadyProjects(),
+        databaseSwitchboardInstance.getOfflineReadyProjectIds(),
       ])
-        .then(([projectsResponse, offlineReadyProjectsResponse]) => {
+        .then(([projectsResponse, offlineReadyProjectIdsResponse]) => {
           if (isMounted.current) {
             setProjects(projectsResponse)
-            setOfflineReadyProjects(offlineReadyProjectsResponse)
+            setOfflineReadyProjectIds(offlineReadyProjectIdsResponse)
             setIsLoading(false)
           }
         })
@@ -43,26 +46,37 @@ const Projects = ({ apiSyncInstance }) => {
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
 
   const getIsProjectOffline = (projectId) =>
-    !!offlineReadyProjects.find(
+    !!offlineReadyProjectIds.find(
       (offlineProject) => offlineProject.id === projectId,
     )
 
-  const projectList = projects.map((project) => (
-    <ProjectCard
-      role="listitem"
-      project={project}
-      key={project.id}
-      apiSyncInstance={apiSyncInstance}
-      isOfflineReady={getIsProjectOffline(project.id)}
-    />
-  ))
+  const offlineReadyProjects = projects.filter((project) =>
+    getObjectById(offlineReadyProjectIds, project.id),
+  )
+
+  const getProjectCardsList = (projectsToUse) =>
+    projectsToUse.map((project) => (
+      <ProjectCard
+        role="listitem"
+        project={project}
+        key={project.id}
+        apiSyncInstance={apiSyncInstance}
+        isOfflineReady={getIsProjectOffline(project.id)}
+      />
+    ))
 
   return isLoading ? (
     <LoadingIndicator aria-label="projects list loading indicator" />
   ) : (
     <HomePageLayout
       topRow={<ProjectToolBarSection />}
-      bottomRow={<div role="list">{projectList}</div>}
+      bottomRow={
+        <div role="list">
+          {isOnline
+            ? getProjectCardsList(projects)
+            : getProjectCardsList(offlineReadyProjects)}
+        </div>
+      }
     />
   )
 }

@@ -1,6 +1,6 @@
 const ProjectsMixin = (Base) =>
   class extends Base {
-    getOfflineReadyProjects = () =>
+    getOfflineReadyProjectIds = () =>
       this._dexieInstance.uiState_offlineReadyProjects.toArray()
 
     getProjects = () =>

@@ -57,3 +57,19 @@ test('Clicking anywhere on a project card navigates to the project health page w
     }),
   )
 })
+
+test('Offline projects page only shows offline ready projects', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  // this includes marking one project as offline ready imperatively
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    dexieInstance,
+  })
+
+  const projects = await screen.findAllByRole('listitem')
+
+  // if all were shown, there would be 5, not 1
+  expect(projects.length).toEqual(1)
+})

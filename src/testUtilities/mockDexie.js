@@ -26,10 +26,13 @@ const getMockDexieInstanceAllSuccess = () => {
 
   dexieInstance.uiState_currentUser
     .put({
-      id: 'fake-id',
-      first_name: 'FakeFirstNameOffline',
-      last_name: 'FakeLastNameOffline',
-      full_name: 'FakeFirstNameOffline FakeLastNameOffline',
+      id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
+      user: {
+        id: 'fake-id',
+        first_name: 'FakeFirstNameOffline',
+        last_name: 'FakeLastNameOffline',
+        full_name: 'FakeFirstNameOffline FakeLastNameOffline',
+      },
     })
     .catch((error) =>
       console.error(

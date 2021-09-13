@@ -52,7 +52,7 @@ const getUserProfile = ({
   }
   if (isOfflineAuthenticatedAndReady) {
     return dexieInstance.uiState_currentUser.toArray().then((results) => {
-      const user = results[0]
+      const { user } = results[0]
 
       if (!user) {
         throw Error('User Profile not returned from offline storage')
