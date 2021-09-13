@@ -44,12 +44,6 @@ export const pullApiData = async ({
 
   const apiData = pullResponse.data
 
-  await persistLastRevisionNumbersPulled({
-    dexieInstance,
-    apiData,
-    projectId,
-  })
-
   await dexieInstance.transaction(
     'rw',
     dexieInstance.benthic_attributes,
@@ -62,7 +56,14 @@ export const pullApiData = async ({
     dexieInstance.project_profiles,
     dexieInstance.project_sites,
     dexieInstance.projects,
+    dexieInstance.uiState_lastRevisionNumbersPulled,
     async () => {
+      persistLastRevisionNumbersPulled({
+        dexieInstance,
+        apiData,
+        projectId,
+      })
+
       apiDataNamesToPull.forEach((apiDataType) => {
         if (apiDataType === 'choices') {
           // choices deletes property will always be empty, so we just ignore it

@@ -72,7 +72,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
       // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pushThenPullEverythingButProjectRelated()
+        .pushThenPullEverything()
         .then(() => {
           if (isMounted.current) {
             setIsOfflineStorageHydrated(true)
@@ -81,14 +81,14 @@ export const useSyncApiDataIntoOfflineStorage = ({
           }
         })
         .catch(() => {
-          toast.error(language.error.apiDataPull)
+          toast.error(language.error.apiDataSync)
         })
     }
 
     if (isInitialLoadOnProjectPageAndOnline) {
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pushThenPullEverything(projectId)
+        .pushThenPullEverythingForAProject(projectId)
         .then(() => {
           if (isMounted.current) {
             setIsOfflineStorageHydrated(true)
@@ -97,21 +97,21 @@ export const useSyncApiDataIntoOfflineStorage = ({
           }
         })
         .catch(() => {
-          toast.error(language.error.apiDataPull)
+          toast.error(language.error.apiDataSync)
         })
     }
     if (isNotInitialLoadOnProjectPageAndOnline) {
       // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pushThenPullEverythingButChoices(projectId)
+        .pushThenPullEverythingForAProjectButChoices(projectId)
         .then(() => {
           if (isMounted.current) {
             setIsSyncInProgress(false)
           }
         })
         .catch(() => {
-          toast.error(language.error.apiDataPull)
+          toast.error(language.error.apiDataSync)
         })
     }
   }, [
