@@ -5,7 +5,7 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 const OfflineHide = ({ children }) => {
   const { isAppOnline } = useOnlineStatus()
 
-  return isAppOnline && <>{children}</>
+  return isAppOnline ? <>{children}</> : null
 }
 
 OfflineHide.propTypes = {

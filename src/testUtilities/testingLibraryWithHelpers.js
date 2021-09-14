@@ -67,6 +67,35 @@ UnauthenticatedProviders.propTypes = {
 UnauthenticatedProviders.defaultProps = {
   initialEntries: undefined,
 }
+const renderAuthenticated = (
+  ui,
+  {
+    renderOptions,
+    initialEntries,
+    dexieInstance,
+    isSyncInProgressOverride,
+  } = {},
+) => {
+  const wrapper = ({ children }) => {
+    return (
+      <AuthenticatedProviders
+        initialEntries={initialEntries}
+        isSyncInProgressOverride={isSyncInProgressOverride}
+      >
+        <DatabaseSwitchboardInstanceProvider
+          value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
+        >
+          <OnlineStatusProvider>{children}</OnlineStatusProvider>
+        </DatabaseSwitchboardInstanceProvider>
+      </AuthenticatedProviders>
+    )
+  }
+
+  return render(ui, {
+    wrapper,
+    ...renderOptions,
+  })
+}
 
 const renderAuthenticatedOnline = (
   ui,
@@ -176,6 +205,7 @@ export { default as mockMermaidApiAllSuccessful } from './mockMermaidApiAllSucce
 export * from '@testing-library/react'
 export {
   renderOverride as render,
+  renderAuthenticated,
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
   renderUnauthenticatedOffline,
