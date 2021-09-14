@@ -15,7 +15,7 @@ test('getUserProfile online returns data from the API', async () => {
     auth0Token,
     dexieInstance: getMockDexieInstanceAllSuccess(),
     isMermaidAuthenticated: true,
-    isOnline: true,
+    isAppOnline: true,
   })
 
   expect(userProfile).toEqual({
@@ -40,7 +40,7 @@ test('getUserProfile online returns error message upon API error', async () => {
       auth0Token: 'fake token',
       dexieInstance: getMockDexieInstanceAllSuccess(),
       isMermaidAuthenticated: true,
-      isOnline: true,
+      isAppOnline: true,
     })
   } catch (error) {
     expect(error.message).toBeTruthy()
@@ -52,7 +52,7 @@ test('getUserProfile offline returns data from local storage', async () => {
     auth0Token: 'fake token',
     dexieInstance: getMockDexieInstanceAllSuccess(),
     isMermaidAuthenticated: true,
-    isOnline: false,
+    isAppOnline: false,
   })
 
   expect(userProfile).toEqual({
@@ -71,7 +71,7 @@ test('getUserProfile offline returns error message upon dexie error', async () =
       auth0Token: 'fake token',
       dexieInstance: getMockDexieInstanceThatProducesErrors(),
       isMermaidAuthenticated: true,
-      isOnline: false,
+      isAppOnline: false,
     })
   } catch (error) {
     expect(error.message).toBeTruthy()

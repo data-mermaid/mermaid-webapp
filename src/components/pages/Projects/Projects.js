@@ -22,7 +22,7 @@ const Projects = ({ apiSyncInstance }) => {
   const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
   const [projects, setProjects] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
 
@@ -72,7 +72,7 @@ const Projects = ({ apiSyncInstance }) => {
       topRow={<ProjectToolBarSection />}
       bottomRow={
         <div role="list">
-          {isOnline
+          {isAppOnline
             ? getProjectCardsList(projects)
             : getProjectCardsList(offlineReadyProjects)}
         </div>

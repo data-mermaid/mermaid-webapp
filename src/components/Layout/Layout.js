@@ -18,7 +18,7 @@ const LayoutContainer = styled(Column)`
 `
 const OfflineIndicatorStyles = styled.div`
   ${(props) =>
-    !props.isOnline &&
+    !props.isAppOnline &&
     css`
       border: solid ${theme.spacing.borderXLarge} ${theme.color.cautionColor};
       pointer-events: none;
@@ -39,11 +39,11 @@ const OfflineIndicatorStyles = styled.div`
     `}
 `
 const OfflineIndicator = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
 
   return (
-    <OfflineIndicatorStyles isOnline={isOnline}>
-      {!isOnline && <span>You&rsquo;re offline</span>}
+    <OfflineIndicatorStyles isAppOnline={isAppOnline}>
+      {!isAppOnline && <span>You&rsquo;re offline</span>}
     </OfflineIndicatorStyles>
   )
 }

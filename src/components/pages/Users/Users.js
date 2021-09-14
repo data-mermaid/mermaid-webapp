@@ -117,7 +117,7 @@ const NameCellStyle = styled('div')`
 `
 
 const Users = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
 
   const [observerProfiles, setObserverProfiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -380,7 +380,7 @@ const Users = () => {
     </>
   )
 
-  const content = isOnline ? <>{table}</> : <PageUnavailableOffline />
+  const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
 
   return (
     <ContentPageLayout
