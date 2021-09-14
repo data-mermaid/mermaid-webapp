@@ -1,12 +1,56 @@
+import axios from 'axios'
 import PropTypes from 'prop-types'
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
+const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const OnlineStatusContext = createContext()
 
 const OnlineStatusProvider = ({ children, value }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
+  const [isServerReachable, setIsServerReachable] = useState(true)
 
-  const isAppOnline = isNavigatorOnline
+  const isAppOnline = isNavigatorOnline && isServerReachable
+  const rePingApiRef = useRef()
+  const stopPingingApi = useCallback(() => {
+    clearInterval(rePingApiRef.current)
+  }, [])
+
+  const _setIsServerReachable = useEffect(() => {
+    const pingApi = () => {
+      axios
+        .get(`${apiBaseUrl}/health/`, {
+          cache: false,
+          method: 'HEAD',
+        })
+        .then(() => {
+          setIsServerReachable(true)
+        })
+        .catch(() => {
+          setIsServerReachable(false)
+        })
+    }
+
+    if (isNavigatorOnline) {
+      pingApi()
+      rePingApiRef.current = window.setInterval(() => {
+        pingApi()
+      }, 30000)
+    }
+    if (!isNavigatorOnline) {
+      stopPingingApi()
+    }
+
+    return () => {
+      stopPingingApi()
+    }
+  }, [isNavigatorOnline, stopPingingApi])
 
   const _setIsNavigatorOnline = useEffect(() => {
     const handleOnline = () => {
