@@ -44,7 +44,7 @@ const Copyright = styled.p`
 `
 
 const Footer = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
 
   return (
     <StyledFooter>
@@ -54,7 +54,7 @@ const Footer = () => {
           htmlFor="offline-toggle-switch"
           data-testid="offline-toggle-switch-label"
         >
-          {isOnline ? (
+          {isAppOnline ? (
             <>
               You&apos;re <strong>ONLINE</strong>
             </>

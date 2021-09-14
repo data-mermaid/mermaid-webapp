@@ -20,7 +20,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
   auth0Token,
   dexieInstance,
   isMounted,
-  isOnline,
+  isAppOnline,
 }) => {
   const location = useLocation()
   const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(
@@ -40,7 +40,11 @@ export const useSyncApiDataIntoOfflineStorage = ({
 
   const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {
     const isOnlineAndReady =
-      apiBaseUrl && auth0Token && dexieInstance && isMounted.current && isOnline
+      apiBaseUrl &&
+      auth0Token &&
+      dexieInstance &&
+      isMounted.current &&
+      isAppOnline
 
     const projectId = getProjectIdFromLocation(location)
 
@@ -51,7 +55,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
       !auth0Token &&
       dexieInstance &&
       isMounted.current &&
-      !isOnline
+      !isAppOnline
 
     const isProjectsListPage =
       location.pathname === '/projects' || location.pathname === '/projects/'
@@ -119,7 +123,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
     auth0Token,
     dexieInstance,
     isMounted,
-    isOnline,
+    isAppOnline,
     location,
     setIsSyncInProgress,
     syncApiDataIntoOfflineStorage,
