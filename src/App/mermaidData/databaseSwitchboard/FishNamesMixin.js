@@ -43,9 +43,24 @@ const FishNameMixin = (Base) =>
         uiState_pushToApi: true,
       }
 
-      return this._dexieInstance.fish_species
-        .put(newFishObject)
-        .then(() => newFishObject)
+      if (this._isOnlineAuthenticatedAndReady) {
+        const _protectAgainstNetworkStutter = await this._dexieInstance.fish_species.put(
+          newFishObject,
+        )
+
+        return this._apiSyncInstance.pushThenPullSpecies().then((response) => {
+          const newFishSpeciesFromApi = response.data.fish_species.updates[0]
+
+          return newFishSpeciesFromApi
+        })
+      }
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexieInstance.fish_species
+          .put(newFishObject)
+          .then(() => newFishObject)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getFishGenera = () =>
