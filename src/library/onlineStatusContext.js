@@ -15,42 +15,63 @@ const OnlineStatusContext = createContext()
 const OnlineStatusProvider = ({ children, value }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
   const [isServerReachable, setIsServerReachable] = useState(true)
+  const [isOfflineToggleSwitchOn, setIsOfflineToggleSwitchOn] = useState(
+    JSON.parse(localStorage.getItem('offline-toggle')),
+  )
+  const isAppOnline =
+    isNavigatorOnline &&
+    isServerReachable === true &&
+    isOfflineToggleSwitchOn !== true
+  const offlineToggleDisabledCondition =
+    isServerReachable === false ||
+    (isServerReachable === null && !isNavigatorOnline)
 
-  const isAppOnline = isNavigatorOnline && isServerReachable
   const rePingApiRef = useRef()
   const stopPingingApi = useCallback(() => {
+    setIsServerReachable(null)
     clearInterval(rePingApiRef.current)
   }, [])
 
-  const _setIsServerReachable = useEffect(() => {
-    const pingApi = () => {
-      axios
-        .get(`${apiBaseUrl}/health/`, {
-          cache: false,
-          method: 'HEAD',
-        })
-        .then(() => {
-          setIsServerReachable(true)
-        })
-        .catch(() => {
-          setIsServerReachable(false)
-        })
-    }
+  const pingApi = useCallback(() => {
+    axios
+      .get(`${apiBaseUrl}/health/`, {
+        cache: false,
+        method: 'HEAD',
+      })
+      .then(() => {
+        setIsServerReachable(true)
+      })
+      .catch(() => {
+        setIsServerReachable(false)
+      })
+  }, [])
 
+  const _setIsServerReachable = useEffect(() => {
+    if (!isNavigatorOnline) {
+      stopPingingApi()
+    }
     if (isNavigatorOnline) {
       pingApi()
       rePingApiRef.current = window.setInterval(() => {
         pingApi()
       }, 30000)
     }
-    if (!isNavigatorOnline) {
-      stopPingingApi()
-    }
 
     return () => {
       stopPingingApi()
     }
-  }, [isNavigatorOnline, stopPingingApi])
+  }, [isNavigatorOnline, pingApi, stopPingingApi])
+
+  const handleChangeFromOfflineToggle = (event) => {
+    const checkedValue = event.target.checked
+
+    setIsOfflineToggleSwitchOn(checkedValue)
+    if (checkedValue) {
+      localStorage.setItem('offline-toggle', checkedValue)
+    } else {
+      localStorage.removeItem('offline-toggle')
+    }
+  }
 
   const _setIsNavigatorOnline = useEffect(() => {
     const handleOnline = () => {
@@ -72,7 +93,14 @@ const OnlineStatusProvider = ({ children, value }) => {
 
   return (
     // the value prop spread here allows for online status to be mocked for testing
-    <OnlineStatusContext.Provider value={{ isAppOnline, ...value }}>
+    <OnlineStatusContext.Provider
+      value={{
+        isAppOnline,
+        offlineToggleDisabledCondition,
+        handleChangeFromOfflineToggle,
+        ...value,
+      }}
+    >
       {children}
     </OnlineStatusContext.Provider>
   )

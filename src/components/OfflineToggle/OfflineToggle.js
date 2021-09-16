@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types'
 import raw from 'raw.macro'
 import React from 'react'
 import styled from 'styled-components/macro'
 import Toggle from 'react-toggle'
 import theme from '../../theme'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 const ToggleCss = raw('react-toggle/style.css')
 
@@ -37,24 +37,25 @@ const ToggleWrapper = styled.div`
   }
 `
 
-const OfflineToggle = ({ onChange }) => {
-  const handleChange = (event) => {
-    onChange(event.target.checked)
-  }
+const OfflineToggle = () => {
+  const {
+    isAppOnline,
+    offlineToggleDisabledCondition,
+    handleChangeFromOfflineToggle,
+  } = useOnlineStatus()
 
   return (
     <ToggleWrapper>
       <Toggle
         id="offline-toggle-switch"
         aria-label="offline-toggle-switch"
-        onChange={handleChange}
+        onChange={handleChangeFromOfflineToggle}
+        checked={!isAppOnline}
         icons={false}
+        disabled={offlineToggleDisabledCondition}
       />
     </ToggleWrapper>
   )
 }
-
-OfflineToggle.propTypes = { onChange: PropTypes.func }
-OfflineToggle.defaultProps = { onChange: () => {} }
 
 export default OfflineToggle
