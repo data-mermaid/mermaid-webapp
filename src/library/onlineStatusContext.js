@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
 import React, {
   createContext,
@@ -8,6 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import language from '../language'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const OnlineStatusContext = createContext()
@@ -24,6 +26,7 @@ const OnlineStatusProvider = ({ children, value }) => {
   const canUserOverrideOnlineStatus = isServerReachable && isNavigatorOnline
 
   const rePingApiRef = useRef()
+
   const stopPingingApi = useCallback(() => {
     setIsServerReachable(null)
     clearInterval(rePingApiRef.current)
@@ -40,6 +43,7 @@ const OnlineStatusProvider = ({ children, value }) => {
           setIsServerReachable(true)
         })
         .catch(() => {
+          toast.warn(language.offlineNotificationMessages.serverReachable)
           setIsServerReachable(false)
         })
     }
@@ -60,6 +64,10 @@ const OnlineStatusProvider = ({ children, value }) => {
   }, [isNavigatorOnline, stopPingingApi])
 
   const toggleUserOnlineStatusOverride = () => {
+    if (!hasUserTurnedAppOffline) {
+      toast.warn(language.offlineNotificationMessages.toggleOffline)
+    }
+
     setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
     localStorage.setItem(
       'has-user-turned-app-offline',
@@ -72,6 +80,7 @@ const OnlineStatusProvider = ({ children, value }) => {
       setIsNavigatorOnline(true)
     }
     const handleOffline = () => {
+      toast.warn(language.offlineNotificationMessages.navigatorOffline)
       setIsNavigatorOnline(false)
     }
     const cleanup = () => {
