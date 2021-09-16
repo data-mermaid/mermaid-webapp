@@ -16,12 +16,10 @@ const OnlineStatusProvider = ({ children, value }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
   const [isServerReachable, setIsServerReachable] = useState(true)
   const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
-    JSON.parse(localStorage.getItem('hasUserTurnedAppOffline')),
+    JSON.parse(localStorage.getItem('hasUserTurnedAppOffline')) || false,
   )
   const isAppOnline =
-    isNavigatorOnline &&
-    isServerReachable === true &&
-    hasUserTurnedAppOffline !== true
+    isNavigatorOnline && isServerReachable === true && !hasUserTurnedAppOffline
 
   const canUserOverrideOnlineStatus = isServerReachable && isNavigatorOnline
 
@@ -31,21 +29,21 @@ const OnlineStatusProvider = ({ children, value }) => {
     clearInterval(rePingApiRef.current)
   }, [])
 
-  const pingApi = useCallback(() => {
-    axios
-      .get(`${apiBaseUrl}/health/`, {
-        cache: false,
-        method: 'HEAD',
-      })
-      .then(() => {
-        setIsServerReachable(true)
-      })
-      .catch(() => {
-        setIsServerReachable(false)
-      })
-  }, [])
-
   const _setIsServerReachable = useEffect(() => {
+    const pingApi = () => {
+      axios
+        .get(`${apiBaseUrl}/health/`, {
+          cache: false,
+          method: 'HEAD',
+        })
+        .then(() => {
+          setIsServerReachable(true)
+        })
+        .catch(() => {
+          setIsServerReachable(false)
+        })
+    }
+
     if (!isNavigatorOnline) {
       stopPingingApi()
     }
@@ -59,17 +57,14 @@ const OnlineStatusProvider = ({ children, value }) => {
     return () => {
       stopPingingApi()
     }
-  }, [isNavigatorOnline, pingApi, stopPingingApi])
+  }, [isNavigatorOnline, stopPingingApi])
 
-  const toggleUserOnlineStatusOverride = (event) => {
-    const checkedValue = event.target.checked
-
-    setHasUserTurnedAppOffline(checkedValue)
-    if (checkedValue) {
-      localStorage.setItem('hasUserTurnedAppOffline', checkedValue)
-    } else {
-      localStorage.removeItem('hasUserTurnedAppOffline')
-    }
+  const toggleUserOnlineStatusOverride = () => {
+    setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
+    localStorage.setItem(
+      'has-user-turned-app-offline',
+      !hasUserTurnedAppOffline,
+    )
   }
 
   const _setIsNavigatorOnline = useEffect(() => {
