@@ -15,16 +15,15 @@ const OnlineStatusContext = createContext()
 const OnlineStatusProvider = ({ children, value }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
   const [isServerReachable, setIsServerReachable] = useState(true)
-  const [isOfflineToggleSwitchOn, setIsOfflineToggleSwitchOn] = useState(
-    JSON.parse(localStorage.getItem('offline-toggle')),
+  const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
+    JSON.parse(localStorage.getItem('has-user-turned-app-offline')),
   )
   const isAppOnline =
     isNavigatorOnline &&
     isServerReachable === true &&
-    isOfflineToggleSwitchOn !== true
-  const offlineToggleDisabledCondition =
-    isServerReachable === false ||
-    (isServerReachable === null && !isNavigatorOnline)
+    hasUserTurnedAppOffline !== true
+
+  const canUserOverrideOnlineStatus = isServerReachable && isNavigatorOnline
 
   const rePingApiRef = useRef()
   const stopPingingApi = useCallback(() => {
@@ -62,14 +61,14 @@ const OnlineStatusProvider = ({ children, value }) => {
     }
   }, [isNavigatorOnline, pingApi, stopPingingApi])
 
-  const handleChangeFromOfflineToggle = (event) => {
+  const toggleUserOnlineStatusOverride = (event) => {
     const checkedValue = event.target.checked
 
-    setIsOfflineToggleSwitchOn(checkedValue)
+    setHasUserTurnedAppOffline(checkedValue)
     if (checkedValue) {
-      localStorage.setItem('offline-toggle', checkedValue)
+      localStorage.setItem('has-user-turned-app-offline', checkedValue)
     } else {
-      localStorage.removeItem('offline-toggle')
+      localStorage.removeItem('has-user-turned-app-offline')
     }
   }
 
@@ -96,8 +95,8 @@ const OnlineStatusProvider = ({ children, value }) => {
     <OnlineStatusContext.Provider
       value={{
         isAppOnline,
-        offlineToggleDisabledCondition,
-        handleChangeFromOfflineToggle,
+        canUserOverrideOnlineStatus,
+        toggleUserOnlineStatusOverride,
         ...value,
       }}
     >
