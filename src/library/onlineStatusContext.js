@@ -16,7 +16,7 @@ const OnlineStatusProvider = ({ children, value }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
   const [isServerReachable, setIsServerReachable] = useState(true)
   const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
-    JSON.parse(localStorage.getItem('has-user-turned-app-offline')),
+    JSON.parse(localStorage.getItem('hasUserTurnedAppOffline')),
   )
   const isAppOnline =
     isNavigatorOnline &&
@@ -66,9 +66,9 @@ const OnlineStatusProvider = ({ children, value }) => {
 
     setHasUserTurnedAppOffline(checkedValue)
     if (checkedValue) {
-      localStorage.setItem('has-user-turned-app-offline', checkedValue)
+      localStorage.setItem('hasUserTurnedAppOffline', checkedValue)
     } else {
-      localStorage.removeItem('has-user-turned-app-offline')
+      localStorage.removeItem('hasUserTurnedAppOffline')
     }
   }
 
