@@ -3,10 +3,7 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 import {
   screen,
-  within,
-  renderAuthenticatedOffline,
   renderAuthenticatedOnline,
-  waitForElementToBeRemoved,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
@@ -44,7 +41,7 @@ describe('Online', () => {
     expect(screen.getByText('Validate', { selector: 'button' })).toBeEnabled()
   })
 
-  test('Edit Fishbelt - Validate records', async () => {
+  test('Edit Fishbelt - Validate button clicked -> send record to validate api endpoint -> Record is failed to validate, and ready to validate again.', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -56,6 +53,10 @@ describe('Online', () => {
 
     userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
 
+    // there should be an insert on hitting validate endpoint here, and supposed to fail.
+
     await screen.findByText('Validating', { selector: 'button' })
+
+    await screen.findByText('Validate', { selector: 'button' })
   })
 })
