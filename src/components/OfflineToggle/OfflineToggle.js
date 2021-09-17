@@ -45,10 +45,10 @@ const OfflineToggle = () => {
   } = useOnlineStatus()
 
   return (
-    <ToggleWrapper>
+    <ToggleWrapper >
       <Toggle
         id="offline-toggle-switch"
-        aria-label="offline-toggle-switch"
+        aria-label="offline-toggle-switch-control"
         onChange={toggleUserOnlineStatusOverride}
         checked={!isAppOnline}
         icons={false}
