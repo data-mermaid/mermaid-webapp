@@ -21,26 +21,27 @@ import { ContentPageLayout } from '../../../Layout'
 import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { getFishBinLabel } from './fishBeltBins'
+import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
+import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
 import { H2 } from '../../../generic/text'
 import { IconSave, IconCheck, IconUpload } from '../../../icons'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
-import RecordFormTitle from '../../../RecordFormTitle'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
 import FishBeltTransectInputs from './FishBeltTransectInputs'
+import IdNotFound from '../../IdNotFound/IdNotFound'
 import language from '../../../../language'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 import ObserversInput from '../../../ObserversInput'
 import OfflineHide from '../../../generic/OfflineHide'
+import RecordFormTitle from '../../../RecordFormTitle'
 import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
-import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
-import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -75,6 +76,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
+  const [idNotAssociatedWithData, setIdNotAssociatedWithData] = useState(false)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
@@ -149,6 +151,13 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             collectRecordResponse,
           ]) => {
             if (isMounted.current) {
+              if (!isNewRecord && !collectRecordResponse) {
+                setIdNotAssociatedWithData(recordId)
+              }
+              if (!isNewRecord && !projectProfilesResponse.length) {
+                // if there is both no data for the recordId and the projectId, show error message for no info for projectId
+                setIdNotAssociatedWithData(projectId)
+              }
               const updateFishNameConstants = getFishNameConstants({
                 species,
                 genera,
@@ -355,7 +364,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }, [formik.dirty, areObservationsInputsDirty])
 
-  return (
+  return idNotAssociatedWithData ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdNotFound id={idNotAssociatedWithData} />}
+    />
+  ) : (
     <>
       <ContentPageLayout
         isPageContentLoading={isLoading}
