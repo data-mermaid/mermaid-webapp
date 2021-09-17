@@ -59,7 +59,7 @@ const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
               <LoadingIndicator aria-label="project pages loading indicator" />
             ) : (
               <>
-                <ContentToolbar>{toolbar}</ContentToolbar>
+                {toolbar && <ContentToolbar>{toolbar}</ContentToolbar>}
                 <Content>{content}</Content>
               </>
             )}
@@ -73,11 +73,12 @@ const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
 ContentPageLayout.propTypes = {
   content: PropTypes.node.isRequired,
   isPageContentLoading: PropTypes.bool,
-  toolbar: PropTypes.node.isRequired,
+  toolbar: PropTypes.node,
 }
 
 ContentPageLayout.defaultProps = {
   isPageContentLoading: false,
+  toolbar: undefined,
 }
 
 export default ContentPageLayout
