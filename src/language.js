@@ -38,8 +38,10 @@ const error = {
     'Management Regime record data is currently unavailable. Please try again',
   managementRegimeRecordsUnavailable:
     'Management Regime records data is currently unavailable. Please try again',
-  getIdNotFoundDetails: (id) =>
-    `Details: information associated with the id, ${id}, cannot be found.`,
+  getIdsNotFoundDetails: (id) =>
+    id.length > 1
+      ? `Details: information associated with one or more of the following ids cannot be found:  ${id}`
+      : `Details: information associated with the id, ${id}, cannot be found.`,
   getProjectTurnOnOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>

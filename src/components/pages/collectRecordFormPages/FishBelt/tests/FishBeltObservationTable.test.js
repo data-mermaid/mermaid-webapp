@@ -236,7 +236,7 @@ test('Fishbelt observations hide and show fish name reference link appropriately
     {
       isSyncInProgressOverride: true,
       dexieInstance,
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
+      initialEntries: ['/projects/5/collecting/fishbelt'],
     },
   )
 
