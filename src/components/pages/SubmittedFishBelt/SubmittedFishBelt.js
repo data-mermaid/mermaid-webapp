@@ -10,6 +10,7 @@ import { IconPen } from '../../icons'
 import { RowSpaceBetween } from '../../generic/positioning'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import RecordFormTitle from '../../RecordFormTitle'
@@ -21,6 +22,9 @@ const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState(
+    false,
+  )
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
@@ -81,13 +85,27 @@ const SubmittedFishBelt = () => {
             }
           },
         )
-        .catch(() => {
+        .catch((error) => {
+          const errorStatus = error.response?.status
+
+          if (
+            (errorStatus === 404 || errorStatus === 400) &&
+            isMounted.current
+          ) {
+            setIdsNotAssociatedWithData([projectId, recordId])
+            setIsLoading(false)
+          }
           toast.error(language.error.submittedRecordUnavailable)
         })
     }
   }, [databaseSwitchboardInstance, isMounted, recordId, projectId, isAppOnline])
 
-  return (
+  return idsNotAssociatedWithData ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
       content={
