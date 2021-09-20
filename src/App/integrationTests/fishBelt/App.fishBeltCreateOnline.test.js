@@ -4,16 +4,15 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   within,
-  renderAuthenticatedOffline,
+  renderAuthenticatedOnline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
-import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 const saveFishbeltRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
   userEvent.selectOptions(screen.getByLabelText('Management'), '2')
-  userEvent.type(screen.getByLabelText('Depth'), '10')
+  userEvent.type(screen.getByLabelText('Depth'), '10000')
   userEvent.type(screen.getByLabelText('Sample Date'), '2021-04-21')
   userEvent.type(screen.getByLabelText('Sample Time'), '12:34')
 
@@ -34,16 +33,14 @@ const saveFishbeltRecord = async () => {
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
 }
 
-describe('Offline', () => {
+describe('Online', () => {
   test('New fishbelt save success shows toast, and navigates to edit fishbelt page for new record', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-
-    renderAuthenticatedOffline(
+    renderAuthenticatedOnline(
       <App dexieInstance={dexieInstance} />,
       {
-        initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
       dexieInstance,
     )
@@ -59,7 +56,7 @@ describe('Offline', () => {
     expect(screen.getByDisplayValue('Site A'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes B'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(10)
+    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
@@ -74,45 +71,45 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
   test('New fishbelt save success show new record in collecting table', async () => {
-    renderAuthenticatedOffline(
-      <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+    const dexieInstance = getMockDexieInstanceAllSuccess()
+
+    renderAuthenticatedOnline(
+      <App dexieInstance={dexieInstance} />,
       {
-        initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
+      dexieInstance,
     )
 
     await saveFishbeltRecord()
 
     expect(await screen.findByText('Collect record saved.'))
 
-    const sideNav = screen.getByTestId('content-page-side-nav')
+    const sideNav = await screen.findByTestId('content-page-side-nav')
 
     userEvent.click(within(sideNav).getByText('Collecting'))
 
-    const tableRows = await screen.findAllByRole('row', { hidden: true })
-    const collectRecordRow = tableRows[1]
+    // show all the records
+    userEvent.selectOptions(
+      await screen.findByTestId('page-size-selector'),
+      '100',
+    )
+    const table = await screen.findByRole('table')
 
-    // 2 here because the header row + the 1 collect record we just created
-    expect(tableRows).toHaveLength(2)
-    expect(within(collectRecordRow).getByText('Fish Belt'))
-    expect(within(collectRecordRow).getByText('Site A'))
-    expect(within(collectRecordRow).getByText('Management Regimes B'))
-    // sample unit #
-    expect(within(collectRecordRow).getByText('56 some label'))
-    // size
-    expect(within(collectRecordRow).getByText('2m x 10m'))
-    // depth
-    expect(within(collectRecordRow).getByText('10'))
-    expect(within(collectRecordRow).getByText('April 21, 2021'))
+    const tableRows = await screen.findAllByRole('row')
+
+    // 13 here because the header row + the 11 mock records + the one we just created
+    expect(tableRows).toHaveLength(13)
+
+    // expect unique depth as proxy for new fishbelt
+    expect(await within(table).findByText('10000'))
   })
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-
     dexieInstance.collect_records.put = () => Promise.reject()
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+    renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
       dexieInstance,
     })
 
@@ -135,7 +132,7 @@ describe('Offline', () => {
     expect(screen.getByDisplayValue('Site A'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes B'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(10)
+    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)

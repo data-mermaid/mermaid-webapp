@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components/macro'
 import { IconClose } from '../../icons'
 import theme from '../../../theme'
@@ -17,7 +17,7 @@ const StyledDialogOverlay = styled('div')`
   display: grid;
   place-items: center;
   grid-template-columns: 1fr;
-  z-index: 10001;
+  z-index: 103;
 `
 const StyledDialog = styled('div')`
   padding: 0;
@@ -76,6 +76,18 @@ const RightFooter = styled('div')`
 `
 
 const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent }) => {
+  const _closeModalWithEscapeKey = useEffect(() => {
+    const close = (event) => {
+      if (event.code === 'Escape') {
+        onDismiss()
+      }
+    }
+
+    window.addEventListener('keydown', close)
+
+    return () => window.removeEventListener('keydown', close)
+  }, [onDismiss])
+
   return (
     isOpen && (
       <StyledDialogOverlay>

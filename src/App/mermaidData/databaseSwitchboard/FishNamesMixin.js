@@ -1,5 +1,4 @@
 import { createUuid } from '../../../library/createUuid'
-import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const FishNameMixin = (Base) =>
   class extends Base {
@@ -41,21 +40,37 @@ const FishNameMixin = (Base) =>
         display_name: proposedDisplayName,
         name: speciesName,
         genus: genusId,
+        uiState_pushToApi: true,
       }
 
-      return this._dexieInstance.fish_species
-        .put(newFishObject)
-        .then(() => newFishObject)
+      if (this._isOnlineAuthenticatedAndReady) {
+        const _protectAgainstNetworkStutter = await this._dexieInstance.fish_species.put(
+          newFishObject,
+        )
+
+        return this._apiSyncInstance.pushThenPullSpecies().then((response) => {
+          const newFishSpeciesFromApi = response.data.fish_species.updates[0]
+
+          return newFishSpeciesFromApi
+        })
+      }
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexieInstance.fish_species
+          .put(newFishObject)
+          .then(() => newFishObject)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getFishGenera = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.fish_genera)
+        ? this._dexieInstance.fish_genera.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
     getFishFamilies = () =>
       this._isAuthenticatedAndReady
-        ? Promise.resolve(mockMermaidData.fish_families)
+        ? this._dexieInstance.fish_families.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
   }
 

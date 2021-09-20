@@ -2,8 +2,10 @@ import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import mockMermaidData from './mockMermaidData'
 
+const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+
 const mockMermaidApiAllSuccessful = setupServer(
-  rest.get(`${process.env.REACT_APP_MERMAID_API}/me`, (req, res, ctx) => {
+  rest.get(`${apiBaseUrl}/me`, (req, res, ctx) => {
     return res(
       ctx.json({
         id: 'fake-id',
@@ -13,12 +15,14 @@ const mockMermaidApiAllSuccessful = setupServer(
       }),
     )
   }),
-  rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
+  rest.get(`${apiBaseUrl}/health`, (req, res, ctx) => {
+    return res(ctx.status(200))
+  }),
+  rest.post(`${apiBaseUrl}/push/`, (req, res, ctx) => {
     const collectRecordsWithStatusCodes = req.body.collect_records.map(
       (record) => ({
-        ...record,
+        data: { ...record, _last_revision_num: 1000 },
         status_code: 200,
-        _last_revision_num: 1000,
       }),
     )
 
@@ -27,7 +31,7 @@ const mockMermaidApiAllSuccessful = setupServer(
     return res(ctx.json(response))
   }),
 
-  rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
+  rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
     const response = {
       benthic_attributes: { updates: mockMermaidData.benthic_attributes },
       choices: { updates: mockMermaidData.choices },

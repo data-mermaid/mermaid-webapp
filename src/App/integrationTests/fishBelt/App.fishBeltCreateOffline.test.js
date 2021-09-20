@@ -1,0 +1,157 @@
+import '@testing-library/jest-dom/extend-expect'
+import React from 'react'
+import userEvent from '@testing-library/user-event'
+import {
+  screen,
+  within,
+  renderAuthenticatedOffline,
+} from '../../../testUtilities/testingLibraryWithHelpers'
+import App from '../../App'
+import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+
+const saveFishbeltRecord = async () => {
+  userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
+  userEvent.selectOptions(screen.getByLabelText('Management'), '2')
+  userEvent.type(screen.getByLabelText('Depth'), '10000')
+  userEvent.type(screen.getByLabelText('Sample Date'), '2021-04-21')
+  userEvent.type(screen.getByLabelText('Sample Time'), '12:34')
+
+  userEvent.type(screen.getByLabelText('Transect Number'), '56')
+  userEvent.type(screen.getByLabelText('Label'), 'some label')
+  userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
+  // user clicks Width radio value 1
+  userEvent.click(screen.getByLabelText('10m'))
+
+  // user clicks on Fish Size Bin radio value 1
+  userEvent.click(screen.getByLabelText('1'))
+
+  // user clicks on Reef Slope radio value flat
+  userEvent.click(screen.getByLabelText('flat'))
+
+  userEvent.type(screen.getByLabelText('Notes'), 'some notes')
+
+  userEvent.click(screen.getByText('Save', { selector: 'button' }))
+}
+
+describe('Offline', () => {
+  test('New fishbelt save success shows toast, and navigates to edit fishbelt page for new record', async () => {
+    const dexieInstance = getMockDexieInstanceAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+    renderAuthenticatedOffline(
+      <App dexieInstance={dexieInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
+      },
+      dexieInstance,
+    )
+
+    await saveFishbeltRecord()
+
+    expect(await screen.findByText('Collect record saved.'))
+
+    // ensure the new form is now the edit form
+    expect(await screen.findByTestId('edit-collect-record-form-title'))
+
+    // Site select
+    expect(screen.getByDisplayValue('Site A'))
+    // Management select
+    expect(screen.getByDisplayValue('Management Regimes B'))
+    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
+    expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
+    expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
+    expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
+    expect(screen.getByLabelText('Label')).toHaveValue('some label')
+    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
+    // width radio checked on 1
+    expect(screen.getByLabelText('10m')).toBeChecked()
+    // fish size bin radio checked on 1
+    expect(screen.getByLabelText('1')).toBeChecked()
+    // reef slope radio checked on flat
+    expect(screen.getByLabelText('flat')).toBeChecked()
+    expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
+  })
+  test('New fishbelt save success show new record in collecting table', async () => {
+    const dexieInstance = getMockDexieInstanceAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+    renderAuthenticatedOffline(
+      <App dexieInstance={dexieInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
+      },
+      dexieInstance,
+    )
+
+    await saveFishbeltRecord()
+
+    expect(await screen.findByText('Collect record saved.'))
+
+    const sideNav = await screen.findByTestId('content-page-side-nav')
+
+    userEvent.click(within(sideNav).getByText('Collecting'))
+
+    // show all the records
+    userEvent.selectOptions(
+      await screen.findByTestId('page-size-selector'),
+      '100',
+    )
+    const table = await screen.findByRole('table')
+
+    const tableRows = await screen.findAllByRole('row')
+
+    // 13 here because the header row + the 11 mock records + the one we just created
+    expect(tableRows).toHaveLength(13)
+
+    // expect unique depth as proxy for new fishbelt
+    expect(await within(table).findByText('10000'))
+  })
+  test('New fishbelt save failure shows toast message with edits persisting', async () => {
+    const dexieInstance = getMockDexieInstanceAllSuccess()
+
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+    dexieInstance.collect_records.put = () => Promise.reject()
+    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
+      dexieInstance,
+    })
+
+    await saveFishbeltRecord()
+
+    expect(
+      await screen.findByText(
+        'Something went wrong. The collect record has not been saved.',
+      ),
+    )
+
+    // ensure the were not in edit mode, but new fish belt mode
+    expect(
+      screen.getByText('Fish Belt', {
+        selector: 'h2',
+      }),
+    )
+
+    // Site select
+    expect(screen.getByDisplayValue('Site A'))
+    // Management select
+    expect(screen.getByDisplayValue('Management Regimes B'))
+    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
+    expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
+    expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
+    expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
+    expect(screen.getByLabelText('Label')).toHaveValue('some label')
+    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
+    // width radio checked on 1
+    expect(screen.getByLabelText('10m')).toBeChecked()
+    // fish size bin radio checked on 1
+    expect(screen.getByLabelText('1')).toBeChecked()
+    // reef slope radio checked on flat value
+    expect(screen.getByLabelText('flat')).toBeChecked()
+
+    expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
+  })
+})

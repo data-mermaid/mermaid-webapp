@@ -5,15 +5,23 @@ import React from 'react'
 import {
   renderAuthenticatedOnline,
   screen,
+  waitForElementToBeRemoved,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 
 test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish Belt page.', async () => {
-  renderAuthenticatedOnline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    { initialEntries: ['/projects/fakewhatever/collecting'] },
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/collecting'],
+    dexieInstance,
+  })
+
+  await screen.findByLabelText('project pages loading indicator')
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('project pages loading indicator'),
   )
 
   userEvent.click(

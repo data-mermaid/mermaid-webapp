@@ -135,6 +135,8 @@ export const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.xsmall};
   width: 100%;
   display: inline-block;
+  color: ${(props) =>
+    props.disabled ? theme.color.primaryDisabledColor : theme.color.textColor};
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
     cursor: pointer;

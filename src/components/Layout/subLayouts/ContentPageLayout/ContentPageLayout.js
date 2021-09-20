@@ -35,7 +35,7 @@ const ContentToolbar = styled('div')`
   border-bottom: solid ${theme.spacing.borderMedium}
     ${theme.color.backgroundColor};
   margin-bottom: 0;
-  z-index: 3;
+  z-index: 100;
 `
 const Content = styled('div')`
   ${contentStyles};
@@ -43,15 +43,12 @@ const Content = styled('div')`
 `
 
 const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
-  // I don't see the point of passing pageTitle to every components using this layout, leave as constant for now.
-  const pageTitle = 'Project Name Placeholder'
-
   const { isSyncInProgress } = useSyncStatus()
 
   return (
     <>
       <MainContentPageLayout>
-        <ProjectName pageTitle={pageTitle} />
+        <ProjectName />
 
         <NavAndContentLayout>
           <Column>
@@ -62,7 +59,7 @@ const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
               <LoadingIndicator aria-label="project pages loading indicator" />
             ) : (
               <>
-                <ContentToolbar>{toolbar}</ContentToolbar>
+                {toolbar && <ContentToolbar>{toolbar}</ContentToolbar>}
                 <Content>{content}</Content>
               </>
             )}
@@ -76,11 +73,12 @@ const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
 ContentPageLayout.propTypes = {
   content: PropTypes.node.isRequired,
   isPageContentLoading: PropTypes.bool,
-  toolbar: PropTypes.node.isRequired,
+  toolbar: PropTypes.node,
 }
 
 ContentPageLayout.defaultProps = {
   isPageContentLoading: false,
+  toolbar: undefined,
 }
 
 export default ContentPageLayout

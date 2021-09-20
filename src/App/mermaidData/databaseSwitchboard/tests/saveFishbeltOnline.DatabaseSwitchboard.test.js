@@ -150,7 +150,7 @@ test('saveFishBelt online returns a rejected promise if the status code from the
 
   /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
     We need to access indexedDb directly because we are in online mode and
-    the db switchboard's getFishBelt would try to hit the real or mocked API
+    the db switchboard's getCollectRecord would try to hit the real or mocked API
     which is boyond the scope of the test.
      */
   expect(await dbInstance.dexieInstance.collect_records.get('foo'))
@@ -178,9 +178,8 @@ test('saveFishBelt online returns saved record with protocol info automatically 
       }
       const collectRecordsWithStatusCodes = req.body.collect_records.map(
         (record) => ({
-          ...record,
+          data: { ...record, _last_revision_num: 1000 },
           status_code: 200,
-          _last_revision_num: 1000,
         }),
       )
 
@@ -258,7 +257,7 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
 
   /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
       We need to access indexedDb directly because we are in online mode and
-      the db switchboard's getFishBelt would try to hit the real or mocked API
+      the db switchboard's getCollectRecord would try to hit the real or mocked API
       which is boyond the scope of the test.
      */
   const savedFishBelt = await dbInstance.dexieInstance.collect_records.get(
@@ -293,9 +292,8 @@ test('saveFishBelt online returns saved record including id, project, profile, i
     rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
       const collectRecordsWithStatusCodes = req.body.collect_records.map(
         (record) => ({
-          ...record,
+          data: { ...record, _last_revision_num: 1000 },
           status_code: 200,
-          _last_revision_num: 1000,
         }),
       )
 

@@ -18,8 +18,8 @@ const CollectRecordsMixin = (Base) =>
       warning: 'Warnings',
     }
 
-    #getIsRecordStatusCodeSuccessful = (recordFromServer) => {
-      const statusCode = recordFromServer.status_code
+    #getIsRecordStatusCodeSuccessful = (recordResponseFromServer) => {
+      const statusCode = recordResponseFromServer.status_code
 
       return statusCode >= 200 && statusCode < 300
     }
@@ -37,6 +37,7 @@ const CollectRecordsMixin = (Base) =>
         data: { ...record.data, protocol: 'fishbelt' },
         project: projectIdToSubmit,
         profile: profileIdToSubmit,
+        uiState_pushToApi: true,
       }
     }
 
@@ -109,7 +110,7 @@ const CollectRecordsMixin = (Base) =>
         return noSizeLabel
       }
 
-      const length = record.data.benthic_transect.len_surveyed
+      const length = record.data.benthic_transect?.len_surveyed
 
       return length === undefined ? noSizeLabel : `${length}m`
     }
@@ -143,18 +144,21 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((response) => {
-            const [recordReturnedFromApiPush] = response.data.collect_records
+            const [recordResponseFromApiPush] = response.data.collect_records
             const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
-              recordReturnedFromApiPush,
+              recordResponseFromApiPush,
             )
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pullEverythingButChoices(projectId)
+                .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
-                  return recordReturnedFromApiPush
+                  const recordReturnedFromServer =
+                    recordResponseFromApiPush.data
+
+                  return recordReturnedFromServer
                 })
             }
 
@@ -169,21 +173,6 @@ const CollectRecordsMixin = (Base) =>
         return this._dexieInstance.collect_records
           .put(recordToSubmit)
           .then(() => recordToSubmit)
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    getFishBelt = (id) => {
-      if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
-      }
-      if (this._isOnlineAuthenticatedAndReady) {
-        // upcoming work
-      }
-
-      if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.get(id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -236,7 +225,7 @@ const CollectRecordsMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pullEverythingButChoices(projectId)
+                .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_apiPullResponse) => apiPushResponse)
             }
 
@@ -269,27 +258,41 @@ const CollectRecordsMixin = (Base) =>
         Promise.reject(this._operationMissingIdParameterError)
       }
 
-      return this._isAuthenticatedAndReady
-        ? this.getCollectRecords().then((records) =>
-            records.find((record) => record.id === id),
-          )
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+      if (!this._isAuthenticatedAndReady) {
+        Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
+      return this._dexieInstance.collect_records.get(id)
     }
 
-    getCollectRecords = () => {
+    getCollectRecordsWithoutOfflineDeleted = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
       if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.toArray()
+        return this._dexieInstance.collect_records
+          .toArray()
+          .then((records) =>
+            records.filter(
+              (record) => record.project === projectId && !record._deleted,
+            ),
+          )
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecordsForUIDisplay = () => {
+    getCollectRecordsForUIDisplay = (projectId) => {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
       return this._isAuthenticatedAndReady
         ? Promise.all([
-            this.getCollectRecords(),
-            this.getSites(),
-            this.getManagementRegimes(),
+            this.getCollectRecordsWithoutOfflineDeleted(projectId),
+            this.getSitesWithoutOfflineDeleted(projectId),
+            this.getManagementRegimesWithoutOfflineDeleted(projectId),
             this.getChoices(),
           ]).then(([collectRecords, sites, managementRegimes, choices]) => {
             return collectRecords.map((record) => ({

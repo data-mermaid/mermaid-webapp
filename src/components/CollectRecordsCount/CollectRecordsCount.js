@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -7,6 +8,7 @@ import language from '../../language'
 import theme from '../../theme'
 import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../library/useIsMounted'
 
 const CollectRecordsCountWrapper = styled.strong`
   background: ${theme.color.calloutColor};
@@ -25,19 +27,18 @@ const CollectRecordsCountWrapper = styled.strong`
 `
 
 const CollectRecordsCount = () => {
+  const [collectRecordsCount, setCollectRecordsCount] = useState(0)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
-
-  const [collectRecordsCount, setCollectRecordsCount] = useState(0)
+  const { projectId } = useParams()
+  const isMounted = useIsMounted()
 
   const _getCollectRecordCount = useEffect(() => {
-    let isMounted = true
-
-    if (!isSyncInProgress) {
+    if (!isSyncInProgress && databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getCollectRecords()
+        .getCollectRecordsWithoutOfflineDeleted(projectId)
         .then((collectRecords) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setCollectRecordsCount(collectRecords.length)
           }
         })
@@ -45,11 +46,7 @@ const CollectRecordsCount = () => {
           toast.warn(language.error.collectRecordsUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, isSyncInProgress])
+  }, [databaseSwitchboardInstance, isSyncInProgress, projectId, isMounted])
 
   return (
     !!collectRecordsCount && (

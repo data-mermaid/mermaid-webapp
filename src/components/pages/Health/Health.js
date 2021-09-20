@@ -5,9 +5,9 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const Health = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
 
-  const content = isOnline ? (
+  const content = isAppOnline ? (
     <>Project Health Placeholder</>
   ) : (
     <PageUnavailableOffline />

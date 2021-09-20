@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -30,32 +30,32 @@ import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../library/useIsMounted'
 
 const Sites = () => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-
-  const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const isMounted = useIsMounted()
+  const { projectId } = useParams()
 
   const _getSiteRecords = useEffect(() => {
-    let isMounted = true
-
-    databaseSwitchboardInstance
-      .getSiteRecordsForUIDisplay()
-      .then((records) => {
-        if (isMounted) {
-          setSiteRecordsForUiDisplay(records)
-          setIsLoading(false)
-        }
-      })
-      .catch(() => {
-        toast.error(language.error.collectRecordsUnavailable)
-      })
-
-    return () => {
-      isMounted = false
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+      databaseSwitchboardInstance
+        .getSiteRecordsForUIDisplay(projectId)
+        .then((records) => {
+          if (isMounted.current) {
+            setSiteRecordsForUiDisplay(records)
+            setIsLoading(false)
+          }
+        })
+        .catch(() => {
+          toast.error(language.error.siteRecordsUnavailable)
+        })
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
 

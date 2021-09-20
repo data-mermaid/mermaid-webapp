@@ -39,7 +39,7 @@ export const TooltipPopup = styled('span')`
   padding-top: calc(4rem - 15px);
   top: 4rem;
   white-space: normal;
-  z-index: 1000;
+  z-index: 100;
 `
 
 export const TooltipWithText = ({ text, tooltipText, id, ...restOfProps }) => {

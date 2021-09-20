@@ -20,7 +20,11 @@ const TdKey = styled(Td)`
 const TableRowItem = ({ title, options, value }) => (
   <Tr>
     <TdKey>{title}</TdKey>
-    {options ? <Td>{getObjectById(options, value).name}</Td> : <Td>{value}</Td>}
+    {options ? (
+      <Td>{getObjectById(options, value)?.name}</Td>
+    ) : (
+      <Td>{value}</Td>
+    )}
   </Tr>
 )
 

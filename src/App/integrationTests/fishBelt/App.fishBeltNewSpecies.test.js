@@ -1,8 +1,10 @@
 import '@testing-library/jest-dom/extend-expect'
+import { rest } from 'msw'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
 import {
+  mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
   waitForElementToBeRemoved,
@@ -21,6 +23,27 @@ test('Fishbelt observations add new species - filling out new species form adds 
 
   // loading indicator is weird in integration tests, so we wait for the page title
   await screen.findByTestId('edit-collect-record-form-title')
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/pull/`,
+
+      (req, res, ctx) => {
+        return res(
+          ctx.json({
+            fish_species: {
+              updates: [
+                {
+                  id: 'whatever',
+                  display_name: 'Nebrius ridens',
+                },
+              ],
+            },
+          }),
+        )
+      },
+    ),
+  )
 
   const fishbeltForm = screen.getByRole('form')
   const observationsTable = (
@@ -99,11 +122,12 @@ test('Fishbelt observations add new species - filling out new species form adds 
   expect(proposedSpeciesSavedToast).toBeInTheDocument()
 
   const updatedSpeciesInOfflineStorage = await dexieInstance.fish_species.toArray()
-  const nameOfLastSpeciesInOfflineStorage =
-    updatedSpeciesInOfflineStorage[updatedSpeciesInOfflineStorage.length - 1]
-      .display_name
 
-  expect(nameOfLastSpeciesInOfflineStorage).toEqual('Nebrius ridens')
+  const newSpecies = updatedSpeciesInOfflineStorage.find(
+    (species) => species.display_name === 'Nebrius ridens',
+  )
+
+  expect(newSpecies).toBeTruthy()
 })
 
 test('Fishbelt observations add new species - proposing new species that already exists results in no added species, and a toast message warning.', async () => {

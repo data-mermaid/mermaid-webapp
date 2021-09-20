@@ -30,7 +30,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -82,7 +82,7 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
       <FishBelt currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -134,7 +134,7 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -192,7 +192,7 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -230,7 +230,7 @@ test('FishBelt component in EDIT mode - button group shows only save button when
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -268,7 +268,7 @@ test('Fishbelt observations: add row button adds a row', async () => {
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -299,7 +299,7 @@ test('Fishbelt observations: delete observation button deleted observation', asy
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -347,7 +347,7 @@ test('FishBelt component in EDIT mode - when change binsize = 10, fish size valu
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -386,7 +386,7 @@ test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size v
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },
@@ -425,7 +425,7 @@ test('FishBelt component in EDIT mode - when change binsize = 1, fish size value
       <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexieInstance,
       isSyncInProgressOverride: true,
     },

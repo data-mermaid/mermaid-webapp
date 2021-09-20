@@ -15,11 +15,11 @@ import Health from '../components/pages/Health'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 import SubmittedFishBelt from '../components/pages/SubmittedFishBelt/SubmittedFishBelt'
 
-export const useRoutes = ({ currentUser }) => {
+export const useRoutes = ({ currentUser, apiSyncInstance }) => {
   const routes = [
     {
       path: '/projects',
-      Component: Projects,
+      Component: () => <Projects apiSyncInstance={apiSyncInstance} />,
     },
     {
       path: '/projects/:projectId/health',

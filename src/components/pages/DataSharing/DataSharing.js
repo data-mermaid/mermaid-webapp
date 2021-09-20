@@ -25,6 +25,7 @@ import { IconInfo } from '../../icons'
 import theme from '../../../theme'
 import language from '../../../language'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
+import useIsMounted from '../../../library/useIsMounted'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -48,12 +49,13 @@ const CheckBoxLabel = styled.label`
   }
 `
 const DataSharing = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const isMounted = useIsMounted()
   const { projectId } = useParams()
 
   const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(
@@ -63,8 +65,6 @@ const DataSharing = () => {
   const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    let isMounted = true
-
     if (databaseSwitchboardInstance) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
@@ -73,7 +73,7 @@ const DataSharing = () => {
 
       Promise.all(promises)
         .then(([projectResponse, choicesResponse]) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setProjectBeingEdited(projectResponse)
             setDataPolicyOptions(
               getDataSharingOptions(choicesResponse.datapolicies),
@@ -82,15 +82,10 @@ const DataSharing = () => {
           }
         })
         .catch(() => {
-          // Will update language file when adding user workflow like save/delete site to page.
-          toast.error(`project error`)
+          toast.error(language.error.projectsUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, projectId])
+  }, [databaseSwitchboardInstance, projectId, isMounted])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -113,7 +108,7 @@ const DataSharing = () => {
     form.setFieldValue('data_policy_habitatcomplexity', updatedValue)
   }
 
-  const content = isOnline ? (
+  const content = isAppOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
         <>

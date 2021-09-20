@@ -1,41 +1,52 @@
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
-import { IconPen } from '../../icons'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { ContentPageLayout } from '../../Layout'
+
 import { ButtonSecondary } from '../../generic/buttons'
+import { ContentPageLayout } from '../../Layout'
+import { getFishNameConstants } from '../../../App/mermaidData/getFishNameConstants'
+import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
+import { IconPen } from '../../icons'
 import { RowSpaceBetween } from '../../generic/positioning'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import language from '../../../language'
+import PageUnavailableOffline from '../PageUnavailableOffline'
+import RecordFormTitle from '../../RecordFormTitle'
 import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
 import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
-import RecordFormTitle from '../../RecordFormTitle'
 import useIsMounted from '../../../library/useIsMounted'
-import language from '../../../language'
-import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
-import { getFishNameConstants } from '../../../App/mermaidData/getFishNameConstants'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
-  const [submittedRecord, setSubmittedRecord] = useState()
-  const [sites, setSites] = useState([])
-  const [managementRegimes, setManagementRegimes] = useState([])
-  const [fishNameOptions, setFishNameOptions] = useState([])
   const [fishNameConstants, setFishNameConstants] = useState([])
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { recordId } = useParams()
+  const [fishNameOptions, setFishNameOptions] = useState([])
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState(
+    false,
+  )
   const [isLoading, setIsLoading] = useState(true)
+  const [managementRegimes, setManagementRegimes] = useState([])
+  const [sites, setSites] = useState([])
+  const [submittedRecord, setSubmittedRecord] = useState()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
+  const { recordId, projectId } = useParams()
   const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance) {
+    if (isAppOnline && databaseSwitchboardInstance) {
       const promises = [
-        databaseSwitchboardInstance.getSites(),
-        databaseSwitchboardInstance.getManagementRegimes(),
+        databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(
+          projectId,
+        ),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
         databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(
+          projectId,
           recordId,
         ),
       ]
@@ -74,45 +85,65 @@ const SubmittedFishBelt = () => {
             }
           },
         )
-        .catch(() => {
-          toast.error(language.error.submittedRecordsUnavailable)
+        .catch((error) => {
+          const errorStatus = error.response?.status
+
+          if (
+            (errorStatus === 404 || errorStatus === 400) &&
+            isMounted.current
+          ) {
+            setIdsNotAssociatedWithData([projectId, recordId])
+            setIsLoading(false)
+          }
+          toast.error(language.error.submittedRecordUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, recordId])
+  }, [databaseSwitchboardInstance, isMounted, recordId, projectId, isAppOnline])
 
-  return (
+  return idsNotAssociatedWithData ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
+    <ContentPageLayout
+      isPageContentLoading={isAppOnline ? isLoading : false}
       content={
-        <>
-          <SubmittedFishBeltInfoTable
-            choices={choices}
-            sites={sites}
-            managementRegimes={managementRegimes}
-            submittedRecord={submittedRecord}
-          />
-          <SubmittedFishBeltObservationTable
-            choices={choices}
-            fishNameOptions={fishNameOptions}
-            fishNameConstants={fishNameConstants}
-            submittedRecord={submittedRecord}
-          />
-        </>
+        isAppOnline ? (
+          <>
+            <SubmittedFishBeltInfoTable
+              choices={choices}
+              sites={sites}
+              managementRegimes={managementRegimes}
+              submittedRecord={submittedRecord}
+            />
+            <SubmittedFishBeltObservationTable
+              choices={choices}
+              fishNameOptions={fishNameOptions}
+              fishNameConstants={fishNameConstants}
+              submittedRecord={submittedRecord}
+            />
+          </>
+        ) : (
+          <PageUnavailableOffline />
+        )
       }
       toolbar={
-        <>
-          <RecordFormTitle
-            submittedRecordOrCollectRecordDataProperty={submittedRecord}
-            sites={sites}
-          />
-          <RowSpaceBetween>
-            <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>{' '}
-            <ButtonSecondary>
-              <IconPen />
-              Edit Sample Unit - move to collect
-            </ButtonSecondary>
-          </RowSpaceBetween>
-        </>
+        isAppOnline && (
+          <>
+            <RecordFormTitle
+              submittedRecordOrCollectRecordDataProperty={submittedRecord}
+              sites={sites}
+            />
+            <RowSpaceBetween>
+              <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>{' '}
+              <ButtonSecondary>
+                <IconPen />
+                Edit Sample Unit - move to collect
+              </ButtonSecondary>
+            </RowSpaceBetween>
+          </>
+        )
       }
     />
   )

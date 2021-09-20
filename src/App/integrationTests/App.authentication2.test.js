@@ -36,7 +36,9 @@ test('App renders the initial screen as expected for an online but not authentic
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
-  expect(screen.queryByText('Projects')).not.toBeInTheDocument()
+  expect(
+    screen.queryByRole('heading', { name: 'Projects' }),
+  ).not.toBeInTheDocument()
 })
 
 test('App renders the initial screen as expected for an offline user who is not authenticated in an online environment', () => {
@@ -44,5 +46,7 @@ test('App renders the initial screen as expected for an offline user who is not 
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
   )
 
-  expect(screen.queryByText('Projects')).not.toBeInTheDocument()
+  expect(
+    screen.queryByRole('heading', { name: 'Projects' }),
+  ).not.toBeInTheDocument()
 })

@@ -17,7 +17,8 @@ import App from '../App'
 /**  this is a very imperative test suite in that its testing state (indexeddb),
  * but since sync is integral to the app, and since we don't have the
  * features fully consuming the synced state yet to test against,
- * we are making an exception
+ * we are making an exception. Testing is a push was part of the
+ * sync was skipped as it might be a convoluted test and not great ROI
  */
 beforeEach(() => {
   /** in order to test the different types of sync,
@@ -61,8 +62,9 @@ test('Sync: initial page load on non project page', async () => {
     dexieInstance,
   })
 
+  await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('projects list loading indicator'),
   )
 
   expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(
@@ -99,7 +101,7 @@ test('Sync: initial page load on project page', async () => {
 
   renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
     dexieInstance,
-    initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
+    initialEntries: ['/projects/5/collecting/fishbelt/'],
   })
 
   await screen.findByLabelText('project pages loading indicator')
@@ -146,8 +148,9 @@ test('Sync: initial page load already done, navigate to non project page', async
     dexieInstance,
   })
 
+  await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('loading indicator'),
+    screen.queryByLabelText('projects list loading indicator'),
   )
 
   /**
@@ -165,9 +168,9 @@ test('Sync: initial page load already done, navigate to non project page', async
   expect((await dexieInstance.project_profiles.toArray()).length).toEqual(0)
   expect((await dexieInstance.project_sites.toArray()).length).toEqual(0)
 
-  const firstProjectListed = screen.getAllByRole('listitem')[0]
+  const projectWithId5 = screen.getAllByRole('listitem')[4]
 
-  userEvent.click(firstProjectListed)
+  userEvent.click(projectWithId5)
 
   /**
    * api syncing can cause the loading indicator to initially be absent,
@@ -182,14 +185,10 @@ test('Sync: initial page load already done, navigate to non project page', async
 
   // this makes the act errors disappear.
   expect(
-    within(await screen.findByTestId('collect-record-count')).getByText(
-      mockMermaidData.collect_records.length,
-    ),
+    within(await screen.findByTestId('collect-record-count')).getByText('11'),
   )
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(
-    mockMermaidData.collect_records.length,
-  )
+  expect((await dexieInstance.collect_records.toArray()).length).toEqual(12)
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.length,
   )

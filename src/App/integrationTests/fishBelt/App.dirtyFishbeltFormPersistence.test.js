@@ -10,12 +10,12 @@ import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 
 test('Unsaved NEW fishbelt form edits clear when the user navigates away and back', async () => {
-  renderAuthenticatedOnline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/'],
-    },
-  )
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/'],
+    dexieInstance,
+  })
 
   const form = await screen.findByRole('form')
 
@@ -53,7 +53,7 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   renderAuthenticatedOnline(
     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
     {
-      initialEntries: ['/projects/fakewhatever/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
     },
   )
 

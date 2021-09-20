@@ -158,6 +158,7 @@ const UnderTableRow = styled(RowRight)`
 `
 
 const FishBeltObservationTable = ({
+  areObservationsInputsDirty,
   choices,
   collectRecord,
   fishBinSelected,
@@ -166,17 +167,23 @@ const FishBeltObservationTable = ({
   observationsReducer,
   openNewFishNameModal,
   persistUnsavedObservationsUtilities,
+  setAreObservationsInputsDirty,
   transectLengthSurveyed,
   widthId,
 }) => {
+  /** IMPORTANT! for other forms with observations,
+   *  instead of copying this logic that uses a reducer,
+   *  using formik for form state is strongly suggested
+   *  to reduce inconsistency in the way different parts
+   *  of the fishbelt form are handled.
+   *  Not using formik here was an oversight.*/
+
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const [
     haveApiObservationsBeenLoaded,
     setHaveApiObservationsBeenLoaded,
   ] = useState(false)
-  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(
-    false,
-  )
+
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const {
@@ -318,20 +325,23 @@ const FishBeltObservationTable = ({
 
     const rowNumber = index + 1
 
+    const sizeOrEmptyStringToAvoidInputValueErrors = size ?? ''
+    const countOrEmptyStringToAvoidInputValueErrors = count ?? ''
+
     const showNumericSizeInput =
       fishBinSelectedLabel?.toString() === '1' ||
       typeof fishBinSelectedLabel === 'undefined'
 
     const sizeSelect = !showNumericSizeInput && (
       <FishBeltObservationSizeSelect
-        onChange={(value) => {
+        onValueEntered={(value) => {
           handleUpdateSize(value, observationId)
         }}
         onKeyDown={(event) => {
           handleKeyDown({ event, index, observation })
         }}
         fishBinSelectedLabel={fishBinSelectedLabel}
-        value={size}
+        value={sizeOrEmptyStringToAvoidInputValueErrors}
         labelledBy="fish-size-label"
       />
     )
@@ -340,7 +350,7 @@ const FishBeltObservationTable = ({
       <InputNumberNoScrollWithUnit
         type="number"
         min="0"
-        value={size}
+        value={sizeOrEmptyStringToAvoidInputValueErrors}
         unit="cm"
         step="any"
         aria-labelledby="fish-size-label"
@@ -411,7 +421,7 @@ const FishBeltObservationTable = ({
           <InputNumberNoScroll
             type="number"
             min="0"
-            value={count}
+            value={countOrEmptyStringToAvoidInputValueErrors}
             step="any"
             aria-labelledby="fish-count-label"
             onChange={(event) => {
@@ -503,6 +513,7 @@ const FishBeltObservationTable = ({
 }
 
 FishBeltObservationTable.propTypes = {
+  areObservationsInputsDirty: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   fishBinSelected: PropTypes.string,
@@ -522,6 +533,7 @@ FishBeltObservationTable.propTypes = {
     clearPersistedUnsavedFormData: PropTypes.func,
     getPersistedUnsavedFormData: PropTypes.func,
   }).isRequired,
+  setAreObservationsInputsDirty: PropTypes.func.isRequired,
   transectLengthSurveyed: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,

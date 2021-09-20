@@ -23,6 +23,7 @@ import theme from '../../../theme'
 import language from '../../../language'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import { createUuid } from '../../../library/createUuid'
+import useIsMounted from '../../../library/useIsMounted'
 
 const SuggestNewOrganizationButton = styled(ButtonSecondary)`
   font-size: smaller;
@@ -94,7 +95,7 @@ const TooltipPopup = styled('span')`
   white-space: normal;
   text-align: start;
   line-height: ${theme.typography.lineHeight};
-  z-index: 1000;
+  z-index: 101;
   ${theme.typography.upperCase};
 `
 const InputAutocompleteWrapper = styled(InputRow)`
@@ -131,12 +132,13 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
 }
 
 const Admin = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [isLoading, setIsLoading] = useState(true)
+  const isMounted = useIsMounted()
   const { projectId } = useParams()
 
   const [
@@ -149,9 +151,11 @@ const Admin = () => {
     setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    let isMounted = true
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
 
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && projectId) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
@@ -159,22 +163,17 @@ const Admin = () => {
 
       Promise.all(promises)
         .then(([projectResponse, projectTagsResponse]) => {
-          if (isMounted) {
+          if (isMounted.current) {
             setProjectBeingEdited(projectResponse)
             setProjectTagOptions(getOptions(projectTagsResponse, false))
             setIsLoading(false)
           }
         })
         .catch(() => {
-          // Will update language file when adding user workflow like save/delete site to page.
-          toast.error(`project error`)
+          toast.error(language.error.projectsUnavailable)
         })
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [databaseSwitchboardInstance, projectId])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -198,7 +197,7 @@ const Admin = () => {
     </>
   )
 
-  const content = isOnline ? (
+  const content = isAppOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
         <>

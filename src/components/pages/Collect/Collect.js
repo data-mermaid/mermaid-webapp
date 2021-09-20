@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -34,33 +34,34 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../library/useIsMounted'
 
 const Collect = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { projectId } = useParams()
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState(
     [],
   )
   const [isLoading, setIsLoading] = useState(true)
+  const isMounted = useIsMounted()
 
   const _getCollectRecords = useEffect(() => {
-    let isMounted = true
-
-    databaseSwitchboardInstance
-      .getCollectRecordsForUIDisplay()
-      .then((records) => {
-        if (isMounted) {
-          setCollectRecordsForUiDisplay(records)
-          setIsLoading(false)
-        }
-      })
-      .catch(() => {
-        toast.error(language.error.collectRecordsUnavailable)
-      })
-
-    return () => {
-      isMounted = false
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+      databaseSwitchboardInstance
+        .getCollectRecordsForUIDisplay(projectId)
+        .then((records) => {
+          if (isMounted.current) {
+            setCollectRecordsForUiDisplay(records)
+            setIsLoading(false)
+          }
+        })
+        .catch(() => {
+          toast.error(language.error.collectRecordsUnavailable)
+        })
     }
-  }, [databaseSwitchboardInstance])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
 
