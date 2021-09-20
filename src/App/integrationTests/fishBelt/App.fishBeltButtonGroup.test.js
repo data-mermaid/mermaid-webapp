@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
+import { rest } from 'msw'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 import {
@@ -8,6 +9,9 @@ import {
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
+
+const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 describe('Online', () => {
   test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
@@ -23,7 +27,7 @@ describe('Online', () => {
     userEvent.clear(await screen.findByLabelText('Depth'))
     userEvent.type(screen.getByLabelText('Depth'), '45')
 
-    screen.getByText('Save', { selector: 'button' })
+    expect(screen.getByText('Save', { selector: 'button' }))
 
     expect(screen.getByText('Validate', { selector: 'button' })).toBeDisabled()
 
@@ -33,11 +37,11 @@ describe('Online', () => {
       }),
     )
 
-    await screen.findByText('Saving', { selector: 'button' })
+    expect(await screen.findByText('Saving', { selector: 'button' }))
 
     expect(await screen.findByText('Collect record saved.'))
 
-    await screen.findByText('Saved', { selector: 'button' })
+    expect(await screen.findByText('Saved', { selector: 'button' }))
     expect(screen.getByText('Validate', { selector: 'button' })).toBeEnabled()
   })
 
@@ -53,10 +57,23 @@ describe('Online', () => {
 
     userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
 
-    // there should be an insert on hitting validate endpoint here, and supposed to fail.
+    mockMermaidApiAllSuccessful.use(
+      rest.post(
+        `${apiBaseUrl}/projects/5/collecting/validate`,
+        (req, res, ctx) => {
+          const project = req.url.searchParams('projectId')
 
-    await screen.findByText('Validating', { selector: 'button' })
+          if (!project) {
+            return res.once(ctx.status(404))
+          }
 
-    await screen.findByText('Validate', { selector: 'button' })
+          return res(ctx.status(200))
+        },
+      ),
+    )
+
+    expect(await screen.findByText('Validating', { selector: 'button' }))
+
+    expect(await screen.findByText('Validate', { selector: 'button' }))
   })
 })
