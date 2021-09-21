@@ -49,7 +49,7 @@ const CheckBoxLabel = styled.label`
   }
 `
 const DataSharing = () => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
@@ -108,7 +108,7 @@ const DataSharing = () => {
     form.setFieldValue('data_policy_habitatcomplexity', updatedValue)
   }
 
-  const content = isOnline ? (
+  const content = isAppOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
         <>

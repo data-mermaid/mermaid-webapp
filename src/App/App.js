@@ -23,7 +23,7 @@ import useIsMounted from '../library/useIsMounted'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
   const {
     auth0Token,
     isMermaidAuthenticated,
@@ -36,7 +36,7 @@ function App({ dexieInstance }) {
     auth0Token,
     dexieInstance,
     isMounted,
-    isOnline,
+    isAppOnline,
   })
 
   const apiSyncInstance = useMemo(() => {
@@ -63,12 +63,12 @@ function App({ dexieInstance }) {
           dexieInstance,
           isMermaidAuthenticated,
           isOfflineStorageHydrated,
-          isOnline,
+          isAppOnline,
         })
   }, [
     auth0Token,
     isMermaidAuthenticated,
-    isOnline,
+    isAppOnline,
     dexieInstance,
     apiBaseUrl,
     apiSyncInstance,
@@ -80,7 +80,7 @@ function App({ dexieInstance }) {
     auth0Token,
     dexieInstance,
     isMermaidAuthenticated,
-    isOnline,
+    isAppOnline,
   })
   const { routes } = useRoutes({ currentUser, apiSyncInstance })
 

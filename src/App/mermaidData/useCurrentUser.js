@@ -8,7 +8,7 @@ export const useCurrentUser = ({
   auth0Token,
   dexieInstance,
   isMermaidAuthenticated,
-  isOnline,
+  isAppOnline,
 }) => {
   const [currentUser, setCurrentUser] = useState()
 
@@ -26,7 +26,7 @@ export const useCurrentUser = ({
         auth0Token,
         dexieInstance,
         isMermaidAuthenticated,
-        isOnline,
+        isAppOnline,
       })
         .then((user) => {
           if (isMounted && user) {
@@ -41,7 +41,13 @@ export const useCurrentUser = ({
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl, auth0Token, dexieInstance, isMermaidAuthenticated, isOnline])
+  }, [
+    apiBaseUrl,
+    auth0Token,
+    dexieInstance,
+    isMermaidAuthenticated,
+    isAppOnline,
+  ])
 
   return currentUser
 }
