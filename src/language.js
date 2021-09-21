@@ -17,13 +17,16 @@ const error = {
     'Something went wrong. The collect record has not been saved.',
   collectRecordDelete:
     'Something went wrong. The collect record has not been deleted.',
-  generaUnavailable:
-    'Fish genera data is currently unavailable. Please try again',
+  error: 'Error',
   fishSpeciesSave:
     'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
   fishSpeciesAlreadyExists:
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   formValidation: { required: 'This field is required' },
+  generic: 'Oooops. Something went wrong.',
+  generaUnavailable:
+    'Fish genera data is currently unavailable. Please try again',
+  idNotFoundUserAction: 'Please check the URL in your browser address bar.',
   submittedRecordUnavailable:
     'Submitted record data is currently unavailable. Please try again',
   submittedRecordsUnavailable:
@@ -36,6 +39,10 @@ const error = {
     'Management Regime record data is currently unavailable. Please try again',
   managementRegimeRecordsUnavailable:
     'Management Regime records data is currently unavailable. Please try again',
+  getIdsNotFoundDetails: (id) =>
+    id.length > 1
+      ? `Details: information associated with one or more of the following ids cannot be found:  ${id}`
+      : `Details: information associated with the id, ${id}, cannot be found.`,
   getProjectTurnOnOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>

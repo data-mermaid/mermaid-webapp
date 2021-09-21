@@ -4,7 +4,7 @@ import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
 const useAuthentication = ({ dexieInstance }) => {
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
   const [auth0Token, setAuth0Token] = useState()
 
@@ -27,11 +27,11 @@ const useAuthentication = ({ dexieInstance }) => {
 
   const _initializeAuthentication = useEffect(() => {
     let isMounted = true
-    const isOffline = !isOnline
+    const isOffline = !isAppOnline
     const hasPreviouslyAuthenticated =
       localStorage.getItem('hasAuth0Authenticated') === 'true'
     const isUserOnlineAndLoggedOut =
-      !isAuth0Authenticated && !isAuth0Loading && isOnline
+      !isAuth0Authenticated && !isAuth0Loading && isAppOnline
     const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading
     const isUserOfflineAndLoggedIn =
       !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
@@ -66,11 +66,11 @@ const useAuthentication = ({ dexieInstance }) => {
     getAuth0AccessTokenSilently,
     isAuth0Authenticated,
     isAuth0Loading,
-    isOnline,
+    isAppOnline,
   ])
 
   const logoutMermaid = () => {
-    if (isOnline) {
+    if (isAppOnline) {
       // this isnt necessary to make logout to work, but is here to make sure users.
       // cant see profile data from the last logged in user if they go searching in dev tools.
       // databaseSwitcboard isnt used because that would create circular dependencies (it depends on the output of this hook)
