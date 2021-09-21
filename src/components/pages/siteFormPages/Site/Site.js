@@ -3,43 +3,58 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
+import { ContentPageLayout } from '../../../Layout'
+import { getOptions } from '../../../../library/getOptions'
 import { getSiteInitialValues } from '../siteRecordFormInitialValues'
 import { H2 } from '../../../generic/text'
-import { ContentPageLayout } from '../../../Layout'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
-import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
-import InputAutocomplete from '../../../generic/InputAutocomplete'
-import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
-import MermaidMap from '../../../MermaidMap'
 import { InputRow, InputWrapper } from '../../../generic/form'
-import { getOptions } from '../../../../library/getOptions'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import useIsMounted from '../../../../library/useIsMounted'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import InputAutocomplete from '../../../generic/InputAutocomplete'
+import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
+import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
 import language from '../../../../language'
+import MermaidMap from '../../../MermaidMap'
+import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import useIsMounted from '../../../../library/useIsMounted'
 
 const Site = () => {
   const [countryOptions, setCountryOptions] = useState([])
   const [exposureOptions, setExposureOptions] = useState([])
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [reefTypeOptions, setReefTypeOptions] = useState([])
   const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [siteBeingEdited, setSiteBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
+  const { siteId, projectId } = useParams()
   const isMounted = useIsMounted()
-  const { siteId } = useParams()
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSite(siteId),
         databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getProject(projectId),
       ]
 
       Promise.all(promises)
-        .then(([siteResponse, choicesResponse]) => {
+        .then(([siteResponse, choicesResponse, projectResponse]) => {
           if (isMounted.current) {
+            if (!siteResponse && siteId) {
+              setIdsNotAssociatedWithData((previousState) => [
+                ...previousState,
+                siteId,
+              ])
+            }
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData((previousState) => [
+                ...previousState,
+                projectId,
+              ])
+            }
             setCountryOptions(getOptions(choicesResponse.countries))
             setExposureOptions(getOptions(choicesResponse.reefexposures))
             setReefTypeOptions(getOptions(choicesResponse.reeftypes))
@@ -52,7 +67,13 @@ const Site = () => {
           toast.error(language.error.siteRecordUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, siteId, isSyncInProgress, isMounted])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isSyncInProgress,
+    projectId,
+    siteId,
+  ])
 
   const initialFormValues = useMemo(
     () => getSiteInitialValues(siteBeingEdited),
@@ -80,7 +101,12 @@ const Site = () => {
     [formikSetFieldValue],
   )
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={
