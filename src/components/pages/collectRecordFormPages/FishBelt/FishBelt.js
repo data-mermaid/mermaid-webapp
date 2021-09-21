@@ -76,9 +76,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState(
-    false,
-  )
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
@@ -154,15 +152,20 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           ]) => {
             if (isMounted.current) {
               if (!isNewRecord && !collectRecordResponse && recordId) {
-                setIdsNotAssociatedWithData([recordId])
+                setIdsNotAssociatedWithData((previousState) => [
+                  ...previousState,
+                  recordId,
+                ])
               }
               if (
                 !isNewRecord &&
                 !projectProfilesResponse.length &&
                 projectId
               ) {
-                // if there is both no data for the recordId and the projectId, show error message for no info for projectId
-                setIdsNotAssociatedWithData([projectId])
+                setIdsNotAssociatedWithData((previousState) => [
+                  ...previousState,
+                  projectId,
+                ])
               }
               const updateFishNameConstants = getFishNameConstants({
                 species,
@@ -370,7 +373,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }, [formik.dirty, areObservationsInputsDirty])
 
-  return idsNotAssociatedWithData ? (
+  return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
