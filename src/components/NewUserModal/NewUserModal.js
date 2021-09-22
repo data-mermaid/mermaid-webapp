@@ -10,8 +10,9 @@ const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit }) => {
   const modalContent = <div>{modalBodyText}</div>
 
   const handleOnSubmit = () => {
-    onSubmit()
-    onDismiss()
+    onSubmit().then(() => {
+      onDismiss()
+    })
   }
 
   const footerContent = (

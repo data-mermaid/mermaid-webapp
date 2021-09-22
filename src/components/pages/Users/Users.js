@@ -170,6 +170,8 @@ const Users = () => {
       _fetchProjectProfiles()
       toast.success(language.success.newPendingUserAdd)
     })
+
+    return Promise.resolve()
   }
 
   const openNewUserProfileModal = () => {
