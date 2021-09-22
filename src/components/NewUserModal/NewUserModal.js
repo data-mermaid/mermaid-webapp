@@ -35,6 +35,7 @@ const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit }) => {
 NewUserModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   newUser: PropTypes.string.isRequired,
 }
 
