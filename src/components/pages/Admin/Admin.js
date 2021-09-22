@@ -24,6 +24,7 @@ import language from '../../../language'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import { createUuid } from '../../../library/createUuid'
 import useIsMounted from '../../../library/useIsMounted'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
 
 const SuggestNewOrganizationButton = styled(ButtonSecondary)`
   font-size: smaller;
@@ -132,14 +133,14 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
 }
 
 const Admin = () => {
-  const { isAppOnline } = useOnlineStatus()
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-
-  const [projectTagOptions, setProjectTagOptions] = useState([])
-  const [projectBeingEdited, setProjectBeingEdited] = useState()
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const isMounted = useIsMounted()
+  const [projectBeingEdited, setProjectBeingEdited] = useState()
+  const [projectTagOptions, setProjectTagOptions] = useState([])
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
+  const isMounted = useIsMounted()
 
   const [
     IsNewOrganizationNameModalOpen,
@@ -151,11 +152,7 @@ const Admin = () => {
     setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (!isAppOnline) {
-      setIsLoading(false)
-    }
-
-    if (databaseSwitchboardInstance && projectId) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
@@ -164,6 +161,9 @@ const Admin = () => {
       Promise.all(promises)
         .then(([projectResponse, projectTagsResponse]) => {
           if (isMounted.current) {
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData([projectId])
+            }
             setProjectBeingEdited(projectResponse)
             setProjectTagOptions(getOptions(projectTagsResponse, false))
             setIsLoading(false)
@@ -275,14 +275,21 @@ const Admin = () => {
     <PageUnavailableOffline />
   )
 
-  return (
+  return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
+    <ContentPageLayout
+      isPageContentLoading={isAppOnline ? isLoading : false}
       content={content}
       toolbar={
-        <>
-          <H2>Project Info</H2>
-        </>
+        isAppOnline ? (
+          <>
+            <H2>Project Info</H2>
+          </>
+        ) : null
       }
     />
   )
