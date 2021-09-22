@@ -131,6 +131,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
+        databaseSwitchboardInstance.getProject(projectId),
       ]
 
       if (recordId && !isNewRecord) {
@@ -146,6 +147,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             species,
             genera,
             families,
+            projectResponse,
 
             // collectRecord needs to be last in array because its pushed to the promise array conditionally
             collectRecordResponse,
@@ -157,11 +159,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                   recordId,
                 ])
               }
-              if (
-                !isNewRecord &&
-                !projectProfilesResponse.length &&
-                projectId
-              ) {
+              if (!isNewRecord && !projectResponse && projectId) {
                 setIdsNotAssociatedWithData((previousState) => [
                   ...previousState,
                   projectId,
