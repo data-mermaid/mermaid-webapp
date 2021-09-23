@@ -1,22 +1,14 @@
-import { Link, useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
-
-import { matchSorter } from 'match-sorter'
 import {
   usePagination,
   useSortBy,
   useGlobalFilter,
   useTable,
 } from 'react-table'
-import { ContentPageLayout } from '../../Layout'
-import { H2 } from '../../generic/text'
-import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-import { RowBottom } from '../../generic/positioning'
-import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import language from '../../../language'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
+import { Link, useParams } from 'react-router-dom'
+import { matchSorter } from 'match-sorter'
+import { toast } from 'react-toastify'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
+
 import {
   Table,
   Tr,
@@ -26,33 +18,49 @@ import {
   TableNavigation,
   InnerCell,
 } from '../../generic/Table/table'
-import PageSelector from '../../generic/Table/PageSelector'
-import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
+import { ContentPageLayout } from '../../Layout'
+import { H2 } from '../../generic/text'
+import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
+import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import { RowBottom } from '../../generic/positioning'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
+import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import language from '../../../language'
+import PageSelector from '../../generic/Table/PageSelector'
+import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 
 const ManagementRegimes = () => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { projectId } = useParams()
-  const { isSyncInProgress } = useSyncStatus()
-  const isMounted = useIsMounted()
-
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const [
     managementRegimeRecordsForUiDisplay,
     setManagementRegimeRecordsForUiDisplay,
   ] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { projectId } = useParams()
+  const isMounted = useIsMounted()
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-      databaseSwitchboardInstance
-        .getManagementRegimeRecordsForUiDisplay(projectId)
-        .then((records) => {
+      Promise.all([
+        databaseSwitchboardInstance.getManagementRegimeRecordsForUiDisplay(
+          projectId,
+        ),
+        databaseSwitchboardInstance.getProject(projectId),
+      ])
+        .then(([managementRegimes, projectResponse]) => {
           if (isMounted.current) {
-            setManagementRegimeRecordsForUiDisplay(records)
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData([projectId])
+            }
+            setManagementRegimeRecordsForUiDisplay(managementRegimes)
             setIsLoading(false)
           }
         })
@@ -246,7 +254,12 @@ const ManagementRegimes = () => {
     </>
   )
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       toolbar={
         <>
