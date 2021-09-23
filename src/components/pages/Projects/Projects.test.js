@@ -83,18 +83,21 @@ test('A project card renders with the expected UI elements for button groups', a
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
-
-  const healthButton = within(projectCard).getByLabelText(/health/i)
+  // commented out for alpha, reactivate post alpha
+  // const healthButton = within(projectCard).getByLabelText(/health/i)
   const collectButton = within(projectCard).getByLabelText(/collect/i)
   const dataButton = within(projectCard).getByLabelText(/data/i)
   const adminButton = within(projectCard).getByLabelText(/admin/i)
-  const copyButton = within(projectCard).getByLabelText(/copy/i)
+  // commented out for alpha, reactivate post alpha
+  // const copyButton = within(projectCard).getByLabelText(/copy/i)
 
-  expect(healthButton).toBeInTheDocument()
+  // commented out for alpha, reactivate post alpha
+  // expect(healthButton).toBeInTheDocument()
   expect(collectButton).toBeInTheDocument()
   expect(dataButton).toBeInTheDocument()
   expect(adminButton).toBeInTheDocument()
-  expect(copyButton).toBeInTheDocument()
+  // commented out for alpha, reactivate post alpha
+  // expect(copyButton).toBeInTheDocument()
 })
 
 test('A project card shows relevant data for a project', async () => {
@@ -216,18 +219,20 @@ test('A project card renders appropriately when online', async () => {
       within(projectCard).queryByLabelText(/collect/i),
     ).toBeInTheDocument(),
   )
-  await waitFor(() =>
-    expect(within(projectCard).queryByLabelText(/health/i)).toBeInTheDocument(),
-  )
+  // commented out for alpha, reactivate post alpha
+  // await waitFor(() =>
+  //   expect(within(projectCard).queryByLabelText(/health/i)).toBeInTheDocument(),
+  // )
   await waitFor(() =>
     expect(within(projectCard).queryByLabelText(/data/i)).toBeInTheDocument(),
   )
   await waitFor(() =>
     expect(within(projectCard).queryByLabelText(/admin/i)).toBeInTheDocument(),
   )
-  await waitFor(() =>
-    expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
-  )
+  // commented out for alpha, reactivate post alpha
+  // await waitFor(() =>
+  //   expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
+  // )
 
   const offlineReadyCheckboxes = screen.getAllByLabelText('Offline Ready')
 

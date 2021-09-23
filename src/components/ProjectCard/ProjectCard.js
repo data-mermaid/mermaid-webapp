@@ -7,18 +7,14 @@ import {
   ButtonGroups,
   CardWrapper,
   CheckBoxLabel,
-  ProjectCardButtonSecondary,
   ProjectInfoWrapper,
   ProjectNameWrapper,
-  VerticalRule,
 } from './ProjectCard.styles'
-import { IconCopy } from '../icons'
 import { pluralize } from '../../library/pluralize'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import language from '../../language'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
-import OfflineHide from '../generic/OfflineHide'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import SyncApiDataIntoOfflineStorage from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -71,16 +67,20 @@ const ProjectCard = ({
   }
 
   const handleCardClick = () => {
-    const destinationUrl = isAppOnline
-      ? `${projectUrl}/health`
-      : `${projectUrl}/collecting`
+    // hiding for alpha release because leads nowhere useful
+    // const destinationUrl = isAppOnline
+    //   ? `${projectUrl}/health`
+    //   : `${projectUrl}/collecting`
+
+    // temp for alpha
+    const destinationUrl = `${projectUrl}/collecting`
 
     history.push(destinationUrl)
   }
-
-  const handleProjectCopyClick = (e) => {
-    e.stopPropagation()
-  }
+  //  hiding for alpha release because leads nowhere useful
+  // const handleProjectCopyClick = (e) => {
+  //   e.stopPropagation()
+  // }
 
   return (
     <CardWrapper onClick={handleCardClick} {...restOfProps}>
@@ -110,7 +110,8 @@ const ProjectCard = ({
       </ProjectInfoWrapper>
       <ButtonGroups data-testid="project-button-groups">
         <NavLinkButtonGroup projectUrl={projectUrl} />
-        <OfflineHide>
+        {/* hiding for alpha release because leads nowhere useful */}
+        {/* <OfflineHide>
           <VerticalRule />
           <ProjectCardButtonSecondary
             onClick={handleProjectCopyClick}
@@ -119,7 +120,7 @@ const ProjectCard = ({
             <IconCopy />
             <span>Copy</span>
           </ProjectCardButtonSecondary>
-        </OfflineHide>
+        </OfflineHide> */}
       </ButtonGroups>
     </CardWrapper>
   )
