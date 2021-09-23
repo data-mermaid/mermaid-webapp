@@ -10,7 +10,6 @@ import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components'
-import { useCurrentUser } from '../../../App/mermaidData/useCurrentUser'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
@@ -24,6 +23,7 @@ import {
 } from '../../icons'
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
+import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -117,14 +117,13 @@ const NameCellStyle = styled('div')`
   }
 `
 
-const Users = () => {
+const Users = ({ currentUser }) => {
   const { isAppOnline } = useOnlineStatus()
 
   const [observerProfiles, setObserverProfiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [isReadonlyUserWithActiveSampleUnits] = useState(false)
   const [newUserProfile, setNewUserProfile] = useState('')
-  const currentUser = useCurrentUser({ databaseSwitchboardInstance })
   const [userTransferFrom, setUserTransferFrom] = useState('')
   const [userTransferTo, setUserTransferTo] = useState(currentUser)
   const [isLoading, setIsLoading] = useState(true)
@@ -487,6 +486,7 @@ const Users = () => {
 }
 
 Users.propTypes = {
+  currentUser: currentUserPropType.isRequired,
   row: PropTypes.shape({
     original: PropTypes.shape({
       name: PropTypes.string,

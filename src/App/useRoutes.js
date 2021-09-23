@@ -101,7 +101,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/users',
-      Component: Users,
+      Component: () => <Users currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/fish-families',
