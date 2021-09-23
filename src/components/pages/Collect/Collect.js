@@ -1,26 +1,14 @@
-import { Link, useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import React, { useEffect, useMemo, useState, useCallback } from 'react'
-
-import { matchSorter } from 'match-sorter'
 import {
   usePagination,
   useSortBy,
   useGlobalFilter,
   useTable,
 } from 'react-table'
-import { ContentPageLayout } from '../../Layout'
-import { H2 } from '../../generic/text'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-  reactTableNaturalSortDates,
-} from '../../generic/Table/reactTableNaturalSort'
-import { RowBottom } from '../../generic/positioning'
-import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import AddSampleUnitButton from './AddSampleUnitButton'
-import language from '../../../language'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { Link, useParams } from 'react-router-dom'
+import { matchSorter } from 'match-sorter'
+import { toast } from 'react-toastify'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
+
 import {
   Table,
   Tr,
@@ -30,29 +18,49 @@ import {
   TableNavigation,
   InnerCell,
 } from '../../generic/Table/table'
-import PageSelector from '../../generic/Table/PageSelector'
-import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import {
+  reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
+  reactTableNaturalSortDates,
+} from '../../generic/Table/reactTableNaturalSort'
+import { ContentPageLayout } from '../../Layout'
+import { H2 } from '../../generic/text'
+import { RowBottom } from '../../generic/positioning'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import AddSampleUnitButton from './AddSampleUnitButton'
+import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import language from '../../../language'
+import PageSelector from '../../generic/Table/PageSelector'
+import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 
 const Collect = () => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
-  const { projectId } = useParams()
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState(
     [],
   )
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { projectId } = useParams()
   const isMounted = useIsMounted()
 
   const _getCollectRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-      databaseSwitchboardInstance
-        .getCollectRecordsForUIDisplay(projectId)
-        .then((records) => {
+      Promise.all([
+        databaseSwitchboardInstance.getCollectRecordsForUIDisplay(projectId),
+        databaseSwitchboardInstance.getProject(projectId),
+      ])
+
+        .then(([records, project]) => {
           if (isMounted.current) {
+            if (!project && projectId) {
+              setIdsNotAssociatedWithData([projectId])
+            }
             setCollectRecordsForUiDisplay(records)
             setIsLoading(false)
           }
@@ -254,7 +262,12 @@ const Collect = () => {
     </>
   )
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       toolbar={
         <>
