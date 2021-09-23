@@ -4,10 +4,10 @@ import {
   screen,
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
-} from '../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
-import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import App from '../App'
+} from '../../../testUtilities/testingLibraryWithHelpers'
+import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import App from '../../App'
 
 test('Offline management regime shows no info associated with MANAGEMENT REGIME id view ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()

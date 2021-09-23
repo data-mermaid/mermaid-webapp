@@ -4,10 +4,10 @@ import {
   screen,
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
-} from '../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
-import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import App from '../App'
+} from '../../../testUtilities/testingLibraryWithHelpers'
+import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import App from '../../App'
 
 test('Offline site shows no info associated with SITE id view ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
