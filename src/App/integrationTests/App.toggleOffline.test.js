@@ -15,7 +15,7 @@ import App from '../App'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Toggle offline switch to offline, page turns offline, some navigation links will disappear. Then navigation links reappear after clicking toggle again.', async () => {
+test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigation links will disappear. Then navigation links reappear after clicking toggle again', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -58,6 +58,10 @@ test('Toggle offline switch to offline, page turns offline, some navigation link
   await waitForElementToBeRemoved(() =>
     screen.queryByLabelText('project pages loading indicator'),
   )
+
+  expect(
+    await screen.findByTestId('offline-toggle-switch-label'),
+  ).toHaveTextContent("You're ONLINE")
 
   expect(
     within(sideNav).queryByRole('link', { name: 'Submitted' }),
