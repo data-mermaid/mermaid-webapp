@@ -34,7 +34,7 @@ test('Appropriate online status message shows when navigator is offline', async 
   ).toHaveTextContent("You're OFFLINE. Some contents may be out of date.")
 })
 
-test('Appropriate online status message shows when server is unreachable', async () => {
+test('Appropriate online status message shows when server is reachable', async () => {
   renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
   expect(

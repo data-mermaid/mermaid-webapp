@@ -6,10 +6,6 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 import { Column } from '../generic/positioning'
 
-/**
- * Basic stacked layout
- */
-
 const LayoutContainer = styled(Column)`
   & main {
     flex-grow: 2;
@@ -38,20 +34,13 @@ const OfflineIndicatorStyles = styled.div`
       }
     `}
 `
-const OfflineIndicator = () => {
+
+const Layout = ({ children, footer, header }) => {
   const { isAppOnline } = useOnlineStatus()
 
   return (
-    <OfflineIndicatorStyles isAppOnline={isAppOnline}>
-      {!isAppOnline && <span>You&rsquo;re offline</span>}
-    </OfflineIndicatorStyles>
-  )
-}
-
-const Layout = ({ children, footer, header }) => {
-  return (
     <LayoutContainer>
-      <OfflineIndicator />
+      <OfflineIndicatorStyles isAppOnline={isAppOnline} />
       {header}
       <main>{children}</main>
       {footer}

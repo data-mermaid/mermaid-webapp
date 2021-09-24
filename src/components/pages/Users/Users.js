@@ -46,6 +46,7 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import { validateEmail } from '../../../library/strings/validateEmail'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -118,21 +119,53 @@ const NameCellStyle = styled('div')`
 `
 
 const Users = ({ currentUser }) => {
-  const { isAppOnline } = useOnlineStatus()
-
-  const [observerProfiles, setObserverProfiles] = useState([])
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
-  const [newUserProfile, setNewUserProfile] = useState('')
-  const [userTransferFrom, setUserTransferFrom] = useState('')
-  const [userTransferTo, setUserTransferTo] = useState(currentUser)
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const isMounted = useIsMounted()
-  const { projectId } = useParams()
-
   const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
     false,
   )
+  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
+  const [
+    isTransferSampleUnitsModalOpen,
+    setIsTransferSampleUnitsModalOpen,
+  ] = useState(false)
+  const [newUserProfile, setNewUserProfile] = useState('')
+  const [observerProfiles, setObserverProfiles] = useState([])
+  const [userTransferFrom, setUserTransferFrom] = useState('')
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
+  const { projectId } = useParams()
+  const isMounted = useIsMounted()
+
+  const [userTransferTo, setUserTransferTo] = useState(currentUser)
+
+  const _getSupportingData = useEffect(() => {
+    if (databaseSwitchboardInstance && projectId) {
+      Promise.all([
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
+        databaseSwitchboardInstance.getProject(projectId),
+      ])
+        .then(([projectProfilesResponse, projectResponse]) => {
+          if (isMounted.current) {
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData([projectId])
+            }
+            setObserverProfiles(projectProfilesResponse)
+            setIsLoading(false)
+          }
+        })
+        .catch(() => {
+          toast.error(language.error.userRecordsUnavailable)
+        })
+    }
+  }, [databaseSwitchboardInstance, isMounted, projectId])
+
+  const openTransferSampleUnitsModal = (name) => {
+    setUserTransferFrom(name)
+    setIsTransferSampleUnitsModalOpen(true)
+  }
+  const closeTransferSampleUnitsModal = () =>
+    setIsTransferSampleUnitsModalOpen(false)
 
   const _fetchProjectProfiles = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -155,6 +188,7 @@ const Users = ({ currentUser }) => {
           .addUser(newUserProfile, projectId)
           .then(() => {
             _fetchProjectProfiles()
+            setNewUserProfile('')
             toast.success(language.success.newUserAdd)
           })
           .catch(() => {
@@ -167,6 +201,7 @@ const Users = ({ currentUser }) => {
   const handleNewUserSubmit = () => {
     databaseSwitchboardInstance.addUser(newUserProfile, projectId).then(() => {
       _fetchProjectProfiles()
+      setNewUserProfile('')
       toast.success(language.success.newPendingUserAdd)
     })
 
@@ -184,33 +219,6 @@ const Users = ({ currentUser }) => {
   }
 
   const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
-
-  const [
-    isTransferSampleUnitsModalOpen,
-    setIsTransferSampleUnitsModalOpen,
-  ] = useState(false)
-  const openTransferSampleUnitsModal = (name) => {
-    setUserTransferFrom(name)
-    setIsTransferSampleUnitsModalOpen(true)
-  }
-  const closeTransferSampleUnitsModal = () =>
-    setIsTransferSampleUnitsModalOpen(false)
-
-  const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId) {
-      databaseSwitchboardInstance
-        .getProjectProfiles(projectId)
-        .then((projectProfilesResponse) => {
-          if (isMounted.current) {
-            setObserverProfiles(projectProfilesResponse)
-            setIsLoading(false)
-          }
-        })
-        .catch(() => {
-          toast.error(language.error.userRecordsUnavailable)
-        })
-    }
-  }, [databaseSwitchboardInstance, isMounted, projectId])
 
   const tableColumns = useMemo(() => {
     return [
@@ -438,7 +446,12 @@ const Users = ({ currentUser }) => {
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       isLoading={isLoading}
       content={content}
