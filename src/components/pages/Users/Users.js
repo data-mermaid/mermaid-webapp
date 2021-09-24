@@ -45,11 +45,8 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
-<<<<<<< HEAD
 import { validateEmail } from '../../../library/strings/validateEmail'
-=======
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
->>>>>>> develop
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
