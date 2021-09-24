@@ -189,6 +189,7 @@ const Users = () => {
           .addUser(newUserProfile, projectId)
           .then(() => {
             _fetchProjectProfiles()
+            setNewUserProfile('')
             toast.success(language.success.newUserAdd)
           })
           .catch(() => {
@@ -201,6 +202,7 @@ const Users = () => {
   const handleNewUserSubmit = () => {
     databaseSwitchboardInstance.addUser(newUserProfile, projectId).then(() => {
       _fetchProjectProfiles()
+      setNewUserProfile('')
       toast.success(language.success.newPendingUserAdd)
     })
 
