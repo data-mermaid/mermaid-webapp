@@ -45,7 +45,11 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
+<<<<<<< HEAD
 import { validateEmail } from '../../../library/strings/validateEmail'
+=======
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+>>>>>>> develop
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -118,19 +122,8 @@ const NameCellStyle = styled('div')`
 `
 
 const Users = () => {
-  const { isAppOnline } = useOnlineStatus()
-
-  const [observerProfiles, setObserverProfiles] = useState([])
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
-  const [newUserProfile, setNewUserProfile] = useState('')
-  const currentUser = useCurrentUser({ databaseSwitchboardInstance })
-  const [userTransferFrom, setUserTransferFrom] = useState('')
-  const [userTransferTo, setUserTransferTo] = useState(currentUser)
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const isMounted = useIsMounted()
-  const { projectId } = useParams()
-
   const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
     false,
   )
@@ -186,10 +179,24 @@ const Users = () => {
 
   const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
 
+  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
   const [
     isTransferSampleUnitsModalOpen,
     setIsTransferSampleUnitsModalOpen,
   ] = useState(false)
+  const [newUserProfile, setNewUserProfile] = useState('')
+  const [observerProfiles, setObserverProfiles] = useState([])
+  const [userTransferFrom, setUserTransferFrom] = useState('')
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
+  const { projectId } = useParams()
+  const currentUser = useCurrentUser({ databaseSwitchboardInstance })
+  const isMounted = useIsMounted()
+
+  const [userTransferTo, setUserTransferTo] = useState(currentUser)
+
+  const openNewUserProfileModal = () => setIsNewUserProfileModalOpen(true)
+  const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
   const openTransferSampleUnitsModal = (name) => {
     setUserTransferFrom(name)
     setIsTransferSampleUnitsModalOpen(true)
@@ -199,10 +206,15 @@ const Users = () => {
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
-      databaseSwitchboardInstance
-        .getProjectProfiles(projectId)
-        .then((projectProfilesResponse) => {
+      Promise.all([
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
+        databaseSwitchboardInstance.getProject(projectId),
+      ])
+        .then(([projectProfilesResponse, projectResponse]) => {
           if (isMounted.current) {
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData([projectId])
+            }
             setObserverProfiles(projectProfilesResponse)
             setIsLoading(false)
           }
@@ -439,7 +451,12 @@ const Users = () => {
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       isLoading={isLoading}
       content={content}

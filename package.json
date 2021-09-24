@@ -31,7 +31,6 @@
     "react-scripts": "4.0.2",
     "react-table": "^7.6.3",
     "react-toastify": "^7.0.3",
-    "react-toggle": "^4.1.1",
     "styled-components": "^5.2.1",
     "uuid": "^8.3.2",
     "web-vitals": "^0.2.4",

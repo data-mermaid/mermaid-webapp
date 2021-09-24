@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
 import React, {
   createContext,
@@ -8,6 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import language from '../language'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const OnlineStatusContext = createContext()
@@ -15,10 +17,18 @@ const OnlineStatusContext = createContext()
 const OnlineStatusProvider = ({ children, value }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
   const [isServerReachable, setIsServerReachable] = useState(true)
+  const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
+    JSON.parse(localStorage.getItem('hasUserTurnedAppOffline')) || false,
+  )
+  const isAppOnline =
+    isNavigatorOnline && isServerReachable === true && !hasUserTurnedAppOffline
 
-  const isAppOnline = isNavigatorOnline && isServerReachable
+  const canUserOverrideOnlineStatus = isServerReachable && isNavigatorOnline
+
   const rePingApiRef = useRef()
+
   const stopPingingApi = useCallback(() => {
+    setIsServerReachable(null)
     clearInterval(rePingApiRef.current)
   }, [])
 
@@ -33,18 +43,19 @@ const OnlineStatusProvider = ({ children, value }) => {
           setIsServerReachable(true)
         })
         .catch(() => {
+          toast.warn(language.offlineNotificationMessages.serverReachable)
           setIsServerReachable(false)
         })
     }
 
+    if (!isNavigatorOnline) {
+      stopPingingApi()
+    }
     if (isNavigatorOnline) {
       pingApi()
       rePingApiRef.current = window.setInterval(() => {
         pingApi()
       }, 30000)
-    }
-    if (!isNavigatorOnline) {
-      stopPingingApi()
     }
 
     return () => {
@@ -52,11 +63,24 @@ const OnlineStatusProvider = ({ children, value }) => {
     }
   }, [isNavigatorOnline, stopPingingApi])
 
+  const toggleUserOnlineStatusOverride = () => {
+    if (!hasUserTurnedAppOffline) {
+      toast.warn(language.offlineNotificationMessages.toggleOffline)
+    }
+
+    setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
+    localStorage.setItem(
+      'has-user-turned-app-offline',
+      !hasUserTurnedAppOffline,
+    )
+  }
+
   const _setIsNavigatorOnline = useEffect(() => {
     const handleOnline = () => {
       setIsNavigatorOnline(true)
     }
     const handleOffline = () => {
+      toast.warn(language.offlineNotificationMessages.navigatorOffline)
       setIsNavigatorOnline(false)
     }
     const cleanup = () => {
@@ -72,7 +96,14 @@ const OnlineStatusProvider = ({ children, value }) => {
 
   return (
     // the value prop spread here allows for online status to be mocked for testing
-    <OnlineStatusContext.Provider value={{ isAppOnline, ...value }}>
+    <OnlineStatusContext.Provider
+      value={{
+        isAppOnline,
+        canUserOverrideOnlineStatus,
+        toggleUserOnlineStatusOverride,
+        ...value,
+      }}
+    >
       {children}
     </OnlineStatusContext.Provider>
   )
