@@ -49,7 +49,7 @@ const Footer = () => {
   return (
     <StyledFooter>
       <OfflineToggleWrapper>
-        <OfflineToggle />
+        <OfflineToggle id="offline-toggle-switch" />
         <label
           htmlFor="offline-toggle-switch"
           data-testid="offline-toggle-switch-label"
