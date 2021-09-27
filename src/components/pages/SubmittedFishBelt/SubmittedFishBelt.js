@@ -22,9 +22,7 @@ const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState(
-    false,
-  )
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
@@ -100,7 +98,7 @@ const SubmittedFishBelt = () => {
     }
   }, [databaseSwitchboardInstance, isMounted, recordId, projectId, isAppOnline])
 
-  return idsNotAssociatedWithData ? (
+  return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}

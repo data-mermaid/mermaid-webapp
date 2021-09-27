@@ -41,7 +41,7 @@ const error = {
     'Management Regime records data is currently unavailable. Please try again',
   getIdsNotFoundDetails: (id) =>
     id.length > 1
-      ? `Details: information associated with one or more of the following ids cannot be found:  ${id}`
+      ? `Details: information associated with one or more of the following ids cannot be found: ${id}`
       : `Details: information associated with the id, ${id}, cannot be found.`,
   getProjectTurnOnOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
@@ -139,6 +139,12 @@ const pages = {
   },
 }
 
+const offlineNotificationMessages = {
+  toggleOffline: 'You turn on OFFLINE mode.',
+  navigatorOffline: 'Network connection is off. You are OFFLINE now.',
+  serverReachable: 'Server connection is down. You are OFFLINE now.',
+}
+
 export default {
   error,
   success,
@@ -146,4 +152,5 @@ export default {
   autocomplete,
   pages,
   createFishSpecies,
+  offlineNotificationMessages
 }

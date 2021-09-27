@@ -3,22 +3,24 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 
-import { getManagementRegimeInitialValues } from '../managementRegimeFormInitialValues'
-import { H2 } from '../../../generic/text'
 import { ContentPageLayout } from '../../../Layout'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
-import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
-import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
-import ManagementRulesInput from '../ManagementRulesInput'
-import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWithLabel'
-import { InputWrapper } from '../../../generic/form'
+import { getManagementRegimeInitialValues } from '../managementRegimeFormInitialValues'
 import { getOptions } from '../../../../library/getOptions'
+import { H2 } from '../../../generic/text'
+import { InputWrapper } from '../../../generic/form'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWithLabel'
+import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
+import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
 import language from '../../../../language'
+import ManagementRulesInput from '../ManagementRulesInput'
+import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../../library/useIsMounted'
 
 const ManagementRegime = () => {
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementCompliances, setManagementCompliances] = useState([])
   const [managementParties, setManagementParties] = useState([])
@@ -28,7 +30,7 @@ const ManagementRegime = () => {
   ] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
-  const { managementRegimeId } = useParams()
+  const { managementRegimeId, projectId } = useParams()
   const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
@@ -36,28 +38,47 @@ const ManagementRegime = () => {
       const promises = [
         databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
         databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getProject(projectId),
       ]
 
       Promise.all(promises)
-        .then(([managementRegimeResponse, choicesResponse]) => {
-          if (isMounted.current) {
-            setManagementParties(getOptions(choicesResponse.managementparties))
-            setManagementCompliances(
-              getOptions(choicesResponse.managementcompliances),
-            )
-            setManagementRegimeBeingEdited(managementRegimeResponse)
-            setIsLoading(false)
-          }
-        })
+        .then(
+          ([managementRegimeResponse, choicesResponse, projectResponse]) => {
+            if (isMounted.current) {
+              if (!managementRegimeResponse && managementRegimeId) {
+                setIdsNotAssociatedWithData((previousState) => [
+                  ...previousState,
+                  managementRegimeId,
+                ])
+              }
+              if (!projectResponse && projectId) {
+                setIdsNotAssociatedWithData((previousState) => [
+                  ...previousState,
+                  projectId,
+                ])
+              }
+
+              setManagementParties(
+                getOptions(choicesResponse.managementparties),
+              )
+              setManagementCompliances(
+                getOptions(choicesResponse.managementcompliances),
+              )
+              setManagementRegimeBeingEdited(managementRegimeResponse)
+              setIsLoading(false)
+            }
+          },
+        )
         .catch(() => {
           toast.error(language.error.managementRegimeRecordUnavailable)
         })
     }
   }, [
     databaseSwitchboardInstance,
-    managementRegimeId,
     isMounted,
     isSyncInProgress,
+    managementRegimeId,
+    projectId,
   ])
 
   const initialFormValues = useMemo(
@@ -70,7 +91,12 @@ const ManagementRegime = () => {
     enableReinitialize: true,
   }
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <Formik {...formikOptions}>
       {(formik) => (
         <ContentPageLayout
