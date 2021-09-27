@@ -274,7 +274,7 @@ const CollectRecordsMixin = (Base) =>
 
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance
-                .pushThenPullEverythingButChoices(projectId)
+                .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const validatedData =
                     _dataSetsReturnedFromApiPull.data.collect_records.updates[0]
