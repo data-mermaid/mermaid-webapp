@@ -44,6 +44,7 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getSubmittedRecordsForUIDisplay: PropTypes.func,
   saveFishBelt: PropTypes.func,
   deleteFishBelt: PropTypes.func,
+  validateFishBelt: PropTypes.func,
 })
 
 export default DatabaseSwitchboard

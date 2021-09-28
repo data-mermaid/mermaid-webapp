@@ -165,7 +165,7 @@ test('deleteFishBelt online returns a rejected promise if the status code from t
     })
     .catch((error) => {
       expect(error.message).toEqual(
-        'the API record returned from deleteFishBelt doesnt have a succussful status code',
+        'the API record returned from deleteFishBelt doesnt have a successful status code',
       )
     })
 })
