@@ -7,6 +7,7 @@ const error = {
     'Options data for creating a collect record is currently unavailable. Please try again',
   collectRecordsUnavailable:
     'Collect records data is currently unavailable. Please try again',
+  collectRecordFailedValidation: `Validation is currently unavailable for this record.`,
   apiDataSync:
     'the app was not able to sync data with the API. Please try again.',
   projectsUnavailable:

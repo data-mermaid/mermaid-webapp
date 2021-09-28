@@ -16,7 +16,7 @@ import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
-import { ButtonCallout, ButtonCaution } from '../../../generic/buttons'
+import { ButtonCaution } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
 import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
@@ -24,8 +24,8 @@ import { getFishBinLabel } from './fishBeltBins'
 import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
 import { H2 } from '../../../generic/text'
-import { IconSave, IconCheck, IconUpload } from '../../../icons'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
+import { possibleCollectButtonGroupStates } from '../possibleCollectButtonGroupStates'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
@@ -37,11 +37,11 @@ import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 import ObserversInput from '../../../ObserversInput'
-import OfflineHide from '../../../generic/OfflineHide'
-import RecordFormTitle from '../../../RecordFormTitle'
 import SampleInfoInputs from '../../../SampleInfoInputs'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
+import RecordFormTitle from '../../../RecordFormTitle'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -50,13 +50,6 @@ const CollectRecordToolbarWrapper = styled('div')`
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-`
-const SaveValidateSubmitButtonWrapper = styled('div')`
-  justify-self: end;
-  button {
-    white-space: nowrap;
-    margin-left: 1px;
-  }
 `
 
 const FishBelt = ({ isNewRecord, currentUser }) => {
@@ -67,8 +60,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
-  // eslint-disable-next-line no-unused-vars
-  const [isFishBeltFormDirty, setIsFishBeltFormDirty] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
@@ -83,6 +74,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
+
+  const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
+    possibleCollectButtonGroupStates.saved,
+  )
 
   const openNewFishNameModal = (observationId) => {
     setObservationToAddSpeciesTo(observationId)
@@ -240,6 +235,26 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }
 
+  const validateRecord = () => {
+    setFishBeltButtonsState(possibleCollectButtonGroupStates.validating)
+
+    databaseSwitchboardInstance
+      .validateFishBelt({ recordId, projectId })
+      .then((recordResponse) => {
+        if (
+          recordResponse !== undefined &&
+          recordResponse.validations.status === 'ok'
+        ) {
+          setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
+        }
+        setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
+      })
+      .catch(() => {
+        toast.error(language.error.collectRecordFailedValidation)
+        setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
+      })
+  }
+
   const handleNewFishSpeciesOnSubmit = ({
     genusId,
     genusName,
@@ -315,6 +330,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         collectRecordBeingEdited,
       )
 
+      setFishBeltButtonsState(possibleCollectButtonGroupStates.saving)
+
       databaseSwitchboardInstance
         .saveFishBelt({
           record: recordToSubmit,
@@ -326,6 +343,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           clearPersistedUnsavedFormikData()
           clearPersistedUnsavedObservationsData()
           setAreObservationsInputsDirty(false)
+          setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
           if (isNewRecord) {
@@ -358,16 +376,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     persistUnsavedFormikData,
     projectId,
     setAreObservationsInputsDirty,
+    setFishBeltButtonsState,
   ])
 
   const formik = useFormik(formikOptions)
 
-  const _manageWholeFormDirtyState = useEffect(() => {
+  const _setCollectButtonsUnsaved = useEffect(() => {
     if (formik.dirty || areObservationsInputsDirty) {
-      setIsFishBeltFormDirty(true)
-    }
-    if (!formik.dirty && !areObservationsInputsDirty) {
-      setIsFishBeltFormDirty(false)
+      setFishBeltButtonsState(possibleCollectButtonGroupStates.unsaved)
     }
   }, [formik.dirty, areObservationsInputsDirty])
 
@@ -440,24 +456,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               />
             )}
 
-            <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
-              <ButtonCallout type="submit" form="fishbelt-form">
-                <IconSave />
-                Save
-              </ButtonCallout>
-              {!isNewRecord && (
-                <OfflineHide>
-                  <ButtonCallout>
-                    <IconCheck />
-                    Validate
-                  </ButtonCallout>
-                  <ButtonCallout>
-                    <IconUpload />
-                    Submit
-                  </ButtonCallout>
-                </OfflineHide>
-              )}
-            </SaveValidateSubmitButtonWrapper>
+            <SaveValidateSubmitButtonGroup
+              isNewRecord={isNewRecord}
+              fishBeltButtonsState={fishBeltButtonsState}
+              validateRecord={validateRecord}
+            />
           </CollectRecordToolbarWrapper>
         }
       />
