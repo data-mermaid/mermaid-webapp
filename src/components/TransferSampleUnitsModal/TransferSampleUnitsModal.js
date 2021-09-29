@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
-import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import language from '../../language'
 import { IconArrowRight } from '../icons'
 import { Select } from '../generic/form'
