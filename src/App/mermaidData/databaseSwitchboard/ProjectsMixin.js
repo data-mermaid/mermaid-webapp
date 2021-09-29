@@ -1,12 +1,5 @@
 const ProjectsMixin = (Base) =>
   class extends Base {
-    #getIsRecordStatusCodeSuccessful = (recordResponseFromServer) => {
-      const statusCode =
-        recordResponseFromServer.status_code || recordResponseFromServer.status
-
-      return statusCode >= 200 && statusCode < 300
-    }
-
     getOfflineReadyProjectIds = () =>
       this._dexieInstance.uiState_offlineReadyProjects.toArray()
 
@@ -81,7 +74,7 @@ const ProjectsMixin = (Base) =>
             email,
           })
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
               response,
             )
 
