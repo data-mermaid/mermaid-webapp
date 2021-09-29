@@ -50,7 +50,7 @@ const ProjectsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getUserProfile = async (email) => {
+    getUserProfile = (email) => {
       if (!email) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -70,7 +70,7 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addUser = async (email, projectId) => {
+    addUser = (email, projectId) => {
       if (!projectId || !email) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -98,6 +98,33 @@ const ProjectsMixin = (Base) =>
                 `the API record returned from addUser doesn't have a successful status code`,
               ),
             )
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    transferSampleUnits = (projectId, fromProfileId, toProfileId) => {
+      if (!projectId || !fromProfileId || !toProfileId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isAuthenticatedAndReady) {
+        return this._apiSyncInstance
+          .forcePushEverythingForAProjectButChoices(projectId)
+          .then(() => {
+            return this._authenticatedAxios
+              .put(
+                `${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`,
+                { from_profile: fromProfileId, to_profile: toProfileId },
+              )
+              .then((response) => {
+                return this._apiSyncInstance
+                  .pullEverythingForAProjectButChoices(projectId)
+                  .then(() => {
+                    return response.data
+                  })
+              })
           })
       }
 
