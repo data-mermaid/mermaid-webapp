@@ -230,6 +230,38 @@ const SyncApiDataIntoOfflineStorage = class {
       },
     )
   }
+
+  forcePushEverythingForAProjectButChoices = async (projectId) => {
+    await this.pushChanges()
+
+    return this._dexieInstance.uiState_offlineReadyProjects.put({
+      id: projectId,
+    })
+  }
+
+  pullEverythingForAProjectButChoices = async (projectId) => {
+    const apiDataNamesToPullNonProject = [
+      'benthic_attributes',
+      'collect_records',
+      'fish_families',
+      'fish_genera',
+      'fish_species',
+      'project_managements',
+      'project_profiles',
+      'project_sites',
+      'projects',
+    ]
+
+    const pullResponse = await pullApiData({
+      dexieInstance: this._dexieInstance,
+      auth0Token: this._auth0Token,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: apiDataNamesToPullNonProject,
+      projectId,
+    })
+
+    return pullResponse
+  }
 }
 
 export default SyncApiDataIntoOfflineStorage
