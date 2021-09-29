@@ -50,7 +50,7 @@ const ProjectsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getUserProfile = async (email) => {
+    getUserProfile = (email) => {
       if (!email) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -70,7 +70,7 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addUser = async (email, projectId) => {
+    addUser = (email, projectId) => {
       if (!projectId || !email) {
         Promise.reject(this._operationMissingParameterError)
       }
