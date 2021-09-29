@@ -131,13 +131,12 @@ const Users = ({ currentUser }) => {
   ] = useState(false)
   const [newUserProfile, setNewUserProfile] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
-  const [userTransferFrom, setUserTransferFrom] = useState('')
+  const [fromUser, setFromUser] = useState({})
+  const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-
-  const [userTransferTo, setUserTransferTo] = useState(currentUser)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
@@ -159,13 +158,6 @@ const Users = ({ currentUser }) => {
         })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
-
-  const openTransferSampleUnitsModal = (name) => {
-    setUserTransferFrom(name)
-    setIsTransferSampleUnitsModalOpen(true)
-  }
-  const closeTransferSampleUnitsModal = () =>
-    setIsTransferSampleUnitsModalOpen(false)
 
   const _fetchProjectProfiles = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -219,6 +211,35 @@ const Users = ({ currentUser }) => {
   }
 
   const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
+
+  const handleNewUserProfileAdd = (event) =>
+    setNewUserProfile(event.target.value)
+
+  const handleTransferSampleUnitChange = (userId) => {
+    setToUserProfileId(userId)
+  }
+
+  const transferSampleUnits = () => {
+    const fromUserProfileId = fromUser.profileId
+
+    databaseSwitchboardInstance
+      .transferSampleUnits(projectId, fromUserProfileId, toUserProfileId)
+      .then((resp) => {
+        const numRecordTransferred = resp.num_collect_records_transferred
+
+        _fetchProjectProfiles()
+        toast.success(`${numRecordTransferred} are transferred`)
+      })
+
+    return Promise.resolve()
+  }
+
+  const openTransferSampleUnitsModal = (profileId, profileName) => {
+    setFromUser({ profileId, profileName })
+    setIsTransferSampleUnitsModalOpen(true)
+  }
+  const closeTransferSampleUnitsModal = () =>
+    setIsTransferSampleUnitsModalOpen(false)
 
   const tableColumns = useMemo(() => {
     return [
@@ -291,6 +312,7 @@ const Users = ({ currentUser }) => {
         email,
         picture,
         num_active_sample_units,
+        profile,
       }) => {
         return {
           name: (
@@ -307,7 +329,9 @@ const Users = ({ currentUser }) => {
           transfer: (
             <ButtonSecondary
               type="button"
-              onClick={() => openTransferSampleUnitsModal(profile_name)}
+              onClick={() =>
+                openTransferSampleUnitsModal(profile, profile_name)
+              }
             >
               <IconAccountConvert />
             </ButtonSecondary>
@@ -365,13 +389,7 @@ const Users = ({ currentUser }) => {
   )
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
-
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
-
-  const handleNewUserProfileAdd = (event) =>
-    setNewUserProfile(event.target.value)
-
-  const handleTransferSampleUnitChange = (name) => setUserTransferTo(name)
 
   const table = (
     <>
@@ -436,10 +454,11 @@ const Users = ({ currentUser }) => {
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
         onDismiss={closeTransferSampleUnitsModal}
-        userTransferTo={userTransferTo}
-        userTransferFrom={userTransferFrom}
+        toUserProfileId={toUserProfileId}
+        fromUser={fromUser}
         userOptions={observerProfiles}
         handleTransferSampleUnitChange={handleTransferSampleUnitChange}
+        onSubmit={transferSampleUnits}
       />
     </>
   )

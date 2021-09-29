@@ -36,20 +36,25 @@ const ModalBodyContainer = styled.div`
 const TransferSampleUnitsModal = ({
   isOpen,
   onDismiss,
-  userTransferTo,
-  userTransferFrom,
+  toUserProfileId,
+  fromUser,
   userOptions,
   handleTransferSampleUnitChange,
+  onSubmit,
 }) => {
-  const userTransferToName = userTransferTo && userTransferTo.full_name
-
   const optionList = userOptions
-    .filter(({ profile_name }) => profile_name !== userTransferFrom)
-    .map((user) => (
-      <option key={user.id} value={user.profile_name}>
-        {user.profile_name}
+    .filter(({ profile }) => profile !== fromUser.profileId)
+    .map(({ profile, profile_name }) => (
+      <option key={profile} value={profile}>
+        {profile_name}
       </option>
     ))
+
+  const handleOnSubmit = () => {
+    onSubmit().then(() => {
+      onDismiss()
+    })
+  }
 
   const modalContent = (
     <form>
@@ -58,7 +63,7 @@ const TransferSampleUnitsModal = ({
           <InputLabel as="div">
             Transfer unsubmitted Sample Unit from:
           </InputLabel>
-          <strong>{userTransferFrom}</strong>
+          <strong>{fromUser.profileName}</strong>
         </ModalBoxItem>
         <IconArrowRight />
         <ModalBoxItem>
@@ -73,7 +78,7 @@ const TransferSampleUnitsModal = ({
               id="modal-transfer-units-to"
               aria-labelledby="aria-label-select-users"
               aria-describedby="aria-descp-select-users"
-              value={userTransferToName}
+              value={toUserProfileId}
               onChange={(event) =>
                 handleTransferSampleUnitChange(event.target.value)
               }
@@ -92,7 +97,9 @@ const TransferSampleUnitsModal = ({
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={onDismiss}>Transfer Sample Units</ButtonPrimary>
+      <ButtonPrimary onClick={handleOnSubmit}>
+        Transfer Sample Units
+      </ButtonPrimary>
     </RightFooter>
   )
 
@@ -110,8 +117,11 @@ const TransferSampleUnitsModal = ({
 TransferSampleUnitsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  userTransferTo: currentUserPropType,
-  userTransferFrom: PropTypes.string.isRequired,
+  toUserProfileId: PropTypes.string,
+  fromUser: PropTypes.shape({
+    profileId: PropTypes.string,
+    profileName: PropTypes.string,
+  }).isRequired,
   userOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -119,10 +129,11 @@ TransferSampleUnitsModal.propTypes = {
     }),
   ).isRequired,
   handleTransferSampleUnitChange: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 }
 
 TransferSampleUnitsModal.defaultProps = {
-  userTransferTo: undefined,
+  toUserProfileId: undefined,
 }
 
 export default TransferSampleUnitsModal
