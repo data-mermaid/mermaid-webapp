@@ -20,7 +20,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const auth0Token = 'fakewhatever'
 const projectId = '5'
 
-test('pullApiData strips _pushToApi properties from api response', async () => {
+test('pullApiData strips uiState_pushToApi properties from api response', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -28,42 +28,58 @@ test('pullApiData strips _pushToApi properties from api response', async () => {
       const response = {
         benthic_attributes: {
           updates: [
-            { ...mockMermaidData.benthic_attributes[0], _pushToApi: true },
+            {
+              ...mockMermaidData.benthic_attributes[0],
+              uiState_pushToApi: true,
+            },
           ],
         },
         // choices is weird
         choices: {
-          updates: { ...mockMermaidData.choices[0], _pushToApi: true },
+          updates: { ...mockMermaidData.choices[0], uiState_pushToApi: true },
         },
         collect_records: {
           updates: [
-            { ...mockMermaidData.collect_records[0], _pushToApi: true },
+            { ...mockMermaidData.collect_records[0], uiState_pushToApi: true },
           ],
         },
         fish_families: {
-          updates: [{ ...mockMermaidData.fish_families[0], _pushToApi: true }],
+          updates: [
+            { ...mockMermaidData.fish_families[0], uiState_pushToApi: true },
+          ],
         },
         fish_genera: {
-          updates: [{ ...mockMermaidData.fish_genera[0], _pushToApi: true }],
+          updates: [
+            { ...mockMermaidData.fish_genera[0], uiState_pushToApi: true },
+          ],
         },
         fish_species: {
-          updates: [{ ...mockMermaidData.fish_species[0], _pushToApi: true }],
+          updates: [
+            { ...mockMermaidData.fish_species[0], uiState_pushToApi: true },
+          ],
         },
         project_managements: {
           updates: [
-            { ...mockMermaidData.project_managements[0], _pushToApi: true },
+            {
+              ...mockMermaidData.project_managements[0],
+              uiState_pushToApi: true,
+            },
           ],
         },
         project_profiles: {
           updates: [
-            { ...mockMermaidData.project_profiles[0], _pushToApi: true },
+            { ...mockMermaidData.project_profiles[0], uiState_pushToApi: true },
           ],
         },
         project_sites: {
-          updates: [{ ...mockMermaidData.project_sites[0], _pushToApi: true }],
+          updates: [
+            { ...mockMermaidData.project_sites[0], uiState_pushToApi: true },
+          ],
         },
         projects: {
-          updates: [{ ...mockMermaidData.projects[0], _pushToApi: true }],
+          updates: [
+            { ...mockMermaidData.projects[0], uiState_pushToApi: true },
+          ],
         },
       }
 
@@ -103,17 +119,17 @@ test('pullApiData strips _pushToApi properties from api response', async () => {
       projectStiesStored,
       projectsStored,
     ]) => {
-      expect(benthicAttributesStored[0]._pushToApi).toBeFalsy()
+      expect(benthicAttributesStored[0].uiState_pushToApi).toBeFalsy()
       // choices is weird
-      expect(choicesStored[0].choices._pushToApi).toBeFalsy()
-      expect(collectRecordsStored[0]._pushToApi).toBeFalsy()
-      expect(fishFamiliesStored[0]._pushToApi).toBeFalsy()
-      expect(fishGeneraStored[0]._pushToApi).toBeFalsy()
-      expect(fishSpeciesStored[0]._pushToApi).toBeFalsy()
-      expect(projectManagementsStored[0]._pushToApi).toBeFalsy()
-      expect(projectProfilesStored[0]._pushToApi).toBeFalsy()
-      expect(projectStiesStored[0]._pushToApi).toBeFalsy()
-      expect(projectsStored[0]._pushToApi).toBeFalsy()
+      expect(choicesStored[0].choices.uiState_pushToApi).toBeFalsy()
+      expect(collectRecordsStored[0].uiState_pushToApi).toBeFalsy()
+      expect(fishFamiliesStored[0].uiState_pushToApi).toBeFalsy()
+      expect(fishGeneraStored[0].uiState_pushToApi).toBeFalsy()
+      expect(fishSpeciesStored[0].uiState_pushToApi).toBeFalsy()
+      expect(projectManagementsStored[0].uiState_pushToApi).toBeFalsy()
+      expect(projectProfilesStored[0].uiState_pushToApi).toBeFalsy()
+      expect(projectStiesStored[0].uiState_pushToApi).toBeFalsy()
+      expect(projectsStored[0].uiState_pushToApi).toBeFalsy()
     },
   )
 })

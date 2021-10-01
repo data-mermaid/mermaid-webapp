@@ -5,124 +5,7 @@ import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAl
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 
-test('pullEverythingButChoices hits the api with the correct config', async () => {
-  const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
-    dexieInstance: getMockDexieInstanceAllSuccess(),
-  })
-
-  mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
-      const requestBody = req.body
-
-      const areAnyProjectIdsMissingFromRequest =
-        !requestBody.benthic_attributes.project ||
-        !requestBody.collect_records.project ||
-        !requestBody.fish_families.project ||
-        !requestBody.fish_genera.project ||
-        !requestBody.fish_species.project ||
-        !requestBody.project_managements.project ||
-        !requestBody.project_profiles.project ||
-        !requestBody.project_sites.project ||
-        !requestBody.projects.project
-
-      if (areAnyProjectIdsMissingFromRequest) {
-        // this causes the test to fail if deleteFishBelt doesnt
-        // send the api project ids
-
-        return res.once(ctx.status(400))
-      }
-
-      return res.once(ctx.status(200))
-    }),
-  )
-
-  expect.assertions(1)
-
-  await apiSync.pullEverythingButChoices('1').then((response) => {
-    expect(response.status).toEqual(200)
-  })
-})
-test('pullEverything hits the api with the correct config', async () => {
-  const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
-    dexieInstance: getMockDexieInstanceAllSuccess(),
-  })
-
-  mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
-      const requestBody = req.body
-
-      const areAnyProjectIdsMissingFromRequest =
-        !requestBody.benthic_attributes.project ||
-        !requestBody.choices.project ||
-        !requestBody.collect_records.project ||
-        !requestBody.fish_families.project ||
-        !requestBody.fish_genera.project ||
-        !requestBody.fish_species.project ||
-        !requestBody.project_managements.project ||
-        !requestBody.project_profiles.project ||
-        !requestBody.project_sites.project ||
-        !requestBody.projects.project
-
-      if (areAnyProjectIdsMissingFromRequest) {
-        // this causes the test to fail if deleteFishBelt doesnt
-        // send the api project ids
-
-        return res.once(ctx.status(400))
-      }
-
-      return res.once(ctx.status(200))
-    }),
-  )
-
-  expect.assertions(1)
-
-  await apiSync.pullEverything('1').then((response) => {
-    expect(response.status).toEqual(200)
-  })
-})
-
-test('pullEverythingButProjectRelated hits the api with the correct config', async () => {
-  const apiSync = new SyncApiDataIntoOfflineStorage({
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
-    dexieInstance: getMockDexieInstanceAllSuccess(),
-  })
-
-  mockMermaidApiAllSuccessful.use(
-    rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
-      const requestBody = req.body
-
-      const areAnyDataTypesMissingFromRequest =
-        !requestBody.benthic_attributes ||
-        !requestBody.choices ||
-        !requestBody.fish_families ||
-        !requestBody.fish_genera ||
-        !requestBody.fish_species ||
-        !requestBody.projects
-
-      if (areAnyDataTypesMissingFromRequest) {
-        // this causes the test to fail if deleteFishBelt doesnt
-        // send the expected data types to the api
-
-        return res.once(ctx.status(400))
-      }
-
-      return res.once(ctx.status(200))
-    }),
-  )
-
-  expect.assertions(1)
-
-  await apiSync.pullEverythingButProjectRelated().then((response) => {
-    expect(response.status).toEqual(200)
-  })
-})
-
-test('pullEverythingButChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pushThenPullEverythingForAProjectButChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -136,7 +19,7 @@ test('pullEverythingButChoices keeps track of returned last_revision_nums and se
         req.body.project_managements.last_revision === null &&
         req.body.project_profiles.last_revision === null &&
         req.body.project_sites.last_revision === null &&
-        req.body.projects.last_revision
+        req.body.projects.last_revision === null
 
       if (areLastRevisionNumbersNull === null && !hasFirstPullCallHappened) {
         hasFirstPullCallHappened = true
@@ -148,7 +31,7 @@ test('pullEverythingButChoices keeps track of returned last_revision_nums and se
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
-        // pullEverythingButChoices shouldn't be sending nulls after
+        // pushThenPullEverythingForAProjectButChoices shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
         return res(ctx.status(400))
@@ -166,13 +49,13 @@ test('pullEverythingButChoices keeps track of returned last_revision_nums and se
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pullEverythingButChoices('1')
+  await apiSync.pushThenPullEverythingForAProjectButChoices('1')
 
   // second pull from api should have last revision numbers
-  await apiSync.pullEverythingButChoices('1')
+  await apiSync.pushThenPullEverythingForAProjectButChoices('1')
 })
 
-test('pullEverything keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pushThenPullEverythingForAProject keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -187,7 +70,7 @@ test('pullEverything keeps track of returned last_revision_nums and sends them w
         req.body.project_managements.last_revision === null &&
         req.body.project_profiles.last_revision === null &&
         req.body.project_sites.last_revision === null &&
-        req.body.projects.last_revision
+        req.body.projects.last_revision === null
 
       if (areLastRevisionNumbersNull === null && !hasFirstPullCallHappened) {
         hasFirstPullCallHappened = true
@@ -199,7 +82,7 @@ test('pullEverything keeps track of returned last_revision_nums and sends them w
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
-        // pullEverything shouldn't be sending nulls after
+        // pushThenPullEverything shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
         return res(ctx.status(400))
@@ -217,13 +100,13 @@ test('pullEverything keeps track of returned last_revision_nums and sends them w
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pullEverything('1')
+  await apiSync.pushThenPullEverythingForAProject('1')
 
   // second pull from api should have last revision numbers
-  await apiSync.pullEverything('1')
+  await apiSync.pushThenPullEverythingForAProject('1')
 })
 
-test('pullEverythingButProjectRelated keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pushThenPullEverything keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -234,19 +117,19 @@ test('pullEverythingButProjectRelated keeps track of returned last_revision_nums
         req.body.fish_families.last_revision === null &&
         req.body.fish_genera.last_revision === null &&
         req.body.fish_species.last_revision === null &&
-        req.body.projects.last_revision
+        req.body.projects.last_revision === null
 
-      if (areLastRevisionNumbersNull === null && !hasFirstPullCallHappened) {
+      if (areLastRevisionNumbersNull && !hasFirstPullCallHappened) {
         hasFirstPullCallHappened = true
         const response = {
-          collect_records: { updates: [], deletes: [], last_revision_num: 17 },
+          choices: { updates: [], deletes: [], last_revision_num: 17 },
         }
 
         return res(ctx.json(response))
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
-        // pullEverythingButProjectRelated shouldn't be sending nulls after
+        // pushThenPullEverything shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
         return res(ctx.status(400))
@@ -264,13 +147,13 @@ test('pullEverythingButProjectRelated keeps track of returned last_revision_nums
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pullEverythingButProjectRelated()
+  await apiSync.pushThenPullEverything()
 
   // second pull from api should have last revision numbers
-  await apiSync.pullEverythingButProjectRelated()
+  await apiSync.pushThenPullEverything()
 })
 
-test('pullEverythingButChoices updates IDB with API data', async () => {
+test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -370,88 +253,91 @@ test('pullEverythingButChoices updates IDB with API data', async () => {
   )
 
   expect.assertions(18)
-  await apiSync.pullEverythingButChoices('1').then(async () => {
-    await Promise.all([
-      dexieInstance.benthic_attributes.toArray(),
-      dexieInstance.collect_records.toArray(),
-      dexieInstance.fish_families.toArray(),
-      dexieInstance.fish_genera.toArray(),
-      dexieInstance.fish_species.toArray(),
-      dexieInstance.project_managements.toArray(),
-      dexieInstance.project_profiles.toArray(),
-      dexieInstance.project_sites.toArray(),
-      dexieInstance.projects.toArray(),
-    ]).then(
-      ([
-        benthicAttributesStored,
-        collectRecordsStored,
-        fishFamiliesStored,
-        fishGeneraStored,
-        fishSpeciesStored,
-        projectManagementsStored,
-        projectProfilesStored,
-        projectStiesStored,
-        projectsStored,
-      ]) => {
-        expect(
-          benthicAttributesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(benthicAttributesStored.length).toEqual(1)
-        expect(
-          collectRecordsStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(collectRecordsStored.length).toEqual(1)
-        expect(
-          fishFamiliesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(fishFamiliesStored.length).toEqual(1)
-        expect(
-          fishGeneraStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(fishGeneraStored.length).toEqual(1)
-        expect(
-          fishSpeciesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(fishSpeciesStored.length).toEqual(1)
-        expect(
-          projectManagementsStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(projectManagementsStored.length).toEqual(1)
-        expect(
-          projectProfilesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(projectProfilesStored.length).toEqual(1)
-        expect(
-          projectStiesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(projectStiesStored.length).toEqual(1)
-        expect(
-          projectsStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-        ).not.toBeDefined()
-        // expect second stored record to get deleted
-        expect(projectsStored.length).toEqual(1)
-      },
-    )
-  })
+  await apiSync
+    .pushThenPullEverythingForAProjectButChoices('1')
+    .then(async () => {
+      await Promise.all([
+        dexieInstance.benthic_attributes.toArray(),
+        dexieInstance.collect_records.toArray(),
+        dexieInstance.fish_families.toArray(),
+        dexieInstance.fish_genera.toArray(),
+        dexieInstance.fish_species.toArray(),
+        dexieInstance.project_managements.toArray(),
+        dexieInstance.project_profiles.toArray(),
+        dexieInstance.project_sites.toArray(),
+        dexieInstance.projects.toArray(),
+      ]).then(
+        ([
+          benthicAttributesStored,
+          collectRecordsStored,
+          fishFamiliesStored,
+          fishGeneraStored,
+          fishSpeciesStored,
+          projectManagementsStored,
+          projectProfilesStored,
+          projectStiesStored,
+          projectsStored,
+        ]) => {
+          expect(
+            benthicAttributesStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(benthicAttributesStored.length).toEqual(1)
+          expect(
+            collectRecordsStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(collectRecordsStored.length).toEqual(1)
+          expect(
+            fishFamiliesStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(fishFamiliesStored.length).toEqual(1)
+          expect(
+            fishGeneraStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(fishGeneraStored.length).toEqual(1)
+          expect(
+            fishSpeciesStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(fishSpeciesStored.length).toEqual(1)
+          expect(
+            projectManagementsStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(projectManagementsStored.length).toEqual(1)
+          expect(
+            projectProfilesStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(projectProfilesStored.length).toEqual(1)
+          expect(
+            projectStiesStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(projectStiesStored.length).toEqual(1)
+          expect(
+            projectsStored[0]
+              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          ).not.toBeDefined()
+          // expect second stored record to get deleted
+          expect(projectsStored.length).toEqual(1)
+        },
+      )
+    })
 })
 
-test('PullEverything updates IDB with API data', async () => {
+test('pushThenPullEverythingForAProject updates IDB with API data', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -565,7 +451,7 @@ test('PullEverything updates IDB with API data', async () => {
   )
 
   expect.assertions(20)
-  await apiSync.pullEverything('1').then(async () => {
+  await apiSync.pushThenPullEverythingForAProject('1').then(async () => {
     await Promise.all([
       dexieInstance.benthic_attributes.toArray(),
       dexieInstance.choices.toArray(),
@@ -644,8 +530,12 @@ test('PullEverything updates IDB with API data', async () => {
   })
 })
 
-test('PullEverythingButProjectRelated updates IDB with API data', async () => {
+test('pushThenPullEverything updates IDB with API data', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  // so we can test that an offline ready project gets pulled too
+  await dexieInstance.uiState_offlineReadyProjects.put({ id: '5' })
+
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
@@ -725,12 +615,37 @@ test('PullEverythingButProjectRelated updates IDB with API data', async () => {
         },
       }
 
+      const isOfflineReadyProjectsPull = !!req.body.collect_records
+
+      if (isOfflineReadyProjectsPull) {
+        response.collect_records = {
+          updates: [mockMermaidData.collect_records[1]],
+          deletes: [mockMermaidData.collect_records[0]],
+          last_revision_num: 17,
+        }
+        response.project_managements = {
+          updates: [mockMermaidData.project_managements[1]],
+          deletes: [mockMermaidData.project_managements[0]],
+          last_revision_num: 17,
+        }
+        response.project_profiles = {
+          updates: [mockMermaidData.project_profiles[1]],
+          deletes: [mockMermaidData.project_profiles[0]],
+          last_revision_num: 17,
+        }
+        response.project_sites = {
+          updates: [mockMermaidData.project_sites[1]],
+          deletes: [mockMermaidData.project_sites[0]],
+          last_revision_num: 17,
+        }
+      }
+
       return res(ctx.json(response))
     }),
   )
 
-  expect.assertions(12)
-  await apiSync.pullEverything('1').then(async () => {
+  expect.assertions(16)
+  await apiSync.pushThenPullEverything().then(async () => {
     await Promise.all([
       dexieInstance.benthic_attributes.toArray(),
       dexieInstance.choices.toArray(),
@@ -738,6 +653,10 @@ test('PullEverythingButProjectRelated updates IDB with API data', async () => {
       dexieInstance.fish_genera.toArray(),
       dexieInstance.fish_species.toArray(),
       dexieInstance.projects.toArray(),
+      dexieInstance.collect_records.toArray(),
+      dexieInstance.project_managements.toArray(),
+      dexieInstance.project_profiles.toArray(),
+      dexieInstance.project_sites.toArray(),
     ]).then(
       ([
         benthicAttributesStored,
@@ -746,6 +665,10 @@ test('PullEverythingButProjectRelated updates IDB with API data', async () => {
         fishGeneraStored,
         fishSpeciesStored,
         projectsStored,
+        collectRecordsStored,
+        projectManagementsStored,
+        projectProfilesStored,
+        projectSitesStored,
       ]) => {
         expect(
           benthicAttributesStored[0]
@@ -777,6 +700,10 @@ test('PullEverythingButProjectRelated updates IDB with API data', async () => {
           projectsStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(projectsStored.length).toEqual(1)
+        expect(collectRecordsStored.length).toEqual(1)
+        expect(projectManagementsStored.length).toEqual(1)
+        expect(projectProfilesStored.length).toEqual(1)
+        expect(projectSitesStored.length).toEqual(1)
       },
     )
   })
@@ -818,37 +745,37 @@ test('pushChanges includes the expected modified data', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  // add a _pushToApi flag to one of each data type to simulate it being edited/created
+  // add a uiState_pushToApi flag to one of each data type to simulate it being edited/created
   await dexieInstance.benthic_attributes.put({
     ...(await dexieInstance.benthic_attributes.toArray())[0],
-    _pushToApi: true,
+    uiState_pushToApi: true,
   })
   await dexieInstance.collect_records.put({
     ...(await dexieInstance.collect_records.toArray())[0],
-    _pushToApi: true,
+    uiState_pushToApi: true,
   })
   await dexieInstance.fish_species.put({
     ...(await dexieInstance.fish_species.toArray())[0],
-    _pushToApi: true,
+    uiState_pushToApi: true,
   })
 
   await dexieInstance.project_managements.put({
     ...(await dexieInstance.project_managements.toArray())[0],
-    _pushToApi: true,
+    uiState_pushToApi: true,
   })
 
   await dexieInstance.project_profiles.put({
     ...(await dexieInstance.project_profiles.toArray())[0],
-    _pushToApi: true,
+    uiState_pushToApi: true,
   })
 
   await dexieInstance.project_sites.put({
     ...(await dexieInstance.project_sites.toArray())[0],
-    _pushToApi: true,
+    uiState_pushToApi: true,
   })
   await dexieInstance.projects.put({
     ...(await dexieInstance.projects.toArray())[0],
-    _pushToApi: true,
+    uiState_pushToApi: true,
   })
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,

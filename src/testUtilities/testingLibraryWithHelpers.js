@@ -67,6 +67,35 @@ UnauthenticatedProviders.propTypes = {
 UnauthenticatedProviders.defaultProps = {
   initialEntries: undefined,
 }
+const renderAuthenticated = (
+  ui,
+  {
+    renderOptions,
+    initialEntries,
+    dexieInstance,
+    isSyncInProgressOverride,
+  } = {},
+) => {
+  const wrapper = ({ children }) => {
+    return (
+      <AuthenticatedProviders
+        initialEntries={initialEntries}
+        isSyncInProgressOverride={isSyncInProgressOverride}
+      >
+        <DatabaseSwitchboardInstanceProvider
+          value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
+        >
+          <OnlineStatusProvider>{children}</OnlineStatusProvider>
+        </DatabaseSwitchboardInstanceProvider>
+      </AuthenticatedProviders>
+    )
+  }
+
+  return render(ui, {
+    wrapper,
+    ...renderOptions,
+  })
+}
 
 const renderAuthenticatedOnline = (
   ui,
@@ -86,7 +115,7 @@ const renderAuthenticatedOnline = (
         <DatabaseSwitchboardInstanceProvider
           value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
         >
-          <OnlineStatusProvider value={{ isOnline: true }}>
+          <OnlineStatusProvider value={{ isAppOnline: true }}>
             {children}
           </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -107,7 +136,7 @@ const renderUnauthenticatedOnline = (
   const wrapper = ({ children }) => {
     return (
       <UnauthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isOnline: true }}>
+        <OnlineStatusProvider value={{ isAppOnline: true }}>
           {children}
         </OnlineStatusProvider>
       </UnauthenticatedProviders>
@@ -135,7 +164,7 @@ const renderAuthenticatedOffline = (
         <DatabaseSwitchboardInstanceProvider
           value={getMockOfflineDatabaseSwitchboardInstance(dexieInstance)}
         >
-          <OnlineStatusProvider value={{ isOnline: false }}>
+          <OnlineStatusProvider value={{ isAppOnline: false }}>
             {children}
           </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -156,7 +185,7 @@ const renderUnauthenticatedOffline = (
   const wrapper = ({ children }) => {
     return (
       <UnauthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isOnline: false }}>
+        <OnlineStatusProvider value={{ isAppOnline: false }}>
           {children}
         </OnlineStatusProvider>
       </UnauthenticatedProviders>
@@ -176,6 +205,7 @@ export { default as mockMermaidApiAllSuccessful } from './mockMermaidApiAllSucce
 export * from '@testing-library/react'
 export {
   renderOverride as render,
+  renderAuthenticated,
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
   renderUnauthenticatedOffline,

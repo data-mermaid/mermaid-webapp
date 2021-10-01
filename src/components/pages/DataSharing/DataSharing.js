@@ -4,15 +4,6 @@ import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { getProjectInitialValues } from '../Admin/projectRecordInitialFormValue'
-import { H2, P } from '../../generic/text'
-import { ContentPageLayout } from '../../Layout'
-import { ButtonPrimary } from '../../generic/buttons'
-import PageUnavailableOffline from '../PageUnavailableOffline'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { MaxWidthInputWrapper } from '../../generic/form'
-import { TooltipWithText } from '../../generic/tooltip'
 import {
   Table,
   Tr,
@@ -20,11 +11,21 @@ import {
   Td,
   TableOverflowWrapper,
 } from '../../generic/Table/table'
+import { ButtonPrimary } from '../../generic/buttons'
+import { ContentPageLayout } from '../../Layout'
 import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
+import { getProjectInitialValues } from '../Admin/projectRecordInitialFormValue'
+import { H2, P } from '../../generic/text'
 import { IconInfo } from '../../icons'
-import theme from '../../../theme'
-import language from '../../../language'
+import { MaxWidthInputWrapper } from '../../generic/form'
+import { TooltipWithText } from '../../generic/tooltip'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import language from '../../../language'
+import PageUnavailableOffline from '../PageUnavailableOffline'
+import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
 
 const DataSharingTable = styled(Table)`
@@ -49,14 +50,14 @@ const CheckBoxLabel = styled.label`
   }
 `
 const DataSharing = () => {
-  const { isOnline } = useOnlineStatus()
-
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
-  const [projectBeingEdited, setProjectBeingEdited] = useState()
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const isMounted = useIsMounted()
+  const [projectBeingEdited, setProjectBeingEdited] = useState()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
+  const isMounted = useIsMounted()
 
   const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(
     false,
@@ -74,6 +75,9 @@ const DataSharing = () => {
       Promise.all(promises)
         .then(([projectResponse, choicesResponse]) => {
           if (isMounted.current) {
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData([projectId])
+            }
             setProjectBeingEdited(projectResponse)
             setDataPolicyOptions(
               getDataSharingOptions(choicesResponse.datapolicies),
@@ -108,7 +112,7 @@ const DataSharing = () => {
     form.setFieldValue('data_policy_habitatcomplexity', updatedValue)
   }
 
-  const content = isOnline ? (
+  const content = isAppOnline ? (
     <Formik {...formikOptions}>
       {(formik) => (
         <>
@@ -239,7 +243,12 @@ const DataSharing = () => {
     <PageUnavailableOffline />
   )
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={content}

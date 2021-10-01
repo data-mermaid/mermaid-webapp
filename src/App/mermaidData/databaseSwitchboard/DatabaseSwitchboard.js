@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import CollectRecordsMixin from './CollectRecordsMixin'
 import DatabaseSwitchboardState from './DatabaseSwitchboardState'
 import ManagementRegimesMixin from './ManagementRegimesMixin'
-import UserProfileMixin from './UserProfileMixin'
 import ChoicesMixin from './ChoicesMixin'
 import ProjectsMixin from './ProjectsMixin'
 import SitesMixin from './SitesMixin'
@@ -15,9 +14,7 @@ class DatabaseSwitchboard extends FishNameMixin(
     SitesMixin(
       ProjectsMixin(
         ChoicesMixin(
-          ManagementRegimesMixin(
-            CollectRecordsMixin(UserProfileMixin(DatabaseSwitchboardState)),
-          ),
+          ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState)),
         ),
       ),
     ),
@@ -29,7 +26,6 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getCollectRecord: PropTypes.func,
   getCollectRecordsWithoutOfflineDeleted: PropTypes.func,
   getCollectRecordsForUIDisplay: PropTypes.func,
-  getFishBelt: PropTypes.func,
   getManagementRegimesWithoutOfflineDeleted: PropTypes.func,
   getManagementRegime: PropTypes.func,
   getManagementRegimeRecordsForUiDisplay: PropTypes.func,
@@ -37,16 +33,18 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getProject: PropTypes.func,
   getProjectTags: PropTypes.func,
   getProjectProfiles: PropTypes.func,
+  getUserProfile: PropTypes.func,
+  addUser: PropTypes.func,
   getSitesWithoutOfflineDeleted: PropTypes.func,
   getSite: PropTypes.func,
   getSiteRecordsForUIDisplay: PropTypes.func,
-  getUserProfile: PropTypes.func,
   getSubmittedRecords: PropTypes.func,
   getSubmittedFishBeltTransectRecords: PropTypes.func,
   getSubmittedFishBeltTransectRecord: PropTypes.func,
   getSubmittedRecordsForUIDisplay: PropTypes.func,
   saveFishBelt: PropTypes.func,
   deleteFishBelt: PropTypes.func,
+  validateFishBelt: PropTypes.func,
 })
 
 export default DatabaseSwitchboard

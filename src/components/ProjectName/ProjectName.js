@@ -70,7 +70,7 @@ const ProjectName = () => {
         .getProject(projectId)
         .then((projectResponse) => {
           if (isMounted.current) {
-            setProjectName(projectResponse.name)
+            setProjectName(projectResponse?.name)
           }
         })
     }

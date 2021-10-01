@@ -1,11 +1,11 @@
 import axios from 'axios'
 import {
-  getLastRevisionNumbersPulled,
+  getLastRevisionNumbersPulledForAProject,
   persistLastRevisionNumbersPulled,
 } from './lastRevisionNumbers'
 
 const resetPushToApiTagFromItems = (items) =>
-  items.map((item) => ({ ...item, _pushToApi: false }))
+  items.map((item) => ({ ...item, uiState_pushToApi: false }))
 
 export const pullApiData = async ({
   dexieInstance,
@@ -14,9 +14,12 @@ export const pullApiData = async ({
   apiDataNamesToPull,
   projectId,
 }) => {
-  const lastRevisionNumbersPulled = await getLastRevisionNumbersPulled({
-    dexieInstance,
-  })
+  const lastRevisionNumbersPulled = await getLastRevisionNumbersPulledForAProject(
+    {
+      dexieInstance,
+      projectId,
+    },
+  )
 
   const pullRequestBody = apiDataNamesToPull.reduce(
     (accumulator, apiDataName) => ({
@@ -41,11 +44,6 @@ export const pullApiData = async ({
 
   const apiData = pullResponse.data
 
-  await persistLastRevisionNumbersPulled({
-    dexieInstance,
-    apiData,
-  })
-
   await dexieInstance.transaction(
     'rw',
     dexieInstance.benthic_attributes,
@@ -58,7 +56,14 @@ export const pullApiData = async ({
     dexieInstance.project_profiles,
     dexieInstance.project_sites,
     dexieInstance.projects,
+    dexieInstance.uiState_lastRevisionNumbersPulled,
     async () => {
+      persistLastRevisionNumbersPulled({
+        dexieInstance,
+        apiData,
+        projectId,
+      })
+
       apiDataNamesToPull.forEach((apiDataType) => {
         if (apiDataType === 'choices') {
           // choices deletes property will always be empty, so we just ignore it
@@ -66,7 +71,7 @@ export const pullApiData = async ({
 
           dexieInstance.choices.put({
             id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
-            choices: { ...apiData.choices?.updates, _pushToApi: false },
+            choices: { ...apiData.choices?.updates, uiState_pushToApi: false },
           })
         }
         if (apiDataType !== 'choices') {

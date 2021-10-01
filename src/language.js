@@ -7,8 +7,9 @@ const error = {
     'Options data for creating a collect record is currently unavailable. Please try again',
   collectRecordsUnavailable:
     'Collect records data is currently unavailable. Please try again',
-  apiDataPull:
-    'The app was not able to pull and store data from the API. Please try again.',
+  collectRecordFailedValidation: `Validation is currently unavailable for this record.`,
+  apiDataSync:
+    'the app was not able to sync data with the API. Please try again.',
   projectsUnavailable:
     'Projects data is currently unavailable. Please try again',
   userProfileUnavailable: 'The user profile is unavailable.',
@@ -16,13 +17,16 @@ const error = {
     'Something went wrong. The collect record has not been saved.',
   collectRecordDelete:
     'Something went wrong. The collect record has not been deleted.',
-  generaUnavailable:
-    'Fish genera data is currently unavailable. Please try again',
+  error: 'Error',
   fishSpeciesSave:
     'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
   fishSpeciesAlreadyExists:
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   formValidation: { required: 'This field is required' },
+  generic: 'Oooops. Something went wrong.',
+  generaUnavailable:
+    'Fish genera data is currently unavailable. Please try again',
+  idNotFoundUserAction: 'Please check the URL in your browser address bar.',
   submittedRecordUnavailable:
     'Submitted record data is currently unavailable. Please try again',
   submittedRecordsUnavailable:
@@ -35,6 +39,19 @@ const error = {
     'Management Regime record data is currently unavailable. Please try again',
   managementRegimeRecordsUnavailable:
     'Management Regime records data is currently unavailable. Please try again',
+  getIdsNotFoundDetails: (id) =>
+    id.length > 1
+      ? `Details: information associated with one or more of the following ids cannot be found: ${id}`
+      : `Details: information associated with the id, ${id}, cannot be found.`,
+  getProjectTurnOnOfflineReadyFailure: (projectName) =>
+    `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
+  getProjectTurnOffOfflineReadyFailure: (projectName) =>
+    `Something went wrong. The Project ${projectName}, has not been removed from being offline ready.`,
+  userRecordsUnavailable:
+    'User records data is currently unavailable. Please try again',
+  emptyEmailAdd: 'No user email',
+  invalidEmailAdd: 'Invalid email',
+  duplicateNewUserAdd: 'User has already been added to project.',
 }
 
 const success = {
@@ -43,6 +60,12 @@ const success = {
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
     'Proposed fish species saved. The observation has been edited to show it selected.',
+  getProjectTurnOnOfflineReadySuccess: (projectName) =>
+    `The project, ${projectName}, is now offline ready`,
+  getProjectTurnOffOfflineReadySuccess: (projectName) =>
+    `The project, ${projectName}, has been removed from being offline ready`,
+  newUserAdd: 'New user added',
+  newPendingUserAdd: 'Sign-up email sent. New user added as pending.',
 }
 
 const deleteCollectRecord = {
@@ -76,6 +99,7 @@ const autocomplete = {
 }
 
 const pages = {
+  projectsList: { offlineReadyCheckboxLabel: 'Offline Ready' },
   collectRecord: {
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
@@ -122,6 +146,12 @@ const pages = {
   },
 }
 
+const offlineNotificationMessages = {
+  toggleOffline: 'You turn on OFFLINE mode.',
+  navigatorOffline: 'Network connection is off. You are OFFLINE now.',
+  serverReachable: 'Server connection is down. You are OFFLINE now.',
+}
+
 export default {
   error,
   success,
@@ -129,4 +159,5 @@ export default {
   autocomplete,
   pages,
   createFishSpecies,
+  offlineNotificationMessages
 }

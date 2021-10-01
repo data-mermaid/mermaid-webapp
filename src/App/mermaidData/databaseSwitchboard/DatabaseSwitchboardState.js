@@ -30,6 +30,8 @@ const DatabaseSwitchboardState = class {
     "This operation requires a parameter that isn't being supplied",
   )
 
+  _getIsResponseStatusSuccessful
+
   constructor({
     apiBaseUrl,
     apiSyncInstance,
@@ -37,7 +39,7 @@ const DatabaseSwitchboardState = class {
     dexieInstance,
     isMermaidAuthenticated,
     isOfflineStorageHydrated,
-    isOnline,
+    isAppOnline,
   }) {
     this._apiBaseUrl = apiBaseUrl
     this._apiSyncInstance = apiSyncInstance
@@ -53,11 +55,18 @@ const DatabaseSwitchboardState = class {
         })
       : undefined
     this._isOnlineAuthenticatedAndReady =
-      this._isAuthenticatedAndReady && isOnline && !!this._authenticatedAxios
+      this._isAuthenticatedAndReady && isAppOnline && !!this._authenticatedAxios
     this._isOnlineAuthenticatedAndLoading =
-      this._isAuthenticatedAndReady && isOnline && !this._authenticatedAxios
+      this._isAuthenticatedAndReady && isAppOnline && !this._authenticatedAxios
     this._isOfflineAuthenticatedAndReady =
-      this._isAuthenticatedAndReady && !isOnline
+      this._isAuthenticatedAndReady && !isAppOnline
+  }
+
+  _getIsResponseStatusSuccessful = (recordResponseFromServer) => {
+    const statusCode =
+      recordResponseFromServer.status_code || recordResponseFromServer.status
+
+    return statusCode >= 200 && statusCode < 300
   }
 }
 

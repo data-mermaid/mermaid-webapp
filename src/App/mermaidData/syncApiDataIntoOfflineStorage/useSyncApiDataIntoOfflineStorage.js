@@ -20,7 +20,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
   auth0Token,
   dexieInstance,
   isMounted,
-  isOnline,
+  isAppOnline,
 }) => {
   const location = useLocation()
   const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(
@@ -40,7 +40,11 @@ export const useSyncApiDataIntoOfflineStorage = ({
 
   const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {
     const isOnlineAndReady =
-      apiBaseUrl && auth0Token && dexieInstance && isMounted.current && isOnline
+      apiBaseUrl &&
+      auth0Token &&
+      dexieInstance &&
+      isMounted.current &&
+      isAppOnline
 
     const projectId = getProjectIdFromLocation(location)
 
@@ -51,13 +55,16 @@ export const useSyncApiDataIntoOfflineStorage = ({
       !auth0Token &&
       dexieInstance &&
       isMounted.current &&
-      !isOnline
+      !isAppOnline
 
-    const isInitialLoadOnNonProjectPage =
-      isPageReload.current && !isProjectPage && isOnlineAndReady
-    const isInitialLoadOnProjectPage =
+    const isProjectsListPage =
+      location.pathname === '/projects' || location.pathname === '/projects/'
+
+    const isProjectsListPageAndOnline = isProjectsListPage && isOnlineAndReady
+
+    const isInitialLoadOnProjectPageAndOnline =
       isPageReload.current && isProjectPage && isOnlineAndReady
-    const isNotInitialLoadOnProjectPage =
+    const isNotInitialLoadOnProjectPageAndOnline =
       !isPageReload.current && isProjectPage && isOnlineAndReady
 
     if (isOfflineAndReadyAndAlreadyInitiated) {
@@ -65,42 +72,50 @@ export const useSyncApiDataIntoOfflineStorage = ({
       setIsSyncInProgress(false)
     }
 
-    if (isInitialLoadOnNonProjectPage) {
+    if (isProjectsListPageAndOnline) {
+      // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pullEverythingButProjectRelated()
+        .pushThenPullEverything()
         .then(() => {
-          setIsOfflineStorageHydrated(true)
-          setIsSyncInProgress(false)
-          isPageReload.current = false
+          if (isMounted.current) {
+            setIsOfflineStorageHydrated(true)
+            setIsSyncInProgress(false)
+            isPageReload.current = false
+          }
         })
         .catch(() => {
-          toast.error(language.error.apiDataPull)
+          toast.error(language.error.apiDataSync)
         })
     }
 
-    if (isInitialLoadOnProjectPage) {
+    if (isInitialLoadOnProjectPageAndOnline) {
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pullEverything(projectId)
+        .pushThenPullEverythingForAProject(projectId)
         .then(() => {
-          setIsOfflineStorageHydrated(true)
-          setIsSyncInProgress(false)
-          isPageReload.current = false
+          if (isMounted.current) {
+            setIsOfflineStorageHydrated(true)
+            setIsSyncInProgress(false)
+            isPageReload.current = false
+          }
         })
         .catch(() => {
-          toast.error(language.error.apiDataPull)
+          toast.error(language.error.apiDataSync)
         })
     }
-    if (isNotInitialLoadOnProjectPage) {
+    if (isNotInitialLoadOnProjectPageAndOnline) {
+      // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
       syncApiDataIntoOfflineStorage
-        .pullEverythingButChoices(projectId)
+        .pushThenPullEverythingForAProjectButChoices(projectId)
         .then(() => {
-          setIsSyncInProgress(false)
+          if (isMounted.current) {
+            setIsSyncInProgress(false)
+          }
         })
         .catch(() => {
-          toast.error(language.error.apiDataPull)
+          toast.error(language.error.apiDataSync)
         })
     }
   }, [
@@ -108,7 +123,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
     auth0Token,
     dexieInstance,
     isMounted,
-    isOnline,
+    isAppOnline,
     location,
     setIsSyncInProgress,
     syncApiDataIntoOfflineStorage,

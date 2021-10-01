@@ -1,45 +1,86 @@
-import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import {
   ButtonGroups,
   CardWrapper,
   CheckBoxLabel,
-  ProjectCardButtonSecondary,
   ProjectInfoWrapper,
   ProjectNameWrapper,
-  VerticalRule,
 } from './ProjectCard.styles'
-import { IconCopy } from '../icons'
-import { useOnlineStatus } from '../../library/onlineStatusContext'
-import NavLinkButtonGroup from '../NavLinkButtonGroup'
 import { pluralize } from '../../library/pluralize'
-import stopEventPropagation from '../../library/stopEventPropagation'
-import OfflineHide from '../generic/OfflineHide'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
+import language from '../../language'
+import NavLinkButtonGroup from '../NavLinkButtonGroup'
+import stopEventPropagation from '../../library/stopEventPropagation'
+import SyncApiDataIntoOfflineStorage from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
+import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
-const ProjectCard = ({ project, ...restOfProps }) => {
-  const { name, countries, num_sites, offlineReady, updated_on, id } = project
+const ProjectCard = ({
+  project,
+  apiSyncInstance,
+  isOfflineReady,
+  ...restOfProps
+}) => {
+  const { isAppOnline } = useOnlineStatus()
+  const { name, countries, num_sites, updated_on, id } = project
+  const { setIsSyncInProgress } = useSyncStatus()
   const history = useHistory()
-  const { isOnline: isAppOnline } = useOnlineStatus()
-  const [projectOfflineStatus, setProjectOfflineStatus] = useState(offlineReady)
   const projectUrl = `projects/${id}`
 
-  const handleProjectOfflineReadyClick = (e) => {
-    setProjectOfflineStatus(e.target.checked)
+  const handleProjectOfflineReadyClick = (event) => {
+    const isChecked = event.target.checked
+
+    if (isChecked) {
+      setIsSyncInProgress(true)
+      apiSyncInstance
+        .pushThenPullEverythingForAProjectButChoices(project.id)
+        .then(() => {
+          // we need to clear the sync status even if component no longer mounted
+          setIsSyncInProgress(false)
+          toast.success(
+            language.success.getProjectTurnOnOfflineReadySuccess(name),
+          )
+        })
+        .catch(() => {
+          toast.error(language.error.getProjectTurnOnOfflineReadyFailure(name))
+        })
+    }
+    if (!isChecked) {
+      setIsSyncInProgress(true)
+      apiSyncInstance
+        .pushThenRemoveProjectFromOfflineStorage(project.id)
+        .then(() => {
+          // we need to clear the sync status even if component no longer mounted
+          setIsSyncInProgress(false)
+          toast.success(
+            language.success.getProjectTurnOffOfflineReadySuccess(name),
+          )
+        })
+        .catch(() => {
+          toast.error(language.error.getProjectTurnOffOfflineReadyFailure(name))
+        })
+    }
   }
 
   const handleCardClick = () => {
-    const destinationUrl = isAppOnline
-      ? `${projectUrl}/health`
-      : `${projectUrl}/collecting`
+    // hiding for alpha release because leads nowhere useful
+    // const destinationUrl = isAppOnline
+    //   ? `${projectUrl}/health`
+    //   : `${projectUrl}/collecting`
+
+    // temp for alpha
+    const destinationUrl = `${projectUrl}/collecting`
 
     history.push(destinationUrl)
   }
-
-  const handleProjectCopyClick = (e) => {
-    e.stopPropagation()
-  }
+  //  hiding for alpha release because leads nowhere useful
+  // const handleProjectCopyClick = (e) => {
+  //   e.stopPropagation()
+  // }
 
   return (
     <CardWrapper onClick={handleCardClick} {...restOfProps}>
@@ -51,20 +92,26 @@ const ProjectCard = ({ project, ...restOfProps }) => {
         <p>
           {num_sites} {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
-        <CheckBoxLabel htmlFor="offline-toggle" onClick={stopEventPropagation}>
+        <CheckBoxLabel
+          htmlFor="offline-toggle"
+          onClick={stopEventPropagation}
+          disabled={!isAppOnline}
+        >
           <input
             id="offline-toggle"
             type="checkbox"
-            checked={projectOfflineStatus}
+            checked={isOfflineReady}
             onChange={handleProjectOfflineReadyClick}
+            disabled={!isAppOnline}
           />
-          Offline Ready
+          {language.pages.projectsList.offlineReadyCheckboxLabel}
         </CheckBoxLabel>
         <p>Updated: {updated_on}</p>
       </ProjectInfoWrapper>
       <ButtonGroups data-testid="project-button-groups">
         <NavLinkButtonGroup projectUrl={projectUrl} />
-        <OfflineHide>
+        {/* hiding for alpha release because leads nowhere useful */}
+        {/* <OfflineHide>
           <VerticalRule />
           <ProjectCardButtonSecondary
             onClick={handleProjectCopyClick}
@@ -73,14 +120,17 @@ const ProjectCard = ({ project, ...restOfProps }) => {
             <IconCopy />
             <span>Copy</span>
           </ProjectCardButtonSecondary>
-        </OfflineHide>
+        </OfflineHide> */}
       </ButtonGroups>
     </CardWrapper>
   )
 }
 
 ProjectCard.propTypes = {
+  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage)
+    .isRequired,
   project: projectPropType.isRequired,
+  isOfflineReady: PropTypes.bool.isRequired,
 }
 
 export default ProjectCard

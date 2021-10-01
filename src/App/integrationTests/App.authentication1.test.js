@@ -34,6 +34,8 @@ test('App: an online and authenticated user can logout', async () => {
   fireEvent.click(await screen.findByText('FakeFirstNameOnline'))
   fireEvent.click(screen.getByText('Logout'))
   await waitFor(() =>
-    expect(screen.queryByText('Projects')).not.toBeInTheDocument(),
+    expect(
+      screen.queryByRole('heading', { name: 'Projects' }),
+    ).not.toBeInTheDocument(),
   )
 })

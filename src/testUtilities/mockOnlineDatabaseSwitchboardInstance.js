@@ -13,7 +13,7 @@ const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) => {
     apiBaseUrl,
     auth0Token,
     isMermaidAuthenticated: true,
-    isOnline: true,
+    isAppOnline: true,
     dexieInstance: dexieInstanceToUse,
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance: dexieInstanceToUse,
@@ -31,7 +31,7 @@ const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) => {
     apiBaseUrl,
     auth0Token,
     isMermaidAuthenticated: true,
-    isOnline: false,
+    isAppOnline: false,
     dexieInstance: dexieInstanceToUse,
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance: dexieInstanceToUse,

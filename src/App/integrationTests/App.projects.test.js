@@ -5,7 +5,6 @@ import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOffline,
-  renderAuthenticatedOnline,
   screen,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
@@ -35,25 +34,41 @@ test('Clicking anywhere on a project card navigates to the project collect page 
     }),
   )
 })
+// commented out for alpha, reactivate post alpha
+// test('Clicking anywhere on a project card navigates to the project health page when online', async () => {
+//   renderAuthenticatedOnline(
+//     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+//   )
 
-test('Clicking anywhere on a project card navigates to the project health page when online', async () => {
-  renderAuthenticatedOnline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-  )
+//   expect(
+//     await screen.findByText('Projects', {
+//       selector: 'h1',
+//     }),
+//   )
 
-  expect(
-    await screen.findByText('Projects', {
-      selector: 'h1',
-    }),
-  )
+//   const projectCard = screen.getAllByRole('listitem')[0]
 
-  const projectCard = screen.getAllByRole('listitem')[0]
+//   userEvent.click(projectCard)
 
-  userEvent.click(projectCard)
+//   expect(
+//     await screen.findByText('Project Health', {
+//       selector: 'h2',
+//     }),
+//   )
+// })
 
-  expect(
-    await screen.findByText('Project Health', {
-      selector: 'h2',
-    }),
-  )
+test('Offline projects page only shows offline ready projects', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  // this includes marking one project as offline ready imperatively
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    dexieInstance,
+  })
+
+  const projects = await screen.findAllByRole('listitem')
+
+  // if all were shown, there would be 5, not 1
+  expect(projects.length).toEqual(1)
 })

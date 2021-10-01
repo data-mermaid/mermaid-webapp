@@ -7,17 +7,22 @@ import { useHistory } from 'react-router-dom'
 export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
   const history = useHistory()
 
-  const persistUnsavedFormData = (values) => {
-    window.sessionStorage.setItem(sessionStorageName, JSON.stringify(values))
-  }
+  const persistUnsavedFormData = useCallback(
+    (values) => {
+      window.sessionStorage.setItem(sessionStorageName, JSON.stringify(values))
+    },
+    [sessionStorageName],
+  )
 
   const clearPersistedUnsavedFormData = useCallback(
     () => window.sessionStorage.removeItem(sessionStorageName),
     [sessionStorageName],
   )
 
-  const getPersistedUnsavedFormData = () =>
-    JSON.parse(window.sessionStorage.getItem(sessionStorageName))
+  const getPersistedUnsavedFormData = useCallback(
+    () => JSON.parse(window.sessionStorage.getItem(sessionStorageName)),
+    [sessionStorageName],
+  )
 
   const _clearPersistedUnsavedFormDataBeforeUnload = useEffect(() => {
     window.addEventListener('beforeunload', clearPersistedUnsavedFormData)

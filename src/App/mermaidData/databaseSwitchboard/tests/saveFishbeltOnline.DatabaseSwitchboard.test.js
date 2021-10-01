@@ -144,13 +144,13 @@ test('saveFishBelt online returns a rejected promise if the status code from the
     })
     .catch((error) => {
       expect(error.message).toEqual(
-        'the API record returned from saveFishBelt doesnt have a succussful status code',
+        'the API record returned from saveFishBelt doesnt have a successful status code',
       )
     })
 
   /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
     We need to access indexedDb directly because we are in online mode and
-    the db switchboard's getFishBelt would try to hit the real or mocked API
+    the db switchboard's getCollectRecord would try to hit the real or mocked API
     which is boyond the scope of the test.
      */
   expect(await dbInstance.dexieInstance.collect_records.get('foo'))
@@ -257,7 +257,7 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
 
   /* this isnt an e2e test, so we will just check indexedDb. not what the API does.
       We need to access indexedDb directly because we are in online mode and
-      the db switchboard's getFishBelt would try to hit the real or mocked API
+      the db switchboard's getCollectRecord would try to hit the real or mocked API
       which is boyond the scope of the test.
      */
   const savedFishBelt = await dbInstance.dexieInstance.collect_records.get(

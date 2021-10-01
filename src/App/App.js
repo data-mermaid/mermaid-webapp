@@ -23,7 +23,7 @@ import useIsMounted from '../library/useIsMounted'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
-  const { isOnline } = useOnlineStatus()
+  const { isAppOnline } = useOnlineStatus()
   const {
     auth0Token,
     isMermaidAuthenticated,
@@ -36,7 +36,7 @@ function App({ dexieInstance }) {
     auth0Token,
     dexieInstance,
     isMounted,
-    isOnline,
+    isAppOnline,
   })
 
   const apiSyncInstance = useMemo(() => {
@@ -63,12 +63,12 @@ function App({ dexieInstance }) {
           dexieInstance,
           isMermaidAuthenticated,
           isOfflineStorageHydrated,
-          isOnline,
+          isAppOnline,
         })
   }, [
     auth0Token,
     isMermaidAuthenticated,
-    isOnline,
+    isAppOnline,
     dexieInstance,
     apiBaseUrl,
     apiSyncInstance,
@@ -76,9 +76,13 @@ function App({ dexieInstance }) {
   ])
 
   const currentUser = useCurrentUser({
-    databaseSwitchboardInstance,
+    apiBaseUrl,
+    auth0Token,
+    dexieInstance,
+    isMermaidAuthenticated,
+    isAppOnline,
   })
-  const { routes } = useRoutes({ currentUser })
+  const { routes } = useRoutes({ currentUser, apiSyncInstance })
 
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,
@@ -96,28 +100,43 @@ function App({ dexieInstance }) {
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <GlobalStyle />
         <CustomToastContainer />
-        {isMermaidAuthenticatedAndReady ? (
-          <Switch>
-            {routes.map(({ path, Component }) => (
-              <Route
-                exact
-                path={path}
-                key={path}
-                render={() => (
-                  <Layout {...layoutProps}>
-                    <Component />
-                  </Layout>
-                )}
-              />
-            ))}
-            <Route exact path="/">
-              <Redirect to="/projects" />
-            </Route>
-            <Route component={PageNotFound} />
-          </Switch>
-        ) : (
-          <LoadingIndicator />
-        )}
+        <Layout {...layoutProps}>
+          {
+            /** The isMermaidAuthenticated is needed here to prevent an
+             * infinite log in loop with authentication.
+             *
+             * The projects list route and project workflow pages will trigger
+             * a sync when they are routed to making isOfflineStorageHydrated = true,
+             * which is needed for there to be a database switchboard instance,
+             * which those pages depend on
+             */
+
+            isMermaidAuthenticated ? (
+              <Switch>
+                {routes.map(({ path, Component }) => (
+                  <Route
+                    exact
+                    path={path}
+                    key={path}
+                    render={() =>
+                      isMermaidAuthenticatedAndReady ? (
+                        <Component />
+                      ) : (
+                        <LoadingIndicator />
+                      )
+                    }
+                  />
+                ))}
+                <Route exact path="/">
+                  <Redirect to="/projects" />
+                </Route>
+                <Route component={PageNotFound} />
+              </Switch>
+            ) : (
+              <LoadingIndicator />
+            )
+          }
+        </Layout>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
   )
