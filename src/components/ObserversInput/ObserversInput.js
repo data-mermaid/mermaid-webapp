@@ -4,13 +4,16 @@ import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import { formikPropType } from '../../library/formikPropType'
-import { observersPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import InputCheckboxGroupWithLabel from '../generic/InputCheckboxGroupWithLabel'
+import {
+  fishBeltPropType,
+  observersPropType,
+} from '../../App/mermaidData/mermaidDataProptypes'
+import InputCheckboxGroupWithLabelAndValidation from '../generic/InputCheckboxGroupWithLabelAndValidation'
 import { getObserverNameOptions } from '../../library/observerHelpers'
+import getValidationPropertiesForInput from '../pages/collectRecordFormPages/getValidationPropertiesForInput'
 
-const ObserversInput = ({ formik, observers }) => {
+const ObserversInput = ({ formik, observers, collectRecord }) => {
   const observerNameOptions = getObserverNameOptions(observers)
-
   const observerNameValues = formik.values.observers.map(
     ({ profile }) => profile,
   )
@@ -21,7 +24,7 @@ const ObserversInput = ({ formik, observers }) => {
   return (
     <InputWrapper>
       <H2>Observers</H2>
-      <InputCheckboxGroupWithLabel
+      <InputCheckboxGroupWithLabelAndValidation
         label="Observers"
         id="observers"
         options={observerNameOptions}
@@ -31,14 +34,20 @@ const ObserversInput = ({ formik, observers }) => {
 
           formik.setFieldValue('observers', updateSelectedItems)
         }}
+        {...getValidationPropertiesForInput(
+          collectRecord?.validations?.results?.observers,
+        )}
       />
     </InputWrapper>
   )
 }
 
 ObserversInput.propTypes = {
-  observers: PropTypes.arrayOf(observersPropType).isRequired,
+  collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
+  observers: PropTypes.arrayOf(observersPropType).isRequired,
 }
+
+ObserversInput.defaultProps = { collectRecord: undefined }
 
 export default ObserversInput
