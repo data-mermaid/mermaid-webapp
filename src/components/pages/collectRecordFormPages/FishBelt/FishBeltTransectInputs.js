@@ -1,20 +1,31 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import { choicesPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import {
+  choicesPropType,
+  fishBeltPropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
+import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
+import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
-import { getOptions } from '../../../../library/getOptions'
 
-const FishBeltTransectForms = ({ formik, choices, onSizeBinChange }) => {
+const FishBeltTransectForms = ({
+  formik,
+  choices,
+  onSizeBinChange,
+  collectRecord,
+}) => {
   const { belttransectwidths, fishsizebins, reefslopes } = choices
   const transectWidthSelectOptions = getOptions(belttransectwidths)
   const fishSizeBinSelectOptions = getOptions(fishsizebins)
   const reefSlopeSelectOptions = getOptions(reefslopes)
+
+  const validations = collectRecord?.validations?.results
 
   return (
     <>
@@ -24,6 +35,7 @@ const FishBeltTransectForms = ({ formik, choices, onSizeBinChange }) => {
           label="Transect Number"
           id="number"
           type="number"
+          {...getValidationPropertiesForInput(validations?.fishbelt_transect)}
           {...formik.getFieldProps('number')}
         />
         <InputWithLabelAndValidation
@@ -36,6 +48,7 @@ const FishBeltTransectForms = ({ formik, choices, onSizeBinChange }) => {
           label="Transect Length Surveyed"
           id="len_surveyed"
           type="number"
+          {...getValidationPropertiesForInput(validations?.len_surveyed)}
           {...formik.getFieldProps('len_surveyed')}
         />
         <InputRadioWithLabelAndValidation
@@ -72,9 +85,12 @@ const FishBeltTransectForms = ({ formik, choices, onSizeBinChange }) => {
 }
 
 FishBeltTransectForms.propTypes = {
-  formik: formikPropType.isRequired,
   choices: choicesPropType.isRequired,
+  collectRecord: fishBeltPropType,
+  formik: formikPropType.isRequired,
   onSizeBinChange: PropTypes.func.isRequired,
 }
+
+FishBeltTransectForms.defaultProps = { collectRecord: undefined }
 
 export default FishBeltTransectForms

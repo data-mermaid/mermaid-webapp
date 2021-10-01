@@ -58,8 +58,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   )
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
+  const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
+    possibleCollectButtonGroupStates.saved,
+  )
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
@@ -67,17 +71,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
-
-  const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
-    possibleCollectButtonGroupStates.saved,
-  )
+  const observationsReducer = useReducer(fishbeltObservationReducer, [])
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const openNewFishNameModal = (observationId) => {
     setObservationToAddSpeciesTo(observationId)
@@ -86,15 +87,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const closeNewFishNameModal = () => {
     setIsNewFishNameModalOpen(false)
   }
-
   const showDeleteConfirmPrompt = () => {
     setShowDeleteModal(true)
   }
   const closeDeleteConfirmPrompt = () => {
     setShowDeleteModal(false)
   }
-  const observationsReducer = useReducer(fishbeltObservationReducer, [])
-  const [observationsState, observationsDispatch] = observationsReducer
 
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -240,14 +238,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     databaseSwitchboardInstance
       .validateFishBelt({ recordId, projectId })
-      .then((recordResponse) => {
-        if (
-          recordResponse !== undefined &&
-          recordResponse.validations.status === 'ok'
-        ) {
+      .then((validatedRecordResponse) => {
+        if (validatedRecordResponse?.validations?.status === 'ok') {
           setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
         }
         setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
+        setCollectRecordBeingEdited(validatedRecordResponse)
       })
       .catch(() => {
         toast.error(language.error.collectRecordFailedValidation)
@@ -407,13 +403,19 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 formik={formik}
                 sites={sites}
                 managementRegimes={managementRegimes}
+                collectRecord={collectRecordBeingEdited}
               />
               <FishBeltTransectInputs
                 formik={formik}
                 choices={choices}
                 onSizeBinChange={handleSizeBinChange}
+                collectRecord={collectRecordBeingEdited}
               />
-              <ObserversInput formik={formik} observers={observerProfiles} />
+              <ObserversInput
+                formik={formik}
+                observers={observerProfiles}
+                collectRecord={collectRecordBeingEdited}
+              />
               <FishBeltObservationTable
                 choices={choices}
                 collectRecord={collectRecordBeingEdited}

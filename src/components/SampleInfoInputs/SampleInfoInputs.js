@@ -6,15 +6,23 @@ import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import { formikPropType } from '../../library/formikPropType'
 import {
+  fishBeltPropType,
   managementRegimePropType,
   sitePropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
 import { getOptions } from '../../library/getOptions'
+import getValidationPropertiesForInput from '../pages/collectRecordFormPages/getValidationPropertiesForInput'
 
-const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
+const SampleInfoInputs = ({
+  formik,
+  sites,
+  managementRegimes,
+  collectRecord,
+}) => {
   const hasData = false
-  const siteSelectOptions = getOptions(sites, hasData)
   const managementSelectOptions = getOptions(managementRegimes, hasData)
+  const siteSelectOptions = getOptions(sites, hasData)
+  const validations = collectRecord?.validations?.results
 
   return (
     <>
@@ -24,18 +32,21 @@ const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
           label="Site"
           id="site"
           options={siteSelectOptions}
+          {...getValidationPropertiesForInput(validations?.site)}
           {...formik.getFieldProps('site')}
         />
         <InputSelectWithLabelAndValidation
           label="Management"
           id="management"
           options={managementSelectOptions}
+          {...getValidationPropertiesForInput(validations?.management)}
           {...formik.getFieldProps('management')}
         />
         <InputWithLabelAndValidation
           label="Depth"
           id="depth"
           type="number"
+          {...getValidationPropertiesForInput(validations?.depth)}
           {...formik.getFieldProps('depth')}
         />
         <InputWithLabelAndValidation
@@ -56,9 +67,12 @@ const SampleInfoInputs = ({ formik, sites, managementRegimes }) => {
 }
 
 SampleInfoInputs.propTypes = {
+  collectRecord: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   formik: formikPropType.isRequired,
 }
+
+SampleInfoInputs.defaultProps = { collectRecord: undefined }
 
 export default SampleInfoInputs
