@@ -47,6 +47,11 @@ const error = {
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, has not been removed from being offline ready.`,
+  userRecordsUnavailable:
+    'User records data is currently unavailable. Please try again',
+  emptyEmailAdd: 'No user email',
+  invalidEmailAdd: 'Invalid email',
+  duplicateNewUserAdd: 'User has already been added to project.',
 }
 
 const success = {
@@ -59,6 +64,8 @@ const success = {
     `The project, ${projectName}, is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `The project, ${projectName}, has been removed from being offline ready`,
+  newUserAdd: 'New user added',
+  newPendingUserAdd: 'Sign-up email sent. New user added as pending.',
 }
 
 const deleteCollectRecord = {

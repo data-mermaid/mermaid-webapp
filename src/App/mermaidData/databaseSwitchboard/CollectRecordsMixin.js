@@ -18,13 +18,6 @@ const CollectRecordsMixin = (Base) =>
       warning: 'Warnings',
     }
 
-    #getIsRecordStatusCodeSuccessful = (recordResponseFromServer) => {
-      const statusCode =
-        recordResponseFromServer.status_code || recordResponseFromServer.status
-
-      return statusCode >= 200 && statusCode < 300
-    }
-
     #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
 
     #formatFishbeltRecordForPush = ({ record, projectId, profileId }) => {
@@ -146,7 +139,7 @@ const CollectRecordsMixin = (Base) =>
           )
           .then((response) => {
             const [recordResponseFromApiPush] = response.data.collect_records
-            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
               recordResponseFromApiPush,
             )
 
@@ -218,7 +211,7 @@ const CollectRecordsMixin = (Base) =>
           .then((apiPushResponse) => {
             const recordReturnedFromApiPush =
               apiPushResponse.data.collect_records[0]
-            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
               recordReturnedFromApiPush,
             )
 
@@ -268,7 +261,7 @@ const CollectRecordsMixin = (Base) =>
             { ids: [recordId] },
           )
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
               response,
             )
 

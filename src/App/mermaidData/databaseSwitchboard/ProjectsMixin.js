@@ -42,6 +42,60 @@ const ProjectsMixin = (Base) =>
             )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    getUserProfile = (email) => {
+      if (!email) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isAuthenticatedAndReady) {
+        return this._authenticatedAxios
+          .get(`${this._apiBaseUrl}/profiles`, {
+            params: {
+              email,
+            },
+          })
+          .then((profilesData) => {
+            return profilesData
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    addUser = (email, projectId) => {
+      if (!projectId || !email) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isAuthenticatedAndReady) {
+        return this._authenticatedAxios
+          .post(`${this._apiBaseUrl}/projects/${projectId}/add_profile/`, {
+            email,
+          })
+          .then((response) => {
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
+              response,
+            )
+
+            if (isRecordStatusCodeSuccessful) {
+              return this._apiSyncInstance
+                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .then(() => {
+                  return response.data
+                })
+            }
+
+            return Promise.reject(
+              new Error(
+                `the API record returned from addUser doesn't have a successful status code`,
+              ),
+            )
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default ProjectsMixin

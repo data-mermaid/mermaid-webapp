@@ -45,6 +45,7 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
+import { validateEmail } from '../../../library/strings/validateEmail'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 
 const inputStyles = css`
@@ -139,15 +140,6 @@ const Users = () => {
 
   const [userTransferTo, setUserTransferTo] = useState(currentUser)
 
-  const openNewUserProfileModal = () => setIsNewUserProfileModalOpen(true)
-  const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
-  const openTransferSampleUnitsModal = (name) => {
-    setUserTransferFrom(name)
-    setIsTransferSampleUnitsModalOpen(true)
-  }
-  const closeTransferSampleUnitsModal = () =>
-    setIsTransferSampleUnitsModalOpen(false)
-
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
       Promise.all([
@@ -164,10 +156,70 @@ const Users = () => {
           }
         })
         .catch(() => {
-          toast.error(`users error`)
+          toast.error(language.error.userRecordsUnavailable)
         })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
+
+  const openTransferSampleUnitsModal = (name) => {
+    setUserTransferFrom(name)
+    setIsTransferSampleUnitsModalOpen(true)
+  }
+  const closeTransferSampleUnitsModal = () =>
+    setIsTransferSampleUnitsModalOpen(false)
+
+  const fetchProjectProfiles = useCallback(() => {
+    if (databaseSwitchboardInstance) {
+      databaseSwitchboardInstance
+        .getProjectProfiles(projectId)
+        .then((projectProfilesResponse) => {
+          setObserverProfiles(projectProfilesResponse)
+        })
+    }
+  }, [databaseSwitchboardInstance, projectId])
+
+  const addNewUser = () => {
+    databaseSwitchboardInstance.getUserProfile(newUserProfile).then((res) => {
+      const doesUserHaveMermaidProfile = res.data.count === 0
+
+      if (doesUserHaveMermaidProfile) {
+        setIsNewUserProfileModalOpen(true)
+      } else {
+        databaseSwitchboardInstance
+          .addUser(newUserProfile, projectId)
+          .then(() => {
+            fetchProjectProfiles()
+            setNewUserProfile('')
+            toast.success(language.success.newUserAdd)
+          })
+          .catch(() => {
+            toast.error(language.error.duplicateNewUserAdd)
+          })
+      }
+    })
+  }
+
+  const handleNewUserSubmit = () => {
+    databaseSwitchboardInstance.addUser(newUserProfile, projectId).then(() => {
+      fetchProjectProfiles()
+      setNewUserProfile('')
+      toast.success(language.success.newPendingUserAdd)
+    })
+
+    return Promise.resolve()
+  }
+
+  const openNewUserProfileModal = () => {
+    if (newUserProfile === '') {
+      toast.warning(language.error.emptyEmailAdd)
+    } else if (validateEmail(newUserProfile)) {
+      addNewUser()
+    } else {
+      toast.warning(language.error.invalidEmailAdd)
+    }
+  }
+
+  const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
 
   const tableColumns = useMemo(() => {
     return [
@@ -207,34 +259,40 @@ const Users = () => {
   }, [])
 
   const tableCellData = useMemo(() => {
-    const getObserverRole = (name) =>
-      observerProfiles.find((profile) => profile.profile_name === name).role
+    const getObserverRole = (id) =>
+      observerProfiles.find((profile) => profile.id === id).role
 
-    const observerRoleRadioCell = (name, value) => (
-      <label htmlFor={`observer-${name}`}>
-        <input
-          type="radio"
-          value={value}
-          name={name}
-          id={`observer-${name}`}
-          checked={getObserverRole(name) === value}
-          onChange={(event) => {
-            const observers = [...observerProfiles]
+    const observerRoleRadioCell = (userId, value) => {
+      return (
+        <label htmlFor={`observer-${userId}`}>
+          <input
+            type="radio"
+            value={value}
+            name={userId}
+            id={`observer-${userId}`}
+            checked={getObserverRole(userId) === value}
+            onChange={(event) => {
+              const observers = [...observerProfiles]
 
-            const foundObserver = observers.find(
-              ({ profile_name }) => profile_name === name,
-            )
+              const foundObserver = observers.find(({ id }) => id === userId)
 
-            foundObserver.role = parseInt(event.target.value, 10)
+              foundObserver.role = parseInt(event.target.value, 10)
 
-            setObserverProfiles(observers)
-          }}
-        />
-      </label>
-    )
+              setObserverProfiles(observers)
+            }}
+          />
+        </label>
+      )
+    }
 
     return observerProfiles.map(
-      ({ profile_name, email, picture, num_active_sample_units }) => {
+      ({
+        id: userId,
+        profile_name,
+        email,
+        picture,
+        num_active_sample_units,
+      }) => {
         return {
           name: (
             <NameCellStyle>
@@ -243,9 +301,9 @@ const Users = () => {
             </NameCellStyle>
           ),
           email,
-          admin: observerRoleRadioCell(profile_name, 90),
-          collector: observerRoleRadioCell(profile_name, 50),
-          readonly: observerRoleRadioCell(profile_name, 10),
+          admin: observerRoleRadioCell(userId, 90),
+          collector: observerRoleRadioCell(userId, 50),
+          readonly: observerRoleRadioCell(userId, 10),
           active: num_active_sample_units,
           transfer: (
             <ButtonSecondary
@@ -374,6 +432,7 @@ const Users = () => {
         isOpen={isNewUserProfileModalOpen}
         onDismiss={closeNewUserProfileModal}
         newUser={newUserProfile}
+        onSubmit={handleNewUserSubmit}
       />
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
