@@ -159,7 +159,7 @@ const Users = ({ currentUser }) => {
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
 
-  const _fetchProjectProfiles = useCallback(() => {
+  const fetchProjectProfiles = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance
         .getProjectProfiles(projectId)
@@ -171,15 +171,15 @@ const Users = ({ currentUser }) => {
 
   const addNewUser = () => {
     databaseSwitchboardInstance.getUserProfile(newUserProfile).then((res) => {
-      const isUserHasMermaidProfile = res.data.count === 0
+      const doesUserHaveMermaidProfile = res.data.count === 0
 
-      if (isUserHasMermaidProfile) {
+      if (doesUserHaveMermaidProfile) {
         setIsNewUserProfileModalOpen(true)
       } else {
         databaseSwitchboardInstance
           .addUser(newUserProfile, projectId)
           .then(() => {
-            _fetchProjectProfiles()
+            fetchProjectProfiles()
             setNewUserProfile('')
             toast.success(language.success.newUserAdd)
           })
@@ -192,7 +192,7 @@ const Users = ({ currentUser }) => {
 
   const handleNewUserSubmit = () => {
     databaseSwitchboardInstance.addUser(newUserProfile, projectId).then(() => {
-      _fetchProjectProfiles()
+      fetchProjectProfiles()
       setNewUserProfile('')
       toast.success(language.success.newPendingUserAdd)
     })
@@ -227,7 +227,7 @@ const Users = ({ currentUser }) => {
       .then((resp) => {
         const numRecordTransferred = resp.num_collect_records_transferred
 
-        _fetchProjectProfiles()
+        fetchProjectProfiles()
         toast.success(`${numRecordTransferred} are transferred`)
       })
 

@@ -30,6 +30,8 @@ const DatabaseSwitchboardState = class {
     "This operation requires a parameter that isn't being supplied",
   )
 
+  _getIsResponseStatusSuccessful
+
   constructor({
     apiBaseUrl,
     apiSyncInstance,
@@ -58,6 +60,13 @@ const DatabaseSwitchboardState = class {
       this._isAuthenticatedAndReady && isAppOnline && !this._authenticatedAxios
     this._isOfflineAuthenticatedAndReady =
       this._isAuthenticatedAndReady && !isAppOnline
+  }
+
+  _getIsResponseStatusSuccessful = (recordResponseFromServer) => {
+    const statusCode =
+      recordResponseFromServer.status_code || recordResponseFromServer.status
+
+    return statusCode >= 200 && statusCode < 300
   }
 }
 

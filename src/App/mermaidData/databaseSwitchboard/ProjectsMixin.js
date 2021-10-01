@@ -81,7 +81,7 @@ const ProjectsMixin = (Base) =>
             email,
           })
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this.#getIsRecordStatusCodeSuccessful(
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
               response,
             )
 
