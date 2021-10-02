@@ -186,12 +186,13 @@ const FishBeltObservationTable = ({
   ] = useState(false)
 
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
-  const [hasValidations] = useState(false) // this is a temporary setup, set 'true' to see the validation messages
   const [observationsState, observationsDispatch] = observationsReducer
   const {
     persistUnsavedFormData: persistUnsavedObservationsData,
     getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
   } = persistUnsavedObservationsUtilities
+  const [warningValidations, setWarningValidations] = useState([])
+  const [errorValidations, setErrorValidations] = useState([])
 
   const _ensureUnsavedObservationsArePersisted = useEffect(() => {
     if (areObservationsInputsDirty) {
@@ -203,7 +204,30 @@ const FishBeltObservationTable = ({
     persistUnsavedObservationsData,
   ])
 
+  const sortOutValidationMessages = (fishBeltObservationValidations) => {
+    const warningMessages = []
+    const errorMessages = []
+
+    if (fishBeltObservationValidations) {
+      Object.values(fishBeltObservationValidations).forEach(
+        ({ status, message }) => {
+          if (status === 'warning') {
+            warningMessages.push(message)
+          }
+          if (status === 'error') {
+            errorMessages.push(message)
+          }
+        },
+      )
+    }
+    setWarningValidations(warningMessages)
+    setErrorValidations(errorMessages)
+  }
+
   const _loadObservationsFromApiIntoState = useEffect(() => {
+    sortOutValidationMessages(
+      collectRecord?.validations?.results.obs_belt_fishes,
+    )
     if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
       const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
@@ -453,7 +477,10 @@ const FishBeltObservationTable = ({
     <>
       <InputWrapper>
         <H2 id="table-label">Observations</H2>
-        {hasValidations && <InputValidationAlert />}
+        <InputValidationAlert
+          warningValidations={warningValidations}
+          errorValidations={errorValidations}
+        />
         <StyledOverflowWrapper>
           <StyledFishBeltObservationTable aria-labelledby="table-label">
             <StyledColgroup>

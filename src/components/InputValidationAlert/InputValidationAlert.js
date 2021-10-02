@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
 
@@ -12,15 +13,12 @@ const ErrorText = styled.div`
   color: red;
 `
 
-const InputValidationAlert = () => {
-  const warningValidations = ['validation warning 1', 'validation warning 2']
-  const errorValidations = ['validation warning 1', 'validation warning 2']
-
-  const warningAlerts = warningValidations.map((warning) => (
-    <WarningText>{warning}</WarningText>
+const InputValidationAlert = ({ warningValidations, errorValidations }) => {
+  const warningAlerts = warningValidations.map((message) => (
+    <WarningText key={message}>{message}</WarningText>
   ))
-  const errorAlerts = errorValidations.map((warning) => (
-    <ErrorText>{warning}</ErrorText>
+  const errorAlerts = errorValidations.map((message) => (
+    <ErrorText key={message}>{message}</ErrorText>
   ))
 
   return (
@@ -29,6 +27,11 @@ const InputValidationAlert = () => {
       {errorAlerts}
     </AlertContainer>
   )
+}
+
+InputValidationAlert.propTypes = {
+  warningValidations: PropTypes.arrayOf(PropTypes.string).isRequired,
+  errorValidations: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
 export default InputValidationAlert

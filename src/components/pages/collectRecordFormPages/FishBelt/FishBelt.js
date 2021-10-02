@@ -248,6 +248,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
         }
         setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
+        setCollectRecordBeingEdited(recordResponse)
       })
       .catch(() => {
         toast.error(language.error.collectRecordFailedValidation)
