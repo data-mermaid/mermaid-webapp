@@ -15,16 +15,17 @@ export const reformatFormValuesIntoFishBeltRecord = (
   collectRecordBeingEdited,
 ) => {
   const {
-    management,
-    notes,
-    sample_date,
-    site,
     depth,
     label,
     len_surveyed,
+    management,
+    notes,
     number,
+    observers,
     reef_slope,
+    sample_date,
     sample_time,
+    site,
     size_bin,
     width,
   } = formikValues
@@ -51,6 +52,7 @@ export const reformatFormValuesIntoFishBeltRecord = (
       obs_belt_fishes: reformatObservationsForFishBeltRecord(
         observationsValues,
       ),
+      observers,
     },
   }
 }
