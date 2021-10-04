@@ -117,6 +117,21 @@ const NameCellStyle = styled('div')`
     height: ${(props) => props.theme.typography.xLargeIconSize};
   }
 `
+const TableRadioLabel = styled('label')`
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  display: grid;
+  place-items: center;
+  &:hover {
+    border: solid 1px ${theme.color.primaryColor};
+  }
+`
+const UserTableTd = styled(Td)`
+  position: relative;
+`
 
 const Users = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -264,12 +279,12 @@ const Users = () => {
 
     const observerRoleRadioCell = (userId, value) => {
       return (
-        <label htmlFor={`observer-${userId}`}>
+        <TableRadioLabel htmlFor={`observer-${userId}-${value}`}>
           <input
             type="radio"
             value={value}
             name={userId}
-            id={`observer-${userId}`}
+            id={`observer-${userId}-${value}`}
             checked={getObserverRole(userId) === value}
             onChange={(event) => {
               const observers = [...observerProfiles]
@@ -281,7 +296,7 @@ const Users = () => {
               setObserverProfiles(observers)
             }}
           />
-        </label>
+        </TableRadioLabel>
       )
     }
 
@@ -401,9 +416,12 @@ const Users = () => {
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                      <UserTableTd
+                        {...cell.getCellProps()}
+                        align={cell.column.align}
+                      >
                         {cell.render('Cell')}
-                      </Td>
+                      </UserTableTd>
                     )
                   })}
                 </Tr>
