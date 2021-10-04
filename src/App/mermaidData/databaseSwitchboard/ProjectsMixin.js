@@ -1,12 +1,5 @@
 const ProjectsMixin = (Base) =>
   class extends Base {
-    #getIsRecordStatusCodeSuccessful = (recordResponseFromServer) => {
-      const statusCode =
-        recordResponseFromServer.status_code || recordResponseFromServer.status
-
-      return statusCode >= 200 && statusCode < 300
-    }
-
     getOfflineReadyProjectIds = () =>
       this._dexieInstance.uiState_offlineReadyProjects.toArray()
 
@@ -110,22 +103,20 @@ const ProjectsMixin = (Base) =>
       }
 
       if (this._isAuthenticatedAndReady) {
-        return this._apiSyncInstance
-          .forcePushEverythingForAProjectButChoices(projectId)
-          .then(() => {
-            return this._authenticatedAxios
-              .put(
-                `${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`,
-                { from_profile: fromProfileId, to_profile: toProfileId },
-              )
-              .then((response) => {
-                return this._apiSyncInstance
-                  .pullEverythingForAProjectButChoices(projectId)
-                  .then(() => {
-                    return response.data
-                  })
-              })
-          })
+        return this._apiSyncInstance.pushChanges().then(() => {
+          return this._authenticatedAxios
+            .put(
+              `${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`,
+              { from_profile: fromProfileId, to_profile: toProfileId },
+            )
+            .then((response) => {
+              return this._apiSyncInstance
+                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .then(() => {
+                  return response.data
+                })
+            })
+        })
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
