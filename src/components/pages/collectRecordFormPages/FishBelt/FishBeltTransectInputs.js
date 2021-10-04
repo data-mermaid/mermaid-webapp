@@ -36,12 +36,11 @@ const FishBeltTransectForms = ({
           label="Transect Number"
           id="number"
           type="number"
-          {...getValidationPropertiesForInput(validations?.fishbelt_transect)}
           {...formik.getFieldProps('number')}
           onChange={(event) => {
             onInputChange({
               event,
-              inputValidationPropertyName: 'fishbelt_transect',
+              inputValidationPropertyName: undefined,
             })
           }}
         />
