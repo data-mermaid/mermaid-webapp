@@ -291,7 +291,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     return Promise.resolve()
   }
-  // note: observations doesn't use formik, maybe it could have
+  // note: observations doesn't use formik, maybe it could have.
+  // Better yet, future iterations should avoid formik which isnt
+  // growing well with the complexity of the app
   const initialFormikFormValues = useMemo(() => {
     return (
       getPersistedUnsavedFormikData() ?? {
@@ -307,16 +309,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
-
-  const handleSizeBinChange = (sizeBinId) => {
-    const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
-
-    const isSizeBinATypeThatRequiresSizeResetting = fishBinSelectedLabel !== '1'
-
-    if (isSizeBinATypeThatRequiresSizeResetting) {
-      observationsDispatch({ type: 'resetFishSizes' })
-    }
-  }
 
   const formikOptions = useMemo(() => {
     const saveRecord = (formikValues, formikActions) => {
@@ -356,8 +348,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     return {
       initialValues: initialFormikFormValues,
       enableReinitialize: true,
-      validate: persistUnsavedFormikData,
       onSubmit: saveRecord,
+      validate: (values) => {
+        // we run persistUnsavedFormikValues on validate because it seems to wait for formik to finish updating its state
+        persistUnsavedFormikData(values)
+      },
     }
   }, [
     clearPersistedUnsavedFormikData,
@@ -376,6 +371,53 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   ])
 
   const formik = useFormik(formikOptions)
+
+  const clearInputValidation = (inputValidationPropertyName) => {
+    if (
+      databaseSwitchboardInstance &&
+      collectRecordBeingEdited?.validations &&
+      inputValidationPropertyName
+    ) {
+      databaseSwitchboardInstance
+        .clearRecordInputValidation({
+          record: collectRecordBeingEdited,
+          inputValidationPropertyName,
+        })
+        .then((recordWithInputValidationCleared) => {
+          setCollectRecordBeingEdited(recordWithInputValidationCleared)
+        })
+    }
+  }
+
+  const handleInputChange = ({ inputValidationPropertyName, event }) => {
+    formik.handleChange(event)
+
+    clearInputValidation(inputValidationPropertyName)
+  }
+
+  const handleSizeBinChange = ({ event, inputValidationPropertyName }) => {
+    const sizeBinId = event.target.value
+
+    formik.setFieldValue('size_bin', sizeBinId)
+
+    clearInputValidation(inputValidationPropertyName)
+
+    const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
+
+    const isSizeBinATypeThatRequiresSizeResetting = fishBinSelectedLabel !== '1'
+
+    if (isSizeBinATypeThatRequiresSizeResetting) {
+      observationsDispatch({ type: 'resetFishSizes' })
+    }
+  }
+
+  const handleObserversChange = ({
+    inputValidationPropertyName,
+    selectedObservers,
+  }) => {
+    formik.setFieldValue('observers', selectedObservers)
+    clearInputValidation(inputValidationPropertyName)
+  }
 
   const _setCollectButtonsUnsaved = useEffect(() => {
     if (formik.dirty || areObservationsInputsDirty) {
@@ -404,17 +446,20 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 sites={sites}
                 managementRegimes={managementRegimes}
                 collectRecord={collectRecordBeingEdited}
+                onInputChange={handleInputChange}
               />
               <FishBeltTransectInputs
-                formik={formik}
                 choices={choices}
-                onSizeBinChange={handleSizeBinChange}
                 collectRecord={collectRecordBeingEdited}
+                formik={formik}
+                onInputChange={handleInputChange}
+                onSizeBinChange={handleSizeBinChange}
               />
               <ObserversInput
+                collectRecord={collectRecordBeingEdited}
                 formik={formik}
                 observers={observerProfiles}
-                collectRecord={collectRecordBeingEdited}
+                onObserversChange={handleObserversChange}
               />
               <FishBeltObservationTable
                 choices={choices}

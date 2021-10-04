@@ -135,7 +135,7 @@ const ManagementRegime = () => {
                     id="parties"
                     options={managementParties}
                     value={formik.getFieldProps('parties').value}
-                    onChange={(selectedItems) => {
+                    onChange={({ selectedItems }) => {
                       formik.setFieldValue('parties', selectedItems)
                     }}
                   />

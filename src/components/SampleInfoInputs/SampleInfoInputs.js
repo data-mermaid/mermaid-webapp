@@ -14,10 +14,11 @@ import { getOptions } from '../../library/getOptions'
 import getValidationPropertiesForInput from '../pages/collectRecordFormPages/getValidationPropertiesForInput'
 
 const SampleInfoInputs = ({
-  formik,
-  sites,
-  managementRegimes,
   collectRecord,
+  formik,
+  managementRegimes,
+  onInputChange,
+  sites,
 }) => {
   const hasData = false
   const managementSelectOptions = getOptions(managementRegimes, hasData)
@@ -34,6 +35,9 @@ const SampleInfoInputs = ({
           options={siteSelectOptions}
           {...getValidationPropertiesForInput(validations?.site)}
           {...formik.getFieldProps('site')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: 'site' })
+          }}
         />
         <InputSelectWithLabelAndValidation
           label="Management"
@@ -41,6 +45,9 @@ const SampleInfoInputs = ({
           options={managementSelectOptions}
           {...getValidationPropertiesForInput(validations?.management)}
           {...formik.getFieldProps('management')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: 'management' })
+          }}
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -48,18 +55,27 @@ const SampleInfoInputs = ({
           type="number"
           {...getValidationPropertiesForInput(validations?.depth)}
           {...formik.getFieldProps('depth')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: 'depth' })
+          }}
         />
         <InputWithLabelAndValidation
           label="Sample Date"
           id="sample_date"
           type="date"
           {...formik.getFieldProps('sample_date')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: undefined })
+          }}
         />
         <InputWithLabelAndValidation
           label="Sample Time"
           id="sample_time"
           type="time"
           {...formik.getFieldProps('sample_time')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: undefined })
+          }}
         />
       </InputWrapper>
     </>
@@ -68,9 +84,10 @@ const SampleInfoInputs = ({
 
 SampleInfoInputs.propTypes = {
   collectRecord: fishBeltPropType,
-  sites: PropTypes.arrayOf(sitePropType).isRequired,
-  managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   formik: formikPropType.isRequired,
+  managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
+  onInputChange: PropTypes.func.isRequired,
+  sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 
 SampleInfoInputs.defaultProps = { collectRecord: undefined }
