@@ -15,10 +15,11 @@ import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValid
 import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
 
 const FishBeltTransectForms = ({
-  formik,
   choices,
-  onSizeBinChange,
   collectRecord,
+  formik,
+  onInputChange,
+  onSizeBinChange,
 }) => {
   const { belttransectwidths, fishsizebins, reefslopes } = choices
   const transectWidthSelectOptions = getOptions(belttransectwidths)
@@ -37,12 +38,21 @@ const FishBeltTransectForms = ({
           type="number"
           {...getValidationPropertiesForInput(validations?.fishbelt_transect)}
           {...formik.getFieldProps('number')}
+          onChange={(event) => {
+            onInputChange({
+              event,
+              inputValidationPropertyName: 'fishbelt_transect',
+            })
+          }}
         />
         <InputWithLabelAndValidation
           label="Label"
           id="label"
           type="text"
           {...formik.getFieldProps('label')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: undefined })
+          }}
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -50,12 +60,21 @@ const FishBeltTransectForms = ({
           type="number"
           {...getValidationPropertiesForInput(validations?.len_surveyed)}
           {...formik.getFieldProps('len_surveyed')}
+          onChange={(event) => {
+            onInputChange({
+              event,
+              inputValidationPropertyName: 'len_surveyed',
+            })
+          }}
         />
         <InputRadioWithLabelAndValidation
           label="Width"
           id="width"
           options={transectWidthSelectOptions}
           {...formik.getFieldProps('width')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: undefined })
+          }}
         />
         <InputRadioWithLabelAndValidation
           label="Fish Size Bin"
@@ -64,8 +83,10 @@ const FishBeltTransectForms = ({
           options={fishSizeBinSelectOptions}
           value={formik.values.size_bin}
           onChange={(event) => {
-            formik.setFieldValue('size_bin', event.target.value)
-            onSizeBinChange(event.target.value)
+            onSizeBinChange({
+              event,
+              inputValidationPropertyName: undefined,
+            })
           }}
         />
         <InputRadioWithLabelAndValidation
@@ -73,11 +94,17 @@ const FishBeltTransectForms = ({
           id="reef_slope"
           options={reefSlopeSelectOptions}
           {...formik.getFieldProps('reef_slope')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: undefined })
+          }}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
           id="notes"
           {...formik.getFieldProps('notes')}
+          onChange={(event) => {
+            onInputChange({ event, inputValidationPropertyName: undefined })
+          }}
         />
       </InputWrapper>
     </>
@@ -88,6 +115,7 @@ FishBeltTransectForms.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
+  onInputChange: PropTypes.func.isRequired,
   onSizeBinChange: PropTypes.func.isRequired,
 }
 

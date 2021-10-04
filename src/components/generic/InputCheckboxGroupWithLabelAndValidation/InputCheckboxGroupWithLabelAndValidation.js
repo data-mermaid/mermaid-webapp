@@ -41,7 +41,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
     }
 
     setCheckboxItems(updateCheckboxItems)
-    onChange(updateCheckboxItems)
+    onChange({ selectedItems: updateCheckboxItems })
   }
 
   const checkboxGroup = options.map((item) => (
