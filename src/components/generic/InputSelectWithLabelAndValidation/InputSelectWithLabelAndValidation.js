@@ -13,7 +13,7 @@ const InputSelectWithLabelAndValidation = ({
   ...restOfProps
 }) => {
   const optionList = options.map((item) => (
-    <option key={item.label} value={item.value}>
+    <option key={item.value} value={item.value}>
       {item.label}
     </option>
   ))
