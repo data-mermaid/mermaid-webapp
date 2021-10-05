@@ -6,7 +6,6 @@ import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
-  width: 50%;
   ${mediaQueryPhoneOnly(css`
     padding: ${theme.spacing.xsmall};
   `)}
@@ -16,7 +15,7 @@ const FilterLabelWrapper = styled.label`
   display: flex;
   flex-direction: column;
   flex-grow: 2;
-  margin-right: 10px;
+  justify-content: flex-end;
   > input {
     ${inputStyles}
   }
