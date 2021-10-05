@@ -71,14 +71,12 @@ const InputAndButtonWrapper = styled.div`
     width: 100%;
   }
 `
-const SearchEmailSectionWrapper = styled.div``
-const SearchEmailLabelWrapper = styled.label``
 const AddUserButton = styled(ButtonSecondary)`
   white-space: nowrap;
 `
 
 const WarningBadgeWrapper = styled('div')`
-  padding: 10px 0;
+  padding: ${theme.spacing.small} 0;
 `
 
 const WarningTextStyle = styled(InputRow)`
@@ -491,10 +489,10 @@ const Users = () => {
               name={language.pages.userTable.filterToolbarText}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
-            <SearchEmailSectionWrapper>
-              <SearchEmailLabelWrapper htmlFor="add-new-user-email">
+            <div>
+              <label htmlFor="add-new-user-email">
                 {language.pages.userTable.searchEmailToolbarText}
-              </SearchEmailLabelWrapper>
+              </label>
               <InputAndButtonWrapper>
                 <input
                   type="text"
@@ -507,7 +505,7 @@ const Users = () => {
                   Add User
                 </AddUserButton>
               </InputAndButtonWrapper>
-            </SearchEmailSectionWrapper>
+            </div>
           </ToolbarRowWrapper>
           {isReadonlyUserWithActiveSampleUnits && (
             <WarningBadgeWrapper>
