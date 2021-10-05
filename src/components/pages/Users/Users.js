@@ -332,6 +332,7 @@ const Users = ({ currentUser }) => {
           transfer: (
             <ButtonSecondary
               type="button"
+              disabled={num_active_sample_units === 0}
               onClick={() =>
                 openTransferSampleUnitsModal(profile, profile_name)
               }
