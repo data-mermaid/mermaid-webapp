@@ -140,7 +140,7 @@ const Users = () => {
   const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
     false,
   )
-  const [isReadonlyUserWithActiveSampleUnits] = useState(true)
+  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
   const [
     isTransferSampleUnitsModalOpen,
     setIsTransferSampleUnitsModalOpen,
