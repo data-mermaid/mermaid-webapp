@@ -166,6 +166,9 @@ const Users = ({ currentUser }) => {
         .then((projectProfilesResponse) => {
           setObserverProfiles(projectProfilesResponse)
         })
+        .catch(() => {
+          toast.error(language.error.userRecordsUnavailable)
+        })
     }
   }, [databaseSwitchboardInstance, projectId])
 
