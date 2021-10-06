@@ -13,7 +13,7 @@ import styled, { css } from 'styled-components'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
-import { InputRow } from '../../generic/form'
+import { InputRow, inputStyles } from '../../generic/form'
 import {
   IconAccount,
   IconAccountConvert,
