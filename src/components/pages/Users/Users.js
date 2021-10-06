@@ -14,7 +14,7 @@ import { useCurrentUser } from '../../../App/mermaidData/useCurrentUser'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
-import { InputRow, inputStyles } from '../../generic/form'
+import { InputRow } from '../../generic/form'
 import {
   IconAccount,
   IconAccountConvert,
