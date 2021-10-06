@@ -14,7 +14,7 @@ import { useCurrentUser } from '../../../App/mermaidData/useCurrentUser'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
-import { InputRow, inputStyles } from '../../generic/form'
+import { InputRow } from '../../generic/form'
 import {
   IconAccount,
   IconAccountConvert,
@@ -47,6 +47,7 @@ import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import { validateEmail } from '../../../library/strings/validateEmail'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import InputAndButton from '../../generic/InputAndButton/InputAndButton'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -56,16 +57,6 @@ const ToolbarRowWrapper = styled('div')`
     grid-template-rows: 1fr 1fr;
     grid-template-columns: auto;
   `)}
-`
-const InputAndButtonWrapper = styled.div`
-  display: flex;
-  > input {
-    ${inputStyles};
-    width: 100%;
-  }
-`
-const AddUserButton = styled(ButtonSecondary)`
-  white-space: nowrap;
 `
 
 const WarningBadgeWrapper = styled('div')`
@@ -482,23 +473,19 @@ const Users = () => {
               name={language.pages.userTable.filterToolbarText}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
-            <div>
-              <label htmlFor="add-new-user-email">
-                {language.pages.userTable.searchEmailToolbarText}
-              </label>
-              <InputAndButtonWrapper>
-                <input
-                  type="text"
-                  id="add-new-user-email"
-                  value={newUserProfile}
-                  onChange={handleNewUserProfileAdd}
-                />
-                <AddUserButton onClick={openNewUserProfileModal}>
+            <InputAndButton
+              inputId="add-new-user-email"
+              labelText={language.pages.userTable.searchEmailToolbarText}
+              buttonChildren={
+                <>
                   <IconPlus />
                   Add User
-                </AddUserButton>
-              </InputAndButtonWrapper>
-            </div>
+                </>
+              }
+              value={newUserProfile}
+              onChange={handleNewUserProfileAdd}
+              buttonOnClick={openNewUserProfileModal}
+            />
           </ToolbarRowWrapper>
           {isReadonlyUserWithActiveSampleUnits && (
             <WarningBadgeWrapper>
