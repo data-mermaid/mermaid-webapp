@@ -47,6 +47,7 @@ import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import { validateEmail } from '../../../library/strings/validateEmail'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import { pluralize } from '../../../library/strings/pluralize'
 
 const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -223,22 +224,32 @@ const Users = ({ currentUser }) => {
   }
 
   const transferSampleUnits = () => {
-    const fromUserProfileId = fromUser.profileId
+    const fromUserProfileId = fromUser.profile
 
     databaseSwitchboardInstance
       .transferSampleUnits(projectId, fromUserProfileId, toUserProfileId)
       .then((resp) => {
+        const sampleUnitMsg = pluralize(
+          fromUser.num_active_sample_units,
+          'sample unit',
+          'sample units',
+        )
         const numRecordTransferred = resp.num_collect_records_transferred
 
         fetchProjectProfiles()
-        toast.success(`${numRecordTransferred} are transferred`)
+        toast.success(`${numRecordTransferred} ${sampleUnitMsg} transferred`)
       })
 
     return Promise.resolve()
   }
 
-  const openTransferSampleUnitsModal = (profileId, profileName) => {
-    setFromUser({ profileId, profileName })
+  const openTransferSampleUnitsModal = (
+    profile,
+    profile_name,
+    email,
+    num_active_sample_units,
+  ) => {
+    setFromUser({ profile, profile_name, email, num_active_sample_units })
     setIsTransferSampleUnitsModalOpen(true)
   }
   const closeTransferSampleUnitsModal = () =>
@@ -334,7 +345,12 @@ const Users = ({ currentUser }) => {
               type="button"
               disabled={num_active_sample_units === 0}
               onClick={() =>
-                openTransferSampleUnitsModal(profile, profile_name)
+                openTransferSampleUnitsModal(
+                  profile,
+                  profile_name,
+                  email,
+                  num_active_sample_units,
+                )
               }
             >
               <IconAccountConvert />
@@ -458,7 +474,7 @@ const Users = ({ currentUser }) => {
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
         onDismiss={closeTransferSampleUnitsModal}
-        toUserProfileId={toUserProfileId}
+        currentUserId={currentUser.id}
         fromUser={fromUser}
         userOptions={observerProfiles}
         handleTransferSampleUnitChange={handleTransferSampleUnitChange}

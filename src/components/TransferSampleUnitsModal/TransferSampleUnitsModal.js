@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -9,6 +9,7 @@ import { Select } from '../generic/form'
 import { Column } from '../generic/positioning'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
+import { pluralize } from '../../library/strings/pluralize'
 
 const ModalBoxItem = styled(Column)`
   background: ${theme.color.secondaryColor};
@@ -32,26 +33,43 @@ const ModalBodyContainer = styled.div`
   }
 `
 
+// new user profile name won't be 'none none' as of now, it will be subject to change to 'pending user'.
+const getProfileNameOrEmailForPendingUser = (user) =>
+  user.profile_name === 'None None' ? user.email : user.profile_name
+
 const TransferSampleUnitsModal = ({
   isOpen,
   onDismiss,
-  toUserProfileId,
+  currentUserId,
   fromUser,
   userOptions,
   handleTransferSampleUnitChange,
   onSubmit,
 }) => {
+  const initialToUserIdInTransferModal =
+    fromUser.profile === currentUserId ? '' : currentUserId
+  const sampleUnitMsg = pluralize(
+    fromUser.num_active_sample_units,
+    'sample unit',
+    'sample units',
+  )
+
   const optionList = userOptions
-    .filter(({ profile }) => profile !== fromUser.profileId)
-    .map(({ profile, profile_name }) => (
-      <option key={profile} value={profile}>
-        {profile_name}
-      </option>
-    ))
+    .filter(({ profile }) => profile !== fromUser.profile)
+    .map((user) => {
+      const profileName = getProfileNameOrEmailForPendingUser(user)
+
+      return (
+        <option key={user.profile} value={user.profile}>
+          {profileName}
+        </option>
+      )
+    })
 
   const handleOnSubmit = () => {
     onSubmit().then(() => {
       onDismiss()
+      handleTransferSampleUnitChange(currentUserId)
     })
   }
 
@@ -60,9 +78,10 @@ const TransferSampleUnitsModal = ({
       <ModalBodyContainer>
         <ModalBoxItem>
           <InputLabel as="div">
-            Transfer unsubmitted Sample Unit from:
+            Transfer {fromUser.num_active_sample_units} unsubmitted{' '}
+            {sampleUnitMsg} from:
           </InputLabel>
-          <strong>{fromUser.profileName}</strong>
+          <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
         </ModalBoxItem>
         <IconArrowRight />
         <ModalBoxItem>
@@ -77,7 +96,7 @@ const TransferSampleUnitsModal = ({
               id="modal-transfer-units-to"
               aria-labelledby="aria-label-select-users"
               aria-describedby="aria-descp-select-users"
-              value={toUserProfileId}
+              defaultValue={initialToUserIdInTransferModal}
               onChange={(event) =>
                 handleTransferSampleUnitChange(event.target.value)
               }
@@ -116,10 +135,12 @@ const TransferSampleUnitsModal = ({
 TransferSampleUnitsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  toUserProfileId: PropTypes.string,
+  currentUserId: PropTypes.string.isRequired,
   fromUser: PropTypes.shape({
-    profileId: PropTypes.string,
-    profileName: PropTypes.string,
+    profile: PropTypes.string,
+    profile_name: PropTypes.string,
+    email: PropTypes.string,
+    num_active_sample_units: PropTypes.number,
   }).isRequired,
   userOptions: PropTypes.arrayOf(
     PropTypes.shape({
@@ -129,10 +150,6 @@ TransferSampleUnitsModal.propTypes = {
   ).isRequired,
   handleTransferSampleUnitChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-}
-
-TransferSampleUnitsModal.defaultProps = {
-  toUserProfileId: undefined,
 }
 
 export default TransferSampleUnitsModal
