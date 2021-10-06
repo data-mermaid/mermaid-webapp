@@ -14,7 +14,7 @@ import { useCurrentUser } from '../../../App/mermaidData/useCurrentUser'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
-import { InputRow } from '../../generic/form'
+import { InputRow, inputStyles } from '../../generic/form'
 import {
   IconAccount,
   IconAccountConvert,
@@ -47,13 +47,6 @@ import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import { validateEmail } from '../../../library/strings/validateEmail'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-
-const inputStyles = css`
-  padding: ${theme.spacing.small};
-  ${mediaQueryPhoneOnly(css`
-    padding: ${theme.spacing.xsmall};
-  `)}
-`
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
