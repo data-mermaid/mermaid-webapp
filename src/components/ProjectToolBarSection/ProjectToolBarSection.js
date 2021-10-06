@@ -7,6 +7,7 @@ import {
 } from '../../library/styling/mediaQueries'
 import { ButtonCallout, ButtonSecondary } from '../generic/buttons'
 import { IconSortDown } from '../icons'
+import { inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
 
 const GlobalWrapper = styled.div`
@@ -43,12 +44,6 @@ const HeaderStyle = styled.h1`
   flex-grow: 1;
   ${theme.typography.upperCase};
   margin: 0;
-`
-const inputStyles = css`
-  padding: ${theme.spacing.small};
-  ${mediaQueryPhoneOnly(css`
-    padding: ${theme.spacing.xsmall};
-  `)}
 `
 
 const FilterLabelWrapper = styled.label`

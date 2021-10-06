@@ -1,15 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
-import theme from '../../theme'
-import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
-
-const inputStyles = css`
-  padding: ${theme.spacing.small};
-  ${mediaQueryPhoneOnly(css`
-    padding: ${theme.spacing.xsmall};
-  `)}
-`
+import styled from 'styled-components'
+import { inputStyles } from '../generic/form'
 
 const FilterLabelWrapper = styled.label`
   display: flex;
