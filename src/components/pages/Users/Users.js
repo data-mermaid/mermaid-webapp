@@ -37,7 +37,7 @@ import {
 } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import { Row, RowSpaceBetween } from '../../generic/positioning'
+import { RowSpaceBetween } from '../../generic/positioning'
 import theme from '../../../theme'
 import language from '../../../language'
 import useIsMounted from '../../../library/useIsMounted'
@@ -55,32 +55,28 @@ const inputStyles = css`
   `)}
 `
 
-const SearchEmailSectionWrapper = styled.div`
-  display: flex;
-  flex-grow: 1;
+const ToolbarRowWrapper = styled('div')`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: ${theme.spacing.small};
+  ${mediaQueryPhoneOnly(css`
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: auto;
+  `)}
 `
-
-const SearchEmailLabelWrapper = styled.label`
+const InputAndButtonWrapper = styled.div`
   display: flex;
-  flex-grow: 2;
-  flex-direction: column;
-  margin-right: 10px;
   > input {
-    ${inputStyles}
+    ${inputStyles};
     width: 100%;
   }
 `
-
-const ToolbarRowWrapper = styled(Row)`
-  align-items: flex-end;
-`
-
 const AddUserButton = styled(ButtonSecondary)`
-  margin-top: 20px;
+  white-space: nowrap;
 `
 
 const WarningBadgeWrapper = styled('div')`
-  padding: 10px 0;
+  padding: ${theme.spacing.small} 0;
 `
 
 const WarningTextStyle = styled(InputRow)`
@@ -94,27 +90,45 @@ const WarningTextStyle = styled(InputRow)`
 `
 
 const ProfileImage = styled.div`
-  border: 1px solid #000;
   border-radius: 50%;
   ${(props) =>
     props.img &&
     css`
       background-image: url(${props.img});
       background-position: center center;
-      background-size: 35px;
-      margin-right: 5px;
+      background-size: ${props.theme.typography.xLargeIconSize};
     `}
-  width: 35px;
-  height: 35px;
+    width: ${(props) => props.theme.typography.xLargeIconSize};
+    height: ${(props) => props.theme.typography.xLargeIconSize};
 `
 
 const NameCellStyle = styled('div')`
   display: flex;
-  width: 250px;
+  white-space: nowrap;
   align-items: center;
   svg {
     width: ${(props) => props.theme.typography.xLargeIconSize};
     height: ${(props) => props.theme.typography.xLargeIconSize};
+  }
+`
+const UserTableTd = styled(Td)`
+  position: relative;
+`
+const TableRadioLabel = styled('label')`
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  display: grid;
+  place-items: center;
+  &:hover {
+    border: solid 1px ${theme.color.primaryColor};
+  }
+`
+const TableIconButtonSecondary = styled(ButtonSecondary)`
+  span {
+    display: none;
   }
 `
 
@@ -252,7 +266,7 @@ const Users = () => {
         accessor: 'transfer',
       },
       {
-        Header: 'Remove From Projects',
+        Header: 'Remove From Project',
         accessor: 'remove',
       },
     ]
@@ -264,12 +278,12 @@ const Users = () => {
 
     const observerRoleRadioCell = (userId, value) => {
       return (
-        <label htmlFor={`observer-${userId}`}>
+        <TableRadioLabel htmlFor={`observer-${userId}-${value}`}>
           <input
             type="radio"
             value={value}
             name={userId}
-            id={`observer-${userId}`}
+            id={`observer-${userId}-${value}`}
             checked={getObserverRole(userId) === value}
             onChange={(event) => {
               const observers = [...observerProfiles]
@@ -281,7 +295,7 @@ const Users = () => {
               setObserverProfiles(observers)
             }}
           />
-        </label>
+        </TableRadioLabel>
       )
     }
 
@@ -306,17 +320,19 @@ const Users = () => {
           readonly: observerRoleRadioCell(userId, 10),
           active: num_active_sample_units,
           transfer: (
-            <ButtonSecondary
+            <TableIconButtonSecondary
               type="button"
               onClick={() => openTransferSampleUnitsModal(profile_name)}
             >
+              <span>Transfer Sample Units</span>
               <IconAccountConvert />
-            </ButtonSecondary>
+            </TableIconButtonSecondary>
           ),
           remove: (
-            <ButtonSecondary type="button" onClick={() => {}}>
+            <TableIconButtonSecondary type="button" onClick={() => {}}>
+              <span>Remove From Project</span>
               <IconAccountRemove />
-            </ButtonSecondary>
+            </TableIconButtonSecondary>
           ),
         }
       },
@@ -401,9 +417,12 @@ const Users = () => {
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                      <UserTableTd
+                        {...cell.getCellProps()}
+                        align={cell.column.align}
+                      >
                         {cell.render('Cell')}
-                      </Td>
+                      </UserTableTd>
                     )
                   })}
                 </Tr>
@@ -470,21 +489,23 @@ const Users = () => {
               name={language.pages.userTable.filterToolbarText}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
-            <SearchEmailSectionWrapper>
-              <SearchEmailLabelWrapper htmlFor="filter_projects">
+            <div>
+              <label htmlFor="add-new-user-email">
                 {language.pages.userTable.searchEmailToolbarText}
+              </label>
+              <InputAndButtonWrapper>
                 <input
                   type="text"
-                  id="search-emails"
+                  id="add-new-user-email"
                   value={newUserProfile}
                   onChange={handleNewUserProfileAdd}
                 />
-              </SearchEmailLabelWrapper>
-              <AddUserButton onClick={openNewUserProfileModal}>
-                <IconPlus />
-                Add User
-              </AddUserButton>
-            </SearchEmailSectionWrapper>
+                <AddUserButton onClick={openNewUserProfileModal}>
+                  <IconPlus />
+                  Add User
+                </AddUserButton>
+              </InputAndButtonWrapper>
+            </div>
           </ToolbarRowWrapper>
           {isReadonlyUserWithActiveSampleUnits && (
             <WarningBadgeWrapper>
