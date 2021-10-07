@@ -131,6 +131,45 @@ const ProjectsMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    removeUser = (user, projectId) => {
+      console.log('Remove user user', user)
+      const hasCorrespondingRecordInTheApi = !!user._last_revision_num
+
+      const recordMarkedToBeDeleted = {
+        ...user,
+        uiStatePush_pushToApi: true,
+        _deleted: true,
+      }
+
+      if (
+        hasCorrespondingRecordInTheApi &&
+        this._isOnlineAuthenticatedAndReady
+      ) {
+        return this._authenticatedAxios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            { project_profiles: [recordMarkedToBeDeleted] },
+            { params: { force: true } },
+          )
+          .then(() => {
+            return this._apiSyncInstance
+              .pushThenPullEverythingForAProjectButChoices(projectId)
+              .then((resp) => {
+                return resp
+              })
+          })
+      }
+
+      if (
+        !hasCorrespondingRecordInTheApi &&
+        this._isOnlineAuthenticatedAndReady
+      ) {
+        return this._dexieInstance.project_profiles.delete(user.id)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default ProjectsMixin

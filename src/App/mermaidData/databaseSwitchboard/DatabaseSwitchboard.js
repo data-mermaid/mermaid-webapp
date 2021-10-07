@@ -36,6 +36,7 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getUserProfile: PropTypes.func,
   addUser: PropTypes.func,
   transferSampleUnits: PropTypes.func,
+  removeUser: PropTypes.func,
   getSitesWithoutOfflineDeleted: PropTypes.func,
   getSite: PropTypes.func,
   getSiteRecordsForUIDisplay: PropTypes.func,
