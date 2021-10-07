@@ -113,11 +113,6 @@ const TableRadioLabel = styled('label')`
     border: solid 1px ${theme.color.primaryColor};
   }
 `
-const TableIconButtonSecondary = styled(ButtonSecondary)`
-  span {
-    display: none;
-  }
-`
 
 const Users = ({ currentUser }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -136,6 +131,10 @@ const Users = ({ currentUser }) => {
   const [fromUser, setFromUser] = useState({})
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
+  const [
+    removeUserWarningWithActiveSampleUnits,
+    setRemoveUserWarningWithActiveSampleUnits,
+  ] = useState(false)
   const [projectName, setProjectName] = useState('')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -255,13 +254,24 @@ const Users = ({ currentUser }) => {
   ) => {
     setFromUser({ profile, profile_name, email, num_active_sample_units })
     setIsTransferSampleUnitsModalOpen(true)
+    setRemoveUserWarningWithActiveSampleUnits(false)
   }
-  const closeTransferSampleUnitsModal = () =>
+  const closeTransferSampleUnitsModal = () => {
     setIsTransferSampleUnitsModalOpen(false)
+    setRemoveUserWarningWithActiveSampleUnits(false)
+  }
 
   const openRemoveUserModal = (user) => {
-    setUserToBeRemoved(user)
-    setIsRemoveUserModalOpen(true)
+    const { profile, profile_name, email, num_active_sample_units } = user
+
+    if (num_active_sample_units === 0) {
+      setIsRemoveUserModalOpen(true)
+      setUserToBeRemoved(user)
+    } else {
+      setFromUser({ profile, profile_name, email, num_active_sample_units })
+      setIsTransferSampleUnitsModalOpen(true)
+      setRemoveUserWarningWithActiveSampleUnits(true)
+    }
   }
   const closeRemoveUserModal = () => {
     setIsRemoveUserModalOpen(false)
@@ -383,6 +393,7 @@ const Users = ({ currentUser }) => {
         remove: (
           <ButtonSecondary
             type="button"
+            disabled={profile === currentUser.id}
             onClick={() => openRemoveUserModal(userInfo)}
           >
             <IconAccountRemove />
@@ -390,7 +401,7 @@ const Users = ({ currentUser }) => {
         ),
       }
     })
-  }, [observerProfiles])
+  }, [observerProfiles, currentUser])
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.email']
@@ -506,6 +517,9 @@ const Users = ({ currentUser }) => {
         currentUserId={currentUser.id}
         fromUser={fromUser}
         userOptions={observerProfiles}
+        removeUserWarningWithActiveSampleUnits={
+          removeUserWarningWithActiveSampleUnits
+        }
         handleTransferSampleUnitChange={handleTransferSampleUnitChange}
         onSubmit={transferSampleUnits}
       />
@@ -563,7 +577,7 @@ const Users = ({ currentUser }) => {
           {isReadonlyUserWithActiveSampleUnits && (
             <WarningBadgeWrapper>
               <WarningTextStyle validationType="warning">
-                {language.pages.userTable.warningBadgeMessage}
+                {language.pages.userTable.warningReadOnlyUser}
               </WarningTextStyle>
             </WarningBadgeWrapper>
           )}

@@ -1,13 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
-import { IconArrowRight } from '../icons'
-import { Select } from '../generic/form'
-import { Column } from '../generic/positioning'
-import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
 const RemoveUserModal = ({
@@ -40,7 +35,7 @@ const RemoveUserModal = ({
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title="Remove User"
+      title={language.pages.userTable.removeUserModalTitle}
       mainContent={modalContent}
       footerContent={footerContent}
     />
