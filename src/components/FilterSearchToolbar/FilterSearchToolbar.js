@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { inputStyles } from '../generic/form'
+import { Input, inputStyles } from '../generic/form'
 
 const FilterLabelWrapper = styled.label`
   display: flex;
@@ -26,7 +26,7 @@ const FilterSearchToolbar = ({ name, handleGlobalFilterChange }) => {
   return (
     <FilterLabelWrapper htmlFor="filter-search">
       {name}
-      <input
+      <Input
         type="text"
         id="filter-search"
         value={filterInputValue}
