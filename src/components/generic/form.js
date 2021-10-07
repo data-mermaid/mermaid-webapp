@@ -1,6 +1,16 @@
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import { hoverState } from '../../library/styling/mediaQueries'
+import {
+  hoverState,
+  mediaQueryPhoneOnly,
+} from '../../library/styling/mediaQueries'
+
+export const inputStyles = css`
+  padding: ${theme.spacing.small};
+  ${mediaQueryPhoneOnly(css`
+    padding: ${theme.spacing.xsmall};
+  `)}
+`
 
 export const InputWrapper = styled.div`
   padding: ${theme.spacing.medium};

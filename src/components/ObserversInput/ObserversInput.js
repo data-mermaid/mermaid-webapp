@@ -4,32 +4,48 @@ import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import { formikPropType } from '../../library/formikPropType'
-import { observersPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import InputCheckboxGroupWithLabel from '../generic/InputCheckboxGroupWithLabel'
+import {
+  fishBeltPropType,
+  observersPropType,
+} from '../../App/mermaidData/mermaidDataProptypes'
+import InputCheckboxGroupWithLabelAndValidation from '../generic/InputCheckboxGroupWithLabelAndValidation'
 import { getObserverNameOptions } from '../../library/observerHelpers'
+import getValidationPropertiesForInput from '../pages/collectRecordFormPages/getValidationPropertiesForInput'
 
-const ObserversInput = ({ formik, observers }) => {
+const ObserversInput = ({
+  collectRecord,
+  formik,
+  observers,
+  onObserversChange,
+}) => {
   const observerNameOptions = getObserverNameOptions(observers)
-
   const observerNameValues = formik.values.observers.map(
     ({ profile }) => profile,
   )
 
   const filterObserverProfiles = (observerIds) =>
-    [...observers].filter(({ profile }) => observerIds.includes(profile))
+    [...observers].filter(({ profile }) =>
+      !observerIds ? undefined : observerIds.includes(profile),
+    )
 
   return (
     <InputWrapper>
       <H2>Observers</H2>
-      <InputCheckboxGroupWithLabel
+      <InputCheckboxGroupWithLabelAndValidation
         label="Observers"
         id="observers"
         options={observerNameOptions}
         value={observerNameValues}
-        onChange={(selectedItems) => {
-          const updateSelectedItems = filterObserverProfiles(selectedItems)
+        {...getValidationPropertiesForInput(
+          collectRecord?.validations?.results?.observers,
+        )}
+        onChange={({ selectedItems }) => {
+          const selectedObservers = filterObserverProfiles(selectedItems)
 
-          formik.setFieldValue('observers', updateSelectedItems)
+          onObserversChange({
+            inputValidationPropertyName: 'observers',
+            selectedObservers,
+          })
         }}
       />
     </InputWrapper>
@@ -37,8 +53,12 @@ const ObserversInput = ({ formik, observers }) => {
 }
 
 ObserversInput.propTypes = {
-  observers: PropTypes.arrayOf(observersPropType).isRequired,
+  collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
+  observers: PropTypes.arrayOf(observersPropType).isRequired,
+  onObserversChange: PropTypes.func.isRequired,
 }
+
+ObserversInput.defaultProps = { collectRecord: undefined }
 
 export default ObserversInput
