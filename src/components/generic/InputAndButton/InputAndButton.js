@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { inputStyles } from '../form'
+import styled from 'styled-components/macro'
+import theme from '../../../theme'
+import { inputStyles, Input } from '../form'
 import { ButtonSecondary } from '../buttons'
 
 const InputAndButtonWrapper = styled.div`
@@ -9,11 +10,15 @@ const InputAndButtonWrapper = styled.div`
   > input {
     ${inputStyles};
     width: 100%;
+    border-color: ${theme.color.border};
   }
 `
 
-const AddUserButton = styled(ButtonSecondary)`
+const InputButton = styled(ButtonSecondary)`
   white-space: nowrap;
+  border-color: ${theme.color.border};
+  border-left-width: 0;
+  ${inputStyles};
 `
 
 const InputAndButton = ({
@@ -33,10 +38,10 @@ const InputAndButton = ({
     <div>
       <label htmlFor={inputId}>{labelText}</label>
       <InputAndButtonWrapper>
-        <input {...textPropsWithoutPlaceholder} id={inputId} type="text" />
-        <AddUserButton type={buttonType} onClick={buttonOnClick}>
+        <Input {...textPropsWithoutPlaceholder} id={inputId} type="text" />
+        <InputButton type={buttonType} onClick={buttonOnClick}>
           {buttonChildren}
-        </AddUserButton>
+        </InputButton>
       </InputAndButtonWrapper>
     </div>
   )
