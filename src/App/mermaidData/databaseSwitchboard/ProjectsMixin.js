@@ -133,7 +133,6 @@ const ProjectsMixin = (Base) =>
     }
 
     removeUser = (user, projectId) => {
-      console.log('Remove user user', user)
       const hasCorrespondingRecordInTheApi = !!user._last_revision_num
 
       const recordMarkedToBeDeleted = {
