@@ -10,6 +10,7 @@ import { Column } from '../generic/positioning'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { pluralize } from '../../library/strings/pluralize'
+import { getProfileNameOrEmailForPendingUser } from '../../library/getProfileNameOrEmailForPendingUser'
 
 const ModalBoxItem = styled(Column)`
   background: ${theme.color.secondaryColor};
@@ -32,10 +33,6 @@ const ModalBodyContainer = styled.div`
     height: 6rem;
   }
 `
-
-// new user profile name won't be 'none none' as of now, it will be subject to change to 'pending user'.
-const getProfileNameOrEmailForPendingUser = (user) =>
-  user.profile_name === 'None None' ? user.email : user.profile_name
 
 const TransferSampleUnitsModal = ({
   isOpen,
