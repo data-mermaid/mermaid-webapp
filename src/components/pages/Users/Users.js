@@ -37,7 +37,7 @@ import {
 } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import { Row, RowSpaceBetween } from '../../generic/positioning'
+import { RowSpaceBetween } from '../../generic/positioning'
 import theme from '../../../theme'
 import language from '../../../language'
 import useIsMounted from '../../../library/useIsMounted'
@@ -50,40 +50,20 @@ import { validateEmail } from '../../../library/strings/validateEmail'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import { pluralize } from '../../../library/strings/pluralize'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
+import InputAndButton from '../../generic/InputAndButton/InputAndButton'
 
-const inputStyles = css`
-  padding: ${theme.spacing.small};
+const ToolbarRowWrapper = styled('div')`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: ${theme.spacing.small};
   ${mediaQueryPhoneOnly(css`
-    padding: ${theme.spacing.xsmall};
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: auto;
   `)}
 `
 
-const SearchEmailSectionWrapper = styled.div`
-  display: flex;
-  flex-grow: 1;
-`
-
-const SearchEmailLabelWrapper = styled.label`
-  display: flex;
-  flex-grow: 2;
-  flex-direction: column;
-  margin-right: 10px;
-  > input {
-    ${inputStyles}
-    width: 100%;
-  }
-`
-
-const ToolbarRowWrapper = styled(Row)`
-  align-items: flex-end;
-`
-
-const AddUserButton = styled(ButtonSecondary)`
-  margin-top: 20px;
-`
-
 const WarningBadgeWrapper = styled('div')`
-  padding: 10px 0;
+  padding: ${theme.spacing.small} 0;
 `
 
 const WarningTextStyle = styled(InputRow)`
@@ -97,27 +77,45 @@ const WarningTextStyle = styled(InputRow)`
 `
 
 const ProfileImage = styled.div`
-  border: 1px solid #000;
   border-radius: 50%;
   ${(props) =>
     props.img &&
     css`
       background-image: url(${props.img});
       background-position: center center;
-      background-size: 35px;
-      margin-right: 5px;
+      background-size: ${props.theme.typography.xLargeIconSize};
     `}
-  width: 35px;
-  height: 35px;
+    width: ${(props) => props.theme.typography.xLargeIconSize};
+    height: ${(props) => props.theme.typography.xLargeIconSize};
 `
 
 const NameCellStyle = styled('div')`
   display: flex;
-  width: 250px;
+  white-space: nowrap;
   align-items: center;
   svg {
     width: ${(props) => props.theme.typography.xLargeIconSize};
     height: ${(props) => props.theme.typography.xLargeIconSize};
+  }
+`
+const UserTableTd = styled(Td)`
+  position: relative;
+`
+const TableRadioLabel = styled('label')`
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  display: grid;
+  place-items: center;
+  &:hover {
+    border: solid 1px ${theme.color.primaryColor};
+  }
+`
+const TableIconButtonSecondary = styled(ButtonSecondary)`
+  span {
+    display: none;
   }
 `
 
@@ -311,7 +309,7 @@ const Users = ({ currentUser }) => {
         accessor: 'transfer',
       },
       {
-        Header: 'Remove From Projects',
+        Header: 'Remove From Project',
         accessor: 'remove',
       },
     ]
@@ -323,12 +321,12 @@ const Users = ({ currentUser }) => {
 
     const observerRoleRadioCell = (userId, value) => {
       return (
-        <label htmlFor={`observer-${userId}`}>
+        <TableRadioLabel htmlFor={`observer-${userId}-${value}`}>
           <input
             type="radio"
             value={value}
             name={userId}
-            id={`observer-${userId}`}
+            id={`observer-${userId}-${value}`}
             checked={getObserverRole(userId) === value}
             onChange={(event) => {
               const observers = [...observerProfiles]
@@ -340,7 +338,7 @@ const Users = ({ currentUser }) => {
               setObserverProfiles(observers)
             }}
           />
-        </label>
+        </TableRadioLabel>
       )
     }
 
@@ -466,9 +464,12 @@ const Users = ({ currentUser }) => {
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                      <UserTableTd
+                        {...cell.getCellProps()}
+                        align={cell.column.align}
+                      >
                         {cell.render('Cell')}
-                      </Td>
+                      </UserTableTd>
                     )
                   })}
                 </Tr>
@@ -545,21 +546,19 @@ const Users = ({ currentUser }) => {
               name={language.pages.userTable.filterToolbarText}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
-            <SearchEmailSectionWrapper>
-              <SearchEmailLabelWrapper htmlFor="filter_projects">
-                {language.pages.userTable.searchEmailToolbarText}
-                <input
-                  type="text"
-                  id="search-emails"
-                  value={newUserProfile}
-                  onChange={handleNewUserProfileAdd}
-                />
-              </SearchEmailLabelWrapper>
-              <AddUserButton onClick={openNewUserProfileModal}>
-                <IconPlus />
-                Add User
-              </AddUserButton>
-            </SearchEmailSectionWrapper>
+            <InputAndButton
+              inputId="add-new-user-email"
+              labelText={language.pages.userTable.searchEmailToolbarText}
+              buttonChildren={
+                <>
+                  <IconPlus />
+                  Add User
+                </>
+              }
+              value={newUserProfile}
+              onChange={handleNewUserProfileAdd}
+              buttonOnClick={openNewUserProfileModal}
+            />
           </ToolbarRowWrapper>
           {isReadonlyUserWithActiveSampleUnits && (
             <WarningBadgeWrapper>

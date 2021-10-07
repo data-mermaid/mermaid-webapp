@@ -58,8 +58,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   )
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
+  const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
+    possibleCollectButtonGroupStates.saved,
+  )
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
@@ -67,17 +71,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
-
-  const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
-    possibleCollectButtonGroupStates.saved,
-  )
+  const observationsReducer = useReducer(fishbeltObservationReducer, [])
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const openNewFishNameModal = (observationId) => {
     setObservationToAddSpeciesTo(observationId)
@@ -86,15 +87,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const closeNewFishNameModal = () => {
     setIsNewFishNameModalOpen(false)
   }
-
   const showDeleteConfirmPrompt = () => {
     setShowDeleteModal(true)
   }
   const closeDeleteConfirmPrompt = () => {
     setShowDeleteModal(false)
   }
-  const observationsReducer = useReducer(fishbeltObservationReducer, [])
-  const [observationsState, observationsDispatch] = observationsReducer
 
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -240,14 +238,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     databaseSwitchboardInstance
       .validateFishBelt({ recordId, projectId })
-      .then((recordResponse) => {
-        if (
-          recordResponse !== undefined &&
-          recordResponse.validations.status === 'ok'
-        ) {
+      .then((validatedRecordResponse) => {
+        if (validatedRecordResponse?.validations?.status === 'ok') {
           setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
         }
         setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
+        setCollectRecordBeingEdited(validatedRecordResponse)
       })
       .catch(() => {
         toast.error(language.error.collectRecordFailedValidation)
@@ -295,7 +291,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     return Promise.resolve()
   }
-  // note: observations doesn't use formik, maybe it could have
+  // note: observations doesn't use formik, maybe it could have.
+  // Better yet, future iterations should avoid formik which isnt
+  // growing well with the complexity of the app
   const initialFormikFormValues = useMemo(() => {
     return (
       getPersistedUnsavedFormikData() ?? {
@@ -311,16 +309,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
-
-  const handleSizeBinChange = (sizeBinId) => {
-    const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
-
-    const isSizeBinATypeThatRequiresSizeResetting = fishBinSelectedLabel !== '1'
-
-    if (isSizeBinATypeThatRequiresSizeResetting) {
-      observationsDispatch({ type: 'resetFishSizes' })
-    }
-  }
 
   const formikOptions = useMemo(() => {
     const saveRecord = (formikValues, formikActions) => {
@@ -360,8 +348,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     return {
       initialValues: initialFormikFormValues,
       enableReinitialize: true,
-      validate: persistUnsavedFormikData,
       onSubmit: saveRecord,
+      validate: (values) => {
+        // we run persistUnsavedFormikValues on validate because it seems to wait for formik to finish updating its state
+        persistUnsavedFormikData(values)
+      },
     }
   }, [
     clearPersistedUnsavedFormikData,
@@ -380,6 +371,53 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   ])
 
   const formik = useFormik(formikOptions)
+
+  const clearInputValidation = (inputValidationPropertyName) => {
+    if (
+      databaseSwitchboardInstance &&
+      collectRecordBeingEdited?.validations &&
+      inputValidationPropertyName
+    ) {
+      databaseSwitchboardInstance
+        .clearRecordInputValidation({
+          record: collectRecordBeingEdited,
+          inputValidationPropertyName,
+        })
+        .then((recordWithInputValidationCleared) => {
+          setCollectRecordBeingEdited(recordWithInputValidationCleared)
+        })
+    }
+  }
+
+  const handleInputChange = ({ inputValidationPropertyName, event }) => {
+    formik.handleChange(event)
+
+    clearInputValidation(inputValidationPropertyName)
+  }
+
+  const handleSizeBinChange = ({ event, inputValidationPropertyName }) => {
+    const sizeBinId = event.target.value
+
+    formik.setFieldValue('size_bin', sizeBinId)
+
+    clearInputValidation(inputValidationPropertyName)
+
+    const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
+
+    const isSizeBinATypeThatRequiresSizeResetting = fishBinSelectedLabel !== '1'
+
+    if (isSizeBinATypeThatRequiresSizeResetting) {
+      observationsDispatch({ type: 'resetFishSizes' })
+    }
+  }
+
+  const handleObserversChange = ({
+    inputValidationPropertyName,
+    selectedObservers,
+  }) => {
+    formik.setFieldValue('observers', selectedObservers)
+    clearInputValidation(inputValidationPropertyName)
+  }
 
   const _setCollectButtonsUnsaved = useEffect(() => {
     if (formik.dirty || areObservationsInputsDirty) {
@@ -407,13 +445,22 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 formik={formik}
                 sites={sites}
                 managementRegimes={managementRegimes}
+                collectRecord={collectRecordBeingEdited}
+                onInputChange={handleInputChange}
               />
               <FishBeltTransectInputs
-                formik={formik}
                 choices={choices}
+                collectRecord={collectRecordBeingEdited}
+                formik={formik}
+                onInputChange={handleInputChange}
                 onSizeBinChange={handleSizeBinChange}
               />
-              <ObserversInput formik={formik} observers={observerProfiles} />
+              <ObserversInput
+                collectRecord={collectRecordBeingEdited}
+                formik={formik}
+                observers={observerProfiles}
+                onObserversChange={handleObserversChange}
+              />
               <FishBeltObservationTable
                 choices={choices}
                 collectRecord={collectRecordBeingEdited}

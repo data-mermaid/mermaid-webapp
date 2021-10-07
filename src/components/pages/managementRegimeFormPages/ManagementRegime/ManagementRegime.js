@@ -11,7 +11,7 @@ import { InputWrapper } from '../../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import InputCheckboxGroupWithLabel from '../../../generic/InputCheckboxGroupWithLabel'
+import InputCheckboxGroupWithLabelAndValidation from '../../../generic/InputCheckboxGroupWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
 import language from '../../../../language'
@@ -130,12 +130,12 @@ const ManagementRegime = () => {
                     unit="ha"
                     {...formik.getFieldProps('size')}
                   />
-                  <InputCheckboxGroupWithLabel
+                  <InputCheckboxGroupWithLabelAndValidation
                     label="Parties"
                     id="parties"
                     options={managementParties}
                     value={formik.getFieldProps('parties').value}
-                    onChange={(selectedItems) => {
+                    onChange={({ selectedItems }) => {
                       formik.setFieldValue('parties', selectedItems)
                     }}
                   />

@@ -51,8 +51,12 @@ RemoveUserModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  userNameToBeRemoved: PropTypes.string.isRequired,
+  userNameToBeRemoved: PropTypes.string,
   projectName: PropTypes.string.isRequired,
+}
+
+RemoveUserModal.defaultProps = {
+  userNameToBeRemoved: 'user',
 }
 
 export default RemoveUserModal

@@ -1,0 +1,3 @@
+import InputCheckboxGroupWithLabelAndValidation from './InputCheckboxGroupWithLabelAndValidation'
+
+export default InputCheckboxGroupWithLabelAndValidation

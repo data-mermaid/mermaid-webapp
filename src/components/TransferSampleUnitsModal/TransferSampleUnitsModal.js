@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -50,6 +50,15 @@ const TransferSampleUnitsModal = ({
     'sample unit',
     'sample units',
   )
+  const [isInitialToUserIdEmpty, setInitialIsToUserIdEmpty] = useState()
+
+  const _checkTransferButtonDisabledWhenModalOpen = useEffect(() => {
+    if (fromUser.profile === currentUserId) {
+      setInitialIsToUserIdEmpty(true)
+    } else {
+      setInitialIsToUserIdEmpty(false)
+    }
+  }, [fromUser, currentUserId])
 
   const optionList = userOptions
     .filter(({ profile }) => profile !== fromUser.profile)
@@ -94,9 +103,10 @@ const TransferSampleUnitsModal = ({
               aria-labelledby="aria-label-select-users"
               aria-describedby="aria-descp-select-users"
               defaultValue={initialToUserIdInTransferModal}
-              onChange={(event) =>
+              onChange={(event) => {
                 handleTransferSampleUnitChange(event.target.value)
-              }
+                setInitialIsToUserIdEmpty(false)
+              }}
             >
               <option value="" disabled>
                 Choose...
@@ -112,7 +122,7 @@ const TransferSampleUnitsModal = ({
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={handleOnSubmit}>
+      <ButtonPrimary onClick={handleOnSubmit} disabled={isInitialToUserIdEmpty}>
         Transfer Sample Units
       </ButtonPrimary>
     </RightFooter>

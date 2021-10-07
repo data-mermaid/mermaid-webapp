@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
+import { InputRow, ValidationMessage } from '../form'
 import theme from '../../../theme'
-import { InputRow } from '../form'
 
 const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.xsmall};
@@ -15,12 +15,14 @@ const CheckBoxLabel = styled.label`
   }
 `
 
-const InputCheckboxGroupWithLabel = ({
-  label,
+const InputCheckboxGroupWithLabelAndValidation = ({
   id,
-  options,
-  value,
+  label,
   onChange,
+  options,
+  validationMessage,
+  validationType,
+  value,
 }) => {
   const [checkboxItems, setCheckboxItems] = useState([])
 
@@ -39,7 +41,7 @@ const InputCheckboxGroupWithLabel = ({
     }
 
     setCheckboxItems(updateCheckboxItems)
-    onChange(updateCheckboxItems)
+    onChange({ selectedItems: updateCheckboxItems })
   }
 
   const checkboxGroup = options.map((item) => (
@@ -56,22 +58,32 @@ const InputCheckboxGroupWithLabel = ({
   ))
 
   return (
-    <InputRow>
+    <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
       <div>{checkboxGroup}</div>
+      <div>
+        {validationMessage ? (
+          <ValidationMessage validationType={validationType}>
+            {validationMessage}
+          </ValidationMessage>
+        ) : null}
+      </div>
     </InputRow>
   )
 }
 
-InputCheckboxGroupWithLabel.propTypes = {
+InputCheckboxGroupWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
+  validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  validationType: PropTypes.string,
   value: PropTypes.arrayOf(
     PropTypes.oneOfType([
       PropTypes.string,
@@ -81,7 +93,11 @@ InputCheckboxGroupWithLabel.propTypes = {
       }),
     ]),
   ).isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
-export default InputCheckboxGroupWithLabel
+InputCheckboxGroupWithLabelAndValidation.defaultProps = {
+  validationMessage: undefined,
+  validationType: undefined,
+}
+
+export default InputCheckboxGroupWithLabelAndValidation
