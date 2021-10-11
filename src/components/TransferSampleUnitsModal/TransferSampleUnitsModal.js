@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
-import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import language from '../../language'
 import { IconArrowRight } from '../icons'
 import { Select } from '../generic/form'
 import { Column } from '../generic/positioning'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
+import { pluralize } from '../../library/strings/pluralize'
 
 const ModalBoxItem = styled(Column)`
   background: ${theme.color.secondaryColor};
@@ -33,32 +33,64 @@ const ModalBodyContainer = styled.div`
   }
 `
 
+// new user profile name won't be 'none none' as of now, it will be subject to change to 'pending user'.
+const getProfileNameOrEmailForPendingUser = (user) =>
+  user.profile_name === 'None None' ? user.email : user.profile_name
+
 const TransferSampleUnitsModal = ({
   isOpen,
   onDismiss,
-  userTransferTo,
-  userTransferFrom,
+  currentUserId,
+  fromUser,
   userOptions,
   handleTransferSampleUnitChange,
+  onSubmit,
 }) => {
-  const userTransferToName = userTransferTo && userTransferTo.full_name
+  const initialToUserIdInTransferModal =
+    fromUser.profile === currentUserId ? '' : currentUserId
+  const sampleUnitMsg = pluralize(
+    fromUser.num_active_sample_units,
+    'sample unit',
+    'sample units',
+  )
+  const [isInitialToUserIdEmpty, setInitialIsToUserIdEmpty] = useState()
+
+  const _checkTransferButtonDisabledWhenModalOpen = useEffect(() => {
+    if (fromUser.profile === currentUserId) {
+      setInitialIsToUserIdEmpty(true)
+    } else {
+      setInitialIsToUserIdEmpty(false)
+    }
+  }, [fromUser, currentUserId])
 
   const optionList = userOptions
-    .filter(({ profile_name }) => profile_name !== userTransferFrom)
-    .map((user) => (
-      <option key={user.id} value={user.profile_name}>
-        {user.profile_name}
-      </option>
-    ))
+    .filter(({ profile }) => profile !== fromUser.profile)
+    .map((user) => {
+      const profileName = getProfileNameOrEmailForPendingUser(user)
+
+      return (
+        <option key={user.profile} value={user.profile}>
+          {profileName}
+        </option>
+      )
+    })
+
+  const handleOnSubmit = () => {
+    onSubmit().then(() => {
+      onDismiss()
+      handleTransferSampleUnitChange(currentUserId)
+    })
+  }
 
   const modalContent = (
     <form>
       <ModalBodyContainer>
         <ModalBoxItem>
           <InputLabel as="div">
-            Transfer unsubmitted Sample Unit from:
+            Transfer {fromUser.num_active_sample_units} unsubmitted{' '}
+            {sampleUnitMsg} from:
           </InputLabel>
-          <strong>{userTransferFrom}</strong>
+          <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
         </ModalBoxItem>
         <IconArrowRight />
         <ModalBoxItem>
@@ -73,10 +105,11 @@ const TransferSampleUnitsModal = ({
               id="modal-transfer-units-to"
               aria-labelledby="aria-label-select-users"
               aria-describedby="aria-descp-select-users"
-              value={userTransferToName}
-              onChange={(event) =>
+              defaultValue={initialToUserIdInTransferModal}
+              onChange={(event) => {
                 handleTransferSampleUnitChange(event.target.value)
-              }
+                setInitialIsToUserIdEmpty(false)
+              }}
             >
               <option value="" disabled>
                 Choose...
@@ -92,7 +125,9 @@ const TransferSampleUnitsModal = ({
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={onDismiss}>Transfer Sample Units</ButtonPrimary>
+      <ButtonPrimary onClick={handleOnSubmit} disabled={isInitialToUserIdEmpty}>
+        Transfer Sample Units
+      </ButtonPrimary>
     </RightFooter>
   )
 
@@ -110,8 +145,13 @@ const TransferSampleUnitsModal = ({
 TransferSampleUnitsModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  userTransferTo: currentUserPropType,
-  userTransferFrom: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string.isRequired,
+  fromUser: PropTypes.shape({
+    profile: PropTypes.string,
+    profile_name: PropTypes.string,
+    email: PropTypes.string,
+    num_active_sample_units: PropTypes.number,
+  }).isRequired,
   userOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -119,10 +159,7 @@ TransferSampleUnitsModal.propTypes = {
     }),
   ).isRequired,
   handleTransferSampleUnitChange: PropTypes.func.isRequired,
-}
-
-TransferSampleUnitsModal.defaultProps = {
-  userTransferTo: undefined,
+  onSubmit: PropTypes.func.isRequired,
 }
 
 export default TransferSampleUnitsModal

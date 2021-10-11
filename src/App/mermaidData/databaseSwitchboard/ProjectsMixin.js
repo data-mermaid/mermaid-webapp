@@ -88,7 +88,42 @@ const ProjectsMixin = (Base) =>
 
             return Promise.reject(
               new Error(
-                `the API record returned from addUser doesn't have a successful status code`,
+                `the API record returned from Add User doesn't have a successful status code`,
+              ),
+            )
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    transferSampleUnits = (projectId, fromProfileId, toProfileId) => {
+      if (!projectId || !fromProfileId || !toProfileId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isAuthenticatedAndReady) {
+        return this._authenticatedAxios
+          .put(
+            `${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`,
+            { from_profile: fromProfileId, to_profile: toProfileId },
+          )
+          .then((response) => {
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
+              response,
+            )
+
+            if (isRecordStatusCodeSuccessful) {
+              return this._apiSyncInstance
+                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .then(() => {
+                  return response.data
+                })
+            }
+
+            return Promise.reject(
+              new Error(
+                `the API record returned from Transfer Sample Units doesn't have a successful status code`,
               ),
             )
           })

@@ -10,7 +10,6 @@ import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components'
-import { useCurrentUser } from '../../../App/mermaidData/useCurrentUser'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
@@ -24,6 +23,7 @@ import {
 } from '../../icons'
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
+import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -47,6 +47,7 @@ import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import { validateEmail } from '../../../library/strings/validateEmail'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import { pluralize } from '../../../library/strings/pluralize'
 import InputAndButton from '../../generic/InputAndButton/InputAndButton'
 
 const ToolbarRowWrapper = styled('div')`
@@ -116,7 +117,7 @@ const TableIconButtonSecondary = styled(ButtonSecondary)`
   }
 `
 
-const Users = () => {
+const Users = ({ currentUser }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
@@ -129,14 +130,12 @@ const Users = () => {
   ] = useState(false)
   const [newUserProfile, setNewUserProfile] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
-  const [userTransferFrom, setUserTransferFrom] = useState('')
+  const [fromUser, setFromUser] = useState({})
+  const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser({ databaseSwitchboardInstance })
   const isMounted = useIsMounted()
-
-  const [userTransferTo, setUserTransferTo] = useState(currentUser)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId) {
@@ -159,19 +158,15 @@ const Users = () => {
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
 
-  const openTransferSampleUnitsModal = (name) => {
-    setUserTransferFrom(name)
-    setIsTransferSampleUnitsModalOpen(true)
-  }
-  const closeTransferSampleUnitsModal = () =>
-    setIsTransferSampleUnitsModalOpen(false)
-
   const fetchProjectProfiles = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance
         .getProjectProfiles(projectId)
         .then((projectProfilesResponse) => {
           setObserverProfiles(projectProfilesResponse)
+        })
+        .catch(() => {
+          toast.error(language.error.userRecordsUnavailable)
         })
     }
   }, [databaseSwitchboardInstance, projectId])
@@ -218,6 +213,45 @@ const Users = () => {
   }
 
   const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
+
+  const handleNewUserProfileAdd = (event) =>
+    setNewUserProfile(event.target.value)
+
+  const handleTransferSampleUnitChange = (userId) => {
+    setToUserProfileId(userId)
+  }
+
+  const transferSampleUnits = () => {
+    const fromUserProfileId = fromUser.profile
+
+    databaseSwitchboardInstance
+      .transferSampleUnits(projectId, fromUserProfileId, toUserProfileId)
+      .then((resp) => {
+        const sampleUnitMsg = pluralize(
+          fromUser.num_active_sample_units,
+          'sample unit',
+          'sample units',
+        )
+        const numRecordTransferred = resp.num_collect_records_transferred
+
+        fetchProjectProfiles()
+        toast.success(`${numRecordTransferred} ${sampleUnitMsg} transferred`)
+      })
+
+    return Promise.resolve()
+  }
+
+  const openTransferSampleUnitsModal = (
+    profile,
+    profile_name,
+    email,
+    num_active_sample_units,
+  ) => {
+    setFromUser({ profile, profile_name, email, num_active_sample_units })
+    setIsTransferSampleUnitsModalOpen(true)
+  }
+  const closeTransferSampleUnitsModal = () =>
+    setIsTransferSampleUnitsModalOpen(false)
 
   const tableColumns = useMemo(() => {
     return [
@@ -290,6 +324,7 @@ const Users = () => {
         email,
         picture,
         num_active_sample_units,
+        profile,
       }) => {
         return {
           name: (
@@ -306,7 +341,15 @@ const Users = () => {
           transfer: (
             <TableIconButtonSecondary
               type="button"
-              onClick={() => openTransferSampleUnitsModal(profile_name)}
+              disabled={num_active_sample_units === 0}
+              onClick={() =>
+                openTransferSampleUnitsModal(
+                  profile,
+                  profile_name,
+                  email,
+                  num_active_sample_units,
+                )
+              }
             >
               <span>Transfer Sample Units</span>
               <IconAccountConvert />
@@ -366,13 +409,7 @@ const Users = () => {
   )
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
-
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
-
-  const handleNewUserProfileAdd = (event) =>
-    setNewUserProfile(event.target.value)
-
-  const handleTransferSampleUnitChange = (name) => setUserTransferTo(name)
 
   const table = (
     <>
@@ -440,10 +477,11 @@ const Users = () => {
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
         onDismiss={closeTransferSampleUnitsModal}
-        userTransferTo={userTransferTo}
-        userTransferFrom={userTransferFrom}
+        currentUserId={currentUser.id}
+        fromUser={fromUser}
         userOptions={observerProfiles}
         handleTransferSampleUnitChange={handleTransferSampleUnitChange}
+        onSubmit={transferSampleUnits}
       />
     </>
   )
@@ -501,6 +539,7 @@ const Users = () => {
 }
 
 Users.propTypes = {
+  currentUser: currentUserPropType.isRequired,
   row: PropTypes.shape({
     original: PropTypes.shape({
       name: PropTypes.string,
