@@ -132,8 +132,8 @@ const Users = ({ currentUser }) => {
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
   const [
-    removeUserWarningWithActiveSampleUnits,
-    setRemoveUserWarningWithActiveSampleUnits,
+    showRemoveUserWithActiveSampleUnitsWarning,
+    setShowRemoveUserWithActiveSampleUnitsWarning,
   ] = useState(false)
   const [projectName, setProjectName] = useState('')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -254,11 +254,11 @@ const Users = ({ currentUser }) => {
   ) => {
     setFromUser({ profile, profile_name, email, num_active_sample_units })
     setIsTransferSampleUnitsModalOpen(true)
-    setRemoveUserWarningWithActiveSampleUnits(false)
+    setShowRemoveUserWithActiveSampleUnitsWarning(false)
   }
   const closeTransferSampleUnitsModal = () => {
     setIsTransferSampleUnitsModalOpen(false)
-    setRemoveUserWarningWithActiveSampleUnits(false)
+    setShowRemoveUserWithActiveSampleUnitsWarning(false)
   }
 
   const openRemoveUserModal = (user) => {
@@ -270,7 +270,7 @@ const Users = ({ currentUser }) => {
     } else {
       setFromUser({ profile, profile_name, email, num_active_sample_units })
       setIsTransferSampleUnitsModalOpen(true)
-      setRemoveUserWarningWithActiveSampleUnits(true)
+      setShowRemoveUserWithActiveSampleUnitsWarning(true)
     }
   }
   const closeRemoveUserModal = () => {
@@ -517,8 +517,8 @@ const Users = ({ currentUser }) => {
         currentUserId={currentUser.id}
         fromUser={fromUser}
         userOptions={observerProfiles}
-        removeUserWarningWithActiveSampleUnits={
-          removeUserWarningWithActiveSampleUnits
+        showRemoveUserWithActiveSampleUnitsWarning={
+          showRemoveUserWithActiveSampleUnitsWarning
         }
         handleTransferSampleUnitChange={handleTransferSampleUnitChange}
         onSubmit={transferSampleUnits}

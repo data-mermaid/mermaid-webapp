@@ -54,7 +54,7 @@ const TransferSampleUnitsModal = ({
   currentUserId,
   fromUser,
   userOptions,
-  removeUserWarningWithActiveSampleUnits,
+  showRemoveUserWithActiveSampleUnitsWarning,
   handleTransferSampleUnitChange,
   onSubmit,
 }) => {
@@ -96,7 +96,7 @@ const TransferSampleUnitsModal = ({
 
   const modalContent = (
     <>
-      {removeUserWarningWithActiveSampleUnits && (
+      {showRemoveUserWithActiveSampleUnitsWarning && (
         <WarningBadgeWrapper>
           <WarningTextStyle validationType="warning">
             {language.pages.userTable.warningRemoveUser}
@@ -173,7 +173,7 @@ TransferSampleUnitsModal.propTypes = {
     email: PropTypes.string,
     num_active_sample_units: PropTypes.number,
   }).isRequired,
-  removeUserWarningWithActiveSampleUnits: PropTypes.bool.isRequired,
+  showRemoveUserWithActiveSampleUnitsWarning: PropTypes.bool.isRequired,
   userOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
