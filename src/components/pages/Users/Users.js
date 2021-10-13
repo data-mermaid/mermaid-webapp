@@ -536,6 +536,45 @@ const Users = ({ currentUser }) => {
   )
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
+  const toolbar = isAppOnline ? (
+    <>
+      <RowSpaceBetween>
+        <H2>Users</H2>
+        <ButtonSecondary>
+          <IconSave />
+          Save Changes
+        </ButtonSecondary>
+      </RowSpaceBetween>
+      <ToolbarRowWrapper>
+        <FilterSearchToolbar
+          name={language.pages.userTable.filterToolbarText}
+          handleGlobalFilterChange={handleGlobalFilterChange}
+        />
+        <InputAndButton
+          inputId="add-new-user-email"
+          labelText={language.pages.userTable.searchEmailToolbarText}
+          buttonChildren={
+            <>
+              <IconPlus />
+              Add User
+            </>
+          }
+          value={newUserProfile}
+          onChange={handleNewUserProfileAdd}
+          buttonOnClick={openNewUserProfileModal}
+        />
+      </ToolbarRowWrapper>
+      {isReadonlyUserWithActiveSampleUnits && (
+        <WarningBadgeWrapper>
+          <WarningTextStyle validationType="warning">
+            {language.pages.userTable.warningBadgeMessage}
+          </WarningTextStyle>
+        </WarningBadgeWrapper>
+      )}
+    </>
+  ) : (
+    <H2>Users</H2>
+  )
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
@@ -546,43 +585,7 @@ const Users = ({ currentUser }) => {
     <ContentPageLayout
       isLoading={isLoading}
       content={content}
-      toolbar={
-        <>
-          <RowSpaceBetween>
-            <H2>Users</H2>
-            <ButtonSecondary>
-              <IconSave />
-              Save Changes
-            </ButtonSecondary>
-          </RowSpaceBetween>
-          <ToolbarRowWrapper>
-            <FilterSearchToolbar
-              name={language.pages.userTable.filterToolbarText}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
-            <InputAndButton
-              inputId="add-new-user-email"
-              labelText={language.pages.userTable.searchEmailToolbarText}
-              buttonChildren={
-                <>
-                  <IconPlus />
-                  Add User
-                </>
-              }
-              value={newUserProfile}
-              onChange={handleNewUserProfileAdd}
-              buttonOnClick={openNewUserProfileModal}
-            />
-          </ToolbarRowWrapper>
-          {isReadonlyUserWithActiveSampleUnits && (
-            <WarningBadgeWrapper>
-              <WarningTextStyle validationType="warning">
-                {language.pages.userTable.warningReadOnlyUser}
-              </WarningTextStyle>
-            </WarningBadgeWrapper>
-          )}
-        </>
-      }
+      toolbar={toolbar}
     />
   )
 }

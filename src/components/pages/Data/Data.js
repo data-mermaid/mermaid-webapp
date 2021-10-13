@@ -27,12 +27,13 @@ import {
   reactTableNaturalSort,
   reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
+import { H2 } from '../../generic/text'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import DataToolbarSection from './DataToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useIsMounted from '../../../library/useIsMounted'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import DataToolbarSection from './DataToolbarSection'
 
 const Data = () => {
   const isMounted = useIsMounted()
@@ -243,16 +244,19 @@ const Data = () => {
   )
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
+  const toolbar = isAppOnline ? (
+    <DataToolbarSection
+      name={language.pages.submittedTable.filterToolbarText}
+      handleGlobalFilterChange={handleGlobalFilterChange}
+    />
+  ) : (
+    <H2>Submitted</H2>
+  )
 
   return (
     <ContentPageLayout
       content={content}
-      toolbar={
-        <DataToolbarSection
-          name={language.pages.submittedTable.filterToolbarText}
-          handleGlobalFilterChange={handleGlobalFilterChange}
-        />
-      }
+      toolbar={toolbar}
       isPageContentLoading={isLoading}
     />
   )
