@@ -28,6 +28,10 @@ const ButtonSecondaryDropdown = ({ children, label, className }) => {
 ButtonSecondaryDropdown.propTypes = {
   children: PropTypes.node.isRequired,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  className: PropTypes.string,
+}
+ButtonSecondaryDropdown.defaultProps = {
+  className: undefined,
 }
 
 export default ButtonSecondaryDropdown
