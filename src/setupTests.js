@@ -17,6 +17,7 @@ beforeAll(() => {
 afterEach(() => {
   mockMermaidApiAllSuccessful.resetHandlers()
   window.sessionStorage.clear()
+  window.localStorage.clear()
 })
 afterAll(() => {
   mockMermaidApiAllSuccessful.close()
