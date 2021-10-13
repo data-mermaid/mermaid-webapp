@@ -33,6 +33,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import DataToolbarSection from './DataToolbarSection'
+import { H2 } from '../../generic/text'
 
 const Data = () => {
   const isMounted = useIsMounted()
@@ -243,16 +244,19 @@ const Data = () => {
   )
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
+  const toolbar = isAppOnline ? (
+    <DataToolbarSection
+      name={language.pages.submittedTable.filterToolbarText}
+      handleGlobalFilterChange={handleGlobalFilterChange}
+    />
+  ) : (
+    <H2>Submitted</H2>
+  )
 
   return (
     <ContentPageLayout
       content={content}
-      toolbar={
-        <DataToolbarSection
-          name={language.pages.submittedTable.filterToolbarText}
-          handleGlobalFilterChange={handleGlobalFilterChange}
-        />
-      }
+      toolbar={toolbar}
       isPageContentLoading={isLoading}
     />
   )
