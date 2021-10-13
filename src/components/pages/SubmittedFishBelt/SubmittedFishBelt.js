@@ -22,7 +22,7 @@ const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState()
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
