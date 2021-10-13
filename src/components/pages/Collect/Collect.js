@@ -25,7 +25,7 @@ import {
 } from '../../generic/Table/reactTableNaturalSort'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
-import { RowBottom } from '../../generic/positioning'
+import { ToolBarRow } from '../../generic/positioning'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -272,13 +272,13 @@ const Collect = () => {
       toolbar={
         <>
           <H2>Collect Records</H2>
-          <RowBottom>
+          <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.collectTable.filterToolbarText}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <AddSampleUnitButton />
-          </RowBottom>
+          </ToolBarRow>
         </>
       }
       content={table}

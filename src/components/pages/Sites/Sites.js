@@ -21,7 +21,7 @@ import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-import { RowBottom } from '../../generic/positioning'
+import { ToolBarRow } from '../../generic/positioning'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -225,7 +225,7 @@ const Sites = () => {
       toolbar={
         <>
           <H2>Sites</H2>
-          <RowBottom>
+          <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.siteTable.filterToolbarText}
               handleGlobalFilterChange={handleGlobalFilterChange}
@@ -241,7 +241,7 @@ const Sites = () => {
                 <IconDownload /> Export sites
               </ButtonSecondary>
             </ToolbarButtonWrapper>
-          </RowBottom>
+          </ToolBarRow>
         </>
       }
       content={table}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
+import theme from '../../theme'
 import { Input, inputStyles } from '../generic/form'
 
 const FilterLabelWrapper = styled.label`
@@ -9,6 +10,7 @@ const FilterLabelWrapper = styled.label`
   flex-grow: 2;
   justify-content: flex-end;
   > input {
+    max-width: ${theme.spacing.maxTextWidth};
     ${inputStyles}
   }
 `

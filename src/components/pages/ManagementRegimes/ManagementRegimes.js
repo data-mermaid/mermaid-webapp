@@ -22,7 +22,7 @@ import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-import { RowBottom } from '../../generic/positioning'
+import { ToolBarRow } from '../../generic/positioning'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -264,7 +264,7 @@ const ManagementRegimes = () => {
       toolbar={
         <>
           <H2>Management Regimes</H2>
-          <RowBottom>
+          <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.managementRegimeTable.filterToolbarText}
               handleGlobalFilterChange={handleGlobalFilterChange}
@@ -280,7 +280,7 @@ const ManagementRegimes = () => {
                 <IconDownload /> Export MRs
               </ButtonSecondary>
             </ToolbarButtonWrapper>
-          </RowBottom>
+          </ToolBarRow>
         </>
       }
       content={table}
