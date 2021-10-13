@@ -5,6 +5,7 @@ import {
   screen,
   renderAuthenticatedOnline,
   within,
+  renderAuthenticated,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
@@ -89,7 +90,57 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   // initial unedited depth value
   expect(within(formAfterNav).getByLabelText(/depth/i)).toHaveValue(10)
 })
+test('Unsaved NEW fishbelt form edits persist through change in online/offline status', async () => {
+  renderAuthenticated(
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
+    },
+  )
 
-test('Unsaved fishbelt form edits persist through online/offline status change', () => {
-  // After M103 - user controlled offline toggle wireup
+  const form = await screen.findByRole('form')
+
+  expect(within(form).getByLabelText(/depth/i)).not.toHaveValue()
+
+  // enter a depth
+  const depthInput = await within(form).findByLabelText(/depth/i)
+
+  userEvent.clear(depthInput)
+  userEvent.type(depthInput, '45')
+
+  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+
+  userEvent.click(screen.getByTestId('offline-toggle-switch-label'))
+
+  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
+})
+
+test('Unsaved EDIT fishbelt form edits persist through change in online/offline status', async () => {
+  renderAuthenticated(
+    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    },
+  )
+
+  const form = await screen.findByRole('form')
+
+  // initial unedited depth value
+  expect(within(form).getByLabelText(/depth/i)).toHaveValue(10)
+
+  // enter a depth
+  const depthInput = await within(form).findByLabelText(/depth/i)
+
+  userEvent.clear(depthInput)
+  userEvent.type(depthInput, '45')
+
+  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
+
+  userEvent.click(screen.getByTestId('offline-toggle-switch-label'))
+
+  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
 })

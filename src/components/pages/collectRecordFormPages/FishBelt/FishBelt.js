@@ -77,6 +77,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
+  const [isFormDirty, setIsFormDirty] = useState(false)
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
@@ -210,6 +211,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
   } = persistUnsavedObservationsUtilities
 
   const deleteRecord = () => {
@@ -372,6 +374,20 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const formik = useFormik(formikOptions)
 
+  const _setIsFormDirty = useEffect(() => {
+    setIsFormDirty(
+      formik.dirty ||
+        areObservationsInputsDirty ||
+        getPersistedUnsavedFormikData() ||
+        getPersistedUnsavedObservationsData(),
+    )
+  }, [
+    areObservationsInputsDirty,
+    formik.dirty,
+    getPersistedUnsavedFormikData,
+    getPersistedUnsavedObservationsData,
+  ])
+
   const clearInputValidation = (inputValidationPropertyName) => {
     if (
       databaseSwitchboardInstance &&
@@ -420,10 +436,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }
 
   const _setCollectButtonsUnsaved = useEffect(() => {
-    if (formik.dirty || areObservationsInputsDirty) {
+    if (isFormDirty) {
       setFishBeltButtonsState(possibleCollectButtonGroupStates.unsaved)
     }
-  }, [formik.dirty, areObservationsInputsDirty])
+  }, [isFormDirty])
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
