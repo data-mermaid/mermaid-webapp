@@ -284,13 +284,7 @@ const Admin = () => {
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
       content={content}
-      toolbar={
-        isAppOnline ? (
-          <>
-            <H2>Project Info</H2>
-          </>
-        ) : null
-      }
+      toolbar={<H2>Project Info</H2>}
     />
   )
 }
