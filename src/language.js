@@ -126,10 +126,12 @@ const pages = {
   userTable: {
     filterToolbarText: 'Filter users by name, or email',
     searchEmailToolbarText: 'Enter email address of user to add',
-    warningBadgeMessage: `Some Sample Units can't be submitted because the user is in read-only mode.`,
+    warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
     newUserModalTitle: `Invite new user`,
     newUserModalText: `will need to sign up because they're not already a MERMAID user. After they've signed up, they'll be added to this project`,
     transferSampleUnitsModalTitle: `Transfer Sample Units`,
+    removeUserModalTitle: 'Remove User From Project',
+    warningRemoveUser: `You must transfer sample units before you can remove the user from project.`,
   },
   submittedFishBeltForm: {
     toolbarLabel: 'Submitted sample units are read-only',
@@ -159,5 +161,5 @@ export default {
   autocomplete,
   pages,
   createFishSpecies,
-  offlineNotificationMessages
+  offlineNotificationMessages,
 }

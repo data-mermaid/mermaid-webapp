@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
 import { IconArrowRight } from '../icons'
-import { Select } from '../generic/form'
+import { Select, InputRow } from '../generic/form'
 import { Column } from '../generic/positioning'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { pluralize } from '../../library/strings/pluralize'
+import { getProfileNameOrEmailForPendingUser } from '../../library/getProfileNameOrEmailForPendingUser'
 
 const ModalBoxItem = styled(Column)`
   background: ${theme.color.secondaryColor};
@@ -33,9 +34,19 @@ const ModalBodyContainer = styled.div`
   }
 `
 
-// new user profile name won't be 'none none' as of now, it will be subject to change to 'pending user'.
-const getProfileNameOrEmailForPendingUser = (user) =>
-  user.profile_name === 'None None' ? user.email : user.profile_name
+const WarningBadgeWrapper = styled('div')`
+  padding: ${theme.spacing.small} 0;
+`
+
+const WarningTextStyle = styled(InputRow)`
+  grid-template-columns: 1fr;
+  ${(props) =>
+    props.validationType === 'warning' &&
+    css`
+      border-color: ${theme.color.warningColor};
+      background: #f0e0b3;
+    `}
+`
 
 const TransferSampleUnitsModal = ({
   isOpen,
@@ -43,6 +54,7 @@ const TransferSampleUnitsModal = ({
   currentUserId,
   fromUser,
   userOptions,
+  showRemoveUserWithActiveSampleUnitsWarning,
   handleTransferSampleUnitChange,
   onSubmit,
 }) => {
@@ -83,43 +95,52 @@ const TransferSampleUnitsModal = ({
   }
 
   const modalContent = (
-    <form>
-      <ModalBodyContainer>
-        <ModalBoxItem>
-          <InputLabel as="div">
-            Transfer {fromUser.num_active_sample_units} unsubmitted{' '}
-            {sampleUnitMsg} from:
-          </InputLabel>
-          <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
-        </ModalBoxItem>
-        <IconArrowRight />
-        <ModalBoxItem>
-          <InputLabel
-            id="modal-transfer-units-to-label"
-            htmlFor="modal-transfer-units-to"
-          >
-            Transfer sample units to
-          </InputLabel>
-          <div>
-            <Select
-              id="modal-transfer-units-to"
-              aria-labelledby="aria-label-select-users"
-              aria-describedby="aria-descp-select-users"
-              defaultValue={initialToUserIdInTransferModal}
-              onChange={(event) => {
-                handleTransferSampleUnitChange(event.target.value)
-                setInitialIsToUserIdEmpty(false)
-              }}
+    <>
+      {showRemoveUserWithActiveSampleUnitsWarning && (
+        <WarningBadgeWrapper>
+          <WarningTextStyle validationType="warning">
+            {language.pages.userTable.warningRemoveUser}
+          </WarningTextStyle>
+        </WarningBadgeWrapper>
+      )}
+      <form>
+        <ModalBodyContainer>
+          <ModalBoxItem>
+            <InputLabel as="div">
+              Transfer {fromUser.num_active_sample_units} unsubmitted{' '}
+              {sampleUnitMsg} from:
+            </InputLabel>
+            <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
+          </ModalBoxItem>
+          <IconArrowRight />
+          <ModalBoxItem>
+            <InputLabel
+              id="modal-transfer-units-to-label"
+              htmlFor="modal-transfer-units-to"
             >
-              <option value="" disabled>
-                Choose...
-              </option>
-              {optionList}
-            </Select>
-          </div>
-        </ModalBoxItem>
-      </ModalBodyContainer>
-    </form>
+              Transfer sample units to
+            </InputLabel>
+            <div>
+              <Select
+                id="modal-transfer-units-to"
+                aria-labelledby="aria-label-select-users"
+                aria-describedby="aria-descp-select-users"
+                defaultValue={initialToUserIdInTransferModal}
+                onChange={(event) => {
+                  handleTransferSampleUnitChange(event.target.value)
+                  setInitialIsToUserIdEmpty(false)
+                }}
+              >
+                <option value="" disabled>
+                  Choose...
+                </option>
+                {optionList}
+              </Select>
+            </div>
+          </ModalBoxItem>
+        </ModalBodyContainer>
+      </form>
+    </>
   )
 
   const footerContent = (
@@ -152,6 +173,7 @@ TransferSampleUnitsModal.propTypes = {
     email: PropTypes.string,
     num_active_sample_units: PropTypes.number,
   }).isRequired,
+  showRemoveUserWithActiveSampleUnitsWarning: PropTypes.bool.isRequired,
   userOptions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,

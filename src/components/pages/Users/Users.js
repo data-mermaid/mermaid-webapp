@@ -45,9 +45,11 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import NewUserModal from '../../NewUserModal'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
+import RemoveUserModal from '../../RemoveUserModal'
 import { validateEmail } from '../../../library/strings/validateEmail'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import { pluralize } from '../../../library/strings/pluralize'
+import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import InputAndButton from '../../generic/InputAndButton/InputAndButton'
 
 const ToolbarRowWrapper = styled('div')`
@@ -111,27 +113,29 @@ const TableRadioLabel = styled('label')`
     border: solid 1px ${theme.color.primaryColor};
   }
 `
-const TableIconButtonSecondary = styled(ButtonSecondary)`
-  span {
-    display: none;
-  }
-`
 
 const Users = ({ currentUser }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
   const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
     false,
   )
-  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
   const [
     isTransferSampleUnitsModalOpen,
     setIsTransferSampleUnitsModalOpen,
   ] = useState(false)
+  const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [newUserProfile, setNewUserProfile] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
   const [fromUser, setFromUser] = useState({})
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
+  const [userToBeRemoved, setUserToBeRemoved] = useState({})
+  const [
+    showRemoveUserWithActiveSampleUnitsWarning,
+    setShowRemoveUserWithActiveSampleUnitsWarning,
+  ] = useState(false)
+  const [projectName, setProjectName] = useState('')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
@@ -148,6 +152,7 @@ const Users = ({ currentUser }) => {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+            setProjectName(projectResponse.name)
             setObserverProfiles(projectProfilesResponse)
             setIsLoading(false)
           }
@@ -249,9 +254,39 @@ const Users = ({ currentUser }) => {
   ) => {
     setFromUser({ profile, profile_name, email, num_active_sample_units })
     setIsTransferSampleUnitsModalOpen(true)
+    setShowRemoveUserWithActiveSampleUnitsWarning(false)
   }
-  const closeTransferSampleUnitsModal = () =>
+  const closeTransferSampleUnitsModal = () => {
     setIsTransferSampleUnitsModalOpen(false)
+    setShowRemoveUserWithActiveSampleUnitsWarning(false)
+  }
+
+  const openRemoveUserModal = (user) => {
+    const { profile, profile_name, email, num_active_sample_units } = user
+
+    if (num_active_sample_units === 0) {
+      setIsRemoveUserModalOpen(true)
+      setUserToBeRemoved(user)
+    } else {
+      setFromUser({ profile, profile_name, email, num_active_sample_units })
+      setIsTransferSampleUnitsModalOpen(true)
+      setShowRemoveUserWithActiveSampleUnitsWarning(true)
+    }
+  }
+  const closeRemoveUserModal = () => {
+    setIsRemoveUserModalOpen(false)
+  }
+
+  const removeUserProfile = () => {
+    databaseSwitchboardInstance
+      .removeUser(userToBeRemoved, projectId)
+      .then(() => {
+        fetchProjectProfiles()
+        toast.success(`User removed`)
+      })
+
+    return Promise.resolve()
+  }
 
   const tableColumns = useMemo(() => {
     return [
@@ -317,54 +352,56 @@ const Users = ({ currentUser }) => {
       )
     }
 
-    return observerProfiles.map(
-      ({
+    return observerProfiles.map((userInfo) => {
+      const {
         id: userId,
         profile_name,
         email,
         picture,
         num_active_sample_units,
         profile,
-      }) => {
-        return {
-          name: (
-            <NameCellStyle>
-              {picture ? <ProfileImage img={picture} /> : <IconAccount />}{' '}
-              {profile_name}
-            </NameCellStyle>
-          ),
-          email,
-          admin: observerRoleRadioCell(userId, 90),
-          collector: observerRoleRadioCell(userId, 50),
-          readonly: observerRoleRadioCell(userId, 10),
-          active: num_active_sample_units,
-          transfer: (
-            <TableIconButtonSecondary
-              type="button"
-              disabled={num_active_sample_units === 0}
-              onClick={() =>
-                openTransferSampleUnitsModal(
-                  profile,
-                  profile_name,
-                  email,
-                  num_active_sample_units,
-                )
-              }
-            >
-              <span>Transfer Sample Units</span>
-              <IconAccountConvert />
-            </TableIconButtonSecondary>
-          ),
-          remove: (
-            <TableIconButtonSecondary type="button" onClick={() => {}}>
-              <span>Remove From Project</span>
-              <IconAccountRemove />
-            </TableIconButtonSecondary>
-          ),
-        }
-      },
-    )
-  }, [observerProfiles])
+      } = userInfo
+
+      return {
+        name: (
+          <NameCellStyle>
+            {picture ? <ProfileImage img={picture} /> : <IconAccount />}{' '}
+            {profile_name}
+          </NameCellStyle>
+        ),
+        email,
+        admin: observerRoleRadioCell(userId, 90),
+        collector: observerRoleRadioCell(userId, 50),
+        readonly: observerRoleRadioCell(userId, 10),
+        active: num_active_sample_units,
+        transfer: (
+          <ButtonSecondary
+            type="button"
+            disabled={num_active_sample_units === 0}
+            onClick={() =>
+              openTransferSampleUnitsModal(
+                profile,
+                profile_name,
+                email,
+                num_active_sample_units,
+              )
+            }
+          >
+            <IconAccountConvert />
+          </ButtonSecondary>
+        ),
+        remove: (
+          <ButtonSecondary
+            type="button"
+            disabled={profile === currentUser.id}
+            onClick={() => openRemoveUserModal(userInfo)}
+          >
+            <IconAccountRemove />
+          </ButtonSecondary>
+        ),
+      }
+    })
+  }, [observerProfiles, currentUser])
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.email']
@@ -480,8 +517,20 @@ const Users = ({ currentUser }) => {
         currentUserId={currentUser.id}
         fromUser={fromUser}
         userOptions={observerProfiles}
+        showRemoveUserWithActiveSampleUnitsWarning={
+          showRemoveUserWithActiveSampleUnitsWarning
+        }
         handleTransferSampleUnitChange={handleTransferSampleUnitChange}
         onSubmit={transferSampleUnits}
+      />
+      <RemoveUserModal
+        isOpen={isRemoveUserModalOpen}
+        onDismiss={closeRemoveUserModal}
+        onSubmit={removeUserProfile}
+        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(
+          userToBeRemoved,
+        )}
+        projectName={projectName}
       />
     </>
   )
