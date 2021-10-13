@@ -18,7 +18,7 @@ const OnlineStatusProvider = ({ children, value }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
   const [isServerReachable, setIsServerReachable] = useState(true)
   const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
-    JSON.parse(localStorage.getItem('hasUserTurnedAppOffline')) || false,
+    !!localStorage.getItem('hasUserTurnedAppOffline'),
   )
   const isAppOnline =
     isNavigatorOnline && isServerReachable === true && !hasUserTurnedAppOffline
@@ -67,12 +67,8 @@ const OnlineStatusProvider = ({ children, value }) => {
     if (!hasUserTurnedAppOffline) {
       toast.warn(language.offlineNotificationMessages.toggleOffline)
     }
-
+    localStorage.setItem('hasUserTurnedAppOffline', !hasUserTurnedAppOffline)
     setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
-    localStorage.setItem(
-      'has-user-turned-app-offline',
-      !hasUserTurnedAppOffline,
-    )
   }
 
   const _setIsNavigatorOnline = useEffect(() => {
