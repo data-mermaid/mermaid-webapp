@@ -81,7 +81,6 @@ const spacing = {
   xlarge,
   buttonSpacing: `${small}`,
   buttonPadding: `${small} ${medium}`,
-  toolbarButtonPadding: `${xsmall} ${small}`,
   width: '90vw',
   maxWidth: '1200px',
   maxTextWidth: '78ch',

@@ -1,20 +1,22 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
+import theme from '../../../theme'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import { Column } from '../../generic/positioning'
 import { IconPlus } from '../../icons'
 
 const CustomNavLink = styled(NavLink)`
-  padding: ${(props) => props.theme.spacing.xsmall};
+  padding: ${theme.spacing.buttonPadding};
+  text-decoration: none;
 `
-
-const TemporarySpanStyling = styled.span`
-  color: grey;
-  padding: 0.5rem 1rem;
+const DisabledCustomNavLink = styled(CustomNavLink)`
+  color: ${theme.color.disabledColor};
 `
-
+const StyledButtonSecondaryDropdown = styled(ButtonSecondaryDropdown)`
+  white-space: nowrap;
+`
 const AddSampleUnitButton = () => {
   const currentProjectPath = useCurrentProjectPath()
   const label = (
@@ -24,17 +26,19 @@ const AddSampleUnitButton = () => {
   )
 
   return (
-    <ButtonSecondaryDropdown label={label}>
+    <StyledButtonSecondaryDropdown label={label}>
       <Column as="nav" data-testid="new-sample-unit-nav">
         <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>
           Fish Belt
         </CustomNavLink>
-        <TemporarySpanStyling>Benthic LIT</TemporarySpanStyling>
-        <TemporarySpanStyling>Benthic PIT</TemporarySpanStyling>
-        <TemporarySpanStyling>Habitat Complexity</TemporarySpanStyling>
-        <TemporarySpanStyling>Bleaching</TemporarySpanStyling>
+        <DisabledCustomNavLink as="span">Benthic LIT</DisabledCustomNavLink>
+        <DisabledCustomNavLink as="span">Benthic PIT</DisabledCustomNavLink>
+        <DisabledCustomNavLink as="span">
+          Habitat Complexity
+        </DisabledCustomNavLink>
+        <DisabledCustomNavLink as="span">Bleaching</DisabledCustomNavLink>
       </Column>
-    </ButtonSecondaryDropdown>
+    </StyledButtonSecondaryDropdown>
   )
 }
 

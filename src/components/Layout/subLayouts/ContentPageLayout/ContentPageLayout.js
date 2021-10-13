@@ -3,6 +3,7 @@ import React from 'react'
 import styled, { css } from 'styled-components/macro'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import theme from '../../../../theme'
+import { mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import { Column } from '../../../generic/positioning'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import NavMenu from '../../../NavMenu'
@@ -36,7 +37,11 @@ const ContentToolbar = styled('div')`
     ${theme.color.backgroundColor};
   margin-bottom: 0;
   z-index: 100;
+  ${mediaQueryTabletLandscapeOnly(css`
+    position: static;
+  `)}
 `
+
 const Content = styled('div')`
   ${contentStyles};
   margin-top: 0px;
