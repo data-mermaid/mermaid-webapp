@@ -8,7 +8,7 @@ import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
 import { useCurrentUser } from './mermaidData/useCurrentUser'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
-import { useSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useSyncApiDataIntoOfflineStorage'
+import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
@@ -20,6 +20,7 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
+import { useSyncStatus } from './mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
@@ -31,13 +32,15 @@ function App({ dexieInstance }) {
   } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-  const { isOfflineStorageHydrated } = useSyncApiDataIntoOfflineStorage({
+  useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
     auth0Token,
     dexieInstance,
     isMounted,
     isAppOnline,
   })
+
+  const { isOfflineStorageHydrated } = useSyncStatus()
 
   const apiSyncInstance = useMemo(() => {
     return new SyncApiDataIntoOfflineStorage({
