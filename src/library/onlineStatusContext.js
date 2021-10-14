@@ -18,7 +18,7 @@ const OnlineStatusProvider = ({ children, value }) => {
   const [isNavigatorOnline, setIsNavigatorOnline] = useState(navigator.onLine)
   const [isServerReachable, setIsServerReachable] = useState(true)
   const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
-    !!localStorage.getItem('hasUserTurnedAppOffline'),
+    JSON.parse(localStorage.getItem('hasUserTurnedAppOffline')) || false,
   )
   const isAppOnline =
     isNavigatorOnline && isServerReachable === true && !hasUserTurnedAppOffline
