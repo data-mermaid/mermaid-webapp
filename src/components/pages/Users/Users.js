@@ -152,7 +152,7 @@ const Users = ({ currentUser }) => {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
-            setProjectName(projectResponse.name)
+            setProjectName(projectResponse?.name)
             setObserverProfiles(projectProfilesResponse)
             setIsLoading(false)
           }

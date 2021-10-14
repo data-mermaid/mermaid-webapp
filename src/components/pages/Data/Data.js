@@ -34,17 +34,19 @@ import DataToolbarSection from './DataToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useIsMounted from '../../../library/useIsMounted'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
 
 const Data = () => {
-  const isMounted = useIsMounted()
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [
     submittedRecordsForUiDisplay,
     setSubmittedRecordsForUiDisplay,
   ] = useState([])
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
+  const isMounted = useIsMounted()
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -60,7 +62,16 @@ const Data = () => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          const errorStatus = error.response?.status
+
+          if (
+            (errorStatus === 404 || errorStatus === 400) &&
+            isMounted.current
+          ) {
+            setIdsNotAssociatedWithData([projectId])
+            setIsLoading(false)
+          }
           toast.error(language.error.submittedRecordsUnavailable)
         })
     }
@@ -253,7 +264,12 @@ const Data = () => {
     <H2>Submitted</H2>
   )
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       content={content}
       toolbar={toolbar}
