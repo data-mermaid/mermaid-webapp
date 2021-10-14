@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import language from '../../../language'
@@ -15,7 +15,7 @@ const getProjectIdFromLocation = (location) => {
   return projectId
 }
 
-export const useSyncApiDataIntoOfflineStorage = ({
+export const useInitializeSyncApiDataIntoOfflineStorage = ({
   apiBaseUrl,
   auth0Token,
   dexieInstance,
@@ -23,10 +23,8 @@ export const useSyncApiDataIntoOfflineStorage = ({
   isAppOnline,
 }) => {
   const location = useLocation()
-  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(
-    false,
-  )
   const isPageReload = useRef(true)
+
   const syncApiDataIntoOfflineStorage = useMemo(
     () =>
       new SyncApiDataIntoOfflineStorage({
@@ -36,7 +34,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
       }),
     [dexieInstance, apiBaseUrl, auth0Token],
   )
-  const { setIsSyncInProgress } = useSyncStatus()
+  const { setIsSyncInProgress, setIsOfflineStorageHydrated } = useSyncStatus()
 
   const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {
     const isOnlineAndReady =
@@ -85,6 +83,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
           }
         })
         .catch(() => {
+          setIsSyncInProgress(false)
           toast.error(language.error.apiDataSync)
         })
     }
@@ -101,6 +100,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
           }
         })
         .catch(() => {
+          setIsSyncInProgress(false)
           toast.error(language.error.apiDataSync)
         })
     }
@@ -115,6 +115,7 @@ export const useSyncApiDataIntoOfflineStorage = ({
           }
         })
         .catch(() => {
+          setIsSyncInProgress(false)
           toast.error(language.error.apiDataSync)
         })
     }
@@ -122,12 +123,11 @@ export const useSyncApiDataIntoOfflineStorage = ({
     apiBaseUrl,
     auth0Token,
     dexieInstance,
-    isMounted,
     isAppOnline,
+    isMounted,
     location,
+    setIsOfflineStorageHydrated,
     setIsSyncInProgress,
     syncApiDataIntoOfflineStorage,
   ])
-
-  return { isOfflineStorageHydrated }
 }

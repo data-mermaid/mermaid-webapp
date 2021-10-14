@@ -8,10 +8,19 @@ const SyncStatusContext = createContext()
 
 const SyncStatusProvider = ({ children, value }) => {
   const [isSyncInProgress, setIsSyncInProgress] = useState(true)
+  const [isOfflineStorageHydrated, setIsOfflineStorageHydrated] = useState(
+    false,
+  )
 
   return (
     <SyncStatusContext.Provider
-      value={{ isSyncInProgress, setIsSyncInProgress, ...value }}
+      value={{
+        isSyncInProgress,
+        setIsSyncInProgress,
+        isOfflineStorageHydrated,
+        setIsOfflineStorageHydrated,
+        ...value,
+      }}
     >
       {children}
     </SyncStatusContext.Provider>
@@ -31,7 +40,9 @@ const useSyncStatus = () => {
 SyncStatusProvider.propTypes = {
   children: PropTypes.node.isRequired,
   value: PropTypes.shape({
+    isOfflineStorageHydrated: PropTypes.bool,
     isSyncInProgress: PropTypes.bool,
+    setIsOfflineStorageHydrated: PropTypes.func,
     setIsSyncInProgress: PropTypes.func,
   }),
 }
