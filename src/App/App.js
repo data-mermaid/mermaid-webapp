@@ -6,9 +6,10 @@ import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
 import { useCurrentUser } from './mermaidData/useCurrentUser'
+import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
-import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
+import { useSyncStatus } from './mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
@@ -20,7 +21,6 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
-import { useSyncStatus } from './mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
@@ -40,7 +40,7 @@ function App({ dexieInstance }) {
     isAppOnline,
   })
 
-  const { isOfflineStorageHydrated } = useSyncStatus()
+  const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
 
   const apiSyncInstance = useMemo(() => {
     return new SyncApiDataIntoOfflineStorage({
@@ -52,10 +52,7 @@ function App({ dexieInstance }) {
 
   const databaseSwitchboardInstance = useMemo(() => {
     const areDependenciesReady =
-      !!dexieInstance &&
-      apiBaseUrl &&
-      isMermaidAuthenticated &&
-      isOfflineStorageHydrated
+      !!dexieInstance && apiBaseUrl && isMermaidAuthenticated
 
     return !areDependenciesReady
       ? undefined
@@ -65,7 +62,6 @@ function App({ dexieInstance }) {
           auth0Token,
           dexieInstance,
           isMermaidAuthenticated,
-          isOfflineStorageHydrated,
           isAppOnline,
         })
   }, [
@@ -75,7 +71,6 @@ function App({ dexieInstance }) {
     dexieInstance,
     apiBaseUrl,
     apiSyncInstance,
-    isOfflineStorageHydrated,
   ])
 
   const currentUser = useCurrentUser({
@@ -96,7 +91,7 @@ function App({ dexieInstance }) {
     isMermaidAuthenticated &&
     currentUser &&
     databaseSwitchboardInstance &&
-    isOfflineStorageHydrated
+    (isOfflineStorageHydrated || syncErrors.length) // we use isOfflineStrorageHydrated here instead of isSyncInProgress to make sure the app level layout doesnt rerender (flash) on sync
 
   return (
     <ThemeProvider theme={theme}>
@@ -109,9 +104,7 @@ function App({ dexieInstance }) {
              * infinite log in loop with authentication.
              *
              * The projects list route and project workflow pages will trigger
-             * a sync when they are routed to making isOfflineStorageHydrated = true,
-             * which is needed for there to be a database switchboard instance,
-             * which those pages depend on
+             * a sync when they are routed to, making isOfflineStorageHydrated = true
              */
 
             isMermaidAuthenticated ? (

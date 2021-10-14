@@ -34,9 +34,20 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
       }),
     [dexieInstance, apiBaseUrl, auth0Token],
   )
-  const { setIsSyncInProgress, setIsOfflineStorageHydrated } = useSyncStatus()
+  const {
+    setIsSyncInProgress,
+    setIsOfflineStorageHydrated,
+    setSyncErrors,
+  } = useSyncStatus()
 
   const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {
+    const resetSyncErrors = () => {
+      setSyncErrors([])
+    }
+    const appendSyncError = (newError) => {
+      setSyncErrors((previousState) => [...previousState, newError])
+    }
+
     const isOnlineAndReady =
       apiBaseUrl &&
       auth0Token &&
@@ -73,6 +84,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     if (isProjectsListPageAndOnline) {
       // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
+      resetSyncErrors()
       syncApiDataIntoOfflineStorage
         .pushThenPullEverything()
         .then(() => {
@@ -84,12 +96,14 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         })
         .catch(() => {
           setIsSyncInProgress(false)
+          appendSyncError(language.error.apiDataSync)
           toast.error(language.error.apiDataSync)
         })
     }
 
     if (isInitialLoadOnProjectPageAndOnline) {
       setIsSyncInProgress(true)
+      resetSyncErrors()
       syncApiDataIntoOfflineStorage
         .pushThenPullEverythingForAProject(projectId)
         .then(() => {
@@ -101,12 +115,14 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         })
         .catch(() => {
           setIsSyncInProgress(false)
+          appendSyncError(language.error.apiDataSync)
           toast.error(language.error.apiDataSync)
         })
     }
     if (isNotInitialLoadOnProjectPageAndOnline) {
       // this captures when a user returns to being online after being offline
       setIsSyncInProgress(true)
+      resetSyncErrors()
       syncApiDataIntoOfflineStorage
         .pushThenPullEverythingForAProjectButChoices(projectId)
         .then(() => {
@@ -116,6 +132,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         })
         .catch(() => {
           setIsSyncInProgress(false)
+          appendSyncError(language.error.apiDataSync)
           toast.error(language.error.apiDataSync)
         })
     }
@@ -128,6 +145,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     location,
     setIsOfflineStorageHydrated,
     setIsSyncInProgress,
+    setSyncErrors,
     syncApiDataIntoOfflineStorage,
   ])
 }
