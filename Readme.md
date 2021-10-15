@@ -19,6 +19,10 @@
 1. Styles will be done with Styled Components for easy scoping, speed, and maintainability. Make sure to import using the macro for easier debugging (it results in more human-friendly classnames) `import styled from 'styled-components/macro'`
 1. Focus on integration tests, and testing complex pieces of code.
 
+### General Architecture (Incomplete WIP)
+
+- Syncing data with the server: initialize with the `useInitializeSyncApiDataIntoOfflineStorage` hook, get sync status state from the `useSyncStatus()` hook. Both hooks depend on `SyncStatusProvider`
+
 ## Manual Testing
 
 - Offline (PWA) apps are not created with the Create React App development server. To test offline functionality, you need to build and serve the built code. `yarn build && serve -s build`.
@@ -26,15 +30,18 @@
 ## Deploying
 
 ### Pull Request Previews
+
 - Available at `preview.datamermaid.org/<pull-request-number-here>/`
 - A preview of the application is created when a pull request is opened, sychronized (commit is made), or re-opened.
 - A bot will add a PR comment with the link to the preview, once it is ready.
 - Once a pull request is merged or closed, the respective preview will be deleted.
 
 ### Develop (non-prod)
+
 - Available at [dev-app.datamermaid.org](https://dev-app.datamermaid.org)
 - Is updated any time someone pushes to the `develop` branch
 
 ### Production
+
 - Available at [app.datamermaid.org](https://app.datamermaid.org)
 - Is updated on tag creation
