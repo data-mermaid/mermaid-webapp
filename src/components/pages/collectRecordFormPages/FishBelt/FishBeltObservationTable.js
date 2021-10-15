@@ -332,7 +332,7 @@ const FishBeltObservationTable = ({
       fishBinSelectedLabel?.toString() === '1' ||
       typeof fishBinSelectedLabel === 'undefined'
 
-    const sizeSelect = !showNumericSizeInput && (
+    const sizeSelect = !showNumericSizeInput ? (
       <FishBeltObservationSizeSelect
         onValueEntered={(value) => {
           handleUpdateSize(value, observationId)
@@ -344,7 +344,7 @@ const FishBeltObservationTable = ({
         value={sizeOrEmptyStringToAvoidInputValueErrors}
         labelledBy="fish-size-label"
       />
-    )
+    ) : null
 
     const sizeInput = showNumericSizeInput ? (
       <InputNumberNoScrollWithUnit

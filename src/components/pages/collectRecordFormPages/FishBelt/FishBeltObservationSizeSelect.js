@@ -39,7 +39,10 @@ export const FishBeltObservationSizeSelect = ({
   }
 
   const handlePlus50OnBlur = (event) => {
-    onValueEntered(event.target.value)
+    const eventValue = event.target.value
+    const validPlus50Value = eventValue < 50 ? '' : eventValue
+
+    onValueEntered(validPlus50Value)
   }
 
   return (
