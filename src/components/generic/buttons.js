@@ -120,7 +120,6 @@ export const ButtonThatLooksLikeLink = styled('button')`
 `
 export const ToolbarButtonWrapper = styled('div')`
   button {
-    padding: ${theme.spacing.toolbarButtonPadding};
     margin: 0 -1px;
   }
 `

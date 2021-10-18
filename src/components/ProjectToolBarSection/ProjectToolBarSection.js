@@ -7,7 +7,7 @@ import {
 } from '../../library/styling/mediaQueries'
 import { ButtonCallout, ButtonSecondary } from '../generic/buttons'
 import { IconSortDown } from '../icons'
-import { inputStyles } from '../generic/form'
+import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
 
 const GlobalWrapper = styled.div`
@@ -90,7 +90,7 @@ const ProjectToolBarSection = () => {
       <FilterRowWrapper>
         <FilterLabelWrapper htmlFor="filter_projects">
           Filter Projects By Name or Country
-          <input type="text" id="filter_projects" />
+          <Input type="text" id="filter_projects" />
         </FilterLabelWrapper>
         <SortByLabelWrapper htmlFor="sort_by">
           Sort By

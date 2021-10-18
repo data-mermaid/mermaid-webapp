@@ -22,7 +22,7 @@ const GlobalStyle = createGlobalStyle`
         -webkit-font-smoothing: antialiased;
     
     }
-    select, input, textarea, p, a{
+    select, input, textarea, p, a, button{
         line-height: ${theme.typography.lineHeight};
 
     }

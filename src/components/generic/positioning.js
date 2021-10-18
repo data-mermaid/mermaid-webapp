@@ -28,3 +28,8 @@ export const Column = styled.div`
   display: flex;
   flex-direction: column;
 `
+export const ToolBarRow = styled(Row)`
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem 1rem;
+`

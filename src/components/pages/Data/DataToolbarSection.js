@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { H2 } from '../../generic/text'
-import { Column, RowBottom } from '../../generic/positioning'
+import { Column, ToolBarRow } from '../../generic/positioning'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 
@@ -27,7 +27,7 @@ const DataToolbarSection = ({ name, handleGlobalFilterChange }) => {
   return (
     <>
       <H2>Submitted</H2>
-      <RowBottom>
+      <ToolBarRow>
         <FilterSearchToolbar
           name={name}
           handleGlobalFilterChange={handleGlobalFilterChange}
@@ -42,7 +42,7 @@ const DataToolbarSection = ({ name, handleGlobalFilterChange }) => {
             <TemporarySpanStyling>Quadrat Percentage</TemporarySpanStyling>
           </Column>
         </ButtonSecondaryDropdown>
-      </RowBottom>
+      </ToolBarRow>
     </>
   )
 }
