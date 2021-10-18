@@ -9,6 +9,7 @@ const InlineMessageWrapper = styled.div`
   border-color: ${theme.color.textColor};
   border-width: 0 0 0 ${theme.spacing.borderXLarge};
   border-style: solid;
+  margin: ${theme.spacing.small} 0 0 0;
   p {
     margin: 0 0 0 ${theme.spacing.small};
     font-size: smaller;

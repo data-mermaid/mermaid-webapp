@@ -9,11 +9,10 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css } from 'styled-components/macro'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
-import { InputRow } from '../../generic/form'
 import {
   IconAccount,
   IconAccountConvert,
@@ -38,6 +37,7 @@ import {
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { RowSpaceBetween } from '../../generic/positioning'
+import InlineMessage from '../../generic/InlineMessage'
 import theme from '../../../theme'
 import language from '../../../language'
 import useIsMounted from '../../../library/useIsMounted'
@@ -60,20 +60,6 @@ const ToolbarRowWrapper = styled('div')`
     grid-template-rows: 1fr 1fr;
     grid-template-columns: auto;
   `)}
-`
-
-const WarningBadgeWrapper = styled('div')`
-  padding: ${theme.spacing.small} 0;
-`
-
-const WarningTextStyle = styled(InputRow)`
-  grid-template-columns: 1fr;
-  ${(props) =>
-    props.validationType === 'warning' &&
-    css`
-      border-color: ${theme.color.warningColor};
-      background: #f0e0b3;
-    `}
 `
 
 const ProfileImage = styled.div`
@@ -565,11 +551,9 @@ const Users = ({ currentUser }) => {
         />
       </ToolbarRowWrapper>
       {isReadonlyUserWithActiveSampleUnits && (
-        <WarningBadgeWrapper>
-          <WarningTextStyle validationType="warning">
-            {language.pages.userTable.warningBadgeMessage}
-          </WarningTextStyle>
-        </WarningBadgeWrapper>
+        <InlineMessage type="warning">
+          {language.pages.userTable.warningReadOnlyUser}
+        </InlineMessage>
       )}
     </>
   ) : (

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
 import { IconArrowRight } from '../icons'
-import { Select, InputRow } from '../generic/form'
+import { Select } from '../generic/form'
 import { Column } from '../generic/positioning'
-import theme from '../../theme'
+import InlineMessage from '../generic/InlineMessage'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { pluralize } from '../../library/strings/pluralize'
 import { getProfileNameOrEmailForPendingUser } from '../../library/getProfileNameOrEmailForPendingUser'
@@ -27,21 +27,6 @@ const ModalBodyContainer = styled.div`
     height: 4rem;
   }
 `
-
-const WarningBadgeWrapper = styled('div')`
-  padding: ${theme.spacing.small} 0;
-`
-
-const WarningTextStyle = styled(InputRow)`
-  grid-template-columns: 1fr;
-  ${(props) =>
-    props.validationType === 'warning' &&
-    css`
-      border-color: ${theme.color.warningColor};
-      background: #f0e0b3;
-    `}
-`
-
 const TransferSampleUnitsModal = ({
   isOpen,
   onDismiss,
@@ -91,11 +76,9 @@ const TransferSampleUnitsModal = ({
   const modalContent = (
     <>
       {showRemoveUserWithActiveSampleUnitsWarning && (
-        <WarningBadgeWrapper>
-          <WarningTextStyle validationType="warning">
-            {language.pages.userTable.warningRemoveUser}
-          </WarningTextStyle>
-        </WarningBadgeWrapper>
+        <InlineMessage type="warning">
+          {language.pages.userTable.warningRemoveUser}
+        </InlineMessage>
       )}
       <form>
         <ModalBodyContainer>
