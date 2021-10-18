@@ -9,7 +9,6 @@ import { IconDown } from '../../icons'
 const StyledDropdownContainer = styled(DropdownContainer)`
   background-color: ${theme.color.white};
   border: solid 1px ${theme.color.border};
-  /* padding: ${theme.spacing.buttonPadding}; */
 `
 
 const ButtonSecondaryDropdown = ({ children, label, className }) => {
