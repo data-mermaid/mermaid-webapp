@@ -13,9 +13,10 @@ const RemoveUserModal = ({
   projectName,
 }) => {
   const modalContent = (
-    <div>
-      Are you sure you want to remove {userNameToBeRemoved} from {projectName}?
-    </div>
+    <p>
+      Are you sure you want to remove <strong>{userNameToBeRemoved}</strong>{' '}
+      from <strong>{projectName}</strong>?
+    </p>
   )
 
   const handleOnSubmit = () => {
