@@ -10,7 +10,7 @@ import {
   ButtonPrimary,
   ButtonSecondary,
 } from '../generic/buttons'
-import { IconArrowBack, IconRequired, IconSend } from '../icons'
+import { IconArrowBack, IconSend } from '../icons'
 import { Input } from '../generic/form'
 import { Row, RowSpaceBetween } from '../generic/positioning'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -28,8 +28,14 @@ const DetailsTable = styled(Table)`
     background: ${theme.color.tableRowEven};
   }
 `
+const StyledRow = styled(Row)`
+  justify-content: space-between;
+  gap: 1rem;
+`
 const MainContentContainer = styled.div``
-const InputContainer = styled.div``
+const InputContainer = styled.div`
+  width: 100%;
+`
 const NewFishSpeciesModal = ({
   isOpen,
   onDismiss,
@@ -118,15 +124,11 @@ const NewFishSpeciesModal = ({
 
   const mainContentPage1 = (
     <form id="form-page-1" onSubmit={formikPage1.handleSubmit}>
-      <Row>
+      <StyledRow>
         <InputContainer>
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label id="genus-label">
-            {language.createFishSpecies.genus} <IconRequired />
-          </label>
+          <label htmlFor="genus">{language.createFishSpecies.genus}</label>
           <InputAutocomplete
             id="genus"
-            aria-labelledby="genus-label"
             options={generaOptions}
             value={formikPage1.values.genusId}
             onChange={(selectedItem) => {
@@ -137,19 +139,18 @@ const NewFishSpeciesModal = ({
           {formikPage1.errors.genus && <div>{formikPage1.errors.genus}</div>}
         </InputContainer>
         <InputContainer>
-          <label htmlFor="species">
-            {language.createFishSpecies.species} <IconRequired />
-          </label>
+          <label htmlFor="species">{language.createFishSpecies.species}</label>
           <Input
             id="species"
+            aria-describedby="species-required"
             value={formikPage1.values.species}
             onChange={handleSpeciesChange}
           />
           {formikPage1.errors.species && (
-            <div>{formikPage1.errors.species}</div>
+            <span id="species-required">{formikPage1.errors.species}</span>
           )}
         </InputContainer>
-      </Row>
+      </StyledRow>
     </form>
   )
 
