@@ -437,7 +437,7 @@ const Users = ({ currentUser }) => {
     {
       columns: tableColumns,
       data: tableCellData,
-      initialState: { pageSize: 10 },
+      initialState: { pageSize: 15 },
       globalFilter: tableGlobalFilters,
     },
     useGlobalFilter,
@@ -493,7 +493,7 @@ const Users = ({ currentUser }) => {
         <PageSizeSelector
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
-          pageSizeOptions={[10, 50, 100]}
+          pageSizeOptions={[15, 50, 100]}
         />
         <PageSelector
           onPreviousClick={previousPage}
