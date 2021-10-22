@@ -21,7 +21,7 @@ const mediaQueryForTabletLandscapeUp = (content) => css`
   }
 `
 const mediaQueryForDesktopUp = (content) => css`
-  @media (min-width: 1200px) {
+  @media (min-width: 1300px) {
     ${content};
   }
 `

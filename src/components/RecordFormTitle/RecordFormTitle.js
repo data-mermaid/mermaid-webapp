@@ -1,6 +1,8 @@
 import React from 'react'
+import styled, { css } from 'styled-components/macro'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import theme from '../../theme'
+import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import { getObjectById } from '../../library/getObjectById'
 import { TooltipWithText, TooltipPopup } from '../generic/tooltip'
 import {
@@ -10,8 +12,11 @@ import {
 
 const TitleContainer = styled('div')`
   display: flex;
-  flex-wrap: wrap;
+  white-space: nowrap;
   gap: 1rem;
+  ${mediaQueryTabletLandscapeOnly(css`
+    font-size: ${theme.typography.smallFontSize};
+  `)}
 `
 const ProjectTooltip = styled(TooltipWithText)`
   ${TooltipPopup} {
