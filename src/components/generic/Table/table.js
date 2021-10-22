@@ -27,8 +27,8 @@ export const TableOverflowWrapper = styled.div`
   `)}
   overflow-y: auto;
   height: calc(
-    100vh - ${theme.spacing.headerHeight} - 123px
-  ); // 123px is the height of the header row and the footer
+    100vh - ${theme.spacing.headerHeight} - 13.3rem
+  ); // 133px is the height of the header row and the footer
   & + button,
   button + & {
     margin: ${theme.spacing.medium} 0;
@@ -42,6 +42,7 @@ export const Table = styled.table`
   thead tr {
     position: sticky;
     top: 0;
+    z-index: 1;
   }
 `
 export const Th = styled.th(
