@@ -3,31 +3,38 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 
 import {
   ButtonThatLooksLikeLink,
   ButtonPrimary,
   ButtonSecondary,
 } from '../generic/buttons'
-import { IconArrowBack, IconRequired, IconSend } from '../icons'
+import { IconArrowBack, IconSend } from '../icons'
 import { Input } from '../generic/form'
-import { Column, Row, RowSpaceBetween } from '../generic/positioning'
+import { Row, RowSpaceBetween } from '../generic/positioning'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import InputAutocomplete from '../generic/InputAutocomplete'
+import { Table, Td, Tr } from '../generic/Table/table'
 import language from '../../language'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import useIsMounted from '../../library/useIsMounted'
 
-const MainContentContainer = styled.div`
-  border: solid thick magenta;
-  padding: ${theme.spacing.xlarge};
+const DetailsTable = styled(Table)`
+  border: solid 1px ${theme.color.secondaryColor};
+  tr td:first-child {
+    background: ${theme.color.tableRowEven};
+  }
 `
+const StyledRow = styled(Row)`
+  justify-content: space-between;
+  gap: 1rem;
+`
+const MainContentContainer = styled.div``
 const InputContainer = styled.div`
-  flex-grow: 1;
-  padding-right: ${theme.spacing.xlarge};
+  width: 100%;
 `
 const NewFishSpeciesModal = ({
   isOpen,
@@ -117,11 +124,10 @@ const NewFishSpeciesModal = ({
 
   const mainContentPage1 = (
     <form id="form-page-1" onSubmit={formikPage1.handleSubmit}>
-      <Row>
+      <StyledRow>
         <InputContainer>
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label id="genus-label">
-            {language.createFishSpecies.genus} <IconRequired />
+          <label id="genus-label" htmlFor="genus">
+            {language.createFishSpecies.genus}
           </label>
           <InputAutocomplete
             id="genus"
@@ -136,40 +142,45 @@ const NewFishSpeciesModal = ({
           {formikPage1.errors.genus && <div>{formikPage1.errors.genus}</div>}
         </InputContainer>
         <InputContainer>
-          <label htmlFor="species">
-            {language.createFishSpecies.species} <IconRequired />
+          <label id="species-label" htmlFor="species">
+            {language.createFishSpecies.species}
           </label>
           <Input
             id="species"
+            aria-describedby="species-label"
             value={formikPage1.values.species}
             onChange={handleSpeciesChange}
           />
           {formikPage1.errors.species && (
-            <div>{formikPage1.errors.species}</div>
+            <span id="species-required">{formikPage1.errors.species}</span>
           )}
         </InputContainer>
-      </Row>
+      </StyledRow>
     </form>
   )
 
   const mainContentPage2 = (
-    <Column>
-      <div>
-        <div>
-          {language.createFishSpecies.getSummaryText1({
-            speciesName: `${genusName} ${formikPage1.values.species}`,
-          })}
-        </div>
-        <h5>{language.createFishSpecies.details}</h5>
-        <dl>
-          <dt id="user-label">{language.createFishSpecies.user}</dt>
-          <dd aria-labelledby="user-label">{currentUser.full_name}</dd>
-          <dt id="project-label">{language.createFishSpecies.project}</dt>
-          <dd aria-labelledby="project-label">{projectName}</dd>
-        </dl>
-      </div>
-      <div>{language.createFishSpecies.summaryText2}</div>
-    </Column>
+    <>
+      <DetailsTable>
+        <tbody>
+          <Tr>
+            <Td id="species-label">{language.createFishSpecies.species}</Td>
+            <Td aria-labelledby="species-label">
+              {formikPage1.values.species}
+            </Td>
+          </Tr>
+          <Tr>
+            <Td id="user-label">{language.createFishSpecies.user}</Td>
+            <Td aria-labelledby="user-label">{currentUser.full_name}</Td>
+          </Tr>
+          <Tr>
+            <Td id="project-label">{language.createFishSpecies.project}</Td>
+            <Td aria-labelledby="project-label">{projectName}</Td>
+          </Tr>
+        </tbody>
+      </DetailsTable>
+      <p>{language.createFishSpecies.summaryText2}</p>
+    </>
   )
 
   const mainContent = (
@@ -186,10 +197,10 @@ const NewFishSpeciesModal = ({
 
   const footerPage1 = (
     <RightFooter>
+      {cancelButton}
       <ButtonPrimary type="submit" form="form-page-1">
         {language.createFishSpecies.goToPage2}
       </ButtonPrimary>
-      {cancelButton}
     </RightFooter>
   )
   const footerPage2 = (
@@ -201,10 +212,10 @@ const NewFishSpeciesModal = ({
       </LeftFooter>
 
       <RightFooter>
+        {cancelButton}
         <ButtonPrimary type="button" onClick={handleOnSubmit}>
           <IconSend /> {language.createFishSpecies.submit}
         </ButtonPrimary>
-        {cancelButton}
       </RightFooter>
     </RowSpaceBetween>
   )

@@ -81,24 +81,26 @@ test('Fishbelt observations add new species - filling out new species form adds 
   userEvent.type(speciesInput, 'Ridens')
 
   const nextScreenButton = within(modal).getByRole('button', {
-    name: 'Propose new species',
+    name: 'Next',
   })
 
   userEvent.click(nextScreenButton)
 
   expect(
     await within(modal).findByText(
-      "I'd like to propose a new species called Nebrius ridens.",
+      'Your proposed new species will be reviewed by the MERMAID team who will either approve it for inclusion in the taxonomy or contact you to follow up.',
     ),
   )
 
-  const userNameElement = within(modal).getByLabelText('User:')
-  const projectNameElement = within(modal).getByLabelText('Project:')
+  const speciesNameElement = within(modal).getByLabelText('Species')
+  const userNameElement = within(modal).getByLabelText('User')
+  const projectNameElement = within(modal).getByLabelText('Project')
 
   expect(
     within(userNameElement).getByText('FakeFirstNameOnline FakeLastNameOnline'),
   )
   expect(within(projectNameElement).getByText('Project V'))
+  expect(within(speciesNameElement).getByText('ridens'))
 
   const submitButton = within(modal).getByRole('button', {
     name: 'Send to MERMAID for review',
@@ -183,8 +185,8 @@ test('Fishbelt observations add new species - proposing new species that already
   // note uppercase first letter. Species names must be transformed to lowercase
   userEvent.type(speciesInput, 'Longipes')
 
-  const nextScreenButton = within(modal).getByRole('button', {
-    name: 'Propose new species',
+  const nextScreenButton = await within(modal).findByRole('button', {
+    name: 'Next',
   })
 
   userEvent.click(nextScreenButton)

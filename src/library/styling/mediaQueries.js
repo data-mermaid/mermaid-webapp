@@ -11,7 +11,7 @@ const mediaQueryForTabletPortraitUp = (content) => css`
   }
 `
 const mediaQueryTabletLandscapeOnly = (content) => css`
-  @media (max-width: 899px) {
+  @media (max-width: 960px) {
     ${content};
   }
 `
