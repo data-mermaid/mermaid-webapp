@@ -25,7 +25,11 @@ const color = {
   callout,
   ignore,
   ignoreColor: ignore,
+  infoColor: ignore,
+  ignoreBorder: ignore.mix(colorHelper('black'), 0.1),
+  infoBorder: ignore.mix(colorHelper('black'), 0.1),
   warningColor: warning,
+  warningBorder: warning.mix(colorHelper('black'), 0.1),
   backgroundColor: secondary,
 
   primaryColor: primary,

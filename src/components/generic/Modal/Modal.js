@@ -43,12 +43,13 @@ const ModalTitle = styled.div`
 const ModalContent = styled.div`
   overflow: auto;
   max-height: 50vh;
-  padding: ${theme.spacing.buttonSpacing};
+  padding: ${theme.spacing.medium};
 `
 const ModalFooter = styled.div`
-  padding: ${theme.spacing.buttonSpacing};
+  padding: ${theme.spacing.medium};
   display: grid;
   grid-auto-columns: auto auto;
+  background: ${theme.color.tableRowEven};
   ${mediaQueryPhoneOnly(css`
     > * {
       display: block;

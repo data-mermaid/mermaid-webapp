@@ -1,53 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
 import { IconArrowRight } from '../icons'
-import { Select, InputRow } from '../generic/form'
+import { Select } from '../generic/form'
 import { Column } from '../generic/positioning'
-import theme from '../../theme'
+import InlineMessage from '../generic/InlineMessage'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { pluralize } from '../../library/strings/pluralize'
 import { getProfileNameOrEmailForPendingUser } from '../../library/getProfileNameOrEmailForPendingUser'
 
 const ModalBoxItem = styled(Column)`
-  background: ${theme.color.secondaryColor};
-  border: none;
-  padding: 20px;
-`
-
-const InputLabel = styled.label`
-  margin-bottom: 10px;
+  width: 100%;
 `
 
 const ModalBodyContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 0.1fr 1fr;
+  gap: 2rem;
   justify-items: center;
   align-items: center;
-  padding: 0 20px;
   svg {
-    width: 6rem;
-    height: 6rem;
+    width: 4rem;
+    height: 4rem;
   }
 `
-
-const WarningBadgeWrapper = styled('div')`
-  padding: ${theme.spacing.small} 0;
-`
-
-const WarningTextStyle = styled(InputRow)`
-  grid-template-columns: 1fr;
-  ${(props) =>
-    props.validationType === 'warning' &&
-    css`
-      border-color: ${theme.color.warningColor};
-      background: #f0e0b3;
-    `}
-`
-
 const TransferSampleUnitsModal = ({
   isOpen,
   onDismiss,
@@ -97,34 +76,28 @@ const TransferSampleUnitsModal = ({
   const modalContent = (
     <>
       {showRemoveUserWithActiveSampleUnitsWarning && (
-        <WarningBadgeWrapper>
-          <WarningTextStyle validationType="warning">
-            {language.pages.userTable.warningRemoveUser}
-          </WarningTextStyle>
-        </WarningBadgeWrapper>
+        <InlineMessage type="warning">
+          {language.pages.userTable.warningRemoveUser}
+        </InlineMessage>
       )}
       <form>
         <ModalBodyContainer>
           <ModalBoxItem>
-            <InputLabel as="div">
+            <p>
               Transfer {fromUser.num_active_sample_units} unsubmitted{' '}
-              {sampleUnitMsg} from:
-            </InputLabel>
-            <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
+              {sampleUnitMsg} from{' '}
+              <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
+            </p>
           </ModalBoxItem>
           <IconArrowRight />
           <ModalBoxItem>
-            <InputLabel
+            <label
               id="modal-transfer-units-to-label"
               htmlFor="modal-transfer-units-to"
             >
-              Transfer sample units to
-            </InputLabel>
-            <div>
+              Transfer sample units to:
               <Select
                 id="modal-transfer-units-to"
-                aria-labelledby="aria-label-select-users"
-                aria-describedby="aria-descp-select-users"
                 defaultValue={initialToUserIdInTransferModal}
                 onChange={(event) => {
                   handleTransferSampleUnitChange(event.target.value)
@@ -136,7 +109,7 @@ const TransferSampleUnitsModal = ({
                 </option>
                 {optionList}
               </Select>
-            </div>
+            </label>
           </ModalBoxItem>
         </ModalBodyContainer>
       </form>
