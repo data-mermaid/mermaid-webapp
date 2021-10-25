@@ -57,7 +57,7 @@ const color = {
   calloutDisabledColor: callout.mix(colorHelper('black'), 0.2),
 
   disabledColor: '#D5D5DD',
-  disabledText: '#969696',
+  disabledText: 'rgba(255,255,255,0.5)',
   disabledBorder: '#969696',
 
   border: white.mix(colorHelper(black), 0.5),

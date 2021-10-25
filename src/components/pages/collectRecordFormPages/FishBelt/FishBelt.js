@@ -10,7 +10,12 @@ import React, {
   useState,
 } from 'react'
 
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
+import {
+  mediaQueryForDesktopUp,
+  mediaQueryTabletLandscapeOnly,
+} from '../../../../library/styling/mediaQueries'
+import theme from '../../../../theme'
 import {
   getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
@@ -47,9 +52,25 @@ import RecordFormTitle from '../../../RecordFormTitle'
   Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
 const CollectRecordToolbarWrapper = styled('div')`
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: start;
+  ${mediaQueryForDesktopUp(css`
+    flex-direction: row;
+    align-items: center;
+  `)}
+  ${mediaQueryTabletLandscapeOnly(css`
+    &,
+    button {
+      svg {
+        width: ${theme.typography.smallIconSize};
+        height: ${theme.typography.smallIconSize};
+      }
+      font-size: ${theme.typography.smallFontSize};
+      padding: ${theme.spacing.small};
+    }
+  `)}
 `
 
 const FishBelt = ({ isNewRecord, currentUser }) => {

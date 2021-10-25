@@ -9,7 +9,7 @@ import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSucces
 jest.setTimeout(30000)
 window.URL.createObjectURL = () => {}
 
-configure({ asyncUtilTimeout: 3000 })
+configure({ asyncUtilTimeout: 10000 })
 
 beforeAll(() => {
   mockMermaidApiAllSuccessful.listen()
