@@ -126,9 +126,12 @@ const NewFishSpeciesModal = ({
     <form id="form-page-1" onSubmit={formikPage1.handleSubmit}>
       <StyledRow>
         <InputContainer>
-          <label htmlFor="genus">{language.createFishSpecies.genus}</label>
+          <label id="genus-label" htmlFor="genus">
+            {language.createFishSpecies.genus}
+          </label>
           <InputAutocomplete
             id="genus"
+            aria-labelledby="genus-label"
             options={generaOptions}
             value={formikPage1.values.genusId}
             onChange={(selectedItem) => {
@@ -139,10 +142,12 @@ const NewFishSpeciesModal = ({
           {formikPage1.errors.genus && <div>{formikPage1.errors.genus}</div>}
         </InputContainer>
         <InputContainer>
-          <label htmlFor="species">{language.createFishSpecies.species}</label>
+          <label id="species-label" htmlFor="species">
+            {language.createFishSpecies.species}
+          </label>
           <Input
             id="species"
-            aria-describedby="species-required"
+            aria-describedby="species-label"
             value={formikPage1.values.species}
             onChange={handleSpeciesChange}
           />
