@@ -25,8 +25,9 @@ const FishBeltTransectForms = ({
   const transectWidthSelectOptions = getOptions(belttransectwidths)
   const fishSizeBinSelectOptions = getOptions(fishsizebins)
   const reefSlopeSelectOptions = getOptions(reefslopes)
-
-  const validations = collectRecord?.validations?.results
+  const validationsApiData = collectRecord?.validations?.results?.data
+  const fishbelt_transect = validationsApiData?.fishbelt_transect
+  const sample_event = validationsApiData?.sample_event
 
   return (
     <>
@@ -36,11 +37,13 @@ const FishBeltTransectForms = ({
           label="Transect Number"
           id="number"
           type="number"
+          {...getValidationPropertiesForInput(fishbelt_transect?.number)}
           {...formik.getFieldProps('number')}
           onChange={(event) => {
             onInputChange({
               event,
-              inputValidationPropertyName: undefined,
+              inputValidationPropertyName: 'number',
+              apiValidationObjectLocation: 'fishbelt_transect',
             })
           }}
         />
@@ -48,21 +51,27 @@ const FishBeltTransectForms = ({
           label="Label"
           id="label"
           type="text"
+          {...getValidationPropertiesForInput(fishbelt_transect?.label)}
           {...formik.getFieldProps('label')}
           onChange={(event) => {
-            onInputChange({ event, inputValidationPropertyName: undefined })
+            onInputChange({
+              event,
+              inputValidationPropertyName: 'label',
+              apiValidationObjectLocation: 'fishbelt_transect',
+            })
           }}
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
           id="len_surveyed"
           type="number"
-          {...getValidationPropertiesForInput(validations?.len_surveyed)}
+          {...getValidationPropertiesForInput(fishbelt_transect?.len_surveyed)}
           {...formik.getFieldProps('len_surveyed')}
           onChange={(event) => {
             onInputChange({
               event,
               inputValidationPropertyName: 'len_surveyed',
+              apiValidationObjectLocation: 'fishbelt_transect',
             })
           }}
         />
@@ -70,9 +79,14 @@ const FishBeltTransectForms = ({
           label="Width"
           id="width"
           options={transectWidthSelectOptions}
+          {...getValidationPropertiesForInput(fishbelt_transect?.width)}
           {...formik.getFieldProps('width')}
           onChange={(event) => {
-            onInputChange({ event, inputValidationPropertyName: undefined })
+            onInputChange({
+              event,
+              inputValidationPropertyName: 'width',
+              apiValidationObjectLocation: 'fishbelt_transect',
+            })
           }}
         />
         <InputRadioWithLabelAndValidation
@@ -80,11 +94,13 @@ const FishBeltTransectForms = ({
           id="size_bin"
           name="fish-size-bin"
           options={fishSizeBinSelectOptions}
+          {...getValidationPropertiesForInput(fishbelt_transect?.size_bin)}
           value={formik.values.size_bin}
           onChange={(event) => {
             onSizeBinChange({
               event,
-              inputValidationPropertyName: undefined,
+              inputValidationPropertyName: 'size_bin',
+              apiValidationObjectLocation: 'fishbelt_transect',
             })
           }}
         />
@@ -92,17 +108,27 @@ const FishBeltTransectForms = ({
           label="Reef Slope"
           id="reef_slope"
           options={reefSlopeSelectOptions}
+          {...getValidationPropertiesForInput(fishbelt_transect?.reef_slope)}
           {...formik.getFieldProps('reef_slope')}
           onChange={(event) => {
-            onInputChange({ event, inputValidationPropertyName: undefined })
+            onInputChange({
+              event,
+              inputValidationPropertyName: 'reef_slope',
+              apiValidationObjectLocation: 'fishbelt_transect',
+            })
           }}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
           id="notes"
+          {...getValidationPropertiesForInput(sample_event?.notes)}
           {...formik.getFieldProps('notes')}
           onChange={(event) => {
-            onInputChange({ event, inputValidationPropertyName: undefined })
+            onInputChange({
+              event,
+              inputValidationPropertyName: 'notes',
+              apiValidationObjectLocation: 'sample_event',
+            })
           }}
         />
       </InputWrapper>

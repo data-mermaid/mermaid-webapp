@@ -24,8 +24,8 @@ const SampleInfoInputs = ({
   const managementSelectOptions = getOptions(managementRegimes, hasData)
   const siteSelectOptions = getOptions(sites, hasData)
   const validationsApiData = collectRecord?.validations?.results?.data
-  const sample_event = validationsApiData?.sample_event
   const fishbelt_transect = validationsApiData?.fishbelt_transect
+  const sample_event = validationsApiData?.sample_event
 
   return (
     <>
