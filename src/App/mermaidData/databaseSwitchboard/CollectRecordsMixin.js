@@ -172,21 +172,27 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    clearRecordInputValidation = ({ record, inputValidationPropertyName }) => {
-      if (!record || !inputValidationPropertyName) {
+    clearRecordInputValidation = ({
+      apiValidationObjectLocation,
+      inputValidationPropertyName,
+      record,
+    }) => {
+      if (
+        !record ||
+        !inputValidationPropertyName ||
+        !apiValidationObjectLocation
+      ) {
         throw new Error(
-          'clearRecordInputValidation requires parameters for record and inputValidationPropertyName',
+          'clearRecordInputValidation requires parameters for apiValidationObjectLocation, record and inputValidationPropertyName',
         )
       }
       const recordWithInputValidationCleared = {
         ...record,
-        validations: {
-          results: {
-            ...record.validations?.results,
-            [inputValidationPropertyName]: null,
-          },
-        },
       }
+
+      recordWithInputValidationCleared.validations.results.data[
+        apiValidationObjectLocation
+      ][inputValidationPropertyName] = null
 
       return this._dexieInstance.collect_records
         .put(recordWithInputValidationCleared)
@@ -279,7 +285,7 @@ const CollectRecordsMixin = (Base) =>
         return this._authenticatedAxios
           .post(
             `${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`,
-            { ids: [recordId] },
+            { ids: [recordId], version: '2' },
           )
           .then((response) => {
             const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
