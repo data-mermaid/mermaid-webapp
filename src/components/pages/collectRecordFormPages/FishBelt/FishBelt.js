@@ -388,7 +388,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     getPersistedUnsavedObservationsData,
   ])
 
-  const clearInputValidation = (inputValidationPropertyName) => {
+  const clearInputValidation = ({
+    apiValidationObjectLocation,
+    inputValidationPropertyName,
+  }) => {
     if (
       databaseSwitchboardInstance &&
       collectRecordBeingEdited?.validations &&
@@ -396,8 +399,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     ) {
       databaseSwitchboardInstance
         .clearRecordInputValidation({
-          record: collectRecordBeingEdited,
+          apiValidationObjectLocation,
           inputValidationPropertyName,
+          record: collectRecordBeingEdited,
         })
         .then((recordWithInputValidationCleared) => {
           setCollectRecordBeingEdited(recordWithInputValidationCleared)
@@ -405,18 +409,32 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }
 
-  const handleInputChange = ({ inputValidationPropertyName, event }) => {
+  const handleInputChange = ({
+    apiValidationObjectLocation,
+    event,
+    inputValidationPropertyName,
+  }) => {
     formik.handleChange(event)
 
-    clearInputValidation(inputValidationPropertyName)
+    clearInputValidation({
+      apiValidationObjectLocation,
+      inputValidationPropertyName,
+    })
   }
 
-  const handleSizeBinChange = ({ event, inputValidationPropertyName }) => {
+  const handleSizeBinChange = ({
+    apiValidationObjectLocation,
+    event,
+    inputValidationPropertyName,
+  }) => {
     const sizeBinId = event.target.value
 
     formik.setFieldValue('size_bin', sizeBinId)
 
-    clearInputValidation(inputValidationPropertyName)
+    clearInputValidation({
+      apiValidationObjectLocation,
+      inputValidationPropertyName,
+    })
 
     const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
 
@@ -428,11 +446,15 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }
 
   const handleObserversChange = ({
+    apiValidationObjectLocation,
     inputValidationPropertyName,
     selectedObservers,
   }) => {
     formik.setFieldValue('observers', selectedObservers)
-    clearInputValidation(inputValidationPropertyName)
+    clearInputValidation({
+      apiValidationObjectLocation,
+      inputValidationPropertyName,
+    })
   }
 
   const _setCollectButtonsUnsaved = useEffect(() => {

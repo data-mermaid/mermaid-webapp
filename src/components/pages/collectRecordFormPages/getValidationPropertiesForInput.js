@@ -14,7 +14,7 @@ const getValidationPropertiesForInput = (inputValidations) => {
 
   return {
     validationType: validationToDisplay?.status,
-    validationMessage: validationToDisplay?.message,
+    validationMessage: validationToDisplay?.code,
   }
 }
 
