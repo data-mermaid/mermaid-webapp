@@ -185,10 +185,10 @@ test('Sync: initial page load already done, navigate to non project page', async
 
   // this makes the act errors disappear.
   expect(
-    within(await screen.findByTestId('collect-record-count')).getByText('11'),
+    within(await screen.findByTestId('collect-record-count')).getByText('16'),
   )
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(12)
+  expect((await dexieInstance.collect_records.toArray()).length).toEqual(17)
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.length,
   )

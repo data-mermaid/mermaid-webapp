@@ -847,6 +847,181 @@ const collect_records = [
     validations: { status: 'ok' },
   },
   {
+    id: '13',
+    profile: 'fake',
+    project: '5',
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+        notes: 'some lit notes',
+        management: '3',
+        sample_date: '2021-3-2',
+      },
+      fishbelt_transect: {
+        depth: 10,
+        label: 'FB-2',
+        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
+        size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        number: 2,
+        sample_time: '11:55',
+        len_surveyed: 5,
+      },
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
+    },
+    validations: { status: 'ok' },
+  },
+  {
+    id: '14',
+    profile: 'fake',
+    project: '5',
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+        notes: 'some lit notes',
+        management: '3',
+        sample_date: '2021-3-2',
+      },
+      fishbelt_transect: {
+        depth: 10,
+        label: 'FB-2',
+        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
+        size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        number: 2,
+        sample_time: '11:55',
+        len_surveyed: 5,
+      },
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
+    },
+    validations: { status: 'ok' },
+  },
+  {
+    id: '15',
+    profile: 'fake',
+    project: '5',
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+        notes: 'some lit notes',
+        management: '3',
+        sample_date: '2021-3-2',
+      },
+      fishbelt_transect: {
+        depth: 10,
+        label: 'FB-2',
+        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
+        size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        number: 2,
+        sample_time: '11:55',
+        len_surveyed: 5,
+      },
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
+    },
+    validations: { status: 'ok' },
+  },
+  {
+    id: '16',
+    profile: 'fake',
+    project: '5',
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+        notes: 'some lit notes',
+        management: '3',
+        sample_date: '2021-3-2',
+      },
+      fishbelt_transect: {
+        depth: 10,
+        label: 'FB-2',
+        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
+        size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        number: 2,
+        sample_time: '11:55',
+        len_surveyed: 5,
+      },
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
+    },
+    validations: { status: 'ok' },
+  },
+  {
+    id: '17',
+    profile: 'fake',
+    project: '5',
+    data: {
+      protocol: 'fishbelt',
+      sample_event: {
+        site: '4',
+        notes: 'some lit notes',
+        management: '3',
+        sample_date: '2021-3-2',
+      },
+      fishbelt_transect: {
+        depth: 10,
+        label: 'FB-2',
+        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
+        size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        number: 2,
+        sample_time: '11:55',
+        len_surveyed: 5,
+      },
+      observers: [
+        {
+          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
+          profile_name: 'Melissa Nunes',
+        },
+        {
+          profile: '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+          profile_name: 'Kim Fisher',
+        },
+      ],
+    },
+    validations: { status: 'ok' },
+  },
+  {
     id: '12',
     profile: 'fake',
     project: 'shouldgetfilteredout',
