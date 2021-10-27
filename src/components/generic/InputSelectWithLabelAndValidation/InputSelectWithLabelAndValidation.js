@@ -10,6 +10,7 @@ const InputSelectWithLabelAndValidation = ({
   helperText,
   validationMessage,
   validationType,
+  testId,
   ...restOfProps
 }) => {
   const optionList = options.map((item) => (
@@ -24,7 +25,7 @@ const InputSelectWithLabelAndValidation = ({
       : undefined
 
   return (
-    <InputRow validationType={validationType}>
+    <InputRow validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -64,6 +65,7 @@ InputSelectWithLabelAndValidation.propTypes = {
   options: inputOptionsPropTypes.isRequired,
   validationType: PropTypes.string,
   helperText: PropTypes.string,
+  testId: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
@@ -71,5 +73,6 @@ InputSelectWithLabelAndValidation.defaultProps = {
   validationType: undefined,
   validationMessage: undefined,
   helperText: undefined,
+  testId: undefined,
 }
 export default InputSelectWithLabelAndValidation

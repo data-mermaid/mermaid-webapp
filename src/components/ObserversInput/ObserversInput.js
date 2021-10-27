@@ -17,6 +17,8 @@ const ObserversInput = ({
   formik,
   observers,
   onObserversChange,
+  areValidationsShowing,
+  ...restOfProps
 }) => {
   const observerNameOptions = getObserverNameOptions(observers)
   const observerNameValues = formik.values.observers.map(
@@ -29,7 +31,7 @@ const ObserversInput = ({
     )
 
   return (
-    <InputWrapper>
+    <InputWrapper {...restOfProps}>
       <H2>Observers</H2>
       <InputCheckboxGroupWithLabelAndValidation
         label="Observers"
@@ -38,6 +40,7 @@ const ObserversInput = ({
         value={observerNameValues}
         {...getValidationPropertiesForInput(
           collectRecord?.validations?.results?.data?.observers,
+          areValidationsShowing,
         )}
         onChange={({ selectedItems }) => {
           const selectedObservers = filterObserverProfiles(selectedItems)
@@ -57,6 +60,7 @@ ObserversInput.propTypes = {
   formik: formikPropType.isRequired,
   observers: PropTypes.arrayOf(observersPropType).isRequired,
   onObserversChange: PropTypes.func.isRequired,
+  areValidationsShowing: PropTypes.bool.isRequired,
 }
 
 ObserversInput.defaultProps = { collectRecord: undefined }

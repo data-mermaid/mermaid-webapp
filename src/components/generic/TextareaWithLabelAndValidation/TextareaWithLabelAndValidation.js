@@ -9,10 +9,11 @@ const TextareaWithLabelAndValidation = ({
   helperText,
   validationMessage,
   validationType,
+  testId,
   ...restOfProps
 }) => {
   return (
-    <InputRow validationType={validationType}>
+    <InputRow validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -40,17 +41,19 @@ const TextareaWithLabelAndValidation = ({
 }
 
 TextareaWithLabelAndValidation.propTypes = {
+  helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  validationType: PropTypes.string,
-  helperText: PropTypes.string,
+  testId: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  validationType: PropTypes.string,
 }
 
 TextareaWithLabelAndValidation.defaultProps = {
-  validationType: undefined,
   helperText: undefined,
+  testId: undefined,
   validationMessage: undefined,
+  validationType: undefined,
 }
 
 export default TextareaWithLabelAndValidation
