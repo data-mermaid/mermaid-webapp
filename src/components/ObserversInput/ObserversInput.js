@@ -37,7 +37,7 @@ const ObserversInput = ({
         options={observerNameOptions}
         value={observerNameValues}
         {...getValidationPropertiesForInput(
-          collectRecord?.validations?.results?.observers,
+          collectRecord?.validations?.results?.data?.observers,
         )}
         onChange={({ selectedItems }) => {
           const selectedObservers = filterObserverProfiles(selectedItems)
