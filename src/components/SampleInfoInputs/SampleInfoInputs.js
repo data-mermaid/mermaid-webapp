@@ -17,7 +17,6 @@ const SampleInfoInputs = ({
   collectRecord,
   formik,
   managementRegimes,
-  onInputChange,
   sites,
 }) => {
   const hasData = false
@@ -37,13 +36,6 @@ const SampleInfoInputs = ({
           options={siteSelectOptions}
           {...getValidationPropertiesForInput(sample_event?.site)}
           {...formik.getFieldProps('site')}
-          onChange={(event) => {
-            onInputChange({
-              event,
-              inputValidationPropertyName: 'site',
-              apiValidationObjectLocation: 'sample_event',
-            })
-          }}
         />
         <InputSelectWithLabelAndValidation
           label="Management"
@@ -51,13 +43,6 @@ const SampleInfoInputs = ({
           options={managementSelectOptions}
           {...getValidationPropertiesForInput(sample_event?.management)}
           {...formik.getFieldProps('management')}
-          onChange={(event) => {
-            onInputChange({
-              event,
-              inputValidationPropertyName: 'management',
-              apiValidationObjectLocation: 'sample_event',
-            })
-          }}
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -65,13 +50,6 @@ const SampleInfoInputs = ({
           type="number"
           {...getValidationPropertiesForInput(fishbelt_transect?.depth)}
           {...formik.getFieldProps('depth')}
-          onChange={(event) => {
-            onInputChange({
-              event,
-              inputValidationPropertyName: 'depth',
-              apiValidationObjectLocation: 'fishbelt_transect',
-            })
-          }}
         />
         <InputWithLabelAndValidation
           label="Sample Date"
@@ -79,13 +57,6 @@ const SampleInfoInputs = ({
           type="date"
           {...getValidationPropertiesForInput(sample_event?.sample_date)}
           {...formik.getFieldProps('sample_date')}
-          onChange={(event) => {
-            onInputChange({
-              event,
-              inputValidationPropertyName: 'sample_date',
-              apiValidationObjectLocation: 'sample_event',
-            })
-          }}
         />
         <InputWithLabelAndValidation
           label="Sample Time"
@@ -93,13 +64,6 @@ const SampleInfoInputs = ({
           type="time"
           {...formik.getFieldProps('sample_time')}
           {...getValidationPropertiesForInput(fishbelt_transect?.sample_time)}
-          onChange={(event) => {
-            onInputChange({
-              event,
-              inputValidationPropertyName: 'sample_time',
-              apiValidationObjectLocation: 'fishbelt_transect',
-            })
-          }}
         />
       </InputWrapper>
     </>
@@ -110,7 +74,6 @@ SampleInfoInputs.propTypes = {
   collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
-  onInputChange: PropTypes.func.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 
