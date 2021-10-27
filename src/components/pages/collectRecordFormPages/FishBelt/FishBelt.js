@@ -351,10 +351,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       initialValues: initialFormikFormValues,
       enableReinitialize: true,
       onSubmit: saveRecord,
-      validate: (values) => {
-        // we run persistUnsavedFormikValues on validate because it seems to wait for formik to finish updating its state
-        persistUnsavedFormikData(values)
-      },
+      validate: persistUnsavedFormikData,
     }
   }, [
     clearPersistedUnsavedFormikData,
@@ -388,53 +385,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     getPersistedUnsavedObservationsData,
   ])
 
-  const clearInputValidation = ({
-    apiValidationObjectLocation,
-    inputValidationPropertyName,
-  }) => {
-    if (
-      databaseSwitchboardInstance &&
-      collectRecordBeingEdited?.validations &&
-      inputValidationPropertyName
-    ) {
-      databaseSwitchboardInstance
-        .clearRecordInputValidation({
-          apiValidationObjectLocation,
-          inputValidationPropertyName,
-          record: collectRecordBeingEdited,
-        })
-        .then((recordWithInputValidationCleared) => {
-          setCollectRecordBeingEdited(recordWithInputValidationCleared)
-        })
-    }
-  }
-
-  const handleInputChange = ({
-    apiValidationObjectLocation,
-    event,
-    inputValidationPropertyName,
-  }) => {
-    formik.handleChange(event)
-
-    clearInputValidation({
-      apiValidationObjectLocation,
-      inputValidationPropertyName,
-    })
-  }
-
-  const handleSizeBinChange = ({
-    apiValidationObjectLocation,
-    event,
-    inputValidationPropertyName,
-  }) => {
+  const handleSizeBinChange = (event) => {
     const sizeBinId = event.target.value
 
     formik.setFieldValue('size_bin', sizeBinId)
-
-    clearInputValidation({
-      apiValidationObjectLocation,
-      inputValidationPropertyName,
-    })
 
     const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
 
@@ -445,16 +399,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }
 
-  const handleObserversChange = ({
-    apiValidationObjectLocation,
-    inputValidationPropertyName,
-    selectedObservers,
-  }) => {
+  const handleObserversChange = ({ selectedObservers }) => {
     formik.setFieldValue('observers', selectedObservers)
-    clearInputValidation({
-      apiValidationObjectLocation,
-      inputValidationPropertyName,
-    })
   }
 
   const _setCollectButtonsUnsaved = useEffect(() => {
@@ -484,13 +430,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 sites={sites}
                 managementRegimes={managementRegimes}
                 collectRecord={collectRecordBeingEdited}
-                onInputChange={handleInputChange}
               />
               <FishBeltTransectInputs
                 choices={choices}
                 collectRecord={collectRecordBeingEdited}
                 formik={formik}
-                onInputChange={handleInputChange}
                 onSizeBinChange={handleSizeBinChange}
               />
               <ObserversInput

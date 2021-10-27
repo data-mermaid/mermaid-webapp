@@ -172,33 +172,6 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    clearRecordInputValidation = ({
-      apiValidationObjectLocation,
-      inputValidationPropertyName,
-      record,
-    }) => {
-      if (
-        !record ||
-        !inputValidationPropertyName ||
-        !apiValidationObjectLocation
-      ) {
-        throw new Error(
-          'clearRecordInputValidation requires parameters for apiValidationObjectLocation, record and inputValidationPropertyName',
-        )
-      }
-      const recordWithInputValidationCleared = {
-        ...record,
-      }
-
-      recordWithInputValidationCleared.validations.results.data[
-        apiValidationObjectLocation
-      ][inputValidationPropertyName] = null
-
-      return this._dexieInstance.collect_records
-        .put(recordWithInputValidationCleared)
-        .then(() => recordWithInputValidationCleared)
-    }
-
     deleteFishBelt = async ({ record, profileId, projectId }) => {
       if (!record || !profileId || !projectId) {
         throw new Error(
