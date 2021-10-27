@@ -9,6 +9,7 @@ const InputRadioWithLabelAndValidation = ({
   options,
   validationMessage,
   validationType,
+  testId,
   ...restOfProps
 }) => {
   const optionsList = options.map(({ label: optionLabel, value }) => {
@@ -27,7 +28,7 @@ const InputRadioWithLabelAndValidation = ({
   })
 
   return (
-    <InputRow validationType={validationType}>
+    <InputRow validationType={validationType} data-testid={testId}>
       <label htmlFor={id}>{label}</label>
       <div>{optionsList}</div>
       <div>
@@ -46,11 +47,13 @@ InputRadioWithLabelAndValidation.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
+  testId: PropTypes.string,
   validationType: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 InputRadioWithLabelAndValidation.defaultProps = {
+  testId: undefined,
   validationType: undefined,
   validationMessage: undefined,
 }

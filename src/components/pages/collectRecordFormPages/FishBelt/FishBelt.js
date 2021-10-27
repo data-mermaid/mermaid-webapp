@@ -99,6 +99,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const [isFormDirty, setIsFormDirty] = useState(false)
+  const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
@@ -266,6 +267,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
         }
         setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
+        setAreValidationsShowing(true)
         setCollectRecordBeingEdited(validatedRecordResponse)
       })
       .catch(() => {
@@ -342,6 +344,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       )
 
       setFishBeltButtonsState(possibleCollectButtonGroupStates.saving)
+      setAreValidationsShowing(false)
 
       databaseSwitchboardInstance
         .saveFishBelt({
@@ -447,19 +450,23 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               onSubmit={formik.handleSubmit}
             >
               <SampleInfoInputs
-                formik={formik}
-                sites={sites}
-                managementRegimes={managementRegimes}
                 collectRecord={collectRecordBeingEdited}
+                formik={formik}
+                managementRegimes={managementRegimes}
+                areValidationsShowing={areValidationsShowing}
+                sites={sites}
               />
               <FishBeltTransectInputs
+                areValidationsShowing={areValidationsShowing}
                 choices={choices}
                 collectRecord={collectRecordBeingEdited}
                 formik={formik}
                 onSizeBinChange={handleSizeBinChange}
               />
               <ObserversInput
+                areValidationsShowing={areValidationsShowing}
                 collectRecord={collectRecordBeingEdited}
+                data-testid="observers"
                 formik={formik}
                 observers={observerProfiles}
                 onObserversChange={handleObserversChange}

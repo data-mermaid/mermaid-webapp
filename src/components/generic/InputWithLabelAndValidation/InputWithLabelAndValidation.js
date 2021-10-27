@@ -12,6 +12,7 @@ const InputWithLabelAndValidation = ({
   unit,
   validationMessage,
   validationType,
+  testId,
   ...restOfProps
 }) => {
   const textFieldRef = useRef()
@@ -37,7 +38,7 @@ const InputWithLabelAndValidation = ({
   )
 
   return (
-    <InputRow validationType={validationType}>
+    <InputRow validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -63,6 +64,7 @@ InputWithLabelAndValidation.propTypes = {
   label: PropTypes.string.isRequired,
   unit: PropTypes.string,
   helperText: PropTypes.string,
+  testId: PropTypes.string,
   validationType: PropTypes.string,
   validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
@@ -70,6 +72,7 @@ InputWithLabelAndValidation.propTypes = {
 InputWithLabelAndValidation.defaultProps = {
   unit: undefined,
   helperText: undefined,
+  testId: undefined,
   validationType: undefined,
   validationMessage: undefined,
 }

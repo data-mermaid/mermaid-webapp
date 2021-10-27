@@ -1,5 +1,8 @@
-const getValidationPropertiesForInput = (inputValidations) => {
-  if (!inputValidations) {
+const getValidationPropertiesForInput = (
+  inputValidations,
+  areValidationsShowing,
+) => {
+  if (!inputValidations || !areValidationsShowing) {
     return {}
   }
   const validationObjectKeys = Object.keys(inputValidations)
