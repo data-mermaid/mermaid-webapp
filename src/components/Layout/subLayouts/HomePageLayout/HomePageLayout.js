@@ -6,10 +6,10 @@ import { mediaQueryPhoneOnly } from '../../../../library/styling/mediaQueries'
 import { Column } from '../../../generic/positioning'
 
 const HomePageContainer = styled(Column)`
-  margin-top: 23rem;
+  margin-top: 25rem;
   margin-bottom: ${theme.spacing.medium};
   ${mediaQueryPhoneOnly(css`
-    margin-top: 16rem;
+    margin-top: 18rem;
   `)}
 `
 const TopRow = styled.div``
