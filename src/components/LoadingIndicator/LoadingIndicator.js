@@ -111,11 +111,11 @@ const LoadingIndicatorContainer = styled.div`
   }
 `
 
-const LoadingIndicator = () => {
+const LoadingIndicator = (props) => {
   return (
-    <LoadingIndicatorContainer>
+    <LoadingIndicatorContainer {...props}>
       <div className="loadingWrapper">
-        <p>loading</p>
+        <p>Loading</p>
         <div className="objectWrapper">
           <div className="triangle">&nbsp;</div>
           <div className="circle">&nbsp;</div>
