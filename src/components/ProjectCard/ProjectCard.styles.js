@@ -17,6 +17,11 @@ export const ButtonGroups = styled('div')`
       display: none;
     }
   }
+  ${mediaQueryTabletLandscapeOnly(css`
+    a {
+      display: none;
+    }
+  `)}
 `
 
 export const CardWrapper = styled('div')`
