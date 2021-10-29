@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { InputRow, ValidationMessage } from '../form'
 import theme from '../../../theme'
+import { IconCheck } from '../../icons'
 
 const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.xsmall};
@@ -62,10 +63,14 @@ const InputCheckboxGroupWithLabelAndValidation = ({
       <label htmlFor={id}>{label}</label>
       <div>{checkboxGroup}</div>
       <div>
-        {validationMessage ? (
+        {validationMessage &&
+        (validationType === 'error' || validationType === 'warning') ? (
           <ValidationMessage validationType={validationType}>
             {validationMessage}
           </ValidationMessage>
+        ) : null}
+        {validationType === 'ok' ? (
+          <IconCheck aria-label="Passed validation" />
         ) : null}
       </div>
     </InputRow>

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { InputRow, Select, ValidationMessage, HelperText } from '../form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
+import { IconCheck } from '../../icons'
 
 const InputSelectWithLabelAndValidation = ({
   label,
@@ -18,11 +19,6 @@ const InputSelectWithLabelAndValidation = ({
       {item.label}
     </option>
   ))
-
-  const validationRole =
-    validationType === 'error' || validationType === 'warning'
-      ? 'alert'
-      : undefined
 
   return (
     <InputRow validationType={validationType} data-testid={testId}>
@@ -46,13 +42,14 @@ const InputSelectWithLabelAndValidation = ({
         )}
       </div>
       <div>
-        {validationMessage ? (
-          <ValidationMessage
-            validationType={validationType}
-            role={validationRole}
-          >
+        {validationMessage &&
+        (validationType === 'error' || validationType === 'warning') ? (
+          <ValidationMessage validationType={validationType}>
             {validationMessage}
           </ValidationMessage>
+        ) : null}
+        {validationType === 'ok' ? (
+          <IconCheck aria-label="Passed validation" />
         ) : null}
       </div>
     </InputRow>
