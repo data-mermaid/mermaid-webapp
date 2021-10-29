@@ -26,13 +26,66 @@ const StyledFooter = styled('footer')`
     `)}
   }
 `
-const OfflineToggleWrapper = styled('div')`
-  padding-left: ${theme.spacing.small};
-  label {
-    padding-left: ${theme.spacing.small};
-    display: inline-block;
+const size = theme.typography.defaultIconSize
+const CssToggle = styled('span')`
+  display: block;
+  width: calc(${size} * 2);
+  position: relative;
+  &:before,
+  &:after {
+    content: '';
+    transition: 0.3s;
+    position: absolute;
+  }
+  &:before {
+    // container
+    width: calc(${size} * 2);
+    height: ${size};
+    left: 0;
+    top: 0;
+    border-radius: 25% / 50%;
+    background: green;
+  }
+  &:after {
+    // toggle
+    width: calc(${size} - 2px);
+    height: calc(${size} - 2px);
+    top: 1px;
+    left: 1px;
+    background: oldlace;
+    border-radius: 50%;
   }
 `
+const StyledToggleLabel = styled('label')`
+  display: flex;
+  gap: 2px;
+  padding: 0 0 ${theme.spacing.small} ${theme.spacing.small};
+  input {
+    display: none;
+  }
+  input:checked {
+    ~ span:after {
+      background: ${theme.color.cautionColor};
+      left: calc(${size} - 1px);
+    }
+    ~ span:before {
+      background: ${theme.color.cautionColor};
+      opacity: 0.5;
+    }
+  }
+  input:disabled {
+    ~ span:before {
+      background: ${theme.color.disabledColor};
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    ~ span:after {
+      background: ${theme.color.disabledColor};
+      cursor: not-allowed;
+    }
+  }
+`
+
 const FooterNav = styled('nav')`
   a {
     display: inline-block;
@@ -48,24 +101,23 @@ const Footer = () => {
 
   return (
     <StyledFooter>
-      <OfflineToggleWrapper>
+      <StyledToggleLabel
+        htmlFor="offline-toggle-switch"
+        data-testid="offline-toggle-switch-label"
+      >
         <OfflineToggle id="offline-toggle-switch" />
-        <label
-          htmlFor="offline-toggle-switch"
-          data-testid="offline-toggle-switch-label"
-        >
-          {isAppOnline ? (
-            <>
-              You&apos;re <strong>ONLINE</strong>
-            </>
-          ) : (
-            <>
-              You&apos;re <strong>OFFLINE</strong>. Some contents may be out of
-              date.
-            </>
-          )}
-        </label>
-      </OfflineToggleWrapper>
+        <CssToggle />
+        {isAppOnline ? (
+          <>
+            You&apos;re <strong>ONLINE</strong>
+          </>
+        ) : (
+          <>
+            You&apos;re <strong>OFFLINE</strong>. Some contents may be out of
+            date.
+          </>
+        )}
+      </StyledToggleLabel>
       <FooterNav>
         <Link to="/#">Help</Link>
         <OfflineHide>

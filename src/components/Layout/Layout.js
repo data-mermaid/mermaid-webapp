@@ -20,18 +20,8 @@ const OfflineIndicatorStyles = styled.div`
       pointer-events: none;
       width: ${theme.spacing.fullViewportWidth};
       height: 100vh;
-      z-index: 101;
+      z-index: 1000;
       position: fixed;
-      span {
-        background: ${theme.color.cautionColor};
-        color: ${theme.color.white};
-        position: absolute;
-        bottom: 0;
-        left: 10px;
-        padding: ${theme.spacing.xsmall} ${theme.spacing.small};
-        font-size: smaller;
-        transition: ${theme.timing.hoverTransition};
-      }
     `}
 `
 
