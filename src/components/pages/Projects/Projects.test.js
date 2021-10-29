@@ -136,7 +136,7 @@ test('A project card shows relevant data for a project', async () => {
 
   expect(
     within(projectCard).getByText(
-      'Tue Jan 21 2020 00:00:00 GMT-0500 (Eastern Standard Time)',
+      'Tue Jan 21 2020 00:00:00 GMT+0000 (Coordinated Universal Time)',
     ),
   )
 })
