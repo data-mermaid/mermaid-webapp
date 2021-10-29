@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Textarea, InputRow, ValidationMessage, HelperText } from '../form'
+import { IconCheck } from '../../icons'
 
 const TextareaWithLabelAndValidation = ({
   label,
@@ -30,10 +31,14 @@ const TextareaWithLabelAndValidation = ({
         )}
       </div>
       <div>
-        {validationMessage ? (
+        {validationMessage &&
+        (validationType === 'error' || validationType === 'warning') ? (
           <ValidationMessage validationType={validationType}>
             {validationMessage}
           </ValidationMessage>
+        ) : null}
+        {validationType === 'ok' ? (
+          <IconCheck aria-label="Passed validation" />
         ) : null}
       </div>
     </InputRow>

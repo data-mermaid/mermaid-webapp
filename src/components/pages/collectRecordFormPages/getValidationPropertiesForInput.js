@@ -2,8 +2,11 @@ const getValidationPropertiesForInput = (
   inputValidations,
   areValidationsShowing,
 ) => {
-  if (!inputValidations || !areValidationsShowing) {
+  if (!areValidationsShowing) {
     return {}
+  }
+  if (!inputValidations) {
+    return { validationType: 'ok' }
   }
   const validationObjectKeys = Object.keys(inputValidations)
   const errors = validationObjectKeys
@@ -16,7 +19,7 @@ const getValidationPropertiesForInput = (
   const validationToDisplay = errors.length ? errors[0] : warnings[0]
 
   return {
-    validationType: validationToDisplay?.status,
+    validationType: !validationToDisplay ? 'ok' : validationToDisplay?.status,
     validationMessage: validationToDisplay?.code,
   }
 }
