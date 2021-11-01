@@ -147,9 +147,9 @@ const pages = {
 }
 
 const offlineNotificationMessages = {
-  toggleOffline: 'You turn on OFFLINE mode.',
-  navigatorOffline: 'Network connection is off. You are OFFLINE now.',
-  serverReachable: 'Server connection is down. You are OFFLINE now.',
+  toggleOffline: 'You are now offline.',
+  navigatorOffline: 'Network connection is off. You are now OFFLINE.',
+  serverReachable: 'Server connection is down. You are now OFFLINE.',
 }
 
 export default {
