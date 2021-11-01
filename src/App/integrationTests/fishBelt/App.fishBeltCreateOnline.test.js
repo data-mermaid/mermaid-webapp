@@ -98,8 +98,8 @@ describe('Online', () => {
 
     const tableRows = await screen.findAllByRole('row')
 
-    // 13 here because the header row + the 11 mock records + the one we just created
-    expect(tableRows).toHaveLength(13)
+    // 18 here because the header row + the 16 mock records + the one we just created
+    expect(tableRows).toHaveLength(18)
 
     // expect unique depth as proxy for new fishbelt
     expect(await within(table).findByText('10000'))

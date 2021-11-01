@@ -86,7 +86,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
 
   expect(project5OfflineCheckboxAfterProjectSetOffline).toBeChecked()
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(12)
+  expect((await dexieInstance.collect_records.toArray()).length).toEqual(17)
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.length,
   )

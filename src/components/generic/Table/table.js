@@ -25,8 +25,10 @@ export const TableOverflowWrapper = styled.div`
   ${mediaQueryPhoneOnly(css`
     max-width: calc(100vw - ${theme.spacing.sideNavWidthPhoneOnly});
   `)}
-  overflow-x: auto;
-  height: 100%;
+  overflow-y: auto;
+  height: calc(
+    100vh - ${theme.spacing.headerHeight} - 13.3rem
+  ); // 133px is the height of the header row and the footer
   & + button,
   button + & {
     margin: ${theme.spacing.medium} 0;
@@ -37,6 +39,11 @@ export const Table = styled.table`
   background: ${theme.color.secondaryColor};
   min-width: 100%;
   border-collapse: collapse;
+  thead tr {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
 `
 export const Th = styled.th(
   (props) => css`

@@ -38,7 +38,7 @@ test('Collect page only shows records that arent marked to be deleted next sync'
 
   const rows = await screen.findAllByRole('row')
 
-  expect(rows).toHaveLength(11)
+  expect(rows).toHaveLength(16)
 })
 
 test('Sites page only shows records that arent marked to be deleted next sync', async () => {

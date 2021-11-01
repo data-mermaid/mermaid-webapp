@@ -45,11 +45,11 @@ describe('Offline', () => {
 
     userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
 
-    // row length = 11 because 11 mock records, now minus 1 + 1 header row
+    // row length = 16 because 16 mock records, now minus 1 + 1 header row
     expect(
       screen.getAllByRole('row', {
         hidden: true,
       }).length,
-    ).toEqual(11)
+    ).toEqual(16)
   })
 })
