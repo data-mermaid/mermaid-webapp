@@ -125,7 +125,7 @@ test('A project card shows relevant data for a project', async () => {
 
   expect(within(projectCard).getByText('Project I'))
   expect(within(projectCard).getByText('Canada'))
-  expect(within(projectCard).getByText('13 sites'))
+  expect(within(projectCard).getByText('13'))
 
   const offlineCheckbox = within(projectCard).getByRole('checkbox', {
     name: /offline ready/i,
@@ -134,7 +134,11 @@ test('A project card shows relevant data for a project', async () => {
   expect(offlineCheckbox)
   expect(offlineCheckbox).toBeChecked()
 
-  expect(within(projectCard).getByText('Updated: 01/21/2020'))
+  expect(
+    within(projectCard).getByText(
+      'Tue Jan 21 2020 00:00:00 GMT+0000 (Coordinated Universal Time)',
+    ),
+  )
 })
 
 test('A project card renders appropriately when offline', async () => {

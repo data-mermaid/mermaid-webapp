@@ -90,23 +90,12 @@ const ProjectCard = ({
       <ProjectInfoWrapper>
         <p>{countries.join(', ')}</p>
         <p>
-          {num_sites} {num_sites && pluralize(num_sites, 'site', 'sites')}
+          <strong>{num_sites}</strong>{' '}
+          {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
-        <CheckBoxLabel
-          htmlFor="offline-toggle"
-          onClick={stopEventPropagation}
-          disabled={!isAppOnline}
-        >
-          <input
-            id="offline-toggle"
-            type="checkbox"
-            checked={isOfflineReady}
-            onChange={handleProjectOfflineReadyClick}
-            disabled={!isAppOnline}
-          />
-          {language.pages.projectsList.offlineReadyCheckboxLabel}
-        </CheckBoxLabel>
-        <p>Updated: {updated_on}</p>
+        <p>
+          Updated: <strong>{new Date(updated_on).toString()}</strong>
+        </p>
       </ProjectInfoWrapper>
       <ButtonGroups data-testid="project-button-groups">
         <NavLinkButtonGroup projectUrl={projectUrl} />
@@ -121,6 +110,20 @@ const ProjectCard = ({
             <span>Copy</span>
           </ProjectCardButtonSecondary>
         </OfflineHide> */}
+        <CheckBoxLabel
+          htmlFor="offline-toggle"
+          onClick={stopEventPropagation}
+          disabled={!isAppOnline}
+        >
+          <input
+            id="offline-toggle"
+            type="checkbox"
+            checked={isOfflineReady}
+            onChange={handleProjectOfflineReadyClick}
+            disabled={!isAppOnline}
+          />
+          {language.pages.projectsList.offlineReadyCheckboxLabel}
+        </CheckBoxLabel>
       </ButtonGroups>
     </CardWrapper>
   )
