@@ -26,10 +26,10 @@ const StyledFooter = styled('footer')`
     `)}
   }
 `
-const size = theme.typography.defaultIconSize
+const offlineToggleSize = theme.typography.defaultIconSize
 const CssToggle = styled('span')`
   display: block;
-  width: calc(${size} * 2);
+  width: calc(${offlineToggleSize} * 2);
   position: relative;
   &:before,
   &:after {
@@ -39,8 +39,8 @@ const CssToggle = styled('span')`
   }
   &:before {
     // container
-    width: calc(${size} * 2);
-    height: ${size};
+    width: calc(${offlineToggleSize} * 2);
+    height: ${offlineToggleSize};
     left: 0;
     top: 0;
     border-radius: 25% / 50%;
@@ -48,8 +48,8 @@ const CssToggle = styled('span')`
   }
   &:after {
     // toggle
-    width: calc(${size} - 2px);
-    height: calc(${size} - 2px);
+    width: calc(${offlineToggleSize} - 2px);
+    height: calc(${offlineToggleSize} - 2px);
     top: 1px;
     left: 1px;
     background: oldlace;
@@ -66,7 +66,7 @@ const StyledToggleLabel = styled('label')`
   input:checked {
     ~ span:after {
       background: ${theme.color.cautionColor};
-      left: calc(${size} - 1px);
+      left: calc(${offlineToggleSize} - 1px);
     }
     ~ span:before {
       background: ${theme.color.cautionColor};
