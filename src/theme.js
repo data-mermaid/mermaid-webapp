@@ -8,7 +8,7 @@ const caution = colorHelper('#BB1600')
 const warning = colorHelper('#FEDD2F')
 const ignore = colorHelper('#D6DDE6')
 const white = colorHelper('#fff')
-const success = colorHelper('#05A269')
+const valid = colorHelper('#05A269')
 const black = primary.mix(colorHelper('black'), 0.95)
 const textColor = colorHelper('#13124A')
 
@@ -29,7 +29,7 @@ const color = {
   infoColor: ignore,
   ignoreBorder: ignore.mix(colorHelper('black'), 0.1),
   infoBorder: ignore.mix(colorHelper('black'), 0.1),
-  success,
+  valid,
   warningColor: warning,
   warningBorder: warning.mix(colorHelper('black'), 0.1),
   backgroundColor: secondary,
