@@ -49,7 +49,7 @@ export const InputRow = styled.div`
   border-style: solid;
   border-color: ${theme.color.secondaryColor};
   label,
-  && > div:last-of-type {
+  & > div:last-of-type {
     display: inline-block;
     ${theme.typography.noWordBreak};
     padding: calc(${theme.spacing.borderSmall} + ${theme.spacing.xsmall})
@@ -64,7 +64,7 @@ export const InputRow = styled.div`
 ${(props) =>
   (props.validationType === 'ok' || !props.validationType) &&
   css`
-    border-color: ${theme.color.success};
+    border-color: ${theme.color.valid};
   `}
   ${(props) =>
     props.validationType === 'error' &&
