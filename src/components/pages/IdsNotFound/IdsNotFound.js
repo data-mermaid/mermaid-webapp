@@ -1,20 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { H2, H3, P } from '../../generic/text'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+import theme from '../../../theme'
 import language from '../../../language'
 
+const IdNotFoundWrapper = styled('div')`
+  padding: ${theme.spacing.medium};
+`
 const IdsNotFound = ({ ids }) => {
   return (
-    <>
-      <H2>{language.error.error}</H2>
-      <H3>{language.error.generic}</H3>
-      <P>
-        <strong>{language.error.IdsNotFoundUserAction}</strong>
-      </P>
-      <P>
+    <IdNotFoundWrapper>
+      <h2>{language.error.idNotFound}</h2>
+      <p>{language.error.idNotFoundRecovery}</p>
+      <Link to="/">{language.error.homePageNavigation}</Link>
+      <p>
         <small>{language.error.getIdsNotFoundDetails(ids)}</small>
-      </P>
-    </>
+      </p>
+    </IdNotFoundWrapper>
   )
 }
 
