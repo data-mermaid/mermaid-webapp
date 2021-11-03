@@ -35,7 +35,6 @@ const OnlineStatusProvider = ({ children, value }) => {
           setIsServerReachable(true)
         })
         .catch(() => {
-          toast.warn(language.offlineNotificationMessages.serverReachable)
           setIsServerReachable(false)
         })
     }
@@ -56,9 +55,6 @@ const OnlineStatusProvider = ({ children, value }) => {
   }, [isNavigatorOnline, stopPingingApi])
 
   const toggleUserOnlineStatusOverride = () => {
-    if (!hasUserTurnedAppOffline) {
-      toast.warn(language.offlineNotificationMessages.toggleOffline)
-    }
     localStorage.setItem('hasUserTurnedAppOffline', !hasUserTurnedAppOffline)
     setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
   }
@@ -68,7 +64,6 @@ const OnlineStatusProvider = ({ children, value }) => {
       setIsNavigatorOnline(true)
     }
     const handleOffline = () => {
-      toast.warn(language.offlineNotificationMessages.navigatorOffline)
       setIsNavigatorOnline(false)
     }
     const cleanup = () => {

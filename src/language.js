@@ -130,12 +130,6 @@ const pages = {
   },
 }
 
-const offlineNotificationMessages = {
-  toggleOffline: 'You are now offline.',
-  navigatorOffline: 'Network connection is off. You are now OFFLINE.',
-  serverReachable: 'Server connection is down. You are now OFFLINE.',
-}
-
 export default {
   error,
   success,
@@ -143,5 +137,4 @@ export default {
   autocomplete,
   pages,
   createFishSpecies,
-  offlineNotificationMessages,
 }
