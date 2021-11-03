@@ -21,7 +21,7 @@ test('Offline collect records list shows no info associated with projectId view 
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantProjectId, cannot be found.',
+      "The item with the id nonExistantProjectId can't be found.",
     ),
   )
 })
@@ -36,7 +36,7 @@ test('Online collect records list shows no info associated with projectId view '
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantProjectId, cannot be found.',
+      "The item with the id nonExistantProjectId can't be found.",
     ),
   )
 })

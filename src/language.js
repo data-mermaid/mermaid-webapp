@@ -52,7 +52,7 @@ const error = {
   invalidEmailAdd: 'Invalid email',
   duplicateNewUserAdd: 'User has already been added to project.',
   pageUnavailableOffline: 'This page is unavailable offline.',
-  pageNotFound: 'This page could not be found.',
+  pageNotFound: "This page can't be found.",
   pageNotFoundRecovery: 'Make sure the URL is correct.',
   idNotFound: "This item can't be found.",
   idNotFoundRecovery: 'It might have been deleted or the URL might be wrong.',

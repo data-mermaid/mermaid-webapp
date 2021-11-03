@@ -16,5 +16,5 @@ test('App renders shows page not found when navigate to unknown path.', async ()
     { initialEntries: ['/thisRouteDoesNotExist'] },
   )
 
-  expect(await screen.findByText(/sorry, page not found/i))
+  expect(await screen.findByText(/This page can't be found./i))
 })

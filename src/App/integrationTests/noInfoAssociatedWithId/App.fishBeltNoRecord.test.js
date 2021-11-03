@@ -21,7 +21,7 @@ test('Offline fish belt collect shows no info associated with RECORD id view ', 
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantRecordId, cannot be found.',
+      "The item with the id nonExistantRecordId can't be found.",
     ),
   )
 })
@@ -36,7 +36,7 @@ test('Online fish belt collect shows no info associated with RECORD id view ', a
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantRecordId, cannot be found.',
+      "The item with the id nonExistantRecordId can't be found.",
     ),
   )
 })
@@ -53,7 +53,7 @@ test('Offline fish belt collect shows no info associated with PROJECT id view ',
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantProjectId, cannot be found.',
+      "The item with the id nonExistantProjectId can't be found.",
     ),
   )
 })
@@ -68,7 +68,7 @@ test('Online fish belt collect shows no info associated with PROJECT id view ', 
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantProjectId, cannot be found.',
+      "The item with the id nonExistantProjectId can't be found.",
     ),
   )
 })
