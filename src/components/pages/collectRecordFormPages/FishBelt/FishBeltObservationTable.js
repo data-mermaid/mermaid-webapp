@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
-import { hoverState } from '../../../../library/styling/mediaQueries'
+import {
+  hoverState,
+  mediaQueryTabletLandscapeOnly,
+} from '../../../../library/styling/mediaQueries'
 import {
   choicesPropType,
   fishBeltPropType,
@@ -37,7 +40,6 @@ import language from '../../../../language'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
-import { RowRight } from '../../../generic/positioning'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 
@@ -69,11 +71,14 @@ const ObservationsSummaryStats = styled(Table)`
   table-layout: auto;
   min-width: auto;
   max-width: 40rem;
-  float: right;
+  border: solid 1px ${theme.color.secondaryColor};
   tr:nth-child(even),
   tr:nth-child(odd) {
     background-color: ${theme.color.white};
   }
+  ${mediaQueryTabletLandscapeOnly(css`
+    font-size: smaller;
+  `)}
 `
 const ButtonRemoveRow = styled(ButtonCaution)`
   display: none;
@@ -86,7 +91,6 @@ const StyledLinkThatLooksLikeButtonToReference = styled(
   background: transparent;
 `
 const StyledOverflowWrapper = styled(TableOverflowWrapper)`
-  overflow: visible;
   border: solid 1px ${theme.color.secondaryColor};
   height: 100%;
 `
@@ -153,10 +157,16 @@ const StyledFishBeltObservationTable = styled(Table)`
     }
   }
 `
-const UnderTableRow = styled(RowRight)`
+const UnderTableRow = styled('div')`
+  display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: ${theme.spacing.medium};
+  ${mediaQueryTabletLandscapeOnly(css`
+    flex-direction: column;
+    align-items: flex-end;
+    gap: ${theme.spacing.small};
+  `)}
 `
 
 const FishBeltObservationTable = ({
