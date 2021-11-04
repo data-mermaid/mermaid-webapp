@@ -57,11 +57,6 @@ const CollectRecordToolbarWrapper = styled('div')`
   ${mediaQueryTabletLandscapeOnly(css`
     &,
     button {
-      svg {
-        width: ${theme.typography.smallIconSize};
-        height: ${theme.typography.smallIconSize};
-      }
-      font-size: ${theme.typography.smallFontSize};
       padding: ${theme.spacing.small};
     }
   `)}
