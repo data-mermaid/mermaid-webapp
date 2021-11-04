@@ -51,6 +51,13 @@ import RecordFormTitle from '../../../RecordFormTitle'
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
+const DeleteRecordButtonCautionWrapper = styled('div')`
+  padding: 0 ${theme.spacing.medium};
+  text-align: right;
+  ${mediaQueryTabletLandscapeOnly(css`
+    text-align: left;
+  `)}
+`
 const CollectRecordToolbarWrapper = styled('div')`
   display: flex;
   justify-content: space-between;
@@ -484,12 +491,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               />
             </form>
-            <ButtonCaution
-              onClick={showDeleteConfirmPrompt}
-              disabled={isNewRecord}
-            >
-              Delete Record
-            </ButtonCaution>
+            <DeleteRecordButtonCautionWrapper>
+              <ButtonCaution
+                onClick={showDeleteConfirmPrompt}
+                disabled={isNewRecord}
+              >
+                Delete Record
+              </ButtonCaution>
+            </DeleteRecordButtonCautionWrapper>
             <DeleteRecordConfirm
               isOpen={showDeleteModal}
               onDismiss={closeDeleteConfirmPrompt}
