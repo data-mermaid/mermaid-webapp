@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import InputWithLabelAndValidation from '../generic/InputWithLabelAndValidation'
-import InputSelectWithLabelAndValidation from '../generic/InputSelectWithLabelAndValidation'
+import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValidation'
+import InputSelectWithLabelAndValidation from '../mermaidInputs/InputSelectWithLabelAndValidation'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import { formikPropType } from '../../library/formikPropType'
@@ -14,11 +14,13 @@ import { getOptions } from '../../library/getOptions'
 import getValidationPropertiesForInput from '../pages/collectRecordFormPages/getValidationPropertiesForInput'
 
 const SampleInfoInputs = ({
+  areValidationsShowing,
   collectRecord,
   formik,
+  ignoreValidations,
   managementRegimes,
+  resetValidations,
   sites,
-  areValidationsShowing,
 }) => {
   const hasData = false
   const managementSelectOptions = getOptions(managementRegimes, hasData)
@@ -36,6 +38,12 @@ const SampleInfoInputs = ({
           id="site"
           testId="site"
           options={siteSelectOptions}
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.sample_event.site' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.sample_event.site' })
+          }}
           {...getValidationPropertiesForInput(sample_event?.site, areValidationsShowing)}
           {...formik.getFieldProps('site')}
         />
@@ -44,12 +52,24 @@ const SampleInfoInputs = ({
           id="management"
           testId="management"
           options={managementSelectOptions}
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.sample_event.management' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.sample_event.management' })
+          }}
           {...getValidationPropertiesForInput(sample_event?.management, areValidationsShowing)}
           {...formik.getFieldProps('management')}
         />
         <InputWithLabelAndValidation
           label="Depth"
           id="depth"
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.fishbelt_transect.depth' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.fishbelt_transect.depth' })
+          }}
           testId="depth"
           type="number"
           {...getValidationPropertiesForInput(fishbelt_transect?.depth, areValidationsShowing)}
@@ -60,6 +80,12 @@ const SampleInfoInputs = ({
           id="sample_date"
           testId="sample_date"
           type="date"
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.sample_event.sample_date' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.sample_event.sample_date' })
+          }}
           {...getValidationPropertiesForInput(sample_event?.sample_date, areValidationsShowing)}
           {...formik.getFieldProps('sample_date')}
         />
@@ -68,6 +94,12 @@ const SampleInfoInputs = ({
           id="sample_time"
           testId="sample_time"
           type="time"
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.fishbelt_transect.sample_time' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.fishbelt_transect.sample_time' })
+          }}
           {...formik.getFieldProps('sample_time')}
           {...getValidationPropertiesForInput(
             fishbelt_transect?.sample_time,
@@ -80,10 +112,12 @@ const SampleInfoInputs = ({
 }
 
 SampleInfoInputs.propTypes = {
+  areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
+  ignoreValidations: PropTypes.func.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
-  areValidationsShowing: PropTypes.bool.isRequired,
+  resetValidations: PropTypes.func.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
 }
 

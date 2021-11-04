@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
-import language from '../language'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const OnlineStatusContext = createContext()

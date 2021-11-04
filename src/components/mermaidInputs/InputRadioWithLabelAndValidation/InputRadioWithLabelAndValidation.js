@@ -1,15 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { IconCheck } from '../../icons'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import { InputRow, ValidationMessage } from '../form'
+import { InputRow } from '../../generic/form'
+import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputRadioWithLabelAndValidation = ({
   id,
   label,
   options,
-  validationMessage,
+  validationMessages,
+  ignoreValidations,
+  resetValidations,
   validationType,
   testId,
   ...restOfProps
@@ -33,30 +36,32 @@ const InputRadioWithLabelAndValidation = ({
     <InputRow validationType={validationType} data-testid={testId}>
       <label htmlFor={id}>{label}</label>
       <div>{optionsList}</div>
-      <div>
-        {validationMessage && (validationType === 'error' || validationType === 'warning') ? (
-          <ValidationMessage validationType={validationType}>{validationMessage}</ValidationMessage>
-        ) : null}
-        {validationType === 'ok' ? <IconCheck aria-label="Passed validation" /> : null}
-      </div>
+      <ValidationInfo
+        ignoreValidations={ignoreValidations}
+        resetValidations={resetValidations}
+        validationMessages={validationMessages}
+        validationType={validationType}
+      />
     </InputRow>
   )
 }
 
 InputRadioWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
+  ignoreValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
+  resetValidations: PropTypes.func.isRequired,
   testId: PropTypes.string,
+  validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-  validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 InputRadioWithLabelAndValidation.defaultProps = {
   testId: undefined,
   validationType: undefined,
-  validationMessage: undefined,
+  validationMessages: [],
 }
 
 export default InputRadioWithLabelAndValidation

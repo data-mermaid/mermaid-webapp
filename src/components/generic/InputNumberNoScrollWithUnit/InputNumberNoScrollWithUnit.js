@@ -4,7 +4,7 @@ import styled from 'styled-components/macro'
 
 import { inputTextareaSelectStyles } from '../form'
 import theme from '../../../theme'
-import InputNumberNoScroll from '../../InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNoScroll from '../InputNumberNoScroll/InputNumberNoScroll'
 
 const InputContainer = styled.div`
   ${inputTextareaSelectStyles}

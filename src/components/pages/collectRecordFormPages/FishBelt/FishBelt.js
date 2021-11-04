@@ -253,6 +253,42 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
   }
 
+  const ignoreValidations = useCallback(
+    ({ validationPath }) => {
+      databaseSwitchboardInstance
+        .ignoreValidations({
+          record: collectRecordBeingEdited,
+          validationPath,
+        })
+        .then((recordWithIgnoredValidations) => {
+          setCollectRecordBeingEdited(recordWithIgnoredValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(language.error.collectRecordIgnore)
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
+  const resetValidations = useCallback(
+    ({ validationPath }) => {
+      databaseSwitchboardInstance
+        .resetValidations({
+          record: collectRecordBeingEdited,
+          validationPath,
+        })
+        .then((recordWithResetValidations) => {
+          setCollectRecordBeingEdited(recordWithResetValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(language.error.collectRecordReset)
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
   const handleNewFishSpeciesOnSubmit = ({ genusId, genusName, speciesName }) => {
     databaseSwitchboardInstance
       .addFishSpecies({
@@ -303,7 +339,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
   const formikOptions = useMemo(() => {
-    const saveRecord = (formikValues, formikActions) => {
+    const saveRecord = (formikValues) => {
       const recordToSubmit = reformatFormValuesIntoFishBeltRecord(
         formikValues,
         observationsState,
@@ -325,7 +361,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           clearPersistedUnsavedObservationsData()
           setAreObservationsInputsDirty(false)
           setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
-          formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
+          setIsFormDirty(false)
 
           if (isNewRecord) {
             history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
@@ -362,10 +398,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const _setIsFormDirty = useEffect(() => {
     setIsFormDirty(
-      formik.dirty ||
+      !!formik.dirty ||
         areObservationsInputsDirty ||
-        getPersistedUnsavedFormikData() ||
-        getPersistedUnsavedObservationsData(),
+        !!getPersistedUnsavedFormikData() ||
+        !!getPersistedUnsavedObservationsData(),
     )
   }, [
     areObservationsInputsDirty,
@@ -373,6 +409,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     getPersistedUnsavedFormikData,
     getPersistedUnsavedObservationsData,
   ])
+
+  const _setCollectButtonsUnsaved = useEffect(() => {
+    if (isFormDirty) {
+      setFishBeltButtonsState(possibleCollectButtonGroupStates.unsaved)
+    }
+  }, [isFormDirty])
 
   const handleSizeBinChange = (event) => {
     const sizeBinId = event.target.value
@@ -392,12 +434,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     formik.setFieldValue('observers', selectedObservers)
   }
 
-  const _setCollectButtonsUnsaved = useEffect(() => {
-    if (isFormDirty) {
-      setFishBeltButtonsState(possibleCollectButtonGroupStates.unsaved)
-    }
-  }, [isFormDirty])
-
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -415,10 +451,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               onSubmit={formik.handleSubmit}
             >
               <SampleInfoInputs
+                areValidationsShowing={areValidationsShowing}
                 collectRecord={collectRecordBeingEdited}
                 formik={formik}
+                ignoreValidations={ignoreValidations}
                 managementRegimes={managementRegimes}
-                areValidationsShowing={areValidationsShowing}
+                resetValidations={resetValidations}
                 sites={sites}
               />
               <FishBeltTransectInputs
@@ -426,7 +464,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 choices={choices}
                 collectRecord={collectRecordBeingEdited}
                 formik={formik}
+                ignoreValidations={ignoreValidations}
                 onSizeBinChange={handleSizeBinChange}
+                resetValidations={resetValidations}
               />
               <ObserversInput
                 areValidationsShowing={areValidationsShowing}
@@ -435,6 +475,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 formik={formik}
                 observers={observerProfiles}
                 onObserversChange={handleObserversChange}
+                ignoreValidations={ignoreValidations}
+                resetValidations={resetValidations}
               />
               <FishBeltObservationTable
                 choices={choices}

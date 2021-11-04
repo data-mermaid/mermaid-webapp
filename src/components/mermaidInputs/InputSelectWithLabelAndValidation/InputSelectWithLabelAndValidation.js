@@ -1,20 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { InputRow, Select, ValidationMessage, HelperText } from '../form'
+import { InputRow, Select, HelperText } from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import { IconCheck } from '../../icons'
+
+import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputSelectWithLabelAndValidation = ({
   label,
   id,
   options,
   helperText,
-  validationMessage,
+  validationMessages,
+  ignoreValidations,
+  resetValidations,
   validationType,
   testId,
   ...restOfProps
 }) => {
-  const optionList = options.map(item => (
+  const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
       {item.label}
     </option>
@@ -39,29 +43,31 @@ const InputSelectWithLabelAndValidation = ({
         </Select>
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
-      <div>
-        {validationMessage && (validationType === 'error' || validationType === 'warning') ? (
-          <ValidationMessage validationType={validationType}>{validationMessage}</ValidationMessage>
-        ) : null}
-        {validationType === 'ok' ? <IconCheck aria-label="Passed validation" /> : null}
-      </div>
+      <ValidationInfo
+        ignoreValidations={ignoreValidations}
+        resetValidations={resetValidations}
+        validationMessages={validationMessages}
+        validationType={validationType}
+      />
     </InputRow>
   )
 }
 
 InputSelectWithLabelAndValidation.propTypes = {
+  helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
+  ignoreValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  validationType: PropTypes.string,
-  helperText: PropTypes.string,
+  resetValidations: PropTypes.func.isRequired,
   testId: PropTypes.string,
-  validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
+  validationType: PropTypes.string,
 }
 
 InputSelectWithLabelAndValidation.defaultProps = {
   validationType: undefined,
-  validationMessage: undefined,
+  validationMessages: [],
   helperText: undefined,
   testId: undefined,
 }

@@ -1,19 +1,23 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { IconCheck } from '../../icons'
-import { Input, InputRow, HelperText, ValidationMessage } from '../form'
+import { Input, InputRow, HelperText } from '../../generic/form'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
-import InputNumberNoScrollWithUnit from '../InputNumberNoScrollWithUnit'
+import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
+
+import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputWithLabelAndValidation = ({
-  label,
   helperText,
   id,
-  unit,
-  validationMessage,
-  validationType,
+  ignoreValidations,
+  label,
+  resetValidations,
   testId,
+  unit,
+  validationMessages,
+  validationType,
   ...restOfProps
 }) => {
   const textFieldRef = useRef()
@@ -47,24 +51,26 @@ const InputWithLabelAndValidation = ({
         {inputType}
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
-      <div>
-        {validationMessage && (validationType === 'error' || validationType === 'warning') ? (
-          <ValidationMessage validationType={validationType}>{validationMessage}</ValidationMessage>
-        ) : null}
-        {validationType === 'ok' ? <IconCheck aria-label="Passed validation" /> : null}
-      </div>
+      <ValidationInfo
+        validationType={validationType}
+        validationMessages={validationMessages}
+        ignoreValidations={ignoreValidations}
+        resetValidations={resetValidations}
+      />
     </InputRow>
   )
 }
 
 InputWithLabelAndValidation.propTypes = {
-  id: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  unit: PropTypes.string,
   helperText: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  ignoreValidations: PropTypes.func.isRequired,
+  label: PropTypes.string.isRequired,
+  resetValidations: PropTypes.func.isRequired,
   testId: PropTypes.string,
+  unit: PropTypes.string,
+  validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-  validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }
 
 InputWithLabelAndValidation.defaultProps = {
@@ -72,7 +78,7 @@ InputWithLabelAndValidation.defaultProps = {
   helperText: undefined,
   testId: undefined,
   validationType: undefined,
-  validationMessage: undefined,
+  validationMessages: [],
 }
 
 export default InputWithLabelAndValidation
