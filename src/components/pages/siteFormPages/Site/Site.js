@@ -12,11 +12,11 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
-import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
-import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
+import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
+import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../language'
 import MermaidMap from '../../../MermaidMap'
-import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../../library/useIsMounted'
 
 const Site = () => {

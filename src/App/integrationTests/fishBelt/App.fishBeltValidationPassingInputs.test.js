@@ -32,6 +32,7 @@ test('Fishbelt validations show check for valid inputs', async () => {
               sample_event: {
                 site: [
                   {
+                    validation_id: Math.random(),
                     code: 'firstError',
                     status: 'ok', // site has an explicit pass for validation, the rest have no info, so we interpret that as a pass
                   },
@@ -106,7 +107,7 @@ test('Fishbelt validations show check for valid inputs', async () => {
     within(screen.getByTestId('sample_time')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('transect-number')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('transect_number')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('label')).getByLabelText('Passed validation'),

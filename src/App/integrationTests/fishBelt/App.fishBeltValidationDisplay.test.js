@@ -84,7 +84,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect-number')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect_number')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('width')).getByText('required')).toBeInTheDocument()
@@ -94,7 +94,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
 })
 
-test('Fishbelt validations will show the first error when there are multiple errors and warnings', async () => {
+test('Fishbelt validations will show all the errors when there are multiple errors and warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -112,18 +112,22 @@ test('Fishbelt validations will show the first error when there are multiple err
               sample_event: {
                 site: [
                   {
+                    validation_id: Math.random(),
                     code: 'firstError',
                     status: 'error',
                   },
                   {
+                    validation_id: Math.random(),
                     code: 'secondError',
                     status: 'error',
                   },
                   {
+                    validation_id: Math.random(),
                     code: 'firstWarning',
                     status: 'warning',
                   },
                   {
+                    validation_id: Math.random(),
                     code: 'secondWarning',
                     status: 'warning',
                   },
@@ -185,12 +189,12 @@ test('Fishbelt validations will show the first error when there are multiple err
   )
 
   expect(within(screen.getByTestId('site')).getByText('firstError')).toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondError')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('secondError')).toBeInTheDocument()
   expect(within(screen.getByTestId('site')).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
 })
 
-test('Fishbelt validations will show the first warning when there are multiple warnings and no errors', async () => {
+test('Fishbelt validations will show the all warnings when there are multiple warnings and no errors', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -208,10 +212,12 @@ test('Fishbelt validations will show the first warning when there are multiple w
               sample_event: {
                 site: [
                   {
+                    validation_id: Math.random(),
                     code: 'firstWarning',
                     status: 'warning',
                   },
                   {
+                    validation_id: Math.random(),
                     code: 'secondWarning',
                     status: 'warning',
                   },
@@ -273,7 +279,7 @@ test('Fishbelt validations will show the first warning when there are multiple w
   )
 
   expect(within(screen.getByTestId('site')).queryByText('firstWarning')).toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).toBeInTheDocument()
 })
 test('Validating an empty collect record, and then editing an input with errors shows the errors until the save button is pressed. Validations show when the validation button is clicked again.', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -369,7 +375,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect-number')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect_number')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('width')).getByText('required')).toBeInTheDocument()
@@ -403,7 +409,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('sample_date')).queryByText('required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('sample_time')).queryByText('required')).not.toBeInTheDocument()
   expect(
-    within(screen.getByTestId('transect-number')).queryByText('required'),
+    within(screen.getByTestId('transect_number')).queryByText('required'),
   ).not.toBeInTheDocument()
   expect(within(screen.getByTestId('label')).queryByText('required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).queryByText('required')).not.toBeInTheDocument()
@@ -444,7 +450,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect-number')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect_number')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('width')).getByText('required')).toBeInTheDocument()

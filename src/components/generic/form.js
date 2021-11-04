@@ -49,8 +49,7 @@ export const InputRow = styled.div`
   & > div:last-of-type {
     display: inline-block;
     ${theme.typography.noWordBreak};
-    padding: calc(${theme.spacing.borderSmall} + ${theme.spacing.xsmall})
-      ${theme.spacing.xsmall};
+    padding: calc(${theme.spacing.borderSmall} + ${theme.spacing.xsmall}) ${theme.spacing.xsmall};
   }
   ${hoverState(css`
     background-color: ${theme.color.secondaryHover};
@@ -58,23 +57,28 @@ export const InputRow = styled.div`
   &:focus-within {
     background-color: ${theme.color.focusWithin};
   }
-${props =>
-  (props.validationType === 'ok' || !props.validationType) &&
-  css`
-    border-color: ${theme.color.valid};
-  `}
-  ${props =>
+  ${(props) =>
+    props.validationType === 'ok' &&
+    css`
+      border-color: ${theme.color.valid};
+    `}
+  ${(props) =>
     props.validationType === 'error' &&
     css`
       border-color: ${theme.color.cautionColor};
     `}
-  ${props =>
+  ${(props) =>
     props.validationType === 'warning' &&
     css`
       border-color: ${theme.color.warningColor};
     `}
+    ${(props) =>
+    props.validationType === 'ignore' &&
+    css`
+      border-color: ${theme.color.ignoreBorder};
+    `}
 `
-export const ValidationMessage = styled.span.attrs(props => ({
+export const ValidationMessage = styled.span.attrs((props) => ({
   role:
     props.validationType === 'error' || props.validationType === 'warning' ? 'alert' : undefined,
 }))``

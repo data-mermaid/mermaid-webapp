@@ -1,5 +1,7 @@
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
+import getObjectProperty from '../../../library/objects/getObjectProperty'
+import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const CollectRecordsMixin = (Base) =>
@@ -141,9 +143,8 @@ const CollectRecordsMixin = (Base) =>
           )
           .then((response) => {
             const [recordResponseFromApiPush] = response.data.collect_records
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              recordResponseFromApiPush,
-            )
+            const isRecordStatusCodeSuccessful =
+              this._getIsResponseStatusSuccessful(recordResponseFromApiPush)
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
@@ -204,9 +205,8 @@ const CollectRecordsMixin = (Base) =>
           )
           .then((apiPushResponse) => {
             const recordReturnedFromApiPush = apiPushResponse.data.collect_records[0]
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              recordReturnedFromApiPush,
-            )
+            const isRecordStatusCodeSuccessful =
+              this._getIsResponseStatusSuccessful(recordReturnedFromApiPush)
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
@@ -269,6 +269,66 @@ const CollectRecordsMixin = (Base) =>
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    ignoreValidations = function ignoreValidations({ record, validationPath }) {
+      const path = `validations.results.${validationPath}`
+      const currentValidations = getObjectProperty({
+        object: record,
+        path,
+      })
+
+      const currentValidationsProperties = Object.keys(currentValidations)
+
+      const ignoredValidations = currentValidationsProperties.map((currentValidationsProperty) => {
+        const currentValidationObject = currentValidations[currentValidationsProperty]
+        const currentValidationStatus = currentValidationObject.status
+
+        return {
+          ...currentValidationObject,
+          status: currentValidationStatus === 'warning' ? 'ignore' : currentValidationStatus,
+        }
+      })
+
+      const recordWithIgnoredValidations = setObjectPropertyOnClone({
+        object: record,
+        path,
+        value: ignoredValidations,
+      })
+
+      return this._dexieInstance.collect_records
+        .put(recordWithIgnoredValidations)
+        .then(() => recordWithIgnoredValidations)
+    }
+
+    resetValidations = function resetValidations({ record, validationPath }) {
+      const path = `validations.results.${validationPath}`
+      const currentValidations = getObjectProperty({
+        object: record,
+        path,
+      })
+
+      const currentValidationsProperties = Object.keys(currentValidations)
+
+      const resettedValidations = currentValidationsProperties.map((currentValidationsProperty) => {
+        const currentValidationObject = currentValidations[currentValidationsProperty]
+        const currentValidationStatus = currentValidationObject.status
+
+        return {
+          ...currentValidationObject,
+          status: currentValidationStatus === 'ignore' ? 'reset' : currentValidationStatus,
+        }
+      })
+
+      const recordWithResetValidations = setObjectPropertyOnClone({
+        object: record,
+        path,
+        value: resettedValidations,
+      })
+
+      return this._dexieInstance.collect_records
+        .put(recordWithResetValidations)
+        .then(() => recordWithResetValidations)
     }
 
     getCollectRecord = function getCollectRecord(id) {
