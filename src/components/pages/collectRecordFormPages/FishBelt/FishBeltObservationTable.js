@@ -141,7 +141,6 @@ const UnderTableRow = styled('div')`
   margin-top: ${theme.spacing.medium};
   ${mediaQueryTabletLandscapeOnly(css`
     flex-direction: column;
-    align-items: flex-end;
     gap: ${theme.spacing.small};
   `)}
 `
