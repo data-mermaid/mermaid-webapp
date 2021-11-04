@@ -33,8 +33,12 @@ const getUserProfile = ({
   }
 
   if (isOnlineAuthenticatedAndReady) {
-    return authenticatedAxios.get(`${apiBaseUrl}/me`).then((apiResults) => {
+    console.warn('get user from api')
+
+    return authenticatedAxios.get(`${apiBaseUrl}/me/`).then((apiResults) => {
       const userFromApi = apiResults.data
+
+      console.warn('api user profile', { apiResults })
 
       if (!userFromApi) {
         throw Error('User Profile not returned from API')
@@ -51,6 +55,8 @@ const getUserProfile = ({
     })
   }
   if (isOfflineAuthenticatedAndReady) {
+    console.warn('get user from IDB')
+
     return dexieInstance.uiState_currentUser.toArray().then((results) => {
       const { user } = results[0]
 

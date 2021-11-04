@@ -21,6 +21,7 @@ export const useCurrentUser = ({
       dexieInstance &&
       isMermaidAuthenticated
     ) {
+      console.warn('trying to get user profile')
       getUserProfile({
         apiBaseUrl,
         auth0Token,
@@ -33,7 +34,8 @@ export const useCurrentUser = ({
             setCurrentUser(user)
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.warn('catch get user promise', error)
           toast.error(language.error.userProfileUnavailable)
         })
     }

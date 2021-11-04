@@ -204,7 +204,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             }
           },
         )
-        .catch(() => {
+        .catch((err) => {
+          console.warn('cant get collect record related data', err)
           const error = isNewRecord
             ? language.error.collectRecordChoicesUnavailable
             : language.error.collectRecordUnavailable
