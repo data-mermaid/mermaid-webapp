@@ -45,11 +45,6 @@ import RecordFormTitle from '../../../RecordFormTitle'
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
 */
-// div {
-//   background: olivedrab;
-//   position: sticky;
-//   top: ${theme.spacing.headerHeight};
-// }
 const CollectRecordToolbarWrapper = styled('div')`
   display: flex;
   justify-content: space-between;
@@ -502,10 +497,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 FishBelt.propTypes = {
   currentUser: currentUserPropType.isRequired,
   isNewRecord: PropTypes.bool,
+  isToolbarSticky: PropTypes.bool,
 }
 
 FishBelt.defaultProps = {
   isNewRecord: true,
+  isToolbarSticky: false,
 }
 
 export default FishBelt
