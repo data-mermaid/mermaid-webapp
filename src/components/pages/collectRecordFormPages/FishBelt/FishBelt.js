@@ -543,12 +543,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 FishBelt.propTypes = {
   currentUser: currentUserPropType.isRequired,
   isNewRecord: PropTypes.bool,
-  isToolbarSticky: PropTypes.bool,
 }
 
 FishBelt.defaultProps = {
   isNewRecord: true,
-  isToolbarSticky: false,
 }
 
 export default FishBelt
