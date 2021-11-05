@@ -45,9 +45,7 @@ const getUserProfile = ({
         user: userFromApi,
       }
 
-      return dexieInstance.uiState_currentUser
-        .put(userToStore)
-        .then(() => userFromApi)
+      return dexieInstance.uiState_currentUser.put(userToStore).then(() => userFromApi)
     })
   }
   if (isOfflineAuthenticatedAndReady) {

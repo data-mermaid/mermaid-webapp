@@ -35,15 +35,11 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      Component: () => (
-        <FishBelt isNewRecord={false} currentUser={currentUser} />
-      ),
+      Component: () => <FishBelt isNewRecord={false} currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
-      Component: () => (
-        <> Placeholder create benthic LIT collect record page </>
-      ),
+      Component: () => <> Placeholder create benthic LIT collect record page </>,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
@@ -51,15 +47,11 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/benthicpit/',
-      Component: () => (
-        <> Placeholder create benthic PIT collect record page </>
-      ),
+      Component: () => <> Placeholder create benthic PIT collect record page </>,
     },
     {
       path: '/projects/:projectId/collecting/habitatcomplexity/',
-      Component: () => (
-        <> Placeholder create habitat complexity collect record page </>
-      ),
+      Component: () => <> Placeholder create habitat complexity collect record page </>,
     },
     {
       path: '/projects/:projectId/collecting/bleaching/',

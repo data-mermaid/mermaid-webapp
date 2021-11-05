@@ -35,10 +35,7 @@ const getMockDexieInstanceAllSuccess = () => {
       },
     })
     .catch((error) =>
-      console.error(
-        'Could not create fake current user in mock offline storage',
-        error,
-      ),
+      console.error('Could not create fake current user in mock offline storage', error),
     )
 
   return dexieInstance
@@ -51,7 +48,4 @@ const getMockDexieInstanceThatProducesErrors = () => {
   })
 }
 
-export {
-  getMockDexieInstanceAllSuccess,
-  getMockDexieInstanceThatProducesErrors,
-}
+export { getMockDexieInstanceAllSuccess, getMockDexieInstanceThatProducesErrors }

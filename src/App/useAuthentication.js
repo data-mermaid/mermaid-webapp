@@ -28,10 +28,8 @@ const useAuthentication = ({ dexieInstance }) => {
   const _initializeAuthentication = useEffect(() => {
     let isMounted = true
     const isOffline = !isAppOnline
-    const hasPreviouslyAuthenticated =
-      localStorage.getItem('hasAuth0Authenticated') === 'true'
-    const isUserOnlineAndLoggedOut =
-      !isAuth0Authenticated && !isAuth0Loading && isAppOnline
+    const hasPreviouslyAuthenticated = localStorage.getItem('hasAuth0Authenticated') === 'true'
+    const isUserOnlineAndLoggedOut = !isAuth0Authenticated && !isAuth0Loading && isAppOnline
     const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading
     const isUserOfflineAndLoggedIn =
       !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
@@ -74,9 +72,7 @@ const useAuthentication = ({ dexieInstance }) => {
       // this isnt necessary to make logout to work, but is here to make sure users.
       // cant see profile data from the last logged in user if they go searching in dev tools.
       // databaseSwitcboard isnt used because that would create circular dependencies (it depends on the output of this hook)
-      dexieInstance.uiState_currentUser.delete(
-        'enforceOnlyOneRecordEverStoredAndOverwritten',
-      )
+      dexieInstance.uiState_currentUser.delete('enforceOnlyOneRecordEverStoredAndOverwritten')
       auth0Logout({ returnTo: window.location.origin })
       setUnauthenticatedStates()
     }

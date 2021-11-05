@@ -14,11 +14,7 @@ import {
 } from './mockOnlineDatabaseSwitchboardInstance'
 import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
-const AuthenticatedProviders = ({
-  children,
-  initialEntries,
-  isSyncInProgressOverride,
-}) => (
+const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOverride }) => (
   <Auth0Context.Provider
     value={{
       isAuthenticated: true,
@@ -29,9 +25,7 @@ const AuthenticatedProviders = ({
   >
     <MemoryRouter initialEntries={initialEntries}>
       <ThemeProvider theme={theme}>
-        <SyncStatusProvider
-          value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}
-        >
+        <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
           {children}
         </SyncStatusProvider>
       </ThemeProvider>
@@ -40,9 +34,7 @@ const AuthenticatedProviders = ({
 )
 
 const UnauthenticatedProviders = ({ children, initialEntries }) => (
-  <Auth0Context.Provider
-    value={{ isAuthenticated: false, loginWithRedirect: () => {} }}
-  >
+  <Auth0Context.Provider value={{ isAuthenticated: false, loginWithRedirect: () => {} }}>
     <MemoryRouter initialEntries={initialEntries}>
       <ThemeProvider theme={theme}>
         <SyncStatusProvider>{children}</SyncStatusProvider>
@@ -69,12 +61,7 @@ UnauthenticatedProviders.defaultProps = {
 }
 const renderAuthenticated = (
   ui,
-  {
-    renderOptions,
-    initialEntries,
-    dexieInstance,
-    isSyncInProgressOverride,
-  } = {},
+  { renderOptions, initialEntries, dexieInstance, isSyncInProgressOverride } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
@@ -99,12 +86,7 @@ const renderAuthenticated = (
 
 const renderAuthenticatedOnline = (
   ui,
-  {
-    renderOptions,
-    initialEntries,
-    dexieInstance,
-    isSyncInProgressOverride,
-  } = {},
+  { renderOptions, initialEntries, dexieInstance, isSyncInProgressOverride } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
@@ -115,9 +97,7 @@ const renderAuthenticatedOnline = (
         <DatabaseSwitchboardInstanceProvider
           value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
         >
-          <OnlineStatusProvider value={{ isAppOnline: true }}>
-            {children}
-          </OnlineStatusProvider>
+          <OnlineStatusProvider value={{ isAppOnline: true }}>{children}</OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
       </AuthenticatedProviders>
     )
@@ -129,16 +109,11 @@ const renderAuthenticatedOnline = (
   })
 }
 
-const renderUnauthenticatedOnline = (
-  ui,
-  { renderOptions, initialEntries } = {},
-) => {
+const renderUnauthenticatedOnline = (ui, { renderOptions, initialEntries } = {}) => {
   const wrapper = ({ children }) => {
     return (
       <UnauthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isAppOnline: true }}>
-          {children}
-        </OnlineStatusProvider>
+        <OnlineStatusProvider value={{ isAppOnline: true }}>{children}</OnlineStatusProvider>
       </UnauthenticatedProviders>
     )
   }
@@ -148,12 +123,7 @@ const renderUnauthenticatedOnline = (
 
 const renderAuthenticatedOffline = (
   ui,
-  {
-    renderOptions,
-    initialEntries,
-    dexieInstance,
-    isSyncInProgressOverride,
-  } = {},
+  { renderOptions, initialEntries, dexieInstance, isSyncInProgressOverride } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
@@ -164,9 +134,7 @@ const renderAuthenticatedOffline = (
         <DatabaseSwitchboardInstanceProvider
           value={getMockOfflineDatabaseSwitchboardInstance(dexieInstance)}
         >
-          <OnlineStatusProvider value={{ isAppOnline: false }}>
-            {children}
-          </OnlineStatusProvider>
+          <OnlineStatusProvider value={{ isAppOnline: false }}>{children}</OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
       </AuthenticatedProviders>
     )
@@ -178,16 +146,11 @@ const renderAuthenticatedOffline = (
   })
 }
 
-const renderUnauthenticatedOffline = (
-  ui,
-  { renderOptions, initialEntries } = {},
-) => {
+const renderUnauthenticatedOffline = (ui, { renderOptions, initialEntries } = {}) => {
   const wrapper = ({ children }) => {
     return (
       <UnauthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isAppOnline: false }}>
-          {children}
-        </OnlineStatusProvider>
+        <OnlineStatusProvider value={{ isAppOnline: false }}>{children}</OnlineStatusProvider>
       </UnauthenticatedProviders>
     )
   }
