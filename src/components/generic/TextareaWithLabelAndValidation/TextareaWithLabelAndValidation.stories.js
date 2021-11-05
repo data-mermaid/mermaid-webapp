@@ -9,16 +9,8 @@ export default {
 export const basic = () => (
   <>
     <TextareaWithLabelAndValidation id="id2" label="No warnings or errors" />
-    <TextareaWithLabelAndValidation
-      id="id2"
-      label="With warning"
-      validationType="warning"
-    />
-    <TextareaWithLabelAndValidation
-      id="id3"
-      label="With error"
-      validationType="error"
-    />
+    <TextareaWithLabelAndValidation id="id2" label="With warning" validationType="warning" />
+    <TextareaWithLabelAndValidation id="id3" label="With error" validationType="error" />
     <TextareaWithLabelAndValidation
       id="id4"
       label="With warning"

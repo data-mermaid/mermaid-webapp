@@ -3,10 +3,7 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
-import {
-  renderAuthenticatedOffline,
-  screen,
-} from '../../testUtilities/testingLibraryWithHelpers'
+import { renderAuthenticatedOffline, screen } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
 test('Clicking anywhere on a project card navigates to the project collect page when offline', async () => {

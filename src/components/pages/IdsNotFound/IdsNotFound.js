@@ -19,9 +19,7 @@ const IdsNotFound = ({ ids }) => {
 }
 
 IdsNotFound.propTypes = {
-  ids: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  ).isRequired,
+  ids: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])).isRequired,
 }
 
 export default IdsNotFound

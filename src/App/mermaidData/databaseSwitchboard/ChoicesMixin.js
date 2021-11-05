@@ -1,4 +1,4 @@
-const ChoicesMixin = (Base) =>
+const ChoicesMixin = Base =>
   class extends Base {
     getChoices = async () => {
       return this._isAuthenticatedAndReady

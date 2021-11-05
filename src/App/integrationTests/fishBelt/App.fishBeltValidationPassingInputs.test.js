@@ -18,12 +18,9 @@ test('Fishbelt validations show check for valid inputs', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
-      `${apiBaseUrl}/projects/5/collectrecords/validate/`,
-      (req, res, ctx) => {
-        return res(ctx.status(200))
-      },
-    ),
+    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+      return res(ctx.status(200))
+    }),
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
@@ -95,39 +92,27 @@ test('Fishbelt validations show check for valid inputs', async () => {
     ),
   )
 
+  expect(within(screen.getByTestId('site')).getByLabelText('Passed validation')).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('site')).getByLabelText('Passed validation'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('management')).getByLabelText(
-      'Passed validation',
-    ),
+    within(screen.getByTestId('management')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('depth')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('sample_date')).getByLabelText(
-      'Passed validation',
-    ),
+    within(screen.getByTestId('sample_date')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('sample_time')).getByLabelText(
-      'Passed validation',
-    ),
+    within(screen.getByTestId('sample_time')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('transect-number')).getByLabelText(
-      'Passed validation',
-    ),
+    within(screen.getByTestId('transect-number')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('label')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('len_surveyed')).getByLabelText(
-      'Passed validation',
-    ),
+    within(screen.getByTestId('len_surveyed')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('width')).getByLabelText('Passed validation'),
@@ -136,9 +121,7 @@ test('Fishbelt validations show check for valid inputs', async () => {
     within(screen.getByTestId('size_bin')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('reef_slope')).getByLabelText(
-      'Passed validation',
-    ),
+    within(screen.getByTestId('reef_slope')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
     within(screen.getByTestId('notes')).getByLabelText('Passed validation'),

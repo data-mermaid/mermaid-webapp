@@ -44,16 +44,10 @@ const Site = () => {
         .then(([siteResponse, choicesResponse, projectResponse]) => {
           if (isMounted.current) {
             if (!siteResponse && siteId) {
-              setIdsNotAssociatedWithData((previousState) => [
-                ...previousState,
-                siteId,
-              ])
+              setIdsNotAssociatedWithData(previousState => [...previousState, siteId])
             }
             if (!projectResponse && projectId) {
-              setIdsNotAssociatedWithData((previousState) => [
-                ...previousState,
-                projectId,
-              ])
+              setIdsNotAssociatedWithData(previousState => [...previousState, projectId])
             }
             setCountryOptions(getOptions(choicesResponse.countries))
             setExposureOptions(getOptions(choicesResponse.reefexposures))
@@ -67,18 +61,9 @@ const Site = () => {
           toast.error(language.error.siteRecordUnavailable)
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    isSyncInProgress,
-    projectId,
-    siteId,
-  ])
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId])
 
-  const initialFormValues = useMemo(
-    () => getSiteInitialValues(siteBeingEdited),
-    [siteBeingEdited],
-  )
+  const initialFormValues = useMemo(() => getSiteInitialValues(siteBeingEdited), [siteBeingEdited])
 
   const formik = useFormik({
     initialValues: initialFormValues,
@@ -88,14 +73,14 @@ const Site = () => {
   const { setFieldValue: formikSetFieldValue } = formik
 
   const handleLatitudeChange = useCallback(
-    (value) => {
+    value => {
       formikSetFieldValue('latitude', value)
     },
     [formikSetFieldValue],
   )
 
   const handleLongitudeChange = useCallback(
-    (value) => {
+    value => {
       formikSetFieldValue('longitude', value)
     },
     [formikSetFieldValue],
@@ -126,7 +111,7 @@ const Site = () => {
                   id="country"
                   options={countryOptions}
                   value={formik.values.country}
-                  onChange={(selectedItem) => {
+                  onChange={selectedItem => {
                     formik.setFieldValue('country', selectedItem.value)
                   }}
                 />

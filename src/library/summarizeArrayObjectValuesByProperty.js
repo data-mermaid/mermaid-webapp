@@ -1,11 +1,6 @@
-export const summarizeArrayObjectValuesByProperty = (
-  arrayOfObjects,
-  objectPropertyName,
-) => {
+export const summarizeArrayObjectValuesByProperty = (arrayOfObjects, objectPropertyName) => {
   const summaryReducer = (accumulator, object) => {
-    const property = object[objectPropertyName]
-      ? parseFloat(object[objectPropertyName])
-      : 0
+    const property = object[objectPropertyName] ? parseFloat(object[objectPropertyName]) : 0
 
     return accumulator + property
   }

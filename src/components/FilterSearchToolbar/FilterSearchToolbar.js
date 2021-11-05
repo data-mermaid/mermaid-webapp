@@ -18,7 +18,7 @@ const FilterLabelWrapper = styled.label`
 const FilterSearchToolbar = ({ name, handleGlobalFilterChange }) => {
   const [filterInputValue, setFilterInputValue] = useState('')
 
-  const handleFilterChange = (event) => {
+  const handleFilterChange = event => {
     const { value } = event.target
 
     setFilterInputValue(value)

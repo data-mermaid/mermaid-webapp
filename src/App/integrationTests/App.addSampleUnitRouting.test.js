@@ -20,9 +20,7 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
   })
 
   await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   userEvent.click(
     await screen.findByRole('button', {

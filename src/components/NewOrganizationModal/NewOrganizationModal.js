@@ -46,9 +46,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
             aria-describedby="modal-input-for-org-descp"
             id="modal-input-for-org"
           />
-          {helperText && (
-            <HelperText id="modal-input-for-org-descp">{helperText}</HelperText>
-          )}
+          {helperText && <HelperText id="modal-input-for-org-descp">{helperText}</HelperText>}
         </div>
       </ModalInputRow>
     </>

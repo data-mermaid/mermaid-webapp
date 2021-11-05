@@ -5,17 +5,11 @@ import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
-const RemoveUserModal = ({
-  isOpen,
-  onDismiss,
-  onSubmit,
-  userNameToBeRemoved,
-  projectName,
-}) => {
+const RemoveUserModal = ({ isOpen, onDismiss, onSubmit, userNameToBeRemoved, projectName }) => {
   const modalContent = (
     <p>
-      Are you sure you want to remove <strong>{userNameToBeRemoved}</strong>{' '}
-      from <strong>{projectName}</strong>?
+      Are you sure you want to remove <strong>{userNameToBeRemoved}</strong> from{' '}
+      <strong>{projectName}</strong>?
     </p>
   )
 

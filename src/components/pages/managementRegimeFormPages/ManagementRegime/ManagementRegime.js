@@ -24,10 +24,7 @@ const ManagementRegime = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [managementCompliances, setManagementCompliances] = useState([])
   const [managementParties, setManagementParties] = useState([])
-  const [
-    managementRegimeBeingEdited,
-    setManagementRegimeBeingEdited,
-  ] = useState()
+  const [managementRegimeBeingEdited, setManagementRegimeBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
@@ -42,44 +39,26 @@ const ManagementRegime = () => {
       ]
 
       Promise.all(promises)
-        .then(
-          ([managementRegimeResponse, choicesResponse, projectResponse]) => {
-            if (isMounted.current) {
-              if (!managementRegimeResponse && managementRegimeId) {
-                setIdsNotAssociatedWithData((previousState) => [
-                  ...previousState,
-                  managementRegimeId,
-                ])
-              }
-              if (!projectResponse && projectId) {
-                setIdsNotAssociatedWithData((previousState) => [
-                  ...previousState,
-                  projectId,
-                ])
-              }
-
-              setManagementParties(
-                getOptions(choicesResponse.managementparties),
-              )
-              setManagementCompliances(
-                getOptions(choicesResponse.managementcompliances),
-              )
-              setManagementRegimeBeingEdited(managementRegimeResponse)
-              setIsLoading(false)
+        .then(([managementRegimeResponse, choicesResponse, projectResponse]) => {
+          if (isMounted.current) {
+            if (!managementRegimeResponse && managementRegimeId) {
+              setIdsNotAssociatedWithData(previousState => [...previousState, managementRegimeId])
             }
-          },
-        )
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData(previousState => [...previousState, projectId])
+            }
+
+            setManagementParties(getOptions(choicesResponse.managementparties))
+            setManagementCompliances(getOptions(choicesResponse.managementcompliances))
+            setManagementRegimeBeingEdited(managementRegimeResponse)
+            setIsLoading(false)
+          }
+        })
         .catch(() => {
           toast.error(language.error.managementRegimeRecordUnavailable)
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    isSyncInProgress,
-    managementRegimeId,
-    projectId,
-  ])
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, managementRegimeId, projectId])
 
   const initialFormValues = useMemo(
     () => getManagementRegimeInitialValues(managementRegimeBeingEdited),
@@ -98,7 +77,7 @@ const ManagementRegime = () => {
     />
   ) : (
     <Formik {...formikOptions}>
-      {(formik) => (
+      {formik => (
         <ContentPageLayout
           isPageContentLoading={isLoading}
           content={

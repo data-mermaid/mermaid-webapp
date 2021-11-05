@@ -11,7 +11,5 @@ test('getSites only returns profiles for a given project', async () => {
   const sites = await dbSwitchboardInstance.getSitesWithoutOfflineDeleted('5')
 
   expect(sites.length).toEqual(2)
-  expect(
-    sites.find((profile) => profile.project === 'shouldGetFilteredOut'),
-  ).toBeUndefined()
+  expect(sites.find(profile => profile.project === 'shouldGetFilteredOut')).toBeUndefined()
 })

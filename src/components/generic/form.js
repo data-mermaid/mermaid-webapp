@@ -1,9 +1,6 @@
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import {
-  hoverState,
-  mediaQueryPhoneOnly,
-} from '../../library/styling/mediaQueries'
+import { hoverState, mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 export const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -61,27 +58,25 @@ export const InputRow = styled.div`
   &:focus-within {
     background-color: ${theme.color.focusWithin};
   }
-${(props) =>
+${props =>
   (props.validationType === 'ok' || !props.validationType) &&
   css`
     border-color: ${theme.color.valid};
   `}
-  ${(props) =>
+  ${props =>
     props.validationType === 'error' &&
     css`
       border-color: ${theme.color.cautionColor};
     `}
-  ${(props) =>
+  ${props =>
     props.validationType === 'warning' &&
     css`
       border-color: ${theme.color.warningColor};
     `}
 `
-export const ValidationMessage = styled.span.attrs((props) => ({
+export const ValidationMessage = styled.span.attrs(props => ({
   role:
-    props.validationType === 'error' || props.validationType === 'warning'
-      ? 'alert'
-      : undefined,
+    props.validationType === 'error' || props.validationType === 'warning' ? 'alert' : undefined,
 }))``
 export const Select = styled.select`
   ${inputTextareaSelectStyles}

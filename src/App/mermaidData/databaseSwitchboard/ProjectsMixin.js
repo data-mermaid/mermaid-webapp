@@ -1,14 +1,13 @@
-const ProjectsMixin = (Base) =>
+const ProjectsMixin = Base =>
   class extends Base {
-    getOfflineReadyProjectIds = () =>
-      this._dexieInstance.uiState_offlineReadyProjects.toArray()
+    getOfflineReadyProjectIds = () => this._dexieInstance.uiState_offlineReadyProjects.toArray()
 
     getProjects = () =>
       this._isAuthenticatedAndReady
         ? this._dexieInstance.projects.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getProject = (id) => {
+    getProject = id => {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
@@ -24,10 +23,10 @@ const ProjectsMixin = (Base) =>
       this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
             .get(`${this._apiBaseUrl}/projecttags`)
-            .then((apiResults) => apiResults.data.results)
+            .then(apiResults => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
 
-    getProjectProfiles = (projectId) => {
+    getProjectProfiles = projectId => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -35,15 +34,13 @@ const ProjectsMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? this._dexieInstance.project_profiles
             .toArray()
-            .then((projectProfiles) =>
-              projectProfiles.filter(
-                (projectProfile) => projectProfile.project === projectId,
-              ),
+            .then(projectProfiles =>
+              projectProfiles.filter(projectProfile => projectProfile.project === projectId),
             )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getUserProfile = (email) => {
+    getUserProfile = email => {
       if (!email) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -55,7 +52,7 @@ const ProjectsMixin = (Base) =>
               email,
             },
           })
-          .then((profilesData) => {
+          .then(profilesData => {
             return profilesData
           })
       }
@@ -73,10 +70,8 @@ const ProjectsMixin = (Base) =>
           .post(`${this._apiBaseUrl}/projects/${projectId}/add_profile/`, {
             email,
           })
-          .then((response) => {
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              response,
-            )
+          .then(response => {
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(response)
 
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance
@@ -104,14 +99,12 @@ const ProjectsMixin = (Base) =>
 
       if (this._isAuthenticatedAndReady) {
         return this._authenticatedAxios
-          .put(
-            `${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`,
-            { from_profile: fromProfileId, to_profile: toProfileId },
-          )
-          .then((response) => {
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              response,
-            )
+          .put(`${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`, {
+            from_profile: fromProfileId,
+            to_profile: toProfileId,
+          })
+          .then(response => {
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(response)
 
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance
@@ -141,10 +134,7 @@ const ProjectsMixin = (Base) =>
         _deleted: true,
       }
 
-      if (
-        hasCorrespondingRecordInTheApi &&
-        this._isOnlineAuthenticatedAndReady
-      ) {
+      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         return this._authenticatedAxios
           .post(
             `${this._apiBaseUrl}/push/`,
@@ -154,16 +144,13 @@ const ProjectsMixin = (Base) =>
           .then(() => {
             return this._apiSyncInstance
               .pushThenPullEverythingForAProjectButChoices(projectId)
-              .then((resp) => {
+              .then(resp => {
                 return resp
               })
           })
       }
 
-      if (
-        !hasCorrespondingRecordInTheApi &&
-        this._isOnlineAuthenticatedAndReady
-      ) {
+      if (!hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         return this._dexieInstance.project_profiles.delete(user.id)
       }
 

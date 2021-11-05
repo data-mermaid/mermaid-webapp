@@ -20,20 +20,11 @@ const TdKey = styled(Td)`
 const TableRowItem = ({ title, options, value }) => (
   <Tr>
     <TdKey>{title}</TdKey>
-    {options ? (
-      <Td>{getObjectById(options, value)?.name}</Td>
-    ) : (
-      <Td>{value}</Td>
-    )}
+    {options ? <Td>{getObjectById(options, value)?.name}</Td> : <Td>{value}</Td>}
   </Tr>
 )
 
-const SubmittedFishBeltInfoTable = ({
-  sites,
-  managementRegimes,
-  choices,
-  submittedRecord,
-}) => {
+const SubmittedFishBeltInfoTable = ({ sites, managementRegimes, choices, submittedRecord }) => {
   const { site, management, sample_date, notes } = submittedRecord.sample_event
   const {
     sample_time,
@@ -66,47 +57,17 @@ const SubmittedFishBeltInfoTable = ({
         <Table>
           <tbody>
             <TableRowItem title="Site" options={sites} value={site} />
-            <TableRowItem
-              title="Management"
-              options={managementRegimes}
-              value={management}
-            />
-            <TableRowItem
-              title="Sample Date Time"
-              value={`${sample_date} ${sample_time}`}
-            />
+            <TableRowItem title="Management" options={managementRegimes} value={management} />
+            <TableRowItem title="Sample Date Time" value={`${sample_date} ${sample_time}`} />
             <TableRowItem title="Depth" value={depth} />
             <TableRowItem title="Transect Number" value={number} />
             <TableRowItem title="Label" value={label} />
-            <TableRowItem
-              title="Transect Length Surveyed<"
-              value={len_surveyed}
-            />
-            <TableRowItem
-              title="Width"
-              options={belttransectwidths.data}
-              value={width}
-            />
-            <TableRowItem
-              title="Fish Size Bin"
-              options={fishsizebins.data}
-              value={size_bin}
-            />
-            <TableRowItem
-              title="Reef Slope"
-              options={reefslopes.data}
-              value={reef_slope}
-            />
-            <TableRowItem
-              title="Visibility"
-              options={visibilities.data}
-              value={visibility}
-            />
-            <TableRowItem
-              title="Current"
-              options={currents.data}
-              value={current}
-            />
+            <TableRowItem title="Transect Length Surveyed<" value={len_surveyed} />
+            <TableRowItem title="Width" options={belttransectwidths.data} value={width} />
+            <TableRowItem title="Fish Size Bin" options={fishsizebins.data} value={size_bin} />
+            <TableRowItem title="Reef Slope" options={reefslopes.data} value={reef_slope} />
+            <TableRowItem title="Visibility" options={visibilities.data} value={visibility} />
+            <TableRowItem title="Current" options={currents.data} value={current} />
             <TableRowItem
               title="Relative Depth"
               options={relativedepths.data}

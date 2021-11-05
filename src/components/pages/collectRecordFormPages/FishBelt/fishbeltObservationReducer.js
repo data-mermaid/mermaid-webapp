@@ -9,7 +9,7 @@ const fishbeltObservationReducer = (state, action) => {
       const idOfRemovee = action.payload
 
       const observationsWithTheRightOneRemoved = state.filter(
-        (observation) => observation.uiId !== idOfRemovee,
+        observation => observation.uiId !== idOfRemovee,
       )
 
       return observationsWithTheRightOneRemoved
@@ -41,38 +41,28 @@ const fishbeltObservationReducer = (state, action) => {
       return [...state, observationWithNewId]
     }
     case 'updateCount':
-      return state.map((observation) => {
-        const isObservationToUpdate =
-          observation.uiId === action.payload.observationId
+      return state.map(observation => {
+        const isObservationToUpdate = observation.uiId === action.payload.observationId
 
         const { newCount } = action.payload
 
         const newCountToUse =
-          Number.isNaN(newCount) || newCount === ''
-            ? null
-            : parseFloat(newCount)
+          Number.isNaN(newCount) || newCount === '' ? null : parseFloat(newCount)
 
-        return isObservationToUpdate
-          ? { ...observation, count: newCountToUse }
-          : observation
+        return isObservationToUpdate ? { ...observation, count: newCountToUse } : observation
       })
     case 'updateSize':
-      return state.map((observation) => {
-        const isObservationToUpdate =
-          observation.uiId === action.payload.observationId
+      return state.map(observation => {
+        const isObservationToUpdate = observation.uiId === action.payload.observationId
         const { newSize } = action.payload
 
-        const newSizeToUse =
-          Number.isNaN(newSize) || newSize === '' ? null : parseFloat(newSize)
+        const newSizeToUse = Number.isNaN(newSize) || newSize === '' ? null : parseFloat(newSize)
 
-        return isObservationToUpdate
-          ? { ...observation, size: newSizeToUse }
-          : observation
+        return isObservationToUpdate ? { ...observation, size: newSizeToUse } : observation
       })
     case 'updateFishName':
-      return state.map((observation) => {
-        const isObservationToUpdate =
-          observation.uiId === action.payload.observationId
+      return state.map(observation => {
+        const isObservationToUpdate = observation.uiId === action.payload.observationId
 
         return isObservationToUpdate
           ? {
@@ -82,7 +72,7 @@ const fishbeltObservationReducer = (state, action) => {
           : observation
       })
     case 'resetFishSizes': {
-      return state.map((observation) => ({ ...observation, size: '' }))
+      return state.map(observation => ({ ...observation, size: '' }))
     }
     default:
       throw new Error("This action isn't supported by the observationReducer")

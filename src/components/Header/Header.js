@@ -6,10 +6,7 @@ import theme from '../../theme'
 import Logo from '../../assets/mermaid-logo.svg'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
 import { IconBell, IconMenu, IconDown } from '../icons'
-import {
-  hoverState,
-  mediaQueryTabletLandscapeOnly,
-} from '../../library/styling/mediaQueries'
+import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
@@ -219,9 +216,7 @@ const Header = ({ logout, currentUser }) => {
             contents={
               <div className="menuDropdown">
                 <GlobalLinks />
-                <p className="loggedInAs">
-                  Logged in as {currentUser && currentUser.first_name}
-                </p>
+                <p className="loggedInAs">Logged in as {currentUser && currentUser.first_name}</p>
                 <div className="mobileUserMenu">
                   <UserMenuDropDownContent />
                 </div>

@@ -1,8 +1,8 @@
 import { getObjectById } from '../../../library/getObjectById'
 
-const ManagementRegimesMixin = (Base) =>
+const ManagementRegimesMixin = Base =>
   class extends Base {
-    getManagementRegimesWithoutOfflineDeleted = (projectId) => {
+    getManagementRegimesWithoutOfflineDeleted = projectId => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -10,17 +10,16 @@ const ManagementRegimesMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? this._dexieInstance.project_managements
             .toArray()
-            .then((managementRegimes) =>
+            .then(managementRegimes =>
               managementRegimes.filter(
-                (managementRegime) =>
-                  managementRegime.project === projectId &&
-                  !managementRegime._deleted,
+                managementRegime =>
+                  managementRegime.project === projectId && !managementRegime._deleted,
               ),
             )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getManagementRegime = (id) => {
+    getManagementRegime = id => {
       if (!id) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -32,7 +31,7 @@ const ManagementRegimesMixin = (Base) =>
       return this._dexieInstance.project_managements.get(id)
     }
 
-    getManagementRegimeRecordsForUiDisplay = (projectId) => {
+    getManagementRegimeRecordsForUiDisplay = projectId => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -44,16 +43,13 @@ const ManagementRegimesMixin = (Base) =>
           ]).then(([managementRegimes, choices]) => {
             const { managementcompliances } = choices
 
-            return managementRegimes.map((record) => {
+            return managementRegimes.map(record => {
               return {
                 ...record,
                 uiLabels: {
                   name: record.name,
                   estYear: record.est_year,
-                  compliance: getObjectById(
-                    managementcompliances.data,
-                    record.compliance,
-                  )?.name,
+                  compliance: getObjectById(managementcompliances.data, record.compliance)?.name,
                   openAccess: record.open_access,
                   accessRestriction: record.access_restriction,
                   periodicClosure: record.periodic_closure,

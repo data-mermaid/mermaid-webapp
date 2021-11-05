@@ -30,8 +30,7 @@ const contentStyles = css`
 const ContentToolbar = styled('div')`
   ${contentStyles};
   padding: ${theme.spacing.small} ${theme.spacing.medium};
-  border-bottom: solid ${theme.spacing.borderMedium}
-    ${theme.color.backgroundColor};
+  border-bottom: solid ${theme.spacing.borderMedium} ${theme.color.backgroundColor};
   margin-bottom: 0;
   z-index: 100;
 `

@@ -1,9 +1,4 @@
-import {
-  usePagination,
-  useSortBy,
-  useGlobalFilter,
-  useTable,
-} from 'react-table'
+import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -13,27 +8,14 @@ import styled, { css } from 'styled-components/macro'
 
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
-import {
-  IconAccount,
-  IconAccountConvert,
-  IconAccountRemove,
-  IconSave,
-  IconPlus,
-} from '../../icons'
+import { IconAccount, IconAccountConvert, IconAccountRemove, IconSave, IconPlus } from '../../icons'
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import {
-  Table,
-  Tr,
-  Th,
-  Td,
-  TableOverflowWrapper,
-  TableNavigation,
-} from '../../generic/Table/table'
+import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { RowSpaceBetween } from '../../generic/positioning'
@@ -64,15 +46,15 @@ const ToolbarRowWrapper = styled('div')`
 
 const ProfileImage = styled.div`
   border-radius: 50%;
-  ${(props) =>
+  ${props =>
     props.img &&
     css`
       background-image: url(${props.img});
       background-position: center center;
       background-size: ${props.theme.typography.xLargeIconSize};
     `}
-    width: ${(props) => props.theme.typography.xLargeIconSize};
-    height: ${(props) => props.theme.typography.xLargeIconSize};
+    width: ${props => props.theme.typography.xLargeIconSize};
+    height: ${props => props.theme.typography.xLargeIconSize};
 `
 
 const NameCellStyle = styled('div')`
@@ -80,8 +62,8 @@ const NameCellStyle = styled('div')`
   white-space: nowrap;
   align-items: center;
   svg {
-    width: ${(props) => props.theme.typography.xLargeIconSize};
-    height: ${(props) => props.theme.typography.xLargeIconSize};
+    width: ${props => props.theme.typography.xLargeIconSize};
+    height: ${props => props.theme.typography.xLargeIconSize};
   }
 `
 const UserTableTd = styled(Td)`
@@ -104,13 +86,8 @@ const Users = ({ currentUser }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isReadonlyUserWithActiveSampleUnits] = useState(false)
-  const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(
-    false,
-  )
-  const [
-    isTransferSampleUnitsModalOpen,
-    setIsTransferSampleUnitsModalOpen,
-  ] = useState(false)
+  const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(false)
+  const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [newUserProfile, setNewUserProfile] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
@@ -153,7 +130,7 @@ const Users = ({ currentUser }) => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance
         .getProjectProfiles(projectId)
-        .then((projectProfilesResponse) => {
+        .then(projectProfilesResponse => {
           setObserverProfiles(projectProfilesResponse)
         })
         .catch(() => {
@@ -163,7 +140,7 @@ const Users = ({ currentUser }) => {
   }, [databaseSwitchboardInstance, projectId])
 
   const addNewUser = () => {
-    databaseSwitchboardInstance.getUserProfile(newUserProfile).then((res) => {
+    databaseSwitchboardInstance.getUserProfile(newUserProfile).then(res => {
       const doesUserHaveMermaidProfile = res.data.count === 0
 
       if (doesUserHaveMermaidProfile) {
@@ -205,10 +182,9 @@ const Users = ({ currentUser }) => {
 
   const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
 
-  const handleNewUserProfileAdd = (event) =>
-    setNewUserProfile(event.target.value)
+  const handleNewUserProfileAdd = event => setNewUserProfile(event.target.value)
 
-  const handleTransferSampleUnitChange = (userId) => {
+  const handleTransferSampleUnitChange = userId => {
     setToUserProfileId(userId)
   }
 
@@ -217,7 +193,7 @@ const Users = ({ currentUser }) => {
 
     databaseSwitchboardInstance
       .transferSampleUnits(projectId, fromUserProfileId, toUserProfileId)
-      .then((resp) => {
+      .then(resp => {
         const sampleUnitMsg = pluralize(
           fromUser.num_active_sample_units,
           'sample unit',
@@ -232,12 +208,7 @@ const Users = ({ currentUser }) => {
     return Promise.resolve()
   }
 
-  const openTransferSampleUnitsModal = (
-    profile,
-    profile_name,
-    email,
-    num_active_sample_units,
-  ) => {
+  const openTransferSampleUnitsModal = (profile, profile_name, email, num_active_sample_units) => {
     setFromUser({ profile, profile_name, email, num_active_sample_units })
     setIsTransferSampleUnitsModalOpen(true)
     setShowRemoveUserWithActiveSampleUnitsWarning(false)
@@ -247,7 +218,7 @@ const Users = ({ currentUser }) => {
     setShowRemoveUserWithActiveSampleUnitsWarning(false)
   }
 
-  const openRemoveUserModal = (user) => {
+  const openRemoveUserModal = user => {
     const { profile, profile_name, email, num_active_sample_units } = user
 
     if (num_active_sample_units === 0) {
@@ -264,12 +235,10 @@ const Users = ({ currentUser }) => {
   }
 
   const removeUserProfile = () => {
-    databaseSwitchboardInstance
-      .removeUser(userToBeRemoved, projectId)
-      .then(() => {
-        fetchProjectProfiles()
-        toast.success(`User removed`)
-      })
+    databaseSwitchboardInstance.removeUser(userToBeRemoved, projectId).then(() => {
+      fetchProjectProfiles()
+      toast.success(`User removed`)
+    })
 
     return Promise.resolve()
   }
@@ -312,8 +281,7 @@ const Users = ({ currentUser }) => {
   }, [])
 
   const tableCellData = useMemo(() => {
-    const getObserverRole = (id) =>
-      observerProfiles.find((profile) => profile.id === id).role
+    const getObserverRole = id => observerProfiles.find(profile => profile.id === id).role
 
     const observerRoleRadioCell = (userId, value) => {
       return (
@@ -324,7 +292,7 @@ const Users = ({ currentUser }) => {
             name={userId}
             id={`observer-${userId}-${value}`}
             checked={getObserverRole(userId) === value}
-            onChange={(event) => {
+            onChange={event => {
               const observers = [...observerProfiles]
 
               const foundObserver = observers.find(({ id }) => id === userId)
@@ -338,7 +306,7 @@ const Users = ({ currentUser }) => {
       )
     }
 
-    return observerProfiles.map((userInfo) => {
+    return observerProfiles.map(userInfo => {
       const {
         id: userId,
         profile_name,
@@ -351,8 +319,7 @@ const Users = ({ currentUser }) => {
       return {
         name: (
           <NameCellStyle>
-            {picture ? <ProfileImage img={picture} /> : <IconAccount />}{' '}
-            {profile_name}
+            {picture ? <ProfileImage img={picture} /> : <IconAccount />} {profile_name}
           </NameCellStyle>
         ),
         email,
@@ -365,12 +332,7 @@ const Users = ({ currentUser }) => {
             type="button"
             disabled={num_active_sample_units === 0}
             onClick={() =>
-              openTransferSampleUnitsModal(
-                profile,
-                profile_name,
-                email,
-                num_active_sample_units,
-              )
+              openTransferSampleUnitsModal(profile, profile_name, email, num_active_sample_units)
             }
           >
             <IconAccountConvert />
@@ -398,10 +360,7 @@ const Users = ({ currentUser }) => {
       return rows
     }
 
-    return queryTerms.reduce(
-      (results, term) => matchSorter(results, term, { keys }),
-      rows,
-    )
+    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
   }, [])
 
   const {
@@ -431,17 +390,17 @@ const Users = ({ currentUser }) => {
     usePagination,
   )
 
-  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+  const handleRowsNumberChange = e => setPageSize(Number(e.target.value))
+  const handleGlobalFilterChange = value => setGlobalFilter(value)
 
   const table = (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => (
+            {headerGroups.map(headerGroup => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
+                {headerGroup.headers.map(column => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     isSorted={column.isSorted}
@@ -454,17 +413,14 @@ const Users = ({ currentUser }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {page.map(row => {
               prepareRow(row)
 
               return (
                 <Tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
+                  {row.cells.map(cell => {
                     return (
-                      <UserTableTd
-                        {...cell.getCellProps()}
-                        align={cell.column.align}
-                      >
+                      <UserTableTd {...cell.getCellProps()} align={cell.column.align}>
                         {cell.render('Cell')}
                       </UserTableTd>
                     )
@@ -503,9 +459,7 @@ const Users = ({ currentUser }) => {
         currentUserId={currentUser.id}
         fromUser={fromUser}
         userOptions={observerProfiles}
-        showRemoveUserWithActiveSampleUnitsWarning={
-          showRemoveUserWithActiveSampleUnitsWarning
-        }
+        showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
         handleTransferSampleUnitChange={handleTransferSampleUnitChange}
         onSubmit={transferSampleUnits}
       />
@@ -513,9 +467,7 @@ const Users = ({ currentUser }) => {
         isOpen={isRemoveUserModalOpen}
         onDismiss={closeRemoveUserModal}
         onSubmit={removeUserProfile}
-        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(
-          userToBeRemoved,
-        )}
+        userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
         projectName={projectName}
       />
     </>
@@ -551,9 +503,7 @@ const Users = ({ currentUser }) => {
         />
       </ToolbarRowWrapper>
       {isReadonlyUserWithActiveSampleUnits && (
-        <InlineMessage type="warning">
-          {language.pages.userTable.warningReadOnlyUser}
-        </InlineMessage>
+        <InlineMessage type="warning">{language.pages.userTable.warningReadOnlyUser}</InlineMessage>
       )}
     </>
   ) : (
@@ -566,11 +516,7 @@ const Users = ({ currentUser }) => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout
-      isLoading={isLoading}
-      content={content}
-      toolbar={toolbar}
-    />
+    <ContentPageLayout isLoading={isLoading} content={content} toolbar={toolbar} />
   )
 }
 

@@ -20,9 +20,7 @@ export const basic = () => (
       <a href="./">
         <IconRefresh /> Then a icon &amp; link
       </a>
-      <a href="./">
-        ohanotherreallylongtextlinkicantbelievehowlongthiswordiswowowowowow
-      </a>
+      <a href="./">ohanotherreallylongtextlinkicantbelievehowlongthiswordiswowowowowow</a>
       <hr />
       <p>Paragraph Text</p>
       <ButtonPrimary>omg a button‽</ButtonPrimary>

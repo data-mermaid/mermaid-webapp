@@ -107,7 +107,7 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   return (
     organizations && (
       <TagStyleWrapper>
-        {organizations.map((item) => {
+        {organizations.map(item => {
           const uid = createUuid()
 
           return (
@@ -142,14 +142,9 @@ const Admin = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
 
-  const [
-    IsNewOrganizationNameModalOpen,
-    setIsNewOrganizationNameModalOpen,
-  ] = useState(false)
-  const openNewOrganizationNameModal = () =>
-    setIsNewOrganizationNameModalOpen(true)
-  const closeNewOrganizationNameModal = () =>
-    setIsNewOrganizationNameModalOpen(false)
+  const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
+  const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
+  const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId) {
@@ -175,10 +170,9 @@ const Admin = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
 
-  const initialFormValues = useMemo(
-    () => getProjectInitialValues(projectBeingEdited),
-    [projectBeingEdited],
-  )
+  const initialFormValues = useMemo(() => getProjectInitialValues(projectBeingEdited), [
+    projectBeingEdited,
+  ])
 
   const formikOptions = {
     initialValues: initialFormValues,
@@ -188,10 +182,7 @@ const Admin = () => {
   const noOrganizationResult = (
     <>
       <p>{language.pages.projectInfo.noOrganizationFound}</p>
-      <SuggestNewOrganizationButton
-        type="button"
-        onClick={openNewOrganizationNameModal}
-      >
+      <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
         {language.pages.projectInfo.newOrganizationNameLink}
       </SuggestNewOrganizationButton>
     </>
@@ -199,7 +190,7 @@ const Admin = () => {
 
   const content = isAppOnline ? (
     <Formik {...formikOptions}>
-      {(formik) => (
+      {formik => (
         <>
           <InputWrapper>
             <InputWithLabelAndValidation
@@ -220,21 +211,16 @@ const Admin = () => {
                 id="organizations"
                 options={projectTagOptions}
                 helperText={language.pages.projectInfo.organizationsHelperText}
-                onChange={(selectedItem) => {
+                onChange={selectedItem => {
                   const { label: selectedItemLabel } = selectedItem
-                  const existingOrganizations = [
-                    ...formik.getFieldProps('tags').value,
-                  ]
+                  const existingOrganizations = [...formik.getFieldProps('tags').value]
 
                   const doesTagAlreadyExist = existingOrganizations.find(
-                    (item) => selectedItemLabel === item,
+                    item => selectedItemLabel === item,
                   )
 
                   if (!doesTagAlreadyExist) {
-                    formik.setFieldValue('tags', [
-                      ...existingOrganizations,
-                      selectedItemLabel,
-                    ])
+                    formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
                   }
                 }}
                 noResultsDisplay={noOrganizationResult}
@@ -242,10 +228,8 @@ const Admin = () => {
             </InputAutocompleteWrapper>
             <OrganizationList
               organizations={formik.getFieldProps('tags').value}
-              handleOrganizationsChange={(item) => {
-                const existingOrganizations = [
-                  ...formik.getFieldProps('tags').value,
-                ]
+              handleOrganizationsChange={item => {
+                const existingOrganizations = [...formik.getFieldProps('tags').value]
                 const foundItemIndex = existingOrganizations.indexOf(item)
 
                 existingOrganizations.splice(foundItemIndex, 1)
@@ -257,15 +241,10 @@ const Admin = () => {
           <NewOrganizationModal
             isOpen={IsNewOrganizationNameModalOpen}
             onDismiss={closeNewOrganizationNameModal}
-            onSubmit={(selectedItemLabel) => {
-              const existingOrganizations = [
-                ...formik.getFieldProps('tags').value,
-              ]
+            onSubmit={selectedItemLabel => {
+              const existingOrganizations = [...formik.getFieldProps('tags').value]
 
-              formik.setFieldValue('tags', [
-                ...existingOrganizations,
-                selectedItemLabel,
-              ])
+              formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
             }}
           />
         </>

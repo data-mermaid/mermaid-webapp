@@ -26,7 +26,7 @@ export const basic = () => (
       test6: 'four',
     }}
   >
-    {(formik) => (
+    {formik => (
       <>
         <InputRadioWithLabelAndValidation
           {...formik.getFieldProps('test1')}

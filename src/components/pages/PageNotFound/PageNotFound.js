@@ -18,9 +18,7 @@ const PageNotFound = () => {
   return (
     <PageNotFoundContainer>
       <H1>Sorry, Page Not Found!</H1>
-      <NavLinkThatLooksLikeButtonStyle to="/">
-        Back to home
-      </NavLinkThatLooksLikeButtonStyle>
+      <NavLinkThatLooksLikeButtonStyle to="/">Back to home</NavLinkThatLooksLikeButtonStyle>
     </PageNotFoundContainer>
   )
 }

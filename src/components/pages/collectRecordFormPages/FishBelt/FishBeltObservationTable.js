@@ -2,28 +2,10 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { hoverState } from '../../../../library/styling/mediaQueries'
-import {
-  choicesPropType,
-  fishBeltPropType,
-} from '../../../../App/mermaidData/mermaidDataProptypes'
-import {
-  ButtonCaution,
-  ButtonThatLooksLikeLink,
-  ButtonPrimary,
-} from '../../../generic/buttons'
-import {
-  IconClose,
-  IconLibraryBooks,
-  IconPlus,
-  IconRequired,
-} from '../../../icons'
-import {
-  Table,
-  TableOverflowWrapper,
-  Tr,
-  Td,
-  Th,
-} from '../../../generic/Table/table'
+import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { ButtonCaution, ButtonThatLooksLikeLink, ButtonPrimary } from '../../../generic/buttons'
+import { IconClose, IconLibraryBooks, IconPlus, IconRequired } from '../../../icons'
+import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { H2 } from '../../../generic/text'
@@ -79,9 +61,7 @@ const ButtonRemoveRow = styled(ButtonCaution)`
   display: none;
   padding: 0;
 `
-const StyledLinkThatLooksLikeButtonToReference = styled(
-  LinkThatLooksLikeButton,
-)`
+const StyledLinkThatLooksLikeButtonToReference = styled(LinkThatLooksLikeButton)`
   padding: 0.5rem 1rem 0 1rem;
   background: transparent;
 `
@@ -181,10 +161,7 @@ const FishBeltObservationTable = ({
    *  Not using formik here was an oversight.*/
 
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
-  const [
-    haveApiObservationsBeenLoaded,
-    setHaveApiObservationsBeenLoaded,
-  ] = useState(false)
+  const [haveApiObservationsBeenLoaded, setHaveApiObservationsBeenLoaded] = useState(false)
 
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
@@ -197,26 +174,19 @@ const FishBeltObservationTable = ({
     if (areObservationsInputsDirty) {
       persistUnsavedObservationsData(observationsState)
     }
-  }, [
-    areObservationsInputsDirty,
-    observationsState,
-    persistUnsavedObservationsData,
-  ])
+  }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
       const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-      const initialObservationsToLoad =
-        persistedUnsavedObservations ?? observationsFromApi
-      const observationsFromApiWithIds = initialObservationsToLoad.map(
-        (observation) => ({
-          ...observation,
-          // id exists on observations just for the sake of the front end logic
-          // (adding rows, adding new species to observation, etc)
-          uiId: observation.uuId ?? createUuid(),
-        }),
-      )
+      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
+      const observationsFromApiWithIds = initialObservationsToLoad.map(observation => ({
+        ...observation,
+        // id exists on observations just for the sake of the front end logic
+        // (adding rows, adding new species to observation, etc)
+        uiId: observation.uuId ?? createUuid(),
+      }))
 
       observationsDispatch({
         type: 'loadObservationsFromApi',
@@ -232,7 +202,7 @@ const FishBeltObservationTable = ({
     observationsDispatch,
   ])
 
-  const handleDeleteObservation = (observationId) => {
+  const handleDeleteObservation = observationId => {
     setAreObservationsInputsDirty(true)
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
   }
@@ -270,13 +240,7 @@ const FishBeltObservationTable = ({
     })
   }
 
-  const handleKeyDown = ({
-    event,
-    index,
-    observation,
-    isCount,
-    isFishName,
-  }) => {
+  const handleKeyDown = ({ event, index, observation, isCount, isFishName }) => {
     const isTabKey = event.code === 'Tab' && !event.shiftKey
     const isEnterKey = event.code === 'Enter'
     const isLastRow = index === observationsState.length - 1
@@ -302,7 +266,7 @@ const FishBeltObservationTable = ({
       })
     }
   }
-  const observationsBiomass = observationsState.map((observation) => ({
+  const observationsBiomass = observationsState.map(observation => ({
     uiId: observation.uiId,
     biomass: getObservationBiomass({
       choices,
@@ -317,10 +281,7 @@ const FishBeltObservationTable = ({
     summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
   )
 
-  const totalAbundance = summarizeArrayObjectValuesByProperty(
-    observationsState,
-    'count',
-  )
+  const totalAbundance = summarizeArrayObjectValuesByProperty(observationsState, 'count')
 
   const observationsRows = observationsState.map((observation, index) => {
     const { uiId: observationId, count, size, fish_attribute } = observation
@@ -331,15 +292,14 @@ const FishBeltObservationTable = ({
     const countOrEmptyStringToAvoidInputValueErrors = count ?? ''
 
     const showNumericSizeInput =
-      fishBinSelectedLabel?.toString() === '1' ||
-      typeof fishBinSelectedLabel === 'undefined'
+      fishBinSelectedLabel?.toString() === '1' || typeof fishBinSelectedLabel === 'undefined'
 
     const sizeSelect = !showNumericSizeInput ? (
       <FishBeltObservationSizeSelect
-        onValueEntered={(value) => {
+        onValueEntered={value => {
           handleUpdateSize(value, observationId)
         }}
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           handleKeyDown({ event, index, observation })
         }}
         fishBinSelectedLabel={fishBinSelectedLabel}
@@ -356,10 +316,10 @@ const FishBeltObservationTable = ({
         unit="cm"
         step="any"
         aria-labelledby="fish-size-label"
-        onChange={(event) => {
+        onChange={event => {
           handleUpdateSize(event.target.value, observationId)
         }}
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           handleKeyDown({ event, index, observation })
         }}
       />
@@ -368,8 +328,7 @@ const FishBeltObservationTable = ({
     )
 
     const observationBiomass = roundToOneDecimal(
-      observationsBiomass.find((object) => object.uiId === observationId)
-        .biomass,
+      observationsBiomass.find(object => object.uiId === observationId).biomass,
     )
 
     return (
@@ -389,10 +348,10 @@ const FishBeltObservationTable = ({
                 autoFocus={isAutoFocusAllowed}
                 aria-labelledby="fish-name-label"
                 options={fishNameOptions}
-                onChange={(selectedOption) =>
+                onChange={selectedOption =>
                   handleFishNameChange(selectedOption.value, observationId)
                 }
-                onKeyDown={(event) => {
+                onKeyDown={event => {
                   handleKeyDown({ event, index, observation, isFishName: true })
                 }}
                 value={fish_attribute}
@@ -426,10 +385,10 @@ const FishBeltObservationTable = ({
             value={countOrEmptyStringToAvoidInputValueErrors}
             step="any"
             aria-labelledby="fish-count-label"
-            onChange={(event) => {
+            onChange={event => {
               handleUpdateCount(event, observationId)
             }}
-            onKeyDown={(event) => {
+            onKeyDown={event => {
               handleKeyDown({ event, index, observation, isCount: true })
             }}
           />
@@ -536,10 +495,7 @@ FishBeltObservationTable.propTypes = {
     getPersistedUnsavedFormData: PropTypes.func,
   }).isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
-  transectLengthSurveyed: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  transectLengthSurveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   widthId: PropTypes.string,
 }
 

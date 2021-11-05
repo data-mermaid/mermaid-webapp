@@ -5,7 +5,7 @@ import language from '../../../language'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from './SyncStatusContext'
 
-const getProjectIdFromLocation = (location) => {
+const getProjectIdFromLocation = location => {
   const { pathname } = location
 
   const pathNameParts = pathname.split('/')
@@ -34,37 +34,25 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
       }),
     [dexieInstance, apiBaseUrl, auth0Token],
   )
-  const {
-    setIsSyncInProgress,
-    setIsOfflineStorageHydrated,
-    setSyncErrors,
-  } = useSyncStatus()
+  const { setIsSyncInProgress, setIsOfflineStorageHydrated, setSyncErrors } = useSyncStatus()
 
   const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {
     const resetSyncErrors = () => {
       setSyncErrors([])
     }
-    const appendSyncError = (newError) => {
-      setSyncErrors((previousState) => [...previousState, newError])
+    const appendSyncError = newError => {
+      setSyncErrors(previousState => [...previousState, newError])
     }
 
     const isOnlineAndReady =
-      apiBaseUrl &&
-      auth0Token &&
-      dexieInstance &&
-      isMounted.current &&
-      isAppOnline
+      apiBaseUrl && auth0Token && dexieInstance && isMounted.current && isAppOnline
 
     const projectId = getProjectIdFromLocation(location)
 
     const isProjectPage = !!projectId
 
     const isOfflineAndReadyAndAlreadyInitiated =
-      apiBaseUrl &&
-      !auth0Token &&
-      dexieInstance &&
-      isMounted.current &&
-      !isAppOnline
+      apiBaseUrl && !auth0Token && dexieInstance && isMounted.current && !isAppOnline
 
     const isProjectsListPage =
       location.pathname === '/projects' || location.pathname === '/projects/'

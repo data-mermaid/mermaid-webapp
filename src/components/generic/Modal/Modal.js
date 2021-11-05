@@ -78,7 +78,7 @@ const RightFooter = styled('div')`
 
 const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
-    const close = (event) => {
+    const close = event => {
       if (event.code === 'Escape') {
         onDismiss()
       }
@@ -92,18 +92,10 @@ const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent }) => {
   return (
     isOpen && (
       <StyledDialogOverlay>
-        <StyledDialog
-          role="dialog"
-          aria-labelledby="modal-title"
-          aria-describedby="modal-content"
-        >
+        <StyledDialog role="dialog" aria-labelledby="modal-title" aria-describedby="modal-content">
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
-            <CloseButton
-              type="button"
-              className="close-button"
-              onClick={onDismiss}
-            >
+            <CloseButton type="button" className="close-button" onClick={onDismiss}>
               <IconClose aria-label="close" />
             </CloseButton>
           </ModalTitle>

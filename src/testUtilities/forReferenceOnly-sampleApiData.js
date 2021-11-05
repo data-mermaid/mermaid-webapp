@@ -9,10 +9,7 @@ export const projects = {
       countries: ['Canada', 'Fiji', 'Indonesia', 'Viet Nam'],
       num_sites: 8,
       tags: [],
-      members: [
-        '4ff5f714-43b3-4564-be1c-c6053f7c0487',
-        '73f817fa-a726-43d1-9e2d-0e4d8fa442c2',
-      ],
+      members: ['4ff5f714-43b3-4564-be1c-c6053f7c0487', '73f817fa-a726-43d1-9e2d-0e4d8fa442c2'],
       observers:
         'https://dev-api.datamermaid.org/v1/projects/3d6edb7b-d310-49e6-b556-c154ad11b20d/observers/',
       project_profiles:
@@ -1118,10 +1115,7 @@ export const managements = {
       project: 'eae004bf-4968-4e7e-bb55-2808edc63957',
       compliance: '1579b2df-a572-4f88-a07a-593cc573317a',
       predecessor: '91bf6350-21f0-4246-8a22-d3e5ff02e54c',
-      parties: [
-        'c1baac4b-6ca2-4a1b-8d74-ec7836629c42',
-        'c2035972-572e-43fe-b261-4536793856b5',
-      ],
+      parties: ['c1baac4b-6ca2-4a1b-8d74-ec7836629c42', 'c2035972-572e-43fe-b261-4536793856b5'],
     },
     {
       id: 'ba8e723e-e1ce-4464-9b1f-d07443ba6b9b',
@@ -2951,15 +2945,13 @@ export const choices = [
       },
       {
         id: 'd31f57b2-044f-4729-ae9b-b5df7a31a5c4',
-        name:
-          '4 widespread very complex (60-100cm) relief with numerous fissures and caves',
+        name: '4 widespread very complex (60-100cm) relief with numerous fissures and caves',
         updated_on: '2017-09-27T19:51:10.461940Z',
         val: 4,
       },
       {
         id: 'b72a2851-e24d-4d2d-880b-d2ea0f068455',
-        name:
-          '5 exceptionally complex (>1m) relief with numerous caves and overhangs',
+        name: '5 exceptionally complex (>1m) relief with numerous caves and overhangs',
         updated_on: '2017-09-27T19:51:10.461960Z',
         val: 5,
       },
@@ -28473,10 +28465,7 @@ export const fishspecies = {
       group_size: '930bac6f-5723-4863-81f1-819513df0296',
       trophic_group: '2dda0d31-dd2c-4ffa-8ea5-99c01f49802f',
       functional_group: '4d268d15-a189-4925-b51f-fc7bddff5e47',
-      regions: [
-        '8229ee76-9bf8-4a6f-b5ae-478c851ebc0d',
-        'f56fe186-a906-45da-a453-30c6f7656555',
-      ],
+      regions: ['8229ee76-9bf8-4a6f-b5ae-478c851ebc0d', 'f56fe186-a906-45da-a453-30c6f7656555'],
     },
     {
       id: '0184f9a4-6518-49bb-84aa-780b248b5299',

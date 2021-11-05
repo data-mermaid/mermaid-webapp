@@ -31,7 +31,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
     setCheckboxItems(value)
   }, [value])
 
-  const handleCheckboxGroupChange = (itemValue) => {
+  const handleCheckboxGroupChange = itemValue => {
     const updateCheckboxItems = [...checkboxItems]
     const foundItemIndex = updateCheckboxItems.indexOf(itemValue)
 
@@ -45,7 +45,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
     onChange({ selectedItems: updateCheckboxItems })
   }
 
-  const checkboxGroup = options.map((item) => (
+  const checkboxGroup = options.map(item => (
     <CheckBoxLabel htmlFor={item.value} key={item.value}>
       <input
         id={item.value}
@@ -63,15 +63,10 @@ const InputCheckboxGroupWithLabelAndValidation = ({
       <label htmlFor={id}>{label}</label>
       <div>{checkboxGroup}</div>
       <div>
-        {validationMessage &&
-        (validationType === 'error' || validationType === 'warning') ? (
-          <ValidationMessage validationType={validationType}>
-            {validationMessage}
-          </ValidationMessage>
+        {validationMessage && (validationType === 'error' || validationType === 'warning') ? (
+          <ValidationMessage validationType={validationType}>{validationMessage}</ValidationMessage>
         ) : null}
-        {validationType === 'ok' ? (
-          <IconCheck aria-label="Passed validation" />
-        ) : null}
+        {validationType === 'ok' ? <IconCheck aria-label="Passed validation" /> : null}
       </div>
     </InputRow>
   )

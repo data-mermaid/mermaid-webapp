@@ -45,17 +45,15 @@ const Projects = ({ apiSyncInstance }) => {
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
 
-  const getIsProjectOffline = (projectId) =>
-    !!offlineReadyProjectIds.find(
-      (offlineProject) => offlineProject.id === projectId,
-    )
+  const getIsProjectOffline = projectId =>
+    !!offlineReadyProjectIds.find(offlineProject => offlineProject.id === projectId)
 
-  const offlineReadyProjects = projects.filter((project) =>
+  const offlineReadyProjects = projects.filter(project =>
     getObjectById(offlineReadyProjectIds, project.id),
   )
 
-  const getProjectCardsList = (projectsToUse) =>
-    projectsToUse.map((project) => (
+  const getProjectCardsList = projectsToUse =>
+    projectsToUse.map(project => (
       <ProjectCard
         role="listitem"
         project={project}
@@ -72,9 +70,7 @@ const Projects = ({ apiSyncInstance }) => {
       topRow={<ProjectToolBarSection />}
       bottomRow={
         <div role="list">
-          {isAppOnline
-            ? getProjectCardsList(projects)
-            : getProjectCardsList(offlineReadyProjects)}
+          {isAppOnline ? getProjectCardsList(projects) : getProjectCardsList(offlineReadyProjects)}
         </div>
       }
     />
@@ -82,8 +78,7 @@ const Projects = ({ apiSyncInstance }) => {
 }
 
 Projects.propTypes = {
-  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage)
-    .isRequired,
+  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage).isRequired,
 }
 
 export default Projects

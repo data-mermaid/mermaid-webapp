@@ -10,8 +10,8 @@ export const basic = () => (
       text={<>AI</>}
       tooltipText={
         <>
-          looks like AL, but it&apos;s actually ai which stands for{' '}
-          <strike>Alan Leonard</strike>, I mean artificial intelligence
+          looks like AL, but it&apos;s actually ai which stands for <strike>Alan Leonard</strike>, I
+          mean artificial intelligence
         </>
       }
       id="someID"

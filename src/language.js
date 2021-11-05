@@ -1,22 +1,15 @@
 const error = {
-  appNotAuthenticatedOrReady:
-    'Initialization error. Try reloading or reauthenticating',
-  collectRecordUnavailable:
-    'Collect record data is currently unavailable. Please try again',
+  appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating',
+  collectRecordUnavailable: 'Collect record data is currently unavailable. Please try again',
   collectRecordChoicesUnavailable:
     'Options data for creating a collect record is currently unavailable. Please try again',
-  collectRecordsUnavailable:
-    'Collect records data is currently unavailable. Please try again',
+  collectRecordsUnavailable: 'Collect records data is currently unavailable. Please try again',
   collectRecordFailedValidation: `Validation is currently unavailable for this record.`,
-  apiDataSync:
-    'the app was not able to sync data with the API. Please try again.',
-  projectsUnavailable:
-    'Projects data is currently unavailable. Please try again',
+  apiDataSync: 'the app was not able to sync data with the API. Please try again.',
+  projectsUnavailable: 'Projects data is currently unavailable. Please try again',
   userProfileUnavailable: 'The user profile is unavailable.',
-  collectRecordSave:
-    'Something went wrong. The collect record has not been saved.',
-  collectRecordDelete:
-    'Something went wrong. The collect record has not been deleted.',
+  collectRecordSave: 'Something went wrong. The collect record has not been saved.',
+  collectRecordDelete: 'Something went wrong. The collect record has not been deleted.',
   error: 'Error',
   fishSpeciesSave:
     'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
@@ -24,31 +17,25 @@ const error = {
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   formValidation: { required: 'This field is required' },
   generic: 'Oooops. Something went wrong.',
-  generaUnavailable:
-    'Fish genera data is currently unavailable. Please try again',
+  generaUnavailable: 'Fish genera data is currently unavailable. Please try again',
   idNotFoundUserAction: 'Please check the URL in your browser address bar.',
-  submittedRecordUnavailable:
-    'Submitted record data is currently unavailable. Please try again',
-  submittedRecordsUnavailable:
-    'Submitted records data is currently unavailable. Please try again',
-  siteRecordUnavailable:
-    'Site record data is currently unavailable. Please try again',
-  siteRecordsUnavailable:
-    'Site records data is currently unavailable. Please try again',
+  submittedRecordUnavailable: 'Submitted record data is currently unavailable. Please try again',
+  submittedRecordsUnavailable: 'Submitted records data is currently unavailable. Please try again',
+  siteRecordUnavailable: 'Site record data is currently unavailable. Please try again',
+  siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again',
   managementRegimeRecordUnavailable:
     'Management Regime record data is currently unavailable. Please try again',
   managementRegimeRecordsUnavailable:
     'Management Regime records data is currently unavailable. Please try again',
-  getIdsNotFoundDetails: (id) =>
+  getIdsNotFoundDetails: id =>
     id.length > 1
       ? `Details: information associated with one or more of the following ids cannot be found: ${id}`
       : `Details: information associated with the id, ${id}, cannot be found.`,
-  getProjectTurnOnOfflineReadyFailure: (projectName) =>
+  getProjectTurnOnOfflineReadyFailure: projectName =>
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
-  getProjectTurnOffOfflineReadyFailure: (projectName) =>
+  getProjectTurnOffOfflineReadyFailure: projectName =>
     `Something went wrong. The Project ${projectName}, has not been removed from being offline ready.`,
-  userRecordsUnavailable:
-    'User records data is currently unavailable. Please try again',
+  userRecordsUnavailable: 'User records data is currently unavailable. Please try again',
   emptyEmailAdd: 'No user email',
   invalidEmailAdd: 'Invalid email',
   duplicateNewUserAdd: 'User has already been added to project.',
@@ -60,9 +47,9 @@ const success = {
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
     'Proposed fish species saved. The observation has been edited to show it selected.',
-  getProjectTurnOnOfflineReadySuccess: (projectName) =>
+  getProjectTurnOnOfflineReadySuccess: projectName =>
     `The project, ${projectName}, is now offline ready`,
-  getProjectTurnOffOfflineReadySuccess: (projectName) =>
+  getProjectTurnOffOfflineReadySuccess: projectName =>
     `The project, ${projectName}, has been removed from being offline ready`,
   newUserAdd: 'New user added',
   newPendingUserAdd: 'Sign-up email sent. New user added as pending.',
@@ -113,13 +100,11 @@ const pages = {
   },
   dataSharing: {
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
-    testProjectHelperText:
-      'Data for a test project will be omitted from all public reporting.',
+    testProjectHelperText: 'Data for a test project will be omitted from all public reporting.',
     moreInfoTitle: 'Data sharing',
   },
   submittedTable: {
-    filterToolbarText:
-      'Filter sample units by method, site, management, or observer',
+    filterToolbarText: 'Filter sample units by method, site, management, or observer',
   },
   userTable: {
     filterToolbarText: 'Filter users by name, or email',
@@ -135,8 +120,7 @@ const pages = {
     toolbarLabel: 'Submitted sample units are read-only',
   },
   collectTable: {
-    filterToolbarText:
-      'Filter sample units by method, site, management, or observer',
+    filterToolbarText: 'Filter sample units by method, site, management, or observer',
   },
   siteTable: {
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',

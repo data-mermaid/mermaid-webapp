@@ -61,9 +61,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
    * the loading indicator to show first before we wait for it to disappear
    */
   await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('projects list loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
   expect((await dexieInstance.collect_records.toArray()).length).toEqual(0)
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(0)
@@ -76,9 +74,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
 
   userEvent.click(project5OfflineCheckboxBeforeFirstClick)
 
-  expect(
-    await screen.findByText('The project, Project V, is now offline ready'),
-  )
+  expect(await screen.findByText('The project, Project V, is now offline ready'))
 
   const project5OfflineCheckboxAfterProjectSetOffline = within(
     (await screen.findAllByRole('listitem'))[4],
@@ -109,9 +105,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
    * the loading indicator to show first before we wait for it to disappear
    */
   await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('projects list loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
   const project5OfflineCheckboxBeforeFirstClick = within(
     screen.getAllByRole('listitem')[4],
@@ -119,14 +113,10 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   userEvent.click(project5OfflineCheckboxBeforeFirstClick)
 
-  expect(
-    await screen.findByText('The project, Project V, is now offline ready'),
-  )
+  expect(await screen.findByText('The project, Project V, is now offline ready'))
 
   await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('projects list loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
   const project5OfflineCheckboxAfterFirstClick = within(
     screen.getAllByRole('listitem')[4],
@@ -135,9 +125,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
   userEvent.click(project5OfflineCheckboxAfterFirstClick)
 
   expect(
-    await screen.findByText(
-      'The project, Project V, has been removed from being offline ready',
-    ),
+    await screen.findByText('The project, Project V, has been removed from being offline ready'),
   )
 
   const project5OfflineCheckboxAfterProjectSetOffline = within(
@@ -147,20 +135,16 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
   expect(project5OfflineCheckboxAfterProjectSetOffline).not.toBeChecked()
 
   expect((await dexieInstance.collect_records.toArray()).length).toEqual(
-    mockMermaidData.collect_records.filter((record) => record.project !== '5')
-      .length,
+    mockMermaidData.collect_records.filter(record => record.project !== '5').length,
   )
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(
-    mockMermaidData.project_managements.filter(
-      (managementRegime) => managementRegime.project !== '5',
-    ).length,
+    mockMermaidData.project_managements.filter(managementRegime => managementRegime.project !== '5')
+      .length,
   )
   expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
-    mockMermaidData.project_profiles.filter(
-      (profile) => profile.project !== '5',
-    ).length,
+    mockMermaidData.project_profiles.filter(profile => profile.project !== '5').length,
   )
   expect((await dexieInstance.project_sites.toArray()).length).toEqual(
-    mockMermaidData.project_sites.filter((site) => site.project !== '5').length,
+    mockMermaidData.project_sites.filter(site => site.project !== '5').length,
   )
 })

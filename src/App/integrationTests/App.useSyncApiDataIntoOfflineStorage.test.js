@@ -63,9 +63,7 @@ test('Sync: initial page load on non project page', async () => {
   })
 
   await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('projects list loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
   expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(
     mockMermaidData.benthic_attributes.length,
@@ -80,9 +78,7 @@ test('Sync: initial page load on non project page', async () => {
   expect((await dexieInstance.fish_species.toArray()).length).toEqual(
     mockMermaidData.fish_species.length,
   )
-  expect((await dexieInstance.projects.toArray()).length).toEqual(
-    mockMermaidData.projects.length,
-  )
+  expect((await dexieInstance.projects.toArray()).length).toEqual(mockMermaidData.projects.length)
 })
 test('Sync: initial page load on project page', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -105,9 +101,7 @@ test('Sync: initial page load on project page', async () => {
   })
 
   await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(
     mockMermaidData.benthic_attributes.length,
@@ -123,9 +117,7 @@ test('Sync: initial page load on project page', async () => {
   expect((await dexieInstance.fish_species.toArray()).length).toEqual(
     mockMermaidData.fish_species.length,
   )
-  expect((await dexieInstance.projects.toArray()).length).toEqual(
-    mockMermaidData.projects.length,
-  )
+  expect((await dexieInstance.projects.toArray()).length).toEqual(mockMermaidData.projects.length)
 
   expect((await dexieInstance.collect_records.toArray()).length).toEqual(
     mockMermaidData.collect_records.length,
@@ -149,9 +141,7 @@ test('Sync: initial page load already done, navigate to non project page', async
   })
 
   await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('projects list loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
   /**
    * because of the other landing page initial load sync test,
@@ -179,14 +169,10 @@ test('Sync: initial page load already done, navigate to non project page', async
    */
 
   await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   // this makes the act errors disappear.
-  expect(
-    within(await screen.findByTestId('collect-record-count')).getByText('16'),
-  )
+  expect(within(await screen.findByTestId('collect-record-count')).getByText('16'))
 
   expect((await dexieInstance.collect_records.toArray()).length).toEqual(17)
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(

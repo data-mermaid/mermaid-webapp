@@ -134,10 +134,12 @@ export const satelliteBaseMap = {
   ],
 }
 
-export const applyOpacityExpression = (array) => {
-  if (array === null) { return 0 }
+export const applyOpacityExpression = array => {
+  if (array === null) {
+    return 0
+  }
 
-  const arrayExp = array.flatMap((item) => {
+  const arrayExp = array.flatMap(item => {
     const equalBenthic = [['==', ['get', 'class_name']], 1]
 
     equalBenthic[0].push(item)
@@ -151,10 +153,8 @@ export const applyOpacityExpression = (array) => {
   return array.length > 0 ? arrayExp : 0
 }
 
-export const loadACALayers = (map) => {
-  const coralMosaicLocalStorage = JSON.parse(
-    localStorage.getItem('coral_mosaic'),
-  )
+export const loadACALayers = map => {
+  const coralMosaicLocalStorage = JSON.parse(localStorage.getItem('coral_mosaic'))
 
   const fillGeomorphicOpacityValue = applyOpacityExpression(
     JSON.parse(localStorage.getItem('geomorphic_legend')),
@@ -163,12 +163,10 @@ export const loadACALayers = (map) => {
   const fillBenthicOpacityValue = applyOpacityExpression(
     JSON.parse(localStorage.getItem('benthic_legend')),
   )
-  const isGeomorphicStorageNull =
-    localStorage.getItem('geomorphic_legend') === null
+  const isGeomorphicStorageNull = localStorage.getItem('geomorphic_legend') === null
   const isBenthicStorageNull = localStorage.getItem('benthic_legend') === null
 
-  const rasterOpacityExpression =
-    coralMosaicLocalStorage !== null ? coralMosaicLocalStorage : 1
+  const rasterOpacityExpression = coralMosaicLocalStorage !== null ? coralMosaicLocalStorage : 1
 
   const fillGeomorphicOpacityExpression = isGeomorphicStorageNull
     ? geomorphicOpacityExpression

@@ -1,14 +1,7 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import language from '../language'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
@@ -20,8 +13,7 @@ const OnlineStatusProvider = ({ children, value }) => {
   const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
     JSON.parse(localStorage.getItem('hasUserTurnedAppOffline')) || false,
   )
-  const isAppOnline =
-    isNavigatorOnline && isServerReachable === true && !hasUserTurnedAppOffline
+  const isAppOnline = isNavigatorOnline && isServerReachable === true && !hasUserTurnedAppOffline
 
   const canUserOverrideOnlineStatus = isServerReachable && isNavigatorOnline
 
@@ -109,9 +101,7 @@ const useOnlineStatus = () => {
   const context = useContext(OnlineStatusContext)
 
   if (context === undefined) {
-    throw new Error(
-      'useOnlineStatus must be used within an OnlineStatusProvider',
-    )
+    throw new Error('useOnlineStatus must be used within an OnlineStatusProvider')
   }
 
   return context

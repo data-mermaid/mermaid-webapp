@@ -96,13 +96,9 @@ test('saveFishBelt offline replaces previous fishBelt record with same id', asyn
 
   const savedFishBelt = await dbInstanceOffline.getCollectRecord('foo')
 
-  expect(savedFishBelt.data.randomProperty).toEqual(
-    replacementFishbelt.data.randomProperty,
-  )
+  expect(savedFishBelt.data.randomProperty).toEqual(replacementFishbelt.data.randomProperty)
   expect(savedFishBelt.profile).toEqual(replacementFishbelt.profile)
-  expect(savedFishBelt.initialProperty).toEqual(
-    replacementFishbelt.initialProperty,
-  )
+  expect(savedFishBelt.initialProperty).toEqual(replacementFishbelt.initialProperty)
 })
 test('saveFishBelt offline returns saved record including an id if one isnt supplied', async () => {
   const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()

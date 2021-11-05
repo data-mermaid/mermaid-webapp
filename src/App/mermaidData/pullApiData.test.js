@@ -39,24 +39,16 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
           updates: { ...mockMermaidData.choices[0], uiState_pushToApi: true },
         },
         collect_records: {
-          updates: [
-            { ...mockMermaidData.collect_records[0], uiState_pushToApi: true },
-          ],
+          updates: [{ ...mockMermaidData.collect_records[0], uiState_pushToApi: true }],
         },
         fish_families: {
-          updates: [
-            { ...mockMermaidData.fish_families[0], uiState_pushToApi: true },
-          ],
+          updates: [{ ...mockMermaidData.fish_families[0], uiState_pushToApi: true }],
         },
         fish_genera: {
-          updates: [
-            { ...mockMermaidData.fish_genera[0], uiState_pushToApi: true },
-          ],
+          updates: [{ ...mockMermaidData.fish_genera[0], uiState_pushToApi: true }],
         },
         fish_species: {
-          updates: [
-            { ...mockMermaidData.fish_species[0], uiState_pushToApi: true },
-          ],
+          updates: [{ ...mockMermaidData.fish_species[0], uiState_pushToApi: true }],
         },
         project_managements: {
           updates: [
@@ -67,19 +59,13 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
           ],
         },
         project_profiles: {
-          updates: [
-            { ...mockMermaidData.project_profiles[0], uiState_pushToApi: true },
-          ],
+          updates: [{ ...mockMermaidData.project_profiles[0], uiState_pushToApi: true }],
         },
         project_sites: {
-          updates: [
-            { ...mockMermaidData.project_sites[0], uiState_pushToApi: true },
-          ],
+          updates: [{ ...mockMermaidData.project_sites[0], uiState_pushToApi: true }],
         },
         projects: {
-          updates: [
-            { ...mockMermaidData.projects[0], uiState_pushToApi: true },
-          ],
+          updates: [{ ...mockMermaidData.projects[0], uiState_pushToApi: true }],
         },
       }
 

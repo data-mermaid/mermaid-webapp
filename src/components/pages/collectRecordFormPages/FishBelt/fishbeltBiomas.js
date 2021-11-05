@@ -8,27 +8,27 @@ import { getObjectById } from '../../../../library/getObjectById'
 
 /* this whole file is copy pasted (for the most part) from v1. */
 const relationalOperatorFunctions = {
-  '==': function (a, b) {
+  '==': function(a, b) {
     return a === b
   },
-  '!=': function (a, b) {
+  '!=': function(a, b) {
     return a !== b
   },
-  '>': function (a, b) {
+  '>': function(a, b) {
     return a > b
   },
-  '>=': function (a, b) {
+  '>=': function(a, b) {
     return a >= b
   },
-  '<': function (a, b) {
+  '<': function(a, b) {
     return a < b
   },
-  '<=': function (a, b) {
+  '<=': function(a, b) {
     return a <= b
   },
 }
 
-const utilsCombinations = (arr) => {
+const utilsCombinations = arr => {
   let i, j, temp
 
   const result = []
@@ -53,7 +53,7 @@ const utilsCombinations = (arr) => {
 }
 
 const evaluateConditions = (fishSize, conditionsCombo) => {
-  const results = conditionsCombo.map((cond) => {
+  const results = conditionsCombo.map(cond => {
     const op = relationalOperatorFunctions[cond.operator]
 
     if (op == null) {
@@ -63,18 +63,10 @@ const evaluateConditions = (fishSize, conditionsCombo) => {
     return op(fishSize, cond.size)
   })
 
-  return results.every((val) => val === true)
+  return results.every(val => val === true)
 }
 
-const calcObsBiomass = ({
-  size,
-  count,
-  constant_a,
-  constant_b,
-  constant_c,
-  length,
-  width,
-}) => {
+const calcObsBiomass = ({ size, count, constant_a, constant_b, constant_c, length, width }) => {
   let ret = null
 
   if (
@@ -86,8 +78,7 @@ const calcObsBiomass = ({
     Number.isFinite(length) &&
     Number.isFinite(width)
   ) {
-    const biomass =
-      (count * (constant_a * Math.pow(size * constant_c, constant_b))) / 1000
+    const biomass = (count * (constant_a * Math.pow(size * constant_c, constant_b))) / 1000
     const area = (length * width) / 10000
 
     // m2 to hectares
@@ -149,10 +140,7 @@ export const getObservationBiomass = ({
   const { size, count, fish_attribute } = observation
   const fishConstants = getObjectById(fishNameConstants, fish_attribute)
 
-  const fishWidthConditions = getObjectById(
-    choices.belttransectwidths.data,
-    widthId,
-  )?.conditions
+  const fishWidthConditions = getObjectById(choices.belttransectwidths.data, widthId)?.conditions
 
   return calcObsBiomass({
     size,

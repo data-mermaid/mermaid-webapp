@@ -35,9 +35,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
@@ -64,9 +62,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   const bin1Radio = within(fishbeltForm).getByLabelText('1')
@@ -97,9 +93,7 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   const bin5Radio = within(fishbeltForm).getByLabelText('5')
@@ -132,9 +126,7 @@ test('FishBelt observations size shows a select input when fish bin size is 10',
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   const bin10Radio = within(fishbeltForm).getByLabelText('10')
@@ -167,9 +159,7 @@ test('FishBelt observations size shows a select input when fish bin size is AGRR
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   const binAGRRARadio = within(fishbeltForm).getByLabelText('AGRRA')
@@ -202,9 +192,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   const binAGRRARadio = within(fishbeltForm).getByLabelText('AGRRA')
@@ -240,9 +228,7 @@ test('Fishbelt observations hide and show fish name reference link appropriately
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   userEvent.click(await screen.findByRole('button', { name: 'Add Row' }))
 
@@ -263,7 +249,5 @@ test('Fishbelt observations hide and show fish name reference link appropriately
 
   userEvent.selectOptions(fishNameList, nebriusOption)
 
-  expect(
-    await screen.findByLabelText('fish name reference'),
-  ).toBeInTheDocument()
+  expect(await screen.findByLabelText('fish name reference')).toBeInTheDocument()
 })

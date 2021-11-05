@@ -1,11 +1,6 @@
 import styled from 'styled-components/macro'
 import React from 'react'
-import {
-  ButtonCallout,
-  ButtonCaution,
-  ButtonPrimary,
-  ButtonSecondary,
-} from './buttons'
+import { ButtonCallout, ButtonCaution, ButtonPrimary, ButtonSecondary } from './buttons'
 
 export const ButtonWrapper = styled.div`
   p,

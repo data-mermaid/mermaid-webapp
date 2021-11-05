@@ -14,9 +14,7 @@ import App from '../App'
 // test suite cut up into 2 parts for performance reasons
 
 test('App renders the initial screen as expected for an online and authenticated user', async () => {
-  renderAuthenticatedOnline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-  )
+  renderAuthenticatedOnline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
 
   expect(await screen.findByText('Projects', { selector: 'h1' }))
 
@@ -27,15 +25,11 @@ test('App renders the initial screen as expected for an online and authenticated
 })
 
 test('App: an online and authenticated user can logout', async () => {
-  renderAuthenticatedOnline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-  )
+  renderAuthenticatedOnline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
 
   fireEvent.click(await screen.findByText('FakeFirstNameOnline'))
   fireEvent.click(screen.getByText('Logout'))
   await waitFor(() =>
-    expect(
-      screen.queryByRole('heading', { name: 'Projects' }),
-    ).not.toBeInTheDocument(),
+    expect(screen.queryByRole('heading', { name: 'Projects' })).not.toBeInTheDocument(),
   )
 })

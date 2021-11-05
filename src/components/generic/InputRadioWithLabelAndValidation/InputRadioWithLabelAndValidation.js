@@ -34,15 +34,10 @@ const InputRadioWithLabelAndValidation = ({
       <label htmlFor={id}>{label}</label>
       <div>{optionsList}</div>
       <div>
-        {validationMessage &&
-        (validationType === 'error' || validationType === 'warning') ? (
-          <ValidationMessage validationType={validationType}>
-            {validationMessage}
-          </ValidationMessage>
+        {validationMessage && (validationType === 'error' || validationType === 'warning') ? (
+          <ValidationMessage validationType={validationType}>{validationMessage}</ValidationMessage>
         ) : null}
-        {validationType === 'ok' ? (
-          <IconCheck aria-label="Passed validation" />
-        ) : null}
+        {validationType === 'ok' ? <IconCheck aria-label="Passed validation" /> : null}
       </div>
     </InputRow>
   )

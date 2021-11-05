@@ -101,10 +101,7 @@ const Footer = () => {
 
   return (
     <StyledFooter>
-      <StyledToggleLabel
-        htmlFor="offline-toggle-switch"
-        data-testid="offline-toggle-switch-label"
-      >
+      <StyledToggleLabel htmlFor="offline-toggle-switch" data-testid="offline-toggle-switch-label">
         <OfflineToggle id="offline-toggle-switch" />
         <CssToggle />
         {isAppOnline ? (
@@ -113,8 +110,7 @@ const Footer = () => {
           </>
         ) : (
           <>
-            You&apos;re <strong>OFFLINE</strong>. Some contents may be out of
-            date.
+            You&apos;re <strong>OFFLINE</strong>. Some contents may be out of date.
           </>
         )}
       </StyledToggleLabel>

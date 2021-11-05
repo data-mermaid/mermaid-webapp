@@ -15,9 +15,7 @@ const SomeExtraSpace = styled.div`
 export const basic = () => (
   <SomeExtraSpace>
     <HideShow
-      button={
-        <button type="button">Hey, I am a hide/show click target!</button>
-      }
+      button={<button type="button">Hey, I am a hide/show click target!</button>}
       contents={<div>Im the drop down part that hides and shows</div>}
     />
   </SomeExtraSpace>

@@ -2,13 +2,7 @@ import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from 'react'
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
 import styled, { css } from 'styled-components/macro'
 import {
@@ -74,9 +68,7 @@ const CollectRecordToolbarWrapper = styled('div')`
 `
 
 const FishBelt = ({ isNewRecord, currentUser }) => {
-  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(
-    false,
-  )
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
@@ -103,7 +95,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
-  const openNewFishNameModal = (observationId) => {
+  const openNewFishNameModal = observationId => {
     setObservationToAddSpeciesTo(observationId)
     setIsNewFishNameModalOpen(true)
   }
@@ -139,9 +131,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
-        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(
-          projectId,
-        ),
+        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getFishSpecies(),
@@ -170,16 +160,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           ]) => {
             if (isMounted.current) {
               if (!isNewRecord && !collectRecordResponse && recordId) {
-                setIdsNotAssociatedWithData((previousState) => [
-                  ...previousState,
-                  recordId,
-                ])
+                setIdsNotAssociatedWithData(previousState => [...previousState, recordId])
               }
               if (!isNewRecord && !projectResponse && projectId) {
-                setIdsNotAssociatedWithData((previousState) => [
-                  ...previousState,
-                  projectId,
-                ])
+                setIdsNotAssociatedWithData(previousState => [...previousState, projectId])
               }
               const updateFishNameConstants = getFishNameConstants({
                 species,
@@ -204,7 +188,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             }
           },
         )
-        .catch((err) => {
+        .catch(err => {
           console.warn('cant get collect record related data', err)
           const error = isNewRecord
             ? language.error.collectRecordChoicesUnavailable
@@ -213,14 +197,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           toast.error(error)
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    isNewRecord,
-    recordId,
-    projectId,
-    isSyncInProgress,
-  ])
+  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId, projectId, isSyncInProgress])
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
@@ -263,7 +240,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     databaseSwitchboardInstance
       .validateFishBelt({ recordId, projectId })
-      .then((validatedRecordResponse) => {
+      .then(validatedRecordResponse => {
         if (validatedRecordResponse?.validations?.status === 'ok') {
           setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
         }
@@ -277,18 +254,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
   }
 
-  const handleNewFishSpeciesOnSubmit = ({
-    genusId,
-    genusName,
-    speciesName,
-  }) => {
+  const handleNewFishSpeciesOnSubmit = ({ genusId, genusName, speciesName }) => {
     databaseSwitchboardInstance
       .addFishSpecies({
         genusId,
         genusName,
         speciesName,
       })
-      .then((newFishSpecies) => {
+      .then(newFishSpecies => {
         observationsDispatch({
           type: 'updateFishName',
           payload: {
@@ -299,7 +272,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         updateFishNameOptionsStateWithOfflineStorageData()
         toast.success(language.success.fishSpeciesSave)
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.message === 'Species already exists') {
           toast.warning(language.error.fishSpeciesAlreadyExists)
 
@@ -324,14 +297,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     return (
       getPersistedUnsavedFormikData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
-        ...getSampleInfoInitialValues(
-          collectRecordBeingEdited,
-          'fishbelt_transect',
-        ),
-        ...getTransectInitialValues(
-          collectRecordBeingEdited,
-          'fishbelt_transect',
-        ),
+        ...getSampleInfoInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
+        ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
@@ -353,7 +320,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           profileId: currentUser.id,
           projectId,
         })
-        .then((response) => {
+        .then(response => {
           toast.success(language.success.collectRecordSave)
           clearPersistedUnsavedFormikData()
           clearPersistedUnsavedObservationsData()
@@ -362,9 +329,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
           if (isNewRecord) {
-            history.push(
-              `${ensureTrailingSlash(history.location.pathname)}${response.id}`,
-            )
+            history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
           }
         })
         .catch(() => {
@@ -410,7 +375,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     getPersistedUnsavedObservationsData,
   ])
 
-  const handleSizeBinChange = (event) => {
+  const handleSizeBinChange = event => {
     const sizeBinId = event.target.value
 
     formik.setFieldValue('size_bin', sizeBinId)
@@ -482,17 +447,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 openNewFishNameModal={openNewFishNameModal}
                 transectLengthSurveyed={formik.values.len_surveyed}
                 widthId={formik.values.width}
-                persistUnsavedObservationsUtilities={
-                  persistUnsavedObservationsUtilities
-                }
+                persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
                 areObservationsInputsDirty={areObservationsInputsDirty}
                 setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               />
             </form>
-            <ButtonCaution
-              onClick={showDeleteConfirmPrompt}
-              disabled={isNewRecord}
-            >
+            <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>
               Delete Record
             </ButtonCaution>
             <DeleteRecordConfirm
@@ -507,9 +467,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             {isNewRecord && <H2>Fish Belt</H2>}
             {collectRecordBeingEdited && !isNewRecord && (
               <RecordFormTitle
-                submittedRecordOrCollectRecordDataProperty={
-                  collectRecordBeingEdited.data
-                }
+                submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
                 sites={sites}
               />
             )}

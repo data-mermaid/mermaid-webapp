@@ -18,13 +18,9 @@ const DatabaseSwitchboardState = class {
 
   _dexieInstance
 
-  _notAuthenticatedAndReadyError = new Error(
-    language.error.appNotAuthenticatedOrReady,
-  )
+  _notAuthenticatedAndReadyError = new Error(language.error.appNotAuthenticatedOrReady)
 
-  _operationMissingIdParameterError = new Error(
-    'This operation requires an id to be supplied',
-  )
+  _operationMissingIdParameterError = new Error('This operation requires an id to be supplied')
 
   _operationMissingParameterError = new Error(
     "This operation requires a parameter that isn't being supplied",
@@ -56,13 +52,11 @@ const DatabaseSwitchboardState = class {
       this._isAuthenticatedAndReady && isAppOnline && !!this._authenticatedAxios
     this._isOnlineAuthenticatedAndLoading =
       this._isAuthenticatedAndReady && isAppOnline && !this._authenticatedAxios
-    this._isOfflineAuthenticatedAndReady =
-      this._isAuthenticatedAndReady && !isAppOnline
+    this._isOfflineAuthenticatedAndReady = this._isAuthenticatedAndReady && !isAppOnline
   }
 
-  _getIsResponseStatusSuccessful = (recordResponseFromServer) => {
-    const statusCode =
-      recordResponseFromServer.status_code || recordResponseFromServer.status
+  _getIsResponseStatusSuccessful = recordResponseFromServer => {
+    const statusCode = recordResponseFromServer.status_code || recordResponseFromServer.status
 
     return statusCode >= 200 && statusCode < 300
   }

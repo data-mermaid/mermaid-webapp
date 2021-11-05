@@ -1,7 +1,4 @@
-const getValidationPropertiesForInput = (
-  inputValidations,
-  areValidationsShowing,
-) => {
+const getValidationPropertiesForInput = (inputValidations, areValidationsShowing) => {
   if (!areValidationsShowing) {
     return {}
   }
@@ -10,11 +7,11 @@ const getValidationPropertiesForInput = (
   }
   const validationObjectKeys = Object.keys(inputValidations)
   const errors = validationObjectKeys
-    .filter((key) => inputValidations[key].status === 'error')
-    .map((key) => inputValidations[key])
+    .filter(key => inputValidations[key].status === 'error')
+    .map(key => inputValidations[key])
   const warnings = validationObjectKeys
-    .filter((key) => inputValidations[key].status === 'warning')
-    .map((key) => inputValidations[key])
+    .filter(key => inputValidations[key].status === 'warning')
+    .map(key => inputValidations[key])
 
   const validationToDisplay = errors.length ? errors[0] : warnings[0]
 

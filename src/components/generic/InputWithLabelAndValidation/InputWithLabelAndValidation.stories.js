@@ -9,11 +9,7 @@ export default {
 export const basic = () => (
   <>
     <InputWithLabelAndValidation id="id2" label="No warnings or errors" />
-    <InputWithLabelAndValidation
-      id="id2"
-      label="With warning"
-      validationType="warning"
-    />
+    <InputWithLabelAndValidation id="id2" label="With warning" validationType="warning" />
     <InputWithLabelAndValidation
       id="myid"
       label="With error"

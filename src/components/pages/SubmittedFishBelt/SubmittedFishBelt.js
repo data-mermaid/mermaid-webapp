@@ -36,17 +36,12 @@ const SubmittedFishBelt = () => {
     if (isAppOnline && databaseSwitchboardInstance) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
-        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(
-          projectId,
-        ),
+        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
-        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(
-          projectId,
-          recordId,
-        ),
+        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(projectId, recordId),
       ]
 
       Promise.all(promises)
@@ -83,13 +78,10 @@ const SubmittedFishBelt = () => {
             }
           },
         )
-        .catch((error) => {
+        .catch(error => {
           const errorStatus = error.response?.status
 
-          if (
-            (errorStatus === 404 || errorStatus === 400) &&
-            isMounted.current
-          ) {
+          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
             setIdsNotAssociatedWithData([projectId, recordId])
             setIsLoading(false)
           }

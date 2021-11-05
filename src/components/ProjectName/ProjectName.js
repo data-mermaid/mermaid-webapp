@@ -29,30 +29,27 @@ const ProjectNameWrapper = styled('div')`
     background: none;
     text-align: center;
     svg {
-      width: ${(props) => props.theme.typography.largeIconSize};
-      height: ${(props) => props.theme.typography.largeIconSize};
+      width: ${props => props.theme.typography.largeIconSize};
+      height: ${props => props.theme.typography.largeIconSize};
     }
   }
   ${mediaQueryTabletLandscapeOnly(css`
-    grid-template-columns: ${(props) =>
-        props.theme.spacing.sideNavWidthTabletLandscapeOnly} 1fr;
+    grid-template-columns: ${props => props.theme.spacing.sideNavWidthTabletLandscapeOnly} 1fr;
     h2 {
-      padding-left: ${(props) => props.theme.spacing.medium};
+      padding-left: ${props => props.theme.spacing.medium};
     }
   `)}
   ${mediaQueryPhoneOnly(css`
-    grid-template-columns: ${(props) =>
-        props.theme.spacing.sideNavWidthPhoneOnly} 1fr;
+    grid-template-columns: ${props => props.theme.spacing.sideNavWidthPhoneOnly} 1fr;
     h2 {
       font-size: smaller;
-      padding: ${theme.spacing.small} ${theme.spacing.xsmall}
-        ${theme.spacing.small} 0;
+      padding: ${theme.spacing.small} ${theme.spacing.xsmall} ${theme.spacing.small} 0;
     }
     a {
       font-size: initial;
       svg {
-        width: ${(props) => props.theme.typography.defaultIconSize};
-        height: ${(props) => props.theme.typography.defaultIconSize};
+        width: ${props => props.theme.typography.defaultIconSize};
+        height: ${props => props.theme.typography.defaultIconSize};
       }
     }
   `)}
@@ -66,13 +63,11 @@ const ProjectName = () => {
 
   const _getProjectName = useEffect(() => {
     if (databaseSwitchboardInstance) {
-      databaseSwitchboardInstance
-        .getProject(projectId)
-        .then((projectResponse) => {
-          if (isMounted.current) {
-            setProjectName(projectResponse?.name)
-          }
-        })
+      databaseSwitchboardInstance.getProject(projectId).then(projectResponse => {
+        if (isMounted.current) {
+          setProjectName(projectResponse?.name)
+        }
+      })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
 

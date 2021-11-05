@@ -5,11 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/macro'
 
-import {
-  ButtonThatLooksLikeLink,
-  ButtonPrimary,
-  ButtonSecondary,
-} from '../generic/buttons'
+import { ButtonThatLooksLikeLink, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconArrowBack, IconSend } from '../icons'
 import { Input } from '../generic/form'
 import { Row, RowSpaceBetween } from '../generic/positioning'
@@ -36,13 +32,7 @@ const MainContentContainer = styled.div``
 const InputContainer = styled.div`
   width: 100%;
 `
-const NewFishSpeciesModal = ({
-  isOpen,
-  onDismiss,
-  onSubmit,
-  projectId,
-  currentUser,
-}) => {
+const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUser }) => {
   const isMounted = useIsMounted()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [generaOptions, setGeneraOptions] = useState([])
@@ -60,11 +50,9 @@ const NewFishSpeciesModal = ({
     if (databaseSwitchboardInstance && isMounted.current) {
       databaseSwitchboardInstance
         .getFishGenera()
-        .then((genera) => {
+        .then(genera => {
           if (isMounted.current) {
-            setGeneraOptions(
-              genera.map((genus) => ({ label: genus.name, value: genus.id })),
-            )
+            setGeneraOptions(genera.map(genus => ({ label: genus.name, value: genus.id })))
           }
         })
         .catch(() => {
@@ -77,7 +65,7 @@ const NewFishSpeciesModal = ({
     if (databaseSwitchboardInstance && isMounted.current) {
       databaseSwitchboardInstance
         .getProject(projectId)
-        .then((project) => {
+        .then(project => {
           if (isMounted.current) {
             setProjectName(project.name)
           }
@@ -108,7 +96,7 @@ const NewFishSpeciesModal = ({
     onDismiss()
   }
 
-  const handleSpeciesChange = (event) => {
+  const handleSpeciesChange = event => {
     formikPage1.setFieldValue('species', event.target.value.toLowerCase())
   }
 
@@ -134,7 +122,7 @@ const NewFishSpeciesModal = ({
             aria-labelledby="genus-label"
             options={generaOptions}
             value={formikPage1.values.genusId}
-            onChange={(selectedItem) => {
+            onChange={selectedItem => {
               formikPage1.setFieldValue('genusId', selectedItem.value)
               setGenusName(selectedItem.label)
             }}
@@ -165,9 +153,7 @@ const NewFishSpeciesModal = ({
         <tbody>
           <Tr>
             <Td id="species-label">{language.createFishSpecies.species}</Td>
-            <Td aria-labelledby="species-label">
-              {formikPage1.values.species}
-            </Td>
+            <Td aria-labelledby="species-label">{formikPage1.values.species}</Td>
           </Tr>
           <Tr>
             <Td id="user-label">{language.createFishSpecies.user}</Td>
@@ -243,8 +229,7 @@ NewFishSpeciesModal.propTypes = {
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   currentUser: currentUserPropType.isRequired,
-  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
-    .isRequired,
+  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
 
 export default NewFishSpeciesModal

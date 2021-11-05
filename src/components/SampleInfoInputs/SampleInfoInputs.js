@@ -36,10 +36,7 @@ const SampleInfoInputs = ({
           id="site"
           testId="site"
           options={siteSelectOptions}
-          {...getValidationPropertiesForInput(
-            sample_event?.site,
-            areValidationsShowing,
-          )}
+          {...getValidationPropertiesForInput(sample_event?.site, areValidationsShowing)}
           {...formik.getFieldProps('site')}
         />
         <InputSelectWithLabelAndValidation
@@ -47,10 +44,7 @@ const SampleInfoInputs = ({
           id="management"
           testId="management"
           options={managementSelectOptions}
-          {...getValidationPropertiesForInput(
-            sample_event?.management,
-            areValidationsShowing,
-          )}
+          {...getValidationPropertiesForInput(sample_event?.management, areValidationsShowing)}
           {...formik.getFieldProps('management')}
         />
         <InputWithLabelAndValidation
@@ -58,10 +52,7 @@ const SampleInfoInputs = ({
           id="depth"
           testId="depth"
           type="number"
-          {...getValidationPropertiesForInput(
-            fishbelt_transect?.depth,
-            areValidationsShowing,
-          )}
+          {...getValidationPropertiesForInput(fishbelt_transect?.depth, areValidationsShowing)}
           {...formik.getFieldProps('depth')}
         />
         <InputWithLabelAndValidation
@@ -69,10 +60,7 @@ const SampleInfoInputs = ({
           id="sample_date"
           testId="sample_date"
           type="date"
-          {...getValidationPropertiesForInput(
-            sample_event?.sample_date,
-            areValidationsShowing,
-          )}
+          {...getValidationPropertiesForInput(sample_event?.sample_date, areValidationsShowing)}
           {...formik.getFieldProps('sample_date')}
         />
         <InputWithLabelAndValidation

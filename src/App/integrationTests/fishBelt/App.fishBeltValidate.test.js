@@ -19,12 +19,9 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
-      `${apiBaseUrl}/projects/5/collectrecords/validate/`,
-      (req, res, ctx) => {
-        return res(ctx.status(200))
-      },
-    ),
+    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+      return res(ctx.status(200))
+    }),
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
@@ -82,57 +79,28 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
     ),
   )
 
-  expect(
-    within(screen.getByTestId('site')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('management')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('depth')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('sample_date')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('sample_time')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('transect-number')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('label')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('len_surveyed')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('width')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('size_bin')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('reef_slope')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('notes')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('observers')).getByText('required'),
-  ).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('management')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect-number')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('label')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('len_surveyed')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('width')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('size_bin')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('reef_slope')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('notes')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
 })
 
 test('Fishbelt validations will show the first error when there are multiple errors and warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
-      `${apiBaseUrl}/projects/5/collectrecords/validate/`,
-      (req, res, ctx) => {
-        return res(ctx.status(200))
-      },
-    ),
+    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+      return res(ctx.status(200))
+    }),
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
@@ -216,30 +184,19 @@ test('Fishbelt validations will show the first error when there are multiple err
     ),
   )
 
-  expect(
-    within(screen.getByTestId('site')).getByText('firstError'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('site')).queryByText('secondError'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('site')).queryByText('firstWarning'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('site')).queryByText('secondWarning'),
-  ).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('firstError')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('secondError')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
 })
 
 test('Fishbelt validations will show the first warning when there are multiple warnings and no errors', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
-      `${apiBaseUrl}/projects/5/collectrecords/validate/`,
-      (req, res, ctx) => {
-        return res(ctx.status(200))
-      },
-    ),
+    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+      return res(ctx.status(200))
+    }),
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
@@ -315,23 +272,16 @@ test('Fishbelt validations will show the first warning when there are multiple w
     ),
   )
 
-  expect(
-    within(screen.getByTestId('site')).queryByText('firstWarning'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('site')).queryByText('secondWarning'),
-  ).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('firstWarning')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
 })
 test('Validating an empty collect record, and then editing an input with errors shows the errors until the save button is pressed. Validations show when the validation button is clicked again.', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
-    rest.post(
-      `${apiBaseUrl}/projects/5/collectrecords/validate/`,
-      (req, res, ctx) => {
-        return res(ctx.status(200))
-      },
-    ),
+    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+      return res(ctx.status(200))
+    }),
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
@@ -409,52 +359,24 @@ test('Validating an empty collect record, and then editing an input with errors 
     ),
   )
 
-  expect(
-    within(screen.getByTestId('depth')).getByText('required'),
-  ).toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
 
   userEvent.type(screen.getByLabelText('Depth'), '1')
 
   // validations remain showing
-  expect(
-    await within(screen.getByTestId('site')).findByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('management')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('depth')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('sample_date')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('sample_time')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('transect-number')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('label')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('len_surveyed')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('width')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('size_bin')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('reef_slope')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('notes')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('observers')).getByText('required'),
-  ).toBeInTheDocument()
+  expect(await within(screen.getByTestId('site')).findByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('management')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect-number')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('label')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('len_surveyed')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('width')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('size_bin')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('reef_slope')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('notes')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
 
   userEvent.type(screen.getByLabelText('Depth'), '{backspace}')
 
@@ -475,45 +397,21 @@ test('Validating an empty collect record, and then editing an input with errors 
   )
 
   // validations hide
-  expect(
-    within(screen.getByTestId('site')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('management')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('depth')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('sample_date')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('sample_time')).queryByText('required'),
-  ).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('management')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_date')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_time')).queryByText('required')).not.toBeInTheDocument()
   expect(
     within(screen.getByTestId('transect-number')).queryByText('required'),
   ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('label')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('len_surveyed')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('width')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('size_bin')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('reef_slope')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('notes')).queryByText('required'),
-  ).not.toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('observers')).queryByText('required'),
-  ).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('label')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('len_surveyed')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('width')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('size_bin')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('reef_slope')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('notes')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('observers')).queryByText('required')).not.toBeInTheDocument()
 
   userEvent.click(
     await screen.findByRole(
@@ -541,43 +439,17 @@ test('Validating an empty collect record, and then editing an input with errors 
   )
 
   // validations show again
-  expect(
-    within(screen.getByTestId('site')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('management')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('depth')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('sample_date')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('sample_time')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('transect-number')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('label')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('len_surveyed')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('width')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('size_bin')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('reef_slope')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('notes')).getByText('required'),
-  ).toBeInTheDocument()
-  expect(
-    within(screen.getByTestId('observers')).getByText('required'),
-  ).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('management')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect-number')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('label')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('len_surveyed')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('width')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('size_bin')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('reef_slope')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('notes')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
 }, 35000)

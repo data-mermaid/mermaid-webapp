@@ -4,6 +4,4 @@
 // Also supports multi quotes in string.
 // example B: splitSearchQueryStrings(`"to the" dustin "kim"`)
 export const splitSearchQueryStrings = (words) =>
-  (words.match(/[^\s"]+|"([^"]*)"/gi) || []).map((word) =>
-    word.replace(/^"(.+(?="$))"$/, '$1'),
-  )
+  (words.match(/[^\s"]+|"([^"]*)"/gi) || []).map((word) => word.replace(/^"(.+(?="$))"$/, '$1'))

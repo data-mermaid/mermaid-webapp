@@ -15,12 +15,7 @@ export const useCurrentUser = ({
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
 
-    if (
-      isMermaidAuthenticated &&
-      apiBaseUrl &&
-      dexieInstance &&
-      isMermaidAuthenticated
-    ) {
+    if (isMermaidAuthenticated && apiBaseUrl && dexieInstance && isMermaidAuthenticated) {
       console.warn('trying to get user profile')
       getUserProfile({
         apiBaseUrl,
@@ -29,12 +24,12 @@ export const useCurrentUser = ({
         isMermaidAuthenticated,
         isAppOnline,
       })
-        .then((user) => {
+        .then(user => {
           if (isMounted && user) {
             setCurrentUser(user)
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.warn('catch get user promise', error)
           toast.error(language.error.userProfileUnavailable)
         })
@@ -43,13 +38,7 @@ export const useCurrentUser = ({
     return () => {
       isMounted = false
     }
-  }, [
-    apiBaseUrl,
-    auth0Token,
-    dexieInstance,
-    isMermaidAuthenticated,
-    isAppOnline,
-  ])
+  }, [apiBaseUrl, auth0Token, dexieInstance, isMermaidAuthenticated, isAppOnline])
 
   return currentUser
 }

@@ -28,10 +28,7 @@ const DataToolbarSection = ({ name, handleGlobalFilterChange }) => {
     <>
       <H2>Submitted</H2>
       <ToolBarRow>
-        <FilterSearchToolbar
-          name={name}
-          handleGlobalFilterChange={handleGlobalFilterChange}
-        />
+        <FilterSearchToolbar name={name} handleGlobalFilterChange={handleGlobalFilterChange} />
         <ButtonSecondaryDropdown label={label}>
           <Column as="nav" data-testid="export-to-csv">
             <DropdownItemStyle>Fish Belt</DropdownItemStyle>

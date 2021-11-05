@@ -29,9 +29,7 @@ test('Site component renders with the expected headers', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -59,9 +57,7 @@ test('Site Records table sorts properly by Name column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -100,9 +96,7 @@ test('Site Records table sorts properly by Reef Type column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -141,9 +135,7 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -182,9 +174,7 @@ test('Site Records table sorts properly by Exposure column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 

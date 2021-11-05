@@ -4,8 +4,8 @@ import {
   persistLastRevisionNumbersPulled,
 } from './lastRevisionNumbers'
 
-const resetPushToApiTagFromItems = (items) =>
-  items.map((item) => ({ ...item, uiState_pushToApi: false }))
+const resetPushToApiTagFromItems = items =>
+  items.map(item => ({ ...item, uiState_pushToApi: false }))
 
 export const pullApiData = async ({
   dexieInstance,
@@ -14,12 +14,10 @@ export const pullApiData = async ({
   apiDataNamesToPull,
   projectId,
 }) => {
-  const lastRevisionNumbersPulled = await getLastRevisionNumbersPulledForAProject(
-    {
-      dexieInstance,
-      projectId,
-    },
-  )
+  const lastRevisionNumbersPulled = await getLastRevisionNumbersPulledForAProject({
+    dexieInstance,
+    projectId,
+  })
 
   const pullRequestBody = apiDataNamesToPull.reduce(
     (accumulator, apiDataName) => ({
@@ -32,15 +30,11 @@ export const pullApiData = async ({
     {},
   )
 
-  const pullResponse = await axios.post(
-    `${apiBaseUrl}/pull/`,
-    pullRequestBody,
-    {
-      headers: {
-        Authorization: `Bearer ${auth0Token}`,
-      },
+  const pullResponse = await axios.post(`${apiBaseUrl}/pull/`, pullRequestBody, {
+    headers: {
+      Authorization: `Bearer ${auth0Token}`,
     },
-  )
+  })
 
   const apiData = pullResponse.data
 
@@ -64,7 +58,7 @@ export const pullApiData = async ({
         projectId,
       })
 
-      apiDataNamesToPull.forEach((apiDataType) => {
+      apiDataNamesToPull.forEach(apiDataType => {
         if (apiDataType === 'choices') {
           // choices deletes property will always be empty, so we just ignore it
           // additionally the updates property is an object, not an array, so we just store it directly
@@ -76,9 +70,7 @@ export const pullApiData = async ({
         }
         if (apiDataType !== 'choices') {
           const updates = apiData[apiDataType]?.updates ?? []
-          const updatesWithPushToApiTagReset = resetPushToApiTagFromItems(
-            updates,
-          )
+          const updatesWithPushToApiTagReset = resetPushToApiTagFromItems(updates)
           const deletes = apiData[apiDataType]?.deletes ?? []
           const deleteIds = deletes.map(({ id }) => id)
 

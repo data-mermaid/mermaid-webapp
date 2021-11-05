@@ -4,10 +4,7 @@ import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import { formikPropType } from '../../library/formikPropType'
-import {
-  fishBeltPropType,
-  observersPropType,
-} from '../../App/mermaidData/mermaidDataProptypes'
+import { fishBeltPropType, observersPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import InputCheckboxGroupWithLabelAndValidation from '../generic/InputCheckboxGroupWithLabelAndValidation'
 import { getObserverNameOptions } from '../../library/observerHelpers'
 import getValidationPropertiesForInput from '../pages/collectRecordFormPages/getValidationPropertiesForInput'
@@ -21,11 +18,9 @@ const ObserversInput = ({
   ...restOfProps
 }) => {
   const observerNameOptions = getObserverNameOptions(observers)
-  const observerNameValues = formik.values.observers.map(
-    ({ profile }) => profile,
-  )
+  const observerNameValues = formik.values.observers.map(({ profile }) => profile)
 
-  const filterObserverProfiles = (observerIds) =>
+  const filterObserverProfiles = observerIds =>
     [...observers].filter(({ profile }) =>
       !observerIds ? undefined : observerIds.includes(profile),
     )

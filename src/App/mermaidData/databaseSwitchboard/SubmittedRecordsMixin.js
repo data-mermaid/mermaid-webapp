@@ -1,6 +1,6 @@
 import { getSampleDateLabel } from '../getSampleDateLabel'
 
-const SubmittedRecordsMixin = (Base) =>
+const SubmittedRecordsMixin = Base =>
   class extends Base {
     #submittedRecordProtocolLabels = {
       fishbelt: 'Fish Belt',
@@ -10,22 +10,19 @@ const SubmittedRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
-    getSubmittedRecords = (projectId) => {
+    getSubmittedRecords = projectId => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
-            .get(
-              `${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`,
-              {
-                params: {
-                  protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
-                },
+            .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
+              params: {
+                protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
               },
-            )
-            .then((apiResults) => apiResults.data.results)
+            })
+            .then(apiResults => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -36,21 +33,19 @@ const SubmittedRecordsMixin = (Base) =>
 
       return this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
-            .get(
-              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
-            )
-            .then((apiResults) => apiResults.data)
+            .get(`${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`)
+            .then(apiResults => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedRecordsForUIDisplay = (projectId) => {
+    getSubmittedRecordsForUIDisplay = projectId => {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
-            return submittedRecords.map((record) => ({
+        ? this.getSubmittedRecords(projectId).then(submittedRecords => {
+            return submittedRecords.map(record => ({
               ...record,
               uiLabels: {
                 protocol: this.#submittedRecordProtocolLabels[record.protocol],

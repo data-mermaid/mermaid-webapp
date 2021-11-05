@@ -37,13 +37,8 @@ const TransferSampleUnitsModal = ({
   handleTransferSampleUnitChange,
   onSubmit,
 }) => {
-  const initialToUserIdInTransferModal =
-    fromUser.profile === currentUserId ? '' : currentUserId
-  const sampleUnitMsg = pluralize(
-    fromUser.num_active_sample_units,
-    'sample unit',
-    'sample units',
-  )
+  const initialToUserIdInTransferModal = fromUser.profile === currentUserId ? '' : currentUserId
+  const sampleUnitMsg = pluralize(fromUser.num_active_sample_units, 'sample unit', 'sample units')
   const [isInitialToUserIdEmpty, setInitialIsToUserIdEmpty] = useState()
 
   const _checkTransferButtonDisabledWhenModalOpen = useEffect(() => {
@@ -56,7 +51,7 @@ const TransferSampleUnitsModal = ({
 
   const optionList = userOptions
     .filter(({ profile }) => profile !== fromUser.profile)
-    .map((user) => {
+    .map(user => {
       const profileName = getProfileNameOrEmailForPendingUser(user)
 
       return (
@@ -76,30 +71,24 @@ const TransferSampleUnitsModal = ({
   const modalContent = (
     <>
       {showRemoveUserWithActiveSampleUnitsWarning && (
-        <InlineMessage type="warning">
-          {language.pages.userTable.warningRemoveUser}
-        </InlineMessage>
+        <InlineMessage type="warning">{language.pages.userTable.warningRemoveUser}</InlineMessage>
       )}
       <form>
         <ModalBodyContainer>
           <ModalBoxItem>
             <p>
-              Transfer {fromUser.num_active_sample_units} unsubmitted{' '}
-              {sampleUnitMsg} from{' '}
+              Transfer {fromUser.num_active_sample_units} unsubmitted {sampleUnitMsg} from{' '}
               <strong>{getProfileNameOrEmailForPendingUser(fromUser)}</strong>
             </p>
           </ModalBoxItem>
           <IconArrowRight />
           <ModalBoxItem>
-            <label
-              id="modal-transfer-units-to-label"
-              htmlFor="modal-transfer-units-to"
-            >
+            <label id="modal-transfer-units-to-label" htmlFor="modal-transfer-units-to">
               Transfer sample units to:
               <Select
                 id="modal-transfer-units-to"
                 defaultValue={initialToUserIdInTransferModal}
-                onChange={(event) => {
+                onChange={event => {
                   handleTransferSampleUnitChange(event.target.value)
                   setInitialIsToUserIdEmpty(false)
                 }}

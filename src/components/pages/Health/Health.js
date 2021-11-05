@@ -7,11 +7,7 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 const Health = () => {
   const { isAppOnline } = useOnlineStatus()
 
-  const content = isAppOnline ? (
-    <>Project Health Placeholder</>
-  ) : (
-    <PageUnavailableOffline />
-  )
+  const content = isAppOnline ? <>Project Health Placeholder</> : <PageUnavailableOffline />
 
   return (
     <ContentPageLayout

@@ -76,12 +76,9 @@ export const CheckBoxLabel = styled.label`
   background: ${theme.color.secondaryColor};
   padding: ${theme.spacing.buttonPadding};
   justify-self: end;
-  background: ${(props) =>
-    props.disabled
-      ? theme.color.secondaryDisabledColor
-      : theme.color.secondaryColor};
-  color: ${(props) =>
-    props.disabled ? theme.color.primaryDisabledColor : theme.color.textColor};
+  background: ${props =>
+    props.disabled ? theme.color.secondaryDisabledColor : theme.color.secondaryColor};
+  color: ${props => (props.disabled ? theme.color.primaryDisabledColor : theme.color.textColor)};
   ${hoverState(css`
     background: ${theme.color.secondaryHover};
   `)}

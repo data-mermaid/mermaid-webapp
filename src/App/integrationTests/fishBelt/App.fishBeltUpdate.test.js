@@ -106,15 +106,11 @@ describe('Offline', () => {
     expect(await screen.findByText('Collect record saved.'))
     const savedCollectRecords = await dexieInstance.collect_records.toArray()
 
-    const updatedCollectRecord = savedCollectRecords.filter(
-      (record) => record.id === '2',
-    )[0]
+    const updatedCollectRecord = savedCollectRecords.filter(record => record.id === '2')[0]
 
     const newObservation = updatedCollectRecord.data.obs_belt_fishes[3]
 
-    expect(newObservation.fish_attribute).toEqual(
-      '018c6b47-9e6f-456d-8db2-ce1c91e8e1c4',
-    )
+    expect(newObservation.fish_attribute).toEqual('018c6b47-9e6f-456d-8db2-ce1c91e8e1c4')
     expect(newObservation.count).toEqual(88)
     expect(newObservation.size).toEqual(37.5)
   })
@@ -160,9 +156,9 @@ describe('Offline', () => {
     )
 
     expect(await screen.findByText('Collect record saved.'))
-    const savedCollectRecord = (
-      await dexieInstance.collect_records.toArray()
-    ).find((record) => record.id === '2')
+    const savedCollectRecord = (await dexieInstance.collect_records.toArray()).find(
+      record => record.id === '2',
+    )
 
     const newObservation = savedCollectRecord.data.obs_belt_fishes[3]
 
@@ -192,11 +188,7 @@ describe('Offline', () => {
       }),
     )
 
-    expect(
-      await screen.findByText(
-        'Something went wrong. The collect record has not been saved.',
-      ),
-    )
+    expect(await screen.findByText('Something went wrong. The collect record has not been saved.'))
 
     expect(await screen.findByLabelText('Depth')).toHaveValue(45)
   })
