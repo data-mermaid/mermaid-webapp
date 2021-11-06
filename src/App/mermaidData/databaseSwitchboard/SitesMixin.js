@@ -1,8 +1,8 @@
 import { getObjectById } from '../../../library/getObjectById'
 
-const SitesMixin = Base =>
+const SitesMixin = (Base) =>
   class extends Base {
-    getSitesWithoutOfflineDeleted = async projectId => {
+    getSitesWithoutOfflineDeleted = async function getSitesWithoutOfflineDeleted(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -10,11 +10,11 @@ const SitesMixin = Base =>
       return this._isAuthenticatedAndReady
         ? this._dexieInstance.project_sites
             .toArray()
-            .then(sites => sites.filter(site => site.project === projectId && !site._deleted))
+            .then((sites) => sites.filter((site) => site.project === projectId && !site._deleted))
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSite = id => {
+    getSite = function getSite(id) {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
@@ -26,7 +26,7 @@ const SitesMixin = Base =>
       return this._dexieInstance.project_sites.get(id)
     }
 
-    getSiteRecordsForUIDisplay = projectId => {
+    getSiteRecordsForUIDisplay = function getSiteRecordsForUIDisplay(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -36,7 +36,7 @@ const SitesMixin = Base =>
             ([sites, choices]) => {
               const { reeftypes, reefzones, reefexposures } = choices
 
-              return sites.map(record => {
+              return sites.map((record) => {
                 return {
                   ...record,
                   uiLabels: {

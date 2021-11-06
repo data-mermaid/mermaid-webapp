@@ -16,7 +16,6 @@ export const useCurrentUser = ({
     let isMounted = true
 
     if (isMermaidAuthenticated && apiBaseUrl && dexieInstance && isMermaidAuthenticated) {
-      console.warn('trying to get user profile')
       getUserProfile({
         apiBaseUrl,
         auth0Token,
@@ -24,13 +23,12 @@ export const useCurrentUser = ({
         isMermaidAuthenticated,
         isAppOnline,
       })
-        .then(user => {
+        .then((user) => {
           if (isMounted && user) {
             setCurrentUser(user)
           }
         })
-        .catch(error => {
-          console.warn('catch get user promise', error)
+        .catch(() => {
           toast.error(language.error.userProfileUnavailable)
         })
     }

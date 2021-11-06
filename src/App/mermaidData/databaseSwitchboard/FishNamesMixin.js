@@ -2,7 +2,7 @@ import { createUuid } from '../../../library/createUuid'
 
 const FishNameMixin = Base =>
   class extends Base {
-    getFishSpecies = () => {
+    getFishSpecies = function getFishSpecies() {
       if (this._isAuthenticatedAndReady) {
         return this._dexieInstance.fish_species.toArray()
       }
@@ -10,7 +10,7 @@ const FishNameMixin = Base =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addFishSpecies = async ({ genusId, genusName, speciesName }) => {
+    addFishSpecies = async function addFishSpecies({ genusId, genusName, speciesName }) {
       if (!genusId || !genusName || !speciesName) {
         Promise.reject(new Error('addFishSpecies was implemented with missing parameters'))
       }
@@ -58,15 +58,17 @@ const FishNameMixin = Base =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getFishGenera = () =>
-      this._isAuthenticatedAndReady
+    getFishGenera = function getFishGenera() {
+      return this._isAuthenticatedAndReady
         ? this._dexieInstance.fish_genera.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
 
-    getFishFamilies = () =>
-      this._isAuthenticatedAndReady
+    getFishFamilies = function getFishFamilies() {
+      return this._isAuthenticatedAndReady
         ? this._dexieInstance.fish_families.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default FishNameMixin
