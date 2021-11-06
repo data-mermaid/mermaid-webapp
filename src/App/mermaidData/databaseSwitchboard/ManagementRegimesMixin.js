@@ -1,8 +1,10 @@
 import { getObjectById } from '../../../library/getObjectById'
 
-const ManagementRegimesMixin = Base =>
+const ManagementRegimesMixin = (Base) =>
   class extends Base {
-    getManagementRegimesWithoutOfflineDeleted = projectId => {
+    getManagementRegimesWithoutOfflineDeleted = function getManagementRegimesWithoutOfflineDeleted(
+      projectId,
+    ) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -10,16 +12,16 @@ const ManagementRegimesMixin = Base =>
       return this._isAuthenticatedAndReady
         ? this._dexieInstance.project_managements
             .toArray()
-            .then(managementRegimes =>
+            .then((managementRegimes) =>
               managementRegimes.filter(
-                managementRegime =>
+                (managementRegime) =>
                   managementRegime.project === projectId && !managementRegime._deleted,
               ),
             )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getManagementRegime = id => {
+    getManagementRegime = function getManagementRegime(id) {
       if (!id) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -31,7 +33,9 @@ const ManagementRegimesMixin = Base =>
       return this._dexieInstance.project_managements.get(id)
     }
 
-    getManagementRegimeRecordsForUiDisplay = projectId => {
+    getManagementRegimeRecordsForUiDisplay = function getManagementRegimeRecordsForUiDisplay(
+      projectId,
+    ) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -43,7 +47,7 @@ const ManagementRegimesMixin = Base =>
           ]).then(([managementRegimes, choices]) => {
             const { managementcompliances } = choices
 
-            return managementRegimes.map(record => {
+            return managementRegimes.map((record) => {
               return {
                 ...record,
                 uiLabels: {

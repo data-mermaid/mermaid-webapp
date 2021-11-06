@@ -95,7 +95,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
-  const openNewFishNameModal = observationId => {
+  const openNewFishNameModal = (observationId) => {
     setObservationToAddSpeciesTo(observationId)
     setIsNewFishNameModalOpen(true)
   }
@@ -160,10 +160,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           ]) => {
             if (isMounted.current) {
               if (!isNewRecord && !collectRecordResponse && recordId) {
-                setIdsNotAssociatedWithData(previousState => [...previousState, recordId])
+                setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
               if (!isNewRecord && !projectResponse && projectId) {
-                setIdsNotAssociatedWithData(previousState => [...previousState, projectId])
+                setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
               }
               const updateFishNameConstants = getFishNameConstants({
                 species,
@@ -188,8 +188,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             }
           },
         )
-        .catch(err => {
-          console.warn('cant get collect record related data', err)
+        .catch(() => {
           const error = isNewRecord
             ? language.error.collectRecordChoicesUnavailable
             : language.error.collectRecordUnavailable
@@ -240,7 +239,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
     databaseSwitchboardInstance
       .validateFishBelt({ recordId, projectId })
-      .then(validatedRecordResponse => {
+      .then((validatedRecordResponse) => {
         if (validatedRecordResponse?.validations?.status === 'ok') {
           setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
         }
@@ -261,7 +260,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         genusName,
         speciesName,
       })
-      .then(newFishSpecies => {
+      .then((newFishSpecies) => {
         observationsDispatch({
           type: 'updateFishName',
           payload: {
@@ -272,7 +271,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         updateFishNameOptionsStateWithOfflineStorageData()
         toast.success(language.success.fishSpeciesSave)
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.message === 'Species already exists') {
           toast.warning(language.error.fishSpeciesAlreadyExists)
 
@@ -320,7 +319,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           profileId: currentUser.id,
           projectId,
         })
-        .then(response => {
+        .then((response) => {
           toast.success(language.success.collectRecordSave)
           clearPersistedUnsavedFormikData()
           clearPersistedUnsavedObservationsData()
@@ -375,7 +374,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     getPersistedUnsavedObservationsData,
   ])
 
-  const handleSizeBinChange = event => {
+  const handleSizeBinChange = (event) => {
     const sizeBinId = event.target.value
 
     formik.setFieldValue('size_bin', sizeBinId)
