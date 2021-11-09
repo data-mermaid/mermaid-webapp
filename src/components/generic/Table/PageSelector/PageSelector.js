@@ -11,6 +11,7 @@ const PaginationButtonStyles = css`
   padding: ${theme.spacing.xsmall};
   &:disabled {
     cursor: not-allowed;
+    color: ${theme.color.primaryDisabledColor};
   }
   &:not([disabled], .paginationCurrentPage) {
     ${hoverState(css`
