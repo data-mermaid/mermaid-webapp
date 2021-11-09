@@ -39,7 +39,7 @@ const InputAutocomplete = ({
   ...restOfProps
 }) => {
   const optionMatchingValueProp = useMemo(
-    () => options.find((option) => option.value === value) ?? '',
+    () => options.find(option => option.value === value) ?? '',
     [options, value],
   )
 
@@ -51,7 +51,7 @@ const InputAutocomplete = ({
     setSelectedValue(optionMatchingValueProp)
   }, [optionMatchingValueProp])
 
-  const getMatchingMenuItems = (inputValue) => {
+  const getMatchingMenuItems = inputValue => {
     const matchingOptions = inputValue
       ? matchSorter(options, inputValue, {
           keys: ['label'],
@@ -61,11 +61,10 @@ const InputAutocomplete = ({
     return matchingOptions
   }
 
-  const handleStateChange = (changes) => {
+  const handleStateChange = changes => {
     const { selectedItem, inputValue } = changes
 
-    const shouldMenuBeOpen =
-      inputValue?.length >= 3 && inputValue !== selectedValue.label
+    const shouldMenuBeOpen = inputValue?.length >= 3 && inputValue !== selectedValue.label
 
     if (selectedItem) {
       onChange(selectedItem)
@@ -80,13 +79,8 @@ const InputAutocomplete = ({
     }
   }
 
-  const getMenuContents = (downshiftObject) => {
-    const {
-      inputValue,
-      getItemProps,
-      highlightedIndex,
-      selectedItem,
-    } = downshiftObject
+  const getMenuContents = downshiftObject => {
+    const { inputValue, getItemProps, highlightedIndex, selectedItem } = downshiftObject
 
     const matchingMenuItems = getMatchingMenuItems(inputValue)
 
@@ -113,15 +107,10 @@ const InputAutocomplete = ({
     <Downshift
       selectedItem={selectedValue}
       onStateChange={handleStateChange}
-      itemToString={(item) => (item ? item.label : '')}
+      itemToString={item => (item ? item.label : '')}
     >
-      {(downshiftObject) => {
-        const {
-          getRootProps,
-          getInputProps,
-          getMenuProps,
-          inputValue,
-        } = downshiftObject
+      {downshiftObject => {
+        const { getRootProps, getInputProps, getMenuProps, inputValue } = downshiftObject
 
         return (
           <AutoCompleteResultsWrapper
@@ -137,9 +126,7 @@ const InputAutocomplete = ({
                 id={id}
                 {...restOfProps}
               />
-              {helperText && (
-                <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
-              )}
+              {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
             </div>
             <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
               {isMenuOpen && getMenuContents(downshiftObject)}

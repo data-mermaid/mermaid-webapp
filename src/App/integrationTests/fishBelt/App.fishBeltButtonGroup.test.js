@@ -2,10 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { rest } from 'msw'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
-import {
-  screen,
-  renderAuthenticatedOnline,
-} from '../../../testUtilities/testingLibraryWithHelpers'
+import { screen, renderAuthenticatedOnline } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -58,18 +55,15 @@ describe('Online', () => {
     userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
 
     mockMermaidApiAllSuccessful.use(
-      rest.post(
-        `${apiBaseUrl}/projects/5/collecting/validate`,
-        (req, res, ctx) => {
-          const project = req.url.searchParams('projectId')
+      rest.post(`${apiBaseUrl}/projects/5/collecting/validate`, (req, res, ctx) => {
+        const project = req.url.searchParams('projectId')
 
-          if (!project) {
-            return res.once(ctx.status(404))
-          }
+        if (!project) {
+          return res.once(ctx.status(404))
+        }
 
-          return res(ctx.status(200))
-        },
-      ),
+        return res(ctx.status(200))
+      }),
     )
 
     expect(await screen.findByText('Validating', { selector: 'button' }))

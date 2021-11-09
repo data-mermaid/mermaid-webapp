@@ -1,9 +1,4 @@
-import {
-  usePagination,
-  useSortBy,
-  useGlobalFilter,
-  useTable,
-} from 'react-table'
+import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
@@ -38,10 +33,7 @@ import useIsMounted from '../../../library/useIsMounted'
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [
-    managementRegimeRecordsForUiDisplay,
-    setManagementRegimeRecordsForUiDisplay,
-  ] = useState([])
+  const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
@@ -50,9 +42,7 @@ const ManagementRegimes = () => {
   const _getManagementRegimeRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
-        databaseSwitchboardInstance.getManagementRegimeRecordsForUiDisplay(
-          projectId,
-        ),
+        databaseSwitchboardInstance.getManagementRegimeRecordsForUiDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
       ])
         .then(([managementRegimes, projectResponse]) => {
@@ -71,7 +61,7 @@ const ManagementRegimes = () => {
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
-  const getIconCheckLabel = (property) => property && <IconCheck />
+  const getIconCheckLabel = property => property && <IconCheck />
 
   const tableColumns = useMemo(
     () => [
@@ -132,11 +122,7 @@ const ManagementRegimes = () => {
   const tableCellData = useMemo(
     () =>
       managementRegimeRecordsForUiDisplay.map(({ id, uiLabels }) => ({
-        name: (
-          <Link to={`${currentProjectPath}/management-regimes/${id}`}>
-            {uiLabels.name}
-          </Link>
-        ),
+        name: <Link to={`${currentProjectPath}/management-regimes/${id}`}>{uiLabels.name}</Link>,
         estYear: uiLabels.estYear,
         compliance: uiLabels.compliance,
         openAccess: getIconCheckLabel(uiLabels.openAccess),
@@ -159,10 +145,7 @@ const ManagementRegimes = () => {
       return rows
     }
 
-    return queryTerms.reduce(
-      (results, term) => matchSorter(results, term, { keys }),
-      rows,
-    )
+    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
   }, [])
 
   const {
@@ -191,20 +174,20 @@ const ManagementRegimes = () => {
     useSortBy,
     usePagination,
   )
-  const handleRowsNumberChange = (e) => {
+  const handleRowsNumberChange = e => {
     setPageSize(Number(e.target.value))
   }
 
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+  const handleGlobalFilterChange = value => setGlobalFilter(value)
 
   const table = (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => (
+            {headerGroups.map(headerGroup => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
+                {headerGroup.headers.map(column => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     isSorted={column.isSorted}
@@ -217,12 +200,12 @@ const ManagementRegimes = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {page.map(row => {
               prepareRow(row)
 
               return (
                 <Tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
+                  {row.cells.map(cell => {
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
                         <InnerCell>{cell.render('Cell')}</InnerCell>

@@ -6,6 +6,4 @@ export default {
   title: 'HomePageLayout',
   component: HomePageLayout,
 }
-export const basic = () => (
-  <HomePageLayout topRow={<>Top Row</>} bottomRow={<>Bottom Row</>} />
-)
+export const basic = () => <HomePageLayout topRow={<>Top Row</>} bottomRow={<>Bottom Row</>} />

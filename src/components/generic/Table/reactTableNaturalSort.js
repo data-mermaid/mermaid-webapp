@@ -29,8 +29,4 @@ const reactTableNaturalSortDates = (rowA, rowB, columnId) => {
   })
 }
 
-export {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-  reactTableNaturalSortDates,
-}
+export { reactTableNaturalSort, reactTableNaturalSortReactNodes, reactTableNaturalSortDates }

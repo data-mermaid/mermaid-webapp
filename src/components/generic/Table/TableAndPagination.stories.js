@@ -260,13 +260,9 @@ export const SortablePaginatedTable = () => {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
-  } = useTable(
-    { columns, data, initialState: { pageSize: 5 } },
-    useSortBy,
-    usePagination,
-  )
+  } = useTable({ columns, data, initialState: { pageSize: 5 } }, useSortBy, usePagination)
 
-  const handleRowsNumberChange = (e) => {
+  const handleRowsNumberChange = e => {
     setPageSize(Number(e.target.value))
   }
 
@@ -274,9 +270,9 @@ export const SortablePaginatedTable = () => {
     <>
       <Table {...getTableProps()}>
         <thead>
-          {headerGroups.map((headerGroup) => (
+          {headerGroups.map(headerGroup => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
+              {headerGroup.headers.map(column => (
                 <Th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   isSorted={column.isSorted}
@@ -289,12 +285,12 @@ export const SortablePaginatedTable = () => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
+          {page.map(row => {
             prepareRow(row)
 
             return (
               <Tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
+                {row.cells.map(cell => {
                   return <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
                 })}
               </Tr>

@@ -28,9 +28,7 @@ test('Collect Records table sorts properly by method column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -62,9 +60,7 @@ test('Collect Records table sorts properly by site column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -103,9 +99,7 @@ test('Collect Records table sorts properly by management column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -144,9 +138,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -185,9 +177,7 @@ test('Collect Records table sorts properly by size column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -226,9 +216,7 @@ test('Collect Records table sorts properly by depth column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -266,9 +254,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -308,9 +294,7 @@ test('Collect Records table sorts properly by observers column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -323,9 +307,7 @@ test('Collect Records table sorts properly by observers column', async () => {
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  const tableCellsFromTableRowsAfter = within(tableRowsAfter[1]).getAllByRole(
-    'cell',
-  )
+  const tableCellsFromTableRowsAfter = within(tableRowsAfter[1]).getAllByRole('cell')
 
   expect(within(tableCellsFromTableRowsAfter[7]).getByText('Al Leonard'))
 
@@ -334,11 +316,7 @@ test('Collect Records table sorts properly by observers column', async () => {
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(
-    within(tableRowsAfterFirstClick[1]).getByText(
-      'Nick Hoang, Kim Fisher, Dustin Sampson',
-    ),
-  )
+  expect(within(tableRowsAfterFirstClick[1]).getByText('Nick Hoang, Kim Fisher, Dustin Sampson'))
 })
 
 test('Collect Records table sorts properly by status column', async () => {
@@ -357,9 +335,7 @@ test('Collect Records table sorts properly by status column', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 
@@ -397,9 +373,7 @@ test('Collect Records table changes number of rows visible size when pagination 
       initialEntries: ['/projects/5/collecting'],
     },
   )
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const table = screen.getByRole('table')
 
   const tableRows = within(table).getAllByRole('row')
@@ -430,9 +404,7 @@ test('Collect Records table change pages when different page is selected ', asyn
       initialEntries: ['/projects/5/collecting'],
     },
   )
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const table = screen.getByRole('table')
 

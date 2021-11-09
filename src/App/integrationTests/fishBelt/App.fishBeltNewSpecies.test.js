@@ -46,9 +46,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
   )
 
   const fishbeltForm = screen.getByRole('form')
-  const observationsTable = (
-    await within(fishbeltForm).findAllByRole('table')
-  )[0]
+  const observationsTable = (await within(fishbeltForm).findAllByRole('table'))[0]
 
   const firstFishNameInput = within(observationsTable).getByDisplayValue(
     'Lethrinus rubrioperculatus',
@@ -96,9 +94,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
   const userNameElement = within(modal).getByLabelText('User')
   const projectNameElement = within(modal).getByLabelText('Project')
 
-  expect(
-    within(userNameElement).getByText('FakeFirstNameOnline FakeLastNameOnline'),
-  )
+  expect(within(userNameElement).getByText('FakeFirstNameOnline FakeLastNameOnline'))
   expect(within(projectNameElement).getByText('Project V'))
   expect(within(speciesNameElement).getByText('ridens'))
 
@@ -108,14 +104,10 @@ test('Fishbelt observations add new species - filling out new species form adds 
 
   userEvent.click(submitButton)
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('Add New Fish Species'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('Add New Fish Species'))
   const fishbeltFormAfterSubmit = screen.getByRole('form')
 
-  expect(
-    await within(fishbeltFormAfterSubmit).findByDisplayValue('Nebrius ridens'),
-  )
+  expect(await within(fishbeltFormAfterSubmit).findByDisplayValue('Nebrius ridens'))
 
   const proposedSpeciesSavedToast = await screen.findByText(
     'Proposed fish species saved. The observation has been edited to show it selected.',
@@ -126,7 +118,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
   const updatedSpeciesInOfflineStorage = await dexieInstance.fish_species.toArray()
 
   const newSpecies = updatedSpeciesInOfflineStorage.find(
-    (species) => species.display_name === 'Nebrius ridens',
+    species => species.display_name === 'Nebrius ridens',
   )
 
   expect(newSpecies).toBeTruthy()
@@ -144,14 +136,10 @@ test('Fishbelt observations add new species - proposing new species that already
   await screen.findByTestId('edit-collect-record-form-title')
 
   const fishbeltForm = screen.getByRole('form')
-  const observationsTable = (
-    await within(fishbeltForm).findAllByRole('table')
-  )[0]
+  const observationsTable = (await within(fishbeltForm).findAllByRole('table'))[0]
 
   // need to wait until app loaded and offline storage hydration before getting species count
-  const speciesInOfflineStorageCount = (
-    await dexieInstance.fish_species.toArray()
-  ).length
+  const speciesInOfflineStorageCount = (await dexieInstance.fish_species.toArray()).length
 
   expect(speciesInOfflineStorageCount).toEqual(4)
 
@@ -197,17 +185,11 @@ test('Fishbelt observations add new species - proposing new species that already
 
   userEvent.click(submitButton)
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('Add New Fish Species'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('Add New Fish Species'))
   const fishbeltFormAfterSubmit = screen.getByRole('form')
 
   // input display value is updated with *existing* species selected
-  expect(
-    await within(fishbeltFormAfterSubmit).findByDisplayValue(
-      'Hologymnosus longipes',
-    ),
-  )
+  expect(await within(fishbeltFormAfterSubmit).findByDisplayValue('Hologymnosus longipes'))
 
   const proposedSpeciesIsDuplicateToast = await screen.findByText(
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
@@ -220,8 +202,7 @@ test('Fishbelt observations add new species - proposing new species that already
   ).length
 
   const isSpeciesInOfflineStorageUnchanged =
-    speciesInOfflineStorageCountAfterRedundantNewSpeciesSubmit ===
-    speciesInOfflineStorageCount
+    speciesInOfflineStorageCountAfterRedundantNewSpeciesSubmit === speciesInOfflineStorageCount
 
   expect(isSpeciesInOfflineStorageUnchanged).toBeTruthy()
 })

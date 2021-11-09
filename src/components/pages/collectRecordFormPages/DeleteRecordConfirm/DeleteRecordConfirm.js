@@ -13,12 +13,8 @@ const DeleteRecordConfirm = ({ isOpen, onDismiss, onConfirm }) => {
       mainContent={language.deleteCollectRecord.prompt}
       footerContent={
         <RightFooter>
-          <ButtonSecondary onClick={onDismiss}>
-            {language.deleteCollectRecord.no}
-          </ButtonSecondary>
-          <ButtonCaution onClick={onConfirm}>
-            {language.deleteCollectRecord.yes}
-          </ButtonCaution>
+          <ButtonSecondary onClick={onDismiss}>{language.deleteCollectRecord.no}</ButtonSecondary>
+          <ButtonCaution onClick={onConfirm}>{language.deleteCollectRecord.yes}</ButtonCaution>
         </RightFooter>
       }
     />

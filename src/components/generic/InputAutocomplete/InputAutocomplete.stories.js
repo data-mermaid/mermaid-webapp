@@ -31,11 +31,7 @@ export const noInitialValue = () => (
 )
 
 export const initialValue = () => (
-  <InputAutocomplete
-    options={options}
-    onChange={action('on change')}
-    value={options[7].value}
-  />
+  <InputAutocomplete options={options} onChange={action('on change')} value={options[7].value} />
 )
 
 const CustomNoResultsContainer = styled.div`

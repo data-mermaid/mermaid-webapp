@@ -2,9 +2,11 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { InputRow, ValidationMessage } from '../form'
+import { InputRow } from '../../generic/form'
 import theme from '../../../theme'
-import { IconCheck } from '../../icons'
+
+import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.xsmall};
@@ -18,10 +20,12 @@ const CheckBoxLabel = styled.label`
 
 const InputCheckboxGroupWithLabelAndValidation = ({
   id,
+  ignoreValidations,
   label,
   onChange,
   options,
-  validationMessage,
+  resetValidations,
+  validationMessages,
   validationType,
   value,
 }) => {
@@ -62,17 +66,12 @@ const InputCheckboxGroupWithLabelAndValidation = ({
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
       <div>{checkboxGroup}</div>
-      <div>
-        {validationMessage &&
-        (validationType === 'error' || validationType === 'warning') ? (
-          <ValidationMessage validationType={validationType}>
-            {validationMessage}
-          </ValidationMessage>
-        ) : null}
-        {validationType === 'ok' ? (
-          <IconCheck aria-label="Passed validation" />
-        ) : null}
-      </div>
+      <ValidationInfo
+        ignoreValidations={ignoreValidations}
+        resetValidations={resetValidations}
+        validationMessages={validationMessages}
+        validationType={validationType}
+      />
     </InputRow>
   )
 }
@@ -87,7 +86,7 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
-  validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   value: PropTypes.arrayOf(
     PropTypes.oneOfType([
@@ -98,10 +97,12 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       }),
     ]),
   ).isRequired,
+  ignoreValidations: PropTypes.func.isRequired,
+  resetValidations: PropTypes.func.isRequired,
 }
 
 InputCheckboxGroupWithLabelAndValidation.defaultProps = {
-  validationMessage: undefined,
+  validationMessages: [],
   validationType: undefined,
 }
 

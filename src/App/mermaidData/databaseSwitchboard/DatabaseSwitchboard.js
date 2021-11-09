@@ -13,9 +13,7 @@ class DatabaseSwitchboard extends FishNameMixin(
   SubmittedRecordsMixin(
     SitesMixin(
       ProjectsMixin(
-        ChoicesMixin(
-          ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState)),
-        ),
+        ChoicesMixin(ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState))),
       ),
     ),
   ),

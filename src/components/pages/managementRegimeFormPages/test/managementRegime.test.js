@@ -28,9 +28,7 @@ test('Management Regime component renders with the expected UI elements', async 
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   expect(
     screen.getByText('Management Regimes B', {
@@ -64,14 +62,10 @@ test('Management Regime component - form inputs are initialized with the correct
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   expect(screen.getByLabelText('Name')).toHaveValue('Management Regimes B')
-  expect(screen.getByLabelText('Secondary Name')).toHaveValue(
-    'Management Regimes 2',
-  )
+  expect(screen.getByLabelText('Secondary Name')).toHaveValue('Management Regimes 2')
   expect(screen.getByLabelText('Year Established')).toHaveValue(null)
   expect(screen.getByLabelText('Area')).toHaveValue(10)
 

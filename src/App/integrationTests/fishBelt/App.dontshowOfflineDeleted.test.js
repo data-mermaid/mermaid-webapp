@@ -14,9 +14,7 @@ test('Collect page only shows records that arent marked to be deleted next sync'
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  const aRecordToMarkAsDeleted = (
-    await dexieInstance.collect_records.toArray()
-  )[0]
+  const aRecordToMarkAsDeleted = (await dexieInstance.collect_records.toArray())[0]
 
   await dexieInstance.collect_records.put({
     ...aRecordToMarkAsDeleted,
@@ -31,10 +29,7 @@ test('Collect page only shows records that arent marked to be deleted next sync'
     dexieInstance,
   )
 
-  userEvent.selectOptions(
-    await screen.findByTestId('page-size-selector'),
-    '100',
-  )
+  userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
 
   const rows = await screen.findAllByRole('row')
 
@@ -46,9 +41,7 @@ test('Sites page only shows records that arent marked to be deleted next sync', 
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  const aRecordToMarkAsDeleted = (
-    await dexieInstance.project_sites.toArray()
-  )[0]
+  const aRecordToMarkAsDeleted = (await dexieInstance.project_sites.toArray())[0]
 
   await dexieInstance.project_sites.put({
     ...aRecordToMarkAsDeleted,
@@ -63,10 +56,7 @@ test('Sites page only shows records that arent marked to be deleted next sync', 
     dexieInstance,
   )
 
-  userEvent.selectOptions(
-    await screen.findByTestId('page-size-selector'),
-    '100',
-  )
+  userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
 
   const rows = await screen.findAllByRole('row')
 
@@ -78,9 +68,7 @@ test('Management Regimes page only shows records that arent marked to be deleted
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  const aRecordToMarkAsDeleted = (
-    await dexieInstance.project_managements.toArray()
-  )[0]
+  const aRecordToMarkAsDeleted = (await dexieInstance.project_managements.toArray())[0]
 
   await dexieInstance.project_managements.put({
     ...aRecordToMarkAsDeleted,
@@ -95,10 +83,7 @@ test('Management Regimes page only shows records that arent marked to be deleted
     dexieInstance,
   )
 
-  userEvent.selectOptions(
-    await screen.findByTestId('page-size-selector'),
-    '100',
-  )
+  userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
 
   const rows = await screen.findAllByRole('row')
 

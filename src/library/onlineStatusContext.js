@@ -1,15 +1,6 @@
 import axios from 'axios'
-import { toast } from 'react-toastify'
 import PropTypes from 'prop-types'
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import language from '../language'
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const OnlineStatusContext = createContext()
@@ -20,8 +11,7 @@ const OnlineStatusProvider = ({ children, value }) => {
   const [hasUserTurnedAppOffline, setHasUserTurnedAppOffline] = useState(
     JSON.parse(localStorage.getItem('hasUserTurnedAppOffline')) || false,
   )
-  const isAppOnline =
-    isNavigatorOnline && isServerReachable === true && !hasUserTurnedAppOffline
+  const isAppOnline = isNavigatorOnline && isServerReachable === true && !hasUserTurnedAppOffline
 
   const canUserOverrideOnlineStatus = isServerReachable && isNavigatorOnline
 
@@ -43,7 +33,6 @@ const OnlineStatusProvider = ({ children, value }) => {
           setIsServerReachable(true)
         })
         .catch(() => {
-          toast.warn(language.offlineNotificationMessages.serverReachable)
           setIsServerReachable(false)
         })
     }
@@ -64,9 +53,6 @@ const OnlineStatusProvider = ({ children, value }) => {
   }, [isNavigatorOnline, stopPingingApi])
 
   const toggleUserOnlineStatusOverride = () => {
-    if (!hasUserTurnedAppOffline) {
-      toast.warn(language.offlineNotificationMessages.toggleOffline)
-    }
     localStorage.setItem('hasUserTurnedAppOffline', !hasUserTurnedAppOffline)
     setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
   }
@@ -76,7 +62,6 @@ const OnlineStatusProvider = ({ children, value }) => {
       setIsNavigatorOnline(true)
     }
     const handleOffline = () => {
-      toast.warn(language.offlineNotificationMessages.navigatorOffline)
       setIsNavigatorOnline(false)
     }
     const cleanup = () => {
@@ -109,9 +94,7 @@ const useOnlineStatus = () => {
   const context = useContext(OnlineStatusContext)
 
   if (context === undefined) {
-    throw new Error(
-      'useOnlineStatus must be used within an OnlineStatusProvider',
-    )
+    throw new Error('useOnlineStatus must be used within an OnlineStatusProvider')
   }
 
   return context

@@ -13,13 +13,7 @@ import {
 import { IconExternalLink } from '../../icons'
 import { geomorphicColors, benthicColors } from '../mapService'
 
-const LegendCheckbox = ({
-  labelName,
-  checked,
-  bgColor,
-  fullWidth,
-  handleCheckboxChange,
-}) => {
+const LegendCheckbox = ({ labelName, checked, bgColor, fullWidth, handleCheckboxChange }) => {
   return (
     <CheckBoxLabel htmlFor={labelName} fullWidth={fullWidth}>
       <input
@@ -53,7 +47,7 @@ const LegendDrawer = ({
     setDrawerOpen(!drawerOpen)
   }
 
-  const geomorphicList = geomorphicLayer.map((geomorphicObj) => {
+  const geomorphicList = geomorphicLayer.map(geomorphicObj => {
     return (
       <LegendCheckbox
         key={geomorphicObj.name}
@@ -66,7 +60,7 @@ const LegendDrawer = ({
     )
   })
 
-  const benthicOptions = benthicLayer.map((benthicObj) => {
+  const benthicOptions = benthicLayer.map(benthicObj => {
     return (
       <LegendCheckbox
         key={benthicObj.name}
@@ -87,11 +81,7 @@ const LegendDrawer = ({
       <SliderLegendPanel isOpen={drawerOpen}>
         <LegendHeader>
           Allen Coral Atlas{' '}
-          <a
-            href="https://allencoralatlas.org/atlas"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://allencoralatlas.org/atlas" target="_blank" rel="noreferrer">
             <IconExternalLink />
           </a>
         </LegendHeader>

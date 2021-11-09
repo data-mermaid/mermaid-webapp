@@ -111,7 +111,7 @@ const LoadingIndicatorContainer = styled.div`
   }
 `
 
-const LoadingIndicator = (props) => {
+const LoadingIndicator = props => {
   return (
     <LoadingIndicatorContainer {...props}>
       <div className="loadingWrapper">

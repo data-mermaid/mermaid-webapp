@@ -36,9 +36,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
@@ -88,9 +86,7 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   expect(
     screen.getByText('Fish Belt', {
@@ -140,9 +136,7 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   // Site select
   expect(screen.getByDisplayValue('Site D'))
@@ -198,9 +192,7 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
   const saveButton = within(collectButtonGroups).getByRole('button', {
@@ -236,9 +228,7 @@ test('FishBelt component in EDIT mode - button group shows only save button when
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
   const saveButton = within(collectButtonGroups).getByRole('button', {
@@ -274,9 +264,7 @@ test('Fishbelt observations: add row button adds a row', async () => {
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const observationsBeforeAdd = screen.getAllByRole('table')[0]
 
@@ -305,37 +293,21 @@ test('Fishbelt observations: delete observation button deleted observation', asy
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const formBeforeDelete = screen.getByRole('form')
-  const observationsTableBeforeDelete = within(formBeforeDelete).getAllByRole(
-    'table',
-  )[0]
+  const observationsTableBeforeDelete = within(formBeforeDelete).getAllByRole('table')[0]
 
-  expect(
-    within(observationsTableBeforeDelete).getAllByRole('row').length,
-  ).toEqual(4)
+  expect(within(observationsTableBeforeDelete).getAllByRole('row').length).toEqual(4)
   expect(within(observationsTableBeforeDelete).getByDisplayValue(2))
 
-  userEvent.click(
-    within(observationsTableBeforeDelete).getAllByLabelText(
-      'Delete Observation',
-    )[1],
-  )
+  userEvent.click(within(observationsTableBeforeDelete).getAllByLabelText('Delete Observation')[1])
 
   const formAfterDelete = screen.getByRole('form')
-  const observationsTableAfterDelete = within(formAfterDelete).getAllByRole(
-    'table',
-  )[0]
+  const observationsTableAfterDelete = within(formAfterDelete).getAllByRole('table')[0]
 
-  expect(
-    within(observationsTableAfterDelete).getAllByRole('row').length,
-  ).toEqual(3)
-  expect(
-    within(observationsTableAfterDelete).queryByDisplayValue(2),
-  ).not.toBeInTheDocument()
+  expect(within(observationsTableAfterDelete).getAllByRole('row').length).toEqual(3)
+  expect(within(observationsTableAfterDelete).queryByDisplayValue(2)).not.toBeInTheDocument()
 })
 
 test('FishBelt component in EDIT mode - when change binsize = 10, fish size values is not selected/null', async () => {
@@ -353,9 +325,7 @@ test('FishBelt component in EDIT mode - when change binsize = 10, fish size valu
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const fishbeltForm = screen.getByRole('form')
 
@@ -365,17 +335,11 @@ test('FishBelt component in EDIT mode - when change binsize = 10, fish size valu
 
   const observationsTable = await screen.findByLabelText('Observations')
 
-  expect(
-    within(observationsTable).getAllByLabelText('Size')[0],
-  ).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size')[0]).not.toHaveValue()
 
-  expect(
-    within(observationsTable).getAllByLabelText('Size')[1],
-  ).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size')[1]).not.toHaveValue()
 
-  expect(
-    within(observationsTable).getAllByLabelText('Size')[2],
-  ).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size')[2]).not.toHaveValue()
 })
 test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size values is not selected/null', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -392,9 +356,7 @@ test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size v
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const fishbeltForm = screen.getByRole('form')
 
@@ -404,17 +366,11 @@ test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size v
 
   const observationsTable = await screen.findByLabelText('Observations')
 
-  expect(
-    within(observationsTable).getAllByLabelText('Size')[0],
-  ).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size')[0]).not.toHaveValue()
 
-  expect(
-    within(observationsTable).getAllByLabelText('Size')[1],
-  ).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size')[1]).not.toHaveValue()
 
-  expect(
-    within(observationsTable).getAllByLabelText('Size')[2],
-  ).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size')[2]).not.toHaveValue()
 })
 test('FishBelt component in EDIT mode - when change binsize = 1, fish size values get transfered to numeric inputs', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -431,9 +387,7 @@ test('FishBelt component in EDIT mode - when change binsize = 1, fish size value
     },
   )
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
-  )
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
   const radioToSelect = within(fishbeltForm).getByLabelText('1')

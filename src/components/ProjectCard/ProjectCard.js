@@ -19,19 +19,14 @@ import stopEventPropagation from '../../library/stopEventPropagation'
 import SyncApiDataIntoOfflineStorage from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
-const ProjectCard = ({
-  project,
-  apiSyncInstance,
-  isOfflineReady,
-  ...restOfProps
-}) => {
+const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps }) => {
   const { isAppOnline } = useOnlineStatus()
   const { name, countries, num_sites, updated_on, id } = project
   const { setIsSyncInProgress } = useSyncStatus()
   const history = useHistory()
   const projectUrl = `projects/${id}`
 
-  const handleProjectOfflineReadyClick = (event) => {
+  const handleProjectOfflineReadyClick = event => {
     const isChecked = event.target.checked
 
     if (isChecked) {
@@ -41,9 +36,7 @@ const ProjectCard = ({
         .then(() => {
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
-          toast.success(
-            language.success.getProjectTurnOnOfflineReadySuccess(name),
-          )
+          toast.success(language.success.getProjectTurnOnOfflineReadySuccess(name))
         })
         .catch(() => {
           toast.error(language.error.getProjectTurnOnOfflineReadyFailure(name))
@@ -56,9 +49,7 @@ const ProjectCard = ({
         .then(() => {
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
-          toast.success(
-            language.success.getProjectTurnOffOfflineReadySuccess(name),
-          )
+          toast.success(language.success.getProjectTurnOffOfflineReadySuccess(name))
         })
         .catch(() => {
           toast.error(language.error.getProjectTurnOffOfflineReadyFailure(name))
@@ -90,8 +81,7 @@ const ProjectCard = ({
       <ProjectInfoWrapper>
         <p>{countries.join(', ')}</p>
         <p>
-          <strong>{num_sites}</strong>{' '}
-          {num_sites && pluralize(num_sites, 'site', 'sites')}
+          <strong>{num_sites}</strong> {num_sites && pluralize(num_sites, 'site', 'sites')}
         </p>
         <p>
           Updated: <strong>{new Date(updated_on).toString()}</strong>
@@ -130,8 +120,7 @@ const ProjectCard = ({
 }
 
 ProjectCard.propTypes = {
-  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage)
-    .isRequired,
+  apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage).isRequired,
   project: projectPropType.isRequired,
   isOfflineReady: PropTypes.bool.isRequired,
 }

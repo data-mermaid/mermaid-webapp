@@ -90,10 +90,7 @@ describe('Online', () => {
     userEvent.click(within(sideNav).getByText('Collecting'))
 
     // show all the records
-    userEvent.selectOptions(
-      await screen.findByTestId('page-size-selector'),
-      '100',
-    )
+    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
     const table = await screen.findByRole('table')
 
     const tableRows = await screen.findAllByRole('row')
@@ -115,11 +112,7 @@ describe('Online', () => {
 
     await saveFishbeltRecord()
 
-    expect(
-      await screen.findByText(
-        'Something went wrong. The collect record has not been saved.',
-      ),
-    )
+    expect(await screen.findByText('Something went wrong. The collect record has not been saved.'))
 
     // ensure the were not in edit mode, but new fish belt mode
     expect(

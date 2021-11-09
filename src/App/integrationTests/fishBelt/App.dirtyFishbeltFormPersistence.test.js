@@ -51,12 +51,9 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
 })
 
 test('Unsaved EDIT fishbelt form edits clear when the user navigates away and back', async () => {
-  renderAuthenticatedOnline(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-    },
-  )
+  renderAuthenticatedOnline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/2'],
+  })
 
   const form = await screen.findByRole('form')
 
@@ -91,12 +88,9 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   expect(within(formAfterNav).getByLabelText(/depth/i)).toHaveValue(10)
 })
 test('Unsaved NEW fishbelt form edits persist through change in online/offline status', async () => {
-  renderAuthenticated(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
-    },
-  )
+  renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/'],
+  })
 
   const form = await screen.findByRole('form')
 
@@ -118,12 +112,9 @@ test('Unsaved NEW fishbelt form edits persist through change in online/offline s
 })
 
 test('Unsaved EDIT fishbelt form edits persist through change in online/offline status', async () => {
-  renderAuthenticated(
-    <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-    },
-  )
+  renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/2'],
+  })
 
   const form = await screen.findByRole('form')
 

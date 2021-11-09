@@ -46,7 +46,7 @@ export const Table = styled.table`
   }
 `
 export const Th = styled.th(
-  (props) => css`
+  props => css`
     text-align: ${props.align || 'left'};
     padding: ${theme.spacing.medium};
     background: ${theme.color.white};
@@ -56,16 +56,16 @@ export const Th = styled.th(
       color: transparent;
     }
     ${props.isSorted &&
-    props.isSortedDescending &&
-    `
+      props.isSortedDescending &&
+      `
       &::after {
         content: ' \u25bc';
         color: ${theme.color.black};
       }
     `}
     ${props.isSorted &&
-    !props.isSortedDescending &&
-    `
+      !props.isSortedDescending &&
+      `
       &::after {
         content: ' \u25b2';
         color: ${theme.color.black};
@@ -74,7 +74,7 @@ export const Th = styled.th(
   `,
 )
 export const Td = styled.td(
-  (props) => css`
+  props => css`
     text-align: ${props.align || 'left'};
     padding: ${theme.spacing.medium};
     border-width: ${theme.spacing.borderSmall};

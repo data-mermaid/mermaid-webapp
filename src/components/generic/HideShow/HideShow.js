@@ -31,7 +31,7 @@ const HideShow = ({ contents, button }) => {
   useEffect(() => {
     const currentButtonRef = buttonRef.current
 
-    window.addEventListener('click', (event) => {
+    window.addEventListener('click', event => {
       if (!(currentButtonRef && currentButtonRef.contains(event.target))) {
         if (isMounted.current) {
           setShowItems(false)
@@ -40,7 +40,7 @@ const HideShow = ({ contents, button }) => {
     })
 
     return () => {
-      window.removeEventListener('click', (event) => {
+      window.removeEventListener('click', event => {
         if (!(currentButtonRef && currentButtonRef.contains(event.target))) {
           setShowItems(false)
         }

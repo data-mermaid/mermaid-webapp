@@ -7,11 +7,7 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 const FishFamilies = () => {
   const { isAppOnline } = useOnlineStatus()
 
-  const content = isAppOnline ? (
-    <>Fish Families Placeholder</>
-  ) : (
-    <PageUnavailableOffline />
-  )
+  const content = isAppOnline ? <>Fish Families Placeholder</> : <PageUnavailableOffline />
 
   return (
     <ContentPageLayout

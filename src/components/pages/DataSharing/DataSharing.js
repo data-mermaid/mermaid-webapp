@@ -4,13 +4,7 @@ import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
-import {
-  Table,
-  Tr,
-  Th,
-  Td,
-  TableOverflowWrapper,
-} from '../../generic/Table/table'
+import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
 import { ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
@@ -59,9 +53,7 @@ const DataSharing = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
 
-  const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(
-    false,
-  )
+  const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(false)
   const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
   const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
 
@@ -79,9 +71,7 @@ const DataSharing = () => {
               setIdsNotAssociatedWithData([projectId])
             }
             setProjectBeingEdited(projectResponse)
-            setDataPolicyOptions(
-              getDataSharingOptions(choicesResponse.datapolicies),
-            )
+            setDataPolicyOptions(getDataSharingOptions(choicesResponse.datapolicies))
             setIsLoading(false)
           }
         })
@@ -91,17 +81,16 @@ const DataSharing = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isMounted])
 
-  const initialFormValues = useMemo(
-    () => getProjectInitialValues(projectBeingEdited),
-    [projectBeingEdited],
-  )
+  const initialFormValues = useMemo(() => getProjectInitialValues(projectBeingEdited), [
+    projectBeingEdited,
+  ])
 
   const formikOptions = {
     initialValues: initialFormValues,
     enableReinitialize: true,
   }
 
-  const findToolTipDescription = (policy) =>
+  const findToolTipDescription = policy =>
     dataPolicyOptions.find(({ label }) => label === policy).description
 
   const handleBenthicPolicyChange = (event, form) => {
@@ -114,7 +103,7 @@ const DataSharing = () => {
 
   const content = isAppOnline ? (
     <Formik {...formikOptions}>
-      {(formik) => (
+      {formik => (
         <>
           <MaxWidthInputWrapper>
             <h3>Data is much more powerful when shared.</h3>
@@ -153,7 +142,7 @@ const DataSharing = () => {
                 <tbody>
                   <Tr>
                     <Td>Fish Belt</Td>
-                    {dataPolicyOptions.map((item) => (
+                    {dataPolicyOptions.map(item => (
                       <Td key={item.value}>
                         <label htmlFor={`fish-belt${item.value}`}>
                           <input
@@ -162,10 +151,9 @@ const DataSharing = () => {
                             name="fish-belt"
                             id={`fish-belt${item.value}`}
                             checked={
-                              formik.getFieldProps('data_policy_beltfish')
-                                .value === item.value
+                              formik.getFieldProps('data_policy_beltfish').value === item.value
                             }
-                            onChange={(event) => {
+                            onChange={event => {
                               formik.setFieldValue(
                                 'data_policy_beltfish',
                                 parseInt(event.target.value, 10),
@@ -178,7 +166,7 @@ const DataSharing = () => {
                   </Tr>
                   <Tr>
                     <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
-                    {dataPolicyOptions.map((item) => (
+                    {dataPolicyOptions.map(item => (
                       <Td key={item.value}>
                         <label htmlFor={`benthic${item.value}`}>
                           <input
@@ -187,12 +175,9 @@ const DataSharing = () => {
                             name="benthic"
                             id={`benthic${item.value}`}
                             checked={
-                              formik.getFieldProps('data_policy_benthiclit')
-                                .value === item.value
+                              formik.getFieldProps('data_policy_benthiclit').value === item.value
                             }
-                            onChange={(event) =>
-                              handleBenthicPolicyChange(event, formik)
-                            }
+                            onChange={event => handleBenthicPolicyChange(event, formik)}
                           />
                         </label>
                       </Td>
@@ -200,7 +185,7 @@ const DataSharing = () => {
                   </Tr>
                   <Tr>
                     <Td>Bleaching</Td>
-                    {dataPolicyOptions.map((item) => (
+                    {dataPolicyOptions.map(item => (
                       <Td key={item.value}>
                         <label htmlFor={`bleaching${item.value}`}>
                           <input
@@ -209,10 +194,9 @@ const DataSharing = () => {
                             id={`bleaching${item.value}`}
                             value={item.value}
                             checked={
-                              formik.getFieldProps('data_policy_bleachingqc')
-                                .value === item.value
+                              formik.getFieldProps('data_policy_bleachingqc').value === item.value
                             }
-                            onChange={(event) => {
+                            onChange={event => {
                               formik.setFieldValue(
                                 'data_policy_bleachingqc',
                                 parseInt(event.target.value, 10),
@@ -227,8 +211,7 @@ const DataSharing = () => {
               </DataSharingTable>
             </TableOverflowWrapper>
             <CheckBoxLabel>
-              <input id="test-project-toggle" type="checkbox" /> This is a test
-              project
+              <input id="test-project-toggle" type="checkbox" /> This is a test project
             </CheckBoxLabel>
             <P>{language.pages.dataSharing.testProjectHelperText}</P>
             <DataSharingInfoModal

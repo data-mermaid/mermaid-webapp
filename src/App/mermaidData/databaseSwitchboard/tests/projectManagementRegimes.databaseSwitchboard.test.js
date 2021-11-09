@@ -14,8 +14,6 @@ test('getManagementRegimes only returns profiles for a given project', async () 
 
   expect(managementRegimes.length).toEqual(2)
   expect(
-    managementRegimes.find(
-      (profile) => profile.project === 'shouldGetFilteredOut',
-    ),
+    managementRegimes.find(profile => profile.project === 'shouldGetFilteredOut'),
   ).toBeUndefined()
 })

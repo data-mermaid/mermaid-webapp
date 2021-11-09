@@ -18,7 +18,7 @@ const PageSizeSelector = ({ pageSize, pageSizeOptions, onChange }) => {
         id="page-size-selector"
         data-testid="page-size-selector"
       >
-        {pageSizeOptions.map((size) => (
+        {pageSizeOptions.map(size => (
           <option key={size} value={size}>
             {size}
           </option>

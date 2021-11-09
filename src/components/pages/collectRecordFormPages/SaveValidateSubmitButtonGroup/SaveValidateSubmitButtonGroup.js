@@ -16,11 +16,7 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
   }
 `
 
-const SaveValidateSubmitButtonGroup = ({
-  isNewRecord,
-  fishBeltButtonsState,
-  validateRecord,
-}) => {
+const SaveValidateSubmitButtonGroup = ({ isNewRecord, fishBeltButtonsState, validateRecord }) => {
   const saveButtonSwitch = () => {
     if (fishBeltButtonsState === possibleCollectButtonGroupStates.saving) {
       return (
@@ -71,9 +67,7 @@ const SaveValidateSubmitButtonGroup = ({
     return (
       <ButtonCallout
         onClick={validateRecord}
-        disabled={
-          fishBeltButtonsState !== possibleCollectButtonGroupStates.saved
-        }
+        disabled={fishBeltButtonsState !== possibleCollectButtonGroupStates.saved}
       >
         <IconCheck />
         Validate
@@ -82,11 +76,7 @@ const SaveValidateSubmitButtonGroup = ({
   }
 
   const submitButton = (
-    <ButtonCallout
-      disabled={
-        fishBeltButtonsState !== possibleCollectButtonGroupStates.validated
-      }
-    >
+    <ButtonCallout disabled={fishBeltButtonsState !== possibleCollectButtonGroupStates.validated}>
       <IconUpload />
       Submit
     </ButtonCallout>

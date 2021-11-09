@@ -26,64 +26,40 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
 
   const sideNav = await screen.findByTestId('content-page-side-nav')
 
-  const offlineToggleSwitchTestIdBeforeFirstClick = screen.getByTestId(
-    'offline-toggle-switch-test',
-  )
+  const offlineToggleSwitchTestIdBeforeFirstClick = screen.getByTestId('offline-toggle-switch-test')
 
   userEvent.click(offlineToggleSwitchTestIdBeforeFirstClick)
 
-  expect(
-    await screen.findByTestId('offline-toggle-switch-label'),
-  ).toHaveTextContent("You're OFFLINE. Some contents may be out of date.")
-
-  expect(
-    within(sideNav).queryByRole('link', { name: 'Submitted' }),
-  ).not.toBeInTheDocument()
-  expect(
-    within(sideNav).queryByRole('link', { name: 'Project Info' }),
-  ).not.toBeInTheDocument()
-  expect(
-    within(sideNav).queryByRole('link', { name: 'Users' }),
-  ).not.toBeInTheDocument()
-  expect(
-    within(sideNav).queryByRole('link', { name: 'Data Sharing' }),
-  ).not.toBeInTheDocument()
-
-  const offlineToggleSwitchTestIdAfterFirstClick = screen.getByTestId(
-    'offline-toggle-switch-test',
+  expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
+    "You're OFFLINE. Some contents may be out of date.",
   )
+
+  expect(within(sideNav).queryByRole('link', { name: 'Submitted' })).not.toBeInTheDocument()
+  expect(within(sideNav).queryByRole('link', { name: 'Project Info' })).not.toBeInTheDocument()
+  expect(within(sideNav).queryByRole('link', { name: 'Users' })).not.toBeInTheDocument()
+  expect(within(sideNav).queryByRole('link', { name: 'Data Sharing' })).not.toBeInTheDocument()
+
+  const offlineToggleSwitchTestIdAfterFirstClick = screen.getByTestId('offline-toggle-switch-test')
 
   userEvent.click(offlineToggleSwitchTestIdAfterFirstClick)
 
-  await waitForElementToBeRemoved(() =>
-    screen.queryByLabelText('project pages loading indicator'),
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+
+  expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
+    "You're ONLINE",
   )
 
-  expect(
-    await screen.findByTestId('offline-toggle-switch-label'),
-  ).toHaveTextContent("You're ONLINE")
-
-  expect(
-    within(sideNav).queryByRole('link', { name: 'Submitted' }),
-  ).toBeInTheDocument()
-  expect(
-    within(sideNav).queryByRole('link', { name: 'Project Info' }),
-  ).toBeInTheDocument()
-  expect(
-    within(sideNav).queryByRole('link', { name: 'Users' }),
-  ).toBeInTheDocument()
-  expect(
-    within(sideNav).queryByRole('link', { name: 'Data Sharing' }),
-  ).toBeInTheDocument()
+  expect(within(sideNav).queryByRole('link', { name: 'Submitted' })).toBeInTheDocument()
+  expect(within(sideNav).queryByRole('link', { name: 'Project Info' })).toBeInTheDocument()
+  expect(within(sideNav).queryByRole('link', { name: 'Users' })).toBeInTheDocument()
+  expect(within(sideNav).queryByRole('link', { name: 'Data Sharing' })).toBeInTheDocument()
 })
 
 test('Navigator online - Toggle switch is not checked, and is enabled', async () => {
   jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(true)
   renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
 
-  const offlineToggleSwitchTestId = await screen.findByTestId(
-    'offline-toggle-switch-test',
-  )
+  const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 
   expect(offlineToggleSwitchTestId).not.toBeChecked()
   expect(offlineToggleSwitchTestId).toBeEnabled()
@@ -93,9 +69,7 @@ test('Navigator offline - Toggle switch is checked and disabled', async () => {
   jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
   renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
 
-  const offlineToggleSwitchTestId = await screen.findByTestId(
-    'offline-toggle-switch-test',
-  )
+  const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 
   expect(offlineToggleSwitchTestId).toBeChecked()
   expect(offlineToggleSwitchTestId).toBeDisabled()
@@ -104,9 +78,7 @@ test('Navigator offline - Toggle switch is checked and disabled', async () => {
 test('Server is reachable - Toggle switch is not checked, and is enabled', async () => {
   renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
 
-  const offlineToggleSwitchTestId = await screen.findByTestId(
-    'offline-toggle-switch-test',
-  )
+  const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 
   expect(offlineToggleSwitchTestId).not.toBeChecked()
   expect(offlineToggleSwitchTestId).toBeEnabled()
@@ -120,9 +92,7 @@ test('Server is unreachable - Toggle switch is not checked, and is enabled', asy
   )
   renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
 
-  const offlineToggleSwitchTestId = await screen.findByTestId(
-    'offline-toggle-switch-test',
-  )
+  const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 
   expect(offlineToggleSwitchTestId).toBeChecked()
   expect(offlineToggleSwitchTestId).toBeDisabled()

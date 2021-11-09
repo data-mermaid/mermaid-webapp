@@ -5,5 +5,4 @@ export const getObserverNameOptions = (choices) => {
   }))
 }
 
-export const getObserverNames = (observers) =>
-  observers.map(({ profile }) => profile)
+export const getObserverNames = (observers) => observers.map(({ profile }) => profile)

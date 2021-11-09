@@ -1,9 +1,6 @@
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import {
-  hoverState,
-  mediaQueryPhoneOnly,
-} from '../../library/styling/mediaQueries'
+import { hoverState, mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 export const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -49,11 +46,10 @@ export const InputRow = styled.div`
   border-style: solid;
   border-color: ${theme.color.secondaryColor};
   label,
-  && > div:last-of-type {
+  & > div:last-of-type {
     display: inline-block;
     ${theme.typography.noWordBreak};
-    padding: calc(${theme.spacing.borderSmall} + ${theme.spacing.xsmall})
-      ${theme.spacing.xsmall};
+    padding: calc(${theme.spacing.borderSmall} + ${theme.spacing.xsmall}) ${theme.spacing.xsmall};
   }
   ${hoverState(css`
     background-color: ${theme.color.secondaryHover};
@@ -61,11 +57,11 @@ export const InputRow = styled.div`
   &:focus-within {
     background-color: ${theme.color.focusWithin};
   }
-${(props) =>
-  (props.validationType === 'ok' || !props.validationType) &&
-  css`
-    border-color: ${theme.color.success};
-  `}
+  ${(props) =>
+    props.validationType === 'ok' &&
+    css`
+      border-color: ${theme.color.valid};
+    `}
   ${(props) =>
     props.validationType === 'error' &&
     css`
@@ -76,12 +72,15 @@ ${(props) =>
     css`
       border-color: ${theme.color.warningColor};
     `}
+    ${(props) =>
+    props.validationType === 'ignore' &&
+    css`
+      border-color: ${theme.color.ignoreBorder};
+    `}
 `
 export const ValidationMessage = styled.span.attrs((props) => ({
   role:
-    props.validationType === 'error' || props.validationType === 'warning'
-      ? 'alert'
-      : undefined,
+    props.validationType === 'error' || props.validationType === 'warning' ? 'alert' : undefined,
 }))``
 export const Select = styled.select`
   ${inputTextareaSelectStyles}

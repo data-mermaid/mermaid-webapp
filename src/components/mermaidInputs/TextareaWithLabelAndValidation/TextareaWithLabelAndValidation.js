@@ -1,16 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Textarea, InputRow, ValidationMessage, HelperText } from '../form'
-import { IconCheck } from '../../icons'
+import { Textarea, InputRow, HelperText } from '../../generic/form'
+import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
+import ValidationInfo from '../ValidationInfo/ValidationInfo'
 
 const TextareaWithLabelAndValidation = ({
-  label,
-  id,
   helperText,
-  validationMessage,
-  validationType,
+  id,
+  ignoreValidations,
+  label,
+  resetValidations,
   testId,
+  validationMessages,
+  validationType,
   ...restOfProps
 }) => {
   return (
@@ -26,21 +29,14 @@ const TextareaWithLabelAndValidation = ({
           id={id}
           {...restOfProps}
         />
-        {helperText && (
-          <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>
-        )}
+        {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
-      <div>
-        {validationMessage &&
-        (validationType === 'error' || validationType === 'warning') ? (
-          <ValidationMessage validationType={validationType}>
-            {validationMessage}
-          </ValidationMessage>
-        ) : null}
-        {validationType === 'ok' ? (
-          <IconCheck aria-label="Passed validation" />
-        ) : null}
-      </div>
+      <ValidationInfo
+        validationType={validationType}
+        validationMessages={validationMessages}
+        ignoreValidations={ignoreValidations}
+        resetValidations={resetValidations}
+      />
     </InputRow>
   )
 }
@@ -48,16 +44,18 @@ const TextareaWithLabelAndValidation = ({
 TextareaWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
+  ignoreValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
+  resetValidations: PropTypes.func.isRequired,
   testId: PropTypes.string,
-  validationMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
 }
 
 TextareaWithLabelAndValidation.defaultProps = {
   helperText: undefined,
   testId: undefined,
-  validationMessage: undefined,
+  validationMessages: undefined,
   validationType: undefined,
 }
 

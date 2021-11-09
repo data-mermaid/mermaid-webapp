@@ -1,8 +1,8 @@
 import { createUuid } from '../../../library/createUuid'
 
-const FishNameMixin = (Base) =>
+const FishNameMixin = Base =>
   class extends Base {
-    getFishSpecies = () => {
+    getFishSpecies = function getFishSpecies() {
       if (this._isAuthenticatedAndReady) {
         return this._dexieInstance.fish_species.toArray()
       }
@@ -10,21 +10,18 @@ const FishNameMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addFishSpecies = async ({ genusId, genusName, speciesName }) => {
+    addFishSpecies = async function addFishSpecies({ genusId, genusName, speciesName }) {
       if (!genusId || !genusName || !speciesName) {
-        Promise.reject(
-          new Error('addFishSpecies was implemented with missing parameters'),
-        )
+        Promise.reject(new Error('addFishSpecies was implemented with missing parameters'))
       }
 
       const proposedDisplayName = `${genusName} ${speciesName}`
 
       const existingSpecies = await this.getFishSpecies()
       const existingMatchingSpecies = existingSpecies.filter(
-        (specie) => specie.display_name === proposedDisplayName,
+        specie => specie.display_name === proposedDisplayName,
       )
-      const isProposedSpeciesAlreadyExisting =
-        existingMatchingSpecies.length > 0
+      const isProposedSpeciesAlreadyExisting = existingMatchingSpecies.length > 0
 
       if (isProposedSpeciesAlreadyExisting) {
         const speciesExistsException = {
@@ -48,30 +45,30 @@ const FishNameMixin = (Base) =>
           newFishObject,
         )
 
-        return this._apiSyncInstance.pushThenPullSpecies().then((response) => {
+        return this._apiSyncInstance.pushThenPullSpecies().then(response => {
           const newFishSpeciesFromApi = response.data.fish_species.updates[0]
 
           return newFishSpeciesFromApi
         })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.fish_species
-          .put(newFishObject)
-          .then(() => newFishObject)
+        return this._dexieInstance.fish_species.put(newFishObject).then(() => newFishObject)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getFishGenera = () =>
-      this._isAuthenticatedAndReady
+    getFishGenera = function getFishGenera() {
+      return this._isAuthenticatedAndReady
         ? this._dexieInstance.fish_genera.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
 
-    getFishFamilies = () =>
-      this._isAuthenticatedAndReady
+    getFishFamilies = function getFishFamilies() {
+      return this._isAuthenticatedAndReady
         ? this._dexieInstance.fish_families.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default FishNameMixin

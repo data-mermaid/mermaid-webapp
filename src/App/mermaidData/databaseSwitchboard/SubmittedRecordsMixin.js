@@ -10,40 +10,38 @@ const SubmittedRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
-    getSubmittedRecords = (projectId) => {
+    getSubmittedRecords = function getSubmittedRecords(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
-            .get(
-              `${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`,
-              {
-                params: {
-                  protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
-                },
+            .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
+              params: {
+                protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
               },
-            )
+            })
             .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedFishBeltTransectRecord = (projectId, id) => {
+    getSubmittedFishBeltTransectRecord = function getSubmittedFishBeltTransectRecord(
+      projectId,
+      id,
+    ) {
       if (!(id || projectId)) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
-            .get(
-              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
-            )
+            .get(`${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`)
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedRecordsForUIDisplay = (projectId) => {
+    getSubmittedRecordsForUIDisplay = function getSubmittedRecordsForUIDisplay(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }

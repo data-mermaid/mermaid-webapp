@@ -1,4 +1,4 @@
-const getProjectInitialValues = (projectRecord) => {
+const getProjectInitialValues = projectRecord => {
   return {
     name: projectRecord?.name ?? '',
     notes: projectRecord?.notes ?? '',

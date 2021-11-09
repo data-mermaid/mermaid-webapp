@@ -12,8 +12,6 @@ test('getProjectProfiles only returns profiles for a given project', async () =>
 
   expect(projectProfiles.length).toEqual(2)
   expect(
-    projectProfiles.find(
-      (profile) => profile.project === 'shouldGetFilteredOut',
-    ),
+    projectProfiles.find(profile => profile.project === 'shouldGetFilteredOut'),
   ).toBeUndefined()
 })

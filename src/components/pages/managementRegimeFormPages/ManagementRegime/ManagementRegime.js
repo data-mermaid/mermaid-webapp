@@ -11,12 +11,12 @@ import { InputWrapper } from '../../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import InputCheckboxGroupWithLabelAndValidation from '../../../generic/InputCheckboxGroupWithLabelAndValidation'
-import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
-import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
+import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
+import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
+import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../language'
 import ManagementRulesInput from '../ManagementRulesInput'
-import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../../library/useIsMounted'
 
 const ManagementRegime = () => {
@@ -24,10 +24,7 @@ const ManagementRegime = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [managementCompliances, setManagementCompliances] = useState([])
   const [managementParties, setManagementParties] = useState([])
-  const [
-    managementRegimeBeingEdited,
-    setManagementRegimeBeingEdited,
-  ] = useState()
+  const [managementRegimeBeingEdited, setManagementRegimeBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
@@ -42,44 +39,26 @@ const ManagementRegime = () => {
       ]
 
       Promise.all(promises)
-        .then(
-          ([managementRegimeResponse, choicesResponse, projectResponse]) => {
-            if (isMounted.current) {
-              if (!managementRegimeResponse && managementRegimeId) {
-                setIdsNotAssociatedWithData((previousState) => [
-                  ...previousState,
-                  managementRegimeId,
-                ])
-              }
-              if (!projectResponse && projectId) {
-                setIdsNotAssociatedWithData((previousState) => [
-                  ...previousState,
-                  projectId,
-                ])
-              }
-
-              setManagementParties(
-                getOptions(choicesResponse.managementparties),
-              )
-              setManagementCompliances(
-                getOptions(choicesResponse.managementcompliances),
-              )
-              setManagementRegimeBeingEdited(managementRegimeResponse)
-              setIsLoading(false)
+        .then(([managementRegimeResponse, choicesResponse, projectResponse]) => {
+          if (isMounted.current) {
+            if (!managementRegimeResponse && managementRegimeId) {
+              setIdsNotAssociatedWithData(previousState => [...previousState, managementRegimeId])
             }
-          },
-        )
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData(previousState => [...previousState, projectId])
+            }
+
+            setManagementParties(getOptions(choicesResponse.managementparties))
+            setManagementCompliances(getOptions(choicesResponse.managementcompliances))
+            setManagementRegimeBeingEdited(managementRegimeResponse)
+            setIsLoading(false)
+          }
+        })
         .catch(() => {
           toast.error(language.error.managementRegimeRecordUnavailable)
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    isSyncInProgress,
-    managementRegimeId,
-    projectId,
-  ])
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, managementRegimeId, projectId])
 
   const initialFormValues = useMemo(
     () => getManagementRegimeInitialValues(managementRegimeBeingEdited),
@@ -98,7 +77,7 @@ const ManagementRegime = () => {
     />
   ) : (
     <Formik {...formikOptions}>
-      {(formik) => (
+      {formik => (
         <ContentPageLayout
           isPageContentLoading={isLoading}
           content={

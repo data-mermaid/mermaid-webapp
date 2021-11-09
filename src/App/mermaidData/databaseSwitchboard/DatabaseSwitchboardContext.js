@@ -7,9 +7,7 @@ const DatabaseSwitchboardInstanceContext = createContext()
 
 const DatabaseSwitchboardInstanceProvider = ({ children, value }) => {
   return (
-    <DatabaseSwitchboardInstanceContext.Provider
-      value={{ databaseSwitchboardInstance: value }}
-    >
+    <DatabaseSwitchboardInstanceContext.Provider value={{ databaseSwitchboardInstance: value }}>
       {children}
     </DatabaseSwitchboardInstanceContext.Provider>
   )

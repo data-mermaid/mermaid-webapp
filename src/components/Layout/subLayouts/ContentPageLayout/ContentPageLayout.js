@@ -27,13 +27,19 @@ const contentStyles = css`
   background: ${theme.color.white};
   width: ${theme.spacing.fullViewportWidth};
 `
+
 const ContentToolbar = styled('div')`
   ${contentStyles};
   padding: ${theme.spacing.small} ${theme.spacing.medium};
-  border-bottom: solid ${theme.spacing.borderMedium}
-    ${theme.color.backgroundColor};
+  border-bottom: solid ${theme.spacing.borderMedium} ${theme.color.backgroundColor};
   margin-bottom: 0;
   z-index: 100;
+  ${(props) =>
+    props.isToolbarSticky &&
+    css`
+      position: sticky;
+      top: ${theme.spacing.headerHeight};
+    `}
 `
 
 const Content = styled('div')`
@@ -41,7 +47,7 @@ const Content = styled('div')`
   margin-top: 0px;
 `
 
-const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
+const ContentPageLayout = ({ content, toolbar, isPageContentLoading, isToolbarSticky }) => {
   const { isSyncInProgress } = useSyncStatus()
 
   return (
@@ -58,7 +64,9 @@ const ContentPageLayout = ({ content, toolbar, isPageContentLoading }) => {
               <LoadingIndicator aria-label="project pages loading indicator" />
             ) : (
               <>
-                {toolbar && <ContentToolbar>{toolbar}</ContentToolbar>}
+                {toolbar && (
+                  <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
+                )}
                 <Content>{content}</Content>
               </>
             )}
@@ -73,10 +81,12 @@ ContentPageLayout.propTypes = {
   content: PropTypes.node.isRequired,
   isPageContentLoading: PropTypes.bool,
   toolbar: PropTypes.node,
+  isToolbarSticky: PropTypes.bool,
 }
 
 ContentPageLayout.defaultProps = {
   isPageContentLoading: false,
+  isToolbarSticky: false,
   toolbar: undefined,
 }
 

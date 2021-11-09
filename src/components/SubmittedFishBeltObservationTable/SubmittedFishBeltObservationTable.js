@@ -45,7 +45,7 @@ const SubmittedFishBeltObservationTable = ({
   const { obs_belt_fishes } = submittedRecord
   const { width, len_surveyed } = submittedRecord.fishbelt_transect
 
-  const observationsBiomass = obs_belt_fishes.map((observation) => ({
+  const observationsBiomass = obs_belt_fishes.map(observation => ({
     uiId: observation.id,
     biomass: getObservationBiomass({
       choices,
@@ -60,23 +60,16 @@ const SubmittedFishBeltObservationTable = ({
     summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
   )
 
-  const totalAbundance = summarizeArrayObjectValuesByProperty(
-    obs_belt_fishes,
-    'count',
-  )
+  const totalAbundance = summarizeArrayObjectValuesByProperty(obs_belt_fishes, 'count')
 
-  const getFishName = (fishAttributeId) => {
-    const foundFishName = fishNameOptions.find(
-      (fish) => fish.value === fishAttributeId,
-    )
+  const getFishName = fishAttributeId => {
+    const foundFishName = fishNameOptions.find(fish => fish.value === fishAttributeId)
 
     return foundFishName ? foundFishName.label : ''
   }
 
-  const getFishBiomass = (observationId) => {
-    const fishBiomass = observationsBiomass.find(
-      (fish) => fish.uiId === observationId,
-    ).biomass
+  const getFishBiomass = observationId => {
+    const fishBiomass = observationsBiomass.find(fish => fish.uiId === observationId).biomass
 
     return roundToOneDecimal(fishBiomass)
   }

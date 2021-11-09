@@ -1,5 +1,7 @@
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
+import getObjectProperty from '../../../library/objects/getObjectProperty'
+import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const CollectRecordsMixin = (Base) =>
@@ -18,9 +20,15 @@ const CollectRecordsMixin = (Base) =>
       warning: 'Warnings',
     }
 
-    #getIsFishBelt = (record) => record.data.protocol === 'fishbelt'
+    #getIsFishBelt = function getIsFishBelt(record) {
+      return record?.data?.protocol === 'fishbelt'
+    }
 
-    #formatFishbeltRecordForPush = ({ record, projectId, profileId }) => {
+    #formatFishbeltRecordForPush = function formatFishbeltRecordForPush({
+      record,
+      projectId,
+      profileId,
+    }) {
       const idToSubmit = record.id ?? createUuid()
       const profileIdToSubmit = record.profile ?? profileId
       const projectIdToSubmit = record.project ?? projectId
@@ -35,7 +43,7 @@ const CollectRecordsMixin = (Base) =>
       }
     }
 
-    #getSampleUnitLabel = (record) => {
+    #getSampleUnitLabel = function getSampleUnitLabel(record) {
       const isFishBelt = this.#getIsFishBelt(record)
 
       const transectNumber = isFishBelt
@@ -51,15 +59,13 @@ const CollectRecordsMixin = (Base) =>
       return sampleUnit === '' ? undefined : sampleUnit
     }
 
-    #getDepthLabel = (record) => {
+    #getDepthLabel = function getDepthLabel(record) {
       const isFishBelt = this.#getIsFishBelt(record)
 
-      return isFishBelt
-        ? record.data.fishbelt_transect?.depth
-        : record.data.benthic_transect?.depth
+      return isFishBelt ? record.data.fishbelt_transect?.depth : record.data.benthic_transect?.depth
     }
 
-    #getObserversLabel = (record) => {
+    #getObserversLabel = function getObserversLabel(record) {
       const { observers } = record.data
 
       return observers
@@ -73,13 +79,13 @@ const CollectRecordsMixin = (Base) =>
         : undefined
     }
 
-    #getStatusLabel = (record) => {
+    #getStatusLabel = function getStatusLabel(record) {
       const { validations } = record
 
       return this.#validationTypeLabel[validations?.status] ?? 'Saved'
     }
 
-    #getSizeLabel = (record, choices) => {
+    #getSizeLabel = function getSizeLabel(record, choices) {
       const { belttransectwidths } = choices
       const isFishBelt = this.#getIsFishBelt(record)
       const noSizeLabel = '-'
@@ -87,10 +93,10 @@ const CollectRecordsMixin = (Base) =>
       if (isFishBelt) {
         const widthId = record.data.fishbelt_transect?.width
 
-        const widthNameWithoutUnit = getObjectById(
-          belttransectwidths.data,
-          widthId,
-        )?.name.slice(0, -1)
+        const widthNameWithoutUnit = getObjectById(belttransectwidths.data, widthId)?.name.slice(
+          0,
+          -1,
+        )
 
         const length = record.data.fishbelt_transect?.len_surveyed
 
@@ -109,11 +115,9 @@ const CollectRecordsMixin = (Base) =>
       return length === undefined ? noSizeLabel : `${length}m`
     }
 
-    saveFishBelt = async ({ record, profileId, projectId }) => {
+    saveFishBelt = async function saveFishBelt({ record, profileId, projectId }) {
       if (!record || !profileId || !projectId) {
-        throw new Error(
-          'saveFishBelt expects record, profileId, and projectId parameters',
-        )
+        throw new Error('saveFishBelt expects record, profileId, and projectId parameters')
       }
       const recordToSubmit = this.#formatFishbeltRecordForPush({
         record,
@@ -139,9 +143,8 @@ const CollectRecordsMixin = (Base) =>
           )
           .then((response) => {
             const [recordResponseFromApiPush] = response.data.collect_records
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              recordResponseFromApiPush,
-            )
+            const isRecordStatusCodeSuccessful =
+              this._getIsResponseStatusSuccessful(recordResponseFromApiPush)
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
@@ -149,8 +152,7 @@ const CollectRecordsMixin = (Base) =>
               return this._apiSyncInstance
                 .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
-                  const recordReturnedFromServer =
-                    recordResponseFromApiPush.data
+                  const recordReturnedFromServer = recordResponseFromApiPush.data
 
                   return recordReturnedFromServer
                 })
@@ -164,19 +166,15 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records
-          .put(recordToSubmit)
-          .then(() => recordToSubmit)
+        return this._dexieInstance.collect_records.put(recordToSubmit).then(() => recordToSubmit)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteFishBelt = async ({ record, profileId, projectId }) => {
+    deleteFishBelt = async function deleteFishBelt({ record, profileId, projectId }) {
       if (!record || !profileId || !projectId) {
-        throw new Error(
-          'deleteFishBelt expects record, profileId, and projectId parameters',
-        )
+        throw new Error('deleteFishBelt expects record, profileId, and projectId parameters')
       }
       const hasCorrespondingRecordInTheApi = !!record._last_revision_num
 
@@ -189,10 +187,7 @@ const CollectRecordsMixin = (Base) =>
         _deleted: true,
       }
 
-      if (
-        hasCorrespondingRecordInTheApi &&
-        this._isOnlineAuthenticatedAndReady
-      ) {
+      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
 
@@ -209,11 +204,9 @@ const CollectRecordsMixin = (Base) =>
             },
           )
           .then((apiPushResponse) => {
-            const recordReturnedFromApiPush =
-              apiPushResponse.data.collect_records[0]
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              recordReturnedFromApiPush,
-            )
+            const recordReturnedFromApiPush = apiPushResponse.data.collect_records[0]
+            const isRecordStatusCodeSuccessful =
+              this._getIsResponseStatusSuccessful(recordReturnedFromApiPush)
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
@@ -230,16 +223,12 @@ const CollectRecordsMixin = (Base) =>
             )
           })
       }
-      if (
-        hasCorrespondingRecordInTheApi &&
-        this._isOfflineAuthenticatedAndReady
-      ) {
+      if (hasCorrespondingRecordInTheApi && this._isOfflineAuthenticatedAndReady) {
         return this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
       }
       if (
         !hasCorrespondingRecordInTheApi &&
-        (this._isOnlineAuthenticatedAndReady ||
-          this._isOfflineAuthenticatedAndReady)
+        (this._isOnlineAuthenticatedAndReady || this._isOfflineAuthenticatedAndReady)
       ) {
         return this._dexieInstance.collect_records.delete(record.id)
       }
@@ -247,30 +236,25 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    validateFishBelt = ({ recordId, projectId }) => {
+    validateFishBelt = function validateFishbelt({ recordId, projectId }) {
       if (!recordId || !projectId) {
-        throw new Error(
-          'validateFishBelt expects record, profileId, and projectId parameters',
-        )
+        throw new Error('validateFishBelt expects record, profileId, and projectId parameters')
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
         return this._authenticatedAxios
-          .post(
-            `${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`,
-            { ids: [recordId], version: '2' },
-          )
+          .post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`, {
+            ids: [recordId],
+            version: '2',
+          })
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              response,
-            )
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(response)
 
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance
                 .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
-                  const validatedData =
-                    _dataSetsReturnedFromApiPull.data.collect_records.updates[0]
+                  const validatedData = _dataSetsReturnedFromApiPull.data.collect_records.updates[0]
 
                   return validatedData
                 })
@@ -287,7 +271,67 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecord = (id) => {
+    ignoreValidations = function ignoreValidations({ record, validationPath }) {
+      const path = `validations.results.${validationPath}`
+      const currentValidations = getObjectProperty({
+        object: record,
+        path,
+      })
+
+      const currentValidationsProperties = Object.keys(currentValidations)
+
+      const ignoredValidations = currentValidationsProperties.map((currentValidationsProperty) => {
+        const currentValidationObject = currentValidations[currentValidationsProperty]
+        const currentValidationStatus = currentValidationObject.status
+
+        return {
+          ...currentValidationObject,
+          status: currentValidationStatus === 'warning' ? 'ignore' : currentValidationStatus,
+        }
+      })
+
+      const recordWithIgnoredValidations = setObjectPropertyOnClone({
+        object: record,
+        path,
+        value: ignoredValidations,
+      })
+
+      return this._dexieInstance.collect_records
+        .put(recordWithIgnoredValidations)
+        .then(() => recordWithIgnoredValidations)
+    }
+
+    resetValidations = function resetValidations({ record, validationPath }) {
+      const path = `validations.results.${validationPath}`
+      const currentValidations = getObjectProperty({
+        object: record,
+        path,
+      })
+
+      const currentValidationsProperties = Object.keys(currentValidations)
+
+      const resettedValidations = currentValidationsProperties.map((currentValidationsProperty) => {
+        const currentValidationObject = currentValidations[currentValidationsProperty]
+        const currentValidationStatus = currentValidationObject.status
+
+        return {
+          ...currentValidationObject,
+          status: currentValidationStatus === 'ignore' ? 'reset' : currentValidationStatus,
+        }
+      })
+
+      const recordWithResetValidations = setObjectPropertyOnClone({
+        object: record,
+        path,
+        value: resettedValidations,
+      })
+
+      return this._dexieInstance.collect_records
+        .put(recordWithResetValidations)
+        .then(() => recordWithResetValidations)
+    }
+
+    getCollectRecord = function getCollectRecord(id) {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
@@ -299,7 +343,9 @@ const CollectRecordsMixin = (Base) =>
       return this._dexieInstance.collect_records.get(id)
     }
 
-    getCollectRecordsWithoutOfflineDeleted = (projectId) => {
+    getCollectRecordsWithoutOfflineDeleted = function getCollectRecordsWithoutOfflineDeleted(
+      projectId,
+    ) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -308,16 +354,14 @@ const CollectRecordsMixin = (Base) =>
         return this._dexieInstance.collect_records
           .toArray()
           .then((records) =>
-            records.filter(
-              (record) => record.project === projectId && !record._deleted,
-            ),
+            records.filter((record) => record.project === projectId && !record._deleted),
           )
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecordsForUIDisplay = (projectId) => {
+    getCollectRecordsForUIDisplay = function getCollectRecordsForUIDisplay(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -333,19 +377,13 @@ const CollectRecordsMixin = (Base) =>
               ...record,
               uiLabels: {
                 site: getObjectById(sites, record.data.sample_event.site)?.name,
-                management: getObjectById(
-                  managementRegimes,
-                  record.data.sample_event.management,
-                )?.name,
-                protocol: this.#collectRecordProtocolLabels[
-                  record.data.protocol
-                ],
+                management: getObjectById(managementRegimes, record.data.sample_event.management)
+                  ?.name,
+                protocol: this.#collectRecordProtocolLabels[record.data.protocol],
                 size: this.#getSizeLabel(record, choices),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 depth: this.#getDepthLabel(record),
-                sampleDate: getSampleDateLabel(
-                  record.data.sample_event.sample_date,
-                ),
+                sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
                 observers: this.#getObserversLabel(record),
                 status: this.#getStatusLabel(record),
               },

@@ -55,7 +55,6 @@ export const TooltipWithText = ({ text, tooltipText, id, ...restOfProps }) => {
 
 TooltipWithText.propTypes = {
   text: PropTypes.node.isRequired,
-  tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
-    .isRequired,
+  tooltipText: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   id: PropTypes.string.isRequired,
 }

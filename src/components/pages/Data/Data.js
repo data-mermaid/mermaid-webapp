@@ -3,12 +3,7 @@ import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { matchSorter } from 'match-sorter'
-import {
-  usePagination,
-  useSortBy,
-  useGlobalFilter,
-  useTable,
-} from 'react-table'
+import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
@@ -37,10 +32,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 
 const Data = () => {
-  const [
-    submittedRecordsForUiDisplay,
-    setSubmittedRecordsForUiDisplay,
-  ] = useState([])
+  const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -56,19 +48,16 @@ const Data = () => {
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getSubmittedRecordsForUIDisplay(projectId)
-        .then((records) => {
+        .then(records => {
           if (isMounted.current) {
             setSubmittedRecordsForUiDisplay(records)
             setIsLoading(false)
           }
         })
-        .catch((error) => {
+        .catch(error => {
           const errorStatus = error.response?.status
 
-          if (
-            (errorStatus === 404 || errorStatus === 400) &&
-            isMounted.current
-          ) {
+          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
             setIdsNotAssociatedWithData([projectId])
             setIsLoading(false)
           }
@@ -131,9 +120,7 @@ const Data = () => {
     () =>
       submittedRecordsForUiDisplay.map(({ id, protocol, uiLabels }) => ({
         method: (
-          <Link to={`${currentProjectPath}/data/${protocol}/${id}`}>
-            {uiLabels.protocol}
-          </Link>
+          <Link to={`${currentProjectPath}/data/${protocol}/${id}`}>{uiLabels.protocol}</Link>
         ),
         site: uiLabels.site,
         management: uiLabels.management,
@@ -160,10 +147,7 @@ const Data = () => {
       return rows
     }
 
-    return queryTerms.reduce(
-      (results, term) => matchSorter(results, term, { keys }),
-      rows,
-    )
+    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
   }, [])
 
   const {
@@ -193,18 +177,18 @@ const Data = () => {
     usePagination,
   )
 
-  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
+  const handleRowsNumberChange = e => setPageSize(Number(e.target.value))
 
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+  const handleGlobalFilterChange = value => setGlobalFilter(value)
 
   const table = (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => (
+            {headerGroups.map(headerGroup => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
+                {headerGroup.headers.map(column => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     isSorted={column.isSorted}
@@ -217,12 +201,12 @@ const Data = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {page.map(row => {
               prepareRow(row)
 
               return (
                 <Tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
+                  {row.cells.map(cell => {
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
                         <InnerCell>{cell.render('Cell')}</InnerCell>
@@ -270,11 +254,7 @@ const Data = () => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout
-      content={content}
-      toolbar={toolbar}
-      isPageContentLoading={isLoading}
-    />
+    <ContentPageLayout content={content} toolbar={toolbar} isPageContentLoading={isLoading} />
   )
 }
 

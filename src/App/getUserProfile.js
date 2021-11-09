@@ -33,7 +33,7 @@ const getUserProfile = ({
   }
 
   if (isOnlineAuthenticatedAndReady) {
-    return authenticatedAxios.get(`${apiBaseUrl}/me`).then((apiResults) => {
+    return authenticatedAxios.get(`${apiBaseUrl}/me/`).then((apiResults) => {
       const userFromApi = apiResults.data
 
       if (!userFromApi) {
@@ -45,9 +45,7 @@ const getUserProfile = ({
         user: userFromApi,
       }
 
-      return dexieInstance.uiState_currentUser
-        .put(userToStore)
-        .then(() => userFromApi)
+      return dexieInstance.uiState_currentUser.put(userToStore).then(() => userFromApi)
     })
   }
   if (isOfflineAuthenticatedAndReady) {

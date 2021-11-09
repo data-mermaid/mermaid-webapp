@@ -18,7 +18,7 @@ const Thead = styled.th`
 
 const Tcell = styled.td`
   padding: 10px;
-  ${(props) =>
+  ${props =>
     props.cellWithText
       ? css`
           text-align: left;
@@ -47,8 +47,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
         <tbody>
           <Tr>
             <Tcell cellWithText>
-              <strong>Contact info:</strong> organization, admin name and admin
-              email
+              <strong>Contact info:</strong> organization, admin name and admin email
             </Tcell>
             <Tcell>
               <IconCheck />
@@ -62,9 +61,9 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           </Tr>
           <Tr>
             <Tcell cellWithText>
-              <strong>Metadata</strong> project name and notes, country, site
-              name and location, survey date, depth, habitat (reef zone, reef
-              type and exposure), management regime name, # of transects
+              <strong>Metadata</strong> project name and notes, country, site name and location,
+              survey date, depth, habitat (reef zone, reef type and exposure), management regime
+              name, # of transects
             </Tcell>
             <Tcell>
               <IconCheck />
@@ -119,8 +118,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           </Tr>
           <Tr>
             <Tcell cellWithText>
-              <strong>Transec-level observations</strong> ​​​​​​​can be
-              downloaded:
+              <strong>Transec-level observations</strong> ​​​​​​​can be downloaded:
             </Tcell>
           </Tr>
           <Tr>
@@ -137,8 +135,8 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           </Tr>
           <Tr>
             <Tcell cellWithText>
-              Reef fish species, size and abundance, taxonomy and functional
-              group information, biomass coefficients
+              Reef fish species, size and abundance, taxonomy and functional group information,
+              biomass coefficients
             </Tcell>
             <TcellWithIconClose>
               <IconClose />

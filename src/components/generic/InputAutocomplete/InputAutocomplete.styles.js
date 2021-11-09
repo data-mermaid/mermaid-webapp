@@ -18,8 +18,8 @@ export const Menu = styled('ul')`
   color: ${theme.color.textColor};
   z-index: 99;
   top: 4rem;
-  border: ${(props) => (props.isOpen ? null : 'none')};
-  outline: ${(props) => (props.isOpen ? null : 'none')};
+  border: ${props => (props.isOpen ? null : 'none')};
+  outline: ${props => (props.isOpen ? null : 'none')};
 `
 
 export const Item = styled('li')`

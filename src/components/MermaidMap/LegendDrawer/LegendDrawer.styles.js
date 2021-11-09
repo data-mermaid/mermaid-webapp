@@ -5,8 +5,8 @@ import theme from '../../../theme'
 export const SliderContainer = styled.div`
   position: absolute;
   width: 270px;
-  right: ${(props) => (props.isOpen ? '0px' : '-270px')};
-  background: ${(props) => props.isOpen && 'rgba(255, 255, 255, 1)'};
+  right: ${props => (props.isOpen ? '0px' : '-270px')};
+  background: ${props => props.isOpen && 'rgba(255, 255, 255, 1)'};
   top: 8px;
   z-index: 2;
   transition: 0.3s ease-out;
@@ -35,8 +35,8 @@ export const SliderHandlerName = styled.span`
 `
 
 export const SliderLegendPanel = styled.div`
-  opacity: ${(props) => (props.isOpen ? 1 : 0)};
-  visibility: ${(props) => (props.isOpen ? 'visible' : 'hidden')};
+  opacity: ${props => (props.isOpen ? 1 : 0)};
+  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
 `
 
 export const LegendHeader = styled(H3)`
@@ -52,7 +52,7 @@ export const LegendBody = styled.div`
 
 export const CheckBoxLabel = styled.label`
   padding: ${theme.spacing.xsmall};
-  width: ${(props) => props.fullWidth && '100%'};
+  width: ${props => props.fullWidth && '100%'};
   display: inline-block;
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
@@ -66,5 +66,5 @@ export const LegendColor = styled.div`
   border: 1px solid;
   float: right;
   margin-top: 2px;
-  background-color: ${(props) => props.bgColor && props.bgColor};
+  background-color: ${props => props.bgColor && props.bgColor};
 `

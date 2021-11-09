@@ -29,10 +29,7 @@ const InputAndButton = ({
   labelText,
   ...restOfProps
 }) => {
-  const {
-    placeholder: _wontBeUsedPlaceholder,
-    ...textPropsWithoutPlaceholder
-  } = restOfProps
+  const { placeholder: _wontBeUsedPlaceholder, ...textPropsWithoutPlaceholder } = restOfProps
 
   return (
     <div>

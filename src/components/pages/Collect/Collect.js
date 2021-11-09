@@ -1,9 +1,4 @@
-import {
-  usePagination,
-  useSortBy,
-  useGlobalFilter,
-  useTable,
-} from 'react-table'
+import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
@@ -39,9 +34,7 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 
 const Collect = () => {
-  const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState(
-    [],
-  )
+  const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -167,10 +160,7 @@ const Collect = () => {
       return rows
     }
 
-    return queryTerms.reduce(
-      (results, term) => matchSorter(results, term, { keys }),
-      rows,
-    )
+    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
   }, [])
 
   const {
@@ -199,20 +189,20 @@ const Collect = () => {
     useSortBy,
     usePagination,
   )
-  const handleRowsNumberChange = (e) => {
+  const handleRowsNumberChange = e => {
     setPageSize(Number(e.target.value))
   }
 
-  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+  const handleGlobalFilterChange = value => setGlobalFilter(value)
 
   const table = (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => (
+            {headerGroups.map(headerGroup => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
+                {headerGroup.headers.map(column => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     isSorted={column.isSorted}
@@ -225,12 +215,12 @@ const Collect = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {page.map(row => {
               prepareRow(row)
 
               return (
                 <Tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
+                  {row.cells.map(cell => {
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
                         <InnerCell>{cell.render('Cell')}</InnerCell>

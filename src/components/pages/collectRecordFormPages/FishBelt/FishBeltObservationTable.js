@@ -1,29 +1,11 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
-import { hoverState } from '../../../../library/styling/mediaQueries'
-import {
-  choicesPropType,
-  fishBeltPropType,
-} from '../../../../App/mermaidData/mermaidDataProptypes'
-import {
-  ButtonCaution,
-  ButtonThatLooksLikeLink,
-  ButtonPrimary,
-} from '../../../generic/buttons'
-import {
-  IconClose,
-  IconLibraryBooks,
-  IconPlus,
-  IconRequired,
-} from '../../../icons'
-import {
-  Table,
-  TableOverflowWrapper,
-  Tr,
-  Td,
-  Th,
-} from '../../../generic/Table/table'
+import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
+import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { ButtonCaution, ButtonThatLooksLikeLink, ButtonPrimary } from '../../../generic/buttons'
+import { IconClose, IconLibraryBooks, IconPlus, IconRequired } from '../../../icons'
+import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { H2 } from '../../../generic/text'
@@ -31,13 +13,12 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { inputTextareaSelectStyles, InputWrapper } from '../../../generic/form'
 import { LinkThatLooksLikeButton } from '../../../generic/links'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
-import InputNumberNoScroll from '../../../InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
-import { RowRight } from '../../../generic/positioning'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 
@@ -69,24 +50,24 @@ const ObservationsSummaryStats = styled(Table)`
   table-layout: auto;
   min-width: auto;
   max-width: 40rem;
-  float: right;
+  border: solid 1px ${theme.color.secondaryColor};
   tr:nth-child(even),
   tr:nth-child(odd) {
     background-color: ${theme.color.white};
   }
+  ${mediaQueryTabletLandscapeOnly(css`
+    font-size: smaller;
+  `)}
 `
 const ButtonRemoveRow = styled(ButtonCaution)`
   display: none;
   padding: 0;
 `
-const StyledLinkThatLooksLikeButtonToReference = styled(
-  LinkThatLooksLikeButton,
-)`
+const StyledLinkThatLooksLikeButtonToReference = styled(LinkThatLooksLikeButton)`
   padding: 0.5rem 1rem 0 1rem;
   background: transparent;
 `
 const StyledOverflowWrapper = styled(TableOverflowWrapper)`
-  overflow: visible;
   border: solid 1px ${theme.color.secondaryColor};
   height: 100%;
 `
@@ -153,10 +134,15 @@ const StyledFishBeltObservationTable = styled(Table)`
     }
   }
 `
-const UnderTableRow = styled(RowRight)`
+const UnderTableRow = styled('div')`
+  display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: ${theme.spacing.medium};
+  ${mediaQueryTabletLandscapeOnly(css`
+    flex-direction: column;
+    gap: ${theme.spacing.small};
+  `)}
 `
 
 const FishBeltObservationTable = ({
@@ -181,10 +167,7 @@ const FishBeltObservationTable = ({
    *  Not using formik here was an oversight.*/
 
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
-  const [
-    haveApiObservationsBeenLoaded,
-    setHaveApiObservationsBeenLoaded,
-  ] = useState(false)
+  const [haveApiObservationsBeenLoaded, setHaveApiObservationsBeenLoaded] = useState(false)
 
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
@@ -197,26 +180,19 @@ const FishBeltObservationTable = ({
     if (areObservationsInputsDirty) {
       persistUnsavedObservationsData(observationsState)
     }
-  }, [
-    areObservationsInputsDirty,
-    observationsState,
-    persistUnsavedObservationsData,
-  ])
+  }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
       const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-      const initialObservationsToLoad =
-        persistedUnsavedObservations ?? observationsFromApi
-      const observationsFromApiWithIds = initialObservationsToLoad.map(
-        (observation) => ({
-          ...observation,
-          // id exists on observations just for the sake of the front end logic
-          // (adding rows, adding new species to observation, etc)
-          uiId: observation.uuId ?? createUuid(),
-        }),
-      )
+      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
+      const observationsFromApiWithIds = initialObservationsToLoad.map((observation) => ({
+        ...observation,
+        // id exists on observations just for the sake of the front end logic
+        // (adding rows, adding new species to observation, etc)
+        uiId: observation.uuId ?? createUuid(),
+      }))
 
       observationsDispatch({
         type: 'loadObservationsFromApi',
@@ -270,13 +246,7 @@ const FishBeltObservationTable = ({
     })
   }
 
-  const handleKeyDown = ({
-    event,
-    index,
-    observation,
-    isCount,
-    isFishName,
-  }) => {
+  const handleKeyDown = ({ event, index, observation, isCount, isFishName }) => {
     const isTabKey = event.code === 'Tab' && !event.shiftKey
     const isEnterKey = event.code === 'Enter'
     const isLastRow = index === observationsState.length - 1
@@ -317,10 +287,7 @@ const FishBeltObservationTable = ({
     summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
   )
 
-  const totalAbundance = summarizeArrayObjectValuesByProperty(
-    observationsState,
-    'count',
-  )
+  const totalAbundance = summarizeArrayObjectValuesByProperty(observationsState, 'count')
 
   const observationsRows = observationsState.map((observation, index) => {
     const { uiId: observationId, count, size, fish_attribute } = observation
@@ -331,8 +298,7 @@ const FishBeltObservationTable = ({
     const countOrEmptyStringToAvoidInputValueErrors = count ?? ''
 
     const showNumericSizeInput =
-      fishBinSelectedLabel?.toString() === '1' ||
-      typeof fishBinSelectedLabel === 'undefined'
+      fishBinSelectedLabel?.toString() === '1' || typeof fishBinSelectedLabel === 'undefined'
 
     const sizeSelect = !showNumericSizeInput ? (
       <FishBeltObservationSizeSelect
@@ -368,8 +334,7 @@ const FishBeltObservationTable = ({
     )
 
     const observationBiomass = roundToOneDecimal(
-      observationsBiomass.find((object) => object.uiId === observationId)
-        .biomass,
+      observationsBiomass.find((object) => object.uiId === observationId).biomass,
     )
 
     return (
@@ -536,10 +501,7 @@ FishBeltObservationTable.propTypes = {
     getPersistedUnsavedFormData: PropTypes.func,
   }).isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
-  transectLengthSurveyed: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]),
+  transectLengthSurveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   widthId: PropTypes.string,
 }
 

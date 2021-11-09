@@ -7,11 +7,7 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 const GraphsAndMaps = () => {
   const { isAppOnline } = useOnlineStatus()
 
-  const content = isAppOnline ? (
-    <>Graphs and Maps Placeholder</>
-  ) : (
-    <PageUnavailableOffline />
-  )
+  const content = isAppOnline ? <>Graphs and Maps Placeholder</> : <PageUnavailableOffline />
 
   return (
     <ContentPageLayout

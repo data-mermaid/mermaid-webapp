@@ -1,10 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import {
-  mediaQueryTabletLandscapeOnly,
-  hoverState,
-} from '../../library/styling/mediaQueries'
+import { mediaQueryTabletLandscapeOnly, hoverState } from '../../library/styling/mediaQueries'
 
 const linkThatLooksLikeButtonStyles = css`
   text-decoration: none;
@@ -26,9 +23,7 @@ export const LinkThatLooksLikeButton = styled.a`
   ${linkThatLooksLikeButtonStyles}
 `
 
-export const NavLinkThatLooksLikeButtonIcon = styled(
-  NavLinkThatLooksLikeButton,
-)``
+export const NavLinkThatLooksLikeButtonIcon = styled(NavLinkThatLooksLikeButton)``
 
 export const NavLinkSidebar = styled(NavLink)`
   padding: ${theme.spacing.small};

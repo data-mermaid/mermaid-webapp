@@ -1,6 +1,6 @@
 import { dateFormat } from '../../../library/strings/dateFormat'
 
-const getCollectRecordDataInitialValues = (collectRecord) => {
+const getCollectRecordDataInitialValues = collectRecord => {
   const collectRecordData = collectRecord?.data
 
   return {
@@ -34,8 +34,4 @@ const getTransectInitialValues = (collectRecord, transectType) => {
   }
 }
 
-export {
-  getCollectRecordDataInitialValues,
-  getSampleInfoInitialValues,
-  getTransectInitialValues,
-}
+export { getCollectRecordDataInitialValues, getSampleInfoInitialValues, getTransectInitialValues }

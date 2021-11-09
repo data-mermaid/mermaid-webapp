@@ -187,11 +187,10 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
     dexieInstance.project_sites,
     dexieInstance.projects,
     () => {
-      apiDataNamesToPullNonProject.forEach((apiDataName) => {
+      apiDataNamesToPullNonProject.forEach(apiDataName => {
         dexieInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
-          somePropertyThatWillBeWipedOutByTheVersionOnTheApi:
-            'So long, farewell',
+          somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
         })
         dexieInstance[apiDataName].put(mockMermaidData[apiDataName][0])
       })
@@ -253,88 +252,77 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
   )
 
   expect.assertions(18)
-  await apiSync
-    .pushThenPullEverythingForAProjectButChoices('1')
-    .then(async () => {
-      await Promise.all([
-        dexieInstance.benthic_attributes.toArray(),
-        dexieInstance.collect_records.toArray(),
-        dexieInstance.fish_families.toArray(),
-        dexieInstance.fish_genera.toArray(),
-        dexieInstance.fish_species.toArray(),
-        dexieInstance.project_managements.toArray(),
-        dexieInstance.project_profiles.toArray(),
-        dexieInstance.project_sites.toArray(),
-        dexieInstance.projects.toArray(),
-      ]).then(
-        ([
-          benthicAttributesStored,
-          collectRecordsStored,
-          fishFamiliesStored,
-          fishGeneraStored,
-          fishSpeciesStored,
-          projectManagementsStored,
-          projectProfilesStored,
-          projectStiesStored,
-          projectsStored,
-        ]) => {
-          expect(
-            benthicAttributesStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(benthicAttributesStored.length).toEqual(1)
-          expect(
-            collectRecordsStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(collectRecordsStored.length).toEqual(1)
-          expect(
-            fishFamiliesStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(fishFamiliesStored.length).toEqual(1)
-          expect(
-            fishGeneraStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(fishGeneraStored.length).toEqual(1)
-          expect(
-            fishSpeciesStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(fishSpeciesStored.length).toEqual(1)
-          expect(
-            projectManagementsStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(projectManagementsStored.length).toEqual(1)
-          expect(
-            projectProfilesStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(projectProfilesStored.length).toEqual(1)
-          expect(
-            projectStiesStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(projectStiesStored.length).toEqual(1)
-          expect(
-            projectsStored[0]
-              .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
-          ).not.toBeDefined()
-          // expect second stored record to get deleted
-          expect(projectsStored.length).toEqual(1)
-        },
-      )
-    })
+  await apiSync.pushThenPullEverythingForAProjectButChoices('1').then(async () => {
+    await Promise.all([
+      dexieInstance.benthic_attributes.toArray(),
+      dexieInstance.collect_records.toArray(),
+      dexieInstance.fish_families.toArray(),
+      dexieInstance.fish_genera.toArray(),
+      dexieInstance.fish_species.toArray(),
+      dexieInstance.project_managements.toArray(),
+      dexieInstance.project_profiles.toArray(),
+      dexieInstance.project_sites.toArray(),
+      dexieInstance.projects.toArray(),
+    ]).then(
+      ([
+        benthicAttributesStored,
+        collectRecordsStored,
+        fishFamiliesStored,
+        fishGeneraStored,
+        fishSpeciesStored,
+        projectManagementsStored,
+        projectProfilesStored,
+        projectStiesStored,
+        projectsStored,
+      ]) => {
+        expect(
+          benthicAttributesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(benthicAttributesStored.length).toEqual(1)
+        expect(
+          collectRecordsStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(collectRecordsStored.length).toEqual(1)
+        expect(
+          fishFamiliesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(fishFamiliesStored.length).toEqual(1)
+        expect(
+          fishGeneraStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(fishGeneraStored.length).toEqual(1)
+        expect(
+          fishSpeciesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(fishSpeciesStored.length).toEqual(1)
+        expect(
+          projectManagementsStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(projectManagementsStored.length).toEqual(1)
+        expect(
+          projectProfilesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(projectProfilesStored.length).toEqual(1)
+        expect(
+          projectStiesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(projectStiesStored.length).toEqual(1)
+        expect(
+          projectsStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+        ).not.toBeDefined()
+        // expect second stored record to get deleted
+        expect(projectsStored.length).toEqual(1)
+      },
+    )
+  })
 })
 
 test('pushThenPullEverythingForAProject updates IDB with API data', async () => {
@@ -372,11 +360,10 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
     dexieInstance.project_sites,
     dexieInstance.projects,
     () => {
-      apiDataNamesToPullNonProject.forEach((apiDataName) => {
+      apiDataNamesToPullNonProject.forEach(apiDataName => {
         dexieInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
-          somePropertyThatWillBeWipedOutByTheVersionOnTheApi:
-            'So long, farewell',
+          somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
         })
         dexieInstance[apiDataName].put(mockMermaidData[apiDataName][0])
       })
@@ -477,8 +464,7 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
         projectsStored,
       ]) => {
         expect(
-          benthicAttributesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          benthicAttributesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         // expect second stored record to get deleted
         expect(benthicAttributesStored.length).toEqual(1)
@@ -487,38 +473,31 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
         ).not.toBeDefined()
         expect(choicesStored.length).toEqual(1)
         expect(
-          collectRecordsStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          collectRecordsStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(collectRecordsStored.length).toEqual(1)
         expect(
-          fishFamiliesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          fishFamiliesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(fishFamiliesStored.length).toEqual(1)
         expect(
-          fishGeneraStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          fishGeneraStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(fishGeneraStored.length).toEqual(1)
         expect(
-          fishSpeciesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          fishSpeciesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(fishSpeciesStored.length).toEqual(1)
         expect(
-          projectManagementsStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          projectManagementsStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(projectManagementsStored.length).toEqual(1)
         expect(
-          projectProfilesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          projectProfilesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(projectProfilesStored.length).toEqual(1)
         expect(
-          projectStiesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          projectStiesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(projectStiesStored.length).toEqual(1)
         expect(
@@ -561,11 +540,10 @@ test('pushThenPullEverything updates IDB with API data', async () => {
     dexieInstance.fish_species,
     dexieInstance.projects,
     () => {
-      apiDataNamesToPullNonProject.forEach((apiDataName) => {
+      apiDataNamesToPullNonProject.forEach(apiDataName => {
         dexieInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
-          somePropertyThatWillBeWipedOutByTheVersionOnTheApi:
-            'So long, farewell',
+          somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
         })
         dexieInstance[apiDataName].put(mockMermaidData[apiDataName][0])
       })
@@ -671,8 +649,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
         projectSitesStored,
       ]) => {
         expect(
-          benthicAttributesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          benthicAttributesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         // expect second stored record to get deleted
         expect(benthicAttributesStored.length).toEqual(1)
@@ -681,18 +658,15 @@ test('pushThenPullEverything updates IDB with API data', async () => {
         ).not.toBeDefined()
         expect(choicesStored.length).toEqual(1)
         expect(
-          fishFamiliesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          fishFamiliesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(fishFamiliesStored.length).toEqual(1)
         expect(
-          fishGeneraStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          fishGeneraStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(fishGeneraStored.length).toEqual(1)
         expect(
-          fishSpeciesStored[0]
-            .somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
+          fishSpeciesStored[0].somePropertyThatWillBeWipedOutByTheVersionOnTheApi,
         ).not.toBeDefined()
         expect(fishSpeciesStored.length).toEqual(1)
 

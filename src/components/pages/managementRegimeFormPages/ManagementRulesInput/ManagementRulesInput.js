@@ -37,13 +37,8 @@ const RadioLabel = styled.label`
   }
 `
 
-const ManagementRulesInput = ({
-  id,
-  label,
-  managementFormValues,
-  onChange,
-}) => {
-  const getManagementRulesRadioInputValue = (rules) => {
+const ManagementRulesInput = ({ id, label, managementFormValues, onChange }) => {
+  const getManagementRulesRadioInputValue = rules => {
     return {
       open_access: rules.open_access,
       no_take: rules.no_take,
@@ -56,7 +51,7 @@ const ManagementRulesInput = ({
     }
   }
 
-  const getPartialRestrictionCheckboxValues = (rules) => {
+  const getPartialRestrictionCheckboxValues = rules => {
     return {
       access_restriction: rules.access_restriction,
       periodic_closure: rules.periodic_closure,
@@ -66,23 +61,19 @@ const ManagementRulesInput = ({
     }
   }
 
-  const [
-    managementRulesRadioInputValue,
-    setManagementRulesRadioInputValue,
-  ] = useState(getManagementRulesRadioInputValue(managementFormValues))
+  const [managementRulesRadioInputValue, setManagementRulesRadioInputValue] = useState(
+    getManagementRulesRadioInputValue(managementFormValues),
+  )
 
-  const [
-    partialRestrictionCheckboxValues,
-    setPartialRestrictionCheckboxValues,
-  ] = useState(getPartialRestrictionCheckboxValues(managementFormValues))
+  const [partialRestrictionCheckboxValues, setPartialRestrictionCheckboxValues] = useState(
+    getPartialRestrictionCheckboxValues(managementFormValues),
+  )
 
   const resetPartialRestrictionProperties = () => {
     const updatedValues = { ...partialRestrictionCheckboxValues }
-    const partialRestrictionOptionValues = partialRestrictionOptions.map(
-      (item) => item.value,
-    )
+    const partialRestrictionOptionValues = partialRestrictionOptions.map(item => item.value)
 
-    partialRestrictionOptionValues.forEach((item) => {
+    partialRestrictionOptionValues.forEach(item => {
       updatedValues[item] = false
 
       onChange(item, false)
@@ -121,7 +112,7 @@ const ManagementRulesInput = ({
     })
   }
 
-  const handlePartialRestrictionChoicesChange = (e) => {
+  const handlePartialRestrictionChoicesChange = e => {
     const value = e.target.checked
     const property = e.target.value
 
@@ -191,8 +182,7 @@ const ManagementRulesInput = ({
             />
             Partial Restrictions
             <span>
-              e.g. periodic closures, size limits, gear restrictions, species
-              restrictions
+              e.g. periodic closures, size limits, gear restrictions, species restrictions
             </span>
           </RadioLabel>
           {showPartialRestrictionChoices}

@@ -142,7 +142,7 @@ test('saveFishBelt online returns a rejected promise if the status code from the
       profileId: '1',
       projectId: '1',
     })
-    .catch((error) => {
+    .catch(error => {
       expect(error.message).toEqual(
         'the API record returned from saveFishBelt doesnt have a successful status code',
       )
@@ -170,18 +170,13 @@ test('saveFishBelt online returns saved record with protocol info automatically 
       const fishbeltSentToApi = req.body.collect_records[0]
 
       // test fails if saveFishBeltOnline doesnt formulate protocol or profile properly
-      if (
-        fishbeltSentToApi.data.protocol !== 'fishbelt' &&
-        fishbeltSentToApi.profile !== '12345'
-      ) {
+      if (fishbeltSentToApi.data.protocol !== 'fishbelt' && fishbeltSentToApi.profile !== '12345') {
         return res(ctx.status(400))
       }
-      const collectRecordsWithStatusCodes = req.body.collect_records.map(
-        (record) => ({
-          data: { ...record, _last_revision_num: 1000 },
-          status_code: 200,
-        }),
-      )
+      const collectRecordsWithStatusCodes = req.body.collect_records.map(record => ({
+        data: { ...record, _last_revision_num: 1000 },
+        status_code: 200,
+      }))
 
       const response = { collect_records: collectRecordsWithStatusCodes }
 
@@ -212,9 +207,7 @@ test('saveFishBelt online returns saved record with protocol info automatically 
     fishBeltToBeSaved.randomUnexpectedProperty,
   )
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get(
-    'foo',
-  )
+  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get('foo')
 
   expect(recordStoredInDexie.profile).toEqual('1234')
   // _last_revision_num proves that the record comes from the server
@@ -260,17 +253,11 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
       the db switchboard's getCollectRecord would try to hit the real or mocked API
       which is boyond the scope of the test.
      */
-  const savedFishBelt = await dbInstance.dexieInstance.collect_records.get(
-    'foo',
-  )
+  const savedFishBelt = await dbInstance.dexieInstance.collect_records.get('foo')
 
-  expect(savedFishBelt.data.randomProperty).toEqual(
-    replacementFishbelt.data.randomProperty,
-  )
+  expect(savedFishBelt.data.randomProperty).toEqual(replacementFishbelt.data.randomProperty)
   expect(savedFishBelt.profile).toEqual(replacementFishbelt.profile)
-  expect(savedFishBelt.initialProperty).toEqual(
-    replacementFishbelt.initialProperty,
-  )
+  expect(savedFishBelt.initialProperty).toEqual(replacementFishbelt.initialProperty)
 })
 test('saveFishBelt online returns saved record including id, project, profile, if those properties dont exist on the record', async () => {
   mockMermaidApiAllSuccessful.use(
@@ -281,21 +268,17 @@ test('saveFishBelt online returns saved record including id, project, profile, i
         return res(
           ctx.json({
             collect_records: {
-              updates: [
-                { id: 'cantMockWhatIDFrontEndGeneratesToMatchSoCantTest' },
-              ],
+              updates: [{ id: 'cantMockWhatIDFrontEndGeneratesToMatchSoCantTest' }],
             },
           }),
         )
       },
     ),
     rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
-      const collectRecordsWithStatusCodes = req.body.collect_records.map(
-        (record) => ({
-          data: { ...record, _last_revision_num: 1000 },
-          status_code: 200,
-        }),
-      )
+      const collectRecordsWithStatusCodes = req.body.collect_records.map(record => ({
+        data: { ...record, _last_revision_num: 1000 },
+        status_code: 200,
+      }))
 
       const response = { collect_records: collectRecordsWithStatusCodes }
 
@@ -407,11 +390,9 @@ test('saveFishBelt online saves the record in indexeddb in the case of network e
       profileId: '1',
       projectId: '1',
     })
-    .catch((error) => expect(error.message).toEqual('Network Error'))
+    .catch(error => expect(error.message).toEqual('Network Error'))
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get(
-    'foo',
-  )
+  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get('foo')
 
   expect(recordStoredInDexie).toBeDefined()
   expect(recordStoredInDexie.data).toBeDefined()

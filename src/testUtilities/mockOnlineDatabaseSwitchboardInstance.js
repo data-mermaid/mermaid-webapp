@@ -42,7 +42,4 @@ const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) => {
   })
 }
 
-export {
-  getMockOnlineDatabaseSwitchboardInstance,
-  getMockOfflineDatabaseSwitchboardInstance,
-}
+export { getMockOnlineDatabaseSwitchboardInstance, getMockOfflineDatabaseSwitchboardInstance }

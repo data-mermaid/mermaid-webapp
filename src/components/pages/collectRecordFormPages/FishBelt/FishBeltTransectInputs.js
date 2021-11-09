@@ -1,25 +1,24 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import {
-  choicesPropType,
-  fishBeltPropType,
-} from '../../../../App/mermaidData/mermaidDataProptypes'
+import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputRadioWithLabelAndValidation from '../../../generic/InputRadioWithLabelAndValidation'
-import InputWithLabelAndValidation from '../../../generic/InputWithLabelAndValidation'
-import TextareaWithLabelAndValidation from '../../../generic/TextareaWithLabelAndValidation'
+import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
+import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
+import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const FishBeltTransectForms = ({
+  areValidationsShowing,
   choices,
   collectRecord,
   formik,
+  ignoreValidations,
   onSizeBinChange,
-  areValidationsShowing,
+  resetValidations,
 }) => {
   const { belttransectwidths, fishsizebins, reefslopes } = choices
   const transectWidthSelectOptions = getOptions(belttransectwidths)
@@ -36,12 +35,15 @@ const FishBeltTransectForms = ({
         <InputWithLabelAndValidation
           label="Transect Number"
           id="number"
-          testId="transect-number"
+          testId="transect_number"
           type="number"
-          {...getValidationPropertiesForInput(
-            fishbelt_transect?.number,
-            areValidationsShowing,
-          )}
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.fishbelt_transect.number' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.fishbelt_transect.number' })
+          }}
+          {...getValidationPropertiesForInput(fishbelt_transect?.number, areValidationsShowing)}
           {...formik.getFieldProps('number')}
         />
         <InputWithLabelAndValidation
@@ -49,10 +51,13 @@ const FishBeltTransectForms = ({
           id="label"
           testId="label"
           type="text"
-          {...getValidationPropertiesForInput(
-            fishbelt_transect?.label,
-            areValidationsShowing,
-          )}
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.fishbelt_transect.label' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.fishbelt_transect.label' })
+          }}
+          {...getValidationPropertiesForInput(fishbelt_transect?.label, areValidationsShowing)}
           {...formik.getFieldProps('label')}
         />
         <InputWithLabelAndValidation
@@ -60,6 +65,12 @@ const FishBeltTransectForms = ({
           id="len_surveyed"
           testId="len_surveyed"
           type="number"
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.fishbelt_transect.len_surveyed' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.fishbelt_transect.len_surveyed' })
+          }}
           {...getValidationPropertiesForInput(
             fishbelt_transect?.len_surveyed,
             areValidationsShowing,
@@ -71,10 +82,13 @@ const FishBeltTransectForms = ({
           id="width"
           testId="width"
           options={transectWidthSelectOptions}
-          {...getValidationPropertiesForInput(
-            fishbelt_transect?.width,
-            areValidationsShowing,
-          )}
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.fishbelt_transect.width' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.fishbelt_transect.width' })
+          }}
+          {...getValidationPropertiesForInput(fishbelt_transect?.width, areValidationsShowing)}
           {...formik.getFieldProps('width')}
         />
         <InputRadioWithLabelAndValidation
@@ -83,10 +97,13 @@ const FishBeltTransectForms = ({
           testId="size_bin"
           name="fish-size-bin"
           options={fishSizeBinSelectOptions}
-          {...getValidationPropertiesForInput(
-            fishbelt_transect?.size_bin,
-            areValidationsShowing,
-          )}
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.fishbelt_transect.size_bin' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.fishbelt_transect.size_bin' })
+          }}
+          {...getValidationPropertiesForInput(fishbelt_transect?.size_bin, areValidationsShowing)}
           value={formik.values.size_bin}
           onChange={(event) => {
             onSizeBinChange(event)
@@ -97,20 +114,26 @@ const FishBeltTransectForms = ({
           id="reef_slope"
           testId="reef_slope"
           options={reefSlopeSelectOptions}
-          {...getValidationPropertiesForInput(
-            fishbelt_transect?.reef_slope,
-            areValidationsShowing,
-          )}
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.fishbelt_transect.reef_slope' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.fishbelt_transect.reef_slope' })
+          }}
+          {...getValidationPropertiesForInput(fishbelt_transect?.reef_slope, areValidationsShowing)}
           {...formik.getFieldProps('reef_slope')}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
           id="notes"
           testId="notes"
-          {...getValidationPropertiesForInput(
-            sample_event?.notes,
-            areValidationsShowing,
-          )}
+          ignoreValidations={() => {
+            ignoreValidations({ validationPath: 'data.sample_event.notes' })
+          }}
+          resetValidations={() => {
+            resetValidations({ validationPath: 'data.sample_event.notes' })
+          }}
+          {...getValidationPropertiesForInput(sample_event?.notes, areValidationsShowing)}
           {...formik.getFieldProps('notes')}
         />
       </InputWrapper>
@@ -119,11 +142,13 @@ const FishBeltTransectForms = ({
 }
 
 FishBeltTransectForms.propTypes = {
+  areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
+  ignoreValidations: PropTypes.func.isRequired,
   onSizeBinChange: PropTypes.func.isRequired,
-  areValidationsShowing: PropTypes.bool.isRequired,
+  resetValidations: PropTypes.func.isRequired,
 }
 
 FishBeltTransectForms.defaultProps = { collectRecord: undefined }

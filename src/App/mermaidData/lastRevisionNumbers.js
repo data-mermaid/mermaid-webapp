@@ -1,8 +1,4 @@
-const persistLastRevisionNumbersPulled = ({
-  dexieInstance,
-  apiData,
-  projectId,
-}) => {
+const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData, projectId }) => {
   return dexieInstance.transaction(
     'rw',
     dexieInstance.uiState_lastRevisionNumbersPulled,
@@ -20,7 +16,7 @@ const persistLastRevisionNumbersPulled = ({
         'projects',
       ]
 
-      dataTypes.forEach((dataType) => {
+      dataTypes.forEach(dataType => {
         if (apiData[dataType]) {
           const isDataTypeProjectAssociated =
             dataType === 'collect_records' ||
@@ -43,10 +39,7 @@ const persistLastRevisionNumbersPulled = ({
   )
 }
 
-const getLastRevisionNumbersPulledForAProject = async ({
-  dexieInstance,
-  projectId,
-}) => {
+const getLastRevisionNumbersPulledForAProject = async ({ dexieInstance, projectId }) => {
   const lastRevisionNumberDexieRecords = await dexieInstance.uiState_lastRevisionNumbersPulled
     .where('projectId')
     .anyOf(projectId, 'n/a')
@@ -55,8 +48,7 @@ const getLastRevisionNumbersPulledForAProject = async ({
   const lastRevisionNumbersObject = lastRevisionNumberDexieRecords.reduce(
     (accumulator, lastRevisionNumberRecord) => ({
       ...accumulator,
-      [lastRevisionNumberRecord.dataType]:
-        lastRevisionNumberRecord.lastRevisionNumber,
+      [lastRevisionNumberRecord.dataType]: lastRevisionNumberRecord.lastRevisionNumber,
     }),
     {},
   )
@@ -64,7 +56,4 @@ const getLastRevisionNumbersPulledForAProject = async ({
   return lastRevisionNumbersObject
 }
 
-export {
-  persistLastRevisionNumbersPulled,
-  getLastRevisionNumbersPulledForAProject,
-}
+export { persistLastRevisionNumbersPulled, getLastRevisionNumbersPulledForAProject }

@@ -4,12 +4,10 @@ export const getFishNameOptions = ({ species, genera, families }) => {
     value: id,
   }))
 
-  const generaAndFamiliesOptions = [...genera, ...families].map(
-    ({ id, name }) => ({
-      label: name,
-      value: id,
-    }),
-  )
+  const generaAndFamiliesOptions = [...genera, ...families].map(({ id, name }) => ({
+    label: name,
+    value: id,
+  }))
 
   return [...speciesOptions, ...generaAndFamiliesOptions]
 }

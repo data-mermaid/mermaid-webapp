@@ -2,7 +2,9 @@ import { getObjectById } from '../../../library/getObjectById'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
-    getManagementRegimesWithoutOfflineDeleted = (projectId) => {
+    getManagementRegimesWithoutOfflineDeleted = function getManagementRegimesWithoutOfflineDeleted(
+      projectId,
+    ) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -13,14 +15,13 @@ const ManagementRegimesMixin = (Base) =>
             .then((managementRegimes) =>
               managementRegimes.filter(
                 (managementRegime) =>
-                  managementRegime.project === projectId &&
-                  !managementRegime._deleted,
+                  managementRegime.project === projectId && !managementRegime._deleted,
               ),
             )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getManagementRegime = (id) => {
+    getManagementRegime = function getManagementRegime(id) {
       if (!id) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -32,7 +33,9 @@ const ManagementRegimesMixin = (Base) =>
       return this._dexieInstance.project_managements.get(id)
     }
 
-    getManagementRegimeRecordsForUiDisplay = (projectId) => {
+    getManagementRegimeRecordsForUiDisplay = function getManagementRegimeRecordsForUiDisplay(
+      projectId,
+    ) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -50,10 +53,7 @@ const ManagementRegimesMixin = (Base) =>
                 uiLabels: {
                   name: record.name,
                   estYear: record.est_year,
-                  compliance: getObjectById(
-                    managementcompliances.data,
-                    record.compliance,
-                  )?.name,
+                  compliance: getObjectById(managementcompliances.data, record.compliance)?.name,
                   openAccess: record.open_access,
                   accessRestriction: record.access_restriction,
                   periodicClosure: record.periodic_closure,

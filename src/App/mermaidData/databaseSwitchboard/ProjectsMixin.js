@@ -1,14 +1,16 @@
 const ProjectsMixin = (Base) =>
   class extends Base {
-    getOfflineReadyProjectIds = () =>
-      this._dexieInstance.uiState_offlineReadyProjects.toArray()
+    getOfflineReadyProjectIds = function getOfflineReadyProjectIds() {
+      return this._dexieInstance.uiState_offlineReadyProjects.toArray()
+    }
 
-    getProjects = () =>
-      this._isAuthenticatedAndReady
+    getProjects = function getProjects() {
+      return this._isAuthenticatedAndReady
         ? this._dexieInstance.projects.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
 
-    getProject = (id) => {
+    getProject = function getProject(id) {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
       }
@@ -20,14 +22,15 @@ const ProjectsMixin = (Base) =>
       return this._dexieInstance.projects.get(id)
     }
 
-    getProjectTags = () =>
-      this._isOnlineAuthenticatedAndReady
+    getProjectTags = function getProjectTags() {
+      return this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
             .get(`${this._apiBaseUrl}/projecttags`)
             .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
 
-    getProjectProfiles = (projectId) => {
+    getProjectProfiles = function getProjectProfiles(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -36,14 +39,12 @@ const ProjectsMixin = (Base) =>
         ? this._dexieInstance.project_profiles
             .toArray()
             .then((projectProfiles) =>
-              projectProfiles.filter(
-                (projectProfile) => projectProfile.project === projectId,
-              ),
+              projectProfiles.filter((projectProfile) => projectProfile.project === projectId),
             )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getUserProfile = (email) => {
+    getUserProfile = function getUserProfile(email) {
       if (!email) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -63,7 +64,7 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addUser = (email, projectId) => {
+    addUser = function addUser(email, projectId) {
       if (!projectId || !email) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -74,9 +75,7 @@ const ProjectsMixin = (Base) =>
             email,
           })
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              response,
-            )
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(response)
 
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance
@@ -97,21 +96,19 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    transferSampleUnits = (projectId, fromProfileId, toProfileId) => {
+    transferSampleUnits = function transferSampleUnits(projectId, fromProfileId, toProfileId) {
       if (!projectId || !fromProfileId || !toProfileId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       if (this._isAuthenticatedAndReady) {
         return this._authenticatedAxios
-          .put(
-            `${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`,
-            { from_profile: fromProfileId, to_profile: toProfileId },
-          )
+          .put(`${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`, {
+            from_profile: fromProfileId,
+            to_profile: toProfileId,
+          })
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(
-              response,
-            )
+            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(response)
 
             if (isRecordStatusCodeSuccessful) {
               return this._apiSyncInstance
@@ -132,7 +129,7 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    removeUser = (user, projectId) => {
+    removeUser = function removeUser(user, projectId) {
       const hasCorrespondingRecordInTheApi = !!user._last_revision_num
 
       const recordMarkedToBeDeleted = {
@@ -141,10 +138,7 @@ const ProjectsMixin = (Base) =>
         _deleted: true,
       }
 
-      if (
-        hasCorrespondingRecordInTheApi &&
-        this._isOnlineAuthenticatedAndReady
-      ) {
+      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         return this._authenticatedAxios
           .post(
             `${this._apiBaseUrl}/push/`,
@@ -160,10 +154,7 @@ const ProjectsMixin = (Base) =>
           })
       }
 
-      if (
-        !hasCorrespondingRecordInTheApi &&
-        this._isOnlineAuthenticatedAndReady
-      ) {
+      if (!hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         return this._dexieInstance.project_profiles.delete(user.id)
       }
 

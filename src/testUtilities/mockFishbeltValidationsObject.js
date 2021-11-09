@@ -15,6 +15,7 @@ export default {
       sample_event: {
         notes: [
           {
+            validation_id: Math.random(),
             code: 'required',
             status: 'error',
           },
@@ -105,12 +106,14 @@ export default {
       fishbelt_transect: {
         reef_slope: [
           {
+            validation_id: Math.random(),
             code: 'required',
             status: 'error',
           },
         ],
         label: [
           {
+            validation_id: Math.random(),
             code: 'required',
             status: 'error',
           },
@@ -165,12 +168,14 @@ export default {
         ],
         sample_time: [
           {
+            validation_id: Math.random(),
             code: 'required',
             status: 'error',
           },
         ],
         len_surveyed: [
           {
+            validation_id: Math.random(),
             code: 'required',
             status: 'error',
           },

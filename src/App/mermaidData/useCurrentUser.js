@@ -15,12 +15,7 @@ export const useCurrentUser = ({
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
 
-    if (
-      isMermaidAuthenticated &&
-      apiBaseUrl &&
-      dexieInstance &&
-      isMermaidAuthenticated
-    ) {
+    if (isMermaidAuthenticated && apiBaseUrl && dexieInstance && isMermaidAuthenticated) {
       getUserProfile({
         apiBaseUrl,
         auth0Token,
@@ -41,13 +36,7 @@ export const useCurrentUser = ({
     return () => {
       isMounted = false
     }
-  }, [
-    apiBaseUrl,
-    auth0Token,
-    dexieInstance,
-    isMermaidAuthenticated,
-    isAppOnline,
-  ])
+  }, [apiBaseUrl, auth0Token, dexieInstance, isMermaidAuthenticated, isAppOnline])
 
   return currentUser
 }

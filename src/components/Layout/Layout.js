@@ -13,7 +13,7 @@ const LayoutContainer = styled(Column)`
   height: 100vh;
 `
 const OfflineIndicatorStyles = styled.div`
-  ${(props) =>
+  ${props =>
     !props.isAppOnline &&
     css`
       border: solid ${theme.spacing.borderXLarge} ${theme.color.cautionColor};

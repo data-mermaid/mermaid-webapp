@@ -86,44 +86,27 @@ const PageSelector = ({
 
       const populateMiddleButtons = () => {
         if (currentlySelectedPage === 3) {
-          middleButtons.push(
-            <PageButton {...pageButtonPropsThatChangeLess} pageIndex={1} />,
-          )
+          middleButtons.push(<PageButton {...pageButtonPropsThatChangeLess} pageIndex={1} />)
         }
         if (currentlySelectedPage > 3) {
           middleButtons.push(
-            <PageButton
-              {...pageButtonPropsThatChangeLess}
-              pageIndex={currentPageIndex - 2}
-            />,
-            <PageButton
-              {...pageButtonPropsThatChangeLess}
-              pageIndex={currentPageIndex - 1}
-            />,
+            <PageButton {...pageButtonPropsThatChangeLess} pageIndex={currentPageIndex - 2} />,
+            <PageButton {...pageButtonPropsThatChangeLess} pageIndex={currentPageIndex - 1} />,
           )
         }
         if (currentlySelectedPage !== 1 && currentlySelectedPage !== lastPage) {
           middleButtons.push(
-            <PageButton
-              {...pageButtonPropsThatChangeLess}
-              pageIndex={currentPageIndex}
-            />,
+            <PageButton {...pageButtonPropsThatChangeLess} pageIndex={currentPageIndex} />,
           )
         }
         if (currentlySelectedPage < lastPage - 1) {
           middleButtons.push(
-            <PageButton
-              {...pageButtonPropsThatChangeLess}
-              pageIndex={currentPageIndex + 1}
-            />,
+            <PageButton {...pageButtonPropsThatChangeLess} pageIndex={currentPageIndex + 1} />,
           )
         }
         if (currentlySelectedPage < lastPage - 2) {
           middleButtons.push(
-            <PageButton
-              {...pageButtonPropsThatChangeLess}
-              pageIndex={currentPageIndex + 2}
-            />,
+            <PageButton {...pageButtonPropsThatChangeLess} pageIndex={currentPageIndex + 2} />,
           )
         }
       }
@@ -142,11 +125,7 @@ const PageSelector = ({
 
       return (
         <>
-          <PageButton
-            {...pageButtonPropsThatChangeLess}
-            pageLabel="1"
-            pageIndex={0}
-          />
+          <PageButton {...pageButtonPropsThatChangeLess} pageLabel="1" pageIndex={0} />
           {middleButtons.map((button, index) => ({
             ...button,
             key: `middle-button-${index}`,
@@ -169,10 +148,7 @@ const PageSelector = ({
 
   return (
     <div data-testid="page-control">
-      <PaginationLinkButton
-        onClick={onPreviousClick}
-        disabled={previousDisabled}
-      >
+      <PaginationLinkButton onClick={onPreviousClick} disabled={previousDisabled}>
         Back
       </PaginationLinkButton>
       {pageButtons}
