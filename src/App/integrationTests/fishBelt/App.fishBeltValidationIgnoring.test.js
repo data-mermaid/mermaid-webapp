@@ -736,7 +736,7 @@ test('user can reset dismissed warnings', async () => {
   )
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observersRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
-})
+}, 35000)
 
 // test(
 //   'Validation: user edits input with ignored validation dismissed the ignored status for that input.',

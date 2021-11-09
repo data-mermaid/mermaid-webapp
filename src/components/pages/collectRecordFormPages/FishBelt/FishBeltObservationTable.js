@@ -159,13 +159,6 @@ const FishBeltObservationTable = ({
   transectLengthSurveyed,
   widthId,
 }) => {
-  /** IMPORTANT! for other forms with observations,
-   *  instead of copying this logic that uses a reducer,
-   *  using formik for form state is strongly suggested
-   *  to reduce inconsistency in the way different parts
-   *  of the fishbelt form are handled.
-   *  Not using formik here was an oversight.*/
-
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const [haveApiObservationsBeenLoaded, setHaveApiObservationsBeenLoaded] = useState(false)
 
