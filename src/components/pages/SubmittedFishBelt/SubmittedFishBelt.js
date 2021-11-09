@@ -78,7 +78,7 @@ const SubmittedFishBelt = () => {
             }
           },
         )
-        .catch(error => {
+        .catch((error) => {
           const errorStatus = error.response?.status
 
           if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
@@ -98,6 +98,7 @@ const SubmittedFishBelt = () => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
+      isToolbarSticky={true}
       content={
         isAppOnline ? (
           <>
