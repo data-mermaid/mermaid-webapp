@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
-import { hoverState } from '../../../../library/styling/mediaQueries'
+import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonCaution, ButtonThatLooksLikeLink, ButtonPrimary } from '../../../generic/buttons'
 import { IconClose, IconLibraryBooks, IconPlus, IconRequired } from '../../../icons'
@@ -19,7 +19,6 @@ import language from '../../../../language'
 import theme from '../../../../theme'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
-import { RowRight } from '../../../generic/positioning'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 
@@ -51,11 +50,14 @@ const ObservationsSummaryStats = styled(Table)`
   table-layout: auto;
   min-width: auto;
   max-width: 40rem;
-  float: right;
+  border: solid 1px ${theme.color.secondaryColor};
   tr:nth-child(even),
   tr:nth-child(odd) {
     background-color: ${theme.color.white};
   }
+  ${mediaQueryTabletLandscapeOnly(css`
+    font-size: smaller;
+  `)}
 `
 const ButtonRemoveRow = styled(ButtonCaution)`
   display: none;
@@ -66,7 +68,6 @@ const StyledLinkThatLooksLikeButtonToReference = styled(LinkThatLooksLikeButton)
   background: transparent;
 `
 const StyledOverflowWrapper = styled(TableOverflowWrapper)`
-  overflow: visible;
   border: solid 1px ${theme.color.secondaryColor};
   height: 100%;
 `
@@ -133,10 +134,15 @@ const StyledFishBeltObservationTable = styled(Table)`
     }
   }
 `
-const UnderTableRow = styled(RowRight)`
+const UnderTableRow = styled('div')`
+  display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-top: ${theme.spacing.medium};
+  ${mediaQueryTabletLandscapeOnly(css`
+    flex-direction: column;
+    gap: ${theme.spacing.small};
+  `)}
 `
 
 const FishBeltObservationTable = ({
@@ -181,7 +187,7 @@ const FishBeltObservationTable = ({
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
       const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
       const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
-      const observationsFromApiWithIds = initialObservationsToLoad.map(observation => ({
+      const observationsFromApiWithIds = initialObservationsToLoad.map((observation) => ({
         ...observation,
         // id exists on observations just for the sake of the front end logic
         // (adding rows, adding new species to observation, etc)
@@ -202,7 +208,7 @@ const FishBeltObservationTable = ({
     observationsDispatch,
   ])
 
-  const handleDeleteObservation = observationId => {
+  const handleDeleteObservation = (observationId) => {
     setAreObservationsInputsDirty(true)
     observationsDispatch({ type: 'deleteObservation', payload: observationId })
   }
@@ -266,7 +272,7 @@ const FishBeltObservationTable = ({
       })
     }
   }
-  const observationsBiomass = observationsState.map(observation => ({
+  const observationsBiomass = observationsState.map((observation) => ({
     uiId: observation.uiId,
     biomass: getObservationBiomass({
       choices,
@@ -296,10 +302,10 @@ const FishBeltObservationTable = ({
 
     const sizeSelect = !showNumericSizeInput ? (
       <FishBeltObservationSizeSelect
-        onValueEntered={value => {
+        onValueEntered={(value) => {
           handleUpdateSize(value, observationId)
         }}
-        onKeyDown={event => {
+        onKeyDown={(event) => {
           handleKeyDown({ event, index, observation })
         }}
         fishBinSelectedLabel={fishBinSelectedLabel}
@@ -316,10 +322,10 @@ const FishBeltObservationTable = ({
         unit="cm"
         step="any"
         aria-labelledby="fish-size-label"
-        onChange={event => {
+        onChange={(event) => {
           handleUpdateSize(event.target.value, observationId)
         }}
-        onKeyDown={event => {
+        onKeyDown={(event) => {
           handleKeyDown({ event, index, observation })
         }}
       />
@@ -328,7 +334,7 @@ const FishBeltObservationTable = ({
     )
 
     const observationBiomass = roundToOneDecimal(
-      observationsBiomass.find(object => object.uiId === observationId).biomass,
+      observationsBiomass.find((object) => object.uiId === observationId).biomass,
     )
 
     return (
@@ -348,10 +354,10 @@ const FishBeltObservationTable = ({
                 autoFocus={isAutoFocusAllowed}
                 aria-labelledby="fish-name-label"
                 options={fishNameOptions}
-                onChange={selectedOption =>
+                onChange={(selectedOption) =>
                   handleFishNameChange(selectedOption.value, observationId)
                 }
-                onKeyDown={event => {
+                onKeyDown={(event) => {
                   handleKeyDown({ event, index, observation, isFishName: true })
                 }}
                 value={fish_attribute}
@@ -385,10 +391,10 @@ const FishBeltObservationTable = ({
             value={countOrEmptyStringToAvoidInputValueErrors}
             step="any"
             aria-labelledby="fish-count-label"
-            onChange={event => {
+            onChange={(event) => {
               handleUpdateCount(event, observationId)
             }}
-            onKeyDown={event => {
+            onKeyDown={(event) => {
               handleKeyDown({ event, index, observation, isCount: true })
             }}
           />

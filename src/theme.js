@@ -49,10 +49,10 @@ const color = {
   secondaryDisabledColor: white.mix(colorHelper(black), 0.2),
 
   cautionColor: caution,
-  cautionHover: caution.mix(colorHelper(white), 0.1),
+  cautionHover: caution.mix(colorHelper(white), 0.9),
   cautionText: white,
   cautionBorder: caution.mix(colorHelper(black), 0.2),
-  cautionActive: caution.mix(colorHelper('black'), 0.2),
+  cautionActive: caution.mix(colorHelper(white), 0.7),
   cautionDisabledColor: caution.mix(colorHelper('black'), 0.2),
 
   calloutColor: callout,
