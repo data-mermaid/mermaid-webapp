@@ -37,12 +37,18 @@ const error = {
 
   getIdsNotFoundDetails: (id) =>
     id.length > 1
-      ? `Details: information associated with one or more of the following ids cannot be found: ${id}`
-      : `Details: information associated with the id, ${id}, cannot be found.`,
+      ? `The items with the ids ${id} can't be found.`
+      : `The item with the id ${id} can't be found.`,
   getProjectTurnOnOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, has not been removed from being offline ready.`,
+  pageUnavailableOffline: 'This page is unavailable offline.',
+  pageNotFound: "This page can't be found.",
+  pageNotFoundRecovery: 'Make sure the URL is correct.',
+  idNotFound: "This item can't be found.",
+  idNotFoundRecovery: 'It might have been deleted or the URL might be wrong.',
+  homePageNavigation: 'Go back to the home page.',
 }
 
 const success = {

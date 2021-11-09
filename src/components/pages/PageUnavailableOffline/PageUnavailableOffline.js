@@ -1,16 +1,19 @@
 import React from 'react'
 import styled from 'styled-components/macro'
-import { H3 } from '../../generic/text'
 import { Column } from '../../generic/positioning'
+import theme from '../../../theme'
+import language from '../../../language'
 
 const PageUnavailableOfflineContainer = styled(Column)`
-  align-items: center;
+  padding: ${theme.spacing.medium};
+  color: ${theme.color.primaryDisabledColor};
+  font-style: italic;
 `
 
 const PageUnavailableOffline = () => {
   return (
     <PageUnavailableOfflineContainer>
-      <H3>This page is unavailable when offline</H3>
+      <p>{language.error.pageUnavailableOffline}</p>
     </PageUnavailableOfflineContainer>
   )
 }

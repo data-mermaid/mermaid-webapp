@@ -15,7 +15,7 @@ test('App renders show page unavailable offline when navigate to Admin page whil
     initialEntries: ['/projects/5/admin'],
   })
 
-  expect(await screen.findByText('This page is unavailable when offline'))
+  expect(await screen.findByText('This page is unavailable offline.'))
 })
 
 test('App renders show page unavailable offline when navigate to Users page while offline.', async () => {
@@ -23,7 +23,7 @@ test('App renders show page unavailable offline when navigate to Users page whil
     initialEntries: ['/projects/5/users'],
   })
 
-  expect(await screen.findByText('This page is unavailable when offline'))
+  expect(await screen.findByText('This page is unavailable offline.'))
 })
 
 test('App renders show page unavailable offline when navigate to Fish Families page while offline.', async () => {
@@ -31,7 +31,7 @@ test('App renders show page unavailable offline when navigate to Fish Families p
     initialEntries: ['/projects/5/fish-families'],
   })
 
-  expect(await screen.findByText('This page is unavailable when offline'))
+  expect(await screen.findByText('This page is unavailable offline.'))
 })
 
 test('App renders show page unavailable offline when navigate to Data Sharing page while offline.', async () => {
@@ -45,5 +45,5 @@ test('App renders show page unavailable offline when navigate to Data Sharing pa
     dexieInstance,
   )
 
-  expect(await screen.findByText('This page is unavailable when offline'))
+  expect(await screen.findByText('This page is unavailable offline.'))
 })

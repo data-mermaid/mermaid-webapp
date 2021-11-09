@@ -1,24 +1,24 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components/macro'
-import { H1 } from '../../generic/text'
-import { Column } from '../../generic/positioning'
-import { NavLinkThatLooksLikeButton } from '../../generic/links'
+import language from '../../../language'
+import theme from '../../../theme'
 
-const PageNotFoundContainer = styled(Column)`
-  align-items: center;
-`
-
-const NavLinkThatLooksLikeButtonStyle = styled(NavLinkThatLooksLikeButton)`
-  display: flex;
-  justify-content: center;
-  width: 200px;
+const PageNotFoundContainer = styled('div')`
+  display: grid;
+  place-items: center;
+  padding: ${theme.spacing.medium};
+  height: 100vh;
 `
 
 const PageNotFound = () => {
   return (
     <PageNotFoundContainer>
-      <H1>Sorry, Page Not Found!</H1>
-      <NavLinkThatLooksLikeButtonStyle to="/">Back to home</NavLinkThatLooksLikeButtonStyle>
+      <div>
+        <h1>{language.error.pageNotFound}</h1>
+        <p>{language.error.pageNotFoundRecovery}</p>
+        <Link to="/">{language.error.homePageNavigation}</Link>
+      </div>
     </PageNotFoundContainer>
   )
 }

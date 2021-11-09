@@ -21,7 +21,7 @@ test('Offline management regimes (plural) shows no info associated with project 
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantProjectId, cannot be found.',
+      "The item with the id nonExistantProjectId can't be found.",
     ),
   )
 })
@@ -36,7 +36,7 @@ test('Online management regimes (plural) shows no info associated with project i
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantProjectId, cannot be found.',
+      "The item with the id nonExistantProjectId can't be found.",
     ),
   )
 })

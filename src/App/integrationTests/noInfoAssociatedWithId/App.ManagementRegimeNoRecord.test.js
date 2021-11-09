@@ -21,7 +21,7 @@ test('Offline management regime shows no info associated with MANAGEMENT REGIME 
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantMrId, cannot be found.',
+      "The item with the id nonExistantMrId can't be found.",
     ),
   )
 })
@@ -36,7 +36,7 @@ test('Online management regime shows no info associated with MANAGEMENT REGIME i
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantMrId, cannot be found.',
+      "The item with the id nonExistantMrId can't be found.",
     ),
   )
 })
@@ -53,7 +53,7 @@ test('Offline management regime shows no info associated with PROJECT id view ',
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantProjectId, cannot be found.',
+      "The item with the id nonExistantProjectId can't be found.",
     ),
   )
 })
@@ -68,7 +68,7 @@ test('Online management regime shows no info associated with PROJECT id view ', 
 
   expect(
     await screen.findByText(
-      'Details: information associated with the id, nonExistantProjectId, cannot be found.',
+      "The item with the id nonExistantProjectId can't be found.",
     ),
   )
 })
@@ -85,7 +85,7 @@ test('Offline management regime shows no info associated with PROJECT or MANAGEM
 
   expect(
     await screen.findByText(
-      'Details: information associated with one or more of the following ids cannot be found: nonExistantMrId,nonExistantProjectId',
+      "The items with the ids nonExistantMrId,nonExistantProjectId can't be found.",
     ),
   )
 })
@@ -99,7 +99,7 @@ test('Online management regime shows no info associated with PROJECT or MANAGEME
   })
   expect(
     await screen.findByText(
-      'Details: information associated with one or more of the following ids cannot be found: nonExistantMrId,nonExistantProjectId',
+      "The items with the ids nonExistantMrId,nonExistantProjectId can't be found.",
     ),
   )
 })
