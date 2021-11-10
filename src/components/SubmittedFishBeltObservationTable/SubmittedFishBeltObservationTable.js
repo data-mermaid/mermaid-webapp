@@ -1,14 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/macro'
-import { H2 } from '../generic/text'
-import { InputWrapper } from '../generic/form'
+import styled, { css } from 'styled-components/macro'
 import { inputOptionsPropTypes } from '../../library/miscPropTypes'
 import {
   choicesPropType,
   submittedFishBeltPropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
-import { Table, TableOverflowWrapper, Tr, Td, Th } from '../generic/Table/table'
+import { Table, Tr, Td, Th } from '../generic/Table/table'
+import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import { RowRight } from '../generic/positioning'
 import { getObservationBiomass } from '../pages/collectRecordFormPages/FishBelt/fishbeltBiomas'
 import { roundToOneDecimal } from '../../library/Numbers/roundToOneDecimal'
@@ -16,8 +15,9 @@ import { summarizeArrayObjectValuesByProperty } from '../../library/summarizeArr
 import language from '../../language'
 import theme from '../../theme'
 
-const TheadItem = styled(Th)`
-  background: #f1f1f4;
+const TheadItem = styled(Th)``
+const StyledH2 = styled('h2')`
+  padding: 0 ${theme.spacing.medium};
 `
 
 const ObservationsSummaryStats = styled(Table)`
@@ -25,15 +25,24 @@ const ObservationsSummaryStats = styled(Table)`
   table-layout: auto;
   min-width: auto;
   max-width: 40rem;
-  float: right;
+  border: solid 1px ${theme.color.secondaryColor};
   tr:nth-child(even),
   tr:nth-child(odd) {
     background-color: ${theme.color.white};
   }
+  ${mediaQueryTabletLandscapeOnly(css`
+    font-size: smaller;
+  `)}
 `
 
 const UnderTableRow = styled(RowRight)`
+  display: flex;
+  align-items: flex-end;
   margin-top: ${theme.spacing.medium};
+  ${mediaQueryTabletLandscapeOnly(css`
+    flex-direction: column;
+    gap: ${theme.spacing.small};
+  `)}
 `
 
 const SubmittedFishBeltObservationTable = ({
@@ -45,7 +54,7 @@ const SubmittedFishBeltObservationTable = ({
   const { obs_belt_fishes } = submittedRecord
   const { width, len_surveyed } = submittedRecord.fishbelt_transect
 
-  const observationsBiomass = obs_belt_fishes.map(observation => ({
+  const observationsBiomass = obs_belt_fishes.map((observation) => ({
     uiId: observation.id,
     biomass: getObservationBiomass({
       choices,
@@ -62,14 +71,14 @@ const SubmittedFishBeltObservationTable = ({
 
   const totalAbundance = summarizeArrayObjectValuesByProperty(obs_belt_fishes, 'count')
 
-  const getFishName = fishAttributeId => {
-    const foundFishName = fishNameOptions.find(fish => fish.value === fishAttributeId)
+  const getFishName = (fishAttributeId) => {
+    const foundFishName = fishNameOptions.find((fish) => fish.value === fishAttributeId)
 
     return foundFishName ? foundFishName.label : ''
   }
 
-  const getFishBiomass = observationId => {
-    const fishBiomass = observationsBiomass.find(fish => fish.uiId === observationId).biomass
+  const getFishBiomass = (observationId) => {
+    const fishBiomass = observationsBiomass.find((fish) => fish.uiId === observationId).biomass
 
     return roundToOneDecimal(fishBiomass)
   }
@@ -77,30 +86,28 @@ const SubmittedFishBeltObservationTable = ({
   const observationBeltFish = obs_belt_fishes.map((item, index) => (
     <Tr key={item.id}>
       <Td align="center">{index + 1}</Td>
-      <Td align="center">{getFishName(item.fish_attribute)}</Td>
-      <Td align="center">{item.size}</Td>
-      <Td align="center">{item.count}</Td>
-      <Td align="center">{getFishBiomass(item.id)}</Td>
+      <Td align="left">{getFishName(item.fish_attribute)}</Td>
+      <Td align="right">{item.size}</Td>
+      <Td align="right">{item.count}</Td>
+      <Td align="right">{getFishBiomass(item.id)}</Td>
     </Tr>
   ))
 
   return (
-    <InputWrapper>
-      <H2 id="table-label">Observations</H2>
-      <TableOverflowWrapper>
-        <Table>
-          <thead>
-            <Tr>
-              <TheadItem> </TheadItem>
-              <TheadItem align="center">Fish Name</TheadItem>
-              <TheadItem align="center">Size</TheadItem>
-              <TheadItem align="center">Count</TheadItem>
-              <TheadItem align="center">Biomass (kg/ha)</TheadItem>
-            </Tr>
-          </thead>
-          <tbody>{observationBeltFish}</tbody>
-        </Table>
-      </TableOverflowWrapper>
+    <>
+      <StyledH2 id="table-label">Observations</StyledH2>
+      <Table>
+        <thead>
+          <Tr>
+            <TheadItem> </TheadItem>
+            <TheadItem align="left">Fish Name</TheadItem>
+            <TheadItem align="right">Size (cm)</TheadItem>
+            <TheadItem align="right">Count</TheadItem>
+            <TheadItem align="right">Biomass (kg/ha)</TheadItem>
+          </Tr>
+        </thead>
+        <tbody>{observationBeltFish}</tbody>
+      </Table>
       <UnderTableRow>
         <ObservationsSummaryStats>
           <tbody>
@@ -115,7 +122,7 @@ const SubmittedFishBeltObservationTable = ({
           </tbody>
         </ObservationsSummaryStats>
       </UnderTableRow>
-    </InputWrapper>
+    </>
   )
 }
 
