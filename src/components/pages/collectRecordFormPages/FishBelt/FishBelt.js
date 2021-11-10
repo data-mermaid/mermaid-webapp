@@ -338,7 +338,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
   const formikOptions = useMemo(() => {
-    const saveRecord = (formikValues) => {
+    const saveRecord = (formikValues, formikActions) => {
       const recordToSubmit = reformatFormValuesIntoFishBeltRecord(
         formikValues,
         observationsState,
@@ -361,6 +361,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setAreObservationsInputsDirty(false)
           setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
           setIsFormDirty(false)
+          formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
           if (isNewRecord) {
             history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
@@ -446,27 +447,24 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         content={
           <>
             <FishbeltForm
+              areObservationsInputsDirty={areObservationsInputsDirty}
               areValidationsShowing={areValidationsShowing}
               choices={choices}
               collectRecord={collectRecordBeingEdited}
+              fishNameConstants={fishNameConstants}
+              fishNameOptions={fishNameOptions}
               formik={formik}
               ignoreValidations={ignoreValidations}
               managementRegimes={managementRegimes}
-              onSizeBinChange={handleSizeBinChange}
-              resetValidations={resetValidations}
-              sites={sites}
+              observationsReducer={observationsReducer}
               observers={observerProfiles}
               onObserversChange={handleObserversChange}
-              fishBinSelected={formik.values.size_bin}
-              fishNameConstants={fishNameConstants}
-              fishNameOptions={fishNameOptions}
-              observationsReducer={observationsReducer}
+              onSizeBinChange={handleSizeBinChange}
               openNewFishNameModal={openNewFishNameModal}
-              transectLengthSurveyed={formik.values.len_surveyed}
-              widthId={formik.values.width}
               persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-              areObservationsInputsDirty={areObservationsInputsDirty}
+              resetValidations={resetValidations}
               setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+              sites={sites}
             />
 
             <DeleteRecordButtonCautionWrapper>

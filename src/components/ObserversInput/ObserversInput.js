@@ -4,19 +4,19 @@ import PropTypes from 'prop-types'
 import { H2 } from '../generic/text'
 import { InputWrapper } from '../generic/form'
 import { formikPropType } from '../../library/formikPropType'
-import { fishBeltPropType, observersPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import { observersPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import InputCheckboxGroupWithLabelAndValidation from '../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import { getObserverNameOptions } from '../../library/observerHelpers'
-import getValidationPropertiesForInput from '../pages/collectRecordFormPages/getValidationPropertiesForInput'
+import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
 
 const ObserversInput = ({
-  areValidationsShowing,
-  collectRecord,
   formik,
   ignoreValidations,
   observers,
   onObserversChange,
   resetValidations,
+  validationPath,
+  validationProperties,
   ...restOfProps
 }) => {
   const observerNameOptions = getObserverNameOptions(observers)
@@ -36,15 +36,12 @@ const ObserversInput = ({
         options={observerNameOptions}
         value={observerNameValues}
         ignoreValidations={() => {
-          ignoreValidations({ validationPath: 'data.observers' })
+          ignoreValidations({ validationPath })
         }}
         resetValidations={() => {
-          resetValidations({ validationPath: 'data.observers' })
+          resetValidations({ validationPath })
         }}
-        {...getValidationPropertiesForInput(
-          collectRecord?.validations?.results?.data?.observers,
-          areValidationsShowing,
-        )}
+        {...validationProperties}
         onChange={({ selectedItems }) => {
           const selectedObservers = filterObserverProfiles(selectedItems)
 
@@ -59,15 +56,16 @@ const ObserversInput = ({
 }
 
 ObserversInput.propTypes = {
-  areValidationsShowing: PropTypes.bool.isRequired,
-  collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
   ignoreValidations: PropTypes.func.isRequired,
   observers: PropTypes.arrayOf(observersPropType).isRequired,
   onObserversChange: PropTypes.func.isRequired,
   resetValidations: PropTypes.func.isRequired,
+  validationPath: PropTypes.string.isRequired,
+  validationProperties: PropTypes.shape({
+    validationType: PropTypes.string,
+    validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
+  }).isRequired,
 }
-
-ObserversInput.defaultProps = { collectRecord: undefined }
 
 export default ObserversInput
