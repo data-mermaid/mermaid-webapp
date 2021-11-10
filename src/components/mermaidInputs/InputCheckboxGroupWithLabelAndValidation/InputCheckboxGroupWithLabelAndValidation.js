@@ -35,7 +35,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
     setCheckboxItems(value)
   }, [value])
 
-  const handleCheckboxGroupChange = (itemValue) => {
+  const handleCheckboxGroupChange = ({ itemValue, event }) => {
     const updateCheckboxItems = [...checkboxItems]
     const foundItemIndex = updateCheckboxItems.indexOf(itemValue)
 
@@ -46,7 +46,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
     }
 
     setCheckboxItems(updateCheckboxItems)
-    onChange({ selectedItems: updateCheckboxItems })
+    onChange({ selectedItems: updateCheckboxItems, event })
   }
 
   const checkboxGroup = options.map((item) => (
@@ -56,7 +56,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
         type="checkbox"
         value={item.value}
         checked={checkboxItems.includes(item.value)}
-        onChange={() => handleCheckboxGroupChange(item.value)}
+        onChange={(event) => handleCheckboxGroupChange({ itemValue: item.value, event })}
       />
       {item.label}
     </CheckBoxLabel>
@@ -78,6 +78,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
 
 InputCheckboxGroupWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
+  ignoreValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
@@ -86,6 +87,7 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
+  resetValidations: PropTypes.func.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   value: PropTypes.arrayOf(
@@ -97,8 +99,6 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       }),
     ]),
   ).isRequired,
-  ignoreValidations: PropTypes.func.isRequired,
-  resetValidations: PropTypes.func.isRequired,
 }
 
 InputCheckboxGroupWithLabelAndValidation.defaultProps = {
