@@ -280,7 +280,8 @@ const FishbeltForm = ({
               resetValidations({ validationPath: siteValidationPath })
             }}
             {...siteValidationProperties}
-            {...formik.getFieldProps('site')}
+            onBlur={formik.handleBlur}
+            value={formik.values.site}
             onChange={handleSiteChange}
           />
           <InputSelectWithLabelAndValidation
@@ -295,7 +296,8 @@ const FishbeltForm = ({
               resetValidations({ validationPath: managementValidationPath })
             }}
             {...managementValidationProperties}
-            {...formik.getFieldProps('management')}
+            onBlur={formik.handleBlur}
+            value={formik.values.management}
             onChange={handleManagementChange}
           />
           <InputWithLabelAndValidation
@@ -309,8 +311,9 @@ const FishbeltForm = ({
             }}
             testId="depth"
             type="number"
-            {...formik.getFieldProps('depth')}
             {...depthValidationProperties}
+            onBlur={formik.handleBlur}
+            value={formik.values.depth}
             onChange={handleDepthChange}
           />
           <InputWithLabelAndValidation
@@ -325,7 +328,8 @@ const FishbeltForm = ({
               resetValidations({ validationPath: sampleDateValidationPath })
             }}
             {...sampleDateValidationProperties}
-            {...formik.getFieldProps('sample_date')}
+            onBlur={formik.handleBlur}
+            value={formik.values.sample_date}
             onChange={handleSampleDateChange}
           />
           <InputWithLabelAndValidation
@@ -339,8 +343,9 @@ const FishbeltForm = ({
             resetValidations={() => {
               resetValidations({ validationPath: sampleTimeValidationPath })
             }}
-            {...formik.getFieldProps('sample_time')}
             {...sampleTimeValidationProperties}
+            onBlur={formik.handleBlur}
+            value={formik.values.sample_time}
             onChange={handleSampleTimeChange}
           />
         </InputWrapper>
@@ -358,7 +363,8 @@ const FishbeltForm = ({
               resetValidations({ validationPath: transectNumberValidationPath })
             }}
             {...transectNumberValidationProperties}
-            {...formik.getFieldProps('number')}
+            onBlur={formik.handleBlur}
+            value={formik.values.number}
             onChange={handleTransectNumberChange}
           />
           <InputWithLabelAndValidation
@@ -373,7 +379,8 @@ const FishbeltForm = ({
               resetValidations({ validationPath: labelValidationPath })
             }}
             {...labelValidationProperties}
-            {...formik.getFieldProps('label')}
+            onBlur={formik.handleBlur}
+            value={formik.values.label}
             onChange={handleLabelChange}
           />
           <InputWithLabelAndValidation
@@ -388,7 +395,8 @@ const FishbeltForm = ({
               resetValidations({ validationPath: lengthSurveyedValidationPath })
             }}
             {...lengthSurveyedValidationProperties}
-            {...formik.getFieldProps('len_surveyed')}
+            onBlur={formik.handleBlur}
+            value={formik.values.len_surveyed}
             onChange={handleLengthSurveyedChange}
           />
           <InputRadioWithLabelAndValidation
@@ -403,7 +411,9 @@ const FishbeltForm = ({
               resetValidations({ validationPath: widthValidationPath })
             }}
             {...widthValidationProperties}
-            {...formik.getFieldProps('width')}
+            onBlur={formik.handleBlur}
+            value={formik.values.width}
+            name="width"
             onChange={handleWidthChange}
           />
           <InputRadioWithLabelAndValidation
@@ -434,7 +444,9 @@ const FishbeltForm = ({
               resetValidations({ validationPath: reefSlopeValidationPath })
             }}
             {...reefSlopeValidationProperties}
-            {...formik.getFieldProps('reef_slope')}
+            onBlur={formik.handleBlur}
+            value={formik.values.reef_slope}
+            name="reef_slope"
             onChange={handleReefSlopeChange}
           />
           <TextareaWithLabelAndValidation
@@ -448,7 +460,8 @@ const FishbeltForm = ({
               resetValidations({ validationPath: notesValidationPath })
             }}
             {...notesValidationProperties}
-            {...formik.getFieldProps('notes')}
+            onBlur={formik.handleBlur}
+            value={formik.values.notes}
             onChange={handleNotesChange}
           />
         </InputWrapper>

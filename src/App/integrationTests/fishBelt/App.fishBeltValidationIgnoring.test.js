@@ -861,7 +861,7 @@ test('user can reset dismissed non-observation input warnings', async () => {
   await waitFor(() => {
     expect(within(observersRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
   })
-}, 35000)
+}, 40000)
 
 test('user can reset dismissed record-level warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
