@@ -252,6 +252,24 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
   }
 
+  const ignoreRecordLevelValidation = useCallback(
+    ({ validationId }) => {
+      databaseSwitchboardInstance
+        .ignoreRecordLevelValidation({
+          record: collectRecordBeingEdited,
+          validationId,
+        })
+        .then((recordWithResetValidations) => {
+          setCollectRecordBeingEdited(recordWithResetValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(language.error.collectRecordReset)
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
   const ignoreValidations = useCallback(
     ({ validationPath }) => {
       databaseSwitchboardInstance
@@ -265,6 +283,24 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         })
         .catch(() => {
           toast.warn(language.error.collectRecordIgnore)
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
+  const resetRecordLevelValidation = useCallback(
+    ({ validationId }) => {
+      databaseSwitchboardInstance
+        .resetRecordLevelValidation({
+          record: collectRecordBeingEdited,
+          validationId,
+        })
+        .then((recordWithResetValidations) => {
+          setCollectRecordBeingEdited(recordWithResetValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(language.error.collectRecordReset)
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -455,6 +491,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               fishNameOptions={fishNameOptions}
               formik={formik}
               ignoreValidations={ignoreValidations}
+              ignoreRecordLevelValidation={ignoreRecordLevelValidation}
               managementRegimes={managementRegimes}
               observationsReducer={observationsReducer}
               observers={observerProfiles}
@@ -462,6 +499,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               onSizeBinChange={handleSizeBinChange}
               openNewFishNameModal={openNewFishNameModal}
               persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+              resetRecordLevelValidation={resetRecordLevelValidation}
               resetValidations={resetValidations}
               setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               sites={sites}

@@ -271,7 +271,35 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    ignoreRecordLevelValidation = function ignoreRecordLevelValidation({ record, validationId }) {
+      if (!record || !validationId) {
+        throw new Error('IgnoreRecordLevelValidation requires record and validationId parameters')
+      }
+
+      const originalRecordLevelValidations = record.validations.results.$record
+      const recordLevelValidationsWithIgnored = originalRecordLevelValidations.map((validation) => {
+        if (validation.validation_id === validationId) {
+          return { ...validation, status: 'ignore' }
+        }
+
+        return validation
+      })
+
+      const recordWithIgnoredValidations = setObjectPropertyOnClone({
+        object: record,
+        path: 'validations.results.$record',
+        value: recordLevelValidationsWithIgnored,
+      })
+
+      return this._dexieInstance.collect_records
+        .put(recordWithIgnoredValidations)
+        .then(() => recordWithIgnoredValidations)
+    }
+
     ignoreValidations = function ignoreValidations({ record, validationPath }) {
+      if (!record || !validationPath) {
+        throw new Error('ignoreValidations requires record and validationPath parameters')
+      }
       const path = `validations.results.${validationPath}`
       const currentValidations = getObjectProperty({
         object: record,
@@ -301,7 +329,40 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithIgnoredValidations)
     }
 
+    resetRecordLevelValidation = function resetRecordLevelValidation({ record, validationId }) {
+      if (!record || !validationId) {
+        throw new Error('resetRecordLevelValidation requires record and validationId parameters')
+      }
+
+      const originalRecordLevelValidations = record.validations.results.$record
+      const recordLevelValidationsWithReset = originalRecordLevelValidations.map((validation) => {
+        if (validation.validation_id === validationId) {
+          const currentValidationStatus = validation.status
+
+          return {
+            ...validation,
+            status: currentValidationStatus === 'ignore' ? 'reset' : currentValidationStatus,
+          }
+        }
+
+        return validation
+      })
+
+      const recordWithResetValidation = setObjectPropertyOnClone({
+        object: record,
+        path: 'validations.results.$record',
+        value: recordLevelValidationsWithReset,
+      })
+
+      return this._dexieInstance.collect_records
+        .put(recordWithResetValidation)
+        .then(() => recordWithResetValidation)
+    }
+
     resetValidations = function resetValidations({ record, validationPath }) {
+      if (!record || !validationPath) {
+        throw new Error('resetValidations requires record and validationPath parameters')
+      }
       const path = `validations.results.${validationPath}`
       const currentValidations = getObjectProperty({
         object: record,

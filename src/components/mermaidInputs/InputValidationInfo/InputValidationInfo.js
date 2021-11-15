@@ -6,7 +6,7 @@ import { IconCheck } from '../../icons'
 import { ButtonSecondary } from '../../generic/buttons'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
-const ValidationInfo = ({
+const InputValidationInfo = ({
   ignoreValidations,
   resetValidations,
   validationMessages,
@@ -29,7 +29,7 @@ const ValidationInfo = ({
       {validationType === 'ok' ? <IconCheck aria-label="Passed validation" /> : null}
       {validationType === 'ignore' ? (
         <Column>
-          Ignored
+          <ValidationMessage validationType={validationType}>Ignored</ValidationMessage>
           <ButtonSecondary type="button" onClick={resetValidations}>
             Reset validations
           </ButtonSecondary>
@@ -45,16 +45,16 @@ const ValidationInfo = ({
   )
 }
 
-ValidationInfo.propTypes = {
+InputValidationInfo.propTypes = {
   ignoreValidations: PropTypes.func.isRequired,
   resetValidations: PropTypes.func.isRequired,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
 }
 
-ValidationInfo.defaultProps = {
+InputValidationInfo.defaultProps = {
   validationType: undefined,
   validationMessages: [],
 }
 
-export default ValidationInfo
+export default InputValidationInfo

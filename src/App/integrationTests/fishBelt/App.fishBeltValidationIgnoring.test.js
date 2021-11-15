@@ -15,7 +15,7 @@ import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Validation: user can dismiss warnings ', async () => {
+test('Validation: user can dismiss non-observations input warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -364,7 +364,85 @@ test('Validation: user can dismiss warnings ', async () => {
   expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
 })
 
-test('user can reset dismissed warnings', async () => {
+test('Validation: user can dismiss record-level warnings ', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+      return res(ctx.status(200))
+    }),
+
+    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+      const collectRecordWithValidation = {
+        ...mockMermaidData.collect_records[0],
+        validations: {
+          status: 'error',
+          results: {
+            $record: [
+              {
+                name: 'record level warning',
+                status: 'warning',
+                validation_id: '63043489232e671a4f9231fdf6d2665f',
+              },
+            ],
+          },
+        },
+      }
+
+      const response = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidation] },
+        fish_families: { updates: mockMermaidData.fish_families },
+        fish_genera: { updates: mockMermaidData.fish_genera },
+        fish_species: { updates: mockMermaidData.fish_species },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+      }
+
+      return res(ctx.json(response))
+    }),
+  )
+
+  renderAuthenticatedOnline(
+    <App dexieInstance={dexieInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+    },
+    dexieInstance,
+  )
+
+  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  expect(await screen.findByRole('button', { name: 'Validating' }))
+  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+
+  const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
+
+  expect(
+    within(recordLevelValidationsSection).getByText('record level warning'),
+  ).toBeInTheDocument()
+
+  userEvent.click(
+    within(recordLevelValidationsSection).getByRole('button', { name: 'Ignore warning' }),
+  )
+
+  await waitFor(() =>
+    expect(
+      within(recordLevelValidationsSection).queryByText('record level warning'),
+    ).not.toBeInTheDocument(),
+  )
+
+  expect(within(recordLevelValidationsSection).getByRole('button', { name: 'Reset validation' }))
+  expect(within(recordLevelValidationsSection).getByText('Ignored: record level warning'))
+
+  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+
+  expect(isFormDirtyAfterIgnore)
+})
+
+test('user can reset dismissed non-observation input warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -593,9 +671,9 @@ test('user can reset dismissed warnings', async () => {
     }),
   )
 
-  const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
+  const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
 
-  expect(isFormDirtyAfterIgnore)
+  expect(isFormDirtyAfterReset)
 
   await waitFor(() => expect(within(siteRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(siteRow).queryByText('secondWarning')).not.toBeInTheDocument()
@@ -610,9 +688,12 @@ test('user can reset dismissed warnings', async () => {
   await waitFor(() =>
     expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(managementRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
-
+  await waitFor(() => {
+    expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(managementRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
   userEvent.click(
     within(depthRow).getByRole('button', {
       name: 'Reset validations',
@@ -620,8 +701,12 @@ test('user can reset dismissed warnings', async () => {
   )
 
   await waitFor(() => expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(depthRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(depthRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(sampleDateRow).getByRole('button', {
@@ -632,8 +717,12 @@ test('user can reset dismissed warnings', async () => {
   await waitFor(() =>
     expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sampleDateRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(sampleDateRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(sampleTimeRow).getByRole('button', {
@@ -644,8 +733,12 @@ test('user can reset dismissed warnings', async () => {
   await waitFor(() =>
     expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sampleTimeRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(sampleTimeRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(transectNumberRow).getByRole('button', {
@@ -656,8 +749,12 @@ test('user can reset dismissed warnings', async () => {
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(transectNumberRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(transectNumberRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(transectNumberRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(transectNumberRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(labelRow).getByRole('button', {
@@ -666,8 +763,12 @@ test('user can reset dismissed warnings', async () => {
   )
 
   await waitFor(() => expect(within(labelRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(labelRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(labelRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(lengthSurveyedRow).getByRole('button', {
@@ -678,8 +779,12 @@ test('user can reset dismissed warnings', async () => {
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(lengthSurveyedRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(lengthSurveyedRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(widthRow).getByRole('button', {
@@ -688,8 +793,12 @@ test('user can reset dismissed warnings', async () => {
   )
 
   await waitFor(() => expect(within(widthRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(widthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(widthRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(widthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(widthRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(sizeBinRow).getByRole('button', {
@@ -700,8 +809,12 @@ test('user can reset dismissed warnings', async () => {
   await waitFor(() =>
     expect(within(sizeBinRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(sizeBinRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sizeBinRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(sizeBinRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(sizeBinRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(reefSlopeRow).getByRole('button', {
@@ -712,8 +825,12 @@ test('user can reset dismissed warnings', async () => {
   await waitFor(() =>
     expect(within(reefSlopeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(reefSlopeRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(reefSlopeRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(notesRow).getByRole('button', {
@@ -722,8 +839,12 @@ test('user can reset dismissed warnings', async () => {
   )
 
   await waitFor(() => expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(notesRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(notesRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 
   userEvent.click(
     within(observersRow).getByRole('button', {
@@ -734,11 +855,93 @@ test('user can reset dismissed warnings', async () => {
   await waitFor(() =>
     expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observersRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  await waitFor(() => {
+    expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  })
+  await waitFor(() => {
+    expect(within(observersRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+  })
 }, 35000)
 
-test('Validation: user edits input with ignored validation resets the ignored status for that input.', async () => {
+test('user can reset dismissed record-level warnings', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+      return res(ctx.status(200))
+    }),
+
+    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+      const collectRecordWithValidation = {
+        ...mockMermaidData.collect_records[0],
+        validations: {
+          status: 'error',
+          results: {
+            $record: [
+              {
+                name: 'record level ignore',
+                status: 'ignore',
+                validation_id: '63043489232e671a4f9231fdf6d2665f',
+              },
+            ],
+          },
+        },
+      }
+
+      const response = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidation] },
+        fish_families: { updates: mockMermaidData.fish_families },
+        fish_genera: { updates: mockMermaidData.fish_genera },
+        fish_species: { updates: mockMermaidData.fish_species },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+      }
+
+      return res(ctx.json(response))
+    }),
+  )
+
+  renderAuthenticatedOnline(
+    <App dexieInstance={dexieInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+    },
+    dexieInstance,
+  )
+
+  userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+  expect(await screen.findByRole('button', { name: 'Validating' }))
+  expect(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
+
+  const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
+
+  expect(
+    within(recordLevelValidationsSection).getByText('Ignored: record level ignore'),
+  ).toBeInTheDocument()
+
+  userEvent.click(
+    await within(recordLevelValidationsSection).findByRole('button', {
+      name: 'Reset validation',
+    }),
+  )
+
+  await waitFor(() =>
+    expect(
+      within(recordLevelValidationsSection).queryByText('Ignored: record level ignore'),
+    ).not.toBeInTheDocument(),
+  )
+  expect(within(recordLevelValidationsSection).getByText('record level ignore')).toBeInTheDocument()
+
+  const isFormDirtyAfterReset = screen.getByRole('button', { name: 'Save' })
+
+  expect(isFormDirtyAfterReset)
+})
+
+test('Validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -1017,4 +1220,7 @@ test('Validation: user edits input with ignored validation resets the ignored st
 
   userEvent.click(within(observersRow).getByLabelText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
+
+  // make act error go away
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })))
 }, 40000)

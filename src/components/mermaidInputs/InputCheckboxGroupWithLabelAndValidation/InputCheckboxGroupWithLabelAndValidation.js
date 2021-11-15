@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { InputRow } from '../../generic/form'
 import theme from '../../../theme'
 
-import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const CheckBoxLabel = styled.label`
@@ -66,7 +66,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
     <InputRow validationType={validationType}>
       <label htmlFor={id}>{label}</label>
       <div>{checkboxGroup}</div>
-      <ValidationInfo
+      <InputValidationInfo
         ignoreValidations={ignoreValidations}
         resetValidations={resetValidations}
         validationMessages={validationMessages}

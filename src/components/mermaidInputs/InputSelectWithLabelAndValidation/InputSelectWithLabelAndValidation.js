@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { InputRow, Select, HelperText } from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
-import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputSelectWithLabelAndValidation = ({
@@ -43,7 +43,7 @@ const InputSelectWithLabelAndValidation = ({
         </Select>
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
-      <ValidationInfo
+      <InputValidationInfo
         ignoreValidations={ignoreValidations}
         resetValidations={resetValidations}
         validationMessages={validationMessages}
