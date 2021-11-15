@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Textarea, InputRow, HelperText } from '../../generic/form'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 
 const TextareaWithLabelAndValidation = ({
   helperText,
@@ -31,7 +31,7 @@ const TextareaWithLabelAndValidation = ({
         />
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
-      <ValidationInfo
+      <InputValidationInfo
         validationType={validationType}
         validationMessages={validationMessages}
         ignoreValidations={ignoreValidations}

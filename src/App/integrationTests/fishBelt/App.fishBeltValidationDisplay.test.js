@@ -78,6 +78,14 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
       { timeout: 10000 },
     ),
   )
+  // record level validations
+  expect(screen.getByText('record level error 1')).toBeInTheDocument()
+  expect(screen.getByText('record level error 2')).toBeInTheDocument()
+  expect(screen.getByText('record level warning 1')).toBeInTheDocument()
+  expect(screen.getByText('record level warning 2')).toBeInTheDocument()
+  expect(screen.queryByText('OK validation shouldnt show')).not.toBeInTheDocument()
+
+  // input level validations
 
   expect(within(screen.getByTestId('site')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('required')).toBeInTheDocument()

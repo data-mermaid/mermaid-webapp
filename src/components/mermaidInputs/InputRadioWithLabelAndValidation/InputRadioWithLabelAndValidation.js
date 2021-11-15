@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { InputRow } from '../../generic/form'
-import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputRadioWithLabelAndValidation = ({
@@ -36,7 +36,7 @@ const InputRadioWithLabelAndValidation = ({
     <InputRow validationType={validationType} data-testid={testId}>
       <label htmlFor={id}>{label}</label>
       <div>{optionsList}</div>
-      <ValidationInfo
+      <InputValidationInfo
         ignoreValidations={ignoreValidations}
         resetValidations={resetValidations}
         validationMessages={validationMessages}

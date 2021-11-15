@@ -5,7 +5,7 @@ import { Input, InputRow, HelperText } from '../../generic/form'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
 
-import ValidationInfo from '../ValidationInfo/ValidationInfo'
+import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputWithLabelAndValidation = ({
@@ -51,7 +51,7 @@ const InputWithLabelAndValidation = ({
         {inputType}
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
-      <ValidationInfo
+      <InputValidationInfo
         validationType={validationType}
         validationMessages={validationMessages}
         ignoreValidations={ignoreValidations}

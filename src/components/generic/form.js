@@ -80,8 +80,29 @@ export const InputRow = styled.div`
 `
 export const ValidationMessage = styled.span.attrs((props) => ({
   role:
-    props.validationType === 'error' || props.validationType === 'warning' ? 'alert' : undefined,
-}))``
+    props.validationType === 'error' ||
+    props.validationType === 'warning' ||
+    props.validationType === 'reset'
+      ? 'alert'
+      : undefined,
+}))`
+  ${(props) =>
+    props.validationType === 'error' &&
+    css`
+      background-color: ${theme.color.cautionColor};
+    `}
+  ${(props) =>
+    (props.validationType === 'warning' || props.validationType === 'reset') &&
+    css`
+      background-color: ${theme.color.warningColor};
+    `}
+    ${(props) =>
+    props.validationType === 'ignore' &&
+    css`
+      background-color: ${theme.color.ignoreColor};
+    `}
+`
+
 export const Select = styled.select`
   ${inputTextareaSelectStyles}
 `

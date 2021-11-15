@@ -19,6 +19,7 @@ import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioW
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import ObserversInput from '../../../ObserversInput'
+import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 
 const FishbeltForm = ({
@@ -29,6 +30,7 @@ const FishbeltForm = ({
   fishNameConstants,
   fishNameOptions,
   formik,
+  ignoreRecordLevelValidation,
   ignoreValidations,
   managementRegimes,
   observationsReducer,
@@ -37,6 +39,7 @@ const FishbeltForm = ({
   onSizeBinChange,
   openNewFishNameModal,
   persistUnsavedObservationsUtilities,
+  resetRecordLevelValidation,
   resetValidations,
   setAreObservationsInputsDirty,
   sites,
@@ -49,6 +52,7 @@ const FishbeltForm = ({
   const managementSelectOptions = getOptions(managementRegimes, hasData)
   const siteSelectOptions = getOptions(sites, hasData)
   const validationsApiData = collectRecord?.validations?.results?.data
+  const recordLevelValidations = collectRecord?.validations?.results?.$record ?? []
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   const sample_event = validationsApiData?.sample_event
 
@@ -254,219 +258,227 @@ const FishbeltForm = ({
   }
 
   return (
-    <form id="fishbelt-form" aria-labelledby="fishbelt-form-title" onSubmit={formik.handleSubmit}>
-      <InputWrapper>
-        <H2>Sample Info</H2>
-        <InputSelectWithLabelAndValidation
-          label="Site"
-          id="site"
-          testId="site"
-          options={siteSelectOptions}
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: siteValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: siteValidationPath })
-          }}
-          {...siteValidationProperties}
-          {...formik.getFieldProps('site')}
-          onChange={handleSiteChange}
-        />
-        <InputSelectWithLabelAndValidation
-          label="Management"
-          id="management"
-          testId="management"
-          options={managementSelectOptions}
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: managementValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: managementValidationPath })
-          }}
-          {...managementValidationProperties}
-          {...formik.getFieldProps('management')}
-          onChange={handleManagementChange}
-        />
-        <InputWithLabelAndValidation
-          label="Depth"
-          id="depth"
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: depthValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: depthValidationPath })
-          }}
-          testId="depth"
-          type="number"
-          {...formik.getFieldProps('depth')}
-          {...depthValidationProperties}
-          onChange={handleDepthChange}
-        />
-        <InputWithLabelAndValidation
-          label="Sample Date"
-          id="sample_date"
-          testId="sample_date"
-          type="date"
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: sampleDateValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: sampleDateValidationPath })
-          }}
-          {...sampleDateValidationProperties}
-          {...formik.getFieldProps('sample_date')}
-          onChange={handleSampleDateChange}
-        />
-        <InputWithLabelAndValidation
-          label="Sample Time"
-          id="sample_time"
-          testId="sample_time"
-          type="time"
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: sampleTimeValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: sampleTimeValidationPath })
-          }}
-          {...formik.getFieldProps('sample_time')}
-          {...sampleTimeValidationProperties}
-          onChange={handleSampleTimeChange}
-        />
-      </InputWrapper>
-      <InputWrapper>
-        <H2>Transect</H2>
-        <InputWithLabelAndValidation
-          label="Transect Number"
-          id="number"
-          testId="transect_number"
-          type="number"
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: transectNumberValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: transectNumberValidationPath })
-          }}
-          {...transectNumberValidationProperties}
-          {...formik.getFieldProps('number')}
-          onChange={handleTransectNumberChange}
-        />
-        <InputWithLabelAndValidation
-          label="Label"
-          id="label"
-          testId="label"
-          type="text"
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: labelValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: labelValidationPath })
-          }}
-          {...labelValidationProperties}
-          {...formik.getFieldProps('label')}
-          onChange={handleLabelChange}
-        />
-        <InputWithLabelAndValidation
-          label="Transect Length Surveyed"
-          id="len_surveyed"
-          testId="len_surveyed"
-          type="number"
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: lengthSurveyedValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: lengthSurveyedValidationPath })
-          }}
-          {...lengthSurveyedValidationProperties}
-          {...formik.getFieldProps('len_surveyed')}
-          onChange={handleLengthSurveyedChange}
-        />
-        <InputRadioWithLabelAndValidation
-          label="Width"
-          id="width"
-          testId="width"
-          options={transectWidthSelectOptions}
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: widthValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: widthValidationPath })
-          }}
-          {...widthValidationProperties}
-          {...formik.getFieldProps('width')}
-          onChange={handleWidthChange}
-        />
-        <InputRadioWithLabelAndValidation
-          label="Fish Size Bin"
-          id="size_bin"
-          testId="size_bin"
-          name="fish-size-bin"
-          options={fishSizeBinSelectOptions}
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: sizeBinValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: sizeBinValidationPath })
-          }}
-          {...sizeBinValidationProperties}
-          value={formik.values.size_bin}
-          onChange={handleSizeBinChange}
-        />
-        <InputRadioWithLabelAndValidation
-          label="Reef Slope"
-          id="reef_slope"
-          testId="reef_slope"
-          options={reefSlopeSelectOptions}
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: reefSlopeValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: reefSlopeValidationPath })
-          }}
-          {...reefSlopeValidationProperties}
-          {...formik.getFieldProps('reef_slope')}
-          onChange={handleReefSlopeChange}
-        />
-        <TextareaWithLabelAndValidation
-          label="Notes"
-          id="notes"
-          testId="notes"
-          ignoreValidations={() => {
-            ignoreValidations({ validationPath: notesValidationPath })
-          }}
-          resetValidations={() => {
-            resetValidations({ validationPath: notesValidationPath })
-          }}
-          {...notesValidationProperties}
-          {...formik.getFieldProps('notes')}
-          onChange={handleNotesChange}
-        />
-      </InputWrapper>
-      <ObserversInput
-        data-testid="observers"
-        formik={formik}
-        ignoreValidations={ignoreValidations}
-        observers={observers}
-        onObserversChange={handleObserversChange}
-        resetValidations={resetValidations}
-        validationPath={observersValidationPath}
-        validationProperties={observersValidationProperties}
+    <>
+      <RecordLevelInputValidationInfo
+        validations={recordLevelValidations}
+        areValidationsShowing={areValidationsShowing}
+        resetRecordLevelValidation={resetRecordLevelValidation}
+        ignoreRecordLevelValidation={ignoreRecordLevelValidation}
       />
+      <form id="fishbelt-form" aria-labelledby="fishbelt-form-title" onSubmit={formik.handleSubmit}>
+        <InputWrapper>
+          <H2>Sample Info</H2>
+          <InputSelectWithLabelAndValidation
+            label="Site"
+            id="site"
+            testId="site"
+            options={siteSelectOptions}
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: siteValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: siteValidationPath })
+            }}
+            {...siteValidationProperties}
+            {...formik.getFieldProps('site')}
+            onChange={handleSiteChange}
+          />
+          <InputSelectWithLabelAndValidation
+            label="Management"
+            id="management"
+            testId="management"
+            options={managementSelectOptions}
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: managementValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: managementValidationPath })
+            }}
+            {...managementValidationProperties}
+            {...formik.getFieldProps('management')}
+            onChange={handleManagementChange}
+          />
+          <InputWithLabelAndValidation
+            label="Depth"
+            id="depth"
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: depthValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: depthValidationPath })
+            }}
+            testId="depth"
+            type="number"
+            {...formik.getFieldProps('depth')}
+            {...depthValidationProperties}
+            onChange={handleDepthChange}
+          />
+          <InputWithLabelAndValidation
+            label="Sample Date"
+            id="sample_date"
+            testId="sample_date"
+            type="date"
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: sampleDateValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: sampleDateValidationPath })
+            }}
+            {...sampleDateValidationProperties}
+            {...formik.getFieldProps('sample_date')}
+            onChange={handleSampleDateChange}
+          />
+          <InputWithLabelAndValidation
+            label="Sample Time"
+            id="sample_time"
+            testId="sample_time"
+            type="time"
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: sampleTimeValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: sampleTimeValidationPath })
+            }}
+            {...formik.getFieldProps('sample_time')}
+            {...sampleTimeValidationProperties}
+            onChange={handleSampleTimeChange}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <H2>Transect</H2>
+          <InputWithLabelAndValidation
+            label="Transect Number"
+            id="number"
+            testId="transect_number"
+            type="number"
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: transectNumberValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: transectNumberValidationPath })
+            }}
+            {...transectNumberValidationProperties}
+            {...formik.getFieldProps('number')}
+            onChange={handleTransectNumberChange}
+          />
+          <InputWithLabelAndValidation
+            label="Label"
+            id="label"
+            testId="label"
+            type="text"
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: labelValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: labelValidationPath })
+            }}
+            {...labelValidationProperties}
+            {...formik.getFieldProps('label')}
+            onChange={handleLabelChange}
+          />
+          <InputWithLabelAndValidation
+            label="Transect Length Surveyed"
+            id="len_surveyed"
+            testId="len_surveyed"
+            type="number"
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: lengthSurveyedValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: lengthSurveyedValidationPath })
+            }}
+            {...lengthSurveyedValidationProperties}
+            {...formik.getFieldProps('len_surveyed')}
+            onChange={handleLengthSurveyedChange}
+          />
+          <InputRadioWithLabelAndValidation
+            label="Width"
+            id="width"
+            testId="width"
+            options={transectWidthSelectOptions}
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: widthValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: widthValidationPath })
+            }}
+            {...widthValidationProperties}
+            {...formik.getFieldProps('width')}
+            onChange={handleWidthChange}
+          />
+          <InputRadioWithLabelAndValidation
+            label="Fish Size Bin"
+            id="size_bin"
+            testId="size_bin"
+            name="fish-size-bin"
+            options={fishSizeBinSelectOptions}
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: sizeBinValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: sizeBinValidationPath })
+            }}
+            {...sizeBinValidationProperties}
+            value={formik.values.size_bin}
+            onChange={handleSizeBinChange}
+          />
+          <InputRadioWithLabelAndValidation
+            label="Reef Slope"
+            id="reef_slope"
+            testId="reef_slope"
+            options={reefSlopeSelectOptions}
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: reefSlopeValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: reefSlopeValidationPath })
+            }}
+            {...reefSlopeValidationProperties}
+            {...formik.getFieldProps('reef_slope')}
+            onChange={handleReefSlopeChange}
+          />
+          <TextareaWithLabelAndValidation
+            label="Notes"
+            id="notes"
+            testId="notes"
+            ignoreValidations={() => {
+              ignoreValidations({ validationPath: notesValidationPath })
+            }}
+            resetValidations={() => {
+              resetValidations({ validationPath: notesValidationPath })
+            }}
+            {...notesValidationProperties}
+            {...formik.getFieldProps('notes')}
+            onChange={handleNotesChange}
+          />
+        </InputWrapper>
+        <ObserversInput
+          data-testid="observers"
+          formik={formik}
+          ignoreValidations={ignoreValidations}
+          observers={observers}
+          onObserversChange={handleObserversChange}
+          resetValidations={resetValidations}
+          validationPath={observersValidationPath}
+          validationProperties={observersValidationProperties}
+        />
 
-      <FishBeltObservationTable
-        choices={choices}
-        collectRecord={collectRecord}
-        fishBinSelected={formik.values.size_bin}
-        fishNameConstants={fishNameConstants}
-        fishNameOptions={fishNameOptions}
-        observationsReducer={observationsReducer}
-        openNewFishNameModal={openNewFishNameModal}
-        transectLengthSurveyed={formik.values.len_surveyed}
-        widthId={formik.values.width}
-        persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-        areObservationsInputsDirty={areObservationsInputsDirty}
-        setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-      />
-    </form>
+        <FishBeltObservationTable
+          choices={choices}
+          collectRecord={collectRecord}
+          fishBinSelected={formik.values.size_bin}
+          fishNameConstants={fishNameConstants}
+          fishNameOptions={fishNameOptions}
+          observationsReducer={observationsReducer}
+          openNewFishNameModal={openNewFishNameModal}
+          transectLengthSurveyed={formik.values.len_surveyed}
+          widthId={formik.values.width}
+          persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+          areObservationsInputsDirty={areObservationsInputsDirty}
+          setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+        />
+      </form>
+    </>
   )
 }
 
@@ -485,6 +497,7 @@ FishbeltForm.propTypes = {
   ).isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   formik: formikPropType.isRequired,
+  ignoreRecordLevelValidation: PropTypes.func.isRequired,
   ignoreValidations: PropTypes.func.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
@@ -497,6 +510,7 @@ FishbeltForm.propTypes = {
     clearPersistedUnsavedFormData: PropTypes.func,
     getPersistedUnsavedFormData: PropTypes.func,
   }).isRequired,
+  resetRecordLevelValidation: PropTypes.func.isRequired,
   resetValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
