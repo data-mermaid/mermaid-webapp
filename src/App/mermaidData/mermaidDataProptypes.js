@@ -1,22 +1,5 @@
 import PropTypes from 'prop-types'
 
-export const projectPropType = PropTypes.shape({
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  name: PropTypes.string,
-  countries: PropTypes.arrayOf(PropTypes.string),
-  num_sites: PropTypes.number,
-  updated_on: PropTypes.string,
-})
-
-export const projectsPropType = PropTypes.arrayOf(projectPropType)
-export const sitePropType = PropTypes.shape({
-  id: PropTypes.string,
-  name: PropTypes.string,
-  reef_type: PropTypes.string,
-  reef_zone: PropTypes.string,
-  exposure: PropTypes.string,
-})
-
 const _sampleEventPropType = PropTypes.shape({
   site: PropTypes.string,
   management: PropTypes.string,
@@ -37,6 +20,37 @@ const _fishBeltTransectPropType = PropTypes.shape({
   current: PropTypes.string,
   relative_depth: PropTypes.string,
   tide: PropTypes.string,
+})
+
+export const observationPropTypeShape = {
+  id: PropTypes.string,
+  updated_by: PropTypes.string,
+  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  created_on: PropTypes.string,
+  updated_on: PropTypes.string,
+  count: PropTypes.number,
+  include: PropTypes.bool,
+  notes: PropTypes.string,
+  created_by: PropTypes.string,
+  beltfish: PropTypes.string,
+  fish_attribute: PropTypes.string,
+}
+
+export const projectPropType = PropTypes.shape({
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  name: PropTypes.string,
+  countries: PropTypes.arrayOf(PropTypes.string),
+  num_sites: PropTypes.number,
+  updated_on: PropTypes.string,
+})
+
+export const projectsPropType = PropTypes.arrayOf(projectPropType)
+export const sitePropType = PropTypes.shape({
+  id: PropTypes.string,
+  name: PropTypes.string,
+  reef_type: PropTypes.string,
+  reef_zone: PropTypes.string,
+  exposure: PropTypes.string,
 })
 
 export const fishBeltPropType = PropTypes.shape({
@@ -65,21 +79,7 @@ export const submittedFishBeltPropType = PropTypes.shape({
       profile: PropTypes.string,
     }),
   ),
-  obs_belt_fishes: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      updated_by: PropTypes.string,
-      size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      created_on: PropTypes.string,
-      updated_on: PropTypes.string,
-      count: PropTypes.number,
-      include: PropTypes.bool,
-      notes: PropTypes.string,
-      created_by: PropTypes.string,
-      beltfish: PropTypes.string,
-      fish_attribute: PropTypes.string,
-    }),
-  ),
+  obs_belt_fishes: PropTypes.arrayOf(PropTypes.shape(observationPropTypeShape)),
 })
 
 export const managementRegimePropType = PropTypes.shape({

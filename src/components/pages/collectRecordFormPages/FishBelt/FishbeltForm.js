@@ -5,6 +5,7 @@ import {
   choicesPropType,
   fishBeltPropType,
   managementRegimePropType,
+  observationPropTypeShape,
   observersPropType,
   sitePropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
@@ -34,6 +35,7 @@ const FishbeltForm = ({
   ignoreValidations,
   managementRegimes,
   observationsReducer,
+  observationValidationsCloneWithUuids,
   observers,
   onObserversChange,
   onSizeBinChange,
@@ -477,18 +479,20 @@ const FishbeltForm = ({
         />
 
         <FishBeltObservationTable
+          areObservationsInputsDirty={areObservationsInputsDirty}
+          areValidationsShowing={areValidationsShowing}
           choices={choices}
           collectRecord={collectRecord}
           fishBinSelected={formik.values.size_bin}
           fishNameConstants={fishNameConstants}
           fishNameOptions={fishNameOptions}
           observationsReducer={observationsReducer}
+          observationValidationsCloneWithUuids={observationValidationsCloneWithUuids}
           openNewFishNameModal={openNewFishNameModal}
+          persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+          setAreObservationsInputsDirty={setAreObservationsInputsDirty}
           transectLengthSurveyed={formik.values.len_surveyed}
           widthId={formik.values.width}
-          persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-          areObservationsInputsDirty={areObservationsInputsDirty}
-          setAreObservationsInputsDirty={setAreObservationsInputsDirty}
         />
       </form>
     </>
@@ -513,6 +517,9 @@ FishbeltForm.propTypes = {
   ignoreRecordLevelValidation: PropTypes.func.isRequired,
   ignoreValidations: PropTypes.func.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
+  observationValidationsCloneWithUuids: PropTypes.arrayOf(
+    PropTypes.shape({ ...observationPropTypeShape, observationId: PropTypes.string }),
+  ).isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   observers: PropTypes.arrayOf(observersPropType).isRequired,
   onObserversChange: PropTypes.func.isRequired,

@@ -38,6 +38,7 @@ import RecordFormTitle from '../../../RecordFormTitle'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import getObservationValidationsCloneWithIds from './getObservationsValidationsCloneWithIds'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -68,6 +69,7 @@ const CollectRecordToolbarWrapper = styled('div')`
 
 const FishBelt = ({ isNewRecord, currentUser }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
+  const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
@@ -76,10 +78,14 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isFormDirty, setIsFormDirty] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [observationToAddSpeciesTo, setObservationToAddSpeciesTo] = useState()
+  const [observationValidationsCloneWithUuids, setObservationValidationsCloneWithUuids] = useState(
+    [],
+  )
   const [observerProfiles, setObserverProfiles] = useState([])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
@@ -89,8 +95,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
-  const [isFormDirty, setIsFormDirty] = useState(false)
-  const [areValidationsShowing, setAreValidationsShowing] = useState(false)
+
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
@@ -245,6 +250,25 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
         setAreValidationsShowing(true)
         setCollectRecordBeingEdited(validatedRecordResponse)
+
+        /* Observations is loaded initially before a user can hit the validate button,
+         and its kept up to date through user actions.
+         So it _should_ be reliable to use here without race conditions
+         This observationsValidationsCloneWithIds thing is because we dont have api ids
+         to link the observations to its validations, so its a bit of a hack
+         to get the ids created for the ui for observations onto the
+         validations object for observations.
+         In the future the api might supply unique ids for
+         observations and observations validations,
+         and this extraneous code can be removed then.
+         This tech debt is tracked in ticket M453
+        */
+        setObservationValidationsCloneWithUuids(
+          getObservationValidationsCloneWithIds({
+            observationsFromApiWithIds: observationsState,
+            collectRecord: validatedRecordResponse,
+          }),
+        )
       })
       .catch(() => {
         toast.error(language.error.collectRecordFailedValidation)
@@ -490,10 +514,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               fishNameConstants={fishNameConstants}
               fishNameOptions={fishNameOptions}
               formik={formik}
-              ignoreValidations={ignoreValidations}
               ignoreRecordLevelValidation={ignoreRecordLevelValidation}
+              ignoreValidations={ignoreValidations}
               managementRegimes={managementRegimes}
               observationsReducer={observationsReducer}
+              observationValidationsCloneWithUuids={observationValidationsCloneWithUuids}
               observers={observerProfiles}
               onObserversChange={handleObserversChange}
               onSizeBinChange={handleSizeBinChange}
