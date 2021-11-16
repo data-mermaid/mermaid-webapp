@@ -18,7 +18,8 @@ const ProjectNameWrapper = styled('div')`
   grid-template-columns: auto 1fr;
   align-items: center;
   h2 {
-    overflow-x: scroll;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
     padding: ${theme.spacing.medium} 0;
     height: 100%;
