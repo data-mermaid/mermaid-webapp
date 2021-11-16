@@ -33,12 +33,12 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
               observers: [
                 {
                   validation_id: Math.random(),
-                  code: 'firstWarning',
+                  name: 'firstWarning',
                   status: 'warning',
                 },
                 {
                   validation_id: Math.random(),
-                  code: 'secondWarning',
+                  name: 'secondWarning',
                   status: 'warning',
                 },
               ],
@@ -46,48 +46,48 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
                 site: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 management: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 sample_date: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 notes: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
@@ -96,96 +96,96 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
                 depth: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 sample_time: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 number: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 label: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 len_surveyed: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 width: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 size_bin: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
                 reef_slope: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'warning',
                   },
                 ],
@@ -460,12 +460,12 @@ test('user can reset dismissed non-observation input warnings', async () => {
               observers: [
                 {
                   validation_id: Math.random(),
-                  code: 'firstWarning',
+                  name: 'firstWarning',
                   status: 'ignore',
                 },
                 {
                   validation_id: Math.random(),
-                  code: 'secondWarning',
+                  name: 'secondWarning',
                   status: 'ignore',
                 },
               ],
@@ -473,48 +473,48 @@ test('user can reset dismissed non-observation input warnings', async () => {
                 site: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 management: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 sample_date: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 notes: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
@@ -523,96 +523,96 @@ test('user can reset dismissed non-observation input warnings', async () => {
                 depth: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 sample_time: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 number: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 label: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 len_surveyed: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 width: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 size_bin: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 reef_slope: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
@@ -959,12 +959,12 @@ test('Validation: user edits non-observation input with ignored validation reset
               observers: [
                 {
                   validation_id: Math.random(),
-                  code: 'firstWarning',
+                  name: 'firstWarning',
                   status: 'ignore',
                 },
                 {
                   validation_id: Math.random(),
-                  code: 'secondWarning',
+                  name: 'secondWarning',
                   status: 'ignore',
                 },
               ],
@@ -972,48 +972,48 @@ test('Validation: user edits non-observation input with ignored validation reset
                 site: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 management: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 sample_date: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 notes: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
@@ -1022,96 +1022,96 @@ test('Validation: user edits non-observation input with ignored validation reset
                 depth: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 sample_time: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 number: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 label: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 len_surveyed: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 width: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 size_bin: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
                 reef_slope: [
                   {
                     validation_id: Math.random(),
-                    code: 'firstWarning',
+                    name: 'firstWarning',
                     status: 'ignore',
                   },
                   {
                     validation_id: Math.random(),
-                    code: 'secondWarning',
+                    name: 'secondWarning',
                     status: 'ignore',
                   },
                 ],
