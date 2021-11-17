@@ -25,7 +25,6 @@ const NavAndContentLayout = styled('div')`
 `
 const contentStyles = css`
   background: ${theme.color.white};
-  width: ${theme.spacing.fullViewportWidth};
 `
 
 const ContentToolbar = styled('div')`

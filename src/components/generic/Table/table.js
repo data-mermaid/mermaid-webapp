@@ -18,7 +18,10 @@ export const TableNavigation = styled.div`
   }
 `
 export const TableOverflowWrapper = styled.div`
-  max-width: calc(100vw - ${theme.spacing.sideNavWidthDesktop});
+  max-width: calc(100vw - ${theme.spacing.sideNavWidthDesktop} - 10px); 
+  // 10px is the approx scrollbar width this is to prevent 
+  // a horziontal scrollbar at the bottom of the page
+  // and to keep the toolbar sticky when needed.
   ${mediaQueryTabletLandscapeOnly(css`
     max-width: calc(100vw - ${theme.spacing.sideNavWidthTabletLandscapeOnly});
   `)}
@@ -26,9 +29,6 @@ export const TableOverflowWrapper = styled.div`
     max-width: calc(100vw - ${theme.spacing.sideNavWidthPhoneOnly});
   `)}
   overflow-y: auto;
-  max-height: calc(
-    100vh - ${theme.spacing.headerHeight} - 13.3rem
-  ); // 133px is the height of the header row and the footer
   & + button,
   button + & {
     margin: ${theme.spacing.medium} 0;
@@ -39,11 +39,6 @@ export const Table = styled.table`
   background: ${theme.color.secondaryColor};
   min-width: 100%;
   border-collapse: collapse;
-  thead tr {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
 `
 export const Th = styled.th(
   (props) => css`
