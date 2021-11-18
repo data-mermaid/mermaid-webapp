@@ -475,6 +475,9 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('reef_slope')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
+  expect(
+    within(screen.getByLabelText('Observations')).getByText('observation error'),
+  ).toBeInTheDocument()
 
   userEvent.type(screen.getByLabelText('Depth'), '{backspace}')
 
@@ -510,6 +513,9 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('reef_slope')).queryByText('required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).queryByText('required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).queryByText('required')).not.toBeInTheDocument()
+  expect(
+    within(screen.getByLabelText('Observations')).queryByText('observation error'),
+  ).not.toBeInTheDocument()
 
   userEvent.click(
     await screen.findByRole(
@@ -550,4 +556,81 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('reef_slope')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
+  expect(
+    within(screen.getByLabelText('Observations')).getByText('observation error'),
+  ).toBeInTheDocument()
 }, 35000)
+
+test('Fishbelt validations will show passed input validations', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+      return res(ctx.status(200))
+    }),
+
+    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+      const collectRecordWithValidation = {
+        ...mockMermaidData.collect_records[0],
+        validations: {},
+      }
+
+      const response = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidation] },
+        fish_families: { updates: mockMermaidData.fish_families },
+        fish_genera: { updates: mockMermaidData.fish_genera },
+        fish_species: { updates: mockMermaidData.fish_species },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+      }
+
+      return res(ctx.json(response))
+    }),
+  )
+
+  renderAuthenticatedOnline(
+    <App dexieInstance={dexieInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+    },
+    dexieInstance,
+  )
+
+  userEvent.click(
+    await screen.findByRole(
+      'button',
+      {
+        name: 'Validate',
+      },
+      { timeout: 10000 },
+    ),
+  )
+
+  expect(
+    await screen.findByRole('button', {
+      name: 'Validating',
+    }),
+  )
+  expect(
+    await screen.findByRole(
+      'button',
+      {
+        name: 'Validate',
+      },
+      { timeout: 10000 },
+    ),
+  )
+
+  // regular imputs
+
+  expect(within(screen.getByTestId('site')).getByLabelText('Passed validation')).toBeInTheDocument()
+
+  // observations table (has one empty observation)
+  expect(
+    within(screen.getByLabelText('Observations')).getByLabelText('Passed validation'),
+  ).toBeInTheDocument()
+})
