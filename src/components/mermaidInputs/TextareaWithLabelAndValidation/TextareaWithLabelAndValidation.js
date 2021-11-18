@@ -8,9 +8,9 @@ import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 const TextareaWithLabelAndValidation = ({
   helperText,
   id,
-  ignoreValidations,
+  ignoreNonObservationFieldValidations,
   label,
-  resetValidations,
+  resetNonObservationFieldValidations,
   testId,
   validationMessages,
   validationType,
@@ -34,8 +34,8 @@ const TextareaWithLabelAndValidation = ({
       <InputValidationInfo
         validationType={validationType}
         validationMessages={validationMessages}
-        ignoreValidations={ignoreValidations}
-        resetValidations={resetValidations}
+        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
       />
     </InputRow>
   )
@@ -44,9 +44,9 @@ const TextareaWithLabelAndValidation = ({
 TextareaWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
-  ignoreValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
-  resetValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,

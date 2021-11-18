@@ -10,29 +10,29 @@ export default {
 export const basic = () => (
   <>
     <InputWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id2"
       label="No warnings or errors"
     />
     <InputWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id2"
       label="With warning"
       validationType="warning"
     />
     <InputWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="myid"
       label="With error"
       validationType="error"
       helperText="this is some helper text right here"
     />
     <InputWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id4"
       label="With warning"
       validationType="warning"
@@ -47,8 +47,8 @@ export const basic = () => (
       ]}
     />
     <InputWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id5a"
       label="Ignored Validations"
       validationType="ignore"
@@ -63,8 +63,8 @@ export const basic = () => (
       ]}
     />
     <InputWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id5"
       label="With error"
       validationType="error"
@@ -79,8 +79,8 @@ export const basic = () => (
       ]}
     />
     <InputWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id6"
       label="With validation message, but a non-supported (or no) validation type"
       validationType="rainbow"

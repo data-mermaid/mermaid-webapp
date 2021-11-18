@@ -20,11 +20,11 @@ const CheckBoxLabel = styled.label`
 
 const InputCheckboxGroupWithLabelAndValidation = ({
   id,
-  ignoreValidations,
+  ignoreNonObservationFieldValidations,
   label,
   onChange,
   options,
-  resetValidations,
+  resetNonObservationFieldValidations,
   validationMessages,
   validationType,
   value,
@@ -67,8 +67,8 @@ const InputCheckboxGroupWithLabelAndValidation = ({
       <label htmlFor={id}>{label}</label>
       <div>{checkboxGroup}</div>
       <InputValidationInfo
-        ignoreValidations={ignoreValidations}
-        resetValidations={resetValidations}
+        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
       />
@@ -78,7 +78,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
 
 InputCheckboxGroupWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
-  ignoreValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
@@ -87,7 +87,7 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
-  resetValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   value: PropTypes.arrayOf(

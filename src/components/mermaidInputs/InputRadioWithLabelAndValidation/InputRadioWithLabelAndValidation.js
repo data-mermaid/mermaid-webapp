@@ -11,8 +11,8 @@ const InputRadioWithLabelAndValidation = ({
   label,
   options,
   validationMessages,
-  ignoreValidations,
-  resetValidations,
+  ignoreNonObservationFieldValidations,
+  resetNonObservationFieldValidations,
   validationType,
   testId,
   ...restOfProps
@@ -37,8 +37,8 @@ const InputRadioWithLabelAndValidation = ({
       <label htmlFor={id}>{label}</label>
       <div>{optionsList}</div>
       <InputValidationInfo
-        ignoreValidations={ignoreValidations}
-        resetValidations={resetValidations}
+        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
       />
@@ -48,11 +48,11 @@ const InputRadioWithLabelAndValidation = ({
 
 InputRadioWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
-  ignoreValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  resetValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,

@@ -31,8 +31,8 @@ export const basic = () => (
     {(formik) => (
       <>
         <InputRadioWithLabelAndValidation
-          resetValidations={action('reset validations')}
-          ignoreValidations={action('ignore validations')}
+          resetNonObservationFieldValidations={action('reset validations')}
+          ignoreNonObservationFieldValidations={action('ignore validations')}
           {...formik.getFieldProps('test1')}
           id="id1"
           label="No warnings or errors"
@@ -40,8 +40,8 @@ export const basic = () => (
         />
 
         <InputRadioWithLabelAndValidation
-          resetValidations={action('reset validations')}
-          ignoreValidations={action('ignore validations')}
+          resetNonObservationFieldValidations={action('reset validations')}
+          ignoreNonObservationFieldValidations={action('ignore validations')}
           {...formik.getFieldProps('test3')}
           id="id3"
           label="With error and a really long word fjkdsjfksdjfksjfksdjksdjfkljsdkfjskldfjksldjkl in the label"
@@ -58,8 +58,8 @@ export const basic = () => (
           options={options}
         />
         <InputRadioWithLabelAndValidation
-          resetValidations={action('reset validations')}
-          ignoreValidations={action('ignore validations')}
+          resetNonObservationFieldValidations={action('reset validations')}
+          ignoreNonObservationFieldValidations={action('ignore validations')}
           {...formik.getFieldProps('test4')}
           id="id4"
           label="With warning"
@@ -77,8 +77,8 @@ export const basic = () => (
         />
         <InputRadioWithLabelAndValidation
           {...formik.getFieldProps('test5a')}
-          resetValidations={action('reset validations')}
-          ignoreValidations={action('ignore validations')}
+          resetNonObservationFieldValidations={action('reset validations')}
+          ignoreNonObservationFieldValidations={action('ignore validations')}
           id="id5a"
           label="Ignored Validations"
           validationType="ignore"
@@ -94,8 +94,8 @@ export const basic = () => (
           options={options}
         />
         <InputRadioWithLabelAndValidation
-          resetValidations={action('reset validations')}
-          ignoreValidations={action('ignore validations')}
+          resetNonObservationFieldValidations={action('reset validations')}
+          ignoreNonObservationFieldValidations={action('ignore validations')}
           {...formik.getFieldProps('test5')}
           id="id5"
           label="With error"
@@ -112,8 +112,8 @@ export const basic = () => (
           options={options}
         />
         <InputRadioWithLabelAndValidation
-          resetValidations={action('reset validations')}
-          ignoreValidations={action('ignore validations')}
+          resetNonObservationFieldValidations={action('reset validations')}
+          ignoreNonObservationFieldValidations={action('ignore validations')}
           {...formik.getFieldProps('test6')}
           id="id6"
           label="With validation message, but a non-supported (or no) validation type"

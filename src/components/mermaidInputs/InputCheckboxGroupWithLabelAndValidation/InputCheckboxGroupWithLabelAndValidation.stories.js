@@ -20,8 +20,8 @@ export const basic = () => (
     <InputCheckboxGroupWithLabelAndValidation
       onChange={action('onChange')}
       value={['three', 'one']}
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id1"
       label="No warnings or errors"
       options={options}
@@ -30,8 +30,8 @@ export const basic = () => (
     <InputCheckboxGroupWithLabelAndValidation
       onChange={action('onChange')}
       value={['three', 'one']}
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id3"
       label="With error and a really long word fjkdsjfksdjfksjfksdjksdjfkljsdkfjskldfjksldjkl in the label"
       validationType="error"
@@ -49,8 +49,8 @@ export const basic = () => (
     <InputCheckboxGroupWithLabelAndValidation
       onChange={action('onChange')}
       value={['three', 'one']}
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id4"
       label="With warning"
       validationType="warning"
@@ -68,8 +68,8 @@ export const basic = () => (
     <InputCheckboxGroupWithLabelAndValidation
       onChange={action('onChange')}
       value={['three', 'one']}
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id5a"
       label="Ignored Validations"
       validationType="ignore"
@@ -87,8 +87,8 @@ export const basic = () => (
     <InputCheckboxGroupWithLabelAndValidation
       onChange={action('onChange')}
       value={['three', 'one']}
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id5"
       label="With error"
       validationType="error"
@@ -106,8 +106,8 @@ export const basic = () => (
     <InputCheckboxGroupWithLabelAndValidation
       onChange={action('onChange')}
       value={['three', 'one']}
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id6"
       label="With validation message, but a non-supported (or no) validation type"
       validationType="rainbow"

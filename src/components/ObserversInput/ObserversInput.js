@@ -11,10 +11,10 @@ import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
 
 const ObserversInput = ({
   formik,
-  ignoreValidations,
+  ignoreNonObservationFieldValidations,
   observers,
   onObserversChange,
-  resetValidations,
+  resetNonObservationFieldValidations,
   validationPath,
   validationProperties,
   ...restOfProps
@@ -35,11 +35,11 @@ const ObserversInput = ({
         id="observers"
         options={observerNameOptions}
         value={observerNameValues}
-        ignoreValidations={() => {
-          ignoreValidations({ validationPath })
+        ignoreNonObservationFieldValidations={() => {
+          ignoreNonObservationFieldValidations({ validationPath })
         }}
-        resetValidations={() => {
-          resetValidations({ validationPath })
+        resetNonObservationFieldValidations={() => {
+          resetNonObservationFieldValidations({ validationPath })
         }}
         {...validationProperties}
         onChange={({ selectedItems }) => {
@@ -57,10 +57,10 @@ const ObserversInput = ({
 
 ObserversInput.propTypes = {
   formik: formikPropType.isRequired,
-  ignoreValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   observers: PropTypes.arrayOf(observersPropType).isRequired,
   onObserversChange: PropTypes.func.isRequired,
-  resetValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPath: PropTypes.string.isRequired,
   validationProperties: PropTypes.shape({
     validationType: PropTypes.string,
