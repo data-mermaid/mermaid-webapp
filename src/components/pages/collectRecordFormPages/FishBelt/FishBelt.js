@@ -283,21 +283,21 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           record: collectRecordBeingEdited,
           validationId,
         })
-        .then((recordWithResetValidations) => {
-          setCollectRecordBeingEdited(recordWithResetValidations)
+        .then((recordWithIgnoredValidations) => {
+          setCollectRecordBeingEdited(recordWithIgnoredValidations)
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordReset)
+          toast.warn(language.error.collectRecordIgnore)
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
   )
 
-  const ignoreValidations = useCallback(
+  const ignoreNonObservationFieldValidations = useCallback(
     ({ validationPath }) => {
       databaseSwitchboardInstance
-        .ignoreValidations({
+        .ignoreNonObservationFieldValidations({
           record: collectRecordBeingEdited,
           validationPath,
         })
@@ -310,6 +310,84 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
+  const ignoreObservationValidations = useCallback(
+    ({ observationUiId }) => {
+      databaseSwitchboardInstance
+        .ignoreObservationValidations({
+          record: collectRecordBeingEdited,
+          observationUiId,
+          observationValidationsCloneWithUuids,
+        })
+        .then((recordWithIgnoredValidations) => {
+          setCollectRecordBeingEdited(recordWithIgnoredValidations)
+          /* This observationsValidationsCloneWithIds thing is because we dont have api ids
+          to link the observations to its validations, so its a bit of a hack
+          to get the ids created for the ui for observations onto the
+          validations object for observations.
+          In the future the api might supply unique ids for
+          observations and observations validations,
+          and this extraneous code can be removed then.
+          This tech debt is tracked in ticket M453
+          */
+          setObservationValidationsCloneWithUuids(
+            getObservationValidationsCloneWithIds({
+              observationsFromApiWithIds: observationsState,
+              collectRecord: recordWithIgnoredValidations,
+            }),
+          )
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(language.error.collectRecordIgnore)
+        })
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      observationValidationsCloneWithUuids,
+      observationsState,
+    ],
+  )
+
+  const resetObservationValidations = useCallback(
+    ({ observationUiId }) => {
+      databaseSwitchboardInstance
+        .resetObservationValidations({
+          record: collectRecordBeingEdited,
+          observationUiId,
+          observationValidationsCloneWithUuids,
+        })
+        .then((recordWithResetValidations) => {
+          setCollectRecordBeingEdited(recordWithResetValidations)
+          /* This observationsValidationsCloneWithIds thing is because we dont have api ids
+          to link the observations to its validations, so its a bit of a hack
+          to get the ids created for the ui for observations onto the
+          validations object for observations.
+          In the future the api might supply unique ids for
+          observations and observations validations,
+          and this extraneous code can be removed then.
+          This tech debt is tracked in ticket M453
+          */
+          setObservationValidationsCloneWithUuids(
+            getObservationValidationsCloneWithIds({
+              observationsFromApiWithIds: observationsState,
+              collectRecord: recordWithResetValidations,
+            }),
+          )
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(language.error.collectRecordReset)
+        })
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      observationValidationsCloneWithUuids,
+      observationsState,
+    ],
   )
 
   const resetRecordLevelValidation = useCallback(
@@ -330,10 +408,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     [collectRecordBeingEdited, databaseSwitchboardInstance],
   )
 
-  const resetValidations = useCallback(
+  const resetNonObservationFieldValidations = useCallback(
     ({ validationPath }) => {
       databaseSwitchboardInstance
-        .resetValidations({
+        .resetNonObservationFieldValidations({
           record: collectRecordBeingEdited,
           validationPath,
         })
@@ -514,8 +592,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               fishNameConstants={fishNameConstants}
               fishNameOptions={fishNameOptions}
               formik={formik}
+              ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+              ignoreObservationValidations={ignoreObservationValidations}
               ignoreRecordLevelValidation={ignoreRecordLevelValidation}
-              ignoreValidations={ignoreValidations}
               managementRegimes={managementRegimes}
               observationsReducer={observationsReducer}
               observationValidationsCloneWithUuids={observationValidationsCloneWithUuids}
@@ -524,8 +603,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               onSizeBinChange={handleSizeBinChange}
               openNewFishNameModal={openNewFishNameModal}
               persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+              resetObservationValidations={resetObservationValidations}
               resetRecordLevelValidation={resetRecordLevelValidation}
-              resetValidations={resetValidations}
+              resetNonObservationFieldValidations={resetNonObservationFieldValidations}
               setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               sites={sites}
             />

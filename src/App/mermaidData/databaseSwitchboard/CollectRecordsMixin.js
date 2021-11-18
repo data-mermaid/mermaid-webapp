@@ -296,9 +296,14 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithIgnoredValidations)
     }
 
-    ignoreValidations = function ignoreValidations({ record, validationPath }) {
+    ignoreNonObservationFieldValidations = function ignoreNonObservationFieldValidations({
+      record,
+      validationPath,
+    }) {
       if (!record || !validationPath) {
-        throw new Error('ignoreValidations requires record and validationPath parameters')
+        throw new Error(
+          'ignoreNonObservationFieldValidations requires record and validationPath parameters',
+        )
       }
       const path = `validations.results.${validationPath}`
       const currentValidations = getObjectProperty({
@@ -327,6 +332,41 @@ const CollectRecordsMixin = (Base) =>
       return this._dexieInstance.collect_records
         .put(recordWithIgnoredValidations)
         .then(() => recordWithIgnoredValidations)
+    }
+
+    ignoreObservationValidations = function ignoreObservationValidations({
+      record,
+      observationUiId,
+      observationValidationsCloneWithUuids,
+    }) {
+      if (!record || !observationUiId) {
+        throw new Error(
+          'ignoreNonObservationFieldValidations requires record and observationUiId parameters',
+        )
+      }
+
+      const observationsValidationsWithIgnored = observationValidationsCloneWithUuids.map(
+        (observationValidations) => {
+          if (observationValidations.observationUiId === observationUiId) {
+            return observationValidations.validations.map((validation) => ({
+              ...validation,
+              status: validation.status === 'warning' ? 'ignore' : validation.status,
+            }))
+          }
+
+          return observationValidations
+        },
+      )
+
+      const recordWithIgnoredObservationValidations = setObjectPropertyOnClone({
+        object: record,
+        path: 'validations.results.data.obs_belt_fishes',
+        value: observationsValidationsWithIgnored,
+      })
+
+      return this._dexieInstance.collect_records
+        .put(recordWithIgnoredObservationValidations)
+        .then(() => recordWithIgnoredObservationValidations)
     }
 
     resetRecordLevelValidation = function resetRecordLevelValidation({ record, validationId }) {
@@ -359,9 +399,14 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithResetValidation)
     }
 
-    resetValidations = function resetValidations({ record, validationPath }) {
+    resetNonObservationFieldValidations = function resetNonObservationFieldValidations({
+      record,
+      validationPath,
+    }) {
       if (!record || !validationPath) {
-        throw new Error('resetValidations requires record and validationPath parameters')
+        throw new Error(
+          'resetNonObservationFieldValidations requires record and validationPath parameters',
+        )
       }
       const path = `validations.results.${validationPath}`
       const currentValidations = getObjectProperty({
@@ -390,6 +435,41 @@ const CollectRecordsMixin = (Base) =>
       return this._dexieInstance.collect_records
         .put(recordWithResetValidations)
         .then(() => recordWithResetValidations)
+    }
+
+    resetObservationValidations = function resetObservationValidations({
+      record,
+      observationUiId,
+      observationValidationsCloneWithUuids,
+    }) {
+      if (!record || !observationUiId) {
+        throw new Error(
+          'ignoreNonObservationFieldValidations requires record and observationUiId parameters',
+        )
+      }
+
+      const observationsValidationsWithReset = observationValidationsCloneWithUuids.map(
+        (observationValidations) => {
+          if (observationValidations.observationUiId === observationUiId) {
+            return observationValidations.validations.map((validation) => ({
+              ...validation,
+              status: validation.status === 'ignore' ? 'reset' : validation.status,
+            }))
+          }
+
+          return observationValidations
+        },
+      )
+
+      const recordWithResetObservationValidations = setObjectPropertyOnClone({
+        object: record,
+        path: 'validations.results.data.obs_belt_fishes',
+        value: observationsValidationsWithReset,
+      })
+
+      return this._dexieInstance.collect_records
+        .put(recordWithResetObservationValidations)
+        .then(() => recordWithResetObservationValidations)
     }
 
     getCollectRecord = function getCollectRecord(id) {

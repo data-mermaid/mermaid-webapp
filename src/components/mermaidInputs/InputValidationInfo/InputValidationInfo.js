@@ -7,8 +7,8 @@ import { ButtonSecondary } from '../../generic/buttons'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputValidationInfo = ({
-  ignoreValidations,
-  resetValidations,
+  ignoreNonObservationFieldValidations,
+  resetNonObservationFieldValidations,
   validationMessages,
   validationType,
 }) => {
@@ -30,14 +30,14 @@ const InputValidationInfo = ({
       {validationType === 'ignore' ? (
         <Column>
           <ValidationMessage validationType={validationType}>Ignored</ValidationMessage>
-          <ButtonSecondary type="button" onClick={resetValidations}>
+          <ButtonSecondary type="button" onClick={resetNonObservationFieldValidations}>
             Reset validations
           </ButtonSecondary>
         </Column>
       ) : null}
 
       {areThereValidationMessages && validationType === 'warning' ? (
-        <ButtonSecondary type="button" onClick={ignoreValidations}>
+        <ButtonSecondary type="button" onClick={ignoreNonObservationFieldValidations}>
           Ignore all warnings
         </ButtonSecondary>
       ) : null}
@@ -46,8 +46,8 @@ const InputValidationInfo = ({
 }
 
 InputValidationInfo.propTypes = {
-  ignoreValidations: PropTypes.func.isRequired,
-  resetValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
 }

@@ -16,16 +16,16 @@ const options = [
 export const basic = () => (
   <>
     <InputSelectWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       onChange={action('Select Option Change')}
       id="id1"
       label="No warnings or errors"
       options={options}
     />
     <InputSelectWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       onChange={action('Select Option Change')}
       id="id2"
       label="With warning"
@@ -33,8 +33,8 @@ export const basic = () => (
       options={options}
     />
     <InputSelectWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       onChange={action('Select Option Change')}
       id="id3"
       label="With error and a reallylonglonglonglonglongword word word in the label"
@@ -43,8 +43,8 @@ export const basic = () => (
       options={options}
     />
     <InputSelectWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       onChange={action('Select Option Change')}
       id="id4"
       label="With warning"
@@ -61,8 +61,8 @@ export const basic = () => (
       options={options}
     />
     <InputSelectWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       onChange={action('Select Option Change')}
       id="id5a"
       label="Ignored Validations"
@@ -79,8 +79,8 @@ export const basic = () => (
       options={options}
     />
     <InputSelectWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       onChange={action('Select Option Change')}
       id="id5"
       label="With error"
@@ -97,8 +97,8 @@ export const basic = () => (
       options={options}
     />
     <InputSelectWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       onChange={action('Select Option Change')}
       id="id6"
       label="With validation message, but a non-supported (or no) validation type"
