@@ -41,7 +41,7 @@ const ModalTitle = styled.div`
   }
 `
 const ModalContent = styled.div`
-  ${(props) => !props.contentOverflows && css`
+  ${(props) => !props.contentOverflowIsvisible && css`
     overflow: auto;
   `}
   max-height: 50vh;
@@ -78,7 +78,7 @@ const RightFooter = styled('div')`
   justify-self: end;
 `
 
-const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent, contentOverflows }) => {
+const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent, contentOverflowIsvisible }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = event => {
       if (event.code === 'Escape') {
@@ -101,7 +101,7 @@ const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent, contentOv
               <IconClose aria-label="close" />
             </CloseButton>
           </ModalTitle>
-          <ModalContent contentOverflows={contentOverflows} id="modal-content">{mainContent}</ModalContent>
+          <ModalContent contentOverflowIsvisible={contentOverflowIsvisible} id="modal-content">{mainContent}</ModalContent>
           <ModalFooter>{footerContent}</ModalFooter>
         </StyledDialog>
       </StyledDialogOverlay>
@@ -115,7 +115,11 @@ Modal.propTypes = {
   mainContent: PropTypes.node.isRequired,
   onDismiss: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  contentOverflows: PropTypes.bool,
+  contentOverflowIsvisible: PropTypes.bool,
+}
+
+Modal.defaultProps = {
+  contentOverflowIsvisible: false,
 }
 
 export default Modal

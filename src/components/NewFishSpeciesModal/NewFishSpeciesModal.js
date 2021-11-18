@@ -220,7 +220,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
       title={language.createFishSpecies.title}
       mainContent={mainContent}
       footerContent={footer}
-      contentOverflows={true}
+      contentOverflowIsvisible={true}
     />
   )
 }
