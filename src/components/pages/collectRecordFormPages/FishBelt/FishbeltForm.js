@@ -31,8 +31,9 @@ const FishbeltForm = ({
   fishNameConstants,
   fishNameOptions,
   formik,
+  ignoreNonObservationFieldValidations,
+  ignoreObservationValidations,
   ignoreRecordLevelValidation,
-  ignoreValidations,
   managementRegimes,
   observationsReducer,
   observationValidationsCloneWithUuids,
@@ -41,8 +42,9 @@ const FishbeltForm = ({
   onSizeBinChange,
   openNewFishNameModal,
   persistUnsavedObservationsUtilities,
+  resetObservationValidations,
   resetRecordLevelValidation,
-  resetValidations,
+  resetNonObservationFieldValidations,
   setAreObservationsInputsDirty,
   sites,
 }) => {
@@ -67,7 +69,7 @@ const FishbeltForm = ({
     const doesFieldHaveIgnoredValidation = validationProperties.validationType === 'ignore'
 
     if (doesFieldHaveIgnoredValidation && isInputDirty) {
-      resetValidations({ validationPath })
+      resetNonObservationFieldValidations({ validationPath })
     }
   }
   const siteValidationProperties = getValidationPropertiesForInput(
@@ -275,11 +277,11 @@ const FishbeltForm = ({
             id="site"
             testId="site"
             options={siteSelectOptions}
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: siteValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: siteValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: siteValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: siteValidationPath })
             }}
             {...siteValidationProperties}
             onBlur={formik.handleBlur}
@@ -291,11 +293,11 @@ const FishbeltForm = ({
             id="management"
             testId="management"
             options={managementSelectOptions}
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: managementValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: managementValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: managementValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: managementValidationPath })
             }}
             {...managementValidationProperties}
             onBlur={formik.handleBlur}
@@ -305,11 +307,11 @@ const FishbeltForm = ({
           <InputWithLabelAndValidation
             label="Depth"
             id="depth"
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: depthValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: depthValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: depthValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: depthValidationPath })
             }}
             testId="depth"
             type="number"
@@ -323,11 +325,11 @@ const FishbeltForm = ({
             id="sample_date"
             testId="sample_date"
             type="date"
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: sampleDateValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: sampleDateValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: sampleDateValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: sampleDateValidationPath })
             }}
             {...sampleDateValidationProperties}
             onBlur={formik.handleBlur}
@@ -339,11 +341,11 @@ const FishbeltForm = ({
             id="sample_time"
             testId="sample_time"
             type="time"
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: sampleTimeValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: sampleTimeValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: sampleTimeValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: sampleTimeValidationPath })
             }}
             {...sampleTimeValidationProperties}
             onBlur={formik.handleBlur}
@@ -358,11 +360,11 @@ const FishbeltForm = ({
             id="number"
             testId="transect_number"
             type="number"
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: transectNumberValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: transectNumberValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: transectNumberValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: transectNumberValidationPath })
             }}
             {...transectNumberValidationProperties}
             onBlur={formik.handleBlur}
@@ -374,11 +376,11 @@ const FishbeltForm = ({
             id="label"
             testId="label"
             type="text"
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: labelValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: labelValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: labelValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: labelValidationPath })
             }}
             {...labelValidationProperties}
             onBlur={formik.handleBlur}
@@ -390,11 +392,11 @@ const FishbeltForm = ({
             id="len_surveyed"
             testId="len_surveyed"
             type="number"
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: lengthSurveyedValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: lengthSurveyedValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: lengthSurveyedValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: lengthSurveyedValidationPath })
             }}
             {...lengthSurveyedValidationProperties}
             onBlur={formik.handleBlur}
@@ -406,11 +408,11 @@ const FishbeltForm = ({
             id="width"
             testId="width"
             options={transectWidthSelectOptions}
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: widthValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: widthValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: widthValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: widthValidationPath })
             }}
             {...widthValidationProperties}
             onBlur={formik.handleBlur}
@@ -424,11 +426,11 @@ const FishbeltForm = ({
             testId="size_bin"
             name="fish-size-bin"
             options={fishSizeBinSelectOptions}
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: sizeBinValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: sizeBinValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: sizeBinValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: sizeBinValidationPath })
             }}
             {...sizeBinValidationProperties}
             value={formik.values.size_bin}
@@ -439,11 +441,11 @@ const FishbeltForm = ({
             id="reef_slope"
             testId="reef_slope"
             options={reefSlopeSelectOptions}
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: reefSlopeValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: reefSlopeValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: reefSlopeValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: reefSlopeValidationPath })
             }}
             {...reefSlopeValidationProperties}
             onBlur={formik.handleBlur}
@@ -455,11 +457,11 @@ const FishbeltForm = ({
             label="Notes"
             id="notes"
             testId="notes"
-            ignoreValidations={() => {
-              ignoreValidations({ validationPath: notesValidationPath })
+            ignoreNonObservationFieldValidations={() => {
+              ignoreNonObservationFieldValidations({ validationPath: notesValidationPath })
             }}
-            resetValidations={() => {
-              resetValidations({ validationPath: notesValidationPath })
+            resetNonObservationFieldValidations={() => {
+              resetNonObservationFieldValidations({ validationPath: notesValidationPath })
             }}
             {...notesValidationProperties}
             onBlur={formik.handleBlur}
@@ -470,10 +472,10 @@ const FishbeltForm = ({
         <ObserversInput
           data-testid="observers"
           formik={formik}
-          ignoreValidations={ignoreValidations}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           observers={observers}
           onObserversChange={handleObserversChange}
-          resetValidations={resetValidations}
+          resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationPath={observersValidationPath}
           validationProperties={observersValidationProperties}
         />
@@ -486,10 +488,12 @@ const FishbeltForm = ({
           fishBinSelected={formik.values.size_bin}
           fishNameConstants={fishNameConstants}
           fishNameOptions={fishNameOptions}
+          ignoreObservationValidations={ignoreObservationValidations}
           observationsReducer={observationsReducer}
           observationValidationsCloneWithUuids={observationValidationsCloneWithUuids}
           openNewFishNameModal={openNewFishNameModal}
           persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+          resetObservationValidations={resetObservationValidations}
           setAreObservationsInputsDirty={setAreObservationsInputsDirty}
           transectLengthSurveyed={formik.values.len_surveyed}
           widthId={formik.values.width}
@@ -514,8 +518,9 @@ FishbeltForm.propTypes = {
   ).isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   formik: formikPropType.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  ignoreObservationValidations: PropTypes.func.isRequired,
   ignoreRecordLevelValidation: PropTypes.func.isRequired,
-  ignoreValidations: PropTypes.func.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   observationValidationsCloneWithUuids: PropTypes.arrayOf(
     PropTypes.shape({ ...observationPropTypeShape, observationId: PropTypes.string }),
@@ -530,8 +535,9 @@ FishbeltForm.propTypes = {
     clearPersistedUnsavedFormData: PropTypes.func,
     getPersistedUnsavedFormData: PropTypes.func,
   }).isRequired,
+  resetObservationValidations: PropTypes.func.isRequired,
   resetRecordLevelValidation: PropTypes.func.isRequired,
-  resetValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
 }

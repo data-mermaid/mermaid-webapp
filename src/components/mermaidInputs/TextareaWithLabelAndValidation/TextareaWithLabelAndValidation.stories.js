@@ -11,28 +11,28 @@ export default {
 export const basic = () => (
   <>
     <TextareaWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id2"
       label="No warnings or errors"
     />
     <TextareaWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id2"
       label="With warning"
       validationType="warning"
     />
     <TextareaWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id3"
       label="With error"
       validationType="error"
     />
     <TextareaWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id4"
       label="With warning"
       validationType="warning"
@@ -47,8 +47,8 @@ export const basic = () => (
       ]}
     />
     <TextareaWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id5a"
       label="Ignored Validations"
       validationType="ignore"
@@ -63,8 +63,8 @@ export const basic = () => (
       ]}
     />
     <TextareaWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id5"
       label="With error"
       validationType="error"
@@ -79,8 +79,8 @@ export const basic = () => (
       ]}
     />
     <TextareaWithLabelAndValidation
-      resetValidations={action('reset validations')}
-      ignoreValidations={action('ignore validations')}
+      resetNonObservationFieldValidations={action('reset validations')}
+      ignoreNonObservationFieldValidations={action('ignore validations')}
       id="id6"
       label="With validation message, but a non-supported (or no) validation type"
       validationType="rainbow"

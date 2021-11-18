@@ -11,9 +11,9 @@ import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 const InputWithLabelAndValidation = ({
   helperText,
   id,
-  ignoreValidations,
+  ignoreNonObservationFieldValidations,
   label,
-  resetValidations,
+  resetNonObservationFieldValidations,
   testId,
   unit,
   validationMessages,
@@ -54,8 +54,8 @@ const InputWithLabelAndValidation = ({
       <InputValidationInfo
         validationType={validationType}
         validationMessages={validationMessages}
-        ignoreValidations={ignoreValidations}
-        resetValidations={resetValidations}
+        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
       />
     </InputRow>
   )
@@ -64,9 +64,9 @@ const InputWithLabelAndValidation = ({
 InputWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
-  ignoreValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
-  resetValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
   testId: PropTypes.string,
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,

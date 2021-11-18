@@ -12,8 +12,8 @@ const InputSelectWithLabelAndValidation = ({
   options,
   helperText,
   validationMessages,
-  ignoreValidations,
-  resetValidations,
+  ignoreNonObservationFieldValidations,
+  resetNonObservationFieldValidations,
   validationType,
   testId,
   ...restOfProps
@@ -44,8 +44,8 @@ const InputSelectWithLabelAndValidation = ({
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
       <InputValidationInfo
-        ignoreValidations={ignoreValidations}
-        resetValidations={resetValidations}
+        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
       />
@@ -56,10 +56,10 @@ const InputSelectWithLabelAndValidation = ({
 InputSelectWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
-  ignoreValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  resetValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,

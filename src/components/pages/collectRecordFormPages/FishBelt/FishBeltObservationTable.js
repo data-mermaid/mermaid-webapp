@@ -7,7 +7,12 @@ import {
   fishBeltPropType,
   observationPropTypeShape,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonCaution, ButtonThatLooksLikeLink, ButtonPrimary } from '../../../generic/buttons'
+import {
+  ButtonCaution,
+  ButtonThatLooksLikeLink,
+  ButtonPrimary,
+  ButtonSecondary,
+} from '../../../generic/buttons'
 import { IconClose, IconLibraryBooks, IconPlus, IconRequired, IconCheck } from '../../../icons'
 import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
 import { createUuid } from '../../../../library/createUuid'
@@ -31,6 +36,7 @@ import { getObservationBiomass } from './fishbeltBiomas'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import { Column } from '../../../generic/positioning'
 
 const ObservationTr = styled(Tr)`
   ${validationRowStyles}
@@ -167,10 +173,12 @@ const FishBeltObservationTable = ({
   fishBinSelected,
   fishNameConstants,
   fishNameOptions,
-  observationValidationsCloneWithUuids,
+  ignoreObservationValidations,
   observationsReducer,
+  observationValidationsCloneWithUuids,
   openNewFishNameModal,
   persistUnsavedObservationsUtilities,
+  resetObservationValidations,
   setAreObservationsInputsDirty,
   transectLengthSurveyed,
   widthId,
@@ -357,6 +365,18 @@ const FishBeltObservationTable = ({
 
     const observationValidations = getObservationValidations(observationId)
 
+    const handleIgnoreObservationValidations = () => {
+      ignoreObservationValidations({
+        observationUiId: observationId,
+      })
+    }
+
+    const handleResetObservationValidations = () => {
+      resetObservationValidations({
+        observationUiId: observationId,
+      })
+    }
+
     const observationValidationsToDisplay = getValidationPropertiesForInput(
       observationValidations?.validations,
       areValidationsShowing,
@@ -364,12 +384,14 @@ const FishBeltObservationTable = ({
     const { validationType } = observationValidationsToDisplay
     const observationValidationMessages = observationValidationsToDisplay?.validationMessages ?? []
     const isObservationValid = validationType === 'ok'
+    const hasWarningValidation = validationType === 'warning'
+    const hasErrorValidation = validationType === 'error'
+    const hasIgnoredValidation = validationType === 'ignore'
 
     const validationsMarkup = (
       <Td>
-        {isObservationValid ? (
-          <IconCheck aria-label="Passed validation" />
-        ) : (
+        {isObservationValid ? <IconCheck aria-label="Passed validation" /> : null}
+        {hasErrorValidation || hasWarningValidation ? (
           <ul>
             {observationValidationMessages.map((validation) => (
               <li key={validation.id}>
@@ -379,7 +401,20 @@ const FishBeltObservationTable = ({
               </li>
             ))}
           </ul>
-        )}
+        ) : null}
+        {hasWarningValidation ? (
+          <ButtonSecondary type="button" onClick={handleIgnoreObservationValidations}>
+            Ignore all warnings
+          </ButtonSecondary>
+        ) : null}
+        {hasIgnoredValidation ? (
+          <Column>
+            <ValidationMessage validationType={validationType}>Ignored</ValidationMessage>
+            <ButtonSecondary type="button" onClick={handleResetObservationValidations}>
+              Reset validations
+            </ButtonSecondary>
+          </Column>
+        ) : null}
       </Td>
     )
 
@@ -543,6 +578,7 @@ FishBeltObservationTable.propTypes = {
     }),
   ).isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
+  ignoreObservationValidations: PropTypes.func.isRequired,
   observationValidationsCloneWithUuids: PropTypes.arrayOf(
     PropTypes.shape({ ...observationPropTypeShape, observationId: PropTypes.string }),
   ).isRequired,
@@ -553,6 +589,7 @@ FishBeltObservationTable.propTypes = {
     clearPersistedUnsavedFormData: PropTypes.func,
     getPersistedUnsavedFormData: PropTypes.func,
   }).isRequired,
+  resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   transectLengthSurveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   widthId: PropTypes.string,
