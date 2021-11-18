@@ -8,7 +8,7 @@ import {
   observationPropTypeShape,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonCaution, ButtonThatLooksLikeLink, ButtonPrimary } from '../../../generic/buttons'
-import { IconClose, IconLibraryBooks, IconPlus, IconRequired } from '../../../icons'
+import { IconClose, IconLibraryBooks, IconPlus, IconRequired, IconCheck } from '../../../icons'
 import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
@@ -203,8 +203,12 @@ const FishBeltObservationTable = ({
       const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
       const observationsFromApiWithIds = initialObservationsToLoad.map((observation) => ({
         ...observation,
-        // id exists on observations just for the sake of the front end logic
-        // (adding rows, adding new species to observation, validation, etc)
+        /* uiId exists on observations for the sake of the front end logic
+         (adding rows, adding new species to observation, validation, etc).
+         In the future it would be better sourced from the back end where
+         database type logic is better situated. This tech debt is tracked
+         in ticket M453.*/
+
         uiId: observation.uuId ?? createUuid(),
       }))
 
@@ -353,12 +357,31 @@ const FishBeltObservationTable = ({
 
     const observationValidations = getObservationValidations(observationId)
 
-    const observationValidationsForDisplay = getValidationPropertiesForInput(
+    const observationValidationsToDisplay = getValidationPropertiesForInput(
       observationValidations?.validations,
       areValidationsShowing,
     )
-    const { validationType } = observationValidationsForDisplay
-    const observationValidationMessages = observationValidationsForDisplay?.validationMessages ?? []
+    const { validationType } = observationValidationsToDisplay
+    const observationValidationMessages = observationValidationsToDisplay?.validationMessages ?? []
+    const isObservationValid = validationType === 'ok'
+
+    const validationsMarkup = (
+      <Td>
+        {isObservationValid ? (
+          <IconCheck aria-label="Passed validation" />
+        ) : (
+          <ul>
+            {observationValidationMessages.map((validation) => (
+              <li key={validation.id}>
+                <ValidationMessage validationType={validationType}>
+                  {validation.message}
+                </ValidationMessage>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Td>
+    )
 
     return (
       <ObservationTr key={observationId} validationType={validationType}>
@@ -423,19 +446,7 @@ const FishBeltObservationTable = ({
           />
         </Td>
         <Td align="right">{observationBiomass ?? <> - </>}</Td>
-        {areValidationsShowing ? (
-          <Td>
-            <ul>
-              {observationValidationMessages.map((validation) => (
-                <li key={validation.id}>
-                  <ValidationMessage validationType={validationType}>
-                    {validation.message}
-                  </ValidationMessage>
-                </li>
-              ))}
-            </ul>
-          </Td>
-        ) : null}
+        {areValidationsShowing ? validationsMarkup : null}
         <Td align="center">
           <ButtonRemoveRow
             tabIndex="-1"
