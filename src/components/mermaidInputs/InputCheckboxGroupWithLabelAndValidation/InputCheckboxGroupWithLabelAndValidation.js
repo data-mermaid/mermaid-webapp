@@ -1,13 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
-
-import { InputRow , CheckRadioLabel, CheckRadioWrapper} from '../../generic/form'
-import theme from '../../../theme'
-
+import { InputRow, CheckRadioLabel, CheckRadioWrapper } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-
 
 const InputCheckboxGroupWithLabelAndValidation = ({
   id,
@@ -21,7 +16,6 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   value,
 }) => {
   const [checkboxItems, setCheckboxItems] = useState([])
-
   const _loadCheckboxItems = useEffect(() => {
     setCheckboxItems(value)
   }, [value])

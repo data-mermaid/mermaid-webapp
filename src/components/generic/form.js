@@ -8,6 +8,7 @@ export const inputStyles = css`
     padding: ${theme.spacing.xsmall};
   `)}
 `
+<<<<<<< HEAD
 export const CheckRadioWrapper = styled.div`
   display: grid;
   grid-template-columns: 2rem auto;
@@ -31,6 +32,35 @@ padding: 0 ${theme.spacing.small};
     padding-bottom: ${theme.spacing.medium};
   }
 `
+=======
+
+export const validationRowStyles = css`
+  border-width: 0 0 0 ${theme.spacing.borderXLarge};
+  border-style: solid;
+  border-color: ${theme.color.secondaryColor};
+  ${(props) =>
+    props.validationType === 'ok' &&
+    css`
+      border-color: ${theme.color.valid};
+    `}
+  ${(props) =>
+    props.validationType === 'error' &&
+    css`
+      border-color: ${theme.color.cautionColor};
+    `}
+  ${(props) =>
+    props.validationType === 'warning' &&
+    css`
+      border-color: ${theme.color.warningColor};
+    `}
+    ${(props) =>
+    props.validationType === 'ignore' &&
+    css`
+      border-color: ${theme.color.ignoreBorder};
+    `}
+`
+
+>>>>>>> 98c6ccb49d1eee8083f93559f2ccbee074284753
 export const InputWrapper = styled.div`
   padding: ${theme.spacing.medium};
 `
@@ -64,6 +94,7 @@ export const InputRow = styled.div`
   grid-template-columns: 0.75fr 1.5fr 1fr;
   margin: 1px 0;
   padding: ${theme.spacing.medium};
+<<<<<<< HEAD
   border-width: 0 0 0 ${theme.spacing.borderXLarge};
   border-style: solid;
   border-color: ${theme.color.secondaryColor};
@@ -90,6 +121,22 @@ export const InputRow = styled.div`
     css`
       border-color: ${theme.color.ignoreBorder};
     `}
+=======
+
+  label,
+  & > div:last-of-type {
+    display: inline-block;
+    ${theme.typography.noWordBreak};
+    padding: calc(${theme.spacing.borderSmall} + ${theme.spacing.xsmall}) ${theme.spacing.xsmall};
+  }
+  ${hoverState(css`
+    background-color: ${theme.color.secondaryHover};
+  `)}
+  &:focus-within {
+    background-color: ${theme.color.focusWithin};
+  }
+  ${validationRowStyles}
+>>>>>>> 98c6ccb49d1eee8083f93559f2ccbee074284753
 `
 export const ValidationMessage = styled.span.attrs((props) => ({
   role:

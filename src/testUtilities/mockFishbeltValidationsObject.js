@@ -4,8 +4,7 @@ export default {
     data: {
       observers: [
         {
-          code: 'required',
-          name: 'required_validator',
+          name: 'required',
           fields: ['data.observers'],
           status: 'error',
           context: null,
@@ -16,21 +15,19 @@ export default {
         notes: [
           {
             validation_id: Math.random(),
-            code: 'required',
+            name: 'required',
             status: 'error',
           },
         ],
         site: [
           {
-            code: 'required',
-            name: 'required_validator',
+            name: 'required',
             fields: ['data.sample_event.site'],
             status: 'error',
             context: null,
             validation_id: 'e7ed8f2c1fddc46b13011a50bd2497ac',
           },
           {
-            code: null,
             name: 'unique_site_validator',
             fields: ['data.sample_event.site'],
             status: 'ok',
@@ -40,8 +37,7 @@ export default {
         ],
         management: [
           {
-            code: 'required',
-            name: 'required_validator',
+            name: 'required',
             fields: ['data.sample_event.management'],
             status: 'error',
             context: null,
@@ -58,8 +54,7 @@ export default {
         ],
         sample_date: [
           {
-            code: 'required',
-            name: 'required_validator',
+            name: 'required',
             fields: ['data.sample_event.sample_date'],
             status: 'error',
             context: null,
@@ -78,27 +73,18 @@ export default {
       obs_belt_fishes: [
         [
           {
-            code: null,
-            name: 'fish_family_subset_validator',
-            fields: ['data.obs_belt_fishes'],
+            name: 'observation validation with ok status shoulnt show',
             status: 'ok',
-            context: null,
             validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
           },
           {
-            code: 'invalid_fish_size',
-            name: 'fish_size_validator',
-            fields: ['data.obs_belt_fishes'],
+            name: 'observation error',
             status: 'error',
-            context: null,
             validation_id: '2b289dc99c02e9ae1c764e8a71cca3cc',
           },
           {
-            code: 'invalid_fish_count',
-            name: 'fish_count_validator',
-            fields: ['data.obs_belt_fishes'],
-            status: 'error',
-            context: null,
+            name: 'observation warning',
+            status: 'warning',
             validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
           },
         ],
@@ -107,21 +93,20 @@ export default {
         reef_slope: [
           {
             validation_id: Math.random(),
-            code: 'required',
+            name: 'required',
             status: 'error',
           },
         ],
         label: [
           {
             validation_id: Math.random(),
-            code: 'required',
+            name: 'required',
             status: 'error',
           },
         ],
         depth: [
           {
-            code: 'required',
-            name: 'required_validator',
+            name: 'required',
             fields: ['data.fishbelt_transect.depth'],
             status: 'error',
             context: null,
@@ -138,8 +123,7 @@ export default {
         ],
         width: [
           {
-            code: 'required',
-            name: 'required_validator',
+            name: 'required',
             fields: ['data.fishbelt_transect.width'],
             status: 'error',
             context: null,
@@ -148,8 +132,7 @@ export default {
         ],
         number: [
           {
-            code: 'required',
-            name: 'required_validator',
+            name: 'required',
             fields: ['data.fishbelt_transect.number'],
             status: 'error',
             context: null,
@@ -158,8 +141,7 @@ export default {
         ],
         size_bin: [
           {
-            code: 'required',
-            name: 'required_validator',
+            name: 'required',
             fields: ['data.fishbelt_transect.size_bin'],
             status: 'error',
             context: null,
@@ -169,14 +151,14 @@ export default {
         sample_time: [
           {
             validation_id: Math.random(),
-            code: 'required',
+            name: 'required',
             status: 'error',
           },
         ],
         len_surveyed: [
           {
             validation_id: Math.random(),
-            code: 'required',
+            name: 'required',
             status: 'error',
           },
         ],

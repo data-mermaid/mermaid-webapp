@@ -456,6 +456,7 @@ const collect_records = [
           profile_name: 'Melissa Nunes',
         },
       ],
+      obs_belt_fishes: [{}],
     },
     validations: null,
   },

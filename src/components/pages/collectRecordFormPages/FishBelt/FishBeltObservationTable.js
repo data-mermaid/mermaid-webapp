@@ -2,15 +2,24 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
-import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import {
+  choicesPropType,
+  fishBeltPropType,
+  observationPropTypeShape,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonCaution, ButtonThatLooksLikeLink, ButtonPrimary } from '../../../generic/buttons'
-import { IconClose, IconLibraryBooks, IconPlus, IconRequired } from '../../../icons'
+import { IconClose, IconLibraryBooks, IconPlus, IconRequired, IconCheck } from '../../../icons'
 import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { H2 } from '../../../generic/text'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { inputTextareaSelectStyles, InputWrapper } from '../../../generic/form'
+import {
+  inputTextareaSelectStyles,
+  InputWrapper,
+  ValidationMessage,
+  validationRowStyles,
+} from '../../../generic/form'
 import { LinkThatLooksLikeButton } from '../../../generic/links'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
@@ -21,6 +30,11 @@ import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
+import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+
+const ObservationTr = styled(Tr)`
+  ${validationRowStyles}
+`
 
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
@@ -147,11 +161,13 @@ const UnderTableRow = styled('div')`
 
 const FishBeltObservationTable = ({
   areObservationsInputsDirty,
+  areValidationsShowing,
   choices,
   collectRecord,
   fishBinSelected,
   fishNameConstants,
   fishNameOptions,
+  observationValidationsCloneWithUuids,
   observationsReducer,
   openNewFishNameModal,
   persistUnsavedObservationsUtilities,
@@ -159,11 +175,10 @@ const FishBeltObservationTable = ({
   transectLengthSurveyed,
   widthId,
 }) => {
-  const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const [haveApiObservationsBeenLoaded, setHaveApiObservationsBeenLoaded] = useState(false)
-
   const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
+  const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const {
     persistUnsavedFormData: persistUnsavedObservationsData,
     getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
@@ -175,6 +190,12 @@ const FishBeltObservationTable = ({
     }
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
+  const getObservationValidations = (observationId) => {
+    return observationValidationsCloneWithUuids.filter(
+      (validation) => validation.observationUiId === observationId,
+    )[0]
+  }
+
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
@@ -182,8 +203,12 @@ const FishBeltObservationTable = ({
       const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
       const observationsFromApiWithIds = initialObservationsToLoad.map((observation) => ({
         ...observation,
-        // id exists on observations just for the sake of the front end logic
-        // (adding rows, adding new species to observation, etc)
+        /* uiId exists on observations for the sake of the front end logic
+         (adding rows, adding new species to observation, validation, etc).
+         In the future it would be better sourced from the back end where
+         database type logic is better situated. This tech debt is tracked
+         in ticket M453.*/
+
         uiId: observation.uuId ?? createUuid(),
       }))
 
@@ -330,8 +355,36 @@ const FishBeltObservationTable = ({
       observationsBiomass.find((object) => object.uiId === observationId).biomass,
     )
 
+    const observationValidations = getObservationValidations(observationId)
+
+    const observationValidationsToDisplay = getValidationPropertiesForInput(
+      observationValidations?.validations,
+      areValidationsShowing,
+    )
+    const { validationType } = observationValidationsToDisplay
+    const observationValidationMessages = observationValidationsToDisplay?.validationMessages ?? []
+    const isObservationValid = validationType === 'ok'
+
+    const validationsMarkup = (
+      <Td>
+        {isObservationValid ? (
+          <IconCheck aria-label="Passed validation" />
+        ) : (
+          <ul>
+            {observationValidationMessages.map((validation) => (
+              <li key={validation.id}>
+                <ValidationMessage validationType={validationType}>
+                  {validation.message}
+                </ValidationMessage>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Td>
+    )
+
     return (
-      <Tr key={observationId}>
+      <ObservationTr key={observationId} validationType={validationType}>
         <Td align="center">{rowNumber}</Td>
         <Td align="left">
           {fishNameOptions.length && (
@@ -393,6 +446,7 @@ const FishBeltObservationTable = ({
           />
         </Td>
         <Td align="right">{observationBiomass ?? <> - </>}</Td>
+        {areValidationsShowing ? validationsMarkup : null}
         <Td align="center">
           <ButtonRemoveRow
             tabIndex="-1"
@@ -403,7 +457,7 @@ const FishBeltObservationTable = ({
             <IconClose />
           </ButtonRemoveRow>
         </Td>
-      </Tr>
+      </ObservationTr>
     )
   })
 
@@ -443,6 +497,8 @@ const FishBeltObservationTable = ({
                   </IconRequiredWrapper>
                 </Th>
                 <Th align="right">Biomass (kg/ha)</Th>
+                {areValidationsShowing ? <Th>Validations</Th> : null}
+
                 <Th> </Th>
               </Tr>
             </thead>
@@ -474,6 +530,7 @@ const FishBeltObservationTable = ({
 
 FishBeltObservationTable.propTypes = {
   areObservationsInputsDirty: PropTypes.bool.isRequired,
+  areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   fishBinSelected: PropTypes.string,
@@ -486,6 +543,9 @@ FishBeltObservationTable.propTypes = {
     }),
   ).isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
+  observationValidationsCloneWithUuids: PropTypes.arrayOf(
+    PropTypes.shape({ ...observationPropTypeShape, observationId: PropTypes.string }),
+  ).isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
