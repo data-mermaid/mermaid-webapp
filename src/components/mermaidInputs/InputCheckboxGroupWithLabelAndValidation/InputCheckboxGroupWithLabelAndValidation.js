@@ -2,21 +2,12 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { InputRow } from '../../generic/form'
+import { InputRow , CheckRadioLabel, CheckRadioWrapper} from '../../generic/form'
 import theme from '../../../theme'
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
-const CheckBoxLabel = styled.label`
-  padding: ${theme.spacing.xsmall};
-  width: 100%;
-  display: inline-block;
-  input {
-    margin: 0 ${theme.spacing.xsmall} 0 0;
-    cursor: pointer;
-  }
-`
 
 const InputCheckboxGroupWithLabelAndValidation = ({
   id,
@@ -50,7 +41,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   }
 
   const checkboxGroup = options.map((item) => (
-    <CheckBoxLabel htmlFor={item.value} key={item.value}>
+    <CheckRadioWrapper>
       <input
         id={item.value}
         type="checkbox"
@@ -58,8 +49,10 @@ const InputCheckboxGroupWithLabelAndValidation = ({
         checked={checkboxItems.includes(item.value)}
         onChange={(event) => handleCheckboxGroupChange({ itemValue: item.value, event })}
       />
-      {item.label}
-    </CheckBoxLabel>
+      <CheckRadioLabel htmlFor={item.value} key={item.value}>
+        {item.label}
+      </CheckRadioLabel>
+    </CheckRadioWrapper>
   ))
 
   return (
