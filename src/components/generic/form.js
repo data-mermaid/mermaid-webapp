@@ -36,6 +36,9 @@ export const validationRowStyles = css`
   border-width: 0 0 0 ${theme.spacing.borderXLarge};
   border-style: solid;
   border-color: ${theme.color.secondaryColor};
+  ${hoverState(css`
+    background-color: ${theme.color.secondaryHover};
+  `)}
   ${(props) =>
     props.validationType === 'ok' &&
     css`
@@ -91,32 +94,7 @@ export const InputRow = styled.div`
   grid-template-columns: 0.75fr 1.5fr 1fr;
   margin: 1px 0;
   padding: ${theme.spacing.medium};
-  border-width: 0 0 0 ${theme.spacing.borderXLarge};
-  border-style: solid;
-  border-color: ${theme.color.secondaryColor};
-  ${hoverState(css`
-    background-color: ${theme.color.secondaryHover};
-  `)}
-  ${(props) =>
-    props.validationType === 'ok' &&
-    css`
-      border-color: ${theme.color.valid};
-    `}
-  ${(props) =>
-    props.validationType === 'error' &&
-    css`
-      border-color: ${theme.color.cautionColor};
-    `}
-  ${(props) =>
-    props.validationType === 'warning' &&
-    css`
-      border-color: ${theme.color.warningColor};
-    `}
-    ${(props) =>
-    props.validationType === 'ignore' &&
-    css`
-      border-color: ${theme.color.ignoreBorder};
-    `}
+  ${validationRowStyles};
 `
 export const ValidationMessage = styled.span.attrs((props) => ({
   role:
