@@ -44,9 +44,9 @@ const TextareaWithLabelAndValidation = ({
 TextareaWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
-  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
@@ -54,6 +54,8 @@ TextareaWithLabelAndValidation.propTypes = {
 
 TextareaWithLabelAndValidation.defaultProps = {
   helperText: undefined,
+  ignoreNonObservationFieldValidations: () => {},
+  resetNonObservationFieldValidations: () => {},
   testId: undefined,
   validationMessages: undefined,
   validationType: undefined,
