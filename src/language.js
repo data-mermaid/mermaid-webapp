@@ -30,6 +30,7 @@ const error = {
   projectsUnavailable: 'Projects data is currently unavailable. Please try again',
   siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again',
   siteRecordUnavailable: 'Site record data is currently unavailable. Please try again',
+  siteSave: 'Something went wrong. The site has not been saved.',
   submittedRecordsUnavailable: 'Submitted records data is currently unavailable. Please try again',
   submittedRecordUnavailable: 'Submitted record data is currently unavailable. Please try again',
   userProfileUnavailable: 'The user profile is unavailable.',
@@ -63,6 +64,7 @@ const success = {
     `The project, ${projectName}, has been removed from being offline ready`,
   newUserAdd: 'New user added',
   newPendingUserAdd: 'Sign-up email sent. New user added as pending.',
+  siteSave: 'Site saved.',
 }
 
 const deleteCollectRecord = {

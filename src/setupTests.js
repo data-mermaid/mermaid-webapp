@@ -1,3 +1,6 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable func-names */
+/* eslint-disable import/no-extraneous-dependencies */
 // jest-dom adds custom jest matchers for asserting on DOM nodes.
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
@@ -8,6 +11,26 @@ import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSucces
 
 jest.setTimeout(30000)
 window.URL.createObjectURL = () => {}
+
+jest.mock('maplibre-gl/dist/maplibre-gl', function foo() {
+  return {
+    Map: function () {
+      return {
+        addControl: jest.fn(() => ({})),
+        dragRotate: { disable: jest.fn() },
+        getLayer: jest.fn(),
+        jumpTo: jest.fn(),
+        on: jest.fn(),
+        remove: jest.fn(),
+        touchZoomRotate: { disableRotation: jest.fn() },
+      }
+    },
+    Marker: function () {
+      return { setLngLat: jest.fn(() => ({ addTo: jest.fn() })), on: jest.fn(), remove: jest.fn() }
+    },
+    NavigationControl: jest.fn(),
+  }
+})
 
 configure({ asyncUtilTimeout: 10000 })
 

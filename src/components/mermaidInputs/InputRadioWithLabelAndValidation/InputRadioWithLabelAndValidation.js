@@ -48,20 +48,22 @@ const InputRadioWithLabelAndValidation = ({
 
 InputRadioWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
-  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
 }
 
 InputRadioWithLabelAndValidation.defaultProps = {
+  ignoreNonObservationFieldValidations: () => {},
+  resetNonObservationFieldValidations: () => {},
   testId: undefined,
-  validationType: undefined,
   validationMessages: [],
+  validationType: undefined,
 }
 
 export default InputRadioWithLabelAndValidation

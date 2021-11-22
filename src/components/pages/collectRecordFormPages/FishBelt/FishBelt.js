@@ -5,10 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
 import styled, { css } from 'styled-components/macro'
-import {
-  mediaQueryForDesktopUp,
-  mediaQueryTabletLandscapeOnly,
-} from '../../../../library/styling/mediaQueries'
+import { mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import theme from '../../../../theme'
 import {
   getCollectRecordDataInitialValues,
@@ -39,6 +36,7 @@ import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
 import getObservationValidationsCloneWithIds from './getObservationsValidationsCloneWithIds'
+import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -48,22 +46,6 @@ const DeleteRecordButtonCautionWrapper = styled('div')`
   text-align: right;
   ${mediaQueryTabletLandscapeOnly(css`
     text-align: left;
-  `)}
-`
-const CollectRecordToolbarWrapper = styled('div')`
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  align-items: start;
-  ${mediaQueryForDesktopUp(css`
-    flex-direction: row;
-    align-items: center;
-  `)}
-  ${mediaQueryTabletLandscapeOnly(css`
-    &,
-    button {
-      padding: ${theme.spacing.small};
-    }
   `)}
 `
 
@@ -623,7 +605,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           </>
         }
         toolbar={
-          <CollectRecordToolbarWrapper>
+          <ContentPageToolbarWrapper>
             {isNewRecord && <H2>Fish Belt</H2>}
             {collectRecordBeingEdited && !isNewRecord && (
               <RecordFormTitle
@@ -637,7 +619,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               fishBeltButtonsState={fishBeltButtonsState}
               validateRecord={validateRecord}
             />
-          </CollectRecordToolbarWrapper>
+          </ContentPageToolbarWrapper>
         }
       />
 

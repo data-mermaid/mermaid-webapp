@@ -152,9 +152,9 @@ const CollectRecordsMixin = (Base) =>
               return this._apiSyncInstance
                 .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
-                  const recordReturnedFromServer = recordResponseFromApiPush.data
+                  const recordWithExtraPropertiesWrittenByApi = recordResponseFromApiPush.data
 
-                  return recordReturnedFromServer
+                  return recordWithExtraPropertiesWrittenByApi
                 })
             }
 

@@ -1,7 +1,20 @@
+import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
 
 const SitesMixin = (Base) =>
   class extends Base {
+    #getSiteReadyForPush = function getSiteReadyForPush({ site, projectId }) {
+      const idToSubmit = site.id ?? createUuid()
+      const projectIdToSubmit = site.project ?? projectId
+
+      return {
+        ...site,
+        id: idToSubmit,
+        project: projectIdToSubmit,
+        uiState_pushToApi: true,
+      }
+    }
+
     getSitesWithoutOfflineDeleted = async function getSitesWithoutOfflineDeleted(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
@@ -50,6 +63,59 @@ const SitesMixin = (Base) =>
             },
           )
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    saveSite = async function saveSite({ site, projectId }) {
+      if (!site || !projectId) {
+        throw new Error('saveSite expects record and projectId parameters')
+      }
+
+      const siteToSubmit = this.#getSiteReadyForPush({ site, projectId })
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        // put it in IDB just in case the network craps out before the API can return
+        await this._dexieInstance.project_sites.put(siteToSubmit)
+
+        return this._authenticatedAxios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              project_sites: [siteToSubmit],
+            },
+            {
+              params: {
+                force: true,
+              },
+            },
+          )
+          .then((response) => {
+            const [siteResponseFromApiPush] = response.data.project_sites
+
+            const isSiteStatusCodeSuccessful =
+              this._getIsResponseStatusSuccessful(siteResponseFromApiPush)
+
+            if (isSiteStatusCodeSuccessful) {
+              // do a pull of data related to collect records
+              // to make sure it is all updated/deleted in IDB
+              return this._apiSyncInstance
+                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .then((_dataSetsReturnedFromApiPull) => {
+                  const siteWithExtraPropertiesWrittenByApi = siteResponseFromApiPush.data
+
+                  return siteWithExtraPropertiesWrittenByApi
+                })
+            }
+
+            return Promise.reject(
+              new Error('the API site returned from saveSite doesnt have a successful status code'),
+            )
+          })
+      }
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexieInstance.project_sites.put(siteToSubmit).then(() => siteToSubmit)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }
 

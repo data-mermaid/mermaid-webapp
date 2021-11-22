@@ -2,6 +2,10 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import {
+  mediaQueryForDesktopUp,
+  mediaQueryTabletLandscapeOnly,
+} from '../../../../library/styling/mediaQueries'
 import theme from '../../../../theme'
 import { Column } from '../../../generic/positioning'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
@@ -44,6 +48,23 @@ const ContentToolbar = styled('div')`
 const Content = styled('div')`
   ${contentStyles};
   margin-top: 0px;
+`
+
+const ContentPageToolbarWrapper = styled('div')`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: start;
+  ${mediaQueryForDesktopUp(css`
+    flex-direction: row;
+    align-items: center;
+  `)}
+  ${mediaQueryTabletLandscapeOnly(css`
+    &,
+    button {
+      padding: ${theme.spacing.small};
+    }
+  `)}
 `
 
 const ContentPageLayout = ({ content, toolbar, isPageContentLoading, isToolbarSticky }) => {
@@ -90,3 +111,4 @@ ContentPageLayout.defaultProps = {
 }
 
 export default ContentPageLayout
+export { ContentPageToolbarWrapper }

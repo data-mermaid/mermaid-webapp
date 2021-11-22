@@ -64,9 +64,9 @@ const InputWithLabelAndValidation = ({
 InputWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
-  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
@@ -74,11 +74,13 @@ InputWithLabelAndValidation.propTypes = {
 }
 
 InputWithLabelAndValidation.defaultProps = {
-  unit: undefined,
   helperText: undefined,
+  ignoreNonObservationFieldValidations: () => {},
+  resetNonObservationFieldValidations: () => {},
   testId: undefined,
-  validationType: undefined,
+  unit: undefined,
   validationMessages: [],
+  validationType: undefined,
 }
 
 export default InputWithLabelAndValidation

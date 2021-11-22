@@ -15,7 +15,6 @@ describe('Offline', () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
     // make sure there is a collect record to edit in dexie
-    // await dexieInstance.collect_records.put(mockMermaidData.collect_records[1])
     await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
@@ -106,7 +105,7 @@ describe('Offline', () => {
     expect(await screen.findByText('Collect record saved.'))
     const savedCollectRecords = await dexieInstance.collect_records.toArray()
 
-    const updatedCollectRecord = savedCollectRecords.filter(record => record.id === '2')[0]
+    const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '2')[0]
 
     const newObservation = updatedCollectRecord.data.obs_belt_fishes[3]
 
@@ -157,7 +156,7 @@ describe('Offline', () => {
 
     expect(await screen.findByText('Collect record saved.'))
     const savedCollectRecord = (await dexieInstance.collect_records.toArray()).find(
-      record => record.id === '2',
+      (record) => record.id === '2',
     )
 
     const newObservation = savedCollectRecord.data.obs_belt_fishes[3]

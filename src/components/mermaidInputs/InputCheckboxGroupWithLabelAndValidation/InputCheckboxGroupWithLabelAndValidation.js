@@ -35,7 +35,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   }
 
   const checkboxGroup = options.map((item) => (
-    <CheckRadioWrapper>
+    <CheckRadioWrapper key={item.value}>
       <input
         id={item.value}
         type="checkbox"
@@ -43,9 +43,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
         checked={checkboxItems.includes(item.value)}
         onChange={(event) => handleCheckboxGroupChange({ itemValue: item.value, event })}
       />
-      <CheckRadioLabel htmlFor={item.value} key={item.value}>
-        {item.label}
-      </CheckRadioLabel>
+      <CheckRadioLabel htmlFor={item.value}>{item.label}</CheckRadioLabel>
     </CheckRadioWrapper>
   ))
 
