@@ -127,6 +127,7 @@ const StyledFishBeltObservationTable = styled(Table)`
     &:focus-within button,
     &:hover button {
       display: inline;
+      cursor: pointer;
     }
     th {
       padding: ${theme.spacing.small};

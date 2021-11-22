@@ -57,6 +57,7 @@ const CssToggle = styled('span')`
   }
 `
 const StyledToggleLabel = styled('label')`
+  cursor: pointer;
   display: flex;
   gap: 2px;
   padding: 0 0 ${theme.spacing.small} ${theme.spacing.small};

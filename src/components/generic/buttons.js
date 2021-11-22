@@ -29,6 +29,7 @@ export const Button = styled.button`
   transition: ${theme.timing.activeTransition};
   padding: ${theme.spacing.buttonPadding};
   border-width: 0;
+  cursor: pointer;
   &:disabled {
     color: ${theme.color.disabledText};
     cursor: not-allowed;
