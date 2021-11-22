@@ -90,6 +90,7 @@ const StyledLinkThatLooksLikeButtonToReference = styled(LinkThatLooksLikeButton)
 const StyledOverflowWrapper = styled(TableOverflowWrapper)`
   border: solid 1px ${theme.color.secondaryColor};
   height: 100%;
+  overflow: visible;
 `
 const StyledColgroup = styled('colgroup')`
   col {
