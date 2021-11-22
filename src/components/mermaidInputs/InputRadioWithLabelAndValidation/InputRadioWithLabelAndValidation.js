@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import { InputRow } from '../../generic/form'
+import { InputRow, CheckRadioWrapper, CheckRadioLabel } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
@@ -19,7 +19,7 @@ const InputRadioWithLabelAndValidation = ({
 }) => {
   const optionsList = options.map(({ label: optionLabel, value }) => {
     return (
-      <div key={value}>
+      <CheckRadioWrapper key={value}>
         <input
           type="radio"
           id={value}
@@ -27,8 +27,8 @@ const InputRadioWithLabelAndValidation = ({
           value={value}
           checked={restOfProps.value === value}
         />
-        <label htmlFor={value}>{optionLabel}</label>
-      </div>
+        <CheckRadioLabel htmlFor={value}>{optionLabel}</CheckRadioLabel>
+      </CheckRadioWrapper>
     )
   })
 

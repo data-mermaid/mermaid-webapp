@@ -8,11 +8,37 @@ export const inputStyles = css`
     padding: ${theme.spacing.xsmall};
   `)}
 `
+export const CheckRadioWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 2rem auto;
+  justify-items:start;
+  padding: ${theme.spacing.xsmall};
+  input{
+    margin-top: ${theme.spacing.xsmall};
+  }
+  ${hoverState(css`
+    background-color: ${theme.color.tableRowHover};
+  `)}
+`
+export const CheckRadioLabel = styled.label`
+  padding: 0 ${theme.spacing.small};
+  width: 100%;
+  ${hoverState(css`
+    background-color: ${theme.color.tableRowHover};
+  `)}
+  @media (hover: none) {
+    width: auto;
+    padding-bottom: ${theme.spacing.medium};
+  }
+`
 
 export const validationRowStyles = css`
   border-width: 0 0 0 ${theme.spacing.borderXLarge};
   border-style: solid;
   border-color: ${theme.color.secondaryColor};
+  ${hoverState(css`
+    background-color: ${theme.color.secondaryHover};
+  `)}
   ${(props) =>
     props.validationType === 'ok' &&
     css`
@@ -68,20 +94,7 @@ export const InputRow = styled.div`
   grid-template-columns: 0.75fr 1.5fr 1fr;
   margin: 1px 0;
   padding: ${theme.spacing.medium};
-
-  label,
-  & > div:last-of-type {
-    display: inline-block;
-    ${theme.typography.noWordBreak};
-    padding: calc(${theme.spacing.borderSmall} + ${theme.spacing.xsmall}) ${theme.spacing.xsmall};
-  }
-  ${hoverState(css`
-    background-color: ${theme.color.secondaryHover};
-  `)}
-  &:focus-within {
-    background-color: ${theme.color.focusWithin};
-  }
-  ${validationRowStyles}
+  ${validationRowStyles};
 `
 export const ValidationMessage = styled.span.attrs((props) => ({
   role:
