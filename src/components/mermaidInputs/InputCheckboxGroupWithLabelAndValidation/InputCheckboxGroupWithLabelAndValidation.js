@@ -63,7 +63,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
 
 InputCheckboxGroupWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
-  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
@@ -72,7 +72,7 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
   ).isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   value: PropTypes.arrayOf(
@@ -87,6 +87,8 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
 }
 
 InputCheckboxGroupWithLabelAndValidation.defaultProps = {
+  ignoreNonObservationFieldValidations: () => {},
+  resetNonObservationFieldValidations: () => {},
   validationMessages: [],
   validationType: undefined,
 }
