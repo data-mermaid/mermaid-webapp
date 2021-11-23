@@ -3,7 +3,7 @@ import colorHelper from 'color'
 
 const primary = colorHelper('#174b82')
 const secondary = colorHelper('#DDDCE4')
-const callout = colorHelper('#fe472f')
+const callout = colorHelper('#DB3B00')
 const caution = colorHelper('#BB1600')
 const warning = colorHelper('#FEDD2F')
 const ignore = colorHelper('#D6DDE6')
@@ -55,11 +55,11 @@ const color = {
   cautionActive: caution.mix(colorHelper(white), 0.7),
   cautionDisabledColor: caution.mix(colorHelper('black'), 0.2),
 
-  calloutColor: callout,
-  calloutHover: callout.mix(colorHelper(white), 0.1),
-  calloutText: white,
-  calloutBorder: callout.mix(colorHelper(black), 0.2),
-  calloutActive: callout.mix(colorHelper('black'), 0.2),
+  calloutColor: white,
+  calloutHover: callout.mix(colorHelper(white), 0.9),
+  calloutText: callout,
+  calloutBorder: callout,
+  calloutActive: callout.mix(colorHelper('white'), 0.8),
   calloutDisabledColor: callout.mix(colorHelper('black'), 0.2),
 
   disabledColor: '#D5D5DD',

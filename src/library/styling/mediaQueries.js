@@ -32,7 +32,7 @@ const mediaQueryForBigDesktopUp = content => css`
 `
 const hoverState = content => css`
   @media (hover: hover) {
-    &:hover {
+    &:hover:not([disabled]){
       ${content};
     }
   }
