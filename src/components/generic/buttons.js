@@ -34,7 +34,7 @@ export const Button = styled.button`
     color: ${theme.color.disabledText};
     cursor: not-allowed;
   }
-  &:active {
+  &:active:enabled {
     ${buttonActive};
   }
 `
@@ -50,7 +50,7 @@ export const ButtonPrimary = styled(Button)`
   &:disabled {
     background-color: ${theme.color.primaryDisabledColor};
   }
-  &:active {
+  &:active:enabled {
     background-color: ${theme.color.primaryActive};
   }
 `
@@ -66,22 +66,24 @@ export const ButtonSecondary = styled(Button)`
   &:disabled {
     background-color: ${theme.color.secondaryDisabledColor};
   }
-  &:active {
+  &:active:enabled {
     background-color: ${theme.color.secondaryActive};
   }
 `
 export const ButtonCallout = styled(Button)`
   background-color: ${theme.color.calloutColor};
   color: ${theme.color.calloutText};
+  border: solid 1px ${theme.color.calloutBorder};
   ${hoverState(
     css`
       background-color: ${theme.color.calloutHover};
     `,
   )}
   &:disabled {
-    background-color: ${theme.color.calloutDisabledColor};
+    color: ${theme.color.disabledBorder};
+    border-color: ${theme.color.disabledBorder};
   }
-  &:active {
+  &:active:enabled {
     background-color: ${theme.color.calloutActive};
   }
 `
@@ -97,7 +99,7 @@ export const ButtonCaution = styled(Button)`
   &:disabled {
     background-color: ${theme.color.cautionDisabledColor};
   }
-  &:active {
+  &:active:enabled {
     background-color: ${theme.color.cautionActive};
   }
 `

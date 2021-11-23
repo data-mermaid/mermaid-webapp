@@ -11,8 +11,9 @@ import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStora
 import useIsMounted from '../../library/useIsMounted'
 
 const CollectRecordsCountWrapper = styled.strong`
-  background: ${theme.color.calloutColor};
+  background: ${theme.color.callout};
   border-radius: 100%;
+  border: solid 1px ${theme.color.white};
   width: ${theme.spacing.large};
   height: ${theme.spacing.large};
   color: ${theme.color.white};
