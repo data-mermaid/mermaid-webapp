@@ -46,15 +46,17 @@ const InputValidationInfo = ({
 }
 
 InputValidationInfo.propTypes = {
-  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func,
+  resetNonObservationFieldValidations: PropTypes.func,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
 }
 
 InputValidationInfo.defaultProps = {
-  validationType: undefined,
+  ignoreNonObservationFieldValidations: () => {},
+  resetNonObservationFieldValidations: () => {},
   validationMessages: [],
+  validationType: undefined,
 }
 
 export default InputValidationInfo

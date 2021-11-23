@@ -362,7 +362,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   )
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
-})
+}, 35000)
 
 test('Validation: user can dismiss record-level warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()

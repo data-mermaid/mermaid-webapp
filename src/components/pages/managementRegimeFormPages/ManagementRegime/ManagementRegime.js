@@ -1,5 +1,5 @@
-import { Formik } from 'formik'
 import { toast } from 'react-toastify'
+import { useFormik } from 'formik'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 
@@ -18,6 +18,9 @@ import language from '../../../../language'
 import ManagementRulesInput from '../ManagementRulesInput'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../../library/useIsMounted'
+import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import { ButtonCallout } from '../../../generic/buttons'
+import { IconSave } from '../../../icons'
 
 const ManagementRegime = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -42,10 +45,10 @@ const ManagementRegime = () => {
         .then(([managementRegimeResponse, choicesResponse, projectResponse]) => {
           if (isMounted.current) {
             if (!managementRegimeResponse && managementRegimeId) {
-              setIdsNotAssociatedWithData(previousState => [...previousState, managementRegimeId])
+              setIdsNotAssociatedWithData((previousState) => [...previousState, managementRegimeId])
             }
             if (!projectResponse && projectId) {
-              setIdsNotAssociatedWithData(previousState => [...previousState, projectId])
+              setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
             }
 
             setManagementParties(getOptions(choicesResponse.managementparties))
@@ -65,10 +68,34 @@ const ManagementRegime = () => {
     [managementRegimeBeingEdited],
   )
 
-  const formikOptions = {
+  const formik = useFormik({
     initialValues: initialFormValues,
     enableReinitialize: true,
-  }
+    onSubmit: () => {},
+    validate: (values) => {
+      const errors = {}
+      const isPartialSelectionSelected =
+        values.access_restriction ||
+        values.periodic_closure ||
+        values.size_limits ||
+        values.gear_restriction ||
+        values.species_restriction
+      const isOneOfRulesSelected =
+        values.open_access || values.no_take || isPartialSelectionSelected
+
+      if (!values.name) {
+        errors.name = [{ message: 'Required', id: 'Required' }]
+      }
+      if (!isOneOfRulesSelected) {
+        errors.rules = [{ message: 'Required', id: 'Required' }]
+      }
+
+      return errors
+    },
+  })
+
+  const doesFormikHaveErrors = Object.keys(formik.errors).length
+  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
@@ -76,77 +103,87 @@ const ManagementRegime = () => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <Formik {...formikOptions}>
-      {formik => (
-        <ContentPageLayout
-          isPageContentLoading={isLoading}
-          content={
-            <>
-              <form id="management-regime-id">
-                <InputWrapper>
-                  <InputWithLabelAndValidation
-                    label="Name"
-                    id="name"
-                    type="text"
-                    {...formik.getFieldProps('name')}
-                  />
-                  <InputWithLabelAndValidation
-                    label="Secondary Name"
-                    id="name_secondary"
-                    type="text"
-                    {...formik.getFieldProps('name_secondary')}
-                  />
-                  <InputWithLabelAndValidation
-                    label="Year Established"
-                    id="est_year"
-                    type="number"
-                    {...formik.getFieldProps('est_year')}
-                  />
-                  <InputWithLabelAndValidation
-                    label="Area"
-                    id="size"
-                    type="number"
-                    unit="ha"
-                    {...formik.getFieldProps('size')}
-                  />
-                  <InputCheckboxGroupWithLabelAndValidation
-                    label="Parties"
-                    id="parties"
-                    options={managementParties}
-                    value={formik.getFieldProps('parties').value}
-                    onChange={({ selectedItems }) => {
-                      formik.setFieldValue('parties', selectedItems)
-                    }}
-                  />
-                  <ManagementRulesInput
-                    managementFormValues={formik.values}
-                    onChange={(property, selectedItems) => {
-                      formik.setFieldValue(property, selectedItems)
-                    }}
-                  />
-                  <InputRadioWithLabelAndValidation
-                    label="Compliance"
-                    id="compliance"
-                    options={managementCompliances}
-                    {...formik.getFieldProps('compliance')}
-                  />
-                  <TextareaWithLabelAndValidation
-                    label="Notes"
-                    id="notes"
-                    {...formik.getFieldProps('notes')}
-                  />
-                </InputWrapper>
-              </form>
-            </>
-          }
-          toolbar={
-            <>
-              <H2>{formik.values.name}</H2>
-            </>
-          }
-        />
-      )}
-    </Formik>
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={
+        <>
+          <form id="management-regime-form" onSubmit={formik.handleSubmit}>
+            <InputWrapper>
+              <InputWithLabelAndValidation
+                label="Name"
+                id="name"
+                type="text"
+                {...formik.getFieldProps('name')}
+                validationType={formik.errors.name ? 'error' : null}
+                validationMessages={formik.errors.name}
+                testId="name"
+              />
+              <InputWithLabelAndValidation
+                label="Secondary Name"
+                id="name_secondary"
+                type="text"
+                {...formik.getFieldProps('name_secondary')}
+              />
+              <InputWithLabelAndValidation
+                label="Year Established"
+                id="est_year"
+                type="number"
+                {...formik.getFieldProps('est_year')}
+              />
+              <InputWithLabelAndValidation
+                label="Area"
+                id="size"
+                type="number"
+                unit="ha"
+                {...formik.getFieldProps('size')}
+              />
+              <InputCheckboxGroupWithLabelAndValidation
+                label="Parties"
+                id="parties"
+                options={managementParties}
+                value={formik.getFieldProps('parties').value}
+                onChange={({ selectedItems }) => {
+                  formik.setFieldValue('parties', selectedItems)
+                }}
+              />
+              <ManagementRulesInput
+                managementFormValues={formik.values}
+                onChange={(property, selectedItems) => {
+                  formik.setFieldValue(property, selectedItems)
+                }}
+                validationType={formik.errors.rules ? 'error' : null}
+                validationMessages={formik.errors.rules}
+                data-testid="rules"
+              />
+              <InputRadioWithLabelAndValidation
+                label="Compliance"
+                id="compliance"
+                options={managementCompliances}
+                {...formik.getFieldProps('compliance')}
+              />
+              <TextareaWithLabelAndValidation
+                label="Notes"
+                id="notes"
+                {...formik.getFieldProps('notes')}
+              />
+            </InputWrapper>
+          </form>
+        </>
+      }
+      toolbar={
+        <ContentPageToolbarWrapper>
+          <H2>{formik.values.name}</H2>
+          <ButtonCallout
+            type="submit"
+            form="management-regime-form"
+            disabled={isSaveButtonDisabled}
+          >
+            <IconSave />
+            Save
+          </ButtonCallout>
+        </ContentPageToolbarWrapper>
+      }
+    />
   )
 }
 

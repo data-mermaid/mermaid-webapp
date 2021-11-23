@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import theme from '../../../../theme'
 import { InputRow } from '../../../generic/form'
 import { managementRegimePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import InputValidationInfo from '../../../mermaidInputs/InputValidationInfo/InputValidationInfo'
+import mermaidInputsPropTypes from '../../../mermaidInputs/mermaidInputsPropTypes'
 
 const partialRestrictionOptions = [
   { value: 'periodic_closure', label: 'Periodic Closure' },
@@ -37,8 +39,16 @@ const RadioLabel = styled.label`
   }
 `
 
-const ManagementRulesInput = ({ id, label, managementFormValues, onChange }) => {
-  const getManagementRulesRadioInputValue = rules => {
+const ManagementRulesInput = ({
+  id,
+  label,
+  managementFormValues,
+  onChange,
+  validationMessages,
+  validationType,
+  ...restOfProps
+}) => {
+  const getManagementRulesRadioInputValue = (rules) => {
     return {
       open_access: rules.open_access,
       no_take: rules.no_take,
@@ -51,7 +61,7 @@ const ManagementRulesInput = ({ id, label, managementFormValues, onChange }) => 
     }
   }
 
-  const getPartialRestrictionCheckboxValues = rules => {
+  const getPartialRestrictionCheckboxValues = (rules) => {
     return {
       access_restriction: rules.access_restriction,
       periodic_closure: rules.periodic_closure,
@@ -71,9 +81,9 @@ const ManagementRulesInput = ({ id, label, managementFormValues, onChange }) => 
 
   const resetPartialRestrictionProperties = () => {
     const updatedValues = { ...partialRestrictionCheckboxValues }
-    const partialRestrictionOptionValues = partialRestrictionOptions.map(item => item.value)
+    const partialRestrictionOptionValues = partialRestrictionOptions.map((item) => item.value)
 
-    partialRestrictionOptionValues.forEach(item => {
+    partialRestrictionOptionValues.forEach((item) => {
       updatedValues[item] = false
 
       onChange(item, false)
@@ -112,7 +122,7 @@ const ManagementRulesInput = ({ id, label, managementFormValues, onChange }) => 
     })
   }
 
-  const handlePartialRestrictionChoicesChange = e => {
+  const handlePartialRestrictionChoicesChange = (e) => {
     const value = e.target.checked
     const property = e.target.value
 
@@ -140,7 +150,7 @@ const ManagementRulesInput = ({ id, label, managementFormValues, onChange }) => 
     ))
 
   return (
-    <InputRow>
+    <InputRow {...restOfProps}>
       <label htmlFor={id}>{label}</label>
       <div>
         <div>
@@ -188,6 +198,10 @@ const ManagementRulesInput = ({ id, label, managementFormValues, onChange }) => 
           {showPartialRestrictionChoices}
         </div>
       </div>
+      <InputValidationInfo
+        validationType={validationType}
+        validationMessages={validationMessages}
+      />
     </InputRow>
   )
 }
@@ -197,12 +211,16 @@ ManagementRulesInput.propTypes = {
   label: PropTypes.string,
   managementFormValues: managementRegimePropType,
   onChange: PropTypes.func.isRequired,
+  validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
+  validationType: PropTypes.string,
 }
 
 ManagementRulesInput.defaultProps = {
   id: 'rules',
   label: 'Rules',
   managementFormValues: {},
+  validationMessages: undefined,
+  validationType: undefined,
 }
 
 export default ManagementRulesInput
