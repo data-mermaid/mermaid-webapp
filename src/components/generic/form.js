@@ -11,21 +11,18 @@ export const inputStyles = css`
 export const CheckRadioWrapper = styled.div`
   display: grid;
   grid-template-columns: 2rem auto;
-  justify-items:start;
+  justify-items: start;
   padding: ${theme.spacing.xsmall};
-  input{
+  input {
     margin-top: ${theme.spacing.xsmall};
   }
   ${hoverState(css`
-    background-color: ${theme.color.tableRowHover};
+    background-color: ${theme.color.white};
   `)}
 `
 export const CheckRadioLabel = styled.label`
   padding: 0 ${theme.spacing.small};
   width: 100%;
-  ${hoverState(css`
-    background-color: ${theme.color.tableRowHover};
-  `)}
   @media (hover: none) {
     width: auto;
     padding-bottom: ${theme.spacing.medium};
@@ -33,11 +30,11 @@ export const CheckRadioLabel = styled.label`
 `
 
 export const validationRowStyles = css`
-  border-width: 0 0 0 ${theme.spacing.borderXLarge};
+  border-width: 0 0 0 ${theme.spacing.borderLarge};
   border-style: solid;
   border-color: ${theme.color.secondaryColor};
   ${hoverState(css`
-    background-color: ${theme.color.secondaryHover};
+    background-color: ${theme.color.tableRowHover};
   `)}
   ${(props) =>
     props.validationType === 'ok' &&
@@ -104,20 +101,22 @@ export const ValidationMessage = styled.span.attrs((props) => ({
       ? 'alert'
       : undefined,
 }))`
+  border-style: solid;
+  border-width: 1px 1px 1px ${theme.spacing.borderLarge};
   ${(props) =>
     props.validationType === 'error' &&
     css`
-      background-color: ${theme.color.cautionColor};
+      border-color: ${theme.color.cautionColor};
     `}
   ${(props) =>
     (props.validationType === 'warning' || props.validationType === 'reset') &&
     css`
-      background-color: ${theme.color.warningColor};
+      border-color: ${theme.color.warningColor};
     `}
     ${(props) =>
     props.validationType === 'ignore' &&
     css`
-      background-color: ${theme.color.ignoreColor};
+      border-color: ${theme.color.ignoreColor};
     `}
 `
 
