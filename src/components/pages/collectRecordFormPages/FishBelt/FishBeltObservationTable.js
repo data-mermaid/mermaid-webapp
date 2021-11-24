@@ -23,7 +23,7 @@ import {
   inputTextareaSelectStyles,
   InputWrapper,
   ValidationMessage,
-  validationRowStyles,
+  validationBorderColors,
 } from '../../../generic/form'
 import { LinkThatLooksLikeButton } from '../../../generic/links'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
@@ -39,7 +39,9 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { Column } from '../../../generic/positioning'
 
 const ObservationTr = styled(Tr)`
-  ${validationRowStyles}
+  border-width: 0 0 0 ${theme.spacing.xxsmall};
+  border-style: solid;
+  ${validationBorderColors}
 `
 
 const FishNameAutocomplete = styled(InputAutocomplete)`

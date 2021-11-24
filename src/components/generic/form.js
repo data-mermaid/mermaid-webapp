@@ -1,6 +1,10 @@
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import { hoverState, mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
+import {
+  hoverState,
+  mediaQueryPhoneOnly,
+  mediaQueryTabletLandscapeOnly,
+} from '../../library/styling/mediaQueries'
 
 export const inputStyles = css`
   padding: ${theme.spacing.small};
@@ -29,13 +33,7 @@ export const CheckRadioLabel = styled.label`
   }
 `
 
-export const validationRowStyles = css`
-  border-width: 0 0 0 ${theme.spacing.borderLarge};
-  border-style: solid;
-  border-color: ${theme.color.secondaryColor};
-  ${hoverState(css`
-    background-color: ${theme.color.tableRowHover};
-  `)}
+export const validationBorderColors = css`
   ${(props) =>
     props.validationType === 'ok' &&
     css`
@@ -87,11 +85,39 @@ export const inputTextareaSelectStyles = css`
 `
 
 export const InputRow = styled.div`
+  // this right here, yo
   display: grid;
   grid-template-columns: 0.75fr 1.5fr 1fr;
   margin: 1px 0;
   padding: ${theme.spacing.medium};
-  ${validationRowStyles};
+  border-width: 0 0 0 ${theme.spacing.borderLarge};
+  border-style: solid;
+  border-color: ${theme.color.secondaryColor};
+  ${hoverState(css`
+    background-color: ${theme.color.tableRowHover};
+  `)}
+  ${validationBorderColors};
+  ${mediaQueryTabletLandscapeOnly(css`
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    margin: 5px 0;
+    gap: 10px;
+    & > :nth-child(1) {
+      /* label */
+      grid-row: 1 / 3;
+      grid-column: 1 / 2;
+    }
+    & > :nth-child(2) {
+      /* input */
+      grid-row: 2 / 3;
+      grid-column: 1 / 3;
+    }
+    & > :nth-child(3) {
+      /* validation */
+      grid-row: 1 / 2;
+      grid-column: 2 / 3;
+    }
+  `)}
 `
 export const ValidationMessage = styled.span.attrs((props) => ({
   role:
@@ -103,21 +129,7 @@ export const ValidationMessage = styled.span.attrs((props) => ({
 }))`
   border-style: solid;
   border-width: 1px 1px 1px ${theme.spacing.borderLarge};
-  ${(props) =>
-    props.validationType === 'error' &&
-    css`
-      border-color: ${theme.color.cautionColor};
-    `}
-  ${(props) =>
-    (props.validationType === 'warning' || props.validationType === 'reset') &&
-    css`
-      border-color: ${theme.color.warningColor};
-    `}
-    ${(props) =>
-    props.validationType === 'ignore' &&
-    css`
-      border-color: ${theme.color.ignoreColor};
-    `}
+  ${validationBorderColors};
 `
 
 export const Select = styled.select`
