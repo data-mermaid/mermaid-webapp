@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { response } from 'msw'
 import language from '../../../language'
 
 const DatabaseSwitchboardState = class {
@@ -26,7 +27,7 @@ const DatabaseSwitchboardState = class {
     "This operation requires a parameter that isn't being supplied",
   )
 
-  _getIsResponseStatusSuccessful
+  _getIsApiDataItemStatusSuccessful
 
   constructor({
     apiBaseUrl,
@@ -55,10 +56,16 @@ const DatabaseSwitchboardState = class {
     this._isOfflineAuthenticatedAndReady = this._isAuthenticatedAndReady && !isAppOnline
   }
 
-  _getIsResponseStatusSuccessful = recordResponseFromServer => {
-    const statusCode = recordResponseFromServer.status_code || recordResponseFromServer.status
+  _getIsApiDataItemStatusSuccessful = (dataItemFromServer) => {
+    const statusCode = dataItemFromServer.status_code
 
     return statusCode >= 200 && statusCode < 300
+  }
+
+  _getDoesApiResponseHaveSuccessfulStatus = (apiResponse) => {
+    const { status } = apiResponse
+
+    return status >= 200 && status < 300
   }
 }
 

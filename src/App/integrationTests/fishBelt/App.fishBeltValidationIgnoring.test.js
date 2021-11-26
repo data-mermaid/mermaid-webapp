@@ -362,7 +362,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   )
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
-}, 35000)
+}, 45000)
 
 test('Validation: user can dismiss record-level warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -899,7 +899,7 @@ test('user can reset dismissed non-observation input warnings', async () => {
   expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observersRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
-}, 40000)
+}, 45000)
 
 test('Validation: user can reset ignored observation warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
