@@ -75,9 +75,9 @@ const ProjectsMixin = (Base) =>
             email,
           })
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(response)
+            const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
-            if (isRecordStatusCodeSuccessful) {
+            if (isApiResponseSuccessful) {
               return this._apiSyncInstance
                 .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then(() => {
@@ -85,11 +85,7 @@ const ProjectsMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(
-              new Error(
-                `the API record returned from Add User doesn't have a successful status code`,
-              ),
-            )
+            return Promise.reject(new Error(`'The API status is unsuccessful',`))
           })
       }
 
@@ -108,9 +104,9 @@ const ProjectsMixin = (Base) =>
             to_profile: toProfileId,
           })
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(response)
+            const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
-            if (isRecordStatusCodeSuccessful) {
+            if (isApiResponseSuccessful) {
               return this._apiSyncInstance
                 .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then(() => {
@@ -118,11 +114,7 @@ const ProjectsMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(
-              new Error(
-                `the API record returned from Transfer Sample Units doesn't have a successful status code`,
-              ),
-            )
+            return Promise.reject(new Error(`'The API status is unsuccessful',`))
           })
       }
 

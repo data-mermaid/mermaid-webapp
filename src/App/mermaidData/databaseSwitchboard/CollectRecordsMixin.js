@@ -143,8 +143,9 @@ const CollectRecordsMixin = (Base) =>
           )
           .then((response) => {
             const [recordResponseFromApiPush] = response.data.collect_records
-            const isRecordStatusCodeSuccessful =
-              this._getIsResponseStatusSuccessful(recordResponseFromApiPush)
+            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              recordResponseFromApiPush.status_code,
+            )
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
@@ -205,8 +206,9 @@ const CollectRecordsMixin = (Base) =>
           )
           .then((apiPushResponse) => {
             const recordReturnedFromApiPush = apiPushResponse.data.collect_records[0]
-            const isRecordStatusCodeSuccessful =
-              this._getIsResponseStatusSuccessful(recordReturnedFromApiPush)
+            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              recordReturnedFromApiPush.status_code,
+            )
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
@@ -248,9 +250,9 @@ const CollectRecordsMixin = (Base) =>
             version: '2',
           })
           .then((response) => {
-            const isRecordStatusCodeSuccessful = this._getIsResponseStatusSuccessful(response)
+            const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
-            if (isRecordStatusCodeSuccessful) {
+            if (isApiResponseStatusSuccessful) {
               return this._apiSyncInstance
                 .pushThenPullEverythingForAProjectButChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
@@ -260,11 +262,7 @@ const CollectRecordsMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(
-              new Error(
-                'the API record returned from validateFishBelt doesnt have a successful status code',
-              ),
-            )
+            return Promise.reject(new Error('The API status is unsuccessful'))
           })
       }
 

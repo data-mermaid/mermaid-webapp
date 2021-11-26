@@ -559,7 +559,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(
     within(screen.getByLabelText('Observations')).getByText('observation error'),
   ).toBeInTheDocument()
-}, 35000)
+}, 45000)
 
 test('Fishbelt validations will show passed input validations', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()

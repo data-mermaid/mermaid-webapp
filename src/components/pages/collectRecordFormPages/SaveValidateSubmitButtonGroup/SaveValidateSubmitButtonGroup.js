@@ -55,8 +55,15 @@ const SaveValidateSubmitButtonGroup = ({
 
   const isValidateDisabled =
     saveButtonState === possibleCollectButtonGroupStates.unsaved ||
+    saveButtonState === possibleCollectButtonGroupStates.saving ||
     validateButtonState === possibleCollectButtonGroupStates.validated ||
     validateButtonState === possibleCollectButtonGroupStates.validating
+
+  const isSubmitDisabled =
+    validateButtonState === possibleCollectButtonGroupStates.validating ||
+    validateButtonState === possibleCollectButtonGroupStates.validatable ||
+    saveButtonState === possibleCollectButtonGroupStates.unsaved ||
+    saveButtonState === possibleCollectButtonGroupStates.saving
 
   const saveButton = (
     <ButtonCallout type="button" disabled={isSaveDisabled} onClick={onSave}>
@@ -73,7 +80,7 @@ const SaveValidateSubmitButtonGroup = ({
   )
 
   const submitButton = (
-    <ButtonCallout disabled={saveButtonState !== possibleCollectButtonGroupStates.validated}>
+    <ButtonCallout disabled={isSubmitDisabled}>
       <IconUpload />
       Submit
     </ButtonCallout>
