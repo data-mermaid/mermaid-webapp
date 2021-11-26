@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { response } from 'msw'
 import language from '../../../language'
 
 const DatabaseSwitchboardState = class {

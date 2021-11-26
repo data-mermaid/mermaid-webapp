@@ -984,7 +984,7 @@ test('Validation: user can reset ignored observation warnings ', async () => {
   expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByLabelText('Passed validation')).not.toBeInTheDocument()
-})
+}, 35000)
 
 test('user can reset dismissed record-level warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
