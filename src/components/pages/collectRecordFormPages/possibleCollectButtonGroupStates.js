@@ -4,4 +4,5 @@ export const possibleCollectButtonGroupStates = {
   saved: 'saved',
   validating: 'validating',
   validated: 'validated',
+  validatable: 'validatable',
 }

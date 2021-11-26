@@ -16,67 +16,64 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
   }
 `
 
-const SaveValidateSubmitButtonGroup = ({ isNewRecord, fishBeltButtonsState, validateRecord }) => {
-  const saveButtonSwitch = () => {
-    if (fishBeltButtonsState === possibleCollectButtonGroupStates.saving) {
-      return (
-        <ButtonCallout disabled>
-          <IconSave />
-          Saving
-        </ButtonCallout>
-      )
+const SaveValidateSubmitButtonGroup = ({
+  isNewRecord,
+  onSave,
+  onValidate,
+  saveButtonState,
+  validateButtonState,
+}) => {
+  const getSaveButtonText = () => {
+    if (saveButtonState === possibleCollectButtonGroupStates.saving) {
+      return 'Saving'
     }
     if (
-      fishBeltButtonsState === possibleCollectButtonGroupStates.saved ||
-      fishBeltButtonsState === possibleCollectButtonGroupStates.validating
+      saveButtonState === possibleCollectButtonGroupStates.saved ||
+      saveButtonState === possibleCollectButtonGroupStates.validating
     ) {
-      return (
-        <ButtonCallout disabled>
-          <IconSave />
-          Saved
-        </ButtonCallout>
-      )
+      return 'Saved'
     }
 
-    return (
-      <ButtonCallout type="submit" form="fishbelt-form">
-        <IconSave />
-        Save
-      </ButtonCallout>
-    )
+    return 'Save'
   }
 
-  const validateButtonSwitch = () => {
-    if (fishBeltButtonsState === possibleCollectButtonGroupStates.validating) {
-      return (
-        <ButtonCallout disabled>
-          <IconCheck />
-          Validating
-        </ButtonCallout>
-      )
+  const getValidateButtonText = () => {
+    if (validateButtonState === possibleCollectButtonGroupStates.validating) {
+      return 'Validating'
     }
-    if (fishBeltButtonsState === possibleCollectButtonGroupStates.validated) {
-      return (
-        <ButtonCallout disabled>
-          <IconCheck />
-          Validated
-        </ButtonCallout>
-      )
+    if (validateButtonState === possibleCollectButtonGroupStates.validated) {
+      return 'Validated'
     }
 
-    return (
-      <ButtonCallout
-        onClick={validateRecord}
-        disabled={fishBeltButtonsState !== possibleCollectButtonGroupStates.saved}
-      >
-        <IconCheck />
-        Validate
-      </ButtonCallout>
-    )
+    return 'Validate'
   }
+
+  const isSaveDisabled =
+    saveButtonState === possibleCollectButtonGroupStates.saved ||
+    saveButtonState === possibleCollectButtonGroupStates.saving ||
+    validateButtonState === possibleCollectButtonGroupStates.validating
+
+  const isValidateDisabled =
+    saveButtonState === possibleCollectButtonGroupStates.unsaved ||
+    validateButtonState === possibleCollectButtonGroupStates.validated ||
+    validateButtonState === possibleCollectButtonGroupStates.validating
+
+  const saveButton = (
+    <ButtonCallout type="button" disabled={isSaveDisabled} onClick={onSave}>
+      <IconSave />
+      {getSaveButtonText()}
+    </ButtonCallout>
+  )
+
+  const validateButton = (
+    <ButtonCallout onClick={onValidate} disabled={isValidateDisabled}>
+      <IconCheck />
+      {getValidateButtonText()}
+    </ButtonCallout>
+  )
 
   const submitButton = (
-    <ButtonCallout disabled={fishBeltButtonsState !== possibleCollectButtonGroupStates.validated}>
+    <ButtonCallout disabled={saveButtonState !== possibleCollectButtonGroupStates.validated}>
       <IconUpload />
       Submit
     </ButtonCallout>
@@ -84,10 +81,10 @@ const SaveValidateSubmitButtonGroup = ({ isNewRecord, fishBeltButtonsState, vali
 
   return (
     <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
-      {saveButtonSwitch()}
+      {saveButton}
       {!isNewRecord && (
         <OfflineHide>
-          {validateButtonSwitch()}
+          {validateButton}
           {submitButton}
         </OfflineHide>
       )}
@@ -97,8 +94,10 @@ const SaveValidateSubmitButtonGroup = ({ isNewRecord, fishBeltButtonsState, vali
 
 SaveValidateSubmitButtonGroup.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
-  fishBeltButtonsState: PropTypes.string.isRequired,
-  validateRecord: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  onValidate: PropTypes.func.isRequired,
+  saveButtonState: PropTypes.string.isRequired,
+  validateButtonState: PropTypes.string.isRequired,
 }
 
 export default SaveValidateSubmitButtonGroup
