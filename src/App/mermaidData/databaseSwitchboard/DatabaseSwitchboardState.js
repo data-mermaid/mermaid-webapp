@@ -8,6 +8,8 @@ const DatabaseSwitchboardState = class {
 
   _authenticatedAxios
 
+  _dexieInstance
+
   _isAuthenticatedAndReady
 
   _isOfflineAuthenticatedAndReady
@@ -16,7 +18,9 @@ const DatabaseSwitchboardState = class {
 
   _isOnlineAuthenticatedAndReady
 
-  _dexieInstance
+  _isStatusCodeSuccessful = function _isStatusCodeSuccessful(statusValue) {
+    return statusValue >= 200 && statusValue < 300
+  }
 
   _notAuthenticatedAndReadyError = new Error(language.error.appNotAuthenticatedOrReady)
 
@@ -25,8 +29,6 @@ const DatabaseSwitchboardState = class {
   _operationMissingParameterError = new Error(
     "This operation requires a parameter that isn't being supplied",
   )
-
-  _getIsResponseStatusSuccessful
 
   constructor({
     apiBaseUrl,
@@ -53,12 +55,6 @@ const DatabaseSwitchboardState = class {
     this._isOnlineAuthenticatedAndLoading =
       this._isAuthenticatedAndReady && isAppOnline && !this._authenticatedAxios
     this._isOfflineAuthenticatedAndReady = this._isAuthenticatedAndReady && !isAppOnline
-  }
-
-  _getIsResponseStatusSuccessful = recordResponseFromServer => {
-    const statusCode = recordResponseFromServer.status_code || recordResponseFromServer.status
-
-    return statusCode >= 200 && statusCode < 300
   }
 }
 

@@ -91,8 +91,9 @@ const SitesMixin = (Base) =>
           .then((response) => {
             const [siteResponseFromApiPush] = response.data.project_sites
 
-            const isSiteStatusCodeSuccessful =
-              this._getIsResponseStatusSuccessful(siteResponseFromApiPush)
+            const isSiteStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              siteResponseFromApiPush.status_code,
+            )
 
             if (isSiteStatusCodeSuccessful) {
               // do a pull of data related to collect records
