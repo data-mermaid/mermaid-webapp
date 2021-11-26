@@ -54,8 +54,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-  const [fishBeltButtonsState, setFishBeltButtonsState] = useState(
-    possibleCollectButtonGroupStates.saved,
+  const [saveButtonState, setSaveButtonState] = useState(possibleCollectButtonGroupStates.saved)
+  const [validateButtonState, setValidateButtonState] = useState(
+    possibleCollectButtonGroupStates.validatable,
   )
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
@@ -220,18 +221,19 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }
 
-  const validateRecord = () => {
-    setFishBeltButtonsState(possibleCollectButtonGroupStates.validating)
+  const handleValidate = () => {
+    setValidateButtonState(possibleCollectButtonGroupStates.validating)
 
     databaseSwitchboardInstance
       .validateFishBelt({ recordId, projectId })
       .then((validatedRecordResponse) => {
-        if (validatedRecordResponse?.validations?.status === 'ok') {
-          setFishBeltButtonsState(possibleCollectButtonGroupStates.validated)
-        }
-        setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
         setAreValidationsShowing(true)
         setCollectRecordBeingEdited(validatedRecordResponse)
+        setValidateButtonState(
+          validatedRecordResponse?.validations?.status === 'ok'
+            ? possibleCollectButtonGroupStates.validated
+            : possibleCollectButtonGroupStates.validatable,
+        )
 
         /* Observations is loaded initially before a user can hit the validate button,
          and its kept up to date through user actions.
@@ -254,7 +256,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
       .catch(() => {
         toast.error(language.error.collectRecordFailedValidation)
-        setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
+        setValidateButtonState(possibleCollectButtonGroupStates.validatable)
       })
   }
 
@@ -457,64 +459,46 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
-  const formikOptions = useMemo(() => {
-    const saveRecord = (formikValues, formikActions) => {
-      const recordToSubmit = reformatFormValuesIntoFishBeltRecord(
-        formikValues,
-        observationsState,
-        collectRecordBeingEdited,
-      )
+  const formik = useFormik({
+    initialValues: initialFormikFormValues,
+    enableReinitialize: true,
+    validate: persistUnsavedFormikData,
+  })
 
-      setFishBeltButtonsState(possibleCollectButtonGroupStates.saving)
-      setAreValidationsShowing(false)
+  const handleSave = () => {
+    const recordToSubmit = reformatFormValuesIntoFishBeltRecord(
+      formik.values,
+      observationsState,
+      collectRecordBeingEdited,
+    )
 
-      databaseSwitchboardInstance
-        .saveFishBelt({
-          record: recordToSubmit,
-          profileId: currentUser.id,
-          projectId,
-        })
-        .then((response) => {
-          toast.success(language.success.collectRecordSave)
-          clearPersistedUnsavedFormikData()
-          clearPersistedUnsavedObservationsData()
-          setAreObservationsInputsDirty(false)
-          setFishBeltButtonsState(possibleCollectButtonGroupStates.saved)
-          setIsFormDirty(false)
-          formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
+    setSaveButtonState(possibleCollectButtonGroupStates.saving)
+    setAreValidationsShowing(false)
 
-          if (isNewRecord) {
-            history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
-          }
-        })
-        .catch(() => {
-          toast.error(language.error.collectRecordSave)
-        })
-    }
+    databaseSwitchboardInstance
+      .saveFishBelt({
+        record: recordToSubmit,
+        profileId: currentUser.id,
+        projectId,
+      })
+      .then((response) => {
+        toast.success(language.success.collectRecordSave)
+        clearPersistedUnsavedFormikData()
+        clearPersistedUnsavedObservationsData()
+        setAreObservationsInputsDirty(false)
+        setSaveButtonState(possibleCollectButtonGroupStates.saved)
+        setValidateButtonState(possibleCollectButtonGroupStates.validatable)
+        setIsFormDirty(false)
+        formik.resetForm({ values: formik.values }) // this resets formik's dirty state
 
-    return {
-      initialValues: initialFormikFormValues,
-      enableReinitialize: true,
-      onSubmit: saveRecord,
-      validate: persistUnsavedFormikData,
-    }
-  }, [
-    clearPersistedUnsavedFormikData,
-    clearPersistedUnsavedObservationsData,
-    collectRecordBeingEdited,
-    currentUser.id,
-    databaseSwitchboardInstance,
-    history,
-    initialFormikFormValues,
-    isNewRecord,
-    observationsState,
-    persistUnsavedFormikData,
-    projectId,
-    setAreObservationsInputsDirty,
-    setFishBeltButtonsState,
-  ])
-
-  const formik = useFormik(formikOptions)
+        if (isNewRecord) {
+          history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
+        }
+      })
+      .catch(() => {
+        toast.error(language.error.collectRecordSave)
+      })
+  }
 
   const _setIsFormDirty = useEffect(() => {
     setIsFormDirty(
@@ -532,7 +516,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const _setCollectButtonsUnsaved = useEffect(() => {
     if (isFormDirty) {
-      setFishBeltButtonsState(possibleCollectButtonGroupStates.unsaved)
+      setSaveButtonState(possibleCollectButtonGroupStates.unsaved)
     }
   }, [isFormDirty])
 
@@ -616,8 +600,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
             <SaveValidateSubmitButtonGroup
               isNewRecord={isNewRecord}
-              fishBeltButtonsState={fishBeltButtonsState}
-              validateRecord={validateRecord}
+              saveButtonState={saveButtonState}
+              validateButtonState={validateButtonState}
+              onValidate={handleValidate}
+              onSave={handleSave}
             />
           </ContentPageToolbarWrapper>
         }
