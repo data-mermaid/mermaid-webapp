@@ -112,7 +112,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   ).not.toBeInTheDocument()
 })
 
-test('Fishbelt validations will show all the errors when there are multiple errors and warnings', async () => {
+test('Fishbelt validations will show only the first error when there are multiple errors and warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -238,7 +238,7 @@ test('Fishbelt validations will show all the errors when there are multiple erro
   // regular imputs
 
   expect(within(screen.getByTestId('site')).getByText('firstError')).toBeInTheDocument()
-  expect(within(screen.getByTestId('site')).queryByText('secondError')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('secondError')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('site')).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
 
@@ -247,7 +247,7 @@ test('Fishbelt validations will show all the errors when there are multiple erro
   const observationsTable = screen.getByLabelText('Observations')
 
   expect(within(observationsTable).getByText('observation error 1')).toBeInTheDocument()
-  expect(within(observationsTable).getByText('observation error 2')).toBeInTheDocument()
+  expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning 1')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning 2')).not.toBeInTheDocument()
   expect(

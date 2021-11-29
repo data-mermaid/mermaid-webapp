@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
+import { IconCheck } from '../icons'
 import {
   hoverState,
   mediaQueryPhoneOnly,
@@ -11,6 +12,11 @@ export const inputStyles = css`
   ${mediaQueryPhoneOnly(css`
     padding: ${theme.spacing.xsmall};
   `)}
+`
+export const ValidationCheckMark = styled(IconCheck)`
+  width: ${theme.typography.defaultIconSize};
+  height: ${theme.typography.defaultIconSize};
+  color: ${theme.color.valid};
 `
 export const CheckRadioWrapper = styled.div`
   display: grid;
@@ -30,6 +36,21 @@ export const CheckRadioLabel = styled.label`
   @media (hover: none) {
     width: auto;
     padding-bottom: ${theme.spacing.medium};
+  }
+`
+export const ValidationList = styled('ul')`
+  list-style: none;
+  padding: ${theme.spacing.medium};
+  margin: 0;
+  li {
+    display: flex;
+    justify-content: space-between;
+    span {
+      margin: ${theme.spacing.xxsmall} 0;
+      display: block;
+      width: 100%;
+      padding: ${theme.spacing.small};
+    }
   }
 `
 
@@ -85,7 +106,6 @@ export const inputTextareaSelectStyles = css`
 `
 
 export const InputRow = styled.div`
-  // this right here, yo
   display: grid;
   grid-template-columns: 0.75fr 1.5fr 1fr;
   margin: 1px 0;
@@ -99,13 +119,14 @@ export const InputRow = styled.div`
   ${validationBorderColors};
   ${mediaQueryTabletLandscapeOnly(css`
     grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: minmax(30px, auto) 1fr;
     margin: 5px 0;
     gap: 10px;
     & > :nth-child(1) {
       /* label */
       grid-row: 1 / 3;
       grid-column: 1 / 2;
+      display: block;
     }
     & > :nth-child(2) {
       /* input */
@@ -114,6 +135,7 @@ export const InputRow = styled.div`
     }
     & > :nth-child(3) {
       /* validation */
+      align-self: center;
       grid-row: 1 / 2;
       grid-column: 2 / 3;
     }

@@ -1,11 +1,21 @@
 import React from 'react'
+import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
-import { ValidationMessage } from '../../generic/form'
-import { Column } from '../../generic/positioning'
-import { IconCheck } from '../../icons'
+import { ValidationMessage, ValidationCheckMark } from '../../generic/form'
+import theme from '../../../theme'
 import { ButtonSecondary } from '../../generic/buttons'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
+const ValidationButton = styled(ButtonSecondary)`
+  font-size: smaller;
+  padding: ${theme.spacing.xxsmall} ${theme.spacing.xsmall};
+  margin: ${theme.spacing.xsmall};
+  text-transform: capitalize;
+`
+const ValidationWrapper = styled('div')`
+  display: flex;
+  flex-wrap: wrap;
+`
 const InputValidationInfo = ({
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
@@ -15,33 +25,33 @@ const InputValidationInfo = ({
   const areThereValidationMessages = validationMessages.length
 
   return (
-    <Column>
+    <ValidationWrapper>
       {areThereValidationMessages &&
       (validationType === 'error' || validationType === 'warning') ? (
-        <Column>
+        <div>
           {validationMessages.map((validationMessage) => (
             <ValidationMessage validationType={validationType} key={validationMessage.id}>
               {validationMessage.message}
             </ValidationMessage>
           ))}
-        </Column>
+        </div>
       ) : null}
-      {validationType === 'ok' ? <IconCheck aria-label="Passed validation" /> : null}
+      {validationType === 'ok' ? <ValidationCheckMark aria-label="Passed validation" /> : null}
       {validationType === 'ignore' ? (
-        <Column>
+        <div>
           <ValidationMessage validationType={validationType}>Ignored</ValidationMessage>
-          <ButtonSecondary type="button" onClick={resetNonObservationFieldValidations}>
+          <ValidationButton type="button" onClick={resetNonObservationFieldValidations}>
             Reset validations
-          </ButtonSecondary>
-        </Column>
+          </ValidationButton>
+        </div>
       ) : null}
 
       {areThereValidationMessages && validationType === 'warning' ? (
-        <ButtonSecondary type="button" onClick={ignoreNonObservationFieldValidations}>
+        <ValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
           Ignore all warnings
-        </ButtonSecondary>
+        </ValidationButton>
       ) : null}
-    </Column>
+    </ValidationWrapper>
   )
 }
 

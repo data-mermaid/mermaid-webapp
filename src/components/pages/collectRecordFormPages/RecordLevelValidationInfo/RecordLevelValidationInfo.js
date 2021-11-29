@@ -1,25 +1,10 @@
 import React from 'react'
 import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
-import { ValidationMessage } from '../../../generic/form'
+import { ValidationMessage, ValidationList } from '../../../generic/form'
 import { ButtonSecondary } from '../../../generic/buttons'
 import theme from '../../../../theme'
 
-const RecordLevelValidationList = styled('ul')`
-  list-style: none;
-  padding: ${theme.spacing.medium};
-  margin: 0;
-  li {
-    display: flex;
-    justify-content: space-between;
-    span {
-      margin: ${theme.spacing.xxsmall} 0;
-      display: block;
-      width: 100%;
-      padding: ${theme.spacing.small};
-    }
-  }
-`
 const InlineValidationButton = styled(ButtonSecondary)`
   margin: ${theme.spacing.xxsmall};
   margin-right: 0;
@@ -34,7 +19,7 @@ const RecordLevelValidationInfo = ({
   validations,
 }) => {
   return (
-    <RecordLevelValidationList data-testid="record-level-validations">
+    <ValidationList data-testid="record-level-validations">
       {validations.map((validation) => {
         const { status, validation_id } = validation
         const isWarning = status === 'warning'
@@ -70,7 +55,7 @@ const RecordLevelValidationInfo = ({
           </li>
         ) : null
       })}
-    </RecordLevelValidationList>
+    </ValidationList>
   )
 }
 
