@@ -5,10 +5,13 @@ const error = {
   collectRecordChoicesUnavailable:
     'Options data for creating a collect record is currently unavailable. Please try again',
   collectRecordDelete: 'Something went wrong. The collect record has not been deleted.',
-  collectRecordFailedValidation: 'Validation is currently unavailable for this record.',
-  collectRecordIgnore: 'Something went wrong. This validation cannot be ignored. Please try again.',
-  collectRecordReset: 'Something went wrong. This validation cannot be reset. Please try again.',
+  collectRecordValidation: 'Validation is currently unavailable for this record.',
+  collectRecordValidationIgnore:
+    'Something went wrong. This validation cannot be ignored. Please try again.',
+  collectRecordValidationReset:
+    'Something went wrong. This validation cannot be reset. Please try again.',
   collectRecordSave: 'Something went wrong. The collect record has not been saved.',
+  collectRecordSubmit: 'Something went wrong. The collect record has not been submitted.',
   collectRecordsUnavailable: 'Collect records data is currently unavailable. Please try again',
   collectRecordUnavailable: 'Collect record data is currently unavailable. Please try again',
   duplicateNewUserAdd: 'User has already been added to project.',
@@ -54,6 +57,7 @@ const error = {
 
 const success = {
   collectRecordSave: 'Collect record saved.',
+  collectRecordSubmit: 'Collect record submitted.',
   collectRecordDelete: 'Collect record deleted.',
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:

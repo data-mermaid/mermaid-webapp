@@ -269,6 +269,31 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    submitFishBelt = function submitFishbelt({ recordId, projectId }) {
+      if (!recordId || !projectId) {
+        throw new Error('submitFishBelt expects record, profileId, and projectId parameters')
+      }
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        return this._authenticatedAxios
+          .post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`, {
+            ids: [recordId],
+            version: '2',
+          })
+          .then((response) => {
+            const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
+
+            if (isApiResponseStatusSuccessful) {
+              return this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId)
+            }
+
+            return Promise.reject(new Error('The API status is unsuccessful'))
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     ignoreRecordLevelValidation = function ignoreRecordLevelValidation({ record, validationId }) {
       if (!record || !validationId) {
         throw new Error('IgnoreRecordLevelValidation requires record and validationId parameters')
