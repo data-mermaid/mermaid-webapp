@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import { IconCheck } from '../icons'
 import {
   hoverState,
   mediaQueryPhoneOnly,
@@ -12,11 +11,6 @@ export const inputStyles = css`
   ${mediaQueryPhoneOnly(css`
     padding: ${theme.spacing.xsmall};
   `)}
-`
-export const ValidationCheckMark = styled(IconCheck)`
-  width: ${theme.typography.defaultIconSize};
-  height: ${theme.typography.defaultIconSize};
-  color: ${theme.color.valid};
 `
 export const CheckRadioWrapper = styled.div`
   display: grid;

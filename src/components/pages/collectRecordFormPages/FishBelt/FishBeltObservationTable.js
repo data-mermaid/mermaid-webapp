@@ -23,7 +23,6 @@ import {
   inputTextareaSelectStyles,
   InputWrapper,
   validationBorderColors,
-  ValidationCheckMark,
 } from '../../../generic/form'
 import { LinkThatLooksLikeButton } from '../../../generic/links'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
@@ -396,7 +395,7 @@ const FishBeltObservationTable = ({
 
     const validationsMarkup = (
       <CellValidation>
-        {isObservationValid ? <ValidationCheckMark aria-label="Passed validation" /> : null}
+        {isObservationValid ? <span aria-label="Passed validation">&nbsp;</span> : null}
         {hasErrorValidation || hasWarningValidation ? (
           <TableValidationList>
             {observationValidationMessages.map((validation) => (

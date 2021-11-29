@@ -8,9 +8,9 @@ const caution = colorHelper('#BB1600')
 const warning = colorHelper('#FEDD2F')
 const ignore = colorHelper('#D6DDE6')
 const white = colorHelper('#fff')
-const valid = colorHelper('#05A269')
 const black = primary.mix(colorHelper('black'), 0.95)
 const textColor = colorHelper('#13124A')
+const valid = textColor
 
 const xxsmall = '0.2rem'
 const xsmall = '0.5rem'
