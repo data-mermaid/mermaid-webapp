@@ -54,10 +54,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-  const [saveButtonState, setSaveButtonState] = useState(possibleCollectButtonGroupStates.saved)
-  const [validateButtonState, setValidateButtonState] = useState(
-    possibleCollectButtonGroupStates.validatable,
-  )
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -69,9 +65,18 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [observationValidationsCloneWithUuids, setObservationValidationsCloneWithUuids] = useState(
     [],
   )
+
   const [observerProfiles, setObserverProfiles] = useState([])
+  const [saveButtonState, setSaveButtonState] = useState(possibleCollectButtonGroupStates.saved)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
+  const [submitButtonState, setSubmitButtonState] = useState(
+    possibleCollectButtonGroupStates.submittable,
+  )
+  const [validateButtonState, setValidateButtonState] = useState(
+    possibleCollectButtonGroupStates.validatable,
+  )
+
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
@@ -212,7 +217,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           clearPersistedUnsavedFormikData()
           clearPersistedUnsavedObservationsData()
           toast.success(language.success.collectRecordDelete)
-          history.push(`${ensureTrailingSlash(currentProjectPath)}collecting`)
+          history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
         })
         .catch(() => {
           toast.error(language.error.collectRecordDelete)
@@ -220,7 +225,20 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         })
     }
   }
+  const handleSubmit = () => {
+    setSubmitButtonState(possibleCollectButtonGroupStates.submitting)
 
+    databaseSwitchboardInstance
+      .submitFishBelt({ recordId, projectId })
+      .then(() => {
+        toast.success(language.success.collectRecordSubmit)
+        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+      })
+      .catch(() => {
+        toast.error(language.error.collectRecordSubmit)
+        setSubmitButtonState(possibleCollectButtonGroupStates.submittable)
+      })
+  }
   const handleValidate = () => {
     setValidateButtonState(possibleCollectButtonGroupStates.validating)
 
@@ -255,7 +273,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         )
       })
       .catch(() => {
-        toast.error(language.error.collectRecordFailedValidation)
+        toast.error(language.error.collectRecordValidation)
         setValidateButtonState(possibleCollectButtonGroupStates.validatable)
       })
   }
@@ -272,7 +290,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordIgnore)
+          toast.warn(language.error.collectRecordValidationIgnore)
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -290,7 +308,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordIgnore)
+          toast.warn(language.error.collectRecordValidationIgnore)
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -324,7 +342,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordIgnore)
+          toast.warn(language.error.collectRecordValidationIgnore)
         })
     },
     [
@@ -363,7 +381,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordReset)
+          toast.warn(language.error.collectRecordValidationReset)
         })
     },
     [
@@ -386,7 +404,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordReset)
+          toast.warn(language.error.collectRecordValidationReset)
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -404,7 +422,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordReset)
+          toast.warn(language.error.collectRecordValidationReset)
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -602,8 +620,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               isNewRecord={isNewRecord}
               saveButtonState={saveButtonState}
               validateButtonState={validateButtonState}
+              submitButtonState={submitButtonState}
               onValidate={handleValidate}
               onSave={handleSave}
+              onSubmit={handleSubmit}
             />
           </ContentPageToolbarWrapper>
         }
