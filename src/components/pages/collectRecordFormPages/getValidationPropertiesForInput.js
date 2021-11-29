@@ -18,7 +18,7 @@ const getValidationsToDisplay = (inputValidations) => {
   const areResets = resets.length
 
   if (areErrors) {
-    return errors
+    return [errors[0]]
   }
   if (!areErrors && areWarnings) {
     return warnings

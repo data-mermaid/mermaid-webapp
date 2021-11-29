@@ -1,9 +1,17 @@
 import React from 'react'
+import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
-import { ValidationMessage } from '../../../generic/form'
-import { Row } from '../../../generic/positioning'
+import { ValidationMessage, ValidationList } from '../../../generic/form'
 import { ButtonSecondary } from '../../../generic/buttons'
+import theme from '../../../../theme'
 
+const InlineValidationButton = styled(ButtonSecondary)`
+  margin: ${theme.spacing.xxsmall};
+  margin-right: 0;
+  white-space: nowrap;
+  padding: ${theme.spacing.small};
+  text-transform: capitalize;
+`
 const RecordLevelValidationInfo = ({
   areValidationsShowing,
   ignoreRecordLevelValidation,
@@ -11,7 +19,7 @@ const RecordLevelValidationInfo = ({
   validations,
 }) => {
   return (
-    <ul data-testid="record-level-validations">
+    <ValidationList data-testid="record-level-validations">
       {validations.map((validation) => {
         const { status, validation_id } = validation
         const isWarning = status === 'warning'
@@ -20,34 +28,34 @@ const RecordLevelValidationInfo = ({
         const isReset = status === 'reset'
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
-          <Row as="li" key={validation_id}>
+          <li key={validation_id}>
             <ValidationMessage validationType={status}>
               {isIgnored ? `Ignored: ${validation.name}` : validation.name}
             </ValidationMessage>
             {isIgnored ? (
-              <ButtonSecondary
+              <InlineValidationButton
                 type="button"
                 onClick={() =>
                   resetRecordLevelValidation({ validationId: validation.validation_id })
                 }
               >
                 Reset validation
-              </ButtonSecondary>
+              </InlineValidationButton>
             ) : null}
             {isWarning || isReset ? (
-              <ButtonSecondary
+              <InlineValidationButton
                 type="button"
                 onClick={() =>
                   ignoreRecordLevelValidation({ validationId: validation.validation_id })
                 }
               >
                 Ignore warning
-              </ButtonSecondary>
+              </InlineValidationButton>
             ) : null}
-          </Row>
+          </li>
         ) : null
       })}
-    </ul>
+    </ValidationList>
   )
 }
 

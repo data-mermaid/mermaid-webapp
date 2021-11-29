@@ -13,7 +13,7 @@ import {
   ButtonPrimary,
   ButtonSecondary,
 } from '../../../generic/buttons'
-import { IconClose, IconLibraryBooks, IconPlus, IconRequired, IconCheck } from '../../../icons'
+import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
 import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
@@ -22,8 +22,7 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import {
   inputTextareaSelectStyles,
   InputWrapper,
-  ValidationMessage,
-  validationRowStyles,
+  validationBorderColors,
 } from '../../../generic/form'
 import { LinkThatLooksLikeButton } from '../../../generic/links'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
@@ -39,9 +38,22 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { Column } from '../../../generic/positioning'
 
 const ObservationTr = styled(Tr)`
-  ${validationRowStyles}
+  border-width: 0 0 0 ${theme.spacing.xsmall};
+  border-style: solid;
+  ${validationBorderColors};
 `
-
+const CellValidation = styled(Td)``
+const CellValidationButton = styled(ButtonSecondary)`
+  font-size: smaller;
+  padding: ${theme.spacing.xxsmall} ${theme.spacing.xsmall};
+  margin: ${theme.spacing.xsmall};
+  text-transform: capitalize;
+`
+const TableValidationList = styled.ul`
+  padding: ${theme.spacing.xsmall};
+  margin: 0;
+  list-style: none; ;
+`
 const FishNameAutocomplete = styled(InputAutocomplete)`
   & input {
     border: none;
@@ -58,12 +70,6 @@ const InputAutocompleteContainer = styled.div`
   padding: 0;
   border: none;
   background: transparent;
-`
-const IconRequiredWrapper = styled.span`
-  color: ${theme.color.cautionHover};
-  svg {
-    width: ${theme.typography.smallIconSize};
-  }
 `
 const ObservationsSummaryStats = styled(Table)`
   width: 25%;
@@ -90,33 +96,30 @@ const StyledLinkThatLooksLikeButtonToReference = styled(LinkThatLooksLikeButton)
 const StyledOverflowWrapper = styled(TableOverflowWrapper)`
   border: solid 1px ${theme.color.secondaryColor};
   height: 100%;
-  overflow: visible;
+  overflow-y: visible;
 `
 const StyledColgroup = styled('colgroup')`
   col {
-    &:nth-child(1) {
-      // count
-      width: 6rem;
+    &.number {
+      width: 5rem;
     }
-    &:nth-child(2) {
-      // Fish name
+    &.fishName {
       width: auto;
     }
-    &:nth-child(3) {
-      // Size
+    &.size {
       width: 15%;
     }
-    &:nth-child(4) {
-      // Count
+    &.count {
+      width: 10%;
+    }
+    &.biomass {
       width: 10rem;
     }
-    &:nth-child(5) {
-      // Biomass
-      width: 15%;
+    &.validation {
+      width: auto;
     }
-    &:nth-child(6) {
-      // remove
-      width: 6rem;
+    &.remove {
+      width: 5rem;
     }
   }
 `
@@ -391,33 +394,29 @@ const FishBeltObservationTable = ({
     const hasIgnoredValidation = validationType === 'ignore'
 
     const validationsMarkup = (
-      <Td>
-        {isObservationValid ? <IconCheck aria-label="Passed validation" /> : null}
+      <CellValidation>
+        {isObservationValid ? <span aria-label="Passed validation">&nbsp;</span> : null}
         {hasErrorValidation || hasWarningValidation ? (
-          <ul>
+          <TableValidationList>
             {observationValidationMessages.map((validation) => (
-              <li key={validation.id}>
-                <ValidationMessage validationType={validationType}>
-                  {validation.message}
-                </ValidationMessage>
-              </li>
+              <li key={validation.id}>{validation.message}</li>
             ))}
-          </ul>
+          </TableValidationList>
         ) : null}
         {hasWarningValidation ? (
-          <ButtonSecondary type="button" onClick={handleIgnoreObservationValidations}>
+          <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
             Ignore all warnings
-          </ButtonSecondary>
+          </CellValidationButton>
         ) : null}
         {hasIgnoredValidation ? (
           <Column>
-            <ValidationMessage validationType={validationType}>Ignored</ValidationMessage>
-            <ButtonSecondary type="button" onClick={handleResetObservationValidations}>
+            Ignored
+            <CellValidationButton type="button" onClick={handleResetObservationValidations}>
               Reset validations
-            </ButtonSecondary>
+            </CellValidationButton>
           </Column>
         ) : null}
-      </Td>
+      </CellValidation>
     )
 
     return (
@@ -505,37 +504,32 @@ const FishBeltObservationTable = ({
         <StyledOverflowWrapper>
           <StyledFishBeltObservationTable aria-labelledby="table-label">
             <StyledColgroup>
-              <col />
-              <col />
-              <col />
-              <col />
-              <col />
-              <col />
+              <col className="number" />
+              <col className="fishName" />
+              <col className="size" />
+              <col className="count" />
+              <col className="biomass" />
+              {areValidationsShowing ? <col className="validations" /> : null}
+              <col className="remove" />
             </StyledColgroup>
             <thead>
               <Tr>
                 <Th> </Th>
                 <Th align="left" id="fish-name-label">
                   Fish Name
-                  <IconRequiredWrapper>
-                    <IconRequired />
-                  </IconRequiredWrapper>
                 </Th>
                 <Th align="right" id="fish-size-label">
                   Size
-                  <IconRequiredWrapper>
-                    <IconRequired />
-                  </IconRequiredWrapper>
                 </Th>
                 <Th align="right" id="fish-count-label">
                   Count
-                  <IconRequiredWrapper>
-                    <IconRequired />
-                  </IconRequiredWrapper>
                 </Th>
-                <Th align="right">Biomass (kg/ha)</Th>
-                {areValidationsShowing ? <Th>Validations</Th> : null}
-
+                <Th align="right">
+                  Biomass
+                  <br />
+                  <small>(kg/ha)</small>
+                </Th>
+                {areValidationsShowing ? <Th align="center">Validations</Th> : null}
                 <Th> </Th>
               </Tr>
             </thead>
