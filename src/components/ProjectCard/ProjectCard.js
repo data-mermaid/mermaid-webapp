@@ -100,13 +100,9 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
             <span>Copy</span>
           </ProjectCardButtonSecondary>
         </OfflineHide> */}
-        <CheckBoxLabel
-          htmlFor="offline-toggle"
-          onClick={stopEventPropagation}
-          disabled={!isAppOnline}
-        >
+        <CheckBoxLabel htmlFor={project.id} onClick={stopEventPropagation} disabled={!isAppOnline}>
           <input
-            id="offline-toggle"
+            id={project.id}
             type="checkbox"
             checked={isOfflineReady}
             onChange={handleProjectOfflineReadyClick}
