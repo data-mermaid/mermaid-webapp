@@ -372,7 +372,7 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   expect(
     within(observationsTable).queryByText('observation validation with ok status shoulnt show'),
   ).not.toBeInTheDocument()
-})
+}, 40000)
 test('Validating an empty collect record, and then editing an input with errors shows the errors until the save button is pressed. Validations show when the validation button is clicked again.', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 

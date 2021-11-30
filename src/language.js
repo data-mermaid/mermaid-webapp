@@ -36,6 +36,7 @@ const error = {
   siteSave: 'Something went wrong. The site has not been saved.',
   submittedRecordsUnavailable: 'Submitted records data is currently unavailable. Please try again',
   submittedRecordUnavailable: 'Submitted record data is currently unavailable. Please try again',
+  submittedRecordMoveToCollect: 'Something went wrong. The submitted record has not been made editable',
   userProfileUnavailable: 'The user profile is unavailable.',
   userRecordsUnavailable: 'User records data is currently unavailable. Please try again',
 
@@ -69,6 +70,7 @@ const success = {
   newUserAdd: 'New user added',
   newPendingUserAdd: 'Sign-up email sent. New user added as pending.',
   siteSave: 'Site saved.',
+  submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
 
 const deleteCollectRecord = {

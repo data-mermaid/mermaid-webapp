@@ -523,7 +523,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterIgnore)
-})
+}, 35000)
 
 test('user can reset dismissed non-observation input warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
