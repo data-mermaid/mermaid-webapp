@@ -46,15 +46,15 @@ const ToolbarRowWrapper = styled('div')`
 
 const ProfileImage = styled.div`
   border-radius: 50%;
-  ${props =>
+  ${(props) =>
     props.img &&
     css`
       background-image: url(${props.img});
       background-position: center center;
       background-size: ${props.theme.typography.xLargeIconSize};
     `}
-    width: ${props => props.theme.typography.xLargeIconSize};
-    height: ${props => props.theme.typography.xLargeIconSize};
+  width: ${(props) => props.theme.typography.xLargeIconSize};
+  height: ${(props) => props.theme.typography.xLargeIconSize};
 `
 
 const NameCellStyle = styled('div')`
@@ -62,8 +62,8 @@ const NameCellStyle = styled('div')`
   white-space: nowrap;
   align-items: center;
   svg {
-    width: ${props => props.theme.typography.xLargeIconSize};
-    height: ${props => props.theme.typography.xLargeIconSize};
+    width: ${(props) => props.theme.typography.xLargeIconSize};
+    height: ${(props) => props.theme.typography.xLargeIconSize};
   }
 `
 const UserTableTd = styled(Td)`
@@ -130,7 +130,7 @@ const Users = ({ currentUser }) => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance
         .getProjectProfiles(projectId)
-        .then(projectProfilesResponse => {
+        .then((projectProfilesResponse) => {
           setObserverProfiles(projectProfilesResponse)
         })
         .catch(() => {
@@ -140,7 +140,7 @@ const Users = ({ currentUser }) => {
   }, [databaseSwitchboardInstance, projectId])
 
   const addNewUser = () => {
-    databaseSwitchboardInstance.getUserProfile(newUserProfile).then(res => {
+    databaseSwitchboardInstance.getUserProfile(newUserProfile).then((res) => {
       const doesUserHaveMermaidProfile = res.data.count === 0
 
       if (doesUserHaveMermaidProfile) {
@@ -182,9 +182,9 @@ const Users = ({ currentUser }) => {
 
   const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
 
-  const handleNewUserProfileAdd = event => setNewUserProfile(event.target.value)
+  const handleNewUserProfileAdd = (event) => setNewUserProfile(event.target.value)
 
-  const handleTransferSampleUnitChange = userId => {
+  const handleTransferSampleUnitChange = (userId) => {
     setToUserProfileId(userId)
   }
 
@@ -193,7 +193,7 @@ const Users = ({ currentUser }) => {
 
     databaseSwitchboardInstance
       .transferSampleUnits(projectId, fromUserProfileId, toUserProfileId)
-      .then(resp => {
+      .then((resp) => {
         const sampleUnitMsg = pluralize(
           fromUser.num_active_sample_units,
           'sample unit',
@@ -218,7 +218,7 @@ const Users = ({ currentUser }) => {
     setShowRemoveUserWithActiveSampleUnitsWarning(false)
   }
 
-  const openRemoveUserModal = user => {
+  const openRemoveUserModal = (user) => {
     const { profile, profile_name, email, num_active_sample_units } = user
 
     if (num_active_sample_units === 0) {
@@ -281,32 +281,9 @@ const Users = ({ currentUser }) => {
   }, [])
 
   const tableCellData = useMemo(() => {
-    const getObserverRole = id => observerProfiles.find(profile => profile.id === id).role
+    const getObserverRole = (id) => observerProfiles.find((profile) => profile.id === id).role
 
-    const observerRoleRadioCell = (userId, value) => {
-      return (
-        <TableRadioLabel htmlFor={`observer-${userId}-${value}`}>
-          <input
-            type="radio"
-            value={value}
-            name={userId}
-            id={`observer-${userId}-${value}`}
-            checked={getObserverRole(userId) === value}
-            onChange={event => {
-              const observers = [...observerProfiles]
-
-              const foundObserver = observers.find(({ id }) => id === userId)
-
-              foundObserver.role = parseInt(event.target.value, 10)
-
-              setObserverProfiles(observers)
-            }}
-          />
-        </TableRadioLabel>
-      )
-    }
-
-    return observerProfiles.map(userInfo => {
+    return observerProfiles.map((userInfo) => {
       const {
         id: userId,
         profile_name,
@@ -316,6 +293,18 @@ const Users = ({ currentUser }) => {
         profile,
       } = userInfo
 
+      const handleRoleChange = (event) => {
+        const observerToEdit = observerProfiles.find(({ id }) => id === userId)
+
+        observerToEdit.role = parseInt(event.target.value, 10)
+
+        const updatedObserverProfiles = observerProfiles.map((observer) =>
+          observer.id === observerToEdit.id ? observerToEdit : observer,
+        )
+
+        setObserverProfiles(updatedObserverProfiles)
+      }
+
       return {
         name: (
           <NameCellStyle>
@@ -323,9 +312,42 @@ const Users = ({ currentUser }) => {
           </NameCellStyle>
         ),
         email,
-        admin: observerRoleRadioCell(userId, 90),
-        collector: observerRoleRadioCell(userId, 50),
-        readonly: observerRoleRadioCell(userId, 10),
+        admin: (
+          <TableRadioLabel htmlFor={`admin-${userId}`}>
+            <input
+              type="radio"
+              value={90}
+              name={userId}
+              id={`admin-${userId}`}
+              checked={getObserverRole(userId) === 90}
+              onChange={handleRoleChange}
+            />
+          </TableRadioLabel>
+        ),
+        collector: (
+          <TableRadioLabel htmlFor={`admin-${userId}`}>
+            <input
+              type="radio"
+              value={50}
+              name={userId}
+              id={`collector-${userId}`}
+              checked={getObserverRole(userId) === 50}
+              onChange={handleRoleChange}
+            />
+          </TableRadioLabel>
+        ),
+        readonly: (
+          <TableRadioLabel htmlFor={`admin-${userId}`}>
+            <input
+              type="radio"
+              value={10}
+              name={userId}
+              id={`readonly-${userId}`}
+              checked={getObserverRole(userId) === 10}
+              onChange={handleRoleChange}
+            />
+          </TableRadioLabel>
+        ),
         active: num_active_sample_units,
         transfer: (
           <ButtonSecondary
@@ -390,17 +412,17 @@ const Users = ({ currentUser }) => {
     usePagination,
   )
 
-  const handleRowsNumberChange = e => setPageSize(Number(e.target.value))
-  const handleGlobalFilterChange = value => setGlobalFilter(value)
+  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const table = (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map(headerGroup => (
+            {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
+                {headerGroup.headers.map((column) => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     isSorted={column.isSorted}
@@ -413,12 +435,12 @@ const Users = ({ currentUser }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map(row => {
+            {page.map((row) => {
               prepareRow(row)
 
               return (
                 <Tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
+                  {row.cells.map((cell) => {
                     return (
                       <UserTableTd {...cell.getCellProps()} align={cell.column.align}>
                         {cell.render('Cell')}
