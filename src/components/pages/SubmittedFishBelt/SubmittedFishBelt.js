@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 
 import { ButtonSecondary } from '../../generic/buttons'
@@ -17,6 +17,8 @@ import RecordFormTitle from '../../RecordFormTitle'
 import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
 import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
 import useIsMounted from '../../../library/useIsMounted'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -24,12 +26,15 @@ const SubmittedFishBelt = () => {
   const [fishNameOptions, setFishNameOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
   const [submittedRecord, setSubmittedRecord] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { recordId, projectId } = useParams()
+  const currentProjectPath = useCurrentProjectPath()
+  const history = useHistory()
   const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
@@ -90,6 +95,20 @@ const SubmittedFishBelt = () => {
     }
   }, [databaseSwitchboardInstance, isMounted, recordId, projectId, isAppOnline])
 
+  const handleMoveToCollect = () => {
+    setIsMoveToButtonDisabled(true)
+    databaseSwitchboardInstance
+      .moveToCollect({ projectId, recordId })
+      .then(() => {
+        toast.success(language.success.submittedRecordMoveToCollect)
+        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+      })
+      .catch(() => {
+        toast.error(language.error.submittedRecordMoveToCollect)
+        setIsMoveToButtonDisabled(false)
+      })
+  }
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -127,8 +146,8 @@ const SubmittedFishBelt = () => {
               sites={sites}
             />
             <RowSpaceBetween>
-              <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>{' '}
-              <ButtonSecondary>
+              <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
+              <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
                 <IconPen />
                 Edit Sample Unit - move to collect
               </ButtonSecondary>

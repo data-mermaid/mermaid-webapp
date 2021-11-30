@@ -64,6 +64,26 @@ const SubmittedRecordsMixin = (Base) =>
           })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    moveToCollect = function moveToCollect({ projectId, recordId }) {
+      if (!projectId || !recordId) {
+        Promise.reject(
+          new Error(
+            'The function, moveToCollect requires an object parameter with projectId and recordId properties',
+          ),
+        )
+      }
+
+      return this._isOnlineAuthenticatedAndReady
+        ? this._authenticatedAxios
+            .put(
+              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${recordId}/edit/`,
+            )
+            .then(() =>
+              this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId),
+            )
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default SubmittedRecordsMixin
