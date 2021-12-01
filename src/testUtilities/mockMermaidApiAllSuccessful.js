@@ -54,6 +54,13 @@ const mockMermaidApiAllSuccessful = setupServer(
 
     return res(ctx.json(response))
   }),
+
+  rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
+    return res(ctx.status(200))
+  }),
+  rest.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, (req, res, ctx) => {
+    return res(ctx.status(200))
+  }),
 )
 
 mockMermaidApiAllSuccessful.listen({

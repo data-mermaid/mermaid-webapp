@@ -45,23 +45,32 @@ const Projects = ({ apiSyncInstance }) => {
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
 
-  const getIsProjectOffline = projectId =>
-    !!offlineReadyProjectIds.find(offlineProject => offlineProject.id === projectId)
+  const getIsProjectOffline = (projectId) =>
+    !!offlineReadyProjectIds.find((offlineProject) => offlineProject.id === projectId)
 
-  const offlineReadyProjects = projects.filter(project =>
+  const offlineReadyProjects = projects.filter((project) =>
     getObjectById(offlineReadyProjectIds, project.id),
   )
 
-  const getProjectCardsList = projectsToUse =>
-    projectsToUse.map(project => (
-      <ProjectCard
-        role="listitem"
-        project={project}
-        key={project.id}
-        apiSyncInstance={apiSyncInstance}
-        isOfflineReady={getIsProjectOffline(project.id)}
-      />
-    ))
+  const projectCardsListOnline = projects.map((project) => (
+    <ProjectCard
+      role="listitem"
+      project={{ ...project }}
+      key={project.id}
+      apiSyncInstance={apiSyncInstance}
+      isOfflineReady={getIsProjectOffline(project.id)}
+    />
+  ))
+
+  const projectCardsListOffline = offlineReadyProjects.map((project) => (
+    <ProjectCard
+      role="listitem"
+      project={project}
+      key={project.id}
+      apiSyncInstance={apiSyncInstance}
+      isOfflineReady={getIsProjectOffline(project.id)}
+    />
+  ))
 
   return isLoading ? (
     <LoadingIndicator aria-label="projects list loading indicator" />
@@ -69,9 +78,7 @@ const Projects = ({ apiSyncInstance }) => {
     <HomePageLayout
       topRow={<ProjectToolBarSection />}
       bottomRow={
-        <div role="list">
-          {isAppOnline ? getProjectCardsList(projects) : getProjectCardsList(offlineReadyProjects)}
-        </div>
+        <div role="list">{isAppOnline ? projectCardsListOnline : projectCardsListOffline}</div>
       }
     />
   )

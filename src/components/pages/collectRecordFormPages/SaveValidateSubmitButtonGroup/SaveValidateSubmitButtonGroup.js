@@ -19,8 +19,10 @@ const SaveValidateSubmitButtonWrapper = styled('div')`
 const SaveValidateSubmitButtonGroup = ({
   isNewRecord,
   onSave,
+  onSubmit,
   onValidate,
   saveButtonState,
+  submitButtonState,
   validateButtonState,
 }) => {
   const getSaveButtonText = () => {
@@ -48,6 +50,9 @@ const SaveValidateSubmitButtonGroup = ({
     return 'Validate'
   }
 
+  const getSubmitButtonText = () =>
+    submitButtonState === possibleCollectButtonGroupStates.submitting ? 'Submitting' : 'Submit'
+
   const isSaveDisabled =
     saveButtonState === possibleCollectButtonGroupStates.saved ||
     saveButtonState === possibleCollectButtonGroupStates.saving ||
@@ -60,8 +65,7 @@ const SaveValidateSubmitButtonGroup = ({
     validateButtonState === possibleCollectButtonGroupStates.validating
 
   const isSubmitDisabled =
-    validateButtonState === possibleCollectButtonGroupStates.validating ||
-    validateButtonState === possibleCollectButtonGroupStates.validatable ||
+    submitButtonState === possibleCollectButtonGroupStates.submitting ||
     saveButtonState === possibleCollectButtonGroupStates.unsaved ||
     saveButtonState === possibleCollectButtonGroupStates.saving
 
@@ -80,9 +84,9 @@ const SaveValidateSubmitButtonGroup = ({
   )
 
   const submitButton = (
-    <ButtonCallout disabled={isSubmitDisabled}>
+    <ButtonCallout disabled={isSubmitDisabled} onClick={onSubmit}>
       <IconUpload />
-      Submit
+      {getSubmitButtonText()}
     </ButtonCallout>
   )
 
@@ -102,8 +106,10 @@ const SaveValidateSubmitButtonGroup = ({
 SaveValidateSubmitButtonGroup.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
   onSave: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   onValidate: PropTypes.func.isRequired,
   saveButtonState: PropTypes.string.isRequired,
+  submitButtonState: PropTypes.string.isRequired,
   validateButtonState: PropTypes.string.isRequired,
 }
 

@@ -1,4 +1,4 @@
-const getSiteInitialValues = siteRecord => {
+const getSiteInitialValues = (siteRecord) => {
   return {
     name: siteRecord?.name ?? '',
     country: siteRecord?.country ?? '',

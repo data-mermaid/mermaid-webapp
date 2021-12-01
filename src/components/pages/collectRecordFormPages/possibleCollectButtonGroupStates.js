@@ -1,8 +1,10 @@
 export const possibleCollectButtonGroupStates = {
-  unsaved: 'unsaved',
-  saving: 'saving',
   saved: 'saved',
-  validating: 'validating',
-  validated: 'validated',
+  saving: 'saving',
+  submittable: 'submitable',
+  submitting: 'submitting',
+  unsaved: 'unsaved',
   validatable: 'validatable',
+  validated: 'validated',
+  validating: 'validating',
 }

@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event'
 import { screen, renderAuthenticatedOnline } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
-import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltValidationsObject'
@@ -15,8 +14,6 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 describe('Online', () => {
   test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
-
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -47,8 +44,6 @@ describe('Online', () => {
   test('Validate fishbelt: fails to validate, shows button able to run validation again.', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-
     renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
       dexieInstance,
@@ -57,10 +52,6 @@ describe('Online', () => {
     userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
 
     mockMermaidApiAllSuccessful.use(
-      rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-        return res(ctx.status(200))
-      }),
-
       // append the validated data on the pull response, because that is what the UI uses to update itself
       rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
         const collectRecordWithValidation = {
@@ -93,23 +84,15 @@ describe('Online', () => {
     ).not.toBeInTheDocument()
   })
 
-  test('Validate fishbelt: validation passes, shows validate button disabled with proper text, submit is enabled.', async () => {
+  test('Validate & submit fishbelt: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
-
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
     renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
       dexieInstance,
     })
 
-    userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
-
     mockMermaidApiAllSuccessful.use(
-      rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
-        return res(ctx.status(200))
-      }),
-
       // append the validated data on the pull response, because that is what the UI uses to update itself
       rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
         const collectRecordWithValidation = {
@@ -134,6 +117,8 @@ describe('Online', () => {
       }),
     )
 
+    userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+
     expect(await screen.findByText('Validating', { selector: 'button' }))
 
     expect(await screen.findByText('Validated', { selector: 'button' }))
@@ -142,5 +127,9 @@ describe('Online', () => {
     ).not.toBeInTheDocument()
 
     expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
+
+    userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
+
+    expect(await screen.findByText('Submitting', { selector: 'button' })).toBeDisabled()
   })
 })
