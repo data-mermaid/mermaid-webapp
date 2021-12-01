@@ -45,6 +45,7 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
   )
 
   userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+  expect(await screen.findByText('Validated', { selector: 'button' }))
 
   userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
 
