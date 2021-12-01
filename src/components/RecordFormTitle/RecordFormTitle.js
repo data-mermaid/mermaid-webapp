@@ -17,6 +17,7 @@ const TitleContainer = styled('div')`
 `
 const ProjectTooltip = styled(TooltipWithText)`
   ${TooltipPopup} {
+    width: auto;
     min-width: max-content;
     text-align: center;
   }

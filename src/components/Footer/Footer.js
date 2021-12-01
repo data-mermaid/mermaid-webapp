@@ -9,6 +9,7 @@ import OfflineHide from '../generic/OfflineHide'
 
 const StyledFooter = styled('footer')`
   display: grid;
+  justify-items: start;
   grid-template-columns: 1fr auto auto;
   background-color: ${theme.color.footerColor};
   ${mediaQueryPhoneOnly(css`

@@ -105,6 +105,7 @@ const ManagementRegime = () => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
+      isToolbarSticky={true}
       content={
         <>
           <form id="management-regime-form" onSubmit={formik.handleSubmit}>

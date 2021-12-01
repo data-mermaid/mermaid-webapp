@@ -124,6 +124,7 @@ const Site = () => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
+      isToolbarSticky={true}
       content={
         <>
           <form id="site-form" onSubmit={formik.handleSubmit}>

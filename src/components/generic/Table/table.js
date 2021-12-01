@@ -18,15 +18,15 @@ export const TableNavigation = styled.div`
   }
 `
 export const TableOverflowWrapper = styled.div`
-  max-width: calc(100vw - ${theme.spacing.sideNavWidthDesktop} - 10px); 
-  // 10px is the approx scrollbar width this is to prevent 
+  max-width: calc(100vw - ${theme.spacing.sideNavWidthDesktop} - 20px);
+  // 20px is the approx scrollbar width this is to prevent
   // a horziontal scrollbar at the bottom of the page
   // and to keep the toolbar sticky when needed.
   ${mediaQueryTabletLandscapeOnly(css`
-    max-width: calc(100vw - ${theme.spacing.sideNavWidthTabletLandscapeOnly});
+    max-width: calc(100vw - ${theme.spacing.sideNavWidthTabletLandscapeOnly} - 20px);
   `)}
   ${mediaQueryPhoneOnly(css`
-    max-width: calc(100vw - ${theme.spacing.sideNavWidthPhoneOnly});
+    max-width: calc(100vw - ${theme.spacing.sideNavWidthPhoneOnly} - 20px);
   `)}
   overflow-y: auto;
   & + button,
