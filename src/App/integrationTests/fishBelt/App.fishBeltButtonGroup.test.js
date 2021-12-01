@@ -11,125 +11,124 @@ import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltVa
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-describe('Online', () => {
-  test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
-    })
-
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
-
-    expect(screen.getByText('Save', { selector: 'button' }))
-
-    expect(screen.getByText('Validate', { selector: 'button' })).toBeDisabled()
-
-    userEvent.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
-
-    expect(await screen.findByText('Saving', { selector: 'button' }))
-
-    expect(await screen.findByText('Collect record saved.'))
-
-    expect(await screen.findByText('Saved', { selector: 'button' }))
-    expect(screen.getByText('Validate', { selector: 'button' })).toBeEnabled()
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexieInstance,
   })
 
-  test('Validate fishbelt: fails to validate, shows button able to run validation again.', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+  userEvent.clear(await screen.findByLabelText('Depth'))
+  userEvent.type(screen.getByLabelText('Depth'), '45')
 
-    renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
-      dexieInstance,
-    })
+  expect(screen.getByText('Save', { selector: 'button' }))
 
-    userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+  expect(screen.getByText('Validate', { selector: 'button' })).toBeDisabled()
 
-    mockMermaidApiAllSuccessful.use(
-      // append the validated data on the pull response, because that is what the UI uses to update itself
-      rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-        const collectRecordWithValidation = {
-          ...mockMermaidData.collect_records[0],
-          validations: mockFishbeltValidationsObject, // fails validation
-        }
+  userEvent.click(
+    screen.getByText('Save', {
+      selector: 'button',
+    }),
+  )
 
-        const response = {
-          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-          choices: { updates: mockMermaidData.choices },
-          collect_records: { updates: [collectRecordWithValidation] },
-          fish_families: { updates: mockMermaidData.fish_families },
-          fish_genera: { updates: mockMermaidData.fish_genera },
-          fish_species: { updates: mockMermaidData.fish_species },
-          project_managements: { updates: mockMermaidData.project_managements },
-          project_profiles: { updates: mockMermaidData.project_profiles },
-          project_sites: { updates: mockMermaidData.project_sites },
-          projects: { updates: mockMermaidData.projects },
-        }
+  expect(await screen.findByText('Saving', { selector: 'button' }))
 
-        return res(ctx.json(response))
-      }),
-    )
+  expect(await screen.findByText('Collect record saved.'))
 
-    expect(await screen.findByText('Validating', { selector: 'button' }))
+  expect(await screen.findByText('Saved', { selector: 'button' }))
+  expect(screen.getByText('Validate', { selector: 'button' })).toBeEnabled()
+  expect(screen.getByText('Submit', { selector: 'button' })).toBeDisabled()
+})
 
-    expect(await screen.findByText('Validate', { selector: 'button' }))
-    expect(
-      screen.queryByText('Validation is currently unavailable for this record.'),
-    ).not.toBeInTheDocument()
+test('Validate fishbelt: fails to validate, shows button able to run validation again.', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/1'],
+    dexieInstance,
   })
 
-  test('Validate & submit fishbelt: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+  userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
 
-    renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
-      dexieInstance,
-    })
+  mockMermaidApiAllSuccessful.use(
+    // append the validated data on the pull response, because that is what the UI uses to update itself
+    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+      const collectRecordWithValidation = {
+        ...mockMermaidData.collect_records[0],
+        validations: mockFishbeltValidationsObject, // fails validation
+      }
 
-    mockMermaidApiAllSuccessful.use(
-      // append the validated data on the pull response, because that is what the UI uses to update itself
-      rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-        const collectRecordWithValidation = {
-          ...mockMermaidData.collect_records[0],
-          validations: { status: 'ok' },
-        }
+      const response = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidation] },
+        fish_families: { updates: mockMermaidData.fish_families },
+        fish_genera: { updates: mockMermaidData.fish_genera },
+        fish_species: { updates: mockMermaidData.fish_species },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+      }
 
-        const response = {
-          benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-          choices: { updates: mockMermaidData.choices },
-          collect_records: { updates: [collectRecordWithValidation] },
-          fish_families: { updates: mockMermaidData.fish_families },
-          fish_genera: { updates: mockMermaidData.fish_genera },
-          fish_species: { updates: mockMermaidData.fish_species },
-          project_managements: { updates: mockMermaidData.project_managements },
-          project_profiles: { updates: mockMermaidData.project_profiles },
-          project_sites: { updates: mockMermaidData.project_sites },
-          projects: { updates: mockMermaidData.projects },
-        }
+      return res(ctx.json(response))
+    }),
+  )
 
-        return res(ctx.json(response))
-      }),
-    )
+  expect(await screen.findByText('Validating', { selector: 'button' }))
 
-    userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+  expect(await screen.findByText('Validate', { selector: 'button' }))
+  expect(
+    screen.queryByText('Validation is currently unavailable for this record.'),
+  ).not.toBeInTheDocument()
+})
 
-    expect(await screen.findByText('Validating', { selector: 'button' }))
+test('Validate & submit fishbelt: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
 
-    expect(await screen.findByText('Validated', { selector: 'button' }))
-    expect(
-      screen.queryByText('Validation is currently unavailable for this record.'),
-    ).not.toBeInTheDocument()
-
-    expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
-
-    userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
-
-    expect(await screen.findByText('Submitting', { selector: 'button' })).toBeDisabled()
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/1'],
+    dexieInstance,
   })
+
+  mockMermaidApiAllSuccessful.use(
+    // append the validated data on the pull response, because that is what the UI uses to update itself
+    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+      const collectRecordWithValidation = {
+        ...mockMermaidData.collect_records[0],
+        validations: { status: 'ok' },
+      }
+
+      const response = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidation] },
+        fish_families: { updates: mockMermaidData.fish_families },
+        fish_genera: { updates: mockMermaidData.fish_genera },
+        fish_species: { updates: mockMermaidData.fish_species },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+      }
+
+      return res(ctx.json(response))
+    }),
+  )
+
+  userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
+
+  expect(await screen.findByText('Validating', { selector: 'button' }))
+
+  expect(await screen.findByText('Validated', { selector: 'button' }))
+  expect(
+    screen.queryByText('Validation is currently unavailable for this record.'),
+  ).not.toBeInTheDocument()
+
+  expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
+
+  userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
+
+  expect(await screen.findByText('Submitting', { selector: 'button' })).toBeDisabled()
 })

@@ -66,6 +66,8 @@ const SaveValidateSubmitButtonGroup = ({
 
   const isSubmitDisabled =
     submitButtonState === possibleCollectButtonGroupStates.submitting ||
+    validateButtonState === possibleCollectButtonGroupStates.validatable ||
+    validateButtonState === possibleCollectButtonGroupStates.validating ||
     saveButtonState === possibleCollectButtonGroupStates.unsaved ||
     saveButtonState === possibleCollectButtonGroupStates.saving
 
