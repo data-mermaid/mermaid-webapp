@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Downshift from 'downshift'
@@ -38,8 +38,9 @@ const InputAutocomplete = ({
   onKeyDown,
   ...restOfProps
 }) => {
+  const [areMatchingMenuItems, setAreMatchingMenuItems] = useState(true)
   const optionMatchingValueProp = useMemo(
-    () => options.find(option => option.value === value) ?? '',
+    () => options.find((option) => option.value === value) ?? '',
     [options, value],
   )
 
@@ -51,66 +52,74 @@ const InputAutocomplete = ({
     setSelectedValue(optionMatchingValueProp)
   }, [optionMatchingValueProp])
 
-  const getMatchingMenuItems = inputValue => {
-    const matchingOptions = inputValue
-      ? matchSorter(options, inputValue, {
-          keys: ['label'],
-        })
-      : options
+  const handleStateChange = useCallback(
+    (changes) => {
+      const { selectedItem, inputValue } = changes
 
-    return matchingOptions
-  }
+      const shouldMenuBeOpen = inputValue?.length >= 3 && inputValue !== selectedValue.label
 
-  const handleStateChange = changes => {
-    const { selectedItem, inputValue } = changes
+      if (selectedItem) {
+        onChange(selectedItem)
+        setIsMenuOpen(false)
+      }
+      if (!selectedItem && inputValue) {
+        setIsMenuOpen(shouldMenuBeOpen)
+      }
 
-    const shouldMenuBeOpen = inputValue?.length >= 3 && inputValue !== selectedValue.label
+      if (inputValue === '') {
+        setIsMenuOpen(false)
+      }
+    },
+    [selectedValue.label, onChange],
+  )
 
-    if (selectedItem) {
-      onChange(selectedItem)
-      setIsMenuOpen(false)
-    }
-    if (!selectedItem && inputValue) {
-      setIsMenuOpen(shouldMenuBeOpen)
-    }
+  const getMenuContents = useCallback(
+    (downshiftObject) => {
+      const { inputValue, getItemProps, highlightedIndex, selectedItem } = downshiftObject
 
-    if (inputValue === '') {
-      setIsMenuOpen(false)
-    }
-  }
+      const getMatchingMenuItems = (valueForMatching) => {
+        const matchingOptions = valueForMatching
+          ? matchSorter(options, valueForMatching, {
+              keys: ['label'],
+            })
+          : options
 
-  const getMenuContents = downshiftObject => {
-    const { inputValue, getItemProps, highlightedIndex, selectedItem } = downshiftObject
+        return matchingOptions
+      }
 
-    const matchingMenuItems = getMatchingMenuItems(inputValue)
+      const matchingMenuItems = getMatchingMenuItems(inputValue)
 
-    return matchingMenuItems.length
-      ? matchingMenuItems.map((item, index) => {
-          return (
-            <Item
-              key={item.value}
-              {...getItemProps({
-                item,
-                index,
-                isActive: highlightedIndex === index,
-                isSelected: selectedItem.label === item.label,
-              })}
-            >
-              {item.label}
-            </Item>
-          )
-        })
-      : null
-  }
+      setAreMatchingMenuItems(matchingMenuItems.length)
+
+      return matchingMenuItems.length
+        ? matchingMenuItems.map((item, index) => {
+            return (
+              <Item
+                key={item.value}
+                {...getItemProps({
+                  item,
+                  index,
+                  isActive: highlightedIndex === index,
+                  isSelected: selectedItem.label === item.label,
+                })}
+              >
+                {item.label}
+              </Item>
+            )
+          })
+        : null
+    },
+    [options],
+  )
 
   return (
     <Downshift
       selectedItem={selectedValue}
       onStateChange={handleStateChange}
-      itemToString={item => (item ? item.label : '')}
+      itemToString={(item) => (item ? item.label : '')}
     >
-      {downshiftObject => {
-        const { getRootProps, getInputProps, getMenuProps, inputValue } = downshiftObject
+      {(downshiftObject) => {
+        const { getRootProps, getInputProps, getMenuProps } = downshiftObject
 
         return (
           <AutoCompleteResultsWrapper
@@ -131,7 +140,7 @@ const InputAutocomplete = ({
             <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
               {isMenuOpen && getMenuContents(downshiftObject)}
             </Menu>
-            {getMatchingMenuItems(inputValue).length === 0 && (
+            {!areMatchingMenuItems && (
               <NoResultSection>
                 {noResultsDisplay || language.autocomplete.noResultsDefault}
               </NoResultSection>

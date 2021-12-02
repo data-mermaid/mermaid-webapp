@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
-  choicesPropType,
   fishBeltPropType,
   managementRegimePropType,
   sitePropType,
@@ -195,7 +194,6 @@ const SampleInfoInputs = ({
 
 SampleInfoInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
-  choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
   handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
