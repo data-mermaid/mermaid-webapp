@@ -96,10 +96,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
 
-  const openNewFishNameModal = (observationId) => {
+  const openNewFishNameModal = useCallback((observationId) => {
     setObservationToAddSpeciesTo(observationId)
     setIsNewFishNameModalOpen(true)
-  }
+  }, [])
   const closeNewFishNameModal = () => {
     setIsNewFishNameModalOpen(false)
   }

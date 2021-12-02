@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import {
@@ -203,12 +203,6 @@ const FishBeltObservationTable = ({
     }
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
-  const getObservationValidations = (observationId) => {
-    return observationValidationsCloneWithUuids.filter(
-      (validation) => validation.observationUiId === observationId,
-    )[0]
-  }
-
   const _loadObservationsFromApiIntoState = useEffect(() => {
     if (!haveApiObservationsBeenLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
@@ -239,263 +233,295 @@ const FishBeltObservationTable = ({
     observationsDispatch,
   ])
 
-  const handleDeleteObservation = (observationId) => {
-    setAreObservationsInputsDirty(true)
-    observationsDispatch({ type: 'deleteObservation', payload: observationId })
-  }
-
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setIsAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
-  const handleUpdateCount = (event, observationId) => {
-    setAreObservationsInputsDirty(true)
-    observationsDispatch({
-      type: 'updateCount',
-      payload: { newCount: event.target.value, observationId },
-    })
-  }
-
-  const handleUpdateSize = (newSize, observationId) => {
-    setAreObservationsInputsDirty(true)
-    observationsDispatch({
-      type: 'updateSize',
-      payload: { newSize, observationId },
-    })
-  }
-
-  const handleFishNameChange = (newFishName, observationId) => {
-    setAreObservationsInputsDirty(true)
-    observationsDispatch({
-      type: 'updateFishName',
-      payload: {
-        newFishName,
-        observationId,
-      },
-    })
-  }
-
-  const handleKeyDown = ({ event, index, observation, isCount, isFishName }) => {
-    const isTabKey = event.code === 'Tab' && !event.shiftKey
-    const isEnterKey = event.code === 'Enter'
-    const isLastRow = index === observationsState.length - 1
-
-    if (isTabKey && isLastRow && isCount) {
-      event.preventDefault()
-      setIsAutoFocusAllowed(true)
-      observationsDispatch({
-        type: 'duplicateLastObservation',
-        payload: { referenceObservation: observation },
-      })
-    }
-
-    if (isEnterKey && !isFishName) {
-      event.preventDefault()
-      setIsAutoFocusAllowed(true)
-      observationsDispatch({
-        type: 'addNewObservationBelow',
-        payload: {
-          referenceObservation: observation,
-          referenceObservationIndex: index,
-        },
-      })
-    }
-  }
-  const observationsBiomass = observationsState.map((observation) => ({
-    uiId: observation.uiId,
-    biomass: getObservationBiomass({
-      choices,
-      fishNameConstants,
-      observation,
-      transectLengthSurveyed,
-      widthId,
-    }),
-  }))
-
-  const totalBiomass = roundToOneDecimal(
-    summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass'),
+  const observationsBiomass = useMemo(
+    () =>
+      observationsState.map((observation) => ({
+        uiId: observation.uiId,
+        biomass: getObservationBiomass({
+          choices,
+          fishNameConstants,
+          observation,
+          transectLengthSurveyed,
+          widthId,
+        }),
+      })),
+    [choices, fishNameConstants, transectLengthSurveyed, widthId, observationsState],
   )
 
-  const totalAbundance = summarizeArrayObjectValuesByProperty(observationsState, 'count')
+  const totalBiomass = useMemo(
+    () => roundToOneDecimal(summarizeArrayObjectValuesByProperty(observationsBiomass, 'biomass')),
+    [observationsBiomass],
+  )
 
-  const observationsRows = observationsState.map((observation, index) => {
-    const { uiId: observationId, count, size, fish_attribute } = observation
+  const totalAbundance = useMemo(
+    () => summarizeArrayObjectValuesByProperty(observationsState, 'count'),
+    [observationsState],
+  )
 
-    const rowNumber = index + 1
-
-    const sizeOrEmptyStringToAvoidInputValueErrors = size ?? ''
-    const countOrEmptyStringToAvoidInputValueErrors = count ?? ''
-
-    const showNumericSizeInput =
-      fishBinSelectedLabel?.toString() === '1' || typeof fishBinSelectedLabel === 'undefined'
-
-    const sizeSelect = !showNumericSizeInput ? (
-      <FishBeltObservationSizeSelect
-        onValueEntered={(value) => {
-          handleUpdateSize(value, observationId)
-        }}
-        onKeyDown={(event) => {
-          handleKeyDown({ event, index, observation })
-        }}
-        fishBinSelectedLabel={fishBinSelectedLabel}
-        value={sizeOrEmptyStringToAvoidInputValueErrors}
-        labelledBy="fish-size-label"
-      />
-    ) : null
-
-    const sizeInput = showNumericSizeInput ? (
-      <InputNumberNoScrollWithUnit
-        type="number"
-        min="0"
-        value={sizeOrEmptyStringToAvoidInputValueErrors}
-        unit="cm"
-        step="any"
-        aria-labelledby="fish-size-label"
-        onChange={(event) => {
-          handleUpdateSize(event.target.value, observationId)
-        }}
-        onKeyDown={(event) => {
-          handleKeyDown({ event, index, observation })
-        }}
-      />
-    ) : (
-      <> {sizeSelect} </>
-    )
-
-    const observationBiomass = roundToOneDecimal(
-      observationsBiomass.find((object) => object.uiId === observationId).biomass,
-    )
-
-    const observationValidations = getObservationValidations(observationId)
-
-    const handleIgnoreObservationValidations = () => {
-      ignoreObservationValidations({
-        observationUiId: observationId,
-      })
+  const observationsRows = useMemo(() => {
+    const getObservationValidations = (observationId) => {
+      return observationValidationsCloneWithUuids.filter(
+        (validation) => validation.observationUiId === observationId,
+      )[0]
     }
 
-    const handleResetObservationValidations = () => {
-      resetObservationValidations({
-        observationUiId: observationId,
-      })
+    const handleKeyDown = ({ event, index, observation, isCount, isFishName }) => {
+      const isTabKey = event.code === 'Tab' && !event.shiftKey
+      const isEnterKey = event.code === 'Enter'
+      const isLastRow = index === observationsState.length - 1
+
+      if (isTabKey && isLastRow && isCount) {
+        event.preventDefault()
+        setIsAutoFocusAllowed(true)
+        observationsDispatch({
+          type: 'duplicateLastObservation',
+          payload: { referenceObservation: observation },
+        })
+      }
+
+      if (isEnterKey && !isFishName) {
+        event.preventDefault()
+        setIsAutoFocusAllowed(true)
+        observationsDispatch({
+          type: 'addNewObservationBelow',
+          payload: {
+            referenceObservation: observation,
+            referenceObservationIndex: index,
+          },
+        })
+      }
     }
 
-    const observationValidationsToDisplay = getValidationPropertiesForInput(
-      observationValidations?.validations,
-      areValidationsShowing,
-    )
-    const { validationType } = observationValidationsToDisplay
-    const observationValidationMessages = observationValidationsToDisplay?.validationMessages ?? []
-    const isObservationValid = validationType === 'ok'
-    const hasWarningValidation = validationType === 'warning'
-    const hasErrorValidation = validationType === 'error'
-    const hasIgnoredValidation = validationType === 'ignore'
+    return observationsState.map((observation, index) => {
+      const { uiId: observationId, count, size, fish_attribute } = observation
 
-    const validationsMarkup = (
-      <CellValidation>
-        {isObservationValid ? <span aria-label="Passed validation">&nbsp;</span> : null}
-        {hasErrorValidation || hasWarningValidation ? (
-          <TableValidationList>
-            {observationValidationMessages.map((validation) => (
-              <li key={validation.id}>{validation.message}</li>
-            ))}
-          </TableValidationList>
-        ) : null}
-        {hasWarningValidation ? (
-          <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-            Ignore all warnings
-          </CellValidationButton>
-        ) : null}
-        {hasIgnoredValidation ? (
-          <Column>
-            Ignored
-            <CellValidationButton type="button" onClick={handleResetObservationValidations}>
-              Reset validations
+      const handleDeleteObservation = () => {
+        setAreObservationsInputsDirty(true)
+        observationsDispatch({ type: 'deleteObservation', payload: observationId })
+      }
+
+      const rowNumber = index + 1
+
+      const sizeOrEmptyStringToAvoidInputValueErrors = size ?? ''
+      const countOrEmptyStringToAvoidInputValueErrors = count ?? ''
+
+      const showNumericSizeInput =
+        fishBinSelectedLabel?.toString() === '1' || typeof fishBinSelectedLabel === 'undefined'
+
+      const handleUpdateSize = (newSize) => {
+        setAreObservationsInputsDirty(true)
+        observationsDispatch({
+          type: 'updateSize',
+          payload: { newSize, observationId },
+        })
+      }
+
+      const handleUpdateSizeEvent = (event) => {
+        handleUpdateSize(event.target.value, observationId)
+      }
+
+      const handleObservationKeyDown = (event) => {
+        handleKeyDown({ event, index, observation })
+      }
+
+      const handleUpdateCount = (event) => {
+        setAreObservationsInputsDirty(true)
+        observationsDispatch({
+          type: 'updateCount',
+          payload: { newCount: event.target.value, observationId },
+        })
+      }
+
+      const sizeSelect = !showNumericSizeInput ? (
+        <FishBeltObservationSizeSelect
+          onValueEntered={handleUpdateSize}
+          onKeyDown={handleObservationKeyDown}
+          fishBinSelectedLabel={fishBinSelectedLabel}
+          value={sizeOrEmptyStringToAvoidInputValueErrors}
+          labelledBy="fish-size-label"
+        />
+      ) : null
+
+      const sizeInput = showNumericSizeInput ? (
+        <InputNumberNoScrollWithUnit
+          type="number"
+          min="0"
+          value={sizeOrEmptyStringToAvoidInputValueErrors}
+          unit="cm"
+          step="any"
+          aria-labelledby="fish-size-label"
+          onChange={handleUpdateSizeEvent}
+          onKeyDown={handleObservationKeyDown}
+        />
+      ) : (
+        <> {sizeSelect} </>
+      )
+
+      const observationBiomass = roundToOneDecimal(
+        observationsBiomass.find((object) => object.uiId === observationId).biomass,
+      )
+
+      const observationValidations = getObservationValidations(observationId)
+
+      const handleIgnoreObservationValidations = () => {
+        ignoreObservationValidations({
+          observationUiId: observationId,
+        })
+      }
+
+      const handleResetObservationValidations = () => {
+        resetObservationValidations({
+          observationUiId: observationId,
+        })
+      }
+
+      const observationValidationsToDisplay = getValidationPropertiesForInput(
+        observationValidations?.validations,
+        areValidationsShowing,
+      )
+      const { validationType } = observationValidationsToDisplay
+      const observationValidationMessages =
+        observationValidationsToDisplay?.validationMessages ?? []
+      const isObservationValid = validationType === 'ok'
+      const hasWarningValidation = validationType === 'warning'
+      const hasErrorValidation = validationType === 'error'
+      const hasIgnoredValidation = validationType === 'ignore'
+
+      const validationsMarkup = (
+        <CellValidation>
+          {isObservationValid ? <span aria-label="Passed validation">&nbsp;</span> : null}
+          {hasErrorValidation || hasWarningValidation ? (
+            <TableValidationList>
+              {observationValidationMessages.map((validation) => (
+                <li key={validation.id}>{validation.message}</li>
+              ))}
+            </TableValidationList>
+          ) : null}
+          {hasWarningValidation ? (
+            <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
+              Ignore all warnings
             </CellValidationButton>
-          </Column>
-        ) : null}
-      </CellValidation>
-    )
+          ) : null}
+          {hasIgnoredValidation ? (
+            <Column>
+              Ignored
+              <CellValidationButton type="button" onClick={handleResetObservationValidations}>
+                Reset validations
+              </CellValidationButton>
+            </Column>
+          ) : null}
+        </CellValidation>
+      )
 
-    return (
-      <ObservationTr key={observationId} validationType={validationType}>
-        <Td align="center">{rowNumber}</Td>
-        <Td align="left">
-          {fishNameOptions.length && (
-            <InputAutocompleteContainer>
-              <FishNameAutocomplete
-                id={`observation-${observationId}`}
-                // we only want autofocus to take over focus after the user adds
-                // new observations, not before. Otherwise initial page load focus
-                // is on the most recently painted observation instead of default focus.
-                // This approach seems easier than handling a list of refs for each observation
-                // and the logic to focus on the right one. in react autoFocus just focuses
-                // the newest element with the autoFocus tag
-                autoFocus={isAutoFocusAllowed}
-                aria-labelledby="fish-name-label"
-                options={fishNameOptions}
-                onChange={(selectedOption) =>
-                  handleFishNameChange(selectedOption.value, observationId)
-                }
-                onKeyDown={(event) => {
-                  handleKeyDown({ event, index, observation, isFishName: true })
-                }}
-                value={fish_attribute}
-                noResultsDisplay={
-                  <ButtonThatLooksLikeLink
-                    type="button"
-                    onClick={() => openNewFishNameModal(observationId)}
+      const handleFishNameChange = (selectedOption) => {
+        const newFishName = selectedOption.value
+
+        setAreObservationsInputsDirty(true)
+        observationsDispatch({
+          type: 'updateFishName',
+          payload: {
+            newFishName,
+            observationId,
+          },
+        })
+      }
+
+      const handleFishNameKeyDown = (event) => {
+        handleKeyDown({ event, index, observation, isFishName: true })
+      }
+
+      const handleCountKeyDown = (event) => {
+        handleKeyDown({ event, index, observation, isCount: true })
+      }
+
+      const proposeNewSpeciesClick = () => openNewFishNameModal(observationId)
+
+      return (
+        <ObservationTr key={observationId} validationType={validationType}>
+          <Td align="center">{rowNumber}</Td>
+          <Td align="left">
+            {fishNameOptions.length && (
+              <InputAutocompleteContainer>
+                <FishNameAutocomplete
+                  id={`observation-${observationId}`}
+                  // we only want autofocus to take over focus after the user adds
+                  // new observations, not before. Otherwise initial page load focus
+                  // is on the most recently painted observation instead of default focus.
+                  // This approach seems easier than handling a list of refs for each observation
+                  // and the logic to focus on the right one. in react autoFocus just focuses
+                  // the newest element with the autoFocus tag
+                  autoFocus={isAutoFocusAllowed}
+                  aria-labelledby="fish-name-label"
+                  options={fishNameOptions}
+                  onChange={handleFishNameChange}
+                  onKeyDown={handleFishNameKeyDown}
+                  value={fish_attribute}
+                  noResultsDisplay={
+                    <ButtonThatLooksLikeLink type="button" onClick={proposeNewSpeciesClick}>
+                      {language.pages.collectRecord.newFishSpeciesLink}
+                    </ButtonThatLooksLikeLink>
+                  }
+                />
+                {fish_attribute && (
+                  <StyledLinkThatLooksLikeButtonToReference
+                    aria-label="fish name reference"
+                    target="_blank"
+                    tabIndex="-1"
+                    href={`https://dev-collect.datamermaid.org/#/reference/fishattributes/species/${fish_attribute}`}
                   >
-                    {language.pages.collectRecord.newFishSpeciesLink}
-                  </ButtonThatLooksLikeLink>
-                }
-              />
-              {fish_attribute && (
-                <StyledLinkThatLooksLikeButtonToReference
-                  aria-label="fish name reference"
-                  target="_blank"
-                  tabIndex="-1"
-                  href={`https://dev-collect.datamermaid.org/#/reference/fishattributes/species/${fish_attribute}`}
-                >
-                  <IconLibraryBooks />
-                </StyledLinkThatLooksLikeButtonToReference>
-              )}
-            </InputAutocompleteContainer>
-          )}
-        </Td>
-        <Td align="right">{sizeInput}</Td>
-        <Td align="right">
-          <InputNumberNoScroll
-            type="number"
-            min="0"
-            value={countOrEmptyStringToAvoidInputValueErrors}
-            step="any"
-            aria-labelledby="fish-count-label"
-            onChange={(event) => {
-              handleUpdateCount(event, observationId)
-            }}
-            onKeyDown={(event) => {
-              handleKeyDown({ event, index, observation, isCount: true })
-            }}
-          />
-        </Td>
-        <Td align="right">{observationBiomass ?? <> - </>}</Td>
-        {areValidationsShowing ? validationsMarkup : null}
-        <Td align="center">
-          <ButtonRemoveRow
-            tabIndex="-1"
-            type="button"
-            onClick={() => handleDeleteObservation(observationId)}
-            aria-label="Delete Observation"
-          >
-            <IconClose />
-          </ButtonRemoveRow>
-        </Td>
-      </ObservationTr>
-    )
-  })
+                    <IconLibraryBooks />
+                  </StyledLinkThatLooksLikeButtonToReference>
+                )}
+              </InputAutocompleteContainer>
+            )}
+          </Td>
+          <Td align="right">{sizeInput}</Td>
+          <Td align="right">
+            <InputNumberNoScroll
+              type="number"
+              min="0"
+              value={countOrEmptyStringToAvoidInputValueErrors}
+              step="any"
+              aria-labelledby="fish-count-label"
+              onChange={handleUpdateCount}
+              onKeyDown={handleCountKeyDown}
+            />
+          </Td>
+          <Td align="right">{observationBiomass ?? <> - </>}</Td>
+          {areValidationsShowing ? validationsMarkup : null}
+          <Td align="center">
+            <ButtonRemoveRow
+              tabIndex="-1"
+              type="button"
+              onClick={handleDeleteObservation}
+              aria-label="Delete Observation"
+            >
+              <IconClose />
+            </ButtonRemoveRow>
+          </Td>
+        </ObservationTr>
+      )
+    })
+  }, [
+    areValidationsShowing,
+    fishBinSelectedLabel,
+    fishNameOptions,
+    isAutoFocusAllowed,
+    ignoreObservationValidations,
+    observationValidationsCloneWithUuids,
+    observationsBiomass,
+    observationsDispatch,
+    observationsState,
+    openNewFishNameModal,
+    resetObservationValidations,
+    setAreObservationsInputsDirty,
+  ])
 
   return (
     <>
