@@ -14,6 +14,7 @@ import {
 } from '../collectRecordFormInitialValues'
 import { ButtonCaution } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
+import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { getFishBinLabel } from './fishBeltBins'
@@ -26,17 +27,21 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
-import FishbeltForm from './FishbeltForm'
+import SampleInfoInputs from './SampleInfoInputs'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
+import FishBeltObservationTable from './FishBeltObservationTable'
+import FishbeltTransectInputs from './FishbeltTransectInputs'
+import getObservationValidationsCloneWithIds from './getObservationsValidationsCloneWithIds'
+import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
+import ObserversInput from '../../../ObserversInput'
 import RecordFormTitle from '../../../RecordFormTitle'
+import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import getObservationValidationsCloneWithIds from './getObservationsValidationsCloneWithIds'
-import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -50,6 +55,8 @@ const DeleteRecordButtonCautionWrapper = styled('div')`
 `
 
 const FishBelt = ({ isNewRecord, currentUser }) => {
+  const OBSERVERS_VALIDATION_PATH = 'data.observers'
+
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
@@ -86,6 +93,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
+
+  const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
 
   const openNewFishNameModal = (observationId) => {
     setObservationToAddSpeciesTo(observationId)
@@ -194,7 +203,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities('unsavedFishbeltFormik')
+  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputsik')
 
   const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
     'unsavedFishbeltObservations',
@@ -552,7 +561,30 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }
 
+  const observersValidationProperties = getValidationPropertiesForInput(
+    collectRecordBeingEdited?.validations?.results?.data?.observers,
+    areValidationsShowing,
+  )
+
+  const handleChangeForDirtyIgnoredInput = ({
+    validationProperties,
+    validationPath,
+    inputName,
+  }) => {
+    const isInputDirty = formik.initialValues[inputName] === formik.values[inputName]
+    const doesFieldHaveIgnoredValidation = validationProperties.validationType === 'ignore'
+
+    if (doesFieldHaveIgnoredValidation && isInputDirty) {
+      resetNonObservationFieldValidations({ validationPath })
+    }
+  }
+
   const handleObserversChange = ({ selectedObservers }) => {
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'observers',
+      validationProperties: observersValidationProperties,
+      validationPath: OBSERVERS_VALIDATION_PATH,
+    })
     formik.setFieldValue('observers', selectedObservers)
   }
 
@@ -568,31 +600,67 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         isToolbarSticky={true}
         content={
           <>
-            <FishbeltForm
-              areObservationsInputsDirty={areObservationsInputsDirty}
+            <RecordLevelInputValidationInfo
+              validations={recordLevelValidations}
               areValidationsShowing={areValidationsShowing}
-              choices={choices}
-              collectRecord={collectRecordBeingEdited}
-              fishNameConstants={fishNameConstants}
-              fishNameOptions={fishNameOptions}
-              formik={formik}
-              ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-              ignoreObservationValidations={ignoreObservationValidations}
-              ignoreRecordLevelValidation={ignoreRecordLevelValidation}
-              managementRegimes={managementRegimes}
-              observationsReducer={observationsReducer}
-              observationValidationsCloneWithUuids={observationValidationsCloneWithUuids}
-              observers={observerProfiles}
-              onObserversChange={handleObserversChange}
-              onSizeBinChange={handleSizeBinChange}
-              openNewFishNameModal={openNewFishNameModal}
-              persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-              resetObservationValidations={resetObservationValidations}
               resetRecordLevelValidation={resetRecordLevelValidation}
-              resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-              setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-              sites={sites}
+              ignoreRecordLevelValidation={ignoreRecordLevelValidation}
             />
+            <form
+              id="fishbelt-form"
+              aria-labelledby="fishbelt-form-title"
+              onSubmit={formik.handleSubmit}
+            >
+              <SampleInfoInputs
+                areValidationsShowing={areValidationsShowing}
+                collectRecord={collectRecordBeingEdited}
+                formik={formik}
+                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                managementRegimes={managementRegimes}
+                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                sites={sites}
+              />
+
+              <FishbeltTransectInputs
+                areValidationsShowing={areValidationsShowing}
+                choices={choices}
+                collectRecord={collectRecordBeingEdited}
+                formik={formik}
+                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                onSizeBinChange={handleSizeBinChange}
+                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+              />
+              <ObserversInput
+                data-testid="observers"
+                formik={formik}
+                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                observers={observerProfiles}
+                onObserversChange={handleObserversChange}
+                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                validationPath={OBSERVERS_VALIDATION_PATH}
+                validationProperties={observersValidationProperties}
+              />
+              <FishBeltObservationTable
+                areObservationsInputsDirty={areObservationsInputsDirty}
+                areValidationsShowing={areValidationsShowing}
+                choices={choices}
+                collectRecord={collectRecordBeingEdited}
+                fishBinSelected={formik.values.size_bin}
+                fishNameConstants={fishNameConstants}
+                fishNameOptions={fishNameOptions}
+                ignoreObservationValidations={ignoreObservationValidations}
+                observationsReducer={observationsReducer}
+                observationValidationsCloneWithUuids={observationValidationsCloneWithUuids}
+                openNewFishNameModal={openNewFishNameModal}
+                persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+                resetObservationValidations={resetObservationValidations}
+                setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+                transectLengthSurveyed={formik.values.len_surveyed}
+                widthId={formik.values.width}
+              />
+            </form>
 
             <DeleteRecordButtonCautionWrapper>
               <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>

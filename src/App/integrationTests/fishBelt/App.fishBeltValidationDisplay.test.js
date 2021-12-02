@@ -110,7 +110,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(
     within(observationsTable).queryByText('observation validation with ok status shoulnt show'),
   ).not.toBeInTheDocument()
-})
+}, 50000)
 
 test('Fishbelt validations will show only the first error when there are multiple errors and warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -253,7 +253,7 @@ test('Fishbelt validations will show only the first error when there are multipl
   expect(
     within(observationsTable).queryByText('observation validation with ok status shoulnt show'),
   ).not.toBeInTheDocument()
-})
+}, 50000)
 
 test('Fishbelt validations will show the all warnings when there are multiple warnings and no errors', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -372,7 +372,7 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   expect(
     within(observationsTable).queryByText('observation validation with ok status shoulnt show'),
   ).not.toBeInTheDocument()
-}, 40000)
+}, 50000)
 test('Validating an empty collect record, and then editing an input with errors shows the errors until the save button is pressed. Validations show when the validation button is clicked again.', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
@@ -559,7 +559,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(
     within(screen.getByLabelText('Observations')).getByText('observation error'),
   ).toBeInTheDocument()
-}, 45000)
+}, 50000)
 
 test('Fishbelt validations will show passed input validations', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -633,4 +633,4 @@ test('Fishbelt validations will show passed input validations', async () => {
   expect(
     within(screen.getByLabelText('Observations')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
-})
+}, 50000)
