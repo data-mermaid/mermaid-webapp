@@ -362,7 +362,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   )
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
-}, 45000)
+}, 50000)
 
 test('Validation: user can dismiss record-level warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -440,7 +440,7 @@ test('Validation: user can dismiss record-level warnings ', async () => {
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterIgnore)
-})
+}, 50000)
 
 test('Validation: user can dismiss observation warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -523,7 +523,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterIgnore)
-}, 35000)
+}, 50000)
 
 test('user can reset dismissed non-observation input warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -899,7 +899,7 @@ test('user can reset dismissed non-observation input warnings', async () => {
   expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observersRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
-}, 45000)
+}, 50000)
 
 test('Validation: user can reset ignored observation warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -984,7 +984,7 @@ test('Validation: user can reset ignored observation warnings ', async () => {
   expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByLabelText('Passed validation')).not.toBeInTheDocument()
-}, 35000)
+}, 50000)
 
 test('user can reset dismissed record-level warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -1062,7 +1062,7 @@ test('user can reset dismissed record-level warnings', async () => {
   const isFormDirtyAfterReset = screen.getByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterReset)
-})
+}, 50000)
 
 test('Validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -1346,4 +1346,4 @@ test('Validation: user edits non-observation input with ignored validation reset
 
   // make act error go away
   await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })))
-}, 40000)
+}, 50000)
