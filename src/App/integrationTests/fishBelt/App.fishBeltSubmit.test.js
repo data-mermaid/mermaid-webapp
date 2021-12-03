@@ -8,6 +8,7 @@ import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie
 import App from '../../App'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
+import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltValidationsObject'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
@@ -22,15 +23,15 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-      const collectRecordWithValidation = {
+      const collectRecordWithValidationFailing = {
         ...mockMermaidData.collect_records[0],
-        validations: { status: 'ok' },
+        validations: mockFishbeltValidationsObject, // fails validation
       }
 
-      const response = {
+      const firstPullResponse = {
         benthic_attributes: { updates: mockMermaidData.benthic_attributes },
         choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecordWithValidation] },
+        collect_records: { updates: [collectRecordWithValidationFailing] },
         fish_families: { updates: mockMermaidData.fish_families },
         fish_genera: { updates: mockMermaidData.fish_genera },
         fish_species: { updates: mockMermaidData.fish_species },
@@ -40,7 +41,28 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return res.once(ctx.json(firstPullResponse))
+    }),
+    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+      const collectRecordWithValidationOk = {
+        ...mockMermaidData.collect_records[0],
+        validations: { status: 'ok' },
+      }
+
+      const secondPullResponse = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidationOk] },
+        fish_families: { updates: mockMermaidData.fish_families },
+        fish_genera: { updates: mockMermaidData.fish_genera },
+        fish_species: { updates: mockMermaidData.fish_species },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+      }
+
+      return res.once(ctx.json(secondPullResponse))
     }),
   )
 
@@ -67,15 +89,15 @@ test('Submit fishbelt failure shows toast message and an enabled submit button',
   mockMermaidApiAllSuccessful.use(
     // append the validated data on the pull response, because that is what the UI uses to update itself
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
-      const collectRecordWithValidation = {
+      const collectRecordWithValidationFailing = {
         ...mockMermaidData.collect_records[0],
-        validations: { status: 'ok' },
+        validations: mockFishbeltValidationsObject, // fails validation
       }
 
-      const response = {
+      const firstPullResponse = {
         benthic_attributes: { updates: mockMermaidData.benthic_attributes },
         choices: { updates: mockMermaidData.choices },
-        collect_records: { updates: [collectRecordWithValidation] },
+        collect_records: { updates: [collectRecordWithValidationFailing] },
         fish_families: { updates: mockMermaidData.fish_families },
         fish_genera: { updates: mockMermaidData.fish_genera },
         fish_species: { updates: mockMermaidData.fish_species },
@@ -85,7 +107,28 @@ test('Submit fishbelt failure shows toast message and an enabled submit button',
         projects: { updates: mockMermaidData.projects },
       }
 
-      return res(ctx.json(response))
+      return res.once(ctx.json(firstPullResponse))
+    }),
+    rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
+      const collectRecordWithValidationOk = {
+        ...mockMermaidData.collect_records[0],
+        validations: { status: 'ok' },
+      }
+
+      const secondPullResponse = {
+        benthic_attributes: { updates: mockMermaidData.benthic_attributes },
+        choices: { updates: mockMermaidData.choices },
+        collect_records: { updates: [collectRecordWithValidationOk] },
+        fish_families: { updates: mockMermaidData.fish_families },
+        fish_genera: { updates: mockMermaidData.fish_genera },
+        fish_species: { updates: mockMermaidData.fish_species },
+        project_managements: { updates: mockMermaidData.project_managements },
+        project_profiles: { updates: mockMermaidData.project_profiles },
+        project_sites: { updates: mockMermaidData.project_sites },
+        projects: { updates: mockMermaidData.projects },
+      }
+
+      return res.once(ctx.json(secondPullResponse))
     }),
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, (req, res, ctx) => {
       return res(ctx.status(400))
