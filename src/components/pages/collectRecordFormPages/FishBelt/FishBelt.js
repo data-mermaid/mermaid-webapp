@@ -72,7 +72,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [observationValidationsCloneWithUuids, setObservationValidationsCloneWithUuids] = useState(
     [],
   )
-
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(possibleCollectButtonGroupStates.saved)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -127,6 +126,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
     }
   }, [databaseSwitchboardInstance])
+
+  const getValidationButtonStatus = (collectRecord) => {
+    return collectRecord?.validations?.status === 'ok'
+      ? possibleCollectButtonGroupStates.validated
+      : possibleCollectButtonGroupStates.validatable
+  }
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -186,6 +191,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
               setIsLoading(false)
+              setValidateButtonState(getValidationButtonStatus(collectRecordResponse))
             }
           },
         )
@@ -256,11 +262,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       .then((validatedRecordResponse) => {
         setAreValidationsShowing(true)
         setCollectRecordBeingEdited(validatedRecordResponse)
-        setValidateButtonState(
-          validatedRecordResponse?.validations?.status === 'ok'
-            ? possibleCollectButtonGroupStates.validated
-            : possibleCollectButtonGroupStates.validatable,
-        )
+        setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
 
         /* Observations is loaded initially before a user can hit the validate button,
          and its kept up to date through user actions.
