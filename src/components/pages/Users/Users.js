@@ -325,7 +325,7 @@ const Users = ({ currentUser }) => {
           </TableRadioLabel>
         ),
         collector: (
-          <TableRadioLabel htmlFor={`admin-${userId}`}>
+          <TableRadioLabel htmlFor={`collector-${userId}`}>
             <input
               type="radio"
               value={50}
@@ -337,7 +337,7 @@ const Users = ({ currentUser }) => {
           </TableRadioLabel>
         ),
         readonly: (
-          <TableRadioLabel htmlFor={`admin-${userId}`}>
+          <TableRadioLabel htmlFor={`readonly-${userId}`}>
             <input
               type="radio"
               value={10}
