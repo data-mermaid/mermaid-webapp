@@ -31,8 +31,7 @@ const useAuthentication = ({ dexieInstance }) => {
     const hasPreviouslyAuthenticated = localStorage.getItem('hasAuth0Authenticated') === 'true'
     const isUserOnlineAndLoggedOut = !isAuth0Authenticated && !isAuth0Loading && isAppOnline
     const isUserOnlineAndLoggedIn = isAuth0Authenticated && !isAuth0Loading
-    const isUserOfflineAndLoggedIn =
-      !isAuth0Authenticated && hasPreviouslyAuthenticated && isOffline
+    const isUserOfflineAndLoggedIn = hasPreviouslyAuthenticated && isOffline
 
     if (isUserOnlineAndLoggedOut) {
       pullRequestRedirectAuth0Hack()
