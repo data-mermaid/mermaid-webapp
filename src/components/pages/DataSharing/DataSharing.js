@@ -2,9 +2,10 @@ import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
+import { hoverState } from '../../../library/styling/mediaQueries'
 import { ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
@@ -33,6 +34,9 @@ const DataSharingTable = styled(Table)`
       place-items: center;
       width: 100%;
       height: 100%;
+      ${hoverState(css`
+        border: solid 1px ${theme.color.primaryColor};
+      `)}
     }
   }
 `
@@ -81,16 +85,17 @@ const DataSharing = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isMounted])
 
-  const initialFormValues = useMemo(() => getProjectInitialValues(projectBeingEdited), [
-    projectBeingEdited,
-  ])
+  const initialFormValues = useMemo(
+    () => getProjectInitialValues(projectBeingEdited),
+    [projectBeingEdited],
+  )
 
   const formikOptions = {
     initialValues: initialFormValues,
     enableReinitialize: true,
   }
 
-  const findToolTipDescription = policy =>
+  const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy).description
 
   const handleBenthicPolicyChange = (event, form) => {
@@ -103,7 +108,7 @@ const DataSharing = () => {
 
   const content = isAppOnline ? (
     <Formik {...formikOptions}>
-      {formik => (
+      {(formik) => (
         <>
           <MaxWidthInputWrapper>
             <h3>Data is much more powerful when shared.</h3>
@@ -142,7 +147,7 @@ const DataSharing = () => {
                 <tbody>
                   <Tr>
                     <Td>Fish Belt</Td>
-                    {dataPolicyOptions.map(item => (
+                    {dataPolicyOptions.map((item) => (
                       <Td key={item.value}>
                         <label htmlFor={`fish-belt${item.value}`}>
                           <input
@@ -153,7 +158,7 @@ const DataSharing = () => {
                             checked={
                               formik.getFieldProps('data_policy_beltfish').value === item.value
                             }
-                            onChange={event => {
+                            onChange={(event) => {
                               formik.setFieldValue(
                                 'data_policy_beltfish',
                                 parseInt(event.target.value, 10),
@@ -166,7 +171,7 @@ const DataSharing = () => {
                   </Tr>
                   <Tr>
                     <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
-                    {dataPolicyOptions.map(item => (
+                    {dataPolicyOptions.map((item) => (
                       <Td key={item.value}>
                         <label htmlFor={`benthic${item.value}`}>
                           <input
@@ -177,7 +182,7 @@ const DataSharing = () => {
                             checked={
                               formik.getFieldProps('data_policy_benthiclit').value === item.value
                             }
-                            onChange={event => handleBenthicPolicyChange(event, formik)}
+                            onChange={(event) => handleBenthicPolicyChange(event, formik)}
                           />
                         </label>
                       </Td>
@@ -185,7 +190,7 @@ const DataSharing = () => {
                   </Tr>
                   <Tr>
                     <Td>Bleaching</Td>
-                    {dataPolicyOptions.map(item => (
+                    {dataPolicyOptions.map((item) => (
                       <Td key={item.value}>
                         <label htmlFor={`bleaching${item.value}`}>
                           <input
@@ -196,7 +201,7 @@ const DataSharing = () => {
                             checked={
                               formik.getFieldProps('data_policy_bleachingqc').value === item.value
                             }
-                            onChange={event => {
+                            onChange={(event) => {
                               formik.setFieldValue(
                                 'data_policy_bleachingqc',
                                 parseInt(event.target.value, 10),

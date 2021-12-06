@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
+import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
 import { IconAccount, IconAccountConvert, IconAccountRemove, IconSave, IconPlus } from '../../icons'
 import { ButtonSecondary } from '../../generic/buttons'
@@ -77,9 +77,9 @@ const TableRadioLabel = styled('label')`
   position: absolute;
   display: grid;
   place-items: center;
-  &:hover {
+  ${hoverState(css`
     border: solid 1px ${theme.color.primaryColor};
-  }
+  `)}
 `
 
 const Users = ({ currentUser }) => {
