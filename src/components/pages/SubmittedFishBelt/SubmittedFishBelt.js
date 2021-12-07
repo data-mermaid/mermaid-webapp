@@ -4,8 +4,10 @@ import React, { useState, useEffect } from 'react'
 
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
+import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { getFishNameConstants } from '../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
+import { H2 } from '../../generic/text'
 import { IconPen } from '../../icons'
 import { RowSpaceBetween } from '../../generic/positioning'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -16,9 +18,8 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import RecordFormTitle from '../../RecordFormTitle'
 import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
 import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
-import useIsMounted from '../../../library/useIsMounted'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
+import useIsMounted from '../../../library/useIsMounted'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -36,6 +37,7 @@ const SubmittedFishBelt = () => {
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
+  const observers = submittedRecord?.observers ?? []
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance) {
@@ -127,6 +129,13 @@ const SubmittedFishBelt = () => {
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
+            <H2>Observers</H2>
+            <ul>
+              {observers.map((observer) => (
+                <li key={observer.id}>{observer.profile_name}</li>
+              ))}
+            </ul>
+
             <SubmittedFishBeltObservationTable
               choices={choices}
               fishNameOptions={fishNameOptions}
