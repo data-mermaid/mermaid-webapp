@@ -7,25 +7,36 @@
    1. To get the server up and running, run `make freshinstall && make runserver` the first time or `make up && make runserver`
 1. Set up local front end
    1. clone this repo
-   1. obtain values for `.env` file (see `.env.sample`)
+   1. obtain values for `.env` file (see `.env.sample`, bug Dustin for the DAshlane file with all the secrets.)
    1. yarn install
    1. yarn start
 
 ## Dev Notes
 
-1. `plop <filename>` scaffolds component files inside the `src/components` directory
-1. `src/components/generic` are be for reusable components that may be useful for other projects. They should be developed to be completely unaware of their context. Make them 'dumb' (employ inversion of control).
-1. `src/components/pages` are for pages or page-like components
-1. Styles will be done with Styled Components for easy scoping, speed, and maintainability. Make sure to import using the macro for easier debugging (it results in more human-friendly classnames) `import styled from 'styled-components/macro'`
-1. Focus on integration tests, and testing complex pieces of code.
+- `plop <filename>` scaffolds component files inside the `src/components` directory
+- `src/components/generic` are be for reusable components that may be useful for other projects. They should be developed to be completely unaware of their context. Make them 'dumb' (employ inversion of control). If a reusable component is Mermaid-specific, it can go elsewhere.
+- `src/components/pages` are for pages or page-like components
+- Styles will be done with Styled Components for easy scoping, speed, and maintainability. Make sure to import using the macro for easier debugging (it results in more human-friendly classnames) `import styled from 'styled-components/macro'`
+- Focus on integration tests, and testing complex pieces of code.
+- Although there is no comprehensive list, tech debt tickets are tracked in Trello with a label, or the title prefix 'Tech debt:'. Most are in the 'Someday' column. Its worth browsing them for context.
+- The fishbelt form page is a gong show. We havent had a refactor cycle to make it more maintaible in between the many various features and bandaids being added to it. Dont copy its approach. The main issue with it is that Formik didnt age will with the requirements as they revealed themselves. The observations table part of the form, thankfully, doesnt use Formik, however using two different approaches for form state cascaded into much more duplication and complication in the code for that page. For some reason the form also loses its dirty/unsaved values when the network status changes, which resulted in a hack that involves saving unsaved values in local storage, which in hindsight was a bad choice (I probably thought it was unavoidable due to props changing, but there are indications that it may be caused by internal state changing). Yuck. Here be dragons.
 
 ### General Architecture (Incomplete WIP)
 
+- The general approach to this code has been to avoid premature performance optimization in favour of more maintainable code. When possible, it is also attempted to keep as much code outside of React and in regular JavaScript as possible. The idea is to make the code more approachable for non-React devs (Dustin, Kim), and to make more of the code reusable in future cases of framework swapouts.
 - Syncing data with the server: initialize with the `useInitializeSyncApiDataIntoOfflineStorage` hook, get sync status state from the `useSyncStatus()` hook. Both hooks depend on `SyncStatusProvider`
-
-## Manual Testing
-
-- Offline (PWA) apps are not created with the Create React App development server. To test offline functionality, you need to build and serve the built code. `yarn build && serve -s build`.
+  - Syncs are triggered when navigating to the projects list page, and any time a user navigates to a project-related page. Note that not all syncs pull the same things.
+  - the hooks take care of nagivation and reload based syncs. There is also an `apiSyncInstance` available in the app for manualy controled syncs.
+- The `DatabaseSwitchBoardInstance` is responsible for getting data to the app. It takes care of if the data should come from InndexedDB or the API so the app doesnt have to think as much about it. The idea is not call the api or interact with IDB other than though the DatabaseSwitchboard for maintainability. Class mixins were used unfortunately, but other than having unclear inheritance and a weird implementation syntax, seem to be working just fine so far.
+- There are two main layout compoenets. One for general page layout (header and footer) and a special one for project pages (It has slots for side nav, and two other sections)
+- As a tradeoff between mixing concerns and having an overlycomplex, it was decided to track some ui state on the Mermaid data itself. These properties are prefized with `uiState_`, and should be removed before pushing the data to the API (In updating this readme, it looks like that work got forgotten, and [a ticket](https://trello.com/c/bV998PDm/506-strip-uistate-from-pushed-data) now exists for it). Its questionable in hindsight if this was the best approach.
+- API stuff:
+  - `last_revision_num` is tricky and there are no API docs for it. Definitely Dustin for an overview if you need to touch it (I cant remember the details).
+  - a `_deleted` property is stored and sent to the api to let it know to delete an item.
+- Testing:
+  - The goal of testing is not 100% test coverage. Its to test critical path features or any complex code.
+  - Since this app can exist in multiple states (online, offline, various states of data), test helpers were created to abstract much of this set up. The main ones are:
+    - renderAuthenticatedOffline, renderAuthenticatedOnline, getMockDexieInstanceAllSuccess, initiallyHydrateOfflineStorageWithMockData (use for offline tests)
 
 ## Deploying
 
