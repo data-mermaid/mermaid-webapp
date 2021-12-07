@@ -80,11 +80,12 @@ TableRowItem.propTypes = {
       name: PropTypes.string,
     }),
   ),
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 TableRowItem.defaultProps = {
   options: undefined,
+  value: undefined,
 }
 
 SubmittedFishBeltInfoTable.propTypes = {
