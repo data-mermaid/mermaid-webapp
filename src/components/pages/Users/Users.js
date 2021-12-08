@@ -293,6 +293,8 @@ const Users = ({ currentUser }) => {
         profile: userId,
       } = userInfo
 
+      const isCurrentUser = userId === currentUser.id
+
       const handleRoleChange = (event) => {
         const observerToEdit = observerProfiles.find(({ id }) => id === projectProfileId)
 
@@ -321,6 +323,7 @@ const Users = ({ currentUser }) => {
               id={`admin-${projectProfileId}`}
               checked={getObserverRole(projectProfileId) === 90}
               onChange={handleRoleChange}
+              disabled={isCurrentUser}
             />
           </TableRadioLabel>
         ),
@@ -333,6 +336,7 @@ const Users = ({ currentUser }) => {
               id={`collector-${projectProfileId}`}
               checked={getObserverRole(projectProfileId) === 50}
               onChange={handleRoleChange}
+              disabled={isCurrentUser}
             />
           </TableRadioLabel>
         ),
@@ -345,6 +349,7 @@ const Users = ({ currentUser }) => {
               id={`readonly-${projectProfileId}`}
               checked={getObserverRole(projectProfileId) === 10}
               onChange={handleRoleChange}
+              disabled={isCurrentUser}
             />
           </TableRadioLabel>
         ),
@@ -363,7 +368,7 @@ const Users = ({ currentUser }) => {
         remove: (
           <ButtonSecondary
             type="button"
-            disabled={userId === currentUser.id}
+            disabled={isCurrentUser}
             onClick={() => openRemoveUserModal(userInfo)}
           >
             <IconAccountRemove />
