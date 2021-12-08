@@ -1,6 +1,6 @@
 import { dateFormat } from '../../../library/strings/dateFormat'
 
-const getCollectRecordDataInitialValues = collectRecord => {
+const getCollectRecordDataInitialValues = (collectRecord) => {
   const collectRecordData = collectRecord?.data
 
   return {
@@ -31,6 +31,10 @@ const getTransectInitialValues = (collectRecord, transectType) => {
     size_bin: collectRecordData?.[transectType]?.size_bin ?? '',
     reef_slope: collectRecordData?.[transectType]?.reef_slope ?? '',
     notes: collectRecordData?.sample_event.notes ?? '',
+    relative_depth: collectRecordData?.[transectType]?.relative_depth ?? '',
+    visibility: collectRecordData?.[transectType]?.visibility ?? '',
+    current: collectRecordData?.[transectType]?.current ?? '',
+    tide: collectRecordData?.[transectType]?.tide ?? '',
   }
 }
 

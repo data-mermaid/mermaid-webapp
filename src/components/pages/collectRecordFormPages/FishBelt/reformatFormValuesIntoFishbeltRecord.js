@@ -1,5 +1,5 @@
-const reformatObservationsForFishBeltRecord = observations =>
-  observations.map(observation => {
+const reformatObservationsForFishBeltRecord = (observations) =>
+  observations.map((observation) => {
     // eslint-disable-next-line no-unused-vars
     const { uiId, ...observationWithUiPropertiesRemoved } = observation
 
@@ -28,6 +28,10 @@ export const reformatFormValuesIntoFishBeltRecord = (
     site,
     size_bin,
     width,
+    relative_depth,
+    visibility,
+    current,
+    tide,
   } = formikValues
 
   return {
@@ -42,6 +46,10 @@ export const reformatFormValuesIntoFishBeltRecord = (
         sample_time,
         size_bin,
         width,
+        relative_depth,
+        visibility,
+        current,
+        tide,
       },
       sample_event: {
         management,

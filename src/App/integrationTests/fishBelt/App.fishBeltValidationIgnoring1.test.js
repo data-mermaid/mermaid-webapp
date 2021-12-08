@@ -189,6 +189,54 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
                     status: 'warning',
                   },
                 ],
+                relative_depth: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'warning',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'warning',
+                  },
+                ],
+                visibility: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'warning',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'warning',
+                  },
+                ],
+                current: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'warning',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'warning',
+                  },
+                ],
+                tide: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'warning',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'warning',
+                  },
+                ],
               },
             },
           },
@@ -235,6 +283,10 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   const widthRow = screen.getByTestId('width')
   const sizeBinRow = screen.getByTestId('size_bin')
   const reefSlopeRow = screen.getByTestId('reef_slope')
+  const relativeDepthRow = screen.getByTestId('relative_depth')
+  const visibilityRow = screen.getByTestId('visibility')
+  const currentRow = screen.getByTestId('current')
+  const tideRow = screen.getByTestId('tide')
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
@@ -260,6 +312,14 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(sizeBinRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(reefSlopeRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(reefSlopeRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(relativeDepthRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(relativeDepthRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(visibilityRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(visibilityRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(currentRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(currentRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(tideRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(tideRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(notesRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(notesRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(observersRow).getByText('firstWarning')).toBeInTheDocument()
@@ -349,6 +409,36 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(reefSlopeRow).getByText('Ignored')).toBeInTheDocument()
 
+  userEvent.click(within(relativeDepthRow).getByRole('button', { name: 'Ignore all warnings' }))
+
+  await waitFor(() =>
+    expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+  )
+  expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(relativeDepthRow).getByText('Ignored')).toBeInTheDocument()
+
+  userEvent.click(within(visibilityRow).getByRole('button', { name: 'Ignore all warnings' }))
+
+  await waitFor(() =>
+    expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+  )
+  expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(visibilityRow).getByText('Ignored')).toBeInTheDocument()
+
+  userEvent.click(within(currentRow).getByRole('button', { name: 'Ignore all warnings' }))
+
+  await waitFor(() =>
+    expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+  )
+  expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(currentRow).getByText('Ignored')).toBeInTheDocument()
+
+  userEvent.click(within(tideRow).getByRole('button', { name: 'Ignore all warnings' }))
+
+  await waitFor(() => expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument())
+  expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(tideRow).getByText('Ignored')).toBeInTheDocument()
+
   userEvent.click(within(notesRow).getByRole('button', { name: 'Ignore all warnings' }))
 
   await waitFor(() => expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument())
@@ -362,7 +452,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   )
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
-}, 40000)
+}, 50000)
 
 test('Validation: user can dismiss record-level warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -440,7 +530,7 @@ test('Validation: user can dismiss record-level warnings ', async () => {
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterIgnore)
-}, 40000)
+}, 50000)
 
 test('Validation: user can dismiss observation warnings ', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -523,7 +613,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterIgnore)
-}, 40000)
+}, 60000)
 
 test('user can reset dismissed non-observation input warnings', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -699,6 +789,54 @@ test('user can reset dismissed non-observation input warnings', async () => {
                     status: 'ignore',
                   },
                 ],
+                relative_depth: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                visibility: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                current: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                tide: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
               },
             },
           },
@@ -745,6 +883,10 @@ test('user can reset dismissed non-observation input warnings', async () => {
   const widthRow = screen.getByTestId('width')
   const sizeBinRow = screen.getByTestId('size_bin')
   const reefSlopeRow = screen.getByTestId('reef_slope')
+  const relativeDepthRow = screen.getByTestId('relative_depth')
+  const visibilityRow = screen.getByTestId('visibility')
+  const currentRow = screen.getByTestId('current')
+  const tideRow = screen.getByTestId('tide')
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
@@ -879,6 +1021,52 @@ test('user can reset dismissed non-observation input warnings', async () => {
   expect(within(reefSlopeRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
 
   userEvent.click(
+    within(relativeDepthRow).getByRole('button', {
+      name: 'Reset validations',
+    }),
+  )
+
+  await waitFor(() =>
+    expect(within(relativeDepthRow).queryByText('Ignored')).not.toBeInTheDocument(),
+  )
+  expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(relativeDepthRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+
+  userEvent.click(
+    within(visibilityRow).getByRole('button', {
+      name: 'Reset validations',
+    }),
+  )
+
+  await waitFor(() => expect(within(visibilityRow).queryByText('Ignored')).not.toBeInTheDocument())
+  expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(visibilityRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+
+  userEvent.click(
+    within(currentRow).getByRole('button', {
+      name: 'Reset validations',
+    }),
+  )
+
+  await waitFor(() => expect(within(currentRow).queryByText('Ignored')).not.toBeInTheDocument())
+  expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(currentRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+
+  userEvent.click(
+    within(tideRow).getByRole('button', {
+      name: 'Reset validations',
+    }),
+  )
+
+  await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
+  expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(tideRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
+
+  userEvent.click(
     within(notesRow).getByRole('button', {
       name: 'Reset validations',
     }),
@@ -899,4 +1087,4 @@ test('user can reset dismissed non-observation input warnings', async () => {
   expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(observersRow).queryByLabelText('Passed validation')).not.toBeInTheDocument()
-}, 40000)
+}, 50000)

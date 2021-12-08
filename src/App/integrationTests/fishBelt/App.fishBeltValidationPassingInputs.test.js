@@ -125,6 +125,16 @@ test('Fishbelt validations show check for valid inputs', async () => {
     within(screen.getByTestId('reef_slope')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(
+    within(screen.getByTestId('relative_depth')).getByLabelText('Passed validation'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('visibility')).getByLabelText('Passed validation'),
+  ).toBeInTheDocument()
+  expect(
+    within(screen.getByTestId('current')).getByLabelText('Passed validation'),
+  ).toBeInTheDocument()
+  expect(within(screen.getByTestId('tide')).getByLabelText('Passed validation')).toBeInTheDocument()
+  expect(
     within(screen.getByTestId('notes')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
   expect(

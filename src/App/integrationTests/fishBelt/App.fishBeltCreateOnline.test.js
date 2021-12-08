@@ -19,15 +19,13 @@ const saveFishbeltRecord = async () => {
   userEvent.type(screen.getByLabelText('Transect Number'), '56')
   userEvent.type(screen.getByLabelText('Label'), 'some label')
   userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
-  // user clicks Width radio value 1
-  userEvent.click(screen.getByLabelText('10m'))
-
-  // user clicks on Fish Size Bin radio value 1
-  userEvent.click(screen.getByLabelText('1'))
-
-  // user clicks on Reef Slope radio value flat
-  userEvent.click(screen.getByLabelText('flat'))
-
+  userEvent.click(within(screen.getByTestId('width')).getByLabelText('10m'))
+  userEvent.click(within(screen.getByTestId('size_bin')).getByLabelText('1'))
+  userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('flat'))
+  userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor'))
+  userEvent.click(within(screen.getByTestId('current')).getByLabelText('high'))
+  userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('deep'))
+  userEvent.click(within(screen.getByTestId('tide')).getByLabelText('falling'))
   userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
@@ -62,14 +60,15 @@ describe('Online', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    // width radio checked on 1
-    expect(screen.getByLabelText('10m')).toBeChecked()
-    // fish size bin radio checked on 1
-    expect(screen.getByLabelText('1')).toBeChecked()
-    // reef slope radio checked on flat
-    expect(screen.getByLabelText('flat')).toBeChecked()
+    expect(within(screen.getByTestId('width')).getByLabelText('10m')).toBeChecked()
+    expect(within(screen.getByTestId('size_bin')).getByLabelText('1')).toBeChecked()
+    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
+    expect(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor')).toBeChecked()
+    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
+    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
+    expect(within(screen.getByTestId('tide')).getByLabelText('falling')).toBeChecked()
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
-  })
+  }, 50000)
   test('New fishbelt save success show new record in collecting table', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
@@ -100,7 +99,7 @@ describe('Online', () => {
 
     // expect unique depth as proxy for new fishbelt
     expect(await within(table).findByText('10000'))
-  })
+  }, 50000)
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
@@ -139,5 +138,5 @@ describe('Online', () => {
     expect(screen.getByLabelText('flat')).toBeChecked()
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
-  })
+  }, 50000)
 })

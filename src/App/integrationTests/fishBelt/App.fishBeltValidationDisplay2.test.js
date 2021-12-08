@@ -98,6 +98,10 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(within(screen.getByTestId('width')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('size_bin')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('reef_slope')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('relative_depth')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('visibility')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('current')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('tide')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
 

@@ -18,6 +18,10 @@ const WIDTH_VALIDATION_PATH = 'data.fishbelt_transect.width'
 const SIZE_BIN_VALIDATION_PATH = 'data.fishbelt_transect.size_bin'
 const REEF_SLOPE_VALIDATION_PATH = 'data.fishbelt_transect.reef_slope'
 const NOTES_VALIDATION_PATH = 'data.sample_event.notes'
+const RELATIVE_DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.relative_depth'
+const VISIBILITY_VALIDATION_PATH = 'data.fishbelt_transect.visibility'
+const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
+const TIDE_VALIDATION_PATH = 'data.fishbelt_transect.tide'
 
 const FishbeltTransectInputs = ({
   areValidationsShowing,
@@ -29,10 +33,22 @@ const FishbeltTransectInputs = ({
   onSizeBinChange,
   resetNonObservationFieldValidations,
 }) => {
-  const { belttransectwidths, fishsizebins, reefslopes } = choices
+  const {
+    belttransectwidths,
+    fishsizebins,
+    reefslopes,
+    relativedepths,
+    visibilities,
+    currents,
+    tides,
+  } = choices
   const transectWidthSelectOptions = getOptions(belttransectwidths)
   const fishSizeBinSelectOptions = getOptions(fishsizebins)
   const reefSlopeSelectOptions = getOptions(reefslopes)
+  const relativeDepthOptions = getOptions(relativedepths)
+  const visibilityOptions = getOptions(visibilities)
+  const currentOptions = getOptions(currents)
+  const tideOptions = getOptions(tides)
   const validationsApiData = collectRecord?.validations?.results?.data
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   const sample_event = validationsApiData?.sample_event
@@ -62,6 +78,22 @@ const FishbeltTransectInputs = ({
 
   const reefSlopeValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.reef_slope,
+    areValidationsShowing,
+  )
+  const relativeDepthValidationProperties = getValidationPropertiesForInput(
+    fishbelt_transect?.relative_depth,
+    areValidationsShowing,
+  )
+  const visibilityValidationProperties = getValidationPropertiesForInput(
+    fishbelt_transect?.visibility,
+    areValidationsShowing,
+  )
+  const currentValidationProperties = getValidationPropertiesForInput(
+    fishbelt_transect?.current,
+    areValidationsShowing,
+  )
+  const tideValidationProperties = getValidationPropertiesForInput(
+    fishbelt_transect?.tide,
     areValidationsShowing,
   )
 
@@ -118,6 +150,38 @@ const FishbeltTransectInputs = ({
       inputName: 'reef_slope',
       validationProperties: reefSlopeValidationProperties,
       validationPath: REEF_SLOPE_VALIDATION_PATH,
+    })
+  }
+  const handleRelativeDepthChange = (event) => {
+    formik.handleChange(event)
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'relative_depth',
+      validationProperties: relativeDepthValidationProperties,
+      validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
+    })
+  }
+  const handleVisibilityChange = (event) => {
+    formik.handleChange(event)
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'visibility',
+      validationProperties: visibilityValidationProperties,
+      validationPath: VISIBILITY_VALIDATION_PATH,
+    })
+  }
+  const handleCurrentChange = (event) => {
+    formik.handleChange(event)
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'current',
+      validationProperties: currentValidationProperties,
+      validationPath: CURRENT_VALIDATION_PATH,
+    })
+  }
+  const handleTideChange = (event) => {
+    formik.handleChange(event)
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'tide',
+      validationProperties: tideValidationProperties,
+      validationPath: TIDE_VALIDATION_PATH,
     })
   }
   const handleNotesChange = (event) => {
@@ -234,6 +298,74 @@ const FishbeltTransectInputs = ({
           value={formik.values.reef_slope}
           name="reef_slope"
           onChange={handleReefSlopeChange}
+        />
+        <InputRadioWithLabelAndValidation
+          label="Visibility"
+          id="visibility"
+          testId="visibility"
+          options={visibilityOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
+          }}
+          {...visibilityValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.visibility}
+          name="visibility"
+          onChange={handleVisibilityChange}
+        />
+        <InputRadioWithLabelAndValidation
+          label="Current"
+          id="current"
+          testId="current"
+          options={currentOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
+          }}
+          {...currentValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.current}
+          name="current"
+          onChange={handleCurrentChange}
+        />
+        <InputRadioWithLabelAndValidation
+          label="Relative Depth"
+          id="relative_depth"
+          testId="relative_depth"
+          options={relativeDepthOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
+          }}
+          {...relativeDepthValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.relative_depth}
+          name="relative_depth"
+          onChange={handleRelativeDepthChange}
+        />
+        <InputRadioWithLabelAndValidation
+          label="Tide"
+          id="tide"
+          testId="tide"
+          options={tideOptions}
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
+          }}
+          {...tideValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.tide}
+          name="tide"
+          onChange={handleTideChange}
         />
         <TextareaWithLabelAndValidation
           label="Notes"

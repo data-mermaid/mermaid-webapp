@@ -90,6 +90,34 @@ export default {
         ],
       ],
       fishbelt_transect: {
+        relative_depth: [
+          {
+            validation_id: Math.random(),
+            name: 'required',
+            status: 'error',
+          },
+        ],
+        visibility: [
+          {
+            validation_id: Math.random(),
+            name: 'required',
+            status: 'error',
+          },
+        ],
+        current: [
+          {
+            validation_id: Math.random(),
+            name: 'required',
+            status: 'error',
+          },
+        ],
+        tide: [
+          {
+            validation_id: Math.random(),
+            name: 'required',
+            status: 'error',
+          },
+        ],
         reef_slope: [
           {
             validation_id: Math.random(),
