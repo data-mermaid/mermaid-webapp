@@ -45,12 +45,14 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
-    // width radio
-    expect(screen.getByLabelText('2m')).toBeChecked()
-    // fish size bin radio
-    expect(screen.getByLabelText('5')).toBeChecked()
-    // reef slope radio
-    expect(screen.getByLabelText('flat')).toBeChecked()
+    expect(within(screen.getByTestId('width')).getByLabelText('2m')).toBeChecked()
+    expect(within(screen.getByTestId('size_bin')).getByLabelText('5')).toBeChecked()
+    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
+    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
+    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
+    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
+    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
+
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie', async () => {
