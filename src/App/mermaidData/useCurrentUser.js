@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../../language'
-import getUserProfile from '../getUserProfile'
+import getCurrentUserProfile from '../getCurrentUserProfile'
 
 export const useCurrentUser = ({
   apiBaseUrl,
@@ -16,7 +16,7 @@ export const useCurrentUser = ({
     let isMounted = true
 
     if (isMermaidAuthenticated && apiBaseUrl && dexieInstance && isMermaidAuthenticated) {
-      getUserProfile({
+      getCurrentUserProfile({
         apiBaseUrl,
         auth0Token,
         dexieInstance,

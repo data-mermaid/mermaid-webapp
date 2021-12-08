@@ -6,33 +6,33 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import { H2 } from '../../generic/text'
-import { IconAccount, IconAccountConvert, IconAccountRemove, IconSave, IconPlus } from '../../icons'
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
-import PageUnavailableOffline from '../PageUnavailableOffline'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
+import { H2 } from '../../generic/text'
+import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
+import { IconAccount, IconAccountConvert, IconAccountRemove, IconSave, IconPlus } from '../../icons'
+import { pluralize } from '../../../library/strings/pluralize'
+import { RowSpaceBetween } from '../../generic/positioning'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { validateEmail } from '../../../library/strings/validateEmail'
+import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import InlineMessage from '../../generic/InlineMessage'
+import InputAndButton from '../../generic/InputAndButton/InputAndButton'
+import language from '../../../language'
+import NewUserModal from '../../NewUserModal'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import { RowSpaceBetween } from '../../generic/positioning'
-import InlineMessage from '../../generic/InlineMessage'
-import theme from '../../../theme'
-import language from '../../../language'
-import useIsMounted from '../../../library/useIsMounted'
-import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import NewUserModal from '../../NewUserModal'
-import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
+import PageUnavailableOffline from '../PageUnavailableOffline'
 import RemoveUserModal from '../../RemoveUserModal'
-import { validateEmail } from '../../../library/strings/validateEmail'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import { pluralize } from '../../../library/strings/pluralize'
-import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
-import InputAndButton from '../../generic/InputAndButton/InputAndButton'
+import theme from '../../../theme'
+import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
+import useIsMounted from '../../../library/useIsMounted'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -83,22 +83,22 @@ const TableRadioLabel = styled('label')`
 `
 
 const Users = ({ currentUser }) => {
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
-  const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(false)
-  const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
-  const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
-  const [newUserProfile, setNewUserProfile] = useState('')
-  const [observerProfiles, setObserverProfiles] = useState([])
-  const [fromUser, setFromUser] = useState({})
-  const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
-  const [userToBeRemoved, setUserToBeRemoved] = useState({})
   const [
     showRemoveUserWithActiveSampleUnitsWarning,
     setShowRemoveUserWithActiveSampleUnitsWarning,
   ] = useState(false)
+  const [fromUser, setFromUser] = useState({})
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(false)
+  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
+  const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
+  const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
+  const [newUserProfile, setNewUserProfile] = useState('')
+  const [observerProfiles, setObserverProfiles] = useState([])
   const [projectName, setProjectName] = useState('')
+  const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
+  const [userToBeRemoved, setUserToBeRemoved] = useState({})
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
@@ -184,8 +184,8 @@ const Users = ({ currentUser }) => {
 
   const handleNewUserProfileAdd = (event) => setNewUserProfile(event.target.value)
 
-  const handleTransferSampleUnitChange = (userId) => {
-    setToUserProfileId(userId)
+  const handleTransferSampleUnitChange = (projectProfileId) => {
+    setToUserProfileId(projectProfileId)
   }
 
   const transferSampleUnits = () => {
@@ -285,16 +285,16 @@ const Users = ({ currentUser }) => {
 
     return observerProfiles.map((userInfo) => {
       const {
-        id: userId,
+        id: projectProfileId,
         profile_name,
         email,
         picture,
         num_active_sample_units,
-        profile,
+        profile: userId,
       } = userInfo
 
       const handleRoleChange = (event) => {
-        const observerToEdit = observerProfiles.find(({ id }) => id === userId)
+        const observerToEdit = observerProfiles.find(({ id }) => id === projectProfileId)
 
         observerToEdit.role = parseInt(event.target.value, 10)
 
@@ -313,37 +313,37 @@ const Users = ({ currentUser }) => {
         ),
         email,
         admin: (
-          <TableRadioLabel htmlFor={`admin-${userId}`}>
+          <TableRadioLabel htmlFor={`admin-${projectProfileId}`}>
             <input
               type="radio"
               value={90}
-              name={userId}
-              id={`admin-${userId}`}
-              checked={getObserverRole(userId) === 90}
+              name={projectProfileId}
+              id={`admin-${projectProfileId}`}
+              checked={getObserverRole(projectProfileId) === 90}
               onChange={handleRoleChange}
             />
           </TableRadioLabel>
         ),
         collector: (
-          <TableRadioLabel htmlFor={`collector-${userId}`}>
+          <TableRadioLabel htmlFor={`collector-${projectProfileId}`}>
             <input
               type="radio"
               value={50}
-              name={userId}
-              id={`collector-${userId}`}
-              checked={getObserverRole(userId) === 50}
+              name={projectProfileId}
+              id={`collector-${projectProfileId}`}
+              checked={getObserverRole(projectProfileId) === 50}
               onChange={handleRoleChange}
             />
           </TableRadioLabel>
         ),
         readonly: (
-          <TableRadioLabel htmlFor={`readonly-${userId}`}>
+          <TableRadioLabel htmlFor={`readonly-${projectProfileId}`}>
             <input
               type="radio"
               value={10}
-              name={userId}
-              id={`readonly-${userId}`}
-              checked={getObserverRole(userId) === 10}
+              name={projectProfileId}
+              id={`readonly-${projectProfileId}`}
+              checked={getObserverRole(projectProfileId) === 10}
               onChange={handleRoleChange}
             />
           </TableRadioLabel>
@@ -354,7 +354,7 @@ const Users = ({ currentUser }) => {
             type="button"
             disabled={num_active_sample_units === 0}
             onClick={() =>
-              openTransferSampleUnitsModal(profile, profile_name, email, num_active_sample_units)
+              openTransferSampleUnitsModal(userId, profile_name, email, num_active_sample_units)
             }
           >
             <IconAccountConvert />
@@ -363,7 +363,7 @@ const Users = ({ currentUser }) => {
         remove: (
           <ButtonSecondary
             type="button"
-            disabled={profile === currentUser.id}
+            disabled={userId === currentUser.id}
             onClick={() => openRemoveUserModal(userInfo)}
           >
             <IconAccountRemove />
@@ -478,7 +478,7 @@ const Users = ({ currentUser }) => {
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
         onDismiss={closeTransferSampleUnitsModal}
-        currentUserId={currentUser.id}
+        currentprojectProfileId={currentUser.id}
         fromUser={fromUser}
         userOptions={observerProfiles}
         showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}

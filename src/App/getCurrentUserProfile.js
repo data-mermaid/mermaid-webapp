@@ -1,7 +1,7 @@
 import axios from 'axios'
 import language from '../language'
 
-const getUserProfile = ({
+const getCurrentUserProfile = ({
   apiBaseUrl,
   auth0Token,
   dexieInstance,
@@ -9,10 +9,10 @@ const getUserProfile = ({
   isAppOnline,
 }) => {
   if (!apiBaseUrl) {
-    throw new Error('getUserProfile needs an API base url')
+    throw new Error('getCurrentUserProfile needs an API base url')
   }
   if (!dexieInstance) {
-    throw new Error('getUserProfile needs a dexieInstance')
+    throw new Error('getCurrentUserProfile needs a dexieInstance')
   }
   const authenticatedAxios = auth0Token
     ? axios.create({
@@ -63,4 +63,4 @@ const getUserProfile = ({
   return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
 }
 
-export default getUserProfile
+export default getCurrentUserProfile
