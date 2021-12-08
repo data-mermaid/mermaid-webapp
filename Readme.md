@@ -34,7 +34,7 @@
   - `last_revision_num` is tricky and there are no API docs for it. Definitely Dustin for an overview if you need to touch it (I cant remember the details).
   - a `_deleted` property is stored and sent to the api to let it know to delete an item.
 - Testing:
-  - The goal of testing is not 100% test coverage. Its to test critical path features or any complex code.
+  - The goal of testing is not 100% test coverage. Its to test critical path features or any complex code. Currently we are focusing test effort on offline functionality, and ignoring online-only functionality.
   - Since this app can exist in multiple states (online, offline, various states of data), test helpers were created to abstract much of this set up. The main ones are:
     - renderAuthenticatedOffline, renderAuthenticatedOnline, getMockDexieInstanceAllSuccess, initiallyHydrateOfflineStorageWithMockData (use for offline tests)
 
