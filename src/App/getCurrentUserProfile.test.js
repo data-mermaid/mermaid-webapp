@@ -4,13 +4,13 @@ import {
   getMockDexieInstanceThatProducesErrors,
 } from '../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../testUtilities/mockMermaidApiAllSuccessful'
-import getUserProfile from './getUserProfile'
+import getCurrentUserProfile from './getCurrentUserProfile'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const auth0Token = 'fake token'
 
-test('getUserProfile online returns data from the API', async () => {
-  const userProfile = await getUserProfile({
+test('getCurrentUserProfile online returns data from the API', async () => {
+  const userProfile = await getCurrentUserProfile({
     apiBaseUrl,
     auth0Token,
     dexieInstance: getMockDexieInstanceAllSuccess(),
@@ -25,7 +25,7 @@ test('getUserProfile online returns data from the API', async () => {
     full_name: 'FakeFirstNameOnline FakeLastNameOnline',
   })
 })
-test('getUserProfile online returns error message upon API error', async () => {
+test('getCurrentUserProfile online returns error message upon API error', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.get(`${apiBaseUrl}/me`, (req, res, ctx) => {
       return res(ctx.status(500))
@@ -35,7 +35,7 @@ test('getUserProfile online returns error message upon API error', async () => {
   expect.assertions(1)
 
   try {
-    await getUserProfile({
+    await getCurrentUserProfile({
       apiBaseUrl: process.env.REACT_APP_MERMAID_API,
       auth0Token: 'fake token',
       dexieInstance: getMockDexieInstanceAllSuccess(),
@@ -46,8 +46,8 @@ test('getUserProfile online returns error message upon API error', async () => {
     expect(error.message).toBeTruthy()
   }
 })
-test('getUserProfile offline returns data from local storage', async () => {
-  const userProfile = await getUserProfile({
+test('getCurrentUserProfile offline returns data from local storage', async () => {
+  const userProfile = await getCurrentUserProfile({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     auth0Token: 'fake token',
     dexieInstance: getMockDexieInstanceAllSuccess(),
@@ -62,11 +62,11 @@ test('getUserProfile offline returns data from local storage', async () => {
     full_name: 'FakeFirstNameOffline FakeLastNameOffline',
   })
 })
-test('getUserProfile offline returns error message upon dexie error', async () => {
+test('getCurrentUserProfile offline returns error message upon dexie error', async () => {
   expect.assertions(1)
 
   try {
-    await getUserProfile({
+    await getCurrentUserProfile({
       apiBaseUrl: process.env.REACT_APP_MERMAID_API,
       auth0Token: 'fake token',
       dexieInstance: getMockDexieInstanceThatProducesErrors(),
