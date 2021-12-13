@@ -14,11 +14,9 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 
-const SITE_VALIDATION_PATH = 'data.sample_event.site'
 const MANAGEMENT_VALIDATION_PATH = 'data.sample_event.management'
-const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
 const SAMPLE_DATE_VALIDATION_PATH = 'data.sample_event.sample_date'
-const SAMPLE_TIME_VALIDATION_PATH = 'data.fishbelt_transect.sample_time'
+const SITE_VALIDATION_PATH = 'data.sample_event.site'
 
 const SampleInfoInputs = ({
   areValidationsShowing,
@@ -34,7 +32,6 @@ const SampleInfoInputs = ({
   const managementSelectOptions = getOptions(managementRegimes, hasData)
   const siteSelectOptions = getOptions(sites, hasData)
   const validationsApiData = collectRecord?.validations?.results?.data
-  const fishbelt_transect = validationsApiData?.fishbelt_transect
   const sample_event = validationsApiData?.sample_event
 
   const siteValidationProperties = getValidationPropertiesForInput(
@@ -45,16 +42,9 @@ const SampleInfoInputs = ({
     sample_event?.management,
     areValidationsShowing,
   )
-  const depthValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.depth,
-    areValidationsShowing,
-  )
+
   const sampleDateValidationProperties = getValidationPropertiesForInput(
     sample_event?.sample_date,
-    areValidationsShowing,
-  )
-  const sampleTimeValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.sample_time,
     areValidationsShowing,
   )
 
@@ -76,15 +66,6 @@ const SampleInfoInputs = ({
     })
   }
 
-  const handleDepthChange = (event) => {
-    formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
-      inputName: 'depth',
-      validationProperties: depthValidationProperties,
-      validationPath: DEPTH_VALIDATION_PATH,
-    })
-  }
-
   const handleSampleDateChange = (event) => {
     formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
@@ -94,19 +75,10 @@ const SampleInfoInputs = ({
     })
   }
 
-  const handleSampleTimeChange = (event) => {
-    formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
-      inputName: 'sample_time',
-      validationProperties: sampleTimeValidationProperties,
-      validationPath: SAMPLE_TIME_VALIDATION_PATH,
-    })
-  }
-
   return (
     <>
       <InputWrapper>
-        <H2>Sample Info</H2>
+        <H2>Sample Event</H2>
         <InputSelectWithLabelAndValidation
           label="Site"
           id="site"
@@ -139,22 +111,7 @@ const SampleInfoInputs = ({
           value={formik.values.management}
           onChange={handleManagementChange}
         />
-        <InputWithLabelAndValidation
-          label="Depth"
-          id="depth"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
-          }}
-          testId="depth"
-          type="number"
-          {...depthValidationProperties}
-          onBlur={formik.handleBlur}
-          value={formik.values.depth}
-          onChange={handleDepthChange}
-        />
+
         <InputWithLabelAndValidation
           label="Sample Date"
           id="sample_date"
@@ -170,22 +127,6 @@ const SampleInfoInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.sample_date}
           onChange={handleSampleDateChange}
-        />
-        <InputWithLabelAndValidation
-          label="Sample Time"
-          id="sample_time"
-          testId="sample_time"
-          type="time"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
-          }}
-          {...sampleTimeValidationProperties}
-          onBlur={formik.handleBlur}
-          value={formik.values.sample_time}
-          onChange={handleSampleTimeChange}
         />
       </InputWrapper>
     </>

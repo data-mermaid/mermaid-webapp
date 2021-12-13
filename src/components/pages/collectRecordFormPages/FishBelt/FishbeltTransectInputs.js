@@ -11,17 +11,19 @@ import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioW
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 
-const TRANSECT_NUMBER_VALIDATION_PATH = 'data.fishbelt_transect.number'
+const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
+const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
 const LABEL_VALIDATION_PATH = 'data.fishbelt_transect.label'
 const LENGHT_SURVEYED_VALIDATION_PATH = 'data.fishbelt_transect.len_surveyed'
-const WIDTH_VALIDATION_PATH = 'data.fishbelt_transect.width'
-const SIZE_BIN_VALIDATION_PATH = 'data.fishbelt_transect.size_bin'
-const REEF_SLOPE_VALIDATION_PATH = 'data.fishbelt_transect.reef_slope'
 const NOTES_VALIDATION_PATH = 'data.sample_event.notes'
+const REEF_SLOPE_VALIDATION_PATH = 'data.fishbelt_transect.reef_slope'
 const RELATIVE_DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.relative_depth'
-const VISIBILITY_VALIDATION_PATH = 'data.fishbelt_transect.visibility'
-const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
+const SAMPLE_TIME_VALIDATION_PATH = 'data.fishbelt_transect.sample_time'
+const SIZE_BIN_VALIDATION_PATH = 'data.fishbelt_transect.size_bin'
 const TIDE_VALIDATION_PATH = 'data.fishbelt_transect.tide'
+const TRANSECT_NUMBER_VALIDATION_PATH = 'data.fishbelt_transect.number'
+const VISIBILITY_VALIDATION_PATH = 'data.fishbelt_transect.visibility'
+const WIDTH_VALIDATION_PATH = 'data.fishbelt_transect.width'
 
 const FishbeltTransectInputs = ({
   areValidationsShowing,
@@ -99,6 +101,16 @@ const FishbeltTransectInputs = ({
 
   const notesValidationProperties = getValidationPropertiesForInput(
     sample_event?.notes,
+    areValidationsShowing,
+  )
+
+  const sampleTimeValidationProperties = getValidationPropertiesForInput(
+    fishbelt_transect?.sample_time,
+    areValidationsShowing,
+  )
+
+  const depthValidationProperties = getValidationPropertiesForInput(
+    fishbelt_transect?.depth,
     areValidationsShowing,
   )
 
@@ -193,6 +205,24 @@ const FishbeltTransectInputs = ({
     })
   }
 
+  const handleSampleTimeChange = (event) => {
+    formik.handleChange(event)
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'sample_time',
+      validationProperties: sampleTimeValidationProperties,
+      validationPath: SAMPLE_TIME_VALIDATION_PATH,
+    })
+  }
+
+  const handleDepthChange = (event) => {
+    formik.handleChange(event)
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'depth',
+      validationProperties: depthValidationProperties,
+      validationPath: DEPTH_VALIDATION_PATH,
+    })
+  }
+
   return (
     <>
       <InputWrapper>
@@ -230,6 +260,38 @@ const FishbeltTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.label}
           onChange={handleLabelChange}
+        />
+        <InputWithLabelAndValidation
+          label="Sample Time"
+          id="sample_time"
+          testId="sample_time"
+          type="time"
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
+          }}
+          {...sampleTimeValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.sample_time}
+          onChange={handleSampleTimeChange}
+        />
+        <InputWithLabelAndValidation
+          label="Depth"
+          id="depth"
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
+          }}
+          testId="depth"
+          type="number"
+          {...depthValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.depth}
+          onChange={handleDepthChange}
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
