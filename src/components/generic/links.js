@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import { mediaQueryTabletLandscapeOnly, hoverState } from '../../library/styling/mediaQueries'
+import { hoverState } from '../../library/styling/mediaQueries'
 
 const linkThatLooksLikeButtonStyles = css`
   text-decoration: none;
@@ -43,12 +43,10 @@ export const NavLinkSidebar = styled(NavLink)`
     background-color: ${theme.color.primaryColor};
     color: ${theme.color.white};
   }
-  ${mediaQueryTabletLandscapeOnly(css`
-    text-align: center;
-    span {
-      display: block;
-      font-size: 1rem;
-      ${theme.typography.noWordBreak};
-    }
-  `)}
+  text-align: center;
+  span {
+    display: block;
+    font-size: 1rem;
+    ${theme.typography.noWordBreak};
+  }
 `

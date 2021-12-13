@@ -9,15 +9,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import {
-  Table,
-  Tr,
-  Th,
-  Td,
-  TableOverflowWrapper,
-  TableNavigation,
-  InnerCell,
-} from '../../generic/Table/table'
+import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortDates,
@@ -48,13 +40,13 @@ const Data = () => {
     if (databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getSubmittedRecordsForUIDisplay(projectId)
-        .then(records => {
+        .then((records) => {
           if (isMounted.current) {
             setSubmittedRecordsForUiDisplay(records)
             setIsLoading(false)
           }
         })
-        .catch(error => {
+        .catch((error) => {
           const errorStatus = error.response?.status
 
           if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
@@ -177,18 +169,18 @@ const Data = () => {
     usePagination,
   )
 
-  const handleRowsNumberChange = e => setPageSize(Number(e.target.value))
+  const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
 
-  const handleGlobalFilterChange = value => setGlobalFilter(value)
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const table = (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map(headerGroup => (
+            {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
+                {headerGroup.headers.map((column) => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     isSorted={column.isSorted}
@@ -201,15 +193,15 @@ const Data = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map(row => {
+            {page.map((row) => {
               prepareRow(row)
 
               return (
                 <Tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
+                  {row.cells.map((cell) => {
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
-                        <InnerCell>{cell.render('Cell')}</InnerCell>
+                        {cell.render('Cell')}
                       </Td>
                     )
                   })}

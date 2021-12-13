@@ -2,10 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import theme from '../../theme'
 import { NavLinkSidebar } from '../generic/links'
-import {
-  mediaQueryTabletLandscapeOnly,
-  mediaQueryPhoneOnly,
-} from '../../library/styling/mediaQueries'
+import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import {
   IconCollect,
@@ -24,16 +21,8 @@ const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
   height: 100%;
-  white-space: nowrap;
-  width: ${theme.spacing.sideNavWidthDesktop};
-  ${mediaQueryTabletLandscapeOnly(css`
-    width: ${theme.spacing.sideNavWidthTabletLandscapeOnly};
-    white-space: normal;
-  `)}
-  ${mediaQueryPhoneOnly(css`
-    width: ${theme.spacing.sideNavWidthPhoneOnly};
-    white-space: auto;
-  `)}
+  font-size: smaller;
+  width: ${theme.spacing.sideNavWidth};
 `
 const NavList = styled('ul')`
   position: sticky;
@@ -54,14 +43,13 @@ const NavList = styled('ul')`
   }
 `
 const NavHeader = styled('p')`
-  margin: 0;
-  color: ${theme.color.black};
+  margin: ${theme.spacing.large} 0 0 0;
+  color: ${theme.color.textColor};
   padding: ${theme.spacing.small};
   padding-top: ${theme.spacing.large};
-  ${mediaQueryTabletLandscapeOnly(css`
-    display: none;
-  `)}
-  ${theme.typography.upperCase};
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 900;
 `
 
 const NavMenu = () => {
