@@ -14,33 +14,20 @@ const InlineMessageWrapper = styled.div`
     margin: 0 0 0 ${theme.spacing.small};
     font-size: smaller;
     max-width: ${theme.spacing.maxTextWidth};
+    color: ${(props) => (props.messageType === 'error' ? theme.color.white : 'inherit')};
   }
   a,
   span {
     font-size: inherit;
     color: inherit;
   }
-
-  &.error {
-    background: ${theme.color.cautionColor};
-    border-color: ${theme.color.cautionBorder};
-    p {
-      color: ${theme.color.white};
-    }
-  }
-  &.warning {
-    background: ${theme.color.warningColor};
-    border-color: ${theme.color.warningBorder};
-  }
-  &.info {
-    background: ${theme.color.infoColor};
-    border-color: ${theme.color.infoBorder};
-  }
+  background: ${(props) => theme.color.getMessageColor(props.messageType)};
+  border-color: ${(props) => theme.color.getBorderColor(props.messageType)};
 `
 
 const InlineMessage = ({ type, children }) => {
   return (
-    <InlineMessageWrapper className={type}>
+    <InlineMessageWrapper messageType={type}>
       <p>{children}</p>
     </InlineMessageWrapper>
   )

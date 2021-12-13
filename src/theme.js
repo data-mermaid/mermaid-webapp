@@ -79,6 +79,32 @@ const color = {
   inputBackground: white,
   outline: `solid 2px ${primary}`,
   headerDropdownMenuBackground: `rgba(0,0,0,0.8)`,
+  getMessageColor: function getMessageColor(messageType) {
+    if (messageType === 'info') {
+      return this.infoColor
+    }
+    if (messageType === 'warning') {
+      return this.warningColor
+    }
+    if (messageType === 'error') {
+      return this.cautionColor
+    }
+
+    return undefined
+  },
+  getBorderColor: function getBorderColor(messageType) {
+    if (messageType === 'info') {
+      return this.infoBorder
+    }
+    if (messageType === 'warning') {
+      return this.warningBorder
+    }
+    if (messageType === 'error') {
+      return this.cautionBorder
+    }
+
+    return undefined
+  },
 }
 const spacing = {
   xxsmall,
