@@ -11,7 +11,11 @@ import App from '../../App'
 // this test suite is broken up into two for performance reasons
 
 test('App renders show page unavailable offline when navigate to Admin page while offline.', async () => {
-  renderAuthenticatedOffline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
     initialEntries: ['/projects/5/admin'],
   })
 
@@ -19,7 +23,11 @@ test('App renders show page unavailable offline when navigate to Admin page whil
 })
 
 test('App renders show page unavailable offline when navigate to Users page while offline.', async () => {
-  renderAuthenticatedOffline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
     initialEntries: ['/projects/5/users'],
   })
 
@@ -27,7 +35,11 @@ test('App renders show page unavailable offline when navigate to Users page whil
 })
 
 test('App renders show page unavailable offline when navigate to Fish Families page while offline.', async () => {
-  renderAuthenticatedOffline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
     initialEntries: ['/projects/5/fish-families'],
   })
 

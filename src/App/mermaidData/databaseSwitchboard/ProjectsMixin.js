@@ -44,6 +44,42 @@ const ProjectsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    editProjectProfileRole = async function editProjectProfileRole({
+      projectId,
+      profileId,
+      roleCode,
+    }) {
+      if (!projectId || !profileId || !roleCode) {
+        throw new Error(
+          'the invocation of editProjectProfileRole is missing one or more parameters.',
+        )
+      }
+      if (this._isAuthenticatedAndReady) {
+        const profileToEdit = await this._dexieInstance.project_profiles
+          .toArray()
+          .then((projectProfiles) =>
+            projectProfiles.find(
+              (projectProfile) =>
+                projectProfile.project === projectId && projectProfile.id === profileId,
+            ),
+          )
+
+        const editedProfile = { ...profileToEdit, role: roleCode, uiState_pushToApi: true }
+
+        return this._dexieInstance.project_profiles.put(editedProfile).then(() =>
+          this._apiSyncInstance
+            .pushThenPullEverythingForAProjectButChoices(projectId)
+            .then((pullResponse) => {
+              const editedProfileFromApi = pullResponse.data.project_profiles.updates[0]
+
+              return editedProfileFromApi
+            }),
+        )
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     getUserProfile = function getUserProfile(email) {
       if (!email) {
         Promise.reject(this._operationMissingParameterError)
