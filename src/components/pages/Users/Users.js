@@ -505,10 +505,6 @@ const Users = ({ currentUser }) => {
     <>
       <RowSpaceBetween>
         <H2>Users</H2>
-        <ButtonSecondary>
-          <IconSave />
-          Save Changes
-        </ButtonSecondary>
       </RowSpaceBetween>
       <ToolbarRowWrapper>
         <FilterSearchToolbar
