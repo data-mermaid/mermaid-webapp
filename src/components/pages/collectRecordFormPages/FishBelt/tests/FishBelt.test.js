@@ -45,7 +45,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
   expect(within(formTitle).getByText('FB-2'))
 
   expect(
-    screen.getByText('Sample Info', {
+    screen.getByText('Sample Event', {
       selector: 'h2',
     }),
   )
@@ -95,7 +95,7 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
   )
 
   expect(
-    screen.getByText('Sample Info', {
+    screen.getByText('Sample Event', {
       selector: 'h2',
     }),
   )
