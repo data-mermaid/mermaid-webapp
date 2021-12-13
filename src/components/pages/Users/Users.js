@@ -12,7 +12,13 @@ import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptyp
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { H2 } from '../../generic/text'
 import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import { IconAccount, IconAccountConvert, IconAccountRemove, IconSave, IconPlus } from '../../icons'
+import {
+  IconAccount,
+  IconAccountConvert,
+  IconAccountRemove,
+  IconPlus,
+  IconAlert,
+} from '../../icons'
 import { pluralize } from '../../../library/strings/pluralize'
 import { RowSpaceBetween } from '../../generic/positioning'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
@@ -82,6 +88,22 @@ const TableRadioLabel = styled('label')`
   `)}
 `
 
+const getRoleLabel = (roleCode) => {
+  if (roleCode === 90) {
+    return 'Admin'
+  }
+  if (roleCode === 50) {
+    return 'Collector'
+  }
+  if (roleCode === 10) {
+    return 'Read-only'
+  }
+
+  return undefined
+}
+const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
+const getIsUserRoleReadOnly = (profile) => profile.role === 10
+
 const Users = ({ currentUser }) => {
   const [
     showRemoveUserWithActiveSampleUnitsWarning,
@@ -91,7 +113,8 @@ const Users = ({ currentUser }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(false)
-  const [isReadonlyUserWithActiveSampleUnits] = useState(false)
+  const [isReadonlyUserWithActiveSampleUnits, setIsReadonlyUserWithActiveSampleUnits] =
+    useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserProfile, setNewUserProfile] = useState('')
@@ -125,6 +148,18 @@ const Users = ({ currentUser }) => {
         })
     }
   }, [databaseSwitchboardInstance, isMounted, projectId])
+
+  const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
+    setIsReadonlyUserWithActiveSampleUnits(false)
+    observerProfiles.forEach((profile) => {
+      const profileHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
+      const isProfileReadOnly = getIsUserRoleReadOnly(profile)
+
+      if (profileHasActiveSampleUnits && isProfileReadOnly) {
+        setIsReadonlyUserWithActiveSampleUnits(true)
+      }
+    })
+  }, [observerProfiles])
 
   const fetchProjectProfiles = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -280,10 +315,49 @@ const Users = ({ currentUser }) => {
     ]
   }, [])
 
+  const handleRoleChange = useCallback(
+    ({ event, projectProfileId }) => {
+      setIsLoading(true)
+
+      const roleCode = parseInt(event.target.value, 10)
+
+      databaseSwitchboardInstance
+        .editProjectProfileRole({
+          profileId: projectProfileId,
+          projectId,
+          roleCode,
+        })
+        .then((editedProfile) => {
+          const editedUserName = editedProfile.profile_name
+          const editedUserRole = getRoleLabel(editedProfile.role)
+
+          const updatedObserverProfiles = observerProfiles.map((observer) =>
+            observer.id === editedProfile.id ? editedProfile : observer,
+          )
+
+          setObserverProfiles(updatedObserverProfiles)
+          setIsLoading(false)
+          toast.success(
+            language.success.getUserRoleChangeSuccessMessage({
+              userName: editedUserName,
+              role: editedUserRole,
+            }),
+          )
+        })
+        .catch(() => {
+          const userToBeEdited = observerProfiles.find(({ id }) => id === projectProfileId)
+
+          toast.error(language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name))
+          setIsLoading(false)
+        })
+    },
+    [databaseSwitchboardInstance, observerProfiles, projectId],
+  )
+
   const tableCellData = useMemo(() => {
     const getObserverRole = (id) => observerProfiles.find((profile) => profile.id === id).role
 
-    return observerProfiles.map((userInfo) => {
+    return observerProfiles.map((profile) => {
       const {
         id: projectProfileId,
         profile_name,
@@ -291,21 +365,12 @@ const Users = ({ currentUser }) => {
         picture,
         num_active_sample_units,
         profile: userId,
-      } = userInfo
+      } = profile
 
+      const doesUserHaveActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
+      const isUserRoleReadOnly = getIsUserRoleReadOnly(profile)
       const isCurrentUser = userId === currentUser.id
-
-      const handleRoleChange = (event) => {
-        const observerToEdit = observerProfiles.find(({ id }) => id === projectProfileId)
-
-        observerToEdit.role = parseInt(event.target.value, 10)
-
-        const updatedObserverProfiles = observerProfiles.map((observer) =>
-          observer.id === observerToEdit.id ? observerToEdit : observer,
-        )
-
-        setObserverProfiles(updatedObserverProfiles)
-      }
+      const isActiveSampleUnitsWarningShowing = doesUserHaveActiveSampleUnits && isUserRoleReadOnly
 
       return {
         name: (
@@ -322,7 +387,9 @@ const Users = ({ currentUser }) => {
               name={projectProfileId}
               id={`admin-${projectProfileId}`}
               checked={getObserverRole(projectProfileId) === 90}
-              onChange={handleRoleChange}
+              onChange={(event) => {
+                handleRoleChange({ event, projectProfileId })
+              }}
               disabled={isCurrentUser}
             />
           </TableRadioLabel>
@@ -335,7 +402,9 @@ const Users = ({ currentUser }) => {
               name={projectProfileId}
               id={`collector-${projectProfileId}`}
               checked={getObserverRole(projectProfileId) === 50}
-              onChange={handleRoleChange}
+              onChange={(event) => {
+                handleRoleChange({ event, projectProfileId })
+              }}
               disabled={isCurrentUser}
             />
           </TableRadioLabel>
@@ -348,16 +417,22 @@ const Users = ({ currentUser }) => {
               name={projectProfileId}
               id={`readonly-${projectProfileId}`}
               checked={getObserverRole(projectProfileId) === 10}
-              onChange={handleRoleChange}
+              onChange={(event) => {
+                handleRoleChange({ event, projectProfileId })
+              }}
               disabled={isCurrentUser}
             />
           </TableRadioLabel>
         ),
-        active: num_active_sample_units,
+        active: (
+          <>
+            {num_active_sample_units} {isActiveSampleUnitsWarningShowing ? <IconAlert /> : null}
+          </>
+        ),
         transfer: (
           <ButtonSecondary
             type="button"
-            disabled={num_active_sample_units === 0}
+            disabled={!doesUserHaveActiveSampleUnits}
             onClick={() =>
               openTransferSampleUnitsModal(userId, profile_name, email, num_active_sample_units)
             }
@@ -369,14 +444,14 @@ const Users = ({ currentUser }) => {
           <ButtonSecondary
             type="button"
             disabled={isCurrentUser}
-            onClick={() => openRemoveUserModal(userInfo)}
+            onClick={() => openRemoveUserModal(profile)}
           >
             <IconAccountRemove />
           </ButtonSecondary>
         ),
       }
     })
-  }, [observerProfiles, currentUser])
+  }, [observerProfiles, currentUser, handleRoleChange])
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.email']
@@ -483,7 +558,7 @@ const Users = ({ currentUser }) => {
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
         onDismiss={closeTransferSampleUnitsModal}
-        currentprojectProfileId={currentUser.id}
+        currentUserId={currentUser.id}
         fromUser={fromUser}
         userOptions={observerProfiles}
         showRemoveUserWithActiveSampleUnitsWarning={showRemoveUserWithActiveSampleUnitsWarning}
@@ -539,7 +614,7 @@ const Users = ({ currentUser }) => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout isLoading={isLoading} content={content} toolbar={toolbar} />
+    <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
   )
 }
 

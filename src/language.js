@@ -36,7 +36,8 @@ const error = {
   siteSave: 'Something went wrong. The site has not been saved.',
   submittedRecordsUnavailable: 'Submitted records data is currently unavailable. Please try again',
   submittedRecordUnavailable: 'Submitted record data is currently unavailable. Please try again',
-  submittedRecordMoveToCollect: 'Something went wrong. The submitted record has not been made editable',
+  submittedRecordMoveToCollect:
+    'Something went wrong. The submitted record has not been made editable',
   userProfileUnavailable: 'The user profile is unavailable.',
   userRecordsUnavailable: 'User records data is currently unavailable. Please try again',
 
@@ -48,6 +49,8 @@ const error = {
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, has not been removed from being offline ready.`,
+  getUserRoleChangeFailureMessage: (userName) =>
+    `Something went wrong. ${userName}'s role has not been changed.`,
   pageUnavailableOffline: 'This page is unavailable offline.',
   pageNotFound: "This page can't be found.",
   pageNotFoundRecovery: 'Make sure the URL is correct.',
@@ -67,6 +70,8 @@ const success = {
     `The project, ${projectName}, is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
     `The project, ${projectName}, has been removed from being offline ready`,
+  getUserRoleChangeSuccessMessage: ({ userName, role }) =>
+    `${userName}'s role is now set to ${role}.`,
   newUserAdd: 'New user added',
   newPendingUserAdd: 'Sign-up email sent. New user added as pending.',
   siteSave: 'Site saved.',
