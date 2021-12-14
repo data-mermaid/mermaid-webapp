@@ -25,7 +25,7 @@ export const ButtonGroups = styled('div')`
 `
 
 export const CardWrapper = styled('div')`
-  margin: ${theme.spacing.medium} auto 0 auto;
+  margin: ${theme.spacing.xlarge} auto 0 auto;
   width: ${theme.spacing.width};
   max-width: ${theme.spacing.maxWidth};
   background: ${theme.color.white};
@@ -76,9 +76,9 @@ export const CheckBoxLabel = styled.label`
   background: ${theme.color.secondaryColor};
   padding: ${theme.spacing.buttonPadding};
   justify-self: end;
-  background: ${props =>
+  background: ${(props) =>
     props.disabled ? theme.color.secondaryDisabledColor : theme.color.secondaryColor};
-  color: ${props => (props.disabled ? theme.color.primaryDisabledColor : theme.color.textColor)};
+  color: ${(props) => (props.disabled ? theme.color.primaryDisabledColor : theme.color.textColor)};
   ${hoverState(css`
     background: ${theme.color.secondaryHover};
   `)}

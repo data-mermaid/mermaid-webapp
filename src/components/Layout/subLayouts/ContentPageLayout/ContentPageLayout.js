@@ -3,7 +3,7 @@ import React from 'react'
 import styled, { css } from 'styled-components/macro'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import {
-  mediaQueryForDesktopUp,
+  mediaQueryPhoneOnly,
   mediaQueryTabletLandscapeOnly,
 } from '../../../../library/styling/mediaQueries'
 import theme from '../../../../theme'
@@ -53,11 +53,11 @@ const Content = styled('div')`
 const ContentPageToolbarWrapper = styled('div')`
   display: flex;
   justify-content: space-between;
-  flex-direction: column;
-  align-items: start;
-  ${mediaQueryForDesktopUp(css`
-    flex-direction: row;
-    align-items: center;
+  flex-direction: row;
+  align-items: center;
+  ${mediaQueryPhoneOnly(css`
+    flex-direction: column;
+    align-items: start;
   `)}
   ${mediaQueryTabletLandscapeOnly(css`
     &,

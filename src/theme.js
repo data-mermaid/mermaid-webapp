@@ -12,12 +12,12 @@ const black = primary.mix(colorHelper('black'), 0.95)
 const textColor = colorHelper('#13124A')
 const valid = textColor
 
-const xxsmall = '0.2rem'
-const xsmall = '0.5rem'
-const small = '1rem'
-const medium = '2rem'
-const large = '2.5rem'
-const xlarge = '3.5rem'
+const xxsmall = '0.1rem'
+const xsmall = '0.2rem'
+const small = '0.5rem'
+const medium = '1rem'
+const large = '1.5rem'
+const xlarge = '2rem'
 
 const color = {
   textColor,
@@ -120,9 +120,7 @@ const spacing = {
   maxTextWidth: '78ch',
   fullViewportWidth: 'calc(100vw - (100vw - 100%))',
   headerHeight: '4.9rem',
-  sideNavWidthTabletLandscapeOnly: '8rem',
-  sideNavWidthPhoneOnly: '6rem',
-  sideNavWidthDesktop: '25rem',
+  sideNavWidth: '8rem',
   borderSmall: '1px',
   borderMedium: '2px',
   borderLarge: '4px',
@@ -135,13 +133,13 @@ const timing = {
 }
 
 const typography = {
-  defaultFontSize: '1.8rem',
+  defaultFontSize: '1.6rem',
   smallFontSize: '1.2rem',
   xSmallFontSize: '1rem',
   lineHeight: '1.5',
   smallIconSize: '1rem',
-  defaultIconSize: '1.8rem',
-  largeIconSize: '3.5rem',
+  defaultIconSize: '1.5rem',
+  largeIconSize: '3rem',
   xLargeIconSize: '4rem',
   noWordBreak: css`
     overflow-wrap: break-word;
