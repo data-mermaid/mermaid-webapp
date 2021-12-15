@@ -16,6 +16,9 @@ const options = [
   { label: 'Option 4', value: 'four' },
 ]
 
+// 'nothing' needs to be empty string, not null or undefined. This is because react complains when inputs change type.
+const optionsWithNothing = [...options, { label: 'Nothing', value: '' }]
+
 export const basic = () => (
   <Formik
     initialValues={{
@@ -37,6 +40,15 @@ export const basic = () => (
           id="id1"
           label="No warnings or errors"
           options={options}
+        />
+
+        <InputRadioWithLabelAndValidation
+          resetNonObservationFieldValidations={action('reset validations')}
+          ignoreNonObservationFieldValidations={action('ignore validations')}
+          {...formik.getFieldProps('test2')}
+          id="id2"
+          label="Can select nothing"
+          options={optionsWithNothing}
         />
 
         <InputRadioWithLabelAndValidation

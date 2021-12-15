@@ -12,7 +12,7 @@ import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSucces
 jest.setTimeout(30000)
 window.URL.createObjectURL = () => {}
 
-jest.mock('maplibre-gl/dist/maplibre-gl', function foo() {
+jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
   return {
     Map: function () {
       return {
