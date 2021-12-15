@@ -1,9 +1,5 @@
 import styled, { css } from 'styled-components/macro'
-import {
-  mediaQueryTabletLandscapeOnly,
-  mediaQueryPhoneOnly,
-  hoverState,
-} from '../../../library/styling/mediaQueries'
+import { mediaQueryTabletLandscapeOnly, hoverState } from '../../../library/styling/mediaQueries'
 import theme from '../../../theme'
 
 export const TableNavigation = styled.div`
@@ -18,16 +14,10 @@ export const TableNavigation = styled.div`
   }
 `
 export const TableOverflowWrapper = styled.div`
-  max-width: calc(100vw - ${theme.spacing.sideNavWidthDesktop} - 20px);
+  max-width: calc(100vw - ${theme.spacing.sideNavWidth} - 20px);
   // 20px is the approx scrollbar width this is to prevent
   // a horziontal scrollbar at the bottom of the page
   // and to keep the toolbar sticky when needed.
-  ${mediaQueryTabletLandscapeOnly(css`
-    max-width: calc(100vw - ${theme.spacing.sideNavWidthTabletLandscapeOnly} - 20px);
-  `)}
-  ${mediaQueryPhoneOnly(css`
-    max-width: calc(100vw - ${theme.spacing.sideNavWidthPhoneOnly} - 20px);
-  `)}
   overflow-y: auto;
   & + button,
   button + & {
@@ -45,10 +35,11 @@ export const Th = styled.th(
     text-align: ${props.align || 'left'};
     padding: ${theme.spacing.medium};
     background: ${theme.color.white};
-    white-space: nowrap;
+    vertical-align: top;
     &::after {
       content: ' \u25bc';
       color: transparent;
+      white-space: nowrap;
     }
     ${props.isSorted &&
     props.isSortedDescending &&
@@ -73,7 +64,6 @@ export const Td = styled.td(
     text-align: ${props.align || 'left'};
     padding: ${theme.spacing.medium};
     border-width: ${theme.spacing.borderSmall};
-    min-width: 6rem;
     border-color: ${theme.color.backgroundColor};
     border-style: solid;
     &:first-child {
@@ -100,9 +90,4 @@ export const Tr = styled.tr`
   ${hoverState(css`
     background-color: ${theme.color.tableRowHover};
   `)}
-`
-export const InnerCell = styled.span`
-  display: inline-block;
-  width: max-content;
-  max-width: 26ch;
 `

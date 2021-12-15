@@ -4,15 +4,7 @@ import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
-import {
-  Table,
-  Tr,
-  Th,
-  Td,
-  TableOverflowWrapper,
-  TableNavigation,
-  InnerCell,
-} from '../../generic/Table/table'
+import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -189,20 +181,20 @@ const Collect = () => {
     useSortBy,
     usePagination,
   )
-  const handleRowsNumberChange = e => {
+  const handleRowsNumberChange = (e) => {
     setPageSize(Number(e.target.value))
   }
 
-  const handleGlobalFilterChange = value => setGlobalFilter(value)
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const table = (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map(headerGroup => (
+            {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
+                {headerGroup.headers.map((column) => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     isSorted={column.isSorted}
@@ -215,15 +207,15 @@ const Collect = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map(row => {
+            {page.map((row) => {
               prepareRow(row)
 
               return (
                 <Tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
+                  {row.cells.map((cell) => {
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
-                        <InnerCell>{cell.render('Cell')}</InnerCell>
+                        {cell.render('Cell')}
                       </Td>
                     )
                   })}
