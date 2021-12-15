@@ -18,23 +18,21 @@ const InputRadioWithLabelAndValidation = ({
   ...restOfProps
 }) => {
   const optionsList = options.map(({ label: optionLabel, value }) => {
+    const isChecked = restOfProps.value === value
+
+    const radioId = `${id}-${value}`
+
     return (
-      <CheckRadioWrapper key={value}>
-        <input
-          type="radio"
-          id={value}
-          {...restOfProps}
-          value={value}
-          checked={restOfProps.value === value}
-        />
-        <CheckRadioLabel htmlFor={value}>{optionLabel}</CheckRadioLabel>
+      <CheckRadioWrapper key={`key-${value}`}>
+        <input type="radio" id={radioId} {...restOfProps} value={value} checked={isChecked} />
+        <CheckRadioLabel htmlFor={radioId}>{optionLabel}</CheckRadioLabel>
       </CheckRadioWrapper>
     )
   })
 
   return (
     <InputRow validationType={validationType} data-testid={testId}>
-      <label htmlFor={id}>{label}</label>
+      <div>{label}</div>
       <div>{optionsList}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
