@@ -19,11 +19,7 @@ import { createUuid } from '../../../../library/createUuid'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { H2 } from '../../../generic/text'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import {
-  inputTextareaSelectStyles,
-  InputWrapper,
-  validationBorderColors,
-} from '../../../generic/form'
+import { inputTextareaSelectStyles, InputWrapper } from '../../../generic/form'
 import { LinkThatLooksLikeButton } from '../../../generic/links'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
@@ -40,7 +36,7 @@ import { Column } from '../../../generic/positioning'
 const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
-  ${validationBorderColors};
+  border-color: ${(props) => theme.color.getBorderColor(props.messageType)};
 `
 const CellValidation = styled(Td)``
 const CellValidationButton = styled(ButtonSecondary)`
@@ -443,7 +439,7 @@ const FishBeltObservationTable = ({
       const proposeNewSpeciesClick = () => openNewFishNameModal(observationId)
 
       return (
-        <ObservationTr key={observationId} validationType={validationType}>
+        <ObservationTr key={observationId} messageType={validationType}>
           <Td align="center">{rowNumber}</Td>
           <Td align="left">
             {fishNameOptions.length && (
