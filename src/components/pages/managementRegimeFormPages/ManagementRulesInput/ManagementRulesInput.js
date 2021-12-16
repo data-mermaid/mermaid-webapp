@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-
-import theme from '../../../../theme'
-import { InputRow } from '../../../generic/form'
+import { InputRow, CheckRadioLabel, CheckRadioWrapper } from '../../../generic/form'
 import { managementRegimePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import InputValidationInfo from '../../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../../../mermaidInputs/mermaidInputsPropTypes'
@@ -16,26 +14,17 @@ const partialRestrictionOptions = [
   { value: 'access_restriction', label: 'Access Restriction' },
 ]
 
-const CheckBoxLabel = styled.label`
-  padding-left: ${theme.spacing.xlarge} !important;
-  width: 100%;
-  display: inline-block;
-  input {
-    cursor: pointer;
-  }
+const StyledCheckRadioWrapper = styled(CheckRadioWrapper)`
+  display: block;
 `
-
-const RadioLabel = styled.label`
-  padding: 6px 5px !important;
-  display: inline-block;
-  input {
-    margin: 0 ${theme.spacing.xsmall} 0 0;
-    cursor: pointer;
-  }
-  span {
+const PartialRestrictionsCheckboxCheckRadioWrapper = styled(CheckRadioWrapper)`
+  margin-left: 2rem;
+`
+const StyledCheckRadioLabel = styled(CheckRadioLabel)`
+  > span {
     display: block;
     font-size: x-small;
-    padding-left: ${theme.spacing.medium};
+    padding-left: 2rem;
   }
 `
 
@@ -137,7 +126,7 @@ const ManagementRulesInput = ({
   const showPartialRestrictionChoices =
     managementRulesRadioInputValue.partial_restrictions &&
     partialRestrictionOptions.map(({ value, label: optionLabel }) => (
-      <CheckBoxLabel key={value}>
+      <PartialRestrictionsCheckboxCheckRadioWrapper>
         <input
           id={value}
           type="checkbox"
@@ -145,58 +134,60 @@ const ManagementRulesInput = ({
           checked={partialRestrictionCheckboxValues[value]}
           onChange={handlePartialRestrictionChoicesChange}
         />
-        <span htmlFor={value}>{optionLabel}</span>
-      </CheckBoxLabel>
+        <CheckRadioLabel htmlFor={value} key={value}>
+          {optionLabel}
+        </CheckRadioLabel>
+      </PartialRestrictionsCheckboxCheckRadioWrapper>
     ))
 
   return (
     <InputRow {...restOfProps}>
       <label htmlFor={id}>{label}</label>
       <div>
-        <div>
-          <RadioLabel htmlFor="open-access">
-            <input
-              type="radio"
-              id="open-access"
-              name="rules"
-              value="open_access"
-              checked={managementRulesRadioInputValue.open_access}
-              onChange={handleOpenAccessChange}
-            />
+        <StyledCheckRadioWrapper>
+          <input
+            type="radio"
+            id="open-access"
+            name="rules"
+            value="open_access"
+            checked={managementRulesRadioInputValue.open_access}
+            onChange={handleOpenAccessChange}
+          />
+          <StyledCheckRadioLabel htmlFor="open-access">
             Open Access
             <span>Open for fishing and entering</span>
-          </RadioLabel>
-        </div>
-        <div>
-          <RadioLabel htmlFor="no-take">
-            <input
-              type="radio"
-              id="no-take"
-              name="rules"
-              value="no_take"
-              checked={managementRulesRadioInputValue.no_take}
-              onChange={handleNoTakeChange}
-            />
+          </StyledCheckRadioLabel>
+        </StyledCheckRadioWrapper>
+        <StyledCheckRadioWrapper>
+          <input
+            type="radio"
+            id="no-take"
+            name="rules"
+            value="no_take"
+            checked={managementRulesRadioInputValue.no_take}
+            onChange={handleNoTakeChange}
+          />
+          <StyledCheckRadioLabel htmlFor="no-take">
             No Take
             <span>Total extraction ban</span>
-          </RadioLabel>
-        </div>
-        <div>
-          <RadioLabel htmlFor="partial-restrictions">
-            <input
-              type="radio"
-              id="partial-restrictions"
-              name="rules"
-              checked={managementRulesRadioInputValue.partial_restrictions}
-              onChange={handlePartialRestrictionChange}
-            />
+          </StyledCheckRadioLabel>
+        </StyledCheckRadioWrapper>
+        <StyledCheckRadioWrapper>
+          <input
+            type="radio"
+            id="partial-restrictions"
+            name="rules"
+            checked={managementRulesRadioInputValue.partial_restrictions}
+            onChange={handlePartialRestrictionChange}
+          />
+          <StyledCheckRadioLabel htmlFor="partial-restrictions">
             Partial Restrictions
             <span>
               e.g. periodic closures, size limits, gear restrictions, species restrictions
             </span>
-          </RadioLabel>
+          </StyledCheckRadioLabel>
           {showPartialRestrictionChoices}
-        </div>
+        </StyledCheckRadioWrapper>
       </div>
       <InputValidationInfo
         validationType={validationType}
