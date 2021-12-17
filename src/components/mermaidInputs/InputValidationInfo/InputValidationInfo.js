@@ -29,12 +29,12 @@ const InputValidationInfo = ({
               <p>{validationMessage.message}</p>
             </InlineMessage>
           ))}
-          {areThereValidationMessages && validationType === 'warning' ? (
-            <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
-              Ignore all
-            </InlineValidationButton>
-          ) : null}
         </>
+      ) : null}
+      {areThereValidationMessages && validationType === 'warning' ? (
+        <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
+          Ignore all
+        </InlineValidationButton>
       ) : null}
       {validationType === 'ok' ? <span aria-label="Passed validation">&nbsp;</span> : null}
       {validationType === 'ignore' ? (
