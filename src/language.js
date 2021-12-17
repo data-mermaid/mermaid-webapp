@@ -30,6 +30,7 @@ const error = {
     'Management Regime records data is currently unavailable. Please try again',
   managementRegimeRecordUnavailable:
     'Management Regime record data is currently unavailable. Please try again',
+  projectSave: 'Something went wrong. The project has not been saved.',
   projectsUnavailable: 'Projects data is currently unavailable. Please try again',
   siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again',
   siteRecordUnavailable: 'Site record data is currently unavailable. Please try again',
@@ -74,6 +75,7 @@ const success = {
     `${userName}'s role is now set to ${role}.`,
   newUserAdd: 'New user added',
   newPendingUserAdd: 'Sign-up email sent. New user added as pending.',
+  projectSave: 'Project saved',
   siteSave: 'Site saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
