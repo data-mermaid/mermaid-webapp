@@ -27,12 +27,14 @@ const color = {
   callout,
   ignore,
   ignoreColor: ignore,
+  ignoreHover: ignore.mix(colorHelper(white), 0.1),
   infoColor: ignore,
   ignoreBorder: ignore.mix(colorHelper('black'), 0.1),
   infoBorder: ignore.mix(colorHelper('black'), 0.1),
   valid,
   warningColor: warning,
   warningBorder: warning.mix(colorHelper('black'), 0.1),
+  warningHover: warning.mix(colorHelper(white), 0.1),
   backgroundColor: secondary,
 
   primaryColor: primary,
@@ -79,6 +81,54 @@ const color = {
   inputBackground: white,
   outline: `solid 2px ${primary}`,
   headerDropdownMenuBackground: `rgba(0,0,0,0.8)`,
+  getMessageColorBackground: function getMessageColorBackground(messageType) {
+    if (messageType === 'ignore') {
+      return this.ignoreColor.alpha(0.15)
+    }
+    if (messageType === 'info') {
+      return this.infoColor.alpha(0.15)
+    }
+    if (messageType === 'warning') {
+      return this.warningColor.alpha(0.15)
+    }
+    if (messageType === 'error') {
+      return this.cautionColor.alpha(0.15)
+    }
+
+    return undefined
+  },
+  getBorderColor: function getBorderColor(messageType) {
+    if (messageType === 'ignore') {
+      return this.ignoreColor
+    }
+    if (messageType === 'info') {
+      return this.infoColor
+    }
+    if (messageType === 'warning') {
+      return this.warningColor
+    }
+    if (messageType === 'error') {
+      return this.cautionColor
+    }
+
+    return this.primaryColor
+  },
+  getHoverColor: function getHoverColor(messageType) {
+    if (messageType === 'ignore') {
+      return this.ignoreColor.alpha(0.4)
+    }
+    if (messageType === 'info') {
+      return this.infoColor.alpha(0.4)
+    }
+    if (messageType === 'warning') {
+      return this.warningColor.alpha(0.4)
+    }
+    if (messageType === 'error') {
+      return this.cautionColor.alpha(0.4)
+    }
+
+    return undefined
+  },
 }
 const spacing = {
   xxsmall,

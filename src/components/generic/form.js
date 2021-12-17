@@ -38,37 +38,8 @@ export const ValidationList = styled('ul')`
   margin: 0;
   li {
     display: flex;
-    justify-content: space-between;
-    span {
-      margin: ${theme.spacing.xxsmall} 0;
-      display: block;
-      width: 100%;
-      padding: ${theme.spacing.small};
-    }
+    margin-bottom: ${theme.spacing.xsmall};
   }
-`
-
-export const validationBorderColors = css`
-  ${(props) =>
-    props.validationType === 'ok' &&
-    css`
-      border-color: ${theme.color.valid};
-    `}
-  ${(props) =>
-    props.validationType === 'error' &&
-    css`
-      border-color: ${theme.color.cautionColor};
-    `}
-  ${(props) =>
-    props.validationType === 'warning' &&
-    css`
-      border-color: ${theme.color.warningColor};
-    `}
-    ${(props) =>
-    props.validationType === 'ignore' &&
-    css`
-      border-color: ${theme.color.ignoreBorder};
-    `}
 `
 
 export const InputWrapper = styled.div`
@@ -106,11 +77,10 @@ export const InputRow = styled.div`
   padding: ${theme.spacing.medium};
   border-width: 0 0 0 ${theme.spacing.borderLarge};
   border-style: solid;
-  border-color: ${theme.color.secondaryColor};
+  border-color: ${(props) => theme.color.getBorderColor(props.validationType)};
   ${hoverState(css`
     background-color: ${theme.color.tableRowHover};
   `)}
-  ${validationBorderColors};
   ${mediaQueryTabletLandscapeOnly(css`
     grid-template-columns: auto 1fr;
     grid-template-rows: minmax(30px, auto) 1fr;
@@ -134,18 +104,6 @@ export const InputRow = styled.div`
       grid-column: 2 / 3;
     }
   `)}
-`
-export const ValidationMessage = styled.span.attrs((props) => ({
-  role:
-    props.validationType === 'error' ||
-    props.validationType === 'warning' ||
-    props.validationType === 'reset'
-      ? 'alert'
-      : undefined,
-}))`
-  border-style: solid;
-  border-width: 1px 1px 1px ${theme.spacing.borderLarge};
-  ${validationBorderColors};
 `
 
 export const Select = styled.select`

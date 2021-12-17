@@ -1,28 +1,14 @@
 import React from 'react'
-import styled, { css } from 'styled-components/macro'
+import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
-import { ValidationMessage } from '../../generic/form'
 import theme from '../../../theme'
-import { ButtonSecondary } from '../../generic/buttons'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
+import InlineMessage from '../../generic/InlineMessage/InlineMessage'
+import { InlineValidationButton } from '../../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 
-const validationStyles = css`
-  padding: ${theme.spacing.xxsmall} ${theme.spacing.xsmall};
-  margin: ${theme.spacing.xsmall} ${theme.spacing.xxsmall};
-  display: block;
-`
-
-const ValidationButton = styled(ButtonSecondary)`
-  ${validationStyles};
-  text-transform: capitalize;
-`
-const FormValidationMessage = styled(ValidationMessage)`
-  ${validationStyles}
-`
 const ValidationWrapper = styled('div')`
+  padding-left: ${theme.spacing.small};
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
   align-items: flex-start;
 `
 const InputValidationInfo = ({
@@ -39,26 +25,27 @@ const InputValidationInfo = ({
       (validationType === 'error' || validationType === 'warning') ? (
         <>
           {validationMessages.map((validationMessage) => (
-            <FormValidationMessage validationType={validationType} key={validationMessage.id}>
-              {validationMessage.message}
-            </FormValidationMessage>
+            <InlineMessage type={validationType} key={validationMessage.id}>
+              <p>{validationMessage.message}</p>
+            </InlineMessage>
           ))}
         </>
+      ) : null}
+      {areThereValidationMessages && validationType === 'warning' ? (
+        <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
+          Ignore all
+        </InlineValidationButton>
       ) : null}
       {validationType === 'ok' ? <span aria-label="Passed validation">&nbsp;</span> : null}
       {validationType === 'ignore' ? (
         <>
-          <FormValidationMessage validationType={validationType}>Ignored</FormValidationMessage>
-          <ValidationButton type="button" onClick={resetNonObservationFieldValidations}>
+          <InlineMessage validationType={validationType}>
+            <p>Ignored</p>
+          </InlineMessage>
+          <InlineValidationButton type="button" onClick={resetNonObservationFieldValidations}>
             Reset validations
-          </ValidationButton>
+          </InlineValidationButton>
         </>
-      ) : null}
-
-      {areThereValidationMessages && validationType === 'warning' ? (
-        <ValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
-          Ignore all warnings
-        </ValidationButton>
       ) : null}
     </ValidationWrapper>
   )

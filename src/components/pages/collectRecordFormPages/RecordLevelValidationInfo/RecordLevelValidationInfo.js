@@ -1,16 +1,20 @@
 import React from 'react'
 import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
-import { ValidationMessage, ValidationList } from '../../../generic/form'
+import { ValidationList } from '../../../generic/form'
 import { ButtonSecondary } from '../../../generic/buttons'
 import theme from '../../../../theme'
+import InlineMessage from '../../../generic/InlineMessage/InlineMessage'
 
-const InlineValidationButton = styled(ButtonSecondary)`
+export const InlineValidationButton = styled(ButtonSecondary)`
   margin: ${theme.spacing.xxsmall};
-  margin-right: 0;
-  white-space: nowrap;
-  padding: ${theme.spacing.small};
+  padding: ${theme.spacing.xxsmall} ${theme.spacing.small};
+  font-size: inherit;
+  text-align: left;
   text-transform: capitalize;
+  font-size: smaller;
+  white-space: nowrap;
+  color: ${theme.color.textColor};
 `
 const RecordLevelValidationInfo = ({
   areValidationsShowing,
@@ -29,9 +33,19 @@ const RecordLevelValidationInfo = ({
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
           <li key={validation_id}>
-            <ValidationMessage validationType={status}>
-              {isIgnored ? `Ignored: ${validation.name}` : validation.name}
-            </ValidationMessage>
+            <InlineMessage type={status}>
+              <p>{isIgnored ? `Ignored: ${validation.name}` : validation.name}</p>
+            </InlineMessage>
+            {isWarning || isReset ? (
+              <InlineValidationButton
+                type="button"
+                onClick={() =>
+                  ignoreRecordLevelValidation({ validationId: validation.validation_id })
+                }
+              >
+                Ignore
+              </InlineValidationButton>
+            ) : null}
             {isIgnored ? (
               <InlineValidationButton
                 type="button"
@@ -40,16 +54,6 @@ const RecordLevelValidationInfo = ({
                 }
               >
                 Reset validation
-              </InlineValidationButton>
-            ) : null}
-            {isWarning || isReset ? (
-              <InlineValidationButton
-                type="button"
-                onClick={() =>
-                  ignoreRecordLevelValidation({ validationId: validation.validation_id })
-                }
-              >
-                Ignore warning
               </InlineValidationButton>
             ) : null}
           </li>
