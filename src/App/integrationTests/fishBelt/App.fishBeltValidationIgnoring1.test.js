@@ -325,7 +325,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(observersRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observersRow).getByText('secondWarning')).toBeInTheDocument()
 
-  userEvent.click(within(siteRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(siteRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() => expect(within(siteRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(siteRow).queryByText('secondWarning')).not.toBeInTheDocument()
@@ -335,7 +335,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterIgnore)
-  userEvent.click(within(managementRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(managementRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -343,13 +343,13 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(managementRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(depthRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(depthRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() => expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(depthRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(sampleDateRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(sampleDateRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -357,7 +357,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(sampleDateRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(sampleTimeRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(sampleTimeRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -365,7 +365,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(sampleTimeRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(transectNumberRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(transectNumberRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(transectNumberRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -373,13 +373,13 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(transectNumberRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(transectNumberRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(labelRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(labelRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() => expect(within(labelRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(labelRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(lengthSurveyedRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(lengthSurveyedRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -387,13 +387,13 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(lengthSurveyedRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(widthRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(widthRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() => expect(within(widthRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(widthRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(widthRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(sizeBinRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(sizeBinRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(sizeBinRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -401,7 +401,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(sizeBinRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(sizeBinRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(reefSlopeRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(reefSlopeRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(reefSlopeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -409,7 +409,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(reefSlopeRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(relativeDepthRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(relativeDepthRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -417,7 +417,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(relativeDepthRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(visibilityRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(visibilityRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -425,7 +425,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(visibilityRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(currentRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(currentRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -433,19 +433,19 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(currentRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(tideRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(tideRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() => expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(tideRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(notesRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(notesRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() => expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(notesRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(observersRow).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(observersRow).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -514,9 +514,7 @@ test('Validation: user can dismiss record-level warnings ', async () => {
     within(recordLevelValidationsSection).getByText('record level warning'),
   ).toBeInTheDocument()
 
-  userEvent.click(
-    within(recordLevelValidationsSection).getByRole('button', { name: 'Ignore warning' }),
-  )
+  userEvent.click(within(recordLevelValidationsSection).getByRole('button', { name: 'Ignore' }))
 
   await waitFor(() =>
     expect(
@@ -600,7 +598,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
   expect(within(observationsTable).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observationsTable).getByText('secondWarning')).toBeInTheDocument()
 
-  userEvent.click(within(observationsTable).getByRole('button', { name: 'Ignore all warnings' }))
+  userEvent.click(within(observationsTable).getByRole('button', { name: 'Ignore all' }))
 
   await waitFor(() =>
     expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument(),
