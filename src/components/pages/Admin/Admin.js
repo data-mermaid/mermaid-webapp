@@ -1,30 +1,32 @@
-import { Formik } from 'formik'
+import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { Prompt, useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import { hoverState } from '../../../library/styling/mediaQueries'
 
+import { CloseButton, ButtonSecondary, ButtonCallout } from '../../generic/buttons'
+import { ContentPageLayout } from '../../Layout'
+import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import { createUuid } from '../../../library/createUuid'
+import { getOptions } from '../../../library/getOptions'
 import { getProjectInitialValues } from './projectRecordInitialFormValue'
 import { H2 } from '../../generic/text'
-import { ContentPageLayout } from '../../Layout'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import PageUnavailableOffline from '../PageUnavailableOffline'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import InputAutocomplete from '../../generic/InputAutocomplete'
-import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
+import { hoverState } from '../../../library/styling/mediaQueries'
+import { IconClose, IconSave } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
-import { getOptions } from '../../../library/getOptions'
-import { IconClose } from '../../icons'
-import { CloseButton, ButtonSecondary } from '../../generic/buttons'
-import theme from '../../../theme'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import InputAutocomplete from '../../generic/InputAutocomplete'
+import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
 import NewOrganizationModal from '../../NewOrganizationModal'
-import { createUuid } from '../../../library/createUuid'
+import PageUnavailableOffline from '../PageUnavailableOffline'
+import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
+import theme from '../../../theme'
+import useBeforeUnloadPrompt from '../../../library/useBeforeUnloadPrompt'
 import useIsMounted from '../../../library/useIsMounted'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
 
 const SuggestNewOrganizationButton = styled(ButtonSecondary)`
   font-size: smaller;
@@ -107,7 +109,7 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   return (
     organizations && (
       <TagStyleWrapper>
-        {organizations.map(item => {
+        {organizations.map((item) => {
           const uid = createUuid()
 
           return (
@@ -146,6 +148,8 @@ const Admin = () => {
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
 
+  useBeforeUnloadPrompt()
+
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId) {
       const promises = [
@@ -170,9 +174,10 @@ const Admin = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
 
-  const initialFormValues = useMemo(() => getProjectInitialValues(projectBeingEdited), [
-    projectBeingEdited,
-  ])
+  const initialFormValues = useMemo(
+    () => getProjectInitialValues(projectBeingEdited),
+    [projectBeingEdited],
+  )
 
   const formikOptions = {
     initialValues: initialFormValues,
@@ -188,68 +193,66 @@ const Admin = () => {
     </>
   )
 
+  const formik = useFormik(formikOptions)
+
   const content = isAppOnline ? (
-    <Formik {...formikOptions}>
-      {formik => (
-        <>
-          <InputWrapper>
-            <InputWithLabelAndValidation
-              label="Project Name"
-              id="name"
-              type="text"
-              {...formik.getFieldProps('name')}
-            />
-            <TextareaWithLabelAndValidation
-              label="Notes"
-              id="notes"
-              {...formik.getFieldProps('notes')}
-            />
-            <InputAutocompleteWrapper>
-              {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-              <label htmlFor="organizations">Organizations</label>
-              <InputAutocomplete
-                id="organizations"
-                options={projectTagOptions}
-                helperText={language.pages.projectInfo.organizationsHelperText}
-                onChange={selectedItem => {
-                  const { label: selectedItemLabel } = selectedItem
-                  const existingOrganizations = [...formik.getFieldProps('tags').value]
-
-                  const doesTagAlreadyExist = existingOrganizations.find(
-                    item => selectedItemLabel === item,
-                  )
-
-                  if (!doesTagAlreadyExist) {
-                    formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
-                  }
-                }}
-                noResultsDisplay={noOrganizationResult}
-              />
-            </InputAutocompleteWrapper>
-            <OrganizationList
-              organizations={formik.getFieldProps('tags').value}
-              handleOrganizationsChange={item => {
-                const existingOrganizations = [...formik.getFieldProps('tags').value]
-                const foundItemIndex = existingOrganizations.indexOf(item)
-
-                existingOrganizations.splice(foundItemIndex, 1)
-
-                formik.setFieldValue('tags', existingOrganizations)
-              }}
-            />
-          </InputWrapper>
-          <NewOrganizationModal
-            isOpen={IsNewOrganizationNameModalOpen}
-            onDismiss={closeNewOrganizationNameModal}
-            onSubmit={selectedItemLabel => {
+    <form id="project-info-form">
+      <InputWrapper>
+        <InputWithLabelAndValidation
+          label="Project Name"
+          id="name"
+          type="text"
+          {...formik.getFieldProps('name')}
+        />
+        <TextareaWithLabelAndValidation
+          label="Notes"
+          id="notes"
+          {...formik.getFieldProps('notes')}
+        />
+        <InputAutocompleteWrapper>
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="organizations">Organizations</label>
+          <InputAutocomplete
+            id="organizations"
+            options={projectTagOptions}
+            helperText={language.pages.projectInfo.organizationsHelperText}
+            onChange={(selectedItem) => {
+              const { label: selectedItemLabel } = selectedItem
               const existingOrganizations = [...formik.getFieldProps('tags').value]
 
-              formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
+              const doesTagAlreadyExist = existingOrganizations.find(
+                (item) => selectedItemLabel === item,
+              )
+
+              if (!doesTagAlreadyExist) {
+                formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
+              }
             }}
+            noResultsDisplay={noOrganizationResult}
           />
-        </>
-      )}
-    </Formik>
+        </InputAutocompleteWrapper>
+        <OrganizationList
+          organizations={formik.getFieldProps('tags').value}
+          handleOrganizationsChange={(item) => {
+            const existingOrganizations = [...formik.getFieldProps('tags').value]
+            const foundItemIndex = existingOrganizations.indexOf(item)
+
+            existingOrganizations.splice(foundItemIndex, 1)
+
+            formik.setFieldValue('tags', existingOrganizations)
+          }}
+        />
+      </InputWrapper>
+      <NewOrganizationModal
+        isOpen={IsNewOrganizationNameModalOpen}
+        onDismiss={closeNewOrganizationNameModal}
+        onSubmit={(selectedItemLabel) => {
+          const existingOrganizations = [...formik.getFieldProps('tags').value]
+
+          formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
+        }}
+      />
+    </form>
   ) : (
     <PageUnavailableOffline />
   )
@@ -260,11 +263,22 @@ const Admin = () => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout
-      isPageContentLoading={isAppOnline ? isLoading : false}
-      content={content}
-      toolbar={<H2>Project Info</H2>}
-    />
+    <>
+      <ContentPageLayout
+        isPageContentLoading={isAppOnline ? isLoading : false}
+        content={content}
+        toolbar={
+          <ContentPageToolbarWrapper>
+            <H2>Project Info</H2>
+            <ButtonCallout type="submit" form="project-info-form" disabled={!formik.dirty}>
+              <IconSave />
+              Save
+            </ButtonCallout>
+          </ContentPageToolbarWrapper>
+        }
+      />
+      <Prompt when={formik.dirty} message={language.navigateAwayPrompt} />
+    </>
   )
 }
 
