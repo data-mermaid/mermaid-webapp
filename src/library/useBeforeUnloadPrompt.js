@@ -1,20 +1,24 @@
 import { useEffect } from 'react'
 
-const triggerPrompt = (event) => {
-  event.preventDefault()
-  // eslint-disable-next-line no-param-reassign
-  event.returnValue = ''
-}
-
 // note, this will not capture front end routing
-const useBeforeUnloadPrompt = () => {
+const useBeforeUnloadPrompt = ({ shouldPromptTrigger }) => {
   useEffect(() => {
+    const triggerPrompt = (event) => {
+      event.preventDefault()
+      if (shouldPromptTrigger) {
+        // eslint-disable-next-line no-param-reassign
+        event.returnValue = ''
+      }
+
+      return event.returnValue
+    }
+
     window.addEventListener('beforeunload', triggerPrompt)
 
     return () => {
       window.removeEventListener('beforeunload', triggerPrompt)
     }
-  }, [])
+  }, [shouldPromptTrigger])
 }
 
 export default useBeforeUnloadPrompt

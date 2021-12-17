@@ -148,8 +148,6 @@ const Admin = () => {
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
 
-  useBeforeUnloadPrompt()
-
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId) {
       const promises = [
@@ -182,7 +180,21 @@ const Admin = () => {
   const formikOptions = {
     initialValues: initialFormValues,
     enableReinitialize: true,
+    onSubmit: (values, actions) => {
+      databaseSwitchboardInstance
+        .saveProject({ projectId, editedValues: values })
+        .then(() => {
+          actions.resetForm({ values }) // resets formiks dirty state
+          toast.success(language.success.projectSave)
+        })
+        .catch(() => {
+          toast.error(language.error.projectSave)
+        })
+    },
   }
+  const formik = useFormik(formikOptions)
+
+  useBeforeUnloadPrompt({ shouldPromptTrigger: formik.dirty })
 
   const noOrganizationResult = (
     <>
@@ -193,10 +205,8 @@ const Admin = () => {
     </>
   )
 
-  const formik = useFormik(formikOptions)
-
   const content = isAppOnline ? (
-    <form id="project-info-form">
+    <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
           label="Project Name"

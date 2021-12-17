@@ -1,8 +1,8 @@
-const getProjectInitialValues = projectRecord => {
+const getProjectInitialValues = (projectRecord) => {
   return {
     name: projectRecord?.name ?? '',
     notes: projectRecord?.notes ?? '',
-    tags: projectRecord?.tags,
+    tags: projectRecord?.tags ?? [],
     data_policy_beltfish: projectRecord?.data_policy_beltfish,
     data_policy_benthiclit: projectRecord?.data_policy_benthiclit,
     data_policy_benthicpit: projectRecord?.data_policy_benthicpit,

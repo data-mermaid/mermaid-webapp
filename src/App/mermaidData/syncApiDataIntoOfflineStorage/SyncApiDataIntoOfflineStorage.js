@@ -6,9 +6,9 @@ const SyncApiDataIntoOfflineStorage = class {
 
   _dexieInstance
 
-  #getOnlyModifiedAndDeletedItems = dataList => {
+  #getOnlyModifiedAndDeletedItems = (dataList) => {
     // new, edited, and deleted items will all have a uiState_pushToApi flag locally
-    return dataList.filter(item => item.uiState_pushToApi)
+    return dataList.filter((item) => item.uiState_pushToApi)
   }
 
   constructor({ dexieInstance, apiBaseUrl, auth0Token }) {
@@ -52,7 +52,7 @@ const SyncApiDataIntoOfflineStorage = class {
       'project_sites',
     ]
 
-    const pullProjectPromises = offlineReadyProjects.map(project =>
+    const pullProjectPromises = offlineReadyProjects.map((project) =>
       pullApiData({
         dexieInstance: this._dexieInstance,
         auth0Token: this._auth0Token,
@@ -122,7 +122,7 @@ const SyncApiDataIntoOfflineStorage = class {
     })
   }
 
-  pushThenPullEverythingForAProject = async projectId => {
+  pushThenPullEverythingForAProject = async (projectId) => {
     const allTheDataNames = [
       'benthic_attributes',
       'choices',
@@ -153,7 +153,7 @@ const SyncApiDataIntoOfflineStorage = class {
     return pullResponse
   }
 
-  pushThenPullEverythingForAProjectButChoices = async projectId => {
+  pushThenPullEverythingForAProjectButChoices = async (projectId) => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'collect_records',
@@ -183,7 +183,7 @@ const SyncApiDataIntoOfflineStorage = class {
     return pullResponse
   }
 
-  pushThenRemoveProjectFromOfflineStorage = async projectId => {
+  pushThenRemoveProjectFromOfflineStorage = async (projectId) => {
     await this.pushChanges()
 
     return this._dexieInstance.transaction(

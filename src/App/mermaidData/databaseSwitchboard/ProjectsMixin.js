@@ -22,6 +22,21 @@ const ProjectsMixin = (Base) =>
       return this._dexieInstance.projects.get(id)
     }
 
+    saveProject = async function saveProject({ projectId, editedValues }) {
+      const projectToEdit = await this.getProject(projectId)
+      const editedProject = { ...projectToEdit, ...editedValues, uiState_pushToApi: true }
+
+      return this._dexieInstance.projects.put(editedProject).then(() => {
+        return this._apiSyncInstance
+          .pushThenPullEverythingForAProjectButChoices(projectId)
+          .then((pullResponse) => {
+            const editedProjectFromApi = pullResponse.data.projects.updates[0]
+
+            return editedProjectFromApi
+          })
+      })
+    }
+
     getProjectTags = function getProjectTags() {
       return this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
