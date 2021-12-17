@@ -95,7 +95,7 @@ const color = {
       return this.cautionColor.alpha(0.15)
     }
 
-    return this.primaryColor
+    return undefined
   },
   getBorderColor: function getBorderColor(messageType) {
     if (messageType === 'ignore') {
@@ -127,7 +127,7 @@ const color = {
       return this.cautionColor.alpha(0.4)
     }
 
-    return this.primaryColor
+    return undefined
   },
 }
 const spacing = {

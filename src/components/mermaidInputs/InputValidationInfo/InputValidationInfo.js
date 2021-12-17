@@ -8,6 +8,8 @@ import { InlineValidationButton } from '../../pages/collectRecordFormPages/Recor
 
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
+  display: flex;
+  align-items: flex-start;
 `
 const InputValidationInfo = ({
   ignoreNonObservationFieldValidations,
@@ -25,27 +27,24 @@ const InputValidationInfo = ({
           {validationMessages.map((validationMessage) => (
             <InlineMessage type={validationType} key={validationMessage.id}>
               <p>{validationMessage.message}</p>
-              {areThereValidationMessages && validationType === 'warning' ? (
-                <InlineValidationButton
-                  type="button"
-                  onClick={ignoreNonObservationFieldValidations}
-                >
-                  Ignore all warnings
-                </InlineValidationButton>
-              ) : null}
             </InlineMessage>
           ))}
+          {areThereValidationMessages && validationType === 'warning' ? (
+            <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
+              Ignore all
+            </InlineValidationButton>
+          ) : null}
         </>
       ) : null}
       {validationType === 'ok' ? <span aria-label="Passed validation">&nbsp;</span> : null}
       {validationType === 'ignore' ? (
         <>
           <InlineMessage validationType={validationType}>
-            Ignored
-            <InlineValidationButton type="button" onClick={resetNonObservationFieldValidations}>
-              Reset validations
-            </InlineValidationButton>
+            <p>Ignored</p>
           </InlineMessage>
+          <InlineValidationButton type="button" onClick={resetNonObservationFieldValidations}>
+            Reset validations
+          </InlineValidationButton>
         </>
       ) : null}
     </ValidationWrapper>

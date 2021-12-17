@@ -11,9 +11,6 @@ const InlineMessageWrapper = styled.div`
   border-style: solid;
   width: 100%;
   font-size: smaller;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
   p {
     margin: 0 0 0 ${theme.spacing.small};
     max-width: ${theme.spacing.maxTextWidth};

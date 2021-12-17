@@ -10,9 +10,11 @@ export const InlineValidationButton = styled(ButtonSecondary)`
   margin: ${theme.spacing.xxsmall};
   padding: ${theme.spacing.xxsmall} ${theme.spacing.small};
   font-size: inherit;
-  border: none;
-  white-space: nowrap;
+  text-align: left;
   text-transform: capitalize;
+  font-size: smaller;
+  white-space: nowrap;
+  color: ${theme.color.textColor};
 `
 const RecordLevelValidationInfo = ({
   areValidationsShowing,
@@ -33,27 +35,27 @@ const RecordLevelValidationInfo = ({
           <li key={validation_id}>
             <InlineMessage type={status}>
               <p>{isIgnored ? `Ignored: ${validation.name}` : validation.name}</p>
-              {isIgnored ? (
-                <InlineValidationButton
-                  type="button"
-                  onClick={() =>
-                    resetRecordLevelValidation({ validationId: validation.validation_id })
-                  }
-                >
-                  Reset validation
-                </InlineValidationButton>
-              ) : null}
-              {isWarning || isReset ? (
-                <InlineValidationButton
-                  type="button"
-                  onClick={() =>
-                    ignoreRecordLevelValidation({ validationId: validation.validation_id })
-                  }
-                >
-                  Ignore warning
-                </InlineValidationButton>
-              ) : null}
             </InlineMessage>
+            {isWarning || isReset ? (
+              <InlineValidationButton
+                type="button"
+                onClick={() =>
+                  ignoreRecordLevelValidation({ validationId: validation.validation_id })
+                }
+              >
+                Ignore
+              </InlineValidationButton>
+            ) : null}
+            {isIgnored ? (
+              <InlineValidationButton
+                type="button"
+                onClick={() =>
+                  resetRecordLevelValidation({ validationId: validation.validation_id })
+                }
+              >
+                Reset validation
+              </InlineValidationButton>
+            ) : null}
           </li>
         ) : null
       })}

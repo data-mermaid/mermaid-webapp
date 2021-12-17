@@ -31,7 +31,6 @@ import { getObservationBiomass } from './fishbeltBiomas'
 import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import { Column } from '../../../generic/positioning'
 
 const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
@@ -401,16 +400,16 @@ const FishBeltObservationTable = ({
           ) : null}
           {hasWarningValidation ? (
             <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-              Ignore all warnings
+              Ignore all
             </CellValidationButton>
           ) : null}
           {hasIgnoredValidation ? (
-            <Column>
+            <>
               Ignored
               <CellValidationButton type="button" onClick={handleResetObservationValidations}>
                 Reset validations
               </CellValidationButton>
-            </Column>
+            </>
           ) : null}
         </CellValidation>
       )

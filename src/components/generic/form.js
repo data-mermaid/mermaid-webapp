@@ -37,6 +37,7 @@ export const ValidationList = styled('ul')`
   padding: ${theme.spacing.medium};
   margin: 0;
   li {
+    display: flex;
     margin-bottom: ${theme.spacing.xsmall};
   }
 `
