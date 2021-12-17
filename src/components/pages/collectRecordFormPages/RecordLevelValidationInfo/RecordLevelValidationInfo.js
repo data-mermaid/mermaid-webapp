@@ -30,10 +30,11 @@ const RecordLevelValidationInfo = ({
         const isError = status === 'error'
         const isIgnored = status === 'ignore'
         const isReset = status === 'reset'
+        const statusForStyling = isReset ? 'warning' : status
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
           <li key={validation_id}>
-            <InlineMessage type={status}>
+            <InlineMessage type={statusForStyling}>
               <p>{isIgnored ? `Ignored: ${validation.name}` : validation.name}</p>
             </InlineMessage>
             {isWarning || isReset ? (
