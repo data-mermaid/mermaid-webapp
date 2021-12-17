@@ -153,6 +153,8 @@ const pages = {
   },
 }
 
+const navigateAwayPrompt = 'Reload site? Changes you made may not be saved.'
+
 export default {
   error,
   success,
@@ -160,4 +162,5 @@ export default {
   autocomplete,
   pages,
   createFishSpecies,
+  navigateAwayPrompt,
 }
