@@ -23,6 +23,10 @@ const ProjectsMixin = (Base) =>
     }
 
     saveProject = async function saveProject({ projectId, editedValues }) {
+      if (!projectId || !editedValues) {
+        throw new Error('the invocation of saveProject is missing one or more parameters.')
+      }
+
       const projectToEdit = await this.getProject(projectId)
       const editedProject = { ...projectToEdit, ...editedValues, uiState_pushToApi: true }
 
