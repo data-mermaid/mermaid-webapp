@@ -55,7 +55,7 @@ const SubmittedFishBeltObservationTable = ({
   const { width, len_surveyed } = submittedRecord.fishbelt_transect
 
   const observationsBiomass = obs_belt_fishes.map((observation) => ({
-    uiId: observation.id,
+    id: observation.id,
     biomass: getObservationBiomass({
       choices,
       fishNameConstants,
@@ -78,7 +78,7 @@ const SubmittedFishBeltObservationTable = ({
   }
 
   const getFishBiomass = (observationId) => {
-    const fishBiomass = observationsBiomass.find((fish) => fish.uiId === observationId).biomass
+    const fishBiomass = observationsBiomass.find((fish) => fish.id === observationId).biomass
 
     return roundToOneDecimal(fishBiomass)
   }
