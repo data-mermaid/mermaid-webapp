@@ -36,16 +36,19 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
                     name: 'observation validation with ok status shoulnt show',
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
+                    context: { observation_id: '7' },
                   },
                   {
                     name: 'observation warning 1',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
+                    context: { observation_id: '7' },
                   },
                   {
                     name: 'observation warning 2',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
+                    context: { observation_id: '7' },
                   },
                 ],
               ],
@@ -120,8 +123,6 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   // regular inputs
   expect(within(screen.getByTestId('site')).queryByText('firstWarning')).toBeInTheDocument()
   expect(within(screen.getByTestId('site')).queryByText('secondWarning')).toBeInTheDocument()
-
-  // observations table (has one empty observation)
 
   const observationsTable = screen.getByLabelText('Observations')
 
@@ -389,8 +390,8 @@ test('Fishbelt validations will show passed input validations', async () => {
 
   expect(within(screen.getByTestId('site')).getByLabelText('Passed validation')).toBeInTheDocument()
 
-  // observations table (has one empty observation)
+  // observations table (has three empty observation)
   expect(
-    within(screen.getByLabelText('Observations')).getByLabelText('Passed validation'),
-  ).toBeInTheDocument()
+    within(screen.getByLabelText('Observations')).getAllByLabelText('Passed validation').length,
+  ).toEqual(3)
 }, 50000)

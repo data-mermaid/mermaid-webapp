@@ -31,7 +31,6 @@ import SampleInfoInputs from './SampleInfoInputs'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
 import FishbeltTransectInputs from './FishbeltTransectInputs'
-import getObservationValidationsCloneWithIds from './getObservationsValidationsCloneWithIds'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
@@ -69,9 +68,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [observationToAddSpeciesTo, setObservationToAddSpeciesTo] = useState()
-  const [observationValidationsCloneWithUuids, setObservationValidationsCloneWithUuids] = useState(
-    [],
-  )
+
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(possibleCollectButtonGroupStates.saved)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -263,25 +260,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         setAreValidationsShowing(true)
         setCollectRecordBeingEdited(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
-
-        /* Observations is loaded initially before a user can hit the validate button,
-         and its kept up to date through user actions.
-         So it _should_ be reliable to use here without race conditions
-         This observationsValidationsCloneWithIds thing is because we dont have api ids
-         to link the observations to its validations, so its a bit of a hack
-         to get the ids created for the ui for observations onto the
-         validations object for observations.
-         In the future the api might supply unique ids for
-         observations and observations validations,
-         and this extraneous code can be removed then.
-         This tech debt is tracked in ticket M453
-        */
-        setObservationValidationsCloneWithUuids(
-          getObservationValidationsCloneWithIds({
-            observationsFromApiWithIds: observationsState,
-            collectRecord: validatedRecordResponse,
-          }),
-        )
       })
       .catch(() => {
         toast.error(language.error.collectRecordValidation)
@@ -326,81 +304,37 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   )
 
   const ignoreObservationValidations = useCallback(
-    ({ observationUiId }) => {
+    ({ observationId }) => {
       databaseSwitchboardInstance
         .ignoreObservationValidations({
-          record: collectRecordBeingEdited,
-          observationUiId,
-          observationValidationsCloneWithUuids,
+          recordId: collectRecordBeingEdited.id,
+          observationId,
         })
         .then((recordWithIgnoredValidations) => {
           setCollectRecordBeingEdited(recordWithIgnoredValidations)
-          /* This observationsValidationsCloneWithIds thing is because we dont have api ids
-          to link the observations to its validations, so its a bit of a hack
-          to get the ids created for the ui for observations onto the
-          validations object for observations.
-          In the future the api might supply unique ids for
-          observations and observations validations,
-          and this extraneous code can be removed then.
-          This tech debt is tracked in ticket M453
-          */
-          setObservationValidationsCloneWithUuids(
-            getObservationValidationsCloneWithIds({
-              observationsFromApiWithIds: observationsState,
-              collectRecord: recordWithIgnoredValidations,
-            }),
-          )
           setIsFormDirty(true)
         })
         .catch(() => {
           toast.warn(language.error.collectRecordValidationIgnore)
         })
     },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      observationValidationsCloneWithUuids,
-      observationsState,
-    ],
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
   )
 
   const resetObservationValidations = useCallback(
-    ({ observationUiId }) => {
+    ({ observationId }) => {
       databaseSwitchboardInstance
-        .resetObservationValidations({
-          record: collectRecordBeingEdited,
-          observationUiId,
-          observationValidationsCloneWithUuids,
-        })
+        .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
         .then((recordWithResetValidations) => {
           setCollectRecordBeingEdited(recordWithResetValidations)
-          /* This observationsValidationsCloneWithIds thing is because we dont have api ids
-          to link the observations to its validations, so its a bit of a hack
-          to get the ids created for the ui for observations onto the
-          validations object for observations.
-          In the future the api might supply unique ids for
-          observations and observations validations,
-          and this extraneous code can be removed then.
-          This tech debt is tracked in ticket M453
-          */
-          setObservationValidationsCloneWithUuids(
-            getObservationValidationsCloneWithIds({
-              observationsFromApiWithIds: observationsState,
-              collectRecord: recordWithResetValidations,
-            }),
-          )
+
           setIsFormDirty(true)
         })
         .catch(() => {
           toast.warn(language.error.collectRecordValidationReset)
         })
     },
-    [
-      collectRecordBeingEdited,
-      databaseSwitchboardInstance,
-      observationValidationsCloneWithUuids,
-      observationsState,
-    ],
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
   )
 
   const resetRecordLevelValidation = useCallback(
@@ -654,7 +588,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 fishNameOptions={fishNameOptions}
                 ignoreObservationValidations={ignoreObservationValidations}
                 observationsReducer={observationsReducer}
-                observationValidationsCloneWithUuids={observationValidationsCloneWithUuids}
                 openNewFishNameModal={openNewFishNameModal}
                 persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
                 resetObservationValidations={resetObservationValidations}

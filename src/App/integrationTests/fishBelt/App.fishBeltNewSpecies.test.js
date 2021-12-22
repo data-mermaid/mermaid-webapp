@@ -118,7 +118,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
   const updatedSpeciesInOfflineStorage = await dexieInstance.fish_species.toArray()
 
   const newSpecies = updatedSpeciesInOfflineStorage.find(
-    species => species.display_name === 'Nebrius ridens',
+    (species) => species.display_name === 'Nebrius ridens',
   )
 
   expect(newSpecies).toBeTruthy()

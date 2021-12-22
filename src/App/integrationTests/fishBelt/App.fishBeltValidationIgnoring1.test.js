@@ -548,12 +548,34 @@ test('Validation: user can dismiss observation warnings ', async () => {
               obs_belt_fishes: [
                 [
                   {
+                    context: { observation_id: '9' },
                     name: 'firstWarning',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
                   },
                   {
+                    context: { observation_id: '9' },
                     name: 'secondWarning',
+                    status: 'warning',
+                    validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
+                  },
+                  {
+                    context: { observation_id: 'not9' },
+                    name: 'someOtherObservationWarning',
+                    status: 'warning',
+                    validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
+                  },
+                ],
+                [
+                  {
+                    context: { observation_id: 'not9' },
+                    name: 'firstOtherObservationWarning',
+                    status: 'warning',
+                    validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
+                  },
+                  {
+                    context: { observation_id: 'not9' },
+                    name: 'secondOtherObservationWarning',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
                   },
@@ -633,11 +655,13 @@ test('user can reset dismissed non-observation input warnings', async () => {
                   validation_id: Math.random(),
                   name: 'firstWarning',
                   status: 'ignore',
+                  context: { observation_id: '7' },
                 },
                 {
                   validation_id: Math.random(),
                   name: 'secondWarning',
                   status: 'ignore',
+                  context: { observation_id: '7' },
                 },
               ],
               sample_event: {
