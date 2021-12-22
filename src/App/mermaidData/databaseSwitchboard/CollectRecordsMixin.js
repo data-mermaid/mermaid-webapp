@@ -357,36 +357,43 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithIgnoredValidations)
     }
 
-    ignoreObservationValidations = function ignoreObservationValidations({
-      record,
-      observationUiId,
-      observationValidationsCloneWithUuids,
+    ignoreObservationValidations = async function ignoreObservationValidations({
+      recordId,
+      observationId,
     }) {
-      if (!record || !observationUiId) {
+      if (!recordId || !observationId) {
         throw new Error(
-          'ignoreNonObservationFieldValidations requires record and observationUiId parameters',
+          'ignoreObservationValidations requires recordId and observationId parameters',
         )
       }
 
-      const observationsValidationsWithIgnored = observationValidationsCloneWithUuids.map(
-        (observationValidations) => {
-          if (observationValidations.observationUiId === observationUiId) {
-            return observationValidations.validations.map((validation) => ({
-              ...validation,
-              status: validation.status === 'warning' ? 'ignore' : validation.status,
-            }))
-          }
+      const recordToOperateOn = await this._dexieInstance.collect_records.get(recordId)
 
-          return observationValidations
+      const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
+
+      const observationsValidationsWithIgnored = allObservationValidations.map(
+        (singleObservationValidations) => {
+          return singleObservationValidations.map((validation) => {
+            const isValidationBelongingToObservation =
+              validation.context?.observation_id === observationId
+            const isWarning = validation.status === 'warning'
+
+            return {
+              ...validation,
+              status:
+                isValidationBelongingToObservation && isWarning ? 'ignore' : validation.status,
+            }
+          })
         },
       )
 
       const recordWithIgnoredObservationValidations = setObjectPropertyOnClone({
-        object: record,
+        object: recordToOperateOn,
         path: 'validations.results.data.obs_belt_fishes',
         value: observationsValidationsWithIgnored,
       })
 
+      // user form will be dirty, and a save will cause a push to the api
       return this._dexieInstance.collect_records
         .put(recordWithIgnoredObservationValidations)
         .then(() => recordWithIgnoredObservationValidations)
@@ -460,32 +467,37 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithResetValidations)
     }
 
-    resetObservationValidations = function resetObservationValidations({
-      record,
-      observationUiId,
-      observationValidationsCloneWithUuids,
+    resetObservationValidations = async function resetObservationValidations({
+      recordId,
+      observationId,
     }) {
-      if (!record || !observationUiId) {
+      if (!recordId || !observationId) {
         throw new Error(
-          'ignoreNonObservationFieldValidations requires record and observationUiId parameters',
+          'resetObservationValidations requires recordId and observationId parameters',
         )
       }
 
-      const observationsValidationsWithReset = observationValidationsCloneWithUuids.map(
-        (observationValidations) => {
-          if (observationValidations.observationUiId === observationUiId) {
-            return observationValidations.validations.map((validation) => ({
-              ...validation,
-              status: validation.status === 'ignore' ? 'reset' : validation.status,
-            }))
-          }
+      const recordToOperateOn = await this._dexieInstance.collect_records.get(recordId)
 
-          return observationValidations
+      const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
+
+      const observationsValidationsWithReset = allObservationValidations.map(
+        (singleObservationValidations) => {
+          return singleObservationValidations.map((validation) => {
+            const isValidationBelongingToObservation =
+              validation.context?.observation_id === observationId
+            const isIgnored = validation.status === 'ignore'
+
+            return {
+              ...validation,
+              status: isValidationBelongingToObservation && isIgnored ? 'reset' : validation.status,
+            }
+          })
         },
       )
 
       const recordWithResetObservationValidations = setObjectPropertyOnClone({
-        object: record,
+        object: recordToOperateOn,
         path: 'validations.results.data.obs_belt_fishes',
         value: observationsValidationsWithReset,
       })

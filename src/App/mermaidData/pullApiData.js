@@ -4,8 +4,8 @@ import {
   persistLastRevisionNumbersPulled,
 } from './lastRevisionNumbers'
 
-const resetPushToApiTagFromItems = items =>
-  items.map(item => ({ ...item, uiState_pushToApi: false }))
+const resetPushToApiTagFromItems = (items) =>
+  items.map((item) => ({ ...item, uiState_pushToApi: false }))
 
 export const pullApiData = async ({
   dexieInstance,
@@ -58,7 +58,7 @@ export const pullApiData = async ({
         projectId,
       })
 
-      apiDataNamesToPull.forEach(apiDataType => {
+      apiDataNamesToPull.forEach((apiDataType) => {
         if (apiDataType === 'choices') {
           // choices deletes property will always be empty, so we just ignore it
           // additionally the updates property is an object, not an array, so we just store it directly
