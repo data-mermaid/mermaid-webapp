@@ -11,16 +11,20 @@ import {
   geomorphicColors,
   benthicColors,
 } from './mapService'
+import { InputRow } from '../generic/form'
 
-const MapWrapper = styled.div`
-  height: 400px;
-  border-top: ${theme.spacing.borderXLarge} solid ${theme.color.secondaryColor};
-  border-bottom: ${theme.spacing.borderXLarge} solid ${theme.color.secondaryColor};
+const MapInputRow = styled(InputRow)`
+  grid-template-columns: 0.75fr 2.5fr;
 `
-
 const MapContainer = styled.div`
   position: relative;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+`
+const MapWrapper = styled.div`
+  height: 100%;
+  min-height: 70vh;
 `
 
 const geomorphicKeyNames = Object.keys(geomorphicColors)
@@ -45,7 +49,7 @@ const MermaidMap = ({
   const loadLegendArrayLayer = (storageArray, legendKeyNameArray) => {
     const legendArray = storageArray || legendKeyNameArray
 
-    return legendKeyNameArray.map(value => {
+    return legendKeyNameArray.map((value) => {
       const updatedGeomorphic = {
         name: value,
         selected: legendArray.includes(value),
@@ -183,7 +187,7 @@ const MermaidMap = ({
   }, [handleLatitudeChange, handleLongitudeChange])
 
   const getUpdatedLayerOption = (layer, item) => {
-    return layer.map(value => {
+    return layer.map((value) => {
       if (value.name === item.name) {
         return { ...value, selected: !item.selected }
       }
@@ -192,7 +196,7 @@ const MermaidMap = ({
     })
   }
 
-  const getFilterSelectedOption = updatedLayer =>
+  const getFilterSelectedOption = (updatedLayer) =>
     updatedLayer.filter(({ selected }) => selected).map(({ name }) => name)
 
   const handleCoralMosaicLayer = () => {
@@ -202,7 +206,7 @@ const MermaidMap = ({
     setCoralMosaicLayer(coralMosaicResult)
   }
 
-  const handleGeomorphicOption = item => {
+  const handleGeomorphicOption = (item) => {
     const legendMaxLength = geomorphicLayer.length
     const updatedLayerOption = getUpdatedLayerOption(geomorphicLayer, item)
 
@@ -213,7 +217,7 @@ const MermaidMap = ({
     setGeomorphicLayer(updatedLayerOption)
   }
 
-  const handleBenthicOption = item => {
+  const handleBenthicOption = (item) => {
     const legendMaxLength = benthicLayer.length
     const updatedLayerOption = getUpdatedLayerOption(benthicLayer, item)
     const filterSelectedLayerOption = getFilterSelectedOption(updatedLayerOption)
@@ -224,7 +228,7 @@ const MermaidMap = ({
   }
 
   const handleSelectAllGeomorphicLayers = () => {
-    const updatedLayerOption = geomorphicLayer.map(value => {
+    const updatedLayerOption = geomorphicLayer.map((value) => {
       return { ...value, selected: !allGeomorphicLayersChecked }
     })
 
@@ -236,7 +240,7 @@ const MermaidMap = ({
   }
 
   const handleSelectAllBenthicLayers = () => {
-    const updatedLayerOption = benthicLayer.map(value => {
+    const updatedLayerOption = benthicLayer.map((value) => {
       return { ...value, selected: !allBenthicLayersChecked }
     })
 
@@ -248,21 +252,24 @@ const MermaidMap = ({
   }
 
   return (
-    <MapContainer>
-      <MapWrapper ref={mapContainer} />
-      <LegendDrawer
-        coralMosaicLayer={coralMosaicLayer}
-        geomorphicLayer={geomorphicLayer}
-        allGeomorphicLayersChecked={allGeomorphicLayersChecked}
-        benthicLayer={benthicLayer}
-        allBenthicLayersChecked={allBenthicLayersChecked}
-        handleCoralMosaicLayer={handleCoralMosaicLayer}
-        handleGeomorphicOption={handleGeomorphicOption}
-        handleSelectAllGeomorphicLayers={handleSelectAllGeomorphicLayers}
-        handleBenthicOption={handleBenthicOption}
-        handleSelectAllBenthicLayers={handleSelectAllBenthicLayers}
-      />
-    </MapContainer>
+    <MapInputRow>
+      <label>Allen Coral Atlas</label>
+      <MapContainer>
+        <MapWrapper ref={mapContainer} />
+        <LegendDrawer
+          coralMosaicLayer={coralMosaicLayer}
+          geomorphicLayer={geomorphicLayer}
+          allGeomorphicLayersChecked={allGeomorphicLayersChecked}
+          benthicLayer={benthicLayer}
+          allBenthicLayersChecked={allBenthicLayersChecked}
+          handleCoralMosaicLayer={handleCoralMosaicLayer}
+          handleGeomorphicOption={handleGeomorphicOption}
+          handleSelectAllGeomorphicLayers={handleSelectAllGeomorphicLayers}
+          handleBenthicOption={handleBenthicOption}
+          handleSelectAllBenthicLayers={handleSelectAllBenthicLayers}
+        />
+      </MapContainer>
+    </MapInputRow>
   )
 }
 
