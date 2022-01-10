@@ -456,7 +456,7 @@ const collect_records = [
           profile_name: 'Melissa Nunes',
         },
       ],
-      obs_belt_fishes: [{}],
+      obs_belt_fishes: [{ id: '9' }, { id: '8' }, { id: '7' }],
     },
     validations: null,
   },
@@ -519,6 +519,7 @@ const collect_records = [
           alt_size: 12.5,
           size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
           fish_attribute: '0006e6d8-7501-4c2d-9cda-263194f8e58b',
+          id: '1',
         },
         {
           size: 12.5,
@@ -526,6 +527,7 @@ const collect_records = [
           alt_size: 12.5,
           size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
           fish_attribute: '03dbdfd1-2ce2-4b80-b470-210ef328a9d8',
+          id: '2',
         },
         {
           size: 2.5,
@@ -533,6 +535,7 @@ const collect_records = [
           alt_size: 2.5,
           size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
           fish_attribute: '03635b1f-95c2-4a80-be46-208152a69138',
+          id: '3',
         },
       ],
     },

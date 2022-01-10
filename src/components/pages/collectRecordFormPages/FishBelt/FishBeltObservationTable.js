@@ -1,36 +1,32 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
-import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
-import {
-  choicesPropType,
-  fishBeltPropType,
-  observationPropTypeShape,
-} from '../../../../App/mermaidData/mermaidDataProptypes'
+
 import {
   ButtonCaution,
   ButtonThatLooksLikeLink,
   ButtonPrimary,
   ButtonSecondary,
 } from '../../../generic/buttons'
-import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
-import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
-import { createUuid } from '../../../../library/createUuid'
+import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
+import { getFishBinLabel } from './fishBeltBins'
+import { getObservationBiomass } from './fishbeltBiomas'
 import { H2 } from '../../../generic/text'
+import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
+import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { inputTextareaSelectStyles, InputWrapper } from '../../../generic/form'
 import { LinkThatLooksLikeButton } from '../../../generic/links'
+import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
+import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
+import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
+import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
 import theme from '../../../../theme'
-import { getFishBinLabel } from './fishBeltBins'
-import { getObservationBiomass } from './fishbeltBiomas'
-import { roundToOneDecimal } from '../../../../library/Numbers/roundToOneDecimal'
-import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 
 const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
@@ -165,6 +161,17 @@ const UnderTableRow = styled('div')`
   `)}
 `
 
+const getObservationValidations = (observationId, collectRecord) => {
+  const allObservationsValidations =
+    collectRecord?.validations?.results?.data?.obs_belt_fishes ?? []
+
+  const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
+    return validation.context?.observation_id === observationId
+  })
+
+  return justThisObservationsValidations
+}
+
 const FishBeltObservationTable = ({
   areObservationsInputsDirty,
   areValidationsShowing,
@@ -175,7 +182,6 @@ const FishBeltObservationTable = ({
   fishNameOptions,
   ignoreObservationValidations,
   observationsReducer,
-  observationValidationsCloneWithUuids,
   openNewFishNameModal,
   persistUnsavedObservationsUtilities,
   resetObservationValidations,
@@ -203,20 +209,10 @@ const FishBeltObservationTable = ({
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
       const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
       const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
-      const observationsFromApiWithIds = initialObservationsToLoad.map((observation) => ({
-        ...observation,
-        /* uiId exists on observations for the sake of the front end logic
-         (adding rows, adding new species to observation, validation, etc).
-         In the future it would be better sourced from the back end where
-         database type logic is better situated. This tech debt is tracked
-         in ticket M453.*/
-
-        uiId: observation.uuId ?? createUuid(),
-      }))
 
       observationsDispatch({
         type: 'loadObservationsFromApi',
-        payload: observationsFromApiWithIds,
+        payload: initialObservationsToLoad,
       })
 
       setHaveApiObservationsBeenLoaded(true)
@@ -237,7 +233,7 @@ const FishBeltObservationTable = ({
   const observationsBiomass = useMemo(
     () =>
       observationsState.map((observation) => ({
-        uiId: observation.uiId,
+        id: observation.id,
         biomass: getObservationBiomass({
           choices,
           fishNameConstants,
@@ -260,12 +256,6 @@ const FishBeltObservationTable = ({
   )
 
   const observationsRows = useMemo(() => {
-    const getObservationValidations = (observationId) => {
-      return observationValidationsCloneWithUuids.filter(
-        (validation) => validation.observationUiId === observationId,
-      )[0]
-    }
-
     const handleKeyDown = ({ event, index, observation, isCount, isFishName }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
@@ -294,7 +284,7 @@ const FishBeltObservationTable = ({
     }
 
     return observationsState.map((observation, index) => {
-      const { uiId: observationId, count, size, fish_attribute } = observation
+      const { id: observationId, count, size, fish_attribute } = observation
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -359,27 +349,28 @@ const FishBeltObservationTable = ({
       )
 
       const observationBiomass = roundToOneDecimal(
-        observationsBiomass.find((object) => object.uiId === observationId).biomass,
+        observationsBiomass.find((object) => object.id === observationId).biomass,
       )
 
-      const observationValidations = getObservationValidations(observationId)
+      const observationValidations = getObservationValidations(observationId, collectRecord)
 
       const handleIgnoreObservationValidations = () => {
         ignoreObservationValidations({
-          observationUiId: observationId,
+          observationId,
         })
       }
 
       const handleResetObservationValidations = () => {
         resetObservationValidations({
-          observationUiId: observationId,
+          observationId,
         })
       }
 
       const observationValidationsToDisplay = getValidationPropertiesForInput(
-        observationValidations?.validations,
+        observationValidations,
         areValidationsShowing,
       )
+
       const { validationType } = observationValidationsToDisplay
       const observationValidationMessages =
         observationValidationsToDisplay?.validationMessages ?? []
@@ -507,9 +498,9 @@ const FishBeltObservationTable = ({
     areValidationsShowing,
     fishBinSelectedLabel,
     fishNameOptions,
-    isAutoFocusAllowed,
+    collectRecord,
     ignoreObservationValidations,
-    observationValidationsCloneWithUuids,
+    isAutoFocusAllowed,
     observationsBiomass,
     observationsDispatch,
     observationsState,
@@ -596,9 +587,6 @@ FishBeltObservationTable.propTypes = {
   ).isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
-  observationValidationsCloneWithUuids: PropTypes.arrayOf(
-    PropTypes.shape({ ...observationPropTypeShape, observationId: PropTypes.string }),
-  ).isRequired,
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
