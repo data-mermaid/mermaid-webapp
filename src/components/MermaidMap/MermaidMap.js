@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import maplibregl from 'maplibre-gl'
-import theme from '../../theme'
 import LegendDrawer from './LegendDrawer'
 import {
   satelliteBaseMap,
@@ -253,9 +252,9 @@ const MermaidMap = ({
 
   return (
     <MapInputRow>
-      <label>Allen Coral Atlas</label>
+      <label htmlFor="Allen-Coral-Atlas-map">Allen Coral Atlas</label>
       <MapContainer>
-        <MapWrapper ref={mapContainer} />
+        <MapWrapper id="Allen-Coral-Atlas-map" ref={mapContainer} />
         <LegendDrawer
           coralMosaicLayer={coralMosaicLayer}
           geomorphicLayer={geomorphicLayer}
