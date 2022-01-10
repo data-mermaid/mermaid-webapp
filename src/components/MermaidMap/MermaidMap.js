@@ -252,9 +252,9 @@ const MermaidMap = ({
 
   return (
     <MapInputRow>
-      <label htmlFor="Allen-Coral-Atlas-map">Allen Coral Atlas</label>
+      <span>Allen Coral Atlas</span>
       <MapContainer>
-        <MapWrapper id="Allen-Coral-Atlas-map" ref={mapContainer} />
+        <MapWrapper ref={mapContainer} />
         <LegendDrawer
           coralMosaicLayer={coralMosaicLayer}
           geomorphicLayer={geomorphicLayer}
