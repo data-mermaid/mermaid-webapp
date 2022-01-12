@@ -40,6 +40,6 @@ InlineMessage.propTypes = {
   type: PropTypes.string,
   className: PropTypes.string,
 }
-InlineMessage.defaultProps = { type: 'warning' }
+InlineMessage.defaultProps = { type: 'warning', className: undefined }
 
 export default InlineMessage
