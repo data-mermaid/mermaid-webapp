@@ -38,6 +38,7 @@ const InlineMessage = ({ type, children, className }) => {
 InlineMessage.propTypes = {
   children: PropTypes.string.isRequired,
   type: PropTypes.string,
+  className: PropTypes.string,
 }
 InlineMessage.defaultProps = { type: 'warning' }
 
