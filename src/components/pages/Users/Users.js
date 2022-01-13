@@ -485,6 +485,7 @@ const Users = ({ currentUser }) => {
       columns: tableColumns,
       data: tableCellData,
       initialState: { pageSize: 15 },
+      autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
     },
     useGlobalFilter,
