@@ -27,14 +27,19 @@ const InlineMessageWrapper = styled.div`
   `)}
 `
 
-const InlineMessage = ({ type, children }) => {
-  return <InlineMessageWrapper type={type}>{children}</InlineMessageWrapper>
+const InlineMessage = ({ type, children, className }) => {
+  return (
+    <InlineMessageWrapper className={className} type={type}>
+      {children}
+    </InlineMessageWrapper>
+  )
 }
 
 InlineMessage.propTypes = {
   children: PropTypes.string.isRequired,
   type: PropTypes.string,
+  className: PropTypes.string,
 }
-InlineMessage.defaultProps = { type: 'warning' }
+InlineMessage.defaultProps = { type: 'warning', className: undefined }
 
 export default InlineMessage

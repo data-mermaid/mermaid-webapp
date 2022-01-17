@@ -20,7 +20,6 @@ import {
   IconAlert,
 } from '../../icons'
 import { pluralize } from '../../../library/strings/pluralize'
-import { RowSpaceBetween } from '../../generic/positioning'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -49,8 +48,14 @@ const ToolbarRowWrapper = styled('div')`
     grid-template-columns: auto;
   `)}
 `
-
-const ProfileImage = styled.div`
+const WarningInlineMessage = styled(InlineMessage)`
+  margin: ${theme.spacing.medium} 0;
+`
+const ActiveSampleUnitsIconAlert = styled(IconAlert)`
+  color: ${theme.color.textColor};
+  margin: 0 ${theme.spacing.small};
+`
+const ProfileImage = styled('div')`
   border-radius: 50%;
   ${(props) =>
     props.img &&
@@ -59,8 +64,8 @@ const ProfileImage = styled.div`
       background-position: center center;
       background-size: ${props.theme.typography.xLargeIconSize};
     `}
-  width: ${(props) => props.theme.typography.xLargeIconSize};
-  height: ${(props) => props.theme.typography.xLargeIconSize};
+  width: ${theme.typography.xLargeIconSize};
+  height: ${theme.typography.xLargeIconSize};
 `
 
 const NameCellStyle = styled('div')`
@@ -303,6 +308,7 @@ const Users = ({ currentUser }) => {
       {
         Header: 'Active Sample Units',
         accessor: 'active',
+        align: 'right',
       },
       {
         Header: 'Transfer Sample Units',
@@ -426,7 +432,8 @@ const Users = ({ currentUser }) => {
         ),
         active: (
           <>
-            {num_active_sample_units} {isActiveSampleUnitsWarningShowing ? <IconAlert /> : null}
+            {isActiveSampleUnitsWarningShowing ? <ActiveSampleUnitsIconAlert /> : null}
+            {num_active_sample_units}{' '}
           </>
         ),
         transfer: (
@@ -578,9 +585,7 @@ const Users = ({ currentUser }) => {
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
   const toolbar = isAppOnline ? (
     <>
-      <RowSpaceBetween>
-        <H2>Users</H2>
-      </RowSpaceBetween>
+      <H2>Users</H2>
       <ToolbarRowWrapper>
         <FilterSearchToolbar
           name={language.pages.userTable.filterToolbarText}
@@ -601,7 +606,9 @@ const Users = ({ currentUser }) => {
         />
       </ToolbarRowWrapper>
       {isReadonlyUserWithActiveSampleUnits && (
-        <InlineMessage type="warning">{language.pages.userTable.warningReadOnlyUser}</InlineMessage>
+        <WarningInlineMessage type="warning">
+          {language.pages.userTable.warningReadOnlyUser}
+        </WarningInlineMessage>
       )}
     </>
   ) : (
