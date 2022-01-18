@@ -1,4 +1,5 @@
 import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
@@ -14,6 +15,7 @@ import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
+import InputWithLabelAndValidationOnType from '../../mermaidInputs/InputWithLabelAndValidationOnType'
 import language from '../../../language'
 import MermaidMap from '../../MermaidMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
@@ -70,6 +72,16 @@ const Site = () => {
 
   const formik = useFormik({
     initialValues: initialFormValues,
+    validationSchema: Yup.object().shape({
+      latitude: Yup.number()
+        .min(-90, 'latitude should be between -90° and 90')
+        .max(90, 'latitude should be between -90° and 90')
+        .required(),
+      longitude: Yup.number()
+        .min(-180, 'longitude should be between -180° and 180')
+        .max(180, 'longitude should be between -180° and 180')
+        .required(),
+    }),
     enableReinitialize: true,
     onSubmit: (formikValues, formikActions) => {
       const { country, exposure, name, latitude, longitude, notes, reef_type, reef_zone } =
@@ -147,16 +159,18 @@ const Site = () => {
                   }}
                 />
               </InputRow>
-              <InputWithLabelAndValidation
+              <InputWithLabelAndValidationOnType
                 label="Latitude"
                 id="latitude"
                 type="number"
+                formikValidationError={formik.errors.latitude}
                 {...formik.getFieldProps('latitude')}
               />
-              <InputWithLabelAndValidation
+              <InputWithLabelAndValidationOnType
                 label="Longitude"
-                id="longitude"
+                id="Longitude"
                 type="number"
+                formikValidationError={formik.errors.longitude}
                 {...formik.getFieldProps('longitude')}
               />
               <MermaidMap
@@ -195,7 +209,11 @@ const Site = () => {
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{formik.values.name}</H2>
-          <ButtonCallout type="submit" form="site-form" disabled={!formik.dirty}>
+          <ButtonCallout
+            type="submit"
+            form="site-form"
+            disabled={!formik.dirty || Object.keys(formik.errors).length}
+          >
             <IconSave />
             Save
           </ButtonCallout>

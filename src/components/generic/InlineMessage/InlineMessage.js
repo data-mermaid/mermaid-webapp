@@ -32,7 +32,7 @@ const InlineMessage = ({ type, children }) => {
 }
 
 InlineMessage.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
   type: PropTypes.string,
 }
 InlineMessage.defaultProps = { type: 'warning' }
