@@ -1,0 +1,3 @@
+import InputWithLabelAndValidationOnType from './InputWithLabelAndValidationOnType'
+
+export default InputWithLabelAndValidationOnType
