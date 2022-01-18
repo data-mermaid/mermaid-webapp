@@ -45,7 +45,7 @@ describe('Online', () => {
 
     await saveFishbeltRecord()
 
-    expect(await screen.findByText('Collect record saved.'))
+    expect(await screen.findByText('Record saved.'))
 
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-collect-record-form-title'))
@@ -82,7 +82,7 @@ describe('Online', () => {
 
     await saveFishbeltRecord()
 
-    expect(await screen.findByText('Collect record saved.'))
+    expect(await screen.findByText('Record saved.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 

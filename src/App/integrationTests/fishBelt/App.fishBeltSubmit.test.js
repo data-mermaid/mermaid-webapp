@@ -71,7 +71,7 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
 
   userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
 
-  expect(await screen.findByText('Collect record submitted.'))
+  expect(await screen.findByText('Record submitted.'))
   expect(await screen.findByText('Collect Records', { selector: 'h2' }))
 
   // we dont test that the record is removed from dexie becuase that is the responsibility

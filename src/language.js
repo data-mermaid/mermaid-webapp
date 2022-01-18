@@ -61,9 +61,9 @@ const error = {
 }
 
 const success = {
-  collectRecordSave: 'Collect record saved.',
-  collectRecordSubmit: 'Collect record submitted.',
-  collectRecordDelete: 'Collect record deleted.',
+  collectRecordSave: 'Record saved.',
+  collectRecordSubmit: 'Record submitted.',
+  collectRecordDelete: 'Record deleted.',
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
     'Proposed fish species saved. The observation has been edited to show it selected.',

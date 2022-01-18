@@ -34,7 +34,7 @@ describe('Offline', () => {
       }),
     )
 
-    expect(await screen.findByText('Collect record saved.'))
+    expect(await screen.findByText('Record saved.'))
 
     // Site select
     expect(screen.getByDisplayValue('Site D'))
@@ -105,7 +105,7 @@ describe('Offline', () => {
       }),
     )
 
-    expect(await screen.findByText('Collect record saved.'))
+    expect(await screen.findByText('Record saved.'))
     const savedCollectRecords = await dexieInstance.collect_records.toArray()
 
     const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '2')[0]
@@ -157,7 +157,7 @@ describe('Offline', () => {
       }),
     )
 
-    expect(await screen.findByText('Collect record saved.'))
+    expect(await screen.findByText('Record saved.'))
     const savedCollectRecord = (await dexieInstance.collect_records.toArray()).find(
       (record) => record.id === '2',
     )
@@ -229,7 +229,7 @@ describe('Offline', () => {
       }),
     )
 
-    expect(await screen.findByText('Collect record saved.'))
+    expect(await screen.findByText('Record saved.'))
 
     const editedStoredRecord = await dexieInstance.collect_records.get('2')
 

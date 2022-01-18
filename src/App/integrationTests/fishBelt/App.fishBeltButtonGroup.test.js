@@ -34,7 +34,7 @@ test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved 
 
   expect(await screen.findByText('Saving', { selector: 'button' }))
 
-  expect(await screen.findByText('Collect record saved.'))
+  expect(await screen.findByText('Record saved.'))
 
   expect(await screen.findByText('Saved', { selector: 'button' }))
   expect(screen.getByText('Validate', { selector: 'button' })).toBeEnabled()
