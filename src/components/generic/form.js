@@ -91,6 +91,7 @@ export const InputRow = styled.div`
       grid-row: 1 / 3;
       grid-column: 1 / 2;
       display: block;
+      white-space: nowrap;
     }
     & > :nth-child(2) {
       /* input */
