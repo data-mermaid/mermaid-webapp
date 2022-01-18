@@ -5,7 +5,7 @@ import theme from '../../../theme'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
 
-import { InputRow, Input } from '../../generic/form'
+import { InputRow, Input, HelperText } from '../../generic/form'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
 
 const ValidationWrapper = styled('div')`
@@ -56,7 +56,7 @@ const InputWithLabelAndValidationOnType = ({
       </div>
       <ValidationWrapper>
         {formikValidationError && (
-          <InlineMessage type={'error'} key={formikValidationError}>
+          <InlineMessage type="error" key={formikValidationError}>
             <p>{formikValidationError}</p>
           </InlineMessage>
         )}
