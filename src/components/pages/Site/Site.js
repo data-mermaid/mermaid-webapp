@@ -18,6 +18,7 @@ import language from '../../../language'
 import MermaidMap from '../../MermaidMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { ButtonCallout } from '../../generic/buttons'
 import { IconSave } from '../../icons'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
@@ -34,6 +35,7 @@ const Site = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { siteId, projectId } = useParams()
   const isMounted = useIsMounted()
+  const { isAppOnline } = useOnlineStatus()
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
@@ -159,12 +161,14 @@ const Site = () => {
                 type="number"
                 {...formik.getFieldProps('longitude')}
               />
-              <MermaidMap
-                formLatitudeValue={formik.getFieldProps('latitude').value}
-                formLongitudeValue={formik.getFieldProps('longitude').value}
-                handleLatitudeChange={handleLatitudeChange}
-                handleLongitudeChange={handleLongitudeChange}
-              />
+              {isAppOnline &&
+                <MermaidMap
+                  formLatitudeValue={formik.getFieldProps('latitude').value}
+                  formLongitudeValue={formik.getFieldProps('longitude').value}
+                  handleLatitudeChange={handleLatitudeChange}
+                  handleLongitudeChange={handleLongitudeChange}
+                />
+              }
               <InputRadioWithLabelAndValidation
                 label="Exposure"
                 id="exposure"
