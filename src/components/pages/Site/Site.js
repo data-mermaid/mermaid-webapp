@@ -163,7 +163,6 @@ const Site = () => {
               />
               {isAppOnline &&
                 <MermaidMap
-                  data-testid="map"
                   formLatitudeValue={formik.getFieldProps('latitude').value}
                   formLongitudeValue={formik.getFieldProps('longitude').value}
                   handleLatitudeChange={handleLatitudeChange}
