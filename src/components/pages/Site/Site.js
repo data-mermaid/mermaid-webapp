@@ -36,6 +36,7 @@ const Site = () => {
   const { siteId, projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
+  const [isNameEmpty, setIsNameEmpty] = useState()
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
@@ -101,6 +102,10 @@ const Site = () => {
         })
     },
   })
+
+  const _checkIsNameEmpty = useEffect(() => {
+    setIsNameEmpty(!!formik.values.name)
+  }, [formik.values.name])
 
   const { setFieldValue: formikSetFieldValue } = formik
 
@@ -199,7 +204,7 @@ const Site = () => {
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{formik.values.name}</H2>
-          <ButtonCallout type="submit" form="site-form" disabled={!formik.dirty}>
+          <ButtonCallout type="submit" form="site-form" disabled={!formik.dirty || !isNameEmpty}>
             <IconSave />
             Save
           </ButtonCallout>

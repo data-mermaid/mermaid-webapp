@@ -124,3 +124,37 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
 
   expect(siteNameInput).toHaveValue('OOF')
 })
+
+test('Online: Save button initially disabled, then enabled when form dirty', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/sites/1'],
+    dexieInstance,
+  })
+
+  const getSaveButton = async () => screen.findByRole('button', { name: 'Save' })
+
+  expect(await getSaveButton()).toBeDisabled()
+
+  const siteNameInput = screen.getByRole('textbox', { name: 'Name' })
+
+  userEvent.type(siteNameInput, 'updated name')
+
+  expect(await getSaveButton()).toBeEnabled()
+})
+
+test('Online: Save button disabled when site name is empty', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    initialEntries: ['/projects/5/sites/1'],
+    dexieInstance,
+  })
+
+  const siteNameInput = await screen.findByRole('textbox', { name: 'Name' })
+
+  userEvent.clear(siteNameInput)
+
+  expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
+})
