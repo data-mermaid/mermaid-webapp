@@ -50,9 +50,9 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     if (databaseSwitchboardInstance && isMounted.current) {
       databaseSwitchboardInstance
         .getFishGenera()
-        .then(genera => {
+        .then((genera) => {
           if (isMounted.current) {
-            setGeneraOptions(genera.map(genus => ({ label: genus.name, value: genus.id })))
+            setGeneraOptions(genera.map((genus) => ({ label: genus.name, value: genus.id })))
           }
         })
         .catch(() => {
@@ -65,7 +65,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     if (databaseSwitchboardInstance && isMounted.current) {
       databaseSwitchboardInstance
         .getProject(projectId)
-        .then(project => {
+        .then((project) => {
           if (isMounted.current) {
             setProjectName(project.name)
           }
@@ -96,7 +96,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     onDismiss()
   }
 
-  const handleSpeciesChange = event => {
+  const handleSpeciesChange = (event) => {
     formikPage1.setFieldValue('species', event.target.value.toLowerCase())
   }
 
@@ -122,7 +122,8 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
             aria-labelledby="genus-label"
             options={generaOptions}
             value={formikPage1.values.genusId}
-            onChange={selectedItem => {
+            noResultsText={language.autocomplete.noResultsDefault}
+            onChange={(selectedItem) => {
               formikPage1.setFieldValue('genusId', selectedItem.value)
               setGenusName(selectedItem.label)
             }}

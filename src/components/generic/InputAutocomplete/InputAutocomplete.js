@@ -20,16 +20,23 @@ const NoResultSection = styled.div`
   top: 4rem;
   outline: ${theme.color.outline};
   background: ${theme.color.white};
-  padding: ${theme.spacing.small};
   z-index: 99;
+  width: 100%;
   p {
-    margin: ${theme.spacing.small} 0;
+    margin: ${theme.spacing.small};
+  }
+  button {
+    width: 100%;
+    border: none;
+    text-align: start;
+    padding: ${theme.spacing.small};
   }
 `
 
 const InputAutocomplete = ({
   className,
-  noResultsDisplay,
+  noResultsText,
+  noResultsAction,
   id,
   helperText,
   onChange,
@@ -142,7 +149,8 @@ const InputAutocomplete = ({
             </Menu>
             {!areMatchingMenuItems && (
               <NoResultSection>
-                {noResultsDisplay || language.autocomplete.noResultsDefault}
+                <p data-testId="noResult">{noResultsText}</p>
+                {noResultsAction}
               </NoResultSection>
             )}
           </AutoCompleteResultsWrapper>
@@ -156,7 +164,8 @@ InputAutocomplete.propTypes = {
   className: PropTypes.string,
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
-  noResultsDisplay: PropTypes.node,
+  noResultsAction: PropTypes.node,
+  noResultsText: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func,
   options: inputOptionsPropTypes.isRequired,
@@ -166,7 +175,8 @@ InputAutocomplete.propTypes = {
 InputAutocomplete.defaultProps = {
   className: undefined,
   helperText: undefined,
-  noResultsDisplay: undefined,
+  noResultsAction: undefined,
+  noResultsText: undefined,
   onKeyDown: undefined,
   value: '',
 }

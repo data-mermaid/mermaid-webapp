@@ -25,11 +25,12 @@ test('InputAutocomplete: default no results view', () => {
     <InputAutocomplete options={options} onChange={() => {}} id="someId" />,
   )
 
-  expect(screen.queryByText('No Results')).not.toBeInTheDocument()
+  const noResults = screen.queryByText('No Results')
+  expect(noResults).not.toBeInTheDocument()
 
   userEvent.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')
 
-  expect(screen.getByText('No Results')).toBeInTheDocument()
+  expect(screen.getByTestId('noResult')).toBeInTheDocument()
 })
 
 test('InputAutocomplete: custom no results view', () => {
@@ -38,7 +39,8 @@ test('InputAutocomplete: custom no results view', () => {
       id="someId"
       options={options}
       onChange={() => {}}
-      noResultsDisplay={<>Custom View</>}
+      noResultsText="No Results"
+      noResultsAction={<>Custom View</>}
     />,
   )
 
