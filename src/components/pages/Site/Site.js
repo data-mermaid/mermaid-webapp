@@ -1,5 +1,4 @@
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
@@ -15,7 +14,6 @@ import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import InputWithLabelAndValidationOnType from '../../mermaidInputs/InputWithLabelAndValidationOnType'
 import language from '../../../language'
 import MermaidMap from '../../MermaidMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
@@ -141,9 +139,6 @@ const Site = () => {
     [formikSetFieldValue],
   )
 
-  console.log('formik.errors ', formik.errors)
-  console.log('Object.keys ', Object.keys(formik.errors))
-
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -182,14 +177,16 @@ const Site = () => {
                 {...formik.getFieldProps('latitude')}
                 validationType={formik.errors.latitude ? 'error' : null}
                 validationMessages={formik.errors.latitude}
+                testId="latitude"
               />
               <InputWithLabelAndValidation
                 label="Longitude"
-                id="Longitude"
+                id="longitude"
                 type="number"
                 {...formik.getFieldProps('longitude')}
                 validationType={formik.errors.longitude ? 'error' : null}
                 validationMessages={formik.errors.longitude}
+                testId="longitude"
               />
               {isAppOnline && (
                 <MermaidMap
