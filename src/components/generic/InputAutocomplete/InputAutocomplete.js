@@ -6,7 +6,6 @@ import { matchSorter } from 'match-sorter'
 import { Menu, Item } from './InputAutocomplete.styles'
 import { Input, HelperText } from '../form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import language from '../../../language'
 import theme from '../../../theme'
 
 const AutoCompleteInput = styled(Input)`

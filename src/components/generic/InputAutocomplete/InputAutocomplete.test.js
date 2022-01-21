@@ -26,6 +26,7 @@ test('InputAutocomplete: default no results view', () => {
   )
 
   const noResults = screen.queryByText('No Results')
+
   expect(noResults).not.toBeInTheDocument()
 
   userEvent.type(screen.getByRole('textbox'), 'teiwhjfkdsjfskdl')

@@ -5,12 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-import {
-  CloseButton,
-  ButtonSecondary,
-  ButtonCallout,
-  ButtonThatLooksLikeLink,
-} from '../../generic/buttons'
+import { CloseButton, ButtonCallout, ButtonThatLooksLikeLink } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { createUuid } from '../../../library/createUuid'
