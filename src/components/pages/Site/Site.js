@@ -74,16 +74,6 @@ const Site = () => {
 
   const formik = useFormik({
     initialValues: initialFormValues,
-    validationSchema: Yup.object().shape({
-      latitude: Yup.number()
-        .min(-90, 'latitude should be between -90° and 90')
-        .max(90, 'latitude should be between -90° and 90')
-        .required(),
-      longitude: Yup.number()
-        .min(-180, 'longitude should be between -180° and 180')
-        .max(180, 'longitude should be between -180° and 180')
-        .required(),
-    }),
     enableReinitialize: true,
     onSubmit: (formikValues, formikActions) => {
       const { country, exposure, name, latitude, longitude, notes, reef_type, reef_zone } =
@@ -112,6 +102,27 @@ const Site = () => {
           toast.error(language.error.siteSave)
         })
     },
+    validate: (values) => {
+      const errors = {}
+
+      if (!values.latitude) {
+        errors.latitude = [{ message: 'Required', id: 'Required' }]
+      } else if (values.latitude > 90 || values.latitude < -90) {
+        errors.latitude = [
+          { message: 'latitude should be between -90° and 90°', id: 'Invalid Latitude' },
+        ]
+      }
+
+      if (!values.longitude) {
+        errors.longitude = [{ message: 'Required', id: 'Required' }]
+      } else if (values.longitude > 180 || values.longitude < -180) {
+        errors.longitude = [
+          { message: 'longitude should be between -180° and 180°', id: 'Invalid Longitude' },
+        ]
+      }
+
+      return errors
+    },
   })
 
   const { setFieldValue: formikSetFieldValue } = formik
@@ -129,6 +140,9 @@ const Site = () => {
     },
     [formikSetFieldValue],
   )
+
+  console.log('formik.errors ', formik.errors)
+  console.log('Object.keys ', Object.keys(formik.errors))
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
@@ -161,28 +175,30 @@ const Site = () => {
                   }}
                 />
               </InputRow>
-              <InputWithLabelAndValidationOnType
+              <InputWithLabelAndValidation
                 label="Latitude"
                 id="latitude"
                 type="number"
-                formikValidationError={formik.errors.latitude}
                 {...formik.getFieldProps('latitude')}
+                validationType={formik.errors.latitude ? 'error' : null}
+                validationMessages={formik.errors.latitude}
               />
-              <InputWithLabelAndValidationOnType
+              <InputWithLabelAndValidation
                 label="Longitude"
                 id="Longitude"
                 type="number"
-                formikValidationError={formik.errors.longitude}
                 {...formik.getFieldProps('longitude')}
+                validationType={formik.errors.longitude ? 'error' : null}
+                validationMessages={formik.errors.longitude}
               />
-              {isAppOnline &&
+              {isAppOnline && (
                 <MermaidMap
                   formLatitudeValue={formik.getFieldProps('latitude').value}
                   formLongitudeValue={formik.getFieldProps('longitude').value}
                   handleLatitudeChange={handleLatitudeChange}
                   handleLongitudeChange={handleLongitudeChange}
                 />
-              }
+              )}
               <InputRadioWithLabelAndValidation
                 label="Exposure"
                 id="exposure"
