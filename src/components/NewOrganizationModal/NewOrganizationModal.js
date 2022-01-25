@@ -45,6 +45,10 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
             aria-labelledby="modal-input-for-org-label"
             aria-describedby="modal-input-for-org-descp"
             id="modal-input-for-org"
+            value={formik.values.newOrganizationSuggestion}
+            onChange={(event) =>
+              formik.setFieldValue('newOrganizationSuggestion', event.target.value)
+            }
           />
           {helperText && <HelperText id="modal-input-for-org-descp">{helperText}</HelperText>}
         </div>
