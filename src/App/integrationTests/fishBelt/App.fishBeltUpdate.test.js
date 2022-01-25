@@ -190,7 +190,7 @@ describe('Offline', () => {
       }),
     )
 
-    expect(await screen.findByText('Something went wrong. The collect record has not been saved.'))
+    expect(await screen.findByText('Something went wrong. The sample unit has not been saved.'))
 
     expect(await screen.findByLabelText('Depth')).toHaveValue(45)
   })
