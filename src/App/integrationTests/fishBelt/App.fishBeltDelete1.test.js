@@ -38,7 +38,7 @@ describe('Offline', () => {
 
     // navigated to collect records table page
     expect(
-      await screen.findByText('Collect Records', {
+      await screen.findByText('Collecting', {
         selector: 'h2',
       }),
     )

@@ -3,17 +3,17 @@ const error = {
   apiDataSync: 'The app was not able to sync data with the API. Please try again.',
   appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
   collectRecordChoicesUnavailable:
-    'Options data for creating a collect record is currently unavailable. Please try again.',
-  collectRecordDelete: 'Something went wrong. The collect record has not been deleted.',
+    'Options data for creating a sample unit is currently unavailable. Please try again',
+  collectRecordDelete: 'Something went wrong. The sample unit has not been deleted.',
   collectRecordValidation: 'Validation is currently unavailable for this record.',
   collectRecordValidationIgnore:
     'Something went wrong. This validation cannot be ignored. Please try again.',
   collectRecordValidationReset:
     'Something went wrong. This validation cannot be reset. Please try again.',
-  collectRecordSave: 'Something went wrong. The collect record has not been saved.',
-  collectRecordSubmit: 'Something went wrong. The collect record has not been submitted.',
-  collectRecordsUnavailable: 'Collect records data is currently unavailable. Please try again.',
-  collectRecordUnavailable: 'Collect record data is currently unavailable. Please try again.',
+  collectRecordSave: 'Something went wrong. The sample unit has not been saved.',
+  collectRecordSubmit: 'Something went wrong. The sample unit has not been submitted.',
+  collectRecordsUnavailable: 'Sample unit data is currently unavailable. Please try again',
+  collectRecordUnavailable: 'Sample unit data is currently unavailable. Please try again',
   duplicateNewUserAdd: 'User has already been added to project.',
   emptyEmailAdd: 'Please enter an email address.',
   error: 'Error',
