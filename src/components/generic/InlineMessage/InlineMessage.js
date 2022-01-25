@@ -36,7 +36,7 @@ const InlineMessage = ({ type, children, className }) => {
 }
 
 InlineMessage.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
   type: PropTypes.string,
   className: PropTypes.string,
 }

@@ -100,6 +100,27 @@ const Site = () => {
           toast.error(language.error.siteSave)
         })
     },
+    validate: (values) => {
+      const errors = {}
+
+      if (!values.latitude) {
+        errors.latitude = [{ message: 'Required', id: 'Required' }]
+      } else if (values.latitude > 90 || values.latitude < -90) {
+        errors.latitude = [
+          { message: 'latitude should be between -90° and 90°', id: 'Invalid Latitude' },
+        ]
+      }
+
+      if (!values.longitude) {
+        errors.longitude = [{ message: 'Required', id: 'Required' }]
+      } else if (values.longitude > 180 || values.longitude < -180) {
+        errors.longitude = [
+          { message: 'longitude should be between -180° and 180°', id: 'Invalid Longitude' },
+        ]
+      }
+
+      return errors
+    },
   })
 
   const { setFieldValue: formikSetFieldValue } = formik
@@ -154,21 +175,27 @@ const Site = () => {
                 id="latitude"
                 type="number"
                 {...formik.getFieldProps('latitude')}
+                validationType={formik.errors.latitude ? 'error' : null}
+                validationMessages={formik.errors.latitude}
+                testId="latitude"
               />
               <InputWithLabelAndValidation
                 label="Longitude"
                 id="longitude"
                 type="number"
                 {...formik.getFieldProps('longitude')}
+                validationType={formik.errors.longitude ? 'error' : null}
+                validationMessages={formik.errors.longitude}
+                testId="longitude"
               />
-              {isAppOnline &&
+              {isAppOnline && (
                 <MermaidMap
                   formLatitudeValue={formik.getFieldProps('latitude').value}
                   formLongitudeValue={formik.getFieldProps('longitude').value}
                   handleLatitudeChange={handleLatitudeChange}
                   handleLongitudeChange={handleLongitudeChange}
                 />
-              }
+              )}
               <InputRadioWithLabelAndValidation
                 label="Exposure"
                 id="exposure"
@@ -199,7 +226,11 @@ const Site = () => {
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{formik.values.name}</H2>
-          <ButtonCallout type="submit" form="site-form" disabled={!formik.dirty}>
+          <ButtonCallout
+            type="submit"
+            form="site-form"
+            disabled={!formik.dirty || Object.keys(formik.errors).length}
+          >
             <IconSave />
             Save
           </ButtonCallout>
