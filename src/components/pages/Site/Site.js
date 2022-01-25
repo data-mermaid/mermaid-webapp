@@ -165,6 +165,7 @@ const Site = () => {
                   id="country"
                   options={countryOptions}
                   value={formik.values.country}
+                  noResultsText={language.autocomplete.noResultsDefault}
                   onChange={(selectedItem) => {
                     formik.setFieldValue('country', selectedItem.value)
                   }}

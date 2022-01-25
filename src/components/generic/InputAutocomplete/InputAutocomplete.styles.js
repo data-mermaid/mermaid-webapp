@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { hoverState } from '../../../library/styling/mediaQueries'
 import theme from '../../../theme'
 
 export const Menu = styled('ul')`
@@ -18,8 +19,8 @@ export const Menu = styled('ul')`
   color: ${theme.color.textColor};
   z-index: 99;
   top: 4rem;
-  border: ${props => (props.isOpen ? null : 'none')};
-  outline: ${props => (props.isOpen ? null : 'none')};
+  border: ${(props) => (props.isOpen ? null : 'none')};
+  outline: ${(props) => (props.isOpen ? null : 'none')};
 `
 
 export const Item = styled('li')`
@@ -31,4 +32,8 @@ export const Item = styled('li')`
   padding: ${theme.spacing.buttonPadding};
   white-space: normal;
   word-wrap: normal;
+  ${hoverState(css`
+    background-color: ${theme.color.primaryColor};
+    color: ${theme.color.white};
+  `)}
 `
