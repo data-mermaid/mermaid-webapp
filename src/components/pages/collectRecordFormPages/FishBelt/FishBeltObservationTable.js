@@ -391,7 +391,7 @@ const FishBeltObservationTable = ({
           ) : null}
           {hasWarningValidation ? (
             <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-              Ignore all
+              Ignore warning
             </CellValidationButton>
           ) : null}
           {hasIgnoredValidation ? (
