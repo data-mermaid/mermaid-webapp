@@ -1,9 +1,9 @@
 // prettier-ignore
 const error = {
-  apiDataSync: 'the app was not able to sync data with the API. Please try again.',
-  appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating',
+  apiDataSync: 'The app was not able to sync data with the API. Please try again.',
+  appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
   collectRecordChoicesUnavailable:
-    'Options data for creating a collect record is currently unavailable. Please try again',
+    'Options data for creating a collect record is currently unavailable. Please try again.',
   collectRecordDelete: 'Something went wrong. The collect record has not been deleted.',
   collectRecordValidation: 'Validation is currently unavailable for this record.',
   collectRecordValidationIgnore:
@@ -12,35 +12,35 @@ const error = {
     'Something went wrong. This validation cannot be reset. Please try again.',
   collectRecordSave: 'Something went wrong. The collect record has not been saved.',
   collectRecordSubmit: 'Something went wrong. The collect record has not been submitted.',
-  collectRecordsUnavailable: 'Collect records data is currently unavailable. Please try again',
-  collectRecordUnavailable: 'Collect record data is currently unavailable. Please try again',
+  collectRecordsUnavailable: 'Collect records data is currently unavailable. Please try again.',
+  collectRecordUnavailable: 'Collect record data is currently unavailable. Please try again.',
   duplicateNewUserAdd: 'User has already been added to project.',
-  emptyEmailAdd: 'No user email',
+  emptyEmailAdd: 'Please enter an email address.',
   error: 'Error',
   fishSpeciesAlreadyExists:
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   fishSpeciesSave:
     'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
   formValidation: { required: 'This field is required' },
-  generaUnavailable: 'Fish genera data is currently unavailable. Please try again',
-  generic: 'Oooops. Something went wrong.',
-  idNotFoundUserAction: 'Please check the URL in your browser address bar.',
-  invalidEmailAdd: 'Invalid email',
+  generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
+  generic: 'Something went wrong.',
+  idNotFoundUserAction: 'Please check the URL in your browser\'s address bar.',
+  invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable:
-    'Management Regime records data is currently unavailable. Please try again',
+    'Management Regime records data is currently unavailable. Please try again.',
   managementRegimeRecordUnavailable:
-    'Management Regime record data is currently unavailable. Please try again',
+    'Management Regime record data is currently unavailable. Please try again.',
   projectSave: 'Something went wrong. The project has not been saved.',
-  projectsUnavailable: 'Projects data is currently unavailable. Please try again',
-  siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again',
-  siteRecordUnavailable: 'Site record data is currently unavailable. Please try again',
+  projectsUnavailable: 'Projects data is currently unavailable. Please try again.',
+  siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again.',
+  siteRecordUnavailable: 'Site record data is currently unavailable. Please try again.',
   siteSave: 'Something went wrong. The site has not been saved.',
   submittedRecordsUnavailable: 'Submitted records data is currently unavailable. Please try again',
   submittedRecordUnavailable: 'Submitted record data is currently unavailable. Please try again',
   submittedRecordMoveToCollect:
     'Something went wrong. The submitted record has not been made editable',
   userProfileUnavailable: 'The user profile is unavailable.',
-  userRecordsUnavailable: 'User records data is currently unavailable. Please try again',
+  userRecordsUnavailable: 'User records data is currently unavailable. Please try again.',
 
   getIdsNotFoundDetails: (id) =>
     id.length > 1
@@ -49,7 +49,7 @@ const error = {
   getProjectTurnOnOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>
-    `Something went wrong. The Project ${projectName}, has not been removed from being offline ready.`,
+    `Something went wrong. The Project ${projectName}, has not been removed from being offline-ready.`,
   getUserRoleChangeFailureMessage: (userName) =>
     `Something went wrong. ${userName}'s role has not been changed.`,
   pageUnavailableOffline: 'This page is unavailable offline.',
@@ -73,8 +73,8 @@ const success = {
     `The project, ${projectName}, has been removed from being offline ready`,
   getUserRoleChangeSuccessMessage: ({ userName, role }) =>
     `${userName}'s role is now set to ${role}.`,
-  newUserAdd: 'New user added',
-  newPendingUserAdd: 'Sign-up email sent. New user added as pending.',
+  newUserAdd: 'New user added.',
+  newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   projectSave: 'Project saved',
   siteSave: 'Site saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
@@ -94,7 +94,7 @@ const createFishSpecies = {
   goToPage2: 'Next',
   cancel: 'Cancel',
   confirmMessage:
-    'Your proposed new species will be reviewed by the MERMAID team, who will either approve it for inclusion in the taxonomy of contact you to follow up.',
+    'Your proposed new species will be reviewed by the MERMAID team, who will either approve it for inclusion in the taxonomy or contact you to follow up.',
   back: 'Back',
   details: 'Details',
   user: 'User',
@@ -105,7 +105,7 @@ const createFishSpecies = {
 }
 
 const autocomplete = {
-  noResultsDefault: 'No Results',
+  noResultsDefault: 'No results found',
 }
 
 const pages = {
@@ -136,7 +136,7 @@ const pages = {
     searchEmailToolbarText: 'Enter email address of user to add',
     warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
     newUserModalTitle: `Invite new user`,
-    newUserModalText: `will need to sign up because they're not already a MERMAID user. After they've signed up, they'll be added to this project`,
+    newUserModalText: `will need to sign up because they're not already a MERMAID user. After they've signed up, they'll be added to this project.`,
     transferSampleUnitsModalTitle: `Transfer Sample Units`,
     removeUserModalTitle: 'Remove User From Project',
     warningRemoveUser: `You must transfer sample units before you can remove the user from project.`,
