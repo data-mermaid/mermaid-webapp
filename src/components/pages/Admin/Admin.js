@@ -5,7 +5,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-import { CloseButton, ButtonSecondary, ButtonCallout } from '../../generic/buttons'
+import { CloseButton, ButtonCallout, ButtonThatLooksLikeLink } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { createUuid } from '../../../library/createUuid'
@@ -28,9 +28,11 @@ import theme from '../../../theme'
 import useBeforeUnloadPrompt from '../../../library/useBeforeUnloadPrompt'
 import useIsMounted from '../../../library/useIsMounted'
 
-const SuggestNewOrganizationButton = styled(ButtonSecondary)`
-  font-size: smaller;
-  text-align: start;
+const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
+  ${hoverState(css`
+    background-color: ${theme.color.primaryColor};
+    color: ${theme.color.white};
+  `)}
 `
 const TagStyleWrapper = styled.ul`
   padding: 0;
@@ -198,7 +200,6 @@ const Admin = () => {
 
   const noOrganizationResult = (
     <>
-      <p>{language.pages.projectInfo.noOrganizationFound}</p>
       <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
         {language.pages.projectInfo.newOrganizationNameLink}
       </SuggestNewOrganizationButton>
@@ -238,7 +239,8 @@ const Admin = () => {
                 formik.setFieldValue('tags', [...existingOrganizations, selectedItemLabel])
               }
             }}
-            noResultsDisplay={noOrganizationResult}
+            noResultsText={language.pages.projectInfo.noOrganizationFound}
+            noResultsAction={noOrganizationResult}
           />
         </InputAutocompleteWrapper>
         <OrganizationList

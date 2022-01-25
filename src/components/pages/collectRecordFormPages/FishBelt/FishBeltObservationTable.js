@@ -28,6 +28,12 @@ import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWit
 import language from '../../../../language'
 import theme from '../../../../theme'
 
+const NewSpeciesButton = styled(ButtonThatLooksLikeLink)`
+  ${hoverState(css`
+    background-color: ${theme.color.primaryColor};
+    color: ${theme.color.white};
+  `)}
+`
 const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
@@ -391,7 +397,7 @@ const FishBeltObservationTable = ({
           ) : null}
           {hasWarningValidation ? (
             <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-              Ignore all
+              Ignore warning
             </CellValidationButton>
           ) : null}
           {hasIgnoredValidation ? (
@@ -448,10 +454,11 @@ const FishBeltObservationTable = ({
                   onChange={handleFishNameChange}
                   onKeyDown={handleFishNameKeyDown}
                   value={fish_attribute}
-                  noResultsDisplay={
-                    <ButtonThatLooksLikeLink type="button" onClick={proposeNewSpeciesClick}>
+                  noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsAction={
+                    <NewSpeciesButton type="button" onClick={proposeNewSpeciesClick}>
                       {language.pages.collectRecord.newFishSpeciesLink}
-                    </ButtonThatLooksLikeLink>
+                    </NewSpeciesButton>
                   }
                 />
                 {fish_attribute && (
