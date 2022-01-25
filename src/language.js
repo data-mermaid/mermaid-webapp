@@ -94,13 +94,13 @@ const createFishSpecies = {
   goToPage2: 'Next',
   cancel: 'Cancel',
   confirmMessage:
-    'Your proposed new species will be reviewed by the MERMAID team, who will either approve it for inclusion in the taxonomy or contact you to follow up.',
+    'Your proposed new species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
   back: 'Back',
   details: 'Details',
   user: 'User',
   project: 'Project',
   summaryText2:
-    'Your proposed new species will be reviewed by the MERMAID team who will either approve it for inclusion in the taxonomy or contact you to follow up.',
+    'Your proposed new species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
   submit: 'Send to MERMAID for review',
 }
 
@@ -125,14 +125,14 @@ const pages = {
   },
   dataSharing: {
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
-    testProjectHelperText: 'Data for a test project will be omitted from all public reporting.',
+    testProjectHelperText: 'Data for a test project will not be included in public reporting.',
     moreInfoTitle: 'Data sharing',
   },
   submittedTable: {
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
   },
   userTable: {
-    filterToolbarText: 'Filter users by name, or email',
+    filterToolbarText: 'Filter users by name or email',
     searchEmailToolbarText: 'Enter email address of user to add',
     warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
     newUserModalTitle: `Invite new user`,
@@ -151,7 +151,7 @@ const pages = {
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
   },
   managementRegimeTable: {
-    filterToolbarText: 'Filter management regimes by name, or year',
+    filterToolbarText: 'Filter management regimes by name or year',
   },
 }
 
