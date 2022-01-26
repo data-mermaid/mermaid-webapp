@@ -253,7 +253,7 @@ const Collect = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>Collect Records</H2>
+          <H2>Collecting</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.collectTable.filterToolbarText}

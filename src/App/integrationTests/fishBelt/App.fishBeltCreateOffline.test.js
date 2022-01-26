@@ -48,7 +48,7 @@ describe('Offline', () => {
 
     await saveFishbeltRecord()
 
-    expect(await screen.findByText('Collect record saved.'))
+    expect(await screen.findByText('Record saved.'))
 
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-collect-record-form-title'))
@@ -87,7 +87,7 @@ describe('Offline', () => {
 
     await saveFishbeltRecord()
 
-    expect(await screen.findByText('Collect record saved.'))
+    expect(await screen.findByText('Record saved.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -118,7 +118,7 @@ describe('Offline', () => {
 
     await saveFishbeltRecord()
 
-    expect(await screen.findByText('Something went wrong. The collect record has not been saved.'))
+    expect(await screen.findByText('Something went wrong. The sample unit has not been saved.'))
 
     // ensure the were not in edit mode, but new fish belt mode
     expect(

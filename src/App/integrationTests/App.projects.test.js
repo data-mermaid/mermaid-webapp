@@ -26,7 +26,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
   userEvent.click(projectCard)
 
   expect(
-    await screen.findByText('Collect Records', {
+    await screen.findByText('Collecting', {
       selector: 'h2',
     }),
   )
