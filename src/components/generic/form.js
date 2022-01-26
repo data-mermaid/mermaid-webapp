@@ -54,8 +54,8 @@ export const HelperText = styled.span`
   display: block;
 `
 export const inputTextareaSelectStyles = css`
-  padding: ${theme.spacing.xsmall};
-  height: fit-content;
+  padding: ${theme.spacing.small};
+  height: 4rem;
   border: solid ${theme.spacing.borderSmall} ${theme.color.border};
   background-color: ${theme.color.inputBackground};
   text-align: inherit;

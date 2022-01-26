@@ -34,11 +34,11 @@ describe('Offline', () => {
       }),
     )
     // shows toast
-    expect(await screen.findByText('Collect record deleted.'))
+    expect(await screen.findByText('Record deleted.'))
 
     // navigated to collect records table page
     expect(
-      await screen.findByText('Collect Records', {
+      await screen.findByText('Collecting', {
         selector: 'h2',
       }),
     )

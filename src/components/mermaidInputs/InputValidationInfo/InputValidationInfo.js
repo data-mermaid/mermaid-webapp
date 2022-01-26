@@ -33,13 +33,13 @@ const InputValidationInfo = ({
       ) : null}
       {areThereValidationMessages && validationType === 'warning' ? (
         <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
-          Ignore all
+          Ignore warning
         </InlineValidationButton>
       ) : null}
       {validationType === 'ok' ? <span aria-label="Passed validation">&nbsp;</span> : null}
       {validationType === 'ignore' ? (
         <>
-          <InlineMessage validationType={validationType}>
+          <InlineMessage type={validationType}>
             <p>Ignored</p>
           </InlineMessage>
           <InlineValidationButton type="button" onClick={resetNonObservationFieldValidations}>

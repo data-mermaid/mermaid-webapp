@@ -29,6 +29,7 @@ export const Button = styled.button`
   transition: ${theme.timing.activeTransition};
   padding: ${theme.spacing.buttonPadding};
   border-width: 0;
+  min-height: 4rem;
   cursor: pointer;
   &:disabled {
     color: ${theme.color.disabledText};
@@ -111,13 +112,10 @@ export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
 
 export const ButtonThatLooksLikeLink = styled('button')`
   font-size: inherit;
+  padding: ${theme.spacing.buttonPadding};
   background: none;
-  margin: 0;
-  padding: 0;
   border: none;
   cursor: pointer;
-  overflow: visible; /* IE hack */
-  width: auto; /* IE hack */
   &:disabled {
     color: ${theme.color.disabledText};
   }

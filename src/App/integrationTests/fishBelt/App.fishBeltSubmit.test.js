@@ -71,8 +71,8 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
 
   userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
 
-  expect(await screen.findByText('Collect record submitted.'))
-  expect(await screen.findByText('Collect Records', { selector: 'h2' }))
+  expect(await screen.findByText('Record submitted.'))
+  expect(await screen.findByText('Collecting', { selector: 'h2' }))
 
   // we dont test that the record is removed from dexie becuase that is the responsibility
   // of sync + the api.Post submit pulls updates and deletes.
@@ -140,9 +140,7 @@ test('Submit fishbelt failure shows toast message and an enabled submit button',
   userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
   expect(await screen.findByText('Submitting', { selector: 'button' }))
 
-  expect(
-    await screen.findByText('Something went wrong. The collect record has not been submitted.'),
-  )
+  expect(await screen.findByText('Something went wrong. The sample unit has not been submitted.'))
   expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
   expect(await screen.findByText('Validated', { selector: 'button' })).toBeDisabled()
   expect(await screen.findByText('Saved', { selector: 'button' })).toBeDisabled()

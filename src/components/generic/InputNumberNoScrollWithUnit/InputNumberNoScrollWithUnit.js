@@ -23,6 +23,7 @@ const UnitContainer = styled.span`
 
 const InnerInput = styled(InputNumberNoScroll)`
   border: none;
+  height: auto;
   text-align: inherit;
   padding: ${theme.spacing.xsmall};
 `
