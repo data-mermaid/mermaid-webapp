@@ -61,11 +61,11 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
   userEvent.clear(siteNameInput)
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
-  expect(await within(screen.getByTestId('name')).findByText('Required')).toBeInTheDocument()
+  expect(await within(screen.getByTestId('name')).findByText('This field is required')).toBeInTheDocument()
 
 })
 
-test('Edit Site page - clear latitude or longitude inputs shows inline error validation message "Required"', async () => {
+test('Edit Site page - clear latitude or longitude inputs shows inline error validation message "This field is required"', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -88,7 +88,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   userEvent.clear(latitudeInput)
 
-  expect(await within(screen.getByTestId('latitude')).findByText('Required')).toBeInTheDocument()
+  expect(await within(screen.getByTestId('latitude')).findByText('This field is required')).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
@@ -102,7 +102,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   userEvent.clear(longitudeInput)
 
-  expect(await within(screen.getByTestId('longitude')).findByText('Required')).toBeInTheDocument()
+  expect(await within(screen.getByTestId('longitude')).findByText('This field is required')).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
@@ -137,7 +137,7 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
 
   expect(
     await within(screen.getByTestId('latitude')).findByText(
-      'latitude should be between -90° and 90°',
+      'Latitude should be between -90° and 90°',
     ),
   ).toBeInTheDocument()
 
@@ -174,7 +174,7 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
 
   expect(
     await within(screen.getByTestId('longitude')).findByText(
-      'longitude should be between -180° and 180°',
+      'Longitude should be between -180° and 180°',
     ),
   ).toBeInTheDocument()
 
