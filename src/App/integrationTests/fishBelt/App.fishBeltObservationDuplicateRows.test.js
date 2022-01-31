@@ -22,11 +22,11 @@ test('Fishbelt observations: tab in count input on last row duplicates row', asy
   await screen.findByTestId('edit-collect-record-form-title')
 
   const formBeforeTab = screen.getByRole('form')
-  const observationsTableBeforeEnterKey = within(formBeforeTab).getAllByRole('table')[0]
+  const observationsTableBeforeTabKey = within(formBeforeTab).getAllByRole('table')[0]
 
-  expect(within(observationsTableBeforeEnterKey).getAllByRole('row').length).toEqual(4)
+  expect(within(observationsTableBeforeTabKey).getAllByRole('row').length).toEqual(4)
 
-  const lastCountInput = within(observationsTableBeforeEnterKey).getByDisplayValue(4)
+  const lastCountInput = within(observationsTableBeforeTabKey).getByDisplayValue(4)
 
   // userEvent doesnt work as expected for tab
   fireEvent.keyDown(lastCountInput, { key: 'Tab', code: 'Tab' })
@@ -42,9 +42,8 @@ test('Fishbelt observations: tab in count input on last row duplicates row', asy
     2,
   )
 
-  const newFishNameInput = within(observationsTableAfterTab).getAllByDisplayValue(
-    'Tylosurus choram',
-  )[1]
+  const newFishNameInput =
+    within(observationsTableAfterTab).getAllByDisplayValue('Tylosurus choram')[1]
 
   expect(newFishNameInput).toHaveFocus()
 })
