@@ -32,6 +32,9 @@ export const Item = styled('li')`
   padding: ${theme.spacing.buttonPadding};
   white-space: normal;
   word-wrap: normal;
+  background-color: ${(props) =>
+    props.highlighted ? theme.color.primaryColor : theme.color.white};
+  color: ${(props) => (props.highlighted ? theme.color.white : theme.color.black)};
   ${hoverState(css`
     background-color: ${theme.color.primaryColor};
     color: ${theme.color.white};
