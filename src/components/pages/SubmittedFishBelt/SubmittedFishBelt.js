@@ -103,7 +103,7 @@ const SubmittedFishBelt = () => {
       .moveToCollect({ projectId, recordId })
       .then(() => {
         toast.success(language.success.submittedRecordMoveToCollect)
-        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${recordId}`)
       })
       .catch(() => {
         toast.error(language.error.submittedRecordMoveToCollect)
