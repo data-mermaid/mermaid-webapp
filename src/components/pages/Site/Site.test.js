@@ -13,7 +13,59 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import Site from './Site'
 
-test('Edit Site page - clear latitude or longitude inputs shows inline error validation message "Required"', async () => {
+test('Edit Site page - Save button initially disabled, then enabled when form dirty', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/sites/:siteId">
+      <Site />
+    </Route>,
+    {
+      initialEntries: ['/projects/5/sites/1'],
+      dexieInstance,
+      isSyncInProgressOverride: true,
+    },
+  )
+
+  const getSaveButton = async () => screen.findByRole('button', { name: 'Save' })
+
+  expect(await getSaveButton()).toBeDisabled()
+
+  const siteNameInput = screen.getByRole('textbox', { name: 'Name' })
+
+  userEvent.type(siteNameInput, 'updated name')
+
+  expect(await getSaveButton()).toBeEnabled()
+})
+
+test('Edit Site page - Save button disabled and "Required" error valudation message displayed when site name is empty', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/sites/:siteId">
+      <Site />
+    </Route>,
+    {
+      initialEntries: ['/projects/5/sites/1'],
+      dexieInstance,
+      isSyncInProgressOverride: true,
+    },
+  )
+
+  const siteNameInput = await screen.findByRole('textbox', { name: 'Name' })
+
+  userEvent.clear(siteNameInput)
+
+  expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
+  expect(await within(screen.getByTestId('name')).findByText('This field is required')).toBeInTheDocument()
+
+})
+
+test('Edit Site page - clear latitude or longitude inputs shows inline error validation message "This field is required"', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -36,7 +88,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   userEvent.clear(latitudeInput)
 
-  expect(await within(screen.getByTestId('latitude')).findByText('Required')).toBeInTheDocument()
+  expect(await within(screen.getByTestId('latitude')).findByText('This field is required')).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
@@ -50,7 +102,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   userEvent.clear(longitudeInput)
 
-  expect(await within(screen.getByTestId('longitude')).findByText('Required')).toBeInTheDocument()
+  expect(await within(screen.getByTestId('longitude')).findByText('This field is required')).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
@@ -85,7 +137,7 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
 
   expect(
     await within(screen.getByTestId('latitude')).findByText(
-      'latitude should be between -90° and 90°',
+      'Latitude should be between -90° and 90°',
     ),
   ).toBeInTheDocument()
 
@@ -122,7 +174,7 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
 
   expect(
     await within(screen.getByTestId('longitude')).findByText(
-      'longitude should be between -180° and 180°',
+      'Longitude should be between -180° and 180°',
     ),
   ).toBeInTheDocument()
 

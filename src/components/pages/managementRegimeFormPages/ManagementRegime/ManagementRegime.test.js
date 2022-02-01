@@ -36,13 +36,13 @@ test('Edit fishbelt shows name and rules required', async () => {
 
   userEvent.clear(nameInput)
 
-  expect(await within(screen.getByTestId('name')).findByText('Required')).toBeInTheDocument()
+  expect(await within(screen.getByTestId('name')).findByText('This field is required')).toBeInTheDocument()
 
   const gearRestrictionCheckbox = screen.getByLabelText('Gear Restriction')
 
   expect(gearRestrictionCheckbox).toBeChecked()
   userEvent.click(gearRestrictionCheckbox)
-  expect(await within(screen.getByTestId('rules')).findByText('Required')).toBeInTheDocument()
+  expect(await within(screen.getByTestId('rules')).findByText('This field is required')).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 

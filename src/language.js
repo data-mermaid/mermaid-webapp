@@ -21,7 +21,11 @@ const error = {
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   fishSpeciesSave:
     'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
-  formValidation: { required: 'This field is required' },
+  formValidation: {
+    latitude: 'Latitude should be between -90° and 90°',
+    longitude: 'Longitude should be between -180° and 180°',
+    required: 'This field is required'
+  },
   generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
   generic: 'Something went wrong.',
   idNotFoundUserAction: 'Please check the URL in your browser\'s address bar.',
