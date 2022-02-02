@@ -159,7 +159,7 @@ const pages = {
   },
 }
 
-const navigateAwayPrompt = 'Reload site? Changes you made may not be saved.'
+const navigateAwayPrompt = 'Are you sure you want to leave this page? You have some unsaved changes.'
 
 export default {
   error,

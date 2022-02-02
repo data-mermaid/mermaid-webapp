@@ -1,6 +1,6 @@
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams, Prompt } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
@@ -41,6 +41,7 @@ import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordL
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import useBeforeUnloadPrompt from '../../../../library/useBeforeUnloadPrompt'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -524,6 +525,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     formik.setFieldValue('observers', selectedObservers)
   }
 
+  useBeforeUnloadPrompt({ shouldPromptTrigger: formik.dirty })
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -641,6 +644,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           projectId={projectId}
         />
       )}
+      <Prompt when={formik.dirty} message={language.navigateAwayPrompt} />
     </>
   )
 }
