@@ -1,5 +1,4 @@
-import styled, { css } from 'styled-components'
-import { hoverState } from '../../../library/styling/mediaQueries'
+import styled from 'styled-components'
 import theme from '../../../theme'
 
 export const Menu = styled('ul')`
@@ -33,6 +32,6 @@ export const Item = styled('li')`
   white-space: normal;
   word-wrap: normal;
   background-color: ${(props) =>
-    (props.highlighted ? theme.color.primaryColor : theme.color.white)};
+    props.highlighted ? theme.color.primaryColor : theme.color.white};
   color: ${(props) => (props.highlighted ? theme.color.white : theme.color.black)};
 `
