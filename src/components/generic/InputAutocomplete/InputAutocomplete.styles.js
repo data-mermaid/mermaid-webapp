@@ -33,10 +33,6 @@ export const Item = styled('li')`
   white-space: normal;
   word-wrap: normal;
   background-color: ${(props) =>
-    props.highlighted ? theme.color.primaryColor : theme.color.white};
+    (props.highlighted ? theme.color.primaryColor : theme.color.white)};
   color: ${(props) => (props.highlighted ? theme.color.white : theme.color.black)};
-  ${hoverState(css`
-    background-color: ${theme.color.primaryColor};
-    color: ${theme.color.white};
-  `)}
 `
