@@ -19,12 +19,12 @@ const fishbeltObservationReducer = (state, action) => {
       return [...state, { id: createUuid(), count: null, size: null }]
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
-      const { referenceObservationIndex, referenceObservation } = action.payload
+      const { referenceObservationIndex } = action.payload
       const indexToInsertAt = referenceObservationIndex + 1
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
         id: createUuid(),
-        fish_attribute: referenceObservation.fish_attribute,
+        fish_attribute: null,
         count: null,
         size: null,
       })
