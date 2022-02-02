@@ -323,8 +323,6 @@ const Users = ({ currentUser }) => {
 
   const handleRoleChange = useCallback(
     ({ event, projectProfileId }) => {
-      setIsLoading(true)
-
       const roleCode = parseInt(event.target.value, 10)
 
       databaseSwitchboardInstance
@@ -342,7 +340,6 @@ const Users = ({ currentUser }) => {
           )
 
           setObserverProfiles(updatedObserverProfiles)
-          setIsLoading(false)
           toast.success(
             language.success.getUserRoleChangeSuccessMessage({
               userName: editedUserName,
