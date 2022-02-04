@@ -47,6 +47,7 @@ As a tradeoff between mixing concerns and having an overlycomplex, it was decide
 There are currently two ways the application warns the user about navigating away from an unsaved (dirty) form:
   1. `useBeforeUnloadPrompt` to add an event listener to detect browser navigation (refresh, back, forward etc)
   2. `<Prompt>` from `react-router-dom` to handle navigation occurring within the application through react router. 
+These have been combined into a single high order component named `<EnhancedPrompt>` which has been added to all forms in the application.
 
 React router v6 will eventually provide a hook called `usePrompt` which will cover both of the above and will display the same default modal/popup for both. Another similar hook named `useBlocker` will be provided too. [Good reference]( https://stackoverflow.com/questions/62792342/in-react-router-v6-how-to-check-form-is-dirty-before-leaving-page-route
 ) with link to a demo. These hooks were available in the v6 alpha, but have been removed until later in the stable v6 ([upgrade guide](https://reactrouter.com/docs/en/v6/upgrading/v5#prompt-is-not-currently-supported)) 
