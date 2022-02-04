@@ -1,6 +1,6 @@
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Prompt, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
@@ -17,6 +17,7 @@ import { IconClose, IconSave } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
@@ -25,7 +26,6 @@ import NewOrganizationModal from '../../NewOrganizationModal'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
-import useBeforeUnloadPrompt from '../../../library/useBeforeUnloadPrompt'
 import useIsMounted from '../../../library/useIsMounted'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
@@ -196,8 +196,6 @@ const Admin = () => {
   }
   const formik = useFormik(formikOptions)
 
-  useBeforeUnloadPrompt({ shouldPromptTrigger: formik.dirty })
-
   const noOrganizationResult = (
     <>
       <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
@@ -289,7 +287,8 @@ const Admin = () => {
           </ContentPageToolbarWrapper>
         }
       />
-      <Prompt when={formik.dirty} message={language.navigateAwayPrompt} />
+      {/* Prompt user if they attempt to navifate away from dirty form */}
+      <EnhancedPrompt shouldPromptTrigger={formik.dirty}/>
     </>
   )
 }

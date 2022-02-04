@@ -1,6 +1,6 @@
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { useHistory, useParams, Prompt } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
@@ -27,6 +27,7 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import SampleInfoInputs from './SampleInfoInputs'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
@@ -41,7 +42,6 @@ import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordL
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import useBeforeUnloadPrompt from '../../../../library/useBeforeUnloadPrompt'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -525,8 +525,6 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     formik.setFieldValue('observers', selectedObservers)
   }
 
-  useBeforeUnloadPrompt({ shouldPromptTrigger: formik.dirty })
-
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -644,7 +642,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           projectId={projectId}
         />
       )}
-      <Prompt when={formik.dirty} message={language.navigateAwayPrompt} />
+      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 }
