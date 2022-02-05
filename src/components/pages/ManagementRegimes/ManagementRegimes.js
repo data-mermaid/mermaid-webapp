@@ -17,6 +17,7 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
@@ -47,7 +48,9 @@ const ManagementRegimes = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.managementRegimeRecordsUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.managementRegimeRecordsUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])

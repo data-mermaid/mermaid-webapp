@@ -34,6 +34,7 @@ import FishbeltTransectInputs from './FishbeltTransectInputs'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
+import { getToastArguments } from '../../../../library/getToastArguments'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 import ObserversInput from '../../../ObserversInput'
 import RecordFormTitle from '../../../RecordFormTitle'
@@ -197,7 +198,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             ? language.error.collectRecordChoicesUnavailable
             : language.error.collectRecordUnavailable
 
-          toast.error(error)
+          toast.error(...getToastArguments(error))
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId, projectId, isSyncInProgress])
@@ -228,11 +229,15 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         .then(() => {
           clearPersistedUnsavedFormikData()
           clearPersistedUnsavedObservationsData()
-          toast.success(language.success.collectRecordDelete)
+          toast.success(
+            ...getToastArguments(language.success.collectRecordDelete)
+          )
           history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
         })
         .catch(() => {
-          toast.error(language.error.collectRecordDelete)
+          toast.error(
+            ...getToastArguments(language.error.collectRecordDelete)
+          )
           closeDeleteConfirmPrompt()
         })
     }
@@ -243,11 +248,15 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     databaseSwitchboardInstance
       .submitFishBelt({ recordId, projectId })
       .then(() => {
-        toast.success(language.success.collectRecordSubmit)
+        toast.success(
+          ...getToastArguments(language.success.collectRecordSubmit)
+        )
         history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch(() => {
-        toast.error(language.error.collectRecordSubmit)
+        toast.error(
+          ...getToastArguments(language.error.collectRecordSubmit)
+        )
         setSubmitButtonState(possibleCollectButtonGroupStates.submittable)
       })
   }
@@ -262,7 +271,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
       })
       .catch(() => {
-        toast.error(language.error.collectRecordValidation)
+        toast.error(
+          ...getToastArguments(language.error.collectRecordValidation)
+        )
         setValidateButtonState(possibleCollectButtonGroupStates.validatable)
       })
   }
@@ -279,7 +290,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordValidationIgnore)
+          toast.warn(
+            ...getToastArguments(language.error.collectRecordValidationIgnore)
+          )
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -297,7 +310,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordValidationIgnore)
+          toast.warn(
+            ...getToastArguments(language.error.collectRecordValidationIgnore)
+          )
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -315,7 +330,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordValidationIgnore)
+          toast.warn(
+            ...getToastArguments(language.error.collectRecordValidationIgnore)
+          )
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -331,7 +348,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordValidationReset)
+          toast.warn(
+            ...getToastArguments(language.error.collectRecordValidationReset)
+          )
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -349,7 +368,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordValidationReset)
+          toast.warn(
+            ...getToastArguments(language.error.collectRecordValidationReset)
+          )
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -367,7 +388,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordValidationReset)
+          toast.warn(
+            ...getToastArguments(language.error.collectRecordValidationReset)
+          )
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -389,11 +412,15 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           },
         })
         updateFishNameOptionsStateWithOfflineStorageData()
-        toast.success(language.success.fishSpeciesSave)
+        toast.success(
+          ...getToastArguments(language.success.fishSpeciesSave)
+        )
       })
       .catch((error) => {
         if (error.message === 'Species already exists') {
-          toast.warning(language.error.fishSpeciesAlreadyExists)
+          toast.warning(
+            ...getToastArguments(language.error.fishSpeciesAlreadyExists)
+          )
 
           observationsDispatch({
             type: 'updateFishName',
@@ -403,7 +430,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             },
           })
         } else {
-          toast.error(language.error.fishSpeciesSave)
+          toast.error(
+            ...getToastArguments(language.error.fishSpeciesSave)
+          )
         }
       })
 
@@ -459,7 +488,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         }
       })
       .catch(() => {
-        toast.error(language.error.collectRecordSave)
+        toast.error(
+          ...getToastArguments(language.error.collectRecordSave)
+        )
       })
   }
 

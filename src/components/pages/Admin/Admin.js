@@ -21,6 +21,7 @@ import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
@@ -169,7 +170,9 @@ const Admin = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.projectsUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.projectsUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
@@ -187,10 +190,14 @@ const Admin = () => {
         .saveProject({ projectId, editedValues: values })
         .then(() => {
           actions.resetForm({ values }) // resets formiks dirty state
-          toast.success(language.success.projectSave)
+          toast.success(
+            ...getToastArguments(language.success.projectSave)
+          )
         })
         .catch(() => {
-          toast.error(language.error.projectSave)
+          toast.error(
+            ...getToastArguments(language.error.projectSave)
+          )
         })
     },
   }
