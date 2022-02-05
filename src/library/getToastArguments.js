@@ -4,8 +4,5 @@
  * @return {[string, {toastId: string}]} Array containing the toast message as the first element, and an object with a toastId property as the second element.
  */
 export const getToastArguments = (toastMessage) => {
-  return ([
-    toastMessage,
-    { toastId: toastMessage }
-  ])
+  return [toastMessage, { toastId: toastMessage }]
 }
