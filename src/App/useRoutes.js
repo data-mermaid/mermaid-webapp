@@ -62,7 +62,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
       Component: Data,
     },
     {
-      path: '/projects/:projectId/data/fishbelt/:recordId',
+      path: '/projects/:projectId/data/fishbelt/:submittedRecordId',
       Component: () => <SubmittedFishBelt currentUser={currentUser} />,
     },
     {
