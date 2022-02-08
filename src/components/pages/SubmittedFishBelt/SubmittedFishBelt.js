@@ -20,6 +20,7 @@ import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
 import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
+import { getSubmittedRecordOrCollectRecordName } from '../../../library/getSubmittedRecordOrCollectRecordName'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -31,9 +32,10 @@ const SubmittedFishBelt = () => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
   const [submittedRecord, setSubmittedRecord] = useState()
+  const [subNavName, setSubNavName] = useState(null)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
-  const { recordId, projectId } = useParams()
+  const { submittedRecordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
@@ -48,7 +50,10 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
-        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(projectId, recordId),
+        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(
+          projectId,
+          submittedRecordId,
+        ),
       ]
 
       Promise.all(promises)
@@ -75,12 +80,19 @@ const SubmittedFishBelt = () => {
                 families,
               })
 
+              const recordNameForSubNav = getSubmittedRecordOrCollectRecordName(
+                submittedRecordResponse,
+                sitesResponse,
+                'fishbelt_transect',
+              )
+
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setSubmittedRecord(submittedRecordResponse)
               setFishNameOptions(updateFishNameOptions)
               setFishNameConstants(updateFishNameConstants)
+              setSubNavName(recordNameForSubNav)
               setIsLoading(false)
             }
           },
@@ -89,21 +101,23 @@ const SubmittedFishBelt = () => {
           const errorStatus = error.response?.status
 
           if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId, recordId])
+            setIdsNotAssociatedWithData([projectId, submittedRecordId])
             setIsLoading(false)
           }
           toast.error(language.error.submittedRecordUnavailable)
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, recordId, projectId, isAppOnline])
+  }, [databaseSwitchboardInstance, isMounted, submittedRecordId, projectId, isAppOnline])
 
   const handleMoveToCollect = () => {
     setIsMoveToButtonDisabled(true)
     databaseSwitchboardInstance
-      .moveToCollect({ projectId, recordId })
+      .moveToCollect({ projectId, submittedRecordId })
       .then(() => {
         toast.success(language.success.submittedRecordMoveToCollect)
-        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${recordId}`)
+        history.push(
+          `${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${submittedRecordId}`,
+        )
       })
       .catch(() => {
         toast.error(language.error.submittedRecordMoveToCollect)
@@ -120,6 +134,7 @@ const SubmittedFishBelt = () => {
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
       isToolbarSticky={true}
+      subNavName={subNavName}
       content={
         isAppOnline ? (
           <>

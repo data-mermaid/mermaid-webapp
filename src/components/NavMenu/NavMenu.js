@@ -1,5 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { useParams } from 'react-router-dom'
 import theme from '../../theme'
 import { NavLinkSidebar } from '../generic/links'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
@@ -15,6 +17,7 @@ import {
 } from '../icons'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
+import SubNavMenuRecordName from '../SubNavMenuRecordName'
 
 const NavWrapper = styled('nav')`
   background: ${theme.color.white};
@@ -52,8 +55,9 @@ const NavHeader = styled('p')`
   font-weight: 900;
 `
 
-const NavMenu = () => {
+const NavMenu = ({ subNavName }) => {
   const projectUrl = useCurrentProjectPath()
+  const { recordId, submittedRecordId, siteId, managementRegimeId } = useParams()
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
@@ -75,24 +79,27 @@ const NavMenu = () => {
           <NavHeader>Collect</NavHeader>
           <ul>
             <li>
-              <NavLinkSidebar to={`${projectUrl}/collecting`}>
+              <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
                 <IconCollect />
                 <span>Collecting</span>
                 <CollectRecordsCount />
               </NavLinkSidebar>
             </li>
+            {recordId && <SubNavMenuRecordName subNavName={subNavName} />}
             <li>
-              <NavLinkSidebar to={`${projectUrl}/sites`}>
+              <NavLinkSidebar exact to={`${projectUrl}/sites`}>
                 <IconSites />
                 <span>Sites</span>
               </NavLinkSidebar>
             </li>
+            {siteId && <SubNavMenuRecordName subNavName={subNavName} />}
             <li>
-              <NavLinkSidebar to={`${projectUrl}/management-regimes`}>
+              <NavLinkSidebar exact to={`${projectUrl}/management-regimes`}>
                 <IconMgmt />
                 <span>Management Regimes</span>
               </NavLinkSidebar>
             </li>
+            {managementRegimeId && <SubNavMenuRecordName subNavName={subNavName} />}
           </ul>
         </li>
         <OfflineHide>
@@ -100,11 +107,12 @@ const NavMenu = () => {
             <NavHeader>Data</NavHeader>
             <ul>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/data`}>
+                <NavLinkSidebar exact to={`${projectUrl}/data`}>
                   <IconData />
                   <span>Submitted</span>
                 </NavLinkSidebar>
               </li>
+              {submittedRecordId && <SubNavMenuRecordName subNavName={subNavName} />}
               {/* hiding for alpha release because leads nowhere useful */}
               {/* <li>
                 <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
@@ -149,5 +157,11 @@ const NavMenu = () => {
     </NavWrapper>
   )
 }
+
+NavMenu.propTypes = {
+  subNavName: PropTypes.string,
+}
+
+NavMenu.defaultProps = { subNavName: null }
 
 export default NavMenu

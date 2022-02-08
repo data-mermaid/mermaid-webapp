@@ -41,6 +41,7 @@ import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordL
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
+import { getSubmittedRecordOrCollectRecordName } from '../../../../library/getSubmittedRecordOrCollectRecordName'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -68,6 +69,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [observationToAddSpeciesTo, setObservationToAddSpeciesTo] = useState()
+  const [subNavName, setSubNavName] = useState(null)
 
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(possibleCollectButtonGroupStates.saved)
@@ -180,6 +182,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 families,
               })
 
+              const recordNameForSubNav = getSubmittedRecordOrCollectRecordName(
+                collectRecordResponse.data,
+                sitesResponse,
+                'fishbelt_transect',
+              )
+
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
@@ -187,6 +195,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
+              setSubNavName(recordNameForSubNav)
               setIsLoading(false)
               setValidateButtonState(getValidationButtonStatus(collectRecordResponse))
             }
@@ -534,6 +543,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       <ContentPageLayout
         isPageContentLoading={isLoading}
         isToolbarSticky={true}
+        subNavName={subNavName}
         content={
           <>
             <RecordLevelInputValidationInfo
