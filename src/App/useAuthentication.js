@@ -1,7 +1,28 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
+
+function useInterval(callback, delay) {
+  const savedCallback = useRef()
+
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback
+  }, [callback])
+
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current()
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay)
+
+return () => clearInterval(id)
+    }
+  }, [delay])
+}
 
 const useAuthentication = ({ dexieInstance }) => {
   const { isAppOnline } = useOnlineStatus()
@@ -24,6 +45,15 @@ const useAuthentication = ({ dexieInstance }) => {
     logout: auth0Logout,
     getAccessTokenSilently: getAuth0AccessTokenSilently,
   } = useAuth0()
+
+  useInterval(() => {
+    if (auth0Token) {
+      getAuth0AccessTokenSilently()
+        .then((token) => {
+          setAuth0Token(token)
+      })
+    }
+  }, 30000)
 
   const _initializeAuthentication = useEffect(() => {
     let isMounted = true
@@ -81,6 +111,7 @@ const useAuthentication = ({ dexieInstance }) => {
     isMermaidAuthenticated,
     logoutMermaid,
     auth0Token,
+    getAuth0Token: getAuth0AccessTokenSilently,
   }
 }
 
