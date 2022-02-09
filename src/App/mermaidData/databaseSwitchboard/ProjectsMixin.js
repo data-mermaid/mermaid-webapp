@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 const ProjectsMixin = (Base) =>
   class extends Base {
     getOfflineReadyProjectIds = function getOfflineReadyProjectIds() {
@@ -42,9 +44,19 @@ const ProjectsMixin = (Base) =>
     }
 
     getProjectTags = function getProjectTags() {
-      return this._isOnlineAuthenticatedAndReady
-        ? this._authenticatedAxios
-            .get(`${this._apiBaseUrl}/projecttags`)
+      let token
+
+      this._getAccessToken().then((newToken) => {
+        token = newToken
+      })
+
+return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .get(`${this._apiBaseUrl}/projecttags`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            })
             .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
@@ -105,11 +117,14 @@ const ProjectsMixin = (Base) =>
       }
 
       if (this._isAuthenticatedAndReady) {
-        return this._authenticatedAxios
+        return axios
           .get(`${this._apiBaseUrl}/profiles`, {
             params: {
               email,
             },
+            headers: {
+              Authorization: `Bearer ${this._getAccessToken()}`
+            }
           })
           .then((profilesData) => {
             return profilesData
@@ -125,9 +140,19 @@ const ProjectsMixin = (Base) =>
       }
 
       if (this._isAuthenticatedAndReady) {
-        return this._authenticatedAxios
+        let token
+
+        this._getAccessToken().then((newToken) => {
+          token = newToken
+        })
+
+        return axios
           .post(`${this._apiBaseUrl}/projects/${projectId}/add_profile/`, {
             email,
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           })
           .then((response) => {
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
@@ -153,11 +178,20 @@ const ProjectsMixin = (Base) =>
       }
 
       if (this._isAuthenticatedAndReady) {
-        return this._authenticatedAxios
+        let token
+
+        this._getAccessToken().then((newToken) => {
+          token = newToken
+        })
+
+        return axios
           .put(`${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`, {
             from_profile: fromProfileId,
             to_profile: toProfileId,
-          })
+          }, {
+            headers: {
+            Authorization: `Bearer ${token}`
+          } })
           .then((response) => {
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
@@ -186,11 +220,22 @@ const ProjectsMixin = (Base) =>
       }
 
       if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
-        return this._authenticatedAxios
+        let token
+
+        this._getAccessToken().then((newToken) => {
+          token = newToken
+        })
+
+        return axios
           .post(
             `${this._apiBaseUrl}/push/`,
             { project_profiles: [recordMarkedToBeDeleted] },
-            { params: { force: true } },
+            {
+              params: { force: true },
+              headers: {
+                Authorization: `Bearer ${token}`
+              }
+            },
           )
           .then(() => {
             return this._apiSyncInstance

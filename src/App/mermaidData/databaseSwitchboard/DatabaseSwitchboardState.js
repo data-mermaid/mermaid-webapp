@@ -1,4 +1,3 @@
-import axios from 'axios'
 import language from '../../../language'
 
 const DatabaseSwitchboardState = class {
@@ -6,7 +5,7 @@ const DatabaseSwitchboardState = class {
 
   _apiSyncInstance
 
-  _authenticatedAxios
+  _getAccessToken
 
   _dexieInstance
 
@@ -33,27 +32,32 @@ const DatabaseSwitchboardState = class {
   constructor({
     apiBaseUrl,
     apiSyncInstance,
-    auth0Token,
+    getAccessToken,
     dexieInstance,
     isMermaidAuthenticated,
     isAppOnline,
   }) {
     this._apiBaseUrl = apiBaseUrl
     this._apiSyncInstance = apiSyncInstance
+    this._getAccessToken = getAccessToken
     this._dexieInstance = dexieInstance
     this._isAuthenticatedAndReady = isMermaidAuthenticated && !!dexieInstance
 
-    this._authenticatedAxios = auth0Token
-      ? axios.create({
-          headers: {
-            Authorization: `Bearer ${auth0Token}`,
-          },
-        })
-      : undefined
+    let currentToken
+
+    this._getAccessToken().then((token) => {
+      currentToken = token
+    })
+
     this._isOnlineAuthenticatedAndReady =
-      this._isAuthenticatedAndReady && isAppOnline && !!this._authenticatedAxios
+      this._isAuthenticatedAndReady && isAppOnline && !!currentToken
     this._isOnlineAuthenticatedAndLoading =
-      this._isAuthenticatedAndReady && isAppOnline && !this._authenticatedAxios
+      this._isAuthenticatedAndReady && isAppOnline && !currentToken
+
+    // this._isOnlineAuthenticatedAndReady =
+    //   this._isAuthenticatedAndReady && isAppOnline && !!currentToken
+    // this._isOnlineAuthenticatedAndLoading =
+    //   this._isAuthenticatedAndReady && isAppOnline && !currentToken
     this._isOfflineAuthenticatedAndReady = this._isAuthenticatedAndReady && !isAppOnline
   }
 }

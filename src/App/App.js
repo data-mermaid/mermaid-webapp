@@ -25,12 +25,12 @@ import useIsMounted from '../library/useIsMounted'
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
-  const { auth0Token, isMermaidAuthenticated, logoutMermaid } = useAuthentication({ dexieInstance })
+  const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({ dexieInstance })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
-    auth0Token,
+    getAccessToken,
     dexieInstance,
     isMounted,
     isAppOnline,
@@ -42,9 +42,9 @@ function App({ dexieInstance }) {
     return new SyncApiDataIntoOfflineStorage({
       dexieInstance,
       apiBaseUrl,
-      auth0Token,
+      getAccessToken,
     })
-  }, [dexieInstance, apiBaseUrl, auth0Token])
+  }, [dexieInstance, apiBaseUrl, getAccessToken])
 
   const databaseSwitchboardInstance = useMemo(() => {
     const areDependenciesReady = !!dexieInstance && apiBaseUrl && isMermaidAuthenticated
@@ -54,16 +54,16 @@ function App({ dexieInstance }) {
       : new DatabaseSwitchboard({
           apiBaseUrl,
           apiSyncInstance,
-          auth0Token,
+          getAccessToken,
           dexieInstance,
           isMermaidAuthenticated,
           isAppOnline,
         })
-  }, [auth0Token, isMermaidAuthenticated, isAppOnline, dexieInstance, apiBaseUrl, apiSyncInstance])
+  }, [getAccessToken, isMermaidAuthenticated, isAppOnline, dexieInstance, apiBaseUrl, apiSyncInstance])
 
   const currentUser = useCurrentUser({
     apiBaseUrl,
-    auth0Token,
+    getAccessToken,
     dexieInstance,
     isMermaidAuthenticated,
     isAppOnline,

@@ -9,7 +9,7 @@ const resetPushToApiTagFromItems = (items) =>
 
 export const pullApiData = async ({
   dexieInstance,
-  auth0Token,
+  getAccessToken,
   apiBaseUrl,
   apiDataNamesToPull,
   projectId,
@@ -32,7 +32,7 @@ export const pullApiData = async ({
 
   const pullResponse = await axios.post(`${apiBaseUrl}/pull/`, pullRequestBody, {
     headers: {
-      Authorization: `Bearer ${auth0Token}`,
+      Authorization: `Bearer ${await getAccessToken()}`,
     },
   })
 

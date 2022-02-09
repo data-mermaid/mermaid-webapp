@@ -5,7 +5,7 @@ import getCurrentUserProfile from '../getCurrentUserProfile'
 
 export const useCurrentUser = ({
   apiBaseUrl,
-  auth0Token,
+  getAccessToken,
   dexieInstance,
   isMermaidAuthenticated,
   isAppOnline,
@@ -18,7 +18,7 @@ export const useCurrentUser = ({
     if (isMermaidAuthenticated && apiBaseUrl && dexieInstance && isMermaidAuthenticated) {
       getCurrentUserProfile({
         apiBaseUrl,
-        auth0Token,
+        getAccessToken,
         dexieInstance,
         isMermaidAuthenticated,
         isAppOnline,
@@ -36,7 +36,7 @@ export const useCurrentUser = ({
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl, auth0Token, dexieInstance, isMermaidAuthenticated, isAppOnline])
+  }, [apiBaseUrl, getAccessToken, dexieInstance, isMermaidAuthenticated, isAppOnline])
 
   return currentUser
 }
