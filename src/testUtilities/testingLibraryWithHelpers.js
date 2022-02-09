@@ -13,6 +13,7 @@ import {
   getMockOfflineDatabaseSwitchboardInstance,
 } from './mockOnlineDatabaseSwitchboardInstance'
 import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { getFakeAccessToken } from './getFakeAccessToken'
 
 const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOverride }) => (
   <Auth0Context.Provider
@@ -34,7 +35,13 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
 )
 
 const UnauthenticatedProviders = ({ children, initialEntries }) => (
-  <Auth0Context.Provider value={{ isAuthenticated: false, loginWithRedirect: () => {} }}>
+  <Auth0Context.Provider
+    value={{
+      isAuthenticated: false,
+      loginWithRedirect: () => {},
+      getAccessTokenSilently: getFakeAccessToken,
+    }}
+  >
     <MemoryRouter initialEntries={initialEntries}>
       <ThemeProvider theme={theme}>
         <SyncStatusProvider>{children}</SyncStatusProvider>

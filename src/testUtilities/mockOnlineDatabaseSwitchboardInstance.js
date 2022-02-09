@@ -1,6 +1,7 @@
 import { getMockDexieInstanceAllSuccess } from './mockDexie'
 import DatabaseSwitchboard from '../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import SyncApiDataIntoOfflineStorage from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
+import { getFakeAccessToken } from './getFakeAccessToken'
 
 const defaultDexieInstance = getMockDexieInstanceAllSuccess()
 const getAccessToken = async () => 'fake token'
@@ -18,7 +19,7 @@ const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) => {
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance: dexieInstanceToUse,
       apiBaseUrl,
-      getAccessToken,
+      getAccessToken: getFakeAccessToken,
     }),
     isOfflineStorageHydrated: true,
   })
@@ -36,7 +37,7 @@ const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) => {
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance: dexieInstanceToUse,
       apiBaseUrl,
-      getAccessToken,
+      getAccessToken: getFakeAccessToken,
     }),
     isOfflineStorageHydrated: true,
   })

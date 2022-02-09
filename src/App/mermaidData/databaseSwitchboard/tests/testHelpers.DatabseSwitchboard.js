@@ -1,3 +1,4 @@
+import { getFakeAccessToken } from '../../../../testUtilities/getFakeAccessToken'
 import {
   getMockDexieInstanceAllSuccess,
   getMockDexieInstanceThatProducesErrors,
@@ -15,7 +16,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () 
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance,
       apiBaseUrl,
-      getAccessToken,
+      getAccessToken: getFakeAccessToken,
     }),
     getAccessToken,
     dexieInstance,
@@ -42,7 +43,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () =>
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance,
       apiBaseUrl,
-      getAccessToken,
+      getAccessToken: getFakeAccessToken,
     }),
   })
 }
@@ -60,7 +61,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance,
       apiBaseUrl,
-      getAccessToken,
+      getAccessToken: getFakeAccessToken,
     }),
   })
 }
@@ -74,7 +75,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = ()
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
       dexieInstance,
       apiBaseUrl,
-      getAccessToken,
+      getAccessToken: getFakeAccessToken,
     }),
     getAccessToken,
     dexieInstance,
