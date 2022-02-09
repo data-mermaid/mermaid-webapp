@@ -71,7 +71,52 @@ const ManagementRegime = () => {
   const formik = useFormik({
     initialValues: initialFormValues,
     enableReinitialize: true,
-    onSubmit: () => {},
+    onSubmit: (formikValues, formikActions) => {
+      const {
+        name,
+        name_secondary,
+        est_year,
+        size,
+        parties,
+        open_access,
+        no_take,
+        periodic_closure,
+        size_limits,
+        gear_restriction,
+        species_restriction,
+        access_restriction,
+        compliance,
+        notes,
+      } = formikValues
+
+      const formattedManagementRegimeForApi = {
+        ...managementRegimeBeingEdited,
+        name,
+        name_secondary,
+        est_year: est_year === '' ? null : est_year,
+        size: size === '' ? null : size,
+        parties,
+        open_access,
+        no_take,
+        periodic_closure,
+        size_limits,
+        gear_restriction,
+        species_restriction,
+        access_restriction,
+        compliance,
+        notes,
+      }
+
+      databaseSwitchboardInstance
+        .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
+        .then(() => {
+          toast.success(language.success.managementRegimeSave)
+          formikActions.resetForm({ values: formikValues })
+        })
+        .catch(() => {
+          toast.error(language.error.managementRegimeSave)
+        })
+    },
     validate: (values) => {
       const errors = {}
       const isPartialSelectionSelected =
