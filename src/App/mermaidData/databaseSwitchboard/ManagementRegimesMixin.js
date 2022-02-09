@@ -110,16 +110,10 @@ const ManagementRegimesMixin = (Base) =>
             },
           )
           .then((response) => {
-            console.log('response ', response)
             const [managementRegimeResponseFromApiPush] = response.data.project_managements
 
             const isManagementRegimeStatusCodeSuccessful = this._isStatusCodeSuccessful(
               managementRegimeResponseFromApiPush.status_code,
-            )
-
-            console.log(
-              'isManagementRegimeStatusCodeSuccessful ',
-              isManagementRegimeStatusCodeSuccessful,
             )
 
             if (isManagementRegimeStatusCodeSuccessful) {
