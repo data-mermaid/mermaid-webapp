@@ -23,12 +23,11 @@ const getCurrentUserProfile = ({
 
   const isAuthenticatedAndReady = isMermaidAuthenticated
   const isOnlineAuthenticatedAndLoading =
-  //   isAuthenticatedAndReady && isAppOnline && !currentToken
-  // const isOnlineAuthenticatedAndReady =
-  //   isAuthenticatedAndReady && isAppOnline && !!currentToken
+    //   isAuthenticatedAndReady && isAppOnline && !currentToken
+    // const isOnlineAuthenticatedAndReady =
+    //   isAuthenticatedAndReady && isAppOnline && !!currentToken
     isAuthenticatedAndReady && isAppOnline
-  const isOnlineAuthenticatedAndReady =
-    isAuthenticatedAndReady && isAppOnline
+  const isOnlineAuthenticatedAndReady = isAuthenticatedAndReady && isAppOnline
   const isOfflineAuthenticatedAndReady = isAuthenticatedAndReady && !isAppOnline
 
   if (isOnlineAuthenticatedAndLoading) {
@@ -42,24 +41,26 @@ const getCurrentUserProfile = ({
       token = newToken
     })
 
-  return axios.get(`${apiBaseUrl}/me/`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then((apiResults) => {
-      const userFromApi = apiResults.data
+    return axios
+      .get(`${apiBaseUrl}/me/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((apiResults) => {
+        const userFromApi = apiResults.data
 
-      if (!userFromApi) {
-        throw Error('User Profile not returned from API')
-      }
+        if (!userFromApi) {
+          throw Error('User Profile not returned from API')
+        }
 
-      const userToStore = {
-        id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
-        user: userFromApi,
-      }
+        const userToStore = {
+          id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
+          user: userFromApi,
+        }
 
-      return dexieInstance.uiState_currentUser.put(userToStore).then(() => userFromApi)
-    })
+        return dexieInstance.uiState_currentUser.put(userToStore).then(() => userFromApi)
+      })
   }
   if (isOfflineAuthenticatedAndReady) {
     return dexieInstance.uiState_currentUser.toArray().then((results) => {

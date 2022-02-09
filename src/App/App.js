@@ -25,7 +25,9 @@ import useIsMounted from '../library/useIsMounted'
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
-  const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({ dexieInstance })
+  const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
+    dexieInstance,
+  })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
   useInitializeSyncApiDataIntoOfflineStorage({
@@ -59,7 +61,14 @@ function App({ dexieInstance }) {
           isMermaidAuthenticated,
           isAppOnline,
         })
-  }, [getAccessToken, isMermaidAuthenticated, isAppOnline, dexieInstance, apiBaseUrl, apiSyncInstance])
+  }, [
+    getAccessToken,
+    isMermaidAuthenticated,
+    isAppOnline,
+    dexieInstance,
+    apiBaseUrl,
+    apiSyncInstance,
+  ])
 
   const currentUser = useCurrentUser({
     apiBaseUrl,

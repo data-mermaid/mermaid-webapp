@@ -3,7 +3,7 @@ import DatabaseSwitchboard from '../App/mermaidData/databaseSwitchboard/Database
 import SyncApiDataIntoOfflineStorage from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 
 const defaultDexieInstance = getMockDexieInstanceAllSuccess()
-const getAccessToken = async() => 'fake token'
+const getAccessToken = async () => 'fake token'
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) => {
