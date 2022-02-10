@@ -24,7 +24,7 @@ export const CheckRadioWrapper = styled.div`
     background-color: ${theme.color.white};
   `)}
 `
-export const CheckRadioLabel = styled.label`
+export const CheckRadioLabel = styled.div`
   padding: 0 ${theme.spacing.small};
   width: 100%;
   @media (hover: none) {
