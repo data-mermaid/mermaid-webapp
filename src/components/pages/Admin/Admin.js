@@ -193,11 +193,22 @@ const Admin = () => {
           toast.error(language.error.projectSave)
         })
     },
+    validate: (values) => {
+      const errors = {}
+
+      if (!values.name) {
+        errors.name = [{ message: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      return errors
+    },
   }
   const formik = useFormik(formikOptions)
 
   useBeforeUnloadPrompt({ shouldPromptTrigger: formik.dirty })
 
+  const doesFormikHaveErrors = Object.keys(formik.errors).length
+  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
   const noOrganizationResult = (
     <>
       <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
@@ -215,6 +226,8 @@ const Admin = () => {
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
+          validationType={formik.errors.name ? 'error' : null}
+          validationMessages={formik.errors.name}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -283,7 +296,7 @@ const Admin = () => {
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>Project Info</H2>
-            <ButtonCallout type="submit" form="project-info-form" disabled={!formik.dirty}>
+            <ButtonCallout type="submit" form="project-info-form" disabled={isSaveButtonDisabled}>
               <IconSave />
               Save
             </ButtonCallout>
