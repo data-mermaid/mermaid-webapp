@@ -43,21 +43,16 @@ const ProjectsMixin = (Base) =>
       })
     }
 
-    getProjectTags = function getProjectTags() {
-      let token
+    getProjectTags = async function getProjectTags() {
 
-      this._getAccessToken().then((newToken) => {
-        token = newToken
-      })
-
-return this._isOnlineAuthenticatedAndReady
-        ? axios
-            .get(`${this._apiBaseUrl}/projecttags`, {
+      return this._isOnlineAuthenticatedAndReady
+        ? axios.get(`${this._apiBaseUrl}/projecttags`, {
               headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${await this._getAccessToken()}`
               }
             })
             .then((apiResults) => apiResults.data.results)
+            .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -111,47 +106,40 @@ return this._isOnlineAuthenticatedAndReady
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getUserProfile = function getUserProfile(email) {
+    getUserProfile = async function getUserProfile(email) {
       if (!email) {
         Promise.reject(this._operationMissingParameterError)
       }
 
-      if (this._isAuthenticatedAndReady) {
-        return axios
+      return this._isAuthenticatedAndReady ?
+        axios
           .get(`${this._apiBaseUrl}/profiles`, {
             params: {
               email,
             },
             headers: {
-              Authorization: `Bearer ${this._getAccessToken()}`
+              Authorization: `Bearer ${await this._getAccessToken()}`
             }
           })
           .then((profilesData) => {
             return profilesData
           })
-      }
-
-      return Promise.reject(this._notAuthenticatedAndReadyError)
+          .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
+        : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addUser = function addUser(email, projectId) {
+    addUser = async function addUser(email, projectId) {
       if (!projectId || !email) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       if (this._isAuthenticatedAndReady) {
-        let token
-
-        this._getAccessToken().then((newToken) => {
-          token = newToken
-        })
-
         return axios
           .post(`${this._apiBaseUrl}/projects/${projectId}/add_profile/`, {
             email,
           }, {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${await this._getAccessToken()}`
             }
           })
           .then((response) => {
@@ -172,25 +160,19 @@ return this._isOnlineAuthenticatedAndReady
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    transferSampleUnits = function transferSampleUnits(projectId, fromProfileId, toProfileId) {
+    transferSampleUnits = async function transferSampleUnits(projectId, fromProfileId, toProfileId) {
       if (!projectId || !fromProfileId || !toProfileId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       if (this._isAuthenticatedAndReady) {
-        let token
-
-        this._getAccessToken().then((newToken) => {
-          token = newToken
-        })
-
         return axios
           .put(`${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`, {
             from_profile: fromProfileId,
             to_profile: toProfileId,
           }, {
             headers: {
-            Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${await this._getAccessToken()}`
           } })
           .then((response) => {
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
@@ -210,7 +192,7 @@ return this._isOnlineAuthenticatedAndReady
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    removeUser = function removeUser(user, projectId) {
+    removeUser = async function removeUser(user, projectId) {
       const hasCorrespondingRecordInTheApi = !!user._last_revision_num
 
       const recordMarkedToBeDeleted = {
@@ -220,12 +202,6 @@ return this._isOnlineAuthenticatedAndReady
       }
 
       if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
-        let token
-
-        this._getAccessToken().then((newToken) => {
-          token = newToken
-        })
-
         return axios
           .post(
             `${this._apiBaseUrl}/push/`,
@@ -233,7 +209,7 @@ return this._isOnlineAuthenticatedAndReady
             {
               params: { force: true },
               headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${await this._getAccessToken()}`
               }
             },
           )

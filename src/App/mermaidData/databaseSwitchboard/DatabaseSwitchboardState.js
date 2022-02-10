@@ -13,8 +13,6 @@ const DatabaseSwitchboardState = class {
 
   _isOfflineAuthenticatedAndReady
 
-  _isOnlineAuthenticatedAndLoading
-
   _isOnlineAuthenticatedAndReady
 
   _isStatusCodeSuccessful = function _isStatusCodeSuccessful(statusValue) {
@@ -43,21 +41,8 @@ const DatabaseSwitchboardState = class {
     this._dexieInstance = dexieInstance
     this._isAuthenticatedAndReady = isMermaidAuthenticated && !!dexieInstance
 
-    let currentToken
-
-    this._getAccessToken().then((token) => {
-      currentToken = token
-    })
-
     this._isOnlineAuthenticatedAndReady =
-      this._isAuthenticatedAndReady && isAppOnline && !!currentToken
-    this._isOnlineAuthenticatedAndLoading =
-      this._isAuthenticatedAndReady && isAppOnline && !currentToken
-
-    // this._isOnlineAuthenticatedAndReady =
-    //   this._isAuthenticatedAndReady && isAppOnline && !!currentToken
-    // this._isOnlineAuthenticatedAndLoading =
-    //   this._isAuthenticatedAndReady && isAppOnline && !currentToken
+      this._isAuthenticatedAndReady && isAppOnline
     this._isOfflineAuthenticatedAndReady = this._isAuthenticatedAndReady && !isAppOnline
   }
 }

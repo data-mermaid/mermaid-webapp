@@ -28,7 +28,8 @@ export const useCurrentUser = ({
             setCurrentUser(user)
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error)
           toast.error(language.error.userProfileUnavailable)
         })
     }
