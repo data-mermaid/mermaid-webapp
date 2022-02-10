@@ -77,7 +77,7 @@ const SubmittedRecordsMixin = (Base) =>
       return this._isOnlineAuthenticatedAndReady
         ? this._authenticatedAxios
             .put(
-              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${recordId}/edit/`,
+              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${submittedRecordId}/edit/`,
             )
             .then(() =>
               this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId),
