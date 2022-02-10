@@ -16,8 +16,7 @@ const getCurrentUserProfile = async ({
   }
 
   const isAuthenticatedAndReady = isMermaidAuthenticated
-  const isOnlineAuthenticatedAndReady =
-    isAuthenticatedAndReady && isAppOnline
+  const isOnlineAuthenticatedAndReady = isAuthenticatedAndReady && isAppOnline
 
   const isOfflineAuthenticatedAndReady = isAuthenticatedAndReady && !isAppOnline
 
