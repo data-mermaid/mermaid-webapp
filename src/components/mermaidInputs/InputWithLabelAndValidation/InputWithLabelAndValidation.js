@@ -9,6 +9,7 @@ import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputWithLabelAndValidation = ({
+  required,
   helperText,
   id,
   ignoreNonObservationFieldValidations,
@@ -43,7 +44,7 @@ const InputWithLabelAndValidation = ({
   )
 
   return (
-    <InputRow validationType={validationType} data-testid={testId}>
+    <InputRow required={required} validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -62,6 +63,7 @@ const InputWithLabelAndValidation = ({
 }
 
 InputWithLabelAndValidation.propTypes = {
+  required: PropTypes.bool,
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
@@ -74,6 +76,7 @@ InputWithLabelAndValidation.propTypes = {
 }
 
 InputWithLabelAndValidation.defaultProps = {
+  required: false,
   helperText: undefined,
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},

@@ -210,6 +210,7 @@ const Admin = () => {
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
+          required
           label="Project Name"
           id="name"
           type="text"
