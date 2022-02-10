@@ -182,11 +182,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 families,
               })
 
-              const recordNameForSubNav = getSubmittedRecordOrCollectRecordName(
+              const recordNameForSubNav = !isNewRecord ? getSubmittedRecordOrCollectRecordName(
                 collectRecordResponse.data,
                 sitesResponse,
                 'fishbelt_transect',
-              )
+              ) : 'Fish Belt'
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)

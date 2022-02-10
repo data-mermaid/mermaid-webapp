@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import theme from '../../theme'
 import { NavLinkSidebar } from '../generic/links'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
@@ -58,6 +58,11 @@ const NavHeader = styled('p')`
 const NavMenu = ({ subNavName }) => {
   const projectUrl = useCurrentProjectPath()
   const { recordId, submittedRecordId, siteId, managementRegimeId } = useParams()
+  const { pathname } = useLocation()
+
+  const isCollectingSubNode = recordId || pathname.includes('collecting')
+  const isSiteSubNode = siteId || pathname.includes('sites')
+  const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
@@ -85,21 +90,21 @@ const NavMenu = ({ subNavName }) => {
                 <CollectRecordsCount />
               </NavLinkSidebar>
             </li>
-            {recordId && <SubNavMenuRecordName subNavName={subNavName} />}
+            {isCollectingSubNode && <SubNavMenuRecordName subNavName={subNavName} />}
             <li>
               <NavLinkSidebar exact to={`${projectUrl}/sites`}>
                 <IconSites />
                 <span>Sites</span>
               </NavLinkSidebar>
             </li>
-            {siteId && <SubNavMenuRecordName subNavName={subNavName} />}
+            {isSiteSubNode && <SubNavMenuRecordName subNavName={subNavName} />}
             <li>
               <NavLinkSidebar exact to={`${projectUrl}/management-regimes`}>
                 <IconMgmt />
                 <span>Management Regimes</span>
               </NavLinkSidebar>
             </li>
-            {managementRegimeId && <SubNavMenuRecordName subNavName={subNavName} />}
+            {isManagementRegimeSubNode && <SubNavMenuRecordName subNavName={subNavName} />}
           </ul>
         </li>
         <OfflineHide>
