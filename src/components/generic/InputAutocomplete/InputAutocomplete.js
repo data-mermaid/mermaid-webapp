@@ -81,7 +81,7 @@ const InputAutocomplete = ({
 
   const getMenuContents = useCallback(
     (downshiftObject) => {
-      const { inputValue, getItemProps, highlightedIndex, selectedItem } = downshiftObject
+      const { inputValue, getItemProps, highlightedIndex } = downshiftObject
 
       const getMatchingMenuItems = (valueForMatching) => {
         const matchingOptions = valueForMatching
@@ -101,13 +101,12 @@ const InputAutocomplete = ({
         ? matchingMenuItems.map((item, index) => {
             return (
               <Item
-                key={item.value}
                 {...getItemProps({
                   item,
                   index,
-                  isActive: highlightedIndex === index,
-                  isSelected: selectedItem.label === item.label,
                 })}
+                key={item.value}
+                highlighted={highlightedIndex === index}
               >
                 {item.label}
               </Item>

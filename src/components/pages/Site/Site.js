@@ -133,6 +133,8 @@ const Site = () => {
   })
 
   const { setFieldValue: formikSetFieldValue } = formik
+  const doesFormikHaveErrors = Object.keys(formik.errors).length
+  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
 
   const handleLatitudeChange = useCallback(
     (value) => {
@@ -240,11 +242,7 @@ const Site = () => {
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{formik.values.name}</H2>
-          <ButtonCallout
-            type="submit"
-            form="site-form"
-            disabled={!formik.dirty || Object.keys(formik.errors).length}
-          >
+          <ButtonCallout type="submit" form="site-form" disabled={isSaveButtonDisabled}>
             <IconSave />
             Save
           </ButtonCallout>

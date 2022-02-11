@@ -282,7 +282,6 @@ const FishBeltObservationTable = ({
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
-            referenceObservation: observation,
             referenceObservationIndex: index,
           },
         })
