@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import theme from '../../theme'
 
-const SubNavListStyles = styled.li`
+const SubNavList = styled.li`
   background-color: ${theme.color.primaryColor};
   color: ${theme.color.white};
 `
 const SubNavMenuRecordName = ({ subNavName }) => {
-  return subNavName && <SubNavListStyles>{subNavName}</SubNavListStyles>
+  return subNavName && <SubNavList>{subNavName}</SubNavList>
 }
 
 SubNavMenuRecordName.propTypes = {
