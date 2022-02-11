@@ -13,6 +13,7 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import InputAutocomplete from '../generic/InputAutocomplete'
 import { Table, Td, Tr } from '../generic/Table/table'
 import language from '../../language'
+import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
@@ -56,7 +57,9 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
           }
         })
         .catch(() => {
-          toast.error(language.error.generaUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.generaUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isMounted])
@@ -71,7 +74,9 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
           }
         })
         .catch(() => {
-          toast.error(language.error.projectsUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.projectsUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted])

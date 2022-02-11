@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../../language'
+import { getToastArguments } from '../../library/getToastArguments'
 import getCurrentUserProfile from '../getCurrentUserProfile'
 
 export const useCurrentUser = ({
@@ -29,7 +30,9 @@ export const useCurrentUser = ({
           }
         })
         .catch(() => {
-          toast.error(language.error.userProfileUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.userProfileUnavailable)
+          )
         })
     }
 

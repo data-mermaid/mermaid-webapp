@@ -19,6 +19,7 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
@@ -80,7 +81,9 @@ const DataSharing = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.projectsUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.projectsUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted])

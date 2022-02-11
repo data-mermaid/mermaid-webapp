@@ -79,6 +79,7 @@ const success = {
     `${userName}'s role is now set to ${role}.`,
   newUserAdd: 'New user added.',
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
+  userRemoved: 'User removed',
   projectSave: 'Project saved',
   siteSave: 'Site saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',

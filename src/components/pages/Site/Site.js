@@ -16,6 +16,7 @@ import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import MermaidMap from '../../MermaidMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
@@ -64,7 +65,9 @@ const Site = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.siteRecordUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.siteRecordUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId])
@@ -94,11 +97,15 @@ const Site = () => {
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
         .then(() => {
-          toast.success(language.success.siteSave)
+          toast.success(
+            ...getToastArguments(language.success.siteSave)
+          )
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
         })
         .catch(() => {
-          toast.error(language.error.siteSave)
+          toast.error(
+            ...getToastArguments(language.error.siteSave)
+          )
         })
     },
     validate: (values) => {

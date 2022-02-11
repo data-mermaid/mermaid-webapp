@@ -16,6 +16,7 @@ import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/Inp
 import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../language'
+import { getToastArguments } from '../../../../library/getToastArguments'
 import ManagementRulesInput from '../ManagementRulesInput'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../../library/useIsMounted'
@@ -59,7 +60,9 @@ const ManagementRegime = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.managementRegimeRecordUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.managementRegimeRecordUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, managementRegimeId, projectId])
