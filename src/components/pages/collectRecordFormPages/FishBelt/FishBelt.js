@@ -474,7 +474,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         projectId,
       })
       .then((response) => {
-        toast.success(language.success.collectRecordSave)
+        toast.success(
+          ...getToastArguments(language.success.collectRecordSave)
+        )
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsData()
         setAreObservationsInputsDirty(false)
