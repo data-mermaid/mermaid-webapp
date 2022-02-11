@@ -205,8 +205,6 @@ const Admin = () => {
   }
   const formik = useFormik(formikOptions)
 
-  useBeforeUnloadPrompt({ shouldPromptTrigger: formik.dirty })
-
   const doesFormikHaveErrors = Object.keys(formik.errors).length
   const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
   const noOrganizationResult = (
