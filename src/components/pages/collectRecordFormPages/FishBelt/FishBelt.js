@@ -27,6 +27,7 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import SampleInfoInputs from './SampleInfoInputs'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
@@ -641,6 +642,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           projectId={projectId}
         />
       )}
+      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 }

@@ -10,6 +10,7 @@ import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
@@ -169,6 +170,7 @@ const ManagementRegime = () => {
               />
             </InputWrapper>
           </form>
+          <EnhancedPrompt shouldPromptTrigger={formik.dirty}/>
         </>
       }
       toolbar={

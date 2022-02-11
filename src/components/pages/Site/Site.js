@@ -10,6 +10,7 @@ import { H2 } from '../../generic/text'
 import { InputRow, InputWrapper } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
@@ -235,6 +236,7 @@ const Site = () => {
               />
             </InputWrapper>
           </form>
+          <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
         </>
       }
       toolbar={
