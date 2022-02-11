@@ -24,7 +24,7 @@ export const CheckRadioWrapper = styled.div`
     background-color: ${theme.color.white};
   `)}
 `
-export const CheckRadioLabel = styled.div`
+export const CheckRadioLabel = styled.label`
   padding: 0 ${theme.spacing.small};
   width: 100%;
   @media (hover: none) {
@@ -81,7 +81,7 @@ export const InputRow = styled.div`
   ${(props) =>
     props.required &&
     css`
-      label:after {
+      label:first-child:after {
         content: ' *';
         color: red;
       }
