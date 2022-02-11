@@ -20,6 +20,7 @@ import AddSampleUnitButton from './AddSampleUnitButton'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
@@ -51,7 +52,9 @@ const Collect = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.collectRecordsUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.collectRecordsUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])

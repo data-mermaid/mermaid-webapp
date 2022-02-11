@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import language from '../../language'
+import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import useIsMounted from '../../library/useIsMounted'
@@ -38,7 +39,9 @@ const CollectRecordsCount = () => {
           }
         })
         .catch(() => {
-          toast.warn(language.error.collectRecordsUnavailable)
+          toast.warn(
+            ...getToastArguments(language.error.apiDataSync.collectRecordsUnavailableError)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isSyncInProgress, projectId, isMounted])

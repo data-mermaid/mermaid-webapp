@@ -14,6 +14,7 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import RecordFormTitle from '../../RecordFormTitle'
 import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
@@ -104,7 +105,9 @@ const SubmittedFishBelt = () => {
             setIdsNotAssociatedWithData([projectId, submittedRecordId])
             setIsLoading(false)
           }
-          toast.error(language.error.submittedRecordUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.submittedRecordUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isMounted, submittedRecordId, projectId, isAppOnline])
@@ -114,13 +117,15 @@ const SubmittedFishBelt = () => {
     databaseSwitchboardInstance
       .moveToCollect({ projectId, submittedRecordId })
       .then(() => {
-        toast.success(language.success.submittedRecordMoveToCollect)
-        history.push(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${submittedRecordId}`,
+        toast.success(
+          ...getToastArguments(language.success.submittedRecordMoveToCollect)
         )
+        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${recordId}`)
       })
       .catch(() => {
-        toast.error(language.error.submittedRecordMoveToCollect)
+        toast.error(
+          ...getToastArguments(language.error.submittedRecordMoveToCollect)
+        )
         setIsMoveToButtonDisabled(false)
       })
   }

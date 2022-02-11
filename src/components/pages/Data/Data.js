@@ -8,6 +8,7 @@ import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import {
@@ -53,7 +54,9 @@ const Data = () => {
             setIdsNotAssociatedWithData([projectId])
             setIsLoading(false)
           }
-          toast.error(language.error.submittedRecordsUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.submittedRecordsUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
