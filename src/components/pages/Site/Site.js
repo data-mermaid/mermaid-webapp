@@ -171,6 +171,7 @@ const Site = () => {
           <form id="site-form" onSubmit={formik.handleSubmit}>
             <InputWrapper>
               <InputWithLabelAndValidation
+                required
                 label="Name"
                 id="name"
                 type="text"
@@ -179,7 +180,7 @@ const Site = () => {
                 validationMessages={formik.errors.name}
                 testId="name"
               />
-              <InputRow>
+              <InputRow required>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="country">Country</label>
                 <InputAutocomplete
@@ -193,6 +194,7 @@ const Site = () => {
                 />
               </InputRow>
               <InputWithLabelAndValidation
+                required
                 label="Latitude"
                 id="latitude"
                 type="number"
@@ -202,6 +204,7 @@ const Site = () => {
                 testId="latitude"
               />
               <InputWithLabelAndValidation
+                required
                 label="Longitude"
                 id="longitude"
                 type="number"
@@ -219,18 +222,21 @@ const Site = () => {
                 />
               )}
               <InputRadioWithLabelAndValidation
+                required
                 label="Exposure"
                 id="exposure"
                 options={exposureOptions}
                 {...formik.getFieldProps('exposure')}
               />
               <InputRadioWithLabelAndValidation
+                required
                 label="Reef Type"
                 id="reef_type"
                 options={reefTypeOptions}
                 {...formik.getFieldProps('reef_type')}
               />
               <InputRadioWithLabelAndValidation
+                required
                 label="Reef Zone"
                 id="reef_zone"
                 options={reefZoneOptions}

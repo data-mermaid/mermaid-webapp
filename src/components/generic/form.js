@@ -81,7 +81,7 @@ export const InputRow = styled.div`
   ${(props) =>
     props.required &&
     css`
-      label:after {
+      label:first-child:after {
         content: ' *';
         color: red;
       }
