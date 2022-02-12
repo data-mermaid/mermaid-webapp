@@ -10,11 +10,13 @@ import { H2 } from '../../generic/text'
 import { InputRow, InputWrapper } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import MermaidMap from '../../MermaidMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
@@ -63,7 +65,9 @@ const Site = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.siteRecordUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.siteRecordUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId])
@@ -93,11 +97,15 @@ const Site = () => {
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
         .then(() => {
-          toast.success(language.success.siteSave)
+          toast.success(
+            ...getToastArguments(language.success.siteSave)
+          )
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
         })
         .catch(() => {
-          toast.error(language.error.siteSave)
+          toast.error(
+            ...getToastArguments(language.error.siteSave)
+          )
         })
     },
     validate: (values) => {
@@ -132,6 +140,8 @@ const Site = () => {
   })
 
   const { setFieldValue: formikSetFieldValue } = formik
+  const doesFormikHaveErrors = Object.keys(formik.errors).length
+  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
 
   const handleLatitudeChange = useCallback(
     (value) => {
@@ -161,6 +171,7 @@ const Site = () => {
           <form id="site-form" onSubmit={formik.handleSubmit}>
             <InputWrapper>
               <InputWithLabelAndValidation
+                required
                 label="Name"
                 id="name"
                 type="text"
@@ -169,7 +180,7 @@ const Site = () => {
                 validationMessages={formik.errors.name}
                 testId="name"
               />
-              <InputRow>
+              <InputRow required>
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label htmlFor="country">Country</label>
                 <InputAutocomplete
@@ -183,6 +194,7 @@ const Site = () => {
                 />
               </InputRow>
               <InputWithLabelAndValidation
+                required
                 label="Latitude"
                 id="latitude"
                 type="number"
@@ -192,6 +204,7 @@ const Site = () => {
                 testId="latitude"
               />
               <InputWithLabelAndValidation
+                required
                 label="Longitude"
                 id="longitude"
                 type="number"
@@ -209,18 +222,21 @@ const Site = () => {
                 />
               )}
               <InputRadioWithLabelAndValidation
+                required
                 label="Exposure"
                 id="exposure"
                 options={exposureOptions}
                 {...formik.getFieldProps('exposure')}
               />
               <InputRadioWithLabelAndValidation
+                required
                 label="Reef Type"
                 id="reef_type"
                 options={reefTypeOptions}
                 {...formik.getFieldProps('reef_type')}
               />
               <InputRadioWithLabelAndValidation
+                required
                 label="Reef Zone"
                 id="reef_zone"
                 options={reefZoneOptions}
@@ -233,16 +249,13 @@ const Site = () => {
               />
             </InputWrapper>
           </form>
+          <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
         </>
       }
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{formik.values.name}</H2>
-          <ButtonCallout
-            type="submit"
-            form="site-form"
-            disabled={!formik.dirty || Object.keys(formik.errors).length}
-          >
+          <ButtonCallout type="submit" form="site-form" disabled={isSaveButtonDisabled}>
             <IconSave />
             Save
           </ButtonCallout>

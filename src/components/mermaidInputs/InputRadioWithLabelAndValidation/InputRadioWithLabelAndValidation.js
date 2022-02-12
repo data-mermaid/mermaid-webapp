@@ -7,6 +7,7 @@ import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputRadioWithLabelAndValidation = ({
+  required,
   id,
   label,
   options,
@@ -31,8 +32,10 @@ const InputRadioWithLabelAndValidation = ({
   })
 
   return (
-    <InputRow validationType={validationType} data-testid={testId}>
-      <div>{label}</div>
+    <InputRow required={required} validationType={validationType} data-testid={testId}>
+      <label id={`aria-label${id}`} htmlFor={id}>
+        {label}
+      </label>
       <div>{optionsList}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
@@ -45,6 +48,7 @@ const InputRadioWithLabelAndValidation = ({
 }
 
 InputRadioWithLabelAndValidation.propTypes = {
+  required: PropTypes.bool,
   id: PropTypes.string.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
@@ -57,6 +61,7 @@ InputRadioWithLabelAndValidation.propTypes = {
 }
 
 InputRadioWithLabelAndValidation.defaultProps = {
+  required: false,
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},
   testId: undefined,

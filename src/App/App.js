@@ -94,7 +94,7 @@ function App({ dexieInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <GlobalStyle />
-        <CustomToastContainer />
+        <CustomToastContainer limit={5} />
         <Layout {...layoutProps}>
           {
             /** The isMermaidAuthenticated is needed here to prevent an

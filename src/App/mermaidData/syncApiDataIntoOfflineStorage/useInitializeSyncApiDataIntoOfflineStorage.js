@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from './SyncStatusContext'
 
@@ -85,7 +86,9 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch(() => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(language.error.apiDataSync)
+          toast.error(
+            ...getToastArguments(language.error.apiDataSync)
+          )
         })
     }
 
@@ -104,7 +107,9 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch(() => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(language.error.apiDataSync)
+          toast.error(
+            ...getToastArguments(language.error.apiDataSync)
+          )
         })
     }
     if (isNotInitialLoadOnProjectPageAndOnline) {
@@ -121,7 +126,9 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch(() => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(language.error.apiDataSync)
+          toast.error(
+            ...getToastArguments(language.error.apiDataSync)
+          )
         })
     }
   }, [

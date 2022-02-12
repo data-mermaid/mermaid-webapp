@@ -10,11 +10,13 @@ import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../language'
+import { getToastArguments } from '../../../../library/getToastArguments'
 import ManagementRulesInput from '../ManagementRulesInput'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../../library/useIsMounted'
@@ -58,7 +60,9 @@ const ManagementRegime = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.managementRegimeRecordUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.managementRegimeRecordUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, managementRegimeId, projectId])
@@ -169,6 +173,7 @@ const ManagementRegime = () => {
               />
             </InputWrapper>
           </form>
+          <EnhancedPrompt shouldPromptTrigger={formik.dirty}/>
         </>
       }
       toolbar={
