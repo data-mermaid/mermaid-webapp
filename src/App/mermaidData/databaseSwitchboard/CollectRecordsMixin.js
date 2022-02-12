@@ -3,6 +3,7 @@ import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
 import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const CollectRecordsMixin = (Base) =>
@@ -139,9 +140,7 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
-              headers: {
-                Authorization: `Bearer ${await this._getAccessToken()}`
-              }
+              ...await getAuthorizationHeaders(this._getAccessToken)
             },
           )
           .then((response) => {
@@ -204,9 +203,8 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
-              headers: {
-                Authorization: `Bearer ${await this._getAccessToken()}`
-              }
+              ...await getAuthorizationHeaders(this._getAccessToken)
+
             },
           )
           .then((apiPushResponse) => {
@@ -253,10 +251,7 @@ const CollectRecordsMixin = (Base) =>
             ids: [recordId],
             version: '2',
           },
-          {
-          headers: {
-            Authorization: `Bearer ${await this._getAccessToken()}`
-          } }
+          await getAuthorizationHeaders(this._getAccessToken)
         ).then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
@@ -287,11 +282,7 @@ const CollectRecordsMixin = (Base) =>
             ids: [recordId],
             version: '2',
           },
-          {
-            headers: {
-              Authorization: `Bearer ${await this._getAccessToken()}`
-            }
-          })
+          await getAuthorizationHeaders(this._getAccessToken))
           .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 

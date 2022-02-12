@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -87,9 +88,7 @@ const SitesMixin = (Base) =>
               params: {
                 force: true,
               },
-              headers: {
-                Authorization: `Bearer ${await this._getAccessToken()}`
-              }
+              ...await getAuthorizationHeaders(this._getAccessToken)
             },
           )
           .then((response) => {

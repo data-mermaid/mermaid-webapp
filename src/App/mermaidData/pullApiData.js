@@ -3,6 +3,7 @@ import {
   getLastRevisionNumbersPulledForAProject,
   persistLastRevisionNumbersPulled,
 } from './lastRevisionNumbers'
+import { getAuthorizationHeaders } from '../../library/getAuthorizationHeaders'
 
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
@@ -30,11 +31,10 @@ export const pullApiData = async ({
     {},
   )
 
-  const pullResponse = await axios.post(`${apiBaseUrl}/pull/`, pullRequestBody, {
-    headers: {
-      Authorization: `Bearer ${await getAccessToken()}`,
-    },
-  })
+  const pullResponse = await axios.post(
+    `${apiBaseUrl}/pull/`, pullRequestBody,
+    await getAuthorizationHeaders(getAccessToken)
+  )
 
   const apiData = pullResponse.data
 

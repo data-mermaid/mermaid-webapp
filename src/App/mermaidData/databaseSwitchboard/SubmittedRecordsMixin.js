@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getSampleDateLabel } from '../getSampleDateLabel'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
@@ -22,9 +23,7 @@ const SubmittedRecordsMixin = (Base) =>
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
               },
-              headers: {
-                Authorization: `Bearer ${await this._getAccessToken()}`,
-              },
+              ...await getAuthorizationHeaders(this._getAccessToken)
             })
             .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
@@ -39,11 +38,10 @@ const SubmittedRecordsMixin = (Base) =>
       }
 
       return this._isOnlineAuthenticatedAndReady
-        ? axios.get(`${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`, {
-          headers: {
-            Authorization: `Bearer ${await this._getAccessToken()}`
-          }
-        })
+        ? axios.get(
+          `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
+          await getAuthorizationHeaders(this._getAccessToken)
+        )
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
@@ -83,11 +81,8 @@ const SubmittedRecordsMixin = (Base) =>
 
       return this._isOnlineAuthenticatedAndReady
         ? axios.put(
-              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${recordId}/edit/`, {
-                headers: {
-                  Authorization: `Bearer ${await this._getAccessToken()}`
-                }
-              }
+              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${recordId}/edit/`,
+              await getAuthorizationHeaders(this._getAccessToken)
             )
             .then(() =>
               this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId),

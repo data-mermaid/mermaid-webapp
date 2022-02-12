@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const ProjectsMixin = (Base) =>
   class extends Base {
@@ -46,11 +47,10 @@ const ProjectsMixin = (Base) =>
     getProjectTags = async function getProjectTags() {
 
       return this._isOnlineAuthenticatedAndReady
-        ? axios.get(`${this._apiBaseUrl}/projecttags`, {
-              headers: {
-                Authorization: `Bearer ${await this._getAccessToken()}`
-              }
-            })
+        ? axios.get(
+          `${this._apiBaseUrl}/projecttags`,
+          await getAuthorizationHeaders(this._getAccessToken)
+        )
             .then((apiResults) => apiResults.data.results)
             .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
         : Promise.reject(this._notAuthenticatedAndReadyError)
@@ -117,9 +117,7 @@ const ProjectsMixin = (Base) =>
             params: {
               email,
             },
-            headers: {
-              Authorization: `Bearer ${await this._getAccessToken()}`
-            }
+            ...await getAuthorizationHeaders(this._getAccessToken)
           })
           .then((profilesData) => {
             return profilesData
@@ -136,13 +134,10 @@ const ProjectsMixin = (Base) =>
       if (this._isAuthenticatedAndReady) {
         return axios
           .post(`${this._apiBaseUrl}/projects/${projectId}/add_profile/`, {
-            email,
-          }, {
-            headers: {
-              Authorization: `Bearer ${await this._getAccessToken()}`
-            }
-          })
-          .then((response) => {
+              email,
+            },
+            await getAuthorizationHeaders(this._getAccessToken)
+          ).then((response) => {
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseSuccessful) {
@@ -168,12 +163,11 @@ const ProjectsMixin = (Base) =>
       if (this._isAuthenticatedAndReady) {
         return axios
           .put(`${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`, {
-            from_profile: fromProfileId,
-            to_profile: toProfileId,
-          }, {
-            headers: {
-              Authorization: `Bearer ${await this._getAccessToken()}`
-          } })
+              from_profile: fromProfileId,
+              to_profile: toProfileId,
+            },
+            await getAuthorizationHeaders(this._getAccessToken)
+          )
           .then((response) => {
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
@@ -208,9 +202,7 @@ const ProjectsMixin = (Base) =>
             { project_profiles: [recordMarkedToBeDeleted] },
             {
               params: { force: true },
-              headers: {
-                Authorization: `Bearer ${await this._getAccessToken()}`
-              }
+              ...await getAuthorizationHeaders(this._getAccessToken)
             },
           )
           .then(() => {

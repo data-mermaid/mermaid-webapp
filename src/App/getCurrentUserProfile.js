@@ -1,5 +1,6 @@
 import axios from 'axios'
 import language from '../language'
+import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 
 const getCurrentUserProfile = async ({
   apiBaseUrl,
@@ -22,11 +23,10 @@ const getCurrentUserProfile = async ({
 
   if (isOnlineAuthenticatedAndReady) {
     return axios
-      .get(`${apiBaseUrl}/me/`, {
-        headers: {
-          Authorization: `Bearer ${await getAccessToken()}`,
-        },
-      })
+      .get(
+        `${apiBaseUrl}/me/`,
+        await getAuthorizationHeaders(getAccessToken)
+      )
       .then((apiResults) => {
         const userFromApi = apiResults.data
 
