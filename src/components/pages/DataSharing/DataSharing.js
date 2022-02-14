@@ -15,6 +15,7 @@ import { IconInfo } from '../../icons'
 import { MaxWidthInputWrapper } from '../../generic/form'
 import { TooltipWithText } from '../../generic/tooltip'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -54,6 +55,7 @@ const DataSharing = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
@@ -63,7 +65,7 @@ const DataSharing = () => {
   const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance) {
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
@@ -81,12 +83,10 @@ const DataSharing = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.projectsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),

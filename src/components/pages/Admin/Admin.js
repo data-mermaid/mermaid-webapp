@@ -16,6 +16,7 @@ import { hoverState } from '../../../library/styling/mediaQueries'
 import { IconClose, IconSave } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -143,6 +144,7 @@ const Admin = () => {
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
@@ -152,7 +154,7 @@ const Admin = () => {
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (isAppOnline && databaseSwitchboardInstance && projectId) {
+    if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
@@ -170,12 +172,10 @@ const Admin = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.projectsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, isSyncInProgress])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -190,14 +190,10 @@ const Admin = () => {
         .saveProject({ projectId, editedValues: values })
         .then(() => {
           actions.resetForm({ values }) // resets formiks dirty state
-          toast.success(
-            ...getToastArguments(language.success.projectSave)
-          )
+          toast.success(...getToastArguments(language.success.projectSave))
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.projectSave)
-          )
+          toast.error(...getToastArguments(language.error.projectSave))
         })
     },
     validate: (values) => {
@@ -309,7 +305,7 @@ const Admin = () => {
         }
       />
       {/* Prompt user if they attempt to navifate away from dirty form */}
-      <EnhancedPrompt shouldPromptTrigger={formik.dirty}/>
+      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 }

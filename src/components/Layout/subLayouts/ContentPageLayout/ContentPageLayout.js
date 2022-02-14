@@ -67,7 +67,13 @@ const ContentPageToolbarWrapper = styled('div')`
   `)}
 `
 
-const ContentPageLayout = ({ content, toolbar, isPageContentLoading, isToolbarSticky }) => {
+const ContentPageLayout = ({
+  content,
+  toolbar,
+  isPageContentLoading,
+  isToolbarSticky,
+  subNavName,
+}) => {
   const { isSyncInProgress } = useSyncStatus()
 
   return (
@@ -77,7 +83,7 @@ const ContentPageLayout = ({ content, toolbar, isPageContentLoading, isToolbarSt
 
         <NavAndContentLayout>
           <Column>
-            <NavMenu />
+            <NavMenu subNavName={subNavName} />
           </Column>
           <ContentWrapper>
             {isPageContentLoading || isSyncInProgress ? (
@@ -102,12 +108,14 @@ ContentPageLayout.propTypes = {
   isPageContentLoading: PropTypes.bool,
   toolbar: PropTypes.node,
   isToolbarSticky: PropTypes.bool,
+  subNavName: PropTypes.string,
 }
 
 ContentPageLayout.defaultProps = {
   isPageContentLoading: false,
   isToolbarSticky: false,
   toolbar: undefined,
+  subNavName: null,
 }
 
 export default ContentPageLayout

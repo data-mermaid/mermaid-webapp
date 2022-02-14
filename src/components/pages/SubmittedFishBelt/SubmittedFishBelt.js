@@ -11,6 +11,7 @@ import { H2 } from '../../generic/text'
 import { IconPen } from '../../icons'
 import { RowSpaceBetween } from '../../generic/positioning'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
@@ -21,6 +22,7 @@ import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
 import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
+import { getSubmittedRecordOrCollectRecordName } from '../../../library/getSubmittedRecordOrCollectRecordName'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -32,16 +34,18 @@ const SubmittedFishBelt = () => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
   const [submittedRecord, setSubmittedRecord] = useState()
+  const [subNavName, setSubNavName] = useState(null)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
-  const { recordId, projectId } = useParams()
+  const { submittedRecordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
   const history = useHistory()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
 
   const _getSupportingData = useEffect(() => {
-    if (isAppOnline && databaseSwitchboardInstance) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
@@ -49,7 +53,10 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
-        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(projectId, recordId),
+        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(
+          projectId,
+          submittedRecordId,
+        ),
       ]
 
       Promise.all(promises)
@@ -76,12 +83,19 @@ const SubmittedFishBelt = () => {
                 families,
               })
 
+              const recordNameForSubNav = getSubmittedRecordOrCollectRecordName(
+                submittedRecordResponse,
+                sitesResponse,
+                'fishbelt_transect',
+              )
+
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setSubmittedRecord(submittedRecordResponse)
               setFishNameOptions(updateFishNameOptions)
               setFishNameConstants(updateFishNameConstants)
+              setSubNavName(recordNameForSubNav)
               setIsLoading(false)
             }
           },
@@ -90,30 +104,33 @@ const SubmittedFishBelt = () => {
           const errorStatus = error.response?.status
 
           if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId, recordId])
+            setIdsNotAssociatedWithData([projectId, submittedRecordId])
             setIsLoading(false)
           }
-          toast.error(
-            ...getToastArguments(language.error.submittedRecordUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, recordId, projectId, isAppOnline])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    submittedRecordId,
+    projectId,
+    isAppOnline,
+    isSyncInProgress,
+  ])
 
   const handleMoveToCollect = () => {
     setIsMoveToButtonDisabled(true)
     databaseSwitchboardInstance
-      .moveToCollect({ projectId, recordId })
+      .moveToCollect({ projectId, submittedRecordId })
       .then(() => {
-        toast.success(
-          ...getToastArguments(language.success.submittedRecordMoveToCollect)
+        toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
+        history.push(
+          `${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${submittedRecordId}`,
         )
-        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${recordId}`)
       })
       .catch(() => {
-        toast.error(
-          ...getToastArguments(language.error.submittedRecordMoveToCollect)
-        )
+        toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
         setIsMoveToButtonDisabled(false)
       })
   }
@@ -127,6 +144,7 @@ const SubmittedFishBelt = () => {
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
       isToolbarSticky={true}
+      subNavName={subNavName}
       content={
         isAppOnline ? (
           <>

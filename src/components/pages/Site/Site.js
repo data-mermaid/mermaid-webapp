@@ -166,6 +166,7 @@ const Site = () => {
     <ContentPageLayout
       isPageContentLoading={isLoading}
       isToolbarSticky={true}
+      subNavName={formik.values.name}
       content={
         <>
           <form id="site-form" onSubmit={formik.handleSubmit}>
