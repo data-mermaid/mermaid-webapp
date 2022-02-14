@@ -1,4 +1,4 @@
-const getManagementRegimeInitialValues = managementRegimeRecord => {
+const getManagementRegimeInitialValues = (managementRegimeRecord) => {
   return {
     name: managementRegimeRecord?.name ?? '',
     name_secondary: managementRegimeRecord?.name_secondary ?? '',

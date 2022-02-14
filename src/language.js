@@ -34,6 +34,7 @@ const error = {
     'Management Regime records data is currently unavailable. Please try again.',
   managementRegimeRecordUnavailable:
     'Management Regime record data is currently unavailable. Please try again.',
+  managementRegimeSave: 'Something went wrong. The management regime has not been saved.',
   projectSave: 'Something went wrong. The project has not been saved.',
   projectsUnavailable: 'Projects data is currently unavailable. Please try again.',
   siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again.',
@@ -82,6 +83,7 @@ const success = {
   userRemoved: 'User removed',
   projectSave: 'Project saved',
   siteSave: 'Site saved.',
+  managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
 }
 
