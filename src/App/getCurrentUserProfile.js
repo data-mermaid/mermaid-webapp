@@ -23,10 +23,7 @@ const getCurrentUserProfile = async ({
 
   if (isOnlineAuthenticatedAndReady) {
     return axios
-      .get(
-        `${apiBaseUrl}/me/`,
-        await getAuthorizationHeaders(getAccessToken)
-      )
+      .get(`${apiBaseUrl}/me/`, await getAuthorizationHeaders(getAccessToken))
       .then((apiResults) => {
         const userFromApi = apiResults.data
 
