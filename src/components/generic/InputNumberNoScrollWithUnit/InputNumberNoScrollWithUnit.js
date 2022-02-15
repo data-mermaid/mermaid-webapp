@@ -17,8 +17,9 @@ const UnitContainer = styled.span`
   width: auto;
   white-space: nowrap;
   background: ${theme.color.unitBackground};
-  padding: ${theme.spacing.xsmall};
+  padding: 0.8rem 0 0 0;
   margin: 0 0 0 ${theme.spacing.borderMedium};
+  font-size: ${theme.typography.defaultFontSize};
 `
 
 const InnerInput = styled(InputNumberNoScroll)`
