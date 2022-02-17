@@ -29,6 +29,7 @@ const SampleInfoInputs = ({
   sites,
 }) => {
   const hasData = false
+  const { initialValues } = formik
   const managementSelectOptions = getOptions(managementRegimes, hasData)
   const siteSelectOptions = getOptions(sites, hasData)
   const validationsApiData = collectRecord?.validations?.results?.data
@@ -93,6 +94,7 @@ const SampleInfoInputs = ({
           {...siteValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.site}
+          initialValue={initialValues.site}
           onChange={handleSiteChange}
         />
         <InputSelectWithLabelAndValidation
@@ -109,6 +111,7 @@ const SampleInfoInputs = ({
           {...managementValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.management}
+          initialValue={initialValues.management}
           onChange={handleManagementChange}
         />
 
@@ -126,6 +129,7 @@ const SampleInfoInputs = ({
           {...sampleDateValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.sample_date}
+          initialValue={initialValues.sample_date}
           onChange={handleSampleDateChange}
         />
       </InputWrapper>

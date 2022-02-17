@@ -77,7 +77,7 @@ InputWithLabelAndValidation.propTypes = {
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-  initialValue: PropTypes.string,
+  initialValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 InputWithLabelAndValidation.defaultProps = {
