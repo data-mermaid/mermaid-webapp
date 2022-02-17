@@ -14,11 +14,14 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   validationMessages,
   validationType,
   value,
+  initialValue,
 }) => {
   const [checkboxItems, setCheckboxItems] = useState([])
   const _loadCheckboxItems = useEffect(() => {
     setCheckboxItems(value)
   }, [value])
+
+  const validationTypeCondition = initialValue.length !== value.length ? null : validationType
 
   const handleCheckboxGroupChange = ({ itemValue, event }) => {
     const updateCheckboxItems = [...checkboxItems]
@@ -48,14 +51,14 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   ))
 
   return (
-    <InputRow validationType={validationType}>
+    <InputRow validationType={validationTypeCondition}>
       <label htmlFor={id}>{label}</label>
       <div>{checkboxGroup}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
-        validationType={validationType}
+        validationType={validationTypeCondition}
       />
     </InputRow>
   )
@@ -84,6 +87,15 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       }),
     ]),
   ).isRequired,
+  initialValue: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        profile: PropTypes.string,
+        profile_name: PropTypes.string,
+      }),
+    ]),
+  ),
 }
 
 InputCheckboxGroupWithLabelAndValidation.defaultProps = {
@@ -91,6 +103,7 @@ InputCheckboxGroupWithLabelAndValidation.defaultProps = {
   resetNonObservationFieldValidations: () => {},
   validationMessages: [],
   validationType: undefined,
+  initialValue: [],
 }
 
 export default InputCheckboxGroupWithLabelAndValidation

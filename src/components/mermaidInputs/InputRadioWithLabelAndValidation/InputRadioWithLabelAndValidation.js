@@ -16,23 +16,27 @@ const InputRadioWithLabelAndValidation = ({
   resetNonObservationFieldValidations,
   validationType,
   testId,
+  initialValue,
   ...restOfProps
 }) => {
-  const optionsList = options.map(({ label: optionLabel, value }) => {
-    const isChecked = restOfProps.value === value
+  const { value } = restOfProps
+  const validationTypeCondition = initialValue !== value ? null : validationType
 
-    const radioId = `${id}-${value}`
+  const optionsList = options.map(({ label: optionLabel, value: optionValue }) => {
+    const isChecked = restOfProps.value === optionValue
+
+    const radioId = `${id}-${optionValue}`
 
     return (
-      <CheckRadioWrapper key={`key-${value}`}>
-        <input type="radio" id={radioId} {...restOfProps} value={value} checked={isChecked} />
+      <CheckRadioWrapper key={`key-${optionValue}`}>
+        <input type="radio" id={radioId} {...restOfProps} value={optionValue} checked={isChecked} />
         <CheckRadioLabel htmlFor={radioId}>{optionLabel}</CheckRadioLabel>
       </CheckRadioWrapper>
     )
   })
 
   return (
-    <InputRow required={required} validationType={validationType} data-testid={testId}>
+    <InputRow required={required} validationType={validationTypeCondition} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -41,7 +45,7 @@ const InputRadioWithLabelAndValidation = ({
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
-        validationType={validationType}
+        validationType={validationTypeCondition}
       />
     </InputRow>
   )
@@ -58,6 +62,7 @@ InputRadioWithLabelAndValidation.propTypes = {
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
+  initialValue: PropTypes.string,
 }
 
 InputRadioWithLabelAndValidation.defaultProps = {
@@ -67,6 +72,7 @@ InputRadioWithLabelAndValidation.defaultProps = {
   testId: undefined,
   validationMessages: [],
   validationType: undefined,
+  initialValue: undefined,
 }
 
 export default InputRadioWithLabelAndValidation

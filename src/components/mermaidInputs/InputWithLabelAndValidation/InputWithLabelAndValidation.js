@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useCallback, useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 
 import { Input, InputRow, HelperText } from '../../generic/form'
@@ -19,9 +19,13 @@ const InputWithLabelAndValidation = ({
   unit,
   validationMessages,
   validationType,
+  initialValue,
   ...restOfProps
 }) => {
   const textFieldRef = useRef()
+  const { value } = restOfProps
+
+  const validationTypeCondition = initialValue !== value ? null : validationType
 
   useStopInputScrollingIncrementNumber(textFieldRef)
 
@@ -44,7 +48,7 @@ const InputWithLabelAndValidation = ({
   )
 
   return (
-    <InputRow required={required} validationType={validationType} data-testid={testId}>
+    <InputRow required={required} validationType={validationTypeCondition} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -53,7 +57,7 @@ const InputWithLabelAndValidation = ({
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
       <InputValidationInfo
-        validationType={validationType}
+        validationType={validationTypeCondition}
         validationMessages={validationMessages}
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
@@ -73,6 +77,7 @@ InputWithLabelAndValidation.propTypes = {
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
+  initialValue: PropTypes.string,
 }
 
 InputWithLabelAndValidation.defaultProps = {
@@ -84,6 +89,7 @@ InputWithLabelAndValidation.defaultProps = {
   unit: undefined,
   validationMessages: [],
   validationType: undefined,
+  initialValue: undefined,
 }
 
 export default InputWithLabelAndValidation
