@@ -246,6 +246,7 @@ const FishbeltTransectInputs = ({
           value={formik.values.number}
           initialValue={initialValues.number}
           onChange={handleTransectNumberChange}
+          resetInputDirty
         />
         <InputWithLabelAndValidation
           label="Label"
@@ -280,6 +281,7 @@ const FishbeltTransectInputs = ({
           value={formik.values.sample_time}
           initialValue={initialValues.sample_time}
           onChange={handleSampleTimeChange}
+          resetInputDirty
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -297,6 +299,7 @@ const FishbeltTransectInputs = ({
           value={formik.values.depth}
           initialValue={initialValues.depth}
           onChange={handleDepthChange}
+          resetInputDirty
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -316,6 +319,7 @@ const FishbeltTransectInputs = ({
           value={formik.values.len_surveyed}
           initialValue={initialValues.len_surveyed}
           onChange={handleLengthSurveyedChange}
+          resetInputDirty
         />
         <InputRadioWithLabelAndValidation
           label="Width"

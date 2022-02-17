@@ -17,10 +17,11 @@ const InputRadioWithLabelAndValidation = ({
   validationType,
   testId,
   initialValue,
+  resetInputDirty,
   ...restOfProps
 }) => {
   const { value } = restOfProps
-  const validationTypeCondition = initialValue !== value ? null : validationType
+  const validationTypeCondition = resetInputDirty && initialValue !== value ? null : validationType
 
   const optionsList = options.map(({ label: optionLabel, value: optionValue }) => {
     const isChecked = restOfProps.value === optionValue
@@ -63,6 +64,7 @@ InputRadioWithLabelAndValidation.propTypes = {
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   initialValue: PropTypes.string,
+  resetInputDirty: PropTypes.bool,
 }
 
 InputRadioWithLabelAndValidation.defaultProps = {
@@ -73,6 +75,7 @@ InputRadioWithLabelAndValidation.defaultProps = {
   validationMessages: [],
   validationType: undefined,
   initialValue: undefined,
+  resetInputDirty: false,
 }
 
 export default InputRadioWithLabelAndValidation

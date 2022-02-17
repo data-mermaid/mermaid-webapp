@@ -96,6 +96,7 @@ const SampleInfoInputs = ({
           value={formik.values.site}
           initialValue={initialValues.site}
           onChange={handleSiteChange}
+          resetInputDirty
         />
         <InputSelectWithLabelAndValidation
           label="Management"
@@ -113,6 +114,7 @@ const SampleInfoInputs = ({
           value={formik.values.management}
           initialValue={initialValues.management}
           onChange={handleManagementChange}
+          resetInputDirty
         />
 
         <InputWithLabelAndValidation
@@ -131,6 +133,7 @@ const SampleInfoInputs = ({
           value={formik.values.sample_date}
           initialValue={initialValues.sample_date}
           onChange={handleSampleDateChange}
+          resetInputDirty
         />
       </InputWrapper>
     </>

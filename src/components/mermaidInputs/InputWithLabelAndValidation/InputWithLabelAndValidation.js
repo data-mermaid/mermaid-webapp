@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect, useState, useMemo } from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { Input, InputRow, HelperText } from '../../generic/form'
@@ -20,12 +20,13 @@ const InputWithLabelAndValidation = ({
   validationMessages,
   validationType,
   initialValue,
+  resetInputDirty,
   ...restOfProps
 }) => {
   const textFieldRef = useRef()
   const { value } = restOfProps
 
-  const validationTypeCondition = initialValue !== value ? null : validationType
+  const validationTypeCondition = resetInputDirty && initialValue !== value ? null : validationType
 
   useStopInputScrollingIncrementNumber(textFieldRef)
 
@@ -78,6 +79,7 @@ InputWithLabelAndValidation.propTypes = {
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   initialValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  resetInputDirty: PropTypes.bool,
 }
 
 InputWithLabelAndValidation.defaultProps = {
@@ -90,6 +92,7 @@ InputWithLabelAndValidation.defaultProps = {
   validationMessages: [],
   validationType: undefined,
   initialValue: undefined,
+  resetInputDirty: false,
 }
 
 export default InputWithLabelAndValidation

@@ -225,7 +225,8 @@ test('Validating an empty collect record, and then editing an input with errors 
   // validations remain showing
   expect(await within(screen.getByTestId('site')).findByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
+  // expect(await within(screen.getByTestId('depth')).findByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).queryByText('required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('transect_number')).getByText('required')).toBeInTheDocument()
