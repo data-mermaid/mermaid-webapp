@@ -1,6 +1,5 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
-import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -138,7 +137,16 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableGlobalFilters = useCallback((rows, id, query) => {
+  const getRowValuesToFilter = (allowedKeys, row) => {
+    return allowedKeys.map((allowedKey) => {
+      // Get the matching values using allowed keys' dot-notation
+      return allowedKey.split('.').reduce((prev, curr) => {
+        return prev && prev[curr] || false
+      }, row)
+    })
+  }
+
+  const tableGlobalFilters = useCallback((rows, ids, query) => {
     const keys = [
       'values.method.props.children',
       'values.site',
@@ -148,11 +156,20 @@ const Collect = () => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    const filteredRows = rows.filter(row => {
+      const relevantValues = getRowValuesToFilter(keys, row)
+
+      return relevantValues.some((value) => {
+          // eslint-disable-next-line max-nested-callbacks
+          return queryTerms.some(term => term.test(value))
+        })
+    })
+
+  return filteredRows
   }, [])
 
   const {
