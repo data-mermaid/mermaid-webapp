@@ -52,6 +52,7 @@ const ObserversInput = ({
             selectedObservers,
           })
         }}
+        resetInputDirty
       />
     </InputWrapper>
   )

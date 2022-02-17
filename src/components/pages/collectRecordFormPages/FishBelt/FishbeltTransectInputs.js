@@ -338,6 +338,7 @@ const FishbeltTransectInputs = ({
           initialValue={initialValues.width}
           name="width"
           onChange={handleWidthChange}
+          resetInputDirty
         />
         <InputRadioWithLabelAndValidation
           label="Fish Size Bin"
@@ -355,6 +356,7 @@ const FishbeltTransectInputs = ({
           value={formik.values.size_bin}
           initialValue={initialValues.size_bin}
           onChange={handleSizeBinChange}
+          resetInputDirty
         />
         <InputRadioWithLabelAndValidation
           label="Reef Slope"

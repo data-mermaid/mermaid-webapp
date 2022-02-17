@@ -17,11 +17,12 @@ const InputSelectWithLabelAndValidation = ({
   validationType,
   testId,
   initialValue,
+  resetInputDirty,
   ...restOfProps
 }) => {
   const { value } = restOfProps
 
-  const validationTypeCondition = initialValue !== value ? null : validationType
+  const validationTypeCondition = resetInputDirty && initialValue !== value ? null : validationType
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
       {item.label}
@@ -68,6 +69,7 @@ InputSelectWithLabelAndValidation.propTypes = {
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
   initialValue: PropTypes.string,
+  resetInputDirty: PropTypes.bool,
 }
 
 InputSelectWithLabelAndValidation.defaultProps = {
@@ -76,5 +78,6 @@ InputSelectWithLabelAndValidation.defaultProps = {
   helperText: undefined,
   testId: undefined,
   initialValue: undefined,
+  resetInputDirty: false,
 }
 export default InputSelectWithLabelAndValidation

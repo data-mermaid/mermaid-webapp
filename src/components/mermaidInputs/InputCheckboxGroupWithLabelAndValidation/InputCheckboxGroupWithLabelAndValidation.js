@@ -15,13 +15,15 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   validationType,
   value,
   initialValue,
+  resetInputDirty,
 }) => {
   const [checkboxItems, setCheckboxItems] = useState([])
   const _loadCheckboxItems = useEffect(() => {
     setCheckboxItems(value)
   }, [value])
 
-  const validationTypeCondition = initialValue.length !== value.length ? null : validationType
+  const validationTypeCondition =
+    resetInputDirty && initialValue.length !== value.length ? null : validationType
 
   const handleCheckboxGroupChange = ({ itemValue, event }) => {
     const updateCheckboxItems = [...checkboxItems]
@@ -96,6 +98,7 @@ InputCheckboxGroupWithLabelAndValidation.propTypes = {
       }),
     ]),
   ),
+  resetInputDirty: PropTypes.bool,
 }
 
 InputCheckboxGroupWithLabelAndValidation.defaultProps = {
@@ -104,6 +107,7 @@ InputCheckboxGroupWithLabelAndValidation.defaultProps = {
   validationMessages: [],
   validationType: undefined,
   initialValue: [],
+  resetInputDirty: false,
 }
 
 export default InputCheckboxGroupWithLabelAndValidation
