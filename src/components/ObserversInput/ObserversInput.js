@@ -20,7 +20,8 @@ const ObserversInput = ({
   ...restOfProps
 }) => {
   const observerNameOptions = getObserverNameOptions(observers)
-  const observerNameValues = formik.values.observers.map(({ profile }) => profile)
+  const { initialValues, values } = formik
+  const observerNameValues = values.observers.map(({ profile }) => profile)
 
   const filterObserverProfiles = (observerIds) =>
     [...observers].filter(({ profile }) =>
@@ -35,6 +36,7 @@ const ObserversInput = ({
         id="observers"
         options={observerNameOptions}
         value={observerNameValues}
+        initialValue={initialValues.observers}
         ignoreNonObservationFieldValidations={() => {
           ignoreNonObservationFieldValidations({ validationPath })
         }}

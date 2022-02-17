@@ -54,6 +54,7 @@ const FishbeltTransectInputs = ({
   const validationsApiData = collectRecord?.validations?.results?.data
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   const sample_event = validationsApiData?.sample_event
+  const { initialValues } = formik
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
@@ -243,6 +244,7 @@ const FishbeltTransectInputs = ({
           {...transectNumberValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.number}
+          initialValue={initialValues.number}
           onChange={handleTransectNumberChange}
         />
         <InputWithLabelAndValidation
@@ -259,6 +261,7 @@ const FishbeltTransectInputs = ({
           {...labelValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.label}
+          initialValue={initialValues.label}
           onChange={handleLabelChange}
         />
         <InputWithLabelAndValidation
@@ -275,6 +278,7 @@ const FishbeltTransectInputs = ({
           {...sampleTimeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
+          initialValue={initialValues.sample_time}
           onChange={handleSampleTimeChange}
         />
         <InputWithLabelAndValidation
@@ -291,6 +295,7 @@ const FishbeltTransectInputs = ({
           {...depthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.depth}
+          initialValue={initialValues.depth}
           onChange={handleDepthChange}
         />
         <InputWithLabelAndValidation
@@ -309,6 +314,7 @@ const FishbeltTransectInputs = ({
           {...lengthSurveyedValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
+          initialValue={initialValues.len_surveyed}
           onChange={handleLengthSurveyedChange}
         />
         <InputRadioWithLabelAndValidation
@@ -325,6 +331,7 @@ const FishbeltTransectInputs = ({
           {...widthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.width}
+          initialValue={initialValues.width}
           name="width"
           onChange={handleWidthChange}
         />
@@ -342,6 +349,7 @@ const FishbeltTransectInputs = ({
           }}
           {...sizeBinValidationProperties}
           value={formik.values.size_bin}
+          initialValue={initialValues.size_bin}
           onChange={handleSizeBinChange}
         />
         <InputRadioWithLabelAndValidation
@@ -358,6 +366,7 @@ const FishbeltTransectInputs = ({
           {...reefSlopeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
+          initialValue={initialValues.reef_slope}
           name="reef_slope"
           onChange={handleReefSlopeChange}
         />
@@ -375,6 +384,7 @@ const FishbeltTransectInputs = ({
           {...visibilityValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
+          initialValue={initialValues.visibility}
           name="visibility"
           onChange={handleVisibilityChange}
         />
@@ -392,6 +402,7 @@ const FishbeltTransectInputs = ({
           {...currentValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.current}
+          initialValue={initialValues.current}
           name="current"
           onChange={handleCurrentChange}
         />
@@ -409,6 +420,7 @@ const FishbeltTransectInputs = ({
           {...relativeDepthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
+          initialValue={initialValues.relative_depth}
           name="relative_depth"
           onChange={handleRelativeDepthChange}
         />
@@ -426,6 +438,7 @@ const FishbeltTransectInputs = ({
           {...tideValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
+          initialValue={initialValues.tide}
           name="tide"
           onChange={handleTideChange}
         />
