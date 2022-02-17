@@ -22,6 +22,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
+import PageNoData from '../PageNoData'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -48,9 +49,7 @@ const ManagementRegimes = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.managementRegimeRecordsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
@@ -175,7 +174,7 @@ const ManagementRegimes = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const table = (
+  const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -230,6 +229,11 @@ const ManagementRegimes = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageNoData
+      noDataText={language.pages.managementRegimeTable.noDataText}
+      noDataExtraText={language.pages.managementRegimeTable.noDataExtraText}
+    />
   )
 
   return idsNotAssociatedWithData.length ? (

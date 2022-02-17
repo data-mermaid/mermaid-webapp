@@ -116,7 +116,12 @@ const autocomplete = {
 }
 
 const pages = {
-  projectsList: { offlineReadyCheckboxLabel: 'Offline Ready' },
+  projectsList: {
+    offlineReadyCheckboxLabel: 'Offline Ready',
+    noDataTextOnline: `You aren't part of any projects yet.`,
+    noDataExtraTextOnline: `Create a new project or get your admin to add you to some.`,
+    noDataTextOffline: `You don't have any offline projects.`,
+  },
   collectRecord: {
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
@@ -137,6 +142,7 @@ const pages = {
   },
   submittedTable: {
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
+    noDataText: `This project has no submitted sample units.`,
   },
   userTable: {
     filterToolbarText: 'Filter users by name or email',
@@ -153,16 +159,22 @@ const pages = {
   },
   collectTable: {
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
+    noDataText: `You don't have any active sample units`,
   },
   siteTable: {
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
+    noDataText: `This project has no sites.`,
+    noDataExtraText: `You can add sites by creating a new one or copying them from another project.`,
   },
   managementRegimeTable: {
     filterToolbarText: 'Filter management regimes by name or year',
+    noDataText: `This project has no management regimes.`,
+    noDataExtraText: `You can add management regimes by creating a new one or copying them from another project.`,
   },
 }
 
-const navigateAwayPrompt = 'Are you sure you want to leave this page? You have some unsaved changes.'
+const navigateAwayPrompt =
+  'Are you sure you want to leave this page? You have some unsaved changes.'
 
 export default {
   error,

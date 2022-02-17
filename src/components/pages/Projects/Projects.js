@@ -14,6 +14,7 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getObjectById } from '../../../library/getObjectById'
+import PageNoData from '../PageNoData'
 
 /**
  * All Projects page (lists projects)
@@ -41,9 +42,7 @@ const Projects = ({ apiSyncInstance }) => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.projectsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
@@ -55,25 +54,36 @@ const Projects = ({ apiSyncInstance }) => {
     getObjectById(offlineReadyProjectIds, project.id),
   )
 
-  const projectCardsListOnline = projects.map((project) => (
-    <ProjectCard
-      role="listitem"
-      project={{ ...project }}
-      key={project.id}
-      apiSyncInstance={apiSyncInstance}
-      isOfflineReady={getIsProjectOffline(project.id)}
+  const projectCardsListOnline = projects.length ? (
+    projects.map((project) => (
+      <ProjectCard
+        role="listitem"
+        project={{ ...project }}
+        key={project.id}
+        apiSyncInstance={apiSyncInstance}
+        isOfflineReady={getIsProjectOffline(project.id)}
+      />
+    ))
+  ) : (
+    <PageNoData
+      noDataText={language.pages.projectsList.noDataTextOnline}
+      noDataExtraText={language.pages.projectsList.noDataTextOnline}
     />
-  ))
+  )
 
-  const projectCardsListOffline = offlineReadyProjects.map((project) => (
-    <ProjectCard
-      role="listitem"
-      project={project}
-      key={project.id}
-      apiSyncInstance={apiSyncInstance}
-      isOfflineReady={getIsProjectOffline(project.id)}
-    />
-  ))
+  const projectCardsListOffline = offlineReadyProjects.length ? (
+    offlineReadyProjects.map((project) => (
+      <ProjectCard
+        role="listitem"
+        project={project}
+        key={project.id}
+        apiSyncInstance={apiSyncInstance}
+        isOfflineReady={getIsProjectOffline(project.id)}
+      />
+    ))
+  ) : (
+    <PageNoData noDataText={language.pages.projectsList.noDataTextOffline} />
+  )
 
   return isLoading ? (
     <LoadingIndicator aria-label="projects list loading indicator" />

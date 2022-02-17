@@ -23,6 +23,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import PageNoData from '../PageNoData'
 
 const Data = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
@@ -54,9 +55,7 @@ const Data = () => {
             setIdsNotAssociatedWithData([projectId])
             setIsLoading(false)
           }
-          toast.error(
-            ...getToastArguments(language.error.submittedRecordsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
@@ -176,7 +175,7 @@ const Data = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const table = (
+  const table = submittedRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -231,6 +230,8 @@ const Data = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageNoData noDataText={language.pages.submittedTable.noDataText} />
   )
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
