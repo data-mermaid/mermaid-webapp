@@ -4,6 +4,7 @@
 // Also supports multi quotes in string.
 // example B: splitSearchQueryStrings(`"to the" dustin "kim"`)
 export const splitSearchQueryStrings = (words) => {
+  // eslint-disable-next-line no-useless-escape
   const regex = /"(.*?)"|([a-zA-Z0-9_,;\-\+]+)|(\|)/
   const parts = words.split(regex)
   const searchItems = []
