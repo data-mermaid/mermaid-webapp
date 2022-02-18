@@ -34,6 +34,7 @@ const FishbeltTransectInputs = ({
   ignoreNonObservationFieldValidations,
   onSizeBinChange,
   resetNonObservationFieldValidations,
+  validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const {
     belttransectwidths,
@@ -54,7 +55,6 @@ const FishbeltTransectInputs = ({
   const validationsApiData = collectRecord?.validations?.results?.data
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   const sample_event = validationsApiData?.sample_event
-  const { initialValues } = formik
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
@@ -241,12 +241,13 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: TRANSECT_NUMBER_VALIDATION_PATH })
           }}
-          {...transectNumberValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            transectNumberValidationProperties,
+            'number',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.number}
-          initialValue={initialValues.number}
           onChange={handleTransectNumberChange}
-          resetInputDirty
         />
         <InputWithLabelAndValidation
           label="Label"
@@ -262,7 +263,6 @@ const FishbeltTransectInputs = ({
           {...labelValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.label}
-          initialValue={initialValues.label}
           onChange={handleLabelChange}
         />
         <InputWithLabelAndValidation
@@ -276,12 +276,13 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
           }}
-          {...sampleTimeValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            sampleTimeValidationProperties,
+            'sample_time',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
-          initialValue={initialValues.sample_time}
           onChange={handleSampleTimeChange}
-          resetInputDirty
         />
         <InputWithLabelAndValidation
           label="Depth"
@@ -294,12 +295,10 @@ const FishbeltTransectInputs = ({
           }}
           testId="depth"
           type="number"
-          {...depthValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(depthValidationProperties, 'depth')}
           onBlur={formik.handleBlur}
           value={formik.values.depth}
-          initialValue={initialValues.depth}
           onChange={handleDepthChange}
-          resetInputDirty
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -314,12 +313,13 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: LENGHT_SURVEYED_VALIDATION_PATH })
           }}
-          {...lengthSurveyedValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            lengthSurveyedValidationProperties,
+            'len_surveyed',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
-          initialValue={initialValues.len_surveyed}
           onChange={handleLengthSurveyedChange}
-          resetInputDirty
         />
         <InputRadioWithLabelAndValidation
           label="Width"
@@ -332,13 +332,11 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
           }}
-          {...widthValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(widthValidationProperties, 'width')}
           onBlur={formik.handleBlur}
           value={formik.values.width}
-          initialValue={initialValues.width}
           name="width"
           onChange={handleWidthChange}
-          resetInputDirty
         />
         <InputRadioWithLabelAndValidation
           label="Fish Size Bin"
@@ -352,11 +350,12 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
           }}
-          {...sizeBinValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            sizeBinValidationProperties,
+            'size_bin',
+          )}
           value={formik.values.size_bin}
-          initialValue={initialValues.size_bin}
           onChange={handleSizeBinChange}
-          resetInputDirty
         />
         <InputRadioWithLabelAndValidation
           label="Reef Slope"
@@ -372,7 +371,6 @@ const FishbeltTransectInputs = ({
           {...reefSlopeValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
-          initialValue={initialValues.reef_slope}
           name="reef_slope"
           onChange={handleReefSlopeChange}
         />
@@ -390,7 +388,6 @@ const FishbeltTransectInputs = ({
           {...visibilityValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
-          initialValue={initialValues.visibility}
           name="visibility"
           onChange={handleVisibilityChange}
         />
@@ -408,7 +405,6 @@ const FishbeltTransectInputs = ({
           {...currentValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.current}
-          initialValue={initialValues.current}
           name="current"
           onChange={handleCurrentChange}
         />
@@ -426,7 +422,6 @@ const FishbeltTransectInputs = ({
           {...relativeDepthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
-          initialValue={initialValues.relative_depth}
           name="relative_depth"
           onChange={handleRelativeDepthChange}
         />
@@ -444,7 +439,6 @@ const FishbeltTransectInputs = ({
           {...tideValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
-          initialValue={initialValues.tide}
           name="tide"
           onChange={handleTideChange}
         />
@@ -477,6 +471,7 @@ FishbeltTransectInputs.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   onSizeBinChange: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 FishbeltTransectInputs.defaultProps = {

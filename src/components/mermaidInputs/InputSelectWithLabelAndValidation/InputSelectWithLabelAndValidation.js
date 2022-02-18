@@ -16,13 +16,8 @@ const InputSelectWithLabelAndValidation = ({
   resetNonObservationFieldValidations,
   validationType,
   testId,
-  initialValue,
-  resetInputDirty,
   ...restOfProps
 }) => {
-  const { value } = restOfProps
-
-  const validationTypeCondition = resetInputDirty && initialValue !== value ? null : validationType
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
       {item.label}
@@ -30,7 +25,7 @@ const InputSelectWithLabelAndValidation = ({
   ))
 
   return (
-    <InputRow validationType={validationTypeCondition} data-testid={testId}>
+    <InputRow validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -52,7 +47,7 @@ const InputSelectWithLabelAndValidation = ({
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
-        validationType={validationTypeCondition}
+        validationType={validationType}
       />
     </InputRow>
   )
@@ -68,8 +63,6 @@ InputSelectWithLabelAndValidation.propTypes = {
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-  initialValue: PropTypes.string,
-  resetInputDirty: PropTypes.bool,
 }
 
 InputSelectWithLabelAndValidation.defaultProps = {
@@ -77,7 +70,5 @@ InputSelectWithLabelAndValidation.defaultProps = {
   validationMessages: [],
   helperText: undefined,
   testId: undefined,
-  initialValue: undefined,
-  resetInputDirty: false,
 }
 export default InputSelectWithLabelAndValidation

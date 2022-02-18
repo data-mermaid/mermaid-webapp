@@ -19,14 +19,9 @@ const InputWithLabelAndValidation = ({
   unit,
   validationMessages,
   validationType,
-  initialValue,
-  resetInputDirty,
   ...restOfProps
 }) => {
   const textFieldRef = useRef()
-  const { value } = restOfProps
-
-  const validationTypeCondition = resetInputDirty && initialValue !== value ? null : validationType
 
   useStopInputScrollingIncrementNumber(textFieldRef)
 
@@ -49,7 +44,7 @@ const InputWithLabelAndValidation = ({
   )
 
   return (
-    <InputRow required={required} validationType={validationTypeCondition} data-testid={testId}>
+    <InputRow required={required} validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -58,7 +53,7 @@ const InputWithLabelAndValidation = ({
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
       <InputValidationInfo
-        validationType={validationTypeCondition}
+        validationType={validationType}
         validationMessages={validationMessages}
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
@@ -78,8 +73,6 @@ InputWithLabelAndValidation.propTypes = {
   unit: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-  initialValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  resetInputDirty: PropTypes.bool,
 }
 
 InputWithLabelAndValidation.defaultProps = {
@@ -91,8 +84,6 @@ InputWithLabelAndValidation.defaultProps = {
   unit: undefined,
   validationMessages: [],
   validationType: undefined,
-  initialValue: undefined,
-  resetInputDirty: false,
 }
 
 export default InputWithLabelAndValidation
