@@ -6,7 +6,6 @@ import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirect
 const useAuthentication = ({ dexieInstance }) => {
   const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
-  const [auth0Token, setAuth0Token] = useState()
 
   const setAuthenticatedStates = () => {
     localStorage.setItem('hasAuth0Authenticated', 'true')
@@ -40,11 +39,11 @@ const useAuthentication = ({ dexieInstance }) => {
     }
     if (isUserOnlineAndLoggedIn) {
       // this is where logged in state gets set after successful login. (because of redirect)
-      setAuthenticatedStates()
       getAuth0AccessTokenSilently()
-        .then((token) => {
+        .then(() => {
           if (isMounted) {
-            setAuth0Token(token)
+            // setAuth0Token(token)
+            setAuthenticatedStates()
           }
         })
         .catch((err) => {
@@ -80,7 +79,7 @@ const useAuthentication = ({ dexieInstance }) => {
   return {
     isMermaidAuthenticated,
     logoutMermaid,
-    auth0Token,
+    getAccessToken: getAuth0AccessTokenSilently,
   }
 }
 

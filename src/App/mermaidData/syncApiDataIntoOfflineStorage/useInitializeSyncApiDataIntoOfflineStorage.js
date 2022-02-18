@@ -18,7 +18,7 @@ const getProjectIdFromLocation = location => {
 
 export const useInitializeSyncApiDataIntoOfflineStorage = ({
   apiBaseUrl,
-  auth0Token,
+  getAccessToken,
   dexieInstance,
   isMounted,
   isAppOnline,
@@ -31,9 +31,9 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
       new SyncApiDataIntoOfflineStorage({
         dexieInstance,
         apiBaseUrl,
-        auth0Token,
+        getAccessToken,
       }),
-    [dexieInstance, apiBaseUrl, auth0Token],
+    [dexieInstance, apiBaseUrl, getAccessToken],
   )
   const { setIsSyncInProgress, setIsOfflineStorageHydrated, setSyncErrors } = useSyncStatus()
 
@@ -46,14 +46,14 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     }
 
     const isOnlineAndReady =
-      apiBaseUrl && auth0Token && dexieInstance && isMounted.current && isAppOnline
+      apiBaseUrl && dexieInstance && isMounted.current && isAppOnline
 
     const projectId = getProjectIdFromLocation(location)
 
     const isProjectPage = !!projectId
 
     const isOfflineAndReadyAndAlreadyInitiated =
-      apiBaseUrl && !auth0Token && dexieInstance && isMounted.current && !isAppOnline
+      apiBaseUrl && dexieInstance && isMounted.current && !isAppOnline
 
     const isProjectsListPage =
       location.pathname === '/projects' || location.pathname === '/projects/'
@@ -133,7 +133,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     }
   }, [
     apiBaseUrl,
-    auth0Token,
+    getAccessToken,
     dexieInstance,
     isAppOnline,
     isMounted,

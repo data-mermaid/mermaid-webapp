@@ -4,6 +4,7 @@ import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtiliti
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
+import { getFakeAccessToken } from '../../../testUtilities/getFakeAccessToken'
 
 test('pushThenPullEverythingForAProjectButChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
@@ -44,7 +45,7 @@ test('pushThenPullEverythingForAProjectButChoices keeps track of returned last_r
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
     dexieInstance,
   })
 
@@ -95,7 +96,7 @@ test('pushThenPullEverythingForAProject keeps track of returned last_revision_nu
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
     dexieInstance,
   })
 
@@ -142,7 +143,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
     dexieInstance,
   })
 
@@ -157,7 +158,7 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
     dexieInstance,
   })
 
@@ -187,7 +188,7 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
     dexieInstance.project_sites,
     dexieInstance.projects,
     () => {
-      apiDataNamesToPullNonProject.forEach(apiDataName => {
+      apiDataNamesToPullNonProject.forEach((apiDataName) => {
         dexieInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
           somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
@@ -329,7 +330,7 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
     dexieInstance,
   })
 
@@ -360,7 +361,7 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
     dexieInstance.project_sites,
     dexieInstance.projects,
     () => {
-      apiDataNamesToPullNonProject.forEach(apiDataName => {
+      apiDataNamesToPullNonProject.forEach((apiDataName) => {
         dexieInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
           somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
@@ -517,7 +518,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
     dexieInstance,
   })
 
@@ -540,7 +541,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
     dexieInstance.fish_species,
     dexieInstance.projects,
     () => {
-      apiDataNamesToPullNonProject.forEach(apiDataName => {
+      apiDataNamesToPullNonProject.forEach((apiDataName) => {
         dexieInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
           somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
@@ -686,7 +687,7 @@ test('pushChanges includes the force flag', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
     dexieInstance,
   })
 
@@ -753,7 +754,7 @@ test('pushChanges includes the expected modified data', async () => {
   })
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
     dexieInstance,
   })
 

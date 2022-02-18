@@ -1,9 +1,10 @@
 import axios from 'axios'
 import language from '../language'
+import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 
-const getCurrentUserProfile = ({
+const getCurrentUserProfile = async ({
   apiBaseUrl,
-  auth0Token,
+  getAccessToken,
   dexieInstance,
   isMermaidAuthenticated,
   isAppOnline,
@@ -14,39 +15,29 @@ const getCurrentUserProfile = ({
   if (!dexieInstance) {
     throw new Error('getCurrentUserProfile needs a dexieInstance')
   }
-  const authenticatedAxios = auth0Token
-    ? axios.create({
-        headers: {
-          Authorization: `Bearer ${auth0Token}`,
-        },
-      })
-    : undefined
+
   const isAuthenticatedAndReady = isMermaidAuthenticated
-  const isOnlineAuthenticatedAndLoading =
-    isAuthenticatedAndReady && isAppOnline && !authenticatedAxios
-  const isOnlineAuthenticatedAndReady =
-    isAuthenticatedAndReady && isAppOnline && !!authenticatedAxios
+  const isOnlineAuthenticatedAndReady = isAuthenticatedAndReady && isAppOnline
+
   const isOfflineAuthenticatedAndReady = isAuthenticatedAndReady && !isAppOnline
 
-  if (isOnlineAuthenticatedAndLoading) {
-    return Promise.resolve(undefined)
-  }
-
   if (isOnlineAuthenticatedAndReady) {
-    return authenticatedAxios.get(`${apiBaseUrl}/me/`).then((apiResults) => {
-      const userFromApi = apiResults.data
+    return axios
+      .get(`${apiBaseUrl}/me/`, await getAuthorizationHeaders(getAccessToken))
+      .then((apiResults) => {
+        const userFromApi = apiResults.data
 
-      if (!userFromApi) {
-        throw Error('User Profile not returned from API')
-      }
+        if (!userFromApi) {
+          throw Error('User Profile not returned from API')
+        }
 
-      const userToStore = {
-        id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
-        user: userFromApi,
-      }
+        const userToStore = {
+          id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
+          user: userFromApi,
+        }
 
-      return dexieInstance.uiState_currentUser.put(userToStore).then(() => userFromApi)
-    })
+        return dexieInstance.uiState_currentUser.put(userToStore).then(() => userFromApi)
+      })
   }
   if (isOfflineAuthenticatedAndReady) {
     return dexieInstance.uiState_currentUser.toArray().then((results) => {

@@ -1,7 +1,9 @@
+import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
 import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const CollectRecordsMixin = (Base) =>
@@ -129,8 +131,7 @@ const CollectRecordsMixin = (Base) =>
         // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.collect_records.put(recordToSubmit)
 
-        return this._authenticatedAxios
-          .post(
+        return axios.post(
             `${this._apiBaseUrl}/push/`,
             {
               collect_records: [recordToSubmit],
@@ -139,6 +140,7 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
+              ...await getAuthorizationHeaders(this._getAccessToken)
             },
           )
           .then((response) => {
@@ -192,8 +194,7 @@ const CollectRecordsMixin = (Base) =>
         // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
 
-        return this._authenticatedAxios
-          .post(
+        return axios.post(
             `${this._apiBaseUrl}/push/`,
             {
               collect_records: [recordMarkedToBeDeleted],
@@ -202,6 +203,8 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
+              ...await getAuthorizationHeaders(this._getAccessToken)
+
             },
           )
           .then((apiPushResponse) => {
@@ -238,18 +241,18 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    validateFishBelt = function validateFishbelt({ recordId, projectId }) {
+    validateFishBelt = async function validateFishbelt({ recordId, projectId }) {
       if (!recordId || !projectId) {
         throw new Error('validateFishBelt expects record, profileId, and projectId parameters')
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        return this._authenticatedAxios
-          .post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`, {
+        return axios.post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`, {
             ids: [recordId],
             version: '2',
-          })
-          .then((response) => {
+          },
+          await getAuthorizationHeaders(this._getAccessToken)
+        ).then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseStatusSuccessful) {
@@ -269,17 +272,17 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    submitFishBelt = function submitFishbelt({ recordId, projectId }) {
+    submitFishBelt = async function submitFishbelt({ recordId, projectId }) {
       if (!recordId || !projectId) {
         throw new Error('submitFishBelt expects record, profileId, and projectId parameters')
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        return this._authenticatedAxios
-          .post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`, {
+        return axios.post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`, {
             ids: [recordId],
             version: '2',
-          })
+          },
+          await getAuthorizationHeaders(this._getAccessToken))
           .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 

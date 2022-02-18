@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
+import { getFakeAccessToken } from '../../../testUtilities/getFakeAccessToken'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 import {
@@ -18,7 +19,7 @@ test('Projects component renders with the expected UI elements', async () => {
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexieInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
   })
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -63,7 +64,7 @@ test('A project card renders with the expected UI elements for button groups', a
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexieInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
   })
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -100,7 +101,7 @@ test('A project card shows relevant data for a project', async () => {
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexieInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
   })
 
   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
@@ -139,7 +140,7 @@ test('A project card renders appropriately when offline', async () => {
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexieInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -174,7 +175,7 @@ test('A project card renders appropriately when online', async () => {
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexieInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -217,7 +218,7 @@ test('Hide new project button in project toolbar when offline', async () => {
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexieInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    auth0Token: 'fake token',
+    getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {

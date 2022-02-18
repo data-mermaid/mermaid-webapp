@@ -1,4 +1,6 @@
+import axios from 'axios'
 import { getSampleDateLabel } from '../getSampleDateLabel'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
@@ -10,23 +12,24 @@ const SubmittedRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
-    getSubmittedRecords = function getSubmittedRecords(projectId) {
+    getSubmittedRecords = async function getSubmittedRecords(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isOnlineAuthenticatedAndReady
-        ? this._authenticatedAxios
+        ? axios
             .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
               },
+              ...await getAuthorizationHeaders(this._getAccessToken)
             })
             .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedFishBeltTransectRecord = function getSubmittedFishBeltTransectRecord(
+    getSubmittedFishBeltTransectRecord = async function getSubmittedFishBeltTransectRecord(
       projectId,
       id,
     ) {
@@ -35,8 +38,10 @@ const SubmittedRecordsMixin = (Base) =>
       }
 
       return this._isOnlineAuthenticatedAndReady
-        ? this._authenticatedAxios
-            .get(`${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`)
+        ? axios.get(
+          `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
+          await getAuthorizationHeaders(this._getAccessToken)
+        )
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
@@ -65,7 +70,7 @@ const SubmittedRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    moveToCollect = function moveToCollect({ projectId, submittedRecordId }) {
+    moveToCollect = async function moveToCollect({ projectId, submittedRecordId }) {
       if (!projectId || !submittedRecordId) {
         Promise.reject(
           new Error(
@@ -78,6 +83,8 @@ const SubmittedRecordsMixin = (Base) =>
         ? this._authenticatedAxios
             .put(
               `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${submittedRecordId}/edit/`,
+              await getAuthorizationHeaders(this._getAccessToken)
+
             )
             .then(() =>
               this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId),

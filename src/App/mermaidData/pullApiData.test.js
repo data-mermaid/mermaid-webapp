@@ -1,4 +1,5 @@
 import { rest } from 'msw'
+import { getFakeAccessToken } from '../../testUtilities/getFakeAccessToken'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
@@ -17,7 +18,6 @@ const allTheDataNames = [
   'projects',
 ]
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-const auth0Token = 'fakewhatever'
 const projectId = '5'
 
 test('pullApiData strips uiState_pushToApi properties from api response', async () => {
@@ -75,7 +75,7 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
 
   await pullApiData({
     dexieInstance,
-    auth0Token,
+    getAccessToken: getFakeAccessToken,
     apiBaseUrl,
     apiDataNamesToPull: allTheDataNames,
     projectId,
