@@ -10,11 +10,13 @@ import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../language'
+import { getToastArguments } from '../../../../library/getToastArguments'
 import ManagementRulesInput from '../ManagementRulesInput'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../../library/useIsMounted'
@@ -58,7 +60,9 @@ const ManagementRegime = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.managementRegimeRecordUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.managementRegimeRecordUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, managementRegimeId, projectId])
@@ -71,7 +75,52 @@ const ManagementRegime = () => {
   const formik = useFormik({
     initialValues: initialFormValues,
     enableReinitialize: true,
-    onSubmit: () => {},
+    onSubmit: (formikValues, formikActions) => {
+      const {
+        name,
+        name_secondary,
+        est_year,
+        size,
+        parties,
+        open_access,
+        no_take,
+        periodic_closure,
+        size_limits,
+        gear_restriction,
+        species_restriction,
+        access_restriction,
+        compliance,
+        notes,
+      } = formikValues
+
+      const formattedManagementRegimeForApi = {
+        ...managementRegimeBeingEdited,
+        name,
+        name_secondary,
+        est_year: est_year === '' ? null : est_year,
+        size: size === '' ? null : size,
+        parties,
+        open_access,
+        no_take,
+        periodic_closure,
+        size_limits,
+        gear_restriction,
+        species_restriction,
+        access_restriction,
+        compliance,
+        notes,
+      }
+
+      databaseSwitchboardInstance
+        .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
+        .then(() => {
+          toast.success(language.success.managementRegimeSave)
+          formikActions.resetForm({ values: formikValues })
+        })
+        .catch(() => {
+          toast.error(language.error.managementRegimeSave)
+        })
+    },
     validate: (values) => {
       const errors = {}
       const isPartialSelectionSelected =
@@ -106,6 +155,7 @@ const ManagementRegime = () => {
     <ContentPageLayout
       isPageContentLoading={isLoading}
       isToolbarSticky={true}
+      subNavName={formik.values.name}
       content={
         <>
           <form id="management-regime-form" onSubmit={formik.handleSubmit}>
@@ -169,6 +219,7 @@ const ManagementRegime = () => {
               />
             </InputWrapper>
           </form>
+          <EnhancedPrompt shouldPromptTrigger={formik.dirty}/>
         </>
       }
       toolbar={

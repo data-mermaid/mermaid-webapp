@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import { HomePageLayout } from '../../Layout'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
@@ -40,7 +41,9 @@ const Projects = ({ apiSyncInstance }) => {
           }
         })
         .catch(() => {
-          toast.error(language.error.projectsUnavailable)
+          toast.error(
+            ...getToastArguments(language.error.projectsUnavailable)
+          )
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])

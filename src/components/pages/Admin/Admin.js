@@ -1,6 +1,6 @@
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { Prompt, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
@@ -16,16 +16,18 @@ import { hoverState } from '../../../library/styling/mediaQueries'
 import { IconClose, IconSave } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import NewOrganizationModal from '../../NewOrganizationModal'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
-import useBeforeUnloadPrompt from '../../../library/useBeforeUnloadPrompt'
 import useIsMounted from '../../../library/useIsMounted'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
@@ -142,6 +144,7 @@ const Admin = () => {
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [projectTagOptions, setProjectTagOptions] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
@@ -151,7 +154,7 @@ const Admin = () => {
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (isAppOnline && databaseSwitchboardInstance && projectId) {
+    if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
@@ -169,10 +172,10 @@ const Admin = () => {
           }
         })
         .catch(() => {
-          toast.error(language.error.projectsUnavailable)
+          toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, isSyncInProgress])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -187,17 +190,26 @@ const Admin = () => {
         .saveProject({ projectId, editedValues: values })
         .then(() => {
           actions.resetForm({ values }) // resets formiks dirty state
-          toast.success(language.success.projectSave)
+          toast.success(...getToastArguments(language.success.projectSave))
         })
         .catch(() => {
-          toast.error(language.error.projectSave)
+          toast.error(...getToastArguments(language.error.projectSave))
         })
+    },
+    validate: (values) => {
+      const errors = {}
+
+      if (!values.name) {
+        errors.name = [{ message: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      return errors
     },
   }
   const formik = useFormik(formikOptions)
 
-  useBeforeUnloadPrompt({ shouldPromptTrigger: formik.dirty })
-
+  const doesFormikHaveErrors = Object.keys(formik.errors).length
+  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
   const noOrganizationResult = (
     <>
       <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
@@ -210,10 +222,13 @@ const Admin = () => {
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
+          required
           label="Project Name"
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
+          validationType={formik.errors.name ? 'error' : null}
+          validationMessages={formik.errors.name}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -282,14 +297,15 @@ const Admin = () => {
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>Project Info</H2>
-            <ButtonCallout type="submit" form="project-info-form" disabled={!formik.dirty}>
+            <ButtonCallout type="submit" form="project-info-form" disabled={isSaveButtonDisabled}>
               <IconSave />
               Save
             </ButtonCallout>
           </ContentPageToolbarWrapper>
         }
       />
-      <Prompt when={formik.dirty} message={language.navigateAwayPrompt} />
+      {/* Prompt user if they attempt to navifate away from dirty form */}
+      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 }

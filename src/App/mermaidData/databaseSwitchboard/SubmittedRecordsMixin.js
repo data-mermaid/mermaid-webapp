@@ -70,19 +70,21 @@ const SubmittedRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    moveToCollect = async function moveToCollect({ projectId, recordId }) {
-      if (!projectId || !recordId) {
+    moveToCollect = async function moveToCollect({ projectId, submittedRecordId }) {
+      if (!projectId || !submittedRecordId) {
         Promise.reject(
           new Error(
-            'The function, moveToCollect requires an object parameter with projectId and recordId properties',
+            'The function, moveToCollect requires an object parameter with projectId and submittedRecordId properties',
           ),
         )
       }
 
       return this._isOnlineAuthenticatedAndReady
-        ? axios.put(
-              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${recordId}/edit/`,
+        ? this._authenticatedAxios
+            .put(
+              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${submittedRecordId}/edit/`,
               await getAuthorizationHeaders(this._getAccessToken)
+
             )
             .then(() =>
               this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId),

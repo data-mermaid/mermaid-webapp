@@ -23,6 +23,7 @@ import { pluralize } from '../../../library/strings/pluralize'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { validateEmail } from '../../../library/strings/validateEmail'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -30,6 +31,7 @@ import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InlineMessage from '../../generic/InlineMessage'
 import InputAndButton from '../../generic/InputAndButton/InputAndButton'
 import language from '../../../language'
+import { getToastArguments } from '../../../library/getToastArguments'
 import NewUserModal from '../../NewUserModal'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -128,12 +130,13 @@ const Users = ({ currentUser }) => {
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId) {
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getProject(projectId),
@@ -149,10 +152,10 @@ const Users = ({ currentUser }) => {
           }
         })
         .catch(() => {
-          toast.error(language.error.userRecordsUnavailable)
+          toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, projectId])
+  }, [databaseSwitchboardInstance, isMounted, projectId, isSyncInProgress])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)
@@ -174,7 +177,7 @@ const Users = ({ currentUser }) => {
           setObserverProfiles(projectProfilesResponse)
         })
         .catch(() => {
-          toast.error(language.error.userRecordsUnavailable)
+          toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId])
@@ -191,10 +194,10 @@ const Users = ({ currentUser }) => {
           .then(() => {
             fetchProjectProfiles()
             setNewUserProfile('')
-            toast.success(language.success.newUserAdd)
+            toast.success(...getToastArguments(language.success.newUserAdd))
           })
           .catch(() => {
-            toast.error(language.error.duplicateNewUserAdd)
+            toast.error(...getToastArguments(language.error.duplicateNewUserAdd))
           })
       }
     })
@@ -204,7 +207,7 @@ const Users = ({ currentUser }) => {
     databaseSwitchboardInstance.addUser(newUserProfile, projectId).then(() => {
       fetchProjectProfiles()
       setNewUserProfile('')
-      toast.success(language.success.newPendingUserAdd)
+      toast.success(...getToastArguments(language.success.newPendingUserAdd))
     })
 
     return Promise.resolve()
@@ -212,11 +215,11 @@ const Users = ({ currentUser }) => {
 
   const openNewUserProfileModal = () => {
     if (newUserProfile === '') {
-      toast.warning(language.error.emptyEmailAdd)
+      toast.warning(...getToastArguments(language.error.emptyEmailAdd))
     } else if (validateEmail(newUserProfile)) {
       addNewUser()
     } else {
-      toast.warning(language.error.invalidEmailAdd)
+      toast.warning(...getToastArguments(language.error.invalidEmailAdd))
     }
   }
 
@@ -242,7 +245,7 @@ const Users = ({ currentUser }) => {
         const numRecordTransferred = resp.num_collect_records_transferred
 
         fetchProjectProfiles()
-        toast.success(`${numRecordTransferred} ${sampleUnitMsg} transferred`)
+        toast.success(...getToastArguments(`${numRecordTransferred} ${sampleUnitMsg} transferred`))
       })
 
     return Promise.resolve()
@@ -277,7 +280,7 @@ const Users = ({ currentUser }) => {
   const removeUserProfile = () => {
     databaseSwitchboardInstance.removeUser(userToBeRemoved, projectId).then(() => {
       fetchProjectProfiles()
-      toast.success(`User removed`)
+      toast.success(...getToastArguments(language.success.userRemoved))
     })
 
     return Promise.resolve()
@@ -323,8 +326,6 @@ const Users = ({ currentUser }) => {
 
   const handleRoleChange = useCallback(
     ({ event, projectProfileId }) => {
-      setIsLoading(true)
-
       const roleCode = parseInt(event.target.value, 10)
 
       databaseSwitchboardInstance
@@ -342,18 +343,23 @@ const Users = ({ currentUser }) => {
           )
 
           setObserverProfiles(updatedObserverProfiles)
-          setIsLoading(false)
           toast.success(
-            language.success.getUserRoleChangeSuccessMessage({
-              userName: editedUserName,
-              role: editedUserRole,
-            }),
+            ...getToastArguments(
+              language.success.getUserRoleChangeSuccessMessage({
+                userName: editedUserName,
+                role: editedUserRole,
+              }),
+            ),
           )
         })
         .catch(() => {
           const userToBeEdited = observerProfiles.find(({ id }) => id === projectProfileId)
 
-          toast.error(language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name))
+          toast.error(
+            ...getToastArguments(
+              language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name),
+            ),
+          )
           setIsLoading(false)
         })
     },

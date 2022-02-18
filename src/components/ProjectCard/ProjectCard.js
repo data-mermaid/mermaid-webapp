@@ -14,6 +14,7 @@ import { pluralize } from '../../library/pluralize'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import language from '../../language'
+import { getToastArguments } from '../../library/getToastArguments'
 import NavLinkButtonGroup from '../NavLinkButtonGroup'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import SyncApiDataIntoOfflineStorage from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
@@ -36,10 +37,12 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
         .then(() => {
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
-          toast.success(language.success.getProjectTurnOnOfflineReadySuccess(name))
+          toast.success(
+            ...getToastArguments(language.success.getProjectTurnOnOfflineReadySuccess(name)))
         })
         .catch(() => {
-          toast.error(language.error.getProjectTurnOnOfflineReadyFailure(name))
+          toast.error(
+            ...getToastArguments(language.error.getProjectTurnOnOfflineReadyFailure(name)))
         })
     }
     if (!isChecked) {
@@ -49,10 +52,12 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
         .then(() => {
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
-          toast.success(language.success.getProjectTurnOffOfflineReadySuccess(name))
+          toast.success(
+            ...getToastArguments(language.success.getProjectTurnOffOfflineReadySuccess(name)))
         })
         .catch(() => {
-          toast.error(language.error.getProjectTurnOffOfflineReadyFailure(name))
+          toast.error(
+            ...getToastArguments(language.error.getProjectTurnOffOfflineReadyFailure(name)))
         })
     }
   }
