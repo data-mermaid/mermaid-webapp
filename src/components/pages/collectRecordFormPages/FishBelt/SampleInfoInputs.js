@@ -30,7 +30,6 @@ const SampleInfoInputs = ({
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const hasData = false
-  const { initialValues } = formik
   const managementSelectOptions = getOptions(managementRegimes, hasData)
   const siteSelectOptions = getOptions(sites, hasData)
   const validationsApiData = collectRecord?.validations?.results?.data

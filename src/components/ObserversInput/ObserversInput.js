@@ -21,8 +21,7 @@ const ObserversInput = ({
   ...restOfProps
 }) => {
   const observerNameOptions = getObserverNameOptions(observers)
-  const { initialValues, values } = formik
-  const observerNameValues = values.observers.map(({ profile }) => profile)
+  const observerNameValues = formik.values.observers.map(({ profile }) => profile)
 
   const filterObserverProfiles = (observerIds) =>
     [...observers].filter(({ profile }) =>
