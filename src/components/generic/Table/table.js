@@ -30,6 +30,34 @@ export const Table = styled.table`
   min-width: 100%;
   border-collapse: collapse;
 `
+const getHeaderSortAfter = (isMultiSortColumns, sortedIndex, isSortedDescending) => {
+  if (sortedIndex < 0) {
+    return null
+  }
+
+  let content
+
+  if (isSortedDescending) {
+    content = ' \u25bc'
+  }
+
+  if (!isSortedDescending) {
+    content = ' \u25b2'
+  }
+
+  if (isMultiSortColumns) {
+    content = `${content} ${sortedIndex + 1}`
+  }
+
+  return `
+    &::after {
+      content: '${content}';
+      color: ${theme.color.black};
+      font-size: x-small;
+    }
+  `
+}
+
 export const Th = styled.th(
   (props) => css`
     text-align: ${props.align || 'left'};
@@ -37,26 +65,16 @@ export const Th = styled.th(
     background: ${theme.color.white};
     vertical-align: top;
     &::after {
-      content: ' \u25bc';
-      color: transparent;
+      content: ' \u25b2';
+      color: ${theme.color.secondaryDisabledColor};
+      font-size: x-small;
       white-space: nowrap;
     }
-    ${props.isSorted &&
-    props.isSortedDescending &&
-    `
-      &::after {
-        content: ' \u25bc';
-        color: ${theme.color.black};
-      }
-    `}
-    ${props.isSorted &&
-    !props.isSortedDescending &&
-    `
-      &::after {
-        content: ' \u25b2';
-        color: ${theme.color.black};
-      }
-    `}
+    ${getHeaderSortAfter(
+      props.isMultiSortColumns,
+      props.sortedIndex,
+      props.isSortedDescending
+    )}
   `,
 )
 export const Td = styled.td(
