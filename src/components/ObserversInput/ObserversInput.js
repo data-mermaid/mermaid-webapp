@@ -17,11 +17,11 @@ const ObserversInput = ({
   resetNonObservationFieldValidations,
   validationPath,
   validationProperties,
+  validationPropertiesWithDirtyResetOnInputChange,
   ...restOfProps
 }) => {
   const observerNameOptions = getObserverNameOptions(observers)
-  const { initialValues, values } = formik
-  const observerNameValues = values.observers.map(({ profile }) => profile)
+  const observerNameValues = formik.values.observers.map(({ profile }) => profile)
 
   const filterObserverProfiles = (observerIds) =>
     [...observers].filter(({ profile }) =>
@@ -36,14 +36,13 @@ const ObserversInput = ({
         id="observers"
         options={observerNameOptions}
         value={observerNameValues}
-        initialValue={initialValues.observers}
         ignoreNonObservationFieldValidations={() => {
           ignoreNonObservationFieldValidations({ validationPath })
         }}
         resetNonObservationFieldValidations={() => {
           resetNonObservationFieldValidations({ validationPath })
         }}
-        {...validationProperties}
+        {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
         onChange={({ selectedItems }) => {
           const selectedObservers = filterObserverProfiles(selectedItems)
 
@@ -52,7 +51,6 @@ const ObserversInput = ({
             selectedObservers,
           })
         }}
-        resetInputDirty
       />
     </InputWrapper>
   )
@@ -69,6 +67,7 @@ ObserversInput.propTypes = {
     validationType: PropTypes.string,
     validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   }).isRequired,
+  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 export default ObserversInput

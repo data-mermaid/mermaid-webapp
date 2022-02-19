@@ -16,13 +16,8 @@ const InputRadioWithLabelAndValidation = ({
   resetNonObservationFieldValidations,
   validationType,
   testId,
-  initialValue,
-  resetInputDirty,
   ...restOfProps
 }) => {
-  const { value } = restOfProps
-  const validationTypeCondition = resetInputDirty && initialValue !== value ? null : validationType
-
   const optionsList = options.map(({ label: optionLabel, value: optionValue }) => {
     const isChecked = restOfProps.value === optionValue
 
@@ -37,7 +32,7 @@ const InputRadioWithLabelAndValidation = ({
   })
 
   return (
-    <InputRow required={required} validationType={validationTypeCondition} data-testid={testId}>
+    <InputRow required={required} validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
       </label>
@@ -46,7 +41,7 @@ const InputRadioWithLabelAndValidation = ({
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
-        validationType={validationTypeCondition}
+        validationType={validationType}
       />
     </InputRow>
   )
@@ -63,8 +58,6 @@ InputRadioWithLabelAndValidation.propTypes = {
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
-  initialValue: PropTypes.string,
-  resetInputDirty: PropTypes.bool,
 }
 
 InputRadioWithLabelAndValidation.defaultProps = {
@@ -74,8 +67,6 @@ InputRadioWithLabelAndValidation.defaultProps = {
   testId: undefined,
   validationMessages: [],
   validationType: undefined,
-  initialValue: undefined,
-  resetInputDirty: false,
 }
 
 export default InputRadioWithLabelAndValidation

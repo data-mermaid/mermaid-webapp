@@ -242,15 +242,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         .then(() => {
           clearPersistedUnsavedFormikData()
           clearPersistedUnsavedObservationsData()
-          toast.success(
-            ...getToastArguments(language.success.collectRecordDelete)
-          )
+          toast.success(...getToastArguments(language.success.collectRecordDelete))
           history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.collectRecordDelete)
-          )
+          toast.error(...getToastArguments(language.error.collectRecordDelete))
           closeDeleteConfirmPrompt()
         })
     }
@@ -261,15 +257,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     databaseSwitchboardInstance
       .submitFishBelt({ recordId, projectId })
       .then(() => {
-        toast.success(
-          ...getToastArguments(language.success.collectRecordSubmit)
-        )
+        toast.success(...getToastArguments(language.success.collectRecordSubmit))
         history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch(() => {
-        toast.error(
-          ...getToastArguments(language.error.collectRecordSubmit)
-        )
+        toast.error(...getToastArguments(language.error.collectRecordSubmit))
         setSubmitButtonState(possibleCollectButtonGroupStates.submittable)
       })
   }
@@ -284,9 +276,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
       })
       .catch(() => {
-        toast.error(
-          ...getToastArguments(language.error.collectRecordValidation)
-        )
+        toast.error(...getToastArguments(language.error.collectRecordValidation))
         setValidateButtonState(possibleCollectButtonGroupStates.validatable)
       })
   }
@@ -303,9 +293,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(
-            ...getToastArguments(language.error.collectRecordValidationIgnore)
-          )
+          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -323,9 +311,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(
-            ...getToastArguments(language.error.collectRecordValidationIgnore)
-          )
+          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -343,9 +329,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(
-            ...getToastArguments(language.error.collectRecordValidationIgnore)
-          )
+          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -361,9 +345,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(
-            ...getToastArguments(language.error.collectRecordValidationReset)
-          )
+          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -381,9 +363,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(
-            ...getToastArguments(language.error.collectRecordValidationReset)
-          )
+          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -401,9 +381,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           setIsFormDirty(true)
         })
         .catch(() => {
-          toast.warn(
-            ...getToastArguments(language.error.collectRecordValidationReset)
-          )
+          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
         })
     },
     [collectRecordBeingEdited, databaseSwitchboardInstance],
@@ -425,15 +403,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           },
         })
         updateFishNameOptionsStateWithOfflineStorageData()
-        toast.success(
-          ...getToastArguments(language.success.fishSpeciesSave)
-        )
+        toast.success(...getToastArguments(language.success.fishSpeciesSave))
       })
       .catch((error) => {
         if (error.message === 'Species already exists') {
-          toast.warning(
-            ...getToastArguments(language.error.fishSpeciesAlreadyExists)
-          )
+          toast.warning(...getToastArguments(language.error.fishSpeciesAlreadyExists))
 
           observationsDispatch({
             type: 'updateFishName',
@@ -443,9 +417,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
             },
           })
         } else {
-          toast.error(
-            ...getToastArguments(language.error.fishSpeciesSave)
-          )
+          toast.error(...getToastArguments(language.error.fishSpeciesSave))
         }
       })
 
@@ -487,9 +459,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         projectId,
       })
       .then((response) => {
-        toast.success(
-          ...getToastArguments(language.success.collectRecordSave)
-        )
+        toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsData()
         setAreObservationsInputsDirty(false)
@@ -503,9 +473,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         }
       })
       .catch(() => {
-        toast.error(
-          ...getToastArguments(language.error.collectRecordSave)
-        )
+        toast.error(...getToastArguments(language.error.collectRecordSave))
       })
   }
 
@@ -570,6 +538,19 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     formik.setFieldValue('observers', selectedObservers)
   }
 
+  const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
+    // for UX purpose only, validation is cleared when input is on change after page is validated
+    const validationDirtyCheck =
+      formik.values[property] !== formik.initialValues[property]
+        ? null
+        : validationProperties.validationType
+
+    return {
+      ...validationProperties,
+      validationType: validationDirtyCheck,
+    }
+  }
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -603,6 +584,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 managementRegimes={managementRegimes}
                 resetNonObservationFieldValidations={resetNonObservationFieldValidations}
                 sites={sites}
+                validationPropertiesWithDirtyResetOnInputChange={
+                  validationPropertiesWithDirtyResetOnInputChange
+                }
               />
 
               <FishbeltTransectInputs
@@ -614,6 +598,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
                 onSizeBinChange={handleSizeBinChange}
                 resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                validationPropertiesWithDirtyResetOnInputChange={
+                  validationPropertiesWithDirtyResetOnInputChange
+                }
               />
               <ObserversInput
                 data-testid="observers"
@@ -624,6 +611,9 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 resetNonObservationFieldValidations={resetNonObservationFieldValidations}
                 validationPath={OBSERVERS_VALIDATION_PATH}
                 validationProperties={observersValidationProperties}
+                validationPropertiesWithDirtyResetOnInputChange={
+                  validationPropertiesWithDirtyResetOnInputChange
+                }
               />
               <FishBeltObservationTable
                 areObservationsInputsDirty={areObservationsInputsDirty}

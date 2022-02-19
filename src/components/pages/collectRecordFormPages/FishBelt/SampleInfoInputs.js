@@ -27,9 +27,9 @@ const SampleInfoInputs = ({
   managementRegimes,
   resetNonObservationFieldValidations,
   sites,
+  validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const hasData = false
-  const { initialValues } = formik
   const managementSelectOptions = getOptions(managementRegimes, hasData)
   const siteSelectOptions = getOptions(sites, hasData)
   const validationsApiData = collectRecord?.validations?.results?.data
@@ -92,11 +92,10 @@ const SampleInfoInputs = ({
             resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
           }}
           {...siteValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(siteValidationProperties, 'site')}
           onBlur={formik.handleBlur}
           value={formik.values.site}
-          initialValue={initialValues.site}
           onChange={handleSiteChange}
-          resetInputDirty
         />
         <InputSelectWithLabelAndValidation
           label="Management"
@@ -109,12 +108,13 @@ const SampleInfoInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
           }}
-          {...managementValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            managementValidationProperties,
+            'management',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.management}
-          initialValue={initialValues.management}
           onChange={handleManagementChange}
-          resetInputDirty
         />
 
         <InputWithLabelAndValidation
@@ -129,11 +129,13 @@ const SampleInfoInputs = ({
             resetNonObservationFieldValidations({ validationPath: SAMPLE_DATE_VALIDATION_PATH })
           }}
           {...sampleDateValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            sampleDateValidationProperties,
+            'sample_date',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.sample_date}
-          initialValue={initialValues.sample_date}
           onChange={handleSampleDateChange}
-          resetInputDirty
         />
       </InputWrapper>
     </>
@@ -149,6 +151,7 @@ SampleInfoInputs.propTypes = {
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
+  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 SampleInfoInputs.defaultProps = {
