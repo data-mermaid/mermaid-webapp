@@ -60,9 +60,7 @@ const ManagementRegime = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.managementRegimeRecordUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, managementRegimeId, projectId])
@@ -161,6 +159,7 @@ const ManagementRegime = () => {
           <form id="management-regime-form" onSubmit={formik.handleSubmit}>
             <InputWrapper>
               <InputWithLabelAndValidation
+                required
                 label="Name"
                 id="name"
                 type="text"
@@ -219,7 +218,7 @@ const ManagementRegime = () => {
               />
             </InputWrapper>
           </form>
-          <EnhancedPrompt shouldPromptTrigger={formik.dirty}/>
+          <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
         </>
       }
       toolbar={
