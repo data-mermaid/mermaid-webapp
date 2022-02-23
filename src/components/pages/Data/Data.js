@@ -13,6 +13,7 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
   reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { H2 } from '../../generic/text'
@@ -54,9 +55,7 @@ const Data = () => {
             setIdsNotAssociatedWithData([projectId])
             setIsLoading(false)
           }
-          toast.error(
-            ...getToastArguments(language.error.submittedRecordsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
@@ -67,7 +66,7 @@ const Data = () => {
       {
         Header: 'Method',
         accessor: 'method',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Site',
