@@ -24,6 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Debug PR preview comment variables
+        run: |
+          echo '::debug::github.event.action is ${{github.event.action}}'
+          echo '::debug::preview url is https://${process.env.S3_BUCKET}/${issue.number}'
+        id: debug-preview-comment-vars
+
       - name: Cache Node Modules
         id: yarn_cache
         uses: actions/cache@v2
@@ -58,12 +64,6 @@ jobs:
       - name: Upload files to S3 with AWS CLI
         run: |
           aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete
-
-      - name: Debug PR preview comment variables
-        run: |
-          echo '::debug::github.event.action is ${{github.event.action}}'
-          echo '::debug::preview url is https://${process.env.S3_BUCKET}/${issue.number}'
-        id: debug-preview-comment-vars
 
       - name: 'PR Preview Comment'
         uses: actions/github-script@0.3.0
