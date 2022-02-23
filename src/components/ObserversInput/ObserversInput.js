@@ -17,6 +17,7 @@ const ObserversInput = ({
   resetNonObservationFieldValidations,
   validationPath,
   validationProperties,
+  validationPropertiesWithDirtyResetOnInputChange,
   ...restOfProps
 }) => {
   const observerNameOptions = getObserverNameOptions(observers)
@@ -41,7 +42,7 @@ const ObserversInput = ({
         resetNonObservationFieldValidations={() => {
           resetNonObservationFieldValidations({ validationPath })
         }}
-        {...validationProperties}
+        {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
         onChange={({ selectedItems }) => {
           const selectedObservers = filterObserverProfiles(selectedItems)
 
@@ -66,6 +67,7 @@ ObserversInput.propTypes = {
     validationType: PropTypes.string,
     validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   }).isRequired,
+  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 export default ObserversInput
