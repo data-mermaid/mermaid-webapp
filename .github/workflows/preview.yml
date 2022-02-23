@@ -59,10 +59,6 @@ jobs:
         run: |
           aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete
 
-      - name: Debug print github event action
-        run: echo '::debug::{github.event.action}'
-        id: debug-github-event-action
-
       - name: 'PR Preview Comment'
         uses: actions/github-script@0.3.0
         if: github.event.action == 'opened'
