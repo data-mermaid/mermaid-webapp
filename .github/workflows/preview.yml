@@ -27,7 +27,7 @@ jobs:
       - name: Debug PR preview comment variables
         run: |
           echo '::debug::github.event.action is ${{github.event.action}}'
-          echo '::debug::preview url is https://${{process.env.S3_BUCKET}}/${{issue.number}}'
+          echo '::debug::preview url is https://${{env.S3_BUCKET}}/${{issue.number}}'
         id: debug-preview-comment-vars
 
       - name: Cache Node Modules
