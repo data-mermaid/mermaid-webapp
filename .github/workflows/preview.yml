@@ -59,6 +59,12 @@ jobs:
         run: |
           aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete
 
+      - name: Debug PR preview comment variables
+        run: |
+          echo '::debug::github.event.action is ${{github.event.action}}'
+          echo '::debug::preview url is https://${{process.env.S3_BUCKET}}/${{issue_number}}'
+        id: debug-preview-comment-vars
+
       - name: 'PR Preview Comment'
         uses: actions/github-script@0.3.0
         if: github.event.action == 'opened'
