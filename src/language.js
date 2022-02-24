@@ -85,6 +85,7 @@ const success = {
   siteSave: 'Site saved.',
   managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
+  projectStatusSaved: `Test project selection saved.`,
 }
 
 const deleteCollectRecord = {
@@ -162,7 +163,8 @@ const pages = {
   },
 }
 
-const navigateAwayPrompt = 'Are you sure you want to leave this page? You have some unsaved changes.'
+const navigateAwayPrompt =
+  'Are you sure you want to leave this page? You have some unsaved changes.'
 
 export default {
   error,
