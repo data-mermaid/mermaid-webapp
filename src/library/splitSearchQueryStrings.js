@@ -20,10 +20,9 @@ export const splitSearchQueryStrings = (words) => {
       item = item.substr(1, item.length - 2)
     }
     item = item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-    searchItems.push(new RegExp(`.*${item}.*`))
+    // The 'i' modifier makes the regex case insensitive
+    searchItems.push(new RegExp(`.*${item}.*`, 'i'))
   }
 
   return searchItems
-
-  // return (words.match(/[^\s"]+|"([^"]*)"/gi) || []).map((word) => word.replace(/^"(.+(?="$))"$/, '$1'))
 }

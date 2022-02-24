@@ -2,7 +2,6 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
-import { matchSorter } from 'match-sorter'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
@@ -15,6 +14,7 @@ import {
   reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { H2 } from '../../generic/text'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import DataToolbarSection from './DataToolbarSection'
@@ -135,11 +135,11 @@ const Data = () => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {

@@ -12,6 +12,7 @@ import {
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -137,15 +138,6 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
-  const getRowValuesToFilter = (allowedKeys, row) => {
-    return allowedKeys.map((allowedKey) => {
-      // Get the matching values using allowed keys' dot-notation
-      return allowedKey.split('.').reduce((prev, curr) => {
-        return prev && prev[curr] || false
-      }, row)
-    })
-  }
-
   const tableGlobalFilters = useCallback((rows, ids, query) => {
     const keys = [
       'values.method.props.children',
@@ -160,16 +152,7 @@ const Collect = () => {
       return rows
     }
 
-    const filteredRows = rows.filter(row => {
-      const relevantValues = getRowValuesToFilter(keys, row)
-
-      return relevantValues.some((value) => {
-          // eslint-disable-next-line max-nested-callbacks
-          return queryTerms.some(term => term.test(value))
-        })
-    })
-
-  return filteredRows
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {
