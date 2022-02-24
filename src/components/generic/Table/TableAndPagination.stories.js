@@ -246,6 +246,13 @@ export const SortablePaginatedTable = () => {
     [],
   )
 
+  const tableDefaultSortByColumns = React.useMemo(() => [
+    {
+      id: 'col1',
+      desc: false,
+    },
+  ], [])
+
   const {
     canNextPage,
     canPreviousPage,
@@ -263,7 +270,7 @@ export const SortablePaginatedTable = () => {
   } = useTable({
     columns,
     data,
-    initialState: { pageSize: 5 },
+    initialState: { pageSize: 5, sortBy: tableDefaultSortByColumns },
     // Disables requirement to hold shift to enable multi-sort
     isMultiSortEvent: () => true
    }, useSortBy, usePagination)

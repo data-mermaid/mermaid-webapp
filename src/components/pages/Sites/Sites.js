@@ -8,7 +8,7 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
-import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import { reactTableNaturalSort, reactTableNaturalSortReactNodes } from '../../generic/Table/reactTableNaturalSort'
 import { ToolBarRow } from '../../generic/positioning'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
@@ -63,7 +63,7 @@ const Sites = () => {
       {
         Header: 'Name',
         accessor: 'name',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Reef Type',
@@ -94,6 +94,13 @@ const Sites = () => {
       })),
     [siteRecordsForUiDisplay, currentProjectPath],
   )
+
+  const tableDefaultSortByColumns = useMemo(() => [
+    {
+      id: 'name',
+      desc: false,
+    },
+  ], [])
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -131,7 +138,10 @@ const Sites = () => {
     {
       columns: tableColumns,
       data: tableCellData,
-      initialState: { pageSize: 15 },
+      initialState: {
+        pageSize: 15,
+        sortBy: tableDefaultSortByColumns
+      },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true

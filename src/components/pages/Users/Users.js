@@ -466,6 +466,13 @@ const Users = ({ currentUser }) => {
     })
   }, [observerProfiles, currentUser, handleRoleChange])
 
+  const tableDefaultSortByColumns = useMemo(() => [
+    {
+      id: 'name',
+      desc: false,
+    },
+  ], [])
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.email']
 
@@ -497,7 +504,10 @@ const Users = ({ currentUser }) => {
     {
       columns: tableColumns,
       data: tableCellData,
-      initialState: { pageSize: 15 },
+      initialState: {
+        pageSize: 15,
+        sortBy: tableDefaultSortByColumns
+      },
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort

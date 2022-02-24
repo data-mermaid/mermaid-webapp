@@ -14,6 +14,7 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import {
   reactTableNaturalSort,
   reactTableNaturalSortDates,
+  reactTableNaturalSortReactNodes,
 } from '../../generic/Table/reactTableNaturalSort'
 import { H2 } from '../../generic/text'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
@@ -67,7 +68,7 @@ const Data = () => {
       {
         Header: 'Method',
         accessor: 'method',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Site',
@@ -128,6 +129,13 @@ const Data = () => {
     [submittedRecordsForUiDisplay, currentProjectPath],
   )
 
+  const tableDefaultSortByColumns = useMemo(() => [
+    {
+      id: 'method',
+      desc: false,
+    },
+  ], [])
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
       'values.method.props.children',
@@ -164,7 +172,10 @@ const Data = () => {
     {
       columns: tableColumns,
       data: tableCellData,
-      initialState: { pageSize: 15 },
+      initialState: {
+        pageSize: 15,
+        sortBy: tableDefaultSortByColumns,
+      },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true

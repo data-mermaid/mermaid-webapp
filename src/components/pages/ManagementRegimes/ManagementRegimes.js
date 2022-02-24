@@ -131,6 +131,13 @@ const ManagementRegimes = () => {
     [managementRegimeRecordsForUiDisplay, currentProjectPath],
   )
 
+  const tableDefaultSortByColumns = useMemo(() => [
+    {
+      id: 'name',
+      desc: false,
+    },
+  ], [])
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.estYear']
 
@@ -162,7 +169,10 @@ const ManagementRegimes = () => {
     {
       columns: tableColumns,
       data: tableCellData,
-      initialState: { pageSize: 15 },
+      initialState: {
+        pageSize: 15,
+        sortBy: tableDefaultSortByColumns
+      },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true
