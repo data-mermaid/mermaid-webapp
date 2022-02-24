@@ -133,6 +133,8 @@ const Sites = () => {
       data: tableCellData,
       initialState: { pageSize: 15 },
       globalFilter: tableGlobalFilters,
+      // Disables requirement to hold shift to enable multi-sort
+      isMultiSortEvent: () => true
     },
     useGlobalFilter,
     useSortBy,
@@ -151,15 +153,20 @@ const Sites = () => {
           <thead>
             {headerGroups.map(headerGroup => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
+                {headerGroup.headers.map(column => {
+                const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+
+                return (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSorted={column.isSorted}
                     isSortedDescending={column.isSortedDesc}
+                    sortedIndex={column.sortedIndex}
+                    isMultiSortColumn={isMultiSortColumn}
                   >
                     {column.render('Header')}
                   </Th>
-                ))}
+                )
+})}
               </Tr>
             ))}
           </thead>

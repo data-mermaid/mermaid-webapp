@@ -198,9 +198,7 @@ const Collect = () => {
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const isMultiSortColumns = headerGroup.headers.some((header) => {
-                return header.sortedIndex > 0
-              })
+              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
 
               return (
                 <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -209,7 +207,7 @@ const Collect = () => {
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
-                      isMultiSortColumns={isMultiSortColumns}
+                      isMultiSortColumn={isMultiSortColumn}
                     >
                       {column.render('Header')}
                     </Th>

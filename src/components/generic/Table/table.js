@@ -30,7 +30,7 @@ export const Table = styled.table`
   min-width: 100%;
   border-collapse: collapse;
 `
-const getHeaderSortAfter = (isMultiSortColumns, sortedIndex, isSortedDescending) => {
+const getHeaderSortAfter = (isMultiSortColumn, sortedIndex, isSortedDescending) => {
   if (sortedIndex < 0) {
     return null
   }
@@ -45,7 +45,7 @@ const getHeaderSortAfter = (isMultiSortColumns, sortedIndex, isSortedDescending)
     content = ' \u25b2'
   }
 
-  if (isMultiSortColumns) {
+  if (isMultiSortColumn) {
     content = `${content} ${sortedIndex + 1}`
   }
 
@@ -53,7 +53,7 @@ const getHeaderSortAfter = (isMultiSortColumns, sortedIndex, isSortedDescending)
     &::after {
       content: '${content}';
       color: ${theme.color.black};
-      font-size: x-small;
+      font-size: small;
     }
   `
 }
@@ -67,11 +67,11 @@ export const Th = styled.th(
     &::after {
       content: ' \u25b2';
       color: ${theme.color.secondaryDisabledColor};
-      font-size: x-small;
+      font-size: small;
       white-space: nowrap;
     }
     ${getHeaderSortAfter(
-      props.isMultiSortColumns,
+      props.isMultiSortColumn,
       props.sortedIndex,
       props.isSortedDescending
     )}

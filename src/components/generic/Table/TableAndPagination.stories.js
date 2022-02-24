@@ -260,7 +260,13 @@ export const SortablePaginatedTable = () => {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
-  } = useTable({ columns, data, initialState: { pageSize: 5 } }, useSortBy, usePagination)
+  } = useTable({
+    columns,
+    data,
+    initialState: { pageSize: 5 },
+    // Disables requirement to hold shift to enable multi-sort
+    isMultiSortEvent: () => true
+   }, useSortBy, usePagination)
 
   const handleRowsNumberChange = e => {
     setPageSize(Number(e.target.value))
@@ -270,19 +276,24 @@ export const SortablePaginatedTable = () => {
     <>
       <Table {...getTableProps()}>
         <thead>
-          {headerGroups.map(headerGroup => (
+          {headerGroups.map(headerGroup => {
+            const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+
+            return (
             <Tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <Th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  isSorted={column.isSorted}
                   isSortedDescending={column.isSortedDesc}
+                  sortedIndex={column.sortedIndex}
+                  isMultiSortColumn={isMultiSortColumn}
                 >
                   {column.render('Header')}
                 </Th>
               ))}
             </Tr>
-          ))}
+          )
+})}
         </thead>
         <tbody {...getTableBodyProps()}>
           {page.map(row => {
