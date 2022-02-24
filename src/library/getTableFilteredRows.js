@@ -2,7 +2,7 @@ const getTableRowValuesToFilter = (allowedKeys, row) => {
   return allowedKeys.map((allowedKey) => {
     // Get the matching values using allowed keys' dot-notation
     return allowedKey.split('.').reduce((prev, curr) => {
-      return prev && prev[curr] || false
+      return (prev && prev[curr]) || false
     }, row)
   })
 }
@@ -16,13 +16,12 @@ const getTableRowValuesToFilter = (allowedKeys, row) => {
  * @returns {Array<Row>} Array of rows where one or more key matches the query terms.
  */
 export const getTableFilteredRows = (rows, keys, queryTerms) => {
-  return rows.filter(row => {
+  return rows.filter((row) => {
     const relevantValues = getTableRowValuesToFilter(keys, row)
 
     return relevantValues.some((value) => {
-        // eslint-disable-next-line max-nested-callbacks
-        return queryTerms.some(term => term.test(value))
-      })
+      // eslint-disable-next-line max-nested-callbacks
+      return queryTerms.some((term) => term.test(value))
+    })
   })
 }
-
