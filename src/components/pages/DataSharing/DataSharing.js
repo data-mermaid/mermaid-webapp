@@ -1,4 +1,4 @@
-import { Formik } from 'formik'
+import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo } from 'react'
@@ -6,12 +6,13 @@ import styled, { css } from 'styled-components'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
 import { hoverState } from '../../../library/styling/mediaQueries'
-import { ButtonPrimary } from '../../generic/buttons'
+import { ButtonPrimary, ButtonCallout } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
+import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
 import { getProjectInitialValues } from '../Admin/projectRecordInitialFormValue'
 import { H2, P } from '../../generic/text'
-import { IconInfo } from '../../icons'
+import { IconInfo, IconSave } from '../../icons'
 import { MaxWidthInputWrapper } from '../../generic/form'
 import { TooltipWithText } from '../../generic/tooltip'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -24,6 +25,23 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
+
+const projectCodes = {
+  status: { open: 90, test: 80 },
+  policy: { private: 10, publicSummary: 50 },
+}
+
+const getDataSharingMessage = (method, policy_code) => {
+  switch (policy_code) {
+    case projectCodes.policy.private:
+      return `${method} is now set to private`
+    case projectCodes.policy.publicSummary:
+      return `${method} is now set to public summary`
+    default:
+      // policy code for public is 100
+      return `${method} is now set to public `
+  }
+}
 
 const DataSharingTable = styled(Table)`
   td {
@@ -96,140 +114,168 @@ const DataSharing = () => {
   const formikOptions = {
     initialValues: initialFormValues,
     enableReinitialize: true,
+    onSubmit: (values, actions) => {
+      databaseSwitchboardInstance
+        .saveProject({ projectId, editedValues: values })
+        .then(() => {
+          actions.resetForm({ values }) // resets formiks dirty state
+          toast.success(...getToastArguments(language.success.projectSave))
+        })
+        .catch(() => {
+          toast.error(...getToastArguments(language.error.projectSave))
+        })
+    },
   }
 
+  const formik = useFormik(formikOptions)
+
   const findToolTipDescription = (policy) =>
-    dataPolicyOptions.find(({ label }) => label === policy).description
+    dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
-  const handleBenthicPolicyChange = (event, form) => {
-    const updatedValue = parseInt(event.target.value, 10)
+  const handleFishBeltPolicyChange = (event) => {
+    const policyValue = parseInt(event.target.value, 10)
+    const toastMessage = getDataSharingMessage('Fish Belt', policyValue)
 
-    form.setFieldValue('data_policy_benthiclit', updatedValue)
-    form.setFieldValue('data_policy_benthicpit', updatedValue)
-    form.setFieldValue('data_policy_habitatcomplexity', updatedValue)
+    formik.setFieldValue('data_policy_beltfish', policyValue)
+    toast.success(...getToastArguments(toastMessage))
+  }
+
+  const handleBenthicPolicyChange = (event) => {
+    const policyValue = parseInt(event.target.value, 10)
+    const toastMessage = getDataSharingMessage(
+      'Benthic: PIT, LIT, and Habitat Complexity',
+      policyValue,
+    )
+
+    formik.setFieldValue('data_policy_benthiclit', policyValue)
+    formik.setFieldValue('data_policy_benthicpit', policyValue)
+    formik.setFieldValue('data_policy_habitatcomplexity', policyValue)
+    toast.success(...getToastArguments(toastMessage))
+  }
+
+  const handleBleachingPolicyChange = (event) => {
+    const policyValue = parseInt(event.target.value, 10)
+    const toastMessage = getDataSharingMessage('Bleaching', policyValue)
+
+    formik.setFieldValue('data_policy_bleachingqc', policyValue)
+    toast.success(...getToastArguments(toastMessage))
+  }
+
+  const handleTestProjectStatusChange = (event) => {
+    const isChecked = event.target.checked
+    const status = isChecked ? projectCodes.status.test : projectCodes.status.open
+
+    formik.setFieldValue('status', status)
+    toast.success(...getToastArguments(language.success.projectStatusSaved))
   }
 
   const content = isAppOnline ? (
-    <Formik {...formikOptions}>
-      {(formik) => (
-        <>
-          <MaxWidthInputWrapper>
-            <h3>Data is much more powerful when shared.</h3>
-            <P>{language.pages.dataSharing.introductionParagraph}</P>
-            <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
-              <IconInfo /> Learn more about how your data is shared...
-            </ButtonPrimary>
-            <TableOverflowWrapper>
-              <DataSharingTable>
-                <thead>
-                  <Tr>
-                    <Th>&nbsp;</Th>
-                    <Th>
-                      <TooltipWithText
-                        tooltipText={findToolTipDescription('Private')}
-                        text={<>Private</>}
-                        id="private-tooltip"
+    <form id="data-sharing-form" onSubmit={formik.handleSubmit}>
+      <MaxWidthInputWrapper>
+        <h3>Data is much more powerful when shared.</h3>
+        <P>{language.pages.dataSharing.introductionParagraph}</P>
+        <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
+          <IconInfo /> Learn more about how your data is shared...
+        </ButtonPrimary>
+        <TableOverflowWrapper>
+          <DataSharingTable>
+            <thead>
+              <Tr>
+                <Th>&nbsp;</Th>
+                <Th>
+                  <TooltipWithText
+                    tooltipText={findToolTipDescription('Private')}
+                    text={<>Private</>}
+                    id="private-tooltip"
+                  />
+                </Th>
+                <Th>
+                  <TooltipWithText
+                    tooltipText={findToolTipDescription('Public Summary')}
+                    text={<>Public Summary</>}
+                    id="public-summary-tooltip"
+                  />
+                </Th>
+                <Th>
+                  <TooltipWithText
+                    tooltipText={findToolTipDescription('Public')}
+                    text={<>Public</>}
+                    id="public-tooltip"
+                  />
+                </Th>
+              </Tr>
+            </thead>
+            <tbody>
+              <Tr>
+                <Td>Fish Belt</Td>
+                {dataPolicyOptions.map((item) => (
+                  <Td key={item.value}>
+                    <label htmlFor={`fish-belt${item.value}`}>
+                      <input
+                        type="radio"
+                        value={item.value}
+                        name="fish-belt"
+                        id={`fish-belt${item.value}`}
+                        checked={formik.values.data_policy_beltfish === item.value}
+                        onChange={handleFishBeltPolicyChange}
                       />
-                    </Th>
-                    <Th>
-                      <TooltipWithText
-                        tooltipText={findToolTipDescription('Public Summary')}
-                        text={<>Public Summary</>}
-                        id="public-summary-tooltip"
+                    </label>
+                  </Td>
+                ))}
+              </Tr>
+              <Tr>
+                <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
+                {dataPolicyOptions.map((item) => (
+                  <Td key={item.value}>
+                    <label htmlFor={`benthic${item.value}`}>
+                      <input
+                        type="radio"
+                        value={item.value}
+                        name="benthic"
+                        id={`benthic${item.value}`}
+                        checked={formik.values.data_policy_benthiclit === item.value}
+                        onChange={handleBenthicPolicyChange}
                       />
-                    </Th>
-                    <Th>
-                      <TooltipWithText
-                        tooltipText={findToolTipDescription('Public')}
-                        text={<>Public</>}
-                        id="public-tooltip"
+                    </label>
+                  </Td>
+                ))}
+              </Tr>
+              <Tr>
+                <Td>Bleaching</Td>
+                {dataPolicyOptions.map((item) => (
+                  <Td key={item.value}>
+                    <label htmlFor={`bleaching${item.value}`}>
+                      <input
+                        type="radio"
+                        name="bleaching"
+                        id={`bleaching${item.value}`}
+                        value={item.value}
+                        checked={formik.values.data_policy_bleachingqc === item.value}
+                        onChange={handleBleachingPolicyChange}
                       />
-                    </Th>
-                  </Tr>
-                </thead>
-                <tbody>
-                  <Tr>
-                    <Td>Fish Belt</Td>
-                    {dataPolicyOptions.map((item) => (
-                      <Td key={item.value}>
-                        <label htmlFor={`fish-belt${item.value}`}>
-                          <input
-                            type="radio"
-                            value={item.value}
-                            name="fish-belt"
-                            id={`fish-belt${item.value}`}
-                            checked={
-                              formik.getFieldProps('data_policy_beltfish').value === item.value
-                            }
-                            onChange={(event) => {
-                              formik.setFieldValue(
-                                'data_policy_beltfish',
-                                parseInt(event.target.value, 10),
-                              )
-                            }}
-                          />
-                        </label>
-                      </Td>
-                    ))}
-                  </Tr>
-                  <Tr>
-                    <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
-                    {dataPolicyOptions.map((item) => (
-                      <Td key={item.value}>
-                        <label htmlFor={`benthic${item.value}`}>
-                          <input
-                            type="radio"
-                            value={item.value}
-                            name="benthic"
-                            id={`benthic${item.value}`}
-                            checked={
-                              formik.getFieldProps('data_policy_benthiclit').value === item.value
-                            }
-                            onChange={(event) => handleBenthicPolicyChange(event, formik)}
-                          />
-                        </label>
-                      </Td>
-                    ))}
-                  </Tr>
-                  <Tr>
-                    <Td>Bleaching</Td>
-                    {dataPolicyOptions.map((item) => (
-                      <Td key={item.value}>
-                        <label htmlFor={`bleaching${item.value}`}>
-                          <input
-                            type="radio"
-                            name="bleaching"
-                            id={`bleaching${item.value}`}
-                            value={item.value}
-                            checked={
-                              formik.getFieldProps('data_policy_bleachingqc').value === item.value
-                            }
-                            onChange={(event) => {
-                              formik.setFieldValue(
-                                'data_policy_bleachingqc',
-                                parseInt(event.target.value, 10),
-                              )
-                            }}
-                          />
-                        </label>
-                      </Td>
-                    ))}
-                  </Tr>
-                </tbody>
-              </DataSharingTable>
-            </TableOverflowWrapper>
-            <CheckBoxLabel>
-              <input id="test-project-toggle" type="checkbox" /> This is a test project
-            </CheckBoxLabel>
-            <P>{language.pages.dataSharing.testProjectHelperText}</P>
-            <DataSharingInfoModal
-              isOpen={issDataSharingInfoModalOpen}
-              onDismiss={closeDataSharingInfoModal}
-            />
-          </MaxWidthInputWrapper>
-        </>
-      )}
-    </Formik>
+                    </label>
+                  </Td>
+                ))}
+              </Tr>
+            </tbody>
+          </DataSharingTable>
+        </TableOverflowWrapper>
+        <CheckBoxLabel>
+          <input
+            id="test-project-toggle"
+            type="checkbox"
+            checked={formik.values.status === 80}
+            onChange={handleTestProjectStatusChange}
+          />{' '}
+          This is a test project
+        </CheckBoxLabel>
+        <P>{language.pages.dataSharing.testProjectHelperText}</P>
+        <DataSharingInfoModal
+          isOpen={issDataSharingInfoModalOpen}
+          onDismiss={closeDataSharingInfoModal}
+        />
+      </MaxWidthInputWrapper>
+    </form>
   ) : (
     <PageUnavailableOffline />
   )
@@ -241,12 +287,16 @@ const DataSharing = () => {
     />
   ) : (
     <ContentPageLayout
-      isPageContentLoading={isLoading}
+      isPageContentLoading={isAppOnline ? isLoading : false}
       content={content}
       toolbar={
-        <>
+        <ContentPageToolbarWrapper>
           <H2>Data Sharing</H2>
-        </>
+          <ButtonCallout type="submit" form="data-sharing-form" disabled={!formik.dirty}>
+            <IconSave />
+            Save
+          </ButtonCallout>
+        </ContentPageToolbarWrapper>
       }
     />
   )
