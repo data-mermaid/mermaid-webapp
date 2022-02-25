@@ -20,7 +20,6 @@ export const getTableFilteredRows = (rows, keys, queryTerms) => {
     const relevantValues = getTableRowValuesToFilter(keys, row)
 
     return relevantValues.some((value) => {
-      // eslint-disable-next-line max-nested-callbacks
       return queryTerms.some((term) => term.test(value))
     })
   })
