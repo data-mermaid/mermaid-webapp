@@ -36,6 +36,9 @@ test('Collect Records table sorts properly by method column', async () => {
 
   expect(within(tableRows[1]).getByText('Benthic LIT'))
 
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
+
   // click twice to change to descending order
   userEvent.dblClick(within(table).getByText('Method'))
 
@@ -68,6 +71,9 @@ test('Collect Records table sorts properly by site column', async () => {
 
   expect(within(tableRows[1]).getByText('Site C'))
 
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
+
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Site'))
 
@@ -75,7 +81,7 @@ test('Collect Records table sorts properly by site column', async () => {
 
   expect(within(tableRowsAfter[1]).getByText('Site C'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Site'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -107,6 +113,9 @@ test('Collect Records table sorts properly by management column', async () => {
 
   expect(within(tableRows[1]).getByText('Management Regimes B'))
 
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
+
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Management'))
 
@@ -114,7 +123,7 @@ test('Collect Records table sorts properly by management column', async () => {
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Management'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -145,6 +154,9 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
   const tableRows = within(table).getAllByRole('row')
 
   expect(within(tableRows[1]).getByText('5 LIT-1'))
+
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Sample Unit #'))
@@ -185,6 +197,9 @@ test('Collect Records table sorts properly by size column', async () => {
 
   expect(within(tableRows[1]).getByText('10m'))
 
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
+
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Size'))
 
@@ -224,6 +239,9 @@ test('Collect Records table sorts properly by depth column', async () => {
 
   expect(within(tableRows[1]).getByText('20'))
 
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
+
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Depth (m)'))
 
@@ -261,6 +279,9 @@ test('Collect Records table sorts properly by sample date column', async () => {
   const tableRows = within(table).getAllByRole('row')
 
   expect(within(tableRows[1]).getByText('March 11, 2021'))
+
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Sample Date'))
@@ -301,6 +322,9 @@ test('Collect Records table sorts properly by observers column', async () => {
   const tableRows = within(table).getAllByRole('row')
 
   expect(within(tableRows[1]).getByText('Al Leonard, Melissa Nunes'))
+
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Observers'))
@@ -343,11 +367,15 @@ test('Collect Records table sorts properly by status column', async () => {
 
   expect(within(tableRows[1]).getByText('Saved'))
 
+  // click the Method column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Method'))
+
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Status'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
+  console.log(tableRowsAfter[1])
   expect(within(tableRowsAfter[1]).getByText('Errors'))
 
   // // click again to change to descending order
