@@ -65,9 +65,7 @@ const Site = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.siteRecordUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.siteRecordUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId])
@@ -97,41 +95,35 @@ const Site = () => {
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
         .then(() => {
-          toast.success(
-            ...getToastArguments(language.success.siteSave)
-          )
+          toast.success(...getToastArguments(language.success.siteSave))
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.siteSave)
-          )
+          toast.error(...getToastArguments(language.error.siteSave))
         })
     },
     validate: (values) => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (!values.latitude) {
-        errors.latitude = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (values.latitude > 90 || values.latitude < -90) {
-        errors.latitude = [
-          { message: language.error.formValidation.latitude, id: 'Invalid Latitude' },
-        ]
+        errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
       }
 
       if (!values.longitude) {
-        errors.longitude = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (values.longitude > 180 || values.longitude < -180) {
         errors.longitude = [
-          { message: language.error.formValidation.longitude, id: 'Invalid Longitude' },
+          { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
         ]
       }
 

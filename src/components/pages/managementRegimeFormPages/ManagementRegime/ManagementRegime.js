@@ -133,10 +133,10 @@ const ManagementRegime = () => {
         values.open_access || values.no_take || isPartialSelectionSelected
 
       if (!values.name) {
-        errors.name = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
       if (!isOneOfRulesSelected) {
-        errors.rules = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.rules = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       return errors

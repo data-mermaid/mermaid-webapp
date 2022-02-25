@@ -27,6 +27,7 @@ import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumbe
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
 import theme from '../../../../theme'
+import { getValidationMessage } from '../../../../library/getValidationMessage'
 
 const NewSpeciesButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -390,7 +391,7 @@ const FishBeltObservationTable = ({
           {hasErrorValidation || hasWarningValidation ? (
             <TableValidationList>
               {observationValidationMessages.map((validation) => (
-                <li key={validation.id}>{validation.message}</li>
+                <li key={validation.id}>{getValidationMessage(validation)}</li>
               ))}
             </TableValidationList>
           ) : null}

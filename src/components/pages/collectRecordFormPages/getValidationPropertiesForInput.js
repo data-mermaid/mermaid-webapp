@@ -39,8 +39,10 @@ const getValidationPropertiesForInput = (inputValidations, areValidationsShowing
   }
 
   const validationsToDisplay = getValidationsToDisplay(inputValidations)
+
   const validationMessages = validationsToDisplay.map((validation) => ({
-    message: validation.name,
+    context: validation.context,
+    code: validation.code,
     id: validation.validation_id,
   }))
 
