@@ -1,6 +1,5 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
-import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -13,6 +12,7 @@ import {
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -141,7 +141,7 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableGlobalFilters = useCallback((rows, id, query) => {
+  const tableGlobalFilters = useCallback((rows, ids, query) => {
     const keys = [
       'values.method.props.children',
       'values.site',
@@ -151,11 +151,11 @@ const Collect = () => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {

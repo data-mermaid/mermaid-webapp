@@ -1,6 +1,5 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
-import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -10,6 +9,7 @@ import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -136,11 +136,11 @@ const ManagementRegimes = () => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {
