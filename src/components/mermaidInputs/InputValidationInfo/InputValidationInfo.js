@@ -5,6 +5,7 @@ import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
 import { InlineValidationButton } from '../../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
+import { getValidationMessage } from '../../../library/getValidationMessage'
 
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
@@ -16,6 +17,7 @@ const InputValidationInfo = ({
   resetNonObservationFieldValidations,
   validationMessages,
   validationType,
+  label,
 }) => {
   const areThereValidationMessages = validationMessages.length
 
@@ -24,9 +26,9 @@ const InputValidationInfo = ({
       {areThereValidationMessages &&
       (validationType === 'error' || validationType === 'warning') ? (
         <>
-          {validationMessages.map((validationMessage) => (
-            <InlineMessage type={validationType} key={validationMessage.id}>
-              <p>{validationMessage.message}</p>
+          {validationMessages.map((validation) => (
+            <InlineMessage type={validationType} key={validation.id}>
+              <p>{getValidationMessage(validation, label)}</p>
             </InlineMessage>
           ))}
         </>
@@ -56,6 +58,7 @@ InputValidationInfo.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
+  label: PropTypes.string,
 }
 
 InputValidationInfo.defaultProps = {
@@ -63,6 +66,7 @@ InputValidationInfo.defaultProps = {
   resetNonObservationFieldValidations: () => {},
   validationMessages: [],
   validationType: undefined,
+  label: '',
 }
 
 export default InputValidationInfo
