@@ -33,19 +33,19 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
               obs_belt_fishes: [
                 [
                   {
-                    name: 'observation validation with ok status shoulnt show',
+                    code: 'observation validation with ok status shouldnt show',
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
                     context: { observation_id: '7' },
                   },
                   {
-                    name: 'observation warning 1',
+                    code: 'observation warning 1',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
                     context: { observation_id: '7' },
                   },
                   {
-                    name: 'observation warning 2',
+                    code: 'observation warning 2',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
                     context: { observation_id: '7' },
@@ -56,12 +56,12 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
                 site: [
                   {
                     validation_id: Math.random(),
-                    name: 'firstWarning',
+                    code: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    name: 'secondWarning',
+                    code: 'secondWarning',
                     status: 'warning',
                   },
                 ],
@@ -131,9 +131,10 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   expect(within(observationsTable).queryByText('observation error 1')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()
   expect(
-    within(observationsTable).queryByText('observation validation with ok status shoulnt show'),
+    within(observationsTable).queryByText('observation validation with ok status shouldnt show'),
   ).not.toBeInTheDocument()
 }, 50000)
+
 test('Validating an empty collect record, and then editing an input with errors shows the errors until the save button is pressed. Validations show when the validation button is clicked again.', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
 
