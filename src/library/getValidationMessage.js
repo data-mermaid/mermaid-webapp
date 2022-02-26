@@ -1,13 +1,7 @@
-const generateRequiredMessage = (label) => {
-  return label.length ? `${label} is required` : 'required'
-}
-
-export const getValidationMessage = (validation, label = '') => {
+export const getValidationMessage = (validation) => {
   const { code, context, name } = validation
 
   switch (code) {
-    case 'required':
-      return generateRequiredMessage(label)
     case 'site_not_found':
       return 'Site record not available for similarity validation'
     case 'not_unique_site':

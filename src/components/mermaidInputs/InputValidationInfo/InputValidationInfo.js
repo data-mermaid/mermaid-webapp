@@ -17,7 +17,6 @@ const InputValidationInfo = ({
   resetNonObservationFieldValidations,
   validationMessages,
   validationType,
-  label,
 }) => {
   const areThereValidationMessages = validationMessages.length
 
@@ -28,7 +27,7 @@ const InputValidationInfo = ({
         <>
           {validationMessages.map((validation) => (
             <InlineMessage type={validationType} key={validation.id}>
-              <p>{getValidationMessage(validation, label)}</p>
+              <p>{getValidationMessage(validation)}</p>
             </InlineMessage>
           ))}
         </>
@@ -58,7 +57,6 @@ InputValidationInfo.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
-  label: PropTypes.string,
 }
 
 InputValidationInfo.defaultProps = {
@@ -66,7 +64,6 @@ InputValidationInfo.defaultProps = {
   resetNonObservationFieldValidations: () => {},
   validationMessages: [],
   validationType: undefined,
-  label: '',
 }
 
 export default InputValidationInfo
