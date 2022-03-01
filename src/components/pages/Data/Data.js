@@ -231,7 +231,7 @@ const Data = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageNoData noDataText={language.pages.submittedTable.noDataText} />
+    <PageNoData mainText={language.pages.submittedTable.noDataText} />
   )
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />

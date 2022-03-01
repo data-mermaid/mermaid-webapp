@@ -13,23 +13,23 @@ const PageNoDataContainer = styled(Column)`
   }
 `
 
-const PageNoData = ({ noDataText, noDataExtraText }) => {
+const PageNoData = ({ mainText, subText }) => {
   return (
     <PageNoDataContainer>
-      <h3>{noDataText}</h3>
-      <p>{noDataExtraText}</p>
+      <h3>{mainText}</h3>
+      <p>{subText}</p>
     </PageNoDataContainer>
   )
 }
 
 PageNoData.propTypes = {
-  noDataText: PropTypes.string,
-  noDataExtraText: PropTypes.string,
+  mainText: PropTypes.string,
+  subText: PropTypes.string,
 }
 
 PageNoData.defaultProps = {
-  noDataText: 'No Data',
-  noDataExtraText: '',
+  mainText: 'No Data',
+  subText: '',
 }
 
 export default PageNoData

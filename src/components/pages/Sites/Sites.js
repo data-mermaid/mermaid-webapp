@@ -200,8 +200,8 @@ const Sites = () => {
     </>
   ) : (
     <PageNoData
-      noDataText={language.pages.siteTable.noDataText}
-      noDataExtraText={language.pages.siteTable.noDataExtraText}
+      mainText={language.pages.siteTable.noDataText}
+      subText={language.pages.siteTable.noDataExtraText}
     />
   )
 

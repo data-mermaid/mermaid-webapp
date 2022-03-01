@@ -119,7 +119,7 @@ const pages = {
   projectsList: {
     offlineReadyCheckboxLabel: 'Offline Ready',
     noDataTextOnline: `You aren't part of any projects yet.`,
-    noDataExtraTextOnline: `Create a new project or get your admin to add you to some.`,
+    noDataSubTextOnline: `Create a new project or get your admin to add you to some.`,
     noDataTextOffline: `You don't have any offline projects.`,
   },
   collectRecord: {

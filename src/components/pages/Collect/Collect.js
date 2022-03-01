@@ -245,7 +245,7 @@ const Collect = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageNoData noDataText={language.pages.collectTable.noDataText} />
+    <PageNoData mainText={language.pages.collectTable.noDataText} />
   )
 
   return idsNotAssociatedWithData.length ? (

@@ -66,8 +66,8 @@ const Projects = ({ apiSyncInstance }) => {
     ))
   ) : (
     <PageNoData
-      noDataText={language.pages.projectsList.noDataTextOnline}
-      noDataExtraText={language.pages.projectsList.noDataTextOnline}
+      mainText={language.pages.projectsList.noDataTextOnline}
+      subText={language.pages.projectsList.noDataSubTextOnline}
     />
   )
 

@@ -231,8 +231,8 @@ const ManagementRegimes = () => {
     </>
   ) : (
     <PageNoData
-      noDataText={language.pages.managementRegimeTable.noDataText}
-      noDataExtraText={language.pages.managementRegimeTable.noDataExtraText}
+      mainText={language.pages.managementRegimeTable.noDataText}
+      subText={language.pages.managementRegimeTable.noDataExtraText}
     />
   )
 
