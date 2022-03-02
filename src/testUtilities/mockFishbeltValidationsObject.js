@@ -217,7 +217,7 @@ export default {
         validation_id: 'ba4ac7677b7878d0a321cd3913f264ca',
       },
       {
-        name: 'OK validation shouldnt show',
+        name: `OK validation shouldn't show`,
         status: 'ok',
         validation_id: '9175eb636ead3bc01a94378fe4d48af8',
       },

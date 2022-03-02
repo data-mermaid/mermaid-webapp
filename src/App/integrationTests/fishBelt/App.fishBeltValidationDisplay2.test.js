@@ -83,7 +83,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(screen.getByText('record level error 2')).toBeInTheDocument()
   expect(screen.getByText('record level warning 1')).toBeInTheDocument()
   expect(screen.getByText('record level warning 2')).toBeInTheDocument()
-  expect(screen.queryByText('OK validation shouldnt show')).not.toBeInTheDocument()
+  expect(screen.queryByText(`OK validation shouldn't show`)).not.toBeInTheDocument()
 
   // input level validations
 
@@ -112,7 +112,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
   expect(
-    within(observationsTable).queryByText('observation validation with ok status shouldnt show'),
+    within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()
 })
 
@@ -134,7 +134,7 @@ test('Fishbelt validations will show only the first error when there are multipl
               obs_belt_fishes: [
                 [
                   {
-    within(observationsTable).queryByText("observation validation with ok status shouldn't show"),
+                    code: `observation validation with ok status shouldn't show`,
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
                     context: { observation_id: '7' },
@@ -260,6 +260,6 @@ test('Fishbelt validations will show only the first error when there are multipl
   expect(within(observationsTable).queryByText('observation warning 1')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning 2')).not.toBeInTheDocument()
   expect(
-    within(observationsTable).queryByText('observation validation with ok status shouldnt show'),
+    within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()
 })

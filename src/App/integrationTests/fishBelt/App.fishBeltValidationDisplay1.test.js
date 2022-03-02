@@ -33,7 +33,7 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
               obs_belt_fishes: [
                 [
                   {
-                    code: 'observation validation with ok status shouldnt show',
+                    code: `observation validation with ok status shouldn't show`,
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
                     context: { observation_id: '7' },
@@ -131,7 +131,7 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   expect(within(observationsTable).queryByText('observation error 1')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()
   expect(
-    within(observationsTable).queryByText('observation validation with ok status shouldnt show'),
+    within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()
 }, 50000)
 
