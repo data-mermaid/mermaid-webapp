@@ -11,7 +11,7 @@ export default {
         biomass_range: PropTypes.arrayOf(PropTypes.number),
         minimum_fish_count: PropTypes.number,
       }),
-      code: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+      code: PropTypes.node,
       name: PropTypes.string,
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }),
