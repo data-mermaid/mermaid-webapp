@@ -25,6 +25,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
+import PageNoData from '../PageNoData'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -52,9 +53,7 @@ const Collect = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.collectRecordsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
@@ -190,7 +189,7 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const table = (
+  const table = collectRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -245,6 +244,8 @@ const Collect = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageNoData mainText={language.pages.collectTable.noDataText} />
   )
 
   return idsNotAssociatedWithData.length ? (

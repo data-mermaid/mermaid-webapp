@@ -24,6 +24,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import PageNoData from '../PageNoData'
 
 const Data = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
@@ -175,7 +176,7 @@ const Data = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const table = (
+  const table = submittedRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -230,6 +231,8 @@ const Data = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageNoData mainText={language.pages.submittedTable.noDataText} />
   )
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
