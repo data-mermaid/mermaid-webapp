@@ -1,5 +1,7 @@
+import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -76,7 +78,7 @@ const SitesMixin = (Base) =>
         // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.project_sites.put(siteToSubmit)
 
-        return this._authenticatedAxios
+        return axios
           .post(
             `${this._apiBaseUrl}/push/`,
             {
@@ -86,6 +88,7 @@ const SitesMixin = (Base) =>
               params: {
                 force: true,
               },
+              ...await getAuthorizationHeaders(this._getAccessToken)
             },
           )
           .then((response) => {

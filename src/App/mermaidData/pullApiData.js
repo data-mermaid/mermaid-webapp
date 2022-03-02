@@ -3,13 +3,14 @@ import {
   getLastRevisionNumbersPulledForAProject,
   persistLastRevisionNumbersPulled,
 } from './lastRevisionNumbers'
+import { getAuthorizationHeaders } from '../../library/getAuthorizationHeaders'
 
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
 
 export const pullApiData = async ({
   dexieInstance,
-  auth0Token,
+  getAccessToken,
   apiBaseUrl,
   apiDataNamesToPull,
   projectId,
@@ -30,11 +31,10 @@ export const pullApiData = async ({
     {},
   )
 
-  const pullResponse = await axios.post(`${apiBaseUrl}/pull/`, pullRequestBody, {
-    headers: {
-      Authorization: `Bearer ${auth0Token}`,
-    },
-  })
+  const pullResponse = await axios.post(
+    `${apiBaseUrl}/pull/`, pullRequestBody,
+    await getAuthorizationHeaders(getAccessToken)
+  )
 
   const apiData = pullResponse.data
 

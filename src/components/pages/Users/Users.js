@@ -1,5 +1,4 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
-import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -20,6 +19,7 @@ import {
   IconAlert,
 } from '../../icons'
 import { pluralize } from '../../../library/strings/pluralize'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -478,11 +478,11 @@ const Users = ({ currentUser }) => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {

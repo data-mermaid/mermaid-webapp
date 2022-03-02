@@ -1,6 +1,5 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
-import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -10,6 +9,7 @@ import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -22,6 +22,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
+import PageNoData from '../PageNoData'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -48,9 +49,7 @@ const ManagementRegimes = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.managementRegimeRecordsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
@@ -143,11 +142,11 @@ const ManagementRegimes = () => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {
@@ -187,7 +186,7 @@ const ManagementRegimes = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const table = (
+  const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -247,6 +246,11 @@ const ManagementRegimes = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageNoData
+      mainText={language.pages.managementRegimeTable.noDataText}
+      subText={language.pages.managementRegimeTable.noDataExtraText}
+    />
   )
 
   return idsNotAssociatedWithData.length ? (

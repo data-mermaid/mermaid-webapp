@@ -11,17 +11,10 @@ const SyncApiDataIntoOfflineStorage = class {
     return dataList.filter((item) => item.uiState_pushToApi)
   }
 
-  constructor({ dexieInstance, apiBaseUrl, auth0Token }) {
+  constructor({ dexieInstance, apiBaseUrl, getAccessToken }) {
     this._dexieInstance = dexieInstance
     this._apiBaseUrl = apiBaseUrl
-    this._auth0Token = auth0Token
-    this._authenticatedAxios = auth0Token
-      ? axios.create({
-          headers: {
-            Authorization: `Bearer ${auth0Token}`,
-          },
-        })
-      : undefined
+    this._getAccessToken = getAccessToken
   }
 
   #pullEverythingButProjectRelated = () => {
@@ -36,7 +29,7 @@ const SyncApiDataIntoOfflineStorage = class {
 
     return pullApiData({
       dexieInstance: this._dexieInstance,
-      auth0Token: this._auth0Token,
+      getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: apiDataNamesToPullNonProject,
     })
@@ -55,7 +48,7 @@ const SyncApiDataIntoOfflineStorage = class {
     const pullProjectPromises = offlineReadyProjects.map((project) =>
       pullApiData({
         dexieInstance: this._dexieInstance,
-        auth0Token: this._auth0Token,
+        getAccessToken: this._getAccessToken,
         apiBaseUrl: this._apiBaseUrl,
         apiDataNamesToPull: apiDataNamesToPullNonProject,
         projectId: project.id,
@@ -74,6 +67,7 @@ const SyncApiDataIntoOfflineStorage = class {
       this._dexieInstance.project_profiles.toArray(),
       this._dexieInstance.project_sites.toArray(),
       this._dexieInstance.projects.toArray(),
+      this._getAccessToken()
     ]).then(
       ([
         benthic_attributes,
@@ -83,8 +77,9 @@ const SyncApiDataIntoOfflineStorage = class {
         project_profiles,
         project_sites,
         projects,
+        token,
       ]) => {
-        return this._authenticatedAxios.post(
+        return axios.post(
           `${this._apiBaseUrl}/push/`,
           {
             benthic_attributes: this.#getOnlyModifiedAndDeletedItems(benthic_attributes),
@@ -98,6 +93,9 @@ const SyncApiDataIntoOfflineStorage = class {
           {
             params: {
               force: true,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
           },
         )
@@ -116,7 +114,7 @@ const SyncApiDataIntoOfflineStorage = class {
 
     return pullApiData({
       dexieInstance: this._dexieInstance,
-      auth0Token: this._auth0Token,
+      getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: ['fish_species'],
     })
@@ -140,7 +138,7 @@ const SyncApiDataIntoOfflineStorage = class {
 
     const pullResponse = await pullApiData({
       dexieInstance: this._dexieInstance,
-      auth0Token: this._auth0Token,
+      getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: allTheDataNames,
       projectId,
@@ -170,7 +168,7 @@ const SyncApiDataIntoOfflineStorage = class {
 
     const pullResponse = await pullApiData({
       dexieInstance: this._dexieInstance,
-      auth0Token: this._auth0Token,
+      getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: apiDataNamesToPullNonProject,
       projectId,

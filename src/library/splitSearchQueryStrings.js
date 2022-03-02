@@ -3,5 +3,26 @@
 // example A: splitSearchQueryStrings(`"to the" dustin`).
 // Also supports multi quotes in string.
 // example B: splitSearchQueryStrings(`"to the" dustin "kim"`)
-export const splitSearchQueryStrings = (words) =>
-  (words.match(/[^\s"]+|"([^"]*)"/gi) || []).map((word) => word.replace(/^"(.+(?="$))"$/, '$1'))
+export const splitSearchQueryStrings = (words) => {
+  // eslint-disable-next-line no-useless-escape
+  const regex = /"(.*?)"|([a-zA-Z0-9_,;\-\+]+)|(\|)/
+  const parts = words.split(regex)
+  const searchItems = []
+
+  for (let n = 0; n < parts.length; n++) {
+    let item = parts[n]
+
+    if (!item || item.trim().length === 0) {
+      // eslint-disable-next-line no-continue
+      continue
+    }
+    if (item.startsWith('"')) {
+      item = item.substr(1, item.length - 2)
+    }
+    item = item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    // The 'i' modifier makes the regex case insensitive
+    searchItems.push(new RegExp(`.*${item}.*`, 'i'))
+  }
+
+  return searchItems
+}

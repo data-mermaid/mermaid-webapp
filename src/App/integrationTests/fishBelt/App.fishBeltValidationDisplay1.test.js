@@ -222,10 +222,10 @@ test('Validating an empty collect record, and then editing an input with errors 
 
   userEvent.type(screen.getByLabelText('Depth'), '1')
 
-  // validations remain showing
+  // validations remain showing, except Depth is changed
   expect(await within(screen.getByTestId('site')).findByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('management')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).queryByText('required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
   expect(within(screen.getByTestId('transect_number')).getByText('required')).toBeInTheDocument()

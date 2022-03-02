@@ -34,6 +34,7 @@ const FishbeltTransectInputs = ({
   ignoreNonObservationFieldValidations,
   onSizeBinChange,
   resetNonObservationFieldValidations,
+  validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const {
     belttransectwidths,
@@ -240,7 +241,10 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: TRANSECT_NUMBER_VALIDATION_PATH })
           }}
-          {...transectNumberValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            transectNumberValidationProperties,
+            'number',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.number}
           onChange={handleTransectNumberChange}
@@ -272,7 +276,10 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: SAMPLE_TIME_VALIDATION_PATH })
           }}
-          {...sampleTimeValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            sampleTimeValidationProperties,
+            'sample_time',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.sample_time}
           onChange={handleSampleTimeChange}
@@ -288,7 +295,7 @@ const FishbeltTransectInputs = ({
           }}
           testId="depth"
           type="number"
-          {...depthValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(depthValidationProperties, 'depth')}
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
@@ -306,7 +313,10 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: LENGHT_SURVEYED_VALIDATION_PATH })
           }}
-          {...lengthSurveyedValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            lengthSurveyedValidationProperties,
+            'len_surveyed',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
@@ -322,7 +332,7 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
           }}
-          {...widthValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(widthValidationProperties, 'width')}
           onBlur={formik.handleBlur}
           value={formik.values.width}
           name="width"
@@ -340,7 +350,10 @@ const FishbeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
           }}
-          {...sizeBinValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            sizeBinValidationProperties,
+            'size_bin',
+          )}
           value={formik.values.size_bin}
           onChange={handleSizeBinChange}
         />
@@ -458,6 +471,7 @@ FishbeltTransectInputs.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   onSizeBinChange: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 FishbeltTransectInputs.defaultProps = {
