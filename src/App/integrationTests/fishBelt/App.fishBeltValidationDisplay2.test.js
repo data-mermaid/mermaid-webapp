@@ -134,7 +134,7 @@ test('Fishbelt validations will show only the first error when there are multipl
               obs_belt_fishes: [
                 [
                   {
-                    code: 'observation validation with ok status shouldnt show',
+    within(observationsTable).queryByText("observation validation with ok status shouldn't show"),
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
                     context: { observation_id: '7' },
