@@ -375,7 +375,6 @@ test('Collect Records table sorts properly by status column', async () => {
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  console.log(tableRowsAfter[1])
   expect(within(tableRowsAfter[1]).getByText('Errors'))
 
   // // click again to change to descending order

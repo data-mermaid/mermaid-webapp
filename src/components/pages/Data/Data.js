@@ -13,8 +13,7 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
-  reactTableNaturalSortDates,
-  reactTableNaturalSortReactNodes,
+  reactTableNaturalSortDates
 } from '../../generic/Table/reactTableNaturalSort'
 import { H2 } from '../../generic/text'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
