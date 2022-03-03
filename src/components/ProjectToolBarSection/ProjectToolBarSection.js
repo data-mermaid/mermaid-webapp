@@ -111,7 +111,7 @@ return (
             <option value="name">Project Name</option>
             <option value="countries">Country</option>
             <option value="num_sites">Number of Sites</option>
-            <option value="updated_on">Last Updated Dates</option>
+            <option value="updated_on">Last Updated Date</option>
           </select>
         </SortByLabelWrapper>
         <ButtonSecondary aria-label="sort-projects" onClick={() => setIsProjectSortAsc(!isProjectSortAsc)}>
