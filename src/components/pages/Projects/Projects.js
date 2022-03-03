@@ -24,8 +24,8 @@ const Projects = ({ apiSyncInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
   const [projects, setProjects] = useState([])
-  const [projectFilter, setProjectFilter] = useState("")
-  const [projectSortKey, setProjectSortKey] = useState("")
+  const [projectFilter, setProjectFilter] = useState('')
+  const [projectSortKey, setProjectSortKey] = useState('name')
   const [isProjectSortAsc, setIsProjectSortAsc] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
@@ -54,32 +54,32 @@ const Projects = ({ apiSyncInstance }) => {
   const getIsProjectOffline = (projectId) =>
     !!offlineReadyProjectIds.find((offlineProject) => offlineProject.id === projectId)
 
-  const getFilteredSortedProjects = () => {
-    let filteredSortedProjects
+  const getAvailableProjects = () => {
+    if (isAppOnline) { return projects }
 
-    if (isAppOnline) {
-      filteredSortedProjects = projects
-    }
+    return projects.filter((project) =>
+      getObjectById(offlineReadyProjectIds, project.id),
+    )
+  }
 
-    if (!isAppOnline) {
-      filteredSortedProjects = projects.filter((project) =>
-        getObjectById(offlineReadyProjectIds, project.id),
-      )
-    }
-
+  const getFilteredProjects = (projectsToFilter) => {
     const queryTerms = splitSearchQueryStrings(projectFilter)
 
-    // if (queryTerms && queryTerms.length) {
-    //   filteredSortedProjects = filteredSortedProjects.filter((project) => {
+    if (queryTerms && queryTerms.length) {
+      const filterKeys = ['name', 'countries']
 
-    //   })
-    // }
+      return projectsToFilter.filter((project) => {
+        return filterKeys.some((key) => {
+          return queryTerms.some(term => term.test(project[key].toString()))
+        })
+      })
+    }
 
-    // Filter by filter term (name and country)
-    // filteredSortedProjects = filteredSortedProjects.filter()
+    return projectsToFilter
+  }
 
-    // Sort by property asc and desc
-    filteredSortedProjects = filteredSortedProjects.sort((a, b) => {
+  const getSortedProjects = (projectsToSort) => {
+    const sortedProjects = projectsToSort.sort((a, b) => {
       if (a[projectSortKey] > b[projectSortKey]) { return 1 }
       if (a[projectSortKey] < b[projectSortKey]) { return -1 }
 
@@ -87,9 +87,17 @@ const Projects = ({ apiSyncInstance }) => {
     })
 
     // Reverse array for descending sort
-    if (!isProjectSortAsc) { return filteredSortedProjects.reverse() }
+    if (!isProjectSortAsc) { return sortedProjects.reverse() }
 
-    return filteredSortedProjects
+    return sortedProjects
+  }
+
+  const getFilteredSortedProjects = () => {
+    const availableProjects = getAvailableProjects()
+    const filteredProjects = getFilteredProjects(availableProjects)
+    const sortedProjects = getSortedProjects(filteredProjects)
+
+    return sortedProjects
   }
 
   const filteredSortedProjects = getFilteredSortedProjects()
