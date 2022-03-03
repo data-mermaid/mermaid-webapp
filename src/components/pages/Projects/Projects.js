@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { HomePageLayout } from '../../Layout'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import LoadingIndicator from '../../LoadingIndicator/LoadingIndicator'
 import ProjectCard from '../../ProjectCard'
 import ProjectToolBarSection from '../../ProjectToolBarSection'
@@ -22,6 +23,9 @@ const Projects = ({ apiSyncInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
   const [projects, setProjects] = useState([])
+  const [projectFilter, setProjectFilter] = useState("")
+  const [projectSortKey, setProjectSortKey] = useState("")
+  const [isProjectSortAsc, setIsProjectSortAsc] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
@@ -51,37 +55,70 @@ const Projects = ({ apiSyncInstance }) => {
   const getIsProjectOffline = (projectId) =>
     !!offlineReadyProjectIds.find((offlineProject) => offlineProject.id === projectId)
 
-  const offlineReadyProjects = projects.filter((project) =>
-    getObjectById(offlineReadyProjectIds, project.id),
-  )
+  const getFilteredSortedProjects = () => {
+    let filteredSortedProjects
 
-  const projectCardsListOnline = projects.map((project) => (
-    <ProjectCard
-      role="listitem"
-      project={{ ...project }}
-      key={project.id}
-      apiSyncInstance={apiSyncInstance}
-      isOfflineReady={getIsProjectOffline(project.id)}
-    />
-  ))
+    if (isAppOnline) {
+      filteredSortedProjects = projects
+    }
 
-  const projectCardsListOffline = offlineReadyProjects.map((project) => (
-    <ProjectCard
-      role="listitem"
-      project={project}
-      key={project.id}
-      apiSyncInstance={apiSyncInstance}
-      isOfflineReady={getIsProjectOffline(project.id)}
-    />
-  ))
+    if (!isAppOnline) {
+      filteredSortedProjects = projects.filter((project) =>
+        getObjectById(offlineReadyProjectIds, project.id),
+      )
+    }
+
+    const queryTerms = splitSearchQueryStrings(projectFilter)
+
+    // if (queryTerms && queryTerms.length) {
+    //   filteredSortedProjects = filteredSortedProjects.filter((project) => {
+
+    //   })
+    // }
+
+    // Filter by filter term (name and country)
+    // filteredSortedProjects = filteredSortedProjects.filter()
+
+    // Sort by property asc and desc
+    filteredSortedProjects = filteredSortedProjects.sort((a, b) => {
+      if (a[projectSortKey] > b[projectSortKey]) { return 1 }
+      if (a[projectSortKey] < b[projectSortKey]) { return -1 }
+
+      return 0
+    })
+
+    // Reverse array for descending sort
+    if (!isProjectSortAsc) { return filteredSortedProjects.reverse() }
+
+    return filteredSortedProjects
+  }
+
+  const projectCardsList = getFilteredSortedProjects().map((project) => (
+      <ProjectCard
+        role="listitem"
+        project={{ ...project }}
+        key={project.id}
+        apiSyncInstance={apiSyncInstance}
+        isOfflineReady={getIsProjectOffline(project.id)}
+      />
+    ))
 
   return isLoading ? (
     <LoadingIndicator aria-label="projects list loading indicator" />
   ) : (
     <HomePageLayout
-      topRow={<ProjectToolBarSection />}
+      topRow={
+        <ProjectToolBarSection
+          projectFilter={projectFilter}
+          setProjectFilter={setProjectFilter}
+          projectSortKey={projectSortKey}
+          setProjectSortKey={setProjectSortKey}
+          isProjectSortAsc={isProjectSortAsc}
+          setIsProjectSortAsc={setIsProjectSortAsc}
+        />
+      }
       bottomRow={
-        <div role="list">{isAppOnline ? projectCardsListOnline : projectCardsListOffline}</div>
+        <div role="list">{projectCardsList}</div>
       }
     />
   )
