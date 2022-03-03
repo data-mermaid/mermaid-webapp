@@ -109,6 +109,8 @@ const ManagementRulesInput = ({
       no_take: false,
       partial_restrictions: true,
     })
+    onChange('open_access', false)
+    onChange('no_take', false)
   }
 
   const handlePartialRestrictionChoicesChange = (e) => {
@@ -126,7 +128,7 @@ const ManagementRulesInput = ({
   const showPartialRestrictionChoices =
     managementRulesRadioInputValue.partial_restrictions &&
     partialRestrictionOptions.map(({ value, label: optionLabel }) => (
-      <PartialRestrictionsCheckboxCheckRadioWrapper>
+      <PartialRestrictionsCheckboxCheckRadioWrapper key={value}>
         <input
           id={value}
           type="checkbox"
@@ -141,7 +143,7 @@ const ManagementRulesInput = ({
     ))
 
   return (
-    <InputRow {...restOfProps}>
+    <InputRow required {...restOfProps}>
       <label htmlFor={id}>{label}</label>
       <div>
         <StyledCheckRadioWrapper>

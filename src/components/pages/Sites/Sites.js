@@ -1,6 +1,5 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
-import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -10,6 +9,7 @@ import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -22,6 +22,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
+import PageNoData from '../PageNoData'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -49,9 +50,7 @@ const Sites = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.siteRecordsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
@@ -105,11 +104,11 @@ const Sites = () => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {
@@ -138,20 +137,20 @@ const Sites = () => {
     useSortBy,
     usePagination,
   )
-  const handleRowsNumberChange = e => {
+  const handleRowsNumberChange = (e) => {
     setPageSize(Number(e.target.value))
   }
 
-  const handleGlobalFilterChange = value => setGlobalFilter(value)
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const table = (
+  const table = siteRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map(headerGroup => (
+            {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
+                {headerGroup.headers.map((column) => (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     isSorted={column.isSorted}
@@ -164,12 +163,12 @@ const Sites = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map(row => {
+            {page.map((row) => {
               prepareRow(row)
 
               return (
                 <Tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
+                  {row.cells.map((cell) => {
                     return (
                       <Td {...cell.getCellProps()} align={cell.column.align}>
                         {cell.render('Cell')}
@@ -199,6 +198,11 @@ const Sites = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageNoData
+      mainText={language.pages.siteTable.noDataText}
+      subText={language.pages.siteTable.noDataExtraText}
+    />
   )
 
   return idsNotAssociatedWithData.length ? (

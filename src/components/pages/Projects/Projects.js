@@ -15,6 +15,7 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getObjectById } from '../../../library/getObjectById'
+import PageNoData from '../PageNoData'
 
 /**
  * All Projects page (lists projects)
@@ -45,9 +46,7 @@ const Projects = ({ apiSyncInstance }) => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.projectsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
@@ -93,7 +92,10 @@ const Projects = ({ apiSyncInstance }) => {
     return filteredSortedProjects
   }
 
-  const projectCardsList = getFilteredSortedProjects().map((project) => (
+  const filteredSortedProjects = getFilteredSortedProjects()
+
+  const projectCardsList = filteredSortedProjects.length ? (
+    getFilteredSortedProjects().map((project) => (
       <ProjectCard
         role="listitem"
         project={{ ...project }}
@@ -102,6 +104,16 @@ const Projects = ({ apiSyncInstance }) => {
         isOfflineReady={getIsProjectOffline(project.id)}
       />
     ))
+  ) : (
+    <PageNoData
+      mainText={isAppOnline
+        ? language.pages.projectsList.noDataTextOnline
+        : language.pages.projectsList.noDataTextOffline}
+      subText={isAppOnline
+        ? language.pages.projectsList.noDataSubTextOnline
+        : language.pages.projectsList.noDataSubTextOffline}
+    />
+  )
 
   return isLoading ? (
     <LoadingIndicator aria-label="projects list loading indicator" />

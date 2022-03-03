@@ -24,6 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Debug PR preview comment variables
+        run: |
+          echo '::debug::github.event.action is ${{github.event.action}}'
+          echo '::debug::preview url will be https://${{env.S3_BUCKET}}/${{env.PR_NUMBER}}'
+        id: debug-preview-comment-vars
+
       - name: Cache Node Modules
         id: yarn_cache
         uses: actions/cache@v2

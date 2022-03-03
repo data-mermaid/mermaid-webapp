@@ -2,7 +2,6 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
-import { matchSorter } from 'match-sorter'
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
 import PageUnavailableOffline from '../PageUnavailableOffline'
@@ -13,9 +12,11 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
   reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { H2 } from '../../generic/text'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import DataToolbarSection from './DataToolbarSection'
@@ -23,6 +24,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import PageNoData from '../PageNoData'
 
 const Data = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
@@ -54,9 +56,7 @@ const Data = () => {
             setIdsNotAssociatedWithData([projectId])
             setIsLoading(false)
           }
-          toast.error(
-            ...getToastArguments(language.error.submittedRecordsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
@@ -67,7 +67,7 @@ const Data = () => {
       {
         Header: 'Method',
         accessor: 'method',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Site',
@@ -138,11 +138,11 @@ const Data = () => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {
@@ -176,7 +176,7 @@ const Data = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const table = (
+  const table = submittedRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -231,6 +231,8 @@ const Data = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageNoData mainText={language.pages.submittedTable.noDataText} />
   )
 
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
