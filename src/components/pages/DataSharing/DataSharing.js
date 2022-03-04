@@ -1,15 +1,14 @@
-import { Formik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
 import { hoverState } from '../../../library/styling/mediaQueries'
 import { ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
+import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
-import { getProjectInitialValues } from '../Admin/projectRecordInitialFormValue'
 import { H2, P } from '../../generic/text'
 import { IconInfo } from '../../icons'
 import { MaxWidthInputWrapper } from '../../generic/form'
@@ -88,148 +87,172 @@ const DataSharing = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress])
 
-  const initialFormValues = useMemo(
-    () => getProjectInitialValues(projectBeingEdited),
-    [projectBeingEdited],
+  const getToastMessageForDataPolicyChange = (property, policy) => {
+    switch (property) {
+      case 'data_policy_beltfish':
+        return language.success.getDataSharingPolicyChangeSuccess('Fish Belt', policy)
+      case 'data_policy_benthiclit':
+        return language.success.getDataSharingPolicyChangeSuccess(
+          'Benthic: PIT, LIT, and Habitat Complexity',
+          policy,
+        )
+      case 'data_policy_bleachingqc':
+        return language.success.getDataSharingPolicyChangeSuccess('Bleaching', policy)
+      default:
+        return 'Project Saved'
+    }
+  }
+
+  const handleSaveProject = useCallback(
+    (editedValues, toastMessage) => {
+      databaseSwitchboardInstance
+        .saveProject({
+          projectId,
+          editedValues,
+        })
+        .then((updatedProject) => {
+          setProjectBeingEdited(updatedProject)
+          toast.success(...getToastArguments(toastMessage))
+        })
+        .catch(() => {
+          toast.error(...getToastArguments(language.error.projectSave))
+        })
+    },
+    [databaseSwitchboardInstance, projectId],
   )
 
-  const formikOptions = {
-    initialValues: initialFormValues,
-    enableReinitialize: true,
+  const handleDataPolicyChange = (event, propertyToUpdate) => {
+    const policyCode = parseInt(event.target.value, 10)
+    const editedValues = { ...projectBeingEdited }
+    const toastMessage = getToastMessageForDataPolicyChange(propertyToUpdate, policyCode)
+
+    if (propertyToUpdate === 'data_policy_benthiclit') {
+      editedValues.data_policy_benthiclit = policyCode
+      editedValues.data_policy_benthicpit = policyCode
+      editedValues.data_policy_habitatcomplexity = policyCode
+    } else {
+      editedValues[propertyToUpdate] = policyCode
+    }
+
+    handleSaveProject(editedValues, toastMessage)
+  }
+
+  const handleTestProjectChange = (event) => {
+    const isChecked = event.target.checked
+    const status = isChecked ? language.projectCodes.status.test : language.projectCodes.status.open
+    const editedValues = { ...projectBeingEdited, status }
+
+    handleSaveProject(editedValues, language.success.projectStatusSaved)
   }
 
   const findToolTipDescription = (policy) =>
-    dataPolicyOptions.find(({ label }) => label === policy).description
-
-  const handleBenthicPolicyChange = (event, form) => {
-    const updatedValue = parseInt(event.target.value, 10)
-
-    form.setFieldValue('data_policy_benthiclit', updatedValue)
-    form.setFieldValue('data_policy_benthicpit', updatedValue)
-    form.setFieldValue('data_policy_habitatcomplexity', updatedValue)
-  }
+    dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
   const content = isAppOnline ? (
-    <Formik {...formikOptions}>
-      {(formik) => (
-        <>
-          <MaxWidthInputWrapper>
-            <h3>Data is much more powerful when shared.</h3>
-            <P>{language.pages.dataSharing.introductionParagraph}</P>
-            <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
-              <IconInfo /> Learn more about how your data is shared...
-            </ButtonPrimary>
-            <TableOverflowWrapper>
-              <DataSharingTable>
-                <thead>
-                  <Tr>
-                    <Th>&nbsp;</Th>
-                    <Th>
-                      <TooltipWithText
-                        tooltipText={findToolTipDescription('Private')}
-                        text={<>Private</>}
-                        id="private-tooltip"
-                      />
-                    </Th>
-                    <Th>
-                      <TooltipWithText
-                        tooltipText={findToolTipDescription('Public Summary')}
-                        text={<>Public Summary</>}
-                        id="public-summary-tooltip"
-                      />
-                    </Th>
-                    <Th>
-                      <TooltipWithText
-                        tooltipText={findToolTipDescription('Public')}
-                        text={<>Public</>}
-                        id="public-tooltip"
-                      />
-                    </Th>
-                  </Tr>
-                </thead>
-                <tbody>
-                  <Tr>
-                    <Td>Fish Belt</Td>
-                    {dataPolicyOptions.map((item) => (
-                      <Td key={item.value}>
-                        <label htmlFor={`fish-belt${item.value}`}>
-                          <input
-                            type="radio"
-                            value={item.value}
-                            name="fish-belt"
-                            id={`fish-belt${item.value}`}
-                            checked={
-                              formik.getFieldProps('data_policy_beltfish').value === item.value
-                            }
-                            onChange={(event) => {
-                              formik.setFieldValue(
-                                'data_policy_beltfish',
-                                parseInt(event.target.value, 10),
-                              )
-                            }}
-                          />
-                        </label>
-                      </Td>
-                    ))}
-                  </Tr>
-                  <Tr>
-                    <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
-                    {dataPolicyOptions.map((item) => (
-                      <Td key={item.value}>
-                        <label htmlFor={`benthic${item.value}`}>
-                          <input
-                            type="radio"
-                            value={item.value}
-                            name="benthic"
-                            id={`benthic${item.value}`}
-                            checked={
-                              formik.getFieldProps('data_policy_benthiclit').value === item.value
-                            }
-                            onChange={(event) => handleBenthicPolicyChange(event, formik)}
-                          />
-                        </label>
-                      </Td>
-                    ))}
-                  </Tr>
-                  <Tr>
-                    <Td>Bleaching</Td>
-                    {dataPolicyOptions.map((item) => (
-                      <Td key={item.value}>
-                        <label htmlFor={`bleaching${item.value}`}>
-                          <input
-                            type="radio"
-                            name="bleaching"
-                            id={`bleaching${item.value}`}
-                            value={item.value}
-                            checked={
-                              formik.getFieldProps('data_policy_bleachingqc').value === item.value
-                            }
-                            onChange={(event) => {
-                              formik.setFieldValue(
-                                'data_policy_bleachingqc',
-                                parseInt(event.target.value, 10),
-                              )
-                            }}
-                          />
-                        </label>
-                      </Td>
-                    ))}
-                  </Tr>
-                </tbody>
-              </DataSharingTable>
-            </TableOverflowWrapper>
-            <CheckBoxLabel>
-              <input id="test-project-toggle" type="checkbox" /> This is a test project
-            </CheckBoxLabel>
-            <P>{language.pages.dataSharing.testProjectHelperText}</P>
-            <DataSharingInfoModal
-              isOpen={issDataSharingInfoModalOpen}
-              onDismiss={closeDataSharingInfoModal}
-            />
-          </MaxWidthInputWrapper>
-        </>
-      )}
-    </Formik>
+    <MaxWidthInputWrapper>
+      <h3>Data is much more powerful when shared.</h3>
+      <P>{language.pages.dataSharing.introductionParagraph}</P>
+      <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
+        <IconInfo /> Learn more about how your data is shared...
+      </ButtonPrimary>
+      <TableOverflowWrapper>
+        <DataSharingTable>
+          <thead>
+            <Tr>
+              <Th>&nbsp;</Th>
+              <Th>
+                <TooltipWithText
+                  tooltipText={findToolTipDescription('Private')}
+                  text={<>Private</>}
+                  id="private-tooltip"
+                />
+              </Th>
+              <Th>
+                <TooltipWithText
+                  tooltipText={findToolTipDescription('Public Summary')}
+                  text={<>Public Summary</>}
+                  id="public-summary-tooltip"
+                />
+              </Th>
+              <Th>
+                <TooltipWithText
+                  tooltipText={findToolTipDescription('Public')}
+                  text={<>Public</>}
+                  id="public-tooltip"
+                />
+              </Th>
+            </Tr>
+          </thead>
+          <tbody>
+            <Tr>
+              <Td>Fish Belt</Td>
+              {dataPolicyOptions.map((item) => (
+                <Td key={item.value}>
+                  <label htmlFor={`fish-belt${item.value}`}>
+                    <input
+                      type="radio"
+                      value={item.value}
+                      name="fish-belt"
+                      id={`fish-belt${item.value}`}
+                      checked={projectBeingEdited?.data_policy_beltfish === item.value}
+                      onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
+                    />
+                  </label>
+                </Td>
+              ))}
+            </Tr>
+            <Tr>
+              <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
+              {dataPolicyOptions.map((item) => (
+                <Td key={item.value}>
+                  <label htmlFor={`benthic${item.value}`}>
+                    <input
+                      type="radio"
+                      value={item.value}
+                      name="benthic"
+                      id={`benthic${item.value}`}
+                      checked={projectBeingEdited?.data_policy_benthiclit === item.value}
+                      onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
+                    />
+                  </label>
+                </Td>
+              ))}
+            </Tr>
+            <Tr>
+              <Td>Bleaching</Td>
+              {dataPolicyOptions.map((item) => (
+                <Td key={item.value}>
+                  <label htmlFor={`bleaching${item.value}`}>
+                    <input
+                      type="radio"
+                      name="bleaching"
+                      id={`bleaching${item.value}`}
+                      value={item.value}
+                      checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
+                      onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
+                    />
+                  </label>
+                </Td>
+              ))}
+            </Tr>
+          </tbody>
+        </DataSharingTable>
+      </TableOverflowWrapper>
+      <CheckBoxLabel>
+        <input
+          id="test-project-toggle"
+          type="checkbox"
+          checked={projectBeingEdited?.status === language.projectCodes.status.test}
+          onChange={handleTestProjectChange}
+        />{' '}
+        This is a test project
+      </CheckBoxLabel>
+      <P>{language.pages.dataSharing.testProjectHelperText}</P>
+      <DataSharingInfoModal
+        isOpen={issDataSharingInfoModalOpen}
+        onDismiss={closeDataSharingInfoModal}
+      />
+    </MaxWidthInputWrapper>
   ) : (
     <PageUnavailableOffline />
   )
@@ -241,12 +264,12 @@ const DataSharing = () => {
     />
   ) : (
     <ContentPageLayout
-      isPageContentLoading={isLoading}
+      isPageContentLoading={isAppOnline ? isLoading : false}
       content={content}
       toolbar={
-        <>
+        <ContentPageToolbarWrapper>
           <H2>Data Sharing</H2>
-        </>
+        </ContentPageToolbarWrapper>
       }
     />
   )

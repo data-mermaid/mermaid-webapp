@@ -1,4 +1,10 @@
 // prettier-ignore
+
+const projectCodes = {
+  status: { open: 90, test: 80 },
+  policy: { private: 10, publicSummary: 50 },
+}
+
 const error = {
   apiDataSync: 'The app was not able to sync data with the API. Please try again.',
   appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
@@ -24,11 +30,11 @@ const error = {
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
-    required: 'This field is required'
+    required: 'This field is required',
   },
   generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
   generic: 'Something went wrong.',
-  idNotFoundUserAction: 'Please check the URL in your browser\'s address bar.',
+  idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable:
     'Management Regime records data is currently unavailable. Please try again.',
@@ -85,6 +91,18 @@ const success = {
   siteSave: 'Site saved.',
   managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
+  projectStatusSaved: `Test project selection saved.`,
+  getDataSharingPolicyChangeSuccess: (method, policy_code) => {
+    switch (policy_code) {
+      case projectCodes.policy.private:
+        return `${method} is now set to private`
+      case projectCodes.policy.publicSummary:
+        return `${method} is now set to public summary`
+      default:
+        // policy code for public is 100
+        return `${method} is now set to public `
+    }
+  },
 }
 
 const deleteCollectRecord = {
@@ -177,6 +195,7 @@ const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
 export default {
+  projectCodes,
   error,
   success,
   deleteCollectRecord,
