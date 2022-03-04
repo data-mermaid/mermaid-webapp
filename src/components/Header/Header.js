@@ -5,7 +5,7 @@ import React from 'react'
 import theme from '../../theme'
 import Logo from '../../assets/mermaid-logo.svg'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
-import { IconBell, IconMenu, IconDown } from '../icons'
+import { IconBell, IconMenu, IconDown, IconUser } from '../icons'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
@@ -53,7 +53,7 @@ const linkStyles = css`
     `,
   )}
 `
-const BellButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
+const HeaderButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
   ${linkStyles}
 `
 const dropdownLinkStyles = css`
@@ -179,6 +179,42 @@ const Header = ({ logout, currentUser }) => {
     </OfflineHide>
   )
 
+  const getUserButton = () => {
+    // Avatar
+    if (currentUser && currentUser.picture) {
+      return <p><img src={currentUser.picture} alt=""/></p>
+    }
+
+    // First name
+    if (currentUser && currentUser.first_name) {
+      return (<p>
+          {currentUser && currentUser.first_name} <IconDown />
+        </p>)
+    }
+
+    // First name
+    if (currentUser && currentUser.full_name) {
+      return (<p>
+          {currentUser && currentUser.full_name} <IconDown />
+        </p>)
+    }
+
+    // User icon
+    return <p><IconUser /></p>
+  }
+
+  const getUserDisplayName = () => {
+    if (currentUser && currentUser.first_name) {
+      return currentUser.first_name
+    }
+
+    if (currentUser && currentUser.first_name) {
+      return currentUser.full_name
+    }
+
+    return currentUser.email
+  }
+
   return (
     <StyledHeader>
       <Link to="/projects">
@@ -187,15 +223,11 @@ const Header = ({ logout, currentUser }) => {
       <GlobalNav>
         <div className="desktop">
           <GlobalLinks />
-          <BellButtonThatLooksLikeLink>
+          <HeaderButtonThatLooksLikeLink>
             <IconBell />
-          </BellButtonThatLooksLikeLink>
+          </HeaderButtonThatLooksLikeLink>
           <HideShow
-            button={
-              <p>
-                {currentUser && currentUser.first_name} <IconDown />
-              </p>
-            }
+            button={getUserButton()}
             contents={
               <div className="desktopUserMenu">
                 <UserMenuDropDownContent />
@@ -204,19 +236,21 @@ const Header = ({ logout, currentUser }) => {
           />
         </div>
         <div className="mobile">
-          <BellButtonThatLooksLikeLink>
+          <HeaderButtonThatLooksLikeLink>
             <IconBell />
-          </BellButtonThatLooksLikeLink>
+          </HeaderButtonThatLooksLikeLink>
           <HideShow
             button={
-              <button className="trigger" type="button">
+              <HeaderButtonThatLooksLikeLink>
                 <IconMenu />
-              </button>
+              </HeaderButtonThatLooksLikeLink>
             }
             contents={
               <div className="menuDropdown">
                 <GlobalLinks />
-                <p className="loggedInAs">Logged in as {currentUser && currentUser.first_name}</p>
+                { currentUser &&
+                  <p className="loggedInAs">Logged in as {getUserDisplayName()}</p>
+                }
                 <div className="mobileUserMenu">
                   <UserMenuDropDownContent />
                 </div>
