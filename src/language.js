@@ -217,7 +217,7 @@ const getValidationMessage = (validation) => {
     case 'high_density':
       return `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`
     case 'len_surveyed_out_of_range':
-      return `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}"`
+      return `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`
     case 'max_depth':
     case 'invalid_depth':
       return `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`
