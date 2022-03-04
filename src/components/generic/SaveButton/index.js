@@ -1,3 +1,3 @@
-import SaveButton from './SaveButton.js'
+import SaveButton from './SaveButton'
 
 export default SaveButton

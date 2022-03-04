@@ -22,8 +22,6 @@ import ManagementRulesInput from '../ManagementRulesInput'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../../library/useIsMounted'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import { ButtonCallout } from '../../../generic/buttons'
-import { IconSave } from '../../../icons'
 import SaveButton from '../../../generic/SaveButton'
 
 const ManagementRegime = () => {
