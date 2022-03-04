@@ -5,7 +5,7 @@ import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
 import { InlineValidationButton } from '../../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
-import { getValidationMessage } from '../../../library/getValidationMessage'
+import language from '../../../language'
 
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
@@ -27,7 +27,7 @@ const InputValidationInfo = ({
         <>
           {validationMessages.map((validation) => (
             <InlineMessage type={validationType} key={validation.id}>
-              <p>{getValidationMessage(validation)}</p>
+              <p>{language.getValidationMessage(validation)}</p>
             </InlineMessage>
           ))}
         </>

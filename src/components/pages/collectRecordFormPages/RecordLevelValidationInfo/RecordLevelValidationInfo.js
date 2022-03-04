@@ -5,7 +5,7 @@ import { ValidationList } from '../../../generic/form'
 import { ButtonSecondary } from '../../../generic/buttons'
 import theme from '../../../../theme'
 import InlineMessage from '../../../generic/InlineMessage/InlineMessage'
-import { getValidationMessage } from '../../../../library/getValidationMessage'
+import language from '../../../../language'
 
 export const InlineValidationButton = styled(ButtonSecondary)`
   margin: ${theme.spacing.xxsmall};
@@ -33,7 +33,7 @@ const RecordLevelValidationInfo = ({
         const isReset = status === 'reset'
         const statusForStyling = isReset ? 'warning' : status
 
-        const validationMessage = getValidationMessage(validation)
+        const validationMessage = language.getValidationMessage(validation)
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
           <li key={validation_id}>
