@@ -7,6 +7,7 @@ import { ContentPageLayout } from '../../../Layout'
 import { getManagementRegimeInitialValues } from '../managementRegimeFormInitialValues'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
+import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { InputWrapper } from '../../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -23,6 +24,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ButtonCallout } from '../../../generic/buttons'
 import { IconSave } from '../../../icons'
+import SaveButton from '../../../generic/SaveButton'
 
 const ManagementRegime = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -34,6 +36,8 @@ const ManagementRegime = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
   const isMounted = useIsMounted()
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [isFormDirty, setIsFormDirty] = useState(false)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -109,10 +113,13 @@ const ManagementRegime = () => {
         notes,
       }
 
+      setSaveButtonState(buttonGroupStates.saving)
       databaseSwitchboardInstance
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then(() => {
           toast.success(language.success.managementRegimeSave)
+          setSaveButtonState(buttonGroupStates.saved)
+          setIsFormDirty(false)
           formikActions.resetForm({ values: formikValues })
         })
         .catch(() => {
@@ -141,8 +148,15 @@ const ManagementRegime = () => {
     },
   })
 
-  const doesFormikHaveErrors = Object.keys(formik.errors).length
-  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
+  const _setIsFormDirty = useEffect(() => {
+    setIsFormDirty(!!formik.dirty)
+  }, [formik.dirty])
+
+  const _setSiteButtonUnsaved = useEffect(() => {
+    if (isFormDirty) {
+      setSaveButtonState(buttonGroupStates.unsaved)
+    }
+  }, [isFormDirty])
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
@@ -224,14 +238,11 @@ const ManagementRegime = () => {
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{formik.values.name}</H2>
-          <ButtonCallout
-            type="submit"
-            form="management-regime-form"
-            disabled={isSaveButtonDisabled}
-          >
-            <IconSave />
-            Save
-          </ButtonCallout>
+          <SaveButton
+            formId="management-regime-form"
+            saveButtonState={saveButtonState}
+            formik={formik}
+          />
         </ContentPageToolbarWrapper>
       }
     />

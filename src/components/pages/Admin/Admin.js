@@ -12,6 +12,7 @@ import { createUuid } from '../../../library/createUuid'
 import { getOptions } from '../../../library/getOptions'
 import { getProjectInitialValues } from './projectRecordInitialFormValue'
 import { H2 } from '../../generic/text'
+import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { hoverState } from '../../../library/styling/mediaQueries'
 import { IconClose, IconSave } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
@@ -29,6 +30,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
+import SaveButton from '../../generic/SaveButton'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -148,6 +150,8 @@ const Admin = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [isFormDirty, setIsFormDirty] = useState(false)
 
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
@@ -182,15 +186,17 @@ const Admin = () => {
     [projectBeingEdited],
   )
 
-  const formikOptions = {
+  const formik = useFormik({
     initialValues: initialFormValues,
     enableReinitialize: true,
     onSubmit: (values, actions) => {
+      setSaveButtonState(buttonGroupStates.saving)
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: values })
         .then(() => {
-          actions.resetForm({ values }) // resets formiks dirty state
+          setSaveButtonState(buttonGroupStates.saved)
           toast.success(...getToastArguments(language.success.projectSave))
+          actions.resetForm({ values }) // resets formiks dirty state
         })
         .catch(() => {
           toast.error(...getToastArguments(language.error.projectSave))
@@ -205,11 +211,18 @@ const Admin = () => {
 
       return errors
     },
-  }
-  const formik = useFormik(formikOptions)
+  })
 
-  const doesFormikHaveErrors = Object.keys(formik.errors).length
-  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
+  const _setIsFormDirty = useEffect(() => {
+    setIsFormDirty(!!formik.dirty)
+  }, [formik.dirty])
+
+  const _setSiteButtonUnsaved = useEffect(() => {
+    if (isFormDirty) {
+      setSaveButtonState(buttonGroupStates.unsaved)
+    }
+  }, [isFormDirty])
+
   const noOrganizationResult = (
     <>
       <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
@@ -297,10 +310,11 @@ const Admin = () => {
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>Project Info</H2>
-            <ButtonCallout type="submit" form="project-info-form" disabled={isSaveButtonDisabled}>
-              <IconSave />
-              Save
-            </ButtonCallout>
+            <SaveButton
+              formId="project-info-form"
+              saveButtonState={saveButtonState}
+              formik={formik}
+            />
           </ContentPageToolbarWrapper>
         }
       />
