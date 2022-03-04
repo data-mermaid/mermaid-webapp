@@ -1,4 +1,10 @@
 // prettier-ignore
+
+const projectCodes = {
+  status: { open: 90, test: 80 },
+  policy: { private: 10, publicSummary: 50 },
+}
+
 const error = {
   apiDataSync: 'The app was not able to sync data with the API. Please try again.',
   appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
@@ -24,11 +30,11 @@ const error = {
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
-    required: 'This field is required'
+    required: 'This field is required',
   },
   generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
   generic: 'Something went wrong.',
-  idNotFoundUserAction: 'Please check the URL in your browser\'s address bar.',
+  idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable:
     'Management Regime records data is currently unavailable. Please try again.',
@@ -85,6 +91,18 @@ const success = {
   siteSave: 'Site saved.',
   managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
+  projectStatusSaved: `Test project selection saved.`,
+  getDataSharingPolicyChangeSuccess: (method, policy_code) => {
+    switch (policy_code) {
+      case projectCodes.policy.private:
+        return `${method} is now set to private`
+      case projectCodes.policy.publicSummary:
+        return `${method} is now set to public summary`
+      default:
+        // policy code for public is 100
+        return `${method} is now set to public `
+    }
+  },
 }
 
 const deleteCollectRecord = {
@@ -116,7 +134,12 @@ const autocomplete = {
 }
 
 const pages = {
-  projectsList: { offlineReadyCheckboxLabel: 'Offline Ready' },
+  projectsList: {
+    offlineReadyCheckboxLabel: 'Offline Ready',
+    noDataTextOnline: `You aren't part of any projects yet.`,
+    noDataSubTextOnline: `Create a new project or get your admin to add you to some.`,
+    noDataTextOffline: `You don't have any offline projects.`,
+  },
   collectRecord: {
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
@@ -137,6 +160,7 @@ const pages = {
   },
   submittedTable: {
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
+    noDataText: `This project has no submitted sample units.`,
   },
   userTable: {
     filterToolbarText: 'Filter users by name or email',
@@ -153,12 +177,17 @@ const pages = {
   },
   collectTable: {
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
+    noDataText: `You don't have any active sample units`,
   },
   siteTable: {
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
+    noDataText: `This project has no sites.`,
+    noDataExtraText: `You can add sites by creating a new one or copying them from another project.`,
   },
   managementRegimeTable: {
     filterToolbarText: 'Filter management regimes by name or year',
+    noDataText: `This project has no management regimes.`,
+    noDataExtraText: `You can add management regimes by creating a new one or copying them from another project.`,
   },
 }
 
@@ -212,6 +241,7 @@ const getValidationMessage = (validation) => {
 }
 
 export default {
+  projectCodes,
   error,
   success,
   deleteCollectRecord,

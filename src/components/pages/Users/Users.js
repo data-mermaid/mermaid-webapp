@@ -1,5 +1,4 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
-import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -20,6 +19,7 @@ import {
   IconAlert,
 } from '../../icons'
 import { pluralize } from '../../../library/strings/pluralize'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -466,16 +466,23 @@ const Users = ({ currentUser }) => {
     })
   }, [observerProfiles, currentUser, handleRoleChange])
 
+  const tableDefaultSortByColumns = useMemo(() => [
+    {
+      id: 'name',
+      desc: false,
+    },
+  ], [])
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.email']
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {
@@ -497,9 +504,14 @@ const Users = ({ currentUser }) => {
     {
       columns: tableColumns,
       data: tableCellData,
-      initialState: { pageSize: 15 },
+      initialState: {
+        pageSize: 15,
+        sortBy: tableDefaultSortByColumns
+      },
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
+      // Disables requirement to hold shift to enable multi-sort
+      isMultiSortEvent: () => true
     },
     useGlobalFilter,
     useSortBy,
@@ -516,15 +528,20 @@ const Users = ({ currentUser }) => {
           <thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
+                {headerGroup.headers.map((column) => {
+                const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+
+                return (
                   <Th
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSorted={column.isSorted}
                     isSortedDescending={column.isSortedDesc}
+                    sortedIndex={column.sortedIndex}
+                    isMultiSortColumn={isMultiSortColumn}
                   >
                     {column.render('Header')}
                   </Th>
-                ))}
+                )
+})}
               </Tr>
             ))}
           </thead>

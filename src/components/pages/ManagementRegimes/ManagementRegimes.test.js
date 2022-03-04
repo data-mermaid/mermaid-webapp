@@ -69,6 +69,9 @@ test('Management Regime Records table sorts properly by Name column', async () =
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
@@ -78,7 +81,7 @@ test('Management Regime Records table sorts properly by Name column', async () =
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Management Regime Name'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -108,6 +111,9 @@ test('Management Regime Records table sorts properly by Year Est. column', async
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('2021'))
 
   // click once to change to ascending order
@@ -118,7 +124,7 @@ test('Management Regime Records table sorts properly by Year Est. column', async
   // we test last row because it will have a non empty value which is easier to query
   expect(within(tableRowsAfter[3]).getByText('2021'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Year Est.'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -149,6 +155,9 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
   const tableRows = within(table).getAllByRole('row')
   // we test last row because it will have a non empty value which is easier to query
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[3]).getByText('somewhat'))
 
   // click once to change to ascending order
@@ -158,7 +167,7 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
 
   expect(within(tableRowsAfter[3]).getByText('somewhat'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Compliance'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -188,6 +197,9 @@ test('Management Regime Records table sorts properly by Open Access column', asy
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
@@ -197,7 +209,7 @@ test('Management Regime Records table sorts properly by Open Access column', asy
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Open Access'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -227,6 +239,9 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
@@ -236,7 +251,7 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Access Restrictions'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -266,6 +281,9 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
@@ -275,7 +293,7 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Periodic Closure'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -305,6 +323,9 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
@@ -314,7 +335,7 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes C'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Size Limits'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -344,6 +365,9 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
@@ -353,7 +377,7 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Gear Restrictions'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -383,6 +407,9 @@ test('Management Regime Records table sorts properly by Species Restrictions col
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
@@ -392,7 +419,7 @@ test('Management Regime Records table sorts properly by Species Restrictions col
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Species Restrictions'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -422,6 +449,9 @@ test('Management Regime Records table sorts properly by No Take column', async (
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Management Regime Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Management Regime Name'))
+
   expect(within(tableRows[1]).getByText('Management Regimes A'))
 
   // click once to change to ascending order
@@ -431,7 +461,7 @@ test('Management Regime Records table sorts properly by No Take column', async (
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes A'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('No Take'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')

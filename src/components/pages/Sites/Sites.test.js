@@ -63,6 +63,9 @@ test('Site Records table sorts properly by Name column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Name'))
+
   expect(within(tableRows[1]).getByText('Site A'))
 
   // click once to change to ascending order
@@ -72,7 +75,7 @@ test('Site Records table sorts properly by Name column', async () => {
 
   expect(within(tableRowsAfter[1]).getByText('Site A'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Name'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -102,6 +105,9 @@ test('Site Records table sorts properly by Reef Type column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Name'))
+
   expect(within(tableRows[1]).getByText('fringing'))
 
   // click once to change to ascending order
@@ -111,7 +117,7 @@ test('Site Records table sorts properly by Reef Type column', async () => {
 
   expect(within(tableRowsAfter[1]).getByText('atoll'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Reef Type'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -141,6 +147,9 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
+  // click the Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Name'))
+
   expect(within(tableRows[1]).getByText('fore reef'))
 
   // click once to change to ascending order
@@ -150,7 +159,7 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
 
   expect(within(tableRowsAfter[1]).getByText('back reef'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Reef Zone'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
@@ -182,6 +191,9 @@ test('Site Records table sorts properly by Exposure column', async () => {
 
   expect(within(tableRows[1]).getByText('exposed'))
 
+  // click the Name column twice to disable default sorting
+  userEvent.dblClick(within(table).getByText('Name'))
+
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Exposure'))
 
@@ -189,7 +201,7 @@ test('Site Records table sorts properly by Exposure column', async () => {
 
   expect(within(tableRowsAfter[1]).getByText('exposed'))
 
-  // // click again to change to descending order
+  // click again to change to descending order
   userEvent.click(within(table).getByText('Exposure'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')

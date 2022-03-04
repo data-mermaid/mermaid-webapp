@@ -1,6 +1,5 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
-import { matchSorter } from 'match-sorter'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
@@ -13,6 +12,7 @@ import {
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -25,6 +25,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
+import PageNoData from '../PageNoData'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -52,9 +53,7 @@ const Collect = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.collectRecordsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
@@ -141,6 +140,13 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
+  const tableDefaultSortByColumns = useMemo(() => [
+    {
+      id: 'method',
+      desc: false,
+    },
+  ], [])
+
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
       'values.method.props.children',
@@ -151,11 +157,11 @@ const Collect = () => {
 
     const queryTerms = splitSearchQueryStrings(query)
 
-    if (!queryTerms) {
+    if (!queryTerms || !queryTerms.length) {
       return rows
     }
 
-    return queryTerms.reduce((results, term) => matchSorter(results, term, { keys }), rows)
+    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
   const {
@@ -177,8 +183,13 @@ const Collect = () => {
     {
       columns: tableColumns,
       data: tableCellData,
-      initialState: { pageSize: 15 },
+      initialState: {
+        pageSize: 15,
+        sortBy: tableDefaultSortByColumns
+      },
       globalFilter: tableGlobalFilters,
+      // Disables requirement to hold shift to enable multi-sort
+      isMultiSortEvent: () => true
     },
     useGlobalFilter,
     useSortBy,
@@ -190,24 +201,30 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const table = (
+  const table = collectRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSorted={column.isSorted}
-                    isSortedDescending={column.isSortedDesc}
-                  >
-                    {column.render('Header')}
-                  </Th>
-                ))}
-              </Tr>
-            ))}
+            {headerGroups.map((headerGroup) => {
+              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+
+              return (
+                <Tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <Th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      isSortedDescending={column.isSortedDesc}
+                      sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
+                    >
+                      {column.render('Header')}
+                    </Th>
+                  ))}
+                </Tr>
+              )
+            }
+            )}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -245,6 +262,8 @@ const Collect = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageNoData mainText={language.pages.collectTable.noDataText} />
   )
 
   return idsNotAssociatedWithData.length ? (
