@@ -82,6 +82,13 @@ const dropdownLinkStyles = css`
 const StyledNavLink = styled(Link)`
   ${linkStyles}
 `
+
+const DisabledNavLink = styled(Link)`
+  ${linkStyles}
+  pointer-events: none;
+  color: ${theme.color.disabledText};
+`
+
 const GlobalNav = styled('nav')`
   .desktop {
     display: flex;
@@ -160,11 +167,18 @@ const GlobalLinks = () => (
   <>
     <StyledNavLink to="/projects">Projects</StyledNavLink>
     <OfflineHide>
-      <StyledNavLink to="/#">Reports</StyledNavLink>
+      <DisabledNavLink to="/#">Reports</DisabledNavLink>
     </OfflineHide>
-    <StyledNavLink to="/#">Reference</StyledNavLink>
+    <StyledNavLink
+      to={{ pathname: 'https://dev-collect.datamermaid.org/#/reference/home' }}
+      target="_blank"
+    >
+      Reference
+    </StyledNavLink>
     <OfflineHide>
-      <StyledNavLink to="/#">Global Dashboard</StyledNavLink>
+      <StyledNavLink to={{ pathname: 'https://dashboard.datamermaid.org/' }} target="_blank">
+        Global Dashboard
+      </StyledNavLink>
     </OfflineHide>
   </>
 )

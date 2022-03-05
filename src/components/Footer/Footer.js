@@ -6,6 +6,7 @@ import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import OfflineHide from '../generic/OfflineHide'
+import MermaidDocs from '../../docs/MERMAID User Documentation 2021-09-28.pdf'
 
 const StyledFooter = styled('footer')`
   display: grid;
@@ -94,9 +95,6 @@ const FooterNav = styled('nav')`
     padding: 0 ${theme.spacing.small};
   }
 `
-const Copyright = styled.p`
-  padding: 0 ${theme.spacing.small};
-`
 
 const Footer = () => {
   const { isAppOnline } = useOnlineStatus()
@@ -117,15 +115,24 @@ const Footer = () => {
         )}
       </StyledToggleLabel>
       <FooterNav>
-        <Link to="/#">Help</Link>
+        <a href={MermaidDocs} target="_blank" rel="noreferrer">
+          Help
+        </a>
         <OfflineHide>
-          <Link to="/#">Terms</Link>
-          <Link to="/#">Contact</Link>
-          <Link to="/#">Changelog</Link>
-          <Link to="/#">Credits</Link>
+          <Link to={{ pathname: 'https://datamermaid.org/terms-of-service' }} target="_blank">
+            Terms
+          </Link>
+          <Link to={{ pathname: 'https://datamermaid.org/contact-us' }} target="_blank">
+            Contact
+          </Link>
+          <Link to={{ pathname: 'https://datamermaid.org/changelog' }} target="_blank">
+            Changelog
+          </Link>
+          <Link to={{ pathname: 'https://datamermaid.org/partners-and-teams/' }} target="_blank">
+            Credits
+          </Link>
         </OfflineHide>
       </FooterNav>
-      <Copyright>&copy; 2021 Mermaid Version v1.0.0</Copyright>
     </StyledFooter>
   )
 }
