@@ -6,7 +6,7 @@ const projects = [
     tags: ['WCS Fiji', 'WCS Kenya'],
     num_sites: 13,
 
-    updated_on: '01/21/2020',
+    updated_on: '2020-01-21T00:00:00.000Z',
     notes: 'Fish are recorded',
     data_policy_beltfish: 10,
     data_policy_benthiclit: 50,
@@ -25,7 +25,7 @@ const projects = [
     ],
     num_sites: 36,
 
-    updated_on: '21/21/2021',
+    updated_on: '2021-01-21T08:00:00.000Z',
     notes: '',
     data_policy_beltfish: 50,
     data_policy_benthiclit: 10,
@@ -40,7 +40,7 @@ const projects = [
     tags: ['California Academy of Sciences'],
     num_sites: 34,
 
-    updated_on: '21/21/1992',
+    updated_on: '1992-01-21T08:00:00.000Z',
     notes: '',
     data_policy_beltfish: 50,
     data_policy_benthiclit: 50,
@@ -55,7 +55,7 @@ const projects = [
     tags: [],
     num_sites: 9,
 
-    updated_on: '31/12/2011',
+    updated_on: '2011-12-31T08:00:00.000Z',
     notes: '',
     data_policy_beltfish: 100,
     data_policy_benthiclit: 50,
@@ -70,7 +70,7 @@ const projects = [
     tags: [],
     num_sites: 33,
 
-    updated_on: '01/21/2001',
+    updated_on: '2001-01-21T08:00:00.000Z',
     notes: '',
     data_policy_beltfish: 50,
     data_policy_benthiclit: 100,

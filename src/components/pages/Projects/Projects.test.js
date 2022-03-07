@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
+import userEvent from '@testing-library/user-event'
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { getFakeAccessToken } from '../../../testUtilities/getFakeAccessToken'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
@@ -234,3 +235,162 @@ test('Hide new project button in project toolbar when offline', async () => {
     expect(screen.queryByRole('button', { name: 'New Project' })).not.toBeInTheDocument(),
   )
 })
+
+test('Projects can be sorted by countries', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    getAccessToken: getFakeAccessToken,
+  })
+
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+  )
+
+  const selectMenu = screen.getAllByRole('combobox')[0]
+
+  userEvent.selectOptions(selectMenu, ['countries'])
+
+  const topProjectCard = screen.getAllByRole('listitem')[0]
+
+  expect(within(topProjectCard).getByText('Project II'))
+  expect(within(topProjectCard).getByText('America'))
+})
+
+test('Projects can be sorted by number of sites', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    getAccessToken: getFakeAccessToken,
+  })
+
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+  )
+
+  const selectMenu = screen.getAllByRole('combobox')[0]
+
+  userEvent.selectOptions(selectMenu, ['num_sites'])
+
+  const topProjectCard = screen.getAllByRole('listitem')[0]
+
+  expect(within(topProjectCard).getByText('Project IV'))
+  expect(within(topProjectCard).getByText('9'))
+})
+
+test('Projects can be sorted by updated on date', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    getAccessToken: getFakeAccessToken,
+  })
+
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+  )
+
+  const selectMenu = screen.getAllByRole('combobox')[0]
+
+  userEvent.selectOptions(selectMenu, ['updated_on'])
+
+  const topProjectCard = screen.getAllByRole('listitem')[0]
+
+  expect(within(topProjectCard).getByText('Project III'))
+  expect(within(topProjectCard).getByText('Tue Jan 21 1992 08:00:00 GMT+0000 (Coordinated Universal Time)'))
+})
+
+test('Project sorted descending', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    getAccessToken: getFakeAccessToken,
+  })
+
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+  )
+
+  const sortProjects = screen.getByLabelText('sort-projects')
+
+  userEvent.click(sortProjects)
+
+  const topProjectCard = screen.getAllByRole('listitem')[0]
+
+  expect(within(topProjectCard).getByText('Project V'))
+})
+
+test('Project filter filters by name and country', async () => {
+  const dexieInstance = getMockDexieInstanceAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexieInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    getAccessToken: getFakeAccessToken,
+  })
+
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexieInstance,
+    isSyncInProgressOverride: true,
+  })
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+  )
+
+  const filterProjects = screen.getByRole('textbox', { name: /Filter Projects By Name or Country/i })
+
+  // Filter by name
+  userEvent.type(filterProjects, '"Project V"')
+
+  let projectCards = screen.getAllByRole('listitem')
+
+  expect(projectCards.length).toEqual(1)
+  expect(within(projectCards[0]).getByText('Project V'))
+
+  // Filter by name and country
+  userEvent.type(filterProjects, '{selectall}{del} "Project V" America')
+
+  projectCards = screen.getAllByRole('listitem')
+
+  expect(projectCards.length).toEqual(2)
+
+})
+
