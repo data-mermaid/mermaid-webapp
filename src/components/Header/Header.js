@@ -192,7 +192,7 @@ const Header = ({ logout, currentUser }) => {
         </p>)
     }
 
-    // First name
+    // Full name
     if (currentUser && currentUser.full_name) {
       return (<p>
           {currentUser && currentUser.full_name} <IconDown />
