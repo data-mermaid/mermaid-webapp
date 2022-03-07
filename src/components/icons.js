@@ -40,6 +40,7 @@ import sortDescending from '@iconify-icons/mdi/sort-descending'
 import sync from '@iconify-icons/mdi/sync'
 import upload from '@iconify-icons/mdi/upload'
 import styled from 'styled-components/macro'
+import user from '@iconify-icons/mdi/user'
 import theme from '../theme'
 
 const WarningIcon = styled(InlineIcon)`
@@ -84,4 +85,5 @@ export const IconSortDown = (props) => <InlineIcon icon={sortDescending} {...pro
 export const IconSortUp = (props) => <InlineIcon icon={sortAscending} {...props} />
 export const IconUp = (props) => <InlineIcon icon={menuUp} {...props} />
 export const IconUpload = (props) => <InlineIcon icon={upload} {...props} />
+export const IconUser = (props) => <InlineIcon icon={user} {...props} />
 export const IconUsers = (props) => <InlineIcon icon={accountGroup} {...props} />
