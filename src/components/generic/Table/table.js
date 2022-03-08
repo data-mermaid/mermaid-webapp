@@ -66,7 +66,10 @@ export const Th = styled.th(
     vertical-align: top;
     &::after {
       content: ' \u25b2';
-      color: ${theme.color.secondaryDisabledColor};
+      color: ${!props.isSortingDisabled
+        ? theme.color.secondaryDisabledColor
+        : theme.color.white
+      };
       font-size: small;
       white-space: nowrap;
     }
