@@ -80,13 +80,12 @@ const SubmittedRecordsMixin = (Base) =>
         )
       }
 
-      const authAccessToken = await getAuthorizationHeaders(this._getAccessToken)
-
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .put(
               `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${submittedRecordId}/edit/`,
-              authAccessToken,
+              {},
+              await getAuthorizationHeaders(this._getAccessToken),
             )
             .then(() =>
               this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId),
