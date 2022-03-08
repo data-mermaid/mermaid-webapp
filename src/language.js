@@ -194,18 +194,31 @@ const pages = {
 const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
+const validationMessages = {
+  siteNotFound: 'Site record not available for similarity validation',
+  notUniqueSite: 'Site: Similar records detected',
+  managementNotFound: 'Management Regime record not available for similarity validation',
+  notUniqueManagement: 'Management Regime: Similar records detected',
+  invalidFishCount: 'Invalid fish count',
+  futureSampleDate: 'Sample date is in the future',
+  noRegionMatch: 'Attributes outside of site region',
+  notPartOfFishFamilySubset: 'There are fish that are not part of project defined fish families',
+  allEqual: 'All observations are the same',
+  duplicateTransect: 'Transect already exists',
+}
+
 const getValidationMessage = (validation) => {
   const { code, context, name } = validation
 
   switch (code) {
     case 'site_not_found':
-      return 'Site record not available for similarity validation'
+      return validationMessages.siteNotFound
     case 'not_unique_site':
-      return 'Site: Similar records detected'
+      return validationMessages.notUniqueSite
     case 'management_not_found':
-      return 'Management Regime record not available for similarity validation'
+      return validationMessages.managementNotFound
     case 'not_unique_management':
-      return 'Management Regime: Similar records detected'
+      return validationMessages.notUniqueManagement
     case 'minimum_total_fish_count':
       return `Total fish count less than ${context?.minimum_fish_count}`
     case 'too_few_observations':
@@ -222,19 +235,19 @@ const getValidationMessage = (validation) => {
     case 'invalid_depth':
       return `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`
     case 'invalid_fish_count':
-      return `Invalid fish count`
+      return validationMessages.invalidFishCount
     case 'future_sample_date':
-      return 'Sample date is in the future'
+      return validationMessages.futureSampleDate
     case 'sample_time_out_of_range':
       return `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`
     case 'no_region_match':
-      return 'Attributes outside of site region'
+      return validationMessages.noRegionMatch
     case 'not_part_of_fish_family_subset':
-      return 'There are fish that are not part of project defined fish families'
+      return validationMessages.notPartOfFishFamilySubset
     case 'all_equal':
-      return 'All observations are the same'
+      return validationMessages.allEqual
     case 'duplicate_transect':
-      return 'Transect already exists'
+      return validationMessages.duplicateTransect
     default:
       return code || name
   }
