@@ -22,6 +22,9 @@ import { pluralize } from '../../../library/strings/pluralize'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  reactTableNaturalSortReactNodesSecondChild
+} from '../../generic/Table/reactTableNaturalSort'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
@@ -68,6 +71,7 @@ const ProfileImage = styled('div')`
     `}
   width: ${theme.typography.xLargeIconSize};
   height: ${theme.typography.xLargeIconSize};
+  margin-right: 1rem;
 `
 
 const NameCellStyle = styled('div')`
@@ -291,6 +295,7 @@ const Users = ({ currentUser }) => {
       {
         Header: 'Name',
         accessor: 'name',
+        sortType: reactTableNaturalSortReactNodesSecondChild,
       },
       {
         Header: 'Email',
@@ -387,7 +392,7 @@ const Users = ({ currentUser }) => {
       return {
         name: (
           <NameCellStyle>
-            {picture ? <ProfileImage img={picture} /> : <IconAccount />} {profile_name}
+            {picture ? <ProfileImage img={picture} /> : <IconAccount />}  {profile_name}
           </NameCellStyle>
         ),
         email,
@@ -541,7 +546,7 @@ const Users = ({ currentUser }) => {
                     {column.render('Header')}
                   </Th>
                 )
-})}
+              })}
               </Tr>
             ))}
           </thead>

@@ -1,6 +1,6 @@
 const reactTableNaturalSort = (rowA, rowB, columnId) => {
-  const rowACellContents = rowA.original[columnId] ?? ''
-  const rowBCellContents = rowB.original[columnId] ?? ''
+  const rowACellContents = rowA?.original[columnId] ?? ''
+  const rowBCellContents = rowB?.original[columnId] ?? ''
 
   return rowACellContents.toString().localeCompare(rowBCellContents, 'en', {
     numeric: true,
@@ -11,8 +11,21 @@ const reactTableNaturalSort = (rowA, rowB, columnId) => {
 const reactTableNaturalSortReactNodes = (rowA, rowB, columnId) => {
   // this sort is different, because the data values will be children of react nodes
 
-  const rowACellContents = rowA.original[columnId].props.children ?? ''
-  const rowBCellContents = rowB.original[columnId].props.children ?? ''
+  const rowACellContents = rowA?.original[columnId].props.children ?? ''
+  const rowBCellContents = rowB?.original[columnId].props.children ?? ''
+
+  return rowACellContents.localeCompare(rowBCellContents, 'en', {
+    numeric: true,
+    caseFirst: 'upper',
+  })
+}
+
+const reactTableNaturalSortReactNodesSecondChild = (rowA, rowB, columnId) => {
+  // this sort is similar to reactTableNaturalSortReactNodes,
+  // but it gets the second element of the children array
+
+  const rowACellContents = rowA?.original[columnId].props.children[1] ?? ''
+  const rowBCellContents = rowB?.original[columnId].props.children[1] ?? ''
 
   return rowACellContents.localeCompare(rowBCellContents, 'en', {
     numeric: true,
@@ -21,8 +34,8 @@ const reactTableNaturalSortReactNodes = (rowA, rowB, columnId) => {
 }
 
 const reactTableNaturalSortDates = (rowA, rowB, columnId) => {
-  const rowACellContents = Date.parse(rowA.original[columnId]) ?? ''
-  const rowBCellContents = Date.parse(rowB.original[columnId]) ?? ''
+  const rowACellContents = Date.parse(rowA?.original[columnId]) ?? ''
+  const rowBCellContents = Date.parse(rowB?.original[columnId]) ?? ''
 
   return rowACellContents.toString().localeCompare(rowBCellContents, 'en', {
     numeric: true,
@@ -32,5 +45,6 @@ const reactTableNaturalSortDates = (rowA, rowB, columnId) => {
 export {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
+  reactTableNaturalSortReactNodesSecondChild,
   reactTableNaturalSortDates
 }
