@@ -35,7 +35,6 @@ const ManagementRegime = () => {
   const { managementRegimeId, projectId } = useParams()
   const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [isFormDirty, setIsFormDirty] = useState(false)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -117,7 +116,6 @@ const ManagementRegime = () => {
         .then(() => {
           toast.success(language.success.managementRegimeSave)
           setSaveButtonState(buttonGroupStates.saved)
-          setIsFormDirty(false)
           formikActions.resetForm({ values: formikValues })
         })
         .catch(() => {
@@ -146,15 +144,11 @@ const ManagementRegime = () => {
     },
   })
 
-  const _setIsFormDirty = useEffect(() => {
-    setIsFormDirty(!!formik.dirty)
-  }, [formik.dirty])
-
   const _setSiteButtonUnsaved = useEffect(() => {
-    if (isFormDirty) {
+    if (formik.dirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
-  }, [isFormDirty])
+  }, [formik.dirty])
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout

@@ -151,7 +151,6 @@ const Admin = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [isFormDirty, setIsFormDirty] = useState(false)
 
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
@@ -213,15 +212,11 @@ const Admin = () => {
     },
   })
 
-  const _setIsFormDirty = useEffect(() => {
-    setIsFormDirty(!!formik.dirty)
-  }, [formik.dirty])
-
   const _setSiteButtonUnsaved = useEffect(() => {
-    if (isFormDirty) {
+    if (formik.dirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
-  }, [isFormDirty])
+  }, [formik.dirty])
 
   const noOrganizationResult = (
     <>

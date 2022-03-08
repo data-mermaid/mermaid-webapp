@@ -39,7 +39,6 @@ const Site = () => {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [isFormDirty, setIsFormDirty] = useState(false)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
@@ -100,7 +99,6 @@ const Site = () => {
         .then(() => {
           toast.success(...getToastArguments(language.success.siteSave))
           setSaveButtonState(buttonGroupStates.saved)
-          setIsFormDirty(false)
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
         })
         .catch(() => {
@@ -140,15 +138,11 @@ const Site = () => {
 
   const { setFieldValue: formikSetFieldValue } = formik
 
-  const _setIsFormDirty = useEffect(() => {
-    setIsFormDirty(!!formik.dirty)
-  }, [formik.dirty])
-
   const _setSiteButtonUnsaved = useEffect(() => {
-    if (isFormDirty) {
+    if (formik.dirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
-  }, [isFormDirty])
+  }, [formik.dirty])
 
   const handleLatitudeChange = useCallback(
     (value) => {
