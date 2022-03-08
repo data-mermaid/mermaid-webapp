@@ -23,6 +23,7 @@ import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import {
+  reactTableNaturalSort,
   reactTableNaturalSortReactNodesSecondChild
 } from '../../generic/Table/reactTableNaturalSort'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -300,31 +301,38 @@ const Users = ({ currentUser }) => {
       {
         Header: 'Email',
         accessor: 'email',
+        sortType: reactTableNaturalSort,
       },
       {
         Header: 'Admin',
         accessor: 'admin',
+        disableSortBy: true,
       },
       {
         Header: 'Collector',
         accessor: 'collector',
+        disableSortBy: true,
       },
       {
         Header: 'Read-Only',
         accessor: 'readonly',
+        disableSortBy: true,
       },
       {
         Header: 'Active Sample Units',
         accessor: 'active',
-        align: 'right',
+        sortType: reactTableNaturalSort,
+        align: 'right'
       },
       {
         Header: 'Transfer Sample Units',
         accessor: 'transfer',
+        disableSortBy: true,
       },
       {
         Header: 'Remove From Project',
         accessor: 'remove',
+        disableSortBy: true,
       },
     ]
   }, [])
@@ -542,6 +550,7 @@ const Users = ({ currentUser }) => {
                     isSortedDescending={column.isSortedDesc}
                     sortedIndex={column.sortedIndex}
                     isMultiSortColumn={isMultiSortColumn}
+                    isSortingDisabled={column.disableSortBy}
                   >
                     {column.render('Header')}
                   </Th>
