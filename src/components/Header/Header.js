@@ -81,12 +81,13 @@ const dropdownLinkStyles = css`
 `
 const StyledNavLink = styled(Link)`
   ${linkStyles}
-`
-
-const DisabledNavLink = styled(Link)`
-  ${linkStyles}
-  pointer-events: none;
-  color: ${theme.color.disabledText};
+  ${(props) =>
+    props.disabled &&
+    css`
+      color: ${theme.color.disabledText};
+      pointer-events: none;
+    `} 
+  }
 `
 
 const GlobalNav = styled('nav')`
@@ -167,7 +168,9 @@ const GlobalLinks = () => (
   <>
     <StyledNavLink to="/projects">Projects</StyledNavLink>
     <OfflineHide>
-      <DisabledNavLink to="/#">Reports</DisabledNavLink>
+      <StyledNavLink to="/#" disabled>
+        Reports
+      </StyledNavLink>
     </OfflineHide>
     <StyledNavLink
       to={{ pathname: 'https://dev-collect.datamermaid.org/#/reference/home' }}
@@ -196,25 +199,37 @@ const Header = ({ logout, currentUser }) => {
   const getUserButton = () => {
     // Avatar
     if (currentUser && currentUser.picture) {
-      return <p><img src={currentUser.picture} alt=""/></p>
+      return (
+        <p>
+          <img src={currentUser.picture} alt="" />
+        </p>
+      )
     }
 
     // First name
     if (currentUser && currentUser.first_name) {
-      return (<p>
+      return (
+        <p>
           {currentUser && currentUser.first_name} <IconDown />
-        </p>)
+        </p>
+      )
     }
 
     // Full name
     if (currentUser && currentUser.full_name) {
-      return (<p>
+      return (
+        <p>
           {currentUser && currentUser.full_name} <IconDown />
-        </p>)
+        </p>
+      )
     }
 
     // User icon
-    return <p><IconUser /></p>
+    return (
+      <p>
+        <IconUser />
+      </p>
+    )
   }
 
   const getUserDisplayName = () => {
@@ -262,9 +277,7 @@ const Header = ({ logout, currentUser }) => {
             contents={
               <div className="menuDropdown">
                 <GlobalLinks />
-                { currentUser &&
-                  <p className="loggedInAs">Logged in as {getUserDisplayName()}</p>
-                }
+                {currentUser && <p className="loggedInAs">Logged in as {getUserDisplayName()}</p>}
                 <div className="mobileUserMenu">
                   <UserMenuDropDownContent />
                 </div>
