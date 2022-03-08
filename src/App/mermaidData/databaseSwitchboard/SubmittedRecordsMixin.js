@@ -23,7 +23,7 @@ const SubmittedRecordsMixin = (Base) =>
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
               },
-              ...await getAuthorizationHeaders(this._getAccessToken)
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
             .then((apiResults) => apiResults.data.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
@@ -38,10 +38,11 @@ const SubmittedRecordsMixin = (Base) =>
       }
 
       return this._isOnlineAuthenticatedAndReady
-        ? axios.get(
-          `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
-          await getAuthorizationHeaders(this._getAccessToken)
-        )
+        ? axios
+            .get(
+              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
+              await getAuthorizationHeaders(this._getAccessToken),
+            )
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
@@ -79,12 +80,13 @@ const SubmittedRecordsMixin = (Base) =>
         )
       }
 
+      const authAccessToken = await getAuthorizationHeaders(this._getAccessToken)
+
       return this._isOnlineAuthenticatedAndReady
-        ? this._authenticatedAxios
+        ? axios
             .put(
               `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${submittedRecordId}/edit/`,
-              await getAuthorizationHeaders(this._getAccessToken)
-
+              authAccessToken,
             )
             .then(() =>
               this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId),
