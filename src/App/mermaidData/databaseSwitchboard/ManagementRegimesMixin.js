@@ -1,5 +1,7 @@
+import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
@@ -97,7 +99,7 @@ const ManagementRegimesMixin = (Base) =>
       if (this._isOnlineAuthenticatedAndReady) {
         await this._dexieInstance.project_managements.put(managementToSubmit)
 
-        return this._authenticatedAxios
+        return axios
           .post(
             `${this._apiBaseUrl}/push/`,
             {
@@ -107,6 +109,7 @@ const ManagementRegimesMixin = (Base) =>
               params: {
                 force: true,
               },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
           .then((response) => {
