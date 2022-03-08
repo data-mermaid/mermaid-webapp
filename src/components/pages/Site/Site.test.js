@@ -29,15 +29,17 @@ test('Edit Site page - Save button initially disabled, then enabled when form di
     },
   )
 
-  const getSaveButton = async () => screen.findByRole('button', { name: 'Save' })
+  const saveButtonInit = await screen.findByRole('button', { name: 'Saved' })
 
-  expect(await getSaveButton()).toBeDisabled()
+  expect(saveButtonInit).toBeDisabled()
 
   const siteNameInput = screen.getByRole('textbox', { name: 'Name' })
 
   userEvent.type(siteNameInput, 'updated name')
 
-  expect(await getSaveButton()).toBeEnabled()
+  const saveButtonAfterFormDirty = await screen.findByRole('button', { name: 'Save' })
+
+  expect(saveButtonAfterFormDirty).toBeEnabled()
 })
 
 test('Edit Site page - Save button disabled and "Required" error valudation message displayed when site name is empty', async () => {
@@ -61,8 +63,9 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
   userEvent.clear(siteNameInput)
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
-  expect(await within(screen.getByTestId('name')).findByText('This field is required')).toBeInTheDocument()
-
+  expect(
+    await within(screen.getByTestId('name')).findByText('This field is required'),
+  ).toBeInTheDocument()
 })
 
 test('Edit Site page - clear latitude or longitude inputs shows inline error validation message "This field is required"', async () => {
@@ -88,7 +91,9 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   userEvent.clear(latitudeInput)
 
-  expect(await within(screen.getByTestId('latitude')).findByText('This field is required')).toBeInTheDocument()
+  expect(
+    await within(screen.getByTestId('latitude')).findByText('This field is required'),
+  ).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 
@@ -102,7 +107,9 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   userEvent.clear(longitudeInput)
 
-  expect(await within(screen.getByTestId('longitude')).findByText('This field is required')).toBeInTheDocument()
+  expect(
+    await within(screen.getByTestId('longitude')).findByText('This field is required'),
+  ).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 

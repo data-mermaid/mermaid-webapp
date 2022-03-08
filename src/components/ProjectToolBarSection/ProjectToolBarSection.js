@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
 import {
@@ -6,7 +7,7 @@ import {
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 import { ButtonCallout, ButtonSecondary } from '../generic/buttons'
-import { IconSortDown } from '../icons'
+import { IconSortDown, IconSortUp } from '../icons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
 
@@ -74,12 +75,24 @@ const SortByLabelWrapper = styled.label`
   `)}
 `
 
-/**
- * Describe your component
- */
+const ProjectToolBarSection = ({
+  projectFilter,
+  setProjectFilter,
+  projectSortKey,
+  setProjectSortKey,
+  isProjectSortAsc,
+  setIsProjectSortAsc
+}) => {
 
-const ProjectToolBarSection = () => {
-  return (
+  const setFilter = (event) => {
+    setProjectFilter(event.target.value)
+  }
+
+  const setSortBy = (event) => {
+    setProjectSortKey(event.target.value)
+  }
+
+return (
     <GlobalWrapper>
       <RowWrapper>
         <HeaderStyle>Projects</HeaderStyle>
@@ -88,21 +101,21 @@ const ProjectToolBarSection = () => {
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>
-        <FilterLabelWrapper htmlFor="filter_projects">
+        <FilterLabelWrapper htmlFor="filter_projects" value={projectFilter} onChange={setFilter}>
           Filter Projects By Name or Country
           <Input type="text" id="filter_projects" />
         </FilterLabelWrapper>
         <SortByLabelWrapper htmlFor="sort_by">
           Sort By
-          <select id="sort_by">
-            <option value="Projects">Project Name</option>
-            <option value="Country">Country</option>
-            <option value="NumberOfSites">Number of Sites</option>
-            <option value="LastUpdated">Last Updated Dates</option>
+          <select id="sort_by" onChange={setSortBy} value={projectSortKey}>
+            <option value="name">Project Name</option>
+            <option value="countries">Country</option>
+            <option value="num_sites">Number of Sites</option>
+            <option value="updated_on">Last Updated Date</option>
           </select>
         </SortByLabelWrapper>
-        <ButtonSecondary aria-label="sort-projects">
-          <IconSortDown />
+        <ButtonSecondary aria-label="sort-projects" onClick={() => setIsProjectSortAsc(!isProjectSortAsc)}>
+          { isProjectSortAsc ? <IconSortDown /> : <IconSortUp /> }
         </ButtonSecondary>
       </FilterRowWrapper>
     </GlobalWrapper>
@@ -110,3 +123,12 @@ const ProjectToolBarSection = () => {
 }
 
 export default ProjectToolBarSection
+
+ProjectToolBarSection.propTypes = {
+  projectFilter: PropTypes.string.isRequired,
+  setProjectFilter: PropTypes.func.isRequired,
+  projectSortKey: PropTypes.string.isRequired,
+  setProjectSortKey: PropTypes.func.isRequired,
+  isProjectSortAsc: PropTypes.bool.isRequired,
+  setIsProjectSortAsc: PropTypes.func.isRequired,
+}

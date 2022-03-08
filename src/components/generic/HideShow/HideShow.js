@@ -54,7 +54,7 @@ const HideShow = ({ contents, button }) => {
   })
 
   return (
-    <PositionedAncestor data-testid="add-sample-unit">
+    <PositionedAncestor>
       {buttonForRender}
       {showItems && contents}
     </PositionedAncestor>
