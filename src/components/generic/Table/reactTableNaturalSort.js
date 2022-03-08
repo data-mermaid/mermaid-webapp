@@ -14,7 +14,7 @@ const reactTableNaturalSortReactNodes = (rowA, rowB, columnId) => {
   const rowACellContents = rowA?.original[columnId].props.children ?? ''
   const rowBCellContents = rowB?.original[columnId].props.children ?? ''
 
-  return rowACellContents.localeCompare(rowBCellContents, 'en', {
+  return rowACellContents.toString().localeCompare(rowBCellContents, 'en', {
     numeric: true,
     caseFirst: 'upper',
   })
@@ -27,7 +27,7 @@ const reactTableNaturalSortReactNodesSecondChild = (rowA, rowB, columnId) => {
   const rowACellContents = rowA?.original[columnId].props.children[1] ?? ''
   const rowBCellContents = rowB?.original[columnId].props.children[1] ?? ''
 
-  return rowACellContents.localeCompare(rowBCellContents, 'en', {
+  return rowACellContents.toString().localeCompare(rowBCellContents, 'en', {
     numeric: true,
     caseFirst: 'upper',
   })

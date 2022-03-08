@@ -321,7 +321,7 @@ const Users = ({ currentUser }) => {
       {
         Header: 'Active Sample Units',
         accessor: 'active',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortReactNodesSecondChild,
         align: 'right'
       },
       {
@@ -452,7 +452,7 @@ const Users = ({ currentUser }) => {
         active: (
           <>
             {isActiveSampleUnitsWarningShowing ? <ActiveSampleUnitsIconAlert /> : null}
-            {num_active_sample_units}{' '}
+            {num_active_sample_units}
           </>
         ),
         transfer: (
