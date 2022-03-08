@@ -1,4 +1,4 @@
-export const possibleCollectButtonGroupStates = {
+export const buttonGroupStates = {
   saved: 'saved',
   saving: 'saving',
   submittable: 'submitable',

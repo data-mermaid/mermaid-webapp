@@ -4,7 +4,7 @@ import styled from 'styled-components/macro'
 
 import { ButtonCallout } from '../../../generic/buttons'
 import { IconSave, IconCheck, IconUpload } from '../../../icons'
-import { possibleCollectButtonGroupStates } from '../possibleCollectButtonGroupStates'
+import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import OfflineHide from '../../../generic/OfflineHide'
 
 const SaveValidateSubmitButtonWrapper = styled('div')`
@@ -26,12 +26,12 @@ const SaveValidateSubmitButtonGroup = ({
   validateButtonState,
 }) => {
   const getSaveButtonText = () => {
-    if (saveButtonState === possibleCollectButtonGroupStates.saving) {
+    if (saveButtonState === buttonGroupStates.saving) {
       return 'Saving'
     }
     if (
-      saveButtonState === possibleCollectButtonGroupStates.saved ||
-      saveButtonState === possibleCollectButtonGroupStates.validating
+      saveButtonState === buttonGroupStates.saved ||
+      saveButtonState === buttonGroupStates.validating
     ) {
       return 'Saved'
     }
@@ -40,10 +40,10 @@ const SaveValidateSubmitButtonGroup = ({
   }
 
   const getValidateButtonText = () => {
-    if (validateButtonState === possibleCollectButtonGroupStates.validating) {
+    if (validateButtonState === buttonGroupStates.validating) {
       return 'Validating'
     }
-    if (validateButtonState === possibleCollectButtonGroupStates.validated) {
+    if (validateButtonState === buttonGroupStates.validated) {
       return 'Validated'
     }
 
@@ -51,25 +51,25 @@ const SaveValidateSubmitButtonGroup = ({
   }
 
   const getSubmitButtonText = () =>
-    submitButtonState === possibleCollectButtonGroupStates.submitting ? 'Submitting' : 'Submit'
+    submitButtonState === buttonGroupStates.submitting ? 'Submitting' : 'Submit'
 
   const isSaveDisabled =
-    saveButtonState === possibleCollectButtonGroupStates.saved ||
-    saveButtonState === possibleCollectButtonGroupStates.saving ||
-    validateButtonState === possibleCollectButtonGroupStates.validating
+    saveButtonState === buttonGroupStates.saved ||
+    saveButtonState === buttonGroupStates.saving ||
+    validateButtonState === buttonGroupStates.validating
 
   const isValidateDisabled =
-    saveButtonState === possibleCollectButtonGroupStates.unsaved ||
-    saveButtonState === possibleCollectButtonGroupStates.saving ||
-    validateButtonState === possibleCollectButtonGroupStates.validated ||
-    validateButtonState === possibleCollectButtonGroupStates.validating
+    saveButtonState === buttonGroupStates.unsaved ||
+    saveButtonState === buttonGroupStates.saving ||
+    validateButtonState === buttonGroupStates.validated ||
+    validateButtonState === buttonGroupStates.validating
 
   const isSubmitDisabled =
-    submitButtonState === possibleCollectButtonGroupStates.submitting ||
-    validateButtonState === possibleCollectButtonGroupStates.validatable ||
-    validateButtonState === possibleCollectButtonGroupStates.validating ||
-    saveButtonState === possibleCollectButtonGroupStates.unsaved ||
-    saveButtonState === possibleCollectButtonGroupStates.saving
+    submitButtonState === buttonGroupStates.submitting ||
+    validateButtonState === buttonGroupStates.validatable ||
+    validateButtonState === buttonGroupStates.validating ||
+    saveButtonState === buttonGroupStates.unsaved ||
+    saveButtonState === buttonGroupStates.saving
 
   const saveButton = (
     <ButtonCallout type="button" disabled={isSaveDisabled} onClick={onSave}>
