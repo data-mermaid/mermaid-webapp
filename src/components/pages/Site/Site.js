@@ -109,26 +109,24 @@ const Site = () => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (!values.latitude) {
-        errors.latitude = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (values.latitude > 90 || values.latitude < -90) {
-        errors.latitude = [
-          { message: language.error.formValidation.latitude, id: 'Invalid Latitude' },
-        ]
+        errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
       }
 
       if (!values.longitude) {
-        errors.longitude = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (values.longitude > 180 || values.longitude < -180) {
         errors.longitude = [
-          { message: language.error.formValidation.longitude, id: 'Invalid Longitude' },
+          { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
         ]
       }
 

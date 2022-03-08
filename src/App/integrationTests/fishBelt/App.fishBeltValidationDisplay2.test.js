@@ -83,7 +83,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(screen.getByText('record level error 2')).toBeInTheDocument()
   expect(screen.getByText('record level warning 1')).toBeInTheDocument()
   expect(screen.getByText('record level warning 2')).toBeInTheDocument()
-  expect(screen.queryByText('OK validation shouldnt show')).not.toBeInTheDocument()
+  expect(screen.queryByText(`OK validation shouldn't show`)).not.toBeInTheDocument()
 
   // input level validations
 
@@ -112,7 +112,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
   expect(
-    within(observationsTable).queryByText('observation validation with ok status shoulnt show'),
+    within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()
 })
 
@@ -134,31 +134,31 @@ test('Fishbelt validations will show only the first error when there are multipl
               obs_belt_fishes: [
                 [
                   {
-                    name: 'observation validation with ok status shoulnt show',
+                    code: `observation validation with ok status shouldn't show`,
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
                     context: { observation_id: '7' },
                   },
                   {
-                    name: 'observation error 1',
+                    code: 'observation error 1',
                     status: 'error',
                     validation_id: '2b289dc99c02e9ae1c764e8a71cca3cc',
                     context: { observation_id: '7' },
                   },
                   {
-                    name: 'observation warning 1',
+                    code: 'observation warning 1',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
                     context: { observation_id: '7' },
                   },
                   {
-                    name: 'observation error 2',
+                    code: 'observation error 2',
                     status: 'error',
                     validation_id: '2b289dc99c02e9ae1c764e8a71cca3c8',
                     context: { observation_id: '7' },
                   },
                   {
-                    name: 'observation warning 2',
+                    code: 'observation warning 2',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
                     context: { observation_id: '7' },
@@ -169,22 +169,22 @@ test('Fishbelt validations will show only the first error when there are multipl
                 site: [
                   {
                     validation_id: Math.random(),
-                    name: 'firstError',
+                    code: 'firstError',
                     status: 'error',
                   },
                   {
                     validation_id: Math.random(),
-                    name: 'secondError',
+                    code: 'secondError',
                     status: 'error',
                   },
                   {
                     validation_id: Math.random(),
-                    name: 'firstWarning',
+                    code: 'firstWarning',
                     status: 'warning',
                   },
                   {
                     validation_id: Math.random(),
-                    name: 'secondWarning',
+                    code: 'secondWarning',
                     status: 'warning',
                   },
                 ],
@@ -260,6 +260,6 @@ test('Fishbelt validations will show only the first error when there are multipl
   expect(within(observationsTable).queryByText('observation warning 1')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('observation warning 2')).not.toBeInTheDocument()
   expect(
-    within(observationsTable).queryByText('observation validation with ok status shoulnt show'),
+    within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
   ).not.toBeInTheDocument()
 })

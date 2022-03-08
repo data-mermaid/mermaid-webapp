@@ -194,6 +194,65 @@ const pages = {
 const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
+const validationMessages = {
+  siteNotFound: 'Site record not available for similarity validation',
+  notUniqueSite: 'Site: Similar records detected',
+  managementNotFound: 'Management Regime record not available for similarity validation',
+  notUniqueManagement: 'Management Regime: Similar records detected',
+  invalidFishCount: 'Invalid fish count',
+  futureSampleDate: 'Sample date is in the future',
+  noRegionMatch: 'Attributes outside of site region',
+  notPartOfFishFamilySubset: 'There are fish that are not part of project defined fish families',
+  allEqual: 'All observations are the same',
+  duplicateTransect: 'Transect already exists',
+}
+
+const getValidationMessage = (validation) => {
+  const { code, context, name } = validation
+
+  switch (code) {
+    case 'site_not_found':
+      return validationMessages.siteNotFound
+    case 'not_unique_site':
+      return validationMessages.notUniqueSite
+    case 'management_not_found':
+      return validationMessages.managementNotFound
+    case 'not_unique_management':
+      return validationMessages.notUniqueManagement
+    case 'minimum_total_fish_count':
+      return `Total fish count less than ${context?.minimum_fish_count}`
+    case 'too_few_observations':
+      return `Fewer than ${context?.observation_count_range[0]} observations`
+    case 'too_many_observations':
+      return `Greater than ${context?.observation_count_range[1]} observations`
+    case 'low_density':
+      return `Fish biomass less than ${context?.biomass_range[1]} kg/ha`
+    case 'high_density':
+      return `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`
+    case 'len_surveyed_out_of_range':
+      return `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`
+    case 'max_depth':
+    case 'invalid_depth':
+      return `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`
+    case 'invalid_fish_count':
+      return validationMessages.invalidFishCount
+    case 'future_sample_date':
+      return validationMessages.futureSampleDate
+    case 'sample_time_out_of_range':
+      return `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`
+    case 'no_region_match':
+      return validationMessages.noRegionMatch
+    case 'not_part_of_fish_family_subset':
+      return validationMessages.notPartOfFishFamilySubset
+    case 'all_equal':
+      return validationMessages.allEqual
+    case 'duplicate_transect':
+      return validationMessages.duplicateTransect
+    default:
+      return code || name
+  }
+}
+
 export default {
   projectCodes,
   error,
@@ -203,4 +262,5 @@ export default {
   pages,
   createFishSpecies,
   navigateAwayPrompt,
+  getValidationMessage,
 }

@@ -205,7 +205,7 @@ const Admin = () => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       return errors

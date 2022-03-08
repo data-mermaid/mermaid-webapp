@@ -4,7 +4,7 @@ export default {
     data: {
       observers: [
         {
-          name: 'required',
+          code: 'required',
           fields: ['data.observers'],
           status: 'error',
           context: null,
@@ -15,13 +15,13 @@ export default {
         notes: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
         site: [
           {
-            name: 'required',
+            code: 'required',
             fields: ['data.sample_event.site'],
             status: 'error',
             context: null,
@@ -37,7 +37,7 @@ export default {
         ],
         management: [
           {
-            name: 'required',
+            code: 'required',
             fields: ['data.sample_event.management'],
             status: 'error',
             context: null,
@@ -54,7 +54,7 @@ export default {
         ],
         sample_date: [
           {
-            name: 'required',
+            code: 'required',
             fields: ['data.sample_event.sample_date'],
             status: 'error',
             context: null,
@@ -79,7 +79,7 @@ export default {
             context: { observation_id: '7' },
           },
           {
-            name: 'observation error',
+            code: 'observation error',
             status: 'error',
             validation_id: '2b289dc99c02e9ae1c764e8a71cca3cc',
             context: { observation_id: '7' },
@@ -96,48 +96,48 @@ export default {
         relative_depth: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
         visibility: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
         current: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
         tide: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
         reef_slope: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
         label: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
         depth: [
           {
-            name: 'required',
+            code: 'required',
             fields: ['data.fishbelt_transect.depth'],
             status: 'error',
             context: null,
@@ -154,7 +154,7 @@ export default {
         ],
         width: [
           {
-            name: 'required',
+            code: 'required',
             fields: ['data.fishbelt_transect.width'],
             status: 'error',
             context: null,
@@ -163,7 +163,7 @@ export default {
         ],
         number: [
           {
-            name: 'required',
+            code: 'required',
             fields: ['data.fishbelt_transect.number'],
             status: 'error',
             context: null,
@@ -172,7 +172,7 @@ export default {
         ],
         size_bin: [
           {
-            name: 'required',
+            code: 'required',
             fields: ['data.fishbelt_transect.size_bin'],
             status: 'error',
             context: null,
@@ -182,14 +182,14 @@ export default {
         sample_time: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
         len_surveyed: [
           {
             validation_id: Math.random(),
-            name: 'required',
+            code: 'required',
             status: 'error',
           },
         ],
@@ -217,7 +217,7 @@ export default {
         validation_id: 'ba4ac7677b7878d0a321cd3913f264ca',
       },
       {
-        name: 'OK validation shouldnt show',
+        name: `OK validation shouldn't show`,
         status: 'ok',
         validation_id: '9175eb636ead3bc01a94378fe4d48af8',
       },
