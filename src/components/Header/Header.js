@@ -88,6 +88,17 @@ const StyledNavLink = styled(Link)`
       pointer-events: none;
     `} 
   }
+  `
+
+const StyledNavLink2 = styled('a')`
+${linkStyles}
+${(props) =>
+  props.disabled &&
+  css`
+    color: ${theme.color.disabledText};
+    pointer-events: none;
+  `} 
+}
 `
 
 const GlobalNav = styled('nav')`
@@ -172,12 +183,16 @@ const GlobalLinks = () => (
         Reports
       </StyledNavLink>
     </OfflineHide>
+
     <StyledNavLink
       to={{ pathname: 'https://dev-collect.datamermaid.org/#/reference/home' }}
       target="_blank"
     >
       Reference
     </StyledNavLink>
+    <StyledNavLink2 href="https://dev-collect.datamermaid.org/#/reference/home" target="_blank">
+      Reference
+    </StyledNavLink2>
     <OfflineHide>
       <StyledNavLink to={{ pathname: 'https://dashboard.datamermaid.org/' }} target="_blank">
         Global Dashboard
