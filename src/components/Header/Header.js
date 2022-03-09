@@ -79,7 +79,7 @@ const dropdownLinkStyles = css`
     `,
   )}
 `
-const StyledNavLink = styled(Link)`
+const StyledNavLink = styled('a')`
   ${linkStyles}
   ${(props) =>
     props.disabled &&
@@ -89,17 +89,6 @@ const StyledNavLink = styled(Link)`
     `} 
   }
   `
-
-const StyledNavLink2 = styled('a')`
-${linkStyles}
-${(props) =>
-  props.disabled &&
-  css`
-    color: ${theme.color.disabledText};
-    pointer-events: none;
-  `} 
-}
-`
 
 const GlobalNav = styled('nav')`
   .desktop {
@@ -184,11 +173,15 @@ const GlobalLinks = () => (
       </StyledNavLink>
     </OfflineHide>
 
-    <StyledNavLink2 href="https://dev-collect.datamermaid.org/#/reference/home" target="_blank">
+    <StyledNavLink
+      href="https://dev-collect.datamermaid.org/#/reference/home"
+      target="_blank"
+      rel="noreferrer"
+    >
       Reference
-    </StyledNavLink2>
+    </StyledNavLink>
     <OfflineHide>
-      <StyledNavLink to={{ pathname: 'https://dashboard.datamermaid.org/' }} target="_blank">
+      <StyledNavLink href="https://dashboard.datamermaid.org/" target="_blank" rel="noreferrer">
         Global Dashboard
       </StyledNavLink>
     </OfflineHide>

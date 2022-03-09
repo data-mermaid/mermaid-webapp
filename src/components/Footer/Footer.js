@@ -119,18 +119,18 @@ const Footer = () => {
           Help
         </a>
         <OfflineHide>
-          <Link to={{ pathname: 'https://datamermaid.org/terms-of-service' }} target="_blank">
+          <a href="https://datamermaid.org/terms-of-service" target="_blank" rel="noreferrer">
             Terms
-          </Link>
-          <Link to={{ pathname: 'https://datamermaid.org/contact-us' }} target="_blank">
+          </a>
+          <a href="https://datamermaid.org/contact-us" target="_blank" rel="noreferrer">
             Contact
-          </Link>
-          <Link to={{ pathname: 'https://datamermaid.org/changelog' }} target="_blank">
+          </a>
+          <a href="https://datamermaid.org/changelog" target="_blank" rel="noreferrer">
             Changelog
-          </Link>
-          <Link to={{ pathname: 'https://datamermaid.org/partners-and-teams/' }} target="_blank">
+          </a>
+          <a href="https://datamermaid.org/partners-and-teams/" target="_blank" rel="noreferrer">
             Credits
-          </Link>
+          </a>
         </OfflineHide>
       </FooterNav>
     </StyledFooter>
