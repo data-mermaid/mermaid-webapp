@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
-import { Link } from 'react-router-dom'
 import OfflineToggle from '../OfflineToggle'
 import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'

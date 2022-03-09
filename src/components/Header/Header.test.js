@@ -1,13 +1,11 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 
-import { mount } from 'react-router-dom'
 import {
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
   screen,
   waitFor,
-  fireEvent,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import Header from '.'
 
