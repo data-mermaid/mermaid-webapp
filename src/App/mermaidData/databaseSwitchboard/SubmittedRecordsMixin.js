@@ -80,8 +80,6 @@ const SubmittedRecordsMixin = (Base) =>
         )
       }
 
-      const authAccessToken = await getAuthorizationHeaders(this._getAccessToken)
-
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .put(
