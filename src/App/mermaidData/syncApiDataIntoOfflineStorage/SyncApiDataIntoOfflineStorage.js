@@ -7,8 +7,11 @@ const SyncApiDataIntoOfflineStorage = class {
   _dexieInstance
 
   #getOnlyModifiedAndDeletedItems = (dataList) => {
-    // new, edited, and deleted items will all have a uiState_pushToApi flag locally
-    return dataList.filter((item) => item.uiState_pushToApi)
+   return dataList
+    // New, edited, and deleted items will all have a uiState_pushToApi flag locally which can be used to filter
+    .filter((item) => item.uiState_pushToApi)
+    // Destructuring assignment removes uiState_pushToApi so it will be omitted from the API request
+    .map(({ uiState_pushToApi, ...keepProps }) => keepProps)
   }
 
   constructor({ dexieInstance, apiBaseUrl, getAccessToken }) {
