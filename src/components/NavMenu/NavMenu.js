@@ -164,7 +164,7 @@ const NavMenu = ({ subNavName }) => {
 }
 
 NavMenu.propTypes = {
-  subNavName: PropTypes.string,
+  subNavName: PropTypes.node,
 }
 
 NavMenu.defaultProps = { subNavName: null }

@@ -1,3 +1,4 @@
+import React from 'react'
 import { getObjectById } from './getObjectById'
 
 export const getSubmittedRecordOrCollectRecordName = (recordData, sites, transect_type) => {
@@ -7,11 +8,20 @@ export const getSubmittedRecordOrCollectRecordName = (recordData, sites, transec
   const label = recordData[transect_type]?.label ?? ''
 
   if (!(transectNumber || label)) {
-    return siteName
+    return <>{siteName}</>
   }
   if (!siteName) {
-    return `${transectNumber} ${label}`
+    return (
+      <>
+        {transectNumber} ${label}
+      </>
+    )
   }
 
-  return `${siteName} - ${transectNumber} ${label}`
+  return (
+    <>
+      <span>{siteName}</span>
+      {transectNumber} {label}
+    </>
+  )
 }
