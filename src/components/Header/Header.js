@@ -166,9 +166,9 @@ const UserMenuButton = styled.button`
 `
 const GlobalLinks = () => (
   <>
-    <StyledNavLink to="/projects">Projects</StyledNavLink>
+    <StyledNavLink href="/projects">Projects</StyledNavLink>
     <OfflineHide>
-      <StyledNavLink to="/#" disabled>
+      <StyledNavLink href="/#" disabled>
         Reports
       </StyledNavLink>
     </OfflineHide>
