@@ -184,12 +184,6 @@ const GlobalLinks = () => (
       </StyledNavLink>
     </OfflineHide>
 
-    <StyledNavLink
-      to={{ pathname: 'https://dev-collect.datamermaid.org/#/reference/home' }}
-      target="_blank"
-    >
-      Reference
-    </StyledNavLink>
     <StyledNavLink2 href="https://dev-collect.datamermaid.org/#/reference/home" target="_blank">
       Reference
     </StyledNavLink2>
