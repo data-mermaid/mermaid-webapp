@@ -5,15 +5,16 @@ import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-import { CloseButton, ButtonCallout, ButtonThatLooksLikeLink } from '../../generic/buttons'
+import { CloseButton, ButtonThatLooksLikeLink } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { createUuid } from '../../../library/createUuid'
 import { getOptions } from '../../../library/getOptions'
 import { getProjectInitialValues } from './projectRecordInitialFormValue'
 import { H2 } from '../../generic/text'
+import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { hoverState } from '../../../library/styling/mediaQueries'
-import { IconClose, IconSave } from '../../icons'
+import { IconClose } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -29,6 +30,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
+import SaveButton from '../../generic/SaveButton'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -148,6 +150,7 @@ const Admin = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
 
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
@@ -182,15 +185,17 @@ const Admin = () => {
     [projectBeingEdited],
   )
 
-  const formikOptions = {
+  const formik = useFormik({
     initialValues: initialFormValues,
     enableReinitialize: true,
     onSubmit: (values, actions) => {
+      setSaveButtonState(buttonGroupStates.saving)
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: values })
         .then(() => {
-          actions.resetForm({ values }) // resets formiks dirty state
+          setSaveButtonState(buttonGroupStates.saved)
           toast.success(...getToastArguments(language.success.projectSave))
+          actions.resetForm({ values }) // resets formiks dirty state
         })
         .catch(() => {
           toast.error(...getToastArguments(language.error.projectSave))
@@ -200,16 +205,19 @@ const Admin = () => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       return errors
     },
-  }
-  const formik = useFormik(formikOptions)
+  })
 
-  const doesFormikHaveErrors = Object.keys(formik.errors).length
-  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
+  const _setSiteButtonUnsaved = useEffect(() => {
+    if (formik.dirty) {
+      setSaveButtonState(buttonGroupStates.unsaved)
+    }
+  }, [formik.dirty])
+
   const noOrganizationResult = (
     <>
       <SuggestNewOrganizationButton type="button" onClick={openNewOrganizationNameModal}>
@@ -297,10 +305,11 @@ const Admin = () => {
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>Project Info</H2>
-            <ButtonCallout type="submit" form="project-info-form" disabled={isSaveButtonDisabled}>
-              <IconSave />
-              Save
-            </ButtonCallout>
+            <SaveButton
+              formId="project-info-form"
+              saveButtonState={saveButtonState}
+              formik={formik}
+            />
           </ContentPageToolbarWrapper>
         }
       />

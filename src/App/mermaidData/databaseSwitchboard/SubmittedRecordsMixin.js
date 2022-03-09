@@ -86,7 +86,8 @@ const SubmittedRecordsMixin = (Base) =>
         ? axios
             .put(
               `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${submittedRecordId}/edit/`,
-              authAccessToken,
+              {},
+              await getAuthorizationHeaders(this._getAccessToken),
             )
             .then(() =>
               this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId),

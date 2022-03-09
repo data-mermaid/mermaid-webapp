@@ -21,7 +21,7 @@ import { getFishBinLabel } from './fishBeltBins'
 import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
 import { H2 } from '../../../generic/text'
-import { possibleCollectButtonGroupStates } from '../possibleCollectButtonGroupStates'
+import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -74,15 +74,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [subNavName, setSubNavName] = useState(null)
 
   const [observerProfiles, setObserverProfiles] = useState([])
-  const [saveButtonState, setSaveButtonState] = useState(possibleCollectButtonGroupStates.saved)
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
-  const [submitButtonState, setSubmitButtonState] = useState(
-    possibleCollectButtonGroupStates.submittable,
-  )
-  const [validateButtonState, setValidateButtonState] = useState(
-    possibleCollectButtonGroupStates.validatable,
-  )
+  const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
+  const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
@@ -130,8 +126,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const getValidationButtonStatus = (collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
-      ? possibleCollectButtonGroupStates.validated
-      : possibleCollectButtonGroupStates.validatable
+      ? buttonGroupStates.validated
+      : buttonGroupStates.validatable
   }
 
   const _getSupportingData = useEffect(() => {
@@ -252,7 +248,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
     }
   }
   const handleSubmit = () => {
-    setSubmitButtonState(possibleCollectButtonGroupStates.submitting)
+    setSubmitButtonState(buttonGroupStates.submitting)
 
     databaseSwitchboardInstance
       .submitFishBelt({ recordId, projectId })
@@ -262,11 +258,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
       .catch(() => {
         toast.error(...getToastArguments(language.error.collectRecordSubmit))
-        setSubmitButtonState(possibleCollectButtonGroupStates.submittable)
+        setSubmitButtonState(buttonGroupStates.submittable)
       })
   }
   const handleValidate = () => {
-    setValidateButtonState(possibleCollectButtonGroupStates.validating)
+    setValidateButtonState(buttonGroupStates.validating)
 
     databaseSwitchboardInstance
       .validateFishBelt({ recordId, projectId })
@@ -277,7 +273,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       })
       .catch(() => {
         toast.error(...getToastArguments(language.error.collectRecordValidation))
-        setValidateButtonState(possibleCollectButtonGroupStates.validatable)
+        setValidateButtonState(buttonGroupStates.validatable)
       })
   }
 
@@ -449,7 +445,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       collectRecordBeingEdited,
     )
 
-    setSaveButtonState(possibleCollectButtonGroupStates.saving)
+    setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
 
     databaseSwitchboardInstance
@@ -463,8 +459,8 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsData()
         setAreObservationsInputsDirty(false)
-        setSaveButtonState(possibleCollectButtonGroupStates.saved)
-        setValidateButtonState(possibleCollectButtonGroupStates.validatable)
+        setSaveButtonState(buttonGroupStates.saved)
+        setValidateButtonState(buttonGroupStates.validatable)
         setIsFormDirty(false)
         formik.resetForm({ values: formik.values }) // this resets formik's dirty state
 
@@ -493,7 +489,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const _setCollectButtonsUnsaved = useEffect(() => {
     if (isFormDirty) {
-      setSaveButtonState(possibleCollectButtonGroupStates.unsaved)
+      setSaveButtonState(buttonGroupStates.unsaved)
     }
   }, [isFormDirty])
 

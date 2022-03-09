@@ -7,6 +7,7 @@ import { ContentPageLayout } from '../../Layout'
 import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { H2 } from '../../generic/text'
+import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { InputRow, InputWrapper } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -21,9 +22,8 @@ import MermaidMap from '../../MermaidMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { ButtonCallout } from '../../generic/buttons'
-import { IconSave } from '../../icons'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import SaveButton from '../../generic/SaveButton'
 
 const Site = () => {
   const [countryOptions, setCountryOptions] = useState([])
@@ -38,6 +38,7 @@ const Site = () => {
   const { siteId, projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
@@ -65,9 +66,7 @@ const Site = () => {
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.siteRecordUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.siteRecordUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId])
@@ -94,44 +93,40 @@ const Site = () => {
         },
       }
 
+      setSaveButtonState(buttonGroupStates.saving)
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
         .then(() => {
-          toast.success(
-            ...getToastArguments(language.success.siteSave)
-          )
+          toast.success(...getToastArguments(language.success.siteSave))
+          setSaveButtonState(buttonGroupStates.saved)
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.siteSave)
-          )
+          toast.error(...getToastArguments(language.error.siteSave))
         })
     },
     validate: (values) => {
       const errors = {}
 
       if (!values.name) {
-        errors.name = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (!values.latitude) {
-        errors.latitude = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (values.latitude > 90 || values.latitude < -90) {
-        errors.latitude = [
-          { message: language.error.formValidation.latitude, id: 'Invalid Latitude' },
-        ]
+        errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
       }
 
       if (!values.longitude) {
-        errors.longitude = [{ message: language.error.formValidation.required, id: 'Required' }]
+        errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (values.longitude > 180 || values.longitude < -180) {
         errors.longitude = [
-          { message: language.error.formValidation.longitude, id: 'Invalid Longitude' },
+          { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
         ]
       }
 
@@ -140,8 +135,12 @@ const Site = () => {
   })
 
   const { setFieldValue: formikSetFieldValue } = formik
-  const doesFormikHaveErrors = Object.keys(formik.errors).length
-  const isSaveButtonDisabled = !formik.dirty || doesFormikHaveErrors
+
+  const _setSiteButtonUnsaved = useEffect(() => {
+    if (formik.dirty) {
+      setSaveButtonState(buttonGroupStates.unsaved)
+    }
+  }, [formik.dirty])
 
   const handleLatitudeChange = useCallback(
     (value) => {
@@ -256,10 +255,7 @@ const Site = () => {
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{formik.values.name}</H2>
-          <ButtonCallout type="submit" form="site-form" disabled={isSaveButtonDisabled}>
-            <IconSave />
-            Save
-          </ButtonCallout>
+          <SaveButton formId="site-form" saveButtonState={saveButtonState} formik={formik} />
         </ContentPageToolbarWrapper>
       }
     />

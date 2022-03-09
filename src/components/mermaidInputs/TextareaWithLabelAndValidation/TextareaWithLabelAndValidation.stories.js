@@ -37,11 +37,10 @@ export const basic = () => (
       label="With warning"
       validationType="warning"
       validationMessages={[
-        { message: 'Validation message 1', id: 1 },
-        { message: 'validation message 2', id: 2 },
+        { code: 'Validation message 1', id: 1 },
+        { code: 'validation message 2', id: 2 },
         {
-          message:
-            'This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message.',
+          code: 'This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message.',
           id: 3,
         },
       ]}
@@ -53,11 +52,10 @@ export const basic = () => (
       label="Ignored Validations"
       validationType="ignore"
       validationMessages={[
-        { message: 'Validation message 1', id: 1 },
-        { message: 'validation message 2', id: 2 },
+        { code: 'Validation message 1', id: 1 },
+        { code: 'validation message 2', id: 2 },
         {
-          message:
-            'This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message.',
+          code: 'This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message.',
           id: 3,
         },
       ]}
@@ -69,11 +67,10 @@ export const basic = () => (
       label="With error"
       validationType="error"
       validationMessages={[
-        { message: 'Validation message 1', id: 1 },
-        { message: 'validation message 2', id: 2 },
+        { code: 'Validation message 1', id: 1 },
+        { code: 'validation message 2', id: 2 },
         {
-          message:
-            'This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message.',
+          code: 'This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message.',
           id: 3,
         },
       ]}
@@ -85,11 +82,10 @@ export const basic = () => (
       label="With validation message, but a non-supported (or no) validation type"
       validationType="rainbow"
       validationMessages={[
-        { message: 'Validation message 1', id: 1 },
-        { message: 'validation message 2', id: 2 },
+        { code: 'Validation message 1', id: 1 },
+        { code: 'validation message 2', id: 2 },
         {
-          message:
-            'This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message.',
+          code: 'This one has got a real real ohwowlookhowlongthiswordiswhatsgoingtohappen real long validation message.',
           id: 3,
         },
       ]}

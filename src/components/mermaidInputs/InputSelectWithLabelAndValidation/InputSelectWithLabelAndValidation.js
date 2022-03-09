@@ -48,6 +48,7 @@ const InputSelectWithLabelAndValidation = ({
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
+        label={label}
       />
     </InputRow>
   )
