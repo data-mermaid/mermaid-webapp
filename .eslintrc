@@ -18,8 +18,7 @@
       "error",
       {
         "varsIgnorePattern": "^_",
-        "argsIgnorePattern": "^_", // ignore unused vars and args that start with _. These vars are unsued, but named for readability/maintainability of code.
-        "ignoreRestSiblings": true // allow destructuring assignment to unpack extract values from arrays or properties fom objects into distinct variables and create partial objects/remove properties from an object (.e.g. {removeProp, ...keepProps})
+        "argsIgnorePattern": "^_" // ignore unused vars and args that start with _. These vars are unsued, but named for readability/maintainability of code.
       }
     ]
   },
