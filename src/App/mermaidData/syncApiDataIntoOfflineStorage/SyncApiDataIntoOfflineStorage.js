@@ -11,25 +11,27 @@ const SyncApiDataIntoOfflineStorage = class {
   _dexieInstance
 
   #getOnlyModifiedAndDeletedItems = (dataList) => {
+    const removeUiStateKeys = (item) => {
+       // Get all of the item's keys starting with "uiState_"
+       const uiStateKeys = Object.keys(item).filter(prop => prop.startsWith('uiState_'))
+       // Reduce item for each element in the uiStateKeys array
+       const itemWithoutUiState = uiStateKeys.reduce((props, uiStateKey) => {
+         // Destructuring assignment with "rest property" removes uiState keys
+         // eslint-disable-next-line no-unused-vars
+         const { [uiStateKey]: omitProp, ...keepProps } = props
+
+         return keepProps
+       }, item)
+
+       return itemWithoutUiState
+    }
+
    return dataList
     // New, edited, and deleted items will all have a uiState_pushToApi flag locally which can be used to filter
     .filter((item) => item.uiState_pushToApi)
     // Map the objects to remove uiState_ keys from each element in the dataList
     // This will ensure they are omitted from the API request
-    .map((item) => {
-        // Get all of the item's keys starting with "uiState_"
-        const uiStateKeys = Object.keys(item).filter(prop => prop.startsWith('uiState_'))
-        // Reduce item for each element in the uiStateKeys array
-        const itemWithoutUiState = uiStateKeys.reduce((props, uiStateKey) => {
-          // Destructuring assignment with "rest property" removes uiState keys
-          // eslint-disable-next-line no-unused-vars
-          const { [uiStateKey]: omitProp, ...keepProps } = props
-
-          return keepProps
-        }, item)
-
-        return itemWithoutUiState
-    })
+    .map((item) => removeUiStateKeys(item))
   }
 
   constructor({ dexieInstance, apiBaseUrl, getAccessToken }) {
