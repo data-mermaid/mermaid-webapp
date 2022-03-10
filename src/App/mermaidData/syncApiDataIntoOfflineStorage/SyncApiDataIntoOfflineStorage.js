@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { pullApiData } from '../pullApiData'
 
+// const removeObjectKeysReducer = (previous, current) => {
+//   const {[current]: dummy, remainder}
+// }
+
 const SyncApiDataIntoOfflineStorage = class {
   _apiBaseUrl
 
@@ -10,9 +14,22 @@ const SyncApiDataIntoOfflineStorage = class {
    return dataList
     // New, edited, and deleted items will all have a uiState_pushToApi flag locally which can be used to filter
     .filter((item) => item.uiState_pushToApi)
-    // Destructuring assignment removes uiState_pushToApi so it will be omitted from the API request
-    // eslint-disable-next-line no-unused-vars
-    .map(({ uiState_pushToApi, ...keepProps }) => keepProps)
+    // Map the objects to remove uiState_ keys from each element in the dataList
+    // This will ensure they are omitted from the API request
+    .map((item) => {
+        // Get all of the item's keys starting with "uiState_"
+        const uiStateKeys = Object.keys(item).filter(prop => prop.startsWith('uiState_'))
+        // Reduce item for each element in the uiStateKeys array
+        const itemWithoutUiState = uiStateKeys.reduce((props, uiStateKey) => {
+          // Destructuring assignment with "rest property" removes uiState keys
+          // eslint-disable-next-line no-unused-vars
+          const { [uiStateKey]: omitProp, ...keepProps } = props
+
+          return keepProps
+        }, item)
+
+        return itemWithoutUiState
+    })
   }
 
   constructor({ dexieInstance, apiBaseUrl, getAccessToken }) {
