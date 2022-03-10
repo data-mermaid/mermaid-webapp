@@ -46,7 +46,6 @@ export const ProjectNameWrapper = styled('div')`
   background: ${theme.color.primaryColor};
   h2 {
     color: ${theme.color.white};
-    height: ${theme.spacing.headerHeight}
     margin: 0;
     padding: ${theme.spacing.small} ${theme.spacing.medium};
     ${theme.typography.noWordBreak};
