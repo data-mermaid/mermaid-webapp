@@ -108,7 +108,7 @@ ContentPageLayout.propTypes = {
   isPageContentLoading: PropTypes.bool,
   toolbar: PropTypes.node,
   isToolbarSticky: PropTypes.bool,
-  subNavName: PropTypes.string,
+  subNavName: PropTypes.node,
 }
 
 ContentPageLayout.defaultProps = {
