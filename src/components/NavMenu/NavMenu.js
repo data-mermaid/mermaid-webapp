@@ -55,7 +55,7 @@ const NavHeader = styled('p')`
   font-weight: 900;
 `
 
-const NavMenu = ({ subNavName }) => {
+const NavMenu = ({ subNavNode }) => {
   const projectUrl = useCurrentProjectPath()
   const { recordId, submittedRecordId, siteId, managementRegimeId } = useParams()
   const { pathname } = useLocation()
@@ -90,21 +90,23 @@ const NavMenu = ({ subNavName }) => {
                 <CollectRecordsCount />
               </NavLinkSidebar>
             </li>
-            {isCollectingSubNode && <SubNavMenuRecordName subNavName={subNavName} />}
+            {isCollectingSubNode && (
+              <SubNavMenuRecordName subNavNode={subNavNode} />
+            )}
             <li>
               <NavLinkSidebar exact to={`${projectUrl}/sites`}>
                 <IconSites />
                 <span>Sites</span>
               </NavLinkSidebar>
             </li>
-            {isSiteSubNode && <SubNavMenuRecordName subNavName={subNavName} />}
+            {isSiteSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <li>
               <NavLinkSidebar exact to={`${projectUrl}/management-regimes`}>
                 <IconMgmt />
                 <span>Management Regimes</span>
               </NavLinkSidebar>
             </li>
-            {isManagementRegimeSubNode && <SubNavMenuRecordName subNavName={subNavName} />}
+            {isManagementRegimeSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
           </ul>
         </li>
         <OfflineHide>
@@ -117,7 +119,9 @@ const NavMenu = ({ subNavName }) => {
                   <span>Submitted</span>
                 </NavLinkSidebar>
               </li>
-              {submittedRecordId && <SubNavMenuRecordName subNavName={subNavName} />}
+              {submittedRecordId && (
+                <SubNavMenuRecordName subNavNode={subNavNode}  />
+              )}
               {/* hiding for alpha release because leads nowhere useful */}
               {/* <li>
                 <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
@@ -164,9 +168,13 @@ const NavMenu = ({ subNavName }) => {
 }
 
 NavMenu.propTypes = {
-  subNavName: PropTypes.node,
+  subNavNode: PropTypes.shape({
+    name: PropTypes.string,
+    number: PropTypes.number,
+    label: PropTypes.string,
+  }),
 }
 
-NavMenu.defaultProps = { subNavName: null }
+NavMenu.defaultProps = { subNavNode: null }
 
 export default NavMenu

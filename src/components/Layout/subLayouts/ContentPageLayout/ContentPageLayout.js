@@ -72,7 +72,7 @@ const ContentPageLayout = ({
   toolbar,
   isPageContentLoading,
   isToolbarSticky,
-  subNavName,
+  subNavNode,
 }) => {
   const { isSyncInProgress } = useSyncStatus()
 
@@ -83,7 +83,7 @@ const ContentPageLayout = ({
 
         <NavAndContentLayout>
           <Column>
-            <NavMenu subNavName={subNavName} />
+            <NavMenu subNavNode={subNavNode} />
           </Column>
           <ContentWrapper>
             {isPageContentLoading || isSyncInProgress ? (
@@ -108,14 +108,18 @@ ContentPageLayout.propTypes = {
   isPageContentLoading: PropTypes.bool,
   toolbar: PropTypes.node,
   isToolbarSticky: PropTypes.bool,
-  subNavName: PropTypes.node,
+  subNavNode: PropTypes.shape({
+    name: PropTypes.string,
+    number: PropTypes.number,
+    label: PropTypes.string,
+  }),
 }
 
 ContentPageLayout.defaultProps = {
   isPageContentLoading: false,
   isToolbarSticky: false,
   toolbar: undefined,
-  subNavName: null,
+  subNavNode: null,
 }
 
 export default ContentPageLayout
