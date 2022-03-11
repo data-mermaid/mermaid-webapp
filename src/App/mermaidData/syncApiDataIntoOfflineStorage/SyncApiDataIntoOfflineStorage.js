@@ -1,14 +1,22 @@
 import axios from 'axios'
 import { pullApiData } from '../pullApiData'
 
+// const removeObjectKeysReducer = (previous, current) => {
+//   const {[current]: dummy, remainder}
+// }
+
 const SyncApiDataIntoOfflineStorage = class {
   _apiBaseUrl
 
   _dexieInstance
 
   #getOnlyModifiedAndDeletedItems = (dataList) => {
-    // new, edited, and deleted items will all have a uiState_pushToApi flag locally
-    return dataList.filter((item) => item.uiState_pushToApi)
+    return dataList
+    // New, edited, and deleted items will all have a uiState_pushToApi flag locally which can be used to filter
+    .filter((item) => item.uiState_pushToApi)
+    // Destructuring assignment with "rest property" removes uiState_pushToApi so it will be omitted from the API request
+    // eslint-disable-next-line no-unused-vars
+    .map(({ uiState_pushToApi, ...keepProps }) => keepProps)
   }
 
   constructor({ dexieInstance, apiBaseUrl, getAccessToken }) {
