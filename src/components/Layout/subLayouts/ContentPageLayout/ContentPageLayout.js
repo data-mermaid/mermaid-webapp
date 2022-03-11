@@ -110,7 +110,7 @@ ContentPageLayout.propTypes = {
   isToolbarSticky: PropTypes.bool,
   subNavNode: PropTypes.shape({
     name: PropTypes.string,
-    number: PropTypes.number,
+    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     label: PropTypes.string,
   }),
 }

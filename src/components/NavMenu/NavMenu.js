@@ -90,9 +90,7 @@ const NavMenu = ({ subNavNode }) => {
                 <CollectRecordsCount />
               </NavLinkSidebar>
             </li>
-            {isCollectingSubNode && (
-              <SubNavMenuRecordName subNavNode={subNavNode} />
-            )}
+            {isCollectingSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <li>
               <NavLinkSidebar exact to={`${projectUrl}/sites`}>
                 <IconSites />
@@ -119,9 +117,7 @@ const NavMenu = ({ subNavNode }) => {
                   <span>Submitted</span>
                 </NavLinkSidebar>
               </li>
-              {submittedRecordId && (
-                <SubNavMenuRecordName subNavNode={subNavNode}  />
-              )}
+              {submittedRecordId && <SubNavMenuRecordName subNavNode={subNavNode} />}
               {/* hiding for alpha release because leads nowhere useful */}
               {/* <li>
                 <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
@@ -170,7 +166,7 @@ const NavMenu = ({ subNavNode }) => {
 NavMenu.propTypes = {
   subNavNode: PropTypes.shape({
     name: PropTypes.string,
-    number: PropTypes.number,
+    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     label: PropTypes.string,
   }),
 }

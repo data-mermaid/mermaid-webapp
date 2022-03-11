@@ -53,7 +53,7 @@ const SubNavMenuRecordName = ({ subNavNode }) => {
 RecordName.propTypes = {
   subNavNode: PropTypes.shape({
     name: PropTypes.string,
-    number: PropTypes.number,
+    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     label: PropTypes.string,
   }),
 }
@@ -61,7 +61,7 @@ RecordName.propTypes = {
 SubNavMenuRecordName.propTypes = {
   subNavNode: PropTypes.shape({
     name: PropTypes.string,
-    number: PropTypes.number,
+    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     label: PropTypes.string,
   }),
 }
