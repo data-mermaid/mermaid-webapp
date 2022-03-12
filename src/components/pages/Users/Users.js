@@ -400,7 +400,7 @@ const Users = ({ currentUser }) => {
       return {
         name: (
           <NameCellStyle>
-            {picture ? <ProfileImage img={picture} /> : <IconAccount />}  {profile_name}
+            {picture ? <ProfileImage img={picture} /> : <IconAccount />}{profile_name}
           </NameCellStyle>
         ),
         email,
