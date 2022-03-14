@@ -78,8 +78,6 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   //   e.stopPropagation()
   // }
 
-  console.log(num_sites)
-
 return (
     <CardWrapper onClick={handleCardClick} {...restOfProps}>
       <ProjectNameWrapper>
