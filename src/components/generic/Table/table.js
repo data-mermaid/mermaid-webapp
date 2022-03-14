@@ -66,7 +66,7 @@ export const Th = styled.th(
     vertical-align: top;
     &::after {
       content: ' \u25b2';
-      color: ${!props.isSortingDisabled
+      color: ${props.isSortingEnabled
         ? theme.color.secondaryDisabledColor
         : theme.color.white
       };
@@ -80,6 +80,13 @@ export const Th = styled.th(
     )}
   `,
 )
+Th.defaultProps = {
+  isSortedDescending: false,
+  isSortingEnabled: false,
+  isMultiSortColumn: false,
+  sortedIndex: -1
+}
+
 export const Td = styled.td(
   (props) => css`
     text-align: ${props.align || 'left'};

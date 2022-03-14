@@ -550,7 +550,7 @@ const Users = ({ currentUser }) => {
                     isSortedDescending={column.isSortedDesc}
                     sortedIndex={column.sortedIndex}
                     isMultiSortColumn={isMultiSortColumn}
-                    isSortingDisabled={column.disableSortBy}
+                    isSortingEnabled={!column.disableSortBy}
                   >
                     {column.render('Header')}
                   </Th>
