@@ -4,8 +4,11 @@ import { useEffect } from 'react'
 const useBeforeUnloadPrompt = ({ shouldPromptTrigger }) => {
   useEffect(() => {
     const triggerPrompt = (event) => {
-      event.preventDefault()
       if (shouldPromptTrigger) {
+        // Useful reference: https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload
+        // Prevent default behavior in Mozilla Firefox ensures prompt will be shown
+        event.preventDefault()
+        // Chrome requires returnValue to be set
         // eslint-disable-next-line no-param-reassign
         event.returnValue = ''
       }
