@@ -1,3 +1,31 @@
+import maplibregl from 'maplibre-gl'
+import { getObjectById } from '../../library/getObjectById'
+
+const controlZoomSettings = {
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  textColor: '#ffffff',
+  textMessage: 'Use Ctrl + Scroll to zoom the map.',
+}
+
+// Create a help text element when scrolling is disabled on map
+const ctrlHelpElement = document.createElement('div')
+
+ctrlHelpElement.id = 'mbgl-gesture-handling-id'
+ctrlHelpElement.style.backgroundColor = controlZoomSettings.backgroundColor
+ctrlHelpElement.style.position = 'absolute'
+ctrlHelpElement.style.display = 'none'
+ctrlHelpElement.style.justifyContent = 'center'
+ctrlHelpElement.style.alignItems = 'center'
+
+const textBox = document.createElement('div')
+
+textBox.style.textAlign = 'center'
+textBox.style.color = controlZoomSettings.textColor
+textBox.style.fontSize = '2rem'
+textBox.innerText = ''
+
+ctrlHelpElement.appendChild(textBox)
+
 export const benthicColors = {
   'Coral/Algae': 'rgb(255, 97, 97)',
   'Benthic Microalgae': 'rgb(155, 204, 79)',
@@ -134,12 +162,25 @@ export const satelliteBaseMap = {
   ],
 }
 
-export const applyOpacityExpression = array => {
+export const addMapController = (map) => {
+  map.addControl(
+    new maplibregl.NavigationControl({
+      showCompass: false,
+      showZoom: true,
+    }),
+    'top-left',
+  )
+
+  map.dragRotate.disable()
+  map.touchZoomRotate.disableRotation()
+}
+
+const applyOpacityExpression = (array) => {
   if (array === null) {
     return 0
   }
 
-  const arrayExp = array.flatMap(item => {
+  const arrayExp = array.flatMap((item) => {
     const equalBenthic = [['==', ['get', 'class_name']], 1]
 
     equalBenthic[0].push(item)
@@ -153,7 +194,15 @@ export const applyOpacityExpression = array => {
   return array.length > 0 ? arrayExp : 0
 }
 
-export const loadACALayers = map => {
+export const setCoralMosaicLayerProperty = (map, dataLayerFromLocalStorage) => {
+  map.setPaintProperty('atlas-planet', 'raster-opacity', dataLayerFromLocalStorage)
+}
+
+export const setGeomorphicOrBenthicLayerProperty = (map, property, dataLayerFromLocalStorage) => {
+  map.setPaintProperty(property, 'fill-opacity', applyOpacityExpression(dataLayerFromLocalStorage))
+}
+
+export const loadACALayers = (map) => {
   const coralMosaicLocalStorage = JSON.parse(localStorage.getItem('coral_mosaic'))
 
   const fillGeomorphicOpacityValue = applyOpacityExpression(
@@ -226,4 +275,93 @@ export const loadACALayers = map => {
       'fill-opacity': fillBenthicOpacityExpression,
     },
   })
+}
+
+const getMapMarkersFeature = (records) => {
+  const bounds = new maplibregl.LngLatBounds()
+
+  const data = {
+    type: 'FeatureCollection',
+    features: [],
+  }
+
+  for (const rec of records) {
+    const rec_geo_data = {
+      id: rec.id,
+      name: rec.name,
+      project_id: rec.project,
+      exposure: rec.exposure,
+      reef_type: rec.reef_type,
+      reef_zone: rec.reef_zone,
+    }
+
+    const recPoint = {
+      type: 'Feature',
+      geometry: rec.location,
+      properties: rec_geo_data,
+    }
+
+    bounds.extend(rec.location.coordinates)
+    data.features.push(recPoint)
+  }
+
+  return { markersData: data, bounds }
+}
+
+export const loadMapMarkers = (map, sites) => {
+  const { markersData, bounds } = getMapMarkersFeature(sites)
+
+  map.addSource('mapMarkers', {
+    type: 'geojson',
+    data: markersData,
+  })
+
+  map.addLayer({
+    id: 'mapMarkers',
+    source: 'mapMarkers',
+    type: 'circle',
+    paint: {
+      'circle-radius': 3,
+      'circle-color': '#223b53',
+      'circle-stroke-color': '#ff0000',
+      'circle-stroke-width': 2,
+      'circle-opacity': 0.8,
+    },
+  })
+
+  if (sites.length > 0) {
+    map.fitBounds(bounds, { padding: 25, animate: false })
+  }
+}
+
+export const createPopup = (feature, choices) => {
+  const { reeftypes, reefzones, reefexposures } = choices
+  const reefType = getObjectById(reeftypes.data, feature.reef_type).name
+  const reefZone = getObjectById(reefzones.data, feature.reef_zone).name
+  const exposure = getObjectById(reefexposures.data, feature.exposure).name
+
+  return Object.keys(feature).length > 0
+    ? `<a href="/projects/${feature.project_id}/sites/${feature.id}">${feature.name}</a>` +
+        `<div><p>Reef type: <span>${reefType}</span></p><p>Reef zone: <span>${reefZone}</span></p><p>Exposure: <span>${exposure}</span></p></div>`
+    : '<p>No content</p>'
+}
+
+export const hideHelpText = (map) => {
+  try {
+    map.getContainer().removeChild(ctrlHelpElement)
+  } catch (e) {
+    // nothing to do
+  }
+}
+
+export const showHelpText = (map) => {
+  ctrlHelpElement.style.top = 0
+  ctrlHelpElement.style.left = 0
+  ctrlHelpElement.style.width = '100%'
+  ctrlHelpElement.style.height = '100%'
+  ctrlHelpElement.style.display = 'flex'
+
+  ctrlHelpElement.querySelector('div').innerText = controlZoomSettings.textMessage
+
+  map.getContainer().appendChild(ctrlHelpElement)
 }
