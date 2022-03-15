@@ -4,7 +4,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import './index.css'
-import 'maplibre-gl/dist/maplibre-gl.css'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 
