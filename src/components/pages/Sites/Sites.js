@@ -7,7 +7,10 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
-import { reactTableNaturalSort, reactTableNaturalSortReactNodes } from '../../generic/Table/reactTableNaturalSort'
+import {
+  reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
+} from '../../generic/Table/reactTableNaturalSort'
 import { ToolBarRow } from '../../generic/positioning'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
@@ -23,11 +26,13 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
+import AllSitesMap from '../../mermaidMap/AllSitesMap'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
+  const [choices, setChoices] = useState({})
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
@@ -38,14 +43,16 @@ const Sites = () => {
       Promise.all([
         databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
+        databaseSwitchboardInstance.getChoices(),
       ])
 
-        .then(([sites, project]) => {
+        .then(([sites, project, choicesResponse]) => {
           if (isMounted.current) {
             if (!project && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
             setSiteRecordsForUiDisplay(sites)
+            setChoices(choicesResponse)
             setIsLoading(false)
           }
         })
@@ -94,12 +101,15 @@ const Sites = () => {
     [siteRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(() => [
-    {
-      id: 'name',
-      desc: false,
-    },
-  ], [])
+  const tableDefaultSortByColumns = useMemo(
+    () => [
+      {
+        id: 'name',
+        desc: false,
+      },
+    ],
+    [],
+  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -139,11 +149,11 @@ const Sites = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns
+        sortBy: tableDefaultSortByColumns,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -162,20 +172,22 @@ const Sites = () => {
           <thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => {
-                const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+                {headerGroup.headers.map((column) => {
+                  const isMultiSortColumn = headerGroup.headers.some(
+                    (header) => header.sortedIndex > 0,
+                  )
 
-                return (
-                  <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSortedDescending={column.isSortedDesc}
-                    sortedIndex={column.sortedIndex}
-                    isMultiSortColumn={isMultiSortColumn}
-                  >
-                    {column.render('Header')}
-                  </Th>
-                )
-})}
+                  return (
+                    <Th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      isSortedDescending={column.isSortedDesc}
+                      sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
+                    >
+                      {column.render('Header')}
+                    </Th>
+                  )
+                })}
               </Tr>
             ))}
           </thead>
@@ -214,6 +226,7 @@ const Sites = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
+      <AllSitesMap sites={siteRecordsForUiDisplay} choices={choices} />
     </>
   ) : (
     <PageNoData
