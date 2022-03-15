@@ -21,6 +21,7 @@ ReactDOM.render(
       redirectUri={window.location.origin}
       audience={process.env.REACT_APP_AUTH0_AUDIENCE}
       useRefreshTokens={true}
+      cacheLocation="localstorage"
       scope="read:current_user update:current_user_metadata"
     >
       <BrowserRouter basename={process.env.PUBLIC_URL}>
