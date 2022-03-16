@@ -11,6 +11,7 @@ import useIsMounted from '../../library/useIsMounted'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
+  height: ${theme.spacing.headerHeight};
   h2 {
     padding: ${theme.spacing.medium};
     margin: 0;
