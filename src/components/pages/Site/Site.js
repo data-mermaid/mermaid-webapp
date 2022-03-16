@@ -18,7 +18,7 @@ import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWith
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
-import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
+import SingleSiteMap from '../../map/SingleSiteMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
