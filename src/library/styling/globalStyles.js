@@ -6,11 +6,9 @@ import '@fontsource/open-sans'
 import '@fontsource/open-sans/700.css'
 
 const toastifyCss = raw('react-toastify/dist/ReactToastify.css')
-const maplibreglCss = raw('maplibre-gl/dist/maplibre-gl.css')
 
 const GlobalStyle = createGlobalStyle`
     ${toastifyCss}
-    ${maplibreglCss}
     :root {
         font-size: 62.5%;
     }
@@ -29,8 +27,8 @@ const GlobalStyle = createGlobalStyle`
 
     }
     svg {
-        width: ${props => props.theme.typography.defaultIconSize};
-        height: ${props => props.theme.typography.defaultIconSize};
+        width: ${(props) => props.theme.typography.defaultIconSize};
+        height: ${(props) => props.theme.typography.defaultIconSize};
     }
     *,*::before,*::after {
         box-sizing: border-box;
@@ -40,27 +38,6 @@ const GlobalStyle = createGlobalStyle`
         ${hoverState(css`
           text-decoration: none;
         `)}
-    }
-    /* mapbox popup content style */
-    .mapboxgl-popup {
-        border-radius: 6px;
-    }
-    .mapboxgl-popup-content {
-        padding: 7px;
-    }
-    .mapboxgl-popup-content a {
-        text-decoration: none;
-        font-weight: bold;
-    }
-    .mapboxgl-popup-content div {
-        border-top: 1px solid;
-    }
-    .mapboxgl-popup-content div p {
-        margin: 0;
-    }
-    .mapboxgl-popup-content div p span {
-        margin: 0;
-        font-style: italic;
     }
 `
 
