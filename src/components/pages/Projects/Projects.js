@@ -80,10 +80,10 @@ const Projects = ({ apiSyncInstance }) => {
 
   const getSortedProjects = (projectsToSort) => {
     const sortedProjects = projectsToSort.sort((a, b) => {
-      if (a[projectSortKey] > b[projectSortKey]) { return 1 }
-      if (a[projectSortKey] < b[projectSortKey]) { return -1 }
-
-      return 0
+      return a[projectSortKey].toString().localeCompare(b[projectSortKey], 'en', {
+        numeric: true,
+        caseFirst: 'upper',
+      })
     })
 
     // Reverse array for descending sort
