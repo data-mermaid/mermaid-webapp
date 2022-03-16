@@ -23,10 +23,10 @@ import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import AllSitesMap from '../../mermaidMap/AllSitesMap'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
-import AllSitesMap from '../../mermaidMap/AllSitesMap'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
