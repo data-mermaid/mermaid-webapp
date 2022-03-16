@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { subNavNodePropTypes } from './subNavNodePropTypes'
 import theme from '../../theme'
 
 const SubNavList = styled.li`
@@ -51,19 +51,11 @@ const SubNavMenuRecordName = ({ subNavNode }) => {
 }
 
 RecordName.propTypes = {
-  subNavNode: PropTypes.shape({
-    name: PropTypes.string,
-    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    label: PropTypes.string,
-  }),
+  subNavNode: subNavNodePropTypes,
 }
 
 SubNavMenuRecordName.propTypes = {
-  subNavNode: PropTypes.shape({
-    name: PropTypes.string,
-    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    label: PropTypes.string,
-  }),
+  subNavNode: subNavNodePropTypes,
 }
 
 RecordName.defaultProps = { subNavNode: null }

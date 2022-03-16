@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
+import { subNavNodePropTypes } from '../../../SubNavMenuRecordName/subNavNodePropTypes'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import {
   mediaQueryPhoneOnly,
@@ -108,11 +109,7 @@ ContentPageLayout.propTypes = {
   isPageContentLoading: PropTypes.bool,
   toolbar: PropTypes.node,
   isToolbarSticky: PropTypes.bool,
-  subNavNode: PropTypes.shape({
-    name: PropTypes.string,
-    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    label: PropTypes.string,
-  }),
+  subNavNode: subNavNodePropTypes,
 }
 
 ContentPageLayout.defaultProps = {

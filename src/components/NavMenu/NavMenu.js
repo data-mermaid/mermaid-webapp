@@ -1,7 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { useParams, useLocation } from 'react-router-dom'
+import { subNavNodePropTypes } from '../SubNavMenuRecordName/subNavNodePropTypes'
 import theme from '../../theme'
 import { NavLinkSidebar } from '../generic/links'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
@@ -164,11 +164,7 @@ const NavMenu = ({ subNavNode }) => {
 }
 
 NavMenu.propTypes = {
-  subNavNode: PropTypes.shape({
-    name: PropTypes.string,
-    number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    label: PropTypes.string,
-  }),
+  subNavNode: subNavNodePropTypes,
 }
 
 NavMenu.defaultProps = { subNavNode: null }
