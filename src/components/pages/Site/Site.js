@@ -18,7 +18,8 @@ import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWith
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
-import MermaidMap from '../../MermaidMap'
+// import MermaidMap from '../../MermaidMap'
+import SingleSiteMap from '../../SingleSiteMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
@@ -214,7 +215,7 @@ const Site = () => {
                 testId="longitude"
               />
               {isAppOnline && (
-                <MermaidMap
+                <SingleSiteMap
                   formLatitudeValue={formik.getFieldProps('latitude').value}
                   formLongitudeValue={formik.getFieldProps('longitude').value}
                   handleLatitudeChange={handleLatitudeChange}
