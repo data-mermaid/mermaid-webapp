@@ -1,31 +1,6 @@
 import maplibregl from 'maplibre-gl'
 import { getObjectById } from '../../library/getObjectById'
 
-const controlZoomSettings = {
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  textColor: '#ffffff',
-  textMessage: 'Use Ctrl + Scroll to zoom the map.',
-}
-
-// Create a help text element when scrolling is disabled on map
-const ctrlHelpElement = document.createElement('div')
-
-ctrlHelpElement.id = 'mbgl-gesture-handling-id'
-ctrlHelpElement.style.backgroundColor = controlZoomSettings.backgroundColor
-ctrlHelpElement.style.position = 'absolute'
-ctrlHelpElement.style.display = 'none'
-ctrlHelpElement.style.justifyContent = 'center'
-ctrlHelpElement.style.alignItems = 'center'
-
-const textBox = document.createElement('div')
-
-textBox.style.textAlign = 'center'
-textBox.style.color = controlZoomSettings.textColor
-textBox.style.fontSize = '2rem'
-textBox.innerText = ''
-
-ctrlHelpElement.appendChild(textBox)
-
 export const benthicColors = {
   'Coral/Algae': 'rgb(255, 97, 97)',
   'Benthic Microalgae': 'rgb(155, 204, 79)',
@@ -344,24 +319,4 @@ export const createPopup = (feature, choices) => {
     ? `<a href="/projects/${feature.project_id}/sites/${feature.id}">${feature.name}</a>` +
         `<div><p>Reef type: <span>${reefType}</span></p><p>Reef zone: <span>${reefZone}</span></p><p>Exposure: <span>${exposure}</span></p></div>`
     : '<p>No content</p>'
-}
-
-export const hideHelpText = (map) => {
-  try {
-    map.getContainer().removeChild(ctrlHelpElement)
-  } catch (e) {
-    // nothing to do
-  }
-}
-
-export const showHelpText = (map) => {
-  ctrlHelpElement.style.top = 0
-  ctrlHelpElement.style.left = 0
-  ctrlHelpElement.style.width = '100%'
-  ctrlHelpElement.style.height = '100%'
-  ctrlHelpElement.style.display = 'flex'
-
-  ctrlHelpElement.querySelector('div').innerText = controlZoomSettings.textMessage
-
-  map.getContainer().appendChild(ctrlHelpElement)
 }

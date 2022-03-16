@@ -11,8 +11,6 @@ import {
   loadACALayers,
   loadMapMarkers,
   createPopup,
-  hideHelpText,
-  showHelpText,
 } from '../mapService'
 import { MapContainer, MapWrapper } from '../Map.styles'
 
@@ -47,31 +45,6 @@ const AllSitesMap = ({ sites, choices }) => {
       map.current.remove()
     }
   }, [sites])
-
-  const _handleMapOnWheel = useEffect(() => {
-    if (!map.current) {
-      return
-    }
-
-    // disabled mouse scroll when Ctrl is not enabled, and vice versa
-    map.current.on('wheel', (event) => {
-      if (event.originalEvent.ctrlKey) {
-        event.originalEvent.preventDefault()
-        hideHelpText(map.current)
-        if (!map.current.scrollZoom._enabled) {
-          map.current.scrollZoom.enable()
-        }
-      } else {
-        if (map.current.scrollZoom._enabled) {
-          map.current.scrollZoom.disable()
-        }
-        showHelpText(map.current)
-        setTimeout(() => {
-          hideHelpText(map.current)
-        }, 1500)
-      }
-    })
-  }, [])
 
   const _handleMapMarkers = useEffect(() => {
     if (!map.current) {
