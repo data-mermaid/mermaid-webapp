@@ -78,7 +78,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   //   e.stopPropagation()
   // }
 
-  return (
+return (
     <CardWrapper onClick={handleCardClick} {...restOfProps}>
       <ProjectNameWrapper>
         <h2>{name}</h2>
@@ -86,7 +86,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
       <ProjectInfoWrapper>
         <p>{countries.join(', ')}</p>
         <p>
-          <strong>{num_sites}</strong> {num_sites && pluralize(num_sites, 'site', 'sites')}
+          <strong>{num_sites}</strong> {pluralize(num_sites, 'site', 'sites')}
         </p>
         <p>
           Updated: <strong>{new Date(updated_on).toString()}</strong>
