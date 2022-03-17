@@ -13,16 +13,15 @@ import {
   loadMapMarkers,
 } from '../mapService'
 import { MapContainer, MapWrapper } from '../mapStyles'
+import Popup from '../Popup'
 
 const defaultCenter = [20, 20]
 const defaultZoom = 2
 
-const Popup = () => <div>Popup here</div>
-
 const ProjectSitesMap = ({ sites, choices }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
-  const popUpRef = useRef(new maplibregl.Popup({ offset: 15 }))
+  const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
 
   const _initializeMap = useEffect(() => {
     map.current = new maplibregl.Map({
@@ -55,10 +54,11 @@ const ProjectSitesMap = ({ sites, choices }) => {
     }
 
     map.current.on('click', 'mapMarkers', (e) => {
-      const coordinates = e.features[0].geometry.coordinates.slice()
       const popupNode = document.createElement('div')
+      const coordinates = e.features[0].geometry.coordinates.slice()
+      const markerProperty = e.features[0].properties
 
-      ReactDOM.render(<Popup />, popupNode)
+      ReactDOM.render(<Popup properties={markerProperty} choices={choices} />, popupNode)
       popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
     })
 

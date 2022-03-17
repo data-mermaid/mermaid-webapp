@@ -1,5 +1,4 @@
 import maplibregl from 'maplibre-gl'
-import { getObjectById } from '../../library/getObjectById'
 
 export const benthicColors = {
   'Coral/Algae': 'rgb(255, 97, 97)',
@@ -307,16 +306,4 @@ export const loadMapMarkers = (map, sites) => {
   if (sites.length > 0) {
     map.fitBounds(bounds, { padding: 25, animate: false })
   }
-}
-
-export const createPopup = (feature, choices) => {
-  const { reeftypes, reefzones, reefexposures } = choices
-  const reefType = getObjectById(reeftypes.data, feature.reef_type).name
-  const reefZone = getObjectById(reefzones.data, feature.reef_zone).name
-  const exposure = getObjectById(reefexposures.data, feature.exposure).name
-
-  return Object.keys(feature).length > 0
-    ? `<a href="/projects/${feature.project_id}/sites/${feature.id}">${feature.name}</a>` +
-        `<div><p>Reef type: <span>${reefType}</span></p><p>Reef zone: <span>${reefZone}</span></p><p>Exposure: <span>${exposure}</span></p></div>`
-    : '<p>No content</p>'
 }
