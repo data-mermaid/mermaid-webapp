@@ -51,13 +51,13 @@ const ProjectSitesMap = ({ sites, choices }) => {
       return
     }
 
-    // Add popup to map when marker is clicked
-    map.current.on('click', 'mapMarkers', (e) => {
-      const coordinates = e.features[0].geometry.coordinates.slice()
-      const description = createPopup(e.features[0].properties, choices)
+    // // Add popup to map when marker is clicked
+    // map.current.on('click', 'mapMarkers', (e) => {
+    //   const coordinates = e.features[0].geometry.coordinates.slice()
+    //   const description = createPopup(e.features[0].properties, choices)
 
-      new maplibregl.Popup().setLngLat(coordinates).setHTML(description).addTo(map.current)
-    })
+    //   new maplibregl.Popup().setLngLat(coordinates).setHTML(description).addTo(map.current)
+    // })
 
     // Change the cursor to a pointer when the mouse is over the places layer.
     map.current.on('mouseenter', 'mapMarkers', () => {
