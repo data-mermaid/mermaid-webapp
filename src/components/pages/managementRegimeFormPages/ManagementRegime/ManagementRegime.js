@@ -159,7 +159,7 @@ const ManagementRegime = () => {
     <ContentPageLayout
       isPageContentLoading={isLoading}
       isToolbarSticky={true}
-      subNavName={formik.values.name}
+      subNavNode={{ name: formik.values.name }}
       content={
         <>
           <form id="management-regime-form" onSubmit={formik.handleSubmit}>

@@ -43,7 +43,7 @@ import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordL
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import { getSubmittedRecordOrCollectRecordName } from '../../../../library/getSubmittedRecordOrCollectRecordName'
+import { getRecordName } from '../../../../library/getRecordName'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -71,7 +71,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [isNewFishNameModalOpen, setIsNewFishNameModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [observationToAddSpeciesTo, setObservationToAddSpeciesTo] = useState()
-  const [subNavName, setSubNavName] = useState(null)
+  const [subNavNode, setSubNavNode] = useState(null)
 
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
@@ -180,14 +180,10 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
                 families,
               })
 
-              const recordNameForSubNav =
+              const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
-                  ? getSubmittedRecordOrCollectRecordName(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      'fishbelt_transect',
-                    )
-                  : 'Fish Belt'
+                  ? getRecordName(collectRecordResponse.data, sitesResponse, 'fishbelt_transect')
+                  : { name: 'Fish Belt' }
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
@@ -196,7 +192,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
-              setSubNavName(recordNameForSubNav)
+              setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
               setValidateButtonState(getValidationButtonStatus(collectRecordResponse))
             }
@@ -557,7 +553,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
       <ContentPageLayout
         isPageContentLoading={isLoading}
         isToolbarSticky={true}
-        subNavName={subNavName}
+        subNavNode={subNavNode}
         content={
           <>
             <RecordLevelInputValidationInfo

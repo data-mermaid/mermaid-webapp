@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { subNavNodePropTypes } from './subNavNodePropTypes'
 import theme from '../../theme'
 
 const SubNavList = styled.li`
@@ -17,20 +17,48 @@ const SubNavList = styled.li`
     }
   }
 `
-const SubNavMenuRecordName = ({ subNavName }) => {
-  return (
-    subNavName && (
-      <SubNavList>
-        <span>{subNavName}</span>
-      </SubNavList>
+
+const RecordName = ({ subNavNode }) => {
+  const { name, number, label } = subNavNode
+
+  if (!number && !label) {
+    return <span>{name}</span>
+  }
+  if (!name) {
+    return (
+      <span>
+        {number} {label}
+      </span>
     )
+  }
+
+  return (
+    <span>
+      <span>{name}</span>
+      {number} {label}
+    </span>
   )
 }
 
-SubNavMenuRecordName.propTypes = {
-  subNavName: PropTypes.node,
+const SubNavMenuRecordName = ({ subNavNode }) => {
+  return subNavNode ? (
+    <SubNavList>
+      <RecordName subNavNode={subNavNode} />
+    </SubNavList>
+  ) : (
+    <></>
+  )
 }
 
-SubNavMenuRecordName.defaultProps = { subNavName: null }
+RecordName.propTypes = {
+  subNavNode: subNavNodePropTypes,
+}
+
+SubNavMenuRecordName.propTypes = {
+  subNavNode: subNavNodePropTypes,
+}
+
+RecordName.defaultProps = { subNavNode: null }
+SubNavMenuRecordName.defaultProps = { subNavNode: null }
 
 export default SubNavMenuRecordName
