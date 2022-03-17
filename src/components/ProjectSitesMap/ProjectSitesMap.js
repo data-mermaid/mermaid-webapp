@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-// import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
@@ -44,10 +44,11 @@ const ProjectSitesMap = ({ sites, choices }) => {
     })
 
     map.current.on('click', 'mapMarkers', () => {
-      // const coordinates = e.features[0].geometry.coordinates.slice()
-      // const popupNode = document.createElement('div')
-      // ReactDOM.render(<Popup />, popupNode)
-      // popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
+      const coordinates = e.features[0].geometry.coordinates.slice()
+      const popupNode = document.createElement('div')
+
+      ReactDOM.render(<Popup />, popupNode)
+      popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
     })
 
     // clean up on unmount

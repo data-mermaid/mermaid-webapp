@@ -28,6 +28,11 @@ jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
     Marker: function () {
       return { setLngLat: jest.fn(() => ({ addTo: jest.fn() })), on: jest.fn(), remove: jest.fn() }
     },
+    Popup: function () {
+      return {
+        setLngLat: jest.fn(() => ({ setDOMContent: jest.fn(() => ({ addTo: jest.fn() })) })),
+      }
+    },
     NavigationControl: jest.fn(),
   }
 })
