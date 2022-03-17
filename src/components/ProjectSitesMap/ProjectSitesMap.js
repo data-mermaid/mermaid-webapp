@@ -43,12 +43,11 @@ const ProjectSitesMap = ({ sites, choices }) => {
       loadMapMarkers(map.current, sites)
     })
 
-    map.current.on('click', 'mapMarkers', (e) => {
-      const coordinates = e.features[0].geometry.coordinates.slice()
-      const popupNode = document.createElement('div')
-
-      ReactDOM.render(<Popup />, popupNode)
-      popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
+    map.current.on('click', 'mapMarkers', () => {
+      // const coordinates = e.features[0].geometry.coordinates.slice()
+      // const popupNode = document.createElement('div')
+      // ReactDOM.render(<Popup />, popupNode)
+      // popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
     })
 
     // clean up on unmount
