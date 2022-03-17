@@ -43,7 +43,7 @@ const ProjectSitesMap = ({ sites, choices }) => {
       loadMapMarkers(map.current, sites)
     })
 
-    map.current.on('click', 'mapMarkers', () => {
+    map.current.on('click', 'mapMarkers', (e) => {
       const coordinates = e.features[0].geometry.coordinates.slice()
       const popupNode = document.createElement('div')
 
