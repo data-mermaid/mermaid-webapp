@@ -9,7 +9,7 @@ import {
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
 } from '../mapService'
-import { MapInputRow, MapContainer, MapWrapper } from '../mapStyles'
+import { MapInputRow, MapContainer, MapWrapper } from '../Map.styles'
 
 const defaultCenter = [0, 0]
 const defaultZoom = 11

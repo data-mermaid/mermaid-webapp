@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
+import language from '../../../language'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import { sitePropType, choicesPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import {
@@ -12,7 +13,7 @@ import {
   loadACALayers,
   loadMapMarkers,
 } from '../mapService'
-import { MapContainer, MapWrapper } from '../mapStyles'
+import { MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import Popup from '../Popup'
 
 const defaultCenter = [20, 20]
@@ -22,6 +23,7 @@ const ProjectSitesMap = ({ sites, choices }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
+  const [displayHelpText, setDisplayHelpText] = useState(false)
 
   const _initializeMap = useEffect(() => {
     map.current = new maplibregl.Map({
@@ -47,6 +49,30 @@ const ProjectSitesMap = ({ sites, choices }) => {
       map.current.remove()
     }
   }, [sites])
+
+  const _handleMapWheel = useEffect(() => {
+    if (!map.current) {
+      return
+    }
+
+    map.current.on('wheel', (e) => {
+      if (e.originalEvent.ctrlKey) {
+        e.originalEvent.preventDefault()
+        setDisplayHelpText(false)
+        if (!map.current.scrollZoom._enabled) {
+          map.current.scrollZoom.enable()
+        }
+      } else {
+        if (map.current.scrollZoom._enabled) {
+          map.current.scrollZoom.disable()
+        }
+        setDisplayHelpText(true)
+        setTimeout(() => {
+          setDisplayHelpText(false)
+        }, 1500)
+      }
+    })
+  }, [])
 
   const _handleMapMarkers = useEffect(() => {
     if (!map.current) {
@@ -85,6 +111,9 @@ const ProjectSitesMap = ({ sites, choices }) => {
   return (
     <MapContainer>
       <MapWrapper ref={mapContainer} />
+      {displayHelpText && (
+        <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
+      )}
       <AtlasLegendDrawer
         updateCoralMosaicLayer={updateCoralMosaicLayer}
         updateGeomorphicLayers={updateGeomorphicLayers}
