@@ -41,32 +41,6 @@ const GlobalStyle = createGlobalStyle`
           text-decoration: none;
         `)}
     }
-    /* mapbox popup content style */
-    .mapboxgl-popup {
-        border-radius: 6px;
-    }
-
-    .mapboxgl-popup-content {
-        padding: 7px;
-    }
-
-    .mapboxgl-popup-content a {
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .mapboxgl-popup-content div {
-        border-top: 1px solid;
-    }
-
-    .mapboxgl-popup-content div p {
-        margin: 0;
-    }
-
-    .mapboxgl-popup-content div p span {
-        margin: 0;
-        font-style: italic;
-    }
 `
 
 export default GlobalStyle

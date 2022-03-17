@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import LegendDrawer from '../LegendDrawer'
@@ -10,18 +11,18 @@ import {
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
   loadMapMarkers,
-  createPopup,
-  hideHelpText,
-  showHelpText,
 } from '../mapService'
 import { MapContainer, MapWrapper } from '../Map.styles'
 
 const defaultCenter = [20, 20]
 const defaultZoom = 2
 
+const Popup = () => <div>Popup here</div>
+
 const AllSitesMap = ({ sites, choices }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
+  const popUpRef = useRef(new maplibregl.Popup({ offset: 15 }))
 
   const _initializeMap = useEffect(() => {
     map.current = new maplibregl.Map({
@@ -48,31 +49,6 @@ const AllSitesMap = ({ sites, choices }) => {
     }
   }, [sites])
 
-  const _handleMapOnWheel = useEffect(() => {
-    if (!map.current) {
-      return
-    }
-
-    // disabled mouse scroll when Ctrl is not enabled, and vice versa
-    map.current.on('wheel', (event) => {
-      if (event.originalEvent.ctrlKey) {
-        event.originalEvent.preventDefault()
-        hideHelpText(map.current)
-        if (!map.current.scrollZoom._enabled) {
-          map.current.scrollZoom.enable()
-        }
-      } else {
-        if (map.current.scrollZoom._enabled) {
-          map.current.scrollZoom.disable()
-        }
-        showHelpText(map.current)
-        setTimeout(() => {
-          hideHelpText(map.current)
-        }, 1500)
-      }
-    })
-  }, [])
-
   const _handleMapMarkers = useEffect(() => {
     if (!map.current) {
       return
@@ -81,9 +57,10 @@ const AllSitesMap = ({ sites, choices }) => {
     // Add popup to map when marker is clicked
     map.current.on('click', 'mapMarkers', (e) => {
       const coordinates = e.features[0].geometry.coordinates.slice()
-      const description = createPopup(e.features[0].properties, choices)
+      const popupNode = document.createElement('div')
 
-      new maplibregl.Popup().setLngLat(coordinates).setHTML(description).addTo(map.current)
+      ReactDOM.render(<Popup />, popupNode)
+      popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
     })
 
     // Change the cursor to a pointer when the mouse is over the places layer.
