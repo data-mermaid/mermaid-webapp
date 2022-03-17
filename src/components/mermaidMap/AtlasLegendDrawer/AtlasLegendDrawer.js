@@ -10,8 +10,8 @@ import {
   LegendColor,
   CheckBoxLabel,
 } from './AtlasLegendDrawer.styles'
-import { IconExternalLink } from '../icons'
-import { geomorphicColors, benthicColors } from '../../library/mapService'
+import { IconExternalLink } from '../../icons'
+import { geomorphicColors, benthicColors } from '../mapService'
 
 const geomorphicKeyNames = Object.keys(geomorphicColors)
 const benthicKeyNames = Object.keys(benthicColors)

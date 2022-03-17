@@ -1,5 +1,5 @@
 import maplibregl from 'maplibre-gl'
-import { getObjectById } from './getObjectById'
+import { getObjectById } from '../../library/getObjectById'
 
 export const benthicColors = {
   'Coral/Algae': 'rgb(255, 97, 97)',

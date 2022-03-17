@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
-import { sitePropType, choicesPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import { sitePropType, choicesPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import {
   satelliteBaseMap,
   addMapController,
@@ -11,8 +11,8 @@ import {
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
   loadMapMarkers,
-} from '../../library/mapService'
-import { MapContainer, MapWrapper } from '../../library/styling/mapStyles'
+} from '../mapService'
+import { MapContainer, MapWrapper } from '../mapStyles'
 
 const defaultCenter = [20, 20]
 const defaultZoom = 2
@@ -43,14 +43,6 @@ const ProjectSitesMap = ({ sites, choices }) => {
       loadMapMarkers(map.current, sites)
     })
 
-    map.current.on('click', 'mapMarkers', (e) => {
-      const coordinates = e.features[0].geometry.coordinates.slice()
-      const popupNode = document.createElement('div')
-
-      ReactDOM.render(<Popup />, popupNode)
-      popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
-    })
-
     // clean up on unmount
     return () => {
       map.current.remove()
@@ -61,6 +53,14 @@ const ProjectSitesMap = ({ sites, choices }) => {
     if (!map.current) {
       return
     }
+
+    map.current.on('click', 'mapMarkers', (e) => {
+      const coordinates = e.features[0].geometry.coordinates.slice()
+      const popupNode = document.createElement('div')
+
+      ReactDOM.render(<Popup />, popupNode)
+      popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
+    })
 
     // Change the cursor to a pointer when the mouse is over the places layer.
     map.current.on('mouseenter', 'mapMarkers', () => {

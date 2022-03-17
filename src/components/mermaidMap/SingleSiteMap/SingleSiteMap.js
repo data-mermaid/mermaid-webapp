@@ -1,15 +1,15 @@
 import React, { useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
-import AtlasLegendDrawer from '../../AtlasLegendDrawer'
+import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
   satelliteBaseMap,
   addMapController,
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
-} from '../../../library/mapService'
-import { MapInputRow, MapContainer, MapWrapper } from '../../../library/styling/mapStyles'
+} from '../mapService'
+import { MapInputRow, MapContainer, MapWrapper } from '../mapStyles'
 
 const defaultCenter = [0, 0]
 const defaultZoom = 11

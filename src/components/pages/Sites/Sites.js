@@ -26,7 +26,7 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
-import ProjectSitesMap from '../../ProjectSitesMap'
+import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])

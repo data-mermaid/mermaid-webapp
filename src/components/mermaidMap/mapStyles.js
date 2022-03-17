@@ -1,5 +1,5 @@
 import styled from 'styled-components/macro'
-import { InputRow } from '../../components/generic/form'
+import { InputRow } from '../generic/form'
 
 export const MapInputRow = styled(InputRow)`
   grid-template-columns: 0.75fr 2.5fr;

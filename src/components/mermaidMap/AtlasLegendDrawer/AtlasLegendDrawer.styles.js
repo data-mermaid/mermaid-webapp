@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { H3 } from '../generic/text'
-import theme from '../../theme'
+import { H3 } from '../../generic/text'
+import theme from '../../../theme'
 
 export const SliderContainer = styled.div`
   position: absolute;
