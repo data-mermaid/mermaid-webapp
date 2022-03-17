@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
@@ -16,9 +17,12 @@ import { MapContainer, MapWrapper } from '../../library/styling/mapStyles'
 const defaultCenter = [20, 20]
 const defaultZoom = 2
 
+const Popup = () => <div>Popup here</div>
+
 const ProjectSitesMap = ({ sites, choices }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
+  const popUpRef = useRef(new maplibregl.Popup({ offset: 15 }))
 
   const _initializeMap = useEffect(() => {
     map.current = new maplibregl.Map({
@@ -37,6 +41,14 @@ const ProjectSitesMap = ({ sites, choices }) => {
     map.current.on('load', () => {
       loadACALayers(map.current)
       loadMapMarkers(map.current, sites)
+    })
+
+    map.current.on('click', 'mapMarkers', (e) => {
+      const coordinates = e.features[0].geometry.coordinates.slice()
+      const popupNode = document.createElement('div')
+
+      ReactDOM.render(<Popup />, popupNode)
+      popUpRef.current.setLngLat(coordinates).setDOMContent(popupNode).addTo(map.current)
     })
 
     // clean up on unmount
