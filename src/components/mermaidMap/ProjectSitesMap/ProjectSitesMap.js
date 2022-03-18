@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
@@ -25,6 +25,26 @@ const ProjectSitesMap = ({ sites, choices }) => {
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
   const [displayHelpText, setDisplayHelpText] = useState(false)
 
+  const handleMapOnWheel = useCallback((mapCurrent) => {
+    mapCurrent.on('wheel', (e) => {
+      if (e.originalEvent.ctrlKey) {
+        e.originalEvent.preventDefault()
+        setDisplayHelpText(false)
+        if (!mapCurrent.scrollZoom._enabled) {
+          mapCurrent.scrollZoom.enable()
+        }
+      } else {
+        if (mapCurrent.scrollZoom._enabled) {
+          mapCurrent.scrollZoom.disable()
+        }
+        setDisplayHelpText(true)
+        setTimeout(() => {
+          setDisplayHelpText(false)
+        }, 1500)
+      }
+    })
+  }, [])
+
   const _initializeMap = useEffect(() => {
     map.current = new maplibregl.Map({
       container: mapContainer.current,
@@ -42,37 +62,14 @@ const ProjectSitesMap = ({ sites, choices }) => {
     map.current.on('load', () => {
       loadACALayers(map.current)
       loadMapMarkers(map.current, sites)
+      handleMapOnWheel(map.current)
     })
 
     // clean up on unmount
     return () => {
       map.current.remove()
     }
-  }, [sites])
-
-  const _handleMapWheel = useEffect(() => {
-    if (!map.current) {
-      return
-    }
-
-    map.current.on('wheel', (e) => {
-      if (e.originalEvent.ctrlKey) {
-        e.originalEvent.preventDefault()
-        setDisplayHelpText(false)
-        if (!map.current.scrollZoom._enabled) {
-          map.current.scrollZoom.enable()
-        }
-      } else {
-        if (map.current.scrollZoom._enabled) {
-          map.current.scrollZoom.disable()
-        }
-        setDisplayHelpText(true)
-        setTimeout(() => {
-          setDisplayHelpText(false)
-        }, 1500)
-      }
-    })
-  }, [])
+  }, [sites, handleMapOnWheel])
 
   const _handleMapMarkers = useEffect(() => {
     if (!map.current) {
