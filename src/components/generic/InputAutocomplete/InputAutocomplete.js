@@ -44,13 +44,13 @@ const InputAutocomplete = ({
   onKeyDown,
   ...restOfProps
 }) => {
-  const [areMatchingMenuItems, setAreMatchingMenuItems] = useState(true)
   const optionMatchingValueProp = useMemo(
     () => options.find((option) => option.value === value) ?? '',
     [options, value],
   )
 
   const [selectedValue, setSelectedValue] = useState(optionMatchingValueProp)
+  const [menuItems, setMenuItems] = useState(options)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const _updateSelectedValueWhenPropsChange = useEffect(() => {
@@ -79,26 +79,25 @@ const InputAutocomplete = ({
     [selectedValue.label, onChange],
   )
 
+  const handleInputValueChange = useCallback(
+    (inputValueItem) => {
+      const matchingMenuItems = inputValueItem
+        ? matchSorter(options, inputValueItem, {
+            keys: ['label'],
+          })
+        : options
+
+      setMenuItems(matchingMenuItems)
+    },
+    [options],
+  )
+
   const getMenuContents = useCallback(
     (downshiftObject) => {
-      const { inputValue, getItemProps, highlightedIndex } = downshiftObject
+      const { getItemProps, highlightedIndex } = downshiftObject
 
-      const getMatchingMenuItems = (valueForMatching) => {
-        const matchingOptions = valueForMatching
-          ? matchSorter(options, valueForMatching, {
-              keys: ['label'],
-            })
-          : options
-
-        return matchingOptions
-      }
-
-      const matchingMenuItems = getMatchingMenuItems(inputValue)
-
-      setAreMatchingMenuItems(matchingMenuItems.length)
-
-      return matchingMenuItems.length
-        ? matchingMenuItems.map((item, index) => {
+      return menuItems.length
+        ? menuItems.map((item, index) => {
             return (
               <Item
                 {...getItemProps({
@@ -114,13 +113,14 @@ const InputAutocomplete = ({
           })
         : null
     },
-    [options],
+    [menuItems],
   )
 
   return (
     <Downshift
       selectedItem={selectedValue}
       onStateChange={handleStateChange}
+      onInputValueChange={handleInputValueChange}
       itemToString={(item) => (item ? item.label : '')}
     >
       {(downshiftObject) => {
@@ -145,9 +145,9 @@ const InputAutocomplete = ({
             <Menu {...getMenuProps({ isOpen: isMenuOpen })}>
               {isMenuOpen && getMenuContents(downshiftObject)}
             </Menu>
-            {!areMatchingMenuItems && (
+            {isMenuOpen && !menuItems.length && (
               <NoResultSection>
-                <p data-testId="noResult">{noResultsText}</p>
+                <p data-testid="noResult">{noResultsText}</p>
                 {noResultsAction}
               </NoResultSection>
             )}
