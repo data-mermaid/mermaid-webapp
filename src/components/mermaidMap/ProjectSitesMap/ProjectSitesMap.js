@@ -19,11 +19,13 @@ import Popup from '../Popup'
 const defaultCenter = [20, 20]
 const defaultZoom = 2
 
-const ProjectSitesMap = ({ sites, choices }) => {
+const ProjectSitesMap = ({ sites, choices, rowValues }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
   const [displayHelpText, setDisplayHelpText] = useState(false)
+  const filteredRecordIds = rowValues.map((record) => record.original.id)
+  const filteredSiteRecords = sites.filter((site) => filteredRecordIds.includes(site.id))
 
   const handleMapOnWheel = useCallback((mapCurrent) => {
     mapCurrent.on('wheel', (e) => {
@@ -61,7 +63,7 @@ const ProjectSitesMap = ({ sites, choices }) => {
 
     map.current.on('load', () => {
       loadACALayers(map.current)
-      loadMapMarkers(map.current, sites)
+      loadMapMarkers(map.current, filteredSiteRecords)
       handleMapOnWheel(map.current)
     })
 
@@ -69,7 +71,7 @@ const ProjectSitesMap = ({ sites, choices }) => {
     return () => {
       map.current.remove()
     }
-  }, [sites, handleMapOnWheel])
+  }, [filteredSiteRecords, handleMapOnWheel])
 
   const _handleMapMarkers = useEffect(() => {
     if (!map.current) {
@@ -123,6 +125,13 @@ const ProjectSitesMap = ({ sites, choices }) => {
 ProjectSitesMap.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   choices: choicesPropType.isRequired,
+  rowValues: PropTypes.arrayOf(
+    PropTypes.shape({
+      original: PropTypes.shape({
+        id: PropTypes.string,
+      }),
+    }),
+  ).isRequired,
 }
 
 export default ProjectSitesMap

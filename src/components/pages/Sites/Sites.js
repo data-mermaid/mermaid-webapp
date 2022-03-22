@@ -97,6 +97,7 @@ const Sites = () => {
         reefType: uiLabels.reefType,
         reefZone: uiLabels.reefZone,
         exposure: uiLabels.exposure,
+        id,
       })),
     [siteRecordsForUiDisplay, currentProjectPath],
   )
@@ -226,7 +227,7 @@ const Sites = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
-      <ProjectSitesMap sites={siteRecordsForUiDisplay} choices={choices} />
+      <ProjectSitesMap sites={siteRecordsForUiDisplay} choices={choices} rowValues={page} />
     </>
   ) : (
     <PageNoData
