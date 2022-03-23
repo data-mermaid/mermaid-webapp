@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
+import { subNavNodePropTypes } from '../../../SubNavMenuRecordName/subNavNodePropTypes'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import {
   mediaQueryPhoneOnly,
@@ -72,7 +73,7 @@ const ContentPageLayout = ({
   toolbar,
   isPageContentLoading,
   isToolbarSticky,
-  subNavName,
+  subNavNode,
 }) => {
   const { isSyncInProgress } = useSyncStatus()
 
@@ -83,7 +84,7 @@ const ContentPageLayout = ({
 
         <NavAndContentLayout>
           <Column>
-            <NavMenu subNavName={subNavName} />
+            <NavMenu subNavNode={subNavNode} />
           </Column>
           <ContentWrapper>
             {isPageContentLoading || isSyncInProgress ? (
@@ -108,14 +109,14 @@ ContentPageLayout.propTypes = {
   isPageContentLoading: PropTypes.bool,
   toolbar: PropTypes.node,
   isToolbarSticky: PropTypes.bool,
-  subNavName: PropTypes.node,
+  subNavNode: subNavNodePropTypes,
 }
 
 ContentPageLayout.defaultProps = {
   isPageContentLoading: false,
   isToolbarSticky: false,
   toolbar: undefined,
-  subNavName: null,
+  subNavNode: null,
 }
 
 export default ContentPageLayout

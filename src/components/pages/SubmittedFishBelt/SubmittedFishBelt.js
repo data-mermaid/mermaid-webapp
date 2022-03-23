@@ -22,7 +22,7 @@ import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
 import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
-import { getSubmittedRecordOrCollectRecordName } from '../../../library/getSubmittedRecordOrCollectRecordName'
+import { getRecordName } from '../../../library/getRecordName'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -34,7 +34,7 @@ const SubmittedFishBelt = () => {
   const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
   const [submittedRecord, setSubmittedRecord] = useState()
-  const [subNavName, setSubNavName] = useState(null)
+  const [subNavNode, setSubNavNode] = useState(null)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
@@ -83,7 +83,7 @@ const SubmittedFishBelt = () => {
                 families,
               })
 
-              const recordNameForSubNav = getSubmittedRecordOrCollectRecordName(
+              const recordNameForSubNode = getRecordName(
                 submittedRecordResponse,
                 sitesResponse,
                 'fishbelt_transect',
@@ -95,7 +95,7 @@ const SubmittedFishBelt = () => {
               setSubmittedRecord(submittedRecordResponse)
               setFishNameOptions(updateFishNameOptions)
               setFishNameConstants(updateFishNameConstants)
-              setSubNavName(recordNameForSubNav)
+              setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
           },
@@ -144,7 +144,7 @@ const SubmittedFishBelt = () => {
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
       isToolbarSticky={true}
-      subNavName={subNavName}
+      subNavNode={subNavNode}
       content={
         isAppOnline ? (
           <>

@@ -400,7 +400,7 @@ const Users = ({ currentUser }) => {
       return {
         name: (
           <NameCellStyle>
-            {picture ? <ProfileImage img={picture} /> : <IconAccount />}  {profile_name}
+            {picture ? <ProfileImage img={picture} /> : <IconAccount />}{profile_name}
           </NameCellStyle>
         ),
         email,
@@ -550,7 +550,7 @@ const Users = ({ currentUser }) => {
                     isSortedDescending={column.isSortedDesc}
                     sortedIndex={column.sortedIndex}
                     isMultiSortColumn={isMultiSortColumn}
-                    isSortingDisabled={column.disableSortBy}
+                    isSortingEnabled={!column.disableSortBy}
                   >
                     {column.render('Header')}
                   </Th>

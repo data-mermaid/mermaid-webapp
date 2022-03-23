@@ -30,8 +30,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
   const handleOnSubmit = () => {
     onSubmit(formik.values.newOrganizationSuggestion)
     resetAndCloseModal()
-    toast.success(
-      ...getToastArguments(language.success.newOrganizationAdd))
+    toast.success(...getToastArguments(language.success.newOrganizationAdd))
   }
 
   const helperText = language.pages.projectInfo.suggestionOrganizationHelperText
@@ -48,6 +47,7 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
             aria-describedby="modal-input-for-org-descp"
             id="modal-input-for-org"
             value={formik.values.newOrganizationSuggestion}
+            autoFocus
             onChange={(event) =>
               formik.setFieldValue('newOrganizationSuggestion', event.target.value)
             }

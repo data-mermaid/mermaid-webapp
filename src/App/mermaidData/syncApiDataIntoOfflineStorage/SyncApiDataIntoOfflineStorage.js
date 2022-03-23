@@ -11,12 +11,14 @@ const SyncApiDataIntoOfflineStorage = class {
   _dexieInstance
 
   #getOnlyModifiedAndDeletedItems = (dataList) => {
-    return dataList
-    // New, edited, and deleted items will all have a uiState_pushToApi flag locally which can be used to filter
-    .filter((item) => item.uiState_pushToApi)
-    // Destructuring assignment with "rest property" removes uiState_pushToApi so it will be omitted from the API request
-    // eslint-disable-next-line no-unused-vars
-    .map(({ uiState_pushToApi, ...keepProps }) => keepProps)
+    return (
+      dataList
+        // New, edited, and deleted items will all have a uiState_pushToApi flag locally which can be used to filter
+        .filter((item) => item.uiState_pushToApi)
+        // Destructuring assignment with "rest property" removes uiState_pushToApi so it will be omitted from the API request
+        // eslint-disable-next-line no-unused-vars
+        .map(({ uiState_pushToApi, ...keepProps }) => keepProps)
+    )
   }
 
   constructor({ dexieInstance, apiBaseUrl, getAccessToken }) {
@@ -75,7 +77,7 @@ const SyncApiDataIntoOfflineStorage = class {
       this._dexieInstance.project_profiles.toArray(),
       this._dexieInstance.project_sites.toArray(),
       this._dexieInstance.projects.toArray(),
-      this._getAccessToken()
+      this._getAccessToken(),
     ]).then(
       ([
         benthic_attributes,
@@ -208,7 +210,7 @@ const SyncApiDataIntoOfflineStorage = class {
           .anyOf([
             ['collect_records', projectId],
             ['project_managements', projectId],
-            ['Project_Profiles', projectId],
+            ['project_profiles', projectId],
             ['project_sites', projectId],
           ])
           .delete()
