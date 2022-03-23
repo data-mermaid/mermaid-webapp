@@ -150,7 +150,7 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
 const ReadOnlyAdminPage = ({ project }) => (
   <ReadOnlyContentWrapper>
     <h2>Notes</h2>
-    <p>{project.notes ?? 'no notes for this project'}</p>
+    <p>{project.notes.length ? project.notes : 'no notes for this project'}</p>
     <h2>Organizations</h2>
     {project.tags.map((org) => (
       <li key={org}>{org}</li>
@@ -360,6 +360,13 @@ Admin.propTypes = {
 OrganizationList.propTypes = {
   organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleOrganizationsChange: PropTypes.func.isRequired,
+}
+
+ReadOnlyAdminPage.propTypes = {
+  project: PropTypes.shape({
+    notes: PropTypes.string,
+    tags: PropTypes.arrayOf(PropTypes.string),
+  }).isRequired,
 }
 
 export default Admin
