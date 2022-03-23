@@ -7,6 +7,7 @@ import styled, { css } from 'styled-components'
 
 import { CloseButton, ButtonThatLooksLikeLink } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
+import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { createUuid } from '../../../library/createUuid'
 import { getOptions } from '../../../library/getOptions'
@@ -111,6 +112,12 @@ const InputAutocompleteWrapper = styled(InputRow)`
   height: 100px;
 `
 
+const ReadOnlyContentWrapper = styled(InputWrapper)`
+  p {
+    font-style: italic;
+  }
+`
+
 const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   return (
     organizations && (
@@ -140,7 +147,18 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   )
 }
 
-const Admin = () => {
+const ReadOnlyAdminPage = ({ project }) => (
+  <ReadOnlyContentWrapper>
+    <h2>Notes</h2>
+    <p>{project.notes ?? 'no notes for this project'}</p>
+    <h2>Organizations</h2>
+    {project.tags.map((org) => (
+      <li key={org}>{org}</li>
+    ))}
+  </ReadOnlyContentWrapper>
+)
+
+const Admin = ({ currentUser }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
@@ -151,6 +169,7 @@ const Admin = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
@@ -161,16 +180,22 @@ const Admin = () => {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, projectTagsResponse]) => {
+        .then(([projectResponse, projectTagsResponse, projectProfilesResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+            const filteredUserProfile = projectProfilesResponse.filter(
+              ({ profile }) => currentUser.id === profile,
+            )[0]
+
             setProjectBeingEdited(projectResponse)
             setProjectTagOptions(getOptions(projectTagsResponse, false))
+            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -178,7 +203,14 @@ const Admin = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, isSyncInProgress])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isAppOnline,
+    isSyncInProgress,
+    currentUser,
+  ])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -226,7 +258,7 @@ const Admin = () => {
     </>
   )
 
-  const content = isAppOnline ? (
+  const contentViewByRole = currentUserProfile.is_admin ? (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
@@ -289,7 +321,7 @@ const Admin = () => {
       />
     </form>
   ) : (
-    <PageUnavailableOffline />
+    <ReadOnlyAdminPage project={formik.values} />
   )
 
   return idsNotAssociatedWithData.length ? (
@@ -301,15 +333,17 @@ const Admin = () => {
     <>
       <ContentPageLayout
         isPageContentLoading={isAppOnline ? isLoading : false}
-        content={content}
+        content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>Project Info</H2>
-            <SaveButton
-              formId="project-info-form"
-              saveButtonState={saveButtonState}
-              formik={formik}
-            />
+            {currentUserProfile.is_admin && (
+              <SaveButton
+                formId="project-info-form"
+                saveButtonState={saveButtonState}
+                formik={formik}
+              />
+            )}
           </ContentPageToolbarWrapper>
         }
       />
@@ -317,6 +351,10 @@ const Admin = () => {
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
+}
+
+Admin.propTypes = {
+  currentUser: currentUserPropType.isRequired,
 }
 
 OrganizationList.propTypes = {

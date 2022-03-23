@@ -67,7 +67,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/admin',
-      Component: Admin,
+      Component: () => <Admin currentUser={currentUser} />,
     },
 
     {
