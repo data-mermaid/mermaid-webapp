@@ -37,6 +37,7 @@ import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
 import ObserversInput from '../../../ObserversInput'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
@@ -674,6 +675,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           projectId={projectId}
         />
       )}
+      <LoadingModal isOpen={true} />
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )

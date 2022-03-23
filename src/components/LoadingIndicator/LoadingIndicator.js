@@ -1,5 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import language from '../../language'
 import theme from '../../theme'
 
 const size = '3.5rem'
@@ -19,10 +21,18 @@ const LoadingIndicatorContainer = styled.div`
       margin: 0;
       width: 100%;
       text-align: center;
-      top: 45%;
-      font-size: ${theme.typography.defaultFontSize};
-      font-weight: 900;
-      text-transform: uppercase;
+    }
+    .loadingPrimary {
+        top: 45%;
+        font-size: ${theme.typography.defaultFontSize};
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+      .loadingSecondary {
+        top: 110%;
+        font-size: ${theme.typography.defaultFontSize};
+        font-weight: 600;
+      }
     }
     .objectWrapper {
       position: relative;
@@ -111,11 +121,10 @@ const LoadingIndicatorContainer = styled.div`
   }
 `
 
-const LoadingIndicator = props => {
+const LoadingIndicator = ({ primaryMessage, secondaryMessage, ...props }) => {
   return (
     <LoadingIndicatorContainer {...props}>
       <div className="loadingWrapper">
-        <p>Loading</p>
         <div className="objectWrapper">
           <div className="triangle">&nbsp;</div>
           <div className="circle">&nbsp;</div>
@@ -124,9 +133,22 @@ const LoadingIndicator = props => {
           <div className="plus">&nbsp;</div>
           <div className="x">&nbsp;</div>
         </div>
+        <p className="loadingPrimary">{primaryMessage}</p>
+        { secondaryMessage && <p className="loadingSecondary">{secondaryMessage}</p> }
       </div>
     </LoadingIndicatorContainer>
   )
+}
+
+LoadingIndicator.defaultProps = {
+  primaryMessage: language.loadingIndicator.loadingPrimary,
+  secondaryMessage: language.loadingIndicator.loadingSecondary,
+  // secondaryMessage: null
+}
+
+LoadingIndicator.propTypes = {
+  primaryMessage: PropTypes.string,
+  secondaryMessage: PropTypes.string
 }
 
 export default LoadingIndicator

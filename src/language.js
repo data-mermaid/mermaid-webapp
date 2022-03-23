@@ -112,6 +112,11 @@ const deleteCollectRecord = {
   no: 'Cancel',
 }
 
+const loadingIndicator = {
+  loadingPrimary: 'Loading',
+  loadingSecondary: 'Taking longer than expected, do not refresh. Or something...',
+}
+
 const createFishSpecies = {
   title: 'Add New Fish Species',
   genus: 'Genus',
@@ -258,6 +263,7 @@ export default {
   error,
   success,
   deleteCollectRecord,
+  loadingIndicator,
   autocomplete,
   pages,
   createFishSpecies,

@@ -123,4 +123,4 @@ Modal.defaultProps = {
 }
 
 export default Modal
-export { LeftFooter, RightFooter }
+export { LeftFooter, RightFooter, StyledDialogOverlay, ModalContent }
