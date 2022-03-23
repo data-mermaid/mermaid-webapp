@@ -95,9 +95,7 @@ const SubmittedFishBelt = ({ currentUser }) => {
 
               const filteredUserProfile = projectProfilesResponse.filter(
                 ({ profile }) => currentUser.id === profile,
-              )
-
-              console.log('filteredUserProfile ', filteredUserProfile)
+              )[0]
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
@@ -105,7 +103,7 @@ const SubmittedFishBelt = ({ currentUser }) => {
               setSubmittedRecord(submittedRecordResponse)
               setFishNameOptions(updateFishNameOptions)
               setFishNameConstants(updateFishNameConstants)
-              setCurrentUserProfile(filteredUserProfile[0])
+              setCurrentUserProfile(filteredUserProfile)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
