@@ -189,6 +189,7 @@ const Admin = ({ currentUser }) => {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+
             const filteredUserProfile = projectProfilesResponse.filter(
               ({ profile }) => currentUser.id === profile,
             )[0]
