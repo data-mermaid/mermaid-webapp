@@ -19,13 +19,11 @@ import Popup from '../Popup'
 const defaultCenter = [20, 20]
 const defaultZoom = 2
 
-const ProjectSitesMap = ({ sites, choices, rowValues }) => {
+const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
   const [displayHelpText, setDisplayHelpText] = useState(false)
-  const filteredRecordIds = rowValues.map((record) => record.original.id)
-  const filteredSiteRecords = sites.filter((site) => filteredRecordIds.includes(site.id))
 
   const handleMapOnWheel = useCallback((mapCurrent) => {
     mapCurrent.on('wheel', (e) => {
@@ -61,19 +59,25 @@ const ProjectSitesMap = ({ sites, choices, rowValues }) => {
 
     addMapController(map.current)
 
-    map.current.on('load', () => {
-      loadACALayers(map.current)
-      loadMapMarkers(map.current, filteredSiteRecords)
-      handleMapOnWheel(map.current)
-    })
-
     // clean up on unmount
     return () => {
       map.current.remove()
     }
-  }, [filteredSiteRecords, handleMapOnWheel])
+  }, [sitesForMapMarkers, handleMapOnWheel])
 
-  const _handleMapMarkers = useEffect(() => {
+  const _loadMapFeatures = useEffect(() => {
+    if (!map.current) {
+      return
+    }
+
+    map.current.on('load', () => {
+      loadACALayers(map.current)
+      loadMapMarkers(map.current, sitesForMapMarkers)
+      handleMapOnWheel(map.current)
+    })
+  }, [sitesForMapMarkers, handleMapOnWheel])
+
+  const _handleMapMarkersEvent = useEffect(() => {
     if (!map.current) {
       return
     }
@@ -123,15 +127,8 @@ const ProjectSitesMap = ({ sites, choices, rowValues }) => {
 }
 
 ProjectSitesMap.propTypes = {
-  sites: PropTypes.arrayOf(sitePropType).isRequired,
+  sitesForMapMarkers: PropTypes.arrayOf(sitePropType).isRequired,
   choices: choicesPropType.isRequired,
-  rowValues: PropTypes.arrayOf(
-    PropTypes.shape({
-      original: PropTypes.shape({
-        id: PropTypes.string,
-      }),
-    }),
-  ).isRequired,
 }
 
 export default ProjectSitesMap
