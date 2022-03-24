@@ -1,37 +1,37 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 import { StyledDialogOverlay, ModalContent } from '../generic/Modal/Modal'
 import LoadingIndicator from '../LoadingIndicator'
 
-const LoadingModal = () => {
-  const [loadingSeconds, setLoadingSeconds] = useState(0)
-  const intervalMs = 1000
+const LoadingModal = ({ displayModalTimingSeconds }) => {
+  const [displayModal, setDisplayModal] = useState(false)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLoadingSeconds(loadingSeconds + 1)
-    }, intervalMs)
+    const timeout = setTimeout(() => {
+      setDisplayModal(true)
+    }, displayModalTimingSeconds * 1000)
 
     return () => {
-      clearInterval(interval)
+      clearTimeout(timeout)
     }
   })
 
-  const getLoadingIndicator = () => {
-    if (loadingSeconds >= 10) {
-      return <LoadingIndicator displaySecondary={true}/>
-    }
-
-    return <LoadingIndicator />
-  }
-
-  return (loadingSeconds >= 1) && (
+  return (displayModal) && (
     <StyledDialogOverlay>
       <ModalContent>
-        {getLoadingIndicator()}
+        <LoadingIndicator />
       </ModalContent>
     </StyledDialogOverlay>
   )
+}
+
+LoadingModal.defaultProps = {
+  displayModalTimingSeconds: 1
+}
+
+LoadingModal.propTypes = {
+  displayModalTimingSeconds: PropTypes.number,
 }
 
 export default LoadingModal

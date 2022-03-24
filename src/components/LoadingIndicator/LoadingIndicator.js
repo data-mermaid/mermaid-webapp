@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import language from '../../language'
@@ -121,7 +121,27 @@ const LoadingIndicatorContainer = styled.div`
   }
 `
 
-const LoadingIndicator = ({ primaryMessage, secondaryMessage, displaySecondary, ...props }) => {
+const LoadingIndicator = ({
+  primaryMessage,
+  secondaryMessage,
+  displaySecondary,
+  displaySecondaryTimingSeconds,
+  ...props
+}) => {
+    const [isDisplaySecondaryTime, setIsDisplaySecondaryTime] = useState(false)
+
+    useEffect(() => {
+      const timeout = setTimeout(() => {
+        setIsDisplaySecondaryTime(true)
+      }, displaySecondaryTimingSeconds * 1000)
+
+      return () => {
+        clearTimeout(timeout)
+      }
+    })
+
+  const isDisplaySecondary = displaySecondary && secondaryMessage && isDisplaySecondaryTime
+
   return (
     <LoadingIndicatorContainer {...props}>
       <div className="loadingWrapper">
@@ -134,7 +154,7 @@ const LoadingIndicator = ({ primaryMessage, secondaryMessage, displaySecondary, 
           <div className="x">&nbsp;</div>
         </div>
         <p className="loadingPrimary">{primaryMessage}</p>
-        { (displaySecondary && secondaryMessage) && <p className="loadingSecondary">{secondaryMessage}</p> }
+        { (isDisplaySecondary) && <p className="loadingSecondary">{secondaryMessage}</p> }
       </div>
     </LoadingIndicatorContainer>
   )
@@ -143,13 +163,15 @@ const LoadingIndicator = ({ primaryMessage, secondaryMessage, displaySecondary, 
 LoadingIndicator.defaultProps = {
   primaryMessage: language.loadingIndicator.loadingPrimary,
   secondaryMessage: language.loadingIndicator.loadingSecondary,
-  displaySecondary: false
+  displaySecondary: true,
+  displaySecondaryTimingSeconds: 10,
 }
 
 LoadingIndicator.propTypes = {
   primaryMessage: PropTypes.string,
   secondaryMessage: PropTypes.string,
   displaySecondary: PropTypes.bool,
+  displaySecondaryTimingSeconds: PropTypes.number,
 }
 
 export default LoadingIndicator
