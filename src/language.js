@@ -114,7 +114,7 @@ const deleteCollectRecord = {
 
 const loadingIndicator = {
   loadingPrimary: 'Loading',
-  loadingSecondary: 'Taking longer than expected, do not refresh. Or something...',
+  loadingSecondary: 'Still working...',
 }
 
 const createFishSpecies = {

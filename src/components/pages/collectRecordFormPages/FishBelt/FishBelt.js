@@ -93,6 +93,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
 
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
 
+  const displayLoadingModal =
+    saveButtonState === buttonGroupStates.saving ||
+    validateButtonState === buttonGroupStates.validating ||
+    submitButtonState === buttonGroupStates.submitting
+
   const openNewFishNameModal = useCallback((observationId) => {
     setObservationToAddSpeciesTo(observationId)
     setIsNewFishNameModalOpen(true)
@@ -671,7 +676,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           projectId={projectId}
         />
       )}
-      <LoadingModal isOpen={true} />
+      {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )

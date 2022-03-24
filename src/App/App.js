@@ -90,41 +90,44 @@ function App({ dexieInstance }) {
     databaseSwitchboardInstance &&
     (isOfflineStorageHydrated || syncErrors.length) // we use isOfflineStrorageHydrated here instead of isSyncInProgress to make sure the app level layout doesnt rerender (flash) on sync
 
+  const layoutContent = () => {
+    /** The isMermaidAuthenticated is needed here to prevent an
+     * infinite log in loop with authentication.
+     *
+     * The projects list route and project workflow pages will trigger
+     * a sync when they are routed to, making isOfflineStorageHydrated = true
+     */
+
+    if (!isMermaidAuthenticated && !isMermaidAuthenticatedAndReady) {
+      return <LoadingIndicator/>
+    }
+
+    return (
+      <Switch>
+        {routes.map(({ path, Component }) => (
+          <Route
+            exact
+            path={path}
+            key={path}
+            render={() => <Component />
+            }
+          />
+        ))}
+        <Route exact path="/">
+          <Redirect to="/projects" />
+        </Route>
+        <Route component={PageNotFound} />
+      </Switch>
+    )
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <GlobalStyle />
         <CustomToastContainer limit={5} />
         <Layout {...layoutProps}>
-          {
-            /** The isMermaidAuthenticated is needed here to prevent an
-             * infinite log in loop with authentication.
-             *
-             * The projects list route and project workflow pages will trigger
-             * a sync when they are routed to, making isOfflineStorageHydrated = true
-             */
-
-            isMermaidAuthenticated ? (
-              <Switch>
-                {routes.map(({ path, Component }) => (
-                  <Route
-                    exact
-                    path={path}
-                    key={path}
-                    render={() =>
-                      isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
-                    }
-                  />
-                ))}
-                <Route exact path="/">
-                  <Redirect to="/projects" />
-                </Route>
-                <Route component={PageNotFound} />
-              </Switch>
-            ) : (
-              <LoadingIndicator />
-            )
-          }
+          {layoutContent()}
         </Layout>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>

@@ -121,7 +121,7 @@ const LoadingIndicatorContainer = styled.div`
   }
 `
 
-const LoadingIndicator = ({ primaryMessage, secondaryMessage, ...props }) => {
+const LoadingIndicator = ({ primaryMessage, secondaryMessage, displaySecondary, ...props }) => {
   return (
     <LoadingIndicatorContainer {...props}>
       <div className="loadingWrapper">
@@ -134,7 +134,7 @@ const LoadingIndicator = ({ primaryMessage, secondaryMessage, ...props }) => {
           <div className="x">&nbsp;</div>
         </div>
         <p className="loadingPrimary">{primaryMessage}</p>
-        { secondaryMessage && <p className="loadingSecondary">{secondaryMessage}</p> }
+        { (displaySecondary && secondaryMessage) && <p className="loadingSecondary">{secondaryMessage}</p> }
       </div>
     </LoadingIndicatorContainer>
   )
@@ -143,12 +143,13 @@ const LoadingIndicator = ({ primaryMessage, secondaryMessage, ...props }) => {
 LoadingIndicator.defaultProps = {
   primaryMessage: language.loadingIndicator.loadingPrimary,
   secondaryMessage: language.loadingIndicator.loadingSecondary,
-  // secondaryMessage: null
+  displaySecondary: false
 }
 
 LoadingIndicator.propTypes = {
   primaryMessage: PropTypes.string,
-  secondaryMessage: PropTypes.string
+  secondaryMessage: PropTypes.string,
+  displaySecondary: PropTypes.bool,
 }
 
 export default LoadingIndicator
