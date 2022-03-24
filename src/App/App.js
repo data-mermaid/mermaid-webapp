@@ -99,19 +99,13 @@ function App({ dexieInstance }) {
      */
 
     if (!isMermaidAuthenticated && !isMermaidAuthenticatedAndReady) {
-      return <LoadingIndicator/>
+      return <LoadingIndicator />
     }
 
     return (
       <Switch>
         {routes.map(({ path, Component }) => (
-          <Route
-            exact
-            path={path}
-            key={path}
-            render={() => <Component />
-            }
-          />
+          <Route exact path={path} key={path} render={() => <Component />} />
         ))}
         <Route exact path="/">
           <Redirect to="/projects" />
@@ -126,9 +120,7 @@ function App({ dexieInstance }) {
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <GlobalStyle />
         <CustomToastContainer limit={5} />
-        <Layout {...layoutProps}>
-          {layoutContent()}
-        </Layout>
+        <Layout {...layoutProps}>{layoutContent()}</Layout>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
   )
