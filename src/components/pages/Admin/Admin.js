@@ -12,7 +12,7 @@ import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLa
 import { createUuid } from '../../../library/createUuid'
 import { getOptions } from '../../../library/getOptions'
 import { getProjectInitialValues } from './projectRecordInitialFormValue'
-import { H2 } from '../../generic/text'
+import { H2, H3, P } from '../../generic/text'
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { hoverState } from '../../../library/styling/mediaQueries'
 import { IconClose } from '../../icons'
@@ -147,11 +147,11 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   )
 }
 
-const ReadOnlyAdminPage = ({ project }) => (
+const ReadOnlyAdminContent = ({ project }) => (
   <ReadOnlyContentWrapper>
-    <h2>Notes</h2>
-    <p>{project.notes.length ? project.notes : 'no notes for this project'}</p>
-    <h2>Organizations</h2>
+    <H3>Notes</H3>
+    <P>{project.notes.length ? project.notes : 'no notes for this project'}</P>
+    <H3>Organizations</H3>
     {project.tags.map((org) => (
       <li key={org}>{org}</li>
     ))}
@@ -322,7 +322,7 @@ const Admin = ({ currentUser }) => {
       />
     </form>
   ) : (
-    <ReadOnlyAdminPage project={formik.values} />
+    <ReadOnlyAdminContent project={formik.values} />
   )
 
   return idsNotAssociatedWithData.length ? (
@@ -363,7 +363,7 @@ OrganizationList.propTypes = {
   handleOrganizationsChange: PropTypes.func.isRequired,
 }
 
-ReadOnlyAdminPage.propTypes = {
+ReadOnlyAdminContent.propTypes = {
   project: PropTypes.shape({
     notes: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
