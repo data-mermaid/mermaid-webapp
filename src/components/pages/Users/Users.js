@@ -101,17 +101,14 @@ const TableRadioLabel = styled('label')`
 `
 
 const getRoleLabel = (roleCode) => {
-  if (roleCode === 90) {
-    return 'Admin'
+  switch (roleCode) {
+    case 90:
+      return 'Admin'
+    case 50:
+      return 'Collector'
+    default:
+      return 'Read-only'
   }
-  if (roleCode === 50) {
-    return 'Collector'
-  }
-  if (roleCode === 10) {
-    return 'Read-only'
-  }
-
-  return undefined
 }
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 const getIsUserRoleReadOnly = (profile) => profile.role === 10
