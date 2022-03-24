@@ -323,7 +323,11 @@ ReadOnlyDataSharingContent.propTypes = {
     data_policy_beltfish: PropTypes.number,
     data_policy_benthiclit: PropTypes.number,
     data_policy_bleachingqc: PropTypes.number,
-  }).isRequired,
+  }),
+}
+
+ReadOnlyDataSharingContent.defaultProps = {
+  project: {},
 }
 
 export default DataSharing
