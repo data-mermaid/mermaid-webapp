@@ -662,7 +662,7 @@ const Users = ({ currentUser }) => {
     </>
   )
 
-  const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
+  const content = isAppOnline ? table : <PageUnavailableOffline />
   const toolbar = isAppOnline ? (
     <>
       <H2>Users</H2>
@@ -707,7 +707,11 @@ const Users = ({ currentUser }) => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
+    <ContentPageLayout
+      isPageContentLoading={isAppOnline ? isLoading : false}
+      content={content}
+      toolbar={toolbar}
+    />
   )
 }
 
