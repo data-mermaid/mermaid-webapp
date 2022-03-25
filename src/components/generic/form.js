@@ -18,7 +18,7 @@ export const CheckRadioWrapper = styled.div`
   justify-items: start;
   padding: ${theme.spacing.xsmall};
   input {
-    margin-top: ${theme.spacing.xsmall};
+    margin-top: ${theme.spacing.small};
   }
   ${hoverState(css`
     background-color: ${theme.color.white};
