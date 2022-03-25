@@ -123,7 +123,6 @@ const ManagementRegime = () => {
         })
     },
     validate: (values) => {
-      console.log('validate values ', values)
       const errors = {}
       const isPartialSelectionSelected =
         values.access_restriction ||
@@ -150,8 +149,6 @@ const ManagementRegime = () => {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
   }, [formik.dirty])
-
-  // console.log('formik values ', formik.values)
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
