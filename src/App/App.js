@@ -5,7 +5,7 @@ import React, { useMemo } from 'react'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
-import { useCurrentUser } from './mermaidData/useCurrentUser'
+import { useInitializeCurrentUser } from './useInitializeCurrentUser'
 import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
@@ -70,7 +70,7 @@ function App({ dexieInstance }) {
     apiSyncInstance,
   ])
 
-  const currentUser = useCurrentUser({
+  const currentUser = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
     dexieInstance,
