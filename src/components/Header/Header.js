@@ -84,7 +84,7 @@ const StyledNavLink = styled('a')`
   ${(props) =>
     props.disabled &&
     css`
-      color: ${theme.color.disabledText};
+      color: ${theme.color.disabledText} !important;
       pointer-events: none;
     `} 
   }
@@ -108,9 +108,6 @@ const GlobalNav = styled('nav')`
       right: 0;
       background-color: ${theme.color.headerDropdownMenuBackground};
       border-radius: 8px 0 8px 8px;
-      a {
-        ${dropdownLinkStyles}
-      }
     }
   }
   .mobile {
@@ -149,6 +146,7 @@ const GlobalNav = styled('nav')`
       }
     }
     .loggedInAs {
+      margin-bottom: ${theme.spacing.xlarge};
       background: ${theme.color.primaryColor};
     }
   }
@@ -163,6 +161,18 @@ const GlobalNav = styled('nav')`
 `
 const UserMenuButton = styled.button`
   ${dropdownLinkStyles}
+  display: flex !important;
+  flex-direction: row-reverse !important;
+`
+
+const StyledLink = styled(Link)`
+  ${dropdownLinkStyles}
+  ${(props) =>
+    props.disabled &&
+    css`
+      color: ${theme.color.disabledText} !important;
+      pointer-events: none;
+    `}
 `
 const GlobalLinks = () => (
   <>
@@ -191,7 +201,9 @@ const GlobalLinks = () => (
 const Header = ({ logout, currentUser }) => {
   const UserMenuDropDownContent = () => (
     <OfflineHide>
-      <Link to="/#">Profile</Link>
+      <StyledLink to="/#" disabled>
+        Profile
+      </StyledLink>
       <UserMenuButton type="button" onClick={logout}>
         Logout
       </UserMenuButton>
