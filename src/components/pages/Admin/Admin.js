@@ -31,6 +31,7 @@ import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabe
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
 import SaveButton from '../../generic/SaveButton'
+import LoadingModal from '../../LoadingModal/LoadingModal'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -313,7 +314,8 @@ const Admin = () => {
           </ContentPageToolbarWrapper>
         }
       />
-      {/* Prompt user if they attempt to navifate away from dirty form */}
+      {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
+      {/* Prompt user if they attempt to navigate away from dirty form */}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )

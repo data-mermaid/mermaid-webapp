@@ -23,6 +23,7 @@ import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithL
 import useIsMounted from '../../../../library/useIsMounted'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../../generic/SaveButton'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
 
 const ManagementRegime = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -224,6 +225,7 @@ const ManagementRegime = () => {
               />
             </InputWrapper>
           </form>
+          {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
           <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
         </>
       }

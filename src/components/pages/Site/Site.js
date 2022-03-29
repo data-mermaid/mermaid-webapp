@@ -24,6 +24,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../generic/SaveButton'
+import LoadingModal from '../../LoadingModal/LoadingModal'
 
 const Site = () => {
   const [countryOptions, setCountryOptions] = useState([])
@@ -249,6 +250,7 @@ const Site = () => {
               />
             </InputWrapper>
           </form>
+          {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
           <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
         </>
       }
