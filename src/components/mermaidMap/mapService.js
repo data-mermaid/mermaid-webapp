@@ -251,7 +251,7 @@ export const loadACALayers = (map) => {
   })
 }
 
-const getMapMarkersFeature = (records) => {
+export const getMapMarkersFeature = (records) => {
   const bounds = new maplibregl.LngLatBounds()
 
   const data = {
@@ -282,12 +282,13 @@ const getMapMarkersFeature = (records) => {
   return { markersData: data, bounds }
 }
 
-export const loadMapMarkers = (map, sites) => {
-  const { markersData, bounds } = getMapMarkersFeature(sites)
-
+export const loadMapMarkersLayer = (map) => {
   map.addSource('mapMarkers', {
     type: 'geojson',
-    data: markersData,
+    data: {
+      type: 'FeatureCollection',
+      features: [],
+    },
   })
 
   map.addLayer({
@@ -302,8 +303,4 @@ export const loadMapMarkers = (map, sites) => {
       'circle-opacity': 0.8,
     },
   })
-
-  if (sites.length > 0) {
-    map.fitBounds(bounds, { padding: 25, animate: false })
-  }
 }

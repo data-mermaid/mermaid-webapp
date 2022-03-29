@@ -11,7 +11,8 @@ import {
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
-  loadMapMarkers,
+  getMapMarkersFeature,
+  loadMapMarkersLayer,
 } from '../mapService'
 import { MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import Popup from '../Popup'
@@ -59,23 +60,35 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
 
     addMapController(map.current)
 
+    map.current.on('load', () => {
+      loadACALayers(map.current)
+      loadMapMarkersLayer(map.current)
+      handleMapOnWheel(map.current)
+    })
+
     // clean up on unmount
     return () => {
       map.current.remove()
     }
-  }, [])
+  }, [handleMapOnWheel])
 
-  const _loadMapFeatures = useEffect(() => {
+  const _updateMapMarkers = useEffect(() => {
     if (!map.current) {
       return
     }
 
+    const { markersData, bounds } = getMapMarkersFeature(sitesForMapMarkers)
+
     map.current.on('load', () => {
-      loadACALayers(map.current)
-      loadMapMarkers(map.current, sitesForMapMarkers)
-      handleMapOnWheel(map.current)
+      if (map.current.getSource('mapMarkers') !== undefined) {
+        map.current.getSource('mapMarkers').setData(markersData)
+      }
     })
-  }, [sitesForMapMarkers, handleMapOnWheel])
+
+    if (sitesForMapMarkers.length > 0) {
+      map.current.fitBounds(bounds, { padding: 25, animate: false })
+    }
+  }, [sitesForMapMarkers])
 
   const _handleMapMarkersEvent = useEffect(() => {
     if (!map.current) {
