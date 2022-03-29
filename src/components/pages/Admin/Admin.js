@@ -34,6 +34,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -160,24 +161,25 @@ const ReadOnlyAdminContent = ({ project }) => (
   </ReadOnlyContentWrapper>
 )
 
-const Admin = ({ currentUser }) => {
+const Admin = () => {
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [projectTagOptions, setProjectTagOptions] = useState([])
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
-  const { isAppOnline } = useOnlineStatus()
-  const { projectId } = useParams()
-  const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
+  const { isSyncInProgress } = useSyncStatus()
+  const { projectId } = useParams()
+  const currentUser = useCurrentUser()
+  const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
-
-  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
