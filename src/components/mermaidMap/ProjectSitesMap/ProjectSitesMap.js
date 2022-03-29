@@ -16,6 +16,7 @@ import {
 } from '../mapService'
 import { MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import Popup from '../Popup'
+import usePrevious from '../../../library/usePrevious'
 
 const defaultCenter = [20, 20]
 const defaultZoom = 2
@@ -24,6 +25,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
+  const previousSitesForMapMarkers = usePrevious(sitesForMapMarkers)
   const [displayHelpText, setDisplayHelpText] = useState(false)
 
   const handleMapOnWheel = useCallback((mapCurrent) => {
@@ -79,16 +81,18 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
 
     const { markersData, bounds } = getMapMarkersFeature(sitesForMapMarkers)
 
-    map.current.on('load', () => {
-      if (map.current.getSource('mapMarkers') !== undefined) {
-        map.current.getSource('mapMarkers').setData(markersData)
-      }
-    })
+    if (JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)) {
+      map.current.on('load', () => {
+        if (map.current.getSource('mapMarkers') !== undefined) {
+          map.current.getSource('mapMarkers').setData(markersData)
+        }
+      })
+    }
 
     if (sitesForMapMarkers.length > 0) {
       map.current.fitBounds(bounds, { padding: 25, animate: false })
     }
-  }, [sitesForMapMarkers])
+  }, [sitesForMapMarkers, previousSitesForMapMarkers])
 
   const _handleMapMarkersEvent = useEffect(() => {
     if (!map.current) {
