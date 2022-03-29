@@ -46,6 +46,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
   }, [])
 
   const _initializeMap = useEffect(() => {
+    console.log('initialize')
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: satelliteBaseMap,
@@ -63,7 +64,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
     return () => {
       map.current.remove()
     }
-  }, [sitesForMapMarkers, handleMapOnWheel])
+  }, [])
 
   const _loadMapFeatures = useEffect(() => {
     if (!map.current) {
