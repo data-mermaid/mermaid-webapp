@@ -30,6 +30,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
@@ -155,6 +156,8 @@ const Admin = () => {
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
+
+  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
@@ -304,7 +307,7 @@ const Admin = () => {
         content={content}
         toolbar={
           <ContentPageToolbarWrapper>
-            <H2>Project Info</H2>
+            <H2>{language.pages.projectInfo.title}</H2>
             <SaveButton
               formId="project-info-form"
               saveButtonState={saveButtonState}

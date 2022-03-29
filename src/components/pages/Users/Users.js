@@ -43,6 +43,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import RemoveUserModal from '../../RemoveUserModal'
 import theme from '../../../theme'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 
 const ToolbarRowWrapper = styled('div')`
@@ -139,6 +140,8 @@ const Users = ({ currentUser }) => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -623,7 +626,7 @@ const Users = ({ currentUser }) => {
   const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
   const toolbar = isAppOnline ? (
     <>
-      <H2>Users</H2>
+      <H2>{language.pages.userTable.title}</H2>
       <ToolbarRowWrapper>
         <FilterSearchToolbar
           name={language.pages.userTable.filterToolbarText}

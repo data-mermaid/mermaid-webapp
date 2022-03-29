@@ -22,6 +22,7 @@ import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import theme from '../../../theme'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 
 const DataSharingTable = styled(Table)`
@@ -58,6 +59,8 @@ const DataSharing = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
   const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(false)
   const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
@@ -268,7 +271,7 @@ const DataSharing = () => {
       content={content}
       toolbar={
         <ContentPageToolbarWrapper>
-          <H2>Data Sharing</H2>
+          <H2>{language.pages.dataSharing.title}</H2>
         </ContentPageToolbarWrapper>
       }
     />

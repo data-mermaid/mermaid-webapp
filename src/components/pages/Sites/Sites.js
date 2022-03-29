@@ -24,6 +24,7 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 
@@ -35,6 +36,8 @@ const Sites = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
   const _getSiteRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -239,7 +242,7 @@ const Sites = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>Sites</H2>
+          <H2>{language.pages.siteTable.title}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.siteTable.filterToolbarText}

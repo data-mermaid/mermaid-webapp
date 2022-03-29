@@ -640,11 +640,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         }
         toolbar={
           <ContentPageToolbarWrapper>
-            {isNewRecord && <H2>Fish Belt</H2>}
+            {isNewRecord && <H2>{language.page.fishbeltForm.title}</H2>}
             {collectRecordBeingEdited && !isNewRecord && (
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
                 sites={sites}
+                primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`}
               />
             )}
 

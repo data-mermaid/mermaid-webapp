@@ -133,19 +133,28 @@ const autocomplete = {
   noResultsDefault: 'No results found',
 }
 
+const title = {
+  mermaid: 'MERMAID',
+  mermaidDescription: 'Marine Ecological Research Management Aid'
+}
+
 const pages = {
   projectsList: {
+    title: 'Projects',
     offlineReadyCheckboxLabel: 'Offline Ready',
     noDataTextOnline: `You aren't part of any projects yet.`,
     noDataSubTextOnline: `Create a new project or get your admin to add you to some.`,
     noDataTextOffline: `You don't have any offline projects.`,
+
   },
   collectRecord: {
+    title: 'Collecting',
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',
   },
   projectInfo: {
+    title: 'Project Info',
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
     createOrganizationTitle: 'Suggest a new organization',
     suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your project.`,
@@ -154,15 +163,18 @@ const pages = {
     removeOrganization: `Remove organization from project`,
   },
   dataSharing: {
+    title: 'Data Sharing',
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
     testProjectHelperText: 'Data for a test project will not be included in public reporting.',
     moreInfoTitle: 'Data sharing',
   },
   submittedTable: {
+    title: 'Submitted',
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
     noDataText: `This project has no submitted sample units.`,
   },
   userTable: {
+    title: 'Users',
     filterToolbarText: 'Filter users by name or email',
     searchEmailToolbarText: 'Enter email address of user to add',
     warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
@@ -172,19 +184,32 @@ const pages = {
     removeUserModalTitle: 'Remove User From Project',
     warningRemoveUser: `You must transfer sample units before you can remove the user from project.`,
   },
+  fishBeltForm: {
+    title: 'Fish Belt'
+  },
   submittedFishBeltForm: {
+    title: 'Fish Belt',
     toolbarLabel: 'Submitted sample units are read-only',
   },
   collectTable: {
+    title: 'Collecting',
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
     noDataText: `You don't have any active sample units`,
   },
+  siteForm: {
+    title: 'Site',
+  },
   siteTable: {
+    title: 'Sites',
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
     noDataText: `This project has no sites.`,
     noDataExtraText: `You can add sites by creating a new one or copying them from another project.`,
   },
+  managementRegimeForm: {
+    title: 'Management Regime',
+  },
   managementRegimeTable: {
+    title: 'Management Regimes',
     filterToolbarText: 'Filter management regimes by name or year',
     noDataText: `This project has no management regimes.`,
     noDataExtraText: `You can add management regimes by creating a new one or copying them from another project.`,
@@ -259,6 +284,7 @@ export default {
   success,
   deleteCollectRecord,
   autocomplete,
+  title,
   pages,
   createFishSpecies,
   navigateAwayPrompt,
