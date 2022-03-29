@@ -96,7 +96,6 @@ const SingleSiteMap = ({
 
   return (
     <MapInputRow>
-      <span>Allen Coral Atlas</span>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
         <AtlasLegendDrawer

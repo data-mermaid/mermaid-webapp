@@ -2,7 +2,7 @@ import styled from 'styled-components/macro'
 import { InputRow } from '../generic/form'
 
 export const MapInputRow = styled(InputRow)`
-  grid-template-columns: 0.75fr 2.5fr;
+  grid-template-columns: 1fr;
 `
 export const MapContainer = styled.div`
   position: relative;
