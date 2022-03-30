@@ -18,13 +18,14 @@ import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWith
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
-import MermaidMap from '../../MermaidMap'
+import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../generic/SaveButton'
+import LoadingModal from '../../LoadingModal/LoadingModal'
 
 const Site = () => {
   const [countryOptions, setCountryOptions] = useState([])
@@ -217,7 +218,7 @@ const Site = () => {
                 testId="longitude"
               />
               {isAppOnline && (
-                <MermaidMap
+                <SingleSiteMap
                   formLatitudeValue={formik.getFieldProps('latitude').value}
                   formLongitudeValue={formik.getFieldProps('longitude').value}
                   handleLatitudeChange={handleLatitudeChange}
@@ -252,6 +253,7 @@ const Site = () => {
               />
             </InputWrapper>
           </form>
+          {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
           <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
         </>
       }

@@ -112,6 +112,11 @@ const deleteCollectRecord = {
   no: 'Cancel',
 }
 
+const loadingIndicator = {
+  loadingPrimary: 'Loading',
+  loadingSecondary: 'Still working...',
+}
+
 const createFishSpecies = {
   title: 'Add New Fish Species',
   genus: 'Genus',
@@ -143,9 +148,10 @@ const pages = {
     title: 'Projects',
     offlineReadyCheckboxLabel: 'Offline Ready',
     noDataTextOnline: `You aren't part of any projects yet.`,
-    noDataSubTextOnline: `Create a new project or get your admin to add you to some.`,
+    noDataSubText: `Create a new project or get your admin to add you to some.`,
     noDataTextOffline: `You don't have any offline projects.`,
-
+    noFilterResults: 'No results',
+    noFilterResultsSubText: 'No projects match the current filter term.'
   },
   collectRecord: {
     title: 'Collecting',
@@ -175,7 +181,8 @@ const pages = {
   },
   userTable: {
     title: 'Users',
-    filterToolbarText: 'Filter users by name or email',
+    filterToolbarTextForAdmin: 'Filter users by name or email',
+    filterToolbarTextForCollector: 'Filter users by name or role',
     searchEmailToolbarText: 'Enter email address of user to add',
     warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
     newUserModalTitle: `Invite new user`,
@@ -204,6 +211,7 @@ const pages = {
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
     noDataText: `This project has no sites.`,
     noDataExtraText: `You can add sites by creating a new one or copying them from another project.`,
+    controlZoomText: 'Use Ctrl + Scroll to zoom the map',
   },
   managementRegimeForm: {
     title: 'Management Regime',
@@ -283,6 +291,7 @@ export default {
   error,
   success,
   deleteCollectRecord,
+  loadingIndicator,
   autocomplete,
   title,
   pages,

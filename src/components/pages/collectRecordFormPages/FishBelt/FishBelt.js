@@ -37,6 +37,7 @@ import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
 import ObserversInput from '../../../ObserversInput'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
@@ -91,6 +92,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [observationsState, observationsDispatch] = observationsReducer
 
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+
+  const displayLoadingModal =
+    saveButtonState === buttonGroupStates.saving ||
+    validateButtonState === buttonGroupStates.validating ||
+    submitButtonState === buttonGroupStates.submitting
 
   const openNewFishNameModal = useCallback((observationId) => {
     setObservationToAddSpeciesTo(observationId)
@@ -671,6 +677,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           projectId={projectId}
         />
       )}
+      {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )

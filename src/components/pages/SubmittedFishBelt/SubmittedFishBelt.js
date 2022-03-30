@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
+import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { getFishNameConstants } from '../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
@@ -24,7 +25,7 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import { getRecordName } from '../../../library/getRecordName'
 
-const SubmittedFishBelt = () => {
+const SubmittedFishBelt = ({ currentUser }) => {
   const [choices, setChoices] = useState({})
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
@@ -43,6 +44,7 @@ const SubmittedFishBelt = () => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -57,6 +59,7 @@ const SubmittedFishBelt = () => {
           projectId,
           submittedRecordId,
         ),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
@@ -69,6 +72,7 @@ const SubmittedFishBelt = () => {
             genera,
             families,
             submittedRecordResponse,
+            projectProfilesResponse,
           ]) => {
             if (isMounted.current) {
               const updateFishNameOptions = getFishNameOptions({
@@ -89,12 +93,17 @@ const SubmittedFishBelt = () => {
                 'fishbelt_transect',
               )
 
+              const filteredUserProfile = projectProfilesResponse.filter(
+                ({ profile }) => currentUser.id === profile,
+              )[0]
+
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setSubmittedRecord(submittedRecordResponse)
               setFishNameOptions(updateFishNameOptions)
               setFishNameConstants(updateFishNameConstants)
+              setCurrentUserProfile(filteredUserProfile)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
@@ -117,6 +126,7 @@ const SubmittedFishBelt = () => {
     projectId,
     isAppOnline,
     isSyncInProgress,
+    currentUser,
   ])
 
   const handleMoveToCollect = () => {
@@ -182,10 +192,12 @@ const SubmittedFishBelt = () => {
             />
             <RowSpaceBetween>
               <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
-              <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
-                <IconPen />
-                Edit Sample Unit - move to collect
-              </ButtonSecondary>
+              {currentUserProfile.is_admin && (
+                <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
+                  <IconPen />
+                  Edit Sample Unit - move to collect
+                </ButtonSecondary>
+              )}
             </RowSpaceBetween>
           </>
         )
@@ -194,6 +206,8 @@ const SubmittedFishBelt = () => {
   )
 }
 
-SubmittedFishBelt.propTypes = {}
+SubmittedFishBelt.propTypes = {
+  currentUser: currentUserPropType.isRequired,
+}
 
 export default SubmittedFishBelt
