@@ -52,14 +52,11 @@ const CheckBoxLabel = styled.label`
 `
 
 const getDataSharingPolicyLabel = (policyCode) => {
-  switch (policyCode) {
-    case 100:
-      return 'Public'
-    case 50:
-      return 'Public Summary'
-    default:
-      return 'Private'
-  }
+  return {
+    10: 'Private',
+    50: 'Public Summary',
+    100: 'Public',
+  }[policyCode]
 }
 
 const ReadOnlyDataSharingContent = ({ project }) => (
