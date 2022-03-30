@@ -13,7 +13,7 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
-  reactTableNaturalSortDates
+  reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { H2 } from '../../generic/text'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
@@ -26,6 +26,16 @@ import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageNoData from '../PageNoData'
 
+const getTransectReportProperty = (transect) => {
+  return {
+    'Fish Belt': 'beltfishes',
+    'Benthic LIT': 'benthiclits',
+    'Benthic PIT': 'benthicpits',
+    'Habitat Complexity': 'habitatcomplexities',
+    'Colonies Bleached': ['bleachingqcs', 'obscoloniesbleacheds'],
+    'Quadrat Percentage': ['bleachingqcs', 'obsquadratbenthicpercents'],
+  }[transect]
+}
 const Data = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -128,12 +138,15 @@ const Data = () => {
     [submittedRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(() => [
-    {
-      id: 'method',
-      desc: false,
-    },
-  ], [])
+  const tableDefaultSortByColumns = useMemo(
+    () => [
+      {
+        id: 'method',
+        desc: false,
+      },
+    ],
+    [],
+  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -177,7 +190,7 @@ const Data = () => {
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -188,29 +201,44 @@ const Data = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleExportToCSV = (transect) => {
+    const isBleachingTransect =
+      transect === 'Colonies Bleached' || transect === 'Quadrat Percentage'
+    const transectReportProperty = getTransectReportProperty(transect)
+
+    const transectProtocol = isBleachingTransect
+      ? transectReportProperty[0]
+      : transectReportProperty
+    const transectMethod = isBleachingTransect
+      ? transectReportProperty[1]
+      : `obstransect${transectReportProperty}`
+
+    databaseSwitchboardInstance.exportToCSV(projectId, transectProtocol, transectMethod)
+  }
+
   const table = submittedRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+              const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
 
               return (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSortedDescending={column.isSortedDesc}
-                    sortedIndex={column.sortedIndex}
-                    isMultiSortColumn={isMultiSortColumn}
-                  >
-                    {column.render('Header')}
-                  </Th>
-                ))}
-              </Tr>
-            )
-})}
+                <Tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <Th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      isSortedDescending={column.isSortedDesc}
+                      sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
+                    >
+                      {column.render('Header')}
+                    </Th>
+                  ))}
+                </Tr>
+              )
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -257,6 +285,7 @@ const Data = () => {
     <DataToolbarSection
       name={language.pages.submittedTable.filterToolbarText}
       handleGlobalFilterChange={handleGlobalFilterChange}
+      handleExportToCSV={handleExportToCSV}
     />
   ) : (
     <H2>Submitted</H2>
