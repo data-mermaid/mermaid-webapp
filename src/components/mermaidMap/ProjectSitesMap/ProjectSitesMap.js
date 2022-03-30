@@ -27,6 +27,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
   const previousSitesForMapMarkers = usePrevious(sitesForMapMarkers)
   const [displayHelpText, setDisplayHelpText] = useState(false)
+  const [isMapInitialIzed, setIsMapInitialIzed] = useState(false)
 
   const handleMapOnWheel = useCallback((mapCurrent) => {
     mapCurrent.on('wheel', (e) => {
@@ -66,6 +67,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       loadACALayers(map.current)
       loadMapMarkersLayer(map.current)
       handleMapOnWheel(map.current)
+      setIsMapInitialIzed(true)
     })
 
     // clean up on unmount
@@ -81,7 +83,10 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
 
     const { markersData, bounds } = getMapMarkersFeature(sitesForMapMarkers)
 
-    if (JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)) {
+    if (
+      isMapInitialIzed ||
+      JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)
+    ) {
       if (map.current.getSource('mapMarkers') !== undefined) {
         map.current.getSource('mapMarkers').setData(markersData)
       }
@@ -89,7 +94,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
         map.current.fitBounds(bounds, { padding: 25, animate: false })
       }
     }
-  }, [sitesForMapMarkers, previousSitesForMapMarkers])
+  }, [isMapInitialIzed, sitesForMapMarkers, previousSitesForMapMarkers])
 
   const _handleMapMarkersEvent = useEffect(() => {
     if (!map.current) {
