@@ -205,8 +205,25 @@ const ManagementRegime = () => {
               />
               <ManagementRulesInput
                 managementFormValues={formik.values}
-                onChange={(property, selectedItems) => {
-                  formik.setFieldValue(property, selectedItems)
+                onChange={(property, partialRestrictionRuleValues) => {
+                  const openAccessAndNoTakeRules =
+                    property === 'partial_restrictions'
+                      ? { open_access: false, no_take: false }
+                      : { open_access: property === 'open_access', no_take: property === 'no_take' }
+
+                  const partialRestrictionRules = {
+                    periodic_closure: partialRestrictionRuleValues.periodic_closure,
+                    size_limits: partialRestrictionRuleValues.size_limits,
+                    gear_restriction: partialRestrictionRuleValues.gear_restriction,
+                    species_restriction: partialRestrictionRuleValues.species_restriction,
+                    access_restriction: partialRestrictionRuleValues.access_restriction,
+                  }
+
+                  formik.setValues({
+                    ...formik.values,
+                    ...openAccessAndNoTakeRules,
+                    ...partialRestrictionRules,
+                  })
                 }}
                 validationType={formik.errors.rules ? 'error' : null}
                 validationMessages={formik.errors.rules}
