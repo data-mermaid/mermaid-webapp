@@ -82,15 +82,12 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
     const { markersData, bounds } = getMapMarkersFeature(sitesForMapMarkers)
 
     if (JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)) {
-      map.current.on('load', () => {
-        if (map.current.getSource('mapMarkers') !== undefined) {
-          map.current.getSource('mapMarkers').setData(markersData)
-        }
-      })
-    }
-
-    if (sitesForMapMarkers.length > 0) {
-      map.current.fitBounds(bounds, { padding: 25, animate: false })
+      if (map.current.getSource('mapMarkers') !== undefined) {
+        map.current.getSource('mapMarkers').setData(markersData)
+      }
+      if (sitesForMapMarkers.length > 0) {
+        map.current.fitBounds(bounds, { padding: 25, animate: false })
+      }
     }
   }, [sitesForMapMarkers, previousSitesForMapMarkers])
 
