@@ -24,7 +24,7 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
-  reactTableNaturalSortReactNodesSecondChild
+  reactTableNaturalSortReactNodesSecondChild,
 } from '../../generic/Table/reactTableNaturalSort'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -101,18 +101,13 @@ const TableRadioLabel = styled('label')`
 `
 
 const getRoleLabel = (roleCode) => {
-  if (roleCode === 90) {
-    return 'Admin'
-  }
-  if (roleCode === 50) {
-    return 'Collector'
-  }
-  if (roleCode === 10) {
-    return 'Read-only'
-  }
-
-  return undefined
+  return {
+    10: 'Read-only',
+    50: 'Collector',
+    90: 'Admin',
+  }[roleCode]
 }
+
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 const getIsUserRoleReadOnly = (profile) => profile.role === 10
 
@@ -139,6 +134,7 @@ const Users = ({ currentUser }) => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -151,8 +147,14 @@ const Users = ({ currentUser }) => {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+
+            const filteredUserProfile = projectProfilesResponse.filter(
+              ({ profile }) => currentUser.id === profile,
+            )[0]
+
             setProjectName(projectResponse?.name)
             setObserverProfiles(projectProfilesResponse)
+            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -160,7 +162,7 @@ const Users = ({ currentUser }) => {
           toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, projectId, isSyncInProgress])
+  }, [databaseSwitchboardInstance, isMounted, projectId, isSyncInProgress, currentUser])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)
@@ -291,7 +293,7 @@ const Users = ({ currentUser }) => {
     return Promise.resolve()
   }
 
-  const tableColumns = useMemo(() => {
+  const tableColumnsForAdmin = useMemo(() => {
     return [
       {
         Header: 'Name',
@@ -322,7 +324,7 @@ const Users = ({ currentUser }) => {
         Header: 'Active Sample Units',
         accessor: 'active',
         sortType: reactTableNaturalSortReactNodesSecondChild,
-        align: 'right'
+        align: 'right',
       },
       {
         Header: 'Transfer Sample Units',
@@ -333,6 +335,21 @@ const Users = ({ currentUser }) => {
         Header: 'Remove From Project',
         accessor: 'remove',
         disableSortBy: true,
+      },
+    ]
+  }, [])
+
+  const tableColumnsForCollector = useMemo(() => {
+    return [
+      {
+        Header: 'Name',
+        accessor: 'name',
+        sortType: reactTableNaturalSort,
+      },
+      {
+        Header: 'Role',
+        accessor: 'role',
+        sortType: reactTableNaturalSort,
       },
     ]
   }, [])
@@ -379,9 +396,7 @@ const Users = ({ currentUser }) => {
     [databaseSwitchboardInstance, observerProfiles, projectId],
   )
 
-  const tableCellData = useMemo(() => {
-    const getObserverRole = (id) => observerProfiles.find((profile) => profile.id === id).role
-
+  const tableCellDataForAdmin = useMemo(() => {
     return observerProfiles.map((profile) => {
       const {
         id: projectProfileId,
@@ -389,6 +404,7 @@ const Users = ({ currentUser }) => {
         email,
         picture,
         num_active_sample_units,
+        role,
         profile: userId,
       } = profile
 
@@ -400,7 +416,8 @@ const Users = ({ currentUser }) => {
       return {
         name: (
           <NameCellStyle>
-            {picture ? <ProfileImage img={picture} /> : <IconAccount />}{profile_name}
+            {picture ? <ProfileImage img={picture} /> : <IconAccount />}
+            {profile_name}
           </NameCellStyle>
         ),
         email,
@@ -411,7 +428,7 @@ const Users = ({ currentUser }) => {
               value={90}
               name={projectProfileId}
               id={`admin-${projectProfileId}`}
-              checked={getObserverRole(projectProfileId) === 90}
+              checked={role === 90}
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
@@ -426,7 +443,7 @@ const Users = ({ currentUser }) => {
               value={50}
               name={projectProfileId}
               id={`collector-${projectProfileId}`}
-              checked={getObserverRole(projectProfileId) === 50}
+              checked={role === 50}
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
@@ -441,7 +458,7 @@ const Users = ({ currentUser }) => {
               value={10}
               name={projectProfileId}
               id={`readonly-${projectProfileId}`}
-              checked={getObserverRole(projectProfileId) === 10}
+              checked={role === 10}
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
@@ -479,24 +496,45 @@ const Users = ({ currentUser }) => {
     })
   }, [observerProfiles, currentUser, handleRoleChange])
 
-  const tableDefaultSortByColumns = useMemo(() => [
-    {
-      id: 'name',
-      desc: false,
+  const tableCellDataForCollector = useMemo(
+    () =>
+      observerProfiles.map((profile) => {
+        const { profile_name, role } = profile
+
+        return {
+          name: profile_name,
+          role: getRoleLabel(role),
+        }
+      }),
+    [observerProfiles],
+  )
+
+  const tableDefaultSortByColumns = useMemo(
+    () => [
+      {
+        id: 'name',
+        desc: false,
+      },
+    ],
+    [],
+  )
+
+  const tableGlobalFilters = useCallback(
+    (rows, id, query) => {
+      const keys = currentUserProfile.isAdmin
+        ? ['values.name.props.children', 'values.email']
+        : ['values.name', 'values.role']
+
+      const queryTerms = splitSearchQueryStrings(query)
+
+      if (!queryTerms || !queryTerms.length) {
+        return rows
+      }
+
+      return getTableFilteredRows(rows, keys, queryTerms)
     },
-  ], [])
-
-  const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.name.props.children', 'values.email']
-
-    const queryTerms = splitSearchQueryStrings(query)
-
-    if (!queryTerms || !queryTerms.length) {
-      return rows
-    }
-
-    return getTableFilteredRows(rows, keys, queryTerms)
-  }, [])
+    [currentUserProfile],
+  )
 
   const {
     canNextPage,
@@ -515,16 +553,16 @@ const Users = ({ currentUser }) => {
     setGlobalFilter,
   } = useTable(
     {
-      columns: tableColumns,
-      data: tableCellData,
+      columns: currentUserProfile.is_admin ? tableColumnsForAdmin : tableColumnsForCollector,
+      data: currentUserProfile.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns
+        sortBy: tableDefaultSortByColumns,
       },
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -542,20 +580,22 @@ const Users = ({ currentUser }) => {
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
-                const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+                  const isMultiSortColumn = headerGroup.headers.some(
+                    (header) => header.sortedIndex > 0,
+                  )
 
-                return (
-                  <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSortedDescending={column.isSortedDesc}
-                    sortedIndex={column.sortedIndex}
-                    isMultiSortColumn={isMultiSortColumn}
-                    isSortingEnabled={!column.disableSortBy}
-                  >
-                    {column.render('Header')}
-                  </Th>
-                )
-              })}
+                  return (
+                    <Th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      isSortedDescending={column.isSortedDesc}
+                      sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
+                      isSortingEnabled={!column.disableSortBy}
+                    >
+                      {column.render('Header')}
+                    </Th>
+                  )
+                })}
               </Tr>
             ))}
           </thead>
@@ -620,28 +660,34 @@ const Users = ({ currentUser }) => {
     </>
   )
 
-  const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
+  const content = isAppOnline ? table : <PageUnavailableOffline />
   const toolbar = isAppOnline ? (
     <>
       <H2>Users</H2>
       <ToolbarRowWrapper>
         <FilterSearchToolbar
-          name={language.pages.userTable.filterToolbarText}
+          name={
+            currentUserProfile.is_admin
+              ? language.pages.userTable.filterToolbarTextForAdmin
+              : language.pages.userTable.filterToolbarTextForCollector
+          }
           handleGlobalFilterChange={handleGlobalFilterChange}
         />
-        <InputAndButton
-          inputId="add-new-user-email"
-          labelText={language.pages.userTable.searchEmailToolbarText}
-          buttonChildren={
-            <>
-              <IconPlus />
-              Add User
-            </>
-          }
-          value={newUserProfile}
-          onChange={handleNewUserProfileAdd}
-          buttonOnClick={openNewUserProfileModal}
-        />
+        {currentUserProfile.is_admin && (
+          <InputAndButton
+            inputId="add-new-user-email"
+            labelText={language.pages.userTable.searchEmailToolbarText}
+            buttonChildren={
+              <>
+                <IconPlus />
+                Add User
+              </>
+            }
+            value={newUserProfile}
+            onChange={handleNewUserProfileAdd}
+            buttonOnClick={openNewUserProfileModal}
+          />
+        )}
       </ToolbarRowWrapper>
       {isReadonlyUserWithActiveSampleUnits && (
         <WarningInlineMessage type="warning">
@@ -659,7 +705,11 @@ const Users = ({ currentUser }) => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
+    <ContentPageLayout
+      isPageContentLoading={isAppOnline ? isLoading : false}
+      content={content}
+      toolbar={toolbar}
+    />
   )
 }
 
