@@ -191,6 +191,7 @@ const pages = {
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
     noDataText: `This project has no sites.`,
     noDataExtraText: `You can add sites by creating a new one or copying them from another project.`,
+    controlZoomText: 'Use Ctrl + Scroll to zoom the map',
   },
   managementRegimeTable: {
     filterToolbarText: 'Filter management regimes by name or year',

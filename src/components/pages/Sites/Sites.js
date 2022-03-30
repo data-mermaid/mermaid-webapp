@@ -26,11 +26,14 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
+import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
+  const [choices, setChoices] = useState({})
+  const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
@@ -41,14 +44,17 @@ const Sites = () => {
       Promise.all([
         databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
+        databaseSwitchboardInstance.getChoices(),
       ])
 
-        .then(([sites, project]) => {
+        .then(([sites, project, choicesResponse]) => {
           if (isMounted.current) {
             if (!project && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
             setSiteRecordsForUiDisplay(sites)
+            setSitesForMapMarkers(sites)
+            setChoices(choicesResponse)
             setIsLoading(false)
           }
         })
@@ -93,6 +99,7 @@ const Sites = () => {
         reefType: uiLabels.reefType,
         reefZone: uiLabels.reefZone,
         exposure: uiLabels.exposure,
+        id,
       })),
     [siteRecordsForUiDisplay, currentProjectPath],
   )
@@ -107,22 +114,30 @@ const Sites = () => {
     [],
   )
 
-  const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = [
-      'values.name.props.children',
-      'values.reefType',
-      'values.reefZone',
-      'values.exposure',
-    ]
+  const tableGlobalFilters = useCallback(
+    (rows, id, query) => {
+      const keys = [
+        'values.name.props.children',
+        'values.reefType',
+        'values.reefZone',
+        'values.exposure',
+      ]
 
-    const queryTerms = splitSearchQueryStrings(query)
+      const queryTerms = splitSearchQueryStrings(query)
+      const filteredRows =
+        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
 
-    if (!queryTerms || !queryTerms.length) {
-      return rows
-    }
+      const filteredRowIds = filteredRows.map((row) => row.original.id)
+      const filteredSiteRecords = siteRecordsForUiDisplay.filter((site) =>
+        filteredRowIds.includes(site.id),
+      )
 
-    return getTableFilteredRows(rows, keys, queryTerms)
-  }, [])
+      setSitesForMapMarkers(filteredSiteRecords)
+
+      return filteredRows
+    },
+    [siteRecordsForUiDisplay],
+  )
 
   const {
     canNextPage,
@@ -222,6 +237,7 @@ const Sites = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
+      <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />
     </>
   ) : (
     <PageNoData
