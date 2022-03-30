@@ -102,6 +102,35 @@ const Projects = ({ apiSyncInstance }) => {
 
   const filteredSortedProjects = getFilteredSortedProjects()
 
+  const renderPageNoData = () => {
+    const {
+      noFilterResults,
+      noFilterResultsSubText,
+      noDataSubText,
+      noDataTextOnline,
+      noDataTextOffline
+    } = language.pages.projectsList
+    const isProjectFilter = projectFilter !== ''
+
+    let mainText
+
+    let subText
+
+    if (isAppOnline) {
+      mainText = isProjectFilter ? noFilterResults : noDataTextOnline
+      subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
+    }
+
+    if (!isAppOnline) {
+      mainText = isProjectFilter ? noFilterResults : noDataTextOffline
+      subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
+    }
+
+    return (
+      <PageNoData mainText={mainText} subText={subText} />
+    )
+  }
+
   const projectCardsList = filteredSortedProjects.length ? (
     getFilteredSortedProjects().map((project) => (
       <ProjectCard
@@ -112,16 +141,7 @@ const Projects = ({ apiSyncInstance }) => {
         isOfflineReady={getIsProjectOffline(project.id)}
       />
     ))
-  ) : (
-    <PageNoData
-      mainText={isAppOnline
-        ? language.pages.projectsList.noDataTextOnline
-        : language.pages.projectsList.noDataTextOffline}
-      subText={isAppOnline
-        ? language.pages.projectsList.noDataSubTextOnline
-        : language.pages.projectsList.noDataSubTextOffline}
-    />
-  )
+  ) : (renderPageNoData())
 
   return isLoading ? (
     <LoadingIndicator aria-label="projects list loading indicator" />
