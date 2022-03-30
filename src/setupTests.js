@@ -24,6 +24,7 @@ jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
         remove: jest.fn(),
         touchZoomRotate: { disableRotation: jest.fn() },
         getSource: jest.fn(() => ({ setData: jest.fn() })),
+        fitBounds: jest.fn(),
       }
     },
     Marker: function () {
@@ -32,6 +33,11 @@ jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
     Popup: function () {
       return {
         setLngLat: jest.fn(() => ({ setDOMContent: jest.fn(() => ({ addTo: jest.fn() })) })),
+      }
+    },
+    LngLatBounds: function () {
+      return {
+        extend: jest.fn,
       }
     },
     NavigationControl: jest.fn(),
