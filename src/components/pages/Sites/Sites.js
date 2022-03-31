@@ -27,7 +27,7 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
-import ProjectSitesMap from '../../MermaidMap/ProjectSitesMap'
+import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
