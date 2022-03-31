@@ -330,7 +330,9 @@ const Site = ({ currentUser }) => {
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{formik.values.name}</H2>
-          <SaveButton formId="site-form" saveButtonState={saveButtonState} formik={formik} />
+          {!isReadOnlyUser && (
+            <SaveButton formId="site-form" saveButtonState={saveButtonState} formik={formik} />
+          )}
         </ContentPageToolbarWrapper>
       }
     />
