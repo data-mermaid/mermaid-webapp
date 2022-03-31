@@ -81,7 +81,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/sites/:siteId',
-      Component: Site,
+      Component: () => <Site currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/management-regimes',
@@ -89,7 +89,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/management-regimes/:managementRegimeId',
-      Component: ManagementRegime,
+      Component: () => <ManagementRegime currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/users',
