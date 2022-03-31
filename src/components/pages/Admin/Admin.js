@@ -31,6 +31,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 
@@ -175,6 +176,8 @@ const Admin = ({ currentUser }) => {
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
+
+  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
@@ -338,7 +341,7 @@ const Admin = ({ currentUser }) => {
         content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
         toolbar={
           <ContentPageToolbarWrapper>
-            <H2>Project Info</H2>
+            <H2>{language.pages.projectInfo.title}</H2>
             {currentUserProfile.is_admin && (
               <SaveButton
                 formId="project-info-form"

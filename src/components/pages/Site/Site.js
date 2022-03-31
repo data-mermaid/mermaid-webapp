@@ -22,6 +22,7 @@ import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
@@ -134,6 +135,8 @@ const Site = () => {
       return errors
     },
   })
+
+  useDocumentTitle(`${language.pages.siteForm.title} - ${formik.values.name} - ${language.title.mermaid}`)
 
   const { setFieldValue: formikSetFieldValue } = formik
 

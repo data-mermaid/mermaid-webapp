@@ -16,6 +16,7 @@ import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataI
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getObjectById } from '../../../library/getObjectById'
 import PageNoData from '../PageNoData'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 
 /**
  * All Projects page (lists projects)
@@ -31,6 +32,8 @@ const Projects = ({ apiSyncInstance }) => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.projectsList.title} - ${language.title.mermaid}`)
 
   const _getProjectsInfo = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {

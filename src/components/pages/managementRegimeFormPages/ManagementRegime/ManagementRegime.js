@@ -20,6 +20,7 @@ import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import ManagementRulesInput from '../ManagementRulesInput'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
+import useDocumentTitle from '../../../../library/useDocumentTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../../generic/SaveButton'
@@ -144,6 +145,8 @@ const ManagementRegime = () => {
       return errors
     },
   })
+
+  useDocumentTitle(`${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`)
 
   const _setSiteButtonUnsaved = useEffect(() => {
     if (formik.dirty) {
