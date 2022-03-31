@@ -519,16 +519,22 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithResetObservationValidations)
     }
 
-    getCollectRecord = function getCollectRecord(id) {
-      if (!id) {
-        Promise.reject(this._operationMissingIdParameterError)
+    getCollectRecord = function getCollectRecord({ id, userId }) {
+      if (!id || !userId) {
+        return Promise.reject(this._operationMissingIdParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        Promise.reject(this._notAuthenticatedAndReadyError)
+        return Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._dexieInstance.collect_records.get(id)
+      return this._dexieInstance.collect_records.get(id).then((record) => {
+        if (record.profile !== userId) {
+          return Promise.reject(new Error('The current user doesnt own this collect record'))
+        }
+
+        return record
+      })
     }
 
     getCollectRecordsWithoutOfflineDeleted = function getCollectRecordsWithoutOfflineDeleted({
@@ -536,7 +542,7 @@ const CollectRecordsMixin = (Base) =>
       userId,
     }) {
       if (!projectId || !userId) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       if (this._isAuthenticatedAndReady) {
@@ -553,7 +559,7 @@ const CollectRecordsMixin = (Base) =>
 
     getCollectRecordsForUIDisplay = function getCollectRecordsForUIDisplay({ projectId, userId }) {
       if (!projectId || !userId) {
-        Promise.reject(this._operationMissingParameterError)
+        return Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isAuthenticatedAndReady
