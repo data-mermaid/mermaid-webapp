@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { getFishNameConstants } from '../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
@@ -24,8 +23,9 @@ import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservatio
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import { getRecordName } from '../../../library/getRecordName'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
-const SubmittedFishBelt = ({ currentUser }) => {
+const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
@@ -44,6 +44,7 @@ const SubmittedFishBelt = ({ currentUser }) => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
+  const currentUser = useCurrentUser()
   const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   const _getSupportingData = useEffect(() => {
@@ -188,6 +189,7 @@ const SubmittedFishBelt = ({ currentUser }) => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
+              primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.submittedFishBeltForm.title}`}
             />
             <RowSpaceBetween>
               <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
@@ -203,10 +205,6 @@ const SubmittedFishBelt = ({ currentUser }) => {
       }
     />
   )
-}
-
-SubmittedFishBelt.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 export default SubmittedFishBelt

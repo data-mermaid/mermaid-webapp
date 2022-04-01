@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import language from '../../language'
-import { getToastArguments } from '../../library/getToastArguments'
-import getCurrentUserProfile from '../getCurrentUserProfile'
+import language from '../language'
+import { getToastArguments } from '../library/getToastArguments'
+import getCurrentUserProfile from './getCurrentUserProfile'
 
-export const useCurrentUser = ({
+export const useInitializeCurrentUser = ({
   apiBaseUrl,
   getAccessToken,
   dexieInstance,
@@ -30,9 +30,7 @@ export const useCurrentUser = ({
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.userProfileUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.userProfileUnavailable))
         })
     }
 

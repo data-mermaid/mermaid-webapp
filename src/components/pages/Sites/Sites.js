@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import {
@@ -25,11 +24,13 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
-const Sites = ({ currentUser }) => {
+const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
@@ -39,7 +40,10 @@ const Sites = ({ currentUser }) => {
   const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
   const _getSiteRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -267,7 +271,7 @@ const Sites = ({ currentUser }) => {
       content={table}
       toolbar={
         <>
-          <H2>Sites</H2>
+          <H2>{language.pages.siteTable.title}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.siteTable.filterToolbarText}
@@ -289,10 +293,6 @@ const Sites = ({ currentUser }) => {
       }
     />
   )
-}
-
-Sites.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 export default Sites

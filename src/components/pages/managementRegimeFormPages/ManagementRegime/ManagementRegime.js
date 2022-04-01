@@ -28,10 +28,12 @@ import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import ManagementRulesInput from '../ManagementRulesInput'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
+import useDocumentTitle from '../../../../library/useDocumentTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../../generic/SaveButton'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
 
 const TdKey = styled(Td)`
   white-space: nowrap;
@@ -104,7 +106,7 @@ const ReadOnlyManagementRegimeContent = ({
   )
 }
 
-const ManagementRegime = ({ currentUser }) => {
+const ManagementRegime = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementCompliances, setManagementCompliances] = useState([])
@@ -113,6 +115,7 @@ const ManagementRegime = ({ currentUser }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [currentUserProfile, setCurrentUserProfile] = useState({})
@@ -246,6 +249,10 @@ const ManagementRegime = ({ currentUser }) => {
       return errors
     },
   })
+
+  useDocumentTitle(
+    `${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
+  )
 
   const _setSiteButtonUnsaved = useEffect(() => {
     if (formik.dirty) {

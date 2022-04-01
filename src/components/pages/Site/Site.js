@@ -27,9 +27,11 @@ import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const TdKey = styled(Td)`
   white-space: nowrap;
@@ -80,7 +82,7 @@ const ReadOnlySiteContent = ({
   )
 }
 
-const Site = ({ currentUser }) => {
+const Site = () => {
   const [countryOptions, setCountryOptions] = useState([])
   const [exposureOptions, setExposureOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -91,6 +93,7 @@ const Site = ({ currentUser }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { siteId, projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
@@ -195,6 +198,10 @@ const Site = ({ currentUser }) => {
       return errors
     },
   })
+
+  useDocumentTitle(
+    `${language.pages.siteForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
+  )
 
   const { setFieldValue: formikSetFieldValue } = formik
 

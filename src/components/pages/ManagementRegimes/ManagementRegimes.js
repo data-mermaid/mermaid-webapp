@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
@@ -22,10 +21,12 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
-const ManagementRegimes = ({ currentUser }) => {
+const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
@@ -33,7 +34,10 @@ const ManagementRegimes = ({ currentUser }) => {
   const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -277,7 +281,7 @@ const ManagementRegimes = ({ currentUser }) => {
       content={table}
       toolbar={
         <>
-          <H2>Management Regimes</H2>
+          <H2>{language.pages.managementRegimeTable.title}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.managementRegimeTable.filterToolbarText}
@@ -299,10 +303,6 @@ const ManagementRegimes = ({ currentUser }) => {
       }
     />
   )
-}
-
-ManagementRegimes.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 export default ManagementRegimes

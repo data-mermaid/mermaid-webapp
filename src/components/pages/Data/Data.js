@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType, sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
@@ -23,11 +22,23 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import DataToolbarSection from './DataToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageNoData from '../PageNoData'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
-const Data = ({ currentUser }) => {
+const getTransectReportProperties = (transect) => {
+  return {
+    'Fish Belt': 'beltfishes',
+    'Benthic LIT': 'benthiclits',
+    'Benthic PIT': 'benthicpits',
+    'Habitat Complexity': 'habitatcomplexities',
+    'Colonies Bleached': ['bleachingqcs', 'obscoloniesbleacheds'],
+    'Quadrat Percentage': ['bleachingqcs', 'obsquadratbenthicpercents'],
+  }[transect]
+}
+const Data = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -35,7 +46,10 @@ const Data = ({ currentUser }) => {
   const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -201,6 +215,21 @@ const Data = ({ currentUser }) => {
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const handleExportToCSV = (transect) => {
+    const isBleachingTransect =
+      transect === 'Colonies Bleached' || transect === 'Quadrat Percentage'
+    const transectReportProperty = getTransectReportProperties(transect)
+
+    const transectProtocol = isBleachingTransect
+      ? transectReportProperty[0]
+      : transectReportProperty
+    const transectMethod = isBleachingTransect
+      ? transectReportProperty[1]
+      : `obstransect${transectReportProperty}`
+
+    databaseSwitchboardInstance.exportToCSV(projectId, transectProtocol, transectMethod)
+  }
+
   const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
   const table = submittedRecordsForUiDisplay.length ? (
     <>
@@ -271,9 +300,10 @@ const Data = ({ currentUser }) => {
     <DataToolbarSection
       name={language.pages.submittedTable.filterToolbarText}
       handleGlobalFilterChange={handleGlobalFilterChange}
+      handleExportToCSV={handleExportToCSV}
     />
   ) : (
-    <H2>Submitted</H2>
+    <H2>{language.pages.submittedTable.title}</H2>
   )
 
   return idsNotAssociatedWithData.length ? (
@@ -289,10 +319,6 @@ const Data = ({ currentUser }) => {
       toolbar={toolbar}
     />
   )
-}
-
-Data.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 export default Data

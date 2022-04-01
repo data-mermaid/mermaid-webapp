@@ -15,7 +15,7 @@ import Health from '../components/pages/Health'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 import SubmittedFishBelt from '../components/pages/SubmittedFishBelt/SubmittedFishBelt'
 
-export const useRoutes = ({ currentUser, apiSyncInstance }) => {
+export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
     {
       path: '/projects',
@@ -31,11 +31,11 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
-      Component: () => <FishBelt currentUser={currentUser} />,
+      Component: () => <FishBelt />,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      Component: () => <FishBelt isNewRecord={false} currentUser={currentUser} />,
+      Component: () => <FishBelt isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
@@ -59,15 +59,15 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/data',
-      Component: () => <Data currentUser={currentUser} />,
+      Component: Data,
     },
     {
       path: '/projects/:projectId/data/fishbelt/:submittedRecordId',
-      Component: () => <SubmittedFishBelt currentUser={currentUser} />,
+      Component: SubmittedFishBelt,
     },
     {
       path: '/projects/:projectId/admin',
-      Component: () => <Admin currentUser={currentUser} />,
+      Component: Admin,
     },
 
     {
@@ -77,23 +77,23 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
 
     {
       path: '/projects/:projectId/sites',
-      Component: () => <Sites currentUser={currentUser} />,
+      Component: Sites,
     },
     {
       path: '/projects/:projectId/sites/:siteId',
-      Component: () => <Site currentUser={currentUser} />,
+      Component: Site,
     },
     {
       path: '/projects/:projectId/management-regimes',
-      Component: () => <ManagementRegimes currentUser={currentUser} />,
+      Component: ManagementRegimes,
     },
     {
       path: '/projects/:projectId/management-regimes/:managementRegimeId',
-      Component: () => <ManagementRegime currentUser={currentUser} />,
+      Component: ManagementRegime,
     },
     {
       path: '/projects/:projectId/users',
-      Component: () => <Users currentUser={currentUser} />,
+      Component: Users,
     },
     {
       path: '/projects/:projectId/fish-families',
@@ -101,7 +101,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/data-sharing',
-      Component: () => <DataSharing currentUser={currentUser} />,
+      Component: DataSharing,
     },
   ]
 

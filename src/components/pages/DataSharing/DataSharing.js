@@ -9,7 +9,6 @@ import { hoverState } from '../../../library/styling/mediaQueries'
 import { ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
 import { H2, H3, P } from '../../generic/text'
 import { IconInfo } from '../../icons'
@@ -24,7 +23,9 @@ import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import theme from '../../../theme'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -70,17 +71,20 @@ const ReadOnlyDataSharingContent = ({ project }) => (
   </>
 )
 
-const DataSharing = ({ currentUser }) => {
+const DataSharing = () => {
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
+  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+
+  useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
   const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(false)
   const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
@@ -306,15 +310,11 @@ const DataSharing = ({ currentUser }) => {
       content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
       toolbar={
         <ContentPageToolbarWrapper>
-          <H2>Data Sharing</H2>
+          <H2>{language.pages.dataSharing.title}</H2>
         </ContentPageToolbarWrapper>
       }
     />
   )
-}
-
-DataSharing.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 ReadOnlyDataSharingContent.propTypes = {
