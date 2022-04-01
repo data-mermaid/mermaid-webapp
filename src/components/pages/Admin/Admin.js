@@ -31,8 +31,10 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -159,18 +161,21 @@ const ReadOnlyAdminContent = ({ project }) => (
   </ReadOnlyContentWrapper>
 )
 
-const Admin = ({ currentUser }) => {
+const Admin = () => {
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const [projectTagOptions, setProjectTagOptions] = useState([])
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
-  const { isAppOnline } = useOnlineStatus()
-  const { projectId } = useParams()
-  const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
+  const { isSyncInProgress } = useSyncStatus()
+  const { projectId } = useParams()
+  const currentUser = useCurrentUser()
+  const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
@@ -338,7 +343,7 @@ const Admin = ({ currentUser }) => {
         content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
         toolbar={
           <ContentPageToolbarWrapper>
-            <H2>Project Info</H2>
+            <H2>{language.pages.projectInfo.title}</H2>
             {currentUserProfile.is_admin && (
               <SaveButton
                 formId="project-info-form"

@@ -21,6 +21,7 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 
@@ -32,6 +33,8 @@ const ManagementRegimes = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -262,7 +265,7 @@ const ManagementRegimes = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>Management Regimes</H2>
+          <H2>{language.pages.managementRegimeTable.title}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.managementRegimeTable.filterToolbarText}

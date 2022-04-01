@@ -188,6 +188,7 @@ const SubmittedFishBelt = ({ currentUser }) => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
+              primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.submittedFishBeltForm.title}`}
             />
             <RowSpaceBetween>
               <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>

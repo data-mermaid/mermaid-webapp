@@ -22,6 +22,7 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import DataToolbarSection from './DataToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageNoData from '../PageNoData'
@@ -44,6 +45,8 @@ const Data = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -288,7 +291,7 @@ const Data = () => {
       handleExportToCSV={handleExportToCSV}
     />
   ) : (
-    <H2>Submitted</H2>
+    <H2>{language.pages.submittedTable.title}</H2>
   )
 
   return idsNotAssociatedWithData.length ? (

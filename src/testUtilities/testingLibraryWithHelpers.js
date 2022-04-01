@@ -14,6 +14,12 @@ import {
 } from './mockOnlineDatabaseSwitchboardInstance'
 import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getFakeAccessToken } from './getFakeAccessToken'
+import { CurrentUserProvider } from '../App/CurrentUserContext'
+
+const fakeCurrentUser = {
+  id: 'fake-id',
+  first_name: 'FakeFirstName',
+}
 
 const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOverride }) => (
   <Auth0Context.Provider
@@ -27,7 +33,7 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
     <MemoryRouter initialEntries={initialEntries}>
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
-          {children}
+          <CurrentUserProvider value={fakeCurrentUser}>{children}</CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
     </MemoryRouter>
@@ -44,7 +50,9 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
   >
     <MemoryRouter initialEntries={initialEntries}>
       <ThemeProvider theme={theme}>
-        <SyncStatusProvider>{children}</SyncStatusProvider>
+        <SyncStatusProvider>
+          <CurrentUserProvider value={undefined}>{children}</CurrentUserProvider>
+        </SyncStatusProvider>
       </ThemeProvider>
     </MemoryRouter>
   </Auth0Context.Provider>

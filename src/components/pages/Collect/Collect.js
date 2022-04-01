@@ -24,6 +24,7 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 
@@ -35,6 +36,8 @@ const Collect = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
   const _getCollectRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -275,7 +278,7 @@ const Collect = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>Collecting</H2>
+          <H2>{language.pages.collectTable.title}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.collectTable.filterToolbarText}
