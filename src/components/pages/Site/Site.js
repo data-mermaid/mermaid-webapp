@@ -7,7 +7,7 @@ import styled from 'styled-components/macro'
 import { Table, Tr, Td } from '../../generic/Table/table'
 
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType, sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
+import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { inputOptionPropType } from '../../../library/miscPropTypes'
 import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
@@ -364,10 +364,6 @@ ReadOnlySiteContent.propTypes = {
   reefTypes: inputOptionPropType.isRequired,
   reefZones: inputOptionPropType.isRequired,
   isReadOnlyUser: PropTypes.bool.isRequired,
-}
-
-Site.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 export default Site

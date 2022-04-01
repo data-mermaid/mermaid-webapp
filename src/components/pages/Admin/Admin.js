@@ -7,7 +7,6 @@ import styled, { css } from 'styled-components'
 
 import { CloseButton, ButtonThatLooksLikeLink } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { createUuid } from '../../../library/createUuid'
 import { getOptions } from '../../../library/getOptions'
@@ -361,10 +360,6 @@ const Admin = () => {
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
-}
-
-Admin.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 OrganizationList.propTypes = {

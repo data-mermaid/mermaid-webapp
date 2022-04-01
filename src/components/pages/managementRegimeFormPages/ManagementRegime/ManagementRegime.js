@@ -7,10 +7,7 @@ import styled from 'styled-components/macro'
 import { Table, Tr, Td } from '../../../generic/Table/table'
 
 import { ContentPageLayout } from '../../../Layout'
-import {
-  currentUserPropType,
-  managementRegimePropType,
-} from '../../../../App/mermaidData/mermaidDataProptypes'
+import { managementRegimePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { inputOptionPropType } from '../../../../library/miscPropTypes'
 import { getManagementRegimeInitialValues } from '../managementRegimeFormInitialValues'
 import { getOptions } from '../../../../library/getOptions'
@@ -395,10 +392,6 @@ ReadOnlyManagementRegimeContent.propTypes = {
   managementRegime: managementRegimePropType.isRequired,
   managementCompliances: inputOptionPropType.isRequired,
   managementParties: inputOptionPropType.isRequired,
-}
-
-ManagementRegime.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 export default ManagementRegime
