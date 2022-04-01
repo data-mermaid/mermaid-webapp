@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { getFishNameConstants } from '../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
@@ -206,10 +205,6 @@ const SubmittedFishBelt = () => {
       }
     />
   )
-}
-
-SubmittedFishBelt.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 export default SubmittedFishBelt
