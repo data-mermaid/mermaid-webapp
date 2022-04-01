@@ -59,7 +59,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/data',
-      Component: Data,
+      Component: () => <Data currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/data/fishbelt/:submittedRecordId',
@@ -77,7 +77,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
 
     {
       path: '/projects/:projectId/sites',
-      Component: Sites,
+      Component: () => <Sites currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/sites/:siteId',
@@ -85,7 +85,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/management-regimes',
-      Component: ManagementRegimes,
+      Component: () => <ManagementRegimes currentUser={currentUser} />,
     },
     {
       path: '/projects/:projectId/management-regimes/:managementRegimeId',

@@ -356,6 +356,7 @@ const ManagementRegime = ({ currentUser }) => {
       isPageContentLoading={isLoading}
       isToolbarSticky={true}
       subNavNode={{ name: formik.values.name }}
+      showCollectingNav={!isReadOnlyUser}
       content={contentViewByRole}
       toolbar={
         <ContentPageToolbarWrapper>

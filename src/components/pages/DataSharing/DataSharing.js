@@ -178,6 +178,7 @@ const DataSharing = ({ currentUser }) => {
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
+  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
   const contentViewByRole = (
     <MaxWidthInputWrapper>
       <h3>Data is much more powerful when shared.</h3>
@@ -301,6 +302,7 @@ const DataSharing = ({ currentUser }) => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
+      showCollectingNav={!isReadOnlyUser}
       content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
       toolbar={
         <ContentPageToolbarWrapper>

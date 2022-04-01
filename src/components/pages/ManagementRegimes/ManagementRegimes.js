@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
+import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
@@ -24,11 +25,12 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 
-const ManagementRegimes = () => {
+const ManagementRegimes = ({ currentUser }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
@@ -38,13 +40,19 @@ const ManagementRegimes = () => {
       Promise.all([
         databaseSwitchboardInstance.getManagementRegimeRecordsForUiDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ])
-        .then(([managementRegimes, projectResponse]) => {
+        .then(([managementRegimes, projectResponse, projectProfilesResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+            const filteredUserProfile = projectProfilesResponse.filter(
+              ({ profile }) => currentUser.id === profile,
+            )[0]
+
             setManagementRegimeRecordsForUiDisplay(managementRegimes)
+            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -52,7 +60,7 @@ const ManagementRegimes = () => {
           toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, currentUser])
 
   const currentProjectPath = useCurrentProjectPath()
   const getIconCheckLabel = (property) => property && <IconCheck />
@@ -130,12 +138,15 @@ const ManagementRegimes = () => {
     [managementRegimeRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(() => [
-    {
-      id: 'name',
-      desc: false,
-    },
-  ], [])
+  const tableDefaultSortByColumns = useMemo(
+    () => [
+      {
+        id: 'name',
+        desc: false,
+      },
+    ],
+    [],
+  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.estYear']
@@ -170,11 +181,11 @@ const ManagementRegimes = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns
+        sortBy: tableDefaultSortByColumns,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -186,29 +197,30 @@ const ManagementRegimes = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
   const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+              const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
 
               return (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSortedDescending={column.isSortedDesc}
-                    sortedIndex={column.sortedIndex}
-                    isMultiSortColumn={isMultiSortColumn}
-                  >
-                    {column.render('Header')}
-                  </Th>
-                ))}
-              </Tr>
-            )
-})}
+                <Tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <Th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      isSortedDescending={column.isSortedDesc}
+                      sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
+                    >
+                      {column.render('Header')}
+                    </Th>
+                  ))}
+                </Tr>
+              )
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -260,6 +272,9 @@ const ManagementRegimes = () => {
     />
   ) : (
     <ContentPageLayout
+      isPageContentLoading={isLoading}
+      showCollectingNav={!isReadOnlyUser}
+      content={table}
       toolbar={
         <>
           <H2>Management Regimes</H2>
@@ -282,10 +297,12 @@ const ManagementRegimes = () => {
           </ToolBarRow>
         </>
       }
-      content={table}
-      isPageContentLoading={isLoading}
     />
   )
+}
+
+ManagementRegimes.propTypes = {
+  currentUser: currentUserPropType.isRequired,
 }
 
 export default ManagementRegimes

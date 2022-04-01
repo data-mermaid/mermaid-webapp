@@ -572,6 +572,7 @@ const Users = ({ currentUser }) => {
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
   const table = (
     <>
       <TableOverflowWrapper>
@@ -707,6 +708,7 @@ const Users = ({ currentUser }) => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
+      showCollectingNav={!isReadOnlyUser}
       content={content}
       toolbar={toolbar}
     />

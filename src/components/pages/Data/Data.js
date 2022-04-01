@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
+import { currentUserPropType, sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
@@ -13,7 +14,7 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
-  reactTableNaturalSortDates
+  reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { H2 } from '../../generic/text'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
@@ -26,11 +27,12 @@ import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageNoData from '../PageNoData'
 
-const Data = () => {
+const Data = ({ currentUser }) => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
@@ -41,11 +43,20 @@ const Data = () => {
     }
 
     if (databaseSwitchboardInstance && projectId) {
-      databaseSwitchboardInstance
-        .getSubmittedRecordsForUIDisplay(projectId)
-        .then((records) => {
+      const promises = [
+        databaseSwitchboardInstance.getSubmittedRecordsForUIDisplay(projectId),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
+      ]
+
+      Promise.all(promises)
+        .then(([submittedRecordsResponse, projectProfilesResponse]) => {
           if (isMounted.current) {
-            setSubmittedRecordsForUiDisplay(records)
+            const filteredUserProfile = projectProfilesResponse.filter(
+              ({ profile }) => currentUser.id === profile,
+            )[0]
+
+            setSubmittedRecordsForUiDisplay(submittedRecordsResponse)
+            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -59,7 +70,7 @@ const Data = () => {
           toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, currentUser])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
@@ -128,12 +139,15 @@ const Data = () => {
     [submittedRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(() => [
-    {
-      id: 'method',
-      desc: false,
-    },
-  ], [])
+  const tableDefaultSortByColumns = useMemo(
+    () => [
+      {
+        id: 'method',
+        desc: false,
+      },
+    ],
+    [],
+  )
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -177,7 +191,7 @@ const Data = () => {
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -185,32 +199,32 @@ const Data = () => {
   )
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
-
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
   const table = submittedRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+              const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
 
               return (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSortedDescending={column.isSortedDesc}
-                    sortedIndex={column.sortedIndex}
-                    isMultiSortColumn={isMultiSortColumn}
-                  >
-                    {column.render('Header')}
-                  </Th>
-                ))}
-              </Tr>
-            )
-})}
+                <Tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <Th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      isSortedDescending={column.isSortedDesc}
+                      sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
+                    >
+                      {column.render('Header')}
+                    </Th>
+                  ))}
+                </Tr>
+              )
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -268,8 +282,17 @@ const Data = () => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout content={content} toolbar={toolbar} isPageContentLoading={isLoading} />
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      showCollectingNav={!isReadOnlyUser}
+      content={content}
+      toolbar={toolbar}
+    />
   )
+}
+
+Data.propTypes = {
+  currentUser: currentUserPropType.isRequired,
 }
 
 export default Data

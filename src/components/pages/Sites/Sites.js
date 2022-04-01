@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
+import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import {
@@ -28,13 +29,14 @@ import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
 
-const Sites = () => {
+const Sites = ({ currentUser }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
   const [choices, setChoices] = useState({})
   const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
@@ -45,16 +47,22 @@ const Sites = () => {
         databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ])
 
-        .then(([sites, project, choicesResponse]) => {
+        .then(([sites, project, choicesResponse, projectProfilesResponse]) => {
           if (isMounted.current) {
             if (!project && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+            const filteredUserProfile = projectProfilesResponse.filter(
+              ({ profile }) => currentUser.id === profile,
+            )[0]
+
             setSiteRecordsForUiDisplay(sites)
             setSitesForMapMarkers(sites)
             setChoices(choicesResponse)
+            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -62,7 +70,7 @@ const Sites = () => {
           toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, currentUser])
 
   const currentProjectPath = useCurrentProjectPath()
 
@@ -176,6 +184,7 @@ const Sites = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
   const table = siteRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
@@ -253,6 +262,9 @@ const Sites = () => {
     />
   ) : (
     <ContentPageLayout
+      isPageContentLoading={isLoading}
+      showCollectingNav={!isReadOnlyUser}
+      content={table}
       toolbar={
         <>
           <H2>Sites</H2>
@@ -275,10 +287,12 @@ const Sites = () => {
           </ToolBarRow>
         </>
       }
-      content={table}
-      isPageContentLoading={isLoading}
     />
   )
+}
+
+Sites.propTypes = {
+  currentUser: currentUserPropType.isRequired,
 }
 
 export default Sites

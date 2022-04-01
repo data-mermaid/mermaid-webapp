@@ -260,6 +260,7 @@ const Admin = ({ currentUser }) => {
     </>
   )
 
+  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
   const contentViewByRole = currentUserProfile.is_admin ? (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -335,6 +336,7 @@ const Admin = ({ currentUser }) => {
     <>
       <ContentPageLayout
         isPageContentLoading={isAppOnline ? isLoading : false}
+        showCollectingNav={!isReadOnlyUser}
         content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
         toolbar={
           <ContentPageToolbarWrapper>
