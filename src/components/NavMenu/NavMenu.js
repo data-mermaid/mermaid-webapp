@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 import styled, { css } from 'styled-components'
 import { useParams, useLocation } from 'react-router-dom'
+import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useCurrentUser } from '../../App/CurrentUserContext'
+import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../library/useIsMounted'
 import { subNavNodePropTypes } from '../SubNavMenuRecordName/subNavNodePropTypes'
 import theme from '../../theme'
+import language from '../../language'
 import { NavLinkSidebar } from '../generic/links'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
@@ -18,6 +24,7 @@ import {
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 import SubNavMenuRecordName from '../SubNavMenuRecordName'
+import { getToastArguments } from '../../library/getToastArguments'
 
 const NavWrapper = styled('nav')`
   background: ${theme.color.white};
@@ -57,12 +64,40 @@ const NavHeader = styled('p')`
 
 const NavMenu = ({ subNavNode }) => {
   const projectUrl = useCurrentProjectPath()
-  const { recordId, submittedRecordId, siteId, managementRegimeId } = useParams()
+  const { recordId, submittedRecordId, siteId, managementRegimeId, projectId } = useParams()
   const { pathname } = useLocation()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const currentUser = useCurrentUser()
+  const isMounted = useIsMounted()
+  const { isSyncInProgress } = useSyncStatus()
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
+
+  const _getCollectRecordCount = useEffect(() => {
+    if (!isSyncInProgress && databaseSwitchboardInstance && projectId) {
+      databaseSwitchboardInstance
+        .getProjectProfiles(projectId)
+        .then((projectProfilesResponse) => {
+          if (isMounted.current) {
+            const filteredUserProfile = projectProfilesResponse.filter(
+              ({ profile }) => currentUser.id === profile,
+            )[0]
+
+            setCurrentUserProfile(filteredUserProfile)
+          }
+        })
+        .catch(() => {
+          toast.warn(
+            ...getToastArguments(language.error.apiDataSync.collectRecordsUnavailableError),
+          )
+        })
+    }
+  }, [databaseSwitchboardInstance, isSyncInProgress, projectId, isMounted, currentUser])
+
+  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
@@ -83,13 +118,15 @@ const NavMenu = ({ subNavNode }) => {
         <li>
           <NavHeader>Collect</NavHeader>
           <ul>
-            <li>
-              <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
-                <IconCollect />
-                <span>Collecting</span>
-                <CollectRecordsCount />
-              </NavLinkSidebar>
-            </li>
+            {!isReadOnlyUser && (
+              <li>
+                <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
+                  <IconCollect />
+                  <span>Collecting</span>
+                  <CollectRecordsCount />
+                </NavLinkSidebar>
+              </li>
+            )}
             {isCollectingSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <li>
               <NavLinkSidebar exact to={`${projectUrl}/sites`}>
