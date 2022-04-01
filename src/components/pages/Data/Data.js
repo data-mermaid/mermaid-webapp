@@ -26,7 +26,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageNoData from '../PageNoData'
 
-const getTransectReportProperty = (transect) => {
+const getTransectReportProperties = (transect) => {
   return {
     'Fish Belt': 'beltfishes',
     'Benthic LIT': 'benthiclits',
@@ -204,7 +204,7 @@ const Data = () => {
   const handleExportToCSV = (transect) => {
     const isBleachingTransect =
       transect === 'Colonies Bleached' || transect === 'Quadrat Percentage'
-    const transectReportProperty = getTransectReportProperty(transect)
+    const transectReportProperty = getTransectReportProperties(transect)
 
     const transectProtocol = isBleachingTransect
       ? transectReportProperty[0]
