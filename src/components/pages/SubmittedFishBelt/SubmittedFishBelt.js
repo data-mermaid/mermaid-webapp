@@ -24,8 +24,9 @@ import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservatio
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import { getRecordName } from '../../../library/getRecordName'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
-const SubmittedFishBelt = ({ currentUser }) => {
+const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
   const [fishNameConstants, setFishNameConstants] = useState([])
   const [fishNameOptions, setFishNameOptions] = useState([])
@@ -44,6 +45,7 @@ const SubmittedFishBelt = ({ currentUser }) => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
+  const currentUser = useCurrentUser()
   const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   const _getSupportingData = useEffect(() => {
