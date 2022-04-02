@@ -431,7 +431,7 @@ const collect_records = [
   {
     id: '1',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'benthiclit',
       sample_event: {
@@ -463,7 +463,7 @@ const collect_records = [
   {
     id: '2',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -544,7 +544,7 @@ const collect_records = [
   {
     id: '3',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -579,7 +579,7 @@ const collect_records = [
   {
     id: '4',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -618,7 +618,7 @@ const collect_records = [
   {
     project: '5',
     id: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -661,7 +661,7 @@ const collect_records = [
   {
     id: '6',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -696,7 +696,7 @@ const collect_records = [
   {
     id: '7',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -726,7 +726,7 @@ const collect_records = [
   {
     id: '8',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -757,7 +757,7 @@ const collect_records = [
   {
     id: '9',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -791,7 +791,7 @@ const collect_records = [
   {
     id: '10',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -822,7 +822,7 @@ const collect_records = [
   {
     id: '11',
     project: '5',
-    profile: 'fake',
+    profile: 'fake-id',
     data: {
       protocol: 'fishbelt',
       sample_event: {
@@ -856,7 +856,7 @@ const collect_records = [
   },
   {
     id: '13',
-    profile: 'fake',
+    profile: 'fake-id',
     project: '5',
     data: {
       protocol: 'fishbelt',
@@ -891,7 +891,7 @@ const collect_records = [
   },
   {
     id: '14',
-    profile: 'fake',
+    profile: 'fake-id',
     project: '5',
     data: {
       protocol: 'fishbelt',
@@ -926,7 +926,7 @@ const collect_records = [
   },
   {
     id: '15',
-    profile: 'fake',
+    profile: 'fake-id',
     project: '5',
     data: {
       protocol: 'fishbelt',
@@ -961,7 +961,7 @@ const collect_records = [
   },
   {
     id: '16',
-    profile: 'fake',
+    profile: 'fake-id',
     project: '5',
     data: {
       protocol: 'fishbelt',
@@ -996,7 +996,7 @@ const collect_records = [
   },
   {
     id: '17',
-    profile: 'fake',
+    profile: 'fake-id',
     project: '5',
     data: {
       protocol: 'fishbelt',
@@ -1031,7 +1031,7 @@ const collect_records = [
   },
   {
     id: '12',
-    profile: 'fake',
+    profile: 'fake-id',
     project: 'shouldgetfilteredout',
     data: {
       protocol: 'fishbelt',

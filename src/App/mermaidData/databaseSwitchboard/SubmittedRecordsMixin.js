@@ -92,6 +92,14 @@ const SubmittedRecordsMixin = (Base) =>
             )
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    exportToCSV = async function exportToCSV(projectId, protocol, method) {
+      const token = await this._getAccessToken()
+
+      const report_url = `${this._apiBaseUrl}/projects/${projectId}/${protocol}/${method}/csv/?field_report=true&access_token=${token}`
+
+      window.open(report_url)
+    }
   }
 
 export default SubmittedRecordsMixin

@@ -7,7 +7,6 @@ import styled, { css } from 'styled-components/macro'
 
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { H2 } from '../../generic/text'
 import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
@@ -45,6 +44,7 @@ import theme from '../../../theme'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -112,7 +112,7 @@ const getRoleLabel = (roleCode) => {
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
 const getIsUserRoleReadOnly = (profile) => profile.role === 10
 
-const Users = ({ currentUser }) => {
+const Users = () => {
   const [
     showRemoveUserWithActiveSampleUnitsWarning,
     setShowRemoveUserWithActiveSampleUnitsWarning,
@@ -128,16 +128,18 @@ const Users = ({ currentUser }) => {
   const [newUserProfile, setNewUserProfile] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
   const [projectName, setProjectName] = useState('')
-  const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
+  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
   const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
+
+  const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -717,7 +719,6 @@ const Users = ({ currentUser }) => {
 }
 
 Users.propTypes = {
-  currentUser: currentUserPropType.isRequired,
   row: PropTypes.shape({
     original: PropTypes.shape({
       name: PropTypes.string,
