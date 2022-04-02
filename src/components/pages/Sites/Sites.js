@@ -25,6 +25,8 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import usePrevious from '../../../library/usePrevious'
+import useSessionStorage from '../../../library/useSessionStorage'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
@@ -114,8 +116,8 @@ const Sites = () => {
         desc: false,
       },
     ],
-    [],
-  )
+    [],)
+    const [sortByColumns, setSortByColumns] = useSessionStorage('sortCollect', tableDefaultSortByColumns)
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -145,6 +147,7 @@ const Sites = () => {
   const {
     canNextPage,
     canPreviousPage,
+    columns,
     getTableBodyProps,
     getTableProps,
     gotoPage,
@@ -155,7 +158,7 @@ const Sites = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy },
     setGlobalFilter,
   } = useTable(
     {
@@ -163,7 +166,7 @@ const Sites = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns,
+        sortBy: sortByColumns,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -173,6 +176,7 @@ const Sites = () => {
     useSortBy,
     usePagination,
   )
+  const previousSortBy = usePrevious(sortBy)
   const handleRowsNumberChange = (e) => {
     setPageSize(Number(e.target.value))
   }

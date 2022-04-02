@@ -24,7 +24,10 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+// import { useCurrentUser } from '../../../ App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import usePrevious from '../../../library/usePrevious'
+import useSessionStorage from '../../../library/useSessionStorage'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 
@@ -36,6 +39,7 @@ const Collect = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  // const currentUser = useCurrentUser()
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -149,6 +153,7 @@ const Collect = () => {
       desc: false,
     },
   ], [])
+  const [sortByColumns, setSortByColumns] = useSessionStorage('sortCollect', tableDefaultSortByColumns,)
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -180,7 +185,7 @@ const Collect = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy },
     setGlobalFilter,
   } = useTable(
     {
@@ -188,7 +193,7 @@ const Collect = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns
+        sortBy: sortByColumns
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -203,6 +208,13 @@ const Collect = () => {
   }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const previousSortBy = usePrevious(sortBy)
+  const _setSortByColumnsOnChange = useEffect(() => {
+    if (JSON.stringify(sortBy) !== JSON.stringify(previousSortBy)) {
+      setSortByColumns(sortBy)
+    }
+  }, [sortBy, previousSortBy, setSortByColumns])
 
   const table = collectRecordsForUiDisplay.length ? (
     <>
