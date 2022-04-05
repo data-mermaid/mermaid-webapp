@@ -230,7 +230,7 @@ const Data = () => {
     databaseSwitchboardInstance.exportToCSV(projectId, transectProtocol, transectMethod)
   }
 
-  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
+  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const table = submittedRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>

@@ -225,7 +225,7 @@ const Site = () => {
     [formikSetFieldValue],
   )
 
-  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
+  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const contentViewByRole = isReadOnlyUser ? (
     <ReadOnlySiteContent
       site={formik.values}

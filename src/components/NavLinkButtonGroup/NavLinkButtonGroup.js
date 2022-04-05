@@ -8,7 +8,7 @@ import OfflineHide from '../generic/OfflineHide'
 
 const ButtonLabel = styled('span')``
 
-const NavLinkButtonGroup = ({ projectUrl }) => {
+const NavLinkButtonGroup = ({ projectUrl, isReadOnlyUser }) => {
   return (
     <>
       {/* hiding for alpha release because leads nowhere useful */}
@@ -22,14 +22,16 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
           <ButtonLabel>Health</ButtonLabel>
         </NavLinkThatLooksLikeButtonIcon>
       </OfflineHide> */}
-      <NavLinkThatLooksLikeButtonIcon
-        to={`${projectUrl}/collecting`}
-        aria-label="Collect"
-        onClick={stopEventPropagation}
-      >
-        <IconCollect />
-        <ButtonLabel>Collecting</ButtonLabel>
-      </NavLinkThatLooksLikeButtonIcon>
+      {!isReadOnlyUser && (
+        <NavLinkThatLooksLikeButtonIcon
+          to={`${projectUrl}/collecting`}
+          aria-label="Collect"
+          onClick={stopEventPropagation}
+        >
+          <IconCollect />
+          <ButtonLabel>Collecting</ButtonLabel>
+        </NavLinkThatLooksLikeButtonIcon>
+      )}
       <OfflineHide>
         <NavLinkThatLooksLikeButtonIcon
           to={`${projectUrl}/data`}
@@ -56,6 +58,7 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
 
 NavLinkButtonGroup.propTypes = {
   projectUrl: PropTypes.string.isRequired,
+  isReadOnlyUser: PropTypes.bool.isRequired,
 }
 
 export default NavLinkButtonGroup

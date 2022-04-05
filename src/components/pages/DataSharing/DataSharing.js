@@ -182,7 +182,7 @@ const DataSharing = () => {
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
-  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
+  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const contentViewByRole = (
     <MaxWidthInputWrapper>
       <h3>Data is much more powerful when shared.</h3>

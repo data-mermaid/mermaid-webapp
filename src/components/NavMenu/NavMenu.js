@@ -76,7 +76,7 @@ const NavMenu = ({ subNavNode }) => {
   const isSiteSubNode = siteId || pathname.includes('sites')
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
 
-  const _getCollectRecordCount = useEffect(() => {
+  const _getCurrentUserProfile = useEffect(() => {
     if (!isSyncInProgress && databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getProjectProfiles(projectId)
@@ -97,7 +97,7 @@ const NavMenu = ({ subNavNode }) => {
     }
   }, [databaseSwitchboardInstance, isSyncInProgress, projectId, isMounted, currentUser])
 
-  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
+  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
 
   return (
     <NavWrapper data-testid="content-page-side-nav">

@@ -257,7 +257,7 @@ const ManagementRegime = () => {
     }
   }, [formik.dirty])
 
-  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
+  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const contentViewByRole = isReadOnlyUser ? (
     <ReadOnlyManagementRegimeContent
       managementRegime={formik.values}

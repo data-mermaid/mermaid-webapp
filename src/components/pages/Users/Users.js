@@ -577,7 +577,7 @@ const Users = () => {
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
+  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const table = (
     <>
       <TableOverflowWrapper>

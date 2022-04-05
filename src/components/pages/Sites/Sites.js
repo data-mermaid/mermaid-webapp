@@ -188,7 +188,7 @@ const Sites = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
+  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const table = siteRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
