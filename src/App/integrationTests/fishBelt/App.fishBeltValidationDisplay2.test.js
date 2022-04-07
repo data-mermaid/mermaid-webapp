@@ -225,7 +225,7 @@ test('Fishbelt validations will show only the first error when there are multipl
       {
         name: 'Validate',
       },
-      { timeout: 100000 },
+      { timeout: 10000 },
     ),
   )
 
@@ -240,7 +240,7 @@ test('Fishbelt validations will show only the first error when there are multipl
       {
         name: 'Validate',
       },
-      { timeout: 100000 },
+      { timeout: 10000 },
     ),
   )
 
