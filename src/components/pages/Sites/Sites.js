@@ -24,9 +24,10 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePrevious from '../../../library/usePrevious'
-import useSessionStorage from '../../../library/useSessionStorage'
+import useTablePreferencesSessionStorage from '../../generic/Table/useTablePreferencesSessionStorage'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
@@ -41,6 +42,7 @@ const Sites = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const currentUser = useCurrentUser()
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -109,15 +111,19 @@ const Sites = () => {
     [siteRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(
-    () => [
-      {
-        id: 'name',
-        desc: false,
-      },
-    ],
-    [],)
-    const [sortByColumns, setSortByColumns] = useSessionStorage('sortCollect', tableDefaultSortByColumns)
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+      globalFilter: ""
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = useTablePreferencesSessionStorage(`${currentUser.id}-sitesTable`, tableDefaultPrefs)
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -147,7 +153,6 @@ const Sites = () => {
   const {
     canNextPage,
     canPreviousPage,
-    columns,
     getTableBodyProps,
     getTableProps,
     gotoPage,
@@ -158,7 +163,7 @@ const Sites = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize, sortBy },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
   } = useTable(
     {
@@ -166,7 +171,8 @@ const Sites = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: sortByColumns,
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -176,12 +182,22 @@ const Sites = () => {
     useSortBy,
     usePagination,
   )
-  const previousSortBy = usePrevious(sortBy)
   const handleRowsNumberChange = (e) => {
     setPageSize(Number(e.target.value))
   }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const previousSortBy = usePrevious(sortBy)
+  const previousGlobalFilter = usePrevious(globalFilter)
+
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs('sortBy', sortBy, previousSortBy)
+  }, [sortBy, previousSortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs('globalFilter', globalFilter, previousGlobalFilter)
+  }, [globalFilter, previousGlobalFilter, handleSetTableUserPrefs])
 
   const table = siteRecordsForUiDisplay.length ? (
     <>
@@ -266,6 +282,7 @@ const Sites = () => {
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.siteTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <ToolbarButtonWrapper>

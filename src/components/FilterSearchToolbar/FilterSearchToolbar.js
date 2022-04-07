@@ -15,14 +15,31 @@ const FilterLabelWrapper = styled.label`
   }
 `
 
-const FilterSearchToolbar = ({ name, handleGlobalFilterChange }) => {
-  const [filterInputValue, setFilterInputValue] = useState('')
+const FilterSearchToolbar = ({
+  name,
+  handleGlobalFilterChange,
+  value: valueFromProps,
+  defaultValue
+}) => {
+  // Component is controlled when value is not undefined
+  const isControlled = valueFromProps !== undefined
+  // An uncontrolled component can have a default value
+  const hasDefaultValue = defaultValue !== undefined
+
+  const [internalValue, setInternalValue] = useState(hasDefaultValue ? defaultValue : '')
+
+  // Get value from props or internal state. Depends on whether component is controlled or not
+  const value = isControlled ? valueFromProps : internalValue
 
   const handleFilterChange = event => {
-    const { value } = event.target
+    const { value: eventValue } = event.target
 
-    setFilterInputValue(value)
-    handleGlobalFilterChange(value)
+    // If the value is uncontrolled, update the internal value
+    if (!isControlled) {
+      setInternalValue(eventValue)
+    }
+
+    handleGlobalFilterChange(eventValue)
   }
 
   return (
@@ -31,16 +48,23 @@ const FilterSearchToolbar = ({ name, handleGlobalFilterChange }) => {
       <Input
         type="text"
         id="filter-search"
-        value={filterInputValue}
+        value={value}
         onChange={handleFilterChange}
       />
     </FilterLabelWrapper>
   )
 }
 
+FilterSearchToolbar.defaultProps = {
+  value: undefined,
+  defaultValue: undefined,
+}
+
 FilterSearchToolbar.propTypes = {
   name: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
+  defaultValue: PropTypes.string,
 }
 
 export default FilterSearchToolbar

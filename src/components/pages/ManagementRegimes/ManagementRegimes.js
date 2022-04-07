@@ -21,7 +21,10 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import useTablePreferencesSessionStorage from '../../generic/Table/useTablePreferencesSessionStorage'
+import usePrevious from '../../../library/usePrevious'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 
@@ -33,6 +36,7 @@ const ManagementRegimes = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const currentUser = useCurrentUser()
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -133,12 +137,19 @@ const ManagementRegimes = () => {
     [managementRegimeRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(() => [
-    {
-      id: 'name',
-      desc: false,
-    },
-  ], [])
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+      globalFilter: ""
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = useTablePreferencesSessionStorage(`${currentUser.id}-managementRegimesTable`, tableDefaultPrefs)
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.estYear']
@@ -165,7 +176,7 @@ const ManagementRegimes = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
   } = useTable(
     {
@@ -173,7 +184,8 @@ const ManagementRegimes = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -188,6 +200,17 @@ const ManagementRegimes = () => {
   }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const previousSortBy = usePrevious(sortBy)
+  const previousGlobalFilter = usePrevious(globalFilter)
+
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs('sortBy', sortBy, previousSortBy)
+  }, [sortBy, previousSortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs('globalFilter', globalFilter, previousGlobalFilter)
+  }, [globalFilter, previousGlobalFilter, handleSetTableUserPrefs])
 
   const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
@@ -269,6 +292,7 @@ const ManagementRegimes = () => {
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.managementRegimeTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <ToolbarButtonWrapper>

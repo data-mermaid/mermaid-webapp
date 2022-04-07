@@ -45,6 +45,8 @@ import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
+import useTablePreferencesSessionStorage from '../../generic/Table/useTablePreferencesSessionStorage'
+import usePrevious from '../../../library/usePrevious'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -514,15 +516,19 @@ const Users = () => {
     [observerProfiles],
   )
 
-  const tableDefaultSortByColumns = useMemo(
-    () => [
-      {
-        id: 'name',
-        desc: false,
-      },
-    ],
-    [],
-  )
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+      globalFilter: ""
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = useTablePreferencesSessionStorage(`${currentUser.id}-usersTable`, tableDefaultPrefs)
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -554,7 +560,7 @@ const Users = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
   } = useTable(
     {
@@ -562,7 +568,8 @@ const Users = () => {
       data: currentUserProfile.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns,
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter
       },
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
@@ -576,6 +583,17 @@ const Users = () => {
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const previousSortBy = usePrevious(sortBy)
+  const previousGlobalFilter = usePrevious(globalFilter)
+
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs('sortBy', sortBy, previousSortBy)
+  }, [sortBy, previousSortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs('globalFilter', globalFilter, previousGlobalFilter)
+  }, [globalFilter, previousGlobalFilter, handleSetTableUserPrefs])
 
   const table = (
     <>
@@ -677,6 +695,7 @@ const Users = () => {
               : language.pages.userTable.filterToolbarTextForCollector
           }
           handleGlobalFilterChange={handleGlobalFilterChange}
+          value={tableUserPrefs.globalFilter}
         />
         {currentUserProfile.is_admin && (
           <InputAndButton
