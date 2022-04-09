@@ -174,7 +174,8 @@ test('Sync: initial page load already done, navigate to non project page', async
   // this makes the act errors disappear.
   expect(within(await screen.findByTestId('collect-record-count')).getByText('16'))
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(17)
+  // dexie includes records that are filtered out in the UI for _deleted and not the current user
+  expect((await dexieInstance.collect_records.toArray()).length).toEqual(18)
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.length,
   )

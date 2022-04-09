@@ -40,7 +40,7 @@ describe('Offline delete fishbelt', () => {
       projectId: '1',
     })
 
-    expect(await dbInstanceOffline.getCollectRecord('foo')).toBeUndefined()
+    expect(await dbInstanceOffline.getCollectRecord({ id: 'foo', userId: '1' })).toBeUndefined()
   })
   test('deleteFishBelt offline marks the record with a _deleted property if there is a corresponding server record', async () => {
     const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
