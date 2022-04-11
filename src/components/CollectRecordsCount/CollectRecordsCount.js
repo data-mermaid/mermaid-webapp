@@ -8,6 +8,7 @@ import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import useIsMounted from '../../library/useIsMounted'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const CollectRecordsCountWrapper = styled.strong`
   background: ${theme.color.callout};
@@ -27,12 +28,13 @@ const CollectRecordsCount = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
 
   const _getCollectRecordCount = useEffect(() => {
-    if (!isSyncInProgress && databaseSwitchboardInstance && projectId) {
+    if (!isSyncInProgress && databaseSwitchboardInstance && projectId && currentUser) {
       databaseSwitchboardInstance
-        .getCollectRecordsWithoutOfflineDeleted(projectId)
+        .getCollectRecordsWithoutOfflineDeleted({ projectId, userId: currentUser.id })
         .then((collectRecords) => {
           if (isMounted.current) {
             setCollectRecordsCount(collectRecords.length)
@@ -40,11 +42,11 @@ const CollectRecordsCount = () => {
         })
         .catch(() => {
           toast.warn(
-            ...getToastArguments(language.error.apiDataSync.collectRecordsUnavailableError)
+            ...getToastArguments(language.error.apiDataSync.collectRecordsUnavailableError),
           )
         })
     }
-  }, [databaseSwitchboardInstance, isSyncInProgress, projectId, isMounted])
+  }, [databaseSwitchboardInstance, isSyncInProgress, projectId, isMounted, currentUser])
 
   return (
     !!collectRecordsCount && (
