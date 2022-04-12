@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect, useParams } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import React, { useMemo } from 'react'
 
@@ -22,9 +22,12 @@ import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { CurrentUserProvider } from './CurrentUserContext'
+import { ProjectUserRoleProvider } from './ProjectUserRoleContext'
+import useInitializeProjectUserRole from './useInitializeProjectUserRole'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
+  const projectId = window.location.pathname.split('/')[2]
   const { isAppOnline } = useOnlineStatus()
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieInstance,
@@ -78,6 +81,15 @@ function App({ dexieInstance }) {
     isMermaidAuthenticated,
     isAppOnline,
   })
+
+  const currentProjectUserRole = useInitializeProjectUserRole({
+    projectId,
+    currentUser,
+    apiBaseUrl,
+    getAccessToken,
+    dexieInstance,
+    isAppOnline,
+  })
   const { routes } = useRoutes({ apiSyncInstance })
 
   const layoutProps = {
@@ -95,39 +107,41 @@ function App({ dexieInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={currentUser}>
-          <GlobalStyle />
-          <CustomToastContainer limit={5} />
-          <Layout {...layoutProps}>
-            {
-              /** The isMermaidAuthenticated is needed here to prevent an
-               * infinite log in loop with authentication.
-               *
-               * The projects list route and project workflow pages will trigger
-               * a sync when they are routed to, making isOfflineStorageHydrated = true
-               */
+          <ProjectUserRoleProvider value={currentProjectUserRole}>
+            <GlobalStyle />
+            <CustomToastContainer limit={5} />
+            <Layout {...layoutProps}>
+              {
+                /** The isMermaidAuthenticated is needed here to prevent an
+                 * infinite log in loop with authentication.
+                 *
+                 * The projects list route and project workflow pages will trigger
+                 * a sync when they are routed to, making isOfflineStorageHydrated = true
+                 */
 
-              isMermaidAuthenticated ? (
-                <Switch>
-                  {routes.map(({ path, Component }) => (
-                    <Route
-                      exact
-                      path={path}
-                      key={path}
-                      render={() =>
-                        isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
-                      }
-                    />
-                  ))}
-                  <Route exact path="/">
-                    <Redirect to="/projects" />
-                  </Route>
-                  <Route component={PageNotFound} />
-                </Switch>
-              ) : (
-                <LoadingIndicator />
-              )
-            }
-          </Layout>
+                isMermaidAuthenticated ? (
+                  <Switch>
+                    {routes.map(({ path, Component }) => (
+                      <Route
+                        exact
+                        path={path}
+                        key={path}
+                        render={() =>
+                          isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
+                        }
+                      />
+                    ))}
+                    <Route exact path="/">
+                      <Redirect to="/projects" />
+                    </Route>
+                    <Route component={PageNotFound} />
+                  </Switch>
+                ) : (
+                  <LoadingIndicator />
+                )
+              }
+            </Layout>
+          </ProjectUserRoleProvider>
         </CurrentUserProvider>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
