@@ -58,11 +58,11 @@ const Projects = ({ apiSyncInstance }) => {
     !!offlineReadyProjectIds.find((offlineProject) => offlineProject.id === projectId)
 
   const getAvailableProjects = () => {
-    if (isAppOnline) { return projects }
+    if (isAppOnline) {
+      return projects
+    }
 
-    return projects.filter((project) =>
-      getObjectById(offlineReadyProjectIds, project.id),
-    )
+    return projects.filter((project) => getObjectById(offlineReadyProjectIds, project.id))
   }
 
   const getFilteredProjects = (projectsToFilter) => {
@@ -73,7 +73,7 @@ const Projects = ({ apiSyncInstance }) => {
 
       return projectsToFilter.filter((project) => {
         return filterKeys.some((key) => {
-          return queryTerms.some(term => term.test(project[key].toString()))
+          return queryTerms.some((term) => term.test(project[key].toString()))
         })
       })
     }
@@ -90,7 +90,9 @@ const Projects = ({ apiSyncInstance }) => {
     })
 
     // Reverse array for descending sort
-    if (!isProjectSortAsc) { return sortedProjects.reverse() }
+    if (!isProjectSortAsc) {
+      return sortedProjects.reverse()
+    }
 
     return sortedProjects
   }
@@ -111,7 +113,7 @@ const Projects = ({ apiSyncInstance }) => {
       noFilterResultsSubText,
       noDataSubText,
       noDataTextOnline,
-      noDataTextOffline
+      noDataTextOffline,
     } = language.pages.projectsList
     const isProjectFilter = projectFilter !== ''
 
@@ -129,22 +131,20 @@ const Projects = ({ apiSyncInstance }) => {
       subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
     }
 
-    return (
-      <PageNoData mainText={mainText} subText={subText} />
-    )
+    return <PageNoData mainText={mainText} subText={subText} />
   }
 
-  const projectCardsList = filteredSortedProjects.length ? (
-    getFilteredSortedProjects().map((project) => (
-      <ProjectCard
-        role="listitem"
-        project={{ ...project }}
-        key={project.id}
-        apiSyncInstance={apiSyncInstance}
-        isOfflineReady={getIsProjectOffline(project.id)}
-      />
-    ))
-  ) : (renderPageNoData())
+  const projectCardsList = filteredSortedProjects.length
+    ? getFilteredSortedProjects().map((project) => (
+        <ProjectCard
+          role="listitem"
+          project={{ ...project }}
+          key={project.id}
+          apiSyncInstance={apiSyncInstance}
+          isOfflineReady={getIsProjectOffline(project.id)}
+        />
+      ))
+    : renderPageNoData()
 
   return isLoading ? (
     <LoadingIndicator aria-label="projects list loading indicator" />
@@ -160,9 +160,7 @@ const Projects = ({ apiSyncInstance }) => {
           setIsProjectSortAsc={setIsProjectSortAsc}
         />
       }
-      bottomRow={
-        <div role="list">{projectCardsList}</div>
-      }
+      bottomRow={<div role="list">{projectCardsList}</div>}
     />
   )
 }

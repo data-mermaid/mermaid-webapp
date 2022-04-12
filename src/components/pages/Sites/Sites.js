@@ -28,7 +28,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -37,11 +37,11 @@ const Sites = () => {
   const [choices, setChoices] = useState({})
   const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+  const projectUserRole = useProjectUserRole()
+  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -51,22 +51,17 @@ const Sites = () => {
         databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ])
 
-        .then(([sites, project, choicesResponse, projectProfilesResponse]) => {
+        .then(([sites, project, choicesResponse]) => {
           if (isMounted.current) {
             if (!project && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
 
             setSiteRecordsForUiDisplay(sites)
             setSitesForMapMarkers(sites)
             setChoices(choicesResponse)
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -74,7 +69,7 @@ const Sites = () => {
           toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, currentUser])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
 
@@ -188,7 +183,6 @@ const Sites = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const table = siteRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
@@ -262,6 +256,7 @@ const Sites = () => {
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
+      showCollectingNav={!isReadOnlyUser}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (

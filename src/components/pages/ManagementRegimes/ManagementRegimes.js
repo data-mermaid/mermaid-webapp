@@ -24,18 +24,18 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+  const projectUserRole = useProjectUserRole()
+  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -44,19 +44,14 @@ const ManagementRegimes = () => {
       Promise.all([
         databaseSwitchboardInstance.getManagementRegimeRecordsForUiDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ])
-        .then(([managementRegimes, projectResponse, projectProfilesResponse]) => {
+        .then(([managementRegimes, projectResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
 
             setManagementRegimeRecordsForUiDisplay(managementRegimes)
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -64,7 +59,7 @@ const ManagementRegimes = () => {
           toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, currentUser])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
   const getIconCheckLabel = (property) => property && <IconCheck />
@@ -201,7 +196,6 @@ const ManagementRegimes = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>

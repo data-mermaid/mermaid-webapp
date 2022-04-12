@@ -25,7 +25,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import theme from '../../../theme'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -72,7 +72,6 @@ const ReadOnlyDataSharingContent = ({ project }) => (
 )
 
 const DataSharing = () => {
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -81,8 +80,9 @@ const DataSharing = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+  const projectUserRole = useProjectUserRole()
+  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -95,23 +95,17 @@ const DataSharing = () => {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, choicesResponse, projectProfilesResponse]) => {
+        .then(([projectResponse, choicesResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectBeingEdited(projectResponse)
             setDataPolicyOptions(getDataSharingOptions(choicesResponse.datapolicies))
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -119,7 +113,7 @@ const DataSharing = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress, currentUser])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress])
 
   const getToastMessageForDataPolicyChange = (property, policy) => {
     switch (property) {
@@ -182,7 +176,6 @@ const DataSharing = () => {
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
-  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const contentViewByRole = (
     <MaxWidthInputWrapper>
       <h3>Data is much more powerful when shared.</h3>
@@ -190,7 +183,7 @@ const DataSharing = () => {
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
         <IconInfo /> Learn more about how your data is shared...
       </ButtonPrimary>
-      {currentUserProfile.is_admin ? (
+      {projectUserRole.is_admin ? (
         <TableOverflowWrapper>
           <DataSharingTable>
             <thead>
@@ -277,7 +270,7 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {currentUserProfile.is_admin && (
+      {projectUserRole.is_admin && (
         <>
           <CheckBoxLabel>
             <input

@@ -8,7 +8,7 @@ import { Table, Tr, Td } from '../../../generic/Table/table'
 
 import { ContentPageLayout } from '../../../Layout'
 import { managementRegimePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { inputOptionPropType } from '../../../../library/miscPropTypes'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { getManagementRegimeInitialValues } from '../managementRegimeFormInitialValues'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
@@ -30,7 +30,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../../generic/SaveButton'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
-import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../../App/ProjectUserRoleContext'
 
 const TdKey = styled(Td)`
   white-space: nowrap;
@@ -112,10 +112,10 @@ const ManagementRegime = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
-  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const projectUserRole = useProjectUserRole()
+  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -123,51 +123,29 @@ const ManagementRegime = () => {
         databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProject(projectId),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(
-          ([
-            managementRegimeResponse,
-            choicesResponse,
-            projectResponse,
-            projectProfilesResponse,
-          ]) => {
-            if (isMounted.current) {
-              if (!managementRegimeResponse && managementRegimeId) {
-                setIdsNotAssociatedWithData((previousState) => [
-                  ...previousState,
-                  managementRegimeId,
-                ])
-              }
-              if (!projectResponse && projectId) {
-                setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
-              }
-              const filteredUserProfile = projectProfilesResponse.filter(
-                ({ profile }) => currentUser.id === profile,
-              )[0]
-
-              setManagementParties(getOptions(choicesResponse.managementparties))
-              setManagementCompliances(getOptions(choicesResponse.managementcompliances))
-              setManagementRegimeBeingEdited(managementRegimeResponse)
-              setCurrentUserProfile(filteredUserProfile)
-              setIsLoading(false)
+        .then(([managementRegimeResponse, choicesResponse, projectResponse]) => {
+          if (isMounted.current) {
+            if (!managementRegimeResponse && managementRegimeId) {
+              setIdsNotAssociatedWithData((previousState) => [...previousState, managementRegimeId])
             }
-          },
-        )
+            if (!projectResponse && projectId) {
+              setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
+            }
+
+            setManagementParties(getOptions(choicesResponse.managementparties))
+            setManagementCompliances(getOptions(choicesResponse.managementcompliances))
+            setManagementRegimeBeingEdited(managementRegimeResponse)
+            setIsLoading(false)
+          }
+        })
         .catch(() => {
           toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    isSyncInProgress,
-    managementRegimeId,
-    projectId,
-    currentUser,
-  ])
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, managementRegimeId, projectId])
 
   const initialFormValues = useMemo(
     () => getManagementRegimeInitialValues(managementRegimeBeingEdited),
@@ -257,7 +235,6 @@ const ManagementRegime = () => {
     }
   }, [formik.dirty])
 
-  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const contentViewByRole = isReadOnlyUser ? (
     <ReadOnlyManagementRegimeContent
       managementRegime={formik.values}
@@ -380,7 +357,7 @@ const ManagementRegime = () => {
 
 TableRowItem.propTypes = {
   title: PropTypes.string.isRequired,
-  options: inputOptionPropType,
+  options: inputOptionsPropTypes,
   value: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
@@ -390,8 +367,8 @@ TableRowItem.defaultProps = {
 
 ReadOnlyManagementRegimeContent.propTypes = {
   managementRegime: managementRegimePropType.isRequired,
-  managementCompliances: inputOptionPropType.isRequired,
-  managementParties: inputOptionPropType.isRequired,
+  managementCompliances: inputOptionsPropTypes.isRequired,
+  managementParties: inputOptionsPropTypes.isRequired,
 }
 
 export default ManagementRegime

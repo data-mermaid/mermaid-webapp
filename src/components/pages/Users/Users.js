@@ -45,6 +45,7 @@ import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -135,7 +136,8 @@ const Users = () => {
   const { projectId } = useParams()
   const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const projectUserRole = useProjectUserRole()
+  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
@@ -153,13 +155,8 @@ const Users = () => {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectName(projectResponse?.name)
             setObserverProfiles(projectProfilesResponse)
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -167,7 +164,7 @@ const Users = () => {
           toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, projectId, isSyncInProgress, currentUser])
+  }, [databaseSwitchboardInstance, isMounted, projectId, isSyncInProgress])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)
@@ -526,7 +523,7 @@ const Users = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = currentUserProfile.isAdmin
+      const keys = projectUserRole.isAdmin
         ? ['values.name.props.children', 'values.email']
         : ['values.name', 'values.role']
 
@@ -538,7 +535,7 @@ const Users = () => {
 
       return getTableFilteredRows(rows, keys, queryTerms)
     },
-    [currentUserProfile],
+    [projectUserRole],
   )
 
   const {
@@ -558,8 +555,8 @@ const Users = () => {
     setGlobalFilter,
   } = useTable(
     {
-      columns: currentUserProfile.is_admin ? tableColumnsForAdmin : tableColumnsForCollector,
-      data: currentUserProfile.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
+      columns: projectUserRole.is_admin ? tableColumnsForAdmin : tableColumnsForCollector,
+      data: projectUserRole.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
       initialState: {
         pageSize: 15,
         sortBy: tableDefaultSortByColumns,
@@ -577,7 +574,6 @@ const Users = () => {
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const table = (
     <>
       <TableOverflowWrapper>
@@ -673,13 +669,13 @@ const Users = () => {
       <ToolbarRowWrapper>
         <FilterSearchToolbar
           name={
-            currentUserProfile.is_admin
+            projectUserRole.is_admin
               ? language.pages.userTable.filterToolbarTextForAdmin
               : language.pages.userTable.filterToolbarTextForCollector
           }
           handleGlobalFilterChange={handleGlobalFilterChange}
         />
-        {currentUserProfile.is_admin && (
+        {projectUserRole.is_admin && (
           <InputAndButton
             inputId="add-new-user-email"
             labelText={language.pages.userTable.searchEmailToolbarText}

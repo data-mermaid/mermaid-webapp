@@ -26,7 +26,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageNoData from '../PageNoData'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const getTransectReportProperties = (transect) => {
   return {
@@ -43,11 +43,11 @@ const Data = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+  const projectUserRole = useProjectUserRole()
+  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 
@@ -57,20 +57,11 @@ const Data = () => {
     }
 
     if (databaseSwitchboardInstance && projectId) {
-      const promises = [
-        databaseSwitchboardInstance.getSubmittedRecordsForUIDisplay(projectId),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
-      ]
-
-      Promise.all(promises)
-        .then(([submittedRecordsResponse, projectProfilesResponse]) => {
+      databaseSwitchboardInstance
+        .getSubmittedRecordsForUIDisplay(projectId)
+        .then((submittedRecordsResponse) => {
           if (isMounted.current) {
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setSubmittedRecordsForUiDisplay(submittedRecordsResponse)
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -84,7 +75,7 @@ const Data = () => {
           toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, currentUser])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
@@ -230,7 +221,6 @@ const Data = () => {
     databaseSwitchboardInstance.exportToCSV(projectId, transectProtocol, transectMethod)
   }
 
-  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const table = submittedRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>

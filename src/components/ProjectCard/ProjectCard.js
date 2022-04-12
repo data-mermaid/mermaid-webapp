@@ -159,7 +159,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
         </p>
       </ProjectInfoWrapper>
       {isButtonLoading ? (
-        <LoadingButtonGroupIndicator>
+        <LoadingButtonGroupIndicator aria-label="project card loading indicator">
           {language.loadingIndicator.loadingPrimary}
         </LoadingButtonGroupIndicator>
       ) : (

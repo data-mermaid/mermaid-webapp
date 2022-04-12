@@ -8,7 +8,7 @@ import { Table, Tr, Td } from '../../generic/Table/table'
 
 import { ContentPageLayout } from '../../Layout'
 import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
-import { inputOptionPropType } from '../../../library/miscPropTypes'
+import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { H2 } from '../../generic/text'
@@ -31,7 +31,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const TdKey = styled(Td)`
   white-space: nowrap;
@@ -93,11 +93,11 @@ const Site = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { siteId, projectId } = useParams()
-  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const projectUserRole = useProjectUserRole()
+  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
@@ -105,11 +105,10 @@ const Site = () => {
         databaseSwitchboardInstance.getSite(siteId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProject(projectId),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([siteResponse, choicesResponse, projectResponse, projectProfilesResponse]) => {
+        .then(([siteResponse, choicesResponse, projectResponse]) => {
           if (isMounted.current) {
             if (!siteResponse && siteId) {
               setIdsNotAssociatedWithData((previousState) => [...previousState, siteId])
@@ -117,16 +116,12 @@ const Site = () => {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
             }
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
 
             setCountryOptions(getOptions(choicesResponse.countries))
             setExposureOptions(getOptions(choicesResponse.reefexposures))
             setReefTypeOptions(getOptions(choicesResponse.reeftypes))
             setReefZoneOptions(getOptions(choicesResponse.reefzones))
             setSiteBeingEdited(siteResponse)
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -134,7 +129,7 @@ const Site = () => {
           toast.error(...getToastArguments(language.error.siteRecordUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId, currentUser])
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId])
 
   const initialFormValues = useMemo(() => getSiteInitialValues(siteBeingEdited), [siteBeingEdited])
 
@@ -225,7 +220,6 @@ const Site = () => {
     [formikSetFieldValue],
   )
 
-  const isReadOnlyUser = !(currentUserProfile?.is_admin || currentUserProfile?.is_collector)
   const contentViewByRole = isReadOnlyUser ? (
     <ReadOnlySiteContent
       site={formik.values}
@@ -349,7 +343,7 @@ const Site = () => {
 
 TableRowItem.propTypes = {
   title: PropTypes.string.isRequired,
-  options: inputOptionPropType,
+  options: inputOptionsPropTypes,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 }
 
@@ -359,10 +353,10 @@ TableRowItem.defaultProps = {
 
 ReadOnlySiteContent.propTypes = {
   site: sitePropType.isRequired,
-  countries: inputOptionPropType.isRequired,
-  exposures: inputOptionPropType.isRequired,
-  reefTypes: inputOptionPropType.isRequired,
-  reefZones: inputOptionPropType.isRequired,
+  countries: inputOptionsPropTypes.isRequired,
+  exposures: inputOptionsPropTypes.isRequired,
+  reefTypes: inputOptionsPropTypes.isRequired,
+  reefZones: inputOptionsPropTypes.isRequired,
   isReadOnlyUser: PropTypes.bool.isRequired,
 }
 

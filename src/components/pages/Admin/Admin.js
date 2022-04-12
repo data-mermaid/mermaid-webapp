@@ -33,7 +33,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -161,7 +161,6 @@ const ReadOnlyAdminContent = ({ project }) => (
 )
 
 const Admin = () => {
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
@@ -171,8 +170,9 @@ const Admin = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+  const projectUserRole = useProjectUserRole()
+  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -185,23 +185,17 @@ const Admin = () => {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, projectTagsResponse, projectProfilesResponse]) => {
+        .then(([projectResponse, projectTagsResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectBeingEdited(projectResponse)
             setProjectTagOptions(getOptions(projectTagsResponse, false))
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -209,14 +203,7 @@ const Admin = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    projectId,
-    isMounted,
-    isAppOnline,
-    isSyncInProgress,
-    currentUser,
-  ])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, isSyncInProgress])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -264,8 +251,7 @@ const Admin = () => {
     </>
   )
 
-  const isReadOnlyUser = !(currentUserProfile.is_admin || currentUserProfile.is_collector)
-  const contentViewByRole = currentUserProfile.is_admin ? (
+  const contentViewByRole = projectUserRole.is_admin ? (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
@@ -345,7 +331,7 @@ const Admin = () => {
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>{language.pages.projectInfo.title}</H2>
-            {currentUserProfile.is_admin && (
+            {projectUserRole.is_admin && (
               <SaveButton
                 formId="project-info-form"
                 saveButtonState={saveButtonState}
