@@ -32,19 +32,16 @@ const useInitializeProjectUserRole = ({
     }
 
     if (currentUser && projectId && dexieInstance) {
-      getProjectProfilesOfflineTable(dexieInstance, projectId).then((result) => {
-        const projectProfilesPromise = result.length
-          ? dexieInstance.project_profiles.toArray()
-          : getProjectProfilesAPI(apiBaseUrl, projectId, getAccessToken)
+      getProjectProfilesOfflineTable(dexieInstance, projectId).then(async (result) => {
+        const projectProfiles = result.length
+          ? result
+          : await getProjectProfilesAPI(apiBaseUrl, projectId, getAccessToken)
 
-        projectProfilesPromise.then((profiles) => {
-          /* eslint-disable max-nested-callbacks */
-          const filteredUserProfile = profiles.filter(
-            ({ profile }) => currentUser.id === profile,
-          )[0]
+        const filteredUserProfile = projectProfiles.filter(
+          ({ profile }) => currentUser.id === profile,
+        )[0]
 
-          setProjectUserRole(filteredUserProfile)
-        })
+        setProjectUserRole(filteredUserProfile)
       })
     }
   }, [isAppOnline, projectId, currentUser, dexieInstance, apiBaseUrl, getAccessToken])
