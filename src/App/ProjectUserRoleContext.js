@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { createContext, useContext } from 'react'
 
+import { observersPropType } from './mermaidData/mermaidDataProptypes'
+
 const ProjectUserRoleContext = createContext({})
 
 const ProjectUserRoleProvider = ({ children, value }) => {
@@ -19,7 +21,7 @@ const useProjectUserRole = () => {
 
 ProjectUserRoleProvider.propTypes = {
   children: PropTypes.node.isRequired,
-  value: PropTypes.shape({}),
+  value: observersPropType,
 }
 
 ProjectUserRoleProvider.defaultProps = {
