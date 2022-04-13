@@ -104,6 +104,7 @@ const Site = () => {
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
         })
         .catch(() => {
+          setSaveButtonState(buttonGroupStates.unsaved)
           toast.error(...getToastArguments(language.error.siteSave))
         })
     },

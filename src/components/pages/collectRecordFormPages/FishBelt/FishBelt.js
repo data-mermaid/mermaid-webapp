@@ -484,6 +484,7 @@ const FishBelt = ({ isNewRecord }) => {
         }
       })
       .catch(() => {
+        setSaveButtonState(buttonGroupStates.unsaved)
         toast.error(...getToastArguments(language.error.collectRecordSave))
       })
   }
