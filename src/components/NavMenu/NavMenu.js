@@ -60,7 +60,7 @@ const NavMenu = ({ subNavNode }) => {
   const projectUrl = useCurrentProjectPath()
   const { recordId, submittedRecordId, siteId, managementRegimeId } = useParams()
   const { pathname } = useLocation()
-  const projectUserRole = useProjectUserRole()
+  const { projectUserRole, isProjectUserRoleLoaded } = useProjectUserRole()
   const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const isCollectingSubNode = recordId || pathname.includes('collecting')
@@ -68,10 +68,11 @@ const NavMenu = ({ subNavNode }) => {
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
 
   return (
-    <NavWrapper data-testid="content-page-side-nav">
-      <NavList>
-        {/* hiding for alpha release because leads nowhere useful */}
-        {/* <OfflineHide>
+    isProjectUserRoleLoaded && (
+      <NavWrapper data-testid="content-page-side-nav">
+        <NavList>
+          {/* hiding for alpha release because leads nowhere useful */}
+          {/* <OfflineHide>
           <li>
             <NavHeader>Project Overview</NavHeader>
             <ul>
@@ -83,88 +84,89 @@ const NavMenu = ({ subNavNode }) => {
             </ul>
           </li>
         </OfflineHide> */}
-        <li>
-          <NavHeader>Collect</NavHeader>
-          <ul>
-            {!isReadOnlyUser && (
-              <li>
-                <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
-                  <IconCollect />
-                  <span>Collecting</span>
-                  <CollectRecordsCount />
-                </NavLinkSidebar>
-              </li>
-            )}
-            {isCollectingSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
-            <li>
-              <NavLinkSidebar exact to={`${projectUrl}/sites`}>
-                <IconSites />
-                <span>Sites</span>
-              </NavLinkSidebar>
-            </li>
-            {isSiteSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
-            <li>
-              <NavLinkSidebar exact to={`${projectUrl}/management-regimes`}>
-                <IconMgmt />
-                <span>Management Regimes</span>
-              </NavLinkSidebar>
-            </li>
-            {isManagementRegimeSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
-          </ul>
-        </li>
-        <OfflineHide>
           <li>
-            <NavHeader>Data</NavHeader>
+            <NavHeader>Collect</NavHeader>
             <ul>
+              {!isReadOnlyUser && (
+                <li>
+                  <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
+                    <IconCollect />
+                    <span>Collecting</span>
+                    <CollectRecordsCount />
+                  </NavLinkSidebar>
+                </li>
+              )}
+              {isCollectingSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
               <li>
-                <NavLinkSidebar exact to={`${projectUrl}/data`}>
-                  <IconData />
-                  <span>Submitted</span>
+                <NavLinkSidebar exact to={`${projectUrl}/sites`}>
+                  <IconSites />
+                  <span>Sites</span>
                 </NavLinkSidebar>
               </li>
-              {submittedRecordId && <SubNavMenuRecordName subNavNode={subNavNode} />}
-              {/* hiding for alpha release because leads nowhere useful */}
-              {/* <li>
+              {isSiteSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
+              <li>
+                <NavLinkSidebar exact to={`${projectUrl}/management-regimes`}>
+                  <IconMgmt />
+                  <span>Management Regimes</span>
+                </NavLinkSidebar>
+              </li>
+              {isManagementRegimeSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
+            </ul>
+          </li>
+          <OfflineHide>
+            <li>
+              <NavHeader>Data</NavHeader>
+              <ul>
+                <li>
+                  <NavLinkSidebar exact to={`${projectUrl}/data`}>
+                    <IconData />
+                    <span>Submitted</span>
+                  </NavLinkSidebar>
+                </li>
+                {submittedRecordId && <SubNavMenuRecordName subNavNode={subNavNode} />}
+                {/* hiding for alpha release because leads nowhere useful */}
+                {/* <li>
                 <NavLinkSidebar to={`${projectUrl}/graphs-and-maps`}>
                   <IconGraph />
                   <span>Graphs and Maps</span>
                 </NavLinkSidebar>
               </li> */}
-            </ul>
-          </li>
-          <li>
-            <NavHeader>Admin</NavHeader>
-            <ul>
-              <li>
-                <NavLinkSidebar to={`${projectUrl}/admin`}>
-                  <IconAdmin />
-                  <span>Project Info</span>
-                </NavLinkSidebar>
-              </li>
-              <li>
-                <NavLinkSidebar to={`${projectUrl}/users`}>
-                  <IconUsers />
-                  <span>Users</span>
-                </NavLinkSidebar>
-              </li>
-              {/* hiding for alpha release because leads nowhere useful */}
-              {/* <li>
+              </ul>
+            </li>
+            <li>
+              <NavHeader>Admin</NavHeader>
+              <ul>
+                <li>
+                  <NavLinkSidebar to={`${projectUrl}/admin`}>
+                    <IconAdmin />
+                    <span>Project Info</span>
+                  </NavLinkSidebar>
+                </li>
+                <li>
+                  <NavLinkSidebar to={`${projectUrl}/users`}>
+                    <IconUsers />
+                    <span>Users</span>
+                  </NavLinkSidebar>
+                </li>
+                {/* hiding for alpha release because leads nowhere useful */}
+                {/* <li>
                 <NavLinkSidebar to={`${projectUrl}/fish-families`}>
                   <IconFish />
                   <span>Fish Families</span>
                 </NavLinkSidebar>
               </li> */}
-              <li>
-                <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
-                  <IconSharing />
-                  <span>Data Sharing</span>
-                </NavLinkSidebar>
-              </li>
-            </ul>
-          </li>
-        </OfflineHide>
-      </NavList>
-    </NavWrapper>
+                <li>
+                  <NavLinkSidebar to={`${projectUrl}/data-sharing`}>
+                    <IconSharing />
+                    <span>Data Sharing</span>
+                  </NavLinkSidebar>
+                </li>
+              </ul>
+            </li>
+          </OfflineHide>
+        </NavList>
+      </NavWrapper>
+    )
   )
 }
 
