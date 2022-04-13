@@ -68,7 +68,7 @@ const error = {
   pageNotFoundRecovery: 'Make sure the URL is correct.',
   idNotFound: "This item can't be found.",
   idNotFoundRecovery:
-    "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
+    'It might have been deleted, you dont have permission to view it, or the URL might be wrong.',
   homePageNavigation: 'Go back to the home page.',
 }
 

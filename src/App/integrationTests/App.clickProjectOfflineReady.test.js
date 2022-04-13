@@ -82,8 +82,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
 
   expect(project5OfflineCheckboxAfterProjectSetOffline).toBeChecked()
 
-  // dexie includes records that are filtered out in the UI for _deleted and not the current user
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(18)
+  expect((await dexieInstance.collect_records.toArray()).length).toEqual(17)
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.length,
   )
@@ -136,17 +135,16 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
   expect(project5OfflineCheckboxAfterProjectSetOffline).not.toBeChecked()
 
   expect((await dexieInstance.collect_records.toArray()).length).toEqual(
-    mockMermaidData.collect_records.filter((record) => record.project !== '5').length,
+    mockMermaidData.collect_records.filter(record => record.project !== '5').length,
   )
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(
-    mockMermaidData.project_managements.filter(
-      (managementRegime) => managementRegime.project !== '5',
-    ).length,
+    mockMermaidData.project_managements.filter(managementRegime => managementRegime.project !== '5')
+      .length,
   )
   expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
-    mockMermaidData.project_profiles.filter((profile) => profile.project !== '5').length,
+    mockMermaidData.project_profiles.filter(profile => profile.project !== '5').length,
   )
   expect((await dexieInstance.project_sites.toArray()).length).toEqual(
-    mockMermaidData.project_sites.filter((site) => site.project !== '5').length,
+    mockMermaidData.project_sites.filter(site => site.project !== '5').length,
   )
 })

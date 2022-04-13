@@ -529,9 +529,6 @@ const CollectRecordsMixin = (Base) =>
       }
 
       return this._dexieInstance.collect_records.get(id).then((record) => {
-        if (!record) {
-          return undefined
-        }
         if (record.profile !== userId) {
           return Promise.reject(new Error('The current user doesnt own this collect record'))
         }
