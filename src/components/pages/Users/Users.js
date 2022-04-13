@@ -137,7 +137,6 @@ const Users = () => {
   const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
   const projectUserRole = useProjectUserRole()
-  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 

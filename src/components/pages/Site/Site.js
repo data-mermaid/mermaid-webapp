@@ -96,7 +96,7 @@ const Site = () => {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const projectUserRole = useProjectUserRole()
+  const { projectUserRole } = useProjectUserRole()
   const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const _getSupportingData = useEffect(() => {

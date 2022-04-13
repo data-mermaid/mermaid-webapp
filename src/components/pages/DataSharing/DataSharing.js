@@ -81,8 +81,7 @@ const DataSharing = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const projectUserRole = useProjectUserRole()
-  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
+  const { projectUserRole } = useProjectUserRole()
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 

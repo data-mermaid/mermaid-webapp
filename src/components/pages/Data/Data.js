@@ -26,7 +26,6 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageNoData from '../PageNoData'
-import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const getTransectReportProperties = (transect) => {
   return {
@@ -46,8 +45,6 @@ const Data = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const projectUserRole = useProjectUserRole()
-  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 

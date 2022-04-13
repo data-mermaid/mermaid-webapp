@@ -114,7 +114,7 @@ const ManagementRegime = () => {
   const { managementRegimeId, projectId } = useParams()
   const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const projectUserRole = useProjectUserRole()
+  const { projectUserRole } = useProjectUserRole()
   const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const _getSupportingData = useEffect(() => {

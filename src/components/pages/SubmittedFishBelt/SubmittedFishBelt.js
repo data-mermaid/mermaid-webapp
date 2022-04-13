@@ -23,7 +23,7 @@ import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservatio
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import { getRecordName } from '../../../library/getRecordName'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -44,8 +44,7 @@ const SubmittedFishBelt = () => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
-  const currentUser = useCurrentUser()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const { projectUserRole } = useProjectUserRole()
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -60,7 +59,6 @@ const SubmittedFishBelt = () => {
           projectId,
           submittedRecordId,
         ),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
@@ -73,7 +71,6 @@ const SubmittedFishBelt = () => {
             genera,
             families,
             submittedRecordResponse,
-            projectProfilesResponse,
           ]) => {
             if (isMounted.current) {
               const updateFishNameOptions = getFishNameOptions({
@@ -94,17 +91,12 @@ const SubmittedFishBelt = () => {
                 'fishbelt_transect',
               )
 
-              const filteredUserProfile = projectProfilesResponse.filter(
-                ({ profile }) => currentUser.id === profile,
-              )[0]
-
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
               setSubmittedRecord(submittedRecordResponse)
               setFishNameOptions(updateFishNameOptions)
               setFishNameConstants(updateFishNameConstants)
-              setCurrentUserProfile(filteredUserProfile)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
@@ -127,7 +119,6 @@ const SubmittedFishBelt = () => {
     projectId,
     isAppOnline,
     isSyncInProgress,
-    currentUser,
   ])
 
   const handleMoveToCollect = () => {
@@ -193,7 +184,7 @@ const SubmittedFishBelt = () => {
             />
             <RowSpaceBetween>
               <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
-              {currentUserProfile.is_admin && (
+              {projectUserRole.is_admin && (
                 <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
                   <IconPen />
                   Edit Sample Unit - move to collect
