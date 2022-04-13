@@ -304,7 +304,6 @@ const Data = () => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
-      showCollectingNav={!isReadOnlyUser}
       content={content}
       toolbar={toolbar}
     />

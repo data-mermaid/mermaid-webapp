@@ -271,7 +271,6 @@ const ManagementRegimes = () => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
-      showCollectingNav={!isReadOnlyUser}
       content={table}
       toolbar={
         <>

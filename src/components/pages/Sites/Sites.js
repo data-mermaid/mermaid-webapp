@@ -256,13 +256,11 @@ const Sites = () => {
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
-      showCollectingNav={!isReadOnlyUser}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
-      showCollectingNav={!isReadOnlyUser}
       content={table}
       toolbar={
         <>

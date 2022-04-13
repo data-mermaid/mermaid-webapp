@@ -709,7 +709,6 @@ const Users = () => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
-      showCollectingNav={!isReadOnlyUser}
       content={content}
       toolbar={toolbar}
     />

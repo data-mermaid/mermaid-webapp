@@ -326,7 +326,6 @@ const Admin = () => {
     <>
       <ContentPageLayout
         isPageContentLoading={isAppOnline ? isLoading : false}
-        showCollectingNav={!isReadOnlyUser}
         content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
         toolbar={
           <ContentPageToolbarWrapper>
