@@ -24,7 +24,6 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import usePrevious from '../../../library/usePrevious'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 

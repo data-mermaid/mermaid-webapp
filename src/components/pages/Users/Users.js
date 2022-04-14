@@ -46,7 +46,6 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import usePrevious from '../../../library/usePrevious'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
