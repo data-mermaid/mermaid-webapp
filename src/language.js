@@ -6,6 +6,12 @@ const projectCodes = {
   policy: { private: 10, publicSummary: 50 },
 }
 
+const inlineMessage = {
+  ignore: 'ignored',
+  warning: 'warning',
+  error: 'error',
+}
+
 const error = {
   apiDataSync: 'The app was not able to sync data with the API. Please try again.',
   appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
@@ -291,4 +297,5 @@ export default {
   createFishSpecies,
   navigateAwayPrompt,
   getValidationMessage,
+  inlineMessage,
 }

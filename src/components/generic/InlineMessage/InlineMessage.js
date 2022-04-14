@@ -1,37 +1,48 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components/macro'
-import theme from '../../../theme'
-import { hoverState } from '../../../library/styling/mediaQueries'
+import React from 'react'
+import styled from 'styled-components/macro'
 
+import language from '../../../language'
+import theme from '../../../theme'
+
+const MessagePill = styled.span`
+  border: solid 1px ${theme.color.border};
+  text-transform: uppercase;
+  background: ${(props) => theme.color.getMessageColorBackground(props.type)};
+  color: ${theme.color.textColor};
+  padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
+  border-radius: 5px;
+`
 const InlineMessageWrapper = styled.div`
   padding: calc(${theme.spacing.xsmall} + 1px);
-  border-color: ${theme.color.textColor};
-  border-width: 0 0 0 ${theme.spacing.borderLarge};
-  border-style: solid;
+  border: none;
   width: 100%;
   font-size: smaller;
   p {
     margin: 0 0 0 ${theme.spacing.small};
     max-width: ${theme.spacing.maxTextWidth};
+    display: inline;
+    align-self: center;
   }
   a,
   span {
     font-size: inherit;
     color: inherit;
   }
-  background: ${(props) => theme.color.getMessageColorBackground(props.type)};
-  border-color: ${(props) => theme.color.getBorderColor(props.type)};
-  ${hoverState(css`
-    background: ${(props) => theme.color.getHoverColor(props.type)};
-  `)}
 `
 
 const InlineMessage = ({ type, children, className }) => {
   return (
-    <InlineMessageWrapper className={className} type={type}>
-      {children}
-    </InlineMessageWrapper>
+    <>
+      {type && (
+        <MessagePill type={type} className={className}>
+          {language.inlineMessage[type]}
+        </MessagePill>
+      )}
+      <InlineMessageWrapper className={className} type={type}>
+        {children}
+      </InlineMessageWrapper>
+    </>
   )
 }
 

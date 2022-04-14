@@ -512,22 +512,24 @@ test('Validation: user can dismiss record-level warnings ', async () => {
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
-  expect(
-    within(recordLevelValidationsSection).getByText('record level warning'),
-  ).toBeInTheDocument()
+  expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
 
   userEvent.click(
     within(recordLevelValidationsSection).getByRole('button', { name: 'Ignore Warning' }),
   )
 
   await waitFor(() =>
-    expect(
-      within(recordLevelValidationsSection).queryByText('record level warning'),
-    ).not.toBeInTheDocument(),
+    expect(within(recordLevelValidationsSection).queryByText('warning')).not.toBeInTheDocument(),
   )
+  expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
 
-  expect(within(recordLevelValidationsSection).getByRole('button', { name: 'Reset validation' }))
-  expect(within(recordLevelValidationsSection).getByText('Ignored: record level warning'))
+  userEvent.click(
+    within(recordLevelValidationsSection).getByRole('button', { name: 'Reset validation' }),
+  )
+  expect(await within(recordLevelValidationsSection).findByText('warning')).toBeInTheDocument()
+  await waitFor(() =>
+    expect(within(recordLevelValidationsSection).queryByText('ignored')).not.toBeInTheDocument(),
+  )
 
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
