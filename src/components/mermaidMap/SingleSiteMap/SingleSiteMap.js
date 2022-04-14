@@ -81,7 +81,7 @@ const SingleSiteMap = ({
     ) {
       map.current.jumpTo({
         center: [formLongitudeValue, formLatitudeValue],
-        zoom: defaultZoom,
+        zoom: map.current.getZoom(),
       })
     }
   }, [formLatitudeValue, formLongitudeValue])
