@@ -3,32 +3,33 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-  reactTableNaturalSortDates,
-} from '../../generic/Table/reactTableNaturalSort'
 import { ContentPageLayout } from '../../Layout'
-import { H2 } from '../../generic/text'
-import { ToolBarRow } from '../../generic/positioning'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
+import { getToastArguments } from '../../../library/getToastArguments'
+import { H2 } from '../../generic/text'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
+import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import { ToolBarRow } from '../../generic/positioning'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
-import { getToastArguments } from '../../../library/getToastArguments'
+import PageNoData from '../PageNoData'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import {
+  reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
+  reactTableNaturalSortDates,
+} from '../../generic/Table/reactTableNaturalSort'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
-import PageNoData from '../PageNoData'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -37,15 +38,19 @@ const Collect = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
   const currentUser = useCurrentUser()
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
   const _getCollectRecords = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress && currentUser) {
       Promise.all([
-        databaseSwitchboardInstance.getCollectRecordsForUIDisplay(projectId),
+        databaseSwitchboardInstance.getCollectRecordsForUIDisplay({
+          projectId,
+          userId: currentUser.id,
+        }),
         databaseSwitchboardInstance.getProject(projectId),
       ])
 
@@ -62,7 +67,7 @@ const Collect = () => {
           toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, currentUser])
 
   const currentProjectPath = useCurrentProjectPath()
 
@@ -146,6 +151,7 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
+<<<<<<< HEAD
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -159,6 +165,17 @@ const Collect = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-collectTable`, defaultValue: tableDefaultPrefs })
+=======
+  const tableDefaultSortByColumns = useMemo(
+    () => [
+      {
+        id: 'method',
+        desc: false,
+      },
+    ],
+    [],
+  )
+>>>>>>> develop
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -203,7 +220,7 @@ const Collect = () => {
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -232,7 +249,7 @@ const Collect = () => {
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+              const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
 
               return (
                 <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -248,8 +265,7 @@ const Collect = () => {
                   ))}
                 </Tr>
               )
-            }
-            )}
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
