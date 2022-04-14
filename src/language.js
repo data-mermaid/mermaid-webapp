@@ -245,46 +245,60 @@ const getSystemValidationErrorMessage = (drySubmitContext) => {
   )
 }
 
-const getValidationMessage = (validation) => {
+const getDuplicateSampleUnitLink = (duplicateTransectMethodContext, projectId) => {
+  const linkToSampleUnit = `/projects/${projectId}/data/fishbelt/${duplicateTransectMethodContext}`
+
+  return (
+    <span>
+      Duplicate sample unit <a href={linkToSampleUnit}>{duplicateTransectMethodContext}</a>
+    </span>
+  )
+}
+
+const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
   const validationTexts = {
-    site_not_found: () => 'Site record not available for similarity validation',
-    not_unique_site: () => 'Site: Similar records detected',
-    management_not_found: () => 'Management Regime record not available for similarity validation',
-    not_unique_management: () => 'Management Regime: Similar records detected',
-    minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
-    too_few_observations: () => `Fewer than ${context?.observation_count_range[0]} observations`,
-    too_many_observations: () => `Greater than ${context?.observation_count_range[1]} observations`,
-    low_density: () => `Fish biomass less than ${context?.biomass_range[1]} kg/ha`,
-    high_density: () => `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`,
+    all_equal: () => 'All observations are the same',
+    duplicate_fishbelt_transect: () =>
+      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
+    duplicate_quadrat_collection: () =>
+      `Duplicate sample unit ${context?.duplicate_transect_method}`,
+    duplicate_transect: () => 'Transect already exists',
+    duplicate_values: () => 'Duplicate',
+    exceed_total_colonies: () => 'Maximum number of colonies exceeded',
+    future_sample_date: () => 'Sample date is in the future',
     len_surveyed_out_of_range: () =>
       `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
+    low_density: () => `Fish biomass less than ${context?.biomass_range[1]} kg/ha`,
+    management_not_found: () => 'Management Regime record not available for similarity validation',
     max_depth: () =>
       `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`,
-    invalid_depth: () => 'Invalid depth',
-    invalid_fish_count: () => 'Invalid fish count',
-    invalid_fishbelt_transect: () => 'Invalid sample unit',
-    invalid_quadrat_collection: () => 'Invalid sample unit',
-    future_sample_date: () => 'Sample date is in the future',
-    sample_time_out_of_range: () =>
-      `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
+    max_fish_size: () => 'Fish size is larger than species max size',
+    minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
     no_region_match: () => 'Attributes outside of site region',
     not_part_of_fish_family_subset: () =>
       'There are fish that are not part of project defined fish families',
     not_positive_integer: () => 'Value is not greater or equal to zero',
-    all_equal: () => 'All observations are the same',
-    duplicate_transect: () => 'Transect already exists',
-    duplicate_fishbelt_transect: () =>
-      `Duplicate sample unit ${context?.duplicate_transect_method} should be link to sample unit page`,
-    duplicate_quadrat_collection: () =>
-      `Duplicate sample unit ${context?.duplicate_transect_method}`,
+    not_unique_site: () => 'Site: Similar records detected',
+    not_unique_management: () => 'Management Regime: Similar records detected',
+    high_density: () => `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`,
+    invalid_depth: () => 'Invalid depth',
+    invalid_fish_count: () => 'Invalid fish count',
+    invalid_fishbelt_transect: () => 'Invalid sample unit',
+    invalid_percent_value: () => 'Not a valid percent value',
+    invalid_quadrat_collection: () => 'Invalid sample unit',
+    invalid_quadrat_size: () => 'Invalid quadrat size',
+    invalid_sample_date: () => 'Invalid date',
+    required_management_rules: () => 'Management rules are required',
+    sample_time_out_of_range: () =>
+      `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
+    similar_name: () => 'A record with similar name exists',
+    site_not_found: () => 'Site record not available for similarity validation',
+    too_many_observations: () => `Greater than ${context?.observation_count_range[1]} observations`,
+    too_few_observations: () => `Fewer than ${context?.observation_count_range[0]} observations`,
     unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
     value_not_set: () => 'Value is not set',
-    similar_name: () => 'A record with similar name exists',
-    duplicate_values: () => 'Duplicate',
-    exceed_total_colonies: () => 'Maximum number of colonies exceeded',
-    max_fish_size: () => 'Fish size is larger than species max size',
     default: () => code || name,
   }
 
