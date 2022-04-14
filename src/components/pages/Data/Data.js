@@ -21,7 +21,6 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import usePrevious from '../../../library/usePrevious'
 import DataToolbarSection from './DataToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -157,7 +156,7 @@ const Data = () => {
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences(`${currentUser.id}-dataSubmittedTable`, tableDefaultPrefs)
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-dataSubmittedTable`, defaultValue: tableDefaultPrefs })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -214,11 +213,11 @@ const Data = () => {
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs('sortBy', sortBy)
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
 
   const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs('globalFilter', globalFilter)
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
   const handleExportToCSV = (transect) => {

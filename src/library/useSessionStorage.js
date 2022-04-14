@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import usePrevious from './usePrevious'
 
-const useSessionStorage = (key, initialValue = undefined, raw = false) => {
+const useSessionStorage = ({ key, initialValue = undefined, raw = false, }) => {
   const [state, setState] = useState(() => {
     try {
       const sessionStorageValue = window.sessionStorage.getItem(key)

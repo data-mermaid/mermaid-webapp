@@ -528,7 +528,7 @@ const Users = () => {
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences(`${currentUser.id}-usersTable`, tableDefaultPrefs)
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-usersTable`, defaultValue: tableDefaultPrefs })
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -585,11 +585,11 @@ const Users = () => {
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs('sortBy', sortBy)
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
 
   const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs('globalFilter', globalFilter)
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
   const table = (

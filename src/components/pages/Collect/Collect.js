@@ -158,7 +158,7 @@ const Collect = () => {
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences(`${currentUser.id}-collectTable`, tableDefaultPrefs)
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-collectTable`, defaultValue: tableDefaultPrefs })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -219,12 +219,11 @@ const Collect = () => {
   // const previousGlobalFilter = usePrevious(globalFilter)
 
   const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs('sortBy', sortBy)
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
 
   const _setFilterPrefs = useEffect(() => {
-    console.log(globalFilter)
-    handleSetTableUserPrefs('globalFilter', globalFilter)
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
   const table = collectRecordsForUiDisplay.length ? (

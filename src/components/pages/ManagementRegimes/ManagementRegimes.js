@@ -149,7 +149,7 @@ const ManagementRegimes = () => {
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences(`${currentUser.id}-managementRegimesTable`, tableDefaultPrefs)
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-managementRegimesTable`, defaultValue: tableDefaultPrefs })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.estYear']
@@ -202,11 +202,11 @@ const ManagementRegimes = () => {
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs('sortBy', sortBy)
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
 
   const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs('globalFilter', globalFilter)
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
   const table = managementRegimeRecordsForUiDisplay.length ? (

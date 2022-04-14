@@ -2,13 +2,13 @@ import { useCallback } from 'react'
 import useSessionStorage from '../../../library/useSessionStorage'
 import usePrevious from '../../../library/usePrevious'
 
-const usePersistUserTablePreferences = (key, defaultValue = undefined) => {
+const usePersistUserTablePreferences = ({ key, defaultValue = undefined }) => {
   // Persist the table user preferences in sessionStorage
-  const [tableUserPreferences, setTableUserPreferences] = useSessionStorage(key, defaultValue)
+  const [tableUserPreferences, setTableUserPreferences] = useSessionStorage({ key, initialValue: defaultValue })
   // Set the previous value
   const previousPreferences = usePrevious(tableUserPreferences)
 
-  const handleSetTableUserPreferences = useCallback((propertyKey, currentValue) => {
+  const handleSetTableUserPreferences = useCallback(({ propertyKey, currentValue }) => {
     const previousPreferencesPropExists = previousPreferences
       && Object.prototype.hasOwnProperty.call(previousPreferences, propertyKey)
     const valueChanged = !previousPreferencesPropExists
