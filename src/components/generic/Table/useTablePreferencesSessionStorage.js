@@ -5,14 +5,12 @@ const usePersistUserTablePreferences = (key, defaultValue = undefined) => {
   // Persist the table user preferences in sessionStorage
   const [tableUserPreferences, setTableUserPreferences] = useSessionStorage(key, defaultValue)
 
-  /** Update the relevant table user preferences.
-   * Only updates user preferences if the value has changed
-   */
   const handleSetTableUserPreferences = useCallback((propertyKey, currentValue, previousValue) => {
     const valueChanged =
       JSON.stringify(currentValue) !== JSON.stringify(previousValue)
 
     if (valueChanged) {
+      // Update the preference specified in the key
       setTableUserPreferences({
         ...tableUserPreferences,
         [propertyKey]: currentValue
