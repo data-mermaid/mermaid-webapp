@@ -16,12 +16,6 @@ const CollectRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
-    #validationTypeLabel = {
-      ok: 'Valid',
-      error: 'Errors',
-      warning: 'Warnings',
-    }
-
     #getIsFishBelt = function getIsFishBelt(record) {
       return record?.data?.protocol === 'fishbelt'
     }
@@ -79,12 +73,6 @@ const CollectRecordsMixin = (Base) =>
             }, [])
             .join(', ')
         : undefined
-    }
-
-    #getStatusLabel = function getStatusLabel(record) {
-      const { validations } = record
-
-      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
     }
 
     #getSizeLabel = function getSizeLabel(record, choices) {
@@ -583,8 +571,7 @@ const CollectRecordsMixin = (Base) =>
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 depth: this.#getDepthLabel(record),
                 sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
-                observers: this.#getObserversLabel(record),
-                status: this.#getStatusLabel(record),
+                observers: this.#getObserversLabel(record)
               },
             }))
           })
