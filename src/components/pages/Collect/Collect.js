@@ -26,7 +26,6 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
-import usePrevious from '../../../library/usePrevious'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
@@ -216,16 +215,17 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const previousSortBy = usePrevious(sortBy)
-  const previousGlobalFilter = usePrevious(globalFilter)
+  // const previousSortBy = usePrevious(sortBy)
+  // const previousGlobalFilter = usePrevious(globalFilter)
 
   const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs('sortBy', sortBy, previousSortBy)
-  }, [sortBy, previousSortBy, handleSetTableUserPrefs])
+    handleSetTableUserPrefs('sortBy', sortBy)
+  }, [sortBy, handleSetTableUserPrefs])
 
   const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs('globalFilter', globalFilter, previousGlobalFilter)
-  }, [globalFilter, previousGlobalFilter, handleSetTableUserPrefs])
+    console.log(globalFilter)
+    handleSetTableUserPrefs('globalFilter', globalFilter)
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const table = collectRecordsForUiDisplay.length ? (
     <>

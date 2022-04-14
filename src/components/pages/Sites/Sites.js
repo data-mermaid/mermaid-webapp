@@ -188,16 +188,13 @@ const Sites = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  const previousSortBy = usePrevious(sortBy)
-  const previousGlobalFilter = usePrevious(globalFilter)
-
   const _setSortByPrefs = useEffect(() => {
-    handleSetTableUserPrefs('sortBy', sortBy, previousSortBy)
-  }, [sortBy, previousSortBy, handleSetTableUserPrefs])
+    handleSetTableUserPrefs('sortBy', sortBy)
+  }, [sortBy, handleSetTableUserPrefs])
 
   const _setFilterPrefs = useEffect(() => {
-    handleSetTableUserPrefs('globalFilter', globalFilter, previousGlobalFilter)
-  }, [globalFilter, previousGlobalFilter, handleSetTableUserPrefs])
+    handleSetTableUserPrefs('globalFilter', globalFilter)
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const table = siteRecordsForUiDisplay.length ? (
     <>
