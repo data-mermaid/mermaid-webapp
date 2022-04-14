@@ -10,7 +10,6 @@ import { H2 } from '../../generic/text'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
@@ -40,7 +39,6 @@ const Collect = () => {
   const { projectId } = useParams()
   const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
-  const currentUser = useCurrentUser()
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -151,7 +149,6 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
-<<<<<<< HEAD
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -165,17 +162,6 @@ const Collect = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-collectTable`, defaultValue: tableDefaultPrefs })
-=======
-  const tableDefaultSortByColumns = useMemo(
-    () => [
-      {
-        id: 'method',
-        desc: false,
-      },
-    ],
-    [],
-  )
->>>>>>> develop
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
