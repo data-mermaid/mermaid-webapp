@@ -20,7 +20,7 @@ import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import useTablePreferencesSessionStorage from '../../generic/Table/useTablePreferencesSessionStorage'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import usePrevious from '../../../library/usePrevious'
 import DataToolbarSection from './DataToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
@@ -157,7 +157,7 @@ const Data = () => {
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = useTablePreferencesSessionStorage(`${currentUser.id}-dataSubmittedTable`, tableDefaultPrefs)
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences(`${currentUser.id}-dataSubmittedTable`, tableDefaultPrefs)
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [

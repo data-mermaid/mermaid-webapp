@@ -23,7 +23,7 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
-import useTablePreferencesSessionStorage from '../../generic/Table/useTablePreferencesSessionStorage'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import usePrevious from '../../../library/usePrevious'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
@@ -149,7 +149,7 @@ const ManagementRegimes = () => {
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = useTablePreferencesSessionStorage(`${currentUser.id}-managementRegimesTable`, tableDefaultPrefs)
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences(`${currentUser.id}-managementRegimesTable`, tableDefaultPrefs)
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.estYear']

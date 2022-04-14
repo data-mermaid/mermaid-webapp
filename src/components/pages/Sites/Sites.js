@@ -27,7 +27,7 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePrevious from '../../../library/usePrevious'
-import useTablePreferencesSessionStorage from '../../generic/Table/useTablePreferencesSessionStorage'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
@@ -123,7 +123,7 @@ const Sites = () => {
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = useTablePreferencesSessionStorage(`${currentUser.id}-sitesTable`, tableDefaultPrefs)
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences(`${currentUser.id}-sitesTable`, tableDefaultPrefs)
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {

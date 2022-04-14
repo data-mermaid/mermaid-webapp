@@ -45,7 +45,7 @@ import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import useTablePreferencesSessionStorage from '../../generic/Table/useTablePreferencesSessionStorage'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import usePrevious from '../../../library/usePrevious'
 
 const ToolbarRowWrapper = styled('div')`
@@ -528,7 +528,7 @@ const Users = () => {
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = useTablePreferencesSessionStorage(`${currentUser.id}-usersTable`, tableDefaultPrefs)
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences(`${currentUser.id}-usersTable`, tableDefaultPrefs)
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
