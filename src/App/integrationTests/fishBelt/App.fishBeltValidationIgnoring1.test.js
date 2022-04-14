@@ -523,7 +523,7 @@ test('Validation: user can dismiss record-level warnings ', async () => {
   )
 
   expect(within(recordLevelValidationsSection).getByRole('button', { name: 'Reset validation' }))
-  expect(within(recordLevelValidationsSection).getByText('Ignored: record level warning'))
+  expect(within(recordLevelValidationsSection).getByText('record level warning'))
 
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 

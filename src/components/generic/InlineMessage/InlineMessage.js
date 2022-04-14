@@ -2,8 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../../theme'
-import { hoverState } from '../../../library/styling/mediaQueries'
+import language from '../../../language'
 
+const getWarningLable = (props) => language.inlineMessage[props.type]
 const InlineMessageWrapper = styled.div`
   padding: calc(${theme.spacing.xsmall} + 1px);
   border-color: ${theme.color.textColor};
@@ -14,17 +15,24 @@ const InlineMessageWrapper = styled.div`
   p {
     margin: 0 0 0 ${theme.spacing.small};
     max-width: ${theme.spacing.maxTextWidth};
+    display: inline;
+    align-self: center;
   }
   a,
   span {
     font-size: inherit;
     color: inherit;
   }
-  background: ${(props) => theme.color.getMessageColorBackground(props.type)};
-  border-color: ${(props) => theme.color.getBorderColor(props.type)};
-  ${hoverState(css`
-    background: ${(props) => theme.color.getHoverColor(props.type)};
-  `)}
+  border: none;
+  &:before {
+    content: '${getWarningLable}';
+    border: solid 1px ${theme.color.border};
+    text-transform: uppercase;
+    background: ${(props) => theme.color.getMessageColorBackground(props.type)};
+    color: ${theme.color.textColor};
+    padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
+    border-radius: 5px;
+  }
 `
 
 const InlineMessage = ({ type, children, className }) => {

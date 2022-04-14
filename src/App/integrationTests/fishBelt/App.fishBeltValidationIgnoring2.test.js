@@ -183,9 +183,7 @@ test('user can reset dismissed record-level warnings', async () => {
 
   const recordLevelValidationsSection = screen.getByTestId('record-level-validations')
 
-  expect(
-    within(recordLevelValidationsSection).getByText('Ignored: record level ignore'),
-  ).toBeInTheDocument()
+  expect(within(recordLevelValidationsSection).getByText('record level ignore')).toBeInTheDocument()
 
   userEvent.click(
     await within(recordLevelValidationsSection).findByRole('button', {
@@ -195,7 +193,7 @@ test('user can reset dismissed record-level warnings', async () => {
 
   await waitFor(() =>
     expect(
-      within(recordLevelValidationsSection).queryByText('Ignored: record level ignore'),
+      within(recordLevelValidationsSection).queryByText('record level ignore'),
     ).not.toBeInTheDocument(),
   )
   expect(within(recordLevelValidationsSection).getByText('record level ignore')).toBeInTheDocument()
