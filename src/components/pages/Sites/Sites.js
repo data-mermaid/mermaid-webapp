@@ -25,7 +25,9 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
@@ -41,6 +43,7 @@ const Sites = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
+  const currentUser = useCurrentUser()
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -109,15 +112,22 @@ const Sites = () => {
     [siteRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(
-    () => [
-      {
-        id: 'name',
-        desc: false,
-      },
-    ],
-    [],
-  )
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+      globalFilter: '',
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-sitesTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -157,7 +167,7 @@ const Sites = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
   } = useTable(
     {
@@ -165,7 +175,8 @@ const Sites = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns,
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -180,6 +191,14 @@ const Sites = () => {
   }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
+  }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const table = siteRecordsForUiDisplay.length ? (
     <>
@@ -264,6 +283,7 @@ const Sites = () => {
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.siteTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <ToolbarButtonWrapper>
