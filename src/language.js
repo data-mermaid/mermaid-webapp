@@ -232,15 +232,15 @@ const navigateAwayPrompt =
 const getSystemValidationErrorMessage = (drySubmitContext) => {
   const errors = Object.entries(drySubmitContext)
   const errorMap = errors.map((errorPart) => (
-    <li key={errorPart[0]}>
+    <div key={errorPart[0]}>
       {errorPart[0]}: {errorPart[1]}
-    </li>
+    </div>
   ))
 
   return (
     <>
       <div>System validation error: </div>
-      <ul>{errorMap}</ul>
+      {errorMap}
     </>
   )
 }
