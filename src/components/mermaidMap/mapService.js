@@ -296,10 +296,10 @@ export const loadMapMarkersLayer = (map) => {
     source: 'mapMarkers',
     type: 'circle',
     paint: {
-      'circle-radius': 3,
-      'circle-color': '#223b53',
+      'circle-radius': 5,
+      'circle-color': '#f0e0b3',
       'circle-stroke-color': '#ff0000',
-      'circle-stroke-width': 2,
+      'circle-stroke-width': 3,
       'circle-opacity': 0.8,
     },
   })
