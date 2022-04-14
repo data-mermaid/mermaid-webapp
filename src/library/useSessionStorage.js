@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import usePrevious from './usePrevious'
 
-const useSessionStorage = ({ key, initialValue = undefined, raw = false, }) => {
-  const [state, setState] = useState(() => {
+const useSessionStorage = ({ key, initialValue = undefined, raw = false }) => {
+  const getInitialState = () => {
     try {
       const sessionStorageValue = window.sessionStorage.getItem(key)
 
@@ -21,7 +21,9 @@ const useSessionStorage = ({ key, initialValue = undefined, raw = false, }) => {
       // JSON.parse and JSON.stringify can throw, too.
       return initialValue
     }
-  })
+  }
+
+  const [state, setState] = useState(getInitialState)
 
   // Track the previous state so we compare it in useEffect
   const previousState = usePrevious(state)
