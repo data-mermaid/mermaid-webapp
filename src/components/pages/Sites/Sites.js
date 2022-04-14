@@ -24,6 +24,7 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
@@ -39,6 +40,7 @@ const Sites = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const { isAppOnline } = useOnlineStatus()
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -240,7 +242,7 @@ const Sites = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
-      <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />
+      {isAppOnline && <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />}
     </>
   ) : (
     <PageNoData

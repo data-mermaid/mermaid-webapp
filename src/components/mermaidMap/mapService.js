@@ -304,3 +304,23 @@ export const loadMapMarkersLayer = (map) => {
     },
   })
 }
+
+export const handleMapOnWheel = (mapCurrent, handleZoomDisplayHelpText) => {
+  mapCurrent.on('wheel', (e) => {
+    if (e.originalEvent.ctrlKey) {
+      e.originalEvent.preventDefault()
+      handleZoomDisplayHelpText(false)
+      if (!mapCurrent.scrollZoom._enabled) {
+        mapCurrent.scrollZoom.enable()
+      }
+    } else {
+      if (mapCurrent.scrollZoom._enabled) {
+        mapCurrent.scrollZoom.disable()
+      }
+      handleZoomDisplayHelpText(true)
+      setTimeout(() => {
+        handleZoomDisplayHelpText(false)
+      }, 1500)
+    }
+  })
+}

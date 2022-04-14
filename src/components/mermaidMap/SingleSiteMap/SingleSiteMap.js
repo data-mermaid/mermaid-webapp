@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
+import language from '../../../language'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
   satelliteBaseMap,
@@ -8,8 +9,9 @@ import {
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
+  handleMapOnWheel,
 } from '../mapService'
-import { MapInputRow, MapContainer, MapWrapper } from '../Map.styles'
+import { MapInputRow, MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 
 const defaultCenter = [0, 0]
 const defaultZoom = 11
@@ -23,6 +25,9 @@ const SingleSiteMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
   const recordMarker = useRef(null)
+  const [displayHelpText, setDisplayHelpText] = useState(false)
+
+  const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
 
   const _initializeMap = useEffect(() => {
     map.current = new maplibregl.Map({
@@ -42,6 +47,7 @@ const SingleSiteMap = ({
 
     map.current.on('load', () => {
       loadACALayers(map.current)
+      handleMapOnWheel(map.current, handleZoomDisplayHelpText)
     })
 
     // clean up on unmount
@@ -98,6 +104,9 @@ const SingleSiteMap = ({
     <MapInputRow>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
+        {displayHelpText && (
+          <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
+        )}
         <AtlasLegendDrawer
           updateCoralMosaicLayer={updateCoralMosaicLayer}
           updateGeomorphicLayers={updateGeomorphicLayers}
