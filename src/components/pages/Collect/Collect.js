@@ -24,7 +24,9 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 
@@ -35,6 +37,7 @@ const Collect = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
@@ -143,12 +146,22 @@ const Collect = () => {
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(() => [
-    {
-      id: 'method',
-      desc: false,
-    },
-  ], [])
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'method',
+          desc: false,
+        },
+      ],
+      globalFilter: '',
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-collectTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -180,19 +193,20 @@ const Collect = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
     setGlobalFilter,
+    state: { pageIndex, pageSize, sortBy, globalFilter },
   } = useTable(
     {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -204,13 +218,24 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  // const previousSortBy = usePrevious(sortBy)
+  // const previousGlobalFilter = usePrevious(globalFilter)
+
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
+  }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
+
   const table = collectRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+              const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
 
               return (
                 <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -226,8 +251,7 @@ const Collect = () => {
                   ))}
                 </Tr>
               )
-            }
-            )}
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -282,6 +306,7 @@ const Collect = () => {
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.collectTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <AddSampleUnitButton />

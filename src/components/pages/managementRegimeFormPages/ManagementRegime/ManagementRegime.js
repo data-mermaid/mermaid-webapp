@@ -121,6 +121,7 @@ const ManagementRegime = () => {
           formikActions.resetForm({ values: formikValues })
         })
         .catch(() => {
+          setSaveButtonState(buttonGroupStates.unsaved)
           toast.error(language.error.managementRegimeSave)
         })
     },

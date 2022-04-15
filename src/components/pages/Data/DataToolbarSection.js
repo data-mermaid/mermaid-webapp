@@ -24,7 +24,7 @@ const DropdownItemStyle = styled.button`
   `)}
 `
 
-const DataToolbarSection = ({ name, handleGlobalFilterChange, handleExportToCSV }) => {
+const DataToolbarSection = ({ name, handleGlobalFilterChange, handleExportToCSV, filterValue }) => {
   const label = (
     <>
       <IconDownload /> Export To CSV
@@ -35,7 +35,7 @@ const DataToolbarSection = ({ name, handleGlobalFilterChange, handleExportToCSV 
     <>
       <H2>Submitted</H2>
       <ToolBarRow>
-        <FilterSearchToolbar name={name} handleGlobalFilterChange={handleGlobalFilterChange} />
+        <FilterSearchToolbar name={name} handleGlobalFilterChange={handleGlobalFilterChange} value={filterValue} />
         <ButtonSecondaryDropdown label={label}>
           <Column as="nav" data-testid="export-to-csv">
             <DropdownItemStyle as="span" onClick={() => handleExportToCSV('Fish Belt')}>
@@ -53,10 +53,15 @@ const DataToolbarSection = ({ name, handleGlobalFilterChange, handleExportToCSV 
   )
 }
 
+DataToolbarSection.defaultProps = {
+  filterValue: undefined
+}
+
 DataToolbarSection.propTypes = {
   name: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
   handleExportToCSV: PropTypes.func.isRequired,
+  filterValue: PropTypes.string,
 }
 
 export default DataToolbarSection
