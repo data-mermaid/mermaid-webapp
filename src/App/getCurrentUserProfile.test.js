@@ -10,10 +10,11 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const getAccessToken = async () => 'fake token'
 
 test('getCurrentUserProfile online returns data from the API', async () => {
+  const { dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
   const userProfile = await getCurrentUserProfile({
     apiBaseUrl,
     getAccessToken,
-    dexieInstance: getMockDexieInstanceAllSuccess(),
+    dexieCurrentUserInstance,
     isMermaidAuthenticated: true,
     isAppOnline: true,
   })
@@ -26,6 +27,8 @@ test('getCurrentUserProfile online returns data from the API', async () => {
   })
 })
 test('getCurrentUserProfile online returns error message upon API error', async () => {
+  const { dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+
   mockMermaidApiAllSuccessful.use(
     rest.get(`${apiBaseUrl}/me`, (req, res, ctx) => {
       return res(ctx.status(500))
@@ -38,7 +41,7 @@ test('getCurrentUserProfile online returns error message upon API error', async 
     await getCurrentUserProfile({
       apiBaseUrl: process.env.REACT_APP_MERMAID_API,
       getAccessToken,
-      dexieInstance: getMockDexieInstanceAllSuccess(),
+      dexieCurrentUserInstance,
       isMermaidAuthenticated: true,
       isAppOnline: true,
     })
@@ -47,10 +50,12 @@ test('getCurrentUserProfile online returns error message upon API error', async 
   }
 })
 test('getCurrentUserProfile offline returns data from local storage', async () => {
+  const { dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+
   const userProfile = await getCurrentUserProfile({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken,
-    dexieInstance: getMockDexieInstanceAllSuccess(),
+    dexieCurrentUserInstance,
     isMermaidAuthenticated: true,
     isAppOnline: false,
   })
@@ -69,7 +74,7 @@ test('getCurrentUserProfile offline returns error message upon dexie error', asy
     await getCurrentUserProfile({
       apiBaseUrl: process.env.REACT_APP_MERMAID_API,
       getAccessToken,
-      dexieInstance: getMockDexieInstanceThatProducesErrors(),
+      dexieCurrentUserInstance: getMockDexieInstanceThatProducesErrors(),
       isMermaidAuthenticated: true,
       isAppOnline: false,
     })

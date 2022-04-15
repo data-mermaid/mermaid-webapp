@@ -2,15 +2,16 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import React, { useMemo } from 'react'
 
+import { CurrentUserProvider } from './CurrentUserContext'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
 import { useInitializeCurrentUser } from './useInitializeCurrentUser'
 import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
 import { useSyncStatus } from './mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
+import dexieInstancePropTypes from './dexieInstancePropTypes'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
@@ -21,20 +22,19 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
-import { CurrentUserProvider } from './CurrentUserContext'
 
-function App({ dexieInstance }) {
+function App({ dexiePerUserDataInstance, dexieCurrentUserInstance }) {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
-    dexieInstance,
+    dexieCurrentUserInstance,
   })
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
     getAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
     isMounted,
     isAppOnline,
   })
@@ -43,14 +43,14 @@ function App({ dexieInstance }) {
 
   const apiSyncInstance = useMemo(() => {
     return new SyncApiDataIntoOfflineStorage({
-      dexieInstance,
+      dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken,
     })
-  }, [dexieInstance, apiBaseUrl, getAccessToken])
+  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken])
 
   const databaseSwitchboardInstance = useMemo(() => {
-    const areDependenciesReady = !!dexieInstance && apiBaseUrl && isMermaidAuthenticated
+    const areDependenciesReady = !!dexiePerUserDataInstance && apiBaseUrl && isMermaidAuthenticated
 
     return !areDependenciesReady
       ? undefined
@@ -58,7 +58,7 @@ function App({ dexieInstance }) {
           apiBaseUrl,
           apiSyncInstance,
           getAccessToken,
-          dexieInstance,
+          dexiePerUserDataInstance,
           isMermaidAuthenticated,
           isAppOnline,
         })
@@ -66,7 +66,7 @@ function App({ dexieInstance }) {
     getAccessToken,
     isMermaidAuthenticated,
     isAppOnline,
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl,
     apiSyncInstance,
   ])
@@ -74,7 +74,7 @@ function App({ dexieInstance }) {
   const currentUser = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
-    dexieInstance,
+    dexieCurrentUserInstance,
     isMermaidAuthenticated,
     isAppOnline,
   })
@@ -135,7 +135,8 @@ function App({ dexieInstance }) {
 }
 
 App.propTypes = {
-  dexieInstance: dexieInstancePropTypes.isRequired,
+  dexiePerUserDataInstance: dexieInstancePropTypes.isRequired,
+  dexieCurrentUserInstance: dexieInstancePropTypes.isRequired,
 }
 
 export default App

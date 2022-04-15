@@ -7,7 +7,7 @@ import getCurrentUserProfile from './getCurrentUserProfile'
 export const useInitializeCurrentUser = ({
   apiBaseUrl,
   getAccessToken,
-  dexieInstance,
+  dexieCurrentUserInstance,
   isMermaidAuthenticated,
   isAppOnline,
 }) => {
@@ -16,11 +16,11 @@ export const useInitializeCurrentUser = ({
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
 
-    if (isMermaidAuthenticated && apiBaseUrl && dexieInstance && isMermaidAuthenticated) {
+    if (isMermaidAuthenticated && apiBaseUrl && dexieCurrentUserInstance) {
       getCurrentUserProfile({
         apiBaseUrl,
         getAccessToken,
-        dexieInstance,
+        dexieCurrentUserInstance,
         isMermaidAuthenticated,
         isAppOnline,
       })
@@ -37,7 +37,7 @@ export const useInitializeCurrentUser = ({
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl, getAccessToken, dexieInstance, isMermaidAuthenticated, isAppOnline])
+  }, [apiBaseUrl, getAccessToken, dexieCurrentUserInstance, isMermaidAuthenticated, isAppOnline])
 
   return currentUser
 }

@@ -6,7 +6,7 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from './SyncStatusContext'
 
-const getProjectIdFromLocation = location => {
+const getProjectIdFromLocation = (location) => {
   const { pathname } = location
 
   const pathNameParts = pathname.split('/')
@@ -19,7 +19,7 @@ const getProjectIdFromLocation = location => {
 export const useInitializeSyncApiDataIntoOfflineStorage = ({
   apiBaseUrl,
   getAccessToken,
-  dexieInstance,
+  dexiePerUserDataInstance,
   isMounted,
   isAppOnline,
 }) => {
@@ -29,11 +29,11 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
   const syncApiDataIntoOfflineStorage = useMemo(
     () =>
       new SyncApiDataIntoOfflineStorage({
-        dexieInstance,
+        dexiePerUserDataInstance,
         apiBaseUrl,
         getAccessToken,
       }),
-    [dexieInstance, apiBaseUrl, getAccessToken],
+    [dexiePerUserDataInstance, apiBaseUrl, getAccessToken],
   )
   const { setIsSyncInProgress, setIsOfflineStorageHydrated, setSyncErrors } = useSyncStatus()
 
@@ -41,19 +41,19 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     const resetSyncErrors = () => {
       setSyncErrors([])
     }
-    const appendSyncError = newError => {
-      setSyncErrors(previousState => [...previousState, newError])
+    const appendSyncError = (newError) => {
+      setSyncErrors((previousState) => [...previousState, newError])
     }
 
     const isOnlineAndReady =
-      apiBaseUrl && dexieInstance && isMounted.current && isAppOnline
+      apiBaseUrl && dexiePerUserDataInstance && isMounted.current && isAppOnline
 
     const projectId = getProjectIdFromLocation(location)
 
     const isProjectPage = !!projectId
 
     const isOfflineAndReadyAndAlreadyInitiated =
-      apiBaseUrl && dexieInstance && isMounted.current && !isAppOnline
+      apiBaseUrl && dexiePerUserDataInstance && isMounted.current && !isAppOnline
 
     const isProjectsListPage =
       location.pathname === '/projects' || location.pathname === '/projects/'
@@ -86,9 +86,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch(() => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(
-            ...getToastArguments(language.error.apiDataSync)
-          )
+          toast.error(...getToastArguments(language.error.apiDataSync))
         })
     }
 
@@ -107,9 +105,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch(() => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(
-            ...getToastArguments(language.error.apiDataSync)
-          )
+          toast.error(...getToastArguments(language.error.apiDataSync))
         })
     }
     if (isNotInitialLoadOnProjectPageAndOnline) {
@@ -126,15 +122,13 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch(() => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(
-            ...getToastArguments(language.error.apiDataSync)
-          )
+          toast.error(...getToastArguments(language.error.apiDataSync))
         })
     }
   }, [
     apiBaseUrl,
+    dexiePerUserDataInstance,
     getAccessToken,
-    dexieInstance,
     isAppOnline,
     isMounted,
     location,

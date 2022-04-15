@@ -12,11 +12,19 @@ import App from '../../App'
 import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
 
 test('Fishbelt observations: tab in count input on last row duplicates row', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/5/collecting/fishbelt/2'],
-  })
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   // loading indicator is weird in integration tests, so we wait for the page title
   await screen.findByTestId('edit-collect-record-form-title')
@@ -49,11 +57,19 @@ test('Fishbelt observations: tab in count input on last row duplicates row', asy
 })
 
 test('Fishbelt observations: enter key adds a new empty row below row where key pressed', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/5/collecting/fishbelt/2'],
-  })
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   // loading indicator is weird in integration tests, so we wait for the page title
   await screen.findByTestId('edit-collect-record-form-title')

@@ -129,9 +129,10 @@ const CollectRecordsMixin = (Base) =>
 
       if (this._isOnlineAuthenticatedAndReady) {
         // put it in IDB just in case the network craps out before the API can return
-        await this._dexieInstance.collect_records.put(recordToSubmit)
+        await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
 
-        return axios.post(
+        return axios
+          .post(
             `${this._apiBaseUrl}/push/`,
             {
               collect_records: [recordToSubmit],
@@ -140,7 +141,7 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
-              ...await getAuthorizationHeaders(this._getAccessToken)
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
           .then((response) => {
@@ -169,7 +170,9 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.put(recordToSubmit).then(() => recordToSubmit)
+        return this._dexiePerUserDataInstance.collect_records
+          .put(recordToSubmit)
+          .then(() => recordToSubmit)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -192,9 +195,10 @@ const CollectRecordsMixin = (Base) =>
 
       if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         // put it in IDB just in case the network craps out before the API can return
-        await this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
+        await this._dexiePerUserDataInstance.collect_records.put(recordMarkedToBeDeleted)
 
-        return axios.post(
+        return axios
+          .post(
             `${this._apiBaseUrl}/push/`,
             {
               collect_records: [recordMarkedToBeDeleted],
@@ -203,8 +207,7 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
-              ...await getAuthorizationHeaders(this._getAccessToken)
-
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
           .then((apiPushResponse) => {
@@ -229,13 +232,13 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (hasCorrespondingRecordInTheApi && this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
+        return this._dexiePerUserDataInstance.collect_records.put(recordMarkedToBeDeleted)
       }
       if (
         !hasCorrespondingRecordInTheApi &&
         (this._isOnlineAuthenticatedAndReady || this._isOfflineAuthenticatedAndReady)
       ) {
-        return this._dexieInstance.collect_records.delete(record.id)
+        return this._dexiePerUserDataInstance.collect_records.delete(record.id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -247,12 +250,16 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        return axios.post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`, {
-            ids: [recordId],
-            version: '2',
-          },
-          await getAuthorizationHeaders(this._getAccessToken)
-        ).then((response) => {
+        return axios
+          .post(
+            `${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`,
+            {
+              ids: [recordId],
+              version: '2',
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseStatusSuccessful) {
@@ -278,11 +285,15 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        return axios.post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`, {
-            ids: [recordId],
-            version: '2',
-          },
-          await getAuthorizationHeaders(this._getAccessToken))
+        return axios
+          .post(
+            `${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`,
+            {
+              ids: [recordId],
+              version: '2',
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
           .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
@@ -317,7 +328,7 @@ const CollectRecordsMixin = (Base) =>
         value: recordLevelValidationsWithIgnored,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithIgnoredValidations)
         .then(() => recordWithIgnoredValidations)
     }
@@ -355,7 +366,7 @@ const CollectRecordsMixin = (Base) =>
         value: ignoredValidations,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithIgnoredValidations)
         .then(() => recordWithIgnoredValidations)
     }
@@ -370,7 +381,7 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const recordToOperateOn = await this._dexieInstance.collect_records.get(recordId)
+      const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
       const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
 
@@ -397,7 +408,7 @@ const CollectRecordsMixin = (Base) =>
       })
 
       // user form will be dirty, and a save will cause a push to the api
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithIgnoredObservationValidations)
         .then(() => recordWithIgnoredObservationValidations)
     }
@@ -427,7 +438,7 @@ const CollectRecordsMixin = (Base) =>
         value: recordLevelValidationsWithReset,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithResetValidation)
         .then(() => recordWithResetValidation)
     }
@@ -465,7 +476,7 @@ const CollectRecordsMixin = (Base) =>
         value: resettedValidations,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithResetValidations)
         .then(() => recordWithResetValidations)
     }
@@ -480,7 +491,7 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const recordToOperateOn = await this._dexieInstance.collect_records.get(recordId)
+      const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
       const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
 
@@ -505,7 +516,7 @@ const CollectRecordsMixin = (Base) =>
         value: observationsValidationsWithReset,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithResetObservationValidations)
         .then(() => recordWithResetObservationValidations)
     }
@@ -519,7 +530,7 @@ const CollectRecordsMixin = (Base) =>
         Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._dexieInstance.collect_records.get(id)
+      return this._dexiePerUserDataInstance.collect_records.get(id)
     }
 
     getCollectRecordsWithoutOfflineDeleted = function getCollectRecordsWithoutOfflineDeleted(
@@ -530,7 +541,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records
+        return this._dexiePerUserDataInstance.collect_records
           .toArray()
           .then((records) =>
             records.filter((record) => record.project === projectId && !record._deleted),

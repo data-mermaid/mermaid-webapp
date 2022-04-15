@@ -11,7 +11,14 @@ import {
 import App from '../App'
 
 test('App renders shows the users name from the API for an online and authenticated user', async () => {
-  renderAuthenticatedOnline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+  )
 
   // wait for page to load in lieu of being able to test for a loading indicator to have vanished
   expect(await screen.findByText('Projects', { selector: 'h1' }))
@@ -22,14 +29,22 @@ test('App renders shows the users name from the API for an online and authentica
 })
 
 test('App renders shows the users name from offline storage for an offline user who is authenticated when online', async () => {
-  const thing = renderAuthenticatedOffline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+
+  renderAuthenticatedOffline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    { dexiePerUserDataInstance, dexieCurrentUserInstance },
+  )
 
   // wait for page to load in lieu of being able to test for a loading indicator to have vanished
   expect(
-    await thing.findByText('Projects', {
+    await screen.findByText('Projects', {
       selector: 'h1',
     }),
   )
-  await waitFor(() => expect(thing.queryByText('FakeFirstNameOnline')).not.toBeInTheDocument())
-  expect(await thing.findByText('FakeFirstNameOffline'))
+  await waitFor(() => expect(screen.queryByText('FakeFirstNameOnline')).not.toBeInTheDocument())
+  expect(await screen.findByText('FakeFirstNameOffline'))
 })

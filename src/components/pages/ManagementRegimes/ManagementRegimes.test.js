@@ -14,9 +14,9 @@ import {
 import ManagementRegimes from './ManagementRegimes'
 
 test('ManagementRegimes component renders with the expected headers', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -25,7 +25,7 @@ test('ManagementRegimes component renders with the expected headers', async () =
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -48,9 +48,9 @@ test('ManagementRegimes component renders with the expected headers', async () =
 })
 
 test('Management Regime Records table sorts properly by Name column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -59,7 +59,7 @@ test('Management Regime Records table sorts properly by Name column', async () =
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -90,9 +90,9 @@ test('Management Regime Records table sorts properly by Name column', async () =
 })
 
 test('Management Regime Records table sorts properly by Year Est. column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -101,7 +101,7 @@ test('Management Regime Records table sorts properly by Year Est. column', async
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -133,9 +133,9 @@ test('Management Regime Records table sorts properly by Year Est. column', async
 })
 
 test('Management Regime Records table sorts properly by Compliance column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -144,7 +144,7 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -176,9 +176,9 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
 })
 
 test('Management Regime Records table sorts properly by Open Access column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -187,7 +187,7 @@ test('Management Regime Records table sorts properly by Open Access column', asy
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -218,9 +218,9 @@ test('Management Regime Records table sorts properly by Open Access column', asy
 })
 
 test('Management Regime Records table sorts properly by Access Restrictions column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -229,7 +229,7 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -260,9 +260,9 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
 })
 
 test('Management Regime Records table sorts properly by Periodic Closure column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -271,7 +271,7 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -302,9 +302,9 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
 })
 
 test('Management Regime Records table sorts properly by Size Limits column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -313,7 +313,7 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -344,9 +344,9 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
 })
 
 test('Management Regime Records table sorts properly by Gear Restrictions column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -355,7 +355,7 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -386,9 +386,9 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
 })
 
 test('Management Regime Records table sorts properly by Species Restrictions column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -397,7 +397,7 @@ test('Management Regime Records table sorts properly by Species Restrictions col
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -428,9 +428,9 @@ test('Management Regime Records table sorts properly by Species Restrictions col
 })
 
 test('Management Regime Records table sorts properly by No Take column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes">
@@ -439,7 +439,7 @@ test('Management Regime Records table sorts properly by No Take column', async (
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/management-regimes'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 

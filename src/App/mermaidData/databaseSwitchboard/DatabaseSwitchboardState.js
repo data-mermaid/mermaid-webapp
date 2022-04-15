@@ -7,7 +7,7 @@ const DatabaseSwitchboardState = class {
 
   _getAccessToken
 
-  _dexieInstance
+  _dexiePerUserDataInstance
 
   _isAuthenticatedAndReady
 
@@ -31,18 +31,17 @@ const DatabaseSwitchboardState = class {
     apiBaseUrl,
     apiSyncInstance,
     getAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
     isMermaidAuthenticated,
     isAppOnline,
   }) {
     this._apiBaseUrl = apiBaseUrl
     this._apiSyncInstance = apiSyncInstance
     this._getAccessToken = getAccessToken
-    this._dexieInstance = dexieInstance
-    this._isAuthenticatedAndReady = isMermaidAuthenticated && !!dexieInstance
+    this._dexiePerUserDataInstance = dexiePerUserDataInstance
+    this._isAuthenticatedAndReady = isMermaidAuthenticated && !!dexiePerUserDataInstance
 
-    this._isOnlineAuthenticatedAndReady =
-      this._isAuthenticatedAndReady && isAppOnline
+    this._isOnlineAuthenticatedAndReady = this._isAuthenticatedAndReady && isAppOnline
     this._isOfflineAuthenticatedAndReady = this._isAuthenticatedAndReady && !isAppOnline
   }
 }

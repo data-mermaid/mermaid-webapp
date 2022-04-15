@@ -1,7 +1,7 @@
-const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData, projectId }) => {
-  return dexieInstance.transaction(
+const persistLastRevisionNumbersPulled = ({ dexiePerUserDataInstance, apiData, projectId }) => {
+  return dexiePerUserDataInstance.transaction(
     'rw',
-    dexieInstance.uiState_lastRevisionNumbersPulled,
+    dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled,
     async () => {
       const dataTypes = [
         'benthic_attributes',
@@ -16,7 +16,7 @@ const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData, projectId })
         'projects',
       ]
 
-      dataTypes.forEach(dataType => {
+      dataTypes.forEach((dataType) => {
         if (apiData[dataType]) {
           const isDataTypeProjectAssociated =
             dataType === 'collect_records' ||
@@ -28,7 +28,7 @@ const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData, projectId })
             ? projectId ?? 'n/a' // this hedges against the api sending more dataTypes than were asked for, eg in tests
             : 'n/a'
 
-          dexieInstance.uiState_lastRevisionNumbersPulled.put({
+          dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled.put({
             dataType,
             projectId: projectIdToUse,
             lastRevisionNumber: apiData[dataType].last_revision_num,
@@ -39,11 +39,12 @@ const persistLastRevisionNumbersPulled = ({ dexieInstance, apiData, projectId })
   )
 }
 
-const getLastRevisionNumbersPulledForAProject = async ({ dexieInstance, projectId }) => {
-  const lastRevisionNumberDexieRecords = await dexieInstance.uiState_lastRevisionNumbersPulled
-    .where('projectId')
-    .anyOf(projectId, 'n/a')
-    .toArray()
+const getLastRevisionNumbersPulledForAProject = async ({ dexiePerUserDataInstance, projectId }) => {
+  const lastRevisionNumberDexieRecords =
+    await dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled
+      .where('projectId')
+      .anyOf(projectId, 'n/a')
+      .toArray()
 
   const lastRevisionNumbersObject = lastRevisionNumberDexieRecords.reduce(
     (accumulator, lastRevisionNumberRecord) => ({

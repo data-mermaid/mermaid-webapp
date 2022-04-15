@@ -5,15 +5,15 @@ import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 const getCurrentUserProfile = async ({
   apiBaseUrl,
   getAccessToken,
-  dexieInstance,
+  dexieCurrentUserInstance,
   isMermaidAuthenticated,
   isAppOnline,
 }) => {
   if (!apiBaseUrl) {
     throw new Error('getCurrentUserProfile needs an API base url')
   }
-  if (!dexieInstance) {
-    throw new Error('getCurrentUserProfile needs a dexieInstance')
+  if (!dexieCurrentUserInstance) {
+    throw new Error('getCurrentUserProfile needs a dexieCurrentUserInstance')
   }
 
   const isAuthenticatedAndReady = isMermaidAuthenticated
@@ -36,11 +36,11 @@ const getCurrentUserProfile = async ({
           user: userFromApi,
         }
 
-        return dexieInstance.uiState_currentUser.put(userToStore).then(() => userFromApi)
+        return dexieCurrentUserInstance.currentUser.put(userToStore).then(() => userFromApi)
       })
   }
   if (isOfflineAuthenticatedAndReady) {
-    return dexieInstance.uiState_currentUser.toArray().then((results) => {
+    return dexieCurrentUserInstance.currentUser.toArray().then((results) => {
       const { user } = results[0]
 
       if (!user) {
