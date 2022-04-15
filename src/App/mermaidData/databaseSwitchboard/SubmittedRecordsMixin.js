@@ -5,6 +5,12 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
+    #getSampleUnitLabel = function getSampleUnitLabel(record) {
+      const sampleUnit = `${record.transectNumber ?? ''} ${record.label ?? ''}`.trim()
+
+      return sampleUnit === '' ? undefined : sampleUnit
+    }
+
     getSubmittedRecords = async function getSubmittedRecords(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
@@ -55,7 +61,7 @@ const SubmittedRecordsMixin = (Base) =>
                 observers: record.observers.join(', '),
                 protocol: getRecordProtocolLabel(record.protocol),
                 sampleDate: getSampleDateLabel(record.sample_date),
-                sampleUnitNumber: record.sample_unit_number,
+                sampleUnitNumber: this.#getSampleUnitLabel(record),
                 site: record.site_name,
                 size: record.size_display,
               },
