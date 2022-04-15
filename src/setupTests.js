@@ -25,6 +25,7 @@ jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
         touchZoomRotate: { disableRotation: jest.fn() },
         getSource: jest.fn(() => ({ setData: jest.fn() })),
         fitBounds: jest.fn(),
+        getZoom: jest.fn(),
       }
     },
     Marker: function () {
