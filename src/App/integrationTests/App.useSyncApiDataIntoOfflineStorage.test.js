@@ -49,96 +49,121 @@ beforeEach(() => {
   )
 })
 test('Sync: initial page load on non project page', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(0)
-  expect((await dexieInstance.choices.toArray()).length).toEqual(0)
-  expect((await dexieInstance.fish_families.toArray()).length).toEqual(0)
-  expect((await dexieInstance.fish_genera.toArray()).length).toEqual(0)
-  expect((await dexieInstance.fish_species.toArray()).length).toEqual(0)
-  expect((await dexieInstance.projects.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.fish_families.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.fish_genera.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.fish_species.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.projects.toArray()).length).toEqual(0)
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    dexieInstance,
-  })
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
-  expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(
     mockMermaidData.benthic_attributes.length,
   )
-  expect((await dexieInstance.choices.toArray()).length).toEqual(1) // choices is weird and gets overwritten
-  expect((await dexieInstance.fish_families.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(1) // choices is weird and gets overwritten
+  expect((await dexiePerUserDataInstance.fish_families.toArray()).length).toEqual(
     mockMermaidData.fish_families.length,
   )
-  expect((await dexieInstance.fish_genera.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.fish_genera.toArray()).length).toEqual(
     mockMermaidData.fish_genera.length,
   )
-  expect((await dexieInstance.fish_species.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.fish_species.toArray()).length).toEqual(
     mockMermaidData.fish_species.length,
   )
-  expect((await dexieInstance.projects.toArray()).length).toEqual(mockMermaidData.projects.length)
+  expect((await dexiePerUserDataInstance.projects.toArray()).length).toEqual(
+    mockMermaidData.projects.length,
+  )
 })
 test('Sync: initial page load on project page', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(0)
-  expect((await dexieInstance.choices.toArray()).length).toEqual(0)
-  expect((await dexieInstance.fish_families.toArray()).length).toEqual(0)
-  expect((await dexieInstance.fish_genera.toArray()).length).toEqual(0)
-  expect((await dexieInstance.fish_species.toArray()).length).toEqual(0)
-  expect((await dexieInstance.projects.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.fish_families.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.fish_genera.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.fish_species.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.projects.toArray()).length).toEqual(0)
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_managements.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_sites.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(0)
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    dexieInstance,
-    initialEntries: ['/projects/5/collecting/fishbelt/'],
-  })
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
+    },
+  )
 
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  expect((await dexieInstance.benthic_attributes.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(
     mockMermaidData.benthic_attributes.length,
   )
   // choices is weird and is just a giant object that gets overwritten
-  expect((await dexieInstance.choices.toArray()).length).toEqual(1)
-  expect((await dexieInstance.fish_families.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(1)
+  expect((await dexiePerUserDataInstance.fish_families.toArray()).length).toEqual(
     mockMermaidData.fish_families.length,
   )
-  expect((await dexieInstance.fish_genera.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.fish_genera.toArray()).length).toEqual(
     mockMermaidData.fish_genera.length,
   )
-  expect((await dexieInstance.fish_species.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.fish_species.toArray()).length).toEqual(
     mockMermaidData.fish_species.length,
   )
-  expect((await dexieInstance.projects.toArray()).length).toEqual(mockMermaidData.projects.length)
+  expect((await dexiePerUserDataInstance.projects.toArray()).length).toEqual(
+    mockMermaidData.projects.length,
+  )
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(
     mockMermaidData.collect_records.length,
   )
-  expect((await dexieInstance.project_managements.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.length,
   )
-  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(
     mockMermaidData.project_profiles.length,
   )
-  expect((await dexieInstance.project_sites.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(
     mockMermaidData.project_sites.length,
   )
 })
 
 test('Sync: initial page load already done, navigate to non project page', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    dexieInstance,
-  })
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
@@ -153,10 +178,10 @@ test('Sync: initial page load already done, navigate to non project page', async
    * to balance ROI. Ignoring choices for the same reason as its exclusion
    * is for performance optimization, and it being pulled or not will not cause bugs
    */
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_managements.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_sites.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(0)
 
   const projectWithId5 = screen.getAllByRole('listitem')[4]
 
@@ -174,14 +199,14 @@ test('Sync: initial page load already done, navigate to non project page', async
   // this makes the act errors disappear.
   expect(within(await screen.findByTestId('collect-record-count')).getByText('16'))
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(17)
-  expect((await dexieInstance.project_managements.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(17)
+  expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.length,
   )
-  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(
     mockMermaidData.project_profiles.length,
   )
-  expect((await dexieInstance.project_sites.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(
     mockMermaidData.project_sites.length,
   )
 })

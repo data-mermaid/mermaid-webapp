@@ -4,12 +4,12 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 const ProjectsMixin = (Base) =>
   class extends Base {
     getOfflineReadyProjectIds = function getOfflineReadyProjectIds() {
-      return this._dexieInstance.uiState_offlineReadyProjects.toArray()
+      return this._dexiePerUserDataInstance.uiState_offlineReadyProjects.toArray()
     }
 
     getProjects = function getProjects() {
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.projects.toArray()
+        ? this._dexiePerUserDataInstance.projects.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -22,7 +22,7 @@ const ProjectsMixin = (Base) =>
         Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._dexieInstance.projects.get(id)
+      return this._dexiePerUserDataInstance.projects.get(id)
     }
 
     saveProject = async function saveProject({ projectId, editedValues }) {
@@ -33,7 +33,7 @@ const ProjectsMixin = (Base) =>
       const projectToEdit = await this.getProject(projectId)
       const editedProject = { ...projectToEdit, ...editedValues, uiState_pushToApi: true }
 
-      return this._dexieInstance.projects.put(editedProject).then(() => {
+      return this._dexiePerUserDataInstance.projects.put(editedProject).then(() => {
         return this._apiSyncInstance
           .pushThenPullEverythingForAProjectButChoices(projectId)
           .then((pullResponse) => {
@@ -45,12 +45,12 @@ const ProjectsMixin = (Base) =>
     }
 
     getProjectTags = async function getProjectTags() {
-
       return this._isOnlineAuthenticatedAndReady
-        ? axios.get(
-          `${this._apiBaseUrl}/projecttags`,
-          await getAuthorizationHeaders(this._getAccessToken)
-        )
+        ? axios
+            .get(
+              `${this._apiBaseUrl}/projecttags`,
+              await getAuthorizationHeaders(this._getAccessToken),
+            )
             .then((apiResults) => apiResults.data.results)
             .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
         : Promise.reject(this._notAuthenticatedAndReadyError)
@@ -62,7 +62,7 @@ const ProjectsMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.project_profiles
+        ? this._dexiePerUserDataInstance.project_profiles
             .toArray()
             .then((projectProfiles) =>
               projectProfiles.filter((projectProfile) => projectProfile.project === projectId),
@@ -81,7 +81,7 @@ const ProjectsMixin = (Base) =>
         )
       }
       if (this._isAuthenticatedAndReady) {
-        const profileToEdit = await this._dexieInstance.project_profiles
+        const profileToEdit = await this._dexiePerUserDataInstance.project_profiles
           .toArray()
           .then((projectProfiles) =>
             projectProfiles.find(
@@ -92,7 +92,7 @@ const ProjectsMixin = (Base) =>
 
         const editedProfile = { ...profileToEdit, role: roleCode, uiState_pushToApi: true }
 
-        return this._dexieInstance.project_profiles.put(editedProfile).then(() =>
+        return this._dexiePerUserDataInstance.project_profiles.put(editedProfile).then(() =>
           this._apiSyncInstance
             .pushThenPullEverythingForAProjectButChoices(projectId)
             .then((pullResponse) => {
@@ -111,18 +111,18 @@ const ProjectsMixin = (Base) =>
         Promise.reject(this._operationMissingParameterError)
       }
 
-      return this._isAuthenticatedAndReady ?
-        axios
-          .get(`${this._apiBaseUrl}/profiles`, {
-            params: {
-              email,
-            },
-            ...await getAuthorizationHeaders(this._getAccessToken)
-          })
-          .then((profilesData) => {
-            return profilesData
-          })
-          .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
+      return this._isAuthenticatedAndReady
+        ? axios
+            .get(`${this._apiBaseUrl}/profiles`, {
+              params: {
+                email,
+              },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            })
+            .then((profilesData) => {
+              return profilesData
+            })
+            .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -133,11 +133,14 @@ const ProjectsMixin = (Base) =>
 
       if (this._isAuthenticatedAndReady) {
         return axios
-          .post(`${this._apiBaseUrl}/projects/${projectId}/add_profile/`, {
+          .post(
+            `${this._apiBaseUrl}/projects/${projectId}/add_profile/`,
+            {
               email,
             },
-            await getAuthorizationHeaders(this._getAccessToken)
-          ).then((response) => {
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then((response) => {
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseSuccessful) {
@@ -155,18 +158,24 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    transferSampleUnits = async function transferSampleUnits(projectId, fromProfileId, toProfileId) {
+    transferSampleUnits = async function transferSampleUnits(
+      projectId,
+      fromProfileId,
+      toProfileId,
+    ) {
       if (!projectId || !fromProfileId || !toProfileId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       if (this._isAuthenticatedAndReady) {
         return axios
-          .put(`${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`, {
+          .put(
+            `${this._apiBaseUrl}/projects/${projectId}/transfer_sample_units/`,
+            {
               from_profile: fromProfileId,
               to_profile: toProfileId,
             },
-            await getAuthorizationHeaders(this._getAccessToken)
+            await getAuthorizationHeaders(this._getAccessToken),
           )
           .then((response) => {
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
@@ -202,7 +211,7 @@ const ProjectsMixin = (Base) =>
             { project_profiles: [recordMarkedToBeDeleted] },
             {
               params: { force: true },
-              ...await getAuthorizationHeaders(this._getAccessToken)
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
           .then(() => {
@@ -215,7 +224,7 @@ const ProjectsMixin = (Base) =>
       }
 
       if (!hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
-        return this._dexieInstance.project_profiles.delete(user.id)
+        return this._dexiePerUserDataInstance.project_profiles.delete(user.id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)

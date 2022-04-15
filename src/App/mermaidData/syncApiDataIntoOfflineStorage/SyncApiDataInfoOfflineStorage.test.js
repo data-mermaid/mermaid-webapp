@@ -42,11 +42,12 @@ test('pushThenPullEverythingForAProjectButChoices keeps track of returned last_r
     }),
   )
 
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
   })
 
   // initial pull from api with last revision numbers being null
@@ -93,11 +94,12 @@ test('pushThenPullEverythingForAProject keeps track of returned last_revision_nu
     }),
   )
 
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
   })
 
   // initial pull from api with last revision numbers being null
@@ -140,11 +142,12 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
     }),
   )
 
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
   })
 
   // initial pull from api with last revision numbers being null
@@ -155,11 +158,12 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
 })
 
 test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
   })
 
   const apiDataNamesToPullNonProject = [
@@ -175,25 +179,25 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
   ]
 
   // add records to IDB that will be updated/deleted with mock api response
-  await dexieInstance.transaction(
+  await dexiePerUserDataInstance.transaction(
     'rw',
-    dexieInstance.benthic_attributes,
-    dexieInstance.choices,
-    dexieInstance.collect_records,
-    dexieInstance.fish_families,
-    dexieInstance.fish_genera,
-    dexieInstance.fish_species,
-    dexieInstance.project_managements,
-    dexieInstance.project_profiles,
-    dexieInstance.project_sites,
-    dexieInstance.projects,
+    dexiePerUserDataInstance.benthic_attributes,
+    dexiePerUserDataInstance.choices,
+    dexiePerUserDataInstance.collect_records,
+    dexiePerUserDataInstance.fish_families,
+    dexiePerUserDataInstance.fish_genera,
+    dexiePerUserDataInstance.fish_species,
+    dexiePerUserDataInstance.project_managements,
+    dexiePerUserDataInstance.project_profiles,
+    dexiePerUserDataInstance.project_sites,
+    dexiePerUserDataInstance.projects,
     () => {
       apiDataNamesToPullNonProject.forEach((apiDataName) => {
-        dexieInstance[apiDataName].put({
+        dexiePerUserDataInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
           somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
         })
-        dexieInstance[apiDataName].put(mockMermaidData[apiDataName][0])
+        dexiePerUserDataInstance[apiDataName].put(mockMermaidData[apiDataName][0])
       })
     },
   )
@@ -255,15 +259,15 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
   expect.assertions(18)
   await apiSync.pushThenPullEverythingForAProjectButChoices('1').then(async () => {
     await Promise.all([
-      dexieInstance.benthic_attributes.toArray(),
-      dexieInstance.collect_records.toArray(),
-      dexieInstance.fish_families.toArray(),
-      dexieInstance.fish_genera.toArray(),
-      dexieInstance.fish_species.toArray(),
-      dexieInstance.project_managements.toArray(),
-      dexieInstance.project_profiles.toArray(),
-      dexieInstance.project_sites.toArray(),
-      dexieInstance.projects.toArray(),
+      dexiePerUserDataInstance.benthic_attributes.toArray(),
+      dexiePerUserDataInstance.collect_records.toArray(),
+      dexiePerUserDataInstance.fish_families.toArray(),
+      dexiePerUserDataInstance.fish_genera.toArray(),
+      dexiePerUserDataInstance.fish_species.toArray(),
+      dexiePerUserDataInstance.project_managements.toArray(),
+      dexiePerUserDataInstance.project_profiles.toArray(),
+      dexiePerUserDataInstance.project_sites.toArray(),
+      dexiePerUserDataInstance.projects.toArray(),
     ]).then(
       ([
         benthicAttributesStored,
@@ -327,11 +331,12 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
 })
 
 test('pushThenPullEverythingForAProject updates IDB with API data', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
   })
 
   const apiDataNamesToPullNonProject = [
@@ -348,29 +353,29 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
   ]
 
   // add records to IDB that will be updated/deleted with mock api response
-  await dexieInstance.transaction(
+  await dexiePerUserDataInstance.transaction(
     'rw',
-    dexieInstance.benthic_attributes,
-    dexieInstance.choices,
-    dexieInstance.collect_records,
-    dexieInstance.fish_families,
-    dexieInstance.fish_genera,
-    dexieInstance.fish_species,
-    dexieInstance.project_managements,
-    dexieInstance.project_profiles,
-    dexieInstance.project_sites,
-    dexieInstance.projects,
+    dexiePerUserDataInstance.benthic_attributes,
+    dexiePerUserDataInstance.choices,
+    dexiePerUserDataInstance.collect_records,
+    dexiePerUserDataInstance.fish_families,
+    dexiePerUserDataInstance.fish_genera,
+    dexiePerUserDataInstance.fish_species,
+    dexiePerUserDataInstance.project_managements,
+    dexiePerUserDataInstance.project_profiles,
+    dexiePerUserDataInstance.project_sites,
+    dexiePerUserDataInstance.projects,
     () => {
       apiDataNamesToPullNonProject.forEach((apiDataName) => {
-        dexieInstance[apiDataName].put({
+        dexiePerUserDataInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
           somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
         })
-        dexieInstance[apiDataName].put(mockMermaidData[apiDataName][0])
+        dexiePerUserDataInstance[apiDataName].put(mockMermaidData[apiDataName][0])
       })
 
       // add choices separately because its weird
-      dexieInstance.choices.put({
+      dexiePerUserDataInstance.choices.put({
         id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
         ...mockMermaidData.choices,
         somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
@@ -441,16 +446,16 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
   expect.assertions(20)
   await apiSync.pushThenPullEverythingForAProject('1').then(async () => {
     await Promise.all([
-      dexieInstance.benthic_attributes.toArray(),
-      dexieInstance.choices.toArray(),
-      dexieInstance.collect_records.toArray(),
-      dexieInstance.fish_families.toArray(),
-      dexieInstance.fish_genera.toArray(),
-      dexieInstance.fish_species.toArray(),
-      dexieInstance.project_managements.toArray(),
-      dexieInstance.project_profiles.toArray(),
-      dexieInstance.project_sites.toArray(),
-      dexieInstance.projects.toArray(),
+      dexiePerUserDataInstance.benthic_attributes.toArray(),
+      dexiePerUserDataInstance.choices.toArray(),
+      dexiePerUserDataInstance.collect_records.toArray(),
+      dexiePerUserDataInstance.fish_families.toArray(),
+      dexiePerUserDataInstance.fish_genera.toArray(),
+      dexiePerUserDataInstance.fish_species.toArray(),
+      dexiePerUserDataInstance.project_managements.toArray(),
+      dexiePerUserDataInstance.project_profiles.toArray(),
+      dexiePerUserDataInstance.project_sites.toArray(),
+      dexiePerUserDataInstance.projects.toArray(),
     ]).then(
       ([
         benthicAttributesStored,
@@ -511,15 +516,15 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
 })
 
 test('pushThenPullEverything updates IDB with API data', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
   // so we can test that an offline ready project gets pulled too
-  await dexieInstance.uiState_offlineReadyProjects.put({ id: '5' })
+  await dexiePerUserDataInstance.uiState_offlineReadyProjects.put({ id: '5' })
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
   })
 
   const apiDataNamesToPullNonProject = [
@@ -532,25 +537,25 @@ test('pushThenPullEverything updates IDB with API data', async () => {
   ]
 
   // add records to IDB that will be updated/deleted with mock api response
-  await dexieInstance.transaction(
+  await dexiePerUserDataInstance.transaction(
     'rw',
-    dexieInstance.benthic_attributes,
-    dexieInstance.choices,
-    dexieInstance.fish_families,
-    dexieInstance.fish_genera,
-    dexieInstance.fish_species,
-    dexieInstance.projects,
+    dexiePerUserDataInstance.benthic_attributes,
+    dexiePerUserDataInstance.choices,
+    dexiePerUserDataInstance.fish_families,
+    dexiePerUserDataInstance.fish_genera,
+    dexiePerUserDataInstance.fish_species,
+    dexiePerUserDataInstance.projects,
     () => {
       apiDataNamesToPullNonProject.forEach((apiDataName) => {
-        dexieInstance[apiDataName].put({
+        dexiePerUserDataInstance[apiDataName].put({
           ...mockMermaidData[apiDataName][1],
           somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
         })
-        dexieInstance[apiDataName].put(mockMermaidData[apiDataName][0])
+        dexiePerUserDataInstance[apiDataName].put(mockMermaidData[apiDataName][0])
       })
 
       // add choices separately because its weird
-      dexieInstance.choices.put({
+      dexiePerUserDataInstance.choices.put({
         id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
         ...mockMermaidData.choices,
         somePropertyThatWillBeWipedOutByTheVersionOnTheApi: 'So long, farewell',
@@ -626,16 +631,16 @@ test('pushThenPullEverything updates IDB with API data', async () => {
   expect.assertions(16)
   await apiSync.pushThenPullEverything().then(async () => {
     await Promise.all([
-      dexieInstance.benthic_attributes.toArray(),
-      dexieInstance.choices.toArray(),
-      dexieInstance.fish_families.toArray(),
-      dexieInstance.fish_genera.toArray(),
-      dexieInstance.fish_species.toArray(),
-      dexieInstance.projects.toArray(),
-      dexieInstance.collect_records.toArray(),
-      dexieInstance.project_managements.toArray(),
-      dexieInstance.project_profiles.toArray(),
-      dexieInstance.project_sites.toArray(),
+      dexiePerUserDataInstance.benthic_attributes.toArray(),
+      dexiePerUserDataInstance.choices.toArray(),
+      dexiePerUserDataInstance.fish_families.toArray(),
+      dexiePerUserDataInstance.fish_genera.toArray(),
+      dexiePerUserDataInstance.fish_species.toArray(),
+      dexiePerUserDataInstance.projects.toArray(),
+      dexiePerUserDataInstance.collect_records.toArray(),
+      dexiePerUserDataInstance.project_managements.toArray(),
+      dexiePerUserDataInstance.project_profiles.toArray(),
+      dexiePerUserDataInstance.project_sites.toArray(),
     ]).then(
       ([
         benthicAttributesStored,
@@ -684,11 +689,12 @@ test('pushThenPullEverything updates IDB with API data', async () => {
   })
 })
 test('pushChanges includes the force flag', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
   })
 
   mockMermaidApiAllSuccessful.use(
@@ -716,46 +722,46 @@ test('pushChanges includes the force flag', async () => {
 })
 
 test('pushChanges includes the expected modified data', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   // add a uiState_pushToApi flag to one of each data type to simulate it being edited/created
-  await dexieInstance.benthic_attributes.put({
-    ...(await dexieInstance.benthic_attributes.toArray())[0],
+  await dexiePerUserDataInstance.benthic_attributes.put({
+    ...(await dexiePerUserDataInstance.benthic_attributes.toArray())[0],
     uiState_pushToApi: true,
   })
-  await dexieInstance.collect_records.put({
-    ...(await dexieInstance.collect_records.toArray())[0],
+  await dexiePerUserDataInstance.collect_records.put({
+    ...(await dexiePerUserDataInstance.collect_records.toArray())[0],
     uiState_pushToApi: true,
   })
-  await dexieInstance.fish_species.put({
-    ...(await dexieInstance.fish_species.toArray())[0],
-    uiState_pushToApi: true,
-  })
-
-  await dexieInstance.project_managements.put({
-    ...(await dexieInstance.project_managements.toArray())[0],
+  await dexiePerUserDataInstance.fish_species.put({
+    ...(await dexiePerUserDataInstance.fish_species.toArray())[0],
     uiState_pushToApi: true,
   })
 
-  await dexieInstance.project_profiles.put({
-    ...(await dexieInstance.project_profiles.toArray())[0],
+  await dexiePerUserDataInstance.project_managements.put({
+    ...(await dexiePerUserDataInstance.project_managements.toArray())[0],
     uiState_pushToApi: true,
   })
 
-  await dexieInstance.project_sites.put({
-    ...(await dexieInstance.project_sites.toArray())[0],
+  await dexiePerUserDataInstance.project_profiles.put({
+    ...(await dexiePerUserDataInstance.project_profiles.toArray())[0],
     uiState_pushToApi: true,
   })
-  await dexieInstance.projects.put({
-    ...(await dexieInstance.projects.toArray())[0],
+
+  await dexiePerUserDataInstance.project_sites.put({
+    ...(await dexiePerUserDataInstance.project_sites.toArray())[0],
+    uiState_pushToApi: true,
+  })
+  await dexiePerUserDataInstance.projects.put({
+    ...(await dexiePerUserDataInstance.projects.toArray())[0],
     uiState_pushToApi: true,
   })
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
   })
 
   mockMermaidApiAllSuccessful.use(

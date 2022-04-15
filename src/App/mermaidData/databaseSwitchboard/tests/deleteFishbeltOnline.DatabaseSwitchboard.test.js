@@ -41,7 +41,7 @@ test('deleteFishBelt online deletes the IDB record if there is no corresponding 
     randomUnexpectedProperty: 'whatever',
   }
 
-  await dbInstance.dexieInstance.collect_records.put(fishBeltToBeDeleted)
+  await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
   await dbInstance.deleteFishBelt({
     record: fishBeltToBeDeleted, // doesnt have a  _last_revision_num property, which means the API call get skipped
@@ -49,7 +49,7 @@ test('deleteFishBelt online deletes the IDB record if there is no corresponding 
     projectId: '1',
   })
 
-  expect(await dbInstance.dexieInstance.collect_records.get('foo')).toBeUndefined()
+  expect(await dbInstance.dexiePerUserDataInstance.collect_records.get('foo')).toBeUndefined()
 })
 test('deleteFishBelt online deletes the record if there is a corresponding copy on the server', async () => {
   const fishBeltToBeDeleted = {
@@ -101,7 +101,7 @@ test('deleteFishBelt online deletes the record if there is a corresponding copy 
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
   // save a record in IDB so we can delete it
-  await dbInstance.dexieInstance.collect_records.put(fishBeltToBeDeleted)
+  await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
   const serverResponse = await dbInstance.deleteFishBelt({
     record: fishBeltToBeDeleted,
@@ -109,7 +109,7 @@ test('deleteFishBelt online deletes the record if there is a corresponding copy 
     projectId: '1',
   })
 
-  expect(await dbInstance.dexieInstance.collect_records.get('foo')).toBeUndefined()
+  expect(await dbInstance.dexiePerUserDataInstance.collect_records.get('foo')).toBeUndefined()
   expect(serverResponse.data.proofOfServerCall).toBeTruthy()
 })
 test('deleteFishBelt online returns a rejected promise if the status code from the API for the record is not successful', async () => {
@@ -148,7 +148,7 @@ test('deleteFishBelt online returns a rejected promise if the status code from t
   }
 
   // save a record in IDB so we can delete it
-  await dbInstance.dexieInstance.collect_records.put(fishBeltToBeDeleted)
+  await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
   await dbInstance
     .deleteFishBelt({
@@ -159,7 +159,7 @@ test('deleteFishBelt online returns a rejected promise if the status code from t
       profileId: '1',
       projectId: '1',
     })
-    .catch(error => {
+    .catch((error) => {
       expect(error.message).toEqual(
         'the API record returned from deleteFishBelt doesnt have a successful status code',
       )
@@ -187,7 +187,7 @@ test('deleteFishBelt online marks a record in indexedDB with _deleted in the cas
   }
 
   // save a record in IDB so we can delete it
-  await dbInstance.dexieInstance.collect_records.put(fishBeltToBeDeleted)
+  await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
   await dbInstance
     .deleteFishBelt({
@@ -198,7 +198,9 @@ test('deleteFishBelt online marks a record in indexedDB with _deleted in the cas
       profileId: '1',
       projectId: '1',
     })
-    .catch(error => expect(error.message).toEqual('Network Error'))
+    .catch((error) => expect(error.message).toEqual('Network Error'))
 
-  expect((await dbInstance.dexieInstance.collect_records.get('foo'))._deleted).toBeTruthy()
+  expect(
+    (await dbInstance.dexiePerUserDataInstance.collect_records.get('foo'))._deleted,
+  ).toBeTruthy()
 })

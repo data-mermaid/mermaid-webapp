@@ -9,39 +9,40 @@ import DatabaseSwitchboard from '../DatabaseSwitchboard'
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () => {
-  const getAccessToken = async() => 'fake token'
-  const dexieInstance = getMockDexieInstanceAllSuccess()
-  const dbInstance = new DatabaseSwitchboard({
+  const getAccessToken = async () => 'fake token'
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+
+  const databaseSwitchboardInstance = new DatabaseSwitchboard({
     apiBaseUrl,
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
-      dexieInstance,
+      dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
     }),
     getAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
     isMermaidAuthenticated: true,
     isOfflineStorageHydrated: true,
     isAppOnline: true,
   })
 
-  dbInstance.dexieInstance = dexieInstance
+  databaseSwitchboardInstance.dexiePerUserDataInstance = dexiePerUserDataInstance
 
-  return dbInstance
+  return databaseSwitchboardInstance
 }
 
 export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () => {
-  const getAccessToken = async() => 'fake token'
-  const dexieInstance = getMockDexieInstanceThatProducesErrors()
+  const getAccessToken = async () => 'fake token'
+  const dexiePerUserDataInstance = getMockDexieInstanceThatProducesErrors()
 
   return new DatabaseSwitchboard({
     apiBaseUrl,
     getAccessToken,
     isMermaidAuthenticated: true,
     isAppOnline: true,
-    dexieInstance,
+    dexiePerUserDataInstance: getMockDexieInstanceThatProducesErrors(),
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
-      dexieInstance,
+      dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
     }),
@@ -49,17 +50,16 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () =>
 }
 
 export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () => {
-  const getAccessToken = async() => 'fake token'
-  const dexieInstance = getMockDexieInstanceThatProducesErrors()
+  const getAccessToken = async () => 'fake token'
 
   return new DatabaseSwitchboard({
     apiBaseUrl,
     getAccessToken,
     isMermaidAuthenticated: true,
     isAppOnline: false,
-    dexieInstance,
+    dexiePerUserDataInstance: getMockDexieInstanceThatProducesErrors(),
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
-      dexieInstance,
+      dexiePerUserDataInstance: getMockDexieInstanceThatProducesErrors(),
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
     }),
@@ -67,24 +67,24 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
 }
 
 export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = () => {
-  const getAccessToken = async() => 'fake token'
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const getAccessToken = async () => 'fake token'
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  const dbInstance = new DatabaseSwitchboard({
+  const databaseSwitchboardInstance = new DatabaseSwitchboard({
     apiBaseUrl,
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
-      dexieInstance,
+      dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
     }),
     getAccessToken,
-    dexieInstance,
+    dexiePerUserDataInstance,
     isMermaidAuthenticated: true,
     isOfflineStorageHydrated: true,
     isAppOnline: false,
   })
 
-  dbInstance.dexieInstance = dexieInstance
+  databaseSwitchboardInstance.dexiePerUserDataInstance = dexiePerUserDataInstance
 
-  return dbInstance
+  return databaseSwitchboardInstance
 }

@@ -10,33 +10,39 @@ import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtiliti
 import App from '../../App'
 
 test('Offline sites list shows no info associated with projectId view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/nonExistantProjectId/sites/'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
+  renderAuthenticatedOffline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/nonExistantProjectId/sites/'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
 
 test('Online sites list shows no info associated with projectId view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/nonExistantProjectId/sites/'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/nonExistantProjectId/sites/'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })

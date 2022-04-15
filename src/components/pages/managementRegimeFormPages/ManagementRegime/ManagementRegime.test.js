@@ -14,9 +14,9 @@ import {
 import ManagementRegime from './ManagementRegime'
 
 test('Edit fishbelt shows name and rules required', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
@@ -24,7 +24,7 @@ test('Edit fishbelt shows name and rules required', async () => {
     </Route>,
     {
       initialEntries: ['/projects/5/management-regimes/1'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -36,13 +36,17 @@ test('Edit fishbelt shows name and rules required', async () => {
 
   userEvent.clear(nameInput)
 
-  expect(await within(screen.getByTestId('name')).findByText('This field is required')).toBeInTheDocument()
+  expect(
+    await within(screen.getByTestId('name')).findByText('This field is required'),
+  ).toBeInTheDocument()
 
   const gearRestrictionCheckbox = screen.getByLabelText('Gear Restriction')
 
   expect(gearRestrictionCheckbox).toBeChecked()
   userEvent.click(gearRestrictionCheckbox)
-  expect(await within(screen.getByTestId('rules')).findByText('This field is required')).toBeInTheDocument()
+  expect(
+    await within(screen.getByTestId('rules')).findByText('This field is required'),
+  ).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 

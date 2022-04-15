@@ -23,7 +23,7 @@ const SitesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.project_sites
+        ? this._dexiePerUserDataInstance.project_sites
             .toArray()
             .then((sites) => sites.filter((site) => site.project === projectId && !site._deleted))
         : Promise.reject(this._notAuthenticatedAndReadyError)
@@ -38,7 +38,7 @@ const SitesMixin = (Base) =>
         Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._dexieInstance.project_sites.get(id)
+      return this._dexiePerUserDataInstance.project_sites.get(id)
     }
 
     getSiteRecordsForUIDisplay = function getSiteRecordsForUIDisplay(projectId) {
@@ -76,7 +76,7 @@ const SitesMixin = (Base) =>
 
       if (this._isOnlineAuthenticatedAndReady) {
         // put it in IDB just in case the network craps out before the API can return
-        await this._dexieInstance.project_sites.put(siteToSubmit)
+        await this._dexiePerUserDataInstance.project_sites.put(siteToSubmit)
 
         return axios
           .post(
@@ -88,7 +88,7 @@ const SitesMixin = (Base) =>
               params: {
                 force: true,
               },
-              ...await getAuthorizationHeaders(this._getAccessToken)
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
           .then((response) => {
@@ -116,7 +116,9 @@ const SitesMixin = (Base) =>
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.project_sites.put(siteToSubmit).then(() => siteToSubmit)
+        return this._dexiePerUserDataInstance.project_sites
+          .put(siteToSubmit)
+          .then(() => siteToSubmit)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)

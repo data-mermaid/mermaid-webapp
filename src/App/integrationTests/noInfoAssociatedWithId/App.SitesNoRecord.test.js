@@ -10,78 +10,97 @@ import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtiliti
 import App from '../../App'
 
 test('Offline site shows no info associated with SITE id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/5/sites/nonExistantSiteId'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantSiteId can't be found.",
-    ),
+  renderAuthenticatedOffline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/5/sites/nonExistantSiteId'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantSiteId can't be found."))
 })
 
 test('Online site shows no info associated with SITE id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/5/sites/nonExistantSiteId'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantSiteId can't be found.",
-    ),
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/5/sites/nonExistantSiteId'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantSiteId can't be found."))
 })
 
 test('Offline site shows no info associated with PROJECT id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/nonExistantProjectId/sites/1'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
+  renderAuthenticatedOffline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/nonExistantProjectId/sites/1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
 
 test('Online site shows no info associated with PROJECT id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/nonExistantProjectId/sites/1'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/nonExistantProjectId/sites/1'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
 
 test('Offline site shows no info associated with PROJECT or SITE id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/nonExistantProjectId/sites/nonExistantSiteId'],
-    dexieInstance,
-  })
+  renderAuthenticatedOffline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/nonExistantProjectId/sites/nonExistantSiteId'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
 
   expect(
     await screen.findByText(
@@ -91,12 +110,19 @@ test('Offline site shows no info associated with PROJECT or SITE id view ', asyn
 })
 
 test('Online site shows no info associated with PROJECT or SITE id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/nonExistantProjectId/sites/nonExistantSiteId'],
-    dexieInstance,
-  })
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/nonExistantProjectId/sites/nonExistantSiteId'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
+  )
   expect(
     await screen.findByText(
       "The items with the ids nonExistantSiteId,nonExistantProjectId can't be found.",

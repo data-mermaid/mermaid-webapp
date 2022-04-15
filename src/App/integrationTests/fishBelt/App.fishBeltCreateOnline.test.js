@@ -33,14 +33,18 @@ const saveFishbeltRecord = async () => {
 
 describe('Online', () => {
   test('New fishbelt save success shows toast, and navigates to edit fishbelt page for new record', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
     renderAuthenticatedOnline(
-      <App dexieInstance={dexieInstance} />,
+      <App
+        dexiePerUserDataInstance={dexiePerUserDataInstance}
+        dexieCurrentUserInstance={dexieCurrentUserInstance}
+      />,
       {
         initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     )
 
     await saveFishbeltRecord()
@@ -70,14 +74,18 @@ describe('Online', () => {
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)
   test('New fishbelt save success show new record in collecting table', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
     renderAuthenticatedOnline(
-      <App dexieInstance={dexieInstance} />,
+      <App
+        dexiePerUserDataInstance={dexiePerUserDataInstance}
+        dexieCurrentUserInstance={dexieCurrentUserInstance}
+      />,
       {
         initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     )
 
     await saveFishbeltRecord()
@@ -101,13 +109,20 @@ describe('Online', () => {
     expect(await within(table).findByText('10000'))
   }, 50000)
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-    dexieInstance.collect_records.put = () => Promise.reject()
-    renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
-      dexieInstance,
-    })
+    dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
+    renderAuthenticatedOnline(
+      <App
+        dexiePerUserDataInstance={dexiePerUserDataInstance}
+        dexieCurrentUserInstance={dexieCurrentUserInstance}
+      />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     await saveFishbeltRecord()
 
