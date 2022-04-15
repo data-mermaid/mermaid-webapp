@@ -7,9 +7,9 @@ import {
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 
 test('Make sure last revision numbers are stored per project where appropriate, and project-agnostic entities get the most recent last revision number', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiDataForProjectA = {
     benthic_attributes: { updates: mockMermaidData.benthic_attributes, last_revision_num: 'pull1' },
@@ -44,23 +44,23 @@ test('Make sure last revision numbers are stored per project where appropriate, 
   }
 
   await persistLastRevisionNumbersPulled({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiData: apiDataForProjectA,
     projectId: 'A',
   })
 
   await persistLastRevisionNumbersPulled({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiData: apiDataForProjectB,
     projectId: 'B',
   })
   const lastRevisonNumbersForProjectA = await getLastRevisionNumbersPulledForAProject({
-    dexieInstance,
+    dexiePerUserDataInstance,
     projectId: 'A',
   })
 
   const lastRevisonNumbersForProjectB = await getLastRevisionNumbersPulledForAProject({
-    dexieInstance,
+    dexiePerUserDataInstance,
     projectId: 'B',
   })
 

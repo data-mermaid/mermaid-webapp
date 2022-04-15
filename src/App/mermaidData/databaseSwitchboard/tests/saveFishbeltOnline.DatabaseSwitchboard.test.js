@@ -142,7 +142,7 @@ test('saveFishBelt online returns a rejected promise if the status code from the
       profileId: '1',
       projectId: '1',
     })
-    .catch(error => {
+    .catch((error) => {
       expect(error.message).toEqual(
         'the API record returned from saveFishBelt doesnt have a successful status code',
       )
@@ -153,7 +153,7 @@ test('saveFishBelt online returns a rejected promise if the status code from the
     the db switchboard's getCollectRecord would try to hit the real or mocked API
     which is boyond the scope of the test.
      */
-  expect(await dbInstance.dexieInstance.collect_records.get('foo'))
+  expect(await dbInstance.dexiePerUserDataInstance.collect_records.get('foo'))
 })
 test('saveFishBelt online returns saved record with protocol info automatically included and stores it ', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
@@ -173,7 +173,7 @@ test('saveFishBelt online returns saved record with protocol info automatically 
       if (fishbeltSentToApi.data.protocol !== 'fishbelt' && fishbeltSentToApi.profile !== '12345') {
         return res(ctx.status(400))
       }
-      const collectRecordsWithStatusCodes = req.body.collect_records.map(record => ({
+      const collectRecordsWithStatusCodes = req.body.collect_records.map((record) => ({
         data: { ...record, _last_revision_num: 1000 },
         status_code: 200,
       }))
@@ -207,7 +207,7 @@ test('saveFishBelt online returns saved record with protocol info automatically 
     fishBeltToBeSaved.randomUnexpectedProperty,
   )
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get('foo')
+  const recordStoredInDexie = await dbInstance.dexiePerUserDataInstance.collect_records.get('foo')
 
   expect(recordStoredInDexie.profile).toEqual('1234')
   // _last_revision_num proves that the record comes from the server
@@ -253,7 +253,7 @@ test('saveFishBelt online replaces previous fishBelt record with same id (acts l
       the db switchboard's getCollectRecord would try to hit the real or mocked API
       which is boyond the scope of the test.
      */
-  const savedFishBelt = await dbInstance.dexieInstance.collect_records.get('foo')
+  const savedFishBelt = await dbInstance.dexiePerUserDataInstance.collect_records.get('foo')
 
   expect(savedFishBelt.data.randomProperty).toEqual(replacementFishbelt.data.randomProperty)
   expect(savedFishBelt.profile).toEqual(replacementFishbelt.profile)
@@ -275,7 +275,7 @@ test('saveFishBelt online returns saved record including id, project, profile, i
       },
     ),
     rest.post(`${process.env.REACT_APP_MERMAID_API}/push/`, (req, res, ctx) => {
-      const collectRecordsWithStatusCodes = req.body.collect_records.map(record => ({
+      const collectRecordsWithStatusCodes = req.body.collect_records.map((record) => ({
         data: { ...record, _last_revision_num: 1000 },
         status_code: 200,
       }))
@@ -343,7 +343,7 @@ test('saveFishBelt online returns and stores a saved record including existing i
   expect(savedFishBeltResponse.profile).toEqual('1234')
   expect(savedFishBeltResponse.project).toEqual('4321')
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get(
+  const recordStoredInDexie = await dbInstance.dexiePerUserDataInstance.collect_records.get(
     savedFishBeltResponse.id,
   )
 
@@ -390,9 +390,9 @@ test('saveFishBelt online saves the record in indexeddb in the case of network e
       profileId: '1',
       projectId: '1',
     })
-    .catch(error => expect(error.message).toEqual('Network Error'))
+    .catch((error) => expect(error.message).toEqual('Network Error'))
 
-  const recordStoredInDexie = await dbInstance.dexieInstance.collect_records.get('foo')
+  const recordStoredInDexie = await dbInstance.dexiePerUserDataInstance.collect_records.get('foo')
 
   expect(recordStoredInDexie).toBeDefined()
   expect(recordStoredInDexie.data).toBeDefined()

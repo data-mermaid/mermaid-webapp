@@ -10,65 +10,77 @@ import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtiliti
 import App from '../../App'
 
 test('Offline fish belt collect shows no info associated with RECORD id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/5/collecting/fishbelt/nonExistantRecordId'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantRecordId can't be found.",
-    ),
+  renderAuthenticatedOffline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/nonExistantRecordId'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantRecordId can't be found."))
 })
 
 test('Online fish belt collect shows no info associated with RECORD id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/5/collecting/fishbelt/nonExistantRecordId'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantRecordId can't be found.",
-    ),
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/5/collecting/fishbelt/nonExistantRecordId'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantRecordId can't be found."))
 })
 
 test('Offline fish belt collect shows no info associated with PROJECT id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/nonExistantProjectId/collecting/fishbelt/5'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
+  renderAuthenticatedOffline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/nonExistantProjectId/collecting/fishbelt/5'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
 
 test('Online fish belt collect shows no info associated with PROJECT id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/nonExistantProjectId/collecting/fishbelt/5'],
-    dexieInstance,
-  })
-
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
+  renderAuthenticatedOnline(
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
+    {
+      initialEntries: ['/projects/nonExistantProjectId/collecting/fishbelt/5'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    },
   )
+
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })

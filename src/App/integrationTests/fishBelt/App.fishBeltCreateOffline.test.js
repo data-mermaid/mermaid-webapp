@@ -34,16 +34,20 @@ const saveFishbeltRecord = async () => {
 
 describe('Offline', () => {
   test('New fishbelt save success shows saved input values, toast, and navigates to edit fishbelt page for new record', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     renderAuthenticatedOffline(
-      <App dexieInstance={dexieInstance} />,
+      <App
+        dexiePerUserDataInstance={dexiePerUserDataInstance}
+        dexieCurrentUserInstance={dexieCurrentUserInstance}
+      />,
       {
         initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     )
 
     await saveFishbeltRecord()
@@ -73,16 +77,20 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
   test('New fishbelt save success show new record in collecting table', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     renderAuthenticatedOffline(
-      <App dexieInstance={dexieInstance} />,
+      <App
+        dexiePerUserDataInstance={dexiePerUserDataInstance}
+        dexieCurrentUserInstance={dexieCurrentUserInstance}
+      />,
       {
         initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     )
 
     await saveFishbeltRecord()
@@ -106,15 +114,22 @@ describe('Offline', () => {
     expect(await within(table).findByText('10000'))
   })
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    dexieInstance.collect_records.put = () => Promise.reject()
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
-      dexieInstance,
-    })
+    dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
+    renderAuthenticatedOffline(
+      <App
+        dexiePerUserDataInstance={dexiePerUserDataInstance}
+        dexieCurrentUserInstance={dexieCurrentUserInstance}
+      />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+      },
+    )
 
     await saveFishbeltRecord()
 

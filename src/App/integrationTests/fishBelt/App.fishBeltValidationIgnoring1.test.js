@@ -16,7 +16,7 @@ import mockMermaidData from '../../../testUtilities/mockMermaidData'
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Validation: user can dismiss non-observations input warnings ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -261,11 +261,15 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
@@ -455,7 +459,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
 }, 50000)
 
 test('Validation: user can dismiss record-level warnings ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -497,11 +501,15 @@ test('Validation: user can dismiss record-level warnings ', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
@@ -531,7 +539,7 @@ test('Validation: user can dismiss record-level warnings ', async () => {
 }, 50000)
 
 test('Validation: user can dismiss observation warnings ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -604,11 +612,15 @@ test('Validation: user can dismiss observation warnings ', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
@@ -636,7 +648,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 }, 60000)
 
 // test('user can reset dismissed non-observation input warnings', async () => {
-//   const dexieInstance = getMockDexieInstanceAllSuccess()
+//   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
 //   mockMermaidApiAllSuccessful.use(
 //     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -883,11 +895,11 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   )
 
 //   renderAuthenticatedOnline(
-//     <App dexieInstance={dexieInstance} />,
+//     <App dexiePerUserDataInstance={dexiePerUserDataInstance} dexieCurrentUserInstance={dexieCurrentUserInstance}/>,
 //     {
 //       initialEntries: ['/projects/5/collecting/fishbelt/1'],
 //     },
-//     dexieInstance,
+//     dexiePerUserDataInstance,
 //   )
 
 //   userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))

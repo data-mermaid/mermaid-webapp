@@ -13,16 +13,16 @@ import {
 import Collect from './Collect'
 
 test('Collect Records table sorts properly by method column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -48,16 +48,16 @@ test('Collect Records table sorts properly by method column', async () => {
 })
 
 test('Collect Records table sorts properly by site column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -90,16 +90,16 @@ test('Collect Records table sorts properly by site column', async () => {
 })
 
 test('Collect Records table sorts properly by management column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -132,16 +132,16 @@ test('Collect Records table sorts properly by management column', async () => {
 })
 
 test('Collect Records table sorts properly by sample unit # column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -174,16 +174,16 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 })
 
 test('Collect Records table sorts properly by size column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -216,16 +216,16 @@ test('Collect Records table sorts properly by size column', async () => {
 })
 
 test('Collect Records table sorts properly by depth column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -257,16 +257,16 @@ test('Collect Records table sorts properly by depth column', async () => {
   expect(within(tableRowsAfterFirstClick[1]).getByText('20'))
 })
 test('Collect Records table sorts properly by sample date column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -300,16 +300,16 @@ test('Collect Records table sorts properly by sample date column', async () => {
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -344,16 +344,16 @@ test('Collect Records table sorts properly by observers column', async () => {
 })
 
 test('Collect Records table sorts properly by sample date column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -386,16 +386,16 @@ test('Collect Records table sorts properly by sample date column', async () => {
 })
 
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },
@@ -417,16 +417,16 @@ test('Collect Records table changes number of rows visible size when pagination 
 })
 
 test('Collect Records table change pages when different page is selected ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting">
       <Collect />
     </Route>,
     {
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/collecting'],
     },

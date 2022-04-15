@@ -15,7 +15,7 @@ import mockMermaidData from '../../../testUtilities/mockMermaidData'
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Fishbelt validations show check for valid inputs', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -61,11 +61,15 @@ test('Fishbelt validations show check for valid inputs', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App
+      dexiePerUserDataInstance={dexiePerUserDataInstance}
+      dexieCurrentUserInstance={dexieCurrentUserInstance}
+    />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(

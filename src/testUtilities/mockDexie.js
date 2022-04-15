@@ -3,12 +3,17 @@ import FDBFactory from 'fake-indexeddb/lib/FDBFactory'
 import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange'
 
 const getMockDexieInstanceAllSuccess = () => {
-  const dexieInstance = new Dexie('mermaidAllSuccess', {
+  const dexiePerUserDataInstance = new Dexie('userDataDatabase', {
     indexedDB: new FDBFactory(),
     IDBKeyRange,
   })
 
-  dexieInstance.version(1).stores({
+  const dexieCurrentUserInstance = new Dexie('uiStateDatabase', {
+    indexedDB: new FDBFactory(),
+    IDBKeyRange,
+  })
+
+  dexiePerUserDataInstance.version(1).stores({
     benthic_attributes: 'id',
     choices: 'id',
     collect_records: 'id, project',
@@ -19,12 +24,15 @@ const getMockDexieInstanceAllSuccess = () => {
     project_profiles: 'id, project',
     project_sites: 'id, project',
     projects: 'id',
-    uiState_currentUser: 'id',
     uiState_lastRevisionNumbersPulled: '[dataType+projectId], projectId',
     uiState_offlineReadyProjects: 'id',
   })
 
-  dexieInstance.uiState_currentUser
+  dexieCurrentUserInstance.version(1).stores({
+    currentUser: 'id',
+  })
+
+  dexieCurrentUserInstance.currentUser
     .put({
       id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
       user: {
@@ -38,7 +46,7 @@ const getMockDexieInstanceAllSuccess = () => {
       console.error('Could not create fake current user in mock offline storage', error),
     )
 
-  return dexieInstance
+  return { dexiePerUserDataInstance, dexieCurrentUserInstance }
 }
 const getMockDexieInstanceThatProducesErrors = () => {
   // produces an error in all cases so far because there are no stores defined

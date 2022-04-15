@@ -6,11 +6,17 @@ import { screen, renderAuthenticatedOnline } from '../../testUtilities/testingLi
 import App from '../App'
 
 test('App renders shows page not found when navigate to unknown path.', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+
   renderAuthenticatedOnline(
     <Route>
-      <App dexieInstance={getMockDexieInstanceAllSuccess()} />
+      <App
+        dexiePerUserDataInstance={dexiePerUserDataInstance}
+        dexieCurrentUserInstance={dexieCurrentUserInstance}
+      />
     </Route>,
     { initialEntries: ['/thisRouteDoesNotExist'] },
+    { dexiePerUserDataInstance, dexieCurrentUserInstance },
   )
 
   expect(await screen.findByText(/This page can't be found./i))

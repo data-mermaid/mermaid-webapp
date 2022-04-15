@@ -28,7 +28,7 @@ const ManagementRegimesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.project_managements
+        ? this._dexiePerUserDataInstance.project_managements
             .toArray()
             .then((managementRegimes) =>
               managementRegimes.filter(
@@ -48,7 +48,7 @@ const ManagementRegimesMixin = (Base) =>
         Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._dexieInstance.project_managements.get(id)
+      return this._dexiePerUserDataInstance.project_managements.get(id)
     }
 
     getManagementRegimeRecordsForUiDisplay = function getManagementRegimeRecordsForUiDisplay(
@@ -97,7 +97,7 @@ const ManagementRegimesMixin = (Base) =>
       })
 
       if (this._isOnlineAuthenticatedAndReady) {
-        await this._dexieInstance.project_managements.put(managementToSubmit)
+        await this._dexiePerUserDataInstance.project_managements.put(managementToSubmit)
 
         return axios
           .post(
@@ -138,7 +138,7 @@ const ManagementRegimesMixin = (Base) =>
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.project_managements
+        return this._dexiePerUserDataInstance.project_managements
           .put(managementToSubmit)
           .then(() => managementToSubmit)
       }

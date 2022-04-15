@@ -1,8 +1,8 @@
-const ChoicesMixin = Base =>
+const ChoicesMixin = (Base) =>
   class extends Base {
     getChoices = async function getChoices() {
       return this._isAuthenticatedAndReady
-        ? (await this._dexieInstance.choices.toArray())[0].choices
+        ? (await this._dexiePerUserDataInstance.choices.toArray())[0].choices
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }

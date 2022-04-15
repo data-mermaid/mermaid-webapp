@@ -1,19 +1,19 @@
 import mockMermaidData from './mockMermaidData'
 
-export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
-  return dexieInstance.transaction(
+export const initiallyHydrateOfflineStorageWithMockData = (dexiePerUserDataInstance) => {
+  const hydrateUsersDataDatabase = dexiePerUserDataInstance.transaction(
     'rw',
-    dexieInstance.benthic_attributes,
-    dexieInstance.choices,
-    dexieInstance.collect_records,
-    dexieInstance.fish_families,
-    dexieInstance.fish_genera,
-    dexieInstance.fish_species,
-    dexieInstance.project_managements,
-    dexieInstance.project_profiles,
-    dexieInstance.project_sites,
-    dexieInstance.projects,
-    dexieInstance.uiState_offlineReadyProjects,
+    dexiePerUserDataInstance.benthic_attributes,
+    dexiePerUserDataInstance.choices,
+    dexiePerUserDataInstance.collect_records,
+    dexiePerUserDataInstance.fish_families,
+    dexiePerUserDataInstance.fish_genera,
+    dexiePerUserDataInstance.fish_species,
+    dexiePerUserDataInstance.project_managements,
+    dexiePerUserDataInstance.project_profiles,
+    dexiePerUserDataInstance.project_sites,
+    dexiePerUserDataInstance.projects,
+
     async () => {
       // choices is not an array, so not like th others
       const allThePullableDataNamesButChoices = [
@@ -29,17 +29,19 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexieInstance) => {
       ]
 
       allThePullableDataNamesButChoices.forEach((dataType) => {
-        dexieInstance[dataType].bulkPut(mockMermaidData[dataType])
+        dexiePerUserDataInstance[dataType].bulkPut(mockMermaidData[dataType])
       })
 
-      dexieInstance.choices.put({
+      dexiePerUserDataInstance.choices.put({
         id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
         choices: mockMermaidData.choices,
       })
-
-      dexieInstance.uiState_offlineReadyProjects.put({
-        id: '1',
-      })
     },
   )
+
+  const hydrateUiStateDatabase = dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
+    id: '1',
+  })
+
+  return Promise.all([hydrateUsersDataDatabase, hydrateUiStateDatabase])
 }

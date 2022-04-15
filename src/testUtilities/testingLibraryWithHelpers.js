@@ -76,7 +76,7 @@ UnauthenticatedProviders.defaultProps = {
 }
 const renderAuthenticated = (
   ui,
-  { renderOptions, initialEntries, dexieInstance, isSyncInProgressOverride } = {},
+  { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
@@ -85,7 +85,9 @@ const renderAuthenticated = (
         isSyncInProgressOverride={isSyncInProgressOverride}
       >
         <DatabaseSwitchboardInstanceProvider
-          value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
+          value={getMockOnlineDatabaseSwitchboardInstance({
+            dexiePerUserDataInstance,
+          })}
         >
           <OnlineStatusProvider>{children}</OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -101,7 +103,7 @@ const renderAuthenticated = (
 
 const renderAuthenticatedOnline = (
   ui,
-  { renderOptions, initialEntries, dexieInstance, isSyncInProgressOverride } = {},
+  { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
@@ -110,7 +112,9 @@ const renderAuthenticatedOnline = (
         isSyncInProgressOverride={isSyncInProgressOverride}
       >
         <DatabaseSwitchboardInstanceProvider
-          value={getMockOnlineDatabaseSwitchboardInstance(dexieInstance)}
+          value={getMockOnlineDatabaseSwitchboardInstance({
+            dexiePerUserDataInstance,
+          })}
         >
           <OnlineStatusProvider value={{ isAppOnline: true }}>{children}</OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
@@ -138,7 +142,7 @@ const renderUnauthenticatedOnline = (ui, { renderOptions, initialEntries } = {})
 
 const renderAuthenticatedOffline = (
   ui,
-  { renderOptions, initialEntries, dexieInstance, isSyncInProgressOverride } = {},
+  { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
   const wrapper = ({ children }) => {
     return (
@@ -147,7 +151,9 @@ const renderAuthenticatedOffline = (
         isSyncInProgressOverride={isSyncInProgressOverride}
       >
         <DatabaseSwitchboardInstanceProvider
-          value={getMockOfflineDatabaseSwitchboardInstance(dexieInstance)}
+          value={getMockOfflineDatabaseSwitchboardInstance({
+            dexiePerUserDataInstance,
+          })}
         >
           <OnlineStatusProvider value={{ isAppOnline: false }}>{children}</OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
