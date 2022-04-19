@@ -6,11 +6,11 @@ import {
   renderAuthenticatedOffline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 test('Collect page only shows records that arent marked to be deleted next sync', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -21,17 +21,11 @@ test('Collect page only shows records that arent marked to be deleted next sync'
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/collecting/'],
-    },
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
-  )
+  })
 
   userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
 
@@ -41,7 +35,7 @@ test('Collect page only shows records that arent marked to be deleted next sync'
 })
 
 test('Sites page only shows records that arent marked to be deleted next sync', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -52,17 +46,11 @@ test('Sites page only shows records that arent marked to be deleted next sync', 
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/sites/'],
-    },
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/sites/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
-  )
+  })
 
   userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
 
@@ -72,7 +60,7 @@ test('Sites page only shows records that arent marked to be deleted next sync', 
 })
 
 test('Management Regimes page only shows records that arent marked to be deleted next sync', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -83,17 +71,11 @@ test('Management Regimes page only shows records that arent marked to be deleted
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/management-regimes/'],
-    },
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/management-regimes/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
-  )
+  })
 
   userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
 

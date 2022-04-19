@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -13,7 +13,7 @@ import {
 import Collect from './Collect'
 
 test('Collect Records table sorts properly by method column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -48,7 +48,7 @@ test('Collect Records table sorts properly by method column', async () => {
 })
 
 test('Collect Records table sorts properly by site column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -90,7 +90,7 @@ test('Collect Records table sorts properly by site column', async () => {
 })
 
 test('Collect Records table sorts properly by management column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -132,7 +132,7 @@ test('Collect Records table sorts properly by management column', async () => {
 })
 
 test('Collect Records table sorts properly by sample unit # column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -174,7 +174,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 })
 
 test('Collect Records table sorts properly by size column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -216,7 +216,7 @@ test('Collect Records table sorts properly by size column', async () => {
 })
 
 test('Collect Records table sorts properly by depth column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -257,7 +257,7 @@ test('Collect Records table sorts properly by depth column', async () => {
   expect(within(tableRowsAfterFirstClick[1]).getByText('20'))
 })
 test('Collect Records table sorts properly by sample date column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -300,7 +300,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -344,7 +344,7 @@ test('Collect Records table sorts properly by observers column', async () => {
 })
 
 test('Collect Records table sorts properly by status column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -386,7 +386,7 @@ test('Collect Records table sorts properly by status column', async () => {
 })
 
 test('Collect Records table changes number of rows visible size when pagination size is changed', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -417,7 +417,7 @@ test('Collect Records table changes number of rows visible size when pagination 
 })
 
 test('Collect Records table change pages when different page is selected ', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 

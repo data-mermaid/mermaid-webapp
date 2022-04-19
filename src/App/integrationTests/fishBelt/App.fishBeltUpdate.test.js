@@ -7,28 +7,22 @@ import {
   waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import App from '../../App'
 
 describe('Offline', () => {
   test('Edit fishbelt save success shows toast message and proper record information', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/2'],
-        dexiePerUserDataInstance,
-        dexieCurrentUserInstance,
-      },
-    )
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    })
 
     // make a change
 
@@ -64,21 +58,15 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/2'],
-        dexiePerUserDataInstance,
-        dexieCurrentUserInstance,
-      },
-    )
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    })
 
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
@@ -131,21 +119,15 @@ describe('Offline', () => {
     expect(newObservation.size).toEqual(37.5)
   })
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie for 50+ observation size input', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/2'],
-        dexiePerUserDataInstance,
-        dexieCurrentUserInstance,
-      },
-    )
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    })
 
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
@@ -188,24 +170,18 @@ describe('Offline', () => {
     expect(newObservation.size).toEqual(50367)
   })
   test('Edit fishbelt save failure shows toast message with new edits persisting', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     // make sure the next save will fail
     dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/2'],
-        dexiePerUserDataInstance,
-        dexieCurrentUserInstance,
-      },
-    )
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    })
 
     // make an unsaved change
     const depthInput = await screen.findByLabelText('Depth')
@@ -224,22 +200,16 @@ describe('Offline', () => {
   })
 
   test('Edit fishbelt can "unselect" non required radio group inputs', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/2'],
-        dexiePerUserDataInstance,
-        dexieCurrentUserInstance,
-      },
-    )
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    })
 
     await screen.findByLabelText('project pages loading indicator')
     await waitForElementToBeRemoved(() =>

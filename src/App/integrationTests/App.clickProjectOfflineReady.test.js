@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import React from 'react'
 
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import {
   mockMermaidApiAllSuccessful,
@@ -50,18 +50,12 @@ beforeEach(() => {
 })
 
 test('Sync: select project to be offline ready, shows toast, syncs and stores data, shows project as selected', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
   /**
    * api syncing can cause the loading indicator to initially be absent,
    * and then show up. for the test to work, we need to wait for
@@ -101,18 +95,12 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
   )
 })
 test('Sync: select project to NOT be offline ready, shows toast, removes data, shows project as not selected', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const project5OfflineCheckboxBeforeFirstClick = within(
     (await screen.findAllByRole('listitem'))[4],

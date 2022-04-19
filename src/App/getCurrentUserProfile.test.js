@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 import {
-  getMockDexieInstanceAllSuccess,
+  getMockDexieInstancesAllSuccess,
   getMockDexieInstanceThatProducesErrors,
 } from '../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../testUtilities/mockMermaidApiAllSuccessful'
@@ -10,7 +10,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const getAccessToken = async () => 'fake token'
 
 test('getCurrentUserProfile online returns data from the API', async () => {
-  const { dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
   const userProfile = await getCurrentUserProfile({
     apiBaseUrl,
     getAccessToken,
@@ -27,7 +27,7 @@ test('getCurrentUserProfile online returns data from the API', async () => {
   })
 })
 test('getCurrentUserProfile online returns error message upon API error', async () => {
-  const { dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.get(`${apiBaseUrl}/me`, (req, res, ctx) => {
@@ -50,7 +50,7 @@ test('getCurrentUserProfile online returns error message upon API error', async 
   }
 })
 test('getCurrentUserProfile offline returns data from local storage', async () => {
-  const { dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   const userProfile = await getCurrentUserProfile({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,

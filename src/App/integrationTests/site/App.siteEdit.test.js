@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import {
   renderAuthenticatedOffline,
@@ -12,22 +12,16 @@ import {
 import App from '../../App'
 
 test('Offline: Edit Site shows toast and edited record info', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/sites/1'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/sites/1'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const siteNameInput = await screen.findByLabelText('Name')
 
@@ -46,19 +40,13 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
 })
 
 test('Online: Edit Site shows toast and edited record info', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/sites/1'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/sites/1'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const siteNameInput = await screen.findByLabelText('Name')
 
@@ -78,22 +66,16 @@ test('Online: Edit Site shows toast and edited record info', async () => {
 
 test('Offline: edit site save stored site in dexie', async () => {
   // hard to test this one online due to excessive mocking, so we will skip that
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/sites/1'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/sites/1'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const siteNameInput = await screen.findByLabelText('Name')
 
@@ -115,7 +97,7 @@ test('Offline: edit site save stored site in dexie', async () => {
   expect(updatedSite.name).toEqual('OOF')
 })
 test('Offline: Edit site  save failure shows toast message with new edits persisting', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -125,17 +107,11 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/sites/1'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/sites/1'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const siteNameInput = await screen.findByLabelText('Name')
 

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -14,7 +14,7 @@ import {
 import ManagementRegimes from './ManagementRegimes'
 
 test('ManagementRegimes component renders with the expected headers', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -48,7 +48,7 @@ test('ManagementRegimes component renders with the expected headers', async () =
 })
 
 test('Management Regime Records table sorts properly by Name column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -90,7 +90,7 @@ test('Management Regime Records table sorts properly by Name column', async () =
 })
 
 test('Management Regime Records table sorts properly by Year Est. column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -133,7 +133,7 @@ test('Management Regime Records table sorts properly by Year Est. column', async
 })
 
 test('Management Regime Records table sorts properly by Compliance column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -176,7 +176,7 @@ test('Management Regime Records table sorts properly by Compliance column', asyn
 })
 
 test('Management Regime Records table sorts properly by Open Access column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -218,7 +218,7 @@ test('Management Regime Records table sorts properly by Open Access column', asy
 })
 
 test('Management Regime Records table sorts properly by Access Restrictions column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -260,7 +260,7 @@ test('Management Regime Records table sorts properly by Access Restrictions colu
 })
 
 test('Management Regime Records table sorts properly by Periodic Closure column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -302,7 +302,7 @@ test('Management Regime Records table sorts properly by Periodic Closure column'
 })
 
 test('Management Regime Records table sorts properly by Size Limits column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -344,7 +344,7 @@ test('Management Regime Records table sorts properly by Size Limits column', asy
 })
 
 test('Management Regime Records table sorts properly by Gear Restrictions column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -386,7 +386,7 @@ test('Management Regime Records table sorts properly by Gear Restrictions column
 })
 
 test('Management Regime Records table sorts properly by Species Restrictions column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -428,7 +428,7 @@ test('Management Regime Records table sorts properly by Species Restrictions col
 })
 
 test('Management Regime Records table sorts properly by No Take column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 

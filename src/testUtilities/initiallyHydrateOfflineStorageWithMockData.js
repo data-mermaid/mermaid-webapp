@@ -1,7 +1,7 @@
 import mockMermaidData from './mockMermaidData'
 
 export const initiallyHydrateOfflineStorageWithMockData = (dexiePerUserDataInstance) => {
-  const hydrateUsersDataDatabase = dexiePerUserDataInstance.transaction(
+  return dexiePerUserDataInstance.transaction(
     'rw',
     dexiePerUserDataInstance.benthic_attributes,
     dexiePerUserDataInstance.choices,
@@ -13,6 +13,7 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexiePerUserDataInsta
     dexiePerUserDataInstance.project_profiles,
     dexiePerUserDataInstance.project_sites,
     dexiePerUserDataInstance.projects,
+    dexiePerUserDataInstance.uiState_offlineReadyProjects,
 
     async () => {
       // choices is not an array, so not like th others
@@ -36,12 +37,10 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexiePerUserDataInsta
         id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
         choices: mockMermaidData.choices,
       })
+
+      dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
+        id: '1',
+      })
     },
   )
-
-  const hydrateUiStateDatabase = dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
-    id: '1',
-  })
-
-  return Promise.all([hydrateUsersDataDatabase, hydrateUiStateDatabase])
 }

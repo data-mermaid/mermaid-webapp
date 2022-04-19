@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
@@ -11,14 +11,12 @@ import {
 import App from '../App'
 
 test('App renders shows the users name from the API for an online and authenticated user', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   // wait for page to load in lieu of being able to test for a loading indicator to have vanished
   expect(await screen.findByText('Projects', { selector: 'h1' }))
@@ -29,15 +27,12 @@ test('App renders shows the users name from the API for an online and authentica
 })
 
 test('App renders shows the users name from offline storage for an offline user who is authenticated when online', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    { dexiePerUserDataInstance, dexieCurrentUserInstance },
-  )
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   // wait for page to load in lieu of being able to test for a loading indicator to have vanished
   expect(

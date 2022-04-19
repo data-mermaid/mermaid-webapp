@@ -7,7 +7,7 @@ import {
   renderAuthenticatedOffline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 const saveFishbeltRecord = async () => {
@@ -34,21 +34,15 @@ const saveFishbeltRecord = async () => {
 
 describe('Offline', () => {
   test('New fishbelt save success shows saved input values, toast, and navigates to edit fishbelt page for new record', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/'],
-      },
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
-    )
+    })
 
     await saveFishbeltRecord()
 
@@ -77,21 +71,15 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
   test('New fishbelt save success show new record in collecting table', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/'],
-      },
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
-    )
+    })
 
     await saveFishbeltRecord()
 
@@ -114,22 +102,16 @@ describe('Offline', () => {
     expect(await within(table).findByText('10000'))
   })
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/'],
-        dexiePerUserDataInstance,
-        dexieCurrentUserInstance,
-      },
-    )
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    })
 
     await saveFishbeltRecord()
 

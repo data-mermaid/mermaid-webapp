@@ -1,4 +1,4 @@
-import { getMockDexieInstanceAllSuccess } from './mockDexie'
+import { getMockDexieInstancesAllSuccess } from './mockDexie'
 import DatabaseSwitchboard from '../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import SyncApiDataIntoOfflineStorage from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { getFakeAccessToken } from './getFakeAccessToken'
@@ -8,7 +8,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 const getMockOnlineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance }) => {
   const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
-    getMockDexieInstanceAllSuccess()
+    getMockDexieInstancesAllSuccess()
   const dexieUserDataDatabaseInstanceToUse =
     dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
 
@@ -29,7 +29,7 @@ const getMockOnlineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance }) 
 
 const getMockOfflineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance }) => {
   const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
-    getMockDexieInstanceAllSuccess()
+    getMockDexieInstancesAllSuccess()
   const dexieUserDataDatabaseInstanceToUse =
     dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
 

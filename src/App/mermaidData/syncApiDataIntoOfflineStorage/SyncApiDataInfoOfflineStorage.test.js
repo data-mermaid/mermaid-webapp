@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
@@ -42,7 +42,7 @@ test('pushThenPullEverythingForAProjectButChoices keeps track of returned last_r
     }),
   )
 
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -94,7 +94,7 @@ test('pushThenPullEverythingForAProject keeps track of returned last_revision_nu
     }),
   )
 
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -142,7 +142,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
     }),
   )
 
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -158,7 +158,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
 })
 
 test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -331,7 +331,7 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
 })
 
 test('pushThenPullEverythingForAProject updates IDB with API data', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -516,7 +516,7 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
 })
 
 test('pushThenPullEverything updates IDB with API data', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   // so we can test that an offline ready project gets pulled too
   await dexiePerUserDataInstance.uiState_offlineReadyProjects.put({ id: '5' })
@@ -689,7 +689,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
   })
 })
 test('pushChanges includes the force flag', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
@@ -722,7 +722,7 @@ test('pushChanges includes the force flag', async () => {
 })
 
 test('pushChanges includes the expected modified data', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 

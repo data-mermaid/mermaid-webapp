@@ -9,11 +9,11 @@ import {
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 
 import ManagementRegime from '../ManagementRegime'
-import { getMockDexieInstanceAllSuccess } from '../../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 test('Management Regime component renders with the expected UI elements', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -47,7 +47,7 @@ test('Management Regime component renders with the expected UI elements', async 
 })
 
 test('Management Regime component - form inputs are initialized with the correct values', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 

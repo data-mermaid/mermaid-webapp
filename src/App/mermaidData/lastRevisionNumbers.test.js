@@ -1,4 +1,4 @@
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import {
   getLastRevisionNumbersPulledForAProject,
@@ -7,7 +7,7 @@ import {
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 
 test('Make sure last revision numbers are stored per project where appropriate, and project-agnostic entities get the most recent last revision number', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 

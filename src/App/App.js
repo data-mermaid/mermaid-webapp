@@ -22,14 +22,28 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
+import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
 
-function App({ dexiePerUserDataInstance, dexieCurrentUserInstance }) {
-  const isMounted = useIsMounted()
+function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
+  const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+  const isMounted = useIsMounted()
+
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
   })
-  const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+
+  const currentUser = useInitializeCurrentUser({
+    apiBaseUrl,
+    getAccessToken,
+    dexieCurrentUserInstance,
+    isMermaidAuthenticated,
+    isAppOnline,
+  })
+
+  const { dexiePerUserDataInstance } = useDexiePerUserDataInstance({
+    currentUser,
+  })
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
@@ -71,13 +85,6 @@ function App({ dexiePerUserDataInstance, dexieCurrentUserInstance }) {
     apiSyncInstance,
   ])
 
-  const currentUser = useInitializeCurrentUser({
-    apiBaseUrl,
-    getAccessToken,
-    dexieCurrentUserInstance,
-    isMermaidAuthenticated,
-    isAppOnline,
-  })
   const { routes } = useRoutes({ apiSyncInstance })
 
   const layoutProps = {
@@ -135,7 +142,6 @@ function App({ dexiePerUserDataInstance, dexieCurrentUserInstance }) {
 }
 
 App.propTypes = {
-  dexiePerUserDataInstance: dexieInstancePropTypes.isRequired,
   dexieCurrentUserInstance: dexieInstancePropTypes.isRequired,
 }
 

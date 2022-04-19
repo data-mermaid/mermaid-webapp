@@ -5,44 +5,32 @@ import {
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import App from '../../App'
 
 test('Offline collect records list shows no info associated with projectId view ', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/nonExistantProjectId/collecting/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/nonExistantProjectId/collecting/'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
 
 test('Online collect records list shows no info associated with projectId view ', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/nonExistantProjectId/collecting/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/nonExistantProjectId/collecting/'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
