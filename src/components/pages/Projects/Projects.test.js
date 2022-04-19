@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { getFakeAccessToken } from '../../../testUtilities/getFakeAccessToken'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   renderAuthenticatedOffline,
@@ -15,7 +15,7 @@ import {
 import Projects from './Projects'
 
 test('Projects component renders with the expected UI elements', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexiePerUserDataInstance,
@@ -61,7 +61,7 @@ test('Projects component renders with the expected UI elements', async () => {
 })
 
 test('A project card renders with the expected UI elements for button groups', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexiePerUserDataInstance,
@@ -99,7 +99,7 @@ test('A project card renders with the expected UI elements for button groups', a
 })
 
 test('A project card shows relevant data for a project', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexiePerUserDataInstance,
@@ -139,7 +139,7 @@ test('A project card shows relevant data for a project', async () => {
 })
 
 test('A project card renders appropriately when offline', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -176,7 +176,7 @@ test('A project card renders appropriately when offline', async () => {
 })
 
 test('A project card renders appropriately when online', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -219,7 +219,7 @@ test('A project card renders appropriately when online', async () => {
 })
 
 test('Hide new project button in project toolbar when offline', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -244,7 +244,7 @@ test('Hide new project button in project toolbar when offline', async () => {
 })
 
 test('Projects can be sorted by countries', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -274,7 +274,7 @@ test('Projects can be sorted by countries', async () => {
 })
 
 test('Projects can be sorted by number of sites', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -304,7 +304,7 @@ test('Projects can be sorted by number of sites', async () => {
 })
 
 test('Projects can be sorted by updated on date', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -338,7 +338,7 @@ test('Projects can be sorted by updated on date', async () => {
 })
 
 test('Project sorted descending', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -367,7 +367,7 @@ test('Project sorted descending', async () => {
 })
 
 test('Project filter filters by name and country', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 

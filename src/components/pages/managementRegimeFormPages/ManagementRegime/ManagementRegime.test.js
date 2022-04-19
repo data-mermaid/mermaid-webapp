@@ -4,7 +4,7 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -14,7 +14,7 @@ import {
 import ManagementRegime from './ManagementRegime'
 
 test('Edit fishbelt shows name and rules required', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 

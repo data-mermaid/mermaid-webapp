@@ -15,6 +15,8 @@ import {
 import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getFakeAccessToken } from './getFakeAccessToken'
 import { CurrentUserProvider } from '../App/CurrentUserContext'
+import { getMockDexieInstancesAllSuccess } from './mockDexie'
+import { DexiePerUserDataInstanceProvider } from '../App/dexiePerUserDataInstanceContext'
 
 const fakeCurrentUser = {
   id: 'fake-id',
@@ -78,6 +80,10 @@ const renderAuthenticated = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
+  const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
+    getMockDexieInstancesAllSuccess()
+  const dexieUserDataDatabaseInstanceToUse =
+    dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
   const wrapper = ({ children }) => {
     return (
       <AuthenticatedProviders
@@ -89,7 +95,13 @@ const renderAuthenticated = (
             dexiePerUserDataInstance,
           })}
         >
-          <OnlineStatusProvider>{children}</OnlineStatusProvider>
+          <OnlineStatusProvider>
+            <DexiePerUserDataInstanceProvider
+              value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
+            >
+              {children}
+            </DexiePerUserDataInstanceProvider>
+          </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
       </AuthenticatedProviders>
     )
@@ -105,6 +117,10 @@ const renderAuthenticatedOnline = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
+  const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
+    getMockDexieInstancesAllSuccess()
+  const dexieUserDataDatabaseInstanceToUse =
+    dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
   const wrapper = ({ children }) => {
     return (
       <AuthenticatedProviders
@@ -116,7 +132,13 @@ const renderAuthenticatedOnline = (
             dexiePerUserDataInstance,
           })}
         >
-          <OnlineStatusProvider value={{ isAppOnline: true }}>{children}</OnlineStatusProvider>
+          <OnlineStatusProvider value={{ isAppOnline: true }}>
+            <DexiePerUserDataInstanceProvider
+              value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
+            >
+              {children}
+            </DexiePerUserDataInstanceProvider>
+          </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
       </AuthenticatedProviders>
     )
@@ -128,11 +150,24 @@ const renderAuthenticatedOnline = (
   })
 }
 
-const renderUnauthenticatedOnline = (ui, { renderOptions, initialEntries } = {}) => {
+const renderUnauthenticatedOnline = (
+  ui,
+  { renderOptions, initialEntries, dexiePerUserDataInstance } = {},
+) => {
+  const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
+    getMockDexieInstancesAllSuccess()
+  const dexieUserDataDatabaseInstanceToUse =
+    dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
   const wrapper = ({ children }) => {
     return (
       <UnauthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isAppOnline: true }}>{children}</OnlineStatusProvider>
+        <OnlineStatusProvider value={{ isAppOnline: true }}>
+          <DexiePerUserDataInstanceProvider
+            value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
+          >
+            {children}
+          </DexiePerUserDataInstanceProvider>
+        </OnlineStatusProvider>
       </UnauthenticatedProviders>
     )
   }
@@ -144,6 +179,10 @@ const renderAuthenticatedOffline = (
   ui,
   { renderOptions, initialEntries, dexiePerUserDataInstance, isSyncInProgressOverride } = {},
 ) => {
+  const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
+    getMockDexieInstancesAllSuccess()
+  const dexieUserDataDatabaseInstanceToUse =
+    dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
   const wrapper = ({ children }) => {
     return (
       <AuthenticatedProviders
@@ -155,7 +194,13 @@ const renderAuthenticatedOffline = (
             dexiePerUserDataInstance,
           })}
         >
-          <OnlineStatusProvider value={{ isAppOnline: false }}>{children}</OnlineStatusProvider>
+          <OnlineStatusProvider value={{ isAppOnline: false }}>
+            <DexiePerUserDataInstanceProvider
+              value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
+            >
+              {children}
+            </DexiePerUserDataInstanceProvider>
+          </OnlineStatusProvider>
         </DatabaseSwitchboardInstanceProvider>
       </AuthenticatedProviders>
     )
@@ -167,11 +212,24 @@ const renderAuthenticatedOffline = (
   })
 }
 
-const renderUnauthenticatedOffline = (ui, { renderOptions, initialEntries } = {}) => {
+const renderUnauthenticatedOffline = (
+  ui,
+  { renderOptions, initialEntries, dexiePerUserDataInstance } = {},
+) => {
+  const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
+    getMockDexieInstancesAllSuccess()
+  const dexieUserDataDatabaseInstanceToUse =
+    dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
   const wrapper = ({ children }) => {
     return (
       <UnauthenticatedProviders initialEntries={initialEntries}>
-        <OnlineStatusProvider value={{ isAppOnline: false }}>{children}</OnlineStatusProvider>
+        <OnlineStatusProvider value={{ isAppOnline: false }}>
+          <DexiePerUserDataInstanceProvider
+            value={{ dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse }}
+          >
+            {children}
+          </DexiePerUserDataInstanceProvider>
+        </OnlineStatusProvider>
       </UnauthenticatedProviders>
     )
   }

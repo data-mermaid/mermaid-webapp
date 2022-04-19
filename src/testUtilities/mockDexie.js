@@ -2,7 +2,7 @@ import Dexie from 'dexie'
 import FDBFactory from 'fake-indexeddb/lib/FDBFactory'
 import IDBKeyRange from 'fake-indexeddb/lib/FDBKeyRange'
 
-const getMockDexieInstanceAllSuccess = () => {
+const getMockDexieInstancesAllSuccess = () => {
   const dexiePerUserDataInstance = new Dexie('userDataDatabase', {
     indexedDB: new FDBFactory(),
     IDBKeyRange,
@@ -56,4 +56,4 @@ const getMockDexieInstanceThatProducesErrors = () => {
   })
 }
 
-export { getMockDexieInstanceAllSuccess, getMockDexieInstanceThatProducesErrors }
+export { getMockDexieInstancesAllSuccess, getMockDexieInstanceThatProducesErrors }

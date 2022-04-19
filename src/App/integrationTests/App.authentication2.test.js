@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 
 import {
   fireEvent,
@@ -16,15 +16,12 @@ import App from '../App'
 // test suite cut up into 2 parts for performance reasons
 
 test('App renders the initial screen as expected for an offline user who is authenticated when online', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    { dexieCurrentUserInstance, dexiePerUserDataInstance },
-  )
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexieCurrentUserInstance,
+    dexiePerUserDataInstance,
+  })
 
   expect(await screen.findByText('Projects', { selector: 'h1' }))
 
@@ -36,29 +33,23 @@ test('App renders the initial screen as expected for an offline user who is auth
 })
 
 test('App renders the initial screen as expected for an online but not authenticated user', () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderUnauthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    { dexieCurrentUserInstance, dexiePerUserDataInstance },
-  )
+  renderUnauthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexieCurrentUserInstance,
+    dexiePerUserDataInstance,
+  })
 
   expect(screen.queryByRole('heading', { name: 'Projects' })).not.toBeInTheDocument()
 })
 
 test('App renders the initial screen as expected for an offline user who is not authenticated in an online environment', () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderUnauthenticatedOffline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    { dexieCurrentUserInstance, dexiePerUserDataInstance },
-  )
+  renderUnauthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexieCurrentUserInstance,
+    dexiePerUserDataInstance,
+  })
 
   expect(screen.queryByRole('heading', { name: 'Projects' })).not.toBeInTheDocument()
 })

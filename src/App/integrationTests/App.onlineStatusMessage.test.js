@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import { rest } from 'msw'
 import React from 'react'
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticated,
@@ -14,18 +14,12 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 test('Appropriate online status message shows when navigator is online', async () => {
   jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(true)
 
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
     "You're ONLINE",
@@ -36,18 +30,12 @@ test('Appropriate online status message shows when navigator is online', async (
 })
 test('Appropriate online status message shows when navigator is offline', async () => {
   jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
   expect(await screen.findByTestId('offline-toggle-switch-label')).not.toHaveTextContent(
     "You're ONLINE",
@@ -58,18 +46,12 @@ test('Appropriate online status message shows when navigator is offline', async 
 })
 
 test('Appropriate online status message shows when server is reachable', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
   expect(await screen.findByTestId('offline-toggle-switch-label')).toHaveTextContent(
     "You're ONLINE",
@@ -84,18 +66,12 @@ test('Appropriate online status message shows when server is unreachable', async
       return res.networkError('Custom network error message')
     }),
   )
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
   // we're using testId + tohaveTextContent here because the text is broken up by html and a regular findByText will fail
   // timeout is necessary here because the server ping happens every 5 seconds.
 

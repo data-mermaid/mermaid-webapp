@@ -1,6 +1,6 @@
 import { getFakeAccessToken } from '../../../../testUtilities/getFakeAccessToken'
 import {
-  getMockDexieInstanceAllSuccess,
+  getMockDexieInstancesAllSuccess,
   getMockDexieInstanceThatProducesErrors,
 } from '../../../../testUtilities/mockDexie'
 import SyncApiDataIntoOfflineStorage from '../../syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
@@ -10,7 +10,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () => {
   const getAccessToken = async () => 'fake token'
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const databaseSwitchboardInstance = new DatabaseSwitchboard({
     apiBaseUrl,
@@ -68,7 +68,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
 
 export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = () => {
   const getAccessToken = async () => 'fake token'
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const databaseSwitchboardInstance = new DatabaseSwitchboard({
     apiBaseUrl,

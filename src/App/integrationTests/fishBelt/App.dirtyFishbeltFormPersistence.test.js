@@ -8,22 +8,16 @@ import {
   renderAuthenticated,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 
 test('Unsaved NEW fishbelt form edits clear when the user navigates away and back', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const form = await screen.findByRole('form')
 
@@ -58,19 +52,13 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
 })
 
 test('Unsaved EDIT fishbelt form edits clear when the user navigates away and back', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const form = await screen.findByRole('form')
 
@@ -105,19 +93,13 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   expect(within(formAfterNav).getByLabelText(/depth/i)).toHaveValue(10)
 })
 test('Unsaved NEW fishbelt form edits persist through change in online/offline status', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const form = await screen.findByRole('form')
 
@@ -139,19 +121,13 @@ test('Unsaved NEW fishbelt form edits persist through change in online/offline s
 })
 
 test('Unsaved EDIT fishbelt form edits persist through change in online/offline status', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const form = await screen.findByRole('form')
 

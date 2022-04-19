@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -14,7 +14,7 @@ import {
 import Sites from './Sites'
 
 test('Site component renders with the expected headers', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -42,7 +42,7 @@ test('Site component renders with the expected headers', async () => {
 })
 
 test('Site Records table sorts properly by Name column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -84,7 +84,7 @@ test('Site Records table sorts properly by Name column', async () => {
 })
 
 test('Site Records table sorts properly by Reef Type column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -126,7 +126,7 @@ test('Site Records table sorts properly by Reef Type column', async () => {
 })
 
 test('Site Records table sorts properly by Reef Zone column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -168,7 +168,7 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
 })
 
 test('Site Records table sorts properly by Exposure column', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
