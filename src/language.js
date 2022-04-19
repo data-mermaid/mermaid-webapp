@@ -1,5 +1,5 @@
 // prettier-ignore
-import React from 'react'
+import { getSystemValidationErrorMessage, getDuplicateSampleUnitLink } from './library/validationMessageHelpers'
 
 const projectCodes = {
   status: { open: 90, test: 80 },
@@ -229,36 +229,10 @@ const pages = {
 const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
-const getSystemValidationErrorMessage = (drySubmitContext) => {
-  const errors = Object.entries(drySubmitContext)
-  const errorMap = errors.map((errorPart) => (
-    <div key={errorPart[0]}>
-      {errorPart[0]}: {errorPart[1]}
-    </div>
-  ))
-
-  return (
-    <>
-      <div>System validation error: </div>
-      {errorMap}
-    </>
-  )
-}
-
-const getDuplicateSampleUnitLink = (duplicateTransectMethodContext, projectId) => {
-  const linkToSampleUnit = `/projects/${projectId}/data/fishbelt/${duplicateTransectMethodContext}`
-
-  return (
-    <span>
-      Duplicate sample unit <a href={linkToSampleUnit}>{duplicateTransectMethodContext}</a>
-    </span>
-  )
-}
-
 const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
-  const validationTexts = {
+  const validationMessages = {
     all_equal: () => 'All observations are the same',
     duplicate_fishbelt_transect: () =>
       getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
@@ -302,7 +276,7 @@ const getValidationMessage = (validation, projectId = '') => {
     default: () => code || name,
   }
 
-  return (validationTexts[code] || validationTexts.default)()
+  return (validationMessages[code] || validationMessages.default)()
 }
 
 export default {
