@@ -3,32 +3,32 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
-import { ContentPageLayout } from '../../Layout'
-import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
-import { getToastArguments } from '../../../library/getToastArguments'
-import { H2 } from '../../generic/text'
-import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
+  reactTableNaturalSortDates,
+} from '../../generic/Table/reactTableNaturalSort'
+import { ContentPageLayout } from '../../Layout'
+import { H2 } from '../../generic/text'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import AddSampleUnitButton from './AddSampleUnitButton'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
-import PageNoData from '../PageNoData'
+import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-  reactTableNaturalSortDates,
-} from '../../generic/Table/reactTableNaturalSort'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
+import PageNoData from '../PageNoData'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -43,12 +43,9 @@ const Collect = () => {
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
   const _getCollectRecords = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress && currentUser) {
+    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
-        databaseSwitchboardInstance.getCollectRecordsForUIDisplay({
-          projectId,
-          userId: currentUser.id,
-        }),
+        databaseSwitchboardInstance.getCollectRecordsForUIDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
       ])
 
@@ -65,7 +62,7 @@ const Collect = () => {
           toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, currentUser])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
 
@@ -157,11 +154,14 @@ const Collect = () => {
           desc: false,
         },
       ],
-      globalFilter: ""
+      globalFilter: '',
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-collectTable`, defaultValue: tableDefaultPrefs })
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-collectTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -202,7 +202,7 @@ const Collect = () => {
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort

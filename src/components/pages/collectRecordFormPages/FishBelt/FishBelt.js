@@ -151,9 +151,7 @@ const FishBelt = ({ isNewRecord }) => {
       ]
 
       if (recordId && !isNewRecord) {
-        promises.push(
-          databaseSwitchboardInstance.getCollectRecord({ id: recordId, userId: currentUser.id }),
-        )
+        promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
       }
       Promise.all(promises)
         .then(
@@ -208,24 +206,14 @@ const FishBelt = ({ isNewRecord }) => {
           },
         )
         .catch(() => {
-          setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
-          setIsLoading(false)
-          const errorMessage = isNewRecord
+          const error = isNewRecord
             ? language.error.collectRecordChoicesUnavailable
             : language.error.collectRecordUnavailable
 
-          toast.error(...getToastArguments(errorMessage))
+          toast.error(...getToastArguments(error))
         })
     }
-  }, [
-    currentUser,
-    databaseSwitchboardInstance,
-    isMounted,
-    isNewRecord,
-    isSyncInProgress,
-    projectId,
-    recordId,
-  ])
+  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId, projectId, isSyncInProgress])
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
