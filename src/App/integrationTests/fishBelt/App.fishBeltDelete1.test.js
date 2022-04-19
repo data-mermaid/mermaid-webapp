@@ -6,28 +6,22 @@ import {
   renderAuthenticatedOffline,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import App from '../../App'
 
 // test suite cut up into 2 parts for performance reasons
 describe('Offline', () => {
   test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(
-      <App
-        dexiePerUserDataInstance={dexiePerUserDataInstance}
-        dexieCurrentUserInstance={dexieCurrentUserInstance}
-      />,
-      {
-        initialEntries: ['/projects/5/collecting/fishbelt/2'],
-        dexiePerUserDataInstance,
-        dexieCurrentUserInstance,
-      },
-    )
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
+    })
 
     userEvent.click(await screen.findByText('Delete Record'))
 

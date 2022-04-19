@@ -10,13 +10,13 @@ import {
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Validation: user can dismiss non-observations input warnings ', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -261,10 +261,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
   )
 
   renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -459,7 +456,7 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
 }, 50000)
 
 test('Validation: user can dismiss record-level warnings ', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -501,10 +498,7 @@ test('Validation: user can dismiss record-level warnings ', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -539,7 +533,7 @@ test('Validation: user can dismiss record-level warnings ', async () => {
 }, 50000)
 
 test('Validation: user can dismiss observation warnings ', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -612,10 +606,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -648,7 +639,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 }, 60000)
 
 // test('user can reset dismissed non-observation input warnings', async () => {
-//   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+//   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
 //   mockMermaidApiAllSuccessful.use(
 //     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -895,7 +886,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   )
 
 //   renderAuthenticatedOnline(
-//     <App dexiePerUserDataInstance={dexiePerUserDataInstance} dexieCurrentUserInstance={dexieCurrentUserInstance}/>,
+//     <App  dexieCurrentUserInstance={dexieCurrentUserInstance}/>,
 //     {
 //       initialEntries: ['/projects/5/collecting/fishbelt/1'],
 //     },

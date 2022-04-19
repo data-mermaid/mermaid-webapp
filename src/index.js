@@ -12,7 +12,7 @@ import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
 import { SyncStatusProvider } from './App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import dexieCurrentUserInstance from './App/dexieCurrentUserInstance'
-import dexiePerUserDataInstance from './App/dexiePerUserDataInstance'
+import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstanceContext'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -27,10 +27,9 @@ ReactDOM.render(
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <OnlineStatusProvider>
           <SyncStatusProvider>
-            <App
-              dexiePerUserDataInstance={dexiePerUserDataInstance}
-              dexieCurrentUserInstance={dexieCurrentUserInstance}
-            />
+            <DexiePerUserDataInstanceProvider>
+              <App dexieCurrentUserInstance={dexieCurrentUserInstance} />
+            </DexiePerUserDataInstanceProvider>
           </SyncStatusProvider>
         </OnlineStatusProvider>
       </BrowserRouter>

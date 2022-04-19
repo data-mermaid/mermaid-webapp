@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import React from 'react'
 
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import {
   mockMermaidApiAllSuccessful,
@@ -49,7 +49,7 @@ beforeEach(() => {
   )
 })
 test('Sync: initial page load on non project page', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(0)
@@ -58,16 +58,10 @@ test('Sync: initial page load on non project page', async () => {
   expect((await dexiePerUserDataInstance.fish_species.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.projects.toArray()).length).toEqual(0)
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
@@ -90,7 +84,7 @@ test('Sync: initial page load on non project page', async () => {
   )
 })
 test('Sync: initial page load on project page', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   expect((await dexiePerUserDataInstance.benthic_attributes.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.choices.toArray()).length).toEqual(0)
@@ -104,17 +98,11 @@ test('Sync: initial page load on project page', async () => {
   expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(0)
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+    initialEntries: ['/projects/5/collecting/fishbelt/'],
+  })
 
   await screen.findByLabelText('project pages loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
@@ -152,18 +140,12 @@ test('Sync: initial page load on project page', async () => {
 })
 
 test('Sync: initial page load already done, navigate to non project page', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))

@@ -4,7 +4,7 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -14,7 +14,7 @@ import {
 import Site from './Site'
 
 test('Edit Site page - Save button initially disabled, then enabled when form dirty', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -43,7 +43,7 @@ test('Edit Site page - Save button initially disabled, then enabled when form di
 })
 
 test('Edit Site page - Save button disabled and "Required" error valudation message displayed when site name is empty', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -69,7 +69,7 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
 })
 
 test('Edit Site page - clear latitude or longitude inputs shows inline error validation message "This field is required"', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -120,7 +120,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 })
 
 test('Edit Site page - enter invalid inputs to latitude shows inline error validation message "latitude should be between -90° and 90°"', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
@@ -157,7 +157,7 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
 })
 
 test('Edit Site page - enter invalid inputs to longitude shows inline error validation message "longitude should be between -180° and 180°"', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 

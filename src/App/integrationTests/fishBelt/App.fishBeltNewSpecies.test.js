@@ -12,22 +12,16 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 
 test('Fishbelt observations add new species - filling out new species form adds a new species to dexie and the observation fish name input', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   // loading indicator is weird in integration tests, so we wait for the page title
   await screen.findByTestId('edit-collect-record-form-title')
@@ -133,19 +127,13 @@ test('Fishbelt observations add new species - filling out new species form adds 
 })
 
 test('Fishbelt observations add new species - proposing new species that already exists results in no added species, and a toast message warning.', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(
-    <App
-      dexiePerUserDataInstance={dexiePerUserDataInstance}
-      dexieCurrentUserInstance={dexieCurrentUserInstance}
-    />,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    },
-  )
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   // loading indicator is weird in integration tests, so we wait for the page title
 
