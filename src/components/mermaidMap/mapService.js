@@ -296,11 +296,31 @@ export const loadMapMarkersLayer = (map) => {
     source: 'mapMarkers',
     type: 'circle',
     paint: {
-      'circle-radius': 3,
-      'circle-color': '#223b53',
+      'circle-radius': 5,
+      'circle-color': '#f0e0b3',
       'circle-stroke-color': '#ff0000',
-      'circle-stroke-width': 2,
+      'circle-stroke-width': 3,
       'circle-opacity': 0.8,
     },
+  })
+}
+
+export const handleMapOnWheel = (mapCurrent, handleZoomDisplayHelpText) => {
+  mapCurrent.on('wheel', (e) => {
+    if (e.originalEvent.ctrlKey) {
+      e.originalEvent.preventDefault()
+      handleZoomDisplayHelpText(false)
+      if (!mapCurrent.scrollZoom._enabled) {
+        mapCurrent.scrollZoom.enable()
+      }
+    } else {
+      if (mapCurrent.scrollZoom._enabled) {
+        mapCurrent.scrollZoom.disable()
+      }
+      handleZoomDisplayHelpText(true)
+      setTimeout(() => {
+        handleZoomDisplayHelpText(false)
+      }, 1500)
+    }
   })
 }

@@ -24,6 +24,7 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
@@ -41,6 +42,7 @@ const Sites = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const { isAppOnline } = useOnlineStatus()
   const currentUser = useCurrentUser()
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
@@ -118,11 +120,14 @@ const Sites = () => {
           desc: false,
         },
       ],
-      globalFilter: ""
+      globalFilter: '',
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-sitesTable`, defaultValue: tableDefaultPrefs })
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-sitesTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -171,7 +176,7 @@ const Sites = () => {
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -256,7 +261,7 @@ const Sites = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
-      <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />
+      {isAppOnline && <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />}
     </>
   ) : (
     <PageNoData

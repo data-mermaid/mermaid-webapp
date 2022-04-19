@@ -7,7 +7,7 @@ export const SliderContainer = styled.div`
   width: 270px;
   right: ${(props) => (props.isOpen ? '0px' : '-270px')};
   background: ${(props) => props.isOpen && 'rgba(255, 255, 255, 1)'};
-  top: 8px;
+  top: 1px;
   z-index: 2;
   transition: 0.3s ease-out;
 `
@@ -44,7 +44,6 @@ export const LegendHeader = styled(H3)`
 `
 
 export const LegendBody = styled.div`
-  height: 318px;
   padding: 0 5px;
   font-size: 1.5rem;
   overflow-y: scroll;
