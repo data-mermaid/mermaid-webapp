@@ -111,16 +111,6 @@ const Collect = () => {
         accessor: 'observers',
         sortType: reactTableNaturalSort,
       },
-      {
-        Header: 'Status',
-        accessor: 'status',
-        sortType: reactTableNaturalSort,
-      },
-      {
-        Header: 'Synced',
-        accessor: 'synced',
-        sortType: reactTableNaturalSort,
-      },
     ],
     [],
   )
@@ -139,9 +129,7 @@ const Collect = () => {
         size: uiLabels.size,
         depth: uiLabels.depth,
         sampleDate: uiLabels.sampleDate,
-        observers: uiLabels.observers,
-        status: uiLabels.status,
-        synced: 'wip',
+        observers: uiLabels.observers
       })),
     [collectRecordsForUiDisplay, currentProjectPath],
   )
