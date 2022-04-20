@@ -6,6 +6,8 @@ import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQuerie
 import { getObjectById } from '../../library/getObjectById'
 import { TooltipWithText, TooltipPopup } from '../generic/tooltip'
 import { fishBeltPropType, sitePropType } from '../../App/mermaidData/mermaidDataProptypes'
+import useDocumentTitle from '../../library/useDocumentTitle'
+import language from '../../language'
 
 const TitleContainer = styled('div')`
   display: flex;
@@ -22,19 +24,20 @@ const ProjectTooltip = styled(TooltipWithText)`
     text-align: center;
   }
 `
-const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites }) => {
-  const defaultTitle = 'Fish Belt'
+const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, primaryTitle }) => {
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
 
   const siteName = getObjectById(sites, siteId)?.name ?? ''
   const transectNumber = submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.number ?? ''
   const label = submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.label ?? ''
 
+  useDocumentTitle(`${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${language.title.mermaid}`)
+
   return (
     <TitleContainer id="collect-form-title" data-testid="edit-collect-record-form-title">
       <ProjectTooltip
         forwardedAs="h2"
-        text={defaultTitle}
+        text={primaryTitle}
         tooltipText="Protocol"
         id="protocol-tooltip"
       />
@@ -58,10 +61,12 @@ const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites }) 
 RecordFormTitle.propTypes = {
   submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
+  primaryTitle: PropTypes.string,
 }
 
 RecordFormTitle.defaultProps = {
   submittedRecordOrCollectRecordDataProperty: undefined,
+  primaryTitle: undefined
 }
 
 export default RecordFormTitle

@@ -24,31 +24,45 @@ import { getToastArguments } from '../../../library/getToastArguments'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
+import useDocumentTitle from '../../../library/useDocumentTitle'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
+import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
+  const [choices, setChoices] = useState({})
+  const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const { isAppOnline } = useOnlineStatus()
+  const currentUser = useCurrentUser()
+
+  useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
   const _getSiteRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
         databaseSwitchboardInstance.getSiteRecordsForUIDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
+        databaseSwitchboardInstance.getChoices(),
       ])
 
-        .then(([sites, project]) => {
+        .then(([sites, project, choicesResponse]) => {
           if (isMounted.current) {
             if (!project && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
             setSiteRecordsForUiDisplay(sites)
+            setSitesForMapMarkers(sites)
+            setChoices(choicesResponse)
             setIsLoading(false)
           }
         })
@@ -93,36 +107,52 @@ const Sites = () => {
         reefType: uiLabels.reefType,
         reefZone: uiLabels.reefZone,
         exposure: uiLabels.exposure,
+        id,
       })),
     [siteRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(
-    () => [
-      {
-        id: 'name',
-        desc: false,
-      },
-    ],
-    [],
-  )
-
-  const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = [
-      'values.name.props.children',
-      'values.reefType',
-      'values.reefZone',
-      'values.exposure',
-    ]
-
-    const queryTerms = splitSearchQueryStrings(query)
-
-    if (!queryTerms || !queryTerms.length) {
-      return rows
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+      globalFilter: '',
     }
-
-    return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-sitesTable`,
+    defaultValue: tableDefaultPrefs,
+  })
+
+  const tableGlobalFilters = useCallback(
+    (rows, id, query) => {
+      const keys = [
+        'values.name.props.children',
+        'values.reefType',
+        'values.reefZone',
+        'values.exposure',
+      ]
+
+      const queryTerms = splitSearchQueryStrings(query)
+      const filteredRows =
+        !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+
+      const filteredRowIds = filteredRows.map((row) => row.original.id)
+      const filteredSiteRecords = siteRecordsForUiDisplay.filter((site) =>
+        filteredRowIds.includes(site.id),
+      )
+
+      setSitesForMapMarkers(filteredSiteRecords)
+
+      return filteredRows
+    },
+    [siteRecordsForUiDisplay],
+  )
 
   const {
     canNextPage,
@@ -137,7 +167,7 @@ const Sites = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
   } = useTable(
     {
@@ -145,7 +175,8 @@ const Sites = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns,
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -160,6 +191,14 @@ const Sites = () => {
   }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
+  }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const table = siteRecordsForUiDisplay.length ? (
     <>
@@ -222,6 +261,7 @@ const Sites = () => {
           pageCount={pageOptions.length}
         />
       </TableNavigation>
+      {isAppOnline && <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />}
     </>
   ) : (
     <PageNoData
@@ -239,10 +279,11 @@ const Sites = () => {
     <ContentPageLayout
       toolbar={
         <>
-          <H2>Sites</H2>
+          <H2>{language.pages.siteTable.title}</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.siteTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <ToolbarButtonWrapper>

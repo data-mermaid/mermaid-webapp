@@ -5,7 +5,7 @@ import React, { useMemo } from 'react'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { dexieInstancePropTypes } from './mermaidData/dexieInstance'
-import { useCurrentUser } from './mermaidData/useCurrentUser'
+import { useInitializeCurrentUser } from './useInitializeCurrentUser'
 import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
@@ -21,6 +21,7 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
+import { CurrentUserProvider } from './CurrentUserContext'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
@@ -70,14 +71,14 @@ function App({ dexieInstance }) {
     apiSyncInstance,
   ])
 
-  const currentUser = useCurrentUser({
+  const currentUser = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
     dexieInstance,
     isMermaidAuthenticated,
     isAppOnline,
   })
-  const { routes } = useRoutes({ currentUser, apiSyncInstance })
+  const { routes } = useRoutes({ apiSyncInstance })
 
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,
@@ -93,39 +94,41 @@ function App({ dexieInstance }) {
   return (
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <GlobalStyle />
-        <CustomToastContainer limit={5} />
-        <Layout {...layoutProps}>
-          {
-            /** The isMermaidAuthenticated is needed here to prevent an
-             * infinite log in loop with authentication.
-             *
-             * The projects list route and project workflow pages will trigger
-             * a sync when they are routed to, making isOfflineStorageHydrated = true
-             */
+        <CurrentUserProvider value={currentUser}>
+          <GlobalStyle />
+          <CustomToastContainer limit={5} />
+          <Layout {...layoutProps}>
+            {
+              /** The isMermaidAuthenticated is needed here to prevent an
+               * infinite log in loop with authentication.
+               *
+               * The projects list route and project workflow pages will trigger
+               * a sync when they are routed to, making isOfflineStorageHydrated = true
+               */
 
-            isMermaidAuthenticated ? (
-              <Switch>
-                {routes.map(({ path, Component }) => (
-                  <Route
-                    exact
-                    path={path}
-                    key={path}
-                    render={() =>
-                      isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
-                    }
-                  />
-                ))}
-                <Route exact path="/">
-                  <Redirect to="/projects" />
-                </Route>
-                <Route component={PageNotFound} />
-              </Switch>
-            ) : (
-              <LoadingIndicator />
-            )
-          }
-        </Layout>
+              isMermaidAuthenticated ? (
+                <Switch>
+                  {routes.map(({ path, Component }) => (
+                    <Route
+                      exact
+                      path={path}
+                      key={path}
+                      render={() =>
+                        isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
+                      }
+                    />
+                  ))}
+                  <Route exact path="/">
+                    <Redirect to="/projects" />
+                  </Route>
+                  <Route component={PageNotFound} />
+                </Switch>
+              ) : (
+                <LoadingIndicator />
+              )
+            }
+          </Layout>
+        </CurrentUserProvider>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
   )

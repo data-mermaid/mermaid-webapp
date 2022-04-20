@@ -20,9 +20,11 @@ import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import ManagementRulesInput from '../ManagementRulesInput'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
+import useDocumentTitle from '../../../../library/useDocumentTitle'
 import useIsMounted from '../../../../library/useIsMounted'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../../generic/SaveButton'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
 
 const ManagementRegime = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -119,6 +121,7 @@ const ManagementRegime = () => {
           formikActions.resetForm({ values: formikValues })
         })
         .catch(() => {
+          setSaveButtonState(buttonGroupStates.unsaved)
           toast.error(language.error.managementRegimeSave)
         })
     },
@@ -143,6 +146,8 @@ const ManagementRegime = () => {
       return errors
     },
   })
+
+  useDocumentTitle(`${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`)
 
   const _setSiteButtonUnsaved = useEffect(() => {
     if (formik.dirty) {
@@ -204,8 +209,25 @@ const ManagementRegime = () => {
               />
               <ManagementRulesInput
                 managementFormValues={formik.values}
-                onChange={(property, selectedItems) => {
-                  formik.setFieldValue(property, selectedItems)
+                onChange={(property, partialRestrictionRuleValues) => {
+                  const openAccessAndNoTakeRules =
+                    property === 'partial_restrictions'
+                      ? { open_access: false, no_take: false }
+                      : { open_access: property === 'open_access', no_take: property === 'no_take' }
+
+                  const partialRestrictionRules = {
+                    periodic_closure: partialRestrictionRuleValues.periodic_closure,
+                    size_limits: partialRestrictionRuleValues.size_limits,
+                    gear_restriction: partialRestrictionRuleValues.gear_restriction,
+                    species_restriction: partialRestrictionRuleValues.species_restriction,
+                    access_restriction: partialRestrictionRuleValues.access_restriction,
+                  }
+
+                  formik.setValues({
+                    ...formik.values,
+                    ...openAccessAndNoTakeRules,
+                    ...partialRestrictionRules,
+                  })
                 }}
                 validationType={formik.errors.rules ? 'error' : null}
                 validationMessages={formik.errors.rules}
@@ -224,6 +246,7 @@ const ManagementRegime = () => {
               />
             </InputWrapper>
           </form>
+          {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
           <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
         </>
       }

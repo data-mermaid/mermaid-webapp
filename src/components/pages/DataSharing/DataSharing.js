@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper } from '../../generic/Table/table'
@@ -9,7 +10,7 @@ import { ButtonPrimary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { getDataSharingOptions } from '../../../library/getDataSharingOptions'
-import { H2, P } from '../../generic/text'
+import { H2, H3, P } from '../../generic/text'
 import { IconInfo } from '../../icons'
 import { MaxWidthInputWrapper } from '../../generic/form'
 import { TooltipWithText } from '../../generic/tooltip'
@@ -22,7 +23,9 @@ import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import theme from '../../../theme'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -48,16 +51,40 @@ const CheckBoxLabel = styled.label`
     cursor: pointer;
   }
 `
+
+const getDataSharingPolicyLabel = (policyCode) => {
+  return {
+    10: 'Private',
+    50: 'Public Summary',
+    100: 'Public',
+  }[policyCode]
+}
+
+const ReadOnlyDataSharingContent = ({ project }) => (
+  <>
+    <H3>Fish Belt</H3>
+    <P>{getDataSharingPolicyLabel(project?.data_policy_beltfish)}</P>
+    <H3>Benthic: PIT, LIT, and Habitat Complexity</H3>
+    <P>{getDataSharingPolicyLabel(project?.data_policy_benthiclit)}</P>
+    <H3>Bleaching</H3>
+    <P>{getDataSharingPolicyLabel(project?.data_policy_bleachingqc)}</P>
+  </>
+)
+
 const DataSharing = () => {
+  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
   const { isAppOnline } = useOnlineStatus()
+  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentUser = useCurrentUser()
   const isMounted = useIsMounted()
+
+  useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
   const [issDataSharingInfoModalOpen, setIsDataSharingInfoModalOpen] = useState(false)
   const openDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(true)
@@ -68,16 +95,23 @@ const DataSharing = () => {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, choicesResponse]) => {
+        .then(([projectResponse, choicesResponse, projectProfilesResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+
+            const filteredUserProfile = projectProfilesResponse.filter(
+              ({ profile }) => currentUser.id === profile,
+            )[0]
+
             setProjectBeingEdited(projectResponse)
             setDataPolicyOptions(getDataSharingOptions(choicesResponse.datapolicies))
+            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -85,7 +119,7 @@ const DataSharing = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress, currentUser])
 
   const getToastMessageForDataPolicyChange = (property, policy) => {
     switch (property) {
@@ -148,113 +182,119 @@ const DataSharing = () => {
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
-  const content = isAppOnline ? (
+  const contentViewByRole = (
     <MaxWidthInputWrapper>
       <h3>Data is much more powerful when shared.</h3>
       <P>{language.pages.dataSharing.introductionParagraph}</P>
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
         <IconInfo /> Learn more about how your data is shared...
       </ButtonPrimary>
-      <TableOverflowWrapper>
-        <DataSharingTable>
-          <thead>
-            <Tr>
-              <Th>&nbsp;</Th>
-              <Th>
-                <TooltipWithText
-                  tooltipText={findToolTipDescription('Private')}
-                  text={<>Private</>}
-                  id="private-tooltip"
-                />
-              </Th>
-              <Th>
-                <TooltipWithText
-                  tooltipText={findToolTipDescription('Public Summary')}
-                  text={<>Public Summary</>}
-                  id="public-summary-tooltip"
-                />
-              </Th>
-              <Th>
-                <TooltipWithText
-                  tooltipText={findToolTipDescription('Public')}
-                  text={<>Public</>}
-                  id="public-tooltip"
-                />
-              </Th>
-            </Tr>
-          </thead>
-          <tbody>
-            <Tr>
-              <Td>Fish Belt</Td>
-              {dataPolicyOptions.map((item) => (
-                <Td key={item.value}>
-                  <label htmlFor={`fish-belt${item.value}`}>
-                    <input
-                      type="radio"
-                      value={item.value}
-                      name="fish-belt"
-                      id={`fish-belt${item.value}`}
-                      checked={projectBeingEdited?.data_policy_beltfish === item.value}
-                      onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
-                    />
-                  </label>
-                </Td>
-              ))}
-            </Tr>
-            <Tr>
-              <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
-              {dataPolicyOptions.map((item) => (
-                <Td key={item.value}>
-                  <label htmlFor={`benthic${item.value}`}>
-                    <input
-                      type="radio"
-                      value={item.value}
-                      name="benthic"
-                      id={`benthic${item.value}`}
-                      checked={projectBeingEdited?.data_policy_benthiclit === item.value}
-                      onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
-                    />
-                  </label>
-                </Td>
-              ))}
-            </Tr>
-            <Tr>
-              <Td>Bleaching</Td>
-              {dataPolicyOptions.map((item) => (
-                <Td key={item.value}>
-                  <label htmlFor={`bleaching${item.value}`}>
-                    <input
-                      type="radio"
-                      name="bleaching"
-                      id={`bleaching${item.value}`}
-                      value={item.value}
-                      checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
-                      onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
-                    />
-                  </label>
-                </Td>
-              ))}
-            </Tr>
-          </tbody>
-        </DataSharingTable>
-      </TableOverflowWrapper>
-      <CheckBoxLabel>
-        <input
-          id="test-project-toggle"
-          type="checkbox"
-          checked={projectBeingEdited?.status === language.projectCodes.status.test}
-          onChange={handleTestProjectChange}
-        />{' '}
-        This is a test project
-      </CheckBoxLabel>
-      <P>{language.pages.dataSharing.testProjectHelperText}</P>
+      {currentUserProfile.is_admin ? (
+        <TableOverflowWrapper>
+          <DataSharingTable>
+            <thead>
+              <Tr>
+                <Th>&nbsp;</Th>
+                <Th>
+                  <TooltipWithText
+                    tooltipText={findToolTipDescription('Private')}
+                    text={<>Private</>}
+                    id="private-tooltip"
+                  />
+                </Th>
+                <Th>
+                  <TooltipWithText
+                    tooltipText={findToolTipDescription('Public Summary')}
+                    text={<>Public Summary</>}
+                    id="public-summary-tooltip"
+                  />
+                </Th>
+                <Th>
+                  <TooltipWithText
+                    tooltipText={findToolTipDescription('Public')}
+                    text={<>Public</>}
+                    id="public-tooltip"
+                  />
+                </Th>
+              </Tr>
+            </thead>
+            <tbody>
+              <Tr>
+                <Td>Fish Belt</Td>
+                {dataPolicyOptions.map((item) => (
+                  <Td key={item.value}>
+                    <label htmlFor={`fish-belt${item.value}`}>
+                      <input
+                        type="radio"
+                        value={item.value}
+                        name="fish-belt"
+                        id={`fish-belt${item.value}`}
+                        checked={projectBeingEdited?.data_policy_beltfish === item.value}
+                        onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
+                      />
+                    </label>
+                  </Td>
+                ))}
+              </Tr>
+              <Tr>
+                <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
+                {dataPolicyOptions.map((item) => (
+                  <Td key={item.value}>
+                    <label htmlFor={`benthic${item.value}`}>
+                      <input
+                        type="radio"
+                        value={item.value}
+                        name="benthic"
+                        id={`benthic${item.value}`}
+                        checked={projectBeingEdited?.data_policy_benthiclit === item.value}
+                        onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
+                      />
+                    </label>
+                  </Td>
+                ))}
+              </Tr>
+              <Tr>
+                <Td>Bleaching</Td>
+                {dataPolicyOptions.map((item) => (
+                  <Td key={item.value}>
+                    <label htmlFor={`bleaching${item.value}`}>
+                      <input
+                        type="radio"
+                        name="bleaching"
+                        id={`bleaching${item.value}`}
+                        value={item.value}
+                        checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
+                        onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
+                      />
+                    </label>
+                  </Td>
+                ))}
+              </Tr>
+            </tbody>
+          </DataSharingTable>
+        </TableOverflowWrapper>
+      ) : (
+        <ReadOnlyDataSharingContent project={projectBeingEdited} />
+      )}
+      {currentUserProfile.is_admin && (
+        <>
+          <CheckBoxLabel>
+            <input
+              id="test-project-toggle"
+              type="checkbox"
+              checked={projectBeingEdited?.status === language.projectCodes.status.test}
+              onChange={handleTestProjectChange}
+            />{' '}
+            This is a test project
+          </CheckBoxLabel>
+          <P>{language.pages.dataSharing.testProjectHelperText}</P>
+        </>
+      )}
       <DataSharingInfoModal
         isOpen={issDataSharingInfoModalOpen}
         onDismiss={closeDataSharingInfoModal}
       />
     </MaxWidthInputWrapper>
-  ) : (
-    <PageUnavailableOffline />
   )
 
   return idsNotAssociatedWithData.length ? (
@@ -265,14 +305,26 @@ const DataSharing = () => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
-      content={content}
+      content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
       toolbar={
         <ContentPageToolbarWrapper>
-          <H2>Data Sharing</H2>
+          <H2>{language.pages.dataSharing.title}</H2>
         </ContentPageToolbarWrapper>
       }
     />
   )
+}
+
+ReadOnlyDataSharingContent.propTypes = {
+  project: PropTypes.shape({
+    data_policy_beltfish: PropTypes.number,
+    data_policy_benthiclit: PropTypes.number,
+    data_policy_bleachingqc: PropTypes.number,
+  }),
+}
+
+ReadOnlyDataSharingContent.defaultProps = {
+  project: {},
 }
 
 export default DataSharing

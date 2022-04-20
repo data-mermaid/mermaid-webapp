@@ -15,7 +15,6 @@ import {
 import { ButtonCaution } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import { currentUserPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { getFishBinLabel } from './fishBeltBins'
 import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
@@ -37,6 +36,7 @@ import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
 import ObserversInput from '../../../ObserversInput'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
@@ -44,6 +44,7 @@ import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordName } from '../../../../library/getRecordName'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -56,7 +57,7 @@ const DeleteRecordButtonCautionWrapper = styled('div')`
   `)}
 `
 
-const FishBelt = ({ isNewRecord, currentUser }) => {
+const FishBelt = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
 
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -84,6 +85,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
+  const currentUser = useCurrentUser()
   const history = useHistory()
   const isMounted = useIsMounted()
 
@@ -91,6 +93,11 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
   const [observationsState, observationsDispatch] = observationsReducer
 
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+
+  const displayLoadingModal =
+    saveButtonState === buttonGroupStates.saving ||
+    validateButtonState === buttonGroupStates.validating ||
+    submitButtonState === buttonGroupStates.submitting
 
   const openNewFishNameModal = useCallback((observationId) => {
     setObservationToAddSpeciesTo(observationId)
@@ -465,6 +472,7 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         }
       })
       .catch(() => {
+        setSaveButtonState(buttonGroupStates.unsaved)
         toast.error(...getToastArguments(language.error.collectRecordSave))
       })
   }
@@ -640,11 +648,12 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
         }
         toolbar={
           <ContentPageToolbarWrapper>
-            {isNewRecord && <H2>Fish Belt</H2>}
+            {isNewRecord && <H2>{language.pages.fishBeltForm.title}</H2>}
             {collectRecordBeingEdited && !isNewRecord && (
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
                 sites={sites}
+                primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`}
               />
             )}
 
@@ -670,13 +679,13 @@ const FishBelt = ({ isNewRecord, currentUser }) => {
           projectId={projectId}
         />
       )}
+      {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 }
 
 FishBelt.propTypes = {
-  currentUser: currentUserPropType.isRequired,
   isNewRecord: PropTypes.bool,
 }
 
