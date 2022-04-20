@@ -13,6 +13,14 @@ export const MapContainer = styled.div`
 export const MapWrapper = styled.div`
   height: 100%;
   min-height: 70vh;
+
+  #marker {
+    background-image: url('https://maplibre.org/maplibre-gl-js-docs/assets/custom_marker.png');
+    background-size: cover;
+    width: 35px;
+    height: 44px;
+    cursor: pointer;
+  }
 `
 
 export const MapZoomHelpMessage = styled('div')`

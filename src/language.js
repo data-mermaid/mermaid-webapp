@@ -67,8 +67,7 @@ const error = {
   pageNotFound: "This page can't be found.",
   pageNotFoundRecovery: 'Make sure the URL is correct.',
   idNotFound: "This item can't be found.",
-  idNotFoundRecovery:
-    "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
+  idNotFoundRecovery: 'It might have been deleted or the URL might be wrong.',
   homePageNavigation: 'Go back to the home page.',
 }
 
@@ -141,7 +140,7 @@ const autocomplete = {
 
 const title = {
   mermaid: 'MERMAID',
-  mermaidDescription: 'Marine Ecological Research Management Aid',
+  mermaidDescription: 'Marine Ecological Research Management Aid'
 }
 
 const pages = {
@@ -152,7 +151,7 @@ const pages = {
     noDataSubText: `Create a new project or get your admin to add you to some.`,
     noDataTextOffline: `You don't have any offline projects.`,
     noFilterResults: 'No results',
-    noFilterResultsSubText: 'No projects match the current filter term.',
+    noFilterResultsSubText: 'No projects match the current filter term.'
   },
   collectRecord: {
     title: 'Collecting',
@@ -193,7 +192,7 @@ const pages = {
     warningRemoveUser: `You must transfer sample units before you can remove the user from project.`,
   },
   fishBeltForm: {
-    title: 'Fish Belt',
+    title: 'Fish Belt'
   },
   submittedFishBeltForm: {
     title: 'Fish Belt',

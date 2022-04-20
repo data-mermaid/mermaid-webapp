@@ -1,6 +1,7 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import maplibregl from 'maplibre-gl'
+import language from '../../../language'
 import AtlasLegendDrawer from '../AtlasLegendDrawer'
 import {
   satelliteBaseMap,
@@ -8,8 +9,9 @@ import {
   setCoralMosaicLayerProperty,
   setGeomorphicOrBenthicLayerProperty,
   loadACALayers,
+  handleMapOnWheel,
 } from '../mapService'
-import { MapInputRow, MapContainer, MapWrapper } from '../Map.styles'
+import { MapInputRow, MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 
 const defaultCenter = [0, 0]
 const defaultZoom = 11
@@ -23,8 +25,15 @@ const SingleSiteMap = ({
   const mapContainer = useRef(null)
   const map = useRef(null)
   const recordMarker = useRef(null)
+  const [displayHelpText, setDisplayHelpText] = useState(false)
+
+  const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
 
   const _initializeMap = useEffect(() => {
+    const el = document.createElement('div')
+
+    el.id = 'marker'
+
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: satelliteBaseMap,
@@ -36,12 +45,13 @@ const SingleSiteMap = ({
         'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
     })
 
-    recordMarker.current = new maplibregl.Marker({ draggable: true })
+    recordMarker.current = new maplibregl.Marker(el, { draggable: true })
 
     addMapController(map.current)
 
     map.current.on('load', () => {
       loadACALayers(map.current)
+      handleMapOnWheel(map.current, handleZoomDisplayHelpText)
     })
 
     // clean up on unmount
@@ -71,7 +81,7 @@ const SingleSiteMap = ({
     ) {
       map.current.jumpTo({
         center: [formLongitudeValue, formLatitudeValue],
-        zoom: defaultZoom,
+        zoom: map.current.getZoom(),
       })
     }
   }, [formLatitudeValue, formLongitudeValue])
@@ -98,6 +108,9 @@ const SingleSiteMap = ({
     <MapInputRow>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
+        {displayHelpText && (
+          <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
+        )}
         <AtlasLegendDrawer
           updateCoralMosaicLayer={updateCoralMosaicLayer}
           updateGeomorphicLayers={updateGeomorphicLayers}
