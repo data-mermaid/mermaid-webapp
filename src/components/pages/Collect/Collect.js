@@ -79,7 +79,7 @@ const Collect = () => {
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Management',
+        Header: 'Management Regime',
         accessor: 'management',
         sortType: reactTableNaturalSort,
       },
