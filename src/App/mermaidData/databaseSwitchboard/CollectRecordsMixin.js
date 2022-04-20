@@ -49,7 +49,7 @@ const CollectRecordsMixin = (Base) =>
         ? record.data?.fishbelt_transect?.label
         : record.data?.benthic_transect?.label
 
-      const sampleUnit = `${transectNumber ?? ''} ${labelName || ''}`.trim()
+      const sampleUnit = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
 
       return sampleUnit === '' ? undefined : sampleUnit
     }
