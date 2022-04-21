@@ -117,14 +117,14 @@ test('Collect Records table sorts properly by management column', async () => {
   userEvent.dblClick(within(table).getByText('Method'))
 
   // click once to change to ascending order
-  userEvent.click(within(table).getByText('Management'))
+  userEvent.click(within(table).getByText('Management Regime'))
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
   expect(within(tableRowsAfter[1]).getByText('Management Regimes B'))
 
   // click again to change to descending order
-  userEvent.click(within(table).getByText('Management'))
+  userEvent.click(within(table).getByText('Management Regime'))
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
