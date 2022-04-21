@@ -9,7 +9,7 @@ import '@testing-library/jest-dom'
 import { configure } from '@testing-library/react'
 import mockMermaidApiAllSuccessful from './testUtilities/mockMermaidApiAllSuccessful'
 
-jest.setTimeout(30000)
+jest.setTimeout(300000)
 window.URL.createObjectURL = () => {}
 
 jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
@@ -25,6 +25,7 @@ jest.mock('maplibre-gl/dist/maplibre-gl', function mapLibreMock() {
         touchZoomRotate: { disableRotation: jest.fn() },
         getSource: jest.fn(() => ({ setData: jest.fn() })),
         fitBounds: jest.fn(),
+        getZoom: jest.fn(),
       }
     },
     Marker: function () {

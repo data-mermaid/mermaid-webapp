@@ -16,12 +16,6 @@ const CollectRecordsMixin = (Base) =>
       bleachingqc: 'Bleaching',
     }
 
-    #validationTypeLabel = {
-      ok: 'Valid',
-      error: 'Errors',
-      warning: 'Warnings',
-    }
-
     #getIsFishBelt = function getIsFishBelt(record) {
       return record?.data?.protocol === 'fishbelt'
     }
@@ -81,12 +75,6 @@ const CollectRecordsMixin = (Base) =>
         : undefined
     }
 
-    #getStatusLabel = function getStatusLabel(record) {
-      const { validations } = record
-
-      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
-    }
-
     #getSizeLabel = function getSizeLabel(record, choices) {
       const { belttransectwidths } = choices
       const isFishBelt = this.#getIsFishBelt(record)
@@ -131,8 +119,7 @@ const CollectRecordsMixin = (Base) =>
         // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.collect_records.put(recordToSubmit)
 
-        return axios
-          .post(
+        return axios.post(
             `${this._apiBaseUrl}/push/`,
             {
               collect_records: [recordToSubmit],
@@ -141,7 +128,7 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
-              ...(await getAuthorizationHeaders(this._getAccessToken)),
+              ...await getAuthorizationHeaders(this._getAccessToken)
             },
           )
           .then((response) => {
@@ -195,8 +182,7 @@ const CollectRecordsMixin = (Base) =>
         // put it in IDB just in case the network craps out before the API can return
         await this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
 
-        return axios
-          .post(
+        return axios.post(
             `${this._apiBaseUrl}/push/`,
             {
               collect_records: [recordMarkedToBeDeleted],
@@ -205,7 +191,8 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
-              ...(await getAuthorizationHeaders(this._getAccessToken)),
+              ...await getAuthorizationHeaders(this._getAccessToken)
+
             },
           )
           .then((apiPushResponse) => {
@@ -248,16 +235,12 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        return axios
-          .post(
-            `${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`,
-            {
-              ids: [recordId],
-              version: '2',
-            },
-            await getAuthorizationHeaders(this._getAccessToken),
-          )
-          .then((response) => {
+        return axios.post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`, {
+            ids: [recordId],
+            version: '2',
+          },
+          await getAuthorizationHeaders(this._getAccessToken)
+        ).then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseStatusSuccessful) {
@@ -283,15 +266,11 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        return axios
-          .post(
-            `${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`,
-            {
-              ids: [recordId],
-              version: '2',
-            },
-            await getAuthorizationHeaders(this._getAccessToken),
-          )
+        return axios.post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`, {
+            ids: [recordId],
+            version: '2',
+          },
+          await getAuthorizationHeaders(this._getAccessToken))
           .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
@@ -519,55 +498,44 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithResetObservationValidations)
     }
 
-    getCollectRecord = function getCollectRecord({ id, userId }) {
-      if (!id || !userId) {
-        return Promise.reject(this._operationMissingIdParameterError)
+    getCollectRecord = function getCollectRecord(id) {
+      if (!id) {
+        Promise.reject(this._operationMissingIdParameterError)
       }
 
       if (!this._isAuthenticatedAndReady) {
-        return Promise.reject(this._notAuthenticatedAndReadyError)
+        Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._dexieInstance.collect_records.get(id).then((record) => {
-        if (!record) {
-          return undefined
-        }
-        if (record.profile !== userId) {
-          return Promise.reject(new Error('The current user doesnt own this collect record'))
-        }
-
-        return record
-      })
+      return this._dexieInstance.collect_records.get(id)
     }
 
-    getCollectRecordsWithoutOfflineDeleted = function getCollectRecordsWithoutOfflineDeleted({
+    getCollectRecordsWithoutOfflineDeleted = function getCollectRecordsWithoutOfflineDeleted(
       projectId,
-      userId,
-    }) {
-      if (!projectId || !userId) {
-        return Promise.reject(this._operationMissingParameterError)
+    ) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
       }
 
       if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.toArray().then((records) => {
-          return records.filter(
-            (record) =>
-              record.project === projectId && record.profile === userId && !record._deleted,
+        return this._dexieInstance.collect_records
+          .toArray()
+          .then((records) =>
+            records.filter((record) => record.project === projectId && !record._deleted),
           )
-        })
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getCollectRecordsForUIDisplay = function getCollectRecordsForUIDisplay({ projectId, userId }) {
-      if (!projectId || !userId) {
-        return Promise.reject(this._operationMissingParameterError)
+    getCollectRecordsForUIDisplay = function getCollectRecordsForUIDisplay(projectId) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isAuthenticatedAndReady
         ? Promise.all([
-            this.getCollectRecordsWithoutOfflineDeleted({ projectId, userId }),
+            this.getCollectRecordsWithoutOfflineDeleted(projectId),
             this.getSitesWithoutOfflineDeleted(projectId),
             this.getManagementRegimesWithoutOfflineDeleted(projectId),
             this.getChoices(),
@@ -583,8 +551,7 @@ const CollectRecordsMixin = (Base) =>
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 depth: this.#getDepthLabel(record),
                 sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
-                observers: this.#getObserversLabel(record),
-                status: this.#getStatusLabel(record),
+                observers: this.#getObserversLabel(record)
               },
             }))
           })

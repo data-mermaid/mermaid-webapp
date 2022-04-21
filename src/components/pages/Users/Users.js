@@ -46,6 +46,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -510,15 +511,19 @@ const Users = () => {
     [observerProfiles],
   )
 
-  const tableDefaultSortByColumns = useMemo(
-    () => [
-      {
-        id: 'name',
-        desc: false,
-      },
-    ],
-    [],
-  )
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+      globalFilter: ""
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-usersTable`, defaultValue: tableDefaultPrefs })
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -550,7 +555,7 @@ const Users = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
   } = useTable(
     {
@@ -558,7 +563,8 @@ const Users = () => {
       data: projectUserRole.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns,
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter
       },
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
@@ -572,6 +578,14 @@ const Users = () => {
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
+  }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const table = (
     <>
@@ -673,6 +687,7 @@ const Users = () => {
               : language.pages.userTable.filterToolbarTextForCollector
           }
           handleGlobalFilterChange={handleGlobalFilterChange}
+          value={tableUserPrefs.globalFilter}
         />
         {projectUserRole.is_admin && (
           <InputAndButton

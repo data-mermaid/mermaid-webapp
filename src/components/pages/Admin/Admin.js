@@ -223,6 +223,7 @@ const Admin = () => {
           actions.resetForm({ values }) // resets formiks dirty state
         })
         .catch(() => {
+          setSaveButtonState(buttonGroupStates.unsaved)
           toast.error(...getToastArguments(language.error.projectSave))
         })
     },

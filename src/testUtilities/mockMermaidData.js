@@ -90,7 +90,7 @@ const sampleUnitMethods = [
     management_name: 'Pat walked to the store',
     management: '2',
     depth: 15.0,
-    sample_date: '2021-07-01',
+    sample_date: '2021-08-01',
     sample_unit_number: 3,
     size: {
       len_surveyed: 25.0,
@@ -764,6 +764,7 @@ const collect_records = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
+        sample_date: '2019-5-29',
       },
       fishbelt_transect: {
         depth: 10,
@@ -1063,38 +1064,6 @@ const collect_records = [
       ],
     },
     validations: { status: 'ok' },
-  },
-  {
-    id: '100',
-    project: '5',
-    profile: 'not-the-current-user',
-    data: {
-      protocol: 'benthiclit',
-      sample_event: {
-        site: '3',
-        management: '2',
-        sample_date: '2021-3-11',
-      },
-      benthic_transect: {
-        depth: 20,
-        label: 'LIT-1',
-        number: 5,
-        sample_time: '22:55',
-        len_surveyed: 10,
-      },
-      observers: [
-        {
-          profile: '9d48bef5-728b-489e-8cb5-dc47c6452ef4',
-          profile_name: 'Al Leonard',
-        },
-        {
-          profile: 'f250ad21-4b2a-41fc-98ee-8edbd4ef869c',
-          profile_name: 'Melissa Nunes',
-        },
-      ],
-      obs_belt_fishes: [{ id: '9' }, { id: '8' }, { id: '7' }],
-    },
-    validations: null,
   },
 ]
 

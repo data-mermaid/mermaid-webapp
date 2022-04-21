@@ -19,6 +19,8 @@ import { H2 } from '../../generic/text'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import DataToolbarSection from './DataToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -45,6 +47,7 @@ const Data = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const currentUser = useCurrentUser()
 
   useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 
@@ -141,15 +144,19 @@ const Data = () => {
     [submittedRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(
-    () => [
-      {
-        id: 'method',
-        desc: false,
-      },
-    ],
-    [],
-  )
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'method',
+          desc: false,
+        },
+      ],
+      globalFilter: ""
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-dataSubmittedTable`, defaultValue: tableDefaultPrefs })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -181,7 +188,7 @@ const Data = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
   } = useTable(
     {
@@ -189,7 +196,8 @@ const Data = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns,
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -202,6 +210,14 @@ const Data = () => {
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
+  }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const handleExportToCSV = (transect) => {
     const isBleachingTransect =
@@ -288,6 +304,7 @@ const Data = () => {
       name={language.pages.submittedTable.filterToolbarText}
       handleGlobalFilterChange={handleGlobalFilterChange}
       handleExportToCSV={handleExportToCSV}
+      filterValue={tableUserPrefs.globalFilter}
     />
   ) : (
     <H2>{language.pages.submittedTable.title}</H2>
