@@ -90,7 +90,7 @@ const sampleUnitMethods = [
     management_name: 'Pat walked to the store',
     management: '2',
     depth: 15.0,
-    sample_date: '2021-07-01',
+    sample_date: '2021-08-01',
     sample_unit_number: 3,
     size: {
       len_surveyed: 25.0,
@@ -764,6 +764,7 @@ const collect_records = [
         site: '4',
         notes: 'some lit notes',
         management: '3',
+        sample_date: '2019-5-29',
       },
       fishbelt_transect: {
         depth: 10,
