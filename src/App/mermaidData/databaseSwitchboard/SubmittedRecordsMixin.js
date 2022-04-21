@@ -1,15 +1,14 @@
 import axios from 'axios'
 import { getSampleDateLabel } from '../getSampleDateLabel'
+import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
-    #submittedRecordProtocolLabels = {
-      fishbelt: 'Fish Belt',
-      benthiclit: 'Benthic LIT',
-      benthicpit: 'Benthic PIT',
-      habitatcomplexity: 'Habitat Complexity',
-      bleachingqc: 'Bleaching',
+    #getSampleUnitLabel = function getSampleUnitLabel(record) {
+      const sampleUnit = `${record.transectNumber ?? ''} ${record.label ?? ''}`.trim()
+
+      return sampleUnit === '' ? undefined : sampleUnit
     }
 
     getSubmittedRecords = async function getSubmittedRecords(projectId) {
@@ -57,14 +56,14 @@ const SubmittedRecordsMixin = (Base) =>
             return submittedRecords.map((record) => ({
               ...record,
               uiLabels: {
-                protocol: this.#submittedRecordProtocolLabels[record.protocol],
-                site: record.site_name,
-                management: record.management_name,
-                sampleUnitNumber: record.sample_unit_number,
-                size: record.size_display,
                 depth: record.depth,
-                sampleDate: getSampleDateLabel(record.sample_date),
+                management: record.management_name,
                 observers: record.observers.join(', '),
+                protocol: getRecordProtocolLabel(record.protocol),
+                sampleDate: getSampleDateLabel(record.sample_date),
+                sampleUnitNumber: this.#getSampleUnitLabel(record),
+                site: record.site_name,
+                size: record.size_display,
               },
             }))
           })

@@ -5,15 +5,14 @@ import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
+import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
-    #collectRecordProtocolLabels = {
-      fishbelt: 'Fish Belt',
-      benthiclit: 'Benthic LIT',
-      benthicpit: 'Benthic PIT',
-      habitatcomplexity: 'Habitat Complexity',
-      bleachingqc: 'Bleaching',
+    #validationTypeLabel = {
+      ok: 'Valid',
+      error: 'Errors',
+      warning: 'Warnings',
     }
 
     #getIsFishBelt = function getIsFishBelt(record) {
@@ -50,7 +49,7 @@ const CollectRecordsMixin = (Base) =>
         ? record.data?.fishbelt_transect?.label
         : record.data?.benthic_transect?.label
 
-      const sampleUnit = `${transectNumber ?? ''} ${labelName || ''}`.trim()
+      const sampleUnit = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
 
       return sampleUnit === '' ? undefined : sampleUnit
     }
@@ -73,6 +72,12 @@ const CollectRecordsMixin = (Base) =>
             }, [])
             .join(', ')
         : undefined
+    }
+
+    #getStatusLabel = function getStatusLabel(record) {
+      const { validations } = record
+
+      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
     }
 
     #getSizeLabel = function getSizeLabel(record, choices) {
@@ -543,15 +548,15 @@ const CollectRecordsMixin = (Base) =>
             return collectRecords.map((record) => ({
               ...record,
               uiLabels: {
-                site: getObjectById(sites, record.data.sample_event.site)?.name,
-                management: getObjectById(managementRegimes, record.data.sample_event.management)
-                  ?.name,
-                protocol: this.#collectRecordProtocolLabels[record.data.protocol],
-                size: this.#getSizeLabel(record, choices),
-                sampleUnitNumber: this.#getSampleUnitLabel(record),
                 depth: this.#getDepthLabel(record),
+                management: getObjectById(managementRegimes, record.data.sample_event.management)?.name,
+                observers: this.#getObserversLabel(record),
+                protocol: getRecordProtocolLabel(record.data.protocol),
                 sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
-                observers: this.#getObserversLabel(record)
+                sampleUnitNumber: this.#getSampleUnitLabel(record),
+                site: getObjectById(sites, record.data.sample_event.site)?.name,
+                size: this.#getSizeLabel(record, choices),
+                status: this.#getStatusLabel(record),
               },
             }))
           })
