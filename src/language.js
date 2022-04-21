@@ -103,6 +103,7 @@ const success = {
         return `${method} is now set to public `
     }
   },
+  userProfileUpdate: 'Profile updated',
 }
 
 const deleteCollectRecord = {
@@ -140,7 +141,8 @@ const autocomplete = {
 
 const title = {
   mermaid: 'MERMAID',
-  mermaidDescription: 'Marine Ecological Research Management Aid'
+  mermaidDescription: 'Marine Ecological Research Management Aid',
+  userProfileModal: 'Your Profile',
 }
 
 const pages = {
@@ -151,7 +153,7 @@ const pages = {
     noDataSubText: `Create a new project or get your admin to add you to some.`,
     noDataTextOffline: `You don't have any offline projects.`,
     noFilterResults: 'No results',
-    noFilterResultsSubText: 'No projects match the current filter term.'
+    noFilterResultsSubText: 'No projects match the current filter term.',
   },
   collectRecord: {
     title: 'Collecting',
@@ -192,7 +194,7 @@ const pages = {
     warningRemoveUser: `You must transfer sample units before you can remove the user from project.`,
   },
   fishBeltForm: {
-    title: 'Fish Belt'
+    title: 'Fish Belt',
   },
   submittedFishBeltForm: {
     title: 'Fish Belt',
