@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
-import React from 'react'
+import React, { useState } from 'react'
 import theme from '../../theme'
 import Logo from '../../assets/mermaid-logo.svg'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
@@ -10,6 +10,7 @@ import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
+import ProfileModal from '../ProfileModal'
 
 /**
  * Mermaid Header
@@ -199,11 +200,15 @@ const GlobalLinks = () => (
 )
 
 const Header = ({ logout, currentUser }) => {
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
+  const openProfileModal = () => setIsProfileModalOpen(true)
+  const closeProfileModal = () => setIsProfileModalOpen(false)
+
   const UserMenuDropDownContent = () => (
     <OfflineHide>
-      <StyledLink to="/#" disabled>
+      <UserMenuButton type="button" onClick={openProfileModal}>
         Profile
-      </StyledLink>
+      </UserMenuButton>
       <UserMenuButton type="button" onClick={logout}>
         Logout
       </UserMenuButton>
@@ -259,48 +264,54 @@ const Header = ({ logout, currentUser }) => {
   }
 
   return (
-    <StyledHeader>
-      <Link to="/projects">
-        <img src={Logo} alt="MERMAID Logo" />
-      </Link>
-      <GlobalNav>
-        <div className="desktop">
-          <GlobalLinks />
-          <HeaderButtonThatLooksLikeLink>
-            <IconBell />
-          </HeaderButtonThatLooksLikeLink>
-          <HideShow
-            button={getUserButton()}
-            contents={
-              <div className="desktopUserMenu">
-                <UserMenuDropDownContent />
-              </div>
-            }
-          />
-        </div>
-        <div className="mobile">
-          <HeaderButtonThatLooksLikeLink>
-            <IconBell />
-          </HeaderButtonThatLooksLikeLink>
-          <HideShow
-            button={
-              <HeaderButtonThatLooksLikeLink>
-                <IconMenu />
-              </HeaderButtonThatLooksLikeLink>
-            }
-            contents={
-              <div className="menuDropdown">
-                <GlobalLinks />
-                {currentUser && <p className="loggedInAs">Logged in as {getUserDisplayName()}</p>}
-                <div className="mobileUserMenu">
+    <>
+      <StyledHeader>
+        <Link to="/projects">
+          <img src={Logo} alt="MERMAID Logo" />
+        </Link>
+        <GlobalNav>
+          <div className="desktop">
+            <GlobalLinks />
+            <HeaderButtonThatLooksLikeLink>
+              <IconBell />
+            </HeaderButtonThatLooksLikeLink>
+            <HideShow
+              button={getUserButton()}
+              contents={
+                <div className="desktopUserMenu">
                   <UserMenuDropDownContent />
                 </div>
-              </div>
-            }
-          />
-        </div>
-      </GlobalNav>
-    </StyledHeader>
+              }
+            />
+          </div>
+          <div className="mobile">
+            <HeaderButtonThatLooksLikeLink>
+              <IconBell />
+            </HeaderButtonThatLooksLikeLink>
+            <HideShow
+              button={
+                <HeaderButtonThatLooksLikeLink>
+                  <IconMenu />
+                </HeaderButtonThatLooksLikeLink>
+              }
+              contents={
+                <div className="menuDropdown">
+                  <GlobalLinks />
+                  {currentUser && <p className="loggedInAs">Logged in as {getUserDisplayName()}</p>}
+                  <div className="mobileUserMenu">
+                    <UserMenuDropDownContent />
+                  </div>
+                </div>
+              }
+            />
+          </div>
+        </GlobalNav>
+      </StyledHeader>
+      <ProfileModal
+        isOpen={isProfileModalOpen}
+        onDismiss={closeProfileModal}
+      />
+    </>
   )
 }
 

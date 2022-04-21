@@ -81,7 +81,7 @@ const DataSharing = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)

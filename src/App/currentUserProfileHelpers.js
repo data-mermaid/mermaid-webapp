@@ -114,4 +114,3 @@ export const updateCurrentUserProfile = async ({
 
   return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
 }
-

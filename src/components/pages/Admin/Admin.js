@@ -7,7 +7,6 @@ import styled, { css } from 'styled-components'
 
 import { CloseButton, ButtonThatLooksLikeLink } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
-import { currentUserPropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { createUuid } from '../../../library/createUuid'
 import { getOptions } from '../../../library/getOptions'
@@ -172,7 +171,7 @@ const Admin = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
@@ -360,10 +359,6 @@ const Admin = () => {
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
-}
-
-Admin.propTypes = {
-  currentUser: currentUserPropType.isRequired,
 }
 
 OrganizationList.propTypes = {

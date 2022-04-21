@@ -71,13 +71,14 @@ function App({ dexieInstance }) {
     apiSyncInstance,
   ])
 
-  const currentUser = useInitializeCurrentUser({
+  const currentUserInstance = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
     dexieInstance,
     isMermaidAuthenticated,
     isAppOnline,
   })
+  const { currentUser } = currentUserInstance
   const { routes } = useRoutes({ apiSyncInstance })
 
   const layoutProps = {
@@ -94,7 +95,7 @@ function App({ dexieInstance }) {
   return (
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <CurrentUserProvider value={currentUser}>
+        <CurrentUserProvider value={currentUserInstance}>
           <GlobalStyle />
           <CustomToastContainer limit={5} />
           <Layout {...layoutProps}>
