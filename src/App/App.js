@@ -79,7 +79,6 @@ function App({ dexieInstance }) {
     isAppOnline,
   })
 
-  console.log('currentUserInstance ', currentUserInstance)
   const { currentUser } = currentUserInstance
   const { routes } = useRoutes({ apiSyncInstance })
 
