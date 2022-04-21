@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -11,29 +11,38 @@ import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
+import { getProfileInitialValues } from './profileFormInitialValues'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const ModalInputRow = styled(InputRow)`
   background: ${theme.color.white};
   display: block;
   border: none;
+  label {
+    font-weight: bold;
+  }
 `
 const ProfileModal = ({ isOpen, onDismiss }) => {
+  const { currentUser, saveUserProfile } = useCurrentUser()
+  const initialFormValues = useMemo(() => getProfileInitialValues(currentUser), [currentUser])
+
   const formik = useFormik({
-    initialValues: { newOrganizationSuggestion: '' },
+    initialValues: initialFormValues,
+    enableReinitialize: true,
   })
 
-  const resetAndCloseModal = () => {
-    formik.resetForm()
-    onDismiss()
-  }
-
   const handleOnSubmit = () => {
-    resetAndCloseModal()
-    toast.success(...getToastArguments(language.success.newOrganizationAdd))
+    saveUserProfile(formik.values)
+    onDismiss()
+    toast.success(...getToastArguments(language.success.userProfileUpdate))
   }
 
   const modalContent = (
     <>
+      <ModalInputRow>
+        <h4>Email address</h4>
+        <div>{formik.values.email}</div>
+      </ModalInputRow>
       <ModalInputRow>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label id="modal-input-for-firstname-label" htmlFor="modal-input-for-firstname">
@@ -44,9 +53,9 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
             aria-labelledby="modal-input-for-firstname-label"
             aria-describedby="modal-input-for-firstname-descp"
             id="modal-input-for-firstname"
-            value="first name"
+            value={formik.values.first_name}
             autoFocus
-            onChange={(event) => {}}
+            onChange={(event) => formik.setFieldValue('first_name', event.target.value)}
           />
         </div>
       </ModalInputRow>
@@ -60,8 +69,8 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
             aria-labelledby="modal-input-for-lastname-label"
             aria-describedby="modal-input-for-lastname-descp"
             id="modal-input-for-lastname"
-            value="last name"
-            onChange={(event) => {}}
+            value={formik.values.last_name}
+            onChange={(event) => formik.setFieldValue('last_name', event.target.value)}
           />
         </div>
       </ModalInputRow>
@@ -70,19 +79,19 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
 
   const footerContent = (
     <RightFooter>
-      <ButtonPrimary onClick={() => {}}>
+      <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
         Save Changes
       </ButtonPrimary>
-      <ButtonSecondary onClick={resetAndCloseModal}>Cancel</ButtonSecondary>
+      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
     </RightFooter>
   )
 
   return (
     <Modal
       isOpen={isOpen}
-      onDismiss={resetAndCloseModal}
-      title="Your Profile"
+      onDismiss={onDismiss}
+      title={language.title.userProfileModal}
       mainContent={modalContent}
       footerContent={footerContent}
     />
