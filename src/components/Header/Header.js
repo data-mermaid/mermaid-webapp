@@ -166,15 +166,6 @@ const UserMenuButton = styled.button`
   flex-direction: row-reverse !important;
 `
 
-const StyledLink = styled(Link)`
-  ${dropdownLinkStyles}
-  ${(props) =>
-    props.disabled &&
-    css`
-      color: ${theme.color.disabledText} !important;
-      pointer-events: none;
-    `}
-`
 const GlobalLinks = () => (
   <>
     <StyledNavLink href="/projects">Projects</StyledNavLink>
@@ -307,10 +298,7 @@ const Header = ({ logout, currentUser }) => {
           </div>
         </GlobalNav>
       </StyledHeader>
-      <ProfileModal
-        isOpen={isProfileModalOpen}
-        onDismiss={closeProfileModal}
-      />
+      <ProfileModal isOpen={isProfileModalOpen} onDismiss={closeProfileModal} />
     </>
   )
 }
