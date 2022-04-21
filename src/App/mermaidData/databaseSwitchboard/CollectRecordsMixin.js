@@ -74,6 +74,12 @@ const CollectRecordsMixin = (Base) =>
         : undefined
     }
 
+    #getStatusLabel = function getStatusLabel(record) {
+      const { validations } = record
+
+      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
+    }
+
     #getSizeLabel = function getSizeLabel(record, choices) {
       const { belttransectwidths } = choices
       const isFishBelt = this.#getIsFishBelt(record)
