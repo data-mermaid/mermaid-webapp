@@ -1,4 +1,5 @@
 // prettier-ignore
+import { getSystemValidationErrorMessage, getDuplicateSampleUnitLink } from './library/validationMessageHelpers'
 
 const projectCodes = {
   status: { open: 90, test: 80 },
@@ -227,63 +228,54 @@ const pages = {
 const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
-const validationMessages = {
-  siteNotFound: 'Site record not available for similarity validation',
-  notUniqueSite: 'Site: Similar records detected',
-  managementNotFound: 'Management Regime record not available for similarity validation',
-  notUniqueManagement: 'Management Regime: Similar records detected',
-  invalidFishCount: 'Invalid fish count',
-  futureSampleDate: 'Sample date is in the future',
-  noRegionMatch: 'Attributes outside of site region',
-  notPartOfFishFamilySubset: 'There are fish that are not part of project defined fish families',
-  allEqual: 'All observations are the same',
-  duplicateTransect: 'Transect already exists',
-}
-
-const getValidationMessage = (validation) => {
+const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
-  switch (code) {
-    case 'site_not_found':
-      return validationMessages.siteNotFound
-    case 'not_unique_site':
-      return validationMessages.notUniqueSite
-    case 'management_not_found':
-      return validationMessages.managementNotFound
-    case 'not_unique_management':
-      return validationMessages.notUniqueManagement
-    case 'minimum_total_fish_count':
-      return `Total fish count less than ${context?.minimum_fish_count}`
-    case 'too_few_observations':
-      return `Fewer than ${context?.observation_count_range[0]} observations`
-    case 'too_many_observations':
-      return `Greater than ${context?.observation_count_range[1]} observations`
-    case 'low_density':
-      return `Fish biomass less than ${context?.biomass_range[1]} kg/ha`
-    case 'high_density':
-      return `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`
-    case 'len_surveyed_out_of_range':
-      return `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`
-    case 'max_depth':
-    case 'invalid_depth':
-      return `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`
-    case 'invalid_fish_count':
-      return validationMessages.invalidFishCount
-    case 'future_sample_date':
-      return validationMessages.futureSampleDate
-    case 'sample_time_out_of_range':
-      return `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`
-    case 'no_region_match':
-      return validationMessages.noRegionMatch
-    case 'not_part_of_fish_family_subset':
-      return validationMessages.notPartOfFishFamilySubset
-    case 'all_equal':
-      return validationMessages.allEqual
-    case 'duplicate_transect':
-      return validationMessages.duplicateTransect
-    default:
-      return code || name
+  const validationMessages = {
+    all_equal: () => 'All observations are the same',
+    duplicate_fishbelt_transect: () =>
+      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
+    duplicate_quadrat_collection: () =>
+      `Duplicate sample unit ${context?.duplicate_transect_method}`,
+    duplicate_transect: () => 'Transect already exists',
+    duplicate_values: () => 'Duplicate',
+    exceed_total_colonies: () => 'Maximum number of colonies exceeded',
+    future_sample_date: () => 'Sample date is in the future',
+    len_surveyed_out_of_range: () =>
+      `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
+    low_density: () => `Fish biomass less than ${context?.biomass_range[1]} kg/ha`,
+    management_not_found: () => 'Management Regime record not available for similarity validation',
+    max_depth: () =>
+      `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`,
+    max_fish_size: () => 'Fish size is larger than species max size',
+    minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
+    no_region_match: () => 'Attributes outside of site region',
+    not_part_of_fish_family_subset: () =>
+      'There are fish that are not part of project defined fish families',
+    not_positive_integer: () => 'Value is not greater or equal to zero',
+    not_unique_site: () => 'Site: Similar records detected',
+    not_unique_management: () => 'Management Regime: Similar records detected',
+    high_density: () => `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`,
+    invalid_depth: () => 'Invalid depth',
+    invalid_fish_count: () => 'Invalid fish count',
+    invalid_fishbelt_transect: () => 'Invalid sample unit',
+    invalid_percent_value: () => 'Not a valid percent value',
+    invalid_quadrat_collection: () => 'Invalid sample unit',
+    invalid_quadrat_size: () => 'Invalid quadrat size',
+    invalid_sample_date: () => 'Invalid date',
+    required_management_rules: () => 'Management rules are required',
+    sample_time_out_of_range: () =>
+      `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
+    similar_name: () => 'A record with similar name exists',
+    site_not_found: () => 'Site record not available for similarity validation',
+    too_many_observations: () => `Greater than ${context?.observation_count_range[1]} observations`,
+    too_few_observations: () => `Fewer than ${context?.observation_count_range[0]} observations`,
+    unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
+    value_not_set: () => 'Value is not set',
+    default: () => code || name,
   }
+
+  return (validationMessages[code] || validationMessages.default)()
 }
 
 export default {
