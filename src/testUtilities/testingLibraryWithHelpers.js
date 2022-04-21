@@ -16,9 +16,11 @@ import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineSto
 import { getFakeAccessToken } from './getFakeAccessToken'
 import { CurrentUserProvider } from '../App/CurrentUserContext'
 
-const fakeCurrentUser = {
-  id: 'fake-id',
-  first_name: 'FakeFirstName',
+const fakeCurrentUserInstance = {
+  currentUser: {
+    id: 'fake-id',
+    first_name: 'FakeFirstName',
+  },
 }
 
 const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOverride }) => (
@@ -33,7 +35,7 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
     <MemoryRouter initialEntries={initialEntries}>
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
-          <CurrentUserProvider value={fakeCurrentUser}>{children}</CurrentUserProvider>
+          <CurrentUserProvider value={fakeCurrentUserInstance}>{children}</CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
     </MemoryRouter>
