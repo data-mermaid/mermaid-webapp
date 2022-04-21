@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
-import getCurrentUserProfile from './getCurrentUserProfile'
+import { getCurrentUserProfile, updateCurrentUserProfile } from './currentUserProfileHelpers'
 
 export const useInitializeCurrentUser = ({
   apiBaseUrl,
@@ -39,5 +39,24 @@ export const useInitializeCurrentUser = ({
     }
   }, [apiBaseUrl, getAccessToken, dexieInstance, isMermaidAuthenticated, isAppOnline])
 
-  return currentUser
+  const saveUserProfile = (userProfile) => {
+    if (isMermaidAuthenticated && apiBaseUrl && dexieInstance && isMermaidAuthenticated) {
+      updateCurrentUserProfile({
+        apiBaseUrl,
+        getAccessToken,
+        dexieInstance,
+        isMermaidAuthenticated,
+        isAppOnline,
+        userProfile,
+      })
+        .then((user) => {
+          setCurrentUser(user)
+        })
+        .catch(() => {
+          toast.error(...getToastArguments(language.error.userProfileUnavailable))
+        })
+    }
+  }
+
+  return { currentUser, saveUserProfile }
 }
