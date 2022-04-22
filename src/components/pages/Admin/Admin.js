@@ -33,7 +33,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
-import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -171,8 +171,7 @@ const Admin = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const projectUserRole = useProjectUserRole()
-  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
+  const { projectUserRole } = useCurrentUser()
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 

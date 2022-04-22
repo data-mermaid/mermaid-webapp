@@ -25,7 +25,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import theme from '../../../theme'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
-import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -81,7 +81,7 @@ const DataSharing = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const { projectUserRole } = useProjectUserRole()
+  const { projectUserRole } = useCurrentUser()
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 

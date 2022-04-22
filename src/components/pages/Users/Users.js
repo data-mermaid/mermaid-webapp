@@ -45,7 +45,6 @@ import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 
 const ToolbarRowWrapper = styled('div')`
@@ -135,9 +134,9 @@ const Users = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
-  const projectUserRole = useProjectUserRole()
+  const projectUserRole = useCurrentUser()
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
@@ -519,11 +518,14 @@ const Users = () => {
           desc: false,
         },
       ],
-      globalFilter: ""
+      globalFilter: '',
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-usersTable`, defaultValue: tableDefaultPrefs })
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-usersTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -564,7 +566,7 @@ const Users = () => {
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter
+        globalFilter: tableUserPrefs.globalFilter,
       },
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,

@@ -47,7 +47,7 @@ const Data = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
 
   useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 
@@ -152,11 +152,14 @@ const Data = () => {
           desc: false,
         },
       ],
-      globalFilter: ""
+      globalFilter: '',
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-dataSubmittedTable`, defaultValue: tableDefaultPrefs })
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-dataSubmittedTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -197,7 +200,7 @@ const Data = () => {
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
@@ -316,11 +319,7 @@ const Data = () => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout
-      isPageContentLoading={isLoading}
-      content={content}
-      toolbar={toolbar}
-    />
+    <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
   )
 }
 

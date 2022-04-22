@@ -50,7 +50,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [isButtonLoading, setIsButtonLoading] = useState(true)
   const [isReadOnlyUser, setIsReadOnlyUser] = useState({})
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const history = useHistory()
   const projectUrl = `projects/${id}`
 

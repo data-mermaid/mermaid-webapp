@@ -23,7 +23,7 @@ import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservatio
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../library/useIsMounted'
 import { getRecordName } from '../../../library/getRecordName'
-import { useProjectUserRole } from '../../../App/ProjectUserRoleContext'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -44,7 +44,7 @@ const SubmittedFishBelt = () => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
-  const { projectUserRole } = useProjectUserRole()
+  const { projectUserRole } = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {

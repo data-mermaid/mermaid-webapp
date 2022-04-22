@@ -37,7 +37,7 @@ const Collect = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
@@ -129,7 +129,7 @@ const Collect = () => {
         size: uiLabels.size,
         depth: uiLabels.depth,
         sampleDate: uiLabels.sampleDate,
-        observers: uiLabels.observers
+        observers: uiLabels.observers,
       })),
     [collectRecordsForUiDisplay, currentProjectPath],
   )

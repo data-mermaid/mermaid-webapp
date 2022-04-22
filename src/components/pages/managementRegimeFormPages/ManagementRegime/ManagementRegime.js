@@ -30,7 +30,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import SaveButton from '../../../generic/SaveButton'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
-import { useProjectUserRole } from '../../../../App/ProjectUserRoleContext'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
 
 const TdKey = styled(Td)`
   white-space: nowrap;
@@ -114,7 +114,7 @@ const ManagementRegime = () => {
   const { managementRegimeId, projectId } = useParams()
   const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const { projectUserRole } = useProjectUserRole()
+  const { projectUserRole } = useCurrentUser()
   const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const _getSupportingData = useEffect(() => {

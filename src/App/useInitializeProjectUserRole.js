@@ -25,12 +25,10 @@ const useInitializeProjectUserRole = ({
   isAppOnline,
 }) => {
   const [projectUserRole, setProjectUserRole] = useState()
-  const [isProjectUserRoleLoaded, setIsProjectUserRoleLoaded] = useState(false)
 
   useEffect(() => {
     if (!projectId) {
       setProjectUserRole({})
-      setIsProjectUserRoleLoaded(false)
     }
 
     if (currentUser && projectId && dexieInstance) {
@@ -44,12 +42,11 @@ const useInitializeProjectUserRole = ({
         )[0]
 
         setProjectUserRole(filteredUserProfile)
-        setIsProjectUserRoleLoaded(true)
       })
     }
   }, [isAppOnline, projectId, currentUser, dexieInstance, apiBaseUrl, getAccessToken])
 
-  return { isProjectUserRoleLoaded, projectUserRole }
+  return projectUserRole
 }
 
 export default useInitializeProjectUserRole

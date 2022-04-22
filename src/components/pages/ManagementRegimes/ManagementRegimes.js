@@ -35,7 +35,7 @@ const ManagementRegimes = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -145,11 +145,14 @@ const ManagementRegimes = () => {
           desc: false,
         },
       ],
-      globalFilter: ""
+      globalFilter: '',
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-managementRegimesTable`, defaultValue: tableDefaultPrefs })
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-managementRegimesTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.estYear']
@@ -185,7 +188,7 @@ const ManagementRegimes = () => {
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort

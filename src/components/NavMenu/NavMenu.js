@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { useParams, useLocation } from 'react-router-dom'
-import { useProjectUserRole } from '../../App/ProjectUserRoleContext'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 import { subNavNodePropTypes } from '../SubNavMenuRecordName/subNavNodePropTypes'
 import theme from '../../theme'
 import { NavLinkSidebar } from '../generic/links'
@@ -60,7 +60,8 @@ const NavMenu = ({ subNavNode }) => {
   const projectUrl = useCurrentProjectPath()
   const { recordId, submittedRecordId, siteId, managementRegimeId } = useParams()
   const { pathname } = useLocation()
-  const { projectUserRole, isProjectUserRoleLoaded } = useProjectUserRole()
+  const { projectUserRole } = useCurrentUser()
+
   const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const isCollectingSubNode = recordId || pathname.includes('collecting')
@@ -68,7 +69,7 @@ const NavMenu = ({ subNavNode }) => {
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
 
   return (
-    isProjectUserRoleLoaded && (
+    Object.keys(projectUserRole).length !== 0 && (
       <NavWrapper data-testid="content-page-side-nav">
         <NavList>
           {/* hiding for alpha release because leads nowhere useful */}

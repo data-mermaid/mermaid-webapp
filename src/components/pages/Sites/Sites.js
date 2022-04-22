@@ -43,7 +43,7 @@ const Sites = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -54,7 +54,6 @@ const Sites = () => {
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
       ])
-
         .then(([sites, project, choicesResponse]) => {
           if (isMounted.current) {
             if (!project && projectId) {
