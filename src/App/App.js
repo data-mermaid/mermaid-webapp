@@ -82,8 +82,8 @@ function App({ dexieInstance }) {
   })
 
   const projectUserRole = useInitializeProjectUserRole({
-    projectId,
     currentUser,
+    projectId,
     apiBaseUrl,
     getAccessToken,
     dexieInstance,

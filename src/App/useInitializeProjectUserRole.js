@@ -17,8 +17,8 @@ const getProjectProfilesAPI = async (apiBaseUrl, projectId, getAccessToken) => {
 }
 
 const useInitializeProjectUserRole = ({
-  projectId,
   currentUser,
+  projectId,
   apiBaseUrl,
   getAccessToken,
   dexieInstance,
@@ -44,7 +44,7 @@ const useInitializeProjectUserRole = ({
         setProjectUserRole(filteredUserProfile)
       })
     }
-  }, [isAppOnline, projectId, currentUser, dexieInstance, apiBaseUrl, getAccessToken])
+  }, [currentUser, projectId, apiBaseUrl, getAccessToken, dexieInstance, isAppOnline])
 
   return projectUserRole
 }
