@@ -121,7 +121,7 @@ const Users = () => {
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(false)
+  const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
   const [isReadonlyUserWithActiveSampleUnits, setIsReadonlyUserWithActiveSampleUnits] =
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
@@ -195,48 +195,61 @@ const Users = () => {
     }
   }, [databaseSwitchboardInstance, projectId])
 
-  const addNewUser = () => {
-    databaseSwitchboardInstance.getUserProfile(newUserProfile).then((res) => {
-      const doesUserHaveMermaidProfile = res.data.count === 0
+  const addExistingUser = () =>
+    databaseSwitchboardInstance
+      .addUser(newUserProfile, projectId)
+      .then(() => {
+        fetchProjectProfiles()
+        setNewUserProfile('')
+        toast.success(...getToastArguments(language.success.newUserAdd))
+      })
+      .catch(() => {
+        toast.error(...getToastArguments(language.error.duplicateNewUserAdd))
+      })
 
-      if (doesUserHaveMermaidProfile) {
-        setIsNewUserProfileModalOpen(true)
-      } else {
-        databaseSwitchboardInstance
-          .addUser(newUserProfile, projectId)
-          .then(() => {
-            fetchProjectProfiles()
-            setNewUserProfile('')
-            toast.success(...getToastArguments(language.success.newUserAdd))
-          })
-          .catch(() => {
-            toast.error(...getToastArguments(language.error.duplicateNewUserAdd))
-          })
-      }
-    })
-  }
-
-  const handleNewUserSubmit = () => {
-    databaseSwitchboardInstance.addUser(newUserProfile, projectId).then(() => {
-      fetchProjectProfiles()
-      setNewUserProfile('')
-      toast.success(...getToastArguments(language.success.newPendingUserAdd))
-    })
-
-    return Promise.resolve()
-  }
-
-  const openNewUserProfileModal = () => {
+  const notifyUserIfEmailInvalid = () => {
     if (newUserProfile === '') {
       toast.warning(...getToastArguments(language.error.emptyEmailAdd))
-    } else if (validateEmail(newUserProfile)) {
-      addNewUser()
-    } else {
-      toast.warning(...getToastArguments(language.error.invalidEmailAdd))
+
+      return false
     }
+    if (!validateEmail(newUserProfile)) {
+      toast.warning(...getToastArguments(language.error.invalidEmailAdd))
+
+      return false
+    }
+
+    return true
   }
 
-  const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
+  const addUser = () => {
+    const isEmailValid = notifyUserIfEmailInvalid()
+
+    if (isEmailValid) {
+      databaseSwitchboardInstance.getUserProfile(newUserProfile).then((res) => {
+        const doesUserHaveMermaidProfile = res.data.count !== 0
+
+        if (!doesUserHaveMermaidProfile) {
+          // if the user doesnt have a profile already, the addUser function
+          // (and the associated API endpoint) results in an email being sent,
+          // hence why we ask for permission first
+          setIsSendEmailToNewUserPromptOpen(true)
+        } else {
+          addExistingUser()
+        }
+      })
+    }
+  }
+  const closeSendEmailToNewUserPrompt = () => setIsSendEmailToNewUserPromptOpen(false)
+
+  const addNewUserAndSendEmail = () => {
+    return databaseSwitchboardInstance.addUser(newUserProfile, projectId).then(() => {
+      fetchProjectProfiles()
+      setNewUserProfile('')
+      closeSendEmailToNewUserPrompt()
+      toast.success(...getToastArguments(language.success.newPendingUserAdd))
+    })
+  }
 
   const handleNewUserProfileAdd = (event) => setNewUserProfile(event.target.value)
 
@@ -523,11 +536,14 @@ const Users = () => {
           desc: false,
         },
       ],
-      globalFilter: ""
+      globalFilter: '',
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-usersTable`, defaultValue: tableDefaultPrefs })
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-usersTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
@@ -568,7 +584,7 @@ const Users = () => {
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter
+        globalFilter: tableUserPrefs.globalFilter,
       },
       autoResetSortBy: false,
       globalFilter: tableGlobalFilters,
@@ -654,10 +670,10 @@ const Users = () => {
         />
       </TableNavigation>
       <NewUserModal
-        isOpen={isNewUserProfileModalOpen}
-        onDismiss={closeNewUserProfileModal}
+        isOpen={isSendEmailToNewUserPromptOpen}
+        onDismiss={closeSendEmailToNewUserPrompt}
         newUser={newUserProfile}
-        onSubmit={handleNewUserSubmit}
+        onSubmit={addNewUserAndSendEmail}
       />
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
@@ -705,7 +721,7 @@ const Users = () => {
             }
             value={newUserProfile}
             onChange={handleNewUserProfileAdd}
-            buttonOnClick={openNewUserProfileModal}
+            buttonOnClick={addUser}
           />
         )}
       </ToolbarRowWrapper>

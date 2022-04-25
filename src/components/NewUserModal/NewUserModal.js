@@ -13,16 +13,10 @@ const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit }) => {
   )
   const modalContent = <p>{modalBodyText}</p>
 
-  const handleOnSubmit = () => {
-    onSubmit().then(() => {
-      onDismiss()
-    })
-  }
-
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={handleOnSubmit}>Send email</ButtonPrimary>
+      <ButtonPrimary onClick={onSubmit}>Send email</ButtonPrimary>
     </RightFooter>
   )
 
