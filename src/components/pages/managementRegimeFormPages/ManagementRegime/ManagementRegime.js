@@ -57,7 +57,10 @@ const ManagementRegime = () => {
             }
 
             setManagementParties(getOptions(choicesResponse.managementparties))
-            setManagementCompliances(getOptions(choicesResponse.managementcompliances))
+            setManagementCompliances([
+              ...getOptions(choicesResponse.managementcompliances),
+              { label: 'not reported', value: '' },
+            ])
             setManagementRegimeBeingEdited(managementRegimeResponse)
             setIsLoading(false)
           }
