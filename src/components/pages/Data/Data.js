@@ -157,7 +157,7 @@ const Data = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-dataSubmittedTable`,
+    key: `${currentUser && currentUser.id}-dataSubmittedTable`,
     defaultValue: tableDefaultPrefs,
   })
 

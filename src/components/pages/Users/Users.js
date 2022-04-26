@@ -523,7 +523,7 @@ const Users = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-usersTable`,
+    key: `${currentUser && currentUser.id}-usersTable`,
     defaultValue: tableDefaultPrefs,
   })
 

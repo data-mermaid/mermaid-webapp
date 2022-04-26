@@ -115,7 +115,10 @@ const ManagementRegime = () => {
   const isMounted = useIsMounted()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const { projectUserRole } = useCurrentUser()
-  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
+  const isReadOnlyUser =
+    projectUserRole &&
+    Object.keys(projectUserRole).length !== 0 &&
+    !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {

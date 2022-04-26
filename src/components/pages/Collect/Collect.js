@@ -147,7 +147,7 @@ const Collect = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-collectTable`,
+    key: `${currentUser && currentUser.id}-collectTable`,
     defaultValue: tableDefaultPrefs,
   })
 

@@ -62,29 +62,19 @@ const NavMenu = ({ subNavNode }) => {
   const { pathname } = useLocation()
   const { projectUserRole } = useCurrentUser()
 
-  const isReadOnlyUser = !(projectUserRole.is_admin || projectUserRole.is_collector)
+  const isReadOnlyUser =
+    projectUserRole &&
+    Object.keys(projectUserRole).length !== 0 &&
+    !(projectUserRole.is_admin || projectUserRole.is_collector)
 
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
 
   return (
-    Object.keys(projectUserRole).length !== 0 && (
-      <NavWrapper data-testid="content-page-side-nav">
+    <NavWrapper data-testid="content-page-side-nav">
+      {projectUserRole && Object.keys(projectUserRole).length !== 0 && (
         <NavList>
-          {/* hiding for alpha release because leads nowhere useful */}
-          {/* <OfflineHide>
-          <li>
-            <NavHeader>Project Overview</NavHeader>
-            <ul>
-              <li>
-                <NavLinkSidebar to={`${projectUrl}/health`}>
-                  <IconHeart /> <span>Project Health</span>
-                </NavLinkSidebar>
-              </li>
-            </ul>
-          </li>
-        </OfflineHide> */}
           <li>
             <NavHeader>Collect</NavHeader>
             <ul>
@@ -166,8 +156,8 @@ const NavMenu = ({ subNavNode }) => {
             </li>
           </OfflineHide>
         </NavList>
-      </NavWrapper>
-    )
+      )}
+    </NavWrapper>
   )
 }
 

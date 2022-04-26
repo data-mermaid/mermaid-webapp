@@ -150,7 +150,7 @@ const ManagementRegimes = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-managementRegimesTable`,
+    key: `${currentUser && currentUser.id}-managementRegimesTable`,
     defaultValue: tableDefaultPrefs,
   })
 

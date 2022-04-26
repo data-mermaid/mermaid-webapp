@@ -125,7 +125,7 @@ const Sites = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-sitesTable`,
+    key: `${currentUser && currentUser.id}-sitesTable`,
     defaultValue: tableDefaultPrefs,
   })
 
