@@ -3,7 +3,11 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
-import { renderAuthenticatedOffline, screen } from '../../testUtilities/testingLibraryWithHelpers'
+import {
+  renderAuthenticatedOffline,
+  screen,
+  waitFor,
+} from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
 test('Clicking anywhere on a project card navigates to the project collect page when offline', async () => {
@@ -13,6 +17,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 
   renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
     dexieInstance,
+    isSyncInProgressOverride: true,
   })
 
   expect(
@@ -20,13 +25,16 @@ test('Clicking anywhere on a project card navigates to the project collect page 
       selector: 'h1',
     }),
   )
+  await waitFor(() =>
+    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+  )
 
   const projectCard = screen.getAllByRole('listitem')[0]
 
   userEvent.click(projectCard)
 
   expect(
-    await screen.findByText('Collecting', {
+    await screen.findByText('Project I', {
       selector: 'h2',
     }),
   )

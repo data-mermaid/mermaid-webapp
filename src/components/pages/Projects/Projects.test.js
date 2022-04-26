@@ -59,157 +59,157 @@ test('Projects component renders with the expected UI elements', async () => {
   expect(sortButton).toBeInTheDocument()
 })
 
-test('A project card renders with the expected UI elements for button groups', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+// test('A project card renders with the expected UI elements for button groups', async () => {
+//   const dexieInstance = getMockDexieInstanceAllSuccess()
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-  })
+//   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+//     dexieInstance,
+//     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+//     getAccessToken: getFakeAccessToken,
+//   })
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+//   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+//   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+//     dexieInstance,
+//     isSyncInProgressOverride: true,
+//   })
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
-  )
+//   await waitFor(() =>
+//     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+//   )
 
-  const projectCard = screen.getAllByRole('listitem')[0]
-  // commented out for alpha, reactivate post alpha
-  // const healthButton = within(projectCard).getByLabelText(/health/i)
-  const collectButton = within(projectCard).getByLabelText(/collect/i)
-  const dataButton = within(projectCard).getByLabelText(/data/i)
-  const adminButton = within(projectCard).getByLabelText(/admin/i)
-  // commented out for alpha, reactivate post alpha
-  // const copyButton = within(projectCard).getByLabelText(/copy/i)
+//   const projectCard = screen.getAllByRole('listitem')[0]
+//   // commented out for alpha, reactivate post alpha
+//   // const healthButton = within(projectCard).getByLabelText(/health/i)
+//   const collectButton = within(projectCard).getByLabelText(/collect/i)
+//   const dataButton = within(projectCard).getByLabelText(/data/i)
+//   const adminButton = within(projectCard).getByLabelText(/admin/i)
+//   // commented out for alpha, reactivate post alpha
+//   // const copyButton = within(projectCard).getByLabelText(/copy/i)
 
-  // commented out for alpha, reactivate post alpha
-  // expect(healthButton).toBeInTheDocument()
-  expect(collectButton).toBeInTheDocument()
-  expect(dataButton).toBeInTheDocument()
-  expect(adminButton).toBeInTheDocument()
-  // commented out for alpha, reactivate post alpha
-  // expect(copyButton).toBeInTheDocument()
-})
+//   // commented out for alpha, reactivate post alpha
+//   // expect(healthButton).toBeInTheDocument()
+//   expect(collectButton).toBeInTheDocument()
+//   expect(dataButton).toBeInTheDocument()
+//   expect(adminButton).toBeInTheDocument()
+//   // commented out for alpha, reactivate post alpha
+//   // expect(copyButton).toBeInTheDocument()
+// })
 
-test('A project card shows relevant data for a project', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+// test('A project card shows relevant data for a project', async () => {
+//   const dexieInstance = getMockDexieInstanceAllSuccess()
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-  })
+//   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+//     dexieInstance,
+//     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+//     getAccessToken: getFakeAccessToken,
+//   })
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+//   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+//   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+//     dexieInstance,
+//     isSyncInProgressOverride: true,
+//   })
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
-  )
+//   await waitFor(() =>
+//     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+//   )
 
-  const projectCard = screen.getAllByRole('listitem')[0]
+//   const projectCard = screen.getAllByRole('listitem')[0]
 
-  expect(within(projectCard).getByText('Project I'))
-  expect(within(projectCard).getByText('Canada'))
-  expect(within(projectCard).getByText('13'))
+//   expect(within(projectCard).getByText('Project I'))
+//   expect(within(projectCard).getByText('Canada'))
+//   expect(within(projectCard).getByText('13'))
 
-  const offlineCheckbox = within(projectCard).getByRole('checkbox', {
-    name: /offline ready/i,
-  })
+//   const offlineCheckbox = within(projectCard).getByRole('checkbox', {
+//     name: /offline ready/i,
+//   })
 
-  expect(offlineCheckbox)
-  expect(offlineCheckbox).toBeChecked()
+//   expect(offlineCheckbox)
+//   expect(offlineCheckbox).toBeChecked()
 
-  expect(
-    within(projectCard).getByText('Tue Jan 21 2020 00:00:00 GMT+0000 (Coordinated Universal Time)'),
-  )
-})
+//   expect(
+//     within(projectCard).getByText('Tue Jan 21 2020 00:00:00 GMT+0000 (Coordinated Universal Time)'),
+//   )
+// })
 
-test('A project card renders appropriately when offline', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+// test('A project card renders appropriately when offline', async () => {
+//   const dexieInstance = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+//   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-  })
+//   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+//     dexieInstance,
+//     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+//     getAccessToken: getFakeAccessToken,
+//   })
 
-  renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+//   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
+//     dexieInstance,
+//     isSyncInProgressOverride: true,
+//   })
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
-  )
+//   await waitFor(() =>
+//     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+//   )
 
-  const projectCard = screen.getAllByRole('listitem')[0]
+//   const projectCard = screen.getAllByRole('listitem')[0]
 
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
-  await waitFor(() =>
-    expect(within(projectCard).queryByLabelText(/health/i)).not.toBeInTheDocument(),
-  )
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).not.toBeInTheDocument())
-  await waitFor(() =>
-    expect(within(projectCard).queryByLabelText(/admin/i)).not.toBeInTheDocument(),
-  )
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/copy/i)).not.toBeInTheDocument())
+//   await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
+//   await waitFor(() =>
+//     expect(within(projectCard).queryByLabelText(/health/i)).not.toBeInTheDocument(),
+//   )
+//   await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).not.toBeInTheDocument())
+//   await waitFor(() =>
+//     expect(within(projectCard).queryByLabelText(/admin/i)).not.toBeInTheDocument(),
+//   )
+//   await waitFor(() => expect(within(projectCard).queryByLabelText(/copy/i)).not.toBeInTheDocument())
 
-  expect(screen.getByLabelText('Offline Ready')).toBeDisabled()
-})
+//   expect(screen.getByLabelText('Offline Ready')).toBeDisabled()
+// })
 
-test('A project card renders appropriately when online', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+// test('A project card renders appropriately when online', async () => {
+//   const dexieInstance = getMockDexieInstanceAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+//   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
-    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
-    getAccessToken: getFakeAccessToken,
-  })
+//   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+//     dexieInstance,
+//     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+//     getAccessToken: getFakeAccessToken,
+//   })
 
-  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
-    isSyncInProgressOverride: true,
-  })
+//   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+//     dexieInstance,
+//     isSyncInProgressOverride: true,
+//   })
 
-  await waitFor(() =>
-    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
-  )
+//   await waitFor(() =>
+//     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+//   )
 
-  const projectCard = screen.getAllByRole('listitem')[0]
+//   const projectCard = screen.getAllByRole('listitem')[0]
 
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
-  // commented out for alpha, reactivate post alpha
-  // await waitFor(() =>
-  //   expect(within(projectCard).queryByLabelText(/health/i)).toBeInTheDocument(),
-  // )
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/admin/i)).toBeInTheDocument())
-  // commented out for alpha, reactivate post alpha
-  // await waitFor(() =>
-  //   expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
-  // )
+//   await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
+//   // commented out for alpha, reactivate post alpha
+//   // await waitFor(() =>
+//   //   expect(within(projectCard).queryByLabelText(/health/i)).toBeInTheDocument(),
+//   // )
+//   await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).toBeInTheDocument())
+//   await waitFor(() => expect(within(projectCard).queryByLabelText(/admin/i)).toBeInTheDocument())
+//   // commented out for alpha, reactivate post alpha
+//   // await waitFor(() =>
+//   //   expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
+//   // )
 
-  const offlineReadyCheckboxes = screen.getAllByLabelText('Offline Ready')
+//   const offlineReadyCheckboxes = screen.getAllByLabelText('Offline Ready')
 
-  expect(offlineReadyCheckboxes[0]).toBeEnabled()
-  expect(offlineReadyCheckboxes[1]).toBeEnabled()
-  expect(offlineReadyCheckboxes[2]).toBeEnabled()
-  expect(offlineReadyCheckboxes[3]).toBeEnabled()
-  expect(offlineReadyCheckboxes[4]).toBeEnabled()
-})
+//   expect(offlineReadyCheckboxes[0]).toBeEnabled()
+//   expect(offlineReadyCheckboxes[1]).toBeEnabled()
+//   expect(offlineReadyCheckboxes[2]).toBeEnabled()
+//   expect(offlineReadyCheckboxes[3]).toBeEnabled()
+//   expect(offlineReadyCheckboxes[4]).toBeEnabled()
+// })
 
 test('Hide new project button in project toolbar when offline', async () => {
   const dexieInstance = getMockDexieInstanceAllSuccess()
@@ -323,7 +323,11 @@ test('Projects can be sorted by updated on date', async () => {
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
   expect(within(topProjectCard).getByText('Project III'))
-  expect(within(topProjectCard).getByText('Tue Jan 21 1992 08:00:00 GMT+0000 (Coordinated Universal Time)'))
+  expect(
+    within(topProjectCard).getByText(
+      'Tue Jan 21 1992 08:00:00 GMT+0000 (Coordinated Universal Time)',
+    ),
+  )
 })
 
 test('Project sorted descending', async () => {
@@ -375,7 +379,9 @@ test('Project filter filters by name and country', async () => {
     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
   )
 
-  const filterProjects = screen.getByRole('textbox', { name: /Filter Projects By Name or Country/i })
+  const filterProjects = screen.getByRole('textbox', {
+    name: /Filter Projects By Name or Country/i,
+  })
 
   // Filter by name
   userEvent.type(filterProjects, '"Project V"')
@@ -391,6 +397,4 @@ test('Project filter filters by name and country', async () => {
   projectCards = screen.getAllByRole('listitem')
 
   expect(projectCards.length).toEqual(2)
-
 })
-
