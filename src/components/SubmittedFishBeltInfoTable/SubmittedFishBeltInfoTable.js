@@ -55,7 +55,7 @@ const SubmittedFishBeltInfoTable = ({ sites, managementRegimes, choices, submitt
       <tbody>
         <TableRowItem title="Site" options={sites} value={site} />
         <TableRowItem title="Management" options={managementRegimes} value={management} />
-        <TableRowItem title="Sample Date Time" value={`${sample_date} ${sample_time}`} />
+        <TableRowItem title="Sample Date Time" value={`${sample_date} ${sample_time || ''}`} />
         <TableRowItem title="Depth" value={depth} />
         <TableRowItem title="Transect Number" value={number} />
         <TableRowItem title="Label" value={label} />
