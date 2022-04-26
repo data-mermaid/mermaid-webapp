@@ -38,6 +38,45 @@ test('communicateGenericApiErrorsToUser produces the appropriate toast message i
 
   expect(callback).not.toHaveBeenCalled()
 })
+test('communicateGenericApiErrorsToUser produces the appropriate toast message if the status is 500', () => {
+  const toastSpy = jest.spyOn(toast, 'error')
+
+  const callback = jest.fn()
+
+  communicateGenericApiErrorsToUser({ error: { response: { status: 500 } }, callback })
+
+  expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
+    toastId: 'Something went wrong with the server.',
+  })
+
+  expect(callback).not.toHaveBeenCalled()
+})
+test('communicateGenericApiErrorsToUser produces the appropriate toast message if the status is 502', () => {
+  const toastSpy = jest.spyOn(toast, 'error')
+
+  const callback = jest.fn()
+
+  communicateGenericApiErrorsToUser({ error: { response: { status: 502 } }, callback })
+
+  expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
+    toastId: 'Something went wrong with the server.',
+  })
+
+  expect(callback).not.toHaveBeenCalled()
+})
+test('communicateGenericApiErrorsToUser produces the appropriate toast message if the status is 503', () => {
+  const toastSpy = jest.spyOn(toast, 'error')
+
+  const callback = jest.fn()
+
+  communicateGenericApiErrorsToUser({ error: { response: { status: 503 } }, callback })
+
+  expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
+    toastId: 'Something went wrong with the server.',
+  })
+
+  expect(callback).not.toHaveBeenCalled()
+})
 test('communicateGenericApiErrorsToUser can be extended with a callback function', () => {
   const callback = jest.fn()
 

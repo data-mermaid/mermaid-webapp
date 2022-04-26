@@ -11,7 +11,10 @@ const communicateGenericApiErrorsToUser = ({ error, callback }) => {
     )
   }
 
-  if (errorStatus === 403 || errorStatus === 401) {
+  const errorStatusesToRespondTo = [401, 403, 500, 502, 503]
+
+  // make sure to only include status codes that would unlikely need a custom message for a given context
+  if (errorStatusesToRespondTo.includes(errorStatus)) {
     toast.error(...getToastArguments(language.error[errorStatus]))
   } else if (callback) {
     // this allows for the logic to be extended.
