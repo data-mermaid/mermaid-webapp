@@ -57,7 +57,10 @@ const ManagementRegime = () => {
             }
 
             setManagementParties(getOptions(choicesResponse.managementparties))
-            setManagementCompliances(getOptions(choicesResponse.managementcompliances))
+            setManagementCompliances([
+              ...getOptions(choicesResponse.managementcompliances),
+              { label: 'not reported', value: '' },
+            ])
             setManagementRegimeBeingEdited(managementRegimeResponse)
             setIsLoading(false)
           }
@@ -147,7 +150,9 @@ const ManagementRegime = () => {
     },
   })
 
-  useDocumentTitle(`${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`)
+  useDocumentTitle(
+    `${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
+  )
 
   const _setSiteButtonUnsaved = useEffect(() => {
     if (formik.dirty) {
