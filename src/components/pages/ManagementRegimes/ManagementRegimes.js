@@ -145,11 +145,14 @@ const ManagementRegimes = () => {
           desc: false,
         },
       ],
-      globalFilter: ""
+      globalFilter: '',
     }
   }, [])
 
-  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({ key: `${currentUser.id}-managementRegimesTable`, defaultValue: tableDefaultPrefs })
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-managementRegimesTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = ['values.name.props.children', 'values.estYear']
@@ -185,11 +188,11 @@ const ManagementRegimes = () => {
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
-        globalFilter: tableUserPrefs.globalFilter
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -215,23 +218,23 @@ const ManagementRegimes = () => {
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+              const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
 
               return (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th
-                    {...column.getHeaderProps(getTableColumnHeaderProps(column))}
-                    isSortedDescending={column.isSortedDesc}
-                    sortedIndex={column.sortedIndex}
-                    isMultiSortColumn={isMultiSortColumn}
-                  >
-                    {column.render('Header')}
-                  </Th>
-                ))}
-              </Tr>
-            )
-})}
+                <Tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <Th
+                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
+                      isSortedDescending={column.isSortedDesc}
+                      sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
+                    >
+                      {column.render('Header')}
+                    </Th>
+                  ))}
+                </Tr>
+              )
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
