@@ -147,7 +147,9 @@ const ManagementRegime = () => {
     },
   })
 
-  useDocumentTitle(`${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`)
+  useDocumentTitle(
+    `${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
+  )
 
   const _setSiteButtonUnsaved = useEffect(() => {
     if (formik.dirty) {
