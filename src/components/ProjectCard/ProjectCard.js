@@ -57,14 +57,12 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   const _loadProjectProfile = useEffect(() => {
     // to prevent React memory leak warning, this will cancel async function when this component is unmount.
     let cancelAsync = false
-    const projectProfilesPromise = isAppOnline
-      ? databaseSwitchboardInstance.getProjectProfilesAPI(id)
-      : databaseSwitchboardInstance.getProjectProfiles(id)
 
     setIsButtonLoading(true)
 
     if (databaseSwitchboardInstance) {
-      projectProfilesPromise
+      databaseSwitchboardInstance
+        .getProjectProfiles(id)
         .then((profiles) => {
           if (cancelAsync) {
             return

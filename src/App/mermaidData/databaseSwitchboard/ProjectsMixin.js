@@ -56,6 +56,24 @@ const ProjectsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    getProjectProfilesAPI = async function getProjectProfilesAPI(projectId) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .get(
+              `${this._apiBaseUrl}/projects/${projectId}/project_profiles/`,
+              await getAuthorizationHeaders(this._getAccessToken),
+            )
+            .then((profiles) => {
+              return profiles.data.results
+            })
+            .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     getProjectProfiles = function getProjectProfiles(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
@@ -63,10 +81,15 @@ const ProjectsMixin = (Base) =>
 
       return this._isAuthenticatedAndReady
         ? this._dexieInstance.project_profiles
+            .where({ project: projectId })
             .toArray()
-            .then((projectProfiles) =>
-              projectProfiles.filter((projectProfile) => projectProfile.project === projectId),
-            )
+            .then(async (result) => {
+              const projectProfiles = result.length
+                ? result
+                : await this.getProjectProfilesAPI(projectId)
+
+              return projectProfiles
+            })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -228,24 +251,6 @@ const ProjectsMixin = (Base) =>
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
-    }
-
-    getProjectProfilesAPI = async function getProjectProfilesAPI(projectId) {
-      if (!projectId) {
-        Promise.reject(this._operationMissingParameterError)
-      }
-
-      return this._isOnlineAuthenticatedAndReady
-        ? axios
-            .get(
-              `${this._apiBaseUrl}/projects/${projectId}/project_profiles/`,
-              await getAuthorizationHeaders(this._getAccessToken),
-            )
-            .then((profiles) => {
-              return profiles.data.results
-            })
-            .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
-        : Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }
 
