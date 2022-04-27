@@ -104,11 +104,6 @@ export const ButtonCaution = styled(Button)`
     background-color: ${theme.color.cautionActive};
   }
 `
-export const ButtonyNavLink = styled(NavLink)`
-  background-color: lightgray;
-  border: solid thin grey;
-`
-export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
 
 export const ButtonThatLooksLikeLink = styled('button')`
   font-size: inherit;
