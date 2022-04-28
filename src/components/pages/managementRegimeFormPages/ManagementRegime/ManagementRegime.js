@@ -1,13 +1,17 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo } from 'react'
 
+import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
+import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { getManagementRegimeInitialValues } from '../managementRegimeFormInitialValues'
 import { getOptions } from '../../../../library/getOptions'
+import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
-import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { InputWrapper } from '../../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -17,37 +21,42 @@ import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/Inp
 import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../../language'
-import { getToastArguments } from '../../../../library/getToastArguments'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
 import ManagementRulesInput from '../ManagementRulesInput'
+import SaveButton from '../../../generic/SaveButton'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../../library/useDocumentTitle'
 import useIsMounted from '../../../../library/useIsMounted'
-import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import SaveButton from '../../../generic/SaveButton'
-import LoadingModal from '../../../LoadingModal/LoadingModal'
 
-const ManagementRegime = () => {
+const ManagementRegime = ({ isNewManagementRegime }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementCompliances, setManagementCompliances] = useState([])
   const [managementParties, setManagementParties] = useState([])
   const [managementRegimeBeingEdited, setManagementRegimeBeingEdited] = useState()
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { managementRegimeId, projectId } = useParams()
+  const history = useHistory()
   const isMounted = useIsMounted()
-  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const currentProjectPath = useCurrentProjectPath()
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
-      const promises = [
-        databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
-        databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getProject(projectId),
-      ]
+      let promises = [databaseSwitchboardInstance.getChoices()]
+
+      if (!isNewManagementRegime) {
+        promises = [
+          ...promises,
+          databaseSwitchboardInstance.getProject(projectId),
+          databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
+        ]
+      }
 
       Promise.all(promises)
-        .then(([managementRegimeResponse, choicesResponse, projectResponse]) => {
+        .then(([choicesResponse, projectResponse, managementRegimeResponse]) => {
           if (isMounted.current) {
             if (!managementRegimeResponse && managementRegimeId) {
               setIdsNotAssociatedWithData((previousState) => [...previousState, managementRegimeId])
@@ -66,7 +75,14 @@ const ManagementRegime = () => {
           toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, managementRegimeId, projectId])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isNewManagementRegime,
+    isSyncInProgress,
+    managementRegimeId,
+    projectId,
+  ])
 
   const initialFormValues = useMemo(
     () => getManagementRegimeInitialValues(managementRegimeBeingEdited),
@@ -115,10 +131,16 @@ const ManagementRegime = () => {
       setSaveButtonState(buttonGroupStates.saving)
       databaseSwitchboardInstance
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
-        .then(() => {
+        .then((response) => {
           toast.success(language.success.managementRegimeSave)
           setSaveButtonState(buttonGroupStates.saved)
           formikActions.resetForm({ values: formikValues })
+
+          if (isNewManagementRegime) {
+            history.push(
+              `${ensureTrailingSlash(currentProjectPath)}management-regimes/${response.id}`,
+            )
+          }
         })
         .catch(() => {
           setSaveButtonState(buttonGroupStates.unsaved)
@@ -157,7 +179,7 @@ const ManagementRegime = () => {
     }
   }, [formik.dirty])
 
-  return idsNotAssociatedWithData.length ? (
+  return idsNotAssociatedWithData.length && !isNewManagementRegime ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
@@ -254,7 +276,11 @@ const ManagementRegime = () => {
       }
       toolbar={
         <ContentPageToolbarWrapper>
-          <H2>{formik.values.name}</H2>
+          {isNewManagementRegime ? (
+            <H2>{language.pages.managementRegimeForm.title}</H2>
+          ) : (
+            <H2 data-testid="edit-management-regime-form-title">{formik.values.name}</H2>
+          )}
           <SaveButton
             formId="management-regime-form"
             saveButtonState={saveButtonState}
@@ -266,6 +292,6 @@ const ManagementRegime = () => {
   )
 }
 
-ManagementRegime.propTypes = {}
+ManagementRegime.propTypes = { isNewManagementRegime: PropTypes.bool.isRequired }
 
 export default ManagementRegime
