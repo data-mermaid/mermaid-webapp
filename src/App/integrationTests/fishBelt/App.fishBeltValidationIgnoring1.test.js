@@ -516,7 +516,9 @@ test('Validation: user can dismiss record-level warnings ', async () => {
     within(recordLevelValidationsSection).getByText('record level warning'),
   ).toBeInTheDocument()
 
-  userEvent.click(within(recordLevelValidationsSection).getByRole('button', { name: 'Ignore' }))
+  userEvent.click(
+    within(recordLevelValidationsSection).getByRole('button', { name: 'Ignore Warning' }),
+  )
 
   await waitFor(() =>
     expect(

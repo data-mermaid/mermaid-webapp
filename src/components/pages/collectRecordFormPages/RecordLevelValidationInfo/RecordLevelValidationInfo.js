@@ -50,7 +50,7 @@ const RecordLevelValidationInfo = ({
                   ignoreRecordLevelValidation({ validationId: validation.validation_id })
                 }
               >
-                Ignore
+                Ignore Warning
               </InlineValidationButton>
             ) : null}
             {isIgnored ? (
