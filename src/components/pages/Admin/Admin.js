@@ -171,7 +171,8 @@ const Admin = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const { projectUserRole } = useCurrentUser()
+  const { projectUserRoles } = useCurrentUser()
+  const currentProjectUserRole = projectUserRoles[projectId]
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -251,7 +252,7 @@ const Admin = () => {
     </>
   )
 
-  const contentViewByRole = projectUserRole.is_admin ? (
+  const contentViewByRole = currentProjectUserRole.is_admin ? (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
@@ -330,7 +331,7 @@ const Admin = () => {
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>{language.pages.projectInfo.title}</H2>
-            {projectUserRole.is_admin && (
+            {currentProjectUserRole.is_admin && (
               <SaveButton
                 formId="project-info-form"
                 saveButtonState={saveButtonState}

@@ -134,9 +134,9 @@ const Users = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, projectUserRoles } = useCurrentUser()
   const isMounted = useIsMounted()
-  const projectUserRole = useCurrentUser()
+  const currentProjectUserRole = projectUserRoles[projectId]
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
@@ -529,7 +529,7 @@ const Users = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = projectUserRole.isAdmin
+      const keys = currentProjectUserRole.isAdmin
         ? ['values.name.props.children', 'values.email']
         : ['values.name', 'values.role']
 
@@ -541,7 +541,7 @@ const Users = () => {
 
       return getTableFilteredRows(rows, keys, queryTerms)
     },
-    [projectUserRole],
+    [currentProjectUserRole],
   )
 
   const {
@@ -561,8 +561,8 @@ const Users = () => {
     setGlobalFilter,
   } = useTable(
     {
-      columns: projectUserRole.is_admin ? tableColumnsForAdmin : tableColumnsForCollector,
-      data: projectUserRole.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
+      columns: currentProjectUserRole.is_admin ? tableColumnsForAdmin : tableColumnsForCollector,
+      data: currentProjectUserRole.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
@@ -684,14 +684,14 @@ const Users = () => {
       <ToolbarRowWrapper>
         <FilterSearchToolbar
           name={
-            projectUserRole.is_admin
+            currentProjectUserRole.is_admin
               ? language.pages.userTable.filterToolbarTextForAdmin
               : language.pages.userTable.filterToolbarTextForCollector
           }
           handleGlobalFilterChange={handleGlobalFilterChange}
           value={tableUserPrefs.globalFilter}
         />
-        {projectUserRole.is_admin && (
+        {currentProjectUserRole.is_admin && (
           <InputAndButton
             inputId="add-new-user-email"
             labelText={language.pages.userTable.searchEmailToolbarText}

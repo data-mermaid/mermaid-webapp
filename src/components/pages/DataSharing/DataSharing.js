@@ -81,7 +81,8 @@ const DataSharing = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const { projectUserRole } = useCurrentUser()
+  const { projectUserRoles } = useCurrentUser()
+  const currentProjectUserRole = projectUserRoles[projectId]
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -182,7 +183,7 @@ const DataSharing = () => {
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
         <IconInfo /> Learn more about how your data is shared...
       </ButtonPrimary>
-      {projectUserRole.is_admin ? (
+      {currentProjectUserRole.is_admin ? (
         <TableOverflowWrapper>
           <DataSharingTable>
             <thead>
@@ -269,7 +270,7 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {projectUserRole.is_admin && (
+      {currentProjectUserRole.is_admin && (
         <>
           <CheckBoxLabel>
             <input

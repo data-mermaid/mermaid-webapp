@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect, useParams } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import React, { useMemo } from 'react'
 
@@ -22,11 +22,10 @@ import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { CurrentUserProvider } from './CurrentUserContext'
-import useInitializeProjectUserRole from './useInitializeProjectUserRole'
+import { useInitializeProjectUserRoles } from './useInitializeProjectUserRoles'
 
 function App({ dexieInstance }) {
   const isMounted = useIsMounted()
-  const projectId = window.location.pathname.split('/')[2]
   const { isAppOnline } = useOnlineStatus()
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieInstance,
@@ -81,13 +80,12 @@ function App({ dexieInstance }) {
     isAppOnline,
   })
 
-  const projectUserRole = useInitializeProjectUserRole({
+  const projectUserRoles = useInitializeProjectUserRoles({
     currentUser,
-    projectId,
     apiBaseUrl,
     getAccessToken,
     dexieInstance,
-    isAppOnline,
+    isMermaidAuthenticated,
   })
   const { routes } = useRoutes({ apiSyncInstance })
 
@@ -105,7 +103,7 @@ function App({ dexieInstance }) {
   return (
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <CurrentUserProvider value={{ currentUser, projectUserRole }}>
+        <CurrentUserProvider value={{ currentUser, projectUserRoles }}>
           <GlobalStyle />
           <CustomToastContainer limit={5} />
           <Layout {...layoutProps}>

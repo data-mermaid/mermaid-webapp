@@ -44,7 +44,8 @@ const SubmittedFishBelt = () => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
-  const { projectUserRole } = useCurrentUser()
+  const { projectUserRoles } = useCurrentUser()
+  const currentProjectUserRole = projectUserRoles[projectId]
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -184,7 +185,7 @@ const SubmittedFishBelt = () => {
             />
             <RowSpaceBetween>
               <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
-              {projectUserRole.is_admin && (
+              {currentProjectUserRole.is_admin && (
                 <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
                   <IconPen />
                   Edit Sample Unit - move to collect

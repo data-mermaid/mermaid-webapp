@@ -58,14 +58,13 @@ const NavHeader = styled('p')`
 
 const NavMenu = ({ subNavNode }) => {
   const projectUrl = useCurrentProjectPath()
-  const { recordId, submittedRecordId, siteId, managementRegimeId } = useParams()
+  const { recordId, submittedRecordId, siteId, managementRegimeId, projectId } = useParams()
   const { pathname } = useLocation()
-  const { projectUserRole } = useCurrentUser()
-
-  const isReadOnlyUser =
-    projectUserRole &&
-    Object.keys(projectUserRole).length !== 0 &&
-    !(projectUserRole.is_admin || projectUserRole.is_collector)
+  const { projectUserRoles } = useCurrentUser()
+  const currentProjectUserRole = projectUserRoles[projectId]
+  const isUserRoleNotEmpty =
+    currentProjectUserRole && Object.keys(currentProjectUserRole).length !== 0
+  const isReadOnlyUser = !(currentProjectUserRole.is_admin || currentProjectUserRole.is_collector)
 
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
@@ -73,7 +72,7 @@ const NavMenu = ({ subNavNode }) => {
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
-      {projectUserRole && Object.keys(projectUserRole).length !== 0 && (
+      {isUserRoleNotEmpty && (
         <NavList>
           <li>
             <NavHeader>Collect</NavHeader>
