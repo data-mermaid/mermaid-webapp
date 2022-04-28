@@ -21,6 +21,7 @@ const mockMermaidApiAllSuccessful = setupServer(
   rest.post(`${apiBaseUrl}/push/`, (req, res, ctx) => {
     const reqCollectRecords = req.body.collect_records ?? []
     const reqSites = req.body.project_sites ?? []
+    const reqProjectManagements = req.body.project_managements ?? []
     const collectRecordsWithStatusCodes = reqCollectRecords.map((record) => ({
       data: { ...record, _last_revision_num: 1000 },
       status_code: 200,
@@ -29,10 +30,15 @@ const mockMermaidApiAllSuccessful = setupServer(
       data: { ...site, _last_revision_num: 1000 },
       status_code: 200,
     }))
+    const projectManagementsWithStatusCode = reqProjectManagements.map((management) => ({
+      data: { ...management, _last_revision_num: 1000 },
+      status_code: 200,
+    }))
 
     const response = {
       collect_records: collectRecordsWithStatusCodes,
       project_sites: sitesWithStatusCodes,
+      project_managements: projectManagementsWithStatusCode,
     }
 
     return res(ctx.json(response))

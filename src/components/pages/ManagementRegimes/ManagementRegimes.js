@@ -12,7 +12,11 @@ import { ToolBarRow } from '../../generic/positioning'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
+import {
+  ToolbarButtonWrapper,
+  ButtonSecondary,
+  LinkLooksLikeButtonSecondary,
+} from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -296,9 +300,9 @@ const ManagementRegimes = () => {
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <ToolbarButtonWrapper>
-              <ButtonSecondary>
+              <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
                 <IconPlus /> New MR
-              </ButtonSecondary>
+              </LinkLooksLikeButtonSecondary>
               <ButtonSecondary>
                 <IconCopy /> Copy MRs from other projects
               </ButtonSecondary>

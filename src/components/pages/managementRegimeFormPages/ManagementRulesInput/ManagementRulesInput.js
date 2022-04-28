@@ -136,8 +136,9 @@ const ManagementRulesInput = ({
 
   return (
     <InputRow required {...restOfProps}>
-      <label htmlFor={id}>{label}</label>
-      <div>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label id={`${id}-management-rules-input`}>{label}</label>
+      <div aria-labelledby={`${id}-management-rules-input`}>
         <StyledCheckRadioWrapper>
           <input
             type="radio"

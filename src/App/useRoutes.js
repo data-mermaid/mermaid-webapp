@@ -31,7 +31,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
-      Component: () => <FishBelt />,
+      Component: () => <FishBelt isNewRecord={true} />,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
@@ -88,8 +88,12 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: ManagementRegimes,
     },
     {
+      path: '/projects/:projectId/management-regimes/new',
+      Component: () => <ManagementRegime isNewManagementRegime={true} />,
+    },
+    {
       path: '/projects/:projectId/management-regimes/:managementRegimeId',
-      Component: ManagementRegime,
+      Component: () => <ManagementRegime isNewManagementRegime={false} />,
     },
     {
       path: '/projects/:projectId/users',
