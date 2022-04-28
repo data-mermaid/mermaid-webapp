@@ -1,4 +1,5 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
 import { ValidationList } from '../../../generic/form'
@@ -23,6 +24,8 @@ const RecordLevelValidationInfo = ({
   resetRecordLevelValidation,
   validations,
 }) => {
+  const { projectId } = useParams()
+
   return (
     <ValidationList data-testid="record-level-validations">
       {validations.map((validation) => {
@@ -33,7 +36,7 @@ const RecordLevelValidationInfo = ({
         const isReset = status === 'reset'
         const statusForStyling = isReset ? 'warning' : status
 
-        const validationMessage = language.getValidationMessage(validation)
+        const validationMessage = language.getValidationMessage(validation, projectId)
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
           <li key={validation_id}>

@@ -12,13 +12,15 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 
 test('Fishbelt observations add new species - filling out new species form adds a new species to dexie and the observation fish name input', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   // loading indicator is weird in integration tests, so we wait for the page title
@@ -115,7 +117,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
 
   expect(proposedSpeciesSavedToast).toBeInTheDocument()
 
-  const updatedSpeciesInOfflineStorage = await dexieInstance.fish_species.toArray()
+  const updatedSpeciesInOfflineStorage = await dexiePerUserDataInstance.fish_species.toArray()
 
   const newSpecies = updatedSpeciesInOfflineStorage.find(
     (species) => species.display_name === 'Nebrius ridens',
@@ -125,10 +127,12 @@ test('Fishbelt observations add new species - filling out new species form adds 
 })
 
 test('Fishbelt observations add new species - proposing new species that already exists results in no added species, and a toast message warning.', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   // loading indicator is weird in integration tests, so we wait for the page title
@@ -139,7 +143,8 @@ test('Fishbelt observations add new species - proposing new species that already
   const observationsTable = (await within(fishbeltForm).findAllByRole('table'))[0]
 
   // need to wait until app loaded and offline storage hydration before getting species count
-  const speciesInOfflineStorageCount = (await dexieInstance.fish_species.toArray()).length
+  const speciesInOfflineStorageCount = (await dexiePerUserDataInstance.fish_species.toArray())
+    .length
 
   expect(speciesInOfflineStorageCount).toEqual(4)
 
@@ -198,7 +203,7 @@ test('Fishbelt observations add new species - proposing new species that already
   expect(proposedSpeciesIsDuplicateToast).toBeInTheDocument()
 
   const speciesInOfflineStorageCountAfterRedundantNewSpeciesSubmit = (
-    await dexieInstance.fish_species.toArray()
+    await dexiePerUserDataInstance.fish_species.toArray()
   ).length
 
   const isSpeciesInOfflineStorageUnchanged =

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
@@ -14,9 +14,9 @@ import {
 import Sites from './Sites'
 
 test('Site component renders with the expected headers', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites">
@@ -25,7 +25,7 @@ test('Site component renders with the expected headers', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -42,9 +42,9 @@ test('Site component renders with the expected headers', async () => {
 })
 
 test('Site Records table sorts properly by Name column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites">
@@ -53,7 +53,7 @@ test('Site Records table sorts properly by Name column', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -84,9 +84,9 @@ test('Site Records table sorts properly by Name column', async () => {
 })
 
 test('Site Records table sorts properly by Reef Type column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites">
@@ -95,7 +95,7 @@ test('Site Records table sorts properly by Reef Type column', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -126,9 +126,9 @@ test('Site Records table sorts properly by Reef Type column', async () => {
 })
 
 test('Site Records table sorts properly by Reef Zone column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites">
@@ -137,7 +137,7 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 
@@ -168,9 +168,9 @@ test('Site Records table sorts properly by Reef Zone column', async () => {
 })
 
 test('Site Records table sorts properly by Exposure column', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites">
@@ -179,7 +179,7 @@ test('Site Records table sorts properly by Exposure column', async () => {
     {
       isSyncInProgressOverride: true,
       initialEntries: ['/projects/5/sites'],
-      dexieInstance,
+      dexiePerUserDataInstance,
     },
   )
 

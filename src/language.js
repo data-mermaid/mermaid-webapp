@@ -1,4 +1,5 @@
 // prettier-ignore
+import { getSystemValidationErrorMessage, getDuplicateSampleUnitLink } from './library/validationMessageHelpers'
 
 const projectCodes = {
   status: { open: 90, test: 80 },
@@ -67,7 +68,8 @@ const error = {
   pageNotFound: "This page can't be found.",
   pageNotFoundRecovery: 'Make sure the URL is correct.',
   idNotFound: "This item can't be found.",
-  idNotFoundRecovery: 'It might have been deleted or the URL might be wrong.',
+  idNotFoundRecovery:
+    "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
   homePageNavigation: 'Go back to the home page.',
 }
 
@@ -112,6 +114,11 @@ const deleteCollectRecord = {
   no: 'Cancel',
 }
 
+const loadingIndicator = {
+  loadingPrimary: 'Loading',
+  loadingSecondary: 'Still working...',
+}
+
 const createFishSpecies = {
   title: 'Add New Fish Species',
   genus: 'Genus',
@@ -133,19 +140,29 @@ const autocomplete = {
   noResultsDefault: 'No results found',
 }
 
+const title = {
+  mermaid: 'MERMAID',
+  mermaidDescription: 'Marine Ecological Research Management Aid',
+}
+
 const pages = {
   projectsList: {
+    title: 'Projects',
     offlineReadyCheckboxLabel: 'Offline Ready',
     noDataTextOnline: `You aren't part of any projects yet.`,
-    noDataSubTextOnline: `Create a new project or get your admin to add you to some.`,
+    noDataSubText: `Create a new project or get your admin to add you to some.`,
     noDataTextOffline: `You don't have any offline projects.`,
+    noFilterResults: 'No results',
+    noFilterResultsSubText: 'No projects match the current filter term.',
   },
   collectRecord: {
+    title: 'Collecting',
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',
   },
   projectInfo: {
+    title: 'Project Info',
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
     createOrganizationTitle: 'Suggest a new organization',
     suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your project.`,
@@ -154,16 +171,20 @@ const pages = {
     removeOrganization: `Remove organization from project`,
   },
   dataSharing: {
+    title: 'Data Sharing',
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
     testProjectHelperText: 'Data for a test project will not be included in public reporting.',
     moreInfoTitle: 'Data sharing',
   },
   submittedTable: {
+    title: 'Submitted',
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
     noDataText: `This project has no submitted sample units.`,
   },
   userTable: {
-    filterToolbarText: 'Filter users by name or email',
+    title: 'Users',
+    filterToolbarTextForAdmin: 'Filter users by name or email',
+    filterToolbarTextForCollector: 'Filter users by name or role',
     searchEmailToolbarText: 'Enter email address of user to add',
     warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
     newUserModalTitle: `Invite new user`,
@@ -172,19 +193,33 @@ const pages = {
     removeUserModalTitle: 'Remove User From Project',
     warningRemoveUser: `You must transfer sample units before you can remove the user from project.`,
   },
+  fishBeltForm: {
+    title: 'Fish Belt',
+  },
   submittedFishBeltForm: {
+    title: 'Fish Belt',
     toolbarLabel: 'Submitted sample units are read-only',
   },
   collectTable: {
+    title: 'Collecting',
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
     noDataText: `You don't have any active sample units`,
   },
+  siteForm: {
+    title: 'Site',
+  },
   siteTable: {
+    title: 'Sites',
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
     noDataText: `This project has no sites.`,
     noDataExtraText: `You can add sites by creating a new one or copying them from another project.`,
+    controlZoomText: 'Use Ctrl + Scroll to zoom the map',
+  },
+  managementRegimeForm: {
+    title: 'Management Regime',
   },
   managementRegimeTable: {
+    title: 'Management Regimes',
     filterToolbarText: 'Filter management regimes by name or year',
     noDataText: `This project has no management regimes.`,
     noDataExtraText: `You can add management regimes by creating a new one or copying them from another project.`,
@@ -194,63 +229,54 @@ const pages = {
 const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
-const validationMessages = {
-  siteNotFound: 'Site record not available for similarity validation',
-  notUniqueSite: 'Site: Similar records detected',
-  managementNotFound: 'Management Regime record not available for similarity validation',
-  notUniqueManagement: 'Management Regime: Similar records detected',
-  invalidFishCount: 'Invalid fish count',
-  futureSampleDate: 'Sample date is in the future',
-  noRegionMatch: 'Attributes outside of site region',
-  notPartOfFishFamilySubset: 'There are fish that are not part of project defined fish families',
-  allEqual: 'All observations are the same',
-  duplicateTransect: 'Transect already exists',
-}
-
-const getValidationMessage = (validation) => {
+const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
-  switch (code) {
-    case 'site_not_found':
-      return validationMessages.siteNotFound
-    case 'not_unique_site':
-      return validationMessages.notUniqueSite
-    case 'management_not_found':
-      return validationMessages.managementNotFound
-    case 'not_unique_management':
-      return validationMessages.notUniqueManagement
-    case 'minimum_total_fish_count':
-      return `Total fish count less than ${context?.minimum_fish_count}`
-    case 'too_few_observations':
-      return `Fewer than ${context?.observation_count_range[0]} observations`
-    case 'too_many_observations':
-      return `Greater than ${context?.observation_count_range[1]} observations`
-    case 'low_density':
-      return `Fish biomass less than ${context?.biomass_range[1]} kg/ha`
-    case 'high_density':
-      return `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`
-    case 'len_surveyed_out_of_range':
-      return `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`
-    case 'max_depth':
-    case 'invalid_depth':
-      return `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`
-    case 'invalid_fish_count':
-      return validationMessages.invalidFishCount
-    case 'future_sample_date':
-      return validationMessages.futureSampleDate
-    case 'sample_time_out_of_range':
-      return `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`
-    case 'no_region_match':
-      return validationMessages.noRegionMatch
-    case 'not_part_of_fish_family_subset':
-      return validationMessages.notPartOfFishFamilySubset
-    case 'all_equal':
-      return validationMessages.allEqual
-    case 'duplicate_transect':
-      return validationMessages.duplicateTransect
-    default:
-      return code || name
+  const validationMessages = {
+    all_equal: () => 'All observations are the same',
+    duplicate_fishbelt_transect: () =>
+      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
+    duplicate_quadrat_collection: () =>
+      `Duplicate sample unit ${context?.duplicate_transect_method}`,
+    duplicate_transect: () => 'Transect already exists',
+    duplicate_values: () => 'Duplicate',
+    exceed_total_colonies: () => 'Maximum number of colonies exceeded',
+    future_sample_date: () => 'Sample date is in the future',
+    len_surveyed_out_of_range: () =>
+      `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
+    low_density: () => `Fish biomass less than ${context?.biomass_range[1]} kg/ha`,
+    management_not_found: () => 'Management Regime record not available for similarity validation',
+    max_depth: () =>
+      `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`,
+    max_fish_size: () => 'Fish size is larger than species max size',
+    minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
+    no_region_match: () => 'Attributes outside of site region',
+    not_part_of_fish_family_subset: () =>
+      'There are fish that are not part of project defined fish families',
+    not_positive_integer: () => 'Value is not greater or equal to zero',
+    not_unique_site: () => 'Site: Similar records detected',
+    not_unique_management: () => 'Management Regime: Similar records detected',
+    high_density: () => `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`,
+    invalid_depth: () => 'Invalid depth',
+    invalid_fish_count: () => 'Invalid fish count',
+    invalid_fishbelt_transect: () => 'Invalid sample unit',
+    invalid_percent_value: () => 'Not a valid percent value',
+    invalid_quadrat_collection: () => 'Invalid sample unit',
+    invalid_quadrat_size: () => 'Invalid quadrat size',
+    invalid_sample_date: () => 'Invalid date',
+    required_management_rules: () => 'Management rules are required',
+    sample_time_out_of_range: () =>
+      `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
+    similar_name: () => 'A record with similar name exists',
+    site_not_found: () => 'Site record not available for similarity validation',
+    too_many_observations: () => `Greater than ${context?.observation_count_range[1]} observations`,
+    too_few_observations: () => `Fewer than ${context?.observation_count_range[0]} observations`,
+    unsuccessful_dry_submit: () => getSystemValidationErrorMessage(context?.dry_submit_results),
+    value_not_set: () => 'Value is not set',
+    default: () => code || name,
   }
+
+  return (validationMessages[code] || validationMessages.default)()
 }
 
 export default {
@@ -258,7 +284,9 @@ export default {
   error,
   success,
   deleteCollectRecord,
+  loadingIndicator,
   autocomplete,
+  title,
   pages,
   createFishSpecies,
   navigateAwayPrompt,

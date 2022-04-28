@@ -13,19 +13,32 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
-  reactTableNaturalSortDates
+  reactTableNaturalSortDates,
 } from '../../generic/Table/reactTableNaturalSort'
 import { H2 } from '../../generic/text'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import DataToolbarSection from './DataToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageNoData from '../PageNoData'
 
+const getTransectReportProperties = (transect) => {
+  return {
+    'Fish Belt': 'beltfishes',
+    'Benthic LIT': 'benthiclits',
+    'Benthic PIT': 'benthicpits',
+    'Habitat Complexity': 'habitatcomplexities',
+    'Colonies Bleached': ['bleachingqcs', 'obscoloniesbleacheds'],
+    'Quadrat Percentage': ['bleachingqcs', 'obsquadratbenthicpercents'],
+  }[transect]
+}
 const Data = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -34,6 +47,9 @@ const Data = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const currentUser = useCurrentUser()
+
+  useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 
   const _getSubmittedRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -75,7 +91,7 @@ const Data = () => {
         sortType: reactTableNaturalSort,
       },
       {
-        Header: 'Management',
+        Header: 'Management Regime',
         accessor: 'management',
         sortType: reactTableNaturalSort,
       },
@@ -128,12 +144,22 @@ const Data = () => {
     [submittedRecordsForUiDisplay, currentProjectPath],
   )
 
-  const tableDefaultSortByColumns = useMemo(() => [
-    {
-      id: 'method',
-      desc: false,
-    },
-  ], [])
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'method',
+          desc: false,
+        },
+      ],
+      globalFilter: '',
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-dataSubmittedTable`,
+    defaultValue: tableDefaultPrefs,
+  })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
     const keys = [
@@ -165,7 +191,7 @@ const Data = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex, pageSize, sortBy, globalFilter },
     setGlobalFilter,
   } = useTable(
     {
@@ -173,11 +199,12 @@ const Data = () => {
       data: tableCellData,
       initialState: {
         pageSize: 15,
-        sortBy: tableDefaultSortByColumns,
+        sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       // Disables requirement to hold shift to enable multi-sort
-      isMultiSortEvent: () => true
+      isMultiSortEvent: () => true,
     },
     useGlobalFilter,
     useSortBy,
@@ -188,29 +215,52 @@ const Data = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
+  }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
+
+  const handleExportToCSV = (transect) => {
+    const isBleachingTransect =
+      transect === 'Colonies Bleached' || transect === 'Quadrat Percentage'
+    const transectReportProperty = getTransectReportProperties(transect)
+
+    const transectProtocol = isBleachingTransect
+      ? transectReportProperty[0]
+      : transectReportProperty
+    const transectMethod = isBleachingTransect
+      ? transectReportProperty[1]
+      : `obstransect${transectReportProperty}`
+
+    databaseSwitchboardInstance.exportToCSV(projectId, transectProtocol, transectMethod)
+  }
+
   const table = submittedRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
-              const isMultiSortColumn = headerGroup.headers.some(header => header.sortedIndex > 0)
+              const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
 
               return (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Th
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
-                    isSortedDescending={column.isSortedDesc}
-                    sortedIndex={column.sortedIndex}
-                    isMultiSortColumn={isMultiSortColumn}
-                  >
-                    {column.render('Header')}
-                  </Th>
-                ))}
-              </Tr>
-            )
-})}
+                <Tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <Th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      isSortedDescending={column.isSortedDesc}
+                      sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
+                    >
+                      {column.render('Header')}
+                    </Th>
+                  ))}
+                </Tr>
+              )
+            })}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -257,9 +307,11 @@ const Data = () => {
     <DataToolbarSection
       name={language.pages.submittedTable.filterToolbarText}
       handleGlobalFilterChange={handleGlobalFilterChange}
+      handleExportToCSV={handleExportToCSV}
+      filterValue={tableUserPrefs.globalFilter}
     />
   ) : (
-    <H2>Submitted</H2>
+    <H2>{language.pages.submittedTable.title}</H2>
   )
 
   return idsNotAssociatedWithData.length ? (

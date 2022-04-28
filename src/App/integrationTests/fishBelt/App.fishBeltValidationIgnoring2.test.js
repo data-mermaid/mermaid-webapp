@@ -10,13 +10,13 @@ import {
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Validation: user can reset ignored observation warnings ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -89,11 +89,12 @@ test('Validation: user can reset ignored observation warnings ', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
@@ -128,7 +129,7 @@ test('Validation: user can reset ignored observation warnings ', async () => {
 })
 
 test('user can reset dismissed record-level warnings', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -170,11 +171,12 @@ test('user can reset dismissed record-level warnings', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))
@@ -206,7 +208,7 @@ test('user can reset dismissed record-level warnings', async () => {
 })
 
 test('Validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -403,11 +405,12 @@ test('Validation: user edits non-observation input with ignored validation reset
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(await screen.findByRole('button', { name: 'Validate' }, { timeout: 10000 }))

@@ -68,17 +68,16 @@ const ManagementRulesInput = ({
     getPartialRestrictionCheckboxValues(managementFormValues),
   )
 
-  const resetPartialRestrictionProperties = () => {
-    const updatedValues = { ...partialRestrictionCheckboxValues }
+  const resetPartialRestrictionRulesAndUpdateFormikOnChange = (formikProperty) => {
+    const updatePartialRestrictionRuleValues = { ...partialRestrictionCheckboxValues }
     const partialRestrictionOptionValues = partialRestrictionOptions.map((item) => item.value)
 
     partialRestrictionOptionValues.forEach((item) => {
-      updatedValues[item] = false
-
-      onChange(item, false)
+      updatePartialRestrictionRuleValues[item] = false
     })
 
-    setPartialRestrictionCheckboxValues(updatedValues)
+    setPartialRestrictionCheckboxValues(updatePartialRestrictionRuleValues)
+    onChange(formikProperty, updatePartialRestrictionRuleValues)
   }
 
   const handleOpenAccessChange = () => {
@@ -87,9 +86,7 @@ const ManagementRulesInput = ({
       no_take: false,
       partial_restrictions: false,
     })
-    onChange('open_access', true)
-    onChange('no_take', false)
-    resetPartialRestrictionProperties()
+    resetPartialRestrictionRulesAndUpdateFormikOnChange('open_access')
   }
 
   const handleNoTakeChange = () => {
@@ -98,9 +95,7 @@ const ManagementRulesInput = ({
       no_take: true,
       partial_restrictions: false,
     })
-    onChange('open_access', false)
-    onChange('no_take', true)
-    resetPartialRestrictionProperties()
+    resetPartialRestrictionRulesAndUpdateFormikOnChange('no_take')
   }
 
   const handlePartialRestrictionChange = () => {
@@ -109,20 +104,17 @@ const ManagementRulesInput = ({
       no_take: false,
       partial_restrictions: true,
     })
-    onChange('open_access', false)
-    onChange('no_take', false)
+    resetPartialRestrictionRulesAndUpdateFormikOnChange('partial_restrictions')
   }
 
   const handlePartialRestrictionChoicesChange = (e) => {
-    const value = e.target.checked
-    const property = e.target.value
+    const { value: property, checked: checkboxValue } = e.target
+    const updatePartialRestrictionRuleValues = { ...partialRestrictionCheckboxValues }
 
-    const updateValues = { ...partialRestrictionCheckboxValues }
+    updatePartialRestrictionRuleValues[property] = checkboxValue
 
-    updateValues[property] = value
-
-    setPartialRestrictionCheckboxValues(updateValues)
-    onChange(property, value)
+    setPartialRestrictionCheckboxValues(updatePartialRestrictionRuleValues)
+    onChange('partial_restrictions', updatePartialRestrictionRuleValues)
   }
 
   const showPartialRestrictionChoices =

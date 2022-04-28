@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import language from '../../language'
-import { getToastArguments } from '../../library/getToastArguments'
-import getCurrentUserProfile from '../getCurrentUserProfile'
+import language from '../language'
+import { getToastArguments } from '../library/getToastArguments'
+import getCurrentUserProfile from './getCurrentUserProfile'
 
-export const useCurrentUser = ({
+export const useInitializeCurrentUser = ({
   apiBaseUrl,
   getAccessToken,
-  dexieInstance,
+  dexieCurrentUserInstance,
   isMermaidAuthenticated,
   isAppOnline,
 }) => {
@@ -16,11 +16,11 @@ export const useCurrentUser = ({
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
 
-    if (isMermaidAuthenticated && apiBaseUrl && dexieInstance && isMermaidAuthenticated) {
+    if (isMermaidAuthenticated && apiBaseUrl && dexieCurrentUserInstance) {
       getCurrentUserProfile({
         apiBaseUrl,
         getAccessToken,
-        dexieInstance,
+        dexieCurrentUserInstance,
         isMermaidAuthenticated,
         isAppOnline,
       })
@@ -30,16 +30,14 @@ export const useCurrentUser = ({
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.userProfileUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.userProfileUnavailable))
         })
     }
 
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl, getAccessToken, dexieInstance, isMermaidAuthenticated, isAppOnline])
+  }, [apiBaseUrl, getAccessToken, dexieCurrentUserInstance, isMermaidAuthenticated, isAppOnline])
 
   return currentUser
 }

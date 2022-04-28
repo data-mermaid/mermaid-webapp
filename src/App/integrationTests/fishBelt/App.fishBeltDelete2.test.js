@@ -7,18 +7,19 @@ import {
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 // test suite cut up into 2 parts for performance reasons
 describe('Offline', () => {
   test('Delete fishbelt prompt cancel closes prompt and does nothing (edits persisted)', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     })
 
     // make an unsaved change

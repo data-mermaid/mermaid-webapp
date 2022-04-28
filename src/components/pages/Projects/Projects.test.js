@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { getFakeAccessToken } from '../../../testUtilities/getFakeAccessToken'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   renderAuthenticatedOffline,
@@ -15,17 +15,18 @@ import {
 import Projects from './Projects'
 
 test('Projects component renders with the expected UI elements', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -60,17 +61,18 @@ test('Projects component renders with the expected UI elements', async () => {
 })
 
 test('A project card renders with the expected UI elements for button groups', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -97,17 +99,20 @@ test('A project card renders with the expected UI elements for button groups', a
 })
 
 test('A project card shows relevant data for a project', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
+
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
+
     isSyncInProgressOverride: true,
   })
 
@@ -134,18 +139,20 @@ test('A project card shows relevant data for a project', async () => {
 })
 
 test('A project card renders appropriately when offline', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
+
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
+
     isSyncInProgressOverride: true,
   })
 
@@ -169,18 +176,18 @@ test('A project card renders appropriately when offline', async () => {
 })
 
 test('A project card renders appropriately when online', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -212,18 +219,18 @@ test('A project card renders appropriately when online', async () => {
 })
 
 test('Hide new project button in project toolbar when offline', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -237,18 +244,18 @@ test('Hide new project button in project toolbar when offline', async () => {
 })
 
 test('Projects can be sorted by countries', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -267,18 +274,18 @@ test('Projects can be sorted by countries', async () => {
 })
 
 test('Projects can be sorted by number of sites', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -297,18 +304,18 @@ test('Projects can be sorted by number of sites', async () => {
 })
 
 test('Projects can be sorted by updated on date', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -323,22 +330,26 @@ test('Projects can be sorted by updated on date', async () => {
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
   expect(within(topProjectCard).getByText('Project III'))
-  expect(within(topProjectCard).getByText('Tue Jan 21 1992 08:00:00 GMT+0000 (Coordinated Universal Time)'))
+  expect(
+    within(topProjectCard).getByText(
+      'Tue Jan 21 1992 08:00:00 GMT+0000 (Coordinated Universal Time)',
+    ),
+  )
 })
 
 test('Project sorted descending', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -356,18 +367,18 @@ test('Project sorted descending', async () => {
 })
 
 test('Project filter filters by name and country', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
-    dexieInstance,
+    dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
-    dexieInstance,
+    dexiePerUserDataInstance,
     isSyncInProgressOverride: true,
   })
 
@@ -375,7 +386,9 @@ test('Project filter filters by name and country', async () => {
     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
   )
 
-  const filterProjects = screen.getByRole('textbox', { name: /Filter Projects By Name or Country/i })
+  const filterProjects = screen.getByRole('textbox', {
+    name: /Filter Projects By Name or Country/i,
+  })
 
   // Filter by name
   userEvent.type(filterProjects, '"Project V"')
@@ -391,6 +404,4 @@ test('Project filter filters by name and country', async () => {
   projectCards = screen.getAllByRole('listitem')
 
   expect(projectCards.length).toEqual(2)
-
 })
-

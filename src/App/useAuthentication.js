@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
-const useAuthentication = ({ dexieInstance }) => {
+const useAuthentication = ({ dexieCurrentUserInstance }) => {
   const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
 
@@ -70,7 +70,7 @@ const useAuthentication = ({ dexieInstance }) => {
       // this isnt necessary to make logout to work, but is here to make sure users.
       // cant see profile data from the last logged in user if they go searching in dev tools.
       // databaseSwitcboard isnt used because that would create circular dependencies (it depends on the output of this hook)
-      dexieInstance.uiState_currentUser.delete('enforceOnlyOneRecordEverStoredAndOverwritten')
+      dexieCurrentUserInstance.currentUser.delete('enforceOnlyOneRecordEverStoredAndOverwritten')
       auth0Logout({ returnTo: window.location.origin })
       setUnauthenticatedStates()
     }

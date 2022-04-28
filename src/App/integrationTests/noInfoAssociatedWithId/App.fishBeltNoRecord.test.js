@@ -5,70 +5,58 @@ import {
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import App from '../../App'
 
 test('Offline fish belt collect shows no info associated with RECORD id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/nonExistantRecordId'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantRecordId can't be found.",
-    ),
-  )
+  expect(await screen.findByText("The item with the id nonExistantRecordId can't be found."))
 })
 
 test('Online fish belt collect shows no info associated with RECORD id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/nonExistantRecordId'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantRecordId can't be found.",
-    ),
-  )
+  expect(await screen.findByText("The item with the id nonExistantRecordId can't be found."))
 })
 
 test('Offline fish belt collect shows no info associated with PROJECT id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/nonExistantProjectId/collecting/fishbelt/5'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
-  )
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
 
 test('Online fish belt collect shows no info associated with PROJECT id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/nonExistantProjectId/collecting/fishbelt/5'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
-  )
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })

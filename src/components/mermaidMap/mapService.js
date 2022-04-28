@@ -1,3 +1,5 @@
+import maplibregl from 'maplibre-gl'
+
 export const benthicColors = {
   'Coral/Algae': 'rgb(255, 97, 97)',
   'Benthic Microalgae': 'rgb(155, 204, 79)',
@@ -134,12 +136,25 @@ export const satelliteBaseMap = {
   ],
 }
 
-export const applyOpacityExpression = array => {
+export const addMapController = (map) => {
+  map.addControl(
+    new maplibregl.NavigationControl({
+      showCompass: false,
+      showZoom: true,
+    }),
+    'top-left',
+  )
+
+  map.dragRotate.disable()
+  map.touchZoomRotate.disableRotation()
+}
+
+const applyOpacityExpression = (array) => {
   if (array === null) {
     return 0
   }
 
-  const arrayExp = array.flatMap(item => {
+  const arrayExp = array.flatMap((item) => {
     const equalBenthic = [['==', ['get', 'class_name']], 1]
 
     equalBenthic[0].push(item)
@@ -153,7 +168,15 @@ export const applyOpacityExpression = array => {
   return array.length > 0 ? arrayExp : 0
 }
 
-export const loadACALayers = map => {
+export const setCoralMosaicLayerProperty = (map, dataLayerFromLocalStorage) => {
+  map.setPaintProperty('atlas-planet', 'raster-opacity', dataLayerFromLocalStorage)
+}
+
+export const setGeomorphicOrBenthicLayerProperty = (map, property, dataLayerFromLocalStorage) => {
+  map.setPaintProperty(property, 'fill-opacity', applyOpacityExpression(dataLayerFromLocalStorage))
+}
+
+export const loadACALayers = (map) => {
   const coralMosaicLocalStorage = JSON.parse(localStorage.getItem('coral_mosaic'))
 
   const fillGeomorphicOpacityValue = applyOpacityExpression(
@@ -225,5 +248,79 @@ export const loadACALayers = map => {
       'fill-color': benthicColorExpression,
       'fill-opacity': fillBenthicOpacityExpression,
     },
+  })
+}
+
+export const getMapMarkersFeature = (records) => {
+  const bounds = new maplibregl.LngLatBounds()
+
+  const data = {
+    type: 'FeatureCollection',
+    features: [],
+  }
+
+  for (const rec of records) {
+    const rec_geo_data = {
+      id: rec.id,
+      name: rec.name,
+      project_id: rec.project,
+      exposure: rec.exposure,
+      reef_type: rec.reef_type,
+      reef_zone: rec.reef_zone,
+    }
+
+    const recPoint = {
+      type: 'Feature',
+      geometry: rec.location,
+      properties: rec_geo_data,
+    }
+
+    bounds.extend(rec.location.coordinates)
+    data.features.push(recPoint)
+  }
+
+  return { markersData: data, bounds }
+}
+
+export const loadMapMarkersLayer = (map) => {
+  map.addSource('mapMarkers', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: [],
+    },
+  })
+
+  map.addLayer({
+    id: 'mapMarkers',
+    source: 'mapMarkers',
+    type: 'circle',
+    paint: {
+      'circle-radius': 5,
+      'circle-color': '#f0e0b3',
+      'circle-stroke-color': '#ff0000',
+      'circle-stroke-width': 3,
+      'circle-opacity': 0.8,
+    },
+  })
+}
+
+export const handleMapOnWheel = (mapCurrent, handleZoomDisplayHelpText) => {
+  mapCurrent.on('wheel', (e) => {
+    if (e.originalEvent.ctrlKey) {
+      e.originalEvent.preventDefault()
+      handleZoomDisplayHelpText(false)
+      if (!mapCurrent.scrollZoom._enabled) {
+        mapCurrent.scrollZoom.enable()
+      }
+    } else {
+      if (mapCurrent.scrollZoom._enabled) {
+        mapCurrent.scrollZoom.disable()
+      }
+      handleZoomDisplayHelpText(true)
+      setTimeout(() => {
+        handleZoomDisplayHelpText(false)
+      }, 1500)
+    }
   })
 }

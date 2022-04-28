@@ -5,82 +5,71 @@ import {
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import App from '../../App'
 
 test('Offline management regime shows no info associated with MANAGEMENT REGIME id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/management-regimes/nonExistantMrId'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantMrId can't be found.",
-    ),
-  )
+  expect(await screen.findByText("The item with the id nonExistantMrId can't be found."))
 })
 
 test('Online management regime shows no info associated with MANAGEMENT REGIME id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/management-regimes/nonExistantMrId'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantMrId can't be found.",
-    ),
-  )
+  expect(await screen.findByText("The item with the id nonExistantMrId can't be found."))
 })
 
 test('Offline management regime shows no info associated with PROJECT id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/nonExistantProjectId/management-regimes/1'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
-  )
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
 
 test('Online management regime shows no info associated with PROJECT id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/nonExistantProjectId/management-regimes/1'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
-  expect(
-    await screen.findByText(
-      "The item with the id nonExistantProjectId can't be found.",
-    ),
-  )
+  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
 })
 
 test('Offline management regime shows no info associated with PROJECT or MANAGEMENT REGIME id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/nonExistantProjectId/management-regimes/nonExistantMrId'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   expect(
@@ -91,11 +80,12 @@ test('Offline management regime shows no info associated with PROJECT or MANAGEM
 })
 
 test('Online management regime shows no info associated with PROJECT or MANAGEMENT REGIME id view ', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/nonExistantProjectId/management-regimes/nonExistantMrId'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
   expect(
     await screen.findByText(

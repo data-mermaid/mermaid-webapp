@@ -9,14 +9,14 @@ import {
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltValidationsObject'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Fishbelt validations will show the all warnings when there are multiple warnings and no errors', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -89,11 +89,12 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(
@@ -136,7 +137,7 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
 }, 50000)
 
 test('Validating an empty collect record, and then editing an input with errors shows the errors until the save button is pressed. Validations show when the validation button is clicked again.', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -187,11 +188,12 @@ test('Validating an empty collect record, and then editing an input with errors 
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(
@@ -324,7 +326,7 @@ test('Validating an empty collect record, and then editing an input with errors 
 }, 60000)
 
 test('Fishbelt validations will show passed input validations', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -355,11 +357,12 @@ test('Fishbelt validations will show passed input validations', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(

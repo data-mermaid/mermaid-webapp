@@ -1,10 +1,10 @@
 import { createUuid } from '../../../library/createUuid'
 
-const FishNameMixin = Base =>
+const FishNameMixin = (Base) =>
   class extends Base {
     getFishSpecies = function getFishSpecies() {
       if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.fish_species.toArray()
+        return this._dexiePerUserDataInstance.fish_species.toArray()
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -19,7 +19,7 @@ const FishNameMixin = Base =>
 
       const existingSpecies = await this.getFishSpecies()
       const existingMatchingSpecies = existingSpecies.filter(
-        specie => specie.display_name === proposedDisplayName,
+        (specie) => specie.display_name === proposedDisplayName,
       )
       const isProposedSpeciesAlreadyExisting = existingMatchingSpecies.length > 0
 
@@ -41,18 +41,20 @@ const FishNameMixin = Base =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        const _protectAgainstNetworkStutter = await this._dexieInstance.fish_species.put(
+        const _protectAgainstNetworkStutter = await this._dexiePerUserDataInstance.fish_species.put(
           newFishObject,
         )
 
-        return this._apiSyncInstance.pushThenPullSpecies().then(response => {
+        return this._apiSyncInstance.pushThenPullSpecies().then((response) => {
           const newFishSpeciesFromApi = response.data.fish_species.updates[0]
 
           return newFishSpeciesFromApi
         })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.fish_species.put(newFishObject).then(() => newFishObject)
+        return this._dexiePerUserDataInstance.fish_species
+          .put(newFishObject)
+          .then(() => newFishObject)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -60,13 +62,13 @@ const FishNameMixin = Base =>
 
     getFishGenera = function getFishGenera() {
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.fish_genera.toArray()
+        ? this._dexiePerUserDataInstance.fish_genera.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     getFishFamilies = function getFishFamilies() {
       return this._isAuthenticatedAndReady
-        ? this._dexieInstance.fish_families.toArray()
+        ? this._dexiePerUserDataInstance.fish_families.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }

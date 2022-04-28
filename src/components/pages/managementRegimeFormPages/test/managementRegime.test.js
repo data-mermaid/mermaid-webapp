@@ -9,13 +9,13 @@ import {
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 
 import ManagementRegime from '../ManagementRegime'
-import { getMockDexieInstanceAllSuccess } from '../../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 test('Management Regime component renders with the expected UI elements', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
@@ -23,7 +23,7 @@ test('Management Regime component renders with the expected UI elements', async 
     </Route>,
     {
       initialEntries: ['/projects/5/management-regimes/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -47,9 +47,9 @@ test('Management Regime component renders with the expected UI elements', async 
 })
 
 test('Management Regime component - form inputs are initialized with the correct values', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
@@ -57,7 +57,7 @@ test('Management Regime component - form inputs are initialized with the correct
     </Route>,
     {
       initialEntries: ['/projects/5/management-regimes/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )

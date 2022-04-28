@@ -3,7 +3,7 @@ import { getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess } from '.
 test('getProjectProfiles only returns profiles for a given project', async () => {
   const dbSwitchboardInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess()
 
-  await dbSwitchboardInstance.dexieInstance.project_profiles.bulkPut([
+  await dbSwitchboardInstance.dexiePerUserDataInstance.project_profiles.bulkPut([
     { id: 'foo', project: '5' },
     { id: 'bar', project: '5' },
     { id: 'baz', project: 'shouldGetFilteredOut' },
@@ -12,6 +12,6 @@ test('getProjectProfiles only returns profiles for a given project', async () =>
 
   expect(projectProfiles.length).toEqual(2)
   expect(
-    projectProfiles.find(profile => profile.project === 'shouldGetFilteredOut'),
+    projectProfiles.find((profile) => profile.project === 'shouldGetFilteredOut'),
   ).toBeUndefined()
 })

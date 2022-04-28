@@ -12,26 +12,21 @@ import {
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
 import FishBelt from '../FishBelt'
-import { getMockDexieInstanceAllSuccess } from '../../../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
-const fakeCurrentUser = {
-  id: 'fake-id',
-  first_name: 'FakeFirstName',
-}
-
 test('FishBelt component in EDIT mode renders with the expected UI elements', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -71,17 +66,17 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
 })
 
 test('FishBelt component in CREATE NEW mode renders with the expected UI elements', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt currentUser={fakeCurrentUser} />
+      <FishBelt />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -121,17 +116,17 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
 })
 
 test('FishBelt component in EDIT mode - form inputs are initialized with the correct values', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -177,17 +172,17 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
 })
 
 test('FishBelt component in EDIT mode - button group shows save, validate and submit buttons when online', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -213,17 +208,17 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
 })
 
 test('FishBelt component in EDIT mode - button group shows only save button when offline', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOffline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -249,17 +244,17 @@ test('FishBelt component in EDIT mode - button group shows only save button when
 })
 
 test('Fishbelt observations: add row button adds a row', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -278,17 +273,17 @@ test('Fishbelt observations: add row button adds a row', async () => {
 })
 
 test('Fishbelt observations: delete observation button deleted observation', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -311,16 +306,17 @@ test('Fishbelt observations: delete observation button deleted observation', asy
 })
 
 test('FishBelt component in EDIT mode - when change binsize = 10, fish size values is not selected/null', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -342,16 +338,17 @@ test('FishBelt component in EDIT mode - when change binsize = 10, fish size valu
   expect(within(observationsTable).getAllByLabelText('Size')[2]).not.toHaveValue()
 })
 test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size values is not selected/null', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )
@@ -373,16 +370,17 @@ test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size v
   expect(within(observationsTable).getAllByLabelText('Size')[2]).not.toHaveValue()
 })
 test('FishBelt component in EDIT mode - when change binsize = 1, fish size values get transfered to numeric inputs', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBelt isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
       isSyncInProgressOverride: true,
     },
   )

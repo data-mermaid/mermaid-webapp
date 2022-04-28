@@ -9,14 +9,14 @@ const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
 
 export const pullApiData = async ({
-  dexieInstance,
+  dexiePerUserDataInstance,
   getAccessToken,
   apiBaseUrl,
   apiDataNamesToPull,
   projectId,
 }) => {
   const lastRevisionNumbersPulled = await getLastRevisionNumbersPulledForAProject({
-    dexieInstance,
+    dexiePerUserDataInstance,
     projectId,
   })
 
@@ -32,28 +32,29 @@ export const pullApiData = async ({
   )
 
   const pullResponse = await axios.post(
-    `${apiBaseUrl}/pull/`, pullRequestBody,
-    await getAuthorizationHeaders(getAccessToken)
+    `${apiBaseUrl}/pull/`,
+    pullRequestBody,
+    await getAuthorizationHeaders(getAccessToken),
   )
 
   const apiData = pullResponse.data
 
-  await dexieInstance.transaction(
+  await dexiePerUserDataInstance.transaction(
     'rw',
-    dexieInstance.benthic_attributes,
-    dexieInstance.choices,
-    dexieInstance.collect_records,
-    dexieInstance.fish_families,
-    dexieInstance.fish_genera,
-    dexieInstance.fish_species,
-    dexieInstance.project_managements,
-    dexieInstance.project_profiles,
-    dexieInstance.project_sites,
-    dexieInstance.projects,
-    dexieInstance.uiState_lastRevisionNumbersPulled,
+    dexiePerUserDataInstance.benthic_attributes,
+    dexiePerUserDataInstance.choices,
+    dexiePerUserDataInstance.collect_records,
+    dexiePerUserDataInstance.fish_families,
+    dexiePerUserDataInstance.fish_genera,
+    dexiePerUserDataInstance.fish_species,
+    dexiePerUserDataInstance.project_managements,
+    dexiePerUserDataInstance.project_profiles,
+    dexiePerUserDataInstance.project_sites,
+    dexiePerUserDataInstance.projects,
+    dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled,
     async () => {
       persistLastRevisionNumbersPulled({
-        dexieInstance,
+        dexiePerUserDataInstance,
         apiData,
         projectId,
       })
@@ -63,7 +64,7 @@ export const pullApiData = async ({
           // choices deletes property will always be empty, so we just ignore it
           // additionally the updates property is an object, not an array, so we just store it directly
 
-          dexieInstance.choices.put({
+          dexiePerUserDataInstance.choices.put({
             id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
             choices: { ...apiData.choices?.updates, uiState_pushToApi: false },
           })
@@ -74,8 +75,8 @@ export const pullApiData = async ({
           const deletes = apiData[apiDataType]?.deletes ?? []
           const deleteIds = deletes.map(({ id }) => id)
 
-          dexieInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
-          dexieInstance[apiDataType].bulkDelete(deleteIds)
+          dexiePerUserDataInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
+          dexiePerUserDataInstance[apiDataType].bulkDelete(deleteIds)
         }
       })
     },

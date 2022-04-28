@@ -15,7 +15,7 @@ import Health from '../components/pages/Health'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 import SubmittedFishBelt from '../components/pages/SubmittedFishBelt/SubmittedFishBelt'
 
-export const useRoutes = ({ currentUser, apiSyncInstance }) => {
+export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
     {
       path: '/projects',
@@ -31,11 +31,11 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
-      Component: () => <FishBelt currentUser={currentUser} />,
+      Component: () => <FishBelt />,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      Component: () => <FishBelt isNewRecord={false} currentUser={currentUser} />,
+      Component: () => <FishBelt isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
@@ -63,11 +63,11 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/data/fishbelt/:submittedRecordId',
-      Component: () => <SubmittedFishBelt currentUser={currentUser} />,
+      Component: () => <SubmittedFishBelt />,
     },
     {
       path: '/projects/:projectId/admin',
-      Component: Admin,
+      Component: () => <Admin />,
     },
 
     {
@@ -93,7 +93,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/users',
-      Component: () => <Users currentUser={currentUser} />,
+      Component: () => <Users />,
     },
     {
       path: '/projects/:projectId/fish-families',
@@ -101,7 +101,7 @@ export const useRoutes = ({ currentUser, apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/data-sharing',
-      Component: DataSharing,
+      Component: () => <DataSharing />,
     },
   ]
 

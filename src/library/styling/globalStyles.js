@@ -27,8 +27,8 @@ const GlobalStyle = createGlobalStyle`
 
     }
     svg {
-        width: ${props => props.theme.typography.defaultIconSize};
-        height: ${props => props.theme.typography.defaultIconSize};
+        width: ${(props) => props.theme.typography.defaultIconSize};
+        height: ${(props) => props.theme.typography.defaultIconSize};
     }
     *,*::before,*::after {
         box-sizing: border-box;

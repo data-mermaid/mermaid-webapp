@@ -12,7 +12,7 @@ import {
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
 import FishBelt from '../FishBelt'
-import { getMockDexieInstanceAllSuccess } from '../../../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 const fakeCurrentUser = {
@@ -21,9 +21,9 @@ const fakeCurrentUser = {
 }
 
 test('FishBelt observations size shows a numeric input when fish bin size is undefined', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
@@ -31,7 +31,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
     </Route>,
     {
       isSyncInProgressOverride: true,
-      dexieInstance,
+      dexiePerUserDataInstance,
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
@@ -48,9 +48,9 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 })
 
 test('FishBelt observations size shows a numeric input when fish bin size is undefined', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
@@ -58,7 +58,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
     </Route>,
     {
       isSyncInProgressOverride: true,
-      dexieInstance,
+      dexiePerUserDataInstance,
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
@@ -79,9 +79,9 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 })
 
 test('FishBelt observations size shows a select input when fish bin size is 5', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
@@ -89,7 +89,7 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
     </Route>,
     {
       isSyncInProgressOverride: true,
-      dexieInstance,
+      dexiePerUserDataInstance,
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
@@ -112,9 +112,9 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
 })
 
 test('FishBelt observations size shows a select input when fish bin size is 10', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
@@ -122,7 +122,7 @@ test('FishBelt observations size shows a select input when fish bin size is 10',
     </Route>,
     {
       isSyncInProgressOverride: true,
-      dexieInstance,
+      dexiePerUserDataInstance,
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
@@ -145,9 +145,9 @@ test('FishBelt observations size shows a select input when fish bin size is 10',
 })
 
 test('FishBelt observations size shows a select input when fish bin size is AGRRA', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
@@ -155,7 +155,7 @@ test('FishBelt observations size shows a select input when fish bin size is AGRR
     </Route>,
     {
       isSyncInProgressOverride: true,
-      dexieInstance,
+      dexiePerUserDataInstance,
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
@@ -178,9 +178,9 @@ test('FishBelt observations size shows a select input when fish bin size is AGRR
 })
 
 test('Fishbelt observations shows extra input for sizes over 50', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
@@ -188,7 +188,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
     </Route>,
     {
       isSyncInProgressOverride: true,
-      dexieInstance,
+      dexiePerUserDataInstance,
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
@@ -213,9 +213,9 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 })
 
 test('Fishbelt observations hide and show fish name reference link appropriately', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
@@ -223,7 +223,7 @@ test('Fishbelt observations hide and show fish name reference link appropriately
     </Route>,
     {
       isSyncInProgressOverride: true,
-      dexieInstance,
+      dexiePerUserDataInstance,
       initialEntries: ['/projects/5/collecting/fishbelt'],
     },
   )
