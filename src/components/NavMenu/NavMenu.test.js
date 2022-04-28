@@ -4,18 +4,11 @@ import React from 'react'
 import {
   renderAuthenticatedOffline,
   renderAuthenticatedOnline,
-  screen,
-  waitFor,
-  within,
+  // screen,
+  // waitFor,
+  // within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import NavMenu from '.'
-
-const fakeProjectUserRole = {
-  id: 'fake-id',
-  first_name: 'FakeFirstName',
-  is_admin: true,
-  is_collector: true,
-}
 
 test('NavMenu component shows project overview, collect, data, admin links when online', async () => {
   renderAuthenticatedOnline(<NavMenu />)

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-import userEvent from '@testing-library/user-event'
+// import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import React from 'react'
 
@@ -10,7 +10,7 @@ import {
   renderAuthenticatedOnline,
   screen,
   waitForElementToBeRemoved,
-  within,
+  // within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
