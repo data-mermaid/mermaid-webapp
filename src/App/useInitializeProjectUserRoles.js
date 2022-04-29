@@ -81,14 +81,17 @@ export const useInitializeProjectUserRoles = ({
           currentUserProfiles.push(filteredUserProfile)
         }
 
-        const userProfileReduced = currentUserProfiles.reduce((profileReduced, profile) => {
-          const { project, is_admin, is_collector } = profile
+        const userProfilesWithProjectRoles = currentUserProfiles.reduce(
+          (profileReduced, profile) => {
+            const { project, is_admin, is_collector } = profile
 
-          return { ...profileReduced, [project]: { is_admin, is_collector } }
-        }, {})
+            return { ...profileReduced, [project]: { is_admin, is_collector } }
+          },
+          {},
+        )
 
         if (isMounted) {
-          setProjectUserRoles(userProfileReduced)
+          setProjectUserRoles(userProfilesWithProjectRoles)
         }
       }
     }
