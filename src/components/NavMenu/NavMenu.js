@@ -14,6 +14,7 @@ import {
   IconAdmin,
   IconUsers,
   IconSharing,
+  IconHeart,
 } from '../icons'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
@@ -67,19 +68,18 @@ const NavMenu = ({ subNavNode }) => {
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
-        {/* hiding for alpha release because leads nowhere useful */}
-        {/* <OfflineHide>
+        <OfflineHide>
           <li>
             <NavHeader>Project Overview</NavHeader>
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/health`}>
-                  <IconHeart /> <span>Project Health</span>
+                  <IconHeart /> <span>Users and Transects</span>
                 </NavLinkSidebar>
               </li>
             </ul>
           </li>
-        </OfflineHide> */}
+        </OfflineHide>
         <li>
           <NavHeader>Collect</NavHeader>
           <ul>
