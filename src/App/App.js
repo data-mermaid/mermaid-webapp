@@ -89,7 +89,7 @@ function App({ dexieInstance }) {
   const projectUserRoles = useInitializeProjectUserRoles({
     currentUser,
     databaseSwitchboardInstance,
-    isOfflineStorageHydrated
+    isOfflineStorageHydrated,
   })
   const { routes } = useRoutes({ apiSyncInstance })
 

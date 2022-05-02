@@ -20,14 +20,10 @@ export const useInitializeProjectUserRoles = ({
 
         const projects = await databaseSwitchboardInstance.getProjects()
 
-        // console.log('projects ', projects)
-
         for (const project of projects) {
           userProfilePromises.push(databaseSwitchboardInstance.getProjectProfiles(project.id))
         }
         const userProfiles = await Promise.all(userProfilePromises)
-
-        // console.log('userProfiles ', userProfiles)
 
         for (const userProfile of userProfiles) {
           const filteredUserProfile = userProfile.filter(
@@ -36,7 +32,6 @@ export const useInitializeProjectUserRoles = ({
 
           currentUserProfiles.push(filteredUserProfile)
         }
-        // console.log('currentUserProfiles ', currentUserProfiles)
 
         const userProfilesWithProjectRoles = currentUserProfiles.reduce(
           (profileReduced, profile) => {
@@ -50,8 +45,6 @@ export const useInitializeProjectUserRoles = ({
           },
           {},
         )
-
-        console.log('userProfilesWithProjectRoles ', userProfilesWithProjectRoles)
 
         if (isMounted) {
           setProjectUserRoles(userProfilesWithProjectRoles)

@@ -62,10 +62,8 @@ const NavMenu = ({ subNavNode }) => {
   const { pathname } = useLocation()
   const { projectUserRoles } = useCurrentUser()
 
-  console.log('Nav Menu projectUserRoles ', projectUserRoles)
   const isUserRoleEmpty = projectUserRoles && Object.keys(projectUserRoles).length === 0
 
-  console.log('Nav Menu isUserRoleEmpty ', isUserRoleEmpty)
   const currentProjectUserRole = projectUserRoles[projectId]
   const isReadOnlyUser =
     !isUserRoleEmpty && !(currentProjectUserRole.is_admin || currentProjectUserRole.is_collector)
