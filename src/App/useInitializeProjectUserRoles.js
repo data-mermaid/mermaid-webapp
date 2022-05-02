@@ -1,52 +1,12 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
-import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
-
-const getProjectProfiles = async (dexieInstance, apiBaseUrl, getAccessToken, projectId) => {
-  const fetchProjectProfilesApi = async () => {
-    return axios
-      .get(
-        `${apiBaseUrl}/projects/${projectId}/project_profiles/`,
-        await getAuthorizationHeaders(getAccessToken),
-      )
-      .then((profiles) => {
-        return profiles.data.results
-      })
-  }
-
-  return dexieInstance.project_profiles
-    .where({ project: projectId })
-    .toArray()
-    .then(async (result) => {
-      const projectProfiles = result.length ? result : await fetchProjectProfilesApi()
-
-      return projectProfiles
-    })
-}
-
-const getProjects = async (apiBaseUrl, dexieInstance, getAccessToken) => {
-  const fetchProjectsApi = async () => {
-    return axios
-      .get(`${apiBaseUrl}/projects/`, await getAuthorizationHeaders(getAccessToken))
-      .then((res) => res.data.results)
-  }
-
-  return dexieInstance.projects.toArray().then(async (result) => {
-    const projects = result.length ? result : await fetchProjectsApi()
-
-    return projects
-  })
-}
 
 export const useInitializeProjectUserRoles = ({
   currentUser,
-  apiBaseUrl,
-  getAccessToken,
-  dexieInstance,
-  isMermaidAuthenticated,
+  databaseSwitchboardInstance,
+  isOfflineStorageHydrated,
 }) => {
   const [projectUserRoles, setProjectUserRoles] = useState({})
 
@@ -54,24 +14,20 @@ export const useInitializeProjectUserRoles = ({
     let isMounted = true
 
     const fetchProjectUserRoles = async () => {
-      if (
-        isMermaidAuthenticated &&
-        apiBaseUrl &&
-        dexieInstance &&
-        isMermaidAuthenticated &&
-        currentUser
-      ) {
+      if (databaseSwitchboardInstance && isOfflineStorageHydrated) {
         const userProfilePromises = []
         const currentUserProfiles = []
 
-        const projects = await getProjects(apiBaseUrl, dexieInstance, getAccessToken)
+        const projects = await databaseSwitchboardInstance.getProjects()
+
+        // console.log('projects ', projects)
 
         for (const project of projects) {
-          userProfilePromises.push(
-            getProjectProfiles(dexieInstance, apiBaseUrl, getAccessToken, project.id),
-          )
+          userProfilePromises.push(databaseSwitchboardInstance.getProjectProfiles(project.id))
         }
         const userProfiles = await Promise.all(userProfilePromises)
+
+        // console.log('userProfiles ', userProfiles)
 
         for (const userProfile of userProfiles) {
           const filteredUserProfile = userProfile.filter(
@@ -80,15 +36,22 @@ export const useInitializeProjectUserRoles = ({
 
           currentUserProfiles.push(filteredUserProfile)
         }
+        // console.log('currentUserProfiles ', currentUserProfiles)
 
         const userProfilesWithProjectRoles = currentUserProfiles.reduce(
           (profileReduced, profile) => {
-            const { project, is_admin, is_collector } = profile
+            if (profile) {
+              const { project, is_admin, is_collector } = profile
 
-            return { ...profileReduced, [project]: { is_admin, is_collector } }
+              return { ...profileReduced, [project]: { is_admin, is_collector } }
+            }
+
+            return profileReduced
           },
           {},
         )
+
+        console.log('userProfilesWithProjectRoles ', userProfilesWithProjectRoles)
 
         if (isMounted) {
           setProjectUserRoles(userProfilesWithProjectRoles)
@@ -103,7 +66,7 @@ export const useInitializeProjectUserRoles = ({
     return () => {
       isMounted = false
     }
-  }, [currentUser, apiBaseUrl, getAccessToken, dexieInstance, isMermaidAuthenticated])
+  }, [currentUser, databaseSwitchboardInstance, isOfflineStorageHydrated])
 
   return projectUserRoles
 }

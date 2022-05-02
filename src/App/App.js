@@ -80,12 +80,16 @@ function App({ dexieInstance }) {
     isAppOnline,
   })
 
+  const isMermaidAuthenticatedAndReady =
+    isMermaidAuthenticated &&
+    currentUser &&
+    databaseSwitchboardInstance &&
+    (isOfflineStorageHydrated || syncErrors.length) // we use isOfflineStrorageHydrated here instead of isSyncInProgress to make sure the app level layout doesnt rerender (flash) on sync
+
   const projectUserRoles = useInitializeProjectUserRoles({
     currentUser,
-    apiBaseUrl,
-    getAccessToken,
-    dexieInstance,
-    isMermaidAuthenticated,
+    databaseSwitchboardInstance,
+    isOfflineStorageHydrated
   })
   const { routes } = useRoutes({ apiSyncInstance })
 
@@ -93,12 +97,6 @@ function App({ dexieInstance }) {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,
     footer: <Footer />,
   }
-
-  const isMermaidAuthenticatedAndReady =
-    isMermaidAuthenticated &&
-    currentUser &&
-    databaseSwitchboardInstance &&
-    (isOfflineStorageHydrated || syncErrors.length) // we use isOfflineStrorageHydrated here instead of isSyncInProgress to make sure the app level layout doesnt rerender (flash) on sync
 
   return (
     <ThemeProvider theme={theme}>

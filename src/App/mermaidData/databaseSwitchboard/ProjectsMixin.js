@@ -56,41 +56,40 @@ const ProjectsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getProjectProfilesAPI = async function getProjectProfilesAPI(projectId) {
+    getProjectProfiles = async function getProjectProfiles(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
-      return this._isOnlineAuthenticatedAndReady
-        ? axios
-            .get(
-              `${this._apiBaseUrl}/projects/${projectId}/project_profiles/`,
-              await getAuthorizationHeaders(this._getAccessToken),
-            )
-            .then((profiles) => {
-              return profiles.data.results
-            })
-            .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
-        : Promise.reject(this._notAuthenticatedAndReadyError)
-    }
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexieInstance.project_profiles
+          .where({ project: projectId })
+          .toArray()
+          .then((result) => {
+            if (!result) {
+              throw Error('Project profiles not available')
+            }
 
-    getProjectProfiles = function getProjectProfiles(projectId) {
-      if (!projectId) {
-        Promise.reject(this._operationMissingParameterError)
+            return result
+          })
       }
 
-      return this._isAuthenticatedAndReady
-        ? this._dexieInstance.project_profiles
-            .where({ project: projectId })
-            .toArray()
-            .then(async (result) => {
-              const projectProfiles = result.length
-                ? result
-                : await this.getProjectProfilesAPI(projectId)
+      if (this._isOnlineAuthenticatedAndReady) {
+        return axios
+          .get(
+            `${this._apiBaseUrl}/projects/${projectId}/project_profiles/`,
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then((profiles) => {
+            if (!profiles) {
+              throw Error('Project Profile not returned from API')
+            }
 
-              return projectProfiles
-            })
-        : Promise.reject(this._notAuthenticatedAndReadyError)
+            return profiles.data.results
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     editProjectProfileRole = async function editProjectProfileRole({
@@ -145,7 +144,6 @@ const ProjectsMixin = (Base) =>
             .then((profilesData) => {
               return profilesData
             })
-            .catch(() => Promise.reject(this._notAuthenticatedAndReadyError))
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 

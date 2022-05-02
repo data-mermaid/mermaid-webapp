@@ -61,10 +61,14 @@ const NavMenu = ({ subNavNode }) => {
   const { recordId, submittedRecordId, siteId, managementRegimeId, projectId } = useParams()
   const { pathname } = useLocation()
   const { projectUserRoles } = useCurrentUser()
+
+  console.log('Nav Menu projectUserRoles ', projectUserRoles)
+  const isUserRoleEmpty = projectUserRoles && Object.keys(projectUserRoles).length === 0
+
+  console.log('Nav Menu isUserRoleEmpty ', isUserRoleEmpty)
   const currentProjectUserRole = projectUserRoles[projectId]
-  const isUserRoleNotEmpty =
-    currentProjectUserRole && Object.keys(currentProjectUserRole).length !== 0
-  const isReadOnlyUser = !(currentProjectUserRole.is_admin || currentProjectUserRole.is_collector)
+  const isReadOnlyUser =
+    !isUserRoleEmpty && !(currentProjectUserRole.is_admin || currentProjectUserRole.is_collector)
 
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
@@ -72,7 +76,7 @@ const NavMenu = ({ subNavNode }) => {
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
-      {isUserRoleNotEmpty && (
+      {!isUserRoleEmpty && (
         <NavList>
           <li>
             <NavHeader>Collect</NavHeader>

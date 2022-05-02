@@ -47,44 +47,15 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   const { isAppOnline } = useOnlineStatus()
   const { name, countries, num_sites, updated_on, id } = project
   const { setIsSyncInProgress } = useSyncStatus()
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [isButtonLoading, setIsButtonLoading] = useState(true)
-  const [isReadOnlyUser, setIsReadOnlyUser] = useState({})
-  const { currentUser } = useCurrentUser()
+  const { projectUserRoles } = useCurrentUser()
+
+  const isUserRoleEmpty = projectUserRoles && Object.keys(projectUserRoles).length === 0
+  const currentProjectUserRole = projectUserRoles[id]
+  const isReadOnlyUser =
+    !isUserRoleEmpty && !(currentProjectUserRole.is_admin || currentProjectUserRole.is_collector)
+
   const history = useHistory()
   const projectUrl = `projects/${id}`
-
-  const _loadProjectProfile = useEffect(() => {
-    // to prevent React memory leak warning, this will cancel async function when this component is unmount.
-    let cancelAsync = false
-
-    setIsButtonLoading(true)
-
-    if (databaseSwitchboardInstance) {
-      databaseSwitchboardInstance
-        .getProjectProfiles(id)
-        .then((profiles) => {
-          if (cancelAsync) {
-            return
-          }
-          const filteredUserProfile = profiles.filter(
-            ({ profile }) => currentUser.id === profile,
-          )[0]
-
-          const readOnlyUser = !(filteredUserProfile.is_admin || filteredUserProfile.is_collector)
-
-          setIsReadOnlyUser(readOnlyUser)
-          setIsButtonLoading(false)
-        })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.projectsUnavailable))
-        })
-    }
-
-    return () => {
-      cancelAsync = true
-    }
-  }, [isAppOnline, databaseSwitchboardInstance, id, currentUser])
 
   const handleProjectOfflineReadyClick = (event) => {
     const isChecked = event.target.checked
@@ -156,17 +127,13 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
           Updated: <strong>{new Date(updated_on).toString()}</strong>
         </p>
       </ProjectInfoWrapper>
-      {isButtonLoading ? (
+      {isUserRoleEmpty ? (
         <LoadingButtonGroupIndicator aria-label="project card loading indicator">
           {language.loadingIndicator.loadingPrimary}
         </LoadingButtonGroupIndicator>
       ) : (
         <ButtonGroups data-testid="project-button-groups" isReadOnlyUser={isReadOnlyUser}>
-          <NavLinkButtonGroup
-            projectUrl={projectUrl}
-            isButtonLoading={isButtonLoading}
-            isReadOnlyUser={isReadOnlyUser}
-          />
+          <NavLinkButtonGroup projectUrl={projectUrl} isReadOnlyUser={isReadOnlyUser} />
           {/* hiding for alpha release because leads nowhere useful */}
           {/* <OfflineHide>
           <VerticalRule />
