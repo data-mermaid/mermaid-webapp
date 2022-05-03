@@ -80,8 +80,12 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: Sites,
     },
     {
+      path: '/projects/:projectId/sites/new',
+      Component: () => <Site isNewSite={true} />,
+    },
+    {
       path: '/projects/:projectId/sites/:siteId',
-      Component: Site,
+      Component: () => <Site isNewSite={false} />,
     },
     {
       path: '/projects/:projectId/management-regimes',
