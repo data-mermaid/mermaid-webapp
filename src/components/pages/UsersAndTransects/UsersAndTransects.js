@@ -1,18 +1,23 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components/macro'
 import { toast } from 'react-toastify'
-
-import React, { useState, useMemo, useCallback, useEffect } from 'react'
-import { useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
-import { H2 } from '../../generic/text'
-import { getToastArguments } from '../../../library/getToastArguments'
-import { Table, Tr, Th, TableOverflowWrapper } from '../../generic/Table/table'
+import { useTable } from 'react-table'
+
 import { ContentPageLayout } from '../../Layout'
+import { getToastArguments } from '../../../library/getToastArguments'
+import { H2 } from '../../generic/text'
+import language from '../../../language'
 import PageUnavailableOffline from '../PageUnavailableOffline'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../library/useIsMounted'
-import language from '../../../language'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { Table, Tr, Th, TableOverflowWrapper } from '../../generic/Table/table'
+
+const HeaderCenter = styled.div`
+  text-align: center;
+`
 
 const UsersAndTransects = () => {
   const { isAppOnline } = useOnlineStatus()
@@ -56,15 +61,7 @@ const UsersAndTransects = () => {
         ],
       },
       {
-        Header: () => (
-          <div
-            style={{
-              textAlign: 'center',
-            }}
-          >
-            Transect Number / User
-          </div>
-        ),
+        Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
         id: 'User Headers',
         columns: getUserColumnHeaders(),
       },
