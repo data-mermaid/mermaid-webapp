@@ -6,6 +6,12 @@ const projectCodes = {
   policy: { private: 10, publicSummary: 50 },
 }
 
+const inlineMessage = {
+  ignore: 'ignored',
+  warning: 'warning',
+  error: 'error',
+}
+
 const error = {
   401: "There is something wrong with the user's credentials. You may want to try logging out and logging back in.",
   403: 'The current user does not have sufficient permission to do that.',
@@ -293,4 +299,5 @@ export default {
   createFishSpecies,
   navigateAwayPrompt,
   getValidationMessage,
+  inlineMessage,
 }
