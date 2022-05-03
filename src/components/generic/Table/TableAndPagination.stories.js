@@ -5,6 +5,7 @@ import PageSelector from './PageSelector'
 import { Table, Td, Th, Tr } from './table'
 import PageSizeSelectorComponent from './PageSizeSelector'
 import { reactTableNaturalSort } from './reactTableNaturalSort'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 
 export default {
   title: 'TableAndPagination',
@@ -290,7 +291,7 @@ export const SortablePaginatedTable = () => {
             <Tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <Th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  {...column.getHeaderProps(column.getSortByToggleProps(getTableColumnHeaderProps))}
                   isSortedDescending={column.isSortedDesc}
                   sortedIndex={column.sortedIndex}
                   isMultiSortColumn={isMultiSortColumn}

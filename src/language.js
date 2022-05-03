@@ -148,6 +148,12 @@ const autocomplete = {
   noResultsDefault: 'No results found',
 }
 
+const table = {
+  sortAscendingTitle: 'Sort ascending',
+  sortDescendingTitle: 'Sort descending',
+  sortRemoveTitle: 'Remove sort',
+}
+
 const title = {
   mermaid: 'MERMAID',
   mermaidDescription: 'Marine Ecological Research Management Aid',
@@ -294,6 +300,7 @@ export default {
   deleteCollectRecord,
   loadingIndicator,
   autocomplete,
+  table,
   title,
   pages,
   createFishSpecies,
