@@ -11,7 +11,7 @@ import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Site from '../components/pages/Site'
 import Users from '../components/pages/Users'
-import Health from '../components/pages/Health'
+import UsersAndTransects from '../components/pages/UsersAndTransects'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 import SubmittedFishBelt from '../components/pages/SubmittedFishBelt/SubmittedFishBelt'
 
@@ -23,7 +23,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/health',
-      Component: Health,
+      Component: UsersAndTransects,
     },
     {
       path: '/projects/:projectId/collecting',
