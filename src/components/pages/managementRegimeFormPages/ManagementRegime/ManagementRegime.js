@@ -45,20 +45,19 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
-      let promises = [databaseSwitchboardInstance.getChoices()]
+      const promises = [
+        databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getProject(projectId),
+      ]
 
       if (!isNewManagementRegime) {
-        promises = [
-          ...promises,
-          databaseSwitchboardInstance.getProject(projectId),
-          databaseSwitchboardInstance.getManagementRegime(managementRegimeId),
-        ]
+        promises.push(databaseSwitchboardInstance.getManagementRegime(managementRegimeId))
       }
 
       Promise.all(promises)
         .then(([choicesResponse, projectResponse, managementRegimeResponse]) => {
           if (isMounted.current) {
-            if (!managementRegimeResponse && managementRegimeId) {
+            if (!managementRegimeResponse && managementRegimeId && !isNewManagementRegime) {
               setIdsNotAssociatedWithData((previousState) => [...previousState, managementRegimeId])
             }
             if (!projectResponse && projectId) {
