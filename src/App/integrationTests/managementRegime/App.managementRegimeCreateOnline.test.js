@@ -120,7 +120,7 @@ describe('Online', () => {
 
     const tableRows = await screen.findAllByRole('row')
 
-    // 18 here because the header row + the 3 mock records + the one we just created
+    // 5 here because the header row + the 3 mock records + the one we just created
     expect(tableRows).toHaveLength(5)
 
     expect(await within(table).findByText('Rebecca'))
