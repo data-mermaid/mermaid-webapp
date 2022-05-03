@@ -25,10 +25,7 @@ const UsersAndTransects = () => {
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-      Promise.all([
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
-        databaseSwitchboardInstance.getProject(projectId),
-      ])
+      Promise.all([databaseSwitchboardInstance.getProjectProfiles(projectId)])
         .then(([projectProfilesResponse]) => {
           if (isMounted.current) {
             setObserverProfiles(projectProfilesResponse)
