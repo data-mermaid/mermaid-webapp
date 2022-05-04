@@ -6,7 +6,7 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
-      const sampleUnit = `${record.transectNumber ?? ''} ${record.label ?? ''}`.trim()
+      const sampleUnit = `${record.sample_unit_number ?? ''} ${record.label ?? ''}`.trim()
 
       return sampleUnit === '' ? undefined : sampleUnit
     }
@@ -67,6 +67,94 @@ const SubmittedRecordsMixin = (Base) =>
               },
             }))
           })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getRecordsForUsersAndTransectsTable = function getRecordsForUsersAndTransectsTable(projectId) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      return this._isAuthenticatedAndReady
+        ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
+            const result = []
+            const recordsGroupedBySite = submittedRecords.reduce((accumulator, record) => {
+              const { site, site_name, protocol, sample_unit_number } = record
+              const siteInfo = { site, site_name }
+              const isFishBelt = protocol === 'fishbelt'
+              const isBenthicPIT = protocol === 'benthicpit'
+              const isBenthicLIT = protocol === 'benthiclit'
+              const isHabitatComplexity = protocol === 'habitatcomplexity'
+              const isBleaching = protocol === 'bleachingqc'
+
+              if (!accumulator[site]) {
+                return {
+                  ...accumulator,
+                  [site]: {
+                    fishbelts: {
+                      ...siteInfo,
+                      method: 'Fish Belt',
+                      numbers: isFishBelt ? [sample_unit_number] : [],
+                    },
+                    benthicpits: {
+                      ...siteInfo,
+                      method: 'Benthic Pit',
+                      numbers: isBenthicPIT ? [sample_unit_number] : [],
+                    },
+                    benthiclits: {
+                      ...siteInfo,
+                      method: 'Benthic Lit',
+                      numbers: isBenthicLIT ? [sample_unit_number] : [],
+                    },
+                    habitatcomplexities: {
+                      ...siteInfo,
+                      method: 'Habitat Complexity',
+                      numbers: isHabitatComplexity ? [sample_unit_number] : [],
+                    },
+                    bleachingqcs: {
+                      ...siteInfo,
+                      method: 'Bleaching',
+                      numbers: isBleaching ? [sample_unit_number] : [],
+                    },
+                  },
+                }
+              }
+
+              if (isFishBelt) {
+                accumulator[site].fishbelts.numbers.push(sample_unit_number)
+              }
+              if (isBenthicPIT) {
+                accumulator[site].benthicpits.numbers.push(sample_unit_number)
+              }
+              if (isBenthicLIT) {
+                accumulator[site].benthiclits.numbers.push(sample_unit_number)
+              }
+              if (isHabitatComplexity) {
+                accumulator[site].habitatcomplexities.numbers.push(sample_unit_number)
+              }
+              if (isBleaching) {
+                accumulator[site].bleachingqcs.numbers.push(sample_unit_number)
+              }
+
+              return accumulator
+            }, {})
+
+            for (const siteId in recordsGroupedBySite) {
+              if (Object.prototype.hasOwnProperty.call(recordsGroupedBySite, siteId)) {
+                if (recordsGroupedBySite[siteId].fishbelts.numbers.length) {
+                  result.push(recordsGroupedBySite[siteId].fishbelts)
+                }
+                if (recordsGroupedBySite[siteId].benthicpits.numbers.length) {
+                  result.push(recordsGroupedBySite[siteId].benthicpits)
+                }
+                if (recordsGroupedBySite[siteId].benthiclits.numbers.length) {
+                  result.push(recordsGroupedBySite[siteId].benthiclits)
+                }
+              }
+            }
+
+            return result
+          }, {})
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
