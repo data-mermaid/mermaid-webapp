@@ -8,6 +8,7 @@ import styled, { css } from 'styled-components/macro'
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
@@ -638,7 +639,7 @@ const Users = () => {
 
                   return (
                     <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
