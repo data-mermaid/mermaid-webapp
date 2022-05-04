@@ -10,7 +10,7 @@ import {
   renderAuthenticatedOnline,
   screen,
   waitForElementToBeRemoved,
-  // within,
+  within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 

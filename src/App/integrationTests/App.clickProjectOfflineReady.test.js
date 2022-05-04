@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect'
-// import userEvent from '@testing-library/user-event'
+import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import React from 'react'
 
@@ -10,7 +10,7 @@ import {
   renderAuthenticatedOnline,
   screen,
   waitForElementToBeRemoved,
-  // within,
+  within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
@@ -135,16 +135,17 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
   expect(project5OfflineCheckboxAfterProjectSetOffline).not.toBeChecked()
 
   expect((await dexieInstance.collect_records.toArray()).length).toEqual(
-    mockMermaidData.collect_records.filter(record => record.project !== '5').length,
+    mockMermaidData.collect_records.filter((record) => record.project !== '5').length,
   )
   expect((await dexieInstance.project_managements.toArray()).length).toEqual(
-    mockMermaidData.project_managements.filter(managementRegime => managementRegime.project !== '5')
-      .length,
+    mockMermaidData.project_managements.filter(
+      (managementRegime) => managementRegime.project !== '5',
+    ).length,
   )
   expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
-    mockMermaidData.project_profiles.filter(profile => profile.project !== '5').length,
+    mockMermaidData.project_profiles.filter((profile) => profile.project !== '5').length,
   )
   expect((await dexieInstance.project_sites.toArray()).length).toEqual(
-    mockMermaidData.project_sites.filter(site => site.project !== '5').length,
+    mockMermaidData.project_sites.filter((site) => site.project !== '5').length,
   )
 })
