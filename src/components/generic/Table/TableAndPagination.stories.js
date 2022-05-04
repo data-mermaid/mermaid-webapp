@@ -291,7 +291,7 @@ export const SortablePaginatedTable = () => {
             <Tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
                 <Th
-                  {...column.getHeaderProps(column.getSortByToggleProps(getTableColumnHeaderProps))}
+                  {...column.getHeaderProps(column.getSortByToggleProps(getTableColumnHeaderProps(column)))}
                   isSortedDescending={column.isSortedDesc}
                   sortedIndex={column.sortedIndex}
                   isMultiSortColumn={isMultiSortColumn}
