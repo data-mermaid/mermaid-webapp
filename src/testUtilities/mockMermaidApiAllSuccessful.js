@@ -61,24 +61,6 @@ const mockMermaidApiAllSuccessful = setupServer(
   rest.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, (req, res, ctx) => {
     return res(ctx.status(200))
   }),
-  rest.get(`${apiBaseUrl}/projects/5/sampleunitmethods`, (req, res, ctx) => {
-    return res(ctx.status(200))
-  }),
-  rest.get(`${apiBaseUrl}/projects/1/project_profiles`, (req, res, ctx) => {
-    return res(ctx.status(200))
-  }),
-  rest.get(`${apiBaseUrl}/projects/2/project_profiles`, (req, res, ctx) => {
-    return res(ctx.status(200))
-  }),
-  rest.get(`${apiBaseUrl}/projects/3/project_profiles`, (req, res, ctx) => {
-    return res(ctx.status(200))
-  }),
-  rest.get(`${apiBaseUrl}/projects/4/project_profiles`, (req, res, ctx) => {
-    return res(ctx.status(200))
-  }),
-  rest.get(`${apiBaseUrl}/projects/5/project_profiles`, (req, res, ctx) => {
-    return res(ctx.status(200))
-  }),
 )
 
 mockMermaidApiAllSuccessful.listen({
