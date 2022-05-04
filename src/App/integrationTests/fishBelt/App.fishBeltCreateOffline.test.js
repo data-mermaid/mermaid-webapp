@@ -72,39 +72,39 @@ describe('Offline', () => {
     expect(within(screen.getByTestId('tide')).getByLabelText('falling')).toBeChecked()
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
-  // test('New fishbelt save success show new record in collecting table', async () => {
-  //   const dexieInstance = getMockDexieInstanceAllSuccess()
+  test('New fishbelt save success show new record in collecting table', async () => {
+    const dexieInstance = getMockDexieInstanceAllSuccess()
 
-  //   await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
 
-  //   renderAuthenticatedOffline(
-  //     <App dexieInstance={dexieInstance} />,
-  //     {
-  //       initialEntries: ['/projects/5/collecting/fishbelt/'],
-  //     },
-  //     dexieInstance,
-  //   )
+    renderAuthenticatedOffline(
+      <App dexieInstance={dexieInstance} />,
+      {
+        initialEntries: ['/projects/5/collecting/fishbelt/'],
+      },
+      dexieInstance,
+    )
 
-  //   await saveFishbeltRecord()
+    await saveFishbeltRecord()
 
-  //   expect(await screen.findByText('Record saved.'))
+    expect(await screen.findByText('Record saved.'))
 
-  //   const sideNav = await screen.findByTestId('content-page-side-nav')
+    const sideNav = await screen.findByTestId('content-page-side-nav')
 
-  //   userEvent.click(within(sideNav).getByText('Collecting'))
+    userEvent.click(within(sideNav).getByText('Collecting'))
 
-  //   // show all the records
-  //   userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
-  //   const table = await screen.findByRole('table')
+    // show all the records
+    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
+    const table = await screen.findByRole('table')
 
-  //   const tableRows = await screen.findAllByRole('row')
+    const tableRows = await screen.findAllByRole('row')
 
-  //   // 18 here because the header row + the 16 mock records + the one we just created
-  //   expect(tableRows).toHaveLength(18)
+    // 18 here because the header row + the 16 mock records + the one we just created
+    expect(tableRows).toHaveLength(18)
 
-  //   // expect unique depth as proxy for new fishbelt
-  //   expect(await within(table).findByText('10000'))
-  // })
+    // expect unique depth as proxy for new fishbelt
+    expect(await within(table).findByText('10000'))
+  })
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
     const dexieInstance = getMockDexieInstanceAllSuccess()
 
