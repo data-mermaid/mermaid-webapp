@@ -6,6 +6,12 @@ const projectCodes = {
   policy: { private: 10, publicSummary: 50 },
 }
 
+const inlineMessage = {
+  ignore: 'ignored',
+  warning: 'warning',
+  error: 'error',
+}
+
 const error = {
   401: "There is something wrong with the user's credentials. You may want to try logging out and logging back in.",
   403: 'The current user does not have sufficient permission to do that.',
@@ -140,6 +146,12 @@ const createFishSpecies = {
 
 const autocomplete = {
   noResultsDefault: 'No results found',
+}
+
+const table = {
+  sortAscendingTitle: 'Sort ascending',
+  sortDescendingTitle: 'Sort descending',
+  sortRemoveTitle: 'Remove sort',
 }
 
 const title = {
@@ -288,9 +300,11 @@ export default {
   deleteCollectRecord,
   loadingIndicator,
   autocomplete,
+  table,
   title,
   pages,
   createFishSpecies,
   navigateAwayPrompt,
   getValidationMessage,
+  inlineMessage,
 }

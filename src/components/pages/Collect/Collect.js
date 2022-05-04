@@ -12,6 +12,7 @@ import {
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -129,7 +130,7 @@ const Collect = () => {
         size: uiLabels.size,
         depth: uiLabels.depth,
         sampleDate: uiLabels.sampleDate,
-        observers: uiLabels.observers
+        observers: uiLabels.observers,
       })),
     [collectRecordsForUiDisplay, currentProjectPath],
   )
@@ -206,9 +207,6 @@ const Collect = () => {
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
-  // const previousSortBy = usePrevious(sortBy)
-  // const previousGlobalFilter = usePrevious(globalFilter)
-
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
@@ -229,7 +227,7 @@ const Collect = () => {
                 <Tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
                     <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}

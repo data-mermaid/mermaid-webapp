@@ -1,23 +1,29 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components/macro'
+import { useParams } from 'react-router-dom'
+import { usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
 
-import React, { useState, useMemo, useCallback, useEffect } from 'react'
-import { usePagination, useSortBy, useTable } from 'react-table'
-import { useParams } from 'react-router-dom'
-import { H2 } from '../../generic/text'
-import { getToastArguments } from '../../../library/getToastArguments'
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
-import PageUnavailableOffline from '../PageUnavailableOffline'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../../library/useIsMounted'
-import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
+import { getToastArguments } from '../../../library/getToastArguments'
+import { H2 } from '../../generic/text'
 import language from '../../../language'
-import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import PageUnavailableOffline from '../PageUnavailableOffline'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useIsMounted from '../../../library/useIsMounted'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+
+const HeaderCenter = styled.div`
+  text-align: center;
+`
 
 const UsersAndTransects = () => {
   const { isAppOnline } = useOnlineStatus()
@@ -76,15 +82,7 @@ const UsersAndTransects = () => {
         ],
       },
       {
-        Header: () => (
-          <div
-            style={{
-              textAlign: 'center',
-            }}
-          >
-            Transect Number / User
-          </div>
-        ),
+        Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
         id: 'User Headers',
         columns: getUserColumnHeaders(),
       },
@@ -151,7 +149,9 @@ const UsersAndTransects = () => {
                 <Tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
                     <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      {...column.getHeaderProps(
+                        column.getSortByToggleProps(getTableColumnHeaderProps(column)),
+                      )}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                     >
