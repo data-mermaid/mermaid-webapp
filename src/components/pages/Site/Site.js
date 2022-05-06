@@ -1,15 +1,20 @@
-import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import { useFormik } from 'formik'
+import { useParams, useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
+import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
+import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
+import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
-import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { InputRow, InputWrapper } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -17,43 +22,46 @@ import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import language from '../../../language'
-import { getToastArguments } from '../../../library/getToastArguments'
+import LoadingModal from '../../LoadingModal/LoadingModal'
+import SaveButton from '../../generic/SaveButton'
 import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
-import useIsMounted from '../../../library/useIsMounted'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
-import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import SaveButton from '../../generic/SaveButton'
-import LoadingModal from '../../LoadingModal/LoadingModal'
+import useIsMounted from '../../../library/useIsMounted'
 
-const Site = () => {
+const Site = ({ isNewSite }) => {
   const [countryOptions, setCountryOptions] = useState([])
   const [exposureOptions, setExposureOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [reefTypeOptions, setReefTypeOptions] = useState([])
   const [reefZoneOptions, setReefZoneOptions] = useState([])
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [siteBeingEdited, setSiteBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { siteId, projectId } = useParams()
+  const history = useHistory()
   const isMounted = useIsMounted()
-  const { isAppOnline } = useOnlineStatus()
-  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const currentProjectPath = useCurrentProjectPath()
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && siteId && !isSyncInProgress) {
+    if (databaseSwitchboardInstance && !isSyncInProgress) {
       const promises = [
-        databaseSwitchboardInstance.getSite(siteId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProject(projectId),
       ]
 
+      if (!isNewSite) {
+        promises.push(databaseSwitchboardInstance.getSite(siteId))
+      }
+
       Promise.all(promises)
-        .then(([siteResponse, choicesResponse, projectResponse]) => {
+        .then(([choicesResponse, projectResponse, siteResponse]) => {
           if (isMounted.current) {
-            if (!siteResponse && siteId) {
+            if (!siteResponse && siteId && !isNewSite) {
               setIdsNotAssociatedWithData((previousState) => [...previousState, siteId])
             }
             if (!projectResponse && projectId) {
@@ -71,7 +79,7 @@ const Site = () => {
           toast.error(...getToastArguments(language.error.siteRecordUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId])
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId, isNewSite])
 
   const initialFormValues = useMemo(() => getSiteInitialValues(siteBeingEdited), [siteBeingEdited])
 
@@ -98,10 +106,14 @@ const Site = () => {
       setSaveButtonState(buttonGroupStates.saving)
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
-        .then(() => {
+        .then((response) => {
           toast.success(...getToastArguments(language.success.siteSave))
           setSaveButtonState(buttonGroupStates.saved)
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
+
+          if (isNewSite) {
+            history.push(`${ensureTrailingSlash(currentProjectPath)}sites/${response.id}`)
+          }
         })
         .catch(() => {
           setSaveButtonState(buttonGroupStates.unsaved)
@@ -137,7 +149,9 @@ const Site = () => {
     },
   })
 
-  useDocumentTitle(`${language.pages.siteForm.title} - ${formik.values.name} - ${language.title.mermaid}`)
+  useDocumentTitle(
+    `${language.pages.siteForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
+  )
 
   const { setFieldValue: formikSetFieldValue } = formik
 
@@ -161,7 +175,7 @@ const Site = () => {
     [formikSetFieldValue],
   )
 
-  return idsNotAssociatedWithData.length ? (
+  return idsNotAssociatedWithData.length && !isNewSite ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
@@ -185,11 +199,12 @@ const Site = () => {
                 validationMessages={formik.errors.name}
                 testId="name"
               />
-              <InputRow required>
+              <InputRow required data-testid="country-select">
                 {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                <label htmlFor="country">Country</label>
+                <label id="country-label">Country</label>
                 <InputAutocomplete
                   id="country"
+                  aria-labelledby="country-label"
                   options={countryOptions}
                   value={formik.values.country}
                   noResultsText={language.autocomplete.noResultsDefault}
@@ -260,12 +275,14 @@ const Site = () => {
       }
       toolbar={
         <ContentPageToolbarWrapper>
-          <H2>{formik.values.name}</H2>
+          {isNewSite ? <H2>{language.pages.siteForm.title}</H2> : <H2>{formik.values.name}</H2>}
           <SaveButton formId="site-form" saveButtonState={saveButtonState} formik={formik} />
         </ContentPageToolbarWrapper>
       }
     />
   )
 }
+
+Site.propTypes = { isNewSite: PropTypes.bool.isRequired }
 
 export default Site
