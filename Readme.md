@@ -35,7 +35,7 @@ Syncs also _should_ be triggered on many create/update/delete operations within 
 
 ### Database Switchboard
 
-The `DatabaseSwitchBoardInstance` is responsible for getting data to the app. It takes care of if the data should come from IndexedDB or the API so the app doesnt have to think as much about it. The idea is not to call the api or interact with IDB other than though the DatabaseSwitchboard for maintainability. In general, because of the app syncing the databaseSwitchboard usually uses IDB as a source of truth on Mermaid Data for foundational app logic, or for offline-able pages because the sync code pulls from the api and puts it in IDB quite frequently.
+The `DatabaseSwitchBoardInstance` is responsible for getting data to the app. It takes care of if the data should come from IndexedDB (IDB) or the API so the app does not have to think as much about it. The idea is not to call the API or interact with IDB other than though the DatabaseSwitchboard for maintainability. In general, because of the app syncing the databaseSwitchboard usually uses IDB as a source of truth on Mermaid Data for foundational app logic, or for offline-able pages because the sync code pulls from the API and puts it in IDB quite frequently.
 
 Class mixins were used unfortunately, but other than having unclear inheritance and a weird implementation syntax, seem to be working just fine so far.
 
