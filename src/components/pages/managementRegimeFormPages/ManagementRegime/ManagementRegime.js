@@ -179,7 +179,9 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     }
   }, [formik.dirty])
 
-  return idsNotAssociatedWithData.length && !isNewManagementRegime ? (
+  const displayIdNotFound = idsNotAssociatedWithData.length && !isNewManagementRegime
+  
+  return displayIdNotFound ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}

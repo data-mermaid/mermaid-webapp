@@ -39,7 +39,7 @@ describe('Offline', () => {
 
     userEvent.click(await screen.findByRole('link', { name: 'New MR' }))
 
-    // ensure the were not in edit mode, but new management regime mode
+    // ensure we're not in edit mode, but new management regime mode
     expect(
       await screen.findByText('Management Regime', {
         selector: 'h2',
