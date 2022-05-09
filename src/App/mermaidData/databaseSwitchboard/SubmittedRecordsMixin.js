@@ -11,6 +11,80 @@ const SubmittedRecordsMixin = (Base) =>
       return sampleUnit === '' ? undefined : sampleUnit
     }
 
+    #getMethodLabel = function getMethodLabel(protocol, recordLabel) {
+      if (recordLabel.length) {
+        return `${getRecordProtocolLabel(protocol)} ${recordLabel}`
+      }
+
+      return getRecordProtocolLabel(protocol)
+    }
+
+    #toFindDuplicates = function toFindDuplicates(array) {
+      return new Set(array).size !== array.length
+    }
+
+    #removeDateFromName = function removeDateFromName(name) {
+      const names = name.split(' ')
+
+      if (names.length > 1) {
+        names.splice(-1, 1)
+
+        return names
+      }
+
+      return names[0]
+    }
+
+    #populateAdditionalSites = function populateAdditionalSites(siteRecords) {
+      const allMethods = siteRecords.map((record) => record.transect_protocol)
+      const uniqueMethods = [...new Set(allMethods)]
+      const uniqueTransectAndMethods = uniqueMethods.map((method) => {
+        return {
+          transectMethod: method,
+          protocolLabel: getRecordProtocolLabel(method),
+        }
+      })
+
+      const siteRecordMemory = siteRecords.reduce((acc, record) => {
+        acc[record.site] = acc[record.site] || {}
+        acc[record.site] = {
+          site_name: record.site_name,
+          transects: acc[record.site].transects
+            ? acc[record.site].transects.concat(record.transect_protocol)
+            : [record.transect_protocol],
+          methods: acc[record.site].methods
+            ? acc[record.site].methods.concat(record.method)
+            : [record.method],
+        }
+
+        return acc
+      }, {})
+
+      for (const siteId in siteRecordMemory) {
+        if (Object.prototype.hasOwnProperty.call(siteRecordMemory, siteId)) {
+          /* eslint max-depth: ["error", 4]*/
+          for (const missingTransect of uniqueTransectAndMethods) {
+            if (
+              !(
+                siteRecordMemory[siteId].methods.includes(missingTransect.protocolLabel) &&
+                siteRecordMemory[siteId].transects.includes(missingTransect.transectMethod)
+              )
+            ) {
+              siteRecords.push({
+                site: siteId,
+                site_name: this.#removeDateFromName(siteRecordMemory[siteId].site_name),
+                method: missingTransect.protocolLabel,
+                transect_protocol: missingTransect.transectMethod,
+                sample_unit_numbers: [],
+              })
+            }
+          }
+        }
+      }
+
+      return siteRecords
+    }
+
     getSubmittedRecords = async function getSubmittedRecords(projectId) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
@@ -77,83 +151,96 @@ const SubmittedRecordsMixin = (Base) =>
 
       return this._isAuthenticatedAndReady
         ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
-            const result = []
-            const recordsGroupedBySite = submittedRecords.reduce((accumulator, record) => {
-              const { site, site_name, protocol, sample_unit_number } = record
-              const siteInfo = { site, site_name }
-              const isFishBelt = protocol === 'fishbelt'
-              const isBenthicPIT = protocol === 'benthicpit'
-              const isBenthicLIT = protocol === 'benthiclit'
-              const isHabitatComplexity = protocol === 'habitatcomplexity'
-              const isBleaching = protocol === 'bleachingqc'
+            const sampleEventUnitRecords = []
+            const filteredSubmittedRecords = submittedRecords.filter(
+              (record) => record.protocol !== 'bleachingqc',
+            )
 
-              if (!accumulator[site]) {
-                return {
-                  ...accumulator,
-                  [site]: {
-                    fishbelts: {
-                      ...siteInfo,
-                      method: 'Fish Belt',
-                      numbers: isFishBelt ? [sample_unit_number] : [],
-                    },
-                    benthicpits: {
-                      ...siteInfo,
-                      method: 'Benthic Pit',
-                      numbers: isBenthicPIT ? [sample_unit_number] : [],
-                    },
-                    benthiclits: {
-                      ...siteInfo,
-                      method: 'Benthic Lit',
-                      numbers: isBenthicLIT ? [sample_unit_number] : [],
-                    },
-                    habitatcomplexities: {
-                      ...siteInfo,
-                      method: 'Habitat Complexity',
-                      numbers: isHabitatComplexity ? [sample_unit_number] : [],
-                    },
-                    bleachingqcs: {
-                      ...siteInfo,
-                      method: 'Bleaching',
-                      numbers: isBleaching ? [sample_unit_number] : [],
-                    },
-                  },
+            const sampleEventRecordsGroupedBySite = filteredSubmittedRecords.reduce(
+              (accumulator, record) => {
+                const { id, site, site_name, protocol, sample_unit_number, label, sample_date } =
+                  record
+
+                const siteInfo = { site, site_name }
+
+                accumulator[site] = accumulator[site] || {}
+                accumulator[site][`${protocol}${label}`] =
+                  accumulator[site][`${protocol}${label}`] || {}
+
+                accumulator[site][`${protocol}${label}`] = {
+                  ...siteInfo,
+                  transect_protocol: protocol,
+                  method: this.#getMethodLabel(protocol, label),
+                  sample_unit_numbers: accumulator[site][`${protocol}${label}`].sample_unit_numbers
+                    ? accumulator[site][`${protocol}${label}`].sample_unit_numbers.concat({
+                        id,
+                        sample_unit_number,
+                        sample_date,
+                      })
+                    : [{ id, sample_unit_number, sample_date }],
                 }
-              }
 
-              if (isFishBelt) {
-                accumulator[site].fishbelts.numbers.push(sample_unit_number)
-              }
-              if (isBenthicPIT) {
-                accumulator[site].benthicpits.numbers.push(sample_unit_number)
-              }
-              if (isBenthicLIT) {
-                accumulator[site].benthiclits.numbers.push(sample_unit_number)
-              }
-              if (isHabitatComplexity) {
-                accumulator[site].habitatcomplexities.numbers.push(sample_unit_number)
-              }
-              if (isBleaching) {
-                accumulator[site].bleachingqcs.numbers.push(sample_unit_number)
-              }
+                return accumulator
+              },
+              {},
+            )
 
-              return accumulator
-            }, {})
+            for (const siteId in sampleEventRecordsGroupedBySite) {
+              if (Object.prototype.hasOwnProperty.call(sampleEventRecordsGroupedBySite, siteId)) {
+                const siteRecordGroup = Object.values(sampleEventRecordsGroupedBySite[siteId])
 
-            for (const siteId in recordsGroupedBySite) {
-              if (Object.prototype.hasOwnProperty.call(recordsGroupedBySite, siteId)) {
-                if (recordsGroupedBySite[siteId].fishbelts.numbers.length) {
-                  result.push(recordsGroupedBySite[siteId].fishbelts)
-                }
-                if (recordsGroupedBySite[siteId].benthicpits.numbers.length) {
-                  result.push(recordsGroupedBySite[siteId].benthicpits)
-                }
-                if (recordsGroupedBySite[siteId].benthiclits.numbers.length) {
-                  result.push(recordsGroupedBySite[siteId].benthiclits)
+                for (const siteRecord of siteRecordGroup) {
+                  const { sample_unit_numbers } = siteRecord
+                  const sampleUnitNumbers = sample_unit_numbers.map(
+                    ({ sample_unit_number }) => sample_unit_number,
+                  )
+                  const sampleDates = sample_unit_numbers.map(({ sample_date }) => sample_date)
+
+                  const hasDuplicateTransectNumbersInSampleUnit =
+                    this.#toFindDuplicates(sampleUnitNumbers)
+                  const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
+
+                  if (
+                    hasDuplicateTransectNumbersInSampleUnit &&
+                    hasMoreThanOneSampleDatesInSampleUnit
+                  ) {
+                    const sampleUnitNumbersGroupedBySampleDate = sample_unit_numbers.reduce(
+                      (acc, sampleUnit) => {
+                        acc[sampleUnit.sample_date] = acc[sampleUnit.sample_date] || []
+                        acc[sampleUnit.sample_date].push(sampleUnit)
+
+                        return acc
+                      },
+                      {},
+                    )
+
+                    for (const sampleDateUnit in sampleUnitNumbersGroupedBySampleDate) {
+                      /* eslint max-depth: ["error", 6]*/
+                      if (
+                        Object.prototype.hasOwnProperty.call(
+                          sampleUnitNumbersGroupedBySampleDate,
+                          sampleDateUnit,
+                        )
+                      ) {
+                        const newSite = {
+                          ...siteRecord,
+                          site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
+                          sample_unit_numbers: sampleUnitNumbersGroupedBySampleDate[sampleDateUnit],
+                        }
+
+                        sampleEventUnitRecords.push(newSite)
+                      }
+                    }
+                  } else {
+                    sampleEventUnitRecords.push(siteRecord)
+                  }
                 }
               }
             }
 
-            return result
+            this.#populateAdditionalSites(sampleEventUnitRecords)
+
+            return sampleEventUnitRecords
           }, {})
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }

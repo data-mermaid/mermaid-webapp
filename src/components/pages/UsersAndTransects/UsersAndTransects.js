@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
 
@@ -14,6 +14,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../library/useIsMounted'
@@ -25,6 +26,10 @@ const HeaderCenter = styled.div`
   text-align: center;
 `
 
+const InlineCell = styled.div`
+  display: inline-flex;
+`
+
 const UsersAndTransects = () => {
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
@@ -34,6 +39,8 @@ const UsersAndTransects = () => {
   const isMounted = useIsMounted()
   const [observerProfiles, setObserverProfiles] = useState([])
   const [submittedRecords, setSubmittedRecords] = useState([])
+  const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
+  const currentProjectPath = useCurrentProjectPath()
   const currentUser = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
@@ -44,8 +51,15 @@ const UsersAndTransects = () => {
       ])
         .then(([projectProfilesResponse, submittedRecordsResponse]) => {
           if (isMounted.current) {
+            const numbers = submittedRecordsResponse
+              .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
+              .map((reducedRecords) => reducedRecords.sample_unit_number)
+
+            const uniqueNumbers = [...new Set(numbers)].sort((a, b) => a - b)
+
             setObserverProfiles(projectProfilesResponse)
             setSubmittedRecords(submittedRecordsResponse)
+            setSubmittedTransectNumbers(uniqueNumbers)
             setIsLoading(false)
           }
         })
@@ -61,25 +75,22 @@ const UsersAndTransects = () => {
     })
   }, [observerProfiles])
 
-  const tableCellData = useMemo(
-    () =>
-      submittedRecords.map((record) => ({
-        site: record.site_name,
-        method: record.method,
-      })),
-    [submittedRecords],
-  )
+  const getSubmittedTransectNumberColumnHeaders = useCallback(() => {
+    return submittedTransectNumbers.map((number) => {
+      const unitNumberColumn = number ? number.toString() : 'NaN'
+
+      return { Header: unitNumberColumn, id: unitNumberColumn, accessor: unitNumberColumn }
+    })
+  }, [submittedTransectNumbers])
 
   const tableColumns = useMemo(
     () => [
+      { Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort },
+      { Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort },
       {
-        Header: () => null,
-        id: 'Transect Header',
-        columns: [
-          { Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort },
-          { Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort },
-          { Header: 'Submitted Transect Number' },
-        ],
+        Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
+        id: 'Transect Number Headers',
+        columns: getSubmittedTransectNumberColumnHeaders(),
       },
       {
         Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
@@ -87,7 +98,51 @@ const UsersAndTransects = () => {
         columns: getUserColumnHeaders(),
       },
     ],
-    [getUserColumnHeaders],
+    [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
+  )
+
+  const populateNumberRow = useCallback(
+    (rowRecord) => {
+      const rowNumbers = rowRecord.sample_unit_numbers.map((record) => record.sample_unit_number)
+
+      return submittedTransectNumbers.reduce((acc, number) => {
+        if (!acc[number]) {
+          acc[number] = '-'
+        }
+
+        if (rowNumbers.includes(number)) {
+          const filteredRows = rowRecord.sample_unit_numbers.filter(
+            ({ sample_unit_number }) => sample_unit_number === number,
+          )
+
+          const filteredLinks = filteredRows.map((row, idx) => {
+            return (
+              <span key={row.id}>
+                <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
+                  {row.sample_unit_number}
+                </Link>
+                {idx < filteredRows.length - 1 && ', '}
+              </span>
+            )
+          })
+
+          acc[number] = <InlineCell>{filteredLinks}</InlineCell>
+        }
+
+        return acc
+      }, {})
+    },
+    [submittedTransectNumbers, currentProjectPath],
+  )
+
+  const tableCellData = useMemo(
+    () =>
+      submittedRecords.map((record) => ({
+        site: record.site_name,
+        method: record.method,
+        ...populateNumberRow(record),
+      })),
+    [submittedRecords, populateNumberRow],
   )
 
   const tableDefaultPrefs = useMemo(() => {
