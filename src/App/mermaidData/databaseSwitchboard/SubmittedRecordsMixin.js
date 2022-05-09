@@ -35,46 +35,46 @@ const SubmittedRecordsMixin = (Base) =>
       return names[0]
     }
 
-    #populateAdditionalSites = function populateAdditionalSites(siteRecords) {
-      const allMethods = siteRecords.map((record) => record.transect_protocol)
+    #populateAdditionalRecords = function populateAdditionalRecords(sampleEventUnitRecords) {
+      const allMethods = sampleEventUnitRecords.map((record) => record.transect_protocol)
       const uniqueMethods = [...new Set(allMethods)]
       const uniqueTransectAndMethods = uniqueMethods.map((method) => {
         return {
-          transectMethod: method,
-          protocolLabel: getRecordProtocolLabel(method),
+          method,
+          protocol: getRecordProtocolLabel(method),
         }
       })
 
-      const siteRecordMemory = siteRecords.reduce((acc, record) => {
-        acc[record.site] = acc[record.site] || {}
-        acc[record.site] = {
+      const recordGroupedBySite = sampleEventUnitRecords.reduce((accumulator, record) => {
+        accumulator[record.site] = accumulator[record.site] || {}
+        accumulator[record.site] = {
           site_name: record.site_name,
-          transects: acc[record.site].transects
-            ? acc[record.site].transects.concat(record.transect_protocol)
+          transects: accumulator[record.site].transects
+            ? accumulator[record.site].transects.concat(record.transect_protocol)
             : [record.transect_protocol],
-          methods: acc[record.site].methods
-            ? acc[record.site].methods.concat(record.method)
+          methods: accumulator[record.site].methods
+            ? accumulator[record.site].methods.concat(record.method)
             : [record.method],
         }
 
-        return acc
+        return accumulator
       }, {})
 
-      for (const siteId in siteRecordMemory) {
-        if (Object.prototype.hasOwnProperty.call(siteRecordMemory, siteId)) {
+      for (const siteId in recordGroupedBySite) {
+        if (Object.prototype.hasOwnProperty.call(recordGroupedBySite, siteId)) {
           /* eslint max-depth: ["error", 4]*/
           for (const missingTransect of uniqueTransectAndMethods) {
             if (
               !(
-                siteRecordMemory[siteId].methods.includes(missingTransect.protocolLabel) &&
-                siteRecordMemory[siteId].transects.includes(missingTransect.transectMethod)
+                recordGroupedBySite[siteId].methods.includes(missingTransect.protocol) &&
+                recordGroupedBySite[siteId].transects.includes(missingTransect.method)
               )
             ) {
-              siteRecords.push({
+              sampleEventUnitRecords.push({
                 site: siteId,
-                site_name: this.#removeDateFromName(siteRecordMemory[siteId].site_name),
-                method: missingTransect.protocolLabel,
-                transect_protocol: missingTransect.transectMethod,
+                site_name: this.#removeDateFromName(recordGroupedBySite[siteId].site_name),
+                method: missingTransect.protocol,
+                transect_protocol: missingTransect.method,
                 sample_unit_numbers: [],
               })
             }
@@ -82,7 +82,7 @@ const SubmittedRecordsMixin = (Base) =>
         }
       }
 
-      return siteRecords
+      return sampleEventUnitRecords
     }
 
     getSubmittedRecords = async function getSubmittedRecords(projectId) {
@@ -205,11 +205,12 @@ const SubmittedRecordsMixin = (Base) =>
                     hasMoreThanOneSampleDatesInSampleUnit
                   ) {
                     const sampleUnitNumbersGroupedBySampleDate = sample_unit_numbers.reduce(
-                      (acc, sampleUnit) => {
-                        acc[sampleUnit.sample_date] = acc[sampleUnit.sample_date] || []
-                        acc[sampleUnit.sample_date].push(sampleUnit)
+                      (accumulator, sampleUnit) => {
+                        accumulator[sampleUnit.sample_date] =
+                          accumulator[sampleUnit.sample_date] || []
+                        accumulator[sampleUnit.sample_date].push(sampleUnit)
 
-                        return acc
+                        return accumulator
                       },
                       {},
                     )
@@ -236,7 +237,7 @@ const SubmittedRecordsMixin = (Base) =>
               }
             }
 
-            this.#populateAdditionalSites(sampleEventUnitRecords)
+            this.#populateAdditionalRecords(sampleEventUnitRecords)
 
             return sampleEventUnitRecords
           }, {})
