@@ -25,8 +25,10 @@ const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
   height: 100%;
-  font-size: smaller;
   width: ${theme.spacing.sideNavWidth};
+  ${mediaQueryPhoneOnly(css`
+    width: ${theme.spacing.mobileSideNavWidth};
+  `)}
 `
 const NavList = styled('ul')`
   position: sticky;
@@ -49,11 +51,13 @@ const NavList = styled('ul')`
 const NavHeader = styled('p')`
   margin: ${theme.spacing.large} 0 0 0;
   color: ${theme.color.textColor};
-  padding: ${theme.spacing.small};
-  padding-top: ${theme.spacing.large};
-  text-align: center;
+  padding: ${theme.spacing.large} 0 0 ${theme.spacing.medium};
   text-transform: uppercase;
   font-weight: 900;
+  ${mediaQueryPhoneOnly(css`
+    font-size: smaller;
+    text-align: center;
+  `)}
 `
 
 const NavMenu = ({ subNavNode }) => {

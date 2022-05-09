@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
-import { hoverState } from '../../library/styling/mediaQueries'
+import { hoverState, mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 const linkThatLooksLikeButtonStyles = css`
   text-decoration: none;
@@ -28,7 +28,10 @@ export const NavLinkThatLooksLikeButtonIcon = styled(NavLinkThatLooksLikeButton)
 export const NavLinkSidebar = styled(NavLink)`
   padding: ${theme.spacing.small};
   text-decoration: none;
-  display: block;
+  display: grid;
+  grid-template-columns: 3rem auto auto;
+  align-items: baseline;
+  ${theme.typography.noWordBreak};
   ${hoverState(css`
     background-color: ${theme.color.primaryHover};
     color: ${theme.color.white};
@@ -43,10 +46,16 @@ export const NavLinkSidebar = styled(NavLink)`
     background-color: ${theme.color.primaryColor};
     color: ${theme.color.white};
   }
-  text-align: center;
   span {
-    display: block;
-    font-size: 1rem;
-    ${theme.typography.noWordBreak};
+    white-space: break-spaces;
   }
+  ${mediaQueryPhoneOnly(css`
+    padding: 0 ${theme.spacing.small};
+    display: block;
+    text-align: center;
+    svg {
+      display: block;
+      margin-inline: auto;
+    }
+  `)}
 `
