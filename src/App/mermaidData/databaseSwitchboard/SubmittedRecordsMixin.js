@@ -222,13 +222,11 @@ const SubmittedRecordsMixin = (Base) =>
                           sampleDateUnit,
                         )
                       ) {
-                        const newSite = {
+                        sampleEventUnitRecords.push({
                           ...siteRecord,
                           site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
                           sample_unit_numbers: sampleUnitNumbersGroupedBySampleDate[sampleDateUnit],
-                        }
-
-                        sampleEventUnitRecords.push(newSite)
+                        })
                       }
                     }
                   } else {
