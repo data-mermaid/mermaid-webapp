@@ -272,7 +272,7 @@ const getValidationMessage = (validation, projectId = '') => {
       'There are fish that are not part of project defined fish families',
     not_positive_integer: () => 'Value is not greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
-    not_unique_management: () => 'Management Regime: Similar records detected',
+    not_unique_management: () => 'Management Regime: Other sample events at this site have a different management regime',
     high_density: () => `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`,
     invalid_depth: () => 'Invalid depth',
     invalid_fish_count: () => 'Invalid fish count',
@@ -284,7 +284,7 @@ const getValidationMessage = (validation, projectId = '') => {
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
-    similar_name: () => 'A record with similar name exists',
+    similar_name: () => 'Management Regime: Similar records detected',
     site_not_found: () => 'Site record not available for similarity validation',
     too_many_observations: () => `Greater than ${context?.observation_count_range[1]} observations`,
     too_few_observations: () => `Fewer than ${context?.observation_count_range[0]} observations`,
