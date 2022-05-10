@@ -14,6 +14,7 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import theme from '../../../theme'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -28,6 +29,25 @@ const HeaderCenter = styled.div`
 
 const InlineCell = styled.div`
   display: inline-flex;
+`
+
+const UserColumnHeader = styled.div`
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+`
+
+const CollectRecordsCountWrapper = styled.strong`
+  background: ${theme.color.callout};
+  border-radius: 100%;
+  border: solid 1px ${theme.color.white};
+  width: ${theme.spacing.xlarge};
+  height: ${theme.spacing.xlarge};
+  color: ${theme.color.white};
+  display: grid;
+  margin: auto 0.5rem;
+  place-items: center;
+  font-size: ${theme.typography.smallFontSize};
 `
 
 const UsersAndTransects = () => {
@@ -69,9 +89,21 @@ const UsersAndTransects = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
-  const getUserColumnHeaders = useCallback(() => {
+  const getUserColumnHeaderHeaders = useCallback(() => {
     return observerProfiles.map((user) => {
-      return { Header: user.profile_name, id: user.id }
+      return {
+        Header: (
+          <UserColumnHeader>
+            <span>{user.profile_name}</span>
+            <span>
+              <CollectRecordsCountWrapper>
+                {user.num_active_sample_units}
+              </CollectRecordsCountWrapper>
+            </span>
+          </UserColumnHeader>
+        ),
+        id: user.id,
+      }
     })
   }, [observerProfiles])
 
@@ -100,10 +132,10 @@ const UsersAndTransects = () => {
       {
         Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
         id: 'User Headers',
-        columns: getUserColumnHeaders(),
+        columns: getUserColumnHeaderHeaders(),
       },
     ],
-    [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
+    [getUserColumnHeaderHeaders, getSubmittedTransectNumberColumnHeaders],
   )
 
   const populateNumberRow = useCallback(
