@@ -55,6 +55,7 @@ const NavHeader = styled('p')`
   text-transform: uppercase;
   font-weight: 900;
   ${mediaQueryPhoneOnly(css`
+    padding-left: 0;
     font-size: smaller;
     text-align: center;
   `)}
