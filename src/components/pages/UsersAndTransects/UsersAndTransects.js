@@ -79,7 +79,12 @@ const UsersAndTransects = () => {
     return submittedTransectNumbers.map((number) => {
       const unitNumberColumn = number ? number.toString() : 'NaN'
 
-      return { Header: unitNumberColumn, id: unitNumberColumn, accessor: unitNumberColumn }
+      return {
+        Header: unitNumberColumn,
+        id: unitNumberColumn,
+        accessor: unitNumberColumn,
+        disableSortBy: true,
+      }
     })
   }, [submittedTransectNumbers])
 
@@ -180,9 +185,10 @@ const UsersAndTransects = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: 15,
+        pageSize: 100,
         sortBy: tableUserPrefs.sortBy,
       },
+      isMultiSortEvent: () => true,
     },
     useSortBy,
     usePagination,
@@ -199,23 +205,26 @@ const UsersAndTransects = () => {
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => {
-              return (
-                <Tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => {
+                  const isMultiSortColumn = headerGroup.headers.some(
+                    (header) => header.sortedIndex > 0,
+                  )
+
+                  return (
                     <Th
-                      {...column.getHeaderProps(
-                        column.getSortByToggleProps(getTableColumnHeaderProps(column)),
-                      )}
+                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
                     >
                       {column.render('Header')}
                     </Th>
-                  ))}
-                </Tr>
-              )
-            })}
+                  )
+                })}
+              </Tr>
+            ))}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -240,7 +249,7 @@ const UsersAndTransects = () => {
         <PageSizeSelector
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
-          pageSizeOptions={[15, 50, 100]}
+          pageSizeOptions={[100, 200]}
         />
         <PageSelector
           onPreviousClick={previousPage}
