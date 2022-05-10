@@ -48,14 +48,13 @@ describe('Online', () => {
     expect(screen.getByLabelText('Secondary Name')).toHaveValue('')
     expect(screen.getByLabelText('Year Established')).toHaveValue(null)
     expect(screen.getByLabelText('Area')).toHaveValue(null)
-    expect(within(screen.getByLabelText('Parties')).getByLabelText('NGO')).not.toBeChecked()
-    expect(
-      within(screen.getByLabelText('Parties')).getByLabelText('community/local government'),
-    ).not.toBeChecked()
-    expect(within(screen.getByLabelText('Parties')).getByLabelText('government')).not.toBeChecked()
-    expect(
-      within(screen.getByLabelText('Parties')).getByLabelText('private sector'),
-    ).not.toBeChecked()
+
+    const parties = screen.getByLabelText('Parties')
+
+    expect(within(parties).getByLabelText('NGO')).not.toBeChecked()
+    expect(within(parties).getByLabelText('community/local government')).not.toBeChecked()
+    expect(within(parties).getByLabelText('government')).not.toBeChecked()
+    expect(within(parties).getByLabelText('private sector')).not.toBeChecked()
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
     ).not.toBeChecked()
