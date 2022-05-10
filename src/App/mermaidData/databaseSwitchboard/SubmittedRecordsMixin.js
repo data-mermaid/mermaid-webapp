@@ -36,6 +36,8 @@ const SubmittedRecordsMixin = (Base) =>
     }
 
     #populateAdditionalRecords = function populateAdditionalRecords(sampleEventUnitRecords) {
+      /* If at least one submitted sample unit has a method, show that method in each site row.
+      Example: there is only ONE sample unit submitted with the Habitat Complexity, but it's given it's own row in every site row */
       const allMethods = sampleEventUnitRecords.map((record) => record.transect_protocol)
       const uniqueMethods = [...new Set(allMethods)]
       const uniqueTransectAndMethods = uniqueMethods.map((method) => {
@@ -95,6 +97,7 @@ const SubmittedRecordsMixin = (Base) =>
             .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
+                limit: 1000,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
@@ -156,6 +159,7 @@ const SubmittedRecordsMixin = (Base) =>
               (record) => record.protocol !== 'bleachingqc',
             )
 
+            // rule: Group sample units by Site then Method + label.
             const sampleEventRecordsGroupedBySite = filteredSubmittedRecords.reduce(
               (accumulator, record) => {
                 const { id, site, site_name, protocol, sample_unit_number, label, sample_date } =
@@ -204,6 +208,7 @@ const SubmittedRecordsMixin = (Base) =>
                     hasDuplicateTransectNumbersInSampleUnit &&
                     hasMoreThanOneSampleDatesInSampleUnit
                   ) {
+                    // rules: If there's more than one sample event at a site in a project, show the date of the sample event in it's own "site row"
                     const sampleUnitNumbersGroupedBySampleDate = sample_unit_numbers.reduce(
                       (accumulator, sampleUnit) => {
                         accumulator[sampleUnit.sample_date] =
