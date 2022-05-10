@@ -6,9 +6,83 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
-      const sampleUnit = `${record.transectNumber ?? ''} ${record.label ?? ''}`.trim()
+      const sampleUnit = `${record.sample_unit_number ?? ''} ${record.label ?? ''}`.trim()
 
       return sampleUnit === '' ? undefined : sampleUnit
+    }
+
+    #getMethodLabel = function getMethodLabel(protocol, recordLabel) {
+      if (recordLabel.length) {
+        return `${getRecordProtocolLabel(protocol)} ${recordLabel}`
+      }
+
+      return getRecordProtocolLabel(protocol)
+    }
+
+    #toFindDuplicates = function toFindDuplicates(array) {
+      return new Set(array).size !== array.length
+    }
+
+    #removeDateFromName = function removeDateFromName(name) {
+      const names = name.split(' ')
+
+      if (names.length > 1) {
+        names.splice(-1, 1)
+
+        return names
+      }
+
+      return names[0]
+    }
+
+    #populateAdditionalRecords = function populateAdditionalRecords(sampleEventUnitRecords) {
+      const allMethods = sampleEventUnitRecords.map((record) => record.transect_protocol)
+      const uniqueMethods = [...new Set(allMethods)]
+      const uniqueTransectAndMethods = uniqueMethods.map((method) => {
+        return {
+          method,
+          protocol: getRecordProtocolLabel(method),
+        }
+      })
+
+      const recordGroupedBySite = sampleEventUnitRecords.reduce((accumulator, record) => {
+        accumulator[record.site] = accumulator[record.site] || {}
+        accumulator[record.site] = {
+          site_name: record.site_name,
+          transects: accumulator[record.site].transects
+            ? accumulator[record.site].transects.concat(record.transect_protocol)
+            : [record.transect_protocol],
+          methods: accumulator[record.site].methods
+            ? accumulator[record.site].methods.concat(record.method)
+            : [record.method],
+        }
+
+        return accumulator
+      }, {})
+
+      for (const siteId in recordGroupedBySite) {
+        if (Object.prototype.hasOwnProperty.call(recordGroupedBySite, siteId)) {
+          /* eslint max-depth: ["error", 4]*/
+          for (const missingTransect of uniqueTransectAndMethods) {
+            if (
+              !(
+                recordGroupedBySite[siteId].methods.includes(missingTransect.protocol) &&
+                recordGroupedBySite[siteId].transects.includes(missingTransect.method)
+              )
+            ) {
+              sampleEventUnitRecords.push({
+                site: siteId,
+                site_name: this.#removeDateFromName(recordGroupedBySite[siteId].site_name),
+                method: missingTransect.protocol,
+                transect_protocol: missingTransect.method,
+                sample_unit_numbers: [],
+              })
+            }
+          }
+        }
+      }
+
+      return sampleEventUnitRecords
     }
 
     getSubmittedRecords = async function getSubmittedRecords(projectId) {
@@ -67,6 +141,106 @@ const SubmittedRecordsMixin = (Base) =>
               },
             }))
           })
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getRecordsForUsersAndTransectsTable = function getRecordsForUsersAndTransectsTable(projectId) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      return this._isAuthenticatedAndReady
+        ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
+            const sampleEventUnitRecords = []
+            const filteredSubmittedRecords = submittedRecords.filter(
+              (record) => record.protocol !== 'bleachingqc',
+            )
+
+            const sampleEventRecordsGroupedBySite = filteredSubmittedRecords.reduce(
+              (accumulator, record) => {
+                const { id, site, site_name, protocol, sample_unit_number, label, sample_date } =
+                  record
+
+                const siteInfo = { site, site_name }
+
+                accumulator[site] = accumulator[site] || {}
+                accumulator[site][`${protocol}${label}`] =
+                  accumulator[site][`${protocol}${label}`] || {}
+
+                accumulator[site][`${protocol}${label}`] = {
+                  ...siteInfo,
+                  transect_protocol: protocol,
+                  method: this.#getMethodLabel(protocol, label),
+                  sample_unit_numbers: accumulator[site][`${protocol}${label}`].sample_unit_numbers
+                    ? accumulator[site][`${protocol}${label}`].sample_unit_numbers.concat({
+                        id,
+                        sample_unit_number,
+                        sample_date,
+                      })
+                    : [{ id, sample_unit_number, sample_date }],
+                }
+
+                return accumulator
+              },
+              {},
+            )
+
+            for (const siteId in sampleEventRecordsGroupedBySite) {
+              if (Object.prototype.hasOwnProperty.call(sampleEventRecordsGroupedBySite, siteId)) {
+                const siteRecordGroup = Object.values(sampleEventRecordsGroupedBySite[siteId])
+
+                for (const siteRecord of siteRecordGroup) {
+                  const { sample_unit_numbers } = siteRecord
+                  const sampleUnitNumbers = sample_unit_numbers.map(
+                    ({ sample_unit_number }) => sample_unit_number,
+                  )
+                  const sampleDates = sample_unit_numbers.map(({ sample_date }) => sample_date)
+
+                  const hasDuplicateTransectNumbersInSampleUnit =
+                    this.#toFindDuplicates(sampleUnitNumbers)
+                  const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
+
+                  if (
+                    hasDuplicateTransectNumbersInSampleUnit &&
+                    hasMoreThanOneSampleDatesInSampleUnit
+                  ) {
+                    const sampleUnitNumbersGroupedBySampleDate = sample_unit_numbers.reduce(
+                      (accumulator, sampleUnit) => {
+                        accumulator[sampleUnit.sample_date] =
+                          accumulator[sampleUnit.sample_date] || []
+                        accumulator[sampleUnit.sample_date].push(sampleUnit)
+
+                        return accumulator
+                      },
+                      {},
+                    )
+
+                    for (const sampleDateUnit in sampleUnitNumbersGroupedBySampleDate) {
+                      /* eslint max-depth: ["error", 6]*/
+                      if (
+                        Object.prototype.hasOwnProperty.call(
+                          sampleUnitNumbersGroupedBySampleDate,
+                          sampleDateUnit,
+                        )
+                      ) {
+                        sampleEventUnitRecords.push({
+                          ...siteRecord,
+                          site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
+                          sample_unit_numbers: sampleUnitNumbersGroupedBySampleDate[sampleDateUnit],
+                        })
+                      }
+                    }
+                  } else {
+                    sampleEventUnitRecords.push(siteRecord)
+                  }
+                }
+              }
+            }
+
+            this.#populateAdditionalRecords(sampleEventUnitRecords)
+
+            return sampleEventUnitRecords
+          }, {})
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 

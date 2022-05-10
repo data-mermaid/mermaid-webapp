@@ -130,7 +130,7 @@ const Collect = () => {
         size: uiLabels.size,
         depth: uiLabels.depth,
         sampleDate: uiLabels.sampleDate,
-        observers: uiLabels.observers
+        observers: uiLabels.observers,
       })),
     [collectRecordsForUiDisplay, currentProjectPath],
   )
@@ -206,9 +206,6 @@ const Collect = () => {
   }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
-
-  // const previousSortBy = usePrevious(sortBy)
-  // const previousGlobalFilter = usePrevious(globalFilter)
 
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
