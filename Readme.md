@@ -27,13 +27,18 @@ The general approach to this code has been to avoid premature performance optimi
 
 #### Syncing data with the server
 
-Initialize with the `useInitializeSyncApiDataIntoOfflineStorage` hook, get sync status state from the `useSyncStatus()` hook. Both hooks depend on `SyncStatusProvider`
+Initialize navigation and app-load-based auto sync with the `useInitializeSyncApiDataIntoOfflineStorage` hook, get sync status state from the `useSyncStatus()` hook. Both hooks depend on `SyncStatusProvider`
+These auto syncs are triggered when navigating to the projects list page, and any time a user navigates to a project-related page. Note that not all syncs pull the same things. - the hooks take care of nagivation and reload based syncs.
 
-Syncs are triggered when navigating to the projects list page, and any time a user navigates to a project-related page. Note that not all syncs pull the same things. - the hooks take care of nagivation and reload based syncs. There is also an `apiSyncInstance` available in the app for manualy controled syncs.
+There is also an `apiSyncInstance` available in the app for manualy controled syncs. Typically, in the databaseSwitchboard, creating, editing, or deleting Mermaid data will involve pushing the changes to IDB first, then pushing to the API, and then using the `pushThenPullEverythingForAProjectButChoices` to make sure a sync happens with all the data (beyond what was just pushed). The Project card component is an exception. There, the component code triggers a sync when the offline-ready checkbox is toggled. The component code handling sync, IDB, or API operations should generally be avoided. Whenever triggering a manual sync, make sure to set the sync status appropriately via `setIsSyncInProgress`
 
-### Database Switchboard
+Syncs also _should_ be triggered on many create/update/delete operations within the databaseSwitchboard (its enforced through code review, so its always good to check that a sync is happening before relying on it. Look for various functions being used from syncApiDataIntoOfflineStorage names starting with 'pushThenPullEverything')
 
-The `DatabaseSwitchBoardInstance` is responsible for getting data to the app. It takes care of if the data should come from InndexedDB or the API so the app doesnt have to think as much about it. The idea is not to call the api or interact with IDB other than though the DatabaseSwitchboard for maintainability. Class mixins were used unfortunately, but other than having unclear inheritance and a weird implementation syntax, seem to be working just fine so far.
+#### Database Switchboard
+
+The `DatabaseSwitchBoardInstance` is responsible for getting data to the app. It takes care of if the data should come from IndexedDB (IDB) or the API so the app does not have to think as much about it. The idea is not to call the API or interact with IDB other than though the DatabaseSwitchboard for maintainability. In general, because of the app syncing the databaseSwitchboard usually uses IDB as a source of truth on Mermaid Data for foundational app logic, or for offline-able pages because the sync code pulls from the API and puts it in IDB quite frequently.
+
+Class mixins were used unfortunately, but other than having unclear inheritance and a weird implementation syntax, seem to be working just fine so far.
 
 #### Layout
 

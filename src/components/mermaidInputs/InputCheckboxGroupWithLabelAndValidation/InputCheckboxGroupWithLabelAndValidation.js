@@ -49,8 +49,9 @@ const InputCheckboxGroupWithLabelAndValidation = ({
 
   return (
     <InputRow validationType={validationType}>
-      <label htmlFor={id}>{label}</label>
-      <div>{checkboxGroup}</div>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label id={`${id}-checkbox-group-with-label-and-validation`}>{label}</label>
+      <div aria-labelledby={`${id}-checkbox-group-with-label-and-validation`}>{checkboxGroup}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}

@@ -1,7 +1,8 @@
+import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components/macro'
-import { NavLink } from 'react-router-dom'
-import theme from '../../theme'
+
 import { hoverState } from '../../library/styling/mediaQueries'
+import theme from '../../theme'
 
 const buttonActive = css`
   transition: ${theme.timing.activeTransition};
@@ -24,12 +25,11 @@ export const CloseButton = styled.button`
     background: ${theme.color.secondaryHover};
   `)}
 `
-
-export const Button = styled.button`
+const buttonCss = css`
   transition: ${theme.timing.activeTransition};
   padding: ${theme.spacing.buttonPadding};
   border-width: 0;
-  min-height: 4rem;
+  display: inline-block;
   cursor: pointer;
   &:disabled {
     color: ${theme.color.disabledText};
@@ -38,6 +38,10 @@ export const Button = styled.button`
   &:active:enabled {
     ${buttonActive};
   }
+`
+
+export const Button = styled.button`
+  ${buttonCss}
 `
 
 export const ButtonPrimary = styled(Button)`
@@ -55,7 +59,8 @@ export const ButtonPrimary = styled(Button)`
     background-color: ${theme.color.primaryActive};
   }
 `
-export const ButtonSecondary = styled(Button)`
+
+const buttonSecondaryCss = css`
   background-color: ${theme.color.white};
   color: ${theme.color.secondaryText};
   border: solid 1px ${theme.color.secondaryBorder};
@@ -71,6 +76,16 @@ export const ButtonSecondary = styled(Button)`
     background-color: ${theme.color.secondaryActive};
   }
 `
+
+export const ButtonSecondary = styled(Button)`
+  ${buttonSecondaryCss}
+`
+export const LinkLooksLikeButtonSecondary = styled(Link)`
+  ${buttonCss}
+  ${buttonSecondaryCss}
+  text-decoration: none;
+`
+
 export const ButtonCallout = styled(Button)`
   background-color: ${theme.color.calloutColor};
   color: ${theme.color.calloutText};
@@ -104,11 +119,6 @@ export const ButtonCaution = styled(Button)`
     background-color: ${theme.color.cautionActive};
   }
 `
-export const ButtonyNavLink = styled(NavLink)`
-  background-color: lightgray;
-  border: solid thin grey;
-`
-export const ButtonyNavLinkIcon = styled(ButtonyNavLink)``
 
 export const ButtonThatLooksLikeLink = styled('button')`
   font-size: inherit;
@@ -121,7 +131,8 @@ export const ButtonThatLooksLikeLink = styled('button')`
   }
 `
 export const ToolbarButtonWrapper = styled('div')`
-  button {
+  button,
+  a {
     margin: 0 -1px;
   }
 `
