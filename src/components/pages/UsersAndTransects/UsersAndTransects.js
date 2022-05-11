@@ -283,7 +283,7 @@ const UsersAndTransects = () => {
         <PageSizeSelector
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
-          pageSizeOptions={[100, 200]}
+          pageSizeOptions={[15, 50, 100]}
         />
         <PageSelector
           onPreviousClick={previousPage}
