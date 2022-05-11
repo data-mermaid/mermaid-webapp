@@ -92,8 +92,6 @@ const SubmittedRecordsMixin = (Base) =>
         }
       })
 
-      console.log('uniqueMethods ', uniqueMethods)
-
       const recordGroupedBySite = sampleEventUnitRecords.reduce((accumulator, record) => {
         accumulator[record.site] = accumulator[record.site] || {}
         accumulator[record.site] = {
