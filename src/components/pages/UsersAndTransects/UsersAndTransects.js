@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { Link, useParams } from 'react-router-dom'
@@ -49,6 +50,23 @@ const ActiveRecordsCount = styled.strong`
   font-size: ${theme.typography.smallFontSize};
 `
 
+const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
+  const currentProjectPath = useCurrentProjectPath()
+
+  const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
+    return (
+      <span key={row.id}>
+        <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
+          {row.sample_unit_number}
+        </Link>
+        {idx < sampleUnitNumbersRow.length - 1 && ', '}
+      </span>
+    )
+  })
+
+  return <InlineCell>{sampleUnitLinks}</InlineCell>
+}
+
 const UsersAndTransects = () => {
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
@@ -59,7 +77,6 @@ const UsersAndTransects = () => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const [submittedRecords, setSubmittedRecords] = useState([])
   const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
-  const currentProjectPath = useCurrentProjectPath()
   const currentUser = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
@@ -135,13 +152,13 @@ const UsersAndTransects = () => {
     [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
   )
 
-  const populateNumberRow = useCallback(
+  const populateTransectNumberRow = useCallback(
     (rowRecord) => {
       const rowNumbers = rowRecord.sample_unit_numbers.map(
         ({ sample_unit_number }) => sample_unit_number,
       )
 
-      return submittedTransectNumbers.reduce((accumulator, number) => {
+      const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
         if (!accumulator[number]) {
           accumulator[number] = '-'
         }
@@ -151,24 +168,20 @@ const UsersAndTransects = () => {
             ({ sample_unit_number }) => sample_unit_number === number,
           )
 
-          const sampleUnitNumberLinks = filteredRowSampleUnitNumbers.map((row, idx) => {
-            return (
-              <span key={row.id}>
-                <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
-                  {row.sample_unit_number}
-                </Link>
-                {idx < filteredRowSampleUnitNumbers.length - 1 && ', '}
-              </span>
-            )
-          })
-
-          accumulator[number] = <InlineCell>{sampleUnitNumberLinks}</InlineCell>
+          accumulator[number] = (
+            <SampleUnitLinks
+              rowRecord={rowRecord}
+              sampleUnitNumbersRow={filteredRowSampleUnitNumbers}
+            />
+          )
         }
 
         return accumulator
       }, {})
+
+      return submittedTransectNumbersRow
     },
-    [submittedTransectNumbers, currentProjectPath],
+    [submittedTransectNumbers],
   )
 
   const tableCellData = useMemo(
@@ -176,9 +189,9 @@ const UsersAndTransects = () => {
       submittedRecords.map((record) => ({
         site: record.site_name,
         method: record.method,
-        ...populateNumberRow(record),
+        ...populateTransectNumberRow(record),
       })),
-    [submittedRecords, populateNumberRow],
+    [submittedRecords, populateTransectNumberRow],
   )
 
   const tableDefaultPrefs = useMemo(() => {
@@ -308,6 +321,18 @@ const UsersAndTransects = () => {
       }
     />
   )
+}
+
+SampleUnitLinks.propTypes = {
+  rowRecord: PropTypes.shape({
+    transect_protocol: PropTypes.string,
+  }).isRequired,
+  sampleUnitNumbersRow: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      sample_unit_number: PropTypes.number,
+    }),
+  ).isRequired,
 }
 
 export default UsersAndTransects
