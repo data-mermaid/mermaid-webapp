@@ -34,10 +34,9 @@ const InlineCell = styled.div`
 const UserColumnHeader = styled.div`
   display: inline-flex;
   flex-direction: row;
-  align-items: center;
 `
 
-const CollectRecordsCountWrapper = styled.strong`
+const ActiveRecordsCount = styled.strong`
   background: ${theme.color.callout};
   border-radius: 100%;
   border: solid 1px ${theme.color.white};
@@ -45,7 +44,7 @@ const CollectRecordsCountWrapper = styled.strong`
   height: ${theme.spacing.xlarge};
   color: ${theme.color.white};
   display: grid;
-  margin: auto 0.5rem;
+  margin: 0.25rem 0.5rem;
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
 `
@@ -96,9 +95,7 @@ const UsersAndTransects = () => {
           <UserColumnHeader>
             <span>{user.profile_name}</span>
             <span>
-              <CollectRecordsCountWrapper>
-                {user.num_active_sample_units}
-              </CollectRecordsCountWrapper>
+              <ActiveRecordsCount>{user.num_active_sample_units}</ActiveRecordsCount>
             </span>
           </UserColumnHeader>
         ),
