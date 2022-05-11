@@ -75,11 +75,11 @@ const UsersAndTransects = () => {
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
               .map((reducedRecords) => reducedRecords.sample_unit_number)
 
-            const uniqueNumbers = [...new Set(numbers)].sort((a, b) => a - b)
+            const uniqueNumbersAsc = [...new Set(numbers)].sort((a, b) => a - b)
 
             setObserverProfiles(projectProfilesResponse)
             setSubmittedRecords(submittedRecordsResponse)
-            setSubmittedTransectNumbers(uniqueNumbers)
+            setSubmittedTransectNumbers(uniqueNumbersAsc)
             setIsLoading(false)
           }
         })
@@ -89,7 +89,7 @@ const UsersAndTransects = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
-  const getUserColumnHeaderHeaders = useCallback(() => {
+  const getUserColumnHeaders = useCallback(() => {
     return observerProfiles.map((user) => {
       return {
         Header: (
@@ -132,41 +132,43 @@ const UsersAndTransects = () => {
       {
         Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
         id: 'User Headers',
-        columns: getUserColumnHeaderHeaders(),
+        columns: getUserColumnHeaders(),
       },
     ],
-    [getUserColumnHeaderHeaders, getSubmittedTransectNumberColumnHeaders],
+    [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
   )
 
   const populateNumberRow = useCallback(
     (rowRecord) => {
-      const rowNumbers = rowRecord.sample_unit_numbers.map((record) => record.sample_unit_number)
+      const rowNumbers = rowRecord.sample_unit_numbers.map(
+        ({ sample_unit_number }) => sample_unit_number,
+      )
 
-      return submittedTransectNumbers.reduce((acc, number) => {
-        if (!acc[number]) {
-          acc[number] = '-'
+      return submittedTransectNumbers.reduce((accumulator, number) => {
+        if (!accumulator[number]) {
+          accumulator[number] = '-'
         }
 
         if (rowNumbers.includes(number)) {
-          const filteredRows = rowRecord.sample_unit_numbers.filter(
+          const filteredRowSampleUnitNumbers = rowRecord.sample_unit_numbers.filter(
             ({ sample_unit_number }) => sample_unit_number === number,
           )
 
-          const filteredLinks = filteredRows.map((row, idx) => {
+          const sampleUnitNumberLinks = filteredRowSampleUnitNumbers.map((row, idx) => {
             return (
               <span key={row.id}>
                 <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
                   {row.sample_unit_number}
                 </Link>
-                {idx < filteredRows.length - 1 && ', '}
+                {idx < filteredRowSampleUnitNumbers.length - 1 && ', '}
               </span>
             )
           })
 
-          acc[number] = <InlineCell>{filteredLinks}</InlineCell>
+          accumulator[number] = <InlineCell>{sampleUnitNumberLinks}</InlineCell>
         }
 
-        return acc
+        return accumulator
       }, {})
     },
     [submittedTransectNumbers, currentProjectPath],
