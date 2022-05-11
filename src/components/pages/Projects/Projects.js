@@ -17,6 +17,7 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getObjectById } from '../../../library/getObjectById'
 import PageNoData from '../PageNoData'
 import useDocumentTitle from '../../../library/useDocumentTitle'
+import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 
 /**
  * All Projects page (lists projects)
@@ -82,17 +83,7 @@ const Projects = ({ apiSyncInstance }) => {
   }
 
   const getSortedProjects = (projectsToSort) => {
-    const sortedProjects = projectsToSort.sort((a, b) => {
-      return a[projectSortKey].toString().localeCompare(b[projectSortKey], 'en', {
-        numeric: true,
-        caseFirst: 'upper',
-      })
-    })
-
-    // Reverse array for descending sort
-    if (!isProjectSortAsc) { return sortedProjects.reverse() }
-
-    return sortedProjects
+    return sortArrayByObjectKey(projectsToSort, projectSortKey, isProjectSortAsc)
   }
 
   const getFilteredSortedProjects = () => {
