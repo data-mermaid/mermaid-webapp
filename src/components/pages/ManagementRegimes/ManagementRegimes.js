@@ -40,7 +40,7 @@ const ManagementRegimes = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 

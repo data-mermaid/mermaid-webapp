@@ -85,7 +85,7 @@ const FishBelt = ({ isNewRecord }) => {
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const history = useHistory()
   const isMounted = useIsMounted()
 
