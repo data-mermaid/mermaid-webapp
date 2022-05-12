@@ -2,11 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { Link, useParams } from 'react-router-dom'
-<<<<<<< HEAD
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
-=======
-import { usePagination, useSortBy, useTable } from 'react-table'
->>>>>>> develop
 import { toast } from 'react-toastify'
 
 import { ContentPageLayout } from '../../Layout'
@@ -22,10 +18,7 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
-<<<<<<< HEAD
 import { ToolBarRow } from '../../generic/positioning'
-=======
->>>>>>> develop
 import theme from '../../../theme'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
@@ -46,16 +39,9 @@ const InlineCell = styled.div`
 const UserColumnHeader = styled.div`
   display: inline-flex;
   flex-direction: row;
-<<<<<<< HEAD
-  align-items: center;
-`
-
-const CollectRecordsCountWrapper = styled.strong`
-=======
 `
 
 const ActiveRecordsCount = styled.strong`
->>>>>>> develop
   background: ${theme.color.callout};
   border-radius: 100%;
   border: solid 1px ${theme.color.white};
@@ -63,17 +49,11 @@ const ActiveRecordsCount = styled.strong`
   height: ${theme.spacing.xlarge};
   color: ${theme.color.white};
   display: grid;
-<<<<<<< HEAD
-  margin: auto 0.5rem;
-=======
   margin: 0.25rem 0.5rem;
->>>>>>> develop
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
 `
 
-<<<<<<< HEAD
-=======
 const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
   const currentProjectPath = useCurrentProjectPath()
 
@@ -91,7 +71,6 @@ const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
   return <InlineCell>{sampleUnitLinks}</InlineCell>
 }
 
->>>>>>> develop
 const UsersAndTransects = () => {
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
@@ -102,10 +81,6 @@ const UsersAndTransects = () => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const [submittedRecords, setSubmittedRecords] = useState([])
   const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
-<<<<<<< HEAD
-  const currentProjectPath = useCurrentProjectPath()
-=======
->>>>>>> develop
   const currentUser = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
@@ -141,13 +116,7 @@ const UsersAndTransects = () => {
           <UserColumnHeader>
             <span>{user.profile_name}</span>
             <span>
-<<<<<<< HEAD
-              <CollectRecordsCountWrapper>
-                {user.num_active_sample_units}
-              </CollectRecordsCountWrapper>
-=======
               <ActiveRecordsCount>{user.num_active_sample_units}</ActiveRecordsCount>
->>>>>>> develop
             </span>
           </UserColumnHeader>
         ),
@@ -187,21 +156,13 @@ const UsersAndTransects = () => {
     [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
   )
 
-<<<<<<< HEAD
-  const populateNumberRow = useCallback(
-=======
   const populateTransectNumberRow = useCallback(
->>>>>>> develop
     (rowRecord) => {
       const rowNumbers = rowRecord.sample_unit_numbers.map(
         ({ sample_unit_number }) => sample_unit_number,
       )
 
-<<<<<<< HEAD
-      return submittedTransectNumbers.reduce((accumulator, number) => {
-=======
       const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
->>>>>>> develop
         if (!accumulator[number]) {
           accumulator[number] = '-'
         }
@@ -211,40 +172,20 @@ const UsersAndTransects = () => {
             ({ sample_unit_number }) => sample_unit_number === number,
           )
 
-<<<<<<< HEAD
-          const sampleUnitNumberLinks = filteredRowSampleUnitNumbers.map((row, idx) => {
-            return (
-              <span key={row.id}>
-                <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
-                  {row.sample_unit_number}
-                </Link>
-                {idx < filteredRowSampleUnitNumbers.length - 1 && ', '}
-              </span>
-            )
-          })
-
-          accumulator[number] = <InlineCell>{sampleUnitNumberLinks}</InlineCell>
-=======
           accumulator[number] = (
             <SampleUnitLinks
               rowRecord={rowRecord}
               sampleUnitNumbersRow={filteredRowSampleUnitNumbers}
             />
           )
->>>>>>> develop
         }
 
         return accumulator
       }, {})
-<<<<<<< HEAD
-    },
-    [submittedTransectNumbers, currentProjectPath],
-=======
 
       return submittedTransectNumbersRow
     },
     [submittedTransectNumbers],
->>>>>>> develop
   )
 
   const tableCellData = useMemo(
@@ -252,15 +193,9 @@ const UsersAndTransects = () => {
       submittedRecords.map((record) => ({
         site: record.site_name,
         method: record.method,
-<<<<<<< HEAD
-        ...populateNumberRow(record),
-      })),
-    [submittedRecords, populateNumberRow],
-=======
         ...populateTransectNumberRow(record),
       })),
     [submittedRecords, populateTransectNumberRow],
->>>>>>> develop
   )
 
   const tableDefaultPrefs = useMemo(() => {
@@ -315,10 +250,7 @@ const UsersAndTransects = () => {
         pageSize: 100,
         sortBy: tableUserPrefs.sortBy,
       },
-<<<<<<< HEAD
       globalFilter: tableGlobalFilters,
-=======
->>>>>>> develop
       isMultiSortEvent: () => true,
     },
     useGlobalFilter,
