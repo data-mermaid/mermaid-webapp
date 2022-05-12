@@ -112,7 +112,7 @@ const SubmittedRecordsMixin = (Base) =>
 
     #populateAdditionalRecords = function populateAdditionalRecords(sampleEventUnitRecords) {
       /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
-      Example: there is only ONE sample unit submitted with the Habitat Complexity, but it's given it's own row in every site row */
+      Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
       const allMethods = sampleEventUnitRecords.map((record) => record.transect_protocol)
       const uniqueMethods = [...new Set(allMethods)]
       const uniqueTransectAndMethods = uniqueMethods.map((method) => {
