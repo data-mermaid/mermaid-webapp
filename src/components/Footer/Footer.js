@@ -8,20 +8,18 @@ import OfflineHide from '../generic/OfflineHide'
 import MermaidDocs from '../../docs/MERMAID User Documentation 2021-09-28.pdf'
 
 const StyledFooter = styled('footer')`
-  display: grid;
-  justify-items: start;
-  grid-template-columns: 1fr auto auto;
+  text-align: end;
   background-color: ${theme.color.footerColor};
+  padding: ${theme.spacing.small};
   ${mediaQueryPhoneOnly(css`
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, auto);
+    text-align: start;
+    padding-bottom: 5rem;
   `)}
   p,
   label,
   nav a,
   button {
     font-size: ${theme.typography.smallFontSize};
-    margin: ${theme.spacing.medium} 0;
     ${mediaQueryPhoneOnly(css`
       margin: ${theme.spacing.small} 0;
     `)}
@@ -58,10 +56,15 @@ const CssToggle = styled('span')`
   }
 `
 const StyledToggleLabel = styled('label')`
+  background: rgba(255, 255, 255, 0.5);
+  position: fixed;
+  bottom: 0;
+  left: 0;
   cursor: pointer;
   display: flex;
-  gap: 2px;
-  padding: 0 0 ${theme.spacing.small} ${theme.spacing.small};
+  gap: 1.5rem;
+  padding: ${theme.spacing.small};
+  margin: 0;
   input {
     display: none;
   }
@@ -103,15 +106,17 @@ const Footer = () => {
       <StyledToggleLabel htmlFor="offline-toggle-switch" data-testid="offline-toggle-switch-label">
         <OfflineToggle id="offline-toggle-switch" />
         <CssToggle />
-        {isAppOnline ? (
-          <>
-            You&apos;re <strong>ONLINE</strong>
-          </>
-        ) : (
-          <>
-            You&apos;re <strong>OFFLINE</strong>. Some contents may be out of date.
-          </>
-        )}
+        <span>
+          {isAppOnline ? (
+            <>
+              You&apos;re <strong>ONLINE</strong>
+            </>
+          ) : (
+            <>
+              You&apos;re <strong>OFFLINE</strong>. Some contents may be out of date.
+            </>
+          )}
+        </span>
       </StyledToggleLabel>
       <FooterNav>
         <a href={MermaidDocs} target="_blank" rel="noreferrer">
