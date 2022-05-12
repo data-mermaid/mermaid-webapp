@@ -80,31 +80,34 @@ const SubmittedRecordsMixin = (Base) =>
         }, {})
       }
 
-    #updateRecords = function updateRecords(siteRecord) {
-      const { sample_unit_numbers } = siteRecord
-      const sampleUnitNumbers = sample_unit_numbers.map(
-        ({ sample_unit_number }) => sample_unit_number,
-      )
-      const sampleDates = sample_unit_numbers.map(({ sample_date }) => sample_date)
+    #updateAndAddRecords = function updateAndAddRecords(sampleEventUnitRecords, siteRecordGroup) {
+      for (const siteRecord of siteRecordGroup) {
+        const { sample_unit_numbers } = siteRecord
+        const sampleUnitNumbers = sample_unit_numbers.map(
+          ({ sample_unit_number }) => sample_unit_number,
+        )
+        const sampleDates = sample_unit_numbers.map(({ sample_date }) => sample_date)
 
-      const hasDuplicateTransectNumbersInSampleUnit = this.#toFindDuplicates(sampleUnitNumbers)
-      const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
+        const hasDuplicateTransectNumbersInSampleUnit = this.#toFindDuplicates(sampleUnitNumbers)
+        const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
 
-      if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
-        const sampleUnitNumbersGroup = this.#groupSampleUnitNumbersBySampleDate(sample_unit_numbers)
+        if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
+          const sampleUnitNumbersGroup =
+            this.#groupSampleUnitNumbersBySampleDate(sample_unit_numbers)
 
-        for (const sampleDateUnit in sampleUnitNumbersGroup) {
-          if (Object.prototype.hasOwnProperty.call(sampleUnitNumbersGroup, sampleDateUnit)) {
-            return {
-              ...siteRecord,
-              site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
-              sample_unit_numbers: sampleUnitNumbersGroup[sampleDateUnit],
+          for (const sampleDateUnit in sampleUnitNumbersGroup) {
+            if (Object.prototype.hasOwnProperty.call(sampleUnitNumbersGroup, sampleDateUnit)) {
+              sampleEventUnitRecords.push({
+                ...siteRecord,
+                site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
+                sample_unit_numbers: sampleUnitNumbersGroup[sampleDateUnit],
+              })
             }
           }
+        } else {
+          sampleEventUnitRecords.push(siteRecord)
         }
       }
-
-      return siteRecord
     }
 
     #populateAdditionalRecords = function populateAdditionalRecords(sampleEventUnitRecords) {
@@ -240,11 +243,7 @@ const SubmittedRecordsMixin = (Base) =>
               if (Object.prototype.hasOwnProperty.call(sampleEventRecordsGroup, siteId)) {
                 const siteRecordGroup = Object.values(sampleEventRecordsGroup[siteId])
 
-                for (const siteRecord of siteRecordGroup) {
-                  const updatedSiteRecords = this.#updateRecords(siteRecord)
-
-                  sampleEventUnitRecords.push(updatedSiteRecords)
-                }
+                this.#updateAndAddRecords(sampleEventUnitRecords, siteRecordGroup)
               }
             }
             this.#populateAdditionalRecords(sampleEventUnitRecords)
