@@ -80,9 +80,39 @@ const SubmittedRecordsMixin = (Base) =>
         }, {})
       }
 
+    #updateAndAddRecords = function updateAndAddRecords(sampleEventUnitRecords, siteRecordGroup) {
+      for (const siteRecord of siteRecordGroup) {
+        const { sample_unit_numbers } = siteRecord
+        const sampleUnitNumbers = sample_unit_numbers.map(
+          ({ sample_unit_number }) => sample_unit_number,
+        )
+        const sampleDates = sample_unit_numbers.map(({ sample_date }) => sample_date)
+
+        const hasDuplicateTransectNumbersInSampleUnit = this.#toFindDuplicates(sampleUnitNumbers)
+        const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
+
+        if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
+          const sampleUnitNumbersGroup =
+            this.#groupSampleUnitNumbersBySampleDate(sample_unit_numbers)
+
+          for (const sampleDateUnit in sampleUnitNumbersGroup) {
+            if (Object.prototype.hasOwnProperty.call(sampleUnitNumbersGroup, sampleDateUnit)) {
+              sampleEventUnitRecords.push({
+                ...siteRecord,
+                site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
+                sample_unit_numbers: sampleUnitNumbersGroup[sampleDateUnit],
+              })
+            }
+          }
+        } else {
+          sampleEventUnitRecords.push(siteRecord)
+        }
+      }
+    }
+
     #populateAdditionalRecords = function populateAdditionalRecords(sampleEventUnitRecords) {
       /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
-      Example: there is only ONE sample unit submitted with the Habitat Complexity, but it's given it's own row in every site row */
+      Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
       const allMethods = sampleEventUnitRecords.map((record) => record.transect_protocol)
       const uniqueMethods = [...new Set(allMethods)]
       const uniqueTransectAndMethods = uniqueMethods.map((method) => {
@@ -213,41 +243,7 @@ const SubmittedRecordsMixin = (Base) =>
               if (Object.prototype.hasOwnProperty.call(sampleEventRecordsGroup, siteId)) {
                 const siteRecordGroup = Object.values(sampleEventRecordsGroup[siteId])
 
-                for (const siteRecord of siteRecordGroup) {
-                  const { sample_unit_numbers } = siteRecord
-                  const sampleUnitNumbers = sample_unit_numbers.map(
-                    ({ sample_unit_number }) => sample_unit_number,
-                  )
-                  const sampleDates = sample_unit_numbers.map(({ sample_date }) => sample_date)
-
-                  const hasDuplicateTransectNumbersInSampleUnit =
-                    this.#toFindDuplicates(sampleUnitNumbers)
-                  const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
-
-                  if (
-                    hasDuplicateTransectNumbersInSampleUnit &&
-                    hasMoreThanOneSampleDatesInSampleUnit
-                  ) {
-                    // rules: If there's more than one sample event at a site in a project, show the date of the sample event in it's own "site row"
-                    const sampleUnitNumbersGroup =
-                      this.#groupSampleUnitNumbersBySampleDate(sample_unit_numbers)
-
-                    for (const sampleDateUnit in sampleUnitNumbersGroup) {
-                      /* eslint max-depth: ["error", 6]*/
-                      if (
-                        Object.prototype.hasOwnProperty.call(sampleUnitNumbersGroup, sampleDateUnit)
-                      ) {
-                        sampleEventUnitRecords.push({
-                          ...siteRecord,
-                          site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
-                          sample_unit_numbers: sampleUnitNumbersGroup[sampleDateUnit],
-                        })
-                      }
-                    }
-                  } else {
-                    sampleEventUnitRecords.push(siteRecord)
-                  }
-                }
+                this.#updateAndAddRecords(sampleEventUnitRecords, siteRecordGroup)
               }
             }
             this.#populateAdditionalRecords(sampleEventUnitRecords)
