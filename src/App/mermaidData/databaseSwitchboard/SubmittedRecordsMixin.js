@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
@@ -25,17 +26,93 @@ const SubmittedRecordsMixin = (Base) =>
 
     #removeDateFromName = function removeDateFromName(name) {
       const names = name.split(' ')
+      const isDateInNames = moment(names[names.length - 1], 'YYYY-MM-DD', true).isValid()
 
       if (names.length > 1) {
-        names.splice(-1, 1)
+        if (isDateInNames) {
+          names.splice(-1, 1)
 
-        return names
+          return names
+        }
+
+        return names.join(' ')
       }
 
       return names[0]
     }
 
+    #groupSampleUnitNumbersBySampleDate = function groupSampleUnitNumbersBySampleDate(
+      sampleUnitNumbers,
+    ) {
+      return sampleUnitNumbers.reduce((accumulator, sampleUnit) => {
+        accumulator[sampleUnit.sample_date] = accumulator[sampleUnit.sample_date] || []
+        accumulator[sampleUnit.sample_date].push(sampleUnit)
+
+        return accumulator
+      }, {})
+    }
+
+    #groupSampleEventRecordsBySiteThenMethodAndLabel =
+      function groupSampleEventRecordsBySiteThenMethodAndLabel(sampleEventUnitRecords) {
+        /* Rule: Group sample units by Site then Method + label. */
+        return sampleEventUnitRecords.reduce((accumulator, record) => {
+          const { id, site, site_name, protocol, sample_unit_number, label, sample_date } = record
+
+          const siteInfo = { site, site_name }
+
+          accumulator[site] = accumulator[site] || {}
+          accumulator[site][`${protocol}${label}`] = accumulator[site][`${protocol}${label}`] || {}
+
+          accumulator[site][`${protocol}${label}`] = {
+            ...siteInfo,
+            transect_protocol: protocol,
+            method: this.#getMethodLabel(protocol, label),
+            sample_unit_numbers: accumulator[site][`${protocol}${label}`].sample_unit_numbers
+              ? accumulator[site][`${protocol}${label}`].sample_unit_numbers.concat({
+                  id,
+                  sample_unit_number,
+                  sample_date,
+                })
+              : [{ id, sample_unit_number, sample_date }],
+          }
+
+          return accumulator
+        }, {})
+      }
+
+    #updateAndAddRecords = function updateAndAddRecords(sampleEventUnitRecords, siteRecordGroup) {
+      for (const siteRecord of siteRecordGroup) {
+        const { sample_unit_numbers } = siteRecord
+        const sampleUnitNumbers = sample_unit_numbers.map(
+          ({ sample_unit_number }) => sample_unit_number,
+        )
+        const sampleDates = sample_unit_numbers.map(({ sample_date }) => sample_date)
+
+        const hasDuplicateTransectNumbersInSampleUnit = this.#toFindDuplicates(sampleUnitNumbers)
+        const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
+
+        if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
+          const sampleUnitNumbersGroup =
+            this.#groupSampleUnitNumbersBySampleDate(sample_unit_numbers)
+
+          for (const sampleDateUnit in sampleUnitNumbersGroup) {
+            if (Object.prototype.hasOwnProperty.call(sampleUnitNumbersGroup, sampleDateUnit)) {
+              sampleEventUnitRecords.push({
+                ...siteRecord,
+                site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
+                sample_unit_numbers: sampleUnitNumbersGroup[sampleDateUnit],
+              })
+            }
+          }
+        } else {
+          sampleEventUnitRecords.push(siteRecord)
+        }
+      }
+    }
+
     #populateAdditionalRecords = function populateAdditionalRecords(sampleEventUnitRecords) {
+      /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
+      Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
       const allMethods = sampleEventUnitRecords.map((record) => record.transect_protocol)
       const uniqueMethods = [...new Set(allMethods)]
       const uniqueTransectAndMethods = uniqueMethods.map((method) => {
@@ -70,9 +147,11 @@ const SubmittedRecordsMixin = (Base) =>
                 recordGroupedBySite[siteId].transects.includes(missingTransect.method)
               )
             ) {
+              const siteName = this.#removeDateFromName(recordGroupedBySite[siteId].site_name)
+
               sampleEventUnitRecords.push({
                 site: siteId,
-                site_name: this.#removeDateFromName(recordGroupedBySite[siteId].site_name),
+                site_name: siteName,
                 method: missingTransect.protocol,
                 transect_protocol: missingTransect.method,
                 sample_unit_numbers: [],
@@ -95,6 +174,7 @@ const SubmittedRecordsMixin = (Base) =>
             .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
+                limit: 1000,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
@@ -156,87 +236,16 @@ const SubmittedRecordsMixin = (Base) =>
               (record) => record.protocol !== 'bleachingqc',
             )
 
-            const sampleEventRecordsGroupedBySite = filteredSubmittedRecords.reduce(
-              (accumulator, record) => {
-                const { id, site, site_name, protocol, sample_unit_number, label, sample_date } =
-                  record
+            const sampleEventRecordsGroup =
+              this.#groupSampleEventRecordsBySiteThenMethodAndLabel(filteredSubmittedRecords)
 
-                const siteInfo = { site, site_name }
+            for (const siteId in sampleEventRecordsGroup) {
+              if (Object.prototype.hasOwnProperty.call(sampleEventRecordsGroup, siteId)) {
+                const siteRecordGroup = Object.values(sampleEventRecordsGroup[siteId])
 
-                accumulator[site] = accumulator[site] || {}
-                accumulator[site][`${protocol}${label}`] =
-                  accumulator[site][`${protocol}${label}`] || {}
-
-                accumulator[site][`${protocol}${label}`] = {
-                  ...siteInfo,
-                  transect_protocol: protocol,
-                  method: this.#getMethodLabel(protocol, label),
-                  sample_unit_numbers: accumulator[site][`${protocol}${label}`].sample_unit_numbers
-                    ? accumulator[site][`${protocol}${label}`].sample_unit_numbers.concat({
-                        id,
-                        sample_unit_number,
-                        sample_date,
-                      })
-                    : [{ id, sample_unit_number, sample_date }],
-                }
-
-                return accumulator
-              },
-              {},
-            )
-
-            for (const siteId in sampleEventRecordsGroupedBySite) {
-              if (Object.prototype.hasOwnProperty.call(sampleEventRecordsGroupedBySite, siteId)) {
-                const siteRecordGroup = Object.values(sampleEventRecordsGroupedBySite[siteId])
-
-                for (const siteRecord of siteRecordGroup) {
-                  const { sample_unit_numbers } = siteRecord
-                  const sampleUnitNumbers = sample_unit_numbers.map(
-                    ({ sample_unit_number }) => sample_unit_number,
-                  )
-                  const sampleDates = sample_unit_numbers.map(({ sample_date }) => sample_date)
-
-                  const hasDuplicateTransectNumbersInSampleUnit =
-                    this.#toFindDuplicates(sampleUnitNumbers)
-                  const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
-
-                  if (
-                    hasDuplicateTransectNumbersInSampleUnit &&
-                    hasMoreThanOneSampleDatesInSampleUnit
-                  ) {
-                    const sampleUnitNumbersGroupedBySampleDate = sample_unit_numbers.reduce(
-                      (accumulator, sampleUnit) => {
-                        accumulator[sampleUnit.sample_date] =
-                          accumulator[sampleUnit.sample_date] || []
-                        accumulator[sampleUnit.sample_date].push(sampleUnit)
-
-                        return accumulator
-                      },
-                      {},
-                    )
-
-                    for (const sampleDateUnit in sampleUnitNumbersGroupedBySampleDate) {
-                      /* eslint max-depth: ["error", 6]*/
-                      if (
-                        Object.prototype.hasOwnProperty.call(
-                          sampleUnitNumbersGroupedBySampleDate,
-                          sampleDateUnit,
-                        )
-                      ) {
-                        sampleEventUnitRecords.push({
-                          ...siteRecord,
-                          site_name: `${siteRecord.site_name} ${sampleDateUnit}`,
-                          sample_unit_numbers: sampleUnitNumbersGroupedBySampleDate[sampleDateUnit],
-                        })
-                      }
-                    }
-                  } else {
-                    sampleEventUnitRecords.push(siteRecord)
-                  }
-                }
+                this.#updateAndAddRecords(sampleEventUnitRecords, siteRecordGroup)
               }
             }
-
             this.#populateAdditionalRecords(sampleEventUnitRecords)
 
             return sampleEventUnitRecords

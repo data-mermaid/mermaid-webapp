@@ -23,6 +23,7 @@
     "formik": "^2.2.9",
     "maplibre-gl": "^1.14.0",
     "match-sorter": "^6.3.1",
+    "moment": "^2.29.3",
     "prop-types": "^15.7.2",
     "raw.macro": "^0.4.2",
     "react": "^17.0.1",

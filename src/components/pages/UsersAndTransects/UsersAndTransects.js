@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
 
@@ -14,6 +15,8 @@ import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import theme from '../../../theme'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../library/useIsMounted'
@@ -25,6 +28,45 @@ const HeaderCenter = styled.div`
   text-align: center;
 `
 
+const InlineCell = styled.div`
+  display: inline-flex;
+`
+
+const UserColumnHeader = styled.div`
+  display: inline-flex;
+  flex-direction: row;
+`
+
+const ActiveRecordsCount = styled.strong`
+  background: ${theme.color.callout};
+  border-radius: 100%;
+  border: solid 1px ${theme.color.white};
+  width: ${theme.spacing.xlarge};
+  height: ${theme.spacing.xlarge};
+  color: ${theme.color.white};
+  display: grid;
+  margin: 0.25rem 0.5rem;
+  place-items: center;
+  font-size: ${theme.typography.smallFontSize};
+`
+
+const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
+  const currentProjectPath = useCurrentProjectPath()
+
+  const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
+    return (
+      <span key={row.id}>
+        <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
+          {row.sample_unit_number}
+        </Link>
+        {idx < sampleUnitNumbersRow.length - 1 && ', '}
+      </span>
+    )
+  })
+
+  return <InlineCell>{sampleUnitLinks}</InlineCell>
+}
+
 const UsersAndTransects = () => {
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
@@ -34,6 +76,7 @@ const UsersAndTransects = () => {
   const isMounted = useIsMounted()
   const [observerProfiles, setObserverProfiles] = useState([])
   const [submittedRecords, setSubmittedRecords] = useState([])
+  const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
   const currentUser = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
@@ -44,8 +87,15 @@ const UsersAndTransects = () => {
       ])
         .then(([projectProfilesResponse, submittedRecordsResponse]) => {
           if (isMounted.current) {
+            const numbers = submittedRecordsResponse
+              .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
+              .map((reducedRecords) => reducedRecords.sample_unit_number)
+
+            const uniqueNumbersAsc = [...new Set(numbers)].sort((a, b) => a - b)
+
             setObserverProfiles(projectProfilesResponse)
             setSubmittedRecords(submittedRecordsResponse)
+            setSubmittedTransectNumbers(uniqueNumbersAsc)
             setIsLoading(false)
           }
         })
@@ -57,29 +107,41 @@ const UsersAndTransects = () => {
 
   const getUserColumnHeaders = useCallback(() => {
     return observerProfiles.map((user) => {
-      return { Header: user.profile_name, id: user.id }
+      return {
+        Header: (
+          <UserColumnHeader>
+            <span>{user.profile_name}</span>
+            <span>
+              <ActiveRecordsCount>{user.num_active_sample_units}</ActiveRecordsCount>
+            </span>
+          </UserColumnHeader>
+        ),
+        id: user.id,
+      }
     })
   }, [observerProfiles])
 
-  const tableCellData = useMemo(
-    () =>
-      submittedRecords.map((record) => ({
-        site: record.site_name,
-        method: record.method,
-      })),
-    [submittedRecords],
-  )
+  const getSubmittedTransectNumberColumnHeaders = useCallback(() => {
+    return submittedTransectNumbers.map((number) => {
+      const unitNumberColumn = number ? number.toString() : 'NaN'
+
+      return {
+        Header: unitNumberColumn,
+        id: unitNumberColumn,
+        accessor: unitNumberColumn,
+        disableSortBy: true,
+      }
+    })
+  }, [submittedTransectNumbers])
 
   const tableColumns = useMemo(
     () => [
+      { Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort },
+      { Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort },
       {
-        Header: () => null,
-        id: 'Transect Header',
-        columns: [
-          { Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort },
-          { Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort },
-          { Header: 'Submitted Transect Number' },
-        ],
+        Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
+        id: 'Transect Number Headers',
+        columns: getSubmittedTransectNumberColumnHeaders(),
       },
       {
         Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
@@ -87,7 +149,49 @@ const UsersAndTransects = () => {
         columns: getUserColumnHeaders(),
       },
     ],
-    [getUserColumnHeaders],
+    [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
+  )
+
+  const populateTransectNumberRow = useCallback(
+    (rowRecord) => {
+      const rowNumbers = rowRecord.sample_unit_numbers.map(
+        ({ sample_unit_number }) => sample_unit_number,
+      )
+
+      const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
+        if (!accumulator[number]) {
+          accumulator[number] = '-'
+        }
+
+        if (rowNumbers.includes(number)) {
+          const filteredRowSampleUnitNumbers = rowRecord.sample_unit_numbers.filter(
+            ({ sample_unit_number }) => sample_unit_number === number,
+          )
+
+          accumulator[number] = (
+            <SampleUnitLinks
+              rowRecord={rowRecord}
+              sampleUnitNumbersRow={filteredRowSampleUnitNumbers}
+            />
+          )
+        }
+
+        return accumulator
+      }, {})
+
+      return submittedTransectNumbersRow
+    },
+    [submittedTransectNumbers],
+  )
+
+  const tableCellData = useMemo(
+    () =>
+      submittedRecords.map((record) => ({
+        site: record.site_name,
+        method: record.method,
+        ...populateTransectNumberRow(record),
+      })),
+    [submittedRecords, populateTransectNumberRow],
   )
 
   const tableDefaultPrefs = useMemo(() => {
@@ -125,9 +229,10 @@ const UsersAndTransects = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: 15,
+        pageSize: 100,
         sortBy: tableUserPrefs.sortBy,
       },
+      isMultiSortEvent: () => true,
     },
     useSortBy,
     usePagination,
@@ -144,23 +249,26 @@ const UsersAndTransects = () => {
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
-            {headerGroups.map((headerGroup) => {
-              return (
-                <Tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
+            {headerGroups.map((headerGroup) => (
+              <Tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => {
+                  const isMultiSortColumn = headerGroup.headers.some(
+                    (header) => header.sortedIndex > 0,
+                  )
+
+                  return (
                     <Th
-                      {...column.getHeaderProps(
-                        column.getSortByToggleProps(getTableColumnHeaderProps(column)),
-                      )}
+                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
+                      isMultiSortColumn={isMultiSortColumn}
                     >
                       {column.render('Header')}
                     </Th>
-                  ))}
-                </Tr>
-              )
-            })}
+                  )
+                })}
+              </Tr>
+            ))}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
@@ -213,6 +321,18 @@ const UsersAndTransects = () => {
       }
     />
   )
+}
+
+SampleUnitLinks.propTypes = {
+  rowRecord: PropTypes.shape({
+    transect_protocol: PropTypes.string,
+  }).isRequired,
+  sampleUnitNumbersRow: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      sample_unit_number: PropTypes.number,
+    }),
+  ).isRequired,
 }
 
 export default UsersAndTransects
