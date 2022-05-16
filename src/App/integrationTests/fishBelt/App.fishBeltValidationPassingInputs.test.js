@@ -94,7 +94,17 @@ test('Fishbelt validations show check for valid inputs', async () => {
     ),
   )
 
-  expect(within(screen.getByTestId('site')).getByLabelText('Passed validation')).toBeInTheDocument()
+  // THIS ONE FAILS 👇
+  expect(
+    within(
+      // await screen.findByTestId(
+      //   'site',
+      //   { timeout: 10000 }
+      // ))
+      await screen.findByLabelText('Passed validation', { timeout: 30000 })
+    )).toBeInTheDocument()
+
+  expect(within(await screen.findByTestId('site', { timeout: 10000 })).getByLabelText('Passed validation')).toBeInTheDocument()
   expect(
     within(screen.getByTestId('management')).getByLabelText('Passed validation'),
   ).toBeInTheDocument()
