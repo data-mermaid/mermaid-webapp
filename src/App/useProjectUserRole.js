@@ -57,16 +57,16 @@ export const useProjectUserRole = ({
 
     const fetchProjectUserRoles = async () => {
       const mockRoles = {
-        "5453d405-4daa-4dca-8448-d8ab4288b8df": {
-          "is_admin": true,
-          "is_collector": true,
-          "is_readonly": false
+        '5453d405-4daa-4dca-8448-d8ab4288b8df': {
+          is_admin: true,
+          is_collector: true,
+          is_readonly: false,
         },
-        "8c213ce8-7973-47a5-9359-3a0ef12ed201": {
-          "is_admin": true,
-          "is_collector": true,
-          "is_readonly": false
-        }
+        '8c213ce8-7973-47a5-9359-3a0ef12ed201': {
+          is_admin: true,
+          is_collector: true,
+          is_readonly: false,
+        },
       }
 
       if (databaseSwitchboardInstance && isOfflineStorageHydrated) {
