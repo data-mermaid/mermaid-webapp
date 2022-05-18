@@ -50,6 +50,8 @@ const Sites = () => {
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
 
+  console.log('currentUser ', currentUser)
+
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
   const _getSiteRecords = useEffect(() => {
@@ -130,7 +132,7 @@ const Sites = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-sitesTable`,
+    key: `${currentUser && currentUser.id}-sitesTable`,
     defaultValue: tableDefaultPrefs,
   })
 

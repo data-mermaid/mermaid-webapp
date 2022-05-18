@@ -171,7 +171,7 @@ const Admin = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, projectUserRole } = useCurrentUser()
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
@@ -179,6 +179,8 @@ const Admin = () => {
   const [IsNewOrganizationNameModalOpen, setIsNewOrganizationNameModalOpen] = useState(false)
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
+
+  console.log('projectUserRole ', projectUserRole)
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
