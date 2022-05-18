@@ -68,6 +68,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
 
 InputCheckboxGroupWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
+  required: PropTypes.bool.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
