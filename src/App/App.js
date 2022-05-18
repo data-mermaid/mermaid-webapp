@@ -100,6 +100,7 @@ function App({ dexieCurrentUserInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
+    projectUserRole &&
     isMermaidAuthenticated &&
     currentUser &&
     databaseSwitchboardInstance &&

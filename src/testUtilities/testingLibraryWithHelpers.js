@@ -22,6 +22,7 @@ const fakeCurrentUser = {
   id: 'fake-id',
   first_name: 'FakeFirstName',
 }
+const fakeProjectUserRoles = { 5: { is_admin: true, is_collector: true } }
 
 const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOverride }) => (
   <Auth0Context.Provider
@@ -35,7 +36,11 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
     <MemoryRouter initialEntries={initialEntries}>
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
-          <CurrentUserProvider value={fakeCurrentUser}>{children}</CurrentUserProvider>
+          <CurrentUserProvider
+            value={{ currentUser: fakeCurrentUser, projectUserRoles: fakeProjectUserRoles }}
+          >
+            {children}
+          </CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
     </MemoryRouter>

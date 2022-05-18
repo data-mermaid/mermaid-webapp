@@ -8,13 +8,13 @@ export const useProjectUserRole = ({
   databaseSwitchboardInstance,
   isOfflineStorageHydrated,
 }) => {
-  const [projectUserRoles, setProjectUserRoles] = useState({})
+  const [projectUserRoles, setProjectUserRoles] = useState()
 
   const _initializeProjectUserRoles = useEffect(() => {
     let isMounted = true
 
     const fetchProjectUserRoles = async () => {
-      if (databaseSwitchboardInstance && isOfflineStorageHydrated) {
+      if (databaseSwitchboardInstance && isOfflineStorageHydrated && currentUser.id) {
         const userProfilePromises = []
         const currentUserProfiles = []
 
@@ -23,35 +23,35 @@ export const useProjectUserRole = ({
         for (const project of projects) {
           userProfilePromises.push(databaseSwitchboardInstance.getProjectProfiles(project.id))
         }
-        const userProfiles = await Promise.all(userProfilePromises)
+        Promise.all(userProfilePromises).then((userProfiles) => {
+          for (const userProfile of userProfiles) {
+            const filteredUserProfile = userProfile.filter(
+              ({ profile }) => currentUser.id === profile,
+            )[0]
 
-        for (const userProfile of userProfiles) {
-          const filteredUserProfile = userProfile.filter(
-            ({ profile }) => currentUser.id === profile,
-          )[0]
+            currentUserProfiles.push(filteredUserProfile)
+          }
 
-          currentUserProfiles.push(filteredUserProfile)
-        }
+          const userProfilesWithProjectRoles = currentUserProfiles.reduce(
+            (profileReduced, profile) => {
+              if (profile) {
+                const { project, is_admin, is_collector } = profile
 
-        const userProfilesWithProjectRoles = currentUserProfiles.reduce(
-          (profileReduced, profile) => {
-            if (profile) {
-              const { project, is_admin, is_collector } = profile
-
-              return {
-                ...profileReduced,
-                [project]: { is_admin, is_collector, is_readonly: !is_admin && !is_collector },
+                return {
+                  ...profileReduced,
+                  [project]: { is_admin, is_collector, is_readonly: !is_admin && !is_collector },
+                }
               }
-            }
 
-            return profileReduced
-          },
-          {},
-        )
+              return profileReduced
+            },
+            {},
+          )
 
-        if (isMounted) {
-          setProjectUserRoles(userProfilesWithProjectRoles)
-        }
+          if (isMounted) {
+            setProjectUserRoles(userProfilesWithProjectRoles)
+          }
+        })
       }
     }
 
