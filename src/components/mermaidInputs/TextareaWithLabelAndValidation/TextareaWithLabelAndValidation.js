@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import { Textarea, InputRow, HelperText, RequiredIndicator } from '../../generic/form'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
-import language from '../../../language'
 
 const TextareaWithLabelAndValidation = ({
   helperText,

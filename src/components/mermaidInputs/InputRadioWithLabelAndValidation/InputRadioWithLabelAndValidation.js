@@ -5,7 +5,6 @@ import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { InputRow, CheckRadioWrapper, CheckRadioLabel, RequiredIndicator } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import language from '../../../language'
 
 const InputRadioWithLabelAndValidation = ({
   required,
@@ -21,7 +20,6 @@ const InputRadioWithLabelAndValidation = ({
 }) => {
   const optionsList = options.map(({ label: optionLabel, value: optionValue }) => {
     const isChecked = restOfProps.value === optionValue
-
     const radioId = `${id}-${optionValue}`
 
     return (

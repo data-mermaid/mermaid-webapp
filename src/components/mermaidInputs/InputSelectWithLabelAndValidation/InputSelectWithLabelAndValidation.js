@@ -5,7 +5,6 @@ import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import language from '../../../language'
 
 const InputSelectWithLabelAndValidation = ({
   label,

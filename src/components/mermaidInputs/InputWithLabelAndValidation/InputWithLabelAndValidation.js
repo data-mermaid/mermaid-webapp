@@ -7,7 +7,6 @@ import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUn
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
-import language from '../../../language'
 
 const InputWithLabelAndValidation = ({
   required,
