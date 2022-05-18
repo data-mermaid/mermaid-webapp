@@ -59,6 +59,7 @@ const InputSelectWithLabelAndValidation = ({
 InputSelectWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
+  required: PropTypes.bool.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,

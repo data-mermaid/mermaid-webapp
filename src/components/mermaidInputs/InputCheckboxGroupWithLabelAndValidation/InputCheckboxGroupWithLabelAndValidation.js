@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
-import language from '../../../language'
 import { InputRow, CheckRadioLabel, CheckRadioWrapper, RequiredIndicator } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'

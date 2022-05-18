@@ -20,6 +20,7 @@ const InputRadioWithLabelAndValidation = ({
 }) => {
   const optionsList = options.map(({ label: optionLabel, value: optionValue }) => {
     const isChecked = restOfProps.value === optionValue
+
     const radioId = `${id}-${optionValue}`
 
     return (
