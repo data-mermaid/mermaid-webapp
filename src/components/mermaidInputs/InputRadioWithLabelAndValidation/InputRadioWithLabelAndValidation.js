@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import { InputRow, CheckRadioWrapper, CheckRadioLabel } from '../../generic/form'
+import { InputRow, CheckRadioWrapper, CheckRadioLabel, RequiredIndicator } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
+import language from '../../../language'
 
 const InputRadioWithLabelAndValidation = ({
   required,
@@ -34,7 +35,10 @@ const InputRadioWithLabelAndValidation = ({
   return (
     <InputRow required={required} validationType={validationType} data-testid={testId}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label id={`${id}-input-radio-with-label-and-validation`}>{label}</label>
+      <label id={`${id}-input-radio-with-label-and-validation`}>
+        {label}
+        {required ? <RequiredIndicator /> : null}
+      </label>
       <div aria-labelledby={`${id}-input-radio-with-label-and-validation`}>{optionsList}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}

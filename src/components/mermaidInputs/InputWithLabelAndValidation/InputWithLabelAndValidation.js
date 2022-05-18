@@ -1,12 +1,13 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { Input, InputRow, HelperText } from '../../generic/form'
+import { Input, InputRow, HelperText, RequiredIndicator } from '../../generic/form'
 import { useStopInputScrollingIncrementNumber } from '../../../library/useStopInputScrollingIncrementNumber'
 import InputNumberNoScrollWithUnit from '../../generic/InputNumberNoScrollWithUnit'
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
+import language from '../../../language'
 
 const InputWithLabelAndValidation = ({
   required,
@@ -47,6 +48,7 @@ const InputWithLabelAndValidation = ({
     <InputRow required={required} validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
+        {required ? <RequiredIndicator /> : null}
       </label>
       <div>
         {inputType}

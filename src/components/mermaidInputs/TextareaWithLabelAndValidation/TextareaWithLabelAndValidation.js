@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Textarea, InputRow, HelperText } from '../../generic/form'
+import { Textarea, InputRow, HelperText, RequiredIndicator } from '../../generic/form'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
+import language from '../../../language'
 
 const TextareaWithLabelAndValidation = ({
   helperText,
+  required,
   id,
   ignoreNonObservationFieldValidations,
   label,
@@ -20,6 +22,7 @@ const TextareaWithLabelAndValidation = ({
     <InputRow validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
+        {required ? <RequiredIndicator /> : null}
       </label>
       <div>
         <Textarea

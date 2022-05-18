@@ -82,6 +82,7 @@ const SampleInfoInputs = ({
         <H2>Sample Event</H2>
         <InputSelectWithLabelAndValidation
           label="Site"
+          required="true"
           id="site"
           testId="site"
           options={siteSelectOptions}
@@ -99,6 +100,7 @@ const SampleInfoInputs = ({
         />
         <InputSelectWithLabelAndValidation
           label="Management"
+          required="true"
           id="management"
           testId="management"
           options={managementSelectOptions}
@@ -119,6 +121,7 @@ const SampleInfoInputs = ({
 
         <InputWithLabelAndValidation
           label="Sample Date"
+          required="true"
           id="sample_date"
           testId="sample_date"
           type="date"
