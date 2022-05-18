@@ -38,7 +38,7 @@ describe('Offline', () => {
     expect(await screen.findByText('Record saved.'))
 
     // Site select
-    expect(screen.getByDisplayValue('Site D'))
+    expect(await screen.findByDisplayValue('Site D'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes C'))
     expect(screen.getByLabelText('Depth')).toHaveValue(45)
