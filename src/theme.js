@@ -145,7 +145,7 @@ const spacing = {
   fullViewportWidth: 'calc(100vw - (100vw - 100%))',
   headerHeight: '4.9rem',
   sideNavWidth: '15rem',
-  mobileSideNavWidth: '9rem',
+  mobileSideNavWidth: '7rem',
   borderSmall: '1px',
   borderMedium: '2px',
   borderLarge: '4px',

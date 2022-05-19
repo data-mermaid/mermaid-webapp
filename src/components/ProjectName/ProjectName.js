@@ -11,7 +11,6 @@ import useIsMounted from '../../library/useIsMounted'
 
 const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
-  height: ${theme.spacing.headerHeight};
   h2 {
     padding: ${theme.spacing.medium};
     margin: 0;
@@ -32,7 +31,7 @@ const ProjectNameWrapper = styled('div')`
   `)}
   ${mediaQueryPhoneOnly(css`
     h2 {
-      padding: ${theme.spacing.small} ${theme.spacing.xsmall} ${theme.spacing.small} 0;
+      padding: ${theme.spacing.small};
     }
     a {
       font-size: initial;
