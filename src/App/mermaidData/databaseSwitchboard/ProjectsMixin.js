@@ -56,17 +56,9 @@ const ProjectsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getProjectProfiles = function getProjectProfiles(projectId) {
-      if (!projectId) {
-        Promise.reject(this._operationMissingParameterError)
-      }
-
+    getProjectProfiles = function getProjectProfiles() {
       return this._isAuthenticatedAndReady
-        ? this._dexiePerUserDataInstance.project_profiles
-            .toArray()
-            .then((projectProfiles) =>
-              projectProfiles.filter((projectProfile) => projectProfile.project === projectId),
-            )
+        ? this._dexiePerUserDataInstance.project_profiles.toArray()
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
