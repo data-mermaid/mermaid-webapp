@@ -77,7 +77,7 @@ const UsersAndTransects = () => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const [submittedRecords, setSubmittedRecords] = useState([])
   const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {

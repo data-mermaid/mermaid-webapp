@@ -136,7 +136,7 @@ const Users = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
   const [currentUserProfile, setCurrentUserProfile] = useState({})
 

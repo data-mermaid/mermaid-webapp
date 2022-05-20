@@ -48,7 +48,7 @@ const Sites = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -130,7 +130,7 @@ const Sites = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-sitesTable`,
+    key: `${currentUser && currentUser.id}-sitesTable`,
     defaultValue: tableDefaultPrefs,
   })
 
