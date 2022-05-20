@@ -180,7 +180,6 @@ const Admin = () => {
   const openNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(true)
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
 
-
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
       const promises = [
