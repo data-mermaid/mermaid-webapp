@@ -2,11 +2,13 @@ import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { Link, useParams } from 'react-router-dom'
-import { usePagination, useSortBy, useTable } from 'react-table'
+import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
 
 import { ContentPageLayout } from '../../Layout'
+import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import language from '../../../language'
@@ -14,7 +16,9 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import { ToolBarRow } from '../../generic/positioning'
 import theme from '../../../theme'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
@@ -202,6 +206,7 @@ const UsersAndTransects = () => {
           desc: false,
         },
       ],
+      globalFilter: '',
     }
   }, [])
 
@@ -209,6 +214,18 @@ const UsersAndTransects = () => {
     key: `${currentUser.id}-usersAndTransectsTable`,
     defaultValue: tableDefaultPrefs,
   })
+
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = ['values.site', 'values.method']
+
+    const queryTerms = splitSearchQueryStrings(query)
+
+    if (!queryTerms || !queryTerms.length) {
+      return rows
+    }
+
+    return getTableFilteredRows(rows, keys, queryTerms)
+  }, [])
 
   const {
     canNextPage,
@@ -223,7 +240,8 @@ const UsersAndTransects = () => {
     prepareRow,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize, sortBy },
+    setGlobalFilter,
+    state: { pageIndex, pageSize, sortBy, globalFilter },
   } = useTable(
     {
       columns: tableColumns,
@@ -231,18 +249,28 @@ const UsersAndTransects = () => {
       initialState: {
         pageSize: 100,
         sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter,
       },
+      globalFilter: tableGlobalFilters,
       isMultiSortEvent: () => true,
     },
+    useGlobalFilter,
     useSortBy,
     usePagination,
   )
 
   const handleRowsNumberChange = (e) => setPageSize(Number(e.target.value))
 
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    console.log('globalFilter ', globalFilter)
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const table = (
     <>
@@ -317,6 +345,13 @@ const UsersAndTransects = () => {
       toolbar={
         <>
           <H2>Users Overview</H2>
+          <ToolBarRow>
+            <FilterSearchToolbar
+              name={language.pages.usersAndTransectsTable.filterToolbarText}
+              value={tableUserPrefs.globalFilter}
+              handleGlobalFilterChange={handleGlobalFilterChange}
+            />
+          </ToolBarRow>
         </>
       }
     />
