@@ -50,8 +50,6 @@ const Sites = () => {
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
 
-  console.log('currentUser ', currentUser)
-
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
   const _getSiteRecords = useEffect(() => {
