@@ -57,7 +57,7 @@ const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
     return (
       <span key={row.id}>
         <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
-          {row.sample_unit_number}
+          {row.label}
         </Link>
         {idx < sampleUnitNumbersRow.length - 1 && ', '}
       </span>
@@ -85,17 +85,17 @@ const UsersAndTransects = () => {
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getRecordsForUsersAndTransectsTable(projectId),
       ])
-        .then(([projectProfilesResponse, submittedRecordsResponse]) => {
+        .then(([projectProfilesResponse, sampleUnitRecordsResponse]) => {
           if (isMounted.current) {
-            const numbers = submittedRecordsResponse
+            const numbersNew = sampleUnitRecordsResponse
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
-              .map((reducedRecords) => reducedRecords.sample_unit_number)
+              .map((reducedRecords) => reducedRecords.label)
 
-            const uniqueNumbersAsc = [...new Set(numbers)].sort((a, b) => a - b)
+            const uniqueNumbersAscNew = [...new Set(numbersNew)]
 
             setObserverProfiles(projectProfilesResponse)
-            setSubmittedRecords(submittedRecordsResponse)
-            setSubmittedTransectNumbers(uniqueNumbersAsc)
+            setSubmittedRecords(sampleUnitRecordsResponse)
+            setSubmittedTransectNumbers(uniqueNumbersAscNew)
             setIsLoading(false)
           }
         })
@@ -123,12 +123,10 @@ const UsersAndTransects = () => {
 
   const getSubmittedTransectNumberColumnHeaders = useCallback(() => {
     return submittedTransectNumbers.map((number) => {
-      const unitNumberColumn = number ? number.toString() : 'NaN'
-
       return {
-        Header: unitNumberColumn,
-        id: unitNumberColumn,
-        accessor: unitNumberColumn,
+        Header: number,
+        id: number,
+        accessor: number,
         disableSortBy: true,
       }
     })
@@ -154,9 +152,7 @@ const UsersAndTransects = () => {
 
   const populateTransectNumberRow = useCallback(
     (rowRecord) => {
-      const rowNumbers = rowRecord.sample_unit_numbers.map(
-        ({ sample_unit_number }) => sample_unit_number,
-      )
+      const rowNumbers = rowRecord.sample_unit_numbers.map(({ label }) => label)
 
       const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
         if (!accumulator[number]) {
@@ -165,7 +161,7 @@ const UsersAndTransects = () => {
 
         if (rowNumbers.includes(number)) {
           const filteredRowSampleUnitNumbers = rowRecord.sample_unit_numbers.filter(
-            ({ sample_unit_number }) => sample_unit_number === number,
+            ({ label }) => label === number,
           )
 
           accumulator[number] = (
