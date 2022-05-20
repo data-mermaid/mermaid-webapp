@@ -249,6 +249,7 @@ const UsersAndTransects = () => {
       initialState: {
         pageSize: 100,
         sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter,
       },
       globalFilter: tableGlobalFilters,
       isMultiSortEvent: () => true,
@@ -267,6 +268,7 @@ const UsersAndTransects = () => {
   }, [sortBy, handleSetTableUserPrefs])
 
   const _setFilterPrefs = useEffect(() => {
+    console.log('globalFilter ', globalFilter)
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
