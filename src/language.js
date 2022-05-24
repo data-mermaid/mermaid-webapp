@@ -241,6 +241,7 @@ const pages = {
     noDataText: `This project has no management regimes.`,
     noDataExtraText: `You can add management regimes by creating a new one or copying them from another project.`,
   },
+  usersAndTransectsTable: { filterToolbarText: 'Filter sample units by site or method' },
 }
 
 const navigateAwayPrompt =

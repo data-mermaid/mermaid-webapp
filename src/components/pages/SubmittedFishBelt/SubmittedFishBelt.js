@@ -44,7 +44,7 @@ const SubmittedFishBelt = () => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const observers = submittedRecord?.observers ?? []
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   const _getSupportingData = useEffect(() => {

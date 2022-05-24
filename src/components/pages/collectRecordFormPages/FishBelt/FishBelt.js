@@ -45,6 +45,7 @@ import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordName } from '../../../../library/getRecordName'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 
 /*
   Fishbelt component lets a user edit and delete a record as well as create a new record.
@@ -85,7 +86,7 @@ const FishBelt = ({ isNewRecord }) => {
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const currentProjectPath = useCurrentProjectPath()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const history = useHistory()
   const isMounted = useIsMounted()
 
@@ -192,10 +193,10 @@ const FishBelt = ({ isNewRecord }) => {
                   ? getRecordName(collectRecordResponse.data, sitesResponse, 'fishbelt_transect')
                   : { name: 'Fish Belt' }
 
-              setSites(sitesResponse)
-              setManagementRegimes(managementRegimesResponse)
+              setSites(sortArrayByObjectKey(sitesResponse, "name"))
+              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, "name"))
               setChoices(choicesResponse)
-              setObserverProfiles(projectProfilesResponse)
+              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, "profile_name"))
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)

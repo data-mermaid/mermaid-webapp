@@ -38,7 +38,7 @@ const Collect = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)

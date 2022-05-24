@@ -171,7 +171,7 @@ const Admin = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const currentUser = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
