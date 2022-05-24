@@ -106,7 +106,11 @@ const UsersAndTransects = () => {
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const getUserColumnHeaders = useCallback(() => {
-    return observerProfiles.map((user) => {
+    const filteredObservers = observerProfiles.filter(
+      ({ num_active_sample_units }) => num_active_sample_units > 0,
+    )
+
+    return filteredObservers.map((user) => {
       return {
         Header: (
           <UserColumnHeader>
@@ -117,6 +121,7 @@ const UsersAndTransects = () => {
           </UserColumnHeader>
         ),
         id: user.id,
+        accessor: user.profile,
       }
     })
   }, [observerProfiles])
@@ -180,14 +185,30 @@ const UsersAndTransects = () => {
     [submittedTransectNumbers],
   )
 
+  const populateCollectNumberRow = useCallback(
+    (rowRecord) => {
+      const collectTransectNumbersRow = observerProfiles.reduce((accumulator, record) => {
+        accumulator[record.profile] = rowRecord.profile_summary[record.profile]
+          ? rowRecord.profile_summary[record.profile].labels.sort((a, b) => a - b).join(', ')
+          : '-'
+
+        return accumulator
+      }, {})
+
+      return collectTransectNumbersRow
+    },
+    [observerProfiles],
+  )
+
   const tableCellData = useMemo(
     () =>
       submittedRecords.map((record) => ({
         site: record.site_name,
         method: record.method,
         ...populateTransectNumberRow(record),
+        ...populateCollectNumberRow(record),
       })),
-    [submittedRecords, populateTransectNumberRow],
+    [submittedRecords, populateTransectNumberRow, populateCollectNumberRow],
   )
 
   const tableDefaultPrefs = useMemo(() => {

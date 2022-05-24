@@ -17,7 +17,7 @@ const ProjectHealthMixin = (Base) =>
         if (isDateInNames) {
           names.splice(-1, 1)
 
-          return names
+          return names[0]
         }
 
         return names.join(' ')
@@ -129,7 +129,7 @@ const ProjectHealthMixin = (Base) =>
 
             if (!recordGroupedBySite[siteId].site_names.includes(missingTransectName)) {
               sampleEventUnitRecords.push({
-                site: siteId,
+                site_id: siteId,
                 site_name: siteName,
                 method: missingTransect.protocol,
                 transect_protocol: missingTransect.method,
@@ -141,6 +141,61 @@ const ProjectHealthMixin = (Base) =>
       }
 
       return sampleEventUnitRecords
+    }
+
+    #addCollectingRecords = function addCollectingRecords(
+      sampleEventUnitRecords,
+      siteCollectingSummary,
+      protocols,
+    ) {
+      const newSampleEvents = sampleEventUnitRecords
+      const allSites = newSampleEvents.map(({ site_id }) => site_id)
+      const collectingSites = Object.keys(siteCollectingSummary)
+      const collectingSitesWithoutSubmittedRecords = collectingSites.filter(
+        (site) => !allSites.includes(site),
+      )
+
+      for (let idx = 0; idx < newSampleEvents.length; idx++) {
+        const sampleEventSiteId = newSampleEvents[idx].site_id
+
+        newSampleEvents[idx].profile_summary = {}
+        const isSiteExist = Object.prototype.hasOwnProperty.call(
+          siteCollectingSummary,
+          sampleEventSiteId,
+        )
+
+        if (isSiteExist) {
+          const collectingSiteName = siteCollectingSummary[sampleEventSiteId].site_name
+          const collectingSiteSampleUnitMethods =
+            siteCollectingSummary[sampleEventSiteId].sample_unit_methods
+
+          const sameSiteName = newSampleEvents[idx].site_name === collectingSiteName
+
+          if (
+            sameSiteName &&
+            collectingSiteSampleUnitMethods[newSampleEvents[idx].transect_protocol]
+          ) {
+            newSampleEvents[idx].profile_summary =
+              collectingSiteSampleUnitMethods[
+                newSampleEvents[idx].transect_protocol
+              ].profile_summary
+          }
+        }
+      }
+      for (const siteId of collectingSitesWithoutSubmittedRecords) {
+        for (const protocol of protocols) {
+          newSampleEvents.push({
+            site_id: siteId,
+            site_name: siteCollectingSummary[siteId].site_name,
+            method: getRecordProtocolLabel(protocol),
+            transect_protocol: protocol,
+            sample_unit_numbers: [],
+            profile_summary: siteCollectingSummary[siteId].sample_unit_methods.[protocol] || {},
+          })
+        }
+      }
+
+    return newSampleEvents
     }
 
     getSampleUnitSummary = async function getSampleUnitSummary(projectId) {
@@ -166,8 +221,8 @@ const ProjectHealthMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? this.getSampleUnitSummary(projectId).then((sampleUnitRecords) => {
             const sampleEventUnitRecords = []
-
-            const { site_submitted_summary, protocols } = sampleUnitRecords
+            const { site_submitted_summary, site_collecting_summary, protocols } = sampleUnitRecords
+            const noBleachingProtocols = protocols.filter((protocol) => protocol !== 'bleachingqc')
 
             for (const siteId in site_submitted_summary) {
               if (Object.prototype.hasOwnProperty.call(site_submitted_summary, siteId)) {
@@ -176,9 +231,15 @@ const ProjectHealthMixin = (Base) =>
                 this.#updateAndAddRecords(sampleEventUnitRecords, siteRecordGroup, siteId)
               }
             }
-            this.#populateAdditionalRecords(sampleEventUnitRecords, protocols)
+            this.#populateAdditionalRecords(sampleEventUnitRecords, noBleachingProtocols)
 
-            return sampleEventUnitRecords
+            const submittedAndCollectRecords = this.#addCollectingRecords(
+              sampleEventUnitRecords,
+              site_collecting_summary,
+              noBleachingProtocols,
+            )
+
+            return submittedAndCollectRecords
           })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
