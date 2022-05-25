@@ -190,12 +190,13 @@ const ProjectHealthMixin = (Base) =>
             method: getRecordProtocolLabel(protocol),
             transect_protocol: protocol,
             sample_unit_numbers: [],
-            profile_summary: siteCollectingSummary[siteId].sample_unit_methods.[protocol] || {},
+            profile_summary:
+              siteCollectingSummary[siteId].sample_unit_methods[protocol]?.profile_summary || {},
           })
         }
       }
 
-    return newSampleEvents
+      return newSampleEvents
     }
 
     getSampleUnitSummary = async function getSampleUnitSummary(projectId) {
@@ -221,6 +222,7 @@ const ProjectHealthMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? this.getSampleUnitSummary(projectId).then((sampleUnitRecords) => {
             const sampleEventUnitRecords = []
+
             const { site_submitted_summary, site_collecting_summary, protocols } = sampleUnitRecords
             const noBleachingProtocols = protocols.filter((protocol) => protocol !== 'bleachingqc')
 

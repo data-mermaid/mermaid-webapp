@@ -95,7 +95,7 @@ const UsersAndTransects = () => {
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
               .map((reducedRecords) => reducedRecords.label)
 
-            const uniqueNumbersAscNew = [...new Set(numbersNew)]
+            const uniqueNumbersAscNew = [...new Set(numbersNew)].sort((a, b) => a - b)
 
             setObserverProfiles(projectProfilesResponse)
             setSubmittedRecords(sampleUnitRecordsResponse)
@@ -126,6 +126,7 @@ const UsersAndTransects = () => {
         ),
         id: user.id,
         accessor: user.profile,
+        disableSortBy: true,
       }
     })
   }, [observerProfiles])
