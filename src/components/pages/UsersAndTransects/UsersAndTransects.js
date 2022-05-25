@@ -95,11 +95,11 @@ const UsersAndTransects = () => {
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
               .map((reducedRecords) => reducedRecords.label)
 
-            const uniqueNumbersAscNew = [...new Set(numbersNew)].sort((a, b) => a - b)
+            const uniqueNumbersAsc = [...new Set(numbersNew)].sort((a, b) => a - b)
 
             setObserverProfiles(projectProfilesResponse)
             setSubmittedRecords(sampleUnitRecordsResponse)
-            setSubmittedTransectNumbers(uniqueNumbersAscNew)
+            setSubmittedTransectNumbers(uniqueNumbersAsc)
             setIsLoading(false)
           }
         })
@@ -144,8 +144,8 @@ const UsersAndTransects = () => {
 
   const tableColumns = useMemo(
     () => [
-      { Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort },
-      { Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort },
+      { Header: 'Site', id: 'site', accessor: 'site', sortType: reactTableNaturalSort },
+      { Header: 'Method', id: 'method', accessor: 'method', sortType: reactTableNaturalSort },
       {
         Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
         id: 'Transect Number Headers',
@@ -289,6 +289,18 @@ const UsersAndTransects = () => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
+  // const getTableCellProps = (cell) => {
+  //   const cellValues = cell.row.values
+
+  //   const filteredCellValues = Object.entries(cellValues).filter((value) =>
+  //     submittedTransectNumbers.includes(value[0]),
+  //   )
+
+  //   const filteredEmptyCellValuesLength = filteredCellValues.filter(
+  //     (value) => value[1] === '-',
+  //   ).length
+  // }
+
   const table = (
     <>
       <TableOverflowWrapper>
@@ -322,8 +334,35 @@ const UsersAndTransects = () => {
               return (
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
+                    const cellColumnId = cell.column.id
+                    const isSiteOrMethodColumn =
+                      cellColumnId === 'site' || cellColumnId === 'method'
+                    const cellValues = cell.row.values
+
+                    const filteredCellValues = Object.entries(cellValues).filter((value) =>
+                      submittedTransectNumbers.includes(value[0]),
+                    )
+
+                    const filteredEmptyCellValuesLength = filteredCellValues.filter(
+                      (value) => value[1] === '-',
+                    )
+
+                    const isSubmittedNumberCellHightLighted =
+                      cell.value === '-' &&
+                      filteredEmptyCellValuesLength.length < submittedTransectNumbers.length &&
+                      submittedTransectNumbers.includes(cellColumnId)
+
+                    const isObserverCellHighLighted =
+                      !submittedTransectNumbers.includes(cellColumnId) &&
+                      cell.value !== '-' &&
+                      !isSiteOrMethodColumn
+
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                      <Td
+                        {...cell.getCellProps()}
+                        align={cell.column.align}
+                        highlighted={isSubmittedNumberCellHightLighted || isObserverCellHighLighted}
+                      >
                         {cell.render('Cell')}
                       </Td>
                     )

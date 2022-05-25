@@ -90,6 +90,7 @@ Th.defaultProps = {
 export const Td = styled.td(
   (props) => css`
     text-align: ${props.align || 'left'};
+    background-color: ${props.highlighted && '#F4EAC8'};
     padding: ${theme.spacing.medium};
     border-width: ${theme.spacing.borderSmall};
     border-color: ${theme.color.backgroundColor};
