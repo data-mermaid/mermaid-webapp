@@ -193,8 +193,16 @@ const UsersAndTransects = () => {
   const populateCollectNumberRow = useCallback(
     (rowRecord) => {
       const collectTransectNumbersRow = observerProfiles.reduce((accumulator, record) => {
+        const replaceEmptyLabels = (labels) => {
+          return labels.map((label) => {
+            return label || language.pages.usersAndTransectsTable.missingLabelNumber
+          })
+        }
+
         accumulator[record.profile] = rowRecord.profile_summary[record.profile]
-          ? rowRecord.profile_summary[record.profile].labels.sort((a, b) => a - b).join(', ')
+          ? replaceEmptyLabels(rowRecord.profile_summary[record.profile].labels)
+              .sort((a, b) => a - b)
+              .join(', ')
           : '-'
 
         return accumulator
@@ -288,18 +296,6 @@ const UsersAndTransects = () => {
   const _setFilterPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
-
-  // const getTableCellProps = (cell) => {
-  //   const cellValues = cell.row.values
-
-  //   const filteredCellValues = Object.entries(cellValues).filter((value) =>
-  //     submittedTransectNumbers.includes(value[0]),
-  //   )
-
-  //   const filteredEmptyCellValuesLength = filteredCellValues.filter(
-  //     (value) => value[1] === '-',
-  //   ).length
-  // }
 
   const table = (
     <>

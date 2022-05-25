@@ -1,10 +1,15 @@
 import axios from 'axios'
 import moment from 'moment'
+import language from '../../../language'
 import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const ProjectHealthMixin = (Base) =>
   class extends Base {
+    #nullLabelName = {
+      __null__: language.pages.usersAndTransectsTable.missingSiteName,
+    }
+
     #toFindDuplicates = function toFindDuplicates(array) {
       return new Set(array).size !== array.length
     }
@@ -182,11 +187,12 @@ const ProjectHealthMixin = (Base) =>
           }
         }
       }
+
       for (const siteId of collectingSitesWithoutSubmittedRecords) {
         for (const protocol of protocols) {
           newSampleEvents.push({
             site_id: siteId,
-            site_name: siteCollectingSummary[siteId].site_name,
+            site_name: this.#nullLabelName[siteCollectingSummary[siteId].site_name],
             method: getRecordProtocolLabel(protocol),
             transect_protocol: protocol,
             sample_unit_numbers: [],
