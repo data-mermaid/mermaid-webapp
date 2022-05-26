@@ -6,8 +6,10 @@ import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeader
 
 const ProjectHealthMixin = (Base) =>
   class extends Base {
-    #nullLabelName = {
-      __null__: language.pages.usersAndTransectsTable.missingSiteName,
+    #getSiteName = function getSiteName(siteName) {
+      return siteName === '__null__'
+        ? language.pages.usersAndTransectsTable.missingSiteName
+        : siteName
     }
 
     #toFindDuplicates = function toFindDuplicates(array) {
@@ -192,7 +194,7 @@ const ProjectHealthMixin = (Base) =>
         for (const protocol of protocols) {
           newSampleEvents.push({
             site_id: siteId,
-            site_name: this.#nullLabelName[siteCollectingSummary[siteId].site_name],
+            site_name: this.#getSiteName(siteCollectingSummary[siteId].site_name),
             method: getRecordProtocolLabel(protocol),
             transect_protocol: protocol,
             sample_unit_numbers: [],

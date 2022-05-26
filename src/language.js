@@ -243,7 +243,7 @@ const pages = {
   },
   usersAndTransectsTable: {
     filterToolbarText: 'Filter sample units by site or method',
-    missingSiteName: 'Missing Site Name',
+    missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',
   },
 }
