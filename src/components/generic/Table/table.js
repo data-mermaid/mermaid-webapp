@@ -71,6 +71,7 @@ export const Th = styled.th(
     padding: ${theme.spacing.medium};
     background: ${theme.color.white};
     vertical-align: top;
+    pointer-events: ${props.disabledHover && 'none'};
     &::after {
       content: ' \u25b2';
       color: ${props.isSortingEnabled ? theme.color.secondaryDisabledColor : theme.color.white};
@@ -90,7 +91,7 @@ Th.defaultProps = {
 export const Td = styled.td(
   (props) => css`
     text-align: ${props.align || 'left'};
-    background-color: ${props.highlighted && '#F4EAC8'};
+    background-color: ${props.highlighted && theme.color.warningColor};
     padding: ${theme.spacing.medium};
     border-width: ${theme.spacing.borderSmall};
     border-color: ${theme.color.backgroundColor};

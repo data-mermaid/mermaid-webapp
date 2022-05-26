@@ -644,6 +644,7 @@ const Users = () => {
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
                       isSortingEnabled={!column.disableSortBy}
+                      disabledHover={column.disableSortBy}
                     >
                       {column.render('Header')}
                     </Th>
