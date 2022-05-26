@@ -124,7 +124,6 @@ const UsersAndTransects = () => {
             </span>
           </UserColumnHeader>
         ),
-        id: user.id,
         accessor: user.profile,
         disableSortBy: true,
       }
@@ -135,7 +134,6 @@ const UsersAndTransects = () => {
     return submittedTransectNumbers.map((number) => {
       return {
         Header: number,
-        id: number,
         accessor: number,
         disableSortBy: true,
       }
@@ -144,17 +142,29 @@ const UsersAndTransects = () => {
 
   const tableColumns = useMemo(
     () => [
-      { Header: 'Site', id: 'site', accessor: 'site', sortType: reactTableNaturalSort },
-      { Header: 'Method', id: 'method', accessor: 'method', sortType: reactTableNaturalSort },
+      {
+        Header: () => '',
+        id: 'site',
+        columns: [{ Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
+      {
+        Header: () => '',
+        id: 'method',
+        columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
       {
         Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
-        id: 'Transect Number Headers',
+        id: 'transect-numbers',
         columns: getSubmittedTransectNumberColumnHeaders(),
+        disableSortBy: true,
       },
       {
         Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
-        id: 'User Headers',
+        id: 'user-headers',
         columns: getUserColumnHeaders(),
+        disableSortBy: true,
       },
     ],
     [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
@@ -315,6 +325,8 @@ const UsersAndTransects = () => {
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
+                      isSortingEnabled={!column.disableSortBy}
+                      disabledHover={column.disableSortBy}
                     >
                       {column.render('Header')}
                     </Th>
@@ -331,33 +343,34 @@ const UsersAndTransects = () => {
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
-                    const isSiteOrMethodColumn =
-                      cellColumnId === 'site' || cellColumnId === 'method'
-                    const cellValues = cell.row.values
+                    const cellRowValues = cell.row.values
 
-                    const filteredCellValues = Object.entries(cellValues).filter((value) =>
-                      submittedTransectNumbers.includes(value[0]),
-                    )
+                    const cellRowValuesForSubmittedTransectNumbers = Object.entries(
+                      cellRowValues,
+                    ).filter((value) => submittedTransectNumbers.includes(value[0]))
 
-                    const filteredEmptyCellValuesLength = filteredCellValues.filter(
-                      (value) => value[1] === '-',
-                    )
+                    const filteredEmptyCellValuesLength =
+                      cellRowValuesForSubmittedTransectNumbers.filter(
+                        (value) => value[1] === '-',
+                      ).length
 
                     const isSubmittedNumberCellHightLighted =
                       cell.value === '-' &&
-                      filteredEmptyCellValuesLength.length < submittedTransectNumbers.length &&
+                      filteredEmptyCellValuesLength < submittedTransectNumbers.length &&
                       submittedTransectNumbers.includes(cellColumnId)
 
-                    const isObserverCellHighLighted =
-                      !submittedTransectNumbers.includes(cellColumnId) &&
+                    const isCollectingNumberCellHighLighted =
                       cell.value !== '-' &&
-                      !isSiteOrMethodColumn
+                      !submittedTransectNumbers.includes(cellColumnId) &&
+                      !(cellColumnId === 'site' || cellColumnId === 'method')
 
                     return (
                       <Td
                         {...cell.getCellProps()}
                         align={cell.column.align}
-                        highlighted={isSubmittedNumberCellHightLighted || isObserverCellHighLighted}
+                        highlighted={
+                          isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
+                        }
                       >
                         {cell.render('Cell')}
                       </Td>

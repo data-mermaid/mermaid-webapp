@@ -44,6 +44,26 @@ const ProjectHealthMixin = (Base) =>
       }, {})
     }
 
+    #groupSampleEventUnitBySIte = function groupSampleEventUnitBySIte(sampleEventUnitRecords) {
+      return sampleEventUnitRecords.reduce((accumulator, record) => {
+        accumulator[record.site_id] = accumulator[record.site_id] || {}
+        accumulator[record.site_id] = {
+          site_name: record.site_name,
+          site_names: accumulator[record.site_id].site_names
+            ? accumulator[record.site_id].site_names.concat(`${record.site_name} ${record.method}`)
+            : [`${record.site_name} ${record.method}`],
+          transects: accumulator[record.site_id].transects
+            ? accumulator[record.site_id].transects.concat(record.transect_protocol)
+            : [record.transect_protocol],
+          methods: accumulator[record.site_id].methods
+            ? accumulator[record.site_id].methods.concat(record.method)
+            : [record.method],
+        }
+
+        return accumulator
+      }, {})
+    }
+
     #updateAndAddRecords = function updateAndAddRecords(
       sampleEventUnitRecords,
       siteRecordGroup,
@@ -57,9 +77,8 @@ const ProjectHealthMixin = (Base) =>
         if (Object.prototype.hasOwnProperty.call(protocols, transect)) {
           if (transect !== 'bleachingqc') {
             const protocolTransectNumbers = protocols[transect]
-            const sampleUnitNumbers = protocolTransectNumbers.map(
-              ({ sample_unit_number }) => sample_unit_number,
-            )
+            const sampleUnitNumberLabels = protocolTransectNumbers.map(({ label }) => label)
+
             const sampleDates = protocolTransectNumbers.map(({ sample_date }) => sample_date)
 
             const sampleEventRecord = {
@@ -71,7 +90,7 @@ const ProjectHealthMixin = (Base) =>
             }
 
             const hasDuplicateTransectNumbersInSampleUnit =
-              this.#toFindDuplicates(sampleUnitNumbers)
+              this.#toFindDuplicates(sampleUnitNumberLabels)
             const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
 
             if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
@@ -99,47 +118,26 @@ const ProjectHealthMixin = (Base) =>
       sampleEventUnitRecords,
       availableProtocols,
     ) {
+      /* eslint max-depth: ["error", 4]*/
       /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
       Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
-      const uniqueTransectAndMethods = availableProtocols.map((method) => {
-        return {
-          method,
-          protocol: getRecordProtocolLabel(method),
-        }
-      })
 
-      const recordGroupedBySite = sampleEventUnitRecords.reduce((accumulator, record) => {
-        accumulator[record.site_id] = accumulator[record.site_id] || {}
-        accumulator[record.site_id] = {
-          site_name: record.site_name,
-          site_names: accumulator[record.site_id].site_names
-            ? accumulator[record.site_id].site_names.concat(`${record.site_name} ${record.method}`)
-            : [`${record.site_name} ${record.method}`],
-          transects: accumulator[record.site_id].transects
-            ? accumulator[record.site_id].transects.concat(record.transect_protocol)
-            : [record.transect_protocol],
-          methods: accumulator[record.site_id].methods
-            ? accumulator[record.site_id].methods.concat(record.method)
-            : [record.method],
-        }
-
-        return accumulator
-      }, {})
+      const recordGroupedBySite = this.#groupSampleEventUnitBySIte(sampleEventUnitRecords)
 
       for (const siteId in recordGroupedBySite) {
         if (Object.prototype.hasOwnProperty.call(recordGroupedBySite, siteId)) {
           const siteName = this.#removeDateFromName(recordGroupedBySite[siteId].site_name)
-          /* eslint max-depth: ["error", 4]*/
 
-          for (const missingTransect of uniqueTransectAndMethods) {
-            const missingTransectName = `${siteName} ${missingTransect.protocol}`
+          for (const protocol of availableProtocols) {
+            const protocolLabel = getRecordProtocolLabel(protocol)
+            const siteAndMethodName = `${siteName} ${protocolLabel}`
 
-            if (!recordGroupedBySite[siteId].site_names.includes(missingTransectName)) {
+            if (!recordGroupedBySite[siteId].site_names.includes(siteAndMethodName)) {
               sampleEventUnitRecords.push({
                 site_id: siteId,
                 site_name: siteName,
-                method: missingTransect.protocol,
-                transect_protocol: missingTransect.method,
+                method: protocolLabel,
+                transect_protocol: protocol,
                 sample_unit_numbers: [],
               })
             }
@@ -155,44 +153,42 @@ const ProjectHealthMixin = (Base) =>
       siteCollectingSummary,
       protocols,
     ) {
-      const newSampleEvents = sampleEventUnitRecords
-      const allSites = newSampleEvents.map(({ site_id }) => site_id)
-      const collectingSites = Object.keys(siteCollectingSummary)
-      const collectingSitesWithoutSubmittedRecords = collectingSites.filter(
-        (site) => !allSites.includes(site),
+      const sampleEventUnitRecordsCopy = [...sampleEventUnitRecords]
+      const sampleEventSiteIds = sampleEventUnitRecordsCopy.map(({ site_id }) => site_id)
+      const collectingSiteIds = Object.keys(siteCollectingSummary)
+      const collectingSiteIsWithoutSubmittedRecords = collectingSiteIds.filter(
+        (site) => !sampleEventSiteIds.includes(site),
       )
 
-      for (let idx = 0; idx < newSampleEvents.length; idx++) {
-        const sampleEventSiteId = newSampleEvents[idx].site_id
+      for (let idx = 0; idx < sampleEventUnitRecordsCopy.length; idx++) {
+        const {
+          site_id,
+          transect_protocol,
+          site_name: sampleEventSiteName,
+        } = sampleEventUnitRecordsCopy[idx]
+        const isSiteExist = Object.prototype.hasOwnProperty.call(siteCollectingSummary, site_id)
 
-        newSampleEvents[idx].profile_summary = {}
-        const isSiteExist = Object.prototype.hasOwnProperty.call(
-          siteCollectingSummary,
-          sampleEventSiteId,
-        )
+        sampleEventUnitRecordsCopy[idx].profile_summary = {}
 
         if (isSiteExist) {
-          const collectingSiteName = siteCollectingSummary[sampleEventSiteId].site_name
-          const collectingSiteSampleUnitMethods =
-            siteCollectingSummary[sampleEventSiteId].sample_unit_methods
-
-          const sameSiteName = newSampleEvents[idx].site_name === collectingSiteName
+          const {
+            site_name: collectingSiteName,
+            sample_unit_methods: collectingSiteSampleUnitMethods,
+          } = siteCollectingSummary[site_id]
 
           if (
-            sameSiteName &&
-            collectingSiteSampleUnitMethods[newSampleEvents[idx].transect_protocol]
+            sampleEventSiteName === collectingSiteName &&
+            collectingSiteSampleUnitMethods[transect_protocol]
           ) {
-            newSampleEvents[idx].profile_summary =
-              collectingSiteSampleUnitMethods[
-                newSampleEvents[idx].transect_protocol
-              ].profile_summary
+            sampleEventUnitRecordsCopy[idx].profile_summary =
+              collectingSiteSampleUnitMethods[transect_protocol].profile_summary
           }
         }
       }
 
-      for (const siteId of collectingSitesWithoutSubmittedRecords) {
+      for (const siteId of collectingSiteIsWithoutSubmittedRecords) {
         for (const protocol of protocols) {
-          newSampleEvents.push({
+          sampleEventUnitRecordsCopy.push({
             site_id: siteId,
             site_name: this.#getSiteName(siteCollectingSummary[siteId].site_name),
             method: getRecordProtocolLabel(protocol),
@@ -204,7 +200,7 @@ const ProjectHealthMixin = (Base) =>
         }
       }
 
-      return newSampleEvents
+      return sampleEventUnitRecordsCopy
     }
 
     getSampleUnitSummary = async function getSampleUnitSummary(projectId) {
@@ -230,7 +226,6 @@ const ProjectHealthMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? this.getSampleUnitSummary(projectId).then((sampleUnitRecords) => {
             const sampleEventUnitRecords = []
-
             const { site_submitted_summary, site_collecting_summary, protocols } = sampleUnitRecords
             const noBleachingProtocols = protocols.filter((protocol) => protocol !== 'bleachingqc')
 
@@ -243,13 +238,13 @@ const ProjectHealthMixin = (Base) =>
             }
             this.#populateAdditionalRecords(sampleEventUnitRecords, noBleachingProtocols)
 
-            const submittedAndCollectRecords = this.#addCollectingRecords(
+            const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
               sampleEventUnitRecords,
               site_collecting_summary,
               noBleachingProtocols,
             )
 
-            return submittedAndCollectRecords
+            return sampleEventUnitWithSubmittedAndCollectingRecords
           })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
