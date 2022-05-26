@@ -65,7 +65,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   const handleCardClick = () => {
     // hiding for alpha release because leads nowhere useful
     // const destinationUrl = isAppOnline
-    //   ? `${projectUrl}/health`
+    //   ? `${projectUrl}/usersandtransects`
     //   : `${projectUrl}/collecting`
 
     // temp for alpha
