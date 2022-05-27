@@ -44,7 +44,7 @@ const ProjectHealthMixin = (Base) =>
       }, {})
     }
 
-    #groupSampleEventUnitBySIte = function groupSampleEventUnitBySIte(sampleEventUnitRecords) {
+    #groupSampleEventUnitBySite = function groupSampleEventUnitBySite(sampleEventUnitRecords) {
       return sampleEventUnitRecords.reduce((accumulator, record) => {
         accumulator[record.site_id] = accumulator[record.site_id] || {}
         accumulator[record.site_id] = {
