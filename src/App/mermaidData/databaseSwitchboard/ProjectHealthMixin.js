@@ -64,6 +64,15 @@ const ProjectHealthMixin = (Base) =>
       }, {})
     }
 
+    #addRecordsToSites = function addRecordsToSites(sampleEventUnitRecords, siteSubmittedSummary) {
+      for (const site of Object.entries(siteSubmittedSummary)) {
+        const siteId = site[0]
+        const siteRecordGroup = Object.values(site[1])
+
+        this.#addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId)
+      }
+    }
+
     #addRecordsBySite = function addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId) {
       const siteName = siteRecordGroup[0]
       const { bleachingqc, ...otherProtocols } = siteRecordGroup[1] // eslint-disable-line no-unused-vars
@@ -217,22 +226,22 @@ const ProjectHealthMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? this.getSampleUnitSummary(projectId).then((sampleUnitRecords) => {
             const sampleEventUnitRecords = []
-            const { site_submitted_summary, site_collecting_summary, protocols } = sampleUnitRecords
+          const {
+            site_submitted_summary: siteSubmittedSummary,
+            site_collecting_summary: siteCollectingSummary,
+            protocols
+          } = sampleUnitRecords
             const noBleachingProtocols = protocols.filter((protocol) => protocol !== 'bleachingqc')
 
-            for (const site of Object.entries(site_submitted_summary)) {
-              const siteId = site[0]
-              const siteRecordGroup = Object.values(site[1])
+          this.#addRecordsToSites(sampleEventUnitRecords, siteSubmittedSummary)
 
-              this.#addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId)
-            }
-            this.#populateAdditionalRecords(sampleEventUnitRecords, noBleachingProtocols)
+          this.#populateAdditionalRecords(sampleEventUnitRecords, noBleachingProtocols)
 
-            const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
-              sampleEventUnitRecords,
-              site_collecting_summary,
-              noBleachingProtocols,
-            )
+          const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
+            sampleEventUnitRecords,
+            siteCollectingSummary,
+            noBleachingProtocols,
+          )
 
             return sampleEventUnitWithSubmittedAndCollectingRecords
           })
