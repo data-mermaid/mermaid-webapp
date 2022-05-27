@@ -12,7 +12,7 @@ const ProjectHealthMixin = (Base) =>
         : siteName
     }
 
-    #toFindDuplicates = function toFindDuplicates(array) {
+    #hasDuplicates = function hasDuplicates(array) {
       return new Set(array).size !== array.length
     }
 
@@ -64,52 +64,45 @@ const ProjectHealthMixin = (Base) =>
       }, {})
     }
 
-    #updateAndAddRecords = function updateAndAddRecords(
-      sampleEventUnitRecords,
-      siteRecordGroup,
-      siteId,
-    ) {
-      /* eslint-disable max-depth */
+    #addRecordsBySite = function addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId) {
       const siteName = siteRecordGroup[0]
-      const protocols = siteRecordGroup[1]
+      const { bleachingqc, ...otherProtocols } = siteRecordGroup[1] // eslint-disable-line no-unused-vars
 
-      for (const transect in protocols) {
-        if (Object.prototype.hasOwnProperty.call(protocols, transect)) {
-          if (transect !== 'bleachingqc') {
-            const protocolTransectNumbers = protocols[transect]
-            const sampleUnitNumberLabels = protocolTransectNumbers.map(({ label }) => label)
+      for (const transect of Object.entries(otherProtocols)) {
+        const transectMethod = transect[0]
+        const transectNumbers = transect[1]
 
-            const sampleDates = protocolTransectNumbers.map(({ sample_date }) => sample_date)
+        const sampleEventRecord = {
+          site_id: siteId,
+          site_name: siteName,
+          method: getRecordProtocolLabel(transectMethod),
+          sample_unit_numbers: transectNumbers,
+          transect_protocol: transectMethod,
+        }
 
-            const sampleEventRecord = {
-              site_id: siteId,
-              site_name: siteName,
-              method: getRecordProtocolLabel(transect),
-              sample_unit_numbers: protocols[transect],
-              transect_protocol: transect,
-            }
+        const sampleUnitNumberLabels = transectNumbers.map(({ label }) => label)
+        const sampleDates = transectNumbers.map(({ sample_date }) => sample_date)
 
-            const hasDuplicateTransectNumbersInSampleUnit =
-              this.#toFindDuplicates(sampleUnitNumberLabels)
-            const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
+        const hasDuplicateTransectNumbersInSampleUnit = this.#hasDuplicates(sampleUnitNumberLabels)
+        const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
 
-            if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
-              const sampleUnitNumbersGroup =
-                this.#groupSampleUnitNumbersBySampleDate(protocolTransectNumbers)
+        if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
+          const sampleUnitNumbersGroup = Object.entries(
+            this.#groupSampleUnitNumbersBySampleDate(transectNumbers),
+          )
 
-              for (const sampleDateUnit in sampleUnitNumbersGroup) {
-                if (Object.prototype.hasOwnProperty.call(sampleUnitNumbersGroup, sampleDateUnit)) {
-                  sampleEventUnitRecords.push({
-                    ...sampleEventRecord,
-                    site_name: `${siteName} ${sampleDateUnit}`,
-                    sample_unit_numbers: sampleUnitNumbersGroup[sampleDateUnit],
-                  })
-                }
-              }
-            } else {
-              sampleEventUnitRecords.push(sampleEventRecord)
-            }
+          for (const sampleUnit of sampleUnitNumbersGroup) {
+            const sampleDate = sampleUnit[0]
+            const sampleUnitNumbers = sampleUnit[1]
+
+            sampleEventUnitRecords.push({
+              ...sampleEventRecord,
+              site_name: `${siteName} ${sampleDate}`,
+              sample_unit_numbers: sampleUnitNumbers,
+            })
           }
+        } else {
+          sampleEventUnitRecords.push(sampleEventRecord)
         }
       }
     }
@@ -118,29 +111,29 @@ const ProjectHealthMixin = (Base) =>
       sampleEventUnitRecords,
       availableProtocols,
     ) {
-      /* eslint max-depth: ["error", 4]*/
       /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
       Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
+      const recordGroupedBySite = Object.entries(
+        this.#groupSampleEventUnitBySite(sampleEventUnitRecords),
+      )
 
-      const recordGroupedBySite = this.#groupSampleEventUnitBySIte(sampleEventUnitRecords)
+      for (const site of recordGroupedBySite) {
+        const siteId = site[0]
+        const siteInfo = site[1]
+        const siteName = this.#removeDateFromName(siteInfo.site_name)
 
-      for (const siteId in recordGroupedBySite) {
-        if (Object.prototype.hasOwnProperty.call(recordGroupedBySite, siteId)) {
-          const siteName = this.#removeDateFromName(recordGroupedBySite[siteId].site_name)
+        for (const protocol of availableProtocols) {
+          const protocolLabel = getRecordProtocolLabel(protocol)
+          const siteAndMethodName = `${siteName} ${protocolLabel}`
 
-          for (const protocol of availableProtocols) {
-            const protocolLabel = getRecordProtocolLabel(protocol)
-            const siteAndMethodName = `${siteName} ${protocolLabel}`
-
-            if (!recordGroupedBySite[siteId].site_names.includes(siteAndMethodName)) {
-              sampleEventUnitRecords.push({
-                site_id: siteId,
-                site_name: siteName,
-                method: protocolLabel,
-                transect_protocol: protocol,
-                sample_unit_numbers: [],
-              })
-            }
+          if (!siteInfo.site_names.includes(siteAndMethodName)) {
+            sampleEventUnitRecords.push({
+              site_id: siteId,
+              site_name: siteName,
+              method: protocolLabel,
+              transect_protocol: protocol,
+              sample_unit_numbers: [],
+            })
           }
         }
       }
@@ -229,12 +222,11 @@ const ProjectHealthMixin = (Base) =>
             const { site_submitted_summary, site_collecting_summary, protocols } = sampleUnitRecords
             const noBleachingProtocols = protocols.filter((protocol) => protocol !== 'bleachingqc')
 
-            for (const siteId in site_submitted_summary) {
-              if (Object.prototype.hasOwnProperty.call(site_submitted_summary, siteId)) {
-                const siteRecordGroup = Object.values(site_submitted_summary[siteId])
+            for (const site of Object.entries(site_submitted_summary)) {
+              const siteId = site[0]
+              const siteRecordGroup = Object.values(site[1])
 
-                this.#updateAndAddRecords(sampleEventUnitRecords, siteRecordGroup, siteId)
-              }
+              this.#addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId)
             }
             this.#populateAdditionalRecords(sampleEventUnitRecords, noBleachingProtocols)
 
