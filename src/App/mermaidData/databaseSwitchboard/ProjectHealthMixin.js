@@ -137,8 +137,6 @@ const ProjectHealthMixin = (Base) =>
           }
         }
       }
-
-      return sampleEventUnitRecords
     }
 
     #addCollectingRecords = function addCollectingRecords(
