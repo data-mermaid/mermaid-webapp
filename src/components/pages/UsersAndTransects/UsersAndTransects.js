@@ -61,7 +61,7 @@ const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
     return (
       <span key={row.id}>
         <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
-          {row.sample_unit_number}
+          {row.label}
         </Link>
         {idx < sampleUnitNumbersRow.length - 1 && ', '}
       </span>
@@ -89,16 +89,16 @@ const UsersAndTransects = () => {
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getRecordsForUsersAndTransectsTable(projectId),
       ])
-        .then(([projectProfilesResponse, submittedRecordsResponse]) => {
+        .then(([projectProfilesResponse, sampleUnitRecordsResponse]) => {
           if (isMounted.current) {
-            const numbers = submittedRecordsResponse
+            const numbersNew = sampleUnitRecordsResponse
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
-              .map((reducedRecords) => reducedRecords.sample_unit_number)
+              .map((reducedRecords) => reducedRecords.label)
 
-            const uniqueNumbersAsc = [...new Set(numbers)].sort((a, b) => a - b)
+            const uniqueNumbersAsc = [...new Set(numbersNew)].sort((a, b) => a - b)
 
             setObserverProfiles(projectProfilesResponse)
-            setSubmittedRecords(submittedRecordsResponse)
+            setSubmittedRecords(sampleUnitRecordsResponse)
             setSubmittedTransectNumbers(uniqueNumbersAsc)
             setIsLoading(false)
           }
@@ -110,7 +110,11 @@ const UsersAndTransects = () => {
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const getUserColumnHeaders = useCallback(() => {
-    return observerProfiles.map((user) => {
+    const filteredObservers = observerProfiles.filter(
+      ({ num_active_sample_units }) => num_active_sample_units > 0,
+    )
+
+    return filteredObservers.map((user) => {
       return {
         Header: (
           <UserColumnHeader>
@@ -120,19 +124,17 @@ const UsersAndTransects = () => {
             </span>
           </UserColumnHeader>
         ),
-        id: user.id,
+        accessor: user.profile,
+        disableSortBy: true,
       }
     })
   }, [observerProfiles])
 
   const getSubmittedTransectNumberColumnHeaders = useCallback(() => {
     return submittedTransectNumbers.map((number) => {
-      const unitNumberColumn = number ? number.toString() : 'NaN'
-
       return {
-        Header: unitNumberColumn,
-        id: unitNumberColumn,
-        accessor: unitNumberColumn,
+        Header: number,
+        accessor: number,
         disableSortBy: true,
       }
     })
@@ -140,17 +142,29 @@ const UsersAndTransects = () => {
 
   const tableColumns = useMemo(
     () => [
-      { Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort },
-      { Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort },
+      {
+        Header: () => '',
+        id: 'site',
+        columns: [{ Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
+      {
+        Header: () => '',
+        id: 'method',
+        columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
       {
         Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
-        id: 'Transect Number Headers',
+        id: 'transect-numbers',
         columns: getSubmittedTransectNumberColumnHeaders(),
+        disableSortBy: true,
       },
       {
         Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
-        id: 'User Headers',
+        id: 'user-headers',
         columns: getUserColumnHeaders(),
+        disableSortBy: true,
       },
     ],
     [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
@@ -158,9 +172,7 @@ const UsersAndTransects = () => {
 
   const populateTransectNumberRow = useCallback(
     (rowRecord) => {
-      const rowNumbers = rowRecord.sample_unit_numbers.map(
-        ({ sample_unit_number }) => sample_unit_number,
-      )
+      const rowNumbers = rowRecord.sample_unit_numbers.map(({ label }) => label)
 
       const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
         if (!accumulator[number]) {
@@ -169,7 +181,7 @@ const UsersAndTransects = () => {
 
         if (rowNumbers.includes(number)) {
           const filteredRowSampleUnitNumbers = rowRecord.sample_unit_numbers.filter(
-            ({ sample_unit_number }) => sample_unit_number === number,
+            ({ label }) => label === number,
           )
 
           accumulator[number] = (
@@ -188,14 +200,38 @@ const UsersAndTransects = () => {
     [submittedTransectNumbers],
   )
 
+  const populateCollectNumberRow = useCallback(
+    (rowRecord) => {
+      const collectTransectNumbersRow = observerProfiles.reduce((accumulator, record) => {
+        const replaceEmptyLabels = (labels) => {
+          return labels.map((label) => {
+            return label || language.pages.usersAndTransectsTable.missingLabelNumber
+          })
+        }
+
+        accumulator[record.profile] = rowRecord.profile_summary[record.profile]
+          ? replaceEmptyLabels(rowRecord.profile_summary[record.profile].labels)
+              .sort((a, b) => a - b)
+              .join(', ')
+          : '-'
+
+        return accumulator
+      }, {})
+
+      return collectTransectNumbersRow
+    },
+    [observerProfiles],
+  )
+
   const tableCellData = useMemo(
     () =>
       submittedRecords.map((record) => ({
         site: record.site_name,
         method: record.method,
         ...populateTransectNumberRow(record),
+        ...populateCollectNumberRow(record),
       })),
-    [submittedRecords, populateTransectNumberRow],
+    [submittedRecords, populateTransectNumberRow, populateCollectNumberRow],
   )
 
   const tableDefaultPrefs = useMemo(() => {
@@ -289,6 +325,8 @@ const UsersAndTransects = () => {
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
+                      isSortingEnabled={!column.disableSortBy}
+                      disabledHover={column.disableSortBy}
                     >
                       {column.render('Header')}
                     </Th>
@@ -304,8 +342,36 @@ const UsersAndTransects = () => {
               return (
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
+                    const cellColumnId = cell.column.id
+                    const cellRowValues = cell.row.values
+
+                    const cellRowValuesForSubmittedTransectNumbers = Object.entries(
+                      cellRowValues,
+                    ).filter((value) => submittedTransectNumbers.includes(value[0]))
+
+                    const filteredEmptyCellValuesLength =
+                      cellRowValuesForSubmittedTransectNumbers.filter(
+                        (value) => value[1] === '-',
+                      ).length
+
+                    const isSubmittedNumberCellHightLighted =
+                      cell.value === '-' &&
+                      filteredEmptyCellValuesLength < submittedTransectNumbers.length &&
+                      submittedTransectNumbers.includes(cellColumnId)
+
+                    const isCollectingNumberCellHighLighted =
+                      cell.value !== '-' &&
+                      !submittedTransectNumbers.includes(cellColumnId) &&
+                      !(cellColumnId === 'site' || cellColumnId === 'method')
+
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                      <Td
+                        {...cell.getCellProps()}
+                        align={cell.column.align}
+                        highlighted={
+                          isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
+                        }
+                      >
                         {cell.render('Cell')}
                       </Td>
                     )

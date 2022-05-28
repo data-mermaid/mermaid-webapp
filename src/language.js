@@ -241,7 +241,11 @@ const pages = {
     noDataText: `This project has no management regimes.`,
     noDataExtraText: `You can add management regimes by creating a new one or copying them from another project.`,
   },
-  usersAndTransectsTable: { filterToolbarText: 'Filter sample units by site or method' },
+  usersAndTransectsTable: {
+    filterToolbarText: 'Filter sample units by site or method',
+    missingSiteName: '(Missing Site Name)',
+    missingLabelNumber: 'missing number',
+  },
 }
 
 const navigateAwayPrompt =
@@ -273,7 +277,8 @@ const getValidationMessage = (validation, projectId = '') => {
       'There are fish that are not part of project defined fish families',
     not_positive_integer: () => 'Value is not greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
-    not_unique_management: () => 'Management Regime: Other sample events at this site have a different management regime',
+    not_unique_management: () =>
+      'Management Regime: Other sample events at this site have a different management regime',
     high_density: () => `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`,
     invalid_depth: () => 'Invalid depth',
     invalid_fish_count: () => 'Invalid fish count',

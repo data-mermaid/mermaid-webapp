@@ -8,12 +8,15 @@ import ProjectsMixin from './ProjectsMixin'
 import SitesMixin from './SitesMixin'
 import FishNameMixin from './FishNamesMixin'
 import SubmittedRecordsMixin from './SubmittedRecordsMixin'
+import ProjectHealthMixin from './ProjectHealthMixin'
 
-class DatabaseSwitchboard extends FishNameMixin(
-  SubmittedRecordsMixin(
-    SitesMixin(
-      ProjectsMixin(
-        ChoicesMixin(ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState))),
+class DatabaseSwitchboard extends ProjectHealthMixin(
+  FishNameMixin(
+    SubmittedRecordsMixin(
+      SitesMixin(
+        ProjectsMixin(
+          ChoicesMixin(ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState))),
+        ),
       ),
     ),
   ),
