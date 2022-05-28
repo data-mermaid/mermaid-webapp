@@ -3,7 +3,7 @@ import { rest } from 'msw'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticated,
@@ -16,13 +16,17 @@ import App from '../App'
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigation links will disappear. Then navigation links reappear after clicking toggle again', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticated(<App dexieInstance={dexieInstance} />, {
-    initialEntries: ['/projects/5/collecting/'],
-  })
+  renderAuthenticated(
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    {
+      initialEntries: ['/projects/5/collecting/'],
+    },
+    { dexieCurrentUserInstance, dexiePerUserDataInstance },
+  )
 
   const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -57,7 +61,13 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
 
 test('Navigator online - Toggle switch is not checked, and is enabled', async () => {
   jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(true)
-  renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
+
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 
@@ -67,7 +77,13 @@ test('Navigator online - Toggle switch is not checked, and is enabled', async ()
 
 test('Navigator offline - Toggle switch is checked and disabled', async () => {
   jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
-  renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
+
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 
@@ -76,7 +92,12 @@ test('Navigator offline - Toggle switch is checked and disabled', async () => {
 })
 
 test('Server is reachable - Toggle switch is not checked, and is enabled', async () => {
-  renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 
@@ -90,7 +111,13 @@ test('Server is unreachable - Toggle switch is not checked, and is enabled', asy
       return res.networkError('Custom network error message')
     }),
   )
-  renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
+
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   const offlineToggleSwitchTestId = await screen.findByTestId('offline-toggle-switch-test')
 

@@ -9,9 +9,14 @@ import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
+import {
+  ToolbarButtonWrapper,
+  ButtonSecondary,
+  LinkLooksLikeButtonSecondary,
+} from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -223,7 +228,7 @@ const ManagementRegimes = () => {
                 <Tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
                     <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
@@ -295,9 +300,9 @@ const ManagementRegimes = () => {
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <ToolbarButtonWrapper>
-              <ButtonSecondary>
+              <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
                 <IconPlus /> New MR
-              </ButtonSecondary>
+              </LinkLooksLikeButtonSecondary>
               <ButtonSecondary>
                 <IconCopy /> Copy MRs from other projects
               </ButtonSecondary>

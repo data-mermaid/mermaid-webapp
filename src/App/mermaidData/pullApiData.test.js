@@ -1,6 +1,6 @@
 import { rest } from 'msw'
 import { getFakeAccessToken } from '../../testUtilities/getFakeAccessToken'
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import { pullApiData } from './pullApiData'
@@ -21,7 +21,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const projectId = '5'
 
 test('pullApiData strips uiState_pushToApi properties from api response', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${process.env.REACT_APP_MERMAID_API}/pull/`, (req, res, ctx) => {
@@ -74,7 +74,7 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
   )
 
   await pullApiData({
-    dexieInstance,
+    dexiePerUserDataInstance,
     getAccessToken: getFakeAccessToken,
     apiBaseUrl,
     apiDataNamesToPull: allTheDataNames,
@@ -82,16 +82,16 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
   })
 
   await Promise.all([
-    dexieInstance.benthic_attributes.toArray(),
-    dexieInstance.choices.toArray(),
-    dexieInstance.collect_records.toArray(),
-    dexieInstance.fish_families.toArray(),
-    dexieInstance.fish_genera.toArray(),
-    dexieInstance.fish_species.toArray(),
-    dexieInstance.project_managements.toArray(),
-    dexieInstance.project_profiles.toArray(),
-    dexieInstance.project_sites.toArray(),
-    dexieInstance.projects.toArray(),
+    dexiePerUserDataInstance.benthic_attributes.toArray(),
+    dexiePerUserDataInstance.choices.toArray(),
+    dexiePerUserDataInstance.collect_records.toArray(),
+    dexiePerUserDataInstance.fish_families.toArray(),
+    dexiePerUserDataInstance.fish_genera.toArray(),
+    dexiePerUserDataInstance.fish_species.toArray(),
+    dexiePerUserDataInstance.project_managements.toArray(),
+    dexiePerUserDataInstance.project_profiles.toArray(),
+    dexiePerUserDataInstance.project_sites.toArray(),
+    dexiePerUserDataInstance.projects.toArray(),
   ]).then(
     ([
       benthicAttributesStored,

@@ -195,21 +195,21 @@ const DataSharing = () => {
             <thead>
               <Tr>
                 <Th>&nbsp;</Th>
-                <Th>
+                <Th align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Private')}
                     text={<>Private</>}
                     id="private-tooltip"
                   />
                 </Th>
-                <Th>
+                <Th align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Public Summary')}
                     text={<>Public Summary</>}
                     id="public-summary-tooltip"
                   />
                 </Th>
-                <Th>
+                <Th align="center">
                   <TooltipWithText
                     tooltipText={findToolTipDescription('Public')}
                     text={<>Public</>}

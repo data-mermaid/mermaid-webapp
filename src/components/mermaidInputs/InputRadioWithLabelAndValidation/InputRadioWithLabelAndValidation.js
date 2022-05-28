@@ -33,10 +33,9 @@ const InputRadioWithLabelAndValidation = ({
 
   return (
     <InputRow required={required} validationType={validationType} data-testid={testId}>
-      <label id={`aria-label${id}`} htmlFor={id}>
-        {label}
-      </label>
-      <div>{optionsList}</div>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label id={`${id}-input-radio-with-label-and-validation`}>{label}</label>
+      <div aria-labelledby={`${id}-input-radio-with-label-and-validation`}>{optionsList}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}

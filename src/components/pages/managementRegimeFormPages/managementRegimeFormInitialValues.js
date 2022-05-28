@@ -1,3 +1,7 @@
+// radios dont complain when initial value is undefined (because they have a value
+// already and checked is the state that changes), but other inputs types do
+// we also dont want 'not reported' (has empty string value) to be selected
+// by default, this is why some of these properties dont default to an ampty string, but others do
 const getManagementRegimeInitialValues = (managementRegimeRecord) => {
   return {
     name: managementRegimeRecord?.name ?? '',
@@ -12,7 +16,7 @@ const getManagementRegimeInitialValues = (managementRegimeRecord) => {
     size_limits: managementRegimeRecord?.size_limits,
     gear_restriction: managementRegimeRecord?.gear_restriction,
     species_restriction: managementRegimeRecord?.species_restriction,
-    compliance: managementRegimeRecord?.compliance ?? '',
+    compliance: managementRegimeRecord?.compliance,
     notes: managementRegimeRecord?.notes ?? '',
   }
 }

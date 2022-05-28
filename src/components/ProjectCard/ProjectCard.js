@@ -10,7 +10,7 @@ import {
   ProjectInfoWrapper,
   ProjectNameWrapper,
 } from './ProjectCard.styles'
-import { pluralize } from '../../library/pluralize'
+import { pluralize } from '../../library/strings/pluralize'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import language from '../../language'

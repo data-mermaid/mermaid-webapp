@@ -11,7 +11,7 @@ import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Site from '../components/pages/Site'
 import Users from '../components/pages/Users'
-import Health from '../components/pages/Health'
+import UsersAndTransects from '../components/pages/UsersAndTransects'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
 import SubmittedFishBelt from '../components/pages/SubmittedFishBelt/SubmittedFishBelt'
 
@@ -23,7 +23,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/health',
-      Component: Health,
+      Component: UsersAndTransects,
     },
     {
       path: '/projects/:projectId/collecting',
@@ -31,7 +31,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
-      Component: () => <FishBelt />,
+      Component: () => <FishBelt isNewRecord={true} />,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
@@ -80,16 +80,24 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: Sites,
     },
     {
+      path: '/projects/:projectId/sites/new',
+      Component: () => <Site isNewSite={true} />,
+    },
+    {
       path: '/projects/:projectId/sites/:siteId',
-      Component: Site,
+      Component: () => <Site isNewSite={false} />,
     },
     {
       path: '/projects/:projectId/management-regimes',
       Component: ManagementRegimes,
     },
     {
+      path: '/projects/:projectId/management-regimes/new',
+      Component: () => <ManagementRegime isNewManagementRegime={true} />,
+    },
+    {
       path: '/projects/:projectId/management-regimes/:managementRegimeId',
-      Component: ManagementRegime,
+      Component: () => <ManagementRegime isNewManagementRegime={false} />,
     },
     {
       path: '/projects/:projectId/users',

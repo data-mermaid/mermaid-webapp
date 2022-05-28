@@ -1,12 +1,14 @@
-import React from 'react'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
-import { ValidationList } from '../../../generic/form'
+import React from 'react'
+import styled, { css } from 'styled-components/macro'
+
 import { ButtonSecondary } from '../../../generic/buttons'
-import theme from '../../../../theme'
+import { hoverState } from '../../../../library/styling/mediaQueries'
+import { ValidationList } from '../../../generic/form'
 import InlineMessage from '../../../generic/InlineMessage/InlineMessage'
 import language from '../../../../language'
+import theme from '../../../../theme'
 
 export const InlineValidationButton = styled(ButtonSecondary)`
   margin: ${theme.spacing.xxsmall};
@@ -17,6 +19,12 @@ export const InlineValidationButton = styled(ButtonSecondary)`
   font-size: smaller;
   white-space: nowrap;
   color: ${theme.color.textColor};
+`
+
+const InlineValidationItem = styled.li`
+  ${hoverState(css`
+    background: ${theme.color.tableRowHover};
+  `)}
 `
 const RecordLevelValidationInfo = ({
   areValidationsShowing,
@@ -39,9 +47,9 @@ const RecordLevelValidationInfo = ({
         const validationMessage = language.getValidationMessage(validation, projectId)
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
-          <li key={validation_id}>
+          <InlineValidationItem key={validation_id}>
             <InlineMessage type={statusForStyling}>
-              <p>{isIgnored ? `Ignored: ${validationMessage}` : validationMessage}</p>
+              <p>{validationMessage}</p>
             </InlineMessage>
             {isWarning || isReset ? (
               <InlineValidationButton
@@ -50,7 +58,7 @@ const RecordLevelValidationInfo = ({
                   ignoreRecordLevelValidation({ validationId: validation.validation_id })
                 }
               >
-                Ignore
+                Ignore Warning
               </InlineValidationButton>
             ) : null}
             {isIgnored ? (
@@ -63,7 +71,7 @@ const RecordLevelValidationInfo = ({
                 Reset validation
               </InlineValidationButton>
             ) : null}
-          </li>
+          </InlineValidationItem>
         ) : null
       })}
     </ValidationList>

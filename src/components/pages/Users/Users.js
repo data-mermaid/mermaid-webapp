@@ -1,5 +1,5 @@
-import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { toast } from 'react-toastify'
+import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
@@ -8,6 +8,9 @@ import styled, { css } from 'styled-components/macro'
 import { ButtonSecondary } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
+import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import {
@@ -17,24 +20,24 @@ import {
   IconPlus,
   IconAlert,
 } from '../../icons'
-import { pluralize } from '../../../library/strings/pluralize'
-import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
-import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodesSecondChild,
 } from '../../generic/Table/reactTableNaturalSort'
+import { pluralize } from '../../../library/strings/pluralize'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
+import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { validateEmail } from '../../../library/strings/validateEmail'
+import communicateGenericApiErrorsToUser from '../../../library/communicateGenericApiErrorsToUser'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InlineMessage from '../../generic/InlineMessage'
 import InputAndButton from '../../generic/InputAndButton/InputAndButton'
 import language from '../../../language'
-import { getToastArguments } from '../../../library/getToastArguments'
 import NewUserModal from '../../NewUserModal'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
@@ -44,7 +47,6 @@ import theme from '../../../theme'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 
 const ToolbarRowWrapper = styled('div')`
@@ -121,12 +123,12 @@ const Users = () => {
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isNewUserProfileModalOpen, setIsNewUserProfileModalOpen] = useState(false)
+  const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
   const [isReadonlyUserWithActiveSampleUnits, setIsReadonlyUserWithActiveSampleUnits] =
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
-  const [newUserProfile, setNewUserProfile] = useState('')
+  const [newUserEmail, setNewUserEmail] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
   const [projectName, setProjectName] = useState('')
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
@@ -195,50 +197,79 @@ const Users = () => {
     }
   }, [databaseSwitchboardInstance, projectId])
 
-  const addNewUser = () => {
-    databaseSwitchboardInstance.getUserProfile(newUserProfile).then((res) => {
-      const doesUserHaveMermaidProfile = res.data.count === 0
+  const addExistingUser = () =>
+    databaseSwitchboardInstance
+      .addUser(newUserEmail, projectId)
+      .then(() => {
+        fetchProjectProfiles()
+        setNewUserEmail('')
+        toast.success(...getToastArguments(language.success.newUserAdd))
+      })
+      .catch((error) => {
+        communicateGenericApiErrorsToUser({
+          error,
+          callback: () => {
+            if (error.response.status === 400) {
+              toast.error(...getToastArguments(language.error.duplicateNewUserAdd))
+            } else {
+              toast.error(...getToastArguments(language.error.generic))
+            }
+          },
+        })
+      })
 
-      if (doesUserHaveMermaidProfile) {
-        setIsNewUserProfileModalOpen(true)
-      } else {
-        databaseSwitchboardInstance
-          .addUser(newUserProfile, projectId)
-          .then(() => {
-            fetchProjectProfiles()
-            setNewUserProfile('')
-            toast.success(...getToastArguments(language.success.newUserAdd))
-          })
-          .catch(() => {
-            toast.error(...getToastArguments(language.error.duplicateNewUserAdd))
-          })
-      }
-    })
-  }
-
-  const handleNewUserSubmit = () => {
-    databaseSwitchboardInstance.addUser(newUserProfile, projectId).then(() => {
-      fetchProjectProfiles()
-      setNewUserProfile('')
-      toast.success(...getToastArguments(language.success.newPendingUserAdd))
-    })
-
-    return Promise.resolve()
-  }
-
-  const openNewUserProfileModal = () => {
-    if (newUserProfile === '') {
+  const notifyUserIfEmailInvalid = () => {
+    if (newUserEmail === '') {
       toast.warning(...getToastArguments(language.error.emptyEmailAdd))
-    } else if (validateEmail(newUserProfile)) {
-      addNewUser()
-    } else {
+
+      return false
+    }
+    if (!validateEmail(newUserEmail)) {
       toast.warning(...getToastArguments(language.error.invalidEmailAdd))
+
+      return false
+    }
+
+    return true
+  }
+
+  const addUser = () => {
+    const isEmailValid = notifyUserIfEmailInvalid()
+
+    if (isEmailValid) {
+      databaseSwitchboardInstance.getUserProfile(newUserEmail).then((res) => {
+        const doesUserHaveMermaidProfile = res.data.count !== 0
+
+        if (!doesUserHaveMermaidProfile) {
+          // if the user doesnt have a profile already, the addUser function
+          // (and the associated API endpoint) results in an email being sent,
+          // hence why we ask for permission first
+          setIsSendEmailToNewUserPromptOpen(true)
+        } else {
+          addExistingUser()
+        }
+      })
     }
   }
+  const closeSendEmailToNewUserPrompt = () => setIsSendEmailToNewUserPromptOpen(false)
 
-  const closeNewUserProfileModal = () => setIsNewUserProfileModalOpen(false)
+  const addNewUserAndSendEmail = () => {
+    return databaseSwitchboardInstance
+      .addUser(newUserEmail, projectId)
+      .then(() => {
+        fetchProjectProfiles()
+        setNewUserEmail('')
+        closeSendEmailToNewUserPrompt()
+        toast.success(...getToastArguments(language.success.newPendingUserAdd))
+      })
+      .catch((error) => {
+        communicateGenericApiErrorsToUser({
+          error,
+        })
+      })
+  }
 
-  const handleNewUserProfileAdd = (event) => setNewUserProfile(event.target.value)
+  const handleNewUserEmailOnChange = (event) => setNewUserEmail(event.target.value)
 
   const handleTransferSampleUnitChange = (projectProfileId) => {
     setToUserProfileId(projectProfileId)
@@ -608,7 +639,7 @@ const Users = () => {
 
                   return (
                     <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
@@ -657,10 +688,10 @@ const Users = () => {
         />
       </TableNavigation>
       <NewUserModal
-        isOpen={isNewUserProfileModalOpen}
-        onDismiss={closeNewUserProfileModal}
-        newUser={newUserProfile}
-        onSubmit={handleNewUserSubmit}
+        isOpen={isSendEmailToNewUserPromptOpen}
+        onDismiss={closeSendEmailToNewUserPrompt}
+        newUser={newUserEmail}
+        onSubmit={addNewUserAndSendEmail}
       />
       <TransferSampleUnitsModal
         isOpen={isTransferSampleUnitsModalOpen}
@@ -706,9 +737,9 @@ const Users = () => {
                 Add User
               </>
             }
-            value={newUserProfile}
-            onChange={handleNewUserProfileAdd}
-            buttonOnClick={openNewUserProfileModal}
+            value={newUserEmail}
+            onChange={handleNewUserEmailOnChange}
+            buttonOnClick={addUser}
           />
         )}
       </ToolbarRowWrapper>

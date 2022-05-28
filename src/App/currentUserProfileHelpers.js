@@ -24,15 +24,15 @@ const getUserName = (user) => {
 export const getCurrentUserProfile = async ({
   apiBaseUrl,
   getAccessToken,
-  dexieInstance,
+  dexieCurrentUserInstance,
   isMermaidAuthenticated,
   isAppOnline,
 }) => {
   if (!apiBaseUrl) {
     throw new Error('getCurrentUserProfile needs an API base url')
   }
-  if (!dexieInstance) {
-    throw new Error('getCurrentUserProfile needs a dexieInstance')
+  if (!dexieCurrentUserInstance) {
+    throw new Error('getCurrentUserProfile needs a dexieCurrentUserInstance')
   }
 
   const isAuthenticatedAndReady = isMermaidAuthenticated
@@ -55,11 +55,11 @@ export const getCurrentUserProfile = async ({
           user: userFromApi,
         }
 
-        return dexieInstance.uiState_currentUser.put(userToStore).then(() => userFromApi)
+        return dexieCurrentUserInstance.currentUser.put(userToStore).then(() => userFromApi)
       })
   }
   if (isOfflineAuthenticatedAndReady) {
-    return dexieInstance.uiState_currentUser.toArray().then((results) => {
+    return dexieCurrentUserInstance.currentUser.toArray().then((results) => {
       const { user } = results[0]
 
       if (!user) {
@@ -76,7 +76,7 @@ export const getCurrentUserProfile = async ({
 export const updateCurrentUserProfile = async ({
   apiBaseUrl,
   getAccessToken,
-  dexieInstance,
+  dexieCurrentUserInstance,
   isMermaidAuthenticated,
   isAppOnline,
   userProfile,
@@ -84,7 +84,7 @@ export const updateCurrentUserProfile = async ({
   if (!apiBaseUrl) {
     throw new Error('updateCurrentUserProfile needs an API base url')
   }
-  if (!dexieInstance) {
+  if (!dexieCurrentUserInstance) {
     throw new Error('updateCurrentUserProfile needs a dexieInstance')
   }
 
@@ -108,7 +108,7 @@ export const updateCurrentUserProfile = async ({
           user: { ...userProfile, first_name, last_name, email, full_name: userFullName },
         }
 
-        return dexieInstance.uiState_currentUser.put(userToStore).then(() => userToStore.user)
+        return dexieCurrentUserInstance.currentUser.put(userToStore).then(() => userToStore.user)
       })
   }
 

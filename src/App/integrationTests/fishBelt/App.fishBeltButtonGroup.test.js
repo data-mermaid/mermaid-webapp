@@ -4,7 +4,7 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 import { screen, renderAuthenticatedOnline } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltValidationsObject'
@@ -12,11 +12,12 @@ import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltVa
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/2'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   userEvent.clear(await screen.findByLabelText('Depth'))
@@ -42,11 +43,12 @@ test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved 
 })
 
 test('Validate fishbelt: fails to validate, shows button able to run validation again.', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   userEvent.click(await screen.findByText('Validate', { selector: 'button' }))
@@ -85,11 +87,12 @@ test('Validate fishbelt: fails to validate, shows button able to run validation 
 })
 
 test('Validate & submit fishbelt: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   mockMermaidApiAllSuccessful.use(
@@ -155,11 +158,12 @@ test('Validate & submit fishbelt: validation passes, shows validate button disab
 })
 
 test('Initial load of successfully validated record', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   userEvent.click(await screen.findByText('Validate', { selector: 'button' }))

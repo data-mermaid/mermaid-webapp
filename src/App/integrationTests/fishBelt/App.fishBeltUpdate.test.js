@@ -7,20 +7,21 @@ import {
   waitForElementToBeRemoved,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 import App from '../../App'
 
 describe('Offline', () => {
   test('Edit fishbelt save success shows toast message and proper record information', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     // make sure there is a collect record to edit in dexie
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     })
 
     // make a change
@@ -57,13 +58,14 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     })
 
     // test all observers format too
@@ -106,7 +108,7 @@ describe('Offline', () => {
     )
 
     expect(await screen.findByText('Record saved.'))
-    const savedCollectRecords = await dexieInstance.collect_records.toArray()
+    const savedCollectRecords = await dexiePerUserDataInstance.collect_records.toArray()
 
     const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '2')[0]
 
@@ -117,13 +119,14 @@ describe('Offline', () => {
     expect(newObservation.size).toEqual(37.5)
   })
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie for 50+ observation size input', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     })
 
     // test all observers format too
@@ -158,7 +161,7 @@ describe('Offline', () => {
     )
 
     expect(await screen.findByText('Record saved.'))
-    const savedCollectRecord = (await dexieInstance.collect_records.toArray()).find(
+    const savedCollectRecord = (await dexiePerUserDataInstance.collect_records.toArray()).find(
       (record) => record.id === '2',
     )
 
@@ -167,16 +170,17 @@ describe('Offline', () => {
     expect(newObservation.size).toEqual(50367)
   })
   test('Edit fishbelt save failure shows toast message with new edits persisting', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     // make sure the next save will fail
-    dexieInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
+    dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     })
 
     // make an unsaved change
@@ -196,14 +200,15 @@ describe('Offline', () => {
   })
 
   test('Edit fishbelt can "unselect" non required radio group inputs', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     // make sure there is a collect record to edit in dexie
-    await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
+    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     })
 
     await screen.findByLabelText('project pages loading indicator')
@@ -231,7 +236,7 @@ describe('Offline', () => {
 
     expect(await screen.findByText('Record saved.'))
 
-    const editedStoredRecord = await dexieInstance.collect_records.get('2')
+    const editedStoredRecord = await dexiePerUserDataInstance.collect_records.get('2')
 
     const storedReefSlope = editedStoredRecord.data.fishbelt_transect.reef_slope
     const storedVisibility = editedStoredRecord.data.fishbelt_transect.visibility

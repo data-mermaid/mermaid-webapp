@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import React from 'react'
 
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import mockMermaidData from '../../testUtilities/mockMermaidData'
 import {
   mockMermaidApiAllSuccessful,
@@ -50,10 +50,11 @@ beforeEach(() => {
 })
 
 test('Sync: select project to be offline ready, shows toast, syncs and stores data, shows project as selected', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    dexieInstance,
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
   /**
    * api syncing can cause the loading indicator to initially be absent,
@@ -63,10 +64,10 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
   await screen.findByLabelText('projects list loading indicator')
   await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_managements.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(0)
-  expect((await dexieInstance.project_sites.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(0)
+  expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(0)
 
   const project5OfflineCheckboxBeforeFirstClick = within(
     screen.getAllByRole('listitem')[4],
@@ -82,44 +83,35 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
 
   expect(project5OfflineCheckboxAfterProjectSetOffline).toBeChecked()
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(17)
-  expect((await dexieInstance.project_managements.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(17)
+  expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(
     mockMermaidData.project_managements.length,
   )
-  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(
     mockMermaidData.project_profiles.length,
   )
-  expect((await dexieInstance.project_sites.toArray()).length).toEqual(
+  expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(
     mockMermaidData.project_sites.length,
   )
 })
 test('Sync: select project to NOT be offline ready, shows toast, removes data, shows project as not selected', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
-    dexieInstance,
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
-  /**
-   * api syncing can cause the loading indicator to initially be absent,
-   * and then show up. for the test to work, we need to wait for
-   * the loading indicator to show first before we wait for it to disappear
-   */
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
 
   const project5OfflineCheckboxBeforeFirstClick = within(
-    screen.getAllByRole('listitem')[4],
+    (await screen.findAllByRole('listitem'))[4],
   ).getByRole('checkbox')
 
   userEvent.click(project5OfflineCheckboxBeforeFirstClick)
 
   expect(await screen.findByText('The project, Project V, is now offline ready'))
 
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
-
   const project5OfflineCheckboxAfterFirstClick = within(
-    screen.getAllByRole('listitem')[4],
+    (await screen.findAllByRole('listitem'))[4],
   ).getByRole('checkbox')
 
   userEvent.click(project5OfflineCheckboxAfterFirstClick)
@@ -134,17 +126,18 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   expect(project5OfflineCheckboxAfterProjectSetOffline).not.toBeChecked()
 
-  expect((await dexieInstance.collect_records.toArray()).length).toEqual(
-    mockMermaidData.collect_records.filter(record => record.project !== '5').length,
+  expect((await dexiePerUserDataInstance.collect_records.toArray()).length).toEqual(
+    mockMermaidData.collect_records.filter((record) => record.project !== '5').length,
   )
-  expect((await dexieInstance.project_managements.toArray()).length).toEqual(
-    mockMermaidData.project_managements.filter(managementRegime => managementRegime.project !== '5')
-      .length,
+  expect((await dexiePerUserDataInstance.project_managements.toArray()).length).toEqual(
+    mockMermaidData.project_managements.filter(
+      (managementRegime) => managementRegime.project !== '5',
+    ).length,
   )
-  expect((await dexieInstance.project_profiles.toArray()).length).toEqual(
-    mockMermaidData.project_profiles.filter(profile => profile.project !== '5').length,
+  expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(
+    mockMermaidData.project_profiles.filter((profile) => profile.project !== '5').length,
   )
-  expect((await dexieInstance.project_sites.toArray()).length).toEqual(
-    mockMermaidData.project_sites.filter(site => site.project !== '5').length,
+  expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(
+    mockMermaidData.project_sites.filter((site) => site.project !== '5').length,
   )
 })

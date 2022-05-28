@@ -8,24 +8,25 @@ import {
   renderAuthenticated,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 
 test('Unsaved NEW fishbelt form edits clear when the user navigates away and back', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   const form = await screen.findByRole('form')
 
-  expect(within(form).getByLabelText(/depth/i)).not.toHaveValue()
+  expect(within(form).getByLabelText('Depth')).not.toHaveValue()
 
   // enter a depth
-  userEvent.type(await within(form).findByLabelText(/depth/i), '45')
+  userEvent.type(await within(form).findByLabelText('Depth'), '45')
 
-  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
 
   // nav away
   const sideNav = await screen.findByTestId('content-page-side-nav')
@@ -47,26 +48,30 @@ test('Unsaved NEW fishbelt form edits clear when the user navigates away and bac
 
   const formAfterNav = await screen.findByRole('form')
 
-  expect(within(formAfterNav).getByLabelText(/depth/i)).not.toHaveValue()
+  expect(within(formAfterNav).getByLabelText('Depth')).not.toHaveValue()
 })
 
 test('Unsaved EDIT fishbelt form edits clear when the user navigates away and back', async () => {
-  renderAuthenticatedOnline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   const form = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(form).getByLabelText(/depth/i)).toHaveValue(10)
+  expect(within(form).getByLabelText('Depth')).toHaveValue(10)
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText(/depth/i)
+  const depthInput = await within(form).findByLabelText('Depth')
 
   userEvent.clear(depthInput)
   userEvent.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
 
   // nav away
   const sideNav = screen.getByTestId('content-page-side-nav')
@@ -85,53 +90,61 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   const formAfterNav = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(formAfterNav).getByLabelText(/depth/i)).toHaveValue(10)
+  expect(within(formAfterNav).getByLabelText('Depth')).toHaveValue(10)
 })
 test('Unsaved NEW fishbelt form edits persist through change in online/offline status', async () => {
-  renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   const form = await screen.findByRole('form')
 
-  expect(within(form).getByLabelText(/depth/i)).not.toHaveValue()
+  expect(within(form).getByLabelText('Depth')).not.toHaveValue()
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText(/depth/i)
+  const depthInput = await within(form).findByLabelText('Depth')
 
   userEvent.clear(depthInput)
   userEvent.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
   expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
 
   userEvent.click(screen.getByTestId('offline-toggle-switch-label'))
 
-  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
   expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
 })
 
 test('Unsaved EDIT fishbelt form edits persist through change in online/offline status', async () => {
-  renderAuthenticated(<App dexieInstance={getMockDexieInstanceAllSuccess()} />, {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/2'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   const form = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(form).getByLabelText(/depth/i)).toHaveValue(10)
+  expect(within(form).getByLabelText('Depth')).toHaveValue(10)
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText(/depth/i)
+  const depthInput = await within(form).findByLabelText('Depth')
 
   userEvent.clear(depthInput)
   userEvent.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
   expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
 
   userEvent.click(screen.getByTestId('offline-toggle-switch-label'))
 
-  expect(await within(form).findByLabelText(/depth/i)).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
   expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
 })

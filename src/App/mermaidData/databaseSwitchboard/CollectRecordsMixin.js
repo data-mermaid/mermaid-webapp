@@ -5,15 +5,14 @@ import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
+import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
-    #collectRecordProtocolLabels = {
-      fishbelt: 'Fish Belt',
-      benthiclit: 'Benthic LIT',
-      benthicpit: 'Benthic PIT',
-      habitatcomplexity: 'Habitat Complexity',
-      bleachingqc: 'Bleaching',
+    #validationTypeLabel = {
+      ok: 'Valid',
+      error: 'Errors',
+      warning: 'Warnings',
     }
 
     #getIsFishBelt = function getIsFishBelt(record) {
@@ -50,7 +49,7 @@ const CollectRecordsMixin = (Base) =>
         ? record.data?.fishbelt_transect?.label
         : record.data?.benthic_transect?.label
 
-      const sampleUnit = `${transectNumber ?? ''} ${labelName || ''}`.trim()
+      const sampleUnit = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
 
       return sampleUnit === '' ? undefined : sampleUnit
     }
@@ -73,6 +72,12 @@ const CollectRecordsMixin = (Base) =>
             }, [])
             .join(', ')
         : undefined
+    }
+
+    #getStatusLabel = function getStatusLabel(record) {
+      const { validations } = record
+
+      return this.#validationTypeLabel[validations?.status] ?? 'Saved'
     }
 
     #getSizeLabel = function getSizeLabel(record, choices) {
@@ -117,9 +122,10 @@ const CollectRecordsMixin = (Base) =>
 
       if (this._isOnlineAuthenticatedAndReady) {
         // put it in IDB just in case the network craps out before the API can return
-        await this._dexieInstance.collect_records.put(recordToSubmit)
+        await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
 
-        return axios.post(
+        return axios
+          .post(
             `${this._apiBaseUrl}/push/`,
             {
               collect_records: [recordToSubmit],
@@ -128,7 +134,7 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
-              ...await getAuthorizationHeaders(this._getAccessToken)
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
           .then((response) => {
@@ -157,7 +163,9 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.put(recordToSubmit).then(() => recordToSubmit)
+        return this._dexiePerUserDataInstance.collect_records
+          .put(recordToSubmit)
+          .then(() => recordToSubmit)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -180,9 +188,10 @@ const CollectRecordsMixin = (Base) =>
 
       if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         // put it in IDB just in case the network craps out before the API can return
-        await this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
+        await this._dexiePerUserDataInstance.collect_records.put(recordMarkedToBeDeleted)
 
-        return axios.post(
+        return axios
+          .post(
             `${this._apiBaseUrl}/push/`,
             {
               collect_records: [recordMarkedToBeDeleted],
@@ -191,8 +200,7 @@ const CollectRecordsMixin = (Base) =>
               params: {
                 force: true,
               },
-              ...await getAuthorizationHeaders(this._getAccessToken)
-
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
           .then((apiPushResponse) => {
@@ -217,13 +225,13 @@ const CollectRecordsMixin = (Base) =>
           })
       }
       if (hasCorrespondingRecordInTheApi && this._isOfflineAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records.put(recordMarkedToBeDeleted)
+        return this._dexiePerUserDataInstance.collect_records.put(recordMarkedToBeDeleted)
       }
       if (
         !hasCorrespondingRecordInTheApi &&
         (this._isOnlineAuthenticatedAndReady || this._isOfflineAuthenticatedAndReady)
       ) {
-        return this._dexieInstance.collect_records.delete(record.id)
+        return this._dexiePerUserDataInstance.collect_records.delete(record.id)
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
@@ -235,12 +243,16 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        return axios.post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`, {
-            ids: [recordId],
-            version: '2',
-          },
-          await getAuthorizationHeaders(this._getAccessToken)
-        ).then((response) => {
+        return axios
+          .post(
+            `${this._apiBaseUrl}/projects/${projectId}/collectrecords/validate/`,
+            {
+              ids: [recordId],
+              version: '2',
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseStatusSuccessful) {
@@ -266,11 +278,15 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
-        return axios.post(`${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`, {
-            ids: [recordId],
-            version: '2',
-          },
-          await getAuthorizationHeaders(this._getAccessToken))
+        return axios
+          .post(
+            `${this._apiBaseUrl}/projects/${projectId}/collectrecords/submit/`,
+            {
+              ids: [recordId],
+              version: '2',
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
           .then((response) => {
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
@@ -305,7 +321,7 @@ const CollectRecordsMixin = (Base) =>
         value: recordLevelValidationsWithIgnored,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithIgnoredValidations)
         .then(() => recordWithIgnoredValidations)
     }
@@ -343,7 +359,7 @@ const CollectRecordsMixin = (Base) =>
         value: ignoredValidations,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithIgnoredValidations)
         .then(() => recordWithIgnoredValidations)
     }
@@ -358,7 +374,7 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const recordToOperateOn = await this._dexieInstance.collect_records.get(recordId)
+      const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
       const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
 
@@ -385,7 +401,7 @@ const CollectRecordsMixin = (Base) =>
       })
 
       // user form will be dirty, and a save will cause a push to the api
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithIgnoredObservationValidations)
         .then(() => recordWithIgnoredObservationValidations)
     }
@@ -415,7 +431,7 @@ const CollectRecordsMixin = (Base) =>
         value: recordLevelValidationsWithReset,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithResetValidation)
         .then(() => recordWithResetValidation)
     }
@@ -453,7 +469,7 @@ const CollectRecordsMixin = (Base) =>
         value: resettedValidations,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithResetValidations)
         .then(() => recordWithResetValidations)
     }
@@ -468,7 +484,7 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const recordToOperateOn = await this._dexieInstance.collect_records.get(recordId)
+      const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
       const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
 
@@ -493,7 +509,7 @@ const CollectRecordsMixin = (Base) =>
         value: observationsValidationsWithReset,
       })
 
-      return this._dexieInstance.collect_records
+      return this._dexiePerUserDataInstance.collect_records
         .put(recordWithResetObservationValidations)
         .then(() => recordWithResetObservationValidations)
     }
@@ -507,7 +523,7 @@ const CollectRecordsMixin = (Base) =>
         Promise.reject(this._notAuthenticatedAndReadyError)
       }
 
-      return this._dexieInstance.collect_records.get(id)
+      return this._dexiePerUserDataInstance.collect_records.get(id)
     }
 
     getCollectRecordsWithoutOfflineDeleted = function getCollectRecordsWithoutOfflineDeleted(
@@ -518,7 +534,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (this._isAuthenticatedAndReady) {
-        return this._dexieInstance.collect_records
+        return this._dexiePerUserDataInstance.collect_records
           .toArray()
           .then((records) =>
             records.filter((record) => record.project === projectId && !record._deleted),
@@ -543,15 +559,15 @@ const CollectRecordsMixin = (Base) =>
             return collectRecords.map((record) => ({
               ...record,
               uiLabels: {
-                site: getObjectById(sites, record.data.sample_event.site)?.name,
-                management: getObjectById(managementRegimes, record.data.sample_event.management)
-                  ?.name,
-                protocol: this.#collectRecordProtocolLabels[record.data.protocol],
-                size: this.#getSizeLabel(record, choices),
-                sampleUnitNumber: this.#getSampleUnitLabel(record),
                 depth: this.#getDepthLabel(record),
+                management: getObjectById(managementRegimes, record.data.sample_event.management)?.name,
+                observers: this.#getObserversLabel(record),
+                protocol: getRecordProtocolLabel(record.data.protocol),
                 sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
-                observers: this.#getObserversLabel(record)
+                sampleUnitNumber: this.#getSampleUnitLabel(record),
+                site: getObjectById(sites, record.data.sample_event.site)?.name,
+                size: this.#getSizeLabel(record, choices),
+                status: this.#getStatusLabel(record),
               },
             }))
           })

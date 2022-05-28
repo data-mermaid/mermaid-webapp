@@ -26,36 +26,50 @@
 The general approach to this code has been to avoid premature performance optimization in favour of more maintainable code. When possible, it is also attempted to keep as much code outside of React and in regular JavaScript as possible. The idea is to make the code more approachable for non-React devs (Dustin, Kim), and to make more of the code reusable in future cases of framework swapouts.
 
 #### Syncing data with the server
-Initialize with the `useInitializeSyncApiDataIntoOfflineStorage` hook, get sync status state from the `useSyncStatus()` hook. Both hooks depend on `SyncStatusProvider`
 
-Syncs are triggered when navigating to the projects list page, and any time a user navigates to a project-related page. Note that not all syncs pull the same things. - the hooks take care of nagivation and reload based syncs. There is also an `apiSyncInstance` available in the app for manualy controled syncs.
+Initialize navigation and app-load-based auto sync with the `useInitializeSyncApiDataIntoOfflineStorage` hook, get sync status state from the `useSyncStatus()` hook. Both hooks depend on `SyncStatusProvider`
+These auto syncs are triggered when navigating to the projects list page, and any time a user navigates to a project-related page. Note that not all syncs pull the same things. - the hooks take care of nagivation and reload based syncs.
 
-### Database Switchboard
-The `DatabaseSwitchBoardInstance` is responsible for getting data to the app. It takes care of if the data should come from InndexedDB or the API so the app doesnt have to think as much about it. The idea is not to call the api or interact with IDB other than though the DatabaseSwitchboard for maintainability. Class mixins were used unfortunately, but other than having unclear inheritance and a weird implementation syntax, seem to be working just fine so far.
+There is also an `apiSyncInstance` available in the app for manualy controled syncs. Typically, in the databaseSwitchboard, creating, editing, or deleting Mermaid data will involve pushing the changes to IDB first, then pushing to the API, and then using the `pushThenPullEverythingForAProjectButChoices` to make sure a sync happens with all the data (beyond what was just pushed). The Project card component is an exception. There, the component code triggers a sync when the offline-ready checkbox is toggled. The component code handling sync, IDB, or API operations should generally be avoided. Whenever triggering a manual sync, make sure to set the sync status appropriately via `setIsSyncInProgress`
+
+Syncs also _should_ be triggered on many create/update/delete operations within the databaseSwitchboard (its enforced through code review, so its always good to check that a sync is happening before relying on it. Look for various functions being used from syncApiDataIntoOfflineStorage names starting with 'pushThenPullEverything')
+
+#### Database Switchboard
+
+The `DatabaseSwitchBoardInstance` is responsible for getting data to the app. It takes care of if the data should come from IndexedDB (IDB) or the API so the app does not have to think as much about it. The idea is not to call the API or interact with IDB other than though the DatabaseSwitchboard for maintainability. In general, because of the app syncing the databaseSwitchboard usually uses IDB as a source of truth on Mermaid Data for foundational app logic, or for offline-able pages because the sync code pulls from the API and puts it in IDB quite frequently.
+
+Class mixins were used unfortunately, but other than having unclear inheritance and a weird implementation syntax, seem to be working just fine so far.
 
 #### Layout
+
 There are two main layout compoenets. One for general page layout (header and footer) and a special one for project pages (It has slots for side nav, and two other sections)
 
-####  State management
+#### State management
+
 As a tradeoff between mixing concerns and having an overlycomplex, it was decided to track some ui state on the Mermaid data itself. These properties are prefized with `uiState_`, and are removed before pushing the data to the API. It is questionable in hindsight if this was the best approach. Noteworthy ui state:
-  - ` uiState_pushToApi` set to true if you want an entity to be included in the next push to the API
+
+- ` uiState_pushToApi` set to true if you want an entity to be included in the next push to the API
 - API stuff:
   - `last_revision_num` is tricky and there are no API docs for it. Definitely Dustin for an overview if you need to touch it (I cant remember the details).
   - a `_deleted` property is stored and sent to the api to let it know to delete an item.
 
 #### Navigation prompts
-There are currently two ways the application warns the user about navigating away from an unsaved (dirty) form:
-  1. `useBeforeUnloadPrompt` to add an event listener to detect browser navigation (refresh, back, forward etc)
-  2. `<Prompt>` from `react-router-dom` to handle navigation occurring within the application through react router. 
-These have been combined into a single high order component named `<EnhancedPrompt>` which has been added to all forms in the application.
 
-React router v6 will eventually provide a hook called `usePrompt` which will cover both of the above and will display the same default modal/popup for both. Another similar hook named `useBlocker` will be provided too. [Good reference]( https://stackoverflow.com/questions/62792342/in-react-router-v6-how-to-check-form-is-dirty-before-leaving-page-route
-) with link to a demo. These hooks were available in the v6 alpha, but have been removed until later in the stable v6 ([upgrade guide](https://reactrouter.com/docs/en/v6/upgrading/v5#prompt-is-not-currently-supported)) 
+There are currently two ways the application warns the user about navigating away from an unsaved (dirty) form:
+
+1. `useBeforeUnloadPrompt` to add an event listener to detect browser navigation (refresh, back, forward etc)
+2. `<Prompt>` from `react-router-dom` to handle navigation occurring within the application through react router.
+   These have been combined into a single high order component named `<EnhancedPrompt>` which has been added to all forms in the application.
+
+React router v6 will eventually provide a hook called `usePrompt` which will cover both of the above and will display the same default modal/popup for both. Another similar hook named `useBlocker` will be provided too. [Good reference](https://stackoverflow.com/questions/62792342/in-react-router-v6-how-to-check-form-is-dirty-before-leaving-page-route) with link to a demo. These hooks were available in the v6 alpha, but have been removed until later in the stable v6 ([upgrade guide](https://reactrouter.com/docs/en/v6/upgrading/v5#prompt-is-not-currently-supported))
+
 #### Testing
+
 The goal of testing is not 100% test coverage. Its to test critical path features or any complex code. Currently we are focusing test effort on offline functionality, and ignoring online-only functionality.
 
 Since this app can exist in multiple states (online, offline, various states of data), test helpers were created to abstract much of this set up. The main ones are:
-  - renderAuthenticatedOffline, renderAuthenticatedOnline, getMockDexieInstanceAllSuccess, initiallyHydrateOfflineStorageWithMockData (use for offline tests)
+
+- renderAuthenticatedOffline, renderAuthenticatedOnline, getMockDexieInstancesAllSuccess, initiallyHydrateOfflineStorageWithMockData (use for offline tests)
 
 ## Deploying
 

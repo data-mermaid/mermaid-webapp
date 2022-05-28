@@ -2,17 +2,18 @@ import '@testing-library/jest-dom/extend-expect'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import { renderAuthenticatedOffline, screen } from '../../testUtilities/testingLibraryWithHelpers'
 import App from '../App'
 
 test('Clicking anywhere on a project card navigates to the project collect page when offline', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-    dexieInstance,
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   expect(
@@ -34,7 +35,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 // commented out for alpha, reactivate post alpha
 // test('Clicking anywhere on a project card navigates to the project health page when online', async () => {
 //   renderAuthenticatedOnline(
-//     <App dexieInstance={getMockDexieInstanceAllSuccess()} />,
+//     <App dexieInstance={getMockDexieInstancesAllSuccess()} />,
 //   )
 
 //   expect(
@@ -55,13 +56,14 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 // })
 
 test('Offline projects page only shows offline ready projects', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   // this includes marking one project as offline ready imperatively
-  await initiallyHydrateOfflineStorageWithMockData(dexieInstance)
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieInstance={dexieInstance} />, {
-    dexieInstance,
+  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   const projects = await screen.findAllByRole('listitem')

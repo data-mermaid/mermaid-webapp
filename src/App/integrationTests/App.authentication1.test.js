@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 
-import { getMockDexieInstanceAllSuccess } from '../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 
 import {
   fireEvent,
@@ -14,7 +14,12 @@ import App from '../App'
 // test suite cut up into 2 parts for performance reasons
 
 test('App renders the initial screen as expected for an online and authenticated user', async () => {
-  renderAuthenticatedOnline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
 
   expect(await screen.findByText('Projects', { selector: 'h1' }))
 
@@ -25,7 +30,12 @@ test('App renders the initial screen as expected for an online and authenticated
 })
 
 test('App: an online and authenticated user can logout', async () => {
-  renderAuthenticatedOnline(<App dexieInstance={getMockDexieInstanceAllSuccess()} />)
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexieCurrentUserInstance,
+    dexiePerUserDataInstance,
+  })
 
   fireEvent.click(await screen.findByText('FakeFirstNameOnline'))
   fireEvent.click(screen.getByText('Logout'))

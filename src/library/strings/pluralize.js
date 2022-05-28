@@ -1,6 +1,6 @@
-export const pluralize = (val, singluar, plural) => {
+export const pluralize = (val, singularWord, plural) => {
   if (val === 1) {
-    return singluar
+    return singularWord
   }
 
   return plural

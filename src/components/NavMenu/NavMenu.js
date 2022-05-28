@@ -14,6 +14,7 @@ import {
   IconAdmin,
   IconUsers,
   IconSharing,
+  IconHeart,
 } from '../icons'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
@@ -24,8 +25,10 @@ const NavWrapper = styled('nav')`
   display: flex;
   flex-direction: column;
   height: 100%;
-  font-size: smaller;
   width: ${theme.spacing.sideNavWidth};
+  ${mediaQueryPhoneOnly(css`
+    width: ${theme.spacing.mobileSideNavWidth};
+  `)}
 `
 const NavList = styled('ul')`
   position: sticky;
@@ -48,11 +51,14 @@ const NavList = styled('ul')`
 const NavHeader = styled('p')`
   margin: ${theme.spacing.large} 0 0 0;
   color: ${theme.color.textColor};
-  padding: ${theme.spacing.small};
-  padding-top: ${theme.spacing.large};
-  text-align: center;
+  padding: ${theme.spacing.large} 0 0 ${theme.spacing.medium};
   text-transform: uppercase;
   font-weight: 900;
+  ${mediaQueryPhoneOnly(css`
+    padding-left: 0;
+    font-size: smaller;
+    text-align: center;
+  `)}
 `
 
 const NavMenu = ({ subNavNode }) => {
@@ -67,19 +73,18 @@ const NavMenu = ({ subNavNode }) => {
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
-        {/* hiding for alpha release because leads nowhere useful */}
-        {/* <OfflineHide>
+        <OfflineHide>
           <li>
             <NavHeader>Project Overview</NavHeader>
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/health`}>
-                  <IconHeart /> <span>Project Health</span>
+                  <IconHeart /> <span>Users and Transects</span>
                 </NavLinkSidebar>
               </li>
             </ul>
           </li>
-        </OfflineHide> */}
+        </OfflineHide>
         <li>
           <NavHeader>Collect</NavHeader>
           <ul>

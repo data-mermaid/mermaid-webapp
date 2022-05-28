@@ -9,13 +9,13 @@ import {
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Fishbelt validations show check for valid inputs', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
@@ -61,11 +61,12 @@ test('Fishbelt validations show check for valid inputs', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieInstance={dexieInstance} />,
+    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   )
 
   userEvent.click(

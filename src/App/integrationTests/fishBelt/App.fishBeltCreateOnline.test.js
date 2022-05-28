@@ -7,7 +7,7 @@ import {
   renderAuthenticatedOnline,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 
 const saveFishbeltRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
@@ -33,14 +33,15 @@ const saveFishbeltRecord = async () => {
 
 describe('Online', () => {
   test('New fishbelt save success shows toast, and navigates to edit fishbelt page for new record', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     renderAuthenticatedOnline(
-      <App dexieInstance={dexieInstance} />,
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
       {
         initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     )
 
     await saveFishbeltRecord()
@@ -70,14 +71,15 @@ describe('Online', () => {
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)
   test('New fishbelt save success show new record in collecting table', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     renderAuthenticatedOnline(
-      <App dexieInstance={dexieInstance} />,
+      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
       {
         initialEntries: ['/projects/5/collecting/fishbelt/'],
       },
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     )
 
     await saveFishbeltRecord()
@@ -101,12 +103,13 @@ describe('Online', () => {
     expect(await within(table).findByText('10000'))
   }, 50000)
   test('New fishbelt save failure shows toast message with edits persisting', async () => {
-    const dexieInstance = getMockDexieInstanceAllSuccess()
+    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    dexieInstance.collect_records.put = () => Promise.reject()
-    renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+    dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
+    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/collecting/fishbelt/'],
-      dexieInstance,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     })
 
     await saveFishbeltRecord()

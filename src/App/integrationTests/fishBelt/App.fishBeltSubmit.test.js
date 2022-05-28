@@ -4,7 +4,7 @@ import React from 'react'
 import userEvent from '@testing-library/user-event'
 
 import { screen, renderAuthenticatedOnline } from '../../../testUtilities/testingLibraryWithHelpers'
-import { getMockDexieInstanceAllSuccess } from '../../../testUtilities/mockDexie'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import App from '../../App'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAllSuccessful'
@@ -13,11 +13,12 @@ import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltVa
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 test('Submit fishbelt success shows toast message and redirects to collect record list page', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   mockMermaidApiAllSuccessful.use(
@@ -79,11 +80,12 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
 })
 
 test('Submit fishbelt failure shows toast message and an enabled submit button', async () => {
-  const dexieInstance = getMockDexieInstanceAllSuccess()
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieInstance={dexieInstance} />, {
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
-    dexieInstance,
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
   })
 
   mockMermaidApiAllSuccessful.use(

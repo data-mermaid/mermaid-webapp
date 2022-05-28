@@ -25,7 +25,7 @@ const TextareaWithLabelAndValidation = ({
         <Textarea
           aria-labelledby={`aria-label${id}`}
           aria-describedby={`aria-descp${id}`}
-          rows="3"
+          rows="6"
           id={id}
           {...restOfProps}
         />

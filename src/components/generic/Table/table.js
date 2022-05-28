@@ -1,5 +1,9 @@
 import styled, { css } from 'styled-components/macro'
-import { mediaQueryTabletLandscapeOnly, hoverState } from '../../../library/styling/mediaQueries'
+import {
+  mediaQueryTabletLandscapeOnly,
+  mediaQueryPhoneOnly,
+  hoverState,
+} from '../../../library/styling/mediaQueries'
 import theme from '../../../theme'
 
 export const TableNavigation = styled.div`
@@ -15,6 +19,9 @@ export const TableNavigation = styled.div`
 `
 export const TableOverflowWrapper = styled.div`
   max-width: calc(100vw - ${theme.spacing.sideNavWidth} - 20px);
+  ${mediaQueryPhoneOnly(css`
+    max-width: calc(100vw - ${theme.spacing.mobileSideNavWidth} - 20px);
+  `)}
   // 20px is the approx scrollbar width this is to prevent
   // a horziontal scrollbar at the bottom of the page
   // and to keep the toolbar sticky when needed.
@@ -66,25 +73,18 @@ export const Th = styled.th(
     vertical-align: top;
     &::after {
       content: ' \u25b2';
-      color: ${props.isSortingEnabled
-        ? theme.color.secondaryDisabledColor
-        : theme.color.white
-      };
+      color: ${props.isSortingEnabled ? theme.color.secondaryDisabledColor : theme.color.white};
       font-size: small;
       white-space: nowrap;
     }
-    ${getHeaderSortAfter(
-      props.isMultiSortColumn,
-      props.sortedIndex,
-      props.isSortedDescending
-    )}
+    ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
   `,
 )
 Th.defaultProps = {
   isSortedDescending: false,
   isSortingEnabled: false,
   isMultiSortColumn: false,
-  sortedIndex: -1
+  sortedIndex: -1,
 }
 
 export const Td = styled.td(

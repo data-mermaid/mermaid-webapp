@@ -12,9 +12,14 @@ import {
   reactTableNaturalSortReactNodes,
 } from '../../generic/Table/reactTableNaturalSort'
 import { ToolBarRow } from '../../generic/positioning'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import { ToolbarButtonWrapper, ButtonSecondary } from '../../generic/buttons'
+import {
+  ToolbarButtonWrapper,
+  ButtonSecondary,
+  LinkLooksLikeButtonSecondary,
+} from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -125,7 +130,7 @@ const Sites = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-sitesTable`,
+    key: `${currentUser && currentUser.id}-sitesTable`,
     defaultValue: tableDefaultPrefs,
   })
 
@@ -214,7 +219,7 @@ const Sites = () => {
 
                   return (
                     <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
@@ -287,9 +292,9 @@ const Sites = () => {
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
             <ToolbarButtonWrapper>
-              <ButtonSecondary>
+              <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
                 <IconPlus /> New site
-              </ButtonSecondary>
+              </LinkLooksLikeButtonSecondary>
               <ButtonSecondary>
                 <IconCopy /> Copy sites from other projects
               </ButtonSecondary>

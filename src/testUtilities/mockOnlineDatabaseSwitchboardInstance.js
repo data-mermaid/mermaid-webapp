@@ -1,23 +1,25 @@
-import { getMockDexieInstanceAllSuccess } from './mockDexie'
+import { getMockDexieInstancesAllSuccess } from './mockDexie'
 import DatabaseSwitchboard from '../App/mermaidData/databaseSwitchboard/DatabaseSwitchboard'
 import SyncApiDataIntoOfflineStorage from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { getFakeAccessToken } from './getFakeAccessToken'
 
-const defaultDexieInstance = getMockDexieInstanceAllSuccess()
 const getAccessToken = async () => 'fake token'
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) => {
-  const dexieInstanceToUse = dexieInstance ?? defaultDexieInstance
+const getMockOnlineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance }) => {
+  const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
+    getMockDexieInstancesAllSuccess()
+  const dexieUserDataDatabaseInstanceToUse =
+    dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
 
   return new DatabaseSwitchboard({
     apiBaseUrl,
     getAccessToken,
     isMermaidAuthenticated: true,
     isAppOnline: true,
-    dexieInstance: dexieInstanceToUse,
+    dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse,
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
-      dexieInstance: dexieInstanceToUse,
+      dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
     }),
@@ -25,17 +27,20 @@ const getMockOnlineDatabaseSwitchboardInstance = (dexieInstance) => {
   })
 }
 
-const getMockOfflineDatabaseSwitchboardInstance = (dexieInstance) => {
-  const dexieInstanceToUse = dexieInstance ?? defaultDexieInstance
+const getMockOfflineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance }) => {
+  const { dexiePerUserDataInstance: defaultDexieUserDataDatabaseInstance } =
+    getMockDexieInstancesAllSuccess()
+  const dexieUserDataDatabaseInstanceToUse =
+    dexiePerUserDataInstance ?? defaultDexieUserDataDatabaseInstance
 
   return new DatabaseSwitchboard({
     apiBaseUrl,
     getAccessToken,
     isMermaidAuthenticated: true,
     isAppOnline: false,
-    dexieInstance: dexieInstanceToUse,
+    dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse,
     apiSyncInstance: new SyncApiDataIntoOfflineStorage({
-      dexieInstance: dexieInstanceToUse,
+      dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
     }),

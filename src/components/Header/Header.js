@@ -12,10 +12,6 @@ import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 
-/**
- * Mermaid Header
- */
-
 const StyledHeader = styled('header')`
   background-color: ${theme.color.headerColor};
   display: flex;
