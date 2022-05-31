@@ -53,7 +53,16 @@ const ActiveRecordsCount = styled.strong`
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
 `
-
+const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
+  overflow: visible;
+`
+const StickyTable = styled(Table)`
+  thead tr:nth-child(2) th {
+    white-space: nowrap;
+    position: sticky;
+    top: ${theme.spacing.headerHeight};
+  }
+`
 const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
   const currentProjectPath = useCurrentProjectPath()
 
@@ -309,8 +318,8 @@ const UsersAndTransects = () => {
 
   const table = (
     <>
-      <TableOverflowWrapper>
-        <Table {...getTableProps()}>
+      <StickyTableOverflowWrapper>
+        <StickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -380,8 +389,8 @@ const UsersAndTransects = () => {
               )
             })}
           </tbody>
-        </Table>
-      </TableOverflowWrapper>
+        </StickyTable>
+      </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}
