@@ -367,6 +367,7 @@ const UsersAndTransects = () => {
                     (header) => header.sortedIndex > 0,
                   )
                   const ThClassName = column.parent ? column.parent.id : undefined
+
                   return (
                     <Th
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
@@ -417,11 +418,12 @@ const UsersAndTransects = () => {
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
                         ? 'highlighted'
                         : undefined
+
                     return (
                       <Td
                         {...cell.getCellProps()}
                         align={cell.column.align}
-                        className={cell.column.parent.id + ' ' + HighlightedClassName}
+                        className={`${cell.column.parent.id} ${HighlightedClassName}`}
                       >
                         <span>{cell.render('Cell')}</span>
                       </Td>
