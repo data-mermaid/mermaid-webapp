@@ -28,6 +28,7 @@ const NavWrapper = styled('nav')`
   width: ${theme.spacing.sideNavWidth};
   ${mediaQueryPhoneOnly(css`
     width: ${theme.spacing.mobileSideNavWidth};
+    font-size: ${theme.typography.xSmallFontSize};
   `)}
 `
 const NavList = styled('ul')`
@@ -39,9 +40,9 @@ const NavList = styled('ul')`
     padding: 0;
     li {
       a {
+        font-size: inherit;
         color: ${theme.color.black};
         ${mediaQueryPhoneOnly(css`
-          font-size: smaller;
           padding: ${theme.spacing.small} ${theme.spacing.xsmall};
         `)}
       }
@@ -56,7 +57,7 @@ const NavHeader = styled('p')`
   font-weight: 900;
   ${mediaQueryPhoneOnly(css`
     padding-left: 0;
-    font-size: smaller;
+    font-size: ${theme.typography.xSmallFontSize};
     text-align: center;
   `)}
 `

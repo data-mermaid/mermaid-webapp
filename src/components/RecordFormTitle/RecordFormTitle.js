@@ -11,10 +11,15 @@ import language from '../../language'
 
 const TitleContainer = styled('div')`
   display: flex;
+  flex-wrap: wrap;
+  line-height: 1;
   white-space: nowrap;
-  gap: 1rem;
+  gap: 0 1rem;
   ${mediaQueryTabletLandscapeOnly(css`
     font-size: ${theme.typography.smallFontSize};
+    h2 {
+      margin-block: ${theme.spacing.small};
+    }
   `)}
 `
 const ProjectTooltip = styled(TooltipWithText)`
@@ -31,7 +36,11 @@ const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, pr
   const transectNumber = submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.number ?? ''
   const label = submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.label ?? ''
 
-  useDocumentTitle(`${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${language.title.mermaid}`)
+  useDocumentTitle(
+    `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${
+      language.title.mermaid
+    }`,
+  )
 
   return (
     <TitleContainer id="collect-form-title" data-testid="edit-collect-record-form-title">
@@ -66,7 +75,7 @@ RecordFormTitle.propTypes = {
 
 RecordFormTitle.defaultProps = {
   submittedRecordOrCollectRecordDataProperty: undefined,
-  primaryTitle: undefined
+  primaryTitle: undefined,
 }
 
 export default RecordFormTitle
