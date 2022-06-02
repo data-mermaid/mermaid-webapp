@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { InputRow, Select, HelperText } from '../../generic/form'
+import { InputRow, Select, HelperText, RequiredIndicator } from '../../generic/form'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
@@ -9,6 +9,7 @@ import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 const InputSelectWithLabelAndValidation = ({
   label,
   id,
+  required,
   options,
   helperText,
   validationMessages,
@@ -28,6 +29,7 @@ const InputSelectWithLabelAndValidation = ({
     <InputRow validationType={validationType} data-testid={testId}>
       <label id={`aria-label${id}`} htmlFor={id}>
         {label}
+        {required ? <RequiredIndicator /> : null}
       </label>
       <div>
         <Select
@@ -57,6 +59,7 @@ const InputSelectWithLabelAndValidation = ({
 InputSelectWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
+  required: PropTypes.bool.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
