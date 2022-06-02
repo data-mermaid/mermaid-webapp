@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import styled, { css } from 'styled-components/macro'
 import { subNavNodePropTypes } from '../../../SubNavMenuRecordName/subNavNodePropTypes'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -12,6 +13,9 @@ import { Column } from '../../../generic/positioning'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import NavMenu from '../../../NavMenu'
 import ProjectName from '../../../ProjectName'
+import { useOnlineStatus } from '../../../../library/onlineStatusContext'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import PageUnavailableReadOnly from '../../../pages/PageUnavailableReadOnly'
 
 const contentPadding = theme.spacing.xsmall
 const MainContentPageLayout = styled('div')`
@@ -76,29 +80,40 @@ const ContentPageLayout = ({
   subNavNode,
 }) => {
   const { isSyncInProgress } = useSyncStatus()
+  const { isAppOnline } = useOnlineStatus()
+  const { projectId } = useParams()
+  const { getProjectRole } = useCurrentUser()
+
+  const isReadOnlyUser = getProjectRole(projectId) === 10
+  const isReadOnlyAndOffline = !isAppOnline && isReadOnlyUser
+
+  const mainContent = isReadOnlyAndOffline ? (
+    <PageUnavailableReadOnly />
+  ) : (
+    <NavAndContentLayout>
+      <Column>
+        <NavMenu subNavNode={subNavNode} />
+      </Column>
+      <ContentWrapper>
+        {isPageContentLoading || isSyncInProgress ? (
+          <LoadingIndicator aria-label="project pages loading indicator" />
+        ) : (
+          <ContentWrapper>
+            {toolbar && (
+              <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
+            )}
+            <Content>{content}</Content>
+          </ContentWrapper>
+        )}
+      </ContentWrapper>
+    </NavAndContentLayout>
+  )
 
   return (
     <>
       <MainContentPageLayout>
         <ProjectName />
-
-        <NavAndContentLayout>
-          <Column>
-            <NavMenu subNavNode={subNavNode} />
-          </Column>
-          <ContentWrapper>
-            {isPageContentLoading || isSyncInProgress ? (
-              <LoadingIndicator aria-label="project pages loading indicator" />
-            ) : (
-              <>
-                {toolbar && (
-                  <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
-                )}
-                <Content>{content}</Content>
-              </>
-            )}
-          </ContentWrapper>
-        </NavAndContentLayout>
+        {mainContent}
       </MainContentPageLayout>
     </>
   )

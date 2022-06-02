@@ -82,6 +82,7 @@ const error = {
   idNotFoundRecovery:
     "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
   homePageNavigation: 'Go back to the home page.',
+  pageReadOnlyOffline: `You can't access this read-only project offline`,
 }
 
 const success = {
