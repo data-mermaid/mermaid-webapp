@@ -4,7 +4,6 @@ import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 
 const getUserName = (user) => {
   const { first_name, last_name, email } = user
-  const emailName = email.match(/^.+(?=@)/)[0]
 
   if (first_name.length && last_name.length) {
     return `${first_name} ${last_name}`
@@ -17,6 +16,8 @@ const getUserName = (user) => {
   if (last_name.length) {
     return last_name
   }
+
+  const emailName = email.match(/^.+(?=@)/)[0]
 
   return emailName
 }
