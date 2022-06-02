@@ -230,7 +230,7 @@ const FishbeltTransectInputs = ({
         <H2>Transect</H2>
         <InputWithLabelAndValidation
           label="Transect Number"
-          required="true"
+          required={true}
           id="number"
           testId="transect_number"
           type="number"
@@ -287,7 +287,7 @@ const FishbeltTransectInputs = ({
         />
         <InputWithLabelAndValidation
           label="Depth"
-          required="true"
+          required={true}
           id="depth"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
@@ -325,7 +325,7 @@ const FishbeltTransectInputs = ({
         />
         <InputRadioWithLabelAndValidation
           label="Width"
-          required="true"
+          required={true}
           id="width"
           testId="width"
           options={transectWidthSelectOptions}
@@ -343,7 +343,7 @@ const FishbeltTransectInputs = ({
         />
         <InputRadioWithLabelAndValidation
           label="Fish Size Bin"
-          required="true"
+          required={true}
           id="size_bin"
           testId="size_bin"
           name="fish-size-bin"

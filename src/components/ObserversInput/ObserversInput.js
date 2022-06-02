@@ -33,7 +33,7 @@ const ObserversInput = ({
       <H2>Observers</H2>
       <InputCheckboxGroupWithLabelAndValidation
         label="Observers"
-        required="true"
+        required={true}
         id="observers"
         options={observerNameOptions}
         value={observerNameValues}
