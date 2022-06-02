@@ -18,6 +18,9 @@ const ModalInputRow = styled(InputRow)`
   background: ${theme.color.white};
   display: block;
   border: none;
+  h4 {
+    margin: 0;
+  }
   label {
     font-weight: bold;
   }
@@ -48,31 +51,27 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
         <label id="modal-input-for-firstname-label" htmlFor="modal-input-for-firstname">
           First Name
         </label>
-        <div>
-          <Input
-            aria-labelledby="modal-input-for-firstname-label"
-            aria-describedby="modal-input-for-firstname-descp"
-            id="modal-input-for-firstname"
-            value={formik.values.first_name}
-            autoFocus
-            onChange={(event) => formik.setFieldValue('first_name', event.target.value)}
-          />
-        </div>
+        <Input
+          aria-labelledby="modal-input-for-firstname-label"
+          aria-describedby="modal-input-for-firstname-descp"
+          id="modal-input-for-firstname"
+          value={formik.values.first_name}
+          autoFocus
+          onChange={(event) => formik.setFieldValue('first_name', event.target.value)}
+        />
       </ModalInputRow>
       <ModalInputRow>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label id="modal-input-for-lastname-label" htmlFor="modal-input-for-lastname">
           Last Name
         </label>
-        <div>
-          <Input
-            aria-labelledby="modal-input-for-lastname-label"
-            aria-describedby="modal-input-for-lastname-descp"
-            id="modal-input-for-lastname"
-            value={formik.values.last_name}
-            onChange={(event) => formik.setFieldValue('last_name', event.target.value)}
-          />
-        </div>
+        <Input
+          aria-labelledby="modal-input-for-lastname-label"
+          aria-describedby="modal-input-for-lastname-descp"
+          id="modal-input-for-lastname"
+          value={formik.values.last_name}
+          onChange={(event) => formik.setFieldValue('last_name', event.target.value)}
+        />
       </ModalInputRow>
     </>
   )

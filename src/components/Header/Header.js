@@ -17,7 +17,7 @@ const StyledHeader = styled('header')`
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  color: ${theme.color.white};
+  /* color: ${theme.color.white}; */
   position: fixed;
   width: 100%;
   top: 0;
@@ -66,8 +66,8 @@ const dropdownLinkStyles = css`
       &:after {
         content: '';
         position: absolute;
-        width: 20px;
-        height: ${theme.spacing.borderSmall};
+        width: 55px;
+        height ${theme.spacing.borderSmall};
         background: ${theme.color.callout};
         bottom: 0;
         left: ${theme.spacing.large};
@@ -79,9 +79,9 @@ const dropdownLinkStyles = css`
 const StyledNavLink = styled('a')`
   ${linkStyles}
   ${(props) =>
-    props.disabled &&
+    props.disabledLink &&
     css`
-      color: ${theme.color.disabledText} !important;
+      color: ${theme.color.disabledText};
       pointer-events: none;
     `} 
   }
@@ -127,7 +127,6 @@ const GlobalNav = styled('nav')`
     button {
       display: block;
       text-decoration: none;
-      color: ${theme.color.white};
       text-align: right;
       padding: ${theme.spacing.small} ${theme.spacing.medium};
       margin: 0;
@@ -145,6 +144,7 @@ const GlobalNav = styled('nav')`
     .loggedInAs {
       margin-bottom: ${theme.spacing.xlarge};
       background: ${theme.color.primaryColor};
+      color: ${theme.color.white};
     }
   }
   ${mediaQueryTabletLandscapeOnly(css`
@@ -158,15 +158,15 @@ const GlobalNav = styled('nav')`
 `
 const UserMenuButton = styled.button`
   ${dropdownLinkStyles}
-  display: flex !important;
-  flex-direction: row-reverse !important;
+  display: flex;
+  flex-direction: row-reverse;
 `
 
 const GlobalLinks = () => (
   <>
     <StyledNavLink href="/projects">Projects</StyledNavLink>
     <OfflineHide>
-      <StyledNavLink href="/#" disabled>
+      <StyledNavLink href="/#" disabledLink>
         Reports
       </StyledNavLink>
     </OfflineHide>
@@ -193,12 +193,8 @@ const Header = ({ logout, currentUser }) => {
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
-      <UserMenuButton type="button" onClick={openProfileModal}>
-        Profile
-      </UserMenuButton>
-      <UserMenuButton type="button" onClick={logout}>
-        Logout
-      </UserMenuButton>
+      <UserMenuButton onClick={openProfileModal}>Profile</UserMenuButton>
+      <UserMenuButton onClick={logout}>Logout</UserMenuButton>
     </OfflineHide>
   )
 
