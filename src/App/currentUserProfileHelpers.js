@@ -96,12 +96,14 @@ export const updateCurrentUserProfile = async ({
       .put(`${apiBaseUrl}/me/`, userProfile, await getAuthorizationHeaders(getAccessToken))
       .then((apiResults) => {
         const userFromApi = apiResults.data
-        const { first_name, last_name, email } = userFromApi
-        const userFullName = getUserName(userFromApi)
-
+        
         if (!userFromApi) {
           throw Error('User Profile not returned from API')
         }
+        
+        const { first_name, last_name, email } = userFromApi
+        const userFullName = getUserName(userFromApi)
+
 
         const userToStore = {
           id: 'enforceOnlyOneRecordEverStoredAndOverwritten',
