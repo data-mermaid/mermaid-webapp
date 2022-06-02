@@ -81,6 +81,7 @@ const ContentPageLayout = ({
     <>
       <MainContentPageLayout>
         <ProjectName />
+
         <NavAndContentLayout>
           <Column>
             <NavMenu subNavNode={subNavNode} />
@@ -89,12 +90,12 @@ const ContentPageLayout = ({
             {isPageContentLoading || isSyncInProgress ? (
               <LoadingIndicator aria-label="project pages loading indicator" />
             ) : (
-              <ContentWrapper>
+              <>
                 {toolbar && (
                   <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
                 )}
                 <Content>{content}</Content>
-              </ContentWrapper>
+              </>
             )}
           </ContentWrapper>
         </NavAndContentLayout>

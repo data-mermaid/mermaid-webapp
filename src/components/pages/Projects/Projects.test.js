@@ -81,8 +81,7 @@ test('A project card renders with the expected UI elements for button groups', a
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
-  // commented out for alpha, reactivate post alpha
-  // const healthButton = within(projectCard).getByLabelText(/health/i)
+  const projectOverviewButton = within(projectCard).getByLabelText(/project overview/i)
   const collectButton = within(projectCard).getByLabelText(/collect/i)
   const dataButton = within(projectCard).getByLabelText(/data/i)
   const adminButton = within(projectCard).getByLabelText(/admin/i)
@@ -90,7 +89,7 @@ test('A project card renders with the expected UI elements for button groups', a
   // const copyButton = within(projectCard).getByLabelText(/copy/i)
 
   // commented out for alpha, reactivate post alpha
-  // expect(healthButton).toBeInTheDocument()
+  expect(projectOverviewButton).toBeInTheDocument()
   expect(collectButton).toBeInTheDocument()
   expect(dataButton).toBeInTheDocument()
   expect(adminButton).toBeInTheDocument()
@@ -164,7 +163,9 @@ test('A project card renders appropriately when offline', async () => {
 
   await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
   await waitFor(() =>
-    expect(within(projectCard).queryByLabelText(/health/i)).not.toBeInTheDocument(),
+    expect(
+      within(projectCard).queryByLabelText(/project overview/i),
+    ).toBeInThenot.toBeInTheDocument(),
   )
   await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).not.toBeInTheDocument())
   await waitFor(() =>
@@ -199,9 +200,9 @@ test('A project card renders appropriately when online', async () => {
 
   await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
   // commented out for alpha, reactivate post alpha
-  // await waitFor(() =>
-  //   expect(within(projectCard).queryByLabelText(/health/i)).toBeInTheDocument(),
-  // )
+  await waitFor(() =>
+    expect(within(projectCard).queryByLabelText(/project overview/i)).toBeInTheDocument(),
+  )
   await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).toBeInTheDocument())
   await waitFor(() => expect(within(projectCard).queryByLabelText(/admin/i)).toBeInTheDocument())
   // commented out for alpha, reactivate post alpha
