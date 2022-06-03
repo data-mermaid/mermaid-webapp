@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
-import { getCurrentUserProfile, updateCurrentUserProfile } from './currentUserProfileHelpers'
+import { getCurrentUserProfile, setCurrentUserProfile } from './currentUserProfileHelpers'
 
 export const useInitializeCurrentUser = ({
   apiBaseUrl,
@@ -46,7 +46,7 @@ export const useInitializeCurrentUser = ({
       dexieCurrentUserInstance &&
       isMermaidAuthenticated
     ) {
-      updateCurrentUserProfile({
+      setCurrentUserProfile({
         apiBaseUrl,
         getAccessToken,
         dexieCurrentUserInstance,

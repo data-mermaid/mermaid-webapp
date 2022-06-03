@@ -74,7 +74,7 @@ export const getCurrentUserProfile = async ({
   return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
 }
 
-export const updateCurrentUserProfile = async ({
+export const setCurrentUserProfile = async ({
   apiBaseUrl,
   getAccessToken,
   dexieCurrentUserInstance,
@@ -83,10 +83,10 @@ export const updateCurrentUserProfile = async ({
   userProfile,
 }) => {
   if (!apiBaseUrl) {
-    throw new Error('updateCurrentUserProfile needs an API base url')
+    throw new Error('setCurrentUserProfile needs an API base url')
   }
   if (!dexieCurrentUserInstance) {
-    throw new Error('updateCurrentUserProfile needs a dexieInstance')
+    throw new Error('setCurrentUserProfile needs a dexieInstance')
   }
 
   const isAuthenticatedAndReady = isMermaidAuthenticated
