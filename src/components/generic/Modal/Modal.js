@@ -41,9 +41,11 @@ const ModalTitle = styled.div`
   }
 `
 const ModalContent = styled.div`
-  ${(props) => !props.contentOverflowIsvisible && css`
-    overflow: auto;
-  `}
+  ${(props) =>
+    !props.contentOverflowIsvisible &&
+    css`
+      overflow: auto;
+    `}
   max-height: 50vh;
   padding: ${theme.spacing.medium};
 `
@@ -63,6 +65,9 @@ const ModalFooter = styled.div`
     }
   `)}
   * > button {
+    svg {
+      margin-right: ${theme.spacing.small};
+    }
     &:not(:last-child) {
       margin-right: ${theme.spacing.buttonSpacing};
     }
@@ -78,9 +83,16 @@ const RightFooter = styled('div')`
   justify-self: end;
 `
 
-const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent, contentOverflowIsvisible }) => {
+const Modal = ({
+  title,
+  mainContent,
+  isOpen,
+  onDismiss,
+  footerContent,
+  contentOverflowIsvisible,
+}) => {
   const _closeModalWithEscapeKey = useEffect(() => {
-    const close = event => {
+    const close = (event) => {
       if (event.code === 'Escape') {
         onDismiss()
       }
@@ -101,7 +113,9 @@ const Modal = ({ title, mainContent, isOpen, onDismiss, footerContent, contentOv
               <IconClose aria-label="close" />
             </CloseButton>
           </ModalTitle>
-          <ModalContent contentOverflowIsvisible={contentOverflowIsvisible} id="modal-content">{mainContent}</ModalContent>
+          <ModalContent contentOverflowIsvisible={contentOverflowIsvisible} id="modal-content">
+            {mainContent}
+          </ModalContent>
           <ModalFooter>{footerContent}</ModalFooter>
         </StyledDialog>
       </StyledDialogOverlay>
