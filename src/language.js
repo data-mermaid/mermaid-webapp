@@ -248,6 +248,9 @@ const pages = {
     missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',
   },
+  benthicPhotoQuadratForm: {
+    title: 'Benthic Photo Quadrat'
+  }
 }
 
 const navigateAwayPrompt =
