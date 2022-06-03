@@ -18,7 +18,7 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
           onClick={stopEventPropagation}
         >
           <IconHeart />
-          <ButtonLabel>Project Overview</ButtonLabel>
+          <ButtonLabel>Overview</ButtonLabel>
         </NavLinkThatLooksLikeButtonIcon>
       </OfflineHide>
       <NavLinkThatLooksLikeButtonIcon
