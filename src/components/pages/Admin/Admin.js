@@ -161,7 +161,6 @@ const ReadOnlyAdminContent = ({ project }) => (
 )
 
 const Admin = () => {
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
@@ -171,8 +170,9 @@ const Admin = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
+  const isAdminUser = getProjectRole(projectId) === 90
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -189,19 +189,14 @@ const Admin = () => {
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, projectTagsResponse, projectProfilesResponse]) => {
+        .then(([projectResponse, projectTagsResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectBeingEdited(projectResponse)
             setProjectTagOptions(getOptions(projectTagsResponse, false))
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -265,7 +260,7 @@ const Admin = () => {
     </>
   )
 
-  const contentViewByRole = currentUserProfile.is_admin ? (
+  const contentViewByRole = isAdminUser ? (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
@@ -344,7 +339,7 @@ const Admin = () => {
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>{language.pages.projectInfo.title}</H2>
-            {currentUserProfile.is_admin && (
+            {isAdminUser && (
               <SaveButton
                 formId="project-info-form"
                 saveButtonState={saveButtonState}

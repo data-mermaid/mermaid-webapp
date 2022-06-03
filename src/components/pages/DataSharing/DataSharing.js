@@ -72,7 +72,6 @@ const ReadOnlyDataSharingContent = ({ project }) => (
 )
 
 const DataSharing = () => {
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -81,8 +80,9 @@ const DataSharing = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
+  const isAdminUser = getProjectRole(projectId) === 90
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -105,13 +105,8 @@ const DataSharing = () => {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectBeingEdited(projectResponse)
             setDataPolicyOptions(getDataSharingOptions(choicesResponse.datapolicies))
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -189,7 +184,7 @@ const DataSharing = () => {
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
         <IconInfo /> Learn more about how your data is shared...
       </ButtonPrimary>
-      {currentUserProfile.is_admin ? (
+      {isAdminUser ? (
         <TableOverflowWrapper>
           <DataSharingTable>
             <thead>
@@ -276,7 +271,7 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {currentUserProfile.is_admin && (
+      {isAdminUser && (
         <>
           <CheckBoxLabel>
             <input

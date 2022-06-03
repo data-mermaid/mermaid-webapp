@@ -136,9 +136,9 @@ const Users = () => {
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const isAdminUser = getProjectRole(projectId) === 90
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
@@ -156,13 +156,8 @@ const Users = () => {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectName(projectResponse?.name)
             setObserverProfiles(projectProfilesResponse)
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -565,7 +560,7 @@ const Users = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = currentUserProfile.isAdmin
+      const keys = isAdminUser
         ? ['values.name.props.children', 'values.email']
         : ['values.name', 'values.role']
 
@@ -577,7 +572,7 @@ const Users = () => {
 
       return getTableFilteredRows(rows, keys, queryTerms)
     },
-    [currentUserProfile],
+    [isAdminUser],
   )
 
   const {
@@ -597,8 +592,8 @@ const Users = () => {
     setGlobalFilter,
   } = useTable(
     {
-      columns: currentUserProfile.is_admin ? tableColumnsForAdmin : tableColumnsForCollector,
-      data: currentUserProfile.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
+      columns: isAdminUser ? tableColumnsForAdmin : tableColumnsForCollector,
+      data: isAdminUser ? tableCellDataForAdmin : tableCellDataForCollector,
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
@@ -721,14 +716,14 @@ const Users = () => {
       <ToolbarRowWrapper>
         <FilterSearchToolbar
           name={
-            currentUserProfile.is_admin
+            isAdminUser
               ? language.pages.userTable.filterToolbarTextForAdmin
               : language.pages.userTable.filterToolbarTextForCollector
           }
           handleGlobalFilterChange={handleGlobalFilterChange}
           value={tableUserPrefs.globalFilter}
         />
-        {currentUserProfile.is_admin && (
+        {isAdminUser && (
           <InputAndButton
             inputId="add-new-user-email"
             labelText={language.pages.userTable.searchEmailToolbarText}
