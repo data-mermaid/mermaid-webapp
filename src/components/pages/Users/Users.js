@@ -145,7 +145,11 @@ const Users = () => {
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
+    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getProject(projectId),
@@ -165,7 +169,14 @@ const Users = () => {
           toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, projectId, isSyncInProgress, currentUser])
+  }, [
+    isAppOnline,
+    databaseSwitchboardInstance,
+    isMounted,
+    projectId,
+    isSyncInProgress,
+    currentUser,
+  ])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)
@@ -755,11 +766,7 @@ const Users = () => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout
-      isPageContentLoading={isAppOnline ? isLoading : false}
-      content={content}
-      toolbar={toolbar}
-    />
+    <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
   )
 }
 

@@ -21,6 +21,9 @@ import { DexiePerUserDataInstanceProvider } from '../App/dexiePerUserDataInstanc
 const fakeCurrentUser = {
   id: 'fake-id',
   first_name: 'FakeFirstName',
+  last_name: 'FakeLastNameOffline',
+  full_name: 'FakeFirstNameOffline FakeLastNameOffline',
+  projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
 }
 
 const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOverride }) => (

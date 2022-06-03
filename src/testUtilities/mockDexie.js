@@ -40,6 +40,7 @@ const getMockDexieInstancesAllSuccess = () => {
         first_name: 'FakeFirstNameOffline',
         last_name: 'FakeLastNameOffline',
         full_name: 'FakeFirstNameOffline FakeLastNameOffline',
+        projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
       },
     })
     .catch((error) =>

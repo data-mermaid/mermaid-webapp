@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
@@ -39,8 +39,16 @@ export const useInitializeCurrentUser = ({
     }
   }, [apiBaseUrl, getAccessToken, dexieCurrentUserInstance, isMermaidAuthenticated, isAppOnline])
 
-  const getProjectRole = (projectId) =>
-    currentUser.projects.filter(({ id }) => id === projectId)[0]?.role
+  const getProjectRole = useCallback(
+    (projectId) => {
+      if (!currentUser) {
+        return ''
+      }
+
+      return currentUser.projects.filter(({ id }) => id === projectId)[0]?.role
+    },
+    [currentUser],
+  )
 
   return { currentUser, getProjectRole }
 }

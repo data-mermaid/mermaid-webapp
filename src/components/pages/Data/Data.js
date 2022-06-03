@@ -20,6 +20,7 @@ import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeader
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import DataToolbarSection from './DataToolbarSection'
@@ -40,12 +41,14 @@ const getTransectReportProperties = (transect) => {
     'Quadrat Percentage': ['bleachingqcs', 'obsquadratbenthicpercents'],
   }[transect]
 }
+
 const Data = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
+  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
@@ -57,7 +60,7 @@ const Data = () => {
       setIsLoading(false)
     }
 
-    if (databaseSwitchboardInstance && projectId) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       databaseSwitchboardInstance
         .getSubmittedRecordsForUIDisplay(projectId)
         .then((records) => {
@@ -76,7 +79,7 @@ const Data = () => {
           toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, isSyncInProgress])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(

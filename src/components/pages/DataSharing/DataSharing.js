@@ -91,7 +91,11 @@ const DataSharing = () => {
   const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
+    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
@@ -114,7 +118,14 @@ const DataSharing = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress, currentUser])
+  }, [
+    isAppOnline,
+    databaseSwitchboardInstance,
+    projectId,
+    isMounted,
+    isSyncInProgress,
+    currentUser,
+  ])
 
   const getToastMessageForDataPolicyChange = (property, policy) => {
     switch (property) {
@@ -299,7 +310,7 @@ const DataSharing = () => {
     />
   ) : (
     <ContentPageLayout
-      isPageContentLoading={isAppOnline ? isLoading : false}
+      isPageContentLoading={isLoading}
       content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
       toolbar={
         <ContentPageToolbarWrapper>

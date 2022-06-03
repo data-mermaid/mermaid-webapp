@@ -181,7 +181,11 @@ const Admin = () => {
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
+    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
@@ -200,7 +204,13 @@ const Admin = () => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          const errorStatus = error.response?.status
+
+          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+            setIdsNotAssociatedWithData([projectId])
+            setIsLoading(false)
+          }
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
@@ -334,7 +344,7 @@ const Admin = () => {
   ) : (
     <>
       <ContentPageLayout
-        isPageContentLoading={isAppOnline ? isLoading : false}
+        isPageContentLoading={isLoading}
         content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
         toolbar={
           <ContentPageToolbarWrapper>
