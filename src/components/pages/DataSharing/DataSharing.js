@@ -99,11 +99,10 @@ const DataSharing = () => {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, choicesResponse, projectProfilesResponse]) => {
+        .then(([projectResponse, choicesResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
