@@ -91,11 +91,27 @@ Th.defaultProps = {
 export const Td = styled.td(
   (props) => css`
     text-align: ${props.align || 'left'};
-    background-color: ${props.highlighted && theme.color.warningColor};
     padding: ${theme.spacing.medium};
     border-width: ${theme.spacing.borderSmall};
     border-color: ${theme.color.backgroundColor};
     border-style: solid;
+    position: relative;
+    &.highlighted {
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: hsl(50, 100%, 50%, 0.4);
+        z-index: 1;
+      }
+      span {
+        z-index: 2;
+        position: relative;
+      }
+    }
     &:first-child {
       border-left: none;
     }

@@ -33,7 +33,11 @@ const HeaderCenter = styled.div`
 `
 
 const InlineCell = styled.div`
-  display: inline-flex;
+  white-space: nowrap;
+  text-align: center;
+  a {
+    color: inherit;
+  }
 `
 
 const UserColumnHeader = styled.div`
@@ -53,7 +57,51 @@ const ActiveRecordsCount = styled.strong`
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
 `
-
+const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
+  overflow: visible;
+`
+const UsersAndTransectsHeaderRow = styled(Tr)`
+  th.transect-numbers {
+    background: hsl(235, 10%, 90%);
+    &:after {
+      display: none;
+    }
+  }
+  th.user-headers {
+    background: hsl(235, 10%, 85%);
+    &:after {
+      display: none;
+    }
+  }
+`
+const UsersAndTransectsRow = styled(Tr)`
+  &:nth-child(odd) {
+    background: hsl(0, 0%, 100%);
+    td.transect-numbers {
+      background: hsl(0, 0%, 95%);
+    }
+    td.user-headers {
+      background: hsl(0, 0%, 90%);
+    }
+  }
+  &:nth-child(even) {
+    background: hsl(235, 10%, 95%);
+    td.transect-numbers {
+      background: hsl(235, 10%, 90%);
+    }
+    td.user-headers {
+      background: hsl(235, 10%, 85%);
+    }
+  }
+`
+const StickyTable = styled(Table)`
+  thead tr:nth-child(2) th {
+    white-space: nowrap;
+    z-index: 3;
+    position: sticky;
+    top: ${theme.spacing.headerHeight};
+  }
+`
 const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
   const currentProjectPath = useCurrentProjectPath()
 
@@ -309,15 +357,16 @@ const UsersAndTransects = () => {
 
   const table = (
     <>
-      <TableOverflowWrapper>
-        <Table {...getTableProps()}>
+      <StickyTableOverflowWrapper>
+        <StickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
+              <UsersAndTransectsHeaderRow {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
                   )
+                  const ThClassName = column.parent ? column.parent.id : undefined
 
                   return (
                     <Th
@@ -327,12 +376,13 @@ const UsersAndTransects = () => {
                       isMultiSortColumn={isMultiSortColumn}
                       isSortingEnabled={!column.disableSortBy}
                       disabledHover={column.disableSortBy}
+                      className={ThClassName}
                     >
                       {column.render('Header')}
                     </Th>
                   )
                 })}
-              </Tr>
+              </UsersAndTransectsHeaderRow>
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
@@ -340,7 +390,7 @@ const UsersAndTransects = () => {
               prepareRow(row)
 
               return (
-                <Tr {...row.getRowProps()}>
+                <UsersAndTransectsRow {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellRowValues = cell.row.values
@@ -364,24 +414,27 @@ const UsersAndTransects = () => {
                       !submittedTransectNumbers.includes(cellColumnId) &&
                       !(cellColumnId === 'site' || cellColumnId === 'method')
 
+                    const HighlightedClassName =
+                      isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
+                        ? 'highlighted'
+                        : undefined
+
                     return (
                       <Td
                         {...cell.getCellProps()}
                         align={cell.column.align}
-                        highlighted={
-                          isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
-                        }
+                        className={`${cell.column.parent.id} ${HighlightedClassName}`}
                       >
-                        {cell.render('Cell')}
+                        <span>{cell.render('Cell')}</span>
                       </Td>
                     )
                   })}
-                </Tr>
+                </UsersAndTransectsRow>
               )
             })}
           </tbody>
-        </Table>
-      </TableOverflowWrapper>
+        </StickyTable>
+      </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}
