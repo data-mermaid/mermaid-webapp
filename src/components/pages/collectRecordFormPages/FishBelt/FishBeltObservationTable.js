@@ -16,7 +16,7 @@ import { H2 } from '../../../generic/text'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { inputTextareaSelectStyles, InputWrapper } from '../../../generic/form'
+import { inputTextareaSelectStyles, InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { LinkThatLooksLikeButton } from '../../../generic/links'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
@@ -534,13 +534,13 @@ const FishBeltObservationTable = ({
               <Tr>
                 <Th> </Th>
                 <Th align="left" id="fish-name-label">
-                  Fish Name
+                  Fish Name <RequiredIndicator />
                 </Th>
                 <Th align="right" id="fish-size-label">
-                  Size
+                  Size <RequiredIndicator />
                 </Th>
                 <Th align="right" id="fish-count-label">
-                  Count
+                  Count <RequiredIndicator />
                 </Th>
                 <Th align="right">
                   Biomass

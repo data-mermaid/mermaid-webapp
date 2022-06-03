@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
-import { InputRow, CheckRadioLabel, CheckRadioWrapper } from '../../generic/form'
+import { InputRow, CheckRadioLabel, CheckRadioWrapper, RequiredIndicator } from '../../generic/form'
 import InputValidationInfo from '../InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 
 const InputCheckboxGroupWithLabelAndValidation = ({
   id,
+  required,
   ignoreNonObservationFieldValidations,
   label,
   onChange,
@@ -50,7 +51,10 @@ const InputCheckboxGroupWithLabelAndValidation = ({
   return (
     <InputRow validationType={validationType}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label id={`${id}-checkbox-group-with-label-and-validation`}>{label}</label>
+      <label id={`${id}-checkbox-group-with-label-and-validation`}>
+        {label}
+        {required ? <RequiredIndicator /> : null}
+      </label>
       <div aria-labelledby={`${id}-checkbox-group-with-label-and-validation`}>{checkboxGroup}</div>
       <InputValidationInfo
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
@@ -64,6 +68,7 @@ const InputCheckboxGroupWithLabelAndValidation = ({
 
 InputCheckboxGroupWithLabelAndValidation.propTypes = {
   id: PropTypes.string.isRequired,
+  required: PropTypes.bool.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
