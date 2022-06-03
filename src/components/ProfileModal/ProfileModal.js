@@ -53,7 +53,6 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
         </label>
         <Input
           aria-labelledby="modal-input-for-firstname-label"
-          aria-describedby="modal-input-for-firstname-descp"
           id="modal-input-for-firstname"
           value={formik.values.first_name}
           autoFocus
@@ -67,7 +66,6 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
         </label>
         <Input
           aria-labelledby="modal-input-for-lastname-label"
-          aria-describedby="modal-input-for-lastname-descp"
           id="modal-input-for-lastname"
           value={formik.values.last_name}
           onChange={(event) => formik.setFieldValue('last_name', event.target.value)}
