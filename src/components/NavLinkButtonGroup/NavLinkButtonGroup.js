@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import { NavLinkThatLooksLikeButtonIcon } from '../generic/links'
-import { IconCollect, IconData, IconAdmin } from '../icons'
+import { IconCollect, IconData, IconInfo } from '../icons'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import OfflineHide from '../generic/OfflineHide'
 
@@ -46,7 +46,7 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
           aria-label="Admin"
           onClick={stopEventPropagation}
         >
-          <IconAdmin />
+          <IconInfo />
           <ButtonLabel>Info</ButtonLabel>
         </NavLinkThatLooksLikeButtonIcon>
       </OfflineHide>

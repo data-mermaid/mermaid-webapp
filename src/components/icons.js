@@ -18,12 +18,11 @@ import contentCopy from '@iconify-icons/mdi/content-copy'
 import contentSave from '@iconify-icons/mdi/content-save'
 import download from '@iconify-icons/mdi/download'
 import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
-import fileMultipleOutline from '@iconify-icons/mdi/file-multiple-outline'
 import filterOutline from '@iconify-icons/mdi/filter-outline'
 import fish from '@iconify-icons/mdi/fish'
 import heartOutline from '@iconify-icons/mdi/heart-outline'
 import homeOutline from '@iconify-icons/mdi/home-outline'
-import informationIcon from '@iconify-icons/mdi/information'
+import informationIcon from '@iconify-icons/mdi/information-outline'
 import launch from '@iconify-icons/mdi/launch'
 import libraryBooks from '@iconify-icons/mdi/library-books'
 import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline'
@@ -41,6 +40,11 @@ import sync from '@iconify-icons/mdi/sync'
 import upload from '@iconify-icons/mdi/upload'
 import styled from 'styled-components/macro'
 import user from '@iconify-icons/mdi/user'
+import usersAndTransects from '@iconify-icons/mdi/account-box-multiple-outline'
+import playButton from '@iconify-icons/mdi/play-circle-outline'
+import fileTable from '@iconify-icons/mdi/file-table-box-outline'
+import multiFileTable from '@iconify-icons/mdi/file-table-box-multiple-outline'
+import clipboardCheck from '@iconify-icons/mdi/clipboard-check-outline'
 import theme from '../theme'
 
 const WarningIcon = styled(InlineIcon)`
@@ -72,7 +76,7 @@ export const IconHome = (props) => <InlineIcon icon={homeOutline} {...props} />
 export const IconInfo = (props) => <InlineIcon icon={informationIcon} {...props} />
 export const IconLibraryBooks = (props) => <InlineIcon icon={libraryBooks} {...props} />
 export const IconMenu = (props) => <InlineIcon icon={menu} {...props} />
-export const IconMgmt = (props) => <InlineIcon icon={fileMultipleOutline} {...props} />
+export const IconMgmt = (props) => <InlineIcon icon={fileTable} {...props} />
 export const IconPen = (props) => <InlineIcon icon={pencilIcon} {...props} />
 export const IconPlus = (props) => <InlineIcon icon={plus} {...props} />
 export const IconRefresh = (props) => <InlineIcon icon={sync} {...props} />
@@ -87,3 +91,10 @@ export const IconUp = (props) => <InlineIcon icon={menuUp} {...props} />
 export const IconUpload = (props) => <InlineIcon icon={upload} {...props} />
 export const IconUser = (props) => <InlineIcon icon={user} {...props} />
 export const IconUsers = (props) => <InlineIcon icon={accountGroup} {...props} />
+export const IconUsersAndTransects = (props) => <InlineIcon icon={usersAndTransects} {...props} />
+export const IconProjectProgress = (props) => <InlineIcon icon={playButton} {...props} />
+export const IconManagementRegimes = (props) => <InlineIcon icon={fileTable} {...props} />
+export const IconProjectOverview = (props) => <InlineIcon icon={clipboardCheck} {...props} />
+export const IconManagementRegimesOverview = (props) => (
+  <InlineIcon icon={multiFileTable} {...props} />
+)

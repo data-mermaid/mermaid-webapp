@@ -11,10 +11,10 @@ import {
   IconSites,
   IconData,
   IconMgmt,
-  IconAdmin,
+  IconInfo,
   IconUsers,
   IconSharing,
-  IconHeart,
+  IconUsersAndTransects,
 } from '../icons'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
@@ -80,7 +80,7 @@ const NavMenu = ({ subNavNode }) => {
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/health`}>
-                  <IconHeart /> <span>Users and Transects</span>
+                  <IconUsersAndTransects /> <span>Users and Transects</span>
                 </NavLinkSidebar>
               </li>
             </ul>
@@ -138,7 +138,7 @@ const NavMenu = ({ subNavNode }) => {
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/admin`}>
-                  <IconAdmin />
+                  <IconInfo />
                   <span>Project Info</span>
                 </NavLinkSidebar>
               </li>
