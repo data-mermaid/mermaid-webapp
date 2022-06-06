@@ -48,6 +48,7 @@ import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import { userRole } from '../../../App/mermaidData/userRole'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -138,7 +139,7 @@ const Users = () => {
   const { projectId } = useParams()
   const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
-  const isAdminUser = getProjectRole(projectId) === 90
+  const isAdminUser = getProjectRole(projectId) === userRole.admin
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 

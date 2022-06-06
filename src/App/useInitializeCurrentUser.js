@@ -40,13 +40,8 @@ export const useInitializeCurrentUser = ({
   }, [apiBaseUrl, getAccessToken, dexieCurrentUserInstance, isMermaidAuthenticated, isAppOnline])
 
   const getProjectRole = useCallback(
-    (projectId) => {
-      if (!currentUser) {
-        return ''
-      }
-
-      return currentUser.projects.filter(({ id }) => id === projectId)[0]?.role
-    },
+    (projectId) =>
+      currentUser ? currentUser.projects.find(({ id }) => id === projectId)?.role : null,
     [currentUser],
   )
 

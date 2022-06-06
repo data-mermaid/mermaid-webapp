@@ -64,6 +64,8 @@ const error = {
     'Something went wrong. The submitted record has not been made editable',
   userProfileUnavailable: 'The user profile is unavailable.',
   userRecordsUnavailable: 'User records data is currently unavailable. Please try again.',
+  projectHealthRecordsUnavailable:
+    'Summary records data is currently unavailable. Please try again',
 
   getIdsNotFoundDetails: (id) =>
     id.length > 1

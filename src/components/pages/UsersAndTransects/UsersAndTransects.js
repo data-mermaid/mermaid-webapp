@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
@@ -81,6 +82,7 @@ const UsersAndTransects = () => {
   const [observerProfiles, setObserverProfiles] = useState([])
   const [submittedRecords, setSubmittedRecords] = useState([])
   const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
@@ -91,6 +93,10 @@ const UsersAndTransects = () => {
       ])
         .then(([projectProfilesResponse, sampleUnitRecordsResponse]) => {
           if (isMounted.current) {
+            if (!projectProfilesResponse && !sampleUnitRecordsResponse && projectId) {
+              setIdsNotAssociatedWithData([projectId])
+            }
+
             const numbersNew = sampleUnitRecordsResponse
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
               .map((reducedRecords) => reducedRecords.label)
@@ -103,8 +109,15 @@ const UsersAndTransects = () => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+        .catch((error) => {
+          const errorStatus = error.response?.status
+
+          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+            setIdsNotAssociatedWithData([projectId])
+            setIsLoading(false)
+          }
+
+          toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
@@ -403,7 +416,12 @@ const UsersAndTransects = () => {
 
   const content = isAppOnline ? table : <PageUnavailableOffline />
 
-  return (
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
     <ContentPageLayout
       isPageContentLoading={isAppOnline ? isLoading : false}
       content={content}

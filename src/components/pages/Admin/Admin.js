@@ -34,6 +34,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { userRole } from '../../../App/mermaidData/userRole'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -172,7 +173,7 @@ const Admin = () => {
   const { projectId } = useParams()
   const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
-  const isAdminUser = getProjectRole(projectId) === 90
+  const isAdminUser = getProjectRole(projectId) === userRole.admin
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
