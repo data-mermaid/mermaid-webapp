@@ -68,7 +68,12 @@ export const inputTextareaSelectStyles = css`
   }
   -moz-appearance: textfield;
 `
-
+export const RequiredIndicator = styled.span`
+  color: ${theme.color.callout};
+  &:after {
+    content: ' *';
+  }
+`
 export const InputRow = styled.div`
   display: grid;
   grid-template-columns: 0.75fr 1.5fr 1fr;
@@ -77,14 +82,6 @@ export const InputRow = styled.div`
   border-width: 0 0 0 ${theme.spacing.borderLarge};
   border-style: solid;
   border-color: ${(props) => theme.color.getBorderColor(props.validationType)};
-  ${(props) =>
-    props.required &&
-    css`
-      label:first-child:after {
-        content: ' *';
-        color: red;
-      }
-    `}
   ${hoverState(css`
     background-color: ${theme.color.tableRowHover};
   `)}

@@ -4,7 +4,7 @@ import {
   getMockDexieInstanceThatProducesErrors,
 } from '../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../testUtilities/mockMermaidApiAllSuccessful'
-import getCurrentUserProfile from './getCurrentUserProfile'
+import { getCurrentUserProfile } from './currentUserProfileHelpers'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const getAccessToken = async () => 'fake token'

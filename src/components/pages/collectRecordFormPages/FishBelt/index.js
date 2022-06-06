@@ -1,3 +1,3 @@
-import CollectRecord from './FishBelt'
+import FishBelt from './FishBelt'
 
-export default CollectRecord
+export default FishBelt

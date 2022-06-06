@@ -118,6 +118,7 @@ const success = {
         return `${method} is now set to public `
     }
   },
+  userProfileUpdate: 'Profile updated',
 }
 
 const deleteCollectRecord = {
@@ -162,6 +163,7 @@ const table = {
 const title = {
   mermaid: 'MERMAID',
   mermaidDescription: 'Marine Ecological Research Management Aid',
+  userProfileModal: 'Your Profile',
 }
 
 const pages = {
@@ -248,6 +250,9 @@ const pages = {
     missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',
   },
+  benthicPhotoQuadratForm: {
+    title: 'Benthic Photo Quadrat'
+  }
 }
 
 const navigateAwayPrompt =

@@ -33,7 +33,7 @@ function App({ dexieCurrentUserInstance }) {
     dexieCurrentUserInstance,
   })
 
-  const { currentUser, getProjectRole } = useInitializeCurrentUser({
+  const { currentUser, saveUserProfile, getProjectRole } = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
     dexieCurrentUserInstance,
@@ -101,7 +101,7 @@ function App({ dexieCurrentUserInstance }) {
   return (
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <CurrentUserProvider value={{ currentUser, getProjectRole }}>
+        <CurrentUserProvider value={{ currentUser, saveUserProfile, getProjectRole }}>
           <GlobalStyle />
           <CustomToastContainer limit={5} />
           <Layout {...layoutProps}>
