@@ -19,8 +19,10 @@ import { getMockDexieInstancesAllSuccess } from './mockDexie'
 import { DexiePerUserDataInstanceProvider } from '../App/dexiePerUserDataInstanceContext'
 
 const fakeCurrentUser = {
-  id: 'fake-id',
-  first_name: 'FakeFirstName',
+  currentUser: {
+    id: 'fake-id',
+    first_name: 'FakeFirstName',
+  },
 }
 const fakeProjectUserRoles = { 5: { is_admin: true, is_collector: true, is_readonly: false } }
 
