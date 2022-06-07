@@ -30,7 +30,6 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { validateEmail } from '../../../library/strings/validateEmail'
 import communicateGenericApiErrorsToUser from '../../../library/communicateGenericApiErrorsToUser'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -135,7 +134,6 @@ const Users = () => {
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
-  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
@@ -150,7 +148,7 @@ const Users = () => {
       setIsLoading(false)
     }
 
-    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       Promise.all([
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getProject(projectId),
@@ -170,14 +168,7 @@ const Users = () => {
           toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
-  }, [
-    isAppOnline,
-    databaseSwitchboardInstance,
-    isMounted,
-    projectId,
-    isSyncInProgress,
-    currentUser,
-  ])
+  }, [isAppOnline, databaseSwitchboardInstance, isMounted, projectId, currentUser])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)

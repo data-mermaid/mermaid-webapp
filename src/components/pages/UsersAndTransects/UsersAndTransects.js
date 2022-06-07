@@ -27,7 +27,6 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const HeaderCenter = styled.div`
   text-align: center;
@@ -125,7 +124,6 @@ const UsersAndTransects = () => {
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
-  const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
   const [observerProfiles, setObserverProfiles] = useState([])
   const [submittedRecords, setSubmittedRecords] = useState([])
@@ -134,7 +132,7 @@ const UsersAndTransects = () => {
   const { currentUser } = useCurrentUser()
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (databaseSwitchboardInstance && projectId) {
       Promise.all([
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getRecordsForUsersAndTransectsTable(projectId),
@@ -168,7 +166,7 @@ const UsersAndTransects = () => {
           toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isMounted])
 
   const getUserColumnHeaders = useCallback(() => {
     const filteredObservers = observerProfiles.filter(

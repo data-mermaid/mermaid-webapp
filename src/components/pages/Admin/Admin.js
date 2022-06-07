@@ -17,7 +17,6 @@ import { hoverState } from '../../../library/styling/mediaQueries'
 import { IconClose } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -169,7 +168,6 @@ const Admin = () => {
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
-  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
@@ -186,7 +184,7 @@ const Admin = () => {
       setIsLoading(false)
     }
 
-    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
@@ -214,14 +212,7 @@ const Admin = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    projectId,
-    isMounted,
-    isAppOnline,
-    isSyncInProgress,
-    currentUser,
-  ])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, currentUser])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
