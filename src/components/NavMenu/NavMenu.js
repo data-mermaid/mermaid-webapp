@@ -79,7 +79,7 @@ const NavMenu = ({ subNavNode }) => {
             <NavHeader>Project Overview</NavHeader>
             <ul>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/health`}>
+                <NavLinkSidebar to={`${projectUrl}/usersandtransects`}>
                   <IconUsersAndTransects /> <span>Users and Transects</span>
                 </NavLinkSidebar>
               </li>

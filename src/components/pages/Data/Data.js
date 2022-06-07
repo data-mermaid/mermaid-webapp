@@ -40,6 +40,7 @@ const getTransectReportProperties = (transect) => {
     'Quadrat Percentage': ['bleachingqcs', 'obsquadratbenthicpercents'],
   }[transect]
 }
+
 const Data = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -57,7 +58,7 @@ const Data = () => {
       setIsLoading(false)
     }
 
-    if (databaseSwitchboardInstance && projectId) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
         .getSubmittedRecordsForUIDisplay(projectId)
         .then((records) => {

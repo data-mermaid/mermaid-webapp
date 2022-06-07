@@ -17,7 +17,6 @@ import { hoverState } from '../../../library/styling/mediaQueries'
 import { IconClose } from '../../icons'
 import { InputWrapper, InputRow } from '../../generic/form'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -34,6 +33,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { userRole } from '../../../App/mermaidData/userRole'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -161,7 +161,6 @@ const ReadOnlyAdminContent = ({ project }) => (
 )
 
 const Admin = () => {
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
@@ -169,10 +168,10 @@ const Admin = () => {
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
-  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
+  const isAdminUser = getProjectRole(projectId) === userRole.admin
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -181,42 +180,39 @@ const Admin = () => {
   const closeNewOrganizationNameModal = () => setIsNewOrganizationNameModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (isAppOnline && databaseSwitchboardInstance && !isSyncInProgress && projectId) {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, projectTagsResponse, projectProfilesResponse]) => {
+        .then(([projectResponse, projectTagsResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectBeingEdited(projectResponse)
             setProjectTagOptions(getOptions(projectTagsResponse, false))
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          const errorStatus = error.response?.status
+
+          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+            setIdsNotAssociatedWithData([projectId])
+            setIsLoading(false)
+          }
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    projectId,
-    isMounted,
-    isAppOnline,
-    isSyncInProgress,
-    currentUser,
-  ])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, currentUser])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -265,7 +261,7 @@ const Admin = () => {
     </>
   )
 
-  const contentViewByRole = currentUserProfile.is_admin ? (
+  const contentViewByRole = isAdminUser ? (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
@@ -339,12 +335,12 @@ const Admin = () => {
   ) : (
     <>
       <ContentPageLayout
-        isPageContentLoading={isAppOnline ? isLoading : false}
+        isPageContentLoading={isLoading}
         content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>{language.pages.projectInfo.title}</H2>
-            {currentUserProfile.is_admin && (
+            {isAdminUser && (
               <SaveButton
                 formId="project-info-form"
                 saveButtonState={saveButtonState}

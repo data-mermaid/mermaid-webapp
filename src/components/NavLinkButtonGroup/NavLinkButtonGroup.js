@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import { NavLinkThatLooksLikeButtonIcon } from '../generic/links'
-import { IconCollect, IconData, IconInfo } from '../icons'
+import { IconCollect, IconData, IconInfo, IconProjectOverview } from '../icons'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import OfflineHide from '../generic/OfflineHide'
 
@@ -11,17 +11,16 @@ const ButtonLabel = styled('span')``
 const NavLinkButtonGroup = ({ projectUrl }) => {
   return (
     <>
-      {/* hiding for alpha release because leads nowhere useful */}
-      {/* <OfflineHide>
+      <OfflineHide>
         <NavLinkThatLooksLikeButtonIcon
-          to={`${projectUrl}/health`}
-          aria-label="Health"
+          to={`${projectUrl}/usersandtransects`}
+          aria-label="Usersandtransects"
           onClick={stopEventPropagation}
         >
-          <IconHeart />
-          <ButtonLabel>Health</ButtonLabel>
+          <IconProjectOverview />
+          <ButtonLabel>Overview</ButtonLabel>
         </NavLinkThatLooksLikeButtonIcon>
-      </OfflineHide> */}
+      </OfflineHide>
       <NavLinkThatLooksLikeButtonIcon
         to={`${projectUrl}/collecting`}
         aria-label="Collect"

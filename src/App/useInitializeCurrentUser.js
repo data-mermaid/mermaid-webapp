@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
@@ -63,5 +63,11 @@ export const useInitializeCurrentUser = ({
     }
   }
 
-  return { currentUser, saveUserProfile }
+  const getProjectRole = useCallback(
+    (projectId) =>
+      currentUser ? currentUser.projects.find(({ id }) => id === projectId)?.role : null,
+    [currentUser],
+  )
+
+  return { currentUser, saveUserProfile, getProjectRole }
 }
