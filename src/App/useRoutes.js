@@ -39,8 +39,12 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <FishBelt isNewRecord={false} />,
     },
     {
-      path: '/projects/:projectId/collecting/benthicphotoquadrat',
+      path: '/projects/:projectId/collecting/benthicpqt',
       Component: () => <BenthicPhotoQuadrat isNewRecord={true} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/benthicpqt/:recordId',
+      Component: () => <BenthicPhotoQuadrat isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
