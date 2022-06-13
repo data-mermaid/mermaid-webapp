@@ -15,7 +15,6 @@ import { IconInfo } from '../../icons'
 import { MaxWidthInputWrapper } from '../../generic/form'
 import { TooltipWithText } from '../../generic/tooltip'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import DataSharingInfoModal from '../../DataSharingInfoModal'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -26,6 +25,7 @@ import theme from '../../../theme'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { userRole } from '../../../App/mermaidData/userRole'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -72,17 +72,16 @@ const ReadOnlyDataSharingContent = ({ project }) => (
 )
 
 const DataSharing = () => {
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
   const [dataPolicyOptions, setDataPolicyOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
-  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
+  const isAdminUser = getProjectRole(projectId) === userRole.admin
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -91,27 +90,25 @@ const DataSharing = () => {
   const closeDataSharingInfoModal = () => setIsDataSharingInfoModalOpen(false)
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, choicesResponse, projectProfilesResponse]) => {
+        .then(([projectResponse, choicesResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectBeingEdited(projectResponse)
             setDataPolicyOptions(getDataSharingOptions(choicesResponse.datapolicies))
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -119,7 +116,7 @@ const DataSharing = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress, currentUser])
+  }, [isAppOnline, databaseSwitchboardInstance, projectId, isMounted, currentUser])
 
   const getToastMessageForDataPolicyChange = (property, policy) => {
     switch (property) {
@@ -189,7 +186,7 @@ const DataSharing = () => {
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
         <IconInfo /> Learn more about how your data is shared...
       </ButtonPrimary>
-      {currentUserProfile.is_admin ? (
+      {isAdminUser ? (
         <TableOverflowWrapper>
           <DataSharingTable>
             <thead>
@@ -276,7 +273,7 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {currentUserProfile.is_admin && (
+      {isAdminUser && (
         <>
           <CheckBoxLabel>
             <input
@@ -304,7 +301,7 @@ const DataSharing = () => {
     />
   ) : (
     <ContentPageLayout
-      isPageContentLoading={isAppOnline ? isLoading : false}
+      isPageContentLoading={isLoading}
       content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
       toolbar={
         <ContentPageToolbarWrapper>

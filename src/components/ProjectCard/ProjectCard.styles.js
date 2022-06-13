@@ -9,7 +9,7 @@ import {
 export const ButtonGroups = styled('div')`
   padding: ${theme.spacing.medium};
   display: grid;
-  grid-template-columns: auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto 1fr;
   align-items: center;
   gap: ${theme.spacing.small};
   @media (hover: none) {
