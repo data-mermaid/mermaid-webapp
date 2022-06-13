@@ -29,12 +29,17 @@ const ProjectTooltip = styled(TooltipWithText)`
     text-align: center;
   }
 `
-const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, primaryTitle }) => {
+const RecordFormTitle = ({
+  submittedRecordOrCollectRecordDataProperty,
+  sites,
+  primaryTitle,
+  transectType,
+}) => {
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
 
   const siteName = getObjectById(sites, siteId)?.name ?? ''
-  const transectNumber = submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.number ?? ''
-  const label = submittedRecordOrCollectRecordDataProperty.fishbelt_transect?.label ?? ''
+  const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
+  const label = submittedRecordOrCollectRecordDataProperty[transectType]?.label ?? ''
 
   useDocumentTitle(
     `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${
@@ -71,6 +76,7 @@ RecordFormTitle.propTypes = {
   submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   primaryTitle: PropTypes.string,
+  transectType: PropTypes.string.isRequired,
 }
 
 RecordFormTitle.defaultProps = {

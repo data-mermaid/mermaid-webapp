@@ -193,10 +193,10 @@ const FishBelt = ({ isNewRecord }) => {
                   ? getRecordName(collectRecordResponse.data, sitesResponse, 'fishbelt_transect')
                   : { name: 'Fish Belt' }
 
-              setSites(sortArrayByObjectKey(sitesResponse, "name"))
-              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, "name"))
+              setSites(sortArrayByObjectKey(sitesResponse, 'name'))
+              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
-              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, "profile_name"))
+              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
@@ -655,6 +655,7 @@ const FishBelt = ({ isNewRecord }) => {
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
                 sites={sites}
                 primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`}
+                transectType="fishbelt_transect"
               />
             )}
 

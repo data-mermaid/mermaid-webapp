@@ -52,6 +52,7 @@ const Collect = () => {
 
         .then(([records, project]) => {
           if (isMounted.current) {
+            console.log('records ', records)
             if (!project && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
