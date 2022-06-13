@@ -5,5 +5,6 @@ export const getRecordProtocolLabel = (protocol) => {
     benthicpit: 'Benthic PIT',
     habitatcomplexity: 'Habitat Complexity',
     bleachingqc: 'Bleaching',
+    benthicpqt: 'Benthic Photo Quadrat',
   }[protocol]
 }
