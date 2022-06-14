@@ -478,7 +478,7 @@ const UsersAndTransects = () => {
       content={content}
       toolbar={
         <>
-          <H2>Users Overview</H2>
+          <H2>Users and Transects</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.usersAndTransectsTable.filterToolbarText}
