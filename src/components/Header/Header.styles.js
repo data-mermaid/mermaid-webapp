@@ -37,7 +37,7 @@ const linkStyles = css`
   padding: 0;
   line-height: ${theme.spacing.headerHeight};
   ${hoverState(
-  css`
+    css`
       border-bottom: solid 3px ${theme.color.callout};
     `,
 )}
@@ -55,12 +55,12 @@ const dropdownLinkStyles = css`
   padding: ${theme.spacing.small} ${theme.spacing.large};
   width: 100%;
   ${hoverState(
-  css`
+    css`
       &:after {
         content: '';
         position: absolute;
-        width: 20px;
-        height: ${theme.spacing.borderSmall};
+        width: 55px;
+        height ${theme.spacing.borderSmall};
         background: ${theme.color.callout};
         bottom: 0;
         left: ${theme.spacing.large};
@@ -73,13 +73,13 @@ const dropdownLinkStyles = css`
 export const StyledNavLink = styled('a')`
   ${linkStyles}
   ${(props) =>
-    props.disabled &&
+  props.disabledLink &&
     css`
       color: ${theme.color.disabledText};
       pointer-events: none;
     `} 
   }
-  `
+`
 
 export const GlobalNav = styled('nav')`
   .desktop {
@@ -99,9 +99,6 @@ export const GlobalNav = styled('nav')`
       right: 0;
       background-color: ${theme.color.headerDropdownMenuBackground};
       border-radius: 8px 0 8px 8px;
-      a {
-        ${dropdownLinkStyles}
-      }
     }
   }
   .mobile {
@@ -128,7 +125,6 @@ export const GlobalNav = styled('nav')`
     button {
       display: block;
       text-decoration: none;
-      color: ${theme.color.white};
       text-align: right;
       padding: ${theme.spacing.small} ${theme.spacing.medium};
       margin: 0;
@@ -144,7 +140,9 @@ export const GlobalNav = styled('nav')`
       }
     }
     .loggedInAs {
+      margin-bottom: ${theme.spacing.xlarge};
       background: ${theme.color.primaryColor};
+      color: ${theme.color.white};
     }
   }
   ${mediaQueryTabletLandscapeOnly(css`
@@ -156,8 +154,11 @@ export const GlobalNav = styled('nav')`
     }
   `)}
 `
+
 export const UserMenuButton = styled.button`
   ${dropdownLinkStyles}
+  /* display: flex;
+  flex-direction: row-reverse; */
 `
 
 export const NotificationCardWrapper = styled('div')`

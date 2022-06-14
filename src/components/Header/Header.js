@@ -1,18 +1,19 @@
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React from 'react'
 import Logo from '../../assets/mermaid-logo.svg'
 import { IconBell, IconMenu, IconDown, IconUser } from '../icons'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
 import { GlobalNav, HeaderButtonThatLooksLikeLink, StyledHeader, StyledNavLink, UserMenuButton, NotificationCard, NotificationCardWrapper } from './Header.styles'
+import ProfileModal from '../ProfileModal'
 
 const GlobalLinks = () => (
   <>
     <StyledNavLink href="/projects">Projects</StyledNavLink>
     <OfflineHide>
-      <StyledNavLink href="/#" disabled>
+      <StyledNavLink href="/#" disabledLink>
         Reports
       </StyledNavLink>
     </OfflineHide>
@@ -33,12 +34,14 @@ const GlobalLinks = () => (
 )
 
 const Header = ({ logout, currentUser }) => {
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
+  const openProfileModal = () => setIsProfileModalOpen(true)
+  const closeProfileModal = () => setIsProfileModalOpen(false)
+
   const UserMenuDropDownContent = () => (
     <OfflineHide>
-      <Link to="/#">Profile</Link>
-      <UserMenuButton type="button" onClick={logout}>
-        Logout
-      </UserMenuButton>
+      <UserMenuButton onClick={openProfileModal}>Profile</UserMenuButton>
+      <UserMenuButton onClick={logout}>Logout</UserMenuButton>
     </OfflineHide>
   )
 
@@ -97,14 +100,14 @@ const Header = ({ logout, currentUser }) => {
   }
 
   return (
-    <StyledHeader>
+    <>
+      <StyledHeader>
       <Link to="/projects">
         <img src={Logo} alt="MERMAID Logo" />
       </Link>
       <GlobalNav>
         <div className="desktop">
           <GlobalLinks />
-          {/* <HeaderButtonThatLooksLikeLink> */}
           <HideShow
             button={<p><IconBell /></p>}
             contents={
@@ -113,7 +116,6 @@ const Header = ({ logout, currentUser }) => {
               </div>
             }
           />
-          {/* </HeaderButtonThatLooksLikeLink> */}
           <HideShow
             button={getUserButton()}
             contents={
@@ -153,10 +155,12 @@ const Header = ({ logout, currentUser }) => {
                 </div>
               </div>
             }
-          />
-        </div>
-      </GlobalNav>
-    </StyledHeader>
+            />
+          </div>
+        </GlobalNav>
+      </StyledHeader>
+      <ProfileModal isOpen={isProfileModalOpen} onDismiss={closeProfileModal} />
+    </>
   )
 }
 

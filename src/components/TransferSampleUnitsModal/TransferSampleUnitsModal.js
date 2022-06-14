@@ -51,7 +51,7 @@ const TransferSampleUnitsModal = ({
 
   const optionList = userOptions
     .filter(({ profile }) => profile !== fromUser.profile)
-    .map(user => {
+    .map((user) => {
       const profileName = getProfileNameOrEmailForPendingUser(user)
 
       return (
@@ -88,7 +88,7 @@ const TransferSampleUnitsModal = ({
               <Select
                 id="modal-transfer-units-to"
                 defaultValue={initialToUserIdInTransferModal}
-                onChange={event => {
+                onChange={(event) => {
                   handleTransferSampleUnitChange(event.target.value)
                   setInitialIsToUserIdEmpty(false)
                 }}

@@ -175,9 +175,6 @@ test('Sync: initial page load already done, navigate to non project page', async
    * the loading indicator to show first before we wait for it to disappear
    */
 
-  await screen.findByLabelText('project pages loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
-
   // this makes the act errors disappear.
   expect(within(await screen.findByTestId('collect-record-count')).getByText('16'))
 

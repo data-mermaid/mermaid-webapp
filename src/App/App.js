@@ -23,7 +23,6 @@ import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
-import { useProjectUserRole } from './useProjectUserRole'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
@@ -34,7 +33,7 @@ function App({ dexieCurrentUserInstance }) {
     dexieCurrentUserInstance,
   })
 
-  const currentUser = useInitializeCurrentUser({
+  const { currentUser, saveUserProfile, getProjectRole } = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
     dexieCurrentUserInstance,
@@ -86,12 +85,6 @@ function App({ dexieCurrentUserInstance }) {
     apiSyncInstance,
   ])
 
-  const projectUserRole = useProjectUserRole({
-    currentUser,
-    databaseSwitchboardInstance,
-    isOfflineStorageHydrated,
-  })
-
   const { routes } = useRoutes({ apiSyncInstance })
 
   const layoutProps = {
@@ -100,7 +93,6 @@ function App({ dexieCurrentUserInstance }) {
   }
 
   const isMermaidAuthenticatedAndReady =
-    projectUserRole &&
     isMermaidAuthenticated &&
     currentUser &&
     databaseSwitchboardInstance &&
@@ -109,7 +101,7 @@ function App({ dexieCurrentUserInstance }) {
   return (
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
-        <CurrentUserProvider value={{ currentUser, projectUserRole }}>
+        <CurrentUserProvider value={{ currentUser, saveUserProfile, getProjectRole }}>
           <GlobalStyle />
           <CustomToastContainer limit={5} />
           <Layout {...layoutProps}>

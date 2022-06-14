@@ -13,7 +13,7 @@ test('App renders show page unavailable offline when navigate to Project Health 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/health'],
+    initialEntries: ['/projects/5/usersandtransects'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

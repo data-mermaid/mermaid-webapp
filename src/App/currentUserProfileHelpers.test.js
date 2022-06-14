@@ -4,7 +4,7 @@ import {
   getMockDexieInstanceThatProducesErrors,
 } from '../testUtilities/mockDexie'
 import mockMermaidApiAllSuccessful from '../testUtilities/mockMermaidApiAllSuccessful'
-import getCurrentUserProfile from './getCurrentUserProfile'
+import { getCurrentUserProfile } from './currentUserProfileHelpers'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const getAccessToken = async () => 'fake token'
@@ -65,6 +65,7 @@ test('getCurrentUserProfile offline returns data from local storage', async () =
     first_name: 'FakeFirstNameOffline',
     last_name: 'FakeLastNameOffline',
     full_name: 'FakeFirstNameOffline FakeLastNameOffline',
+    projects: [{ id: 'fake-project-id', name: 'FakeProjectName', role: 90 }],
   })
 })
 test('getCurrentUserProfile offline returns error message upon dexie error', async () => {

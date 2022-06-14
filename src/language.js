@@ -64,6 +64,8 @@ const error = {
     'Something went wrong. The submitted record has not been made editable',
   userProfileUnavailable: 'The user profile is unavailable.',
   userRecordsUnavailable: 'User records data is currently unavailable. Please try again.',
+  projectHealthRecordsUnavailable:
+    'Summary records data is currently unavailable. Please try again',
 
   getIdsNotFoundDetails: (id) =>
     id.length > 1
@@ -116,6 +118,7 @@ const success = {
         return `${method} is now set to public `
     }
   },
+  userProfileUpdate: 'Profile updated',
 }
 
 const deleteCollectRecord = {
@@ -160,6 +163,7 @@ const table = {
 const title = {
   mermaid: 'MERMAID',
   mermaidDescription: 'Marine Ecological Research Management Aid',
+  userProfileModal: 'Your Profile',
 }
 
 const pages = {
@@ -246,6 +250,9 @@ const pages = {
     missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',
   },
+  benthicPhotoQuadratForm: {
+    title: 'Benthic Photo Quadrat'
+  }
 }
 
 const navigateAwayPrompt =

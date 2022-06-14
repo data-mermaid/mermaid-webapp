@@ -27,7 +27,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   const history = useHistory()
   const projectUrl = `projects/${id}`
 
-  const handleProjectOfflineReadyClick = event => {
+  const handleProjectOfflineReadyClick = (event) => {
     const isChecked = event.target.checked
 
     if (isChecked) {
@@ -38,11 +38,13 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(language.success.getProjectTurnOnOfflineReadySuccess(name)))
+            ...getToastArguments(language.success.getProjectTurnOnOfflineReadySuccess(name)),
+          )
         })
         .catch(() => {
           toast.error(
-            ...getToastArguments(language.error.getProjectTurnOnOfflineReadyFailure(name)))
+            ...getToastArguments(language.error.getProjectTurnOnOfflineReadyFailure(name)),
+          )
         })
     }
     if (!isChecked) {
@@ -53,23 +55,21 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)
           toast.success(
-            ...getToastArguments(language.success.getProjectTurnOffOfflineReadySuccess(name)))
+            ...getToastArguments(language.success.getProjectTurnOffOfflineReadySuccess(name)),
+          )
         })
         .catch(() => {
           toast.error(
-            ...getToastArguments(language.error.getProjectTurnOffOfflineReadyFailure(name)))
+            ...getToastArguments(language.error.getProjectTurnOffOfflineReadyFailure(name)),
+          )
         })
     }
   }
 
   const handleCardClick = () => {
-    // hiding for alpha release because leads nowhere useful
-    // const destinationUrl = isAppOnline
-    //   ? `${projectUrl}/health`
-    //   : `${projectUrl}/collecting`
-
-    // temp for alpha
-    const destinationUrl = `${projectUrl}/collecting`
+    const destinationUrl = isAppOnline
+      ? `${projectUrl}/usersandtransects`
+      : `${projectUrl}/collecting`
 
     history.push(destinationUrl)
   }
@@ -78,7 +78,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   //   e.stopPropagation()
   // }
 
-return (
+  return (
     <CardWrapper onClick={handleCardClick} {...restOfProps}>
       <ProjectNameWrapper>
         <h2>{name}</h2>

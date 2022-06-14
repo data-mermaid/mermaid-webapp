@@ -30,7 +30,6 @@ import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { validateEmail } from '../../../library/strings/validateEmail'
 import communicateGenericApiErrorsToUser from '../../../library/communicateGenericApiErrorsToUser'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -48,6 +47,7 @@ import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import { userRole } from '../../../App/mermaidData/userRole'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -134,18 +134,21 @@ const Users = () => {
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
-  const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
-  const { currentUser } = useCurrentUser()
+  const { currentUser, getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const isAdminUser = getProjectRole(projectId) === userRole.admin
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
   const [toUserProfileId, setToUserProfileId] = useState(currentUser.id)
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       Promise.all([
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getProject(projectId),
@@ -156,13 +159,8 @@ const Users = () => {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const filteredUserProfile = projectProfilesResponse.filter(
-              ({ profile }) => currentUser.id === profile,
-            )[0]
-
             setProjectName(projectResponse?.name)
             setObserverProfiles(projectProfilesResponse)
-            setCurrentUserProfile(filteredUserProfile)
             setIsLoading(false)
           }
         })
@@ -170,7 +168,7 @@ const Users = () => {
           toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, projectId, isSyncInProgress, currentUser])
+  }, [isAppOnline, databaseSwitchboardInstance, isMounted, projectId, currentUser])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)
@@ -565,7 +563,7 @@ const Users = () => {
 
   const tableGlobalFilters = useCallback(
     (rows, id, query) => {
-      const keys = currentUserProfile.isAdmin
+      const keys = isAdminUser
         ? ['values.name.props.children', 'values.email']
         : ['values.name', 'values.role']
 
@@ -577,7 +575,7 @@ const Users = () => {
 
       return getTableFilteredRows(rows, keys, queryTerms)
     },
-    [currentUserProfile],
+    [isAdminUser],
   )
 
   const {
@@ -597,8 +595,8 @@ const Users = () => {
     setGlobalFilter,
   } = useTable(
     {
-      columns: currentUserProfile.is_admin ? tableColumnsForAdmin : tableColumnsForCollector,
-      data: currentUserProfile.is_admin ? tableCellDataForAdmin : tableCellDataForCollector,
+      columns: isAdminUser ? tableColumnsForAdmin : tableColumnsForCollector,
+      data: isAdminUser ? tableCellDataForAdmin : tableCellDataForCollector,
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
@@ -721,14 +719,14 @@ const Users = () => {
       <ToolbarRowWrapper>
         <FilterSearchToolbar
           name={
-            currentUserProfile.is_admin
+            isAdminUser
               ? language.pages.userTable.filterToolbarTextForAdmin
               : language.pages.userTable.filterToolbarTextForCollector
           }
           handleGlobalFilterChange={handleGlobalFilterChange}
           value={tableUserPrefs.globalFilter}
         />
-        {currentUserProfile.is_admin && (
+        {isAdminUser && (
           <InputAndButton
             inputId="add-new-user-email"
             labelText={language.pages.userTable.searchEmailToolbarText}
@@ -760,11 +758,7 @@ const Users = () => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout
-      isPageContentLoading={isAppOnline ? isLoading : false}
-      content={content}
-      toolbar={toolbar}
-    />
+    <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
   )
 }
 

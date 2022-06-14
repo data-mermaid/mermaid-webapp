@@ -12,8 +12,9 @@ import Sites from '../components/pages/Sites'
 import Site from '../components/pages/Site'
 import Users from '../components/pages/Users'
 import UsersAndTransects from '../components/pages/UsersAndTransects'
-import FishBelt from '../components/pages/collectRecordFormPages/FishBelt/FishBelt'
+import FishBelt from '../components/pages/collectRecordFormPages/FishBelt'
 import SubmittedFishBelt from '../components/pages/SubmittedFishBelt/SubmittedFishBelt'
+import BenthicPhotoQuadrat from '../components/pages/collectRecordFormPages/BenthicPhotoQuadrat'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
@@ -22,7 +23,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <Projects apiSyncInstance={apiSyncInstance} />,
     },
     {
-      path: '/projects/:projectId/health',
+      path: '/projects/:projectId/usersandtransects',
       Component: UsersAndTransects,
     },
     {
@@ -36,6 +37,10 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
       Component: () => <FishBelt isNewRecord={false} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/benthicphotoquadrat',
+      Component: () => <BenthicPhotoQuadrat isNewRecord={true} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
