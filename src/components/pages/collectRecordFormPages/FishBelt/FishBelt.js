@@ -220,7 +220,7 @@ const FishBelt = ({ isNewRecord }) => {
     persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputsik')
+  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputs')
 
   const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
     'unsavedFishbeltObservations',
@@ -430,7 +430,7 @@ const FishBelt = ({ isNewRecord }) => {
     return (
       getPersistedUnsavedFormikData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
-        ...getSampleInfoInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
+        ...getSampleInfoInitialValues(collectRecordBeingEdited),
         ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
       }
     )
