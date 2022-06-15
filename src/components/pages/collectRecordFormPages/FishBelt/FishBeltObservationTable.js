@@ -593,6 +593,7 @@ FishBeltObservationTable.propTypes = {
   ).isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
+  /* eslint-disable-next-line react/prop-types */
   observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
