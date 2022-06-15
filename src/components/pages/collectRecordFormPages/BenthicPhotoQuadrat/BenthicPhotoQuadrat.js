@@ -28,6 +28,7 @@ import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import SampleEventInputs from '../SampleEventInputs'
 import TransectInputs from '../TransectInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
+import { getRecordName } from '../../../../library/getRecordName'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [choices, setChoices] = useState({})
@@ -41,6 +42,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [subNavNode, setSubNavNode] = useState(null)
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const { currentUser } = useCurrentUser()
@@ -77,10 +79,17 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               if (!isNewRecord && !projectResponse && projectId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
               }
+
+              const recordNameForSubNode =
+                !isNewRecord && collectRecordResponse
+                  ? getRecordName(collectRecordResponse.data, sitesResponse, 'quadrat_transect')
+                  : { name: 'Fish Belt' }
+
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
               setCollectRecordBeingEdited(collectRecordResponse)
+              setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
           },
@@ -169,6 +178,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
       <ContentPageLayout
         isPageContentLoading={isLoading}
         isToolbarSticky={true}
+        subNavNode={subNavNode}
         content={
           <>
             <form id="benthicpqt-form" aria-labelledby="benthicpqt-form-title">
