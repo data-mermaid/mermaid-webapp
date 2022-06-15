@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getSampleDateLabel } from '../getSampleDateLabel'
-import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
+import { getRecordProtocolLabel } from '../recordProtocolHelper'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const SubmittedRecordsMixin = (Base) =>

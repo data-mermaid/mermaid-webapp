@@ -1,7 +1,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import language from '../../../language'
-import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
+import { getRecordProtocolLabel } from '../recordProtocolHelper'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const ProjectHealthMixin = (Base) =>

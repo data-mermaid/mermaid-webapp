@@ -5,7 +5,7 @@ import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
-import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
+import { getRecordProtocolLabel, getRecordProtocolMethod } from '../recordProtocolHelper'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
@@ -59,15 +59,9 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
-      const isFishBelt = this.#getIsFishBelt(record)
-
-      const transectNumber = isFishBelt
-        ? record.data?.fishbelt_transect?.number
-        : record.data?.benthic_transect?.number
-
-      const labelName = isFishBelt
-        ? record.data?.fishbelt_transect?.label
-        : record.data?.benthic_transect?.label
+      const transectMethod = getRecordProtocolMethod(record.data.protocol)
+      const transectNumber = record.data?.[transectMethod]?.number
+      const labelName = record.data?.[transectMethod]?.label
 
       const sampleUnit = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
 
