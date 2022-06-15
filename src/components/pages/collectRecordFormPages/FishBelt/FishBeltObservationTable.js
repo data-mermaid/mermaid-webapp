@@ -593,7 +593,7 @@ FishBeltObservationTable.propTypes = {
   ).isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
-  observationsReducer: PropTypes.arrayOf(PropTypes.node).isRequired,
+  observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
     persistUnsavedFormData: PropTypes.func,
