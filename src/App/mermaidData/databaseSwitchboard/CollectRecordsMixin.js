@@ -38,6 +38,26 @@ const CollectRecordsMixin = (Base) =>
       }
     }
 
+    #formatCollectRecordForPush = function formatCollectRecordForPush({
+      record,
+      projectId,
+      profileId,
+      protocol,
+    }) {
+      const idToSubmit = record.id ?? createUuid()
+      const profileIdToSubmit = record.profile ?? profileId
+      const projectIdToSubmit = record.project ?? projectId
+
+      return {
+        ...record,
+        id: idToSubmit,
+        data: { ...record.data, protocol },
+        project: projectIdToSubmit,
+        profile: profileIdToSubmit,
+        uiState_pushToApi: true,
+      }
+    }
+
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
       const isFishBelt = this.#getIsFishBelt(record)
 
@@ -108,6 +128,74 @@ const CollectRecordsMixin = (Base) =>
       const length = record.data.benthic_transect?.len_surveyed
 
       return length === undefined ? noSizeLabel : `${length}m`
+    }
+
+    saveCollectRecord = async function saveCollectRecord({
+      record,
+      profileId,
+      projectId,
+      protocol,
+    }) {
+      if (!record || !profileId || !projectId || !protocol) {
+        throw new Error(
+          'saveFishBelt expects record, profileId, projectId, and protocol parameters',
+        )
+      }
+
+      const recordToSubmit = this.#formatCollectRecordForPush({
+        record,
+        profileId,
+        projectId,
+        protocol,
+      })
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        // put it in IDB just in case the network craps out before the API can return
+        await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
+
+        return axios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            { collect_records: [recordToSubmit] },
+            {
+              params: {
+                force: true,
+              },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            },
+          )
+          .then((response) => {
+            const [recordResponseFromApiPush] = response.data.collect_records
+            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              recordResponseFromApiPush.status_code,
+            )
+
+            if (isRecordStatusCodeSuccessful) {
+              // do a pull of data related to collect records
+              // to make sure it is all updated/deleted in IDB
+              return this._apiSyncInstance
+                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .then((_dataSetsReturnedFromApiPull) => {
+                  const recordWithExtraPropertiesWrittenByApi = recordResponseFromApiPush.data
+
+                  return recordWithExtraPropertiesWrittenByApi
+                })
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API record returned from saveFishBelt doesnt have a successful status code',
+              ),
+            )
+          })
+      }
+      if (this._isOfflineAuthenticatedAndReady) {
+        return this._dexiePerUserDataInstance.collect_records
+          .put(recordToSubmit)
+          .then(() => recordToSubmit)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
     saveFishBelt = async function saveFishBelt({ record, profileId, projectId }) {
@@ -560,7 +648,8 @@ const CollectRecordsMixin = (Base) =>
               ...record,
               uiLabels: {
                 depth: this.#getDepthLabel(record),
-                management: getObjectById(managementRegimes, record.data.sample_event.management)?.name,
+                management: getObjectById(managementRegimes, record.data.sample_event.management)
+                  ?.name,
                 observers: this.#getObserversLabel(record),
                 protocol: getRecordProtocolLabel(record.data.protocol),
                 sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
