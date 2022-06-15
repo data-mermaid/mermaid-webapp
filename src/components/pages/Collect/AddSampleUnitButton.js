@@ -29,7 +29,7 @@ const AddSampleUnitButton = () => {
     <StyledButtonSecondaryDropdown label={label}>
       <Column as="nav" data-testid="new-sample-unit-nav">
         <CustomNavLink to={`${currentProjectPath}/collecting/fishbelt`}>Fish Belt</CustomNavLink>
-        <CustomNavLink to={`${currentProjectPath}/collecting/benthicphotoquadrat`}>
+        <CustomNavLink to={`${currentProjectPath}/collecting/benthicpqt`}>
           Benthic Photo Quadrat
         </CustomNavLink>
         <DisabledCustomNavLink as="span">Benthic LIT</DisabledCustomNavLink>
