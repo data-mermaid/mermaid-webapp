@@ -157,25 +157,6 @@ export const GlobalNav = styled('nav')`
 
 export const UserMenuButton = styled.button`
   ${dropdownLinkStyles}
-  /* display: flex;
-  flex-direction: row-reverse; */
-`
-
-export const NotificationCardWrapper = styled('div')`
-  width: ${'80vw'};
-  max-width: ${'40rem'};
-  cursor: pointer;
-  ${mediaQueryTabletLandscapeOnly(css`
-    width: '90vw';
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-  `)}
-`
-
-export const NotificationCard = styled('div')`
- margin: ${theme.spacing.small};
- background-color: white;
- width: 97%;
- color: ${theme.color.primaryColor};
+  display: flex;
+  flex-direction: row-reverse;
 `
