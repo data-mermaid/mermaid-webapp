@@ -27,6 +27,7 @@ import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObje
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import SampleEventInputs from '../SampleEventInputs'
 import TransectInputs from '../TransectInputs'
+import ObserversInput from '../ObserversInput'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import { getRecordName } from '../../../../library/getRecordName'
 
@@ -41,6 +42,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [submitButtonState] = useState(buttonGroupStates.submittable)
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
+  const [observerProfiles, setObserverProfiles] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [subNavNode, setSubNavNode] = useState(null)
   const { isSyncInProgress } = useSyncStatus()
@@ -55,6 +57,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
+        databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getProject(projectId),
       ]
 
@@ -67,6 +70,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
+            projectProfilesResponse,
             projectResponse,
 
             // collectRecord needs to be last in array because its pushed to the promise array conditionally
@@ -88,6 +92,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
+              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setCollectRecordBeingEdited(collectRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -168,6 +173,10 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     }
   }, [isFormDirty])
 
+  const handleObserversChange = ({ selectedObservers }) => {
+    formik.setFieldValue('observers', selectedObservers)
+  }
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -188,6 +197,12 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                 sites={sites}
               />
               <TransectInputs choices={choices} formik={formik} />
+              <ObserversInput
+                data-testid="observers"
+                formik={formik}
+                observers={observerProfiles}
+                onObserversChange={handleObserversChange}
+              />
             </form>
           </>
         }
