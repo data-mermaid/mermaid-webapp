@@ -1,5 +1,5 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
 import {
   managementRegimePropType,
@@ -8,9 +8,9 @@ import {
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
+import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
-import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 
 const SampleEventInputs = ({ formik, managementRegimes, sites, hasData }) => {
   const managementSelectOptions = getOptions(managementRegimes, hasData)

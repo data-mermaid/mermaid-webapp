@@ -1,55 +1,57 @@
-import { useFormik } from 'formik'
-import { toast } from 'react-toastify'
-import React, { useState, useEffect, useMemo } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import language from '../../../../language'
+import React, { useState, useEffect, useMemo } from 'react'
+import { toast } from 'react-toastify'
+import { useFormik } from 'formik'
+import { useHistory, useParams } from 'react-router-dom'
+
+import { buttonGroupStates } from '../../../../library/buttonGroupStates'
+import { ContentPageLayout } from '../../../Layout'
+import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
   getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
   getBenthicPhotoQuadratAdditionalValues,
 } from '../collectRecordFormInitialValues'
+import { getRecordName } from '../../../../library/getRecordName'
+import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
-import { buttonGroupStates } from '../../../../library/buttonGroupStates'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import language from '../../../../language'
+import ObserversInput from '../ObserversInput'
 import { reformatFormValuesIntoBenthicPQTRecord } from './reformatFormValuesIntoBenthicPQTRecord'
-import { ContentPageLayout } from '../../../Layout'
-import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
+import RecordFormTitle from '../../../RecordFormTitle'
+import SampleEventInputs from '../SampleEventInputs'
+import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
+import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
+import TransectInputs from '../TransectInputs'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
-import { getToastArguments } from '../../../../library/getToastArguments'
-import { useCurrentUser } from '../../../../App/CurrentUserContext'
-import useIsMounted from '../../../../library/useIsMounted'
-import RecordFormTitle from '../../../RecordFormTitle'
-import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
-import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import SampleEventInputs from '../SampleEventInputs'
-import TransectInputs from '../TransectInputs'
-import ObserversInput from '../ObserversInput'
-import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
-import { getRecordName } from '../../../../library/getRecordName'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
-  const [choices, setChoices] = useState({})
+  const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const history = useHistory()
+  const isMounted = useIsMounted()
+  const { isSyncInProgress } = useSyncStatus()
+  const { recordId, projectId } = useParams()
+
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
+  const [choices, setChoices] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
-  const [submitButtonState] = useState(buttonGroupStates.submittable)
-  const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
   const [observerProfiles, setObserverProfiles] = useState([])
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [sites, setSites] = useState([])
+  const [submitButtonState] = useState(buttonGroupStates.submittable)
   const [subNavNode, setSubNavNode] = useState(null)
-  const { isSyncInProgress } = useSyncStatus()
-  const { recordId, projectId } = useParams()
-  const { currentUser } = useCurrentUser()
-  const history = useHistory()
-  const isMounted = useIsMounted()
+  const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {

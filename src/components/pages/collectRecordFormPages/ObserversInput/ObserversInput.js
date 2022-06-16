@@ -1,12 +1,12 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
-import { H2 } from '../../../generic/text'
-import { InputWrapper } from '../../../generic/form'
 import { formikPropType } from '../../../../library/formikPropType'
-import { observersPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import { getObserverNameOptions } from '../../../../library/observerHelpers'
+import { H2 } from '../../../generic/text'
+import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
+import { InputWrapper } from '../../../generic/form'
+import { observersPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 
 const ObserversInput = ({ formik, observers, onObserversChange, ...restOfProps }) => {
   const observerNameOptions = getObserverNameOptions(observers)

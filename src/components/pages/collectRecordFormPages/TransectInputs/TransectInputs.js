@@ -1,19 +1,20 @@
 import React from 'react'
+
 import { choicesPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
-import { InputWrapper } from '../../../generic/form'
 import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
+import { InputWrapper } from '../../../generic/form'
 
 const TransectInputs = ({ choices, formik }) => {
-  const { relativedepths, visibilities, currents, tides } = choices
+  const { currents, relativedepths, tides, visibilities } = choices
 
-  const visibilityOptions = [...getOptions(visibilities), { label: 'not reported', value: '' }]
   const currentOptions = [...getOptions(currents), { label: 'not reported', value: '' }]
   const relativeDepthOptions = [...getOptions(relativedepths), { label: 'not reported', value: '' }]
   const tideOptions = [...getOptions(tides), { label: 'not reported', value: '' }]
+  const visibilityOptions = [...getOptions(visibilities), { label: 'not reported', value: '' }]
 
   const handleTransectNumberChange = (event) => {
     formik.handleChange(event)
