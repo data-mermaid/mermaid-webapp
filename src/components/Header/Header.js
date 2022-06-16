@@ -47,12 +47,6 @@ const Header = ({ logout, currentUser }) => {
     </OfflineHide>
   )
 
-  const BellNotificationDropDownContent = () => (
-    <NotificationCardWrapper>
-      <NotificationCard>card goes here</NotificationCard>
-    </NotificationCardWrapper>
-  )
-
   const getUserButton = () => {
     // Avatar
     if (currentUser && currentUser.picture) {
