@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+
 import Logo from '../../assets/mermaid-logo.svg'
 import { IconBell, IconMenu, IconDown, IconUser } from '../icons'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
@@ -44,6 +45,12 @@ const Header = ({ logout, currentUser }) => {
       <UserMenuButton onClick={openProfileModal}>Profile</UserMenuButton>
       <UserMenuButton onClick={logout}>Logout</UserMenuButton>
     </OfflineHide>
+  )
+
+  const BellNotificationDropDownContent = () => (
+    <NotificationCardWrapper>
+      <NotificationCard>card goes here</NotificationCard>
+    </NotificationCardWrapper>
   )
 
   const getUserButton = () => {
