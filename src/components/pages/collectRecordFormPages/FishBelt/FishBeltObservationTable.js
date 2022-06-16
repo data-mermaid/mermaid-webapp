@@ -8,7 +8,11 @@ import {
   ButtonPrimary,
   ButtonSecondary,
 } from '../../../generic/buttons'
-import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import {
+  choicesPropType,
+  fishBeltPropType,
+  observationsReducerPropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
@@ -593,8 +597,7 @@ FishBeltObservationTable.propTypes = {
   ).isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
-  /* eslint-disable-next-line react/prop-types */
-  observationsReducer: PropTypes.arrayOf(PropTypes.any).isRequired,
+  observationsReducer: PropTypes.arrayOf(observationsReducerPropType).isRequired,
   openNewFishNameModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
     persistUnsavedFormData: PropTypes.func,
