@@ -34,7 +34,7 @@ const HeaderCenter = styled.div`
 
 const InlineCell = styled.div`
   white-space: nowrap;
-  text-align: center;
+  text-align: inherit;
   a {
     color: inherit;
   }
@@ -379,6 +379,9 @@ const UsersAndTransects = () => {
                   )
                   const ThClassName = column.parent ? column.parent.id : undefined
 
+                  const headerAlignment =
+                    column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+
                   return (
                     <Th
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
@@ -387,6 +390,7 @@ const UsersAndTransects = () => {
                       isMultiSortColumn={isMultiSortColumn}
                       isSortingEnabled={!column.disableSortBy}
                       disabledHover={column.disableSortBy}
+                      align={headerAlignment}
                       className={ThClassName}
                     >
                       {column.render('Header')}
@@ -430,10 +434,15 @@ const UsersAndTransects = () => {
                         ? 'highlighted'
                         : undefined
 
+                    const cellAlignment =
+                      cell.column.parent.id === 'site' || cell.column.parent.id === 'method'
+                        ? 'left'
+                        : 'right'
+
                     return (
                       <Td
                         {...cell.getCellProps()}
-                        align={cell.column.align}
+                        align={cellAlignment}
                         className={`${cell.column.parent.id} ${HighlightedClassName}`}
                       >
                         <span>{cell.render('Cell')}</span>
@@ -478,7 +487,7 @@ const UsersAndTransects = () => {
       content={content}
       toolbar={
         <>
-          <H2>Users Overview</H2>
+          <H2>Users and Transects</H2>
           <ToolBarRow>
             <FilterSearchToolbar
               name={language.pages.usersAndTransectsTable.filterToolbarText}

@@ -196,7 +196,7 @@ const SubmittedFishBelt = () => {
               {currentUserProfile.is_admin && (
                 <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
                   <IconPen />
-                  Edit Sample Unit - move to collect
+                  Edit Sample Unit - move to Collecting
                 </ButtonSecondary>
               )}
             </RowSpaceBetween>
