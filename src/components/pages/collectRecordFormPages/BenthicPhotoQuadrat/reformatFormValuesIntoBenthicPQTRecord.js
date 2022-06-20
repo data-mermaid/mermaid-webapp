@@ -1,4 +1,8 @@
-export const reformatFormValuesIntoBenthicPQTRecord = (formikValues, collectRecordBeingEdited) => {
+export const reformatFormValuesIntoBenthicPQTRecord = (
+  formikValues,
+  observationsValues,
+  collectRecordBeingEdited,
+) => {
   const {
     depth,
     label,
@@ -42,6 +46,7 @@ export const reformatFormValuesIntoBenthicPQTRecord = (formikValues, collectReco
         sample_date,
         site,
       },
+      obs_benthic_photo_quadrats: observationsValues,
       observers,
     },
   }

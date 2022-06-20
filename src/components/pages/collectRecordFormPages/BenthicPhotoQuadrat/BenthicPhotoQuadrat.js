@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useReducer } from 'react'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useHistory, useParams } from 'react-router-dom'
 
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
+import benthicpqtObservationReducer from './benthicpqtObservationReducer'
+import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
@@ -14,6 +16,7 @@ import {
   getTransectInitialValues,
   getBenthicPhotoQuadratAdditionalValues,
 } from '../collectRecordFormInitialValues'
+import { getOptions } from '../../../../library/getOptions'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
@@ -33,15 +36,19 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const history = useHistory()
   const isMounted = useIsMounted()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
+  const observationsReducer = useReducer(benthicpqtObservationReducer, [])
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [choices, setChoices] = useState({})
+  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -60,6 +67,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(projectId),
+        databaseSwitchboardInstance.getBenthicAttributes(),
         databaseSwitchboardInstance.getProject(projectId),
       ]
 
@@ -73,6 +81,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
             managementRegimesResponse,
             choicesResponse,
             projectProfilesResponse,
+            benthicAttributes,
             projectResponse,
 
             // collectRecord needs to be last in array because its pushed to the promise array conditionally
@@ -91,10 +100,13 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                   ? getRecordName(collectRecordResponse.data, sitesResponse, 'quadrat_transect')
                   : { name: 'Fish Belt' }
 
+              const updateBenthicAttributeOptions = getOptions(benthicAttributes, false)
+
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
               setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
+              setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setCollectRecordBeingEdited(collectRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -116,6 +128,14 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
   } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputs')
 
+  const persistUnsavedObservationsUtilities =
+    useUnsavedDirtyFormDataUtilities('unsavedObservations')
+
+  const {
+    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
+  } = persistUnsavedObservationsUtilities
+
   const initialFormikFormValues = useMemo(() => {
     return (
       getPersistedUnsavedFormikData() ?? {
@@ -135,6 +155,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const handleSave = () => {
     const recordToSubmit = reformatFormValuesIntoBenthicPQTRecord(
       formik.values,
+      observationsState,
       collectRecordBeingEdited,
     )
 
@@ -150,6 +171,8 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
       .then((response) => {
         toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
+        clearPersistedUnsavedObservationsData()
+        setAreObservationsInputsDirty(false)
         setSaveButtonState(buttonGroupStates.saved)
         setValidateButtonState(buttonGroupStates.validatable)
         setIsFormDirty(false)
@@ -166,8 +189,18 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   }
 
   const _setIsFormDirty = useEffect(() => {
-    setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData())
-  }, [formik.dirty, getPersistedUnsavedFormikData])
+    setIsFormDirty(
+      areObservationsInputsDirty ||
+        !!formik.dirty ||
+        !!getPersistedUnsavedFormikData() ||
+        !!getPersistedUnsavedObservationsData(),
+    )
+  }, [
+    areObservationsInputsDirty,
+    formik.dirty,
+    getPersistedUnsavedFormikData,
+    getPersistedUnsavedObservationsData,
+  ])
 
   const _setCollectButtonsUnsaved = useEffect(() => {
     if (isFormDirty) {
@@ -204,6 +237,15 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                 formik={formik}
                 observers={observerProfiles}
                 onObserversChange={handleObserversChange}
+              />
+              <BenthicPhotoQuadratObservationTable
+                areObservationsInputsDirty={areObservationsInputsDirty}
+                benthicAttributeOptions={benthicAttributeOptions}
+                choices={choices}
+                collectRecord={collectRecordBeingEdited}
+                observationsReducer={observationsReducer}
+                persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+                setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               />
             </form>
           </>
