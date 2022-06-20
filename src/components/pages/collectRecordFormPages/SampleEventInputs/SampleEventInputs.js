@@ -12,9 +12,9 @@ import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAn
 import { InputWrapper } from '../../../generic/form'
 import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 
-const SampleEventInputs = ({ formik, managementRegimes, sites, hasData }) => {
-  const managementSelectOptions = getOptions(managementRegimes, hasData)
-  const siteSelectOptions = getOptions(sites, hasData)
+const SampleEventInputs = ({ formik, managementRegimes, sites }) => {
+  const managementSelectOptions = getOptions(managementRegimes, false)
+  const siteSelectOptions = getOptions(sites, false)
 
   const handleSiteChange = (event) => {
     formik.handleChange(event)
@@ -71,11 +71,6 @@ SampleEventInputs.propTypes = {
   formik: formikPropType.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
-  hasData: PropTypes.bool,
-}
-
-SampleEventInputs.defaultProps = {
-  hasData: false,
 }
 
 export default SampleEventInputs
