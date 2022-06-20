@@ -44,7 +44,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
-  const [observationsState, observationsDispatch] = observationsReducer
+  const [observationsState] = observationsReducer
 
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [choices, setChoices] = useState({})
