@@ -655,7 +655,7 @@ const FishBelt = ({ isNewRecord }) => {
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
                 sites={sites}
                 primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`}
-                transectType="fishbelt_transect"
+                sampleUnit="fishbelt_transect"
               />
             )}
 

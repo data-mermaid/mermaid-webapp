@@ -33,13 +33,13 @@ const RecordFormTitle = ({
   submittedRecordOrCollectRecordDataProperty,
   sites,
   primaryTitle,
-  transectType,
+  sampleUnit,
 }) => {
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
 
   const siteName = getObjectById(sites, siteId)?.name ?? ''
-  const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
-  const label = submittedRecordOrCollectRecordDataProperty[transectType]?.label ?? ''
+  const transectNumber = submittedRecordOrCollectRecordDataProperty[sampleUnit]?.number ?? ''
+  const label = submittedRecordOrCollectRecordDataProperty[sampleUnit]?.label ?? ''
 
   useDocumentTitle(
     `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${
@@ -76,7 +76,7 @@ RecordFormTitle.propTypes = {
   submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   primaryTitle: PropTypes.string,
-  transectType: PropTypes.string.isRequired,
+  sampleUnit: PropTypes.string.isRequired,
 }
 
 RecordFormTitle.defaultProps = {

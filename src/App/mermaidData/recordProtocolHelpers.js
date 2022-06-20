@@ -1,4 +1,4 @@
-export const getRecordProtocolLabel = (protocol) => {
+export const getRecordSampleUnitMethod = (protocol) => {
   return {
     fishbelt: 'Fish Belt',
     benthiclit: 'Benthic LIT',
@@ -9,7 +9,7 @@ export const getRecordProtocolLabel = (protocol) => {
   }[protocol]
 }
 
-export const getRecordProtocolMethod = (protocol) => {
+export const getRecordSampleUnit = (protocol) => {
   return {
     fishbelt: 'fishbelt_transect',
     benthiclit: 'benthic_transect',

@@ -216,7 +216,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
                 sites={sites}
                 primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.benthicPhotoQuadratForm.title}`}
-                transectType="quadrat_transect"
+                sampleUnit="quadrat_transect"
               />
             )}
 
