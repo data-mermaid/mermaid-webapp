@@ -60,7 +60,7 @@ const ObserversInput = ({
 ObserversInput.propTypes = {
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  observers: PropTypes.arrayOf(observersPropType).isRequired,
+  observers: observersPropType.isRequired,
   onObserversChange: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPath: PropTypes.string.isRequired,

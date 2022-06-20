@@ -7,6 +7,18 @@ const _sampleEventPropType = PropTypes.shape({
   notes: PropTypes.string,
 })
 
+const _observerPropType = PropTypes.shape({
+  id: PropTypes.string,
+  updated_by: PropTypes.string,
+  profile_name: PropTypes.string,
+  created_on: PropTypes.string,
+  updated_on: PropTypes.string,
+  role: PropTypes.number,
+  created_by: PropTypes.string,
+  project: PropTypes.string,
+  profile: PropTypes.string,
+})
+
 const _fishBeltTransectPropType = PropTypes.shape({
   depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   label: PropTypes.string,
@@ -20,6 +32,30 @@ const _fishBeltTransectPropType = PropTypes.shape({
   current: PropTypes.string,
   relative_depth: PropTypes.string,
   tide: PropTypes.string,
+})
+
+const _benthicPhotoQuadratTransectPropType = PropTypes.shape({
+  tide: PropTypes.string,
+  depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  label: PropTypes.string,
+  number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  current: PropTypes.string,
+  reef_slope: PropTypes.string,
+  visibility: PropTypes.string,
+  sample_time: PropTypes.string,
+  len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  num_quadrats: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  quadrat_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  relative_depth: PropTypes.string,
+  num_points_per_quadrat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+})
+
+const _benthicPhotoQuadratObservationPropType = PropTypes.shape({
+  id: PropTypes.string,
+  attribute: PropTypes.string,
+  num_points: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  growth_form: PropTypes.string,
+  quadrat_number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 })
 
 export const observationPropTypeShape = {
@@ -45,6 +81,7 @@ export const projectPropType = PropTypes.shape({
 })
 
 export const projectsPropType = PropTypes.arrayOf(projectPropType)
+
 export const sitePropType = PropTypes.shape({
   id: PropTypes.string,
   name: PropTypes.string,
@@ -59,6 +96,18 @@ export const fishBeltPropType = PropTypes.shape({
     protocol: PropTypes.string,
     sample_event: _sampleEventPropType,
     fishbelt_transect: _fishBeltTransectPropType,
+    observers: PropTypes.arrayOf(_observerPropType),
+  }),
+})
+
+export const benthicPhotoQuadratPropType = PropTypes.shape({
+  id: PropTypes.string,
+  data: PropTypes.shape({
+    protocol: PropTypes.string,
+    sample_event: _sampleEventPropType,
+    quadrat_transect: _benthicPhotoQuadratTransectPropType,
+    observers: PropTypes.arrayOf(_observerPropType),
+    obs_benthic_photo_quadrats: PropTypes.arrayOf(_benthicPhotoQuadratObservationPropType),
   }),
 })
 
@@ -66,19 +115,7 @@ export const submittedFishBeltPropType = PropTypes.shape({
   id: PropTypes.string,
   sample_event: _sampleEventPropType,
   fishbelt_transect: _fishBeltTransectPropType,
-  observers: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      updated_by: PropTypes.string,
-      profile_name: PropTypes.string,
-      created_on: PropTypes.string,
-      updated_on: PropTypes.string,
-      rank: PropTypes.number,
-      created_by: PropTypes.string,
-      transectmethod: PropTypes.string,
-      profile: PropTypes.string,
-    }),
-  ),
+  observers: PropTypes.arrayOf(_observerPropType),
   obs_belt_fishes: PropTypes.arrayOf(PropTypes.shape(observationPropTypeShape)),
 })
 
@@ -139,6 +176,7 @@ const _beltTransectWidthPropType = PropTypes.shape({
     }),
   ),
 })
+
 const _reefSlopePropType = PropTypes.shape({
   name: PropTypes.string,
   data: PropTypes.arrayOf(
@@ -157,17 +195,7 @@ export const choicesPropType = PropTypes.shape({
   reefslopes: _reefSlopePropType,
 })
 
-export const observersPropType = PropTypes.shape({
-  id: PropTypes.string,
-  updated_by: PropTypes.string,
-  profile_name: PropTypes.string,
-  created_on: PropTypes.string,
-  updated_on: PropTypes.string,
-  role: PropTypes.number,
-  created_by: PropTypes.string,
-  project: PropTypes.string,
-  profile: PropTypes.string,
-})
+export const observersPropType = PropTypes.arrayOf(_observerPropType)
 
 export const observationsReducerPropType = (propValue, key, componentName) => {
   if (!Array.isArray(propValue[0])) {
