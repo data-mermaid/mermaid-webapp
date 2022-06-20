@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 
+import BenthicAttributesMixin from './BenthicAttributesMixin'
 import CollectRecordsMixin from './CollectRecordsMixin'
 import DatabaseSwitchboardState from './DatabaseSwitchboardState'
 import ManagementRegimesMixin from './ManagementRegimesMixin'
@@ -11,11 +12,13 @@ import SubmittedRecordsMixin from './SubmittedRecordsMixin'
 import ProjectHealthMixin from './ProjectHealthMixin'
 
 class DatabaseSwitchboard extends ProjectHealthMixin(
-  FishNameMixin(
-    SubmittedRecordsMixin(
-      SitesMixin(
-        ProjectsMixin(
-          ChoicesMixin(ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState))),
+  BenthicAttributesMixin(
+    FishNameMixin(
+      SubmittedRecordsMixin(
+        SitesMixin(
+          ProjectsMixin(
+            ChoicesMixin(ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState))),
+          ),
         ),
       ),
     ),
