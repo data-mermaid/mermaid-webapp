@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+
 import Logo from '../../assets/mermaid-logo.svg'
 import { IconBell, IconMenu, IconDown, IconUser } from '../icons'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
-import { GlobalNav, HeaderButtonThatLooksLikeLink, StyledHeader, StyledNavLink, UserMenuButton, NotificationCard, NotificationCardWrapper } from './Header.styles'
+import { GlobalNav, HeaderButtonThatLooksLikeLink, StyledHeader, StyledNavLink, UserMenuButton } from './Header.styles'
 import ProfileModal from '../ProfileModal'
+import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
 
 const GlobalLinks = () => (
   <>
@@ -43,12 +45,6 @@ const Header = ({ logout, currentUser }) => {
       <UserMenuButton onClick={openProfileModal}>Profile</UserMenuButton>
       <UserMenuButton onClick={logout}>Logout</UserMenuButton>
     </OfflineHide>
-  )
-
-  const BellNotificationDropDownContent = () => (
-    <NotificationCardWrapper>
-      <NotificationCard>card goes here</NotificationCard>
-    </NotificationCardWrapper>
   )
 
   const getUserButton = () => {
@@ -112,7 +108,7 @@ const Header = ({ logout, currentUser }) => {
             button={<p><IconBell /></p>}
             contents={
               <div className="desktopUserMenu">
-                <BellNotificationDropDownContent />
+                <BellNotificationDropDown />
               </div>
             }
           />
@@ -135,7 +131,7 @@ const Header = ({ logout, currentUser }) => {
             contents={
               <div className="menuDropdown">
                 <div className="mobileUserMenu">
-                  < BellNotificationDropDownContent />
+                  <BellNotificationDropDown />
                 </div>
               </div>
             }
