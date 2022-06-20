@@ -1,166 +1,15 @@
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components/macro'
-import React, { useState } from 'react'
-import theme from '../../theme'
+
 import Logo from '../../assets/mermaid-logo.svg'
-import { ButtonThatLooksLikeLink } from '../generic/buttons'
 import { IconBell, IconMenu, IconDown, IconUser } from '../icons'
-import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
+import { GlobalNav, HeaderButtonThatLooksLikeLink, StyledHeader, StyledNavLink, UserMenuButton } from './Header.styles'
 import ProfileModal from '../ProfileModal'
-
-const StyledHeader = styled('header')`
-  background-color: ${theme.color.headerColor};
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  /* color: ${theme.color.white}; */
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 102;
-  height: ${theme.spacing.headerHeight};
-  img {
-    height: calc(${theme.spacing.headerHeight} - 10px);
-    padding: 0 ${theme.spacing.small};
-    margin-top: 5px;
-    ${mediaQueryTabletLandscapeOnly(css`
-      height: calc(${theme.spacing.headerHeight} - 15px);
-      margin-top: 7px;
-    `)}
-  }
-`
-const linkStyles = css`
-  color: ${theme.color.white};
-  height: ${theme.spacing.headerHeight};
-  cursor: pointer;
-  border-bottom: solid ${theme.spacing.borderLarge} transparent;
-  text-decoration: none;
-  position: relative;
-  margin: 0 ${theme.spacing.small};
-  display: inline-block;
-  padding: 0;
-  line-height: ${theme.spacing.headerHeight};
-  ${hoverState(
-    css`
-      border-bottom: solid 3px ${theme.color.callout};
-    `,
-  )}
-`
-const HeaderButtonThatLooksLikeLink = styled(ButtonThatLooksLikeLink)`
-  ${linkStyles}
-`
-const dropdownLinkStyles = css`
-  ${linkStyles};
-  border-width: 0 0 3px 0;
-  background: none;
-  display: inline-block;
-  margin: 0;
-  padding: ${theme.spacing.small} ${theme.spacing.large};
-  width: 100%;
-  ${hoverState(
-    css`
-      &:after {
-        content: '';
-        position: absolute;
-        width: 55px;
-        height ${theme.spacing.borderSmall};
-        background: ${theme.color.callout};
-        bottom: 0;
-        left: ${theme.spacing.large};
-      }
-      border-color: transparent;
-    `,
-  )}
-`
-const StyledNavLink = styled('a')`
-  ${linkStyles}
-  ${(props) =>
-    props.disabledLink &&
-    css`
-      color: ${theme.color.disabledText};
-      pointer-events: none;
-    `} 
-  }
-  `
-
-const GlobalNav = styled('nav')`
-  .desktop {
-    display: flex;
-    align-items: stretch;
-    div,
-    div p {
-      display: inline-block;
-    }
-    div p {
-      ${linkStyles}
-    }
-    .desktopUserMenu,
-    .mobileUserMenu {
-      position: absolute;
-      top: calc(${theme.spacing.headerHeight} + ${theme.spacing.small});
-      right: 0;
-      background-color: ${theme.color.headerDropdownMenuBackground};
-      border-radius: 8px 0 8px 8px;
-    }
-  }
-  .mobile {
-    display: none;
-    align-items: stretch;
-    button.trigger {
-      border: none;
-      font-size: larger;
-      background: none;
-    }
-    .menuDropdown {
-      background-color: ${theme.color.headerDropdownMenuBackground};
-      border-radius: 8px 0 8px 8px;
-      top: calc(${theme.spacing.headerHeight} + 1px);
-      right: 1px;
-      position: absolute;
-    }
-    a,
-    div p,
-    button {
-      display: block;
-      text-decoration: none;
-      text-align: right;
-      padding: ${theme.spacing.small} ${theme.spacing.medium};
-      margin: 0;
-      width: 100%;
-      white-space: nowrap;
-      font-size: smaller;
-      line-height: 1;
-      &:hover {
-        border: none;
-        &:after {
-          display: none;
-        }
-      }
-    }
-    .loggedInAs {
-      margin-bottom: ${theme.spacing.xlarge};
-      background: ${theme.color.primaryColor};
-      color: ${theme.color.white};
-    }
-  }
-  ${mediaQueryTabletLandscapeOnly(css`
-    .desktop {
-      display: none;
-    }
-    .mobile {
-      display: flex;
-    }
-  `)}
-`
-const UserMenuButton = styled.button`
-  ${dropdownLinkStyles}
-  display: flex;
-  flex-direction: row-reverse;
-`
+import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
 
 const GlobalLinks = () => (
   <>
@@ -249,43 +98,59 @@ const Header = ({ logout, currentUser }) => {
   return (
     <>
       <StyledHeader>
-        <Link to="/projects">
-          <img src={Logo} alt="MERMAID Logo" />
-        </Link>
-        <GlobalNav>
-          <div className="desktop">
-            <GlobalLinks />
-            <HeaderButtonThatLooksLikeLink>
-              <IconBell />
-            </HeaderButtonThatLooksLikeLink>
-            <HideShow
-              button={getUserButton()}
-              contents={
-                <div className="desktopUserMenu">
+      <Link to="/projects">
+        <img src={Logo} alt="MERMAID Logo" />
+      </Link>
+      <GlobalNav>
+        <div className="desktop">
+          <GlobalLinks />
+          <HideShow
+            button={<p><IconBell /></p>}
+            contents={
+              <div className="desktopUserMenu">
+                <BellNotificationDropDown />
+              </div>
+            }
+          />
+          <HideShow
+            button={getUserButton()}
+            contents={
+              <div className="desktopUserMenu">
+                <UserMenuDropDownContent />
+              </div>
+            }
+          />
+        </div>
+        <div className="mobile">
+          <HideShow
+            button={
+              <HeaderButtonThatLooksLikeLink>
+                <IconBell />
+              </HeaderButtonThatLooksLikeLink>
+            }
+            contents={
+              <div className="menuDropdown">
+                <div className="mobileUserMenu">
+                  <BellNotificationDropDown />
+                </div>
+              </div>
+            }
+          />
+          <HideShow
+            button={
+              <HeaderButtonThatLooksLikeLink>
+                <IconMenu />
+              </HeaderButtonThatLooksLikeLink>
+            }
+            contents={
+              <div className="menuDropdown">
+                <GlobalLinks />
+                {currentUser && <p className="loggedInAs">Logged in as {getUserDisplayName()}</p>}
+                <div className="mobileUserMenu">
                   <UserMenuDropDownContent />
                 </div>
-              }
-            />
-          </div>
-          <div className="mobile">
-            <HeaderButtonThatLooksLikeLink>
-              <IconBell />
-            </HeaderButtonThatLooksLikeLink>
-            <HideShow
-              button={
-                <HeaderButtonThatLooksLikeLink>
-                  <IconMenu />
-                </HeaderButtonThatLooksLikeLink>
-              }
-              contents={
-                <div className="menuDropdown">
-                  <GlobalLinks />
-                  {currentUser && <p className="loggedInAs">Logged in as {getUserDisplayName()}</p>}
-                  <div className="mobileUserMenu">
-                    <UserMenuDropDownContent />
-                  </div>
-                </div>
-              }
+              </div>
+            }
             />
           </div>
         </GlobalNav>

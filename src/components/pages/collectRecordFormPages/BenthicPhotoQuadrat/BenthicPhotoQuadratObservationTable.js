@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
 import {
   choicesPropType,
-  fishBeltPropType,
+  benthicPhotoQuadratPropType,
   observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../../generic/text'
@@ -188,8 +188,7 @@ const BenthicPhotoQuadratObservationTable = ({
   }
 
   const observationsRows = useMemo(() => {
-    const { growthforms } = choices
-    const growthFormOptions = [...getOptions(growthforms), { label: 'not reported', value: '' }]
+    const growthFormOptions = getOptions(choices.growthforms)
 
     const handleKeyDown = ({ event, index, observation, isBenthicAttribute, isNumberOfPoints }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
@@ -426,8 +425,8 @@ BenthicPhotoQuadratObservationTable.propTypes = {
   areObservationsInputsDirty: PropTypes.bool.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
-  collectRecord: fishBeltPropType,
-  observationsReducer: PropTypes.arrayOf(observationsReducerPropType).isRequired,
+  collectRecord: benthicPhotoQuadratPropType,
+  observationsReducer: observationsReducerPropType,
   persistUnsavedObservationsUtilities: PropTypes.shape({
     persistUnsavedFormData: PropTypes.func,
     clearPersistedUnsavedFormData: PropTypes.func,
@@ -438,6 +437,7 @@ BenthicPhotoQuadratObservationTable.propTypes = {
 
 BenthicPhotoQuadratObservationTable.defaultProps = {
   collectRecord: undefined,
+  observationsReducer: [],
 }
 
 export default BenthicPhotoQuadratObservationTable

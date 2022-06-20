@@ -19,24 +19,24 @@ const getSampleInfoInitialValues = (collectRecord) => {
   }
 }
 
-const getTransectInitialValues = (collectRecord, transectType) => {
-  const collectRecordTransectTypeData = collectRecord?.data?.[transectType]
+const getTransectInitialValues = (collectRecord, sampleUnit) => {
+  const collectRecordSampleUnitData = collectRecord?.data?.[sampleUnit]
 
   // radios dont complain when initial value is undefined (because they have a value already and checked is the state that changes), but other inputs types do
   // we also dont want 'not reported' (has empty string value) to be selected by default, this is why some of these properties dont default to an ampty string, but others do
   return {
-    depth: collectRecordTransectTypeData?.depth ?? '',
-    number: collectRecordTransectTypeData?.number ?? '',
-    label: collectRecordTransectTypeData?.label ?? '',
-    len_surveyed: collectRecordTransectTypeData?.len_surveyed ?? '',
-    width: collectRecordTransectTypeData?.width,
-    sample_time: collectRecordTransectTypeData?.sample_time ?? '',
-    size_bin: collectRecordTransectTypeData?.size_bin,
-    reef_slope: collectRecordTransectTypeData?.reef_slope,
-    relative_depth: collectRecordTransectTypeData?.relative_depth,
-    visibility: collectRecordTransectTypeData?.visibility,
-    current: collectRecordTransectTypeData?.current,
-    tide: collectRecordTransectTypeData?.tide,
+    depth: collectRecordSampleUnitData?.depth ?? '',
+    number: collectRecordSampleUnitData?.number ?? '',
+    label: collectRecordSampleUnitData?.label ?? '',
+    len_surveyed: collectRecordSampleUnitData?.len_surveyed ?? '',
+    width: collectRecordSampleUnitData?.width,
+    sample_time: collectRecordSampleUnitData?.sample_time ?? '',
+    size_bin: collectRecordSampleUnitData?.size_bin,
+    reef_slope: collectRecordSampleUnitData?.reef_slope,
+    relative_depth: collectRecordSampleUnitData?.relative_depth,
+    visibility: collectRecordSampleUnitData?.visibility,
+    current: collectRecordSampleUnitData?.current,
+    tide: collectRecordSampleUnitData?.tide,
   }
 }
 

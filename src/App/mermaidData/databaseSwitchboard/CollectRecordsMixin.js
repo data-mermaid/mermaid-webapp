@@ -5,7 +5,7 @@ import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
-import { getRecordProtocolLabel, getRecordProtocolMethod } from '../recordProtocolHelper'
+import { getRecordSampleUnitMethod, getRecordSampleUnit } from '../recordProtocolHelpers'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
@@ -59,7 +59,7 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
-      const transectMethod = getRecordProtocolMethod(record.data.protocol)
+      const transectMethod = getRecordSampleUnit(record.data.protocol)
       const transectNumber = record.data?.[transectMethod]?.number
       const labelName = record.data?.[transectMethod]?.label
 
@@ -144,7 +144,7 @@ const CollectRecordsMixin = (Base) =>
       })
 
       if (this._isOnlineAuthenticatedAndReady) {
-        // put it in IDB just in case the network craps out before the API can return
+        // Add to IDB in case the there are network issues before the API responds
         await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
 
         return axios
@@ -203,7 +203,7 @@ const CollectRecordsMixin = (Base) =>
       })
 
       if (this._isOnlineAuthenticatedAndReady) {
-        // put it in IDB just in case the network craps out before the API can return
+        // Add to IDB in case the there are network issues before the API responds
         await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
 
         return axios
@@ -269,7 +269,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
-        // put it in IDB just in case the network craps out before the API can return
+        // Add to IDB in case the there are network issues before the API responds
         await this._dexiePerUserDataInstance.collect_records.put(recordMarkedToBeDeleted)
 
         return axios
@@ -645,7 +645,7 @@ const CollectRecordsMixin = (Base) =>
                 management: getObjectById(managementRegimes, record.data.sample_event.management)
                   ?.name,
                 observers: this.#getObserversLabel(record),
-                protocol: getRecordProtocolLabel(record.data.protocol),
+                protocol: getRecordSampleUnitMethod(record.data.protocol),
                 sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 site: getObjectById(sites, record.data.sample_event.site)?.name,

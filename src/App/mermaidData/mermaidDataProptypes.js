@@ -197,16 +197,20 @@ export const choicesPropType = PropTypes.shape({
 
 export const observersPropType = PropTypes.arrayOf(_observerPropType)
 
-export const observationsReducerPropType = (propValue, key, componentName) => {
-  if (!Array.isArray(propValue[0])) {
+export const observationsReducerPropType = (props, propName, componentName) => {
+  if (!Array.isArray(props[propName])) {
     return new Error(
-      `Failed prop type: Invalid prop observationsReducer[0] supplied to ${componentName}, expected an Array.`,
+      `Failed prop type: Invalid prop ${propName} supplied to ${componentName}, expected an Array.`,
     )
   }
-
-  if (typeof propValue[1] !== 'function') {
+  if (!Array.isArray(props[propName][0])) {
     return new Error(
-      `Failed prop type: Invalid prop observationsReducer[0] supplied to ${componentName}, expected a Function.`,
+      `Failed prop type: Invalid property element ${propName}[0] supplied to ${componentName}, expected an Array.`,
+    )
+  }
+  if (typeof props[propName][1] !== 'function') {
+    return new Error(
+      `Failed prop type: Invalid property element ${propName}[1] supplied to ${componentName}, expected an Function.`,
     )
   }
 

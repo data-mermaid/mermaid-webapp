@@ -190,14 +190,14 @@ const SubmittedFishBelt = () => {
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
               primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.submittedFishBeltForm.title}`}
-              transectType="fishbelt_transect"
+              sampleUnit="fishbelt_transect"
             />
             <RowSpaceBetween>
               <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
               {currentUserProfile.is_admin && (
                 <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
                   <IconPen />
-                  Edit Sample Unit - move to collect
+                  Edit Sample Unit - move to Collecting
                 </ButtonSecondary>
               )}
             </RowSpaceBetween>
