@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { getSampleDateLabel } from '../getSampleDateLabel'
-import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
+import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const SubmittedRecordsMixin = (Base) =>
@@ -60,7 +60,7 @@ const SubmittedRecordsMixin = (Base) =>
                 depth: record.depth,
                 management: record.management_name,
                 observers: record.observers.join(', '),
-                protocol: getRecordProtocolLabel(record.protocol),
+                protocol: getRecordSampleUnitMethod(record.protocol),
                 sampleDate: getSampleDateLabel(record.sample_date),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 site: record.site_name,

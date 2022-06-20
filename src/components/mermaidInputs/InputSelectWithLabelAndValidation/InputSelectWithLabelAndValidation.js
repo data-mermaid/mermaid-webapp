@@ -60,10 +60,10 @@ InputSelectWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
   required: PropTypes.bool.isRequired,
-  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
   options: inputOptionsPropTypes.isRequired,
-  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
@@ -74,5 +74,7 @@ InputSelectWithLabelAndValidation.defaultProps = {
   validationMessages: [],
   helperText: undefined,
   testId: undefined,
+  ignoreNonObservationFieldValidations: () => {},
+  resetNonObservationFieldValidations: () => {},
 }
 export default InputSelectWithLabelAndValidation

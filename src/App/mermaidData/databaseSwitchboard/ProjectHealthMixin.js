@@ -1,7 +1,7 @@
 import axios from 'axios'
 import moment from 'moment'
 import language from '../../../language'
-import { getRecordProtocolLabel } from '../getRecordProtocolLabel'
+import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const ProjectHealthMixin = (Base) =>
@@ -84,7 +84,7 @@ const ProjectHealthMixin = (Base) =>
         const sampleEventRecord = {
           site_id: siteId,
           site_name: siteName,
-          method: getRecordProtocolLabel(transectMethod),
+          method: getRecordSampleUnitMethod(transectMethod),
           sample_unit_numbers: transectNumbers,
           transect_protocol: transectMethod,
         }
@@ -132,7 +132,7 @@ const ProjectHealthMixin = (Base) =>
         const siteName = this.#removeDateFromName(siteInfo.site_name)
 
         for (const protocol of availableProtocols) {
-          const protocolLabel = getRecordProtocolLabel(protocol)
+          const protocolLabel = getRecordSampleUnitMethod(protocol)
           const siteAndMethodName = `${siteName} ${protocolLabel}`
 
           if (!siteInfo.site_names.includes(siteAndMethodName)) {
@@ -191,7 +191,7 @@ const ProjectHealthMixin = (Base) =>
           sampleEventUnitRecordsCopy.push({
             site_id: siteId,
             site_name: this.#getSiteName(siteCollectingSummary[siteId].site_name),
-            method: getRecordProtocolLabel(protocol),
+            method: getRecordSampleUnitMethod(protocol),
             transect_protocol: protocol,
             sample_unit_numbers: [],
             profile_summary:

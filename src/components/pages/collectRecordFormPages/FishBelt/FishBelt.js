@@ -193,10 +193,10 @@ const FishBelt = ({ isNewRecord }) => {
                   ? getRecordName(collectRecordResponse.data, sitesResponse, 'fishbelt_transect')
                   : { name: 'Fish Belt' }
 
-              setSites(sortArrayByObjectKey(sitesResponse, "name"))
-              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, "name"))
+              setSites(sortArrayByObjectKey(sitesResponse, 'name'))
+              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
-              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, "profile_name"))
+              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
@@ -220,7 +220,7 @@ const FishBelt = ({ isNewRecord }) => {
     persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputsik')
+  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputs')
 
   const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
     'unsavedFishbeltObservations',
@@ -430,7 +430,7 @@ const FishBelt = ({ isNewRecord }) => {
     return (
       getPersistedUnsavedFormikData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
-        ...getSampleInfoInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
+        ...getSampleInfoInitialValues(collectRecordBeingEdited),
         ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
       }
     )
@@ -655,6 +655,7 @@ const FishBelt = ({ isNewRecord }) => {
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
                 sites={sites}
                 primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`}
+                sampleUnit="fishbelt_transect"
               />
             )}
 

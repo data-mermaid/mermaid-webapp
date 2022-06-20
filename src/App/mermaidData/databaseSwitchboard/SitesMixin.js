@@ -75,7 +75,7 @@ const SitesMixin = (Base) =>
       const siteToSubmit = this.#getSiteReadyForPush({ site, projectId })
 
       if (this._isOnlineAuthenticatedAndReady) {
-        // put it in IDB just in case the network craps out before the API can return
+         // Add to IDB in case the there are network issues before the API responds
         await this._dexiePerUserDataInstance.project_sites.put(siteToSubmit)
 
         return axios

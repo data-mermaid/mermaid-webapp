@@ -168,3 +168,23 @@ export const observersPropType = PropTypes.shape({
   project: PropTypes.string,
   profile: PropTypes.string,
 })
+
+export const observationsReducerPropType = (props, propName, componentName) => {
+  if (!Array.isArray(props[propName])) {
+    return new Error(
+      `Failed prop type: Invalid prop ${propName} supplied to ${componentName}, expected an Array.`,
+    )
+  }
+  if (!Array.isArray(props[propName][0])) {
+    return new Error(
+      `Failed prop type: Invalid property element ${propName}[0] supplied to ${componentName}, expected an Array.`,
+    )
+  }
+  if (typeof props[propName][1] !== 'function') {
+    return new Error(
+      `Failed prop type: Invalid property element ${propName}[1] supplied to ${componentName}, expected an Function.`,
+    )
+  }
+
+  return null
+}

@@ -46,7 +46,7 @@ const TextareaWithLabelAndValidation = ({
 TextareaWithLabelAndValidation.propTypes = {
   helperText: PropTypes.string,
   id: PropTypes.string.isRequired,
-  required: PropTypes.bool.isRequired,
+  required: PropTypes.bool,
   ignoreNonObservationFieldValidations: PropTypes.func,
   label: PropTypes.string.isRequired,
   resetNonObservationFieldValidations: PropTypes.func,
@@ -57,6 +57,7 @@ TextareaWithLabelAndValidation.propTypes = {
 
 TextareaWithLabelAndValidation.defaultProps = {
   helperText: undefined,
+  required: false,
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},
   testId: undefined,

@@ -27,6 +27,7 @@ test('RecordFormTitle shows the title as expected when all of site name, transec
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.project_sites}
       primaryTitle="Fish Belt"
+      sampleUnit="fishbelt_transect"
     />,
   )
 
@@ -50,6 +51,7 @@ test('RecordFormTitle component renders a default title when site name, transect
       }
       sites={mockMermaidData.project_sites}
       primaryTitle="Fish Belt"
+      sampleUnit="fishbelt_transect"
     />,
   )
 
@@ -75,6 +77,7 @@ test('RecordFormTitle component renders properly when site name is missing.', ()
       submittedRecordOrCollectRecordDataProperty={mockMissingSiteCollectRecord.data}
       sites={mockMermaidData.project_sites}
       primaryTitle="Fish Belt"
+      sampleUnit="fishbelt_transect"
     />,
   )
 
@@ -102,6 +105,7 @@ test('RecordFormTitle component renders properly when label is missing.', () => 
       submittedRecordOrCollectRecordDataProperty={mockMissingLabelCollectRecord.data}
       sites={mockMermaidData.project_sites}
       primaryTitle="Fish Belt"
+      sampleUnit="fishbelt_transect"
     />,
   )
 
@@ -128,6 +132,7 @@ test('RecordFormTitle component renders properly when transect number is missing
     <RecordFormTitle
       submittedRecordOrCollectRecordDataProperty={mockMissingTransectNumberCollectRecord.data}
       sites={mockMermaidData.project_sites}
+      sampleUnit="fishbelt_transect"
     />,
   )
 
