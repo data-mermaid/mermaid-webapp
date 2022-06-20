@@ -203,7 +203,7 @@ const CollectRecordsMixin = (Base) =>
       })
 
       if (this._isOnlineAuthenticatedAndReady) {
-        // put it in IDB just in case the network craps out before the API can return
+        // Add to IDB in case the there are network issues before the API responds
         await this._dexiePerUserDataInstance.collect_records.put(recordToSubmit)
 
         return axios
@@ -269,7 +269,7 @@ const CollectRecordsMixin = (Base) =>
       }
 
       if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
-        // put it in IDB just in case the network craps out before the API can return
+        // Add to IDB in case the there are network issues before the API responds
         await this._dexiePerUserDataInstance.collect_records.put(recordMarkedToBeDeleted)
 
         return axios
