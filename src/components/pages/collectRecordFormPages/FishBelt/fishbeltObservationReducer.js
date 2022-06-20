@@ -2,14 +2,20 @@ import { createUuid } from '../../../../library/createUuid'
 
 const fishbeltObservationReducer = (state, action) => {
   switch (action.type) {
-    case 'loadObservationsFromApi':
-      return [...action.payload]
+    case 'loadObservationsFromApi': {
+      const updateObservationsWithIds = [...action.payload].map((record) => ({
+        id: record.id || createUuid(),
+        ...record,
+      }))
+
+      return updateObservationsWithIds
+    }
 
     case 'deleteObservation': {
-      const idOfRemovee = action.payload
+      const observationIdToBeRemoved = action.payload
 
       const observationsWithTheRightOneRemoved = state.filter(
-        (observation) => observation.id !== idOfRemovee,
+        (observation) => observation.id !== observationIdToBeRemoved,
       )
 
       return observationsWithTheRightOneRemoved
