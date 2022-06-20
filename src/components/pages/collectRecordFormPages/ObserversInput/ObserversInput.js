@@ -41,7 +41,7 @@ const ObserversInput = ({ formik, observers, onObserversChange, ...restOfProps }
 
 ObserversInput.propTypes = {
   formik: formikPropType.isRequired,
-  observers: PropTypes.arrayOf(observersPropType).isRequired,
+  observers: observersPropType.isRequired,
   onObserversChange: PropTypes.func.isRequired,
 }
 
