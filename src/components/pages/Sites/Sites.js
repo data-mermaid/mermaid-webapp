@@ -1,4 +1,5 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
+import { CSVLink } from 'react-csv'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
@@ -36,12 +37,14 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
+import './ExportSites.css'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
   const [choices, setChoices] = useState({})
+
   const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
@@ -117,6 +120,40 @@ const Sites = () => {
     [siteRecordsForUiDisplay, currentProjectPath],
   )
 
+  const getTableCellData = useMemo(
+    () =>
+      siteRecordsForUiDisplay.map(({ id, uiLabels }) => ({
+        name: uiLabels.name,
+        reefType: uiLabels.reefType,
+        reefZone: uiLabels.reefZone,
+        exposure: uiLabels.exposure,
+        id,
+      })),
+    [siteRecordsForUiDisplay],
+  )
+
+  const names = getTableCellData.map((obj) => {
+    return obj.name
+  })
+  const reefType = getTableCellData.map((obj) => {
+    return obj.reefType
+  })
+
+  const reefZone = getTableCellData.map((obj) => {
+    return obj.reefZone
+  })
+
+  const exposure = getTableCellData.map((obj) => {
+    return obj.exposure
+  })
+  const headers = ['Name', 'Reef type', 'Reef zone', 'Reef exposure']
+
+  const data = [names, reefType, reefZone, exposure]
+
+  const transposeData = data[0].map((_, colIndex) => data.map((row) => row[colIndex]))
+
+  // console.log(getTableCellData)
+  console.log(siteRecordsForUiDisplay)
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -157,6 +194,7 @@ const Sites = () => {
       return filteredRows
     },
     [siteRecordsForUiDisplay],
+    // console.log(siteRecordsForUiDisplay),
   )
 
   const {
@@ -213,6 +251,7 @@ const Sites = () => {
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
+                  // console.log(column.Header)
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
                   )
@@ -234,6 +273,7 @@ const Sites = () => {
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
+              // console.log(row)
 
               return (
                 <Tr {...row.getRowProps()}>
@@ -291,6 +331,7 @@ const Sites = () => {
               value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
+
             <ToolbarButtonWrapper>
               <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
                 <IconPlus /> New site
@@ -299,7 +340,14 @@ const Sites = () => {
                 <IconCopy /> Copy sites from other projects
               </ButtonSecondary>
               <ButtonSecondary>
-                <IconDownload /> Export sites
+                <CSVLink
+                  headers={headers}
+                  data={transposeData}
+                  filename="Export_sites.csv"
+                  style={{ margin: 0, textDecoration: 'none' }}
+                >
+                  <IconDownload /> Export sites
+                </CSVLink>
               </ButtonSecondary>
             </ToolbarButtonWrapper>
           </ToolBarRow>
