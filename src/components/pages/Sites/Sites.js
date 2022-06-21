@@ -37,7 +37,6 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
-import './ExportSites.css'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
