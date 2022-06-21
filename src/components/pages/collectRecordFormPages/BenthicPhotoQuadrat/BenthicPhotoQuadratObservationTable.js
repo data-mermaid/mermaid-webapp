@@ -1,69 +1,31 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useMemo, useState } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
+import { ButtonPrimary } from '../../../generic/buttons'
 import {
   choicesPropType,
   benthicPhotoQuadratPropType,
   observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { H2 } from '../../../generic/text'
-import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import {
-  inputTextareaSelectStyles,
-  InputWrapper,
-  RequiredIndicator,
-  Select,
-} from '../../../generic/form'
-import { LinkThatLooksLikeButton } from '../../../generic/links'
-import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
-import InputAutocomplete from '../../../generic/InputAutocomplete'
+import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
+import { Tr, Td, Th } from '../../../generic/Table/table'
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
-import theme from '../../../../theme'
 import { getOptions } from '../../../../library/getOptions'
-
-const ObservationTr = styled(Tr)`
-  border-width: 0 0 0 ${theme.spacing.xsmall};
-  border-style: solid;
-  border-color: ${(props) => theme.color.getBorderColor(props.messageType)};
-`
-
-const BenthicAttributeAutocomplete = styled(InputAutocomplete)`
-  & input {
-    border: none;
-  }
-  width: 100%;
-  text-align: inherit;
-  padding: 0;
-`
-
-const InputAutocompleteContainer = styled.div`
-  ${inputTextareaSelectStyles}
-  display: flex;
-  justify-content: space-between;
-  padding: 0;
-  border: none;
-  background: transparent;
-`
-
-const ButtonRemoveRow = styled(ButtonCaution)`
-  display: none;
-  padding: 0;
-`
-const StyledLinkThatLooksLikeButtonToReference = styled(LinkThatLooksLikeButton)`
-  padding: 0.5rem 1rem 0 1rem;
-  background: transparent;
-`
-
-const StyledOverflowWrapper = styled(TableOverflowWrapper)`
-  border: solid 1px ${theme.color.secondaryColor};
-  height: 100%;
-  overflow-y: visible;
-`
+import {
+  ButtonRemoveRow,
+  InputAutocompleteContainer,
+  ObservationAutocomplete,
+  ObservationTr,
+  StyledLinkThatLooksLikeButtonToReference,
+  StyledOverflowWrapper,
+  StyledObservationTable,
+  UnderTableRow,
+} from '../CollectingFormPage.Styles'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -88,54 +50,6 @@ const StyledColgroup = styled('colgroup')`
   }
 `
 
-const StyledBenthicPhotoQuadratObservationTable = styled(Table)`
-  table-layout: auto;
-  font-variant: tabular-nums;
-  font-feature-settings: 'tnum';
-  tr {
-    &:focus-within button,
-    &:hover button {
-      display: inline;
-      cursor: pointer;
-    }
-    th {
-      padding: ${theme.spacing.small};
-    }
-    td {
-      padding: 0rem;
-      & > div {
-        background: transparent;
-        border: none;
-        span {
-          line-height: 1.6;
-          background: rgba(255, 255, 255, 0.5);
-        }
-      }
-      input,
-      select {
-        background: transparent;
-        border: none;
-        padding: 1px 3px;
-        height: 4rem;
-        ${hoverState(css`
-          outline: ${theme.color.outline};
-        `)}
-      }
-    }
-  }
-`
-
-const UnderTableRow = styled('div')`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: ${theme.spacing.medium};
-  ${mediaQueryTabletLandscapeOnly(css`
-    flex-direction: column;
-    gap: ${theme.spacing.small};
-  `)}
-`
-
 const BenthicPhotoQuadratObservationTable = ({
   areObservationsInputsDirty,
   benthicAttributeOptions,
@@ -145,8 +59,8 @@ const BenthicPhotoQuadratObservationTable = ({
   persistUnsavedObservationsUtilities,
   setAreObservationsInputsDirty,
 }) => {
-  const [haveApiObservationsBeenLoaded, setHaveApiObservationsBeenLoaded] = useState(false)
-  const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
+  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
 
   const {
@@ -161,7 +75,7 @@ const BenthicPhotoQuadratObservationTable = ({
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
-    if (!haveApiObservationsBeenLoaded && collectRecord) {
+    if (!apiObservationsLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_benthic_photo_quadrats ?? []
 
       const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
@@ -172,18 +86,18 @@ const BenthicPhotoQuadratObservationTable = ({
         payload: initialObservationsToLoad,
       })
 
-      setHaveApiObservationsBeenLoaded(true)
+      setApiObservationsLoaded(true)
     }
   }, [
     collectRecord,
     getPersistedUnsavedObservationsData,
-    haveApiObservationsBeenLoaded,
+    apiObservationsLoaded,
     observationsDispatch,
   ])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
-    setIsAutoFocusAllowed(true)
+    setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -197,7 +111,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
       if (isTabKey && isLastRow && isNumberOfPoints) {
         event.preventDefault()
-        setIsAutoFocusAllowed(true)
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -206,7 +120,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
       if (isEnterKey && !isBenthicAttribute) {
         event.preventDefault()
-        setIsAutoFocusAllowed(true)
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -294,7 +208,7 @@ const BenthicPhotoQuadratObservationTable = ({
           <Td align="right">
             <InputNumberNoScroll
               type="number"
-              autoFocus={isAutoFocusAllowed}
+              autoFocus={autoFocusAllowed}
               min="0"
               value={quadratNumberOrEmptyStringToAvoidInputValueErrors}
               step="any"
@@ -306,7 +220,7 @@ const BenthicPhotoQuadratObservationTable = ({
           <Td align="left">
             {benthicAttributeOptions.length && (
               <InputAutocompleteContainer>
-                <BenthicAttributeAutocomplete
+                <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeOptions}
@@ -372,7 +286,7 @@ const BenthicPhotoQuadratObservationTable = ({
     setAreObservationsInputsDirty,
     observationsDispatch,
     choices,
-    isAutoFocusAllowed,
+    autoFocusAllowed,
     benthicAttributeOptions,
   ])
 
@@ -381,7 +295,7 @@ const BenthicPhotoQuadratObservationTable = ({
       <InputWrapper>
         <H2 id="table-label">Observations</H2>
         <StyledOverflowWrapper>
-          <StyledBenthicPhotoQuadratObservationTable aria-labelledby="table-label">
+          <StyledObservationTable aria-labelledby="table-label">
             <StyledColgroup>
               <col className="number" />
               <col className="quadrat" />
@@ -409,7 +323,7 @@ const BenthicPhotoQuadratObservationTable = ({
               </Tr>
             </thead>
             <tbody>{observationsRows}</tbody>
-          </StyledBenthicPhotoQuadratObservationTable>
+          </StyledObservationTable>
         </StyledOverflowWrapper>
         <UnderTableRow>
           <ButtonPrimary type="button" onClick={handleAddObservation}>

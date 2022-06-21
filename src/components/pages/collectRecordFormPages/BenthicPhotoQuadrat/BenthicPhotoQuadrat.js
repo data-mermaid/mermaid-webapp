@@ -98,7 +98,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
                   ? getRecordName(collectRecordResponse.data, sitesResponse, 'quadrat_transect')
-                  : { name: 'Fish Belt' }
+                  : { name: 'Benthic Photo Quadrat' }
 
               const updateBenthicAttributeOptions = getOptions(benthicAttributes, false)
 
