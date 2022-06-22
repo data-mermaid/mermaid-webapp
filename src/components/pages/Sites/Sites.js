@@ -145,14 +145,36 @@ const Sites = () => {
   const exposure = getTableCellData.map((obj) => {
     return obj.exposure
   })
-  const headers = ['Name', 'Reef type', 'Reef zone', 'Reef exposure']
 
-  const data = [names, reefType, reefZone, exposure]
+  const longitude = siteRecordsForUiDisplay.map((obj) => {
+    return obj.location.coordinates[0]
+  })
+
+  const latitude = siteRecordsForUiDisplay.map((obj) => {
+    return obj.location.coordinates[1]
+  })
+  const notes = siteRecordsForUiDisplay.map((obj) => {
+    return obj.notes
+  })
+  const country = siteRecordsForUiDisplay.map((obj) => {
+    return obj.country
+  })
+
+  const headers = [
+    'Country',
+    'Name',
+    'Latitude',
+    'Longitude',
+    'Reef type',
+    'Reef zone',
+    'Reef exposure',
+    'Notes',
+  ]
+
+  const data = [country, names, latitude, longitude, reefType, reefZone, exposure, notes]
 
   const transposeData = data[0].map((_, colIndex) => data.map((row) => row[colIndex]))
 
-  // console.log(getTableCellData)
-  console.log(siteRecordsForUiDisplay)
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
