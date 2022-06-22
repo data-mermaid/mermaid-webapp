@@ -57,9 +57,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.generaUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.generaUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, isMounted])
@@ -74,9 +72,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
           }
         })
         .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.projectsUnavailable)
-          )
+          toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isMounted])
@@ -120,7 +116,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
       <StyledRow>
         <InputContainer>
           <label id="genus-label" htmlFor="genus">
-            {language.createFishSpecies.genus}
+            {language.createNewOptionModal.genus}
           </label>
           <InputAutocomplete
             id="genus"
@@ -133,11 +129,13 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
               setGenusName(selectedItem.label)
             }}
           />
-          {formikPage1.errors.genus && <div>{formikPage1.errors.genus}</div>}
+          {formikPage1.errors.genusId && (
+            <span id="genus-required">{formikPage1.errors.genusId}</span>
+          )}
         </InputContainer>
         <InputContainer>
           <label id="species-label" htmlFor="species">
-            {language.createFishSpecies.species}
+            {language.createNewOptionModal.species}
           </label>
           <Input
             id="species"
@@ -158,20 +156,20 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
       <DetailsTable>
         <tbody>
           <Tr>
-            <Td id="species-label">{language.createFishSpecies.species}</Td>
+            <Td id="species-label">{language.createNewOptionModal.species}</Td>
             <Td aria-labelledby="species-label">{formikPage1.values.species}</Td>
           </Tr>
           <Tr>
-            <Td id="user-label">{language.createFishSpecies.user}</Td>
+            <Td id="user-label">{language.createNewOptionModal.user}</Td>
             <Td aria-labelledby="user-label">{currentUser.full_name}</Td>
           </Tr>
           <Tr>
-            <Td id="project-label">{language.createFishSpecies.project}</Td>
+            <Td id="project-label">{language.createNewOptionModal.project}</Td>
             <Td aria-labelledby="project-label">{projectName}</Td>
           </Tr>
         </tbody>
       </DetailsTable>
-      <p>{language.createFishSpecies.summaryText2}</p>
+      <p>{language.createNewOptionModal.proposedSummaryText('fish species')}</p>
     </>
   )
 
@@ -183,7 +181,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
   )
   const cancelButton = (
     <ButtonSecondary type="button" onClick={resetAndCloseModal}>
-      {language.createFishSpecies.cancel}
+      {language.createNewOptionModal.cancel}
     </ButtonSecondary>
   )
 
@@ -191,7 +189,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     <RightFooter>
       {cancelButton}
       <ButtonPrimary type="submit" form="form-page-1">
-        {language.createFishSpecies.goToPage2}
+        {language.createNewOptionModal.goToPage2}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -199,14 +197,14 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     <RowSpaceBetween>
       <LeftFooter>
         <ButtonThatLooksLikeLink type="button" onClick={goToPage1}>
-          <IconArrowBack /> {language.createFishSpecies.back}
+          <IconArrowBack /> {language.createNewOptionModal.back}
         </ButtonThatLooksLikeLink>
       </LeftFooter>
 
       <RightFooter>
         {cancelButton}
         <ButtonPrimary type="button" onClick={handleOnSubmit}>
-          <IconSend /> {language.createFishSpecies.submit}
+          <IconSend /> {language.createNewOptionModal.submit}
         </ButtonPrimary>
       </RightFooter>
     </RowSpaceBetween>
@@ -223,7 +221,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     <Modal
       isOpen={isOpen}
       onDismiss={resetAndCloseModal}
-      title={language.createFishSpecies.title}
+      title={language.createNewOptionModal.addNewAttributeTitle('Fish Species')}
       mainContent={mainContent}
       footerContent={footer}
       contentOverflowIsvisible={true}
