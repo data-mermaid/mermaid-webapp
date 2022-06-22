@@ -1,13 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { useEffect, useMemo, useState } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import {
-  ButtonCaution,
-  ButtonThatLooksLikeLink,
-  ButtonPrimary,
-  ButtonSecondary,
-} from '../../../generic/buttons'
+import { ButtonPrimary } from '../../../generic/buttons'
 import {
   choicesPropType,
   fishBeltPropType,
@@ -17,88 +12,32 @@ import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
 import { H2 } from '../../../generic/text'
-import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { inputTextareaSelectStyles, InputWrapper, RequiredIndicator } from '../../../generic/form'
-import { LinkThatLooksLikeButton } from '../../../generic/links'
+import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import { Table, TableOverflowWrapper, Tr, Td, Th } from '../../../generic/Table/table'
+import { Tr, Td, Th } from '../../../generic/Table/table'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputAutocomplete from '../../../generic/InputAutocomplete'
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
-import theme from '../../../../theme'
+import {
+  ButtonRemoveRow,
+  CellValidation,
+  CellValidationButton,
+  InputAutocompleteContainer,
+  NewOptionButton,
+  ObservationAutocomplete,
+  ObservationsSummaryStats,
+  ObservationTr,
+  StyledLinkThatLooksLikeButtonToReference,
+  StyledOverflowWrapper,
+  StyledObservationTable,
+  TableValidationList,
+  UnderTableRow,
+} from '../CollectingFormPage.Styles'
 
-const NewSpeciesButton = styled(ButtonThatLooksLikeLink)`
-  ${hoverState(css`
-    background-color: ${theme.color.primaryColor};
-    color: ${theme.color.white};
-  `)}
-`
-const ObservationTr = styled(Tr)`
-  border-width: 0 0 0 ${theme.spacing.xsmall};
-  border-style: solid;
-  border-color: ${(props) => theme.color.getBorderColor(props.messageType)};
-`
-const CellValidation = styled(Td)``
-const CellValidationButton = styled(ButtonSecondary)`
-  font-size: smaller;
-  padding: ${theme.spacing.xxsmall} ${theme.spacing.xsmall};
-  margin: ${theme.spacing.xsmall};
-  text-transform: capitalize;
-`
-const TableValidationList = styled.ul`
-  padding: ${theme.spacing.xsmall};
-  margin: 0;
-  list-style: none; ;
-`
-const FishNameAutocomplete = styled(InputAutocomplete)`
-  & input {
-    border: none;
-  }
-  width: 100%;
-  text-align: inherit;
-  padding: 0;
-`
-
-const InputAutocompleteContainer = styled.div`
-  ${inputTextareaSelectStyles}
-  display: flex;
-  justify-content: space-between;
-  padding: 0;
-  border: none;
-  background: transparent;
-`
-const ObservationsSummaryStats = styled(Table)`
-  width: 25%;
-  table-layout: auto;
-  min-width: auto;
-  max-width: 40rem;
-  border: solid 1px ${theme.color.secondaryColor};
-  tr:nth-child(even),
-  tr:nth-child(odd) {
-    background-color: ${theme.color.white};
-  }
-  ${mediaQueryTabletLandscapeOnly(css`
-    font-size: smaller;
-  `)}
-`
-const ButtonRemoveRow = styled(ButtonCaution)`
-  display: none;
-  padding: 0;
-`
-const StyledLinkThatLooksLikeButtonToReference = styled(LinkThatLooksLikeButton)`
-  padding: 0.5rem 1rem 0 1rem;
-  background: transparent;
-`
-const StyledOverflowWrapper = styled(TableOverflowWrapper)`
-  border: solid 1px ${theme.color.secondaryColor};
-  height: 100%;
-  overflow-y: visible;
-`
 const StyledColgroup = styled('colgroup')`
   col {
     &.number {
@@ -123,52 +62,6 @@ const StyledColgroup = styled('colgroup')`
       width: 5rem;
     }
   }
-`
-const StyledFishBeltObservationTable = styled(Table)`
-  table-layout: auto;
-  font-variant: tabular-nums;
-  font-feature-settings: 'tnum';
-  tr {
-    &:focus-within button,
-    &:hover button {
-      display: inline;
-      cursor: pointer;
-    }
-    th {
-      padding: ${theme.spacing.small};
-    }
-    td {
-      padding: 0rem;
-      & > div {
-        background: transparent;
-        border: none;
-        span {
-          line-height: 1.6;
-          background: rgba(255, 255, 255, 0.5);
-        }
-      }
-      input,
-      select {
-        background: transparent;
-        border: none;
-        padding: 1px 3px;
-        height: 4rem;
-        ${hoverState(css`
-          outline: ${theme.color.outline};
-        `)}
-      }
-    }
-  }
-`
-const UnderTableRow = styled('div')`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-top: ${theme.spacing.medium};
-  ${mediaQueryTabletLandscapeOnly(css`
-    flex-direction: column;
-    gap: ${theme.spacing.small};
-  `)}
 `
 
 const getObservationValidations = (observationId, collectRecord) => {
@@ -199,8 +92,8 @@ const FishBeltObservationTable = ({
   transectLengthSurveyed,
   widthId,
 }) => {
-  const [haveApiObservationsBeenLoaded, setHaveApiObservationsBeenLoaded] = useState(false)
-  const [isAutoFocusAllowed, setIsAutoFocusAllowed] = useState(false)
+  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const {
@@ -215,7 +108,7 @@ const FishBeltObservationTable = ({
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
   const _loadObservationsFromApiIntoState = useEffect(() => {
-    if (!haveApiObservationsBeenLoaded && collectRecord) {
+    if (!apiObservationsLoaded && collectRecord) {
       const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
       const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
       const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
@@ -225,18 +118,18 @@ const FishBeltObservationTable = ({
         payload: initialObservationsToLoad,
       })
 
-      setHaveApiObservationsBeenLoaded(true)
+      setApiObservationsLoaded(true)
     }
   }, [
     collectRecord,
     getPersistedUnsavedObservationsData,
-    haveApiObservationsBeenLoaded,
+    apiObservationsLoaded,
     observationsDispatch,
   ])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
-    setIsAutoFocusAllowed(true)
+    setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -273,7 +166,7 @@ const FishBeltObservationTable = ({
 
       if (isTabKey && isLastRow && isCount) {
         event.preventDefault()
-        setIsAutoFocusAllowed(true)
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -282,7 +175,7 @@ const FishBeltObservationTable = ({
 
       if (isEnterKey && !isFishName) {
         event.preventDefault()
-        setIsAutoFocusAllowed(true)
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -443,7 +336,7 @@ const FishBeltObservationTable = ({
           <Td align="left">
             {fishNameOptions.length && (
               <InputAutocompleteContainer>
-                <FishNameAutocomplete
+                <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   // we only want autofocus to take over focus after the user adds
                   // new observations, not before. Otherwise initial page load focus
@@ -451,7 +344,7 @@ const FishBeltObservationTable = ({
                   // This approach seems easier than handling a list of refs for each observation
                   // and the logic to focus on the right one. in react autoFocus just focuses
                   // the newest element with the autoFocus tag
-                  autoFocus={isAutoFocusAllowed}
+                  autoFocus={autoFocusAllowed}
                   aria-labelledby="fish-name-label"
                   options={fishNameOptions}
                   onChange={handleFishNameChange}
@@ -459,9 +352,9 @@ const FishBeltObservationTable = ({
                   value={fish_attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
-                    <NewSpeciesButton type="button" onClick={proposeNewSpeciesClick}>
+                    <NewOptionButton type="button" onClick={proposeNewSpeciesClick}>
                       {language.pages.collectRecord.newFishSpeciesLink}
-                    </NewSpeciesButton>
+                    </NewOptionButton>
                   }
                 />
                 {fish_attribute && (
@@ -510,7 +403,7 @@ const FishBeltObservationTable = ({
     fishNameOptions,
     collectRecord,
     ignoreObservationValidations,
-    isAutoFocusAllowed,
+    autoFocusAllowed,
     observationsBiomass,
     observationsDispatch,
     observationsState,
@@ -524,7 +417,7 @@ const FishBeltObservationTable = ({
       <InputWrapper>
         <H2 id="table-label">Observations</H2>
         <StyledOverflowWrapper>
-          <StyledFishBeltObservationTable aria-labelledby="table-label">
+          <StyledObservationTable aria-labelledby="table-label">
             <StyledColgroup>
               <col className="number" />
               <col className="fishName" />
@@ -557,7 +450,7 @@ const FishBeltObservationTable = ({
             </thead>
 
             <tbody>{observationsRows}</tbody>
-          </StyledFishBeltObservationTable>
+          </StyledObservationTable>
         </StyledOverflowWrapper>
         <UnderTableRow>
           <ButtonPrimary type="button" onClick={handleAddObservation}>

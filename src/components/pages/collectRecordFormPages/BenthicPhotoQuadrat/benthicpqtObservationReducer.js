@@ -1,6 +1,6 @@
 import { createUuid } from '../../../../library/createUuid'
 
-const fishbeltObservationReducer = (state, action) => {
+const benthicpqtObservationReducer = (state, action) => {
   switch (action.type) {
     case 'loadObservationsFromApi': {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
@@ -22,7 +22,11 @@ const fishbeltObservationReducer = (state, action) => {
     }
 
     case 'addObservation':
-      return [...state, { id: createUuid(), count: null, size: null }]
+      return [
+        ...state,
+        { id: createUuid(), quadrat_number: null, growth_form: null, num_points: null },
+      ]
+
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
       const { referenceObservationIndex } = action.payload
@@ -30,9 +34,10 @@ const fishbeltObservationReducer = (state, action) => {
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
         id: createUuid(),
-        fish_attribute: null,
-        count: null,
-        size: null,
+        quadrat_number: null,
+        attribute: null,
+        growth_form: null,
+        num_points: null,
       })
 
       return observationsWithInsertedRow
@@ -46,43 +51,66 @@ const fishbeltObservationReducer = (state, action) => {
 
       return [...state, observationWithNewId]
     }
-    case 'updateCount':
+
+    case 'updateQuadratNumber':
       return state.map((observation) => {
         const isObservationToUpdate = observation.id === action.payload.observationId
 
-        const { newCount } = action.payload
+        const { newQuadratNumber } = action.payload
 
-        const newCountToUse =
-          Number.isNaN(newCount) || newCount === '' ? null : parseFloat(newCount)
+        const newQuadratNumberToUse =
+          Number.isNaN(newQuadratNumber) || newQuadratNumber === ''
+            ? null
+            : parseFloat(newQuadratNumber)
 
-        return isObservationToUpdate ? { ...observation, count: newCountToUse } : observation
+        return isObservationToUpdate
+          ? { ...observation, quadrat_number: newQuadratNumberToUse }
+          : observation
       })
-    case 'updateSize':
-      return state.map((observation) => {
-        const isObservationToUpdate = observation.id === action.payload.observationId
-        const { newSize } = action.payload
 
-        const newSizeToUse = Number.isNaN(newSize) || newSize === '' ? null : parseFloat(newSize)
-
-        return isObservationToUpdate ? { ...observation, size: newSizeToUse } : observation
-      })
-    case 'updateFishName':
+    case 'updateBenthicAttribute':
       return state.map((observation) => {
         const isObservationToUpdate = observation.id === action.payload.observationId
 
         return isObservationToUpdate
           ? {
               ...observation,
-              fish_attribute: action.payload.newFishName,
+              attribute: action.payload.newBenthicAttribute,
             }
           : observation
       })
-    case 'resetFishSizes': {
-      return state.map((observation) => ({ ...observation, size: '' }))
-    }
+
+    case 'updateGrowthForm':
+      return state.map((observation) => {
+        const isObservationToUpdate = observation.id === action.payload.observationId
+
+        return isObservationToUpdate
+          ? {
+              ...observation,
+              growth_form: action.payload.newGrowthForm,
+            }
+          : observation
+      })
+
+    case 'updateNumberOfPoints':
+      return state.map((observation) => {
+        const isObservationToUpdate = observation.id === action.payload.observationId
+
+        const { newNumberOfPoints } = action.payload
+
+        const newNumberOfPointsToUse =
+          Number.isNaN(newNumberOfPoints) || newNumberOfPoints === ''
+            ? null
+            : parseFloat(newNumberOfPoints)
+
+        return isObservationToUpdate
+          ? { ...observation, num_points: newNumberOfPointsToUse }
+          : observation
+      })
+
     default:
       throw new Error("This action isn't supported by the observationReducer")
   }
 }
 
-export default fishbeltObservationReducer
+export default benthicpqtObservationReducer

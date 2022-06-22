@@ -222,9 +222,8 @@ const FishBelt = ({ isNewRecord }) => {
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
   } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputs')
 
-  const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
-    'unsavedFishbeltObservations',
-  )
+  const persistUnsavedObservationsUtilities =
+    useUnsavedDirtyFormDataUtilities('unsavedObservations')
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
