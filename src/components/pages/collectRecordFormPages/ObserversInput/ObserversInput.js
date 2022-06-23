@@ -7,8 +7,19 @@ import { H2 } from '../../../generic/text'
 import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
 import { observersPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import mermaidInputsPropTypes from '../../../mermaidInputs/mermaidInputsPropTypes'
 
-const ObserversInput = ({ formik, observers, onObserversChange, ...restOfProps }) => {
+const ObserversInput = ({
+  formik,
+  ignoreNonObservationFieldValidations,
+  observers,
+  onObserversChange,
+  resetNonObservationFieldValidations,
+  validationPath,
+  validationProperties,
+  validationPropertiesWithDirtyResetOnInputChange,
+  ...restOfProps
+}) => {
   const observerNameOptions = getObserverNameOptions(observers)
   const observerNameValues = formik.values.observers.map(({ profile }) => profile)
 
@@ -26,6 +37,13 @@ const ObserversInput = ({ formik, observers, onObserversChange, ...restOfProps }
         id="observers"
         options={observerNameOptions}
         value={observerNameValues}
+        ignoreNonObservationFieldValidations={() => {
+          ignoreNonObservationFieldValidations({ validationPath })
+        }}
+        resetNonObservationFieldValidations={() => {
+          resetNonObservationFieldValidations({ validationPath })
+        }}
+        {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
         onChange={({ selectedItems }) => {
           const selectedObservers = filterObserverProfiles(selectedItems)
 
@@ -41,8 +59,16 @@ const ObserversInput = ({ formik, observers, onObserversChange, ...restOfProps }
 
 ObserversInput.propTypes = {
   formik: formikPropType.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   observers: observersPropType.isRequired,
   onObserversChange: PropTypes.func.isRequired,
+  resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  validationPath: PropTypes.string.isRequired,
+  validationProperties: PropTypes.shape({
+    validationType: PropTypes.string,
+    validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
+  }).isRequired,
+  validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
 export default ObserversInput

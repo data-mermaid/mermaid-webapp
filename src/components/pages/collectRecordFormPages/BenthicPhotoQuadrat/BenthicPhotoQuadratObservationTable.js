@@ -2,6 +2,19 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import {
+  ButtonRemoveRow,
+  CellValidation,
+  CellValidationButton,
+  InputAutocompleteContainer,
+  ObservationAutocomplete,
+  ObservationTr,
+  StyledLinkThatLooksLikeButtonToReference,
+  StyledOverflowWrapper,
+  StyledObservationTable,
+  TableValidationList,
+  UnderTableRow,
+} from '../CollectingFormPage.Styles'
 import { ButtonPrimary } from '../../../generic/buttons'
 import {
   choicesPropType,
@@ -16,16 +29,7 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
 import { getOptions } from '../../../../library/getOptions'
-import {
-  ButtonRemoveRow,
-  InputAutocompleteContainer,
-  ObservationAutocomplete,
-  ObservationTr,
-  StyledLinkThatLooksLikeButtonToReference,
-  StyledOverflowWrapper,
-  StyledObservationTable,
-  UnderTableRow,
-} from '../CollectingFormPage.Styles'
+import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -44,19 +48,35 @@ const StyledColgroup = styled('colgroup')`
     &.numberOfPoints {
       width: 20rem;
     }
+    &.validation {
+      width: auto;
+    }
     &.remove {
       width: 5rem;
     }
   }
 `
 
+const getObservationValidations = (observationId, collectRecord) => {
+  const allObservationsValidations =
+    collectRecord?.validations?.results?.data?.obs_benthic_photo_quadrats ?? []
+
+  const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
+    return validation.context?.observation_id === observationId
+  })
+
+  return justThisObservationsValidations
+}
 const BenthicPhotoQuadratObservationTable = ({
   areObservationsInputsDirty,
+  areValidationsShowing,
   benthicAttributeOptions,
   choices,
   collectRecord,
   observationsReducer,
   persistUnsavedObservationsUtilities,
+  ignoreObservationValidations,
+  resetObservationValidations,
   setAreObservationsInputsDirty,
 }) => {
   const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
@@ -131,18 +151,32 @@ const BenthicPhotoQuadratObservationTable = ({
     }
 
     return observationsState.map((observation, index) => {
+      const rowNumber = index + 1
       const { id: observationId, quadrat_number, attribute, growth_form, num_points } = observation
+
+      const quadratNumberOrEmptyStringToAvoidInputValueErrors = quadrat_number ?? ''
+      const growthFormOrEmptyStringToAvoidInputValueErrors = growth_form ?? ''
+      const numberOfPointsOrEmptyStringToAvoidInputValueErrors = num_points ?? ''
+
+      const observationValidations = getObservationValidations(observationId, collectRecord)
+      const observationValidationsToDisplay = getValidationPropertiesForInput(
+        observationValidations,
+        areValidationsShowing,
+      )
+
+      const { validationType } = observationValidationsToDisplay
+      const observationValidationMessages =
+        observationValidationsToDisplay?.validationMessages ?? []
+
+      const isObservationValid = validationType === 'ok'
+      const hasWarningValidation = validationType === 'warning'
+      const hasErrorValidation = validationType === 'error'
+      const hasIgnoredValidation = validationType === 'ignore'
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
         observationsDispatch({ type: 'deleteObservation', payload: observationId })
       }
-
-      const rowNumber = index + 1
-
-      const quadratNumberOrEmptyStringToAvoidInputValueErrors = quadrat_number ?? ''
-      const growthFormOrEmptyStringToAvoidInputValueErrors = growth_form ?? ''
-      const numberOfPointsOrEmptyStringToAvoidInputValueErrors = num_points ?? ''
 
       const handleQuadratNumberChange = (event) => {
         setAreObservationsInputsDirty(true)
@@ -201,6 +235,44 @@ const BenthicPhotoQuadratObservationTable = ({
       const handleNumberOfPointsKeyDown = (event) => {
         handleKeyDown({ event, index, observation, isNumberOfPoints: true })
       }
+
+      const handleIgnoreObservationValidations = () => {
+        ignoreObservationValidations({
+          observationId,
+        })
+      }
+
+      const handleResetObservationValidations = () => {
+        resetObservationValidations({
+          observationId,
+        })
+      }
+
+      const validationsMarkup = (
+        <CellValidation>
+          {isObservationValid ? <span aria-label="passed-validation">&nbsp;</span> : null}
+          {hasErrorValidation || hasWarningValidation ? (
+            <TableValidationList>
+              {observationValidationMessages.map((validation) => (
+                <li key={validation.id}>{language.getValidationMessage(validation)}</li>
+              ))}
+            </TableValidationList>
+          ) : null}
+          {hasWarningValidation ? (
+            <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
+              Ignore warning
+            </CellValidationButton>
+          ) : null}
+          {hasIgnoredValidation ? (
+            <>
+              Ignored
+              <CellValidationButton type="button" onClick={handleResetObservationValidations}>
+                Reset validations
+              </CellValidationButton>
+            </>
+          ) : null}
+        </CellValidation>
+      )
 
       return (
         <ObservationTr key={observationId}>
@@ -268,6 +340,7 @@ const BenthicPhotoQuadratObservationTable = ({
               onKeyDown={handleNumberOfPointsKeyDown}
             />
           </Td>
+          {areValidationsShowing ? validationsMarkup : null}
           <Td align="center">
             <ButtonRemoveRow
               tabIndex="-1"
@@ -282,12 +355,16 @@ const BenthicPhotoQuadratObservationTable = ({
       )
     })
   }, [
-    observationsState,
-    setAreObservationsInputsDirty,
-    observationsDispatch,
-    choices,
+    areValidationsShowing,
     autoFocusAllowed,
     benthicAttributeOptions,
+    collectRecord,
+    choices,
+    observationsDispatch,
+    observationsState,
+    ignoreObservationValidations,
+    resetObservationValidations,
+    setAreObservationsInputsDirty,
   ])
 
   return (
@@ -302,6 +379,7 @@ const BenthicPhotoQuadratObservationTable = ({
               <col className="benthicAttribute" />
               <col className="growthForm" />
               <col className="numberOfPoints" />
+              {areValidationsShowing ? <col className="validations" /> : null}
               <col className="remove" />
             </StyledColgroup>
             <thead>
@@ -319,6 +397,7 @@ const BenthicPhotoQuadratObservationTable = ({
                 <Th align="right" id="number-of-points-label">
                   Number of Points <RequiredIndicator />
                 </Th>
+                {areValidationsShowing ? <Th align="center">Validations</Th> : null}
                 <Th> </Th>
               </Tr>
             </thead>
@@ -337,6 +416,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
 BenthicPhotoQuadratObservationTable.propTypes = {
   areObservationsInputsDirty: PropTypes.bool.isRequired,
+  areValidationsShowing: PropTypes.bool.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
@@ -346,6 +426,8 @@ BenthicPhotoQuadratObservationTable.propTypes = {
     clearPersistedUnsavedFormData: PropTypes.func,
     getPersistedUnsavedFormData: PropTypes.func,
   }).isRequired,
+  ignoreObservationValidations: PropTypes.func.isRequired,
+  resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
 }
 
