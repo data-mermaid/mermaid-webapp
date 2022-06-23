@@ -19,6 +19,7 @@ import { getOptions } from '../../../../library/getOptions'
 import {
   ButtonRemoveRow,
   InputAutocompleteContainer,
+  NewOptionButton,
   ObservationAutocomplete,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
@@ -56,6 +57,7 @@ const BenthicPhotoQuadratObservationTable = ({
   choices,
   collectRecord,
   observationsReducer,
+  openNewBenthicAttributeModal,
   persistUnsavedObservationsUtilities,
   setAreObservationsInputsDirty,
 }) => {
@@ -202,6 +204,8 @@ const BenthicPhotoQuadratObservationTable = ({
         handleKeyDown({ event, index, observation, isNumberOfPoints: true })
       }
 
+      const proposeNewBenthicAttributeClick = () => openNewBenthicAttributeModal(observationId)
+
       return (
         <ObservationTr key={observationId}>
           <Td align="center">{rowNumber}</Td>
@@ -228,6 +232,11 @@ const BenthicPhotoQuadratObservationTable = ({
                   onKeyDown={handleBenthicAttributeKeyDown}
                   value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsAction={
+                    <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
+                      {language.pages.collectRecord.newBenthicAttributeLink}
+                    </NewOptionButton>
+                  }
                 />
                 {attribute && (
                   <StyledLinkThatLooksLikeButtonToReference
@@ -285,6 +294,7 @@ const BenthicPhotoQuadratObservationTable = ({
     observationsState,
     setAreObservationsInputsDirty,
     observationsDispatch,
+    openNewBenthicAttributeModal,
     choices,
     autoFocusAllowed,
     benthicAttributeOptions,
@@ -341,6 +351,7 @@ BenthicPhotoQuadratObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
   observationsReducer: observationsReducerPropType,
+  openNewBenthicAttributeModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
     persistUnsavedFormData: PropTypes.func,
     clearPersistedUnsavedFormData: PropTypes.func,

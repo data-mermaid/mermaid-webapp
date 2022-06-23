@@ -1,23 +1,20 @@
-import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 
 import { ButtonThatLooksLikeLink, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconArrowBack, IconSend } from '../icons'
 import { Input } from '../generic/form'
 import { Row, RowSpaceBetween } from '../generic/positioning'
-import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import InputAutocomplete from '../generic/InputAutocomplete'
 import { Table, Td, Tr } from '../generic/Table/table'
 import language from '../../language'
-import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import useIsMounted from '../../library/useIsMounted'
+import { inputOptionsPropTypes } from '../../library/miscPropTypes'
 
 const DetailsTable = styled(Table)`
   border: solid 1px ${theme.color.secondaryColor};
@@ -29,17 +26,19 @@ const StyledRow = styled(Row)`
   justify-content: space-between;
   gap: 1rem;
 `
-
 const InputContainer = styled.div`
   width: 100%;
 `
-const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUser }) => {
-  const isMounted = useIsMounted()
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const [generaOptions, setGeneraOptions] = useState([])
+const NewBenthicAttributeModal = ({
+  isOpen,
+  onDismiss,
+  onSubmit,
+  currentUser,
+  projectName,
+  benthicAttributeOptions,
+}) => {
   const [currentPage, setCurrentPage] = useState(1)
-  const [projectName, setProjectName] = useState()
-  const [genusName, setGenusName] = useState()
+  const [benthicAttributeParentName, setBenthicAttributeParentName] = useState()
   const goToPage2 = () => {
     setCurrentPage(2)
   }
@@ -47,41 +46,11 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     setCurrentPage(1)
   }
 
-  const _loadGenera = useEffect(() => {
-    if (databaseSwitchboardInstance && isMounted.current) {
-      databaseSwitchboardInstance
-        .getFishGenera()
-        .then((genera) => {
-          if (isMounted.current) {
-            setGeneraOptions(genera.map((genus) => ({ label: genus.name, value: genus.id })))
-          }
-        })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.generaUnavailable))
-        })
-    }
-  }, [databaseSwitchboardInstance, isMounted])
-
-  const _getProjectName = useEffect(() => {
-    if (databaseSwitchboardInstance && isMounted.current) {
-      databaseSwitchboardInstance
-        .getProject(projectId)
-        .then((project) => {
-          if (isMounted.current) {
-            setProjectName(project.name)
-          }
-        })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.projectsUnavailable))
-        })
-    }
-  }, [databaseSwitchboardInstance, projectId, isMounted])
-
   const formikPage1 = useFormik({
-    initialValues: { genusId: '', species: '' },
+    initialValues: { benthicAttributeParentId: '', newBenthicAttribute: '' },
     validationSchema: Yup.object().shape({
-      genusId: Yup.string().required(language.error.formValidation.required),
-      species: Yup.string().required(language.error.formValidation.required),
+      benthicAttributeParentId: Yup.string().required(language.error.formValidation.required),
+      newBenthicAttribute: Yup.string().required(language.error.formValidation.required),
     }),
     validateOnBlur: false,
     validateOnChange: false,
@@ -97,15 +66,15 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     onDismiss()
   }
 
-  const handleSpeciesChange = (event) => {
-    formikPage1.setFieldValue('species', event.target.value.toLowerCase())
+  const handleNewBenthicAttributeNameChange = (event) => {
+    formikPage1.setFieldValue('newBenthicAttribute', event.target.value.toLowerCase())
   }
 
   const handleOnSubmit = () => {
     onSubmit({
-      genusId: formikPage1.values.genusId,
-      genusName,
-      speciesName: formikPage1.values.species,
+      benthicAttributeParentId: formikPage1.values.benthicAttributeParentId,
+      benthicAttributeParentName,
+      newBenthicAttributeName: formikPage1.values.newBenthicAttribute,
     }).then(() => {
       resetAndCloseModal()
     })
@@ -115,36 +84,40 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     <form id="form-page-1" onSubmit={formikPage1.handleSubmit}>
       <StyledRow>
         <InputContainer>
-          <label id="genus-label" htmlFor="genus">
-            {language.createNewOptionModal.genus}
+          <label id="benthic-attribute-parent-label" htmlFor="benthic-attribute-parent">
+            {language.createNewOptionModal.benthicAttributeParent}
           </label>
           <InputAutocomplete
-            id="genus"
-            aria-labelledby="genus-label"
-            options={generaOptions}
-            value={formikPage1.values.genusId}
+            id="benthic-attribute-parent"
+            aria-labelledby="benthic-attribute-parent-label"
+            options={benthicAttributeOptions}
+            value={formikPage1.values.benthicAttributeParentId}
             noResultsText={language.autocomplete.noResultsDefault}
             onChange={(selectedItem) => {
-              formikPage1.setFieldValue('genusId', selectedItem.value)
-              setGenusName(selectedItem.label)
+              formikPage1.setFieldValue('benthicAttributeParentId', selectedItem.value)
+              setBenthicAttributeParentName(selectedItem.label)
             }}
           />
-          {formikPage1.errors.genusId && (
-            <span id="genus-required">{formikPage1.errors.genusId}</span>
+          {formikPage1.errors.benthicAttributeParentId && (
+            <span id="benthic-attribute-parent-required">
+              {formikPage1.errors.benthicAttributeParentId}
+            </span>
           )}
         </InputContainer>
         <InputContainer>
-          <label id="species-label" htmlFor="species">
-            {language.createNewOptionModal.species}
+          <label id="new-benthic-attribute-label" htmlFor="new-benthic-attribute">
+            {language.createNewOptionModal.newBenthicAttributeName}
           </label>
           <Input
-            id="species"
-            aria-describedby="species-label"
-            value={formikPage1.values.species}
-            onChange={handleSpeciesChange}
+            id="new-benthic-attribute"
+            aria-describedby="new-benthic-attribute-label"
+            value={formikPage1.values.newBenthicAttribute}
+            onChange={handleNewBenthicAttributeNameChange}
           />
-          {formikPage1.errors.species && (
-            <span id="species-required">{formikPage1.errors.species}</span>
+          {formikPage1.errors.newBenthicAttribute && (
+            <span id="new-benthic-attribute-required">
+              {formikPage1.errors.newBenthicAttribute}
+            </span>
           )}
         </InputContainer>
       </StyledRow>
@@ -156,8 +129,12 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
       <DetailsTable>
         <tbody>
           <Tr>
-            <Td id="species-label">{language.createNewOptionModal.species}</Td>
-            <Td aria-labelledby="species-label">{formikPage1.values.species}</Td>
+            <Td id="new-benthic-attribute-label">
+              {language.createNewOptionModal.newBenthicAttribute}
+            </Td>
+            <Td aria-labelledby="new-benthic-attribute-label">
+              {formikPage1.values.newBenthicAttribute}
+            </Td>
           </Tr>
           <Tr>
             <Td id="user-label">{language.createNewOptionModal.user}</Td>
@@ -169,7 +146,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
           </Tr>
         </tbody>
       </DetailsTable>
-      <p>{language.createNewOptionModal.proposedSummaryText('fish species')}</p>
+      <p>{language.createNewOptionModal.proposedSummaryText('benthic attribute')}</p>
     </>
   )
 
@@ -221,7 +198,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
     <Modal
       isOpen={isOpen}
       onDismiss={resetAndCloseModal}
-      title={language.createNewOptionModal.addNewAttributeTitle('Fish Species')}
+      title={language.createNewOptionModal.addNewAttributeTitle('Benthic Attribute')}
       mainContent={mainContent}
       footerContent={footer}
       contentOverflowIsvisible={true}
@@ -229,12 +206,13 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
   )
 }
 
-NewFishSpeciesModal.propTypes = {
+NewBenthicAttributeModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   currentUser: currentUserPropType.isRequired,
-  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  projectName: PropTypes.string.isRequired,
+  benthicAttributeOptions: inputOptionsPropTypes.isRequired,
 }
 
-export default NewFishSpeciesModal
+export default NewBenthicAttributeModal

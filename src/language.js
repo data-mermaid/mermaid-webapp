@@ -39,6 +39,8 @@ const error = {
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   fishSpeciesSave:
     'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
+  attributeSave: (attribute) =>
+    `Something went Wrong. The new ${attribute} has not been saved. Please try proposing it again.`,
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
@@ -66,6 +68,8 @@ const error = {
   userRecordsUnavailable: 'User records data is currently unavailable. Please try again.',
   projectHealthRecordsUnavailable:
     'Summary records data is currently unavailable. Please try again',
+  attributeAlreadyExists: (attribute) =>
+    `The proposed ${attribute} already exists in the list. The observation has been edited to show the existing ${attribute} selected.`,
 
   getIdsNotFoundDetails: (id) =>
     id.length > 1
@@ -119,6 +123,8 @@ const success = {
     }
   },
   userProfileUpdate: 'Profile updated',
+  attributeSave: (attribute) =>
+    `Proposed benthic ${attribute} saved. The observation has been edited to show it selected.`,
 }
 
 const deleteCollectRecord = {
@@ -133,20 +139,21 @@ const loadingIndicator = {
   loadingSecondary: 'Still working...',
 }
 
-const createFishSpecies = {
-  title: 'Add New Fish Species',
+const createNewOptionModal = {
+  addNewAttributeTitle: (attribute) => `Add New ${attribute}`,
   genus: 'Genus',
   species: 'Species',
+  newBenthicAttribute: 'Benthic Attribute',
+  benthicAttributeParent: 'Parent',
+  newBenthicAttributeName: 'Name',
   goToPage2: 'Next',
   cancel: 'Cancel',
-  confirmMessage:
-    'Your proposed new species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
   back: 'Back',
   details: 'Details',
   user: 'User',
   project: 'Project',
-  summaryText2:
-    'Your proposed new species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
+  proposedSummaryText: (attribute) =>
+    `Your proposed new ${attribute} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.`,
   submit: 'Send to MERMAID for review',
 }
 
@@ -181,6 +188,7 @@ const pages = {
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',
+    newBenthicAttributeLink: 'Propose New Benthic Attribute...'
   },
   projectInfo: {
     title: 'Project Info',
@@ -251,8 +259,8 @@ const pages = {
     missingLabelNumber: 'missing number',
   },
   benthicPhotoQuadratForm: {
-    title: 'Benthic Photo Quadrat'
-  }
+    title: 'Benthic Photo Quadrat',
+  },
 }
 
 const navigateAwayPrompt =
@@ -319,7 +327,7 @@ export default {
   table,
   title,
   pages,
-  createFishSpecies,
+  createNewOptionModal,
   navigateAwayPrompt,
   getValidationMessage,
   inlineMessage,

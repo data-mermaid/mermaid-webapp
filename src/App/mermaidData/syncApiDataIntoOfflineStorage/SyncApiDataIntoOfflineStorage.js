@@ -120,14 +120,14 @@ const SyncApiDataIntoOfflineStorage = class {
     return Promise.all([this.#pullEverythingButProjectRelated(), this.#pullOfflineProjects()])
   }
 
-  pushThenPullSpecies = async () => {
+  pushThenPullFishOrBenthicAttributes = async (fishOrBenthicAttributesData) => {
     await this.pushChanges()
 
     return pullApiData({
       dexiePerUserDataInstance: this._dexiePerUserDataInstance,
       getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
-      apiDataNamesToPull: ['fish_species'],
+      apiDataNamesToPull: [fishOrBenthicAttributesData],
     })
   }
 
