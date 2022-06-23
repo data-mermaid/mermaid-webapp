@@ -23,9 +23,9 @@ const BenthicAttributesMixin = (Base) =>
       const existingMatchingBenthicAttribute = existingBenthicAttribute.filter(
         (benthicAttribute) => benthicAttribute.name === newBenthicAttributeName,
       )
-      const isProposedBenthicAttributeAlreadyExisting = existingMatchingBenthicAttribute.length > 0
+      const proposedBenthicAttributeExists = existingMatchingBenthicAttribute.length > 0
 
-      if (isProposedBenthicAttributeAlreadyExisting) {
+      if (proposedBenthicAttributeExists) {
         const benthicAttributeException = {
           message: 'Benthic attribute already exists',
           existingBenthicAttribute: existingMatchingBenthicAttribute[0],

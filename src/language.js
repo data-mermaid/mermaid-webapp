@@ -188,6 +188,7 @@ const pages = {
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',
+    newBenthicAttributeLink: 'Propose New Benthic Attribute...'
   },
   projectInfo: {
     title: 'Project Info',

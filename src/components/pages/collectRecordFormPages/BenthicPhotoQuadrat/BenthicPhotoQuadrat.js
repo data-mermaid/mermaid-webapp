@@ -1,9 +1,5 @@
 import PropTypes from 'prop-types'
-<<<<<<< HEAD
 import React, { useState, useEffect, useMemo, useReducer, useCallback } from 'react'
-=======
-import React, { useState, useEffect, useMemo, useReducer } from 'react'
->>>>>>> origin/develop
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useHistory, useParams } from 'react-router-dom'
@@ -164,7 +160,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
   } = persistUnsavedObservationsUtilities
 
-  const handleNewBenthicAttributeOnSubmit = ({
+  const onSubmitNewBenthicAttribute = ({
     benthicAttributeParentId,
     benthicAttributeParentName,
     newBenthicAttributeName,
@@ -354,7 +350,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         <NewBenthicAttributeModal
           isOpen={isNewBenthicAttributeModalOpen}
           onDismiss={closeNewBenthicAttributeModal}
-          onSubmit={handleNewBenthicAttributeOnSubmit}
+          onSubmit={onSubmitNewBenthicAttribute}
           currentUser={currentUser}
           projectName={projectName}
           benthicAttributeOptions={benthicAttributeOptions}

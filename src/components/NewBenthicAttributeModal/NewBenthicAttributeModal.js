@@ -26,7 +26,6 @@ const StyledRow = styled(Row)`
   justify-content: space-between;
   gap: 1rem;
 `
-const MainContentContainer = styled.div``
 const InputContainer = styled.div`
   width: 100%;
 `
@@ -152,10 +151,10 @@ const NewBenthicAttributeModal = ({
   )
 
   const mainContent = (
-    <MainContentContainer>
+    <div>
       {currentPage === 1 && mainContentPage1}
       {currentPage === 2 && mainContentPage2}
-    </MainContentContainer>
+    </div>
   )
   const cancelButton = (
     <ButtonSecondary type="button" onClick={resetAndCloseModal}>

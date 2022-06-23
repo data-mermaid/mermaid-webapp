@@ -234,7 +234,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
                     <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
-                      {language.pages.collectRecord.newFishSpeciesLink}
+                      {language.pages.collectRecord.newBenthicAttributeLink}
                     </NewOptionButton>
                   }
                 />
