@@ -10,6 +10,7 @@ import benthicpqtObservationReducer from './benthicpqtObservationReducer'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
   getCollectRecordDataInitialValues,
@@ -24,6 +25,8 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { H2 } from '../../../generic/text'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
+import NewBenthicAttributeModal from '../../../NewBenthicAttributeModal'
 import ObserversInput from '../ObserversInput'
 import { reformatFormValuesIntoBenthicPQTRecord } from './reformatFormValuesIntoBenthicPQTRecord'
 import RecordFormTitle from '../../../RecordFormTitle'
@@ -47,7 +50,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
-  const [observationsState] = observationsReducer
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
@@ -57,8 +60,11 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isNewBenthicAttributeModalOpen, setIsNewBenthicAttributeModalOpen] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
   const [observerProfiles, setObserverProfiles] = useState([])
+  const [observationToAddAttributesTo, setObservationToAddAttributesTo] = useState()
+  const [projectName, setProjectName] = useState('')
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [sites, setSites] = useState([])
   const [submitButtonState] = useState(buttonGroupStates.submittable)
@@ -66,12 +72,35 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
 
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+  const displayLoadingModal =
+    saveButtonState === buttonGroupStates.saving ||
+    validateButtonState === buttonGroupStates.validating ||
+    submitButtonState === buttonGroupStates.submitting
 
   const getValidationButtonStatus = (collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
       ? buttonGroupStates.validated
       : buttonGroupStates.validatable
   }
+
+  const openNewBenthicAttributeModal = useCallback((observationId) => {
+    setObservationToAddAttributesTo(observationId)
+    setIsNewBenthicAttributeModalOpen(true)
+  }, [])
+
+  const closeNewBenthicAttributeModal = () => {
+    setIsNewBenthicAttributeModalOpen(false)
+  }
+
+  const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
+    if (databaseSwitchboardInstance) {
+      databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
+        const updatedBenthicAttributeOptions = getOptions(benthicAttributes, false)
+
+        setBenthicAttributeOptions(updatedBenthicAttributeOptions)
+      })
+    }
+  }, [databaseSwitchboardInstance])
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -120,6 +149,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               setChoices(choicesResponse)
               setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setBenthicAttributeOptions(updateBenthicAttributeOptions)
+              setProjectName(projectResponse.name)
               setCollectRecordBeingEdited(collectRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -149,6 +179,49 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
     getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
   } = persistUnsavedObservationsUtilities
+
+  const onSubmitNewBenthicAttribute = ({
+    benthicAttributeParentId,
+    benthicAttributeParentName,
+    newBenthicAttributeName,
+  }) => {
+    databaseSwitchboardInstance
+      .addBenthicAttribute({
+        benthicAttributeParentId,
+        benthicAttributeParentName,
+        newBenthicAttributeName,
+      })
+      .then((newBenthicAttribute) => {
+        observationsDispatch({
+          type: 'updateBenthicAttribute',
+          payload: {
+            observationId: observationToAddAttributesTo,
+            newBenthicAttribute: newBenthicAttribute.id,
+          },
+        })
+        updateBenthicAttributeOptionsStateWithOfflineStorageData()
+        toast.success(...getToastArguments(language.success.attributeSave('benthic attribute')))
+      })
+      .catch((error) => {
+        if (error.message === 'Benthic attribute already exists') {
+          toast.warning(
+            ...getToastArguments(language.error.attributeAlreadyExists('benthic attribute')),
+          )
+
+          observationsDispatch({
+            type: 'updateBenthicAttribute',
+            payload: {
+              observationId: observationToAddAttributesTo,
+              newBenthicAttribute: error.existingBenthicAttribute.id,
+            },
+          })
+        } else {
+          toast.error(...getToastArguments(language.error.attributeSave('benthic attribute')))
+        }
+      })
+
+    return Promise.resolve()
+  }
 
   const initialFormikFormValues = useMemo(() => {
     return (
@@ -450,6 +523,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                 choices={choices}
                 collectRecord={collectRecordBeingEdited}
                 observationsReducer={observationsReducer}
+                openNewBenthicAttributeModal={openNewBenthicAttributeModal}
                 persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
                 ignoreObservationValidations={ignoreObservationValidations}
                 resetObservationValidations={resetObservationValidations}
@@ -482,6 +556,19 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           </ContentPageToolbarWrapper>
         }
       />
+
+      {!!projectId && !!currentUser && (
+        <NewBenthicAttributeModal
+          isOpen={isNewBenthicAttributeModalOpen}
+          onDismiss={closeNewBenthicAttributeModal}
+          onSubmit={onSubmitNewBenthicAttribute}
+          currentUser={currentUser}
+          projectName={projectName}
+          benthicAttributeOptions={benthicAttributeOptions}
+        />
+      )}
+      {displayLoadingModal && <LoadingModal />}
+      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 }

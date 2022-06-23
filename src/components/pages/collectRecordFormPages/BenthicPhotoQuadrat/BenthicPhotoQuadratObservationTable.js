@@ -7,6 +7,7 @@ import {
   CellValidation,
   CellValidationButton,
   InputAutocompleteContainer,
+  NewOptionButton,
   ObservationAutocomplete,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
@@ -74,6 +75,7 @@ const BenthicPhotoQuadratObservationTable = ({
   choices,
   collectRecord,
   observationsReducer,
+  openNewBenthicAttributeModal,
   persistUnsavedObservationsUtilities,
   ignoreObservationValidations,
   resetObservationValidations,
@@ -273,6 +275,7 @@ const BenthicPhotoQuadratObservationTable = ({
           ) : null}
         </CellValidation>
       )
+      const proposeNewBenthicAttributeClick = () => openNewBenthicAttributeModal(observationId)
 
       return (
         <ObservationTr key={observationId}>
@@ -300,6 +303,11 @@ const BenthicPhotoQuadratObservationTable = ({
                   onKeyDown={handleBenthicAttributeKeyDown}
                   value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
+                  noResultsAction={
+                    <NewOptionButton type="button" onClick={proposeNewBenthicAttributeClick}>
+                      {language.pages.collectRecord.newBenthicAttributeLink}
+                    </NewOptionButton>
+                  }
                 />
                 {attribute && (
                   <StyledLinkThatLooksLikeButtonToReference
@@ -362,6 +370,7 @@ const BenthicPhotoQuadratObservationTable = ({
     choices,
     observationsDispatch,
     observationsState,
+    openNewBenthicAttributeModal,
     ignoreObservationValidations,
     resetObservationValidations,
     setAreObservationsInputsDirty,
@@ -421,6 +430,7 @@ BenthicPhotoQuadratObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
   observationsReducer: observationsReducerPropType,
+  openNewBenthicAttributeModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
     persistUnsavedFormData: PropTypes.func,
     clearPersistedUnsavedFormData: PropTypes.func,

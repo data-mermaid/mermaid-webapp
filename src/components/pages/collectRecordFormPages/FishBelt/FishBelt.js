@@ -386,7 +386,7 @@ const FishBelt = ({ isNewRecord }) => {
     [collectRecordBeingEdited, databaseSwitchboardInstance],
   )
 
-  const handleNewFishSpeciesOnSubmit = ({ genusId, genusName, speciesName }) => {
+  const onSubmitNewFishSpecies = ({ genusId, genusName, speciesName }) => {
     databaseSwitchboardInstance
       .addFishSpecies({
         genusId,
@@ -675,7 +675,7 @@ const FishBelt = ({ isNewRecord }) => {
         <NewFishSpeciesModal
           isOpen={isNewFishNameModalOpen}
           onDismiss={closeNewFishNameModal}
-          onSubmit={handleNewFishSpeciesOnSubmit}
+          onSubmit={onSubmitNewFishSpecies}
           currentUser={currentUser}
           projectId={projectId}
         />
