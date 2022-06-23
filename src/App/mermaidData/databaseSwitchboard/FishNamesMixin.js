@@ -35,7 +35,7 @@ const FishNameMixin = (Base) =>
       const newFishObject = {
         id: createUuid(),
         display_name: proposedDisplayName,
-        name: speciesName, 
+        name: speciesName,
         genus: genusId,
         uiState_pushToApi: true,
       }
