@@ -94,51 +94,51 @@ test('Fishbelt validations show check for valid inputs', async () => {
     ),
   )
 
-  expect(within(screen.getByTestId('site')).getByLabelText('Passed validation')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByLabelText('passed-validation')).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('management')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('management')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('depth')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('depth')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('sample_date')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('sample_date')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('sample_time')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('sample_time')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('transect_number')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('transect_number')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('label')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('label')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('len_surveyed')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('len_surveyed')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('width')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('width')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('size_bin')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('size_bin')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('reef_slope')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('reef_slope')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('relative_depth')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('relative_depth')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('visibility')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('visibility')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('current')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('current')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
-  expect(within(screen.getByTestId('tide')).getByLabelText('Passed validation')).toBeInTheDocument()
+  expect(within(screen.getByTestId('tide')).getByLabelText('passed-validation')).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('notes')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('notes')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
   expect(
-    within(screen.getByTestId('observers')).getByLabelText('Passed validation'),
+    within(screen.getByTestId('observers')).getByLabelText('passed-validation'),
   ).toBeInTheDocument()
 })
