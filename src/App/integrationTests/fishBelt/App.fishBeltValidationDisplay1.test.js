@@ -392,10 +392,10 @@ test('Fishbelt validations will show passed input validations', async () => {
 
   // regular imputs
 
-  expect(within(screen.getByTestId('site')).getByLabelText('passed-validation')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByLabelText('Passed Validation')).toBeInTheDocument()
 
   // observations table (has three empty observation)
   expect(
-    within(screen.getByLabelText('Observations')).getAllByLabelText('passed-validation').length,
+    within(screen.getByLabelText('Observations')).getAllByLabelText('Passed Validation').length,
   ).toEqual(3)
 }, 50000)

@@ -112,7 +112,7 @@ test('Validation: user can reset ignored observation warnings ', async () => {
   expect(within(observationsTable).getByText('Ignored')).toBeInTheDocument()
 
   // other two passing
-  expect(within(observationsTable).queryAllByLabelText('passed-validation').length).toEqual(2)
+  expect(within(observationsTable).queryAllByLabelText('Passed Validation').length).toEqual(2)
 
   userEvent.click(within(observationsTable).getByRole('button', { name: 'Reset validations' }))
 
@@ -125,7 +125,7 @@ test('Validation: user can reset ignored observation warnings ', async () => {
   )
   expect(within(observationsTable).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(observationsTable).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryAllByLabelText('passed-validation').length).toEqual(2)
+  expect(within(observationsTable).queryAllByLabelText('Passed Validation').length).toEqual(2)
 })
 
 test('user can reset dismissed record-level warnings', async () => {

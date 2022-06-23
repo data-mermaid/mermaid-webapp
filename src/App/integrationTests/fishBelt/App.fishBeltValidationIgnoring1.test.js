@@ -932,7 +932,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(siteRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(siteRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(siteRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(siteRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(managementRow).getByRole('button', {
@@ -944,7 +944,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 
 //   expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(managementRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(managementRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(depthRow).getByRole('button', {
@@ -955,7 +955,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(depthRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(depthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(sampleDateRow).getByRole('button', {
@@ -966,7 +966,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(sampleDateRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(sampleDateRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(sampleDateRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(sampleTimeRow).getByRole('button', {
@@ -977,7 +977,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(sampleTimeRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(sampleTimeRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(sampleTimeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(transectNumberRow).getByRole('button', {
@@ -990,7 +990,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   )
 //   expect(within(transectNumberRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(transectNumberRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(transectNumberRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(transectNumberRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(labelRow).getByRole('button', {
@@ -1001,7 +1001,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(labelRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(labelRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(labelRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(lengthSurveyedRow).getByRole('button', {
@@ -1014,7 +1014,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   )
 //   expect(within(lengthSurveyedRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(lengthSurveyedRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(lengthSurveyedRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(widthRow).getByRole('button', {
@@ -1025,7 +1025,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(widthRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(widthRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(widthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(widthRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(widthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(sizeBinRow).getByRole('button', {
@@ -1036,7 +1036,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(sizeBinRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(sizeBinRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(sizeBinRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(sizeBinRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(reefSlopeRow).getByRole('button', {
@@ -1047,7 +1047,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(reefSlopeRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(reefSlopeRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(reefSlopeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(relativeDepthRow).getByRole('button', {
@@ -1060,7 +1060,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   )
 //   expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(relativeDepthRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(relativeDepthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(visibilityRow).getByRole('button', {
@@ -1071,7 +1071,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(visibilityRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(visibilityRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(visibilityRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(currentRow).getByRole('button', {
@@ -1082,7 +1082,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(currentRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(currentRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(currentRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(tideRow).getByRole('button', {
@@ -1093,7 +1093,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(tideRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(tideRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(notesRow).getByRole('button', {
@@ -1104,7 +1104,7 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(notesRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(notesRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
 //   userEvent.click(
 //     within(observersRow).getByRole('button', {
@@ -1115,5 +1115,5 @@ test('Validation: user can dismiss observation warnings ', async () => {
 //   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
 //   expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument()
 //   expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
-//   expect(within(observersRow).queryByLabelText('passed-validation')).not.toBeInTheDocument()
+//   expect(within(observersRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 // }, 50000)
