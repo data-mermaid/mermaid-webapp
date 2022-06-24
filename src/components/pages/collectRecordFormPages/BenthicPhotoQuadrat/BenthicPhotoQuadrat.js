@@ -16,7 +16,7 @@ import {
   getTransectInitialValues,
   getBenthicPhotoQuadratAdditionalValues,
 } from '../collectRecordFormInitialValues'
-import { getOptions } from '../../../../library/getOptions'
+import { getBenthicOptions } from '../../../../library/getOptions'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
@@ -76,7 +76,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        const updatedBenthicAttributeOptions = getOptions(benthicAttributes, false)
+        const updatedBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
         setBenthicAttributeOptions(updatedBenthicAttributeOptions)
       })
@@ -123,7 +123,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                   ? getRecordName(collectRecordResponse.data, sitesResponse, 'quadrat_transect')
                   : { name: 'Benthic Photo Quadrat' }
 
-              const updateBenthicAttributeOptions = getOptions(benthicAttributes, false)
+              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
