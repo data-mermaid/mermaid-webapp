@@ -35,12 +35,10 @@ export const getBellNotifications = async ({
   return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
 }
 
-export const deleteBellNotification = async (notificationId, {
-  apiBaseUrl,
-  getAccessToken,
-  isMermaidAuthenticated,
-  isAppOnline,
-}) => {
+export const deleteBellNotification = async (
+  notificationId,
+  { apiBaseUrl, getAccessToken, isMermaidAuthenticated, isAppOnline },
+) => {
   if (!apiBaseUrl) {
     throw new Error('deleteBellNotification needs an API base url')
   }
@@ -50,7 +48,10 @@ export const deleteBellNotification = async (notificationId, {
 
   if (isOnlineAuthenticatedAndReady) {
     return axios
-      .delete(`${apiBaseUrl}/notifications/${notificationId}`, await getAuthorizationHeaders(getAccessToken))
+      .delete(
+        `${apiBaseUrl}/notifications/${notificationId}`,
+        await getAuthorizationHeaders(getAccessToken),
+      )
       .catch((error) => {
         console.error(error.response)
       })

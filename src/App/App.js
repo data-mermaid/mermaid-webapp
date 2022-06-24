@@ -97,9 +97,7 @@ function App({ dexieCurrentUserInstance }) {
   })
 
   const layoutProps = {
-    header: (
-      <Header currentUser={currentUser} logout={logoutMermaid} />
-    ),
+    header: <Header currentUser={currentUser} logout={logoutMermaid} />,
     footer: <Footer />,
   }
 
@@ -119,11 +117,11 @@ function App({ dexieCurrentUserInstance }) {
             <Layout {...layoutProps}>
               {
                 /** The isMermaidAuthenticated is needed here to prevent an
-                * infinite log in loop with authentication.
-                *
-                * The projects list route and project workflow pages will trigger
-                * a sync when they are routed to, making isOfflineStorageHydrated = true
-                */
+                 * infinite log in loop with authentication.
+                 *
+                 * The projects list route and project workflow pages will trigger
+                 * a sync when they are routed to, making isOfflineStorageHydrated = true
+                 */
 
                 isMermaidAuthenticated ? (
                   <Switch>
