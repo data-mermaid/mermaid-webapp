@@ -1,56 +1,61 @@
 import React from 'react'
+
 import {
   NotificationCard,
   NotificationCardWrapper,
   NotificationCloseButton,
   NotificationContent,
+  NotificationDate,
   NotificationHeader,
-  NotificationStatus
+  NotificationStatus,
+  NoNotifications
 } from './BellNotificationDropDown.styles'
 import { IconClose } from '../icons'
+import language from '../../language'
+import { useBellNotifications } from '../../App/BellNotificationContext'
 
-const mockNotifications = [
-  {
-    title: 'a notification',
-    status: 'error',
-    description: 'description for this notification. these could get quite long',
-    owner: 'name'
-  },
-  {
-    title: 'another notification',
-    status: 'info',
-    description: 'description for this notification. these could get quite long. this one is the longest in the example by far',
-    owner: 'name'
-  },
-  {
-    title: 'another notification',
-    status: 'warning',
-    description: 'description for this notification',
-    owner: 'name'
-  },
-  {
-    title: 'and some more',
-    status: 'warning',
-    description: 'description for this notification',
-    owner: 'name'
+const getUpdatedOnText = (updatedOn) => {
+  // const secondsAgo = new Date() - new Date(updatedOn)
+  const locale = navigator.language ?? 'en-US'
+
+  return new Date(updatedOn).toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
+
+const BellNotificationDropDown = () => {
+  const { notifications, deleteNotification } = useBellNotifications()
+
+  const dismissNotification = (id) => {
+    deleteNotification(id)
   }
-]
 
-const BellNotificationDropDown = () => (
-  <NotificationCardWrapper>
-    {mockNotifications.map((notification) => {
-      return <NotificationCard>
-        <NotificationStatus status={notification.status} />
-        <NotificationContent>
-          <NotificationHeader>
-            <h1>{notification.title}</h1>
-            <NotificationCloseButton><IconClose aria-label="close" /></NotificationCloseButton>
-          </NotificationHeader>
-          <span>{notification.description}</span>
-        </NotificationContent>
-      </NotificationCard>
-    })}
+  return <NotificationCardWrapper>
+    {!notifications?.results || !notifications.results?.length ?
+      <NoNotifications>{language.header.noNotifications}</NoNotifications> :
+      notifications.results.map((notification) => {
+        return <NotificationCard key={`notification-card-${notification.id}`}>
+          <NotificationStatus status={notification.status} />
+          <NotificationContent>
+            <NotificationHeader>
+              <h1>{notification.title}</h1>
+              <NotificationCloseButton onClick={() => dismissNotification(notification.id)}>
+                <IconClose aria-label="close" />
+              </NotificationCloseButton>
+            </NotificationHeader>
+            <NotificationDate>
+              {getUpdatedOnText(notification.created_on)}
+            </NotificationDate>
+            <span>{notification.description}</span>
+          </NotificationContent>
+        </NotificationCard>
+      })
+
+    }
+
   </NotificationCardWrapper>
-)
+}
 
 export default BellNotificationDropDown

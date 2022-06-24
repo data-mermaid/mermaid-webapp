@@ -53,6 +53,8 @@ const error = {
   managementRegimeRecordUnavailable:
     'Management Regime record data is currently unavailable. Please try again.',
   managementRegimeSave: 'Something went wrong. The management regime has not been saved.',
+  notificationsUnavailable: 'Notifications are unavailable.',
+  notificationNotDeleted: 'Notification could not be removed.',
   projectSave: 'Something went wrong. The project has not been saved.',
   projectsUnavailable: 'Projects data is currently unavailable. Please try again.',
   siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again.',
@@ -152,6 +154,10 @@ const createFishSpecies = {
 
 const autocomplete = {
   noResultsDefault: 'No results found',
+}
+
+const header = {
+  noNotifications: 'There are currently no notifications'
 }
 
 const table = {
@@ -316,6 +322,7 @@ export default {
   deleteCollectRecord,
   loadingIndicator,
   autocomplete,
+  header,
   table,
   title,
   pages,
