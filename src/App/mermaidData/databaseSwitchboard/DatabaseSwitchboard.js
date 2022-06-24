@@ -54,8 +54,8 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   exportToCSV: PropTypes.func,
   saveFishBelt: PropTypes.func,
   deleteFishBelt: PropTypes.func,
-  validateFishBelt: PropTypes.func,
-  saveCollectRecord: PropTypes.func,
+  validateSampleUnit: PropTypes.func,
+  saveSampleUnit: PropTypes.func,
 })
 
 export default DatabaseSwitchboard

@@ -27,7 +27,7 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
-import SampleInfoInputs from './SampleInfoInputs'
+import SampleEventInputs from '../SampleEventInputs'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
 import FishbeltTransectInputs from './FishbeltTransectInputs'
@@ -37,7 +37,7 @@ import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
-import ObserversInput from '../../../ObserversInput'
+import ObserversInput from '../ObserversInput'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
@@ -268,7 +268,7 @@ const FishBelt = ({ isNewRecord }) => {
     setValidateButtonState(buttonGroupStates.validating)
 
     databaseSwitchboardInstance
-      .validateFishBelt({ recordId, projectId })
+      .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
         setAreValidationsShowing(true)
         setCollectRecordBeingEdited(validatedRecordResponse)
@@ -575,15 +575,15 @@ const FishBelt = ({ isNewRecord }) => {
               aria-labelledby="fishbelt-form-title"
               onSubmit={formik.handleSubmit}
             >
-              <SampleInfoInputs
+              <SampleEventInputs
                 areValidationsShowing={areValidationsShowing}
                 collectRecord={collectRecordBeingEdited}
                 formik={formik}
+                managementRegimes={managementRegimes}
+                sites={sites}
                 handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
                 ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                managementRegimes={managementRegimes}
                 resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                sites={sites}
                 validationPropertiesWithDirtyResetOnInputChange={
                   validationPropertiesWithDirtyResetOnInputChange
                 }

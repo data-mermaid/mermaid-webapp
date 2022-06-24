@@ -4,11 +4,13 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useHistory, useParams } from 'react-router-dom'
 
-import { buttonGroupStates } from '../../../../library/buttonGroupStates'
-import benthicpqtObservationReducer from './benthicpqtObservationReducer'
+import BenthicAttributeTransectInputs from './BenthicAttributeTransectInputs'
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
+import benthicpqtObservationReducer from './benthicpqtObservationReducer'
+import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
   getCollectRecordDataInitialValues,
@@ -19,17 +21,19 @@ import {
 import { getOptions } from '../../../../library/getOptions'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
+import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { H2 } from '../../../generic/text'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
+import LoadingModal from '../../../LoadingModal/LoadingModal'
 import NewBenthicAttributeModal from '../../../NewBenthicAttributeModal'
 import ObserversInput from '../ObserversInput'
 import { reformatFormValuesIntoBenthicPQTRecord } from './reformatFormValuesIntoBenthicPQTRecord'
 import RecordFormTitle from '../../../RecordFormTitle'
+import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import SampleEventInputs from '../SampleEventInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
-import TransectInputs from '../TransectInputs'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../../library/useIsMounted'
@@ -37,7 +41,8 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
-  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
+  const OBSERVERS_VALIDATION_PATH = 'data.observers'
+
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const history = useHistory()
@@ -47,6 +52,8 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
+  const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [choices, setChoices] = useState({})
   const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
@@ -63,6 +70,18 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [submitButtonState] = useState(buttonGroupStates.submittable)
   const [subNavNode, setSubNavNode] = useState(null)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
+
+  const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+  const displayLoadingModal =
+    saveButtonState === buttonGroupStates.saving ||
+    validateButtonState === buttonGroupStates.validating ||
+    submitButtonState === buttonGroupStates.submitting
+
+  const getValidationButtonStatus = (collectRecord) => {
+    return collectRecord?.validations?.status === 'ok'
+      ? buttonGroupStates.validated
+      : buttonGroupStates.validatable
+  }
 
   const openNewBenthicAttributeModal = useCallback((observationId) => {
     setObservationToAddAttributesTo(observationId)
@@ -134,6 +153,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               setCollectRecordBeingEdited(collectRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
+              setValidateButtonState(getValidationButtonStatus(collectRecordResponse))
             }
           },
         )
@@ -227,9 +247,10 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     )
 
     setSaveButtonState(buttonGroupStates.saving)
+    setAreValidationsShowing(false)
 
     databaseSwitchboardInstance
-      .saveCollectRecord({
+      .saveSampleUnit({
         record: recordToSubmit,
         profileId: currentUser.id,
         projectId,
@@ -255,6 +276,128 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
       })
   }
 
+  const handleValidate = () => {
+    setValidateButtonState(buttonGroupStates.validating)
+
+    databaseSwitchboardInstance
+      .validateSampleUnit({ recordId, projectId })
+      .then((validatedRecordResponse) => {
+        setAreValidationsShowing(true)
+        setCollectRecordBeingEdited(validatedRecordResponse)
+        setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
+      })
+      .catch(() => {
+        toast.error(...getToastArguments(language.error.collectRecordValidation))
+        setValidateButtonState(buttonGroupStates.validatable)
+      })
+  }
+
+  const ignoreRecordLevelValidation = useCallback(
+    ({ validationId }) => {
+      databaseSwitchboardInstance
+        .ignoreRecordLevelValidation({
+          record: collectRecordBeingEdited,
+          validationId,
+        })
+        .then((recordWithIgnoredValidations) => {
+          setCollectRecordBeingEdited(recordWithIgnoredValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
+  const ignoreNonObservationFieldValidations = useCallback(
+    ({ validationPath }) => {
+      databaseSwitchboardInstance
+        .ignoreNonObservationFieldValidations({
+          record: collectRecordBeingEdited,
+          validationPath,
+        })
+        .then((recordWithIgnoredValidations) => {
+          setCollectRecordBeingEdited(recordWithIgnoredValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
+  const ignoreObservationValidations = useCallback(
+    ({ observationId }) => {
+      databaseSwitchboardInstance
+        .ignoreObservationValidations({
+          recordId: collectRecordBeingEdited.id,
+          observationId,
+        })
+        .then((recordWithIgnoredValidations) => {
+          setCollectRecordBeingEdited(recordWithIgnoredValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
+  const resetObservationValidations = useCallback(
+    ({ observationId }) => {
+      databaseSwitchboardInstance
+        .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
+        .then((recordWithResetValidations) => {
+          setCollectRecordBeingEdited(recordWithResetValidations)
+
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
+  const resetRecordLevelValidation = useCallback(
+    ({ validationId }) => {
+      databaseSwitchboardInstance
+        .resetRecordLevelValidation({
+          record: collectRecordBeingEdited,
+          validationId,
+        })
+        .then((recordWithResetValidations) => {
+          setCollectRecordBeingEdited(recordWithResetValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
+  const resetNonObservationFieldValidations = useCallback(
+    ({ validationPath }) => {
+      databaseSwitchboardInstance
+        .resetNonObservationFieldValidations({
+          record: collectRecordBeingEdited,
+          validationPath,
+        })
+        .then((recordWithResetValidations) => {
+          setCollectRecordBeingEdited(recordWithResetValidations)
+          setIsFormDirty(true)
+        })
+        .catch(() => {
+          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
+        })
+    },
+    [collectRecordBeingEdited, databaseSwitchboardInstance],
+  )
+
   const _setIsFormDirty = useEffect(() => {
     setIsFormDirty(
       areObservationsInputsDirty ||
@@ -275,8 +418,44 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     }
   }, [isFormDirty])
 
+  const observersValidationProperties = getValidationPropertiesForInput(
+    collectRecordBeingEdited?.validations?.results?.data?.observers,
+    areValidationsShowing,
+  )
+
+  const handleChangeForDirtyIgnoredInput = ({
+    validationProperties,
+    validationPath,
+    inputName,
+  }) => {
+    const isInputDirty = formik.initialValues[inputName] === formik.values[inputName]
+    const doesFieldHaveIgnoredValidation = validationProperties.validationType === 'ignore'
+
+    if (doesFieldHaveIgnoredValidation && isInputDirty) {
+      resetNonObservationFieldValidations({ validationPath })
+    }
+  }
+
   const handleObserversChange = ({ selectedObservers }) => {
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'observers',
+      validationProperties: observersValidationProperties,
+      validationPath: OBSERVERS_VALIDATION_PATH,
+    })
     formik.setFieldValue('observers', selectedObservers)
+  }
+
+  const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
+    // for UX purpose only, validation is cleared when input is on change after page is validated
+    const validationDirtyCheck =
+      formik.values[property] !== formik.initialValues[property]
+        ? null
+        : validationProperties.validationType
+
+    return {
+      ...validationProperties,
+      validationType: validationDirtyCheck,
+    }
   }
 
   return idsNotAssociatedWithData.length ? (
@@ -292,27 +471,62 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         subNavNode={subNavNode}
         content={
           <>
+            <RecordLevelInputValidationInfo
+              validations={recordLevelValidations}
+              areValidationsShowing={areValidationsShowing}
+              resetRecordLevelValidation={resetRecordLevelValidation}
+              ignoreRecordLevelValidation={ignoreRecordLevelValidation}
+            />
             <form id="benthicpqt-form" aria-labelledby="benthicpqt-form-title">
               <SampleEventInputs
+                areValidationsShowing={areValidationsShowing}
+                collectRecord={collectRecordBeingEdited}
                 formik={formik}
                 managementRegimes={managementRegimes}
                 sites={sites}
+                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                validationPropertiesWithDirtyResetOnInputChange={
+                  validationPropertiesWithDirtyResetOnInputChange
+                }
               />
-              <TransectInputs choices={choices} formik={formik} />
+              <BenthicAttributeTransectInputs
+                areValidationsShowing={areValidationsShowing}
+                collectRecord={collectRecordBeingEdited}
+                choices={choices}
+                formik={formik}
+                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                validationPropertiesWithDirtyResetOnInputChange={
+                  validationPropertiesWithDirtyResetOnInputChange
+                }
+              />
               <ObserversInput
                 data-testid="observers"
                 formik={formik}
                 observers={observerProfiles}
                 onObserversChange={handleObserversChange}
+                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                validationPath={OBSERVERS_VALIDATION_PATH}
+                validationProperties={observersValidationProperties}
+                validationPropertiesWithDirtyResetOnInputChange={
+                  validationPropertiesWithDirtyResetOnInputChange
+                }
               />
               <BenthicPhotoQuadratObservationTable
                 areObservationsInputsDirty={areObservationsInputsDirty}
+                areValidationsShowing={areValidationsShowing}
                 benthicAttributeOptions={benthicAttributeOptions}
                 choices={choices}
                 collectRecord={collectRecordBeingEdited}
                 observationsReducer={observationsReducer}
                 openNewBenthicAttributeModal={openNewBenthicAttributeModal}
                 persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+                ignoreObservationValidations={ignoreObservationValidations}
+                resetObservationValidations={resetObservationValidations}
                 setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               />
             </form>
@@ -335,10 +549,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               saveButtonState={saveButtonState}
               validateButtonState={validateButtonState}
               submitButtonState={submitButtonState}
-              onValidate={() => {
-                // This is temporary, at the same time it just provides UX feedback.
-                toast.error('Validate Benthic PQT record is temporarily unavailable')
-              }}
+              onValidate={handleValidate}
               onSave={handleSave}
               onSubmit={() => {}}
             />
@@ -356,6 +567,8 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           benthicAttributeOptions={benthicAttributeOptions}
         />
       )}
+      {displayLoadingModal && <LoadingModal />}
+      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 }
