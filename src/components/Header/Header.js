@@ -115,8 +115,7 @@ const Header = ({ logout, currentUser }) => {
         <div className="desktop">
           <GlobalLinks />
             {isAppOnline && <HideShow
-              button={<p><IconBell
-                color={notifications?.results?.length ? 'red' : 'white'} />
+              button={<p><IconBell color={notifications?.results?.length ? 'red' : 'white'} />
               </p>}
               contents={
                 <div className="desktopUserMenu">
@@ -137,7 +136,7 @@ const Header = ({ logout, currentUser }) => {
             {isAppOnline && <HideShow
             button={
               <HeaderButtonThatLooksLikeLink>
-                <IconBell />
+                  <IconBell color={notifications?.results?.length ? 'red' : 'white'} />
               </HeaderButtonThatLooksLikeLink>
             }
             contents={
