@@ -314,6 +314,7 @@ const TransectInputs = ({
           testId="quadrat_size"
           type="number"
           unit="m2"
+          step="any"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: QUADRAT_SIZE_VALIDATION_PATH })
           }}
