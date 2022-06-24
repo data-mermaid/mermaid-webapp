@@ -18,6 +18,9 @@ const mockMermaidApiAllSuccessful = setupServer(
   rest.get(`${apiBaseUrl}/health`, (req, res, ctx) => {
     return res(ctx.status(200))
   }),
+  rest.get(`${apiBaseUrl}/notifications`, (req, res, ctx) => {
+    return res(ctx.status(200))
+  }),
   rest.post(`${apiBaseUrl}/push/`, (req, res, ctx) => {
     const reqCollectRecords = req.body.collect_records ?? []
     const reqSites = req.body.project_sites ?? []
