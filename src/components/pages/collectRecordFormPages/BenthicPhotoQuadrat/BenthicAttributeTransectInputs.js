@@ -1,102 +1,99 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
-import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import {
+  benthicPhotoQuadratPropType,
+  choicesPropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
-import { H2 } from '../../../generic/text'
-import { InputWrapper } from '../../../generic/form'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import { H2 } from '../../../generic/text'
 import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
+import { InputWrapper } from '../../../generic/form'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 
-const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
-const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
-const LABEL_VALIDATION_PATH = 'data.fishbelt_transect.label'
-const LENGHT_SURVEYED_VALIDATION_PATH = 'data.fishbelt_transect.len_surveyed'
+const DEPTH_VALIDATION_PATH = 'data.quadrat_transect.depth'
+const LABEL_VALIDATION_PATH = 'data.quadrat_transect.label'
+const LENGTH_SURVEYED_VALIDATION_PATH = 'data.quadrat_transect.len_surveyed'
 const NOTES_VALIDATION_PATH = 'data.sample_event.notes'
-const REEF_SLOPE_VALIDATION_PATH = 'data.fishbelt_transect.reef_slope'
-const RELATIVE_DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.relative_depth'
-const SAMPLE_TIME_VALIDATION_PATH = 'data.fishbelt_transect.sample_time'
-const SIZE_BIN_VALIDATION_PATH = 'data.fishbelt_transect.size_bin'
-const TIDE_VALIDATION_PATH = 'data.fishbelt_transect.tide'
-const TRANSECT_NUMBER_VALIDATION_PATH = 'data.fishbelt_transect.number'
-const VISIBILITY_VALIDATION_PATH = 'data.fishbelt_transect.visibility'
-const WIDTH_VALIDATION_PATH = 'data.fishbelt_transect.width'
+const NUM_POINTS_PER_QUADRAT_VALIDATION_PATH = 'data.quadrat_transect.num_points_per_quadrat'
+const NUM_QUADRATS_VALIDATION_PATH = 'data.quadrat_transect.num_quadrat'
+const QUADRAT_SIZE_VALIDATION_PATH = 'data.quadrat_transect.quadrat_size'
+const SAMPLE_TIME_VALIDATION_PATH = 'data.quadrat_transect.sample_time'
+const TRANSECT_NUMBER_VALIDATION_PATH = 'data.quadrat_transect.number'
+const VISIBILITY_VALIDATION_PATH = 'data.quadrat_transect.visibility'
+const CURRENT_VALIDATION_PATH = 'data.quadrat_transect.current'
+const RELATIVE_DEPTH_VALIDATION_PATH = 'data.quadrat_transect.relative_depth'
+const TIDE_VALIDATION_PATH = 'data.quadrat_transect.tide'
 
-const FishbeltTransectInputs = ({
+const TransectInputs = ({
   areValidationsShowing,
-  choices,
   collectRecord,
+  choices,
   formik,
   handleChangeForDirtyIgnoredInput,
   ignoreNonObservationFieldValidations,
-  onSizeBinChange,
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
-  const {
-    belttransectwidths,
-    fishsizebins,
-    reefslopes,
-    relativedepths,
-    visibilities,
-    currents,
-    tides,
-  } = choices
-  const transectWidthSelectOptions = getOptions(belttransectwidths)
-  const fishSizeBinSelectOptions = getOptions(fishsizebins)
-  const reefSlopeSelectOptions = [...getOptions(reefslopes), { label: 'not reported', value: '' }]
-  const relativeDepthOptions = [...getOptions(relativedepths), { label: 'not reported', value: '' }]
-  const visibilityOptions = [...getOptions(visibilities), { label: 'not reported', value: '' }]
+  const { currents, relativedepths, tides, visibilities } = choices
+
   const currentOptions = [...getOptions(currents), { label: 'not reported', value: '' }]
+  const relativeDepthOptions = [...getOptions(relativedepths), { label: 'not reported', value: '' }]
   const tideOptions = [...getOptions(tides), { label: 'not reported', value: '' }]
+  const visibilityOptions = [...getOptions(visibilities), { label: 'not reported', value: '' }]
   const validationsApiData = collectRecord?.validations?.results?.data
-  const fishbelt_transect = validationsApiData?.fishbelt_transect
+  const quadrat_transect = validationsApiData?.quadrat_transect
   const sample_event = validationsApiData?.sample_event
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.number,
+    quadrat_transect?.number,
     areValidationsShowing,
   )
-
   const labelValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.label,
+    quadrat_transect?.label,
+    areValidationsShowing,
+  )
+  const sampleTimeValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.sample_time,
+    areValidationsShowing,
+  )
+  const depthValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.depth,
     areValidationsShowing,
   )
   const lengthSurveyedValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.len_surveyed,
+    quadrat_transect?.len_surveyed,
     areValidationsShowing,
   )
-  const widthValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.width,
+  const quadratSizeValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.quadrat_size,
     areValidationsShowing,
   )
-
-  const sizeBinValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.size_bin,
+  const numberOfQuadratsValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.num_quadrats,
     areValidationsShowing,
   )
-
-  const reefSlopeValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.reef_slope,
-    areValidationsShowing,
-  )
-  const relativeDepthValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.relative_depth,
+  const numberOfPointsPerQuadratValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.num_points_per_quadrat,
     areValidationsShowing,
   )
   const visibilityValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.visibility,
+    quadrat_transect?.visibility,
     areValidationsShowing,
   )
   const currentValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.current,
+    quadrat_transect?.current,
+    areValidationsShowing,
+  )
+  const relativeDepthValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.relative_depth,
     areValidationsShowing,
   )
   const tideValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.tide,
+    quadrat_transect?.tide,
     areValidationsShowing,
   )
 
@@ -105,122 +102,109 @@ const FishbeltTransectInputs = ({
     areValidationsShowing,
   )
 
-  const sampleTimeValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.sample_time,
-    areValidationsShowing,
-  )
-
-  const depthValidationProperties = getValidationPropertiesForInput(
-    fishbelt_transect?.depth,
-    areValidationsShowing,
-  )
-
   const handleTransectNumberChange = (event) => {
-    formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
       inputName: 'number',
       validationProperties: transectNumberValidationProperties,
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
     })
-  }
-
-  const handleLabelChange = (event) => {
     formik.handleChange(event)
+  }
+  const handleLabelChange = (event) => {
     handleChangeForDirtyIgnoredInput({
       inputName: 'label',
       validationProperties: labelValidationProperties,
       validationPath: LABEL_VALIDATION_PATH,
     })
-  }
-
-  const handleLengthSurveyedChange = (event) => {
     formik.handleChange(event)
+  }
+  const handleSampleTimeChange = (event) => {
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'sample_time',
+      validationProperties: sampleTimeValidationProperties,
+      validationPath: SAMPLE_TIME_VALIDATION_PATH,
+    })
+    formik.handleChange(event)
+  }
+  const handleDepthChange = (event) => {
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'depth',
+      validationProperties: depthValidationProperties,
+      validationPath: DEPTH_VALIDATION_PATH,
+    })
+    formik.handleChange(event)
+  }
+  const handleLengthSurveyedChange = (event) => {
     handleChangeForDirtyIgnoredInput({
       inputName: 'len_surveyed',
       validationProperties: lengthSurveyedValidationProperties,
-      validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
+      validationPath: LENGTH_SURVEYED_VALIDATION_PATH,
     })
-  }
-  const handleWidthChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
-      inputName: 'width',
-      validationProperties: widthValidationProperties,
-      validationPath: WIDTH_VALIDATION_PATH,
-    })
   }
-  const handleSizeBinChange = (event) => {
-    onSizeBinChange(event)
+  const handleQuadratSizeChange = (event) => {
     handleChangeForDirtyIgnoredInput({
-      inputName: 'size_bin',
-      validationProperties: sizeBinValidationProperties,
-      validationPath: SIZE_BIN_VALIDATION_PATH,
+      inputName: 'quadrat_size',
+      validationProperties: quadratSizeValidationProperties,
+      validationPath: QUADRAT_SIZE_VALIDATION_PATH,
     })
-  }
-  const handleReefSlopeChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
-      inputName: 'reef_slope',
-      validationProperties: reefSlopeValidationProperties,
-      validationPath: REEF_SLOPE_VALIDATION_PATH,
-    })
   }
-  const handleRelativeDepthChange = (event) => {
-    formik.handleChange(event)
+  const handleNumberOfQuadratsChange = (event) => {
     handleChangeForDirtyIgnoredInput({
-      inputName: 'relative_depth',
-      validationProperties: relativeDepthValidationProperties,
-      validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
+      inputName: 'num_quadrats',
+      validationProperties: numberOfQuadratsValidationProperties,
+      validationPath: NUM_QUADRATS_VALIDATION_PATH,
     })
+    formik.handleChange(event)
+  }
+  const handleNumberOfPointsPerQuadratChange = (event) => {
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'num_points_per_quadrat',
+      validationProperties: numberOfPointsPerQuadratValidationProperties,
+      validationPath: NUM_POINTS_PER_QUADRAT_VALIDATION_PATH,
+    })
+    formik.handleChange(event)
   }
   const handleVisibilityChange = (event) => {
-    formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
       inputName: 'visibility',
       validationProperties: visibilityValidationProperties,
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
+    formik.handleChange(event)
   }
   const handleCurrentChange = (event) => {
-    formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
       inputName: 'current',
       validationProperties: currentValidationProperties,
       validationPath: CURRENT_VALIDATION_PATH,
     })
+    formik.handleChange(event)
+  }
+  const handleRelativeDepthChange = (event) => {
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'relative_depth',
+      validationProperties: relativeDepthValidationProperties,
+      validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
+    })
+    formik.handleChange(event)
   }
   const handleTideChange = (event) => {
-    formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
       inputName: 'tide',
       validationProperties: tideValidationProperties,
       validationPath: TIDE_VALIDATION_PATH,
     })
+    formik.handleChange(event)
   }
+
   const handleNotesChange = (event) => {
     formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
       inputName: 'notes',
       validationProperties: notesValidationProperties,
       validationPath: NOTES_VALIDATION_PATH,
-    })
-  }
-
-  const handleSampleTimeChange = (event) => {
-    formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
-      inputName: 'sample_time',
-      validationProperties: sampleTimeValidationProperties,
-      validationPath: SAMPLE_TIME_VALIDATION_PATH,
-    })
-  }
-
-  const handleDepthChange = (event) => {
-    formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
-      inputName: 'depth',
-      validationProperties: depthValidationProperties,
-      validationPath: DEPTH_VALIDATION_PATH,
     })
   }
 
@@ -310,11 +294,11 @@ const FishbeltTransectInputs = ({
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
-              validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
+              validationPath: LENGTH_SURVEYED_VALIDATION_PATH,
             })
           }}
           resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: LENGHT_SURVEYED_VALIDATION_PATH })
+            resetNonObservationFieldValidations({ validationPath: LENGTH_SURVEYED_VALIDATION_PATH })
           }}
           {...validationPropertiesWithDirtyResetOnInputChange(
             lengthSurveyedValidationProperties,
@@ -324,64 +308,67 @@ const FishbeltTransectInputs = ({
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
         />
-        <InputRadioWithLabelAndValidation
-          label="Width"
+        <InputWithLabelAndValidation
+          label="Quadrat Size"
           required={true}
-          id="width"
-          testId="width"
-          options={transectWidthSelectOptions}
+          id="quadrat_size"
+          testId="quadrat_size"
+          type="number"
+          unit="m2"
+          step="any"
           ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
+            ignoreNonObservationFieldValidations({ validationPath: QUADRAT_SIZE_VALIDATION_PATH })
           }}
           resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
+            resetNonObservationFieldValidations({ validationPath: QUADRAT_SIZE_VALIDATION_PATH })
           }}
-          {...validationPropertiesWithDirtyResetOnInputChange(widthValidationProperties, 'width')}
+          {...quadratSizeValidationProperties}
           onBlur={formik.handleBlur}
-          value={formik.values.width}
-          name="width"
-          onChange={handleWidthChange}
+          value={formik.values.quadrat_size}
+          onChange={handleQuadratSizeChange}
         />
-        <InputRadioWithLabelAndValidation
-          label="Fish Size Bin"
+        <InputWithLabelAndValidation
+          label="Number of Quadrats"
           required={true}
-          id="size_bin"
-          testId="size_bin"
-          name="fish-size-bin"
-          options={fishSizeBinSelectOptions}
+          id="num_quadrats"
+          testId="num_quadrats"
+          type="number"
           ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
+            ignoreNonObservationFieldValidations({ validationPath: NUM_QUADRATS_VALIDATION_PATH })
           }}
           resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
+            resetNonObservationFieldValidations({ validationPath: NUM_QUADRATS_VALIDATION_PATH })
           }}
-          {...validationPropertiesWithDirtyResetOnInputChange(
-            sizeBinValidationProperties,
-            'size_bin',
-          )}
-          value={formik.values.size_bin}
-          onChange={handleSizeBinChange}
-        />
-        <InputRadioWithLabelAndValidation
-          label="Reef Slope"
-          id="reef_slope"
-          testId="reef_slope"
-          options={reefSlopeSelectOptions}
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
-          }}
-          {...reefSlopeValidationProperties}
+          {...numberOfQuadratsValidationProperties}
           onBlur={formik.handleBlur}
-          value={formik.values.reef_slope}
-          name="reef_slope"
-          onChange={handleReefSlopeChange}
+          value={formik.values.num_quadrats}
+          onChange={handleNumberOfQuadratsChange}
+        />
+        <InputWithLabelAndValidation
+          label="Number of Points per Quadrat"
+          required={true}
+          id="num_points_per_quadrat"
+          testId="num_points_per_quadrat"
+          type="number"
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({
+              validationPath: NUM_POINTS_PER_QUADRAT_VALIDATION_PATH,
+            })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({
+              validationPath: NUM_POINTS_PER_QUADRAT_VALIDATION_PATH,
+            })
+          }}
+          {...numberOfPointsPerQuadratValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.num_points_per_quadrat}
+          onChange={handleNumberOfPointsPerQuadratChange}
         />
         <InputRadioWithLabelAndValidation
           label="Visibility"
           id="visibility"
+          name="visibility"
           testId="visibility"
           options={visibilityOptions}
           ignoreNonObservationFieldValidations={() => {
@@ -391,14 +378,14 @@ const FishbeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
           }}
           {...visibilityValidationProperties}
-          onBlur={formik.handleBlur}
           value={formik.values.visibility}
-          name="visibility"
+          onBlur={formik.handleBlur}
           onChange={handleVisibilityChange}
         />
         <InputRadioWithLabelAndValidation
           label="Current"
           id="current"
+          name="current"
           testId="current"
           options={currentOptions}
           ignoreNonObservationFieldValidations={() => {
@@ -410,12 +397,12 @@ const FishbeltTransectInputs = ({
           {...currentValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.current}
-          name="current"
           onChange={handleCurrentChange}
         />
         <InputRadioWithLabelAndValidation
           label="Relative Depth"
           id="relative_depth"
+          name="relative_depth"
           testId="relative_depth"
           options={relativeDepthOptions}
           ignoreNonObservationFieldValidations={() => {
@@ -427,12 +414,12 @@ const FishbeltTransectInputs = ({
           {...relativeDepthValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
-          name="relative_depth"
           onChange={handleRelativeDepthChange}
         />
         <InputRadioWithLabelAndValidation
           label="Tide"
           id="tide"
+          name="tide"
           testId="tide"
           options={tideOptions}
           ignoreNonObservationFieldValidations={() => {
@@ -444,7 +431,6 @@ const FishbeltTransectInputs = ({
           {...tideValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
-          name="tide"
           onChange={handleTideChange}
         />
         <TextareaWithLabelAndValidation
@@ -467,20 +453,19 @@ const FishbeltTransectInputs = ({
   )
 }
 
-FishbeltTransectInputs.propTypes = {
+TransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
+  collectRecord: benthicPhotoQuadratPropType,
   choices: choicesPropType.isRequired,
-  collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
   handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  onSizeBinChange: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
-FishbeltTransectInputs.defaultProps = {
+TransectInputs.defaultProps = {
   collectRecord: undefined,
 }
 
-export default FishbeltTransectInputs
+export default TransectInputs

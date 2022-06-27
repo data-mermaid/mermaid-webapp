@@ -283,7 +283,7 @@ const FishBeltObservationTable = ({
 
       const validationsMarkup = (
         <CellValidation>
-          {isObservationValid ? <span aria-label="Passed validation">&nbsp;</span> : null}
+          {isObservationValid ? <span aria-label="Passed Validation">&nbsp;</span> : null}
           {hasErrorValidation || hasWarningValidation ? (
             <TableValidationList>
               {observationValidationMessages.map((validation) => (

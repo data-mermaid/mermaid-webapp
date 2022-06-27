@@ -124,7 +124,7 @@ const CollectRecordsMixin = (Base) =>
       return length === undefined ? noSizeLabel : `${length}m`
     }
 
-    saveCollectRecord = async function saveCollectRecord({
+    saveSampleUnit = async function saveSampleUnit({
       record,
       profileId,
       projectId,
@@ -319,9 +319,9 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    validateFishBelt = async function validateFishbelt({ recordId, projectId }) {
+    validateSampleUnit = async function validateSampleUnit({ recordId, projectId }) {
       if (!recordId || !projectId) {
-        throw new Error('validateFishBelt expects record, profileId, and projectId parameters')
+        throw new Error('validateSampleUnit expects record, profileId, and projectId parameters')
       }
 
       if (this._isOnlineAuthenticatedAndReady) {
