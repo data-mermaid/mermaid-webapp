@@ -9,6 +9,7 @@ import {
   InputAutocompleteContainer,
   NewOptionButton,
   ObservationAutocomplete,
+  ObservationsSummaryStats,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
@@ -31,6 +32,8 @@ import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumbe
 import language from '../../../../language'
 import { getOptions } from '../../../../library/getOptions'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -122,6 +125,45 @@ const BenthicPhotoQuadratObservationTable = ({
     setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
+
+  const observationCategoryPercentages = useMemo(() => {
+    const getCategory = (benthicAttributeId) =>
+      benthicAttributeOptions.find((benthic) => benthic.value === benthicAttributeId)
+
+    const addTopCategoryInfoToObservation = observationsState.map((obs) => {
+      const benthicAttribute = getCategory(obs.attribute)
+
+      return { ...obs, top_level_category: benthicAttribute?.topLevelCategory }
+    })
+
+    const categoryGroups = addTopCategoryInfoToObservation.reduce((accumulator, obs) => {
+      const benthicAttributeName = getCategory(obs.top_level_category)?.label
+
+      accumulator[benthicAttributeName] = accumulator[benthicAttributeName] || []
+      accumulator[benthicAttributeName].push(obs)
+
+      return accumulator
+    }, {})
+
+    const categoryNames = Object.keys(categoryGroups).sort()
+    const totalNumberOfPoints = summarizeArrayObjectValuesByProperty(
+      observationsState,
+      'num_points',
+    )
+    const categoryPercentages = categoryNames.map((category) => {
+      const categoryPercentage =
+        (summarizeArrayObjectValuesByProperty(categoryGroups[category], 'num_points') /
+          totalNumberOfPoints) *
+        100
+
+      return {
+        benthicAttribute: category,
+        benthicAttributePercentage: roundToOneDecimal(categoryPercentage),
+      }
+    })
+
+    return categoryPercentages
+  }, [observationsState, benthicAttributeOptions])
 
   const observationsRows = useMemo(() => {
     const growthFormOptions = getOptions(choices.growthforms)
@@ -417,6 +459,24 @@ const BenthicPhotoQuadratObservationTable = ({
           <ButtonPrimary type="button" onClick={handleAddObservation}>
             <IconPlus /> Add Row
           </ButtonPrimary>
+          <ObservationsSummaryStats>
+            <tbody>
+              {observationCategoryPercentages.map((obs) => {
+                const isPercentageAvailable = !Number.isNaN(
+                  parseFloat(obs.benthicAttributePercentage),
+                )
+
+                return (
+                  isPercentageAvailable && (
+                    <Tr key={obs.benthicAttribute}>
+                      <Th>{`% ${obs.benthicAttribute}`}</Th>
+                      <Td>{obs.benthicAttributePercentage}</Td>
+                    </Tr>
+                  )
+                )
+              })}
+            </tbody>
+          </ObservationsSummaryStats>
         </UnderTableRow>
       </InputWrapper>
     </>

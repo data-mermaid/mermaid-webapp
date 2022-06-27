@@ -6,3 +6,11 @@ export const getOptions = (choices, hasData = true) => {
     value: id,
   }))
 }
+
+export const getBenthicOptions = (benthicChoices) => {
+  return benthicChoices.map(({ name, id, top_level_category }) => ({
+    label: name,
+    value: id,
+    topLevelCategory: top_level_category,
+  }))
+}
