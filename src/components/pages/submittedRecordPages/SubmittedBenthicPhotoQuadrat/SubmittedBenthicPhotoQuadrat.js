@@ -5,9 +5,9 @@ import React, { useState, useEffect } from 'react'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import { H2 } from '../../../generic/text'
 import { IconPen } from '../../../icons'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import { getOptions } from '../../../../library/getOptions'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
@@ -22,10 +22,12 @@ import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import RecordFormTitle from '../../../RecordFormTitle'
 import { RowSpaceBetween } from '../../../generic/positioning'
+import { FormSubTitle } from '../SubmittedFormPage.styles'
+import { userRole } from '../../../../App/mermaidData/userRole'
 
 const SubmittedBenthicPhotoQuadrat = () => {
   const currentProjectPath = useCurrentProjectPath()
-  const { currentUser } = useCurrentUser()
+  const { getProjectRole } = useCurrentUser()
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const history = useHistory()
@@ -44,6 +46,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
   const [submittedRecord, setSubmittedRecord] = useState()
   const [subNavNode, setSubNavNode] = useState(null)
 
+  const isAdminUser = getProjectRole(projectId) === userRole.admin
   const observers = submittedRecord?.observers ?? []
 
   const _getSupportingData = useEffect(() => {
@@ -60,31 +63,43 @@ const SubmittedBenthicPhotoQuadrat = () => {
         ),
       ]
 
-      Promise.all(promises).then(
-        ([
-          sitesResponse,
-          managementRegimesResponse,
-          choicesResponse,
-          benthicAttributes,
-          submittedRecordResponse,
-        ]) => {
-          if (isMounted.current) {
-            const recordNameForSubNode = getRecordName(
-              submittedRecordResponse,
-              sitesResponse,
-              'quadrat_transect',
-            )
+      Promise.all(promises)
+        .then(
+          ([
+            sitesResponse,
+            managementRegimesResponse,
+            choicesResponse,
+            benthicAttributes,
+            submittedRecordResponse,
+          ]) => {
+            if (isMounted.current) {
+              const recordNameForSubNode = getRecordName(
+                submittedRecordResponse,
+                sitesResponse,
+                'quadrat_transect',
+              )
 
-            setSites(sitesResponse)
-            setManagementRegimes(managementRegimesResponse)
-            setChoices(choicesResponse)
-            setBenthicAttributeOptions(benthicAttributes)
-            setSubmittedRecord(submittedRecordResponse)
-            setSubNavNode(recordNameForSubNode)
+              const updateBenthicAttributeOptions = getOptions(benthicAttributes, false)
+
+              setSites(sitesResponse)
+              setManagementRegimes(managementRegimesResponse)
+              setChoices(choicesResponse)
+              setBenthicAttributeOptions(updateBenthicAttributeOptions)
+              setSubmittedRecord(submittedRecordResponse)
+              setSubNavNode(recordNameForSubNode)
+              setIsLoading(false)
+            }
+          },
+        )
+        .catch((error) => {
+          const errorStatus = error.response?.status
+
+          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+            setIdsNotAssociatedWithData([projectId, submittedRecordId])
             setIsLoading(false)
           }
-        },
-      )
+          toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+        })
     }
   }, [
     databaseSwitchboardInstance,
@@ -98,7 +113,11 @@ const SubmittedBenthicPhotoQuadrat = () => {
   const handleMoveToCollect = () => {
     setIsMoveToButtonDisabled(true)
     databaseSwitchboardInstance
-      .moveToCollect({ projectId, submittedRecordId })
+      .moveToCollect({
+        projectId,
+        submittedRecordId,
+        sampleUnitMethod: 'benthicphotoquadrattransectmethods',
+      })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
@@ -130,19 +149,18 @@ const SubmittedBenthicPhotoQuadrat = () => {
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
-            <H2>Observers</H2>
+            <FormSubTitle>Observers</FormSubTitle>
             <ul>
               {observers.map((observer) => (
                 <li key={observer.id}>{observer.profile_name}</li>
               ))}
             </ul>
 
-            {/* <SubmittedBenthicPhotoQuadratObservationTable
+            <SubmittedBenthicPhotoQuadratObservationTable
               choices={choices}
-              fishNameOptions={fishNameOptions}
-              fishNameConstants={fishNameConstants}
+              benthicAttributeOptions={benthicAttributeOptions}
               submittedRecord={submittedRecord}
-            /> */}
+            />
           </>
         ) : (
           <PageUnavailableOffline />
@@ -154,15 +172,17 @@ const SubmittedBenthicPhotoQuadrat = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.submittedFishBeltForm.title}`}
-              sampleUnit="fishbelt_transect"
+              primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.benthicPhotoQuadratForm.title}`}
+              sampleUnit="quadrat_transect"
             />
             <RowSpaceBetween>
               <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
-              <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
-                <IconPen />
-                Edit Sample Unit - move to Collecting
-              </ButtonSecondary>
+              {isAdminUser && (
+                <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
+                  <IconPen />
+                  Edit Sample Unit - move to Collecting
+                </ButtonSecondary>
+              )}
             </RowSpaceBetween>
           </>
         )
