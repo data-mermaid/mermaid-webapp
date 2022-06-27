@@ -17,6 +17,8 @@ import { getFakeAccessToken } from './getFakeAccessToken'
 import { CurrentUserProvider } from '../App/CurrentUserContext'
 import { getMockDexieInstancesAllSuccess } from './mockDexie'
 import { DexiePerUserDataInstanceProvider } from '../App/dexiePerUserDataInstanceContext'
+import { BellNotificationProvider } from '../App/BellNotificationContext'
+import mockMermaidData from './mockMermaidData'
 
 const fakeCurrentUser = {
   id: 'fake-id',
@@ -39,7 +41,12 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
           <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
+            <BellNotificationProvider value={{
+              notifications: mockMermaidData.notifications,
+              deleteNotification: () => { }
+            }}>
             {children}
+            </BellNotificationProvider>
           </CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
@@ -58,7 +65,11 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
     <MemoryRouter initialEntries={initialEntries}>
       <ThemeProvider theme={theme}>
         <SyncStatusProvider>
-          <CurrentUserProvider value={undefined}>{children}</CurrentUserProvider>
+          <CurrentUserProvider value={undefined}>
+            <BellNotificationProvider value={undefined}>
+              {children}
+            </BellNotificationProvider>
+          </CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
     </MemoryRouter>

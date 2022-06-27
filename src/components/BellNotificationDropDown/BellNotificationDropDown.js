@@ -28,8 +28,9 @@ const getUpdatedOnText = (updatedOn) => {
 const BellNotificationDropDown = () => {
   const { notifications, deleteNotification } = useBellNotifications()
 
-  const dismissNotification = (id) => {
+  const dismissNotification = (event, id) => {
     deleteNotification(id)
+    event.stopPropogation()
   }
 
   return <NotificationCardWrapper>
@@ -41,7 +42,7 @@ const BellNotificationDropDown = () => {
           <NotificationContent>
             <NotificationHeader>
               <h1>{notification.title}</h1>
-              <NotificationCloseButton onClick={() => dismissNotification(notification.id)}>
+              <NotificationCloseButton onClick={(event) => dismissNotification(event, notification.id)}>
                 <IconClose aria-label="close" />
               </NotificationCloseButton>
             </NotificationHeader>

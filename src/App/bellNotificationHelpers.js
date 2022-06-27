@@ -28,7 +28,7 @@ export const getBellNotifications = async ({
         return notificationsResponse
       })
       .catch((error) => {
-        console.error(error.response)
+        console.error(error.response || error)
       })
   }
 
@@ -53,7 +53,8 @@ export const deleteBellNotification = async (
         await getAuthorizationHeaders(getAccessToken),
       )
       .catch((error) => {
-        console.error(error.response)
+        console.error(error.response || error)
+        throw error
       })
   }
 
