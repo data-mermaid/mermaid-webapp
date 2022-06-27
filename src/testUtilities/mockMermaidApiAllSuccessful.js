@@ -19,14 +19,10 @@ const mockMermaidApiAllSuccessful = setupServer(
     return res(ctx.status(200))
   }),
   rest.get(`${apiBaseUrl}/notifications`, (req, res, ctx) => {
-    const response = {
-      data: {
-        ...mockMermaidData.notifications,
-      },
-      status_code: 200,
-    }
 
-    return res(ctx.json(response))
+    return res(ctx.json({
+      ...mockMermaidData.notifications
+    }))
   }),
   rest.post(`${apiBaseUrl}/push/`, (req, res, ctx) => {
     const reqCollectRecords = req.body.collect_records ?? []
