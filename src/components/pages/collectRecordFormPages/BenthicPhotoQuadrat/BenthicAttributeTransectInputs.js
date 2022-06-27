@@ -288,6 +288,7 @@ const TransectInputs = ({
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
+          required={true}
           id="len_surveyed"
           testId="len_surveyed"
           type="number"
