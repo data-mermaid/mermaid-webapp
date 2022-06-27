@@ -2,28 +2,28 @@ import { toast } from 'react-toastify'
 import { useParams, useHistory } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 
-import { ButtonSecondary } from '../../generic/buttons'
-import { ContentPageLayout } from '../../Layout'
-import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
-import { getFishNameConstants } from '../../../App/mermaidData/getFishNameConstants'
-import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
-import { H2 } from '../../generic/text'
-import { IconPen } from '../../icons'
-import { RowSpaceBetween } from '../../generic/positioning'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
-import { getToastArguments } from '../../../library/getToastArguments'
-import PageUnavailableOffline from '../PageUnavailableOffline'
-import RecordFormTitle from '../../RecordFormTitle'
-import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
-import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import useIsMounted from '../../../library/useIsMounted'
-import { getRecordName } from '../../../library/getRecordName'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { ButtonSecondary } from '../../../generic/buttons'
+import { ContentPageLayout } from '../../../Layout'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
+import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
+import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
+import { IconPen } from '../../../icons'
+import { RowSpaceBetween } from '../../../generic/positioning'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useOnlineStatus } from '../../../../library/onlineStatusContext'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import language from '../../../../language'
+import { getToastArguments } from '../../../../library/getToastArguments'
+import PageUnavailableOffline from '../../PageUnavailableOffline'
+import RecordFormTitle from '../../../RecordFormTitle'
+import SubmittedFishBeltInfoTable from './SubmittedFishBeltInfoTable'
+import SubmittedFishBeltObservationTable from './SubmittedFishBeltObservationTable'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import useIsMounted from '../../../../library/useIsMounted'
+import { getRecordName } from '../../../../library/getRecordName'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import { FormSubTitle } from '../SubmittedFormPage.styles'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -56,9 +56,10 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getFishSpecies(),
         databaseSwitchboardInstance.getFishGenera(),
         databaseSwitchboardInstance.getFishFamilies(),
-        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(
+        databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
           projectId,
           submittedRecordId,
+          'beltfishtransectmethods',
         ),
         databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
@@ -133,7 +134,7 @@ const SubmittedFishBelt = () => {
   const handleMoveToCollect = () => {
     setIsMoveToButtonDisabled(true)
     databaseSwitchboardInstance
-      .moveToCollect({ projectId, submittedRecordId })
+      .moveToCollect({ projectId, submittedRecordId, sampleUnitMethod: 'beltfishtransectmethods' })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
@@ -165,7 +166,7 @@ const SubmittedFishBelt = () => {
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
-            <H2>Observers</H2>
+            <FormSubTitle>Observers</FormSubTitle>
             <ul>
               {observers.map((observer) => (
                 <li key={observer.id}>{observer.profile_name}</li>

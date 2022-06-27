@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
-import { Table, Tr, Td } from '../generic/Table/table'
+import { Table, Tr, Td } from '../../../generic/Table/table'
 import {
   managementRegimePropType,
   sitePropType,
   choicesPropType,
   submittedFishBeltPropType,
-} from '../../App/mermaidData/mermaidDataProptypes'
-import { getObjectById } from '../../library/getObjectById'
+} from '../../../../App/mermaidData/mermaidDataProptypes'
+import { getObjectById } from '../../../../library/getObjectById'
 
 const TdKey = styled(Td)`
   white-space: nowrap;
