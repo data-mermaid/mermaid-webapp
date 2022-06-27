@@ -41,11 +41,13 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
           <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
-            <BellNotificationProvider value={{
-              notifications: mockMermaidData.notifications,
-              deleteNotification: () => { }
-            }}>
-            {children}
+            <BellNotificationProvider
+              value={{
+                notifications: mockMermaidData.notifications,
+                deleteNotification: () => {},
+              }}
+            >
+              {children}
             </BellNotificationProvider>
           </CurrentUserProvider>
         </SyncStatusProvider>
@@ -66,9 +68,7 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
       <ThemeProvider theme={theme}>
         <SyncStatusProvider>
           <CurrentUserProvider value={undefined}>
-            <BellNotificationProvider value={undefined}>
-              {children}
-            </BellNotificationProvider>
+            <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
           </CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
