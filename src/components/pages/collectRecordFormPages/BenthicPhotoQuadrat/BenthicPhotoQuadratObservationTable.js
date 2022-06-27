@@ -401,7 +401,7 @@ const BenthicPhotoQuadratObservationTable = ({
                   Benthic Attribute <RequiredIndicator />
                 </Th>
                 <Th align="right" id="growth-form-label">
-                  Growth Form <RequiredIndicator />
+                  Growth Form
                 </Th>
                 <Th align="right" id="number-of-points-label">
                   Number of Points <RequiredIndicator />

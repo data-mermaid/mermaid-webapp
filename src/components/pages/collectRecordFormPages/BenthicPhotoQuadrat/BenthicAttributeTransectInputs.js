@@ -288,6 +288,7 @@ const TransectInputs = ({
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
+          required={true}
           id="len_surveyed"
           testId="len_surveyed"
           type="number"
@@ -314,6 +315,7 @@ const TransectInputs = ({
           testId="quadrat_size"
           type="number"
           unit="m2"
+          step="any"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: QUADRAT_SIZE_VALIDATION_PATH })
           }}
