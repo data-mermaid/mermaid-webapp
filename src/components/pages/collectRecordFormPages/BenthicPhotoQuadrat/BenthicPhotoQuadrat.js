@@ -156,7 +156,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
-              console.log(collectRecordResponse)
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
