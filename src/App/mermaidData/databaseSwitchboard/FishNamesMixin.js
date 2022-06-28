@@ -45,11 +45,13 @@ const FishNameMixin = (Base) =>
           newFishObject,
         )
 
-        return this._apiSyncInstance.pushThenPullSpecies().then((response) => {
-          const newFishSpeciesFromApi = response.data.fish_species.updates[0]
+        return this._apiSyncInstance
+          .pushThenPullFishOrBenthicAttributes('fish_species')
+          .then((response) => {
+            const newFishSpeciesFromApi = response.data.fish_species.updates[0]
 
-          return newFishSpeciesFromApi
-        })
+            return newFishSpeciesFromApi
+          })
       }
       if (this._isOfflineAuthenticatedAndReady) {
         return this._dexiePerUserDataInstance.fish_species

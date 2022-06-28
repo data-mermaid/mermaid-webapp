@@ -1,37 +1,36 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
 import {
-  fishBeltPropType,
   managementRegimePropType,
   sitePropType,
+  benthicPhotoQuadratPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
-import { H2 } from '../../../generic/text'
-import { InputWrapper } from '../../../generic/form'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
+import { H2 } from '../../../generic/text'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
+import { InputWrapper } from '../../../generic/form'
+import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 
 const MANAGEMENT_VALIDATION_PATH = 'data.sample_event.management'
 const SAMPLE_DATE_VALIDATION_PATH = 'data.sample_event.sample_date'
 const SITE_VALIDATION_PATH = 'data.sample_event.site'
 
-const SampleInfoInputs = ({
+const SampleEventInputs = ({
   areValidationsShowing,
   collectRecord,
   formik,
+  managementRegimes,
+  sites,
   handleChangeForDirtyIgnoredInput,
   ignoreNonObservationFieldValidations,
-  managementRegimes,
   resetNonObservationFieldValidations,
-  sites,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
-  const hasData = false
-  const managementSelectOptions = getOptions(managementRegimes, hasData)
-  const siteSelectOptions = getOptions(sites, hasData)
+  const managementSelectOptions = getOptions(managementRegimes, false)
+  const siteSelectOptions = getOptions(sites, false)
   const validationsApiData = collectRecord?.validations?.results?.data
   const sample_event = validationsApiData?.sample_event
 
@@ -39,6 +38,7 @@ const SampleInfoInputs = ({
     sample_event?.site,
     areValidationsShowing,
   )
+
   const managementValidationProperties = getValidationPropertiesForInput(
     sample_event?.management,
     areValidationsShowing,
@@ -50,30 +50,30 @@ const SampleInfoInputs = ({
   )
 
   const handleSiteChange = (event) => {
-    formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
       inputName: 'site',
       validationProperties: siteValidationProperties,
       validationPath: SITE_VALIDATION_PATH,
     })
+    formik.handleChange(event)
   }
 
   const handleManagementChange = (event) => {
-    formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
       inputName: 'management',
       validationProperties: managementValidationProperties,
       validationPath: MANAGEMENT_VALIDATION_PATH,
     })
+    formik.handleChange(event)
   }
 
   const handleSampleDateChange = (event) => {
-    formik.handleChange(event)
     handleChangeForDirtyIgnoredInput({
       inputName: 'sample_date',
       validationProperties: sampleDateValidationProperties,
       validationPath: SAMPLE_DATE_VALIDATION_PATH,
     })
+    formik.handleChange(event)
   }
 
   return (
@@ -118,7 +118,6 @@ const SampleInfoInputs = ({
           value={formik.values.management}
           onChange={handleManagementChange}
         />
-
         <InputWithLabelAndValidation
           label="Sample Date"
           required={true}
@@ -145,20 +144,20 @@ const SampleInfoInputs = ({
   )
 }
 
-SampleInfoInputs.propTypes = {
+SampleEventInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
-  collectRecord: fishBeltPropType,
+  collectRecord: benthicPhotoQuadratPropType,
   formik: formikPropType.isRequired,
+  managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
+  sites: PropTypes.arrayOf(sitePropType).isRequired,
   handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
-  sites: PropTypes.arrayOf(sitePropType).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
-SampleInfoInputs.defaultProps = {
+SampleEventInputs.defaultProps = {
   collectRecord: undefined,
 }
 
-export default SampleInfoInputs
+export default SampleEventInputs

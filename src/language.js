@@ -39,6 +39,8 @@ const error = {
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   fishSpeciesSave:
     'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
+  attributeSave: (attribute) =>
+    `Something went Wrong. The new ${attribute} has not been saved. Please try proposing it again.`,
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
@@ -53,6 +55,8 @@ const error = {
   managementRegimeRecordUnavailable:
     'Management Regime record data is currently unavailable. Please try again.',
   managementRegimeSave: 'Something went wrong. The management regime has not been saved.',
+  notificationsUnavailable: 'Notifications are unavailable.',
+  notificationNotDeleted: 'Notification could not be removed.',
   projectSave: 'Something went wrong. The project has not been saved.',
   projectsUnavailable: 'Projects data is currently unavailable. Please try again.',
   siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again.',
@@ -66,6 +70,8 @@ const error = {
   userRecordsUnavailable: 'User records data is currently unavailable. Please try again.',
   projectHealthRecordsUnavailable:
     'Summary records data is currently unavailable. Please try again',
+  attributeAlreadyExists: (attribute) =>
+    `The proposed ${attribute} already exists in the list. The observation has been edited to show the existing ${attribute} selected.`,
 
   getIdsNotFoundDetails: (id) =>
     id.length > 1
@@ -119,6 +125,8 @@ const success = {
     }
   },
   userProfileUpdate: 'Profile updated',
+  attributeSave: (attribute) =>
+    `Proposed benthic ${attribute} saved. The observation has been edited to show it selected.`,
 }
 
 const deleteCollectRecord = {
@@ -133,25 +141,30 @@ const loadingIndicator = {
   loadingSecondary: 'Still working...',
 }
 
-const createFishSpecies = {
-  title: 'Add New Fish Species',
+const createNewOptionModal = {
+  addNewAttributeTitle: (attribute) => `Add New ${attribute}`,
   genus: 'Genus',
   species: 'Species',
+  newBenthicAttribute: 'Benthic Attribute',
+  benthicAttributeParent: 'Parent',
+  newBenthicAttributeName: 'Name',
   goToPage2: 'Next',
   cancel: 'Cancel',
-  confirmMessage:
-    'Your proposed new species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
   back: 'Back',
   details: 'Details',
   user: 'User',
   project: 'Project',
-  summaryText2:
-    'Your proposed new species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
+  proposedSummaryText: (attribute) =>
+    `Your proposed new ${attribute} will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.`,
   submit: 'Send to MERMAID for review',
 }
 
 const autocomplete = {
   noResultsDefault: 'No results found',
+}
+
+const header = {
+  noNotifications: 'There are currently no notifications'
 }
 
 const table = {
@@ -181,6 +194,7 @@ const pages = {
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',
+    newBenthicAttributeLink: 'Propose New Benthic Attribute...',
   },
   projectInfo: {
     title: 'Project Info',
@@ -251,8 +265,8 @@ const pages = {
     missingLabelNumber: 'missing number',
   },
   benthicPhotoQuadratForm: {
-    title: 'Benthic Photo Quadrat'
-  }
+    title: 'Benthic Photo Quadrat',
+  },
 }
 
 const navigateAwayPrompt =
@@ -263,14 +277,27 @@ const getValidationMessage = (validation, projectId = '') => {
 
   const validationMessages = {
     all_equal: () => 'All observations are the same',
+    diff_num_quadrats: () => 'Defined number of quadrats does not match',
     duplicate_fishbelt_transect: () =>
       getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
     duplicate_quadrat_collection: () =>
       `Duplicate sample unit ${context?.duplicate_transect_method}`,
+    duplicate_quadrat_transect: () => `Duplicate sample unit ${context?.duplicate_transect_method}`,
     duplicate_transect: () => 'Transect already exists',
     duplicate_values: () => 'Duplicate',
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
     future_sample_date: () => 'Sample date is in the future',
+    invalid_depth: () => 'Invalid depth',
+    invalid_fish_count: () => 'Invalid fish count',
+    invalid_fishbelt_transect: () => 'Invalid sample unit',
+    invalid_number_of_points: () => 'Invalid number of points per quadrat',
+    invalid_percent_value: () => 'Not a valid percent value',
+    invalid_quadrat_collection: () => 'Invalid sample unit',
+    invalid_quadrat_numbers: () =>
+      `Number of points entered for quadrat numbers ${context?.invalid_quadrat_numbers}, does not match defined number of points per quadrat`,
+    invalid_quadrat_size: () => 'Invalid quadrat size',
+    invalid_quadrat_transect: () => 'Invalid quadrat transect',
+    invalid_sample_date: () => 'Invalid date',
     len_surveyed_out_of_range: () =>
       `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
     low_density: () => `Fish biomass less than ${context?.biomass_range[1]} kg/ha`,
@@ -279,6 +306,7 @@ const getValidationMessage = (validation, projectId = '') => {
       `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`,
     max_fish_size: () => 'Fish size is larger than species max size',
     minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
+    missing_quadrat_numbers: () => `Missing quadrat numbers ${context?.missing_quadrat_numbers}`,
     no_region_match: () => 'Attributes outside of site region',
     not_part_of_fish_family_subset: () =>
       'There are fish that are not part of project defined fish families',
@@ -287,13 +315,6 @@ const getValidationMessage = (validation, projectId = '') => {
     not_unique_management: () =>
       'Management Regime: Other sample events at this site have a different management regime',
     high_density: () => `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`,
-    invalid_depth: () => 'Invalid depth',
-    invalid_fish_count: () => 'Invalid fish count',
-    invalid_fishbelt_transect: () => 'Invalid sample unit',
-    invalid_percent_value: () => 'Not a valid percent value',
-    invalid_quadrat_collection: () => 'Invalid sample unit',
-    invalid_quadrat_size: () => 'Invalid quadrat size',
-    invalid_sample_date: () => 'Invalid date',
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
@@ -316,10 +337,11 @@ export default {
   deleteCollectRecord,
   loadingIndicator,
   autocomplete,
+  header,
   table,
   title,
   pages,
-  createFishSpecies,
+  createNewOptionModal,
   navigateAwayPrompt,
   getValidationMessage,
   inlineMessage,

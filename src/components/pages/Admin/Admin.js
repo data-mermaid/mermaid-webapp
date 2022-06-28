@@ -169,7 +169,7 @@ const Admin = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
-  const { currentUser, getProjectRole } = useCurrentUser()
+  const { getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
   const isAdminUser = getProjectRole(projectId) === userRole.admin
 
@@ -212,7 +212,7 @@ const Admin = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, currentUser])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),

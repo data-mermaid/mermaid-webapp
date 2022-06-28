@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types'
 
+import BenthicAttributesMixin from './BenthicAttributesMixin'
 import CollectRecordsMixin from './CollectRecordsMixin'
 import DatabaseSwitchboardState from './DatabaseSwitchboardState'
 import ManagementRegimesMixin from './ManagementRegimesMixin'
@@ -11,11 +12,13 @@ import SubmittedRecordsMixin from './SubmittedRecordsMixin'
 import ProjectHealthMixin from './ProjectHealthMixin'
 
 class DatabaseSwitchboard extends ProjectHealthMixin(
-  FishNameMixin(
-    SubmittedRecordsMixin(
-      SitesMixin(
-        ProjectsMixin(
-          ChoicesMixin(ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState))),
+  BenthicAttributesMixin(
+    FishNameMixin(
+      SubmittedRecordsMixin(
+        SitesMixin(
+          ProjectsMixin(
+            ChoicesMixin(ManagementRegimesMixin(CollectRecordsMixin(DatabaseSwitchboardState))),
+          ),
         ),
       ),
     ),
@@ -44,14 +47,14 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getSiteRecordsForUIDisplay: PropTypes.func,
   saveSite: PropTypes.func,
   getSubmittedRecords: PropTypes.func,
-  getSubmittedFishBeltTransectRecords: PropTypes.func,
-  getSubmittedFishBeltTransectRecord: PropTypes.func,
+  getSubmittedSampleUnitRecord: PropTypes.func,
   getSubmittedRecordsForUIDisplay: PropTypes.func,
   moveToCollect: PropTypes.func,
   exportToCSV: PropTypes.func,
   saveFishBelt: PropTypes.func,
   deleteFishBelt: PropTypes.func,
-  validateFishBelt: PropTypes.func,
+  validateSampleUnit: PropTypes.func,
+  saveSampleUnit: PropTypes.func,
 })
 
 export default DatabaseSwitchboard

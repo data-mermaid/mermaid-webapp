@@ -1,13 +1,13 @@
-import React from 'react'
 import PropTypes from 'prop-types'
+import React from 'react'
 
-import { H2 } from '../generic/text'
-import { InputWrapper } from '../generic/form'
-import { formikPropType } from '../../library/formikPropType'
-import { observersPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import InputCheckboxGroupWithLabelAndValidation from '../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
-import { getObserverNameOptions } from '../../library/observerHelpers'
-import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
+import { formikPropType } from '../../../../library/formikPropType'
+import { getObserverNameOptions } from '../../../../library/observerHelpers'
+import { H2 } from '../../../generic/text'
+import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
+import { InputWrapper } from '../../../generic/form'
+import { observersPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import mermaidInputsPropTypes from '../../../mermaidInputs/mermaidInputsPropTypes'
 
 const ObserversInput = ({
   formik,
@@ -60,7 +60,7 @@ const ObserversInput = ({
 ObserversInput.propTypes = {
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
-  observers: PropTypes.arrayOf(observersPropType).isRequired,
+  observers: observersPropType.isRequired,
   onObserversChange: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPath: PropTypes.string.isRequired,

@@ -3612,15 +3612,45 @@ const benthic_attributes = [
   },
 ]
 
+const notifications = {
+  count: 2,
+  next: null,
+  previous: null,
+  results: [
+    {
+      id: '7dc13ff2-e865-46fb-952c-6373975e1bb4',
+      updated_by: null,
+      created_on: '2022-06-24T23:46:36.382165Z',
+      updated_on: '2022-06-24T23:46:36.383083Z',
+      title: 'Some Info',
+      status: 'info',
+      description: 'This is an info description',
+      created_by: null,
+      owner: '469dd4ae-0d1a-49d1-bdcd-52739cb2d6e6',
+    },
+    {
+      id: 'abd4dbf9-eb79-493f-808b-63d8f90fe637',
+      updated_by: null,
+      created_on: '2022-06-24T23:46:36.399152Z',
+      updated_on: '2022-06-24T23:46:36.399186Z',
+      title: 'Some Warning',
+      status: 'warning',
+      description: 'This is a warning description',
+      created_by: null,
+      owner: '469dd4ae-0d1a-49d1-bdcd-52739cb2d6e6',
+    },
+  ],
+}
+
 const mockMermaidData = {
   benthic_attributes,
   choices,
   collect_records,
-
   fish_families,
   fish_genera,
   fish_species,
   fishBeltTransectMethods,
+  notifications,
   project_managements,
   project_profiles,
   project_sites,

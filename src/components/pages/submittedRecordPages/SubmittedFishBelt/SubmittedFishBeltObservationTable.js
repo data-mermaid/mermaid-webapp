@@ -1,49 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components/macro'
-import { inputOptionsPropTypes } from '../../library/miscPropTypes'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import {
   choicesPropType,
   submittedFishBeltPropType,
-} from '../../App/mermaidData/mermaidDataProptypes'
-import { Table, Tr, Td, Th } from '../generic/Table/table'
-import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
-import { RowRight } from '../generic/positioning'
-import { getObservationBiomass } from '../pages/collectRecordFormPages/FishBelt/fishbeltBiomas'
-import { roundToOneDecimal } from '../../library/numbers/roundToOneDecimal'
-import { summarizeArrayObjectValuesByProperty } from '../../library/summarizeArrayObjectValuesByProperty'
-import language from '../../language'
-import theme from '../../theme'
-
-const TheadItem = styled(Th)``
-const StyledH2 = styled('h2')`
-  padding: 0 ${theme.spacing.medium};
-`
-
-const ObservationsSummaryStats = styled(Table)`
-  width: 25%;
-  table-layout: auto;
-  min-width: auto;
-  max-width: 40rem;
-  border: solid 1px ${theme.color.secondaryColor};
-  tr:nth-child(even),
-  tr:nth-child(odd) {
-    background-color: ${theme.color.white};
-  }
-  ${mediaQueryTabletLandscapeOnly(css`
-    font-size: smaller;
-  `)}
-`
-
-const UnderTableRow = styled(RowRight)`
-  display: flex;
-  align-items: flex-end;
-  margin-top: ${theme.spacing.medium};
-  ${mediaQueryTabletLandscapeOnly(css`
-    flex-direction: column;
-    gap: ${theme.spacing.small};
-  `)}
-`
+} from '../../../../App/mermaidData/mermaidDataProptypes'
+import { Table, Tr, Td, Th } from '../../../generic/Table/table'
+import { getObservationBiomass } from '../../collectRecordFormPages/FishBelt/fishbeltBiomas'
+import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
+import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
+import language from '../../../../language'
+import {
+  TheadItem,
+  FormSubTitle,
+  ObservationsSummaryStats,
+  UnderTableRow,
+} from '../SubmittedFormPage.styles'
 
 const SubmittedFishBeltObservationTable = ({
   choices,
@@ -95,7 +67,7 @@ const SubmittedFishBeltObservationTable = ({
 
   return (
     <>
-      <StyledH2 id="table-label">Observations</StyledH2>
+      <FormSubTitle id="table-label">Observations</FormSubTitle>
       <Table>
         <thead>
           <Tr>
