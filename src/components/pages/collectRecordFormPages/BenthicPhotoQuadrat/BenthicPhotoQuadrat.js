@@ -298,7 +298,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     setSubmitButtonState(buttonGroupStates.submitting)
 
     databaseSwitchboardInstance
-      .submitFishBelt({ recordId, projectId })
+      .submitSampleUnit({ recordId, projectId })
       .then(() => {
         toast.success(...getToastArguments(language.success.collectRecordSubmit))
         history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
