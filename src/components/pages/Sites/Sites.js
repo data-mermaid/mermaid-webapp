@@ -161,11 +161,13 @@ const Sites = () => {
 
   const countries_name = []
 
-  for (const [key, value] of Object.entries(choices)) {
-    for (const [key2, value2] of Object.entries(value)) {
+  for (const [, value] of Object.entries(choices)) {
+    for (const [, value2] of Object.entries(value)) {
       for (let i = 0; i < value2.length; i++) {
+        // eslint-disable-next-line max-depth
         for (let j = 0; j < country.length; j++) {
-          if (value2[i].id == country[j]) {
+          // eslint-disable-next-line max-depth
+          if (value2[i].id === country[j]) {
             countries_name.push(value2[i].name)
           }
         }
