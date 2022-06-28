@@ -7,9 +7,12 @@ import { useHistory, useParams } from 'react-router-dom'
 import BenthicAttributeTransectInputs from './BenthicAttributeTransectInputs'
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
+import { ButtonCaution } from '../../../generic/buttons'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import { DeleteRecordButtonCautionWrapper } from '../CollectingFormPage.Styles'
+import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
@@ -68,6 +71,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [observationToAddAttributesTo, setObservationToAddAttributesTo] = useState()
   const [projectName, setProjectName] = useState('')
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [subNavNode, setSubNavNode] = useState(null)
@@ -92,6 +96,12 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
 
   const closeNewBenthicAttributeModal = () => {
     setIsNewBenthicAttributeModalOpen(false)
+  }
+  const showDeleteConfirmPrompt = () => {
+    setShowDeleteModal(true)
+  }
+  const closeDeleteConfirmPrompt = () => {
+    setShowDeleteModal(false)
   }
 
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
@@ -146,6 +156,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
+              console.log(collectRecordResponse)
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
@@ -475,6 +486,27 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     }
   }
 
+  const deleteRecord = () => {
+    if (!isNewRecord) {
+      databaseSwitchboardInstance
+        .deleteSampleUnit({
+          record: collectRecordBeingEdited,
+          profileId: currentUser.id,
+          projectId,
+        })
+        .then(() => {
+          clearPersistedUnsavedFormikData()
+          clearPersistedUnsavedObservationsData()
+          toast.success(...getToastArguments(language.success.collectRecordDelete))
+          history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+        })
+        .catch(() => {
+          toast.error(...getToastArguments(language.error.collectRecordDelete))
+          closeDeleteConfirmPrompt()
+        })
+    }
+  }
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -551,6 +583,17 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                 setAreObservationsInputsDirty={setAreObservationsInputsDirty}
               />
             </form>
+
+            <DeleteRecordButtonCautionWrapper>
+              <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>
+                Delete Record
+              </ButtonCaution>
+            </DeleteRecordButtonCautionWrapper>
+            <DeleteRecordConfirm
+              isOpen={showDeleteModal}
+              onDismiss={closeDeleteConfirmPrompt}
+              onConfirm={deleteRecord}
+            />
           </>
         }
         toolbar={

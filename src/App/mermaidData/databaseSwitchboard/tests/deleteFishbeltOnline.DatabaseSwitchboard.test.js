@@ -6,13 +6,13 @@ import {
   getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError,
 } from './testHelpers.DatabseSwitchboard'
 
-test('deleteFishBelt online returns error message upon dexie error', async () => {
+test('deleteSampleUnit online returns error message upon dexie error', async () => {
   const dbInstance = getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError()
 
   expect.assertions(1)
 
   try {
-    await dbInstance.deleteFishBelt({
+    await dbInstance.deleteSampleUnit({
       record: { id: 'someId' },
       profileId: '1',
       projectId: '1',
@@ -21,7 +21,7 @@ test('deleteFishBelt online returns error message upon dexie error', async () =>
     expect(error.message).toBeTruthy()
   }
 })
-test('deleteFishBelt online deletes the IDB record if there is no corresponding record on the server', async () => {
+test('deleteSampleUnit online deletes the IDB record if there is no corresponding record on the server', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
       `${process.env.REACT_APP_MERMAID_API}/push/`,
@@ -43,7 +43,7 @@ test('deleteFishBelt online deletes the IDB record if there is no corresponding 
 
   await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
-  await dbInstance.deleteFishBelt({
+  await dbInstance.deleteSampleUnit({
     record: fishBeltToBeDeleted, // doesnt have a  _last_revision_num property, which means the API call get skipped
     profileId: '1',
     projectId: '1',
@@ -51,7 +51,7 @@ test('deleteFishBelt online deletes the IDB record if there is no corresponding 
 
   expect(await dbInstance.dexiePerUserDataInstance.collect_records.get('foo')).toBeUndefined()
 })
-test('deleteFishBelt online deletes the record if there is a corresponding copy on the server', async () => {
+test('deleteSampleUnit online deletes the record if there is a corresponding copy on the server', async () => {
   const fishBeltToBeDeleted = {
     id: 'foo',
     data: {},
@@ -69,7 +69,7 @@ test('deleteFishBelt online deletes the record if there is a corresponding copy 
         const force = req.url.searchParams.get('force')
 
         if (!_deleted || !profile || !project || !force) {
-          // this causes the test to fail if deleteFishBelt doesnt
+          // this causes the test to fail if deleteSampleUnit doesnt
           // send the api: force=true, _deleted, profile or project info
 
           return res.once(ctx.status(400))
@@ -103,7 +103,7 @@ test('deleteFishBelt online deletes the record if there is a corresponding copy 
   // save a record in IDB so we can delete it
   await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
-  const serverResponse = await dbInstance.deleteFishBelt({
+  const serverResponse = await dbInstance.deleteSampleUnit({
     record: fishBeltToBeDeleted,
     profileId: '1',
     projectId: '1',
@@ -112,7 +112,7 @@ test('deleteFishBelt online deletes the record if there is a corresponding copy 
   expect(await dbInstance.dexiePerUserDataInstance.collect_records.get('foo')).toBeUndefined()
   expect(serverResponse.data.proofOfServerCall).toBeTruthy()
 })
-test('deleteFishBelt online returns a rejected promise if the status code from the API for the record is not successful', async () => {
+test('deleteSampleUnit online returns a rejected promise if the status code from the API for the record is not successful', async () => {
   mockMermaidApiAllSuccessful.use(
     rest.post(
       `${process.env.REACT_APP_MERMAID_API}/push/`,
@@ -151,7 +151,7 @@ test('deleteFishBelt online returns a rejected promise if the status code from t
   await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
   await dbInstance
-    .deleteFishBelt({
+    .deleteSampleUnit({
       record: {
         id: 'foo',
         _last_revision_num: 1,
@@ -161,11 +161,11 @@ test('deleteFishBelt online returns a rejected promise if the status code from t
     })
     .catch((error) => {
       expect(error.message).toEqual(
-        'the API record returned from deleteFishBelt doesnt have a successful status code',
+        'the API record returned from deleteSampleUnit doesnt have a successful status code',
       )
     })
 })
-test('deleteFishBelt online marks a record in indexedDB with _deleted in the case of a network error', async () => {
+test('deleteSampleUnit online marks a record in indexedDB with _deleted in the case of a network error', async () => {
   expect.assertions(2)
   mockMermaidApiAllSuccessful.use(
     rest.post(
@@ -190,7 +190,7 @@ test('deleteFishBelt online marks a record in indexedDB with _deleted in the cas
   await dbInstance.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
   await dbInstance
-    .deleteFishBelt({
+    .deleteSampleUnit({
       record: {
         id: 'foo',
         _last_revision_num: 1,

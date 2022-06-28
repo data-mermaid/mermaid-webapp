@@ -253,9 +253,9 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteFishBelt = async function deleteFishBelt({ record, profileId, projectId }) {
+    deleteSampleUnit = async function deleteSampleUnit({ record, profileId, projectId }) {
       if (!record || !profileId || !projectId) {
-        throw new Error('deleteFishBelt expects record, profileId, and projectId parameters')
+        throw new Error('deleteSampleUnit expects record, profileId, and projectId parameters')
       }
       const hasCorrespondingRecordInTheApi = !!record._last_revision_num
 
@@ -301,7 +301,7 @@ const CollectRecordsMixin = (Base) =>
 
             return Promise.reject(
               new Error(
-                'the API record returned from deleteFishBelt doesnt have a successful status code',
+                'the API record returned from deleteSampleUnit doesnt have a successful status code',
               ),
             )
           })
