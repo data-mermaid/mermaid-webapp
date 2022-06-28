@@ -14,15 +14,18 @@ import { IconClose } from '../icons'
 import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 
-const getUpdatedOnText = (updatedOn) => {
-  // const secondsAgo = new Date() - new Date(updatedOn)
+const getUpdatedOnText = (createdOn) => {
   const locale = navigator.language ?? 'en-US'
 
-  return new Date(updatedOn).toLocaleDateString(locale, {
+  const date = new Date(createdOn)
+  const dateText = date.toLocaleDateString(locale, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   })
+  const timeText = date.toLocaleTimeString(locale)
+
+  return `${dateText}, ${timeText}`
 }
 
 const BellNotificationDropDown = () => {
