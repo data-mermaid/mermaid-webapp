@@ -9,10 +9,10 @@ import {
 } from '../../testUtilities/testingLibraryWithHelpers'
 import NavMenu from '.'
 
-test('NavMenu component shows project overview, collect, data, admin links when online', async () => {
+test('NavMenu component shows project Health, collect, data, admin links when online', async () => {
   renderAuthenticatedOnline(<NavMenu />)
 
-  // expect(await screen.findByText('Project Overview')).toBeInTheDocument()
+  // expect(await screen.findByText('Project Health')).toBeInTheDocument()
   // expect(screen.getByText('Project Health')).toBeInTheDocument()
   expect(screen.getByText('Collect')).toBeInTheDocument()
   expect(screen.getByText('Collecting')).toBeInTheDocument()
@@ -27,11 +27,11 @@ test('NavMenu component shows project overview, collect, data, admin links when 
   expect(screen.getByText('Data Sharing')).toBeInTheDocument()
 })
 
-test('NavMenu component shows collect links; and hide project overview, data, admin links when offline', async () => {
+test('NavMenu component shows collect links; and hide project health, data, admin links when offline', async () => {
   renderAuthenticatedOffline(<NavMenu />)
 
   await waitFor(() => {
-    expect(screen.queryByText('Project Overview')).not.toBeInTheDocument()
+    expect(screen.queryByText('Project Health')).not.toBeInTheDocument()
   })
 
   await waitFor(() => {
