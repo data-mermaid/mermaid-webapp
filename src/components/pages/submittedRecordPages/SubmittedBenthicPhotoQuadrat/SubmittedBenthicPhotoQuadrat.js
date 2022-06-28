@@ -7,7 +7,7 @@ import { ContentPageLayout } from '../../../Layout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { IconPen } from '../../../icons'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import { getOptions } from '../../../../library/getOptions'
+import { getBenthicOptions } from '../../../../library/getOptions'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
@@ -79,7 +79,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
                 'quadrat_transect',
               )
 
-              const updateBenthicAttributeOptions = getOptions(benthicAttributes, false)
+              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
