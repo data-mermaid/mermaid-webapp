@@ -354,9 +354,9 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    submitFishBelt = async function submitFishbelt({ recordId, projectId }) {
+    submitSampleUnit = async function submitSampleUnit({ recordId, projectId }) {
       if (!recordId || !projectId) {
-        throw new Error('submitFishBelt expects record, profileId, and projectId parameters')
+        throw new Error('submitSampleUnit expects record, profileId, and projectId parameters')
       }
 
       if (this._isOnlineAuthenticatedAndReady) {

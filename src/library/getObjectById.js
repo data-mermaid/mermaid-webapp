@@ -3,5 +3,9 @@ export const getObjectById = (arrayWithObjects, searchId) => {
     return undefined
   }
 
-  return arrayWithObjects.find((object) => object.id === searchId)
+  return arrayWithObjects.find((object) => {
+    const objectValueOrId = object.id || object.value
+
+    return objectValueOrId === searchId
+  })
 }

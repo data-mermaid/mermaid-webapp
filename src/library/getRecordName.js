@@ -1,6 +1,9 @@
 import { getObjectById } from './getObjectById'
 
-const transectDefaultName = { fishbelt_transect: 'Fish Belt' }
+const transectDefaultName = {
+  fishbelt_transect: 'Fish Belt',
+  quadrat_transect: 'Benthic Photo Quadrat',
+}
 
 /**
  *

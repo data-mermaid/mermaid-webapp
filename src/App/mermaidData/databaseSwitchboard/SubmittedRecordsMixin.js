@@ -20,7 +20,7 @@ const SubmittedRecordsMixin = (Base) =>
         ? axios
             .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
               params: {
-                protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc`,
+                protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc,benthicpqt`,
                 limit: 1000,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
@@ -29,18 +29,19 @@ const SubmittedRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedFishBeltTransectRecord = async function getSubmittedFishBeltTransectRecord(
+    getSubmittedSampleUnitRecord = async function getSubmittedSampleUnitRecord(
       projectId,
       id,
+      sampleUnitMethod,
     ) {
-      if (!(id || projectId)) {
+      if (!(id || projectId || sampleUnitMethod)) {
         Promise.reject(this._operationMissingParameterError)
       }
 
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .get(
-              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${id}`,
+              `${this._apiBaseUrl}/projects/${projectId}/${sampleUnitMethod}/${id}`,
               await getAuthorizationHeaders(this._getAccessToken),
             )
             .then((apiResults) => apiResults.data)
@@ -71,7 +72,11 @@ const SubmittedRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    moveToCollect = async function moveToCollect({ projectId, submittedRecordId }) {
+    moveToCollect = async function moveToCollect({
+      projectId,
+      submittedRecordId,
+      sampleUnitMethod,
+    }) {
       if (!projectId || !submittedRecordId) {
         Promise.reject(
           new Error(
@@ -83,7 +88,7 @@ const SubmittedRecordsMixin = (Base) =>
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .put(
-              `${this._apiBaseUrl}/projects/${projectId}/beltfishtransectmethods/${submittedRecordId}/edit/`,
+              `${this._apiBaseUrl}/projects/${projectId}/${sampleUnitMethod}/${submittedRecordId}/edit/`,
               {},
               await getAuthorizationHeaders(this._getAccessToken),
             )

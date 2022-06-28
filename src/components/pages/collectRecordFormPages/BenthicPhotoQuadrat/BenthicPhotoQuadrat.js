@@ -34,6 +34,7 @@ import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordL
 import SampleEventInputs from '../SampleEventInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../../library/useIsMounted'
@@ -43,6 +44,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilitie
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
 
+  const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const history = useHistory()
@@ -67,7 +69,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [projectName, setProjectName] = useState('')
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [sites, setSites] = useState([])
-  const [submitButtonState] = useState(buttonGroupStates.submittable)
+  const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [subNavNode, setSubNavNode] = useState(null)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
 
@@ -292,6 +294,21 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
       })
   }
 
+  const handleSubmit = () => {
+    setSubmitButtonState(buttonGroupStates.submitting)
+
+    databaseSwitchboardInstance
+      .submitSampleUnit({ recordId, projectId })
+      .then(() => {
+        toast.success(...getToastArguments(language.success.collectRecordSubmit))
+        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+      })
+      .catch(() => {
+        toast.error(...getToastArguments(language.error.collectRecordSubmit))
+        setSubmitButtonState(buttonGroupStates.submittable)
+      })
+  }
+
   const ignoreRecordLevelValidation = useCallback(
     ({ validationId }) => {
       databaseSwitchboardInstance
@@ -477,7 +494,11 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               resetRecordLevelValidation={resetRecordLevelValidation}
               ignoreRecordLevelValidation={ignoreRecordLevelValidation}
             />
-            <form id="benthicpqt-form" aria-labelledby="benthicpqt-form-title">
+            <form
+              id="benthicpqt-form"
+              aria-labelledby="benthicpqt-form-title"
+              onSubmit={formik.handleSubmit}
+            >
               <SampleEventInputs
                 areValidationsShowing={areValidationsShowing}
                 collectRecord={collectRecordBeingEdited}
@@ -551,7 +572,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               submitButtonState={submitButtonState}
               onValidate={handleValidate}
               onSave={handleSave}
-              onSubmit={() => {}}
+              onSubmit={handleSubmit}
             />
           </ContentPageToolbarWrapper>
         }

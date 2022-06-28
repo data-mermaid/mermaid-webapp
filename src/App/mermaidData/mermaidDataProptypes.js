@@ -46,6 +46,7 @@ const _benthicPhotoQuadratTransectPropType = PropTypes.shape({
   len_surveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   num_quadrats: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   quadrat_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  quadrat_number_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   relative_depth: PropTypes.string,
   num_points_per_quadrat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 })
@@ -58,7 +59,7 @@ const _benthicPhotoQuadratObservationPropType = PropTypes.shape({
   quadrat_number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 })
 
-export const observationPropTypeShape = {
+export const _submittedFishBeltObservationPropType = PropTypes.shape({
   id: PropTypes.string,
   updated_by: PropTypes.string,
   size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -70,7 +71,22 @@ export const observationPropTypeShape = {
   created_by: PropTypes.string,
   beltfish: PropTypes.string,
   fish_attribute: PropTypes.string,
-}
+})
+
+export const _submittedBenthicPhotoQuadratObservationPropType = PropTypes.shape({
+  attribute: PropTypes.string,
+  benthic_photo_quadrat_transect: PropTypes.string,
+  count: PropTypes.number,
+  created_by: PropTypes.string,
+  created_on: PropTypes.string,
+  growth_form: PropTypes.string,
+  id: PropTypes.string,
+  notes: PropTypes.string,
+  num_points: PropTypes.number,
+  quadrat_number: PropTypes.number,
+  updated_by: PropTypes.string,
+  updated_on: PropTypes.string,
+})
 
 export const projectPropType = PropTypes.shape({
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -116,7 +132,16 @@ export const submittedFishBeltPropType = PropTypes.shape({
   sample_event: _sampleEventPropType,
   fishbelt_transect: _fishBeltTransectPropType,
   observers: PropTypes.arrayOf(_observerPropType),
-  obs_belt_fishes: PropTypes.arrayOf(PropTypes.shape(observationPropTypeShape)),
+  obs_belt_fishes: PropTypes.arrayOf(_submittedFishBeltObservationPropType),
+})
+
+export const submittedBenthicPhotoQuadratPropType = PropTypes.shape({
+  id: PropTypes.string,
+  collect_record_id: PropTypes.string,
+  sample_event: _sampleEventPropType,
+  quadrat_transect: _benthicPhotoQuadratTransectPropType,
+  observers: PropTypes.arrayOf(_observerPropType),
+  obs_benthic_photo_quadrats: PropTypes.arrayOf(_submittedBenthicPhotoQuadratObservationPropType),
 })
 
 export const managementRegimePropType = PropTypes.shape({
