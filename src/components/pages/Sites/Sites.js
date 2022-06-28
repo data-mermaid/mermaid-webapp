@@ -3,7 +3,6 @@ import { CSVLink } from 'react-csv'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
@@ -37,7 +36,6 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
-import './ExportSites.css'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -81,7 +79,6 @@ const Sites = () => {
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
-
   const tableColumns = useMemo(
     () => [
       {
@@ -132,7 +129,7 @@ const Sites = () => {
     [siteRecordsForUiDisplay],
   )
 
-  const names = getTableCellData.map((obj) => {
+  const name = getTableCellData.map((obj) => {
     return obj.name
   })
   const reefType = getTableCellData.map((obj) => {
@@ -146,14 +143,52 @@ const Sites = () => {
   const exposure = getTableCellData.map((obj) => {
     return obj.exposure
   })
-  const headers = ['Name', 'Reef type', 'Reef zone', 'Reef exposure']
 
-  const data = [names, reefType, reefZone, exposure]
+  const longitude = siteRecordsForUiDisplay.map((obj) => {
+    return obj.location.coordinates[0]
+  })
+
+  const latitude = siteRecordsForUiDisplay.map((obj) => {
+    return obj.location.coordinates[1]
+  })
+  const notes = siteRecordsForUiDisplay.map((obj) => {
+    return obj.notes
+  })
+  const country = siteRecordsForUiDisplay.map((obj) => {
+    return obj.country
+  })
+
+  const countries_name = []
+
+  for (const [, value] of Object.entries(choices)) {
+    for (const [, value2] of Object.entries(value)) {
+      for (let i = 0; i < value2.length; i++) {
+        // eslint-disable-next-line max-depth
+        for (let j = 0; j < country.length; j++) {
+          // eslint-disable-next-line max-depth
+          if (value2[i].id === country[j]) {
+            countries_name.push(value2[i].name)
+          }
+        }
+      }
+    }
+  }
+
+  const headers = [
+    'Country',
+    'Name',
+    'Latitude',
+    'Longitude',
+    'Reef type',
+    'Reef zone',
+    'Reef exposure',
+    'Notes',
+  ]
+
+  const data = [countries_name, name, latitude, longitude, reefType, reefZone, exposure, notes]
 
   const transposeData = data[0].map((_, colIndex) => data.map((row) => row[colIndex]))
 
-  // console.log(getTableCellData)
-  console.log(siteRecordsForUiDisplay)
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -194,7 +229,6 @@ const Sites = () => {
       return filteredRows
     },
     [siteRecordsForUiDisplay],
-    // console.log(siteRecordsForUiDisplay),
   )
 
   const {
@@ -251,7 +285,6 @@ const Sites = () => {
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
-                  // console.log(column.Header)
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
                   )
