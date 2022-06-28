@@ -20,10 +20,12 @@ export const getRecordSampleUnit = (protocol) => {
   }[protocol]
 }
 
-export const getIsFishBelt = (record) => {
-  return record?.data?.protocol === 'fishbelt'
+export const getIsFishBelt = (protocol) => {
+  return protocol === 'fishbelt'
 }
 
-export const getIsQuadratSampleUnit = (record) => {
-  return record?.data?.protocol === 'benthicpqt' || record?.data?.protocol === 'bleachingqc'
+export const getIsQuadratSampleUnit = (protocol) => {
+  return protocol === 'benthicpqt' || protocol === 'bleachingqc'
 }
+
+export const noLabelSymbol = '-'

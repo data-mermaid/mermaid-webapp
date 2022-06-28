@@ -10,6 +10,7 @@ import {
   getRecordSampleUnit,
   getIsFishBelt,
   getIsQuadratSampleUnit,
+  noLabelSymbol,
 } from '../recordProtocolHelpers'
 
 const CollectRecordsMixin = (Base) =>
@@ -60,25 +61,25 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
-      const transectMethod = getRecordSampleUnit(record.data.protocol)
-      const transectNumber = record.data?.[transectMethod]?.number
-      const labelName = record.data?.[transectMethod]?.label
+      const sampleUnitType = getRecordSampleUnit(record.data.protocol)
+      const transectNumber = record.data?.[sampleUnitType]?.number
+      const labelName = record.data?.[sampleUnitType]?.label
 
-      const sampleUnit = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
+      const sampleUnitLabel = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
 
-      return sampleUnit === '' ? undefined : sampleUnit
+      return sampleUnitLabel
     }
 
     #getDepthLabel = function getDepthLabel(record) {
-      const isFishBelt = getIsFishBelt(record)
+      const sampleUnitType = getRecordSampleUnit(record.data.protocol)
 
-      return isFishBelt ? record.data.fishbelt_transect?.depth : record.data.benthic_transect?.depth
+      return record.data?.[sampleUnitType]?.depth
     }
 
     #getObserversLabel = function getObserversLabel(record) {
       const { observers } = record.data
 
-      return observers
+      return observers !== undefined && observers.length
         ? observers
             .reduce((observerList, observer) => {
               observerList.push(observer.profile_name)
@@ -86,7 +87,7 @@ const CollectRecordsMixin = (Base) =>
               return observerList
             }, [])
             .join(', ')
-        : undefined
+        : noLabelSymbol
     }
 
     #getStatusLabel = function getStatusLabel(record) {
@@ -97,9 +98,9 @@ const CollectRecordsMixin = (Base) =>
 
     #getSizeLabel = function getSizeLabel(record, choices) {
       const { belttransectwidths } = choices
-      const isFishBelt = getIsFishBelt(record)
-      const isQuadratSampleUnit = getIsQuadratSampleUnit(record)
-      const noSizeLabel = '-'
+      const recordDataProtocol = record?.data?.protocol
+      const isFishBelt = getIsFishBelt(recordDataProtocol)
+      const isQuadratSampleUnit = getIsQuadratSampleUnit(recordDataProtocol)
 
       if (isFishBelt) {
         const widthId = record.data?.fishbelt_transect?.width
@@ -116,7 +117,7 @@ const CollectRecordsMixin = (Base) =>
           return `${fishBeltLength || fishBeltWidth}m`
         }
 
-        return noSizeLabel
+        return noLabelSymbol
       }
 
       if (isQuadratSampleUnit) {
@@ -124,12 +125,12 @@ const CollectRecordsMixin = (Base) =>
           record.data?.quadrat_collection?.quadrat_size ||
           record.data?.quadrat_transect?.quadrat_size
 
-        return quadratSize === undefined ? noSizeLabel : `${quadratSize}m`
+        return quadratSize ? `${quadratSize}m` : noLabelSymbol
       }
 
       const benthicLength = record.data?.benthic_transect?.len_surveyed
 
-      return benthicLength === undefined ? noSizeLabel : `${benthicLength}m`
+      return benthicLength ? `${benthicLength}m` : noLabelSymbol
     }
 
     saveSampleUnit = async function saveSampleUnit({ record, profileId, projectId, protocol }) {
