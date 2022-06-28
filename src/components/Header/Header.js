@@ -7,9 +7,17 @@ import { IconBell, IconMenu, IconDown, IconUser } from '../icons'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
-import { GlobalNav, HeaderButtonThatLooksLikeLink, StyledHeader, StyledNavLink, UserMenuButton } from './Header.styles'
+import {
+  GlobalNav,
+  HeaderButtonThatLooksLikeLink,
+  StyledHeader,
+  StyledNavLink,
+  UserMenuButton
+} from './Header.styles'
 import ProfileModal from '../ProfileModal'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
+import { useBellNotifications } from '../../App/BellNotificationContext'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 const GlobalLinks = () => (
   <>
@@ -39,6 +47,8 @@ const Header = ({ logout, currentUser }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)
   const openProfileModal = () => setIsProfileModalOpen(true)
   const closeProfileModal = () => setIsProfileModalOpen(false)
+  const { notifications } = useBellNotifications()
+  const { isAppOnline } = useOnlineStatus()
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
@@ -104,14 +114,15 @@ const Header = ({ logout, currentUser }) => {
       <GlobalNav>
         <div className="desktop">
           <GlobalLinks />
-          <HideShow
-            button={<p><IconBell /></p>}
-            contents={
-              <div className="desktopUserMenu">
-                <BellNotificationDropDown />
-              </div>
-            }
-          />
+            {isAppOnline && <HideShow
+              button={<p><IconBell color={notifications?.results?.length ? 'red' : 'white'} />
+              </p>}
+              contents={
+                <div className="desktopUserMenu">
+                  <BellNotificationDropDown />
+                </div>
+              }
+            />}
           <HideShow
             button={getUserButton()}
             contents={
@@ -122,10 +133,10 @@ const Header = ({ logout, currentUser }) => {
           />
         </div>
         <div className="mobile">
-          <HideShow
+            {isAppOnline && <HideShow
             button={
               <HeaderButtonThatLooksLikeLink>
-                <IconBell />
+                  <IconBell color={notifications?.results?.length ? 'red' : 'white'} />
               </HeaderButtonThatLooksLikeLink>
             }
             contents={
@@ -135,7 +146,7 @@ const Header = ({ logout, currentUser }) => {
                 </div>
               </div>
             }
-          />
+            />}
           <HideShow
             button={
               <HeaderButtonThatLooksLikeLink>
@@ -164,9 +175,10 @@ Header.propTypes = {
   currentUser: currentUserPropType,
   logout: PropTypes.func,
 }
+
 Header.defaultProps = {
   currentUser: undefined,
-  logout: () => {},
+  logout: () => { },
 }
 
 export default Header

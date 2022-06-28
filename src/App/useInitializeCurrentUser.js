@@ -40,12 +40,7 @@ export const useInitializeCurrentUser = ({
   }, [apiBaseUrl, getAccessToken, dexieCurrentUserInstance, isMermaidAuthenticated, isAppOnline])
 
   const saveUserProfile = (userProfile) => {
-    if (
-      isMermaidAuthenticated &&
-      apiBaseUrl &&
-      dexieCurrentUserInstance &&
-      isMermaidAuthenticated
-    ) {
+    if (isMermaidAuthenticated && apiBaseUrl && dexieCurrentUserInstance) {
       setCurrentUserProfile({
         apiBaseUrl,
         getAccessToken,

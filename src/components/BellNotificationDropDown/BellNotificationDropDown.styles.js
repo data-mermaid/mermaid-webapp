@@ -16,7 +16,7 @@ export const NotificationCard = styled('div')`
     display: flex;
   }
   margin: ${theme.spacing.small} ${theme.spacing.small};
-  padding: 0 ${theme.spacing.medium};
+  padding: ${theme.spacing.medium};
   background-color: white;
   width: 97%;
   color: ${theme.color.primaryColor};
@@ -26,9 +26,9 @@ export const NotificationCard = styled('div')`
     };
     span {
       font-size: ${theme.typography.smallFontSize};
-      color: ${theme.color.primaryColor};
+      color: ${theme.color.black};
     }
-    
+
   `}
 `
 
@@ -46,6 +46,13 @@ export const NotificationContent = styled('span')`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+`
+
+export const NotificationDate = styled('span')`
+  font-size: ${theme.typography.smallFontSize};
+  &&& {
+    color: ${theme.color.primaryColor};
+  }
 `
 
 export const NotificationHeader = styled('span')`
@@ -69,6 +76,10 @@ export const NotificationStatus = styled('span')`
   flex-shrink: 0;
   width: ${theme.spacing.small};
   background-color: ${(props) => getNotificationStatusColor(props)};
-  margin: ${theme.spacing.small} ${theme.spacing.small} ${theme.spacing.small} 0;
+  margin: ${theme.spacing.small} ${theme.spacing.medium} 0 0;
 }
+`
+
+export const NoNotifications = styled('div')`
+  padding: ${theme.spacing.small} ${theme.spacing.large};
 `
