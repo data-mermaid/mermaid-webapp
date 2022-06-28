@@ -24,12 +24,14 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
   submittedRecord,
 }) => {
   const { site, management, sample_date, notes } = submittedRecord.sample_event
+
   const {
     sample_time,
     depth,
     number,
     label,
     len_surveyed,
+    quadrat_number_start,
     quadrat_size,
     num_quadrats,
     num_points_per_quadrat,
@@ -51,6 +53,7 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
         <TableRowItem title="Transect Number" value={number} />
         <TableRowItem title="Label" value={label} />
         <TableRowItem title="Transect Length Surveyed" value={len_surveyed} />
+        <TableRowItem title="Quadrat Number Start" value={quadrat_number_start} />
         <TableRowItem title="Quadrat Size" value={quadrat_size} />
         <TableRowItem title="Number of Quadrats" value={num_quadrats} />
         <TableRowItem title="Number of Points per Quadrat" value={num_points_per_quadrat} />
