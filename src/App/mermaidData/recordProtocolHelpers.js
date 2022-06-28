@@ -19,3 +19,11 @@ export const getRecordSampleUnit = (protocol) => {
     benthicpqt: 'quadrat_transect',
   }[protocol]
 }
+
+export const getIsFishBelt = (record) => {
+  return record?.data?.protocol === 'fishbelt'
+}
+
+export const getIsQuadratSampleUnit = (record) => {
+  return record?.data?.protocol === 'quadrat_transect' || 'quadrat_collection'
+}
