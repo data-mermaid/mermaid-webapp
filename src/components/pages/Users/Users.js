@@ -168,7 +168,7 @@ const Users = () => {
           toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
-  }, [isAppOnline, databaseSwitchboardInstance, isMounted, projectId, currentUser])
+  }, [isAppOnline, databaseSwitchboardInstance, isMounted, projectId])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)

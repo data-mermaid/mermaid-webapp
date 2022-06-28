@@ -1,0 +1,3 @@
+import SubmittedBenthicPhotoQuadrat from './SubmittedBenthicPhotoQuadrat'
+
+export default SubmittedBenthicPhotoQuadrat

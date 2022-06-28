@@ -30,7 +30,6 @@ export const NavLinkSidebar = styled(NavLink)`
   text-decoration: none;
   display: grid;
   grid-template-columns: 3rem auto auto;
-  align-items: baseline;
   ${theme.typography.noWordBreak};
   ${hoverState(css`
     background-color: ${theme.color.primaryHover};
@@ -40,7 +39,7 @@ export const NavLinkSidebar = styled(NavLink)`
     background-color: ${theme.color.primaryActive};
   }
   & > svg {
-    margin: 0 ${theme.spacing.small};
+    margin: ${theme.spacing.small};
   }
   &.active {
     background-color: ${theme.color.primaryColor};

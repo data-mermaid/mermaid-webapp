@@ -3,8 +3,10 @@ import { ThemeProvider } from 'styled-components/macro'
 import React, { useMemo } from 'react'
 
 import { CurrentUserProvider } from './CurrentUserContext'
+import { BellNotificationProvider } from './BellNotificationContext'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useInitializeBellNotifications } from './useInitializeBellNotifications'
 import { useInitializeCurrentUser } from './useInitializeCurrentUser'
 import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../library/onlineStatusContext'
@@ -87,6 +89,13 @@ function App({ dexieCurrentUserInstance }) {
 
   const { routes } = useRoutes({ apiSyncInstance })
 
+  const { notifications, deleteNotification } = useInitializeBellNotifications({
+    apiBaseUrl,
+    getAccessToken,
+    isMermaidAuthenticated,
+    isAppOnline,
+  })
+
   const layoutProps = {
     header: <Header currentUser={currentUser} logout={logoutMermaid} />,
     footer: <Footer />,
@@ -102,39 +111,41 @@ function App({ dexieCurrentUserInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={{ currentUser, saveUserProfile, getProjectRole }}>
-          <GlobalStyle />
-          <CustomToastContainer limit={5} />
-          <Layout {...layoutProps}>
-            {
-              /** The isMermaidAuthenticated is needed here to prevent an
-               * infinite log in loop with authentication.
-               *
-               * The projects list route and project workflow pages will trigger
-               * a sync when they are routed to, making isOfflineStorageHydrated = true
-               */
+          <BellNotificationProvider value={{ notifications, deleteNotification }}>
+            <GlobalStyle />
+            <CustomToastContainer limit={5} />
+            <Layout {...layoutProps}>
+              {
+                /** The isMermaidAuthenticated is needed here to prevent an
+                 * infinite log in loop with authentication.
+                 *
+                 * The projects list route and project workflow pages will trigger
+                 * a sync when they are routed to, making isOfflineStorageHydrated = true
+                 */
 
-              isMermaidAuthenticated ? (
-                <Switch>
-                  {routes.map(({ path, Component }) => (
-                    <Route
-                      exact
-                      path={path}
-                      key={path}
-                      render={() =>
-                        isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
-                      }
-                    />
-                  ))}
-                  <Route exact path="/">
-                    <Redirect to="/projects" />
-                  </Route>
-                  <Route component={PageNotFound} />
-                </Switch>
-              ) : (
-                <LoadingIndicator />
-              )
-            }
-          </Layout>
+                isMermaidAuthenticated ? (
+                  <Switch>
+                    {routes.map(({ path, Component }) => (
+                      <Route
+                        exact
+                        path={path}
+                        key={path}
+                        render={() =>
+                          isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
+                        }
+                      />
+                    ))}
+                    <Route exact path="/">
+                      <Redirect to="/projects" />
+                    </Route>
+                    <Route component={PageNotFound} />
+                  </Switch>
+                ) : (
+                  <LoadingIndicator />
+                )
+              }
+            </Layout>
+          </BellNotificationProvider>
         </CurrentUserProvider>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>

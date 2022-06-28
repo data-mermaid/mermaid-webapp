@@ -79,7 +79,7 @@ const DataSharing = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
-  const { currentUser, getProjectRole } = useCurrentUser()
+  const { getProjectRole } = useCurrentUser()
   const isMounted = useIsMounted()
   const isAdminUser = getProjectRole(projectId) === userRole.admin
 
@@ -116,7 +116,7 @@ const DataSharing = () => {
           toast.error(...getToastArguments(language.error.projectsUnavailable))
         })
     }
-  }, [isAppOnline, databaseSwitchboardInstance, projectId, isMounted, currentUser])
+  }, [isAppOnline, databaseSwitchboardInstance, projectId, isMounted])
 
   const getToastMessageForDataPolicyChange = (property, policy) => {
     switch (property) {

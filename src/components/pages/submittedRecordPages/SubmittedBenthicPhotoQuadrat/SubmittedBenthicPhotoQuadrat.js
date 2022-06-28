@@ -2,33 +2,42 @@ import { toast } from 'react-toastify'
 import { useParams, useHistory } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 
-import { ButtonSecondary } from '../../generic/buttons'
-import { ContentPageLayout } from '../../Layout'
-import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
-import { getFishNameConstants } from '../../../App/mermaidData/getFishNameConstants'
-import { getFishNameOptions } from '../../../App/mermaidData/getFishNameOptions'
-import { H2 } from '../../generic/text'
-import { IconPen } from '../../icons'
-import { RowSpaceBetween } from '../../generic/positioning'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
-import { getToastArguments } from '../../../library/getToastArguments'
-import PageUnavailableOffline from '../PageUnavailableOffline'
-import RecordFormTitle from '../../RecordFormTitle'
-import SubmittedFishBeltInfoTable from '../../SubmittedFishBeltInfoTable'
-import SubmittedFishBeltObservationTable from '../../SubmittedFishBeltObservationTable'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import useIsMounted from '../../../library/useIsMounted'
-import { getRecordName } from '../../../library/getRecordName'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { ButtonSecondary } from '../../../generic/buttons'
+import { ContentPageLayout } from '../../../Layout'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
+import { IconPen } from '../../../icons'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import { getBenthicOptions } from '../../../../library/getOptions'
+import { getRecordName } from '../../../../library/getRecordName'
+import { getToastArguments } from '../../../../library/getToastArguments'
+import language from '../../../../language'
+import PageUnavailableOffline from '../../PageUnavailableOffline'
+import SubmittedBenthicPhotoQuadratInfoTable from './SubmittedBenthicPhotoQuadratInfoTable'
+import SubmittedBenthicPhotoQuadratObservationTable from './SubmittedBenthicPhotoQuadratObservationTable'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useIsMounted from '../../../../library/useIsMounted'
+import { useOnlineStatus } from '../../../../library/onlineStatusContext'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import RecordFormTitle from '../../../RecordFormTitle'
+import { RowSpaceBetween } from '../../../generic/positioning'
+import { FormSubTitle } from '../SubmittedFormPage.styles'
+import { userRole } from '../../../../App/mermaidData/userRole'
 
-const SubmittedFishBelt = () => {
+const SubmittedBenthicPhotoQuadrat = () => {
+  const currentProjectPath = useCurrentProjectPath()
+  const { getProjectRole } = useCurrentUser()
+
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const history = useHistory()
+  const { isAppOnline } = useOnlineStatus()
+  const isMounted = useIsMounted()
+  const { isSyncInProgress } = useSyncStatus()
+  const { submittedRecordId, projectId } = useParams()
+
+  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
   const [choices, setChoices] = useState({})
-  const [fishNameConstants, setFishNameConstants] = useState([])
-  const [fishNameOptions, setFishNameOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
@@ -36,16 +45,9 @@ const SubmittedFishBelt = () => {
   const [sites, setSites] = useState([])
   const [submittedRecord, setSubmittedRecord] = useState()
   const [subNavNode, setSubNavNode] = useState(null)
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
-  const { isAppOnline } = useOnlineStatus()
-  const { submittedRecordId, projectId } = useParams()
-  const currentProjectPath = useCurrentProjectPath()
-  const history = useHistory()
-  const isMounted = useIsMounted()
+
+  const isAdminUser = getProjectRole(projectId) === userRole.admin
   const observers = submittedRecord?.observers ?? []
-  const { currentUser } = useCurrentUser()
-  const [currentUserProfile, setCurrentUserProfile] = useState({})
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -53,14 +55,12 @@ const SubmittedFishBelt = () => {
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getFishSpecies(),
-        databaseSwitchboardInstance.getFishGenera(),
-        databaseSwitchboardInstance.getFishFamilies(),
-        databaseSwitchboardInstance.getSubmittedFishBeltTransectRecord(
+        databaseSwitchboardInstance.getBenthicAttributes(),
+        databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
           projectId,
           submittedRecordId,
+          'benthicphotoquadrattransectmethods',
         ),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
       ]
 
       Promise.all(promises)
@@ -69,42 +69,23 @@ const SubmittedFishBelt = () => {
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
-            species,
-            genera,
-            families,
+            benthicAttributes,
             submittedRecordResponse,
-            projectProfilesResponse,
           ]) => {
             if (isMounted.current) {
-              const updateFishNameOptions = getFishNameOptions({
-                species,
-                genera,
-                families,
-              })
-
-              const updateFishNameConstants = getFishNameConstants({
-                species,
-                genera,
-                families,
-              })
-
               const recordNameForSubNode = getRecordName(
                 submittedRecordResponse,
                 sitesResponse,
-                'fishbelt_transect',
+                'quadrat_transect',
               )
 
-              const filteredUserProfile = projectProfilesResponse.filter(
-                ({ profile }) => currentUser.id === profile,
-              )[0]
+              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
+              setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setSubmittedRecord(submittedRecordResponse)
-              setFishNameOptions(updateFishNameOptions)
-              setFishNameConstants(updateFishNameConstants)
-              setCurrentUserProfile(filteredUserProfile)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
@@ -127,17 +108,20 @@ const SubmittedFishBelt = () => {
     projectId,
     isAppOnline,
     isSyncInProgress,
-    currentUser,
   ])
 
   const handleMoveToCollect = () => {
     setIsMoveToButtonDisabled(true)
     databaseSwitchboardInstance
-      .moveToCollect({ projectId, submittedRecordId })
+      .moveToCollect({
+        projectId,
+        submittedRecordId,
+        sampleUnitMethod: 'benthicphotoquadrattransectmethods',
+      })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${submittedRecordId}`,
+          `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpqt/${submittedRecordId}`,
         )
       })
       .catch(() => {
@@ -159,23 +143,22 @@ const SubmittedFishBelt = () => {
       content={
         isAppOnline ? (
           <>
-            <SubmittedFishBeltInfoTable
+            <SubmittedBenthicPhotoQuadratInfoTable
               choices={choices}
               sites={sites}
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
-            <H2>Observers</H2>
+            <FormSubTitle>Observers</FormSubTitle>
             <ul>
               {observers.map((observer) => (
                 <li key={observer.id}>{observer.profile_name}</li>
               ))}
             </ul>
 
-            <SubmittedFishBeltObservationTable
+            <SubmittedBenthicPhotoQuadratObservationTable
               choices={choices}
-              fishNameOptions={fishNameOptions}
-              fishNameConstants={fishNameConstants}
+              benthicAttributeOptions={benthicAttributeOptions}
               submittedRecord={submittedRecord}
             />
           </>
@@ -189,14 +172,15 @@ const SubmittedFishBelt = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.submittedFishBeltForm.title}`}
+              primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.benthicPhotoQuadratForm.title}`}
+              sampleUnit="quadrat_transect"
             />
             <RowSpaceBetween>
               <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
-              {currentUserProfile.is_admin && (
+              {isAdminUser && (
                 <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
                   <IconPen />
-                  Edit Sample Unit - move to collect
+                  Edit Sample Unit - move to Collecting
                 </ButtonSecondary>
               )}
             </RowSpaceBetween>
@@ -207,4 +191,4 @@ const SubmittedFishBelt = () => {
   )
 }
 
-export default SubmittedFishBelt
+export default SubmittedBenthicPhotoQuadrat

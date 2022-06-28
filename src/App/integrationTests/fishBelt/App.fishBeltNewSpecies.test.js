@@ -88,7 +88,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
 
   expect(
     await within(modal).findByText(
-      'Your proposed new species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
+      'Your proposed new fish species will be reviewed by the MERMAID team. They will either approve it for inclusion in the taxonomy or contact you to follow up.',
     ),
   )
 

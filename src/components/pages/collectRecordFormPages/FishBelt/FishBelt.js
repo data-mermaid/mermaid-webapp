@@ -27,7 +27,7 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
-import SampleInfoInputs from './SampleInfoInputs'
+import SampleEventInputs from '../SampleEventInputs'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
 import FishbeltTransectInputs from './FishbeltTransectInputs'
@@ -37,7 +37,7 @@ import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
-import ObserversInput from '../../../ObserversInput'
+import ObserversInput from '../ObserversInput'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
@@ -193,10 +193,10 @@ const FishBelt = ({ isNewRecord }) => {
                   ? getRecordName(collectRecordResponse.data, sitesResponse, 'fishbelt_transect')
                   : { name: 'Fish Belt' }
 
-              setSites(sortArrayByObjectKey(sitesResponse, "name"))
-              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, "name"))
+              setSites(sortArrayByObjectKey(sitesResponse, 'name'))
+              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
-              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, "profile_name"))
+              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
@@ -220,11 +220,10 @@ const FishBelt = ({ isNewRecord }) => {
     persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputsik')
+  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputs')
 
-  const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
-    'unsavedFishbeltObservations',
-  )
+  const persistUnsavedObservationsUtilities =
+    useUnsavedDirtyFormDataUtilities('unsavedObservations')
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
@@ -255,7 +254,7 @@ const FishBelt = ({ isNewRecord }) => {
     setSubmitButtonState(buttonGroupStates.submitting)
 
     databaseSwitchboardInstance
-      .submitFishBelt({ recordId, projectId })
+      .submitSampleUnit({ recordId, projectId })
       .then(() => {
         toast.success(...getToastArguments(language.success.collectRecordSubmit))
         history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
@@ -269,7 +268,7 @@ const FishBelt = ({ isNewRecord }) => {
     setValidateButtonState(buttonGroupStates.validating)
 
     databaseSwitchboardInstance
-      .validateFishBelt({ recordId, projectId })
+      .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
         setAreValidationsShowing(true)
         setCollectRecordBeingEdited(validatedRecordResponse)
@@ -387,7 +386,7 @@ const FishBelt = ({ isNewRecord }) => {
     [collectRecordBeingEdited, databaseSwitchboardInstance],
   )
 
-  const handleNewFishSpeciesOnSubmit = ({ genusId, genusName, speciesName }) => {
+  const onSubmitNewFishSpecies = ({ genusId, genusName, speciesName }) => {
     databaseSwitchboardInstance
       .addFishSpecies({
         genusId,
@@ -430,7 +429,7 @@ const FishBelt = ({ isNewRecord }) => {
     return (
       getPersistedUnsavedFormikData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
-        ...getSampleInfoInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
+        ...getSampleInfoInitialValues(collectRecordBeingEdited),
         ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
       }
     )
@@ -576,15 +575,15 @@ const FishBelt = ({ isNewRecord }) => {
               aria-labelledby="fishbelt-form-title"
               onSubmit={formik.handleSubmit}
             >
-              <SampleInfoInputs
+              <SampleEventInputs
                 areValidationsShowing={areValidationsShowing}
                 collectRecord={collectRecordBeingEdited}
                 formik={formik}
+                managementRegimes={managementRegimes}
+                sites={sites}
                 handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
                 ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                managementRegimes={managementRegimes}
                 resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                sites={sites}
                 validationPropertiesWithDirtyResetOnInputChange={
                   validationPropertiesWithDirtyResetOnInputChange
                 }
@@ -655,6 +654,7 @@ const FishBelt = ({ isNewRecord }) => {
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
                 sites={sites}
                 primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`}
+                sampleUnit="fishbelt_transect"
               />
             )}
 
@@ -675,7 +675,7 @@ const FishBelt = ({ isNewRecord }) => {
         <NewFishSpeciesModal
           isOpen={isNewFishNameModalOpen}
           onDismiss={closeNewFishNameModal}
-          onSubmit={handleNewFishSpeciesOnSubmit}
+          onSubmit={onSubmitNewFishSpecies}
           currentUser={currentUser}
           projectId={projectId}
         />
