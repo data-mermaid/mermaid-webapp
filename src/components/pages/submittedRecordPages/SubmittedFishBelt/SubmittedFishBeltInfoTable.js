@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/macro'
 import { Table, Tr, Td } from '../../../generic/Table/table'
 import {
   managementRegimePropType,
@@ -9,12 +8,7 @@ import {
   submittedFishBeltPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { getObjectById } from '../../../../library/getObjectById'
-
-const TdKey = styled(Td)`
-  white-space: nowrap;
-  font-weight: 900;
-  width: 0;
-`
+import { TdKey } from '../SubmittedFormPage.styles'
 
 const TableRowItem = ({ title, options, value }) => (
   <Tr>
@@ -25,6 +19,7 @@ const TableRowItem = ({ title, options, value }) => (
 
 const SubmittedFishBeltInfoTable = ({ sites, managementRegimes, choices, submittedRecord }) => {
   const { site, management, sample_date, notes } = submittedRecord.sample_event
+
   const {
     sample_time,
     depth,

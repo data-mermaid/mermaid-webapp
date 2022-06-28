@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components/macro'
 import { mediaQueryTabletLandscapeOnly } from '../../../library/styling/mediaQueries'
 import { H2 } from '../../generic/text'
 import { RowRight } from '../../generic/positioning'
-import { Table, Th } from '../../generic/Table/table'
+import { Table, Th, Td } from '../../generic/Table/table'
 import theme from '../../../theme'
 
 export const TheadItem = styled(Th)``
@@ -34,4 +34,10 @@ export const UnderTableRow = styled(RowRight)`
     flex-direction: column;
     gap: ${theme.spacing.small};
   `)}
+`
+
+export const TdKey = styled(Td)`
+  white-space: nowrap;
+  font-weight: 900;
+  width: 0;
 `

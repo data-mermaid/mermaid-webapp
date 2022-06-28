@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import {
   choicesPropType,
-  submittedFishBeltPropType,
+  submittedBenthicPhotoQuadratPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { getObjectById } from '../../../../library/getObjectById'
 import { getOptions } from '../../../../library/getOptions'
@@ -115,7 +115,7 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
 SubmittedBenthicPhotoQuadratObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
-  submittedRecord: submittedFishBeltPropType,
+  submittedRecord: submittedBenthicPhotoQuadratPropType,
 }
 
 SubmittedBenthicPhotoQuadratObservationTable.defaultProps = {

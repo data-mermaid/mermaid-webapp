@@ -1,20 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/macro'
 import { Table, Tr, Td } from '../../../generic/Table/table'
 import {
   managementRegimePropType,
   sitePropType,
   choicesPropType,
-  submittedFishBeltPropType,
+  submittedBenthicPhotoQuadratPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { getObjectById } from '../../../../library/getObjectById'
-
-const TdKey = styled(Td)`
-  white-space: nowrap;
-  font-weight: 900;
-  width: 0;
-`
+import { TdKey } from '../SubmittedFormPage.styles'
 
 const TableRowItem = ({ title, options, value }) => (
   <Tr>
@@ -89,7 +83,7 @@ SubmittedBenthicPhotoQuadratInfoTable.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   choices: choicesPropType.isRequired,
-  submittedRecord: submittedFishBeltPropType,
+  submittedRecord: submittedBenthicPhotoQuadratPropType,
 }
 
 SubmittedBenthicPhotoQuadratInfoTable.defaultProps = {
