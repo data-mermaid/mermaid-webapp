@@ -18,6 +18,7 @@ const NoResultSection = styled.div`
   position: absolute;
   top: 4rem;
   outline: ${theme.color.outline};
+  outline-offset: -3px;
   background: ${theme.color.white};
   z-index: 99;
   width: 100%;
