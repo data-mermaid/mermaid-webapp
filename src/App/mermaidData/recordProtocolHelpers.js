@@ -25,5 +25,5 @@ export const getIsFishBelt = (record) => {
 }
 
 export const getIsQuadratSampleUnit = (record) => {
-  return record?.data?.protocol === 'quadrat_transect' || 'quadrat_collection'
+  return record?.data?.protocol === 'benthicpqt' || record?.data?.protocol === 'bleachingqc'
 }
