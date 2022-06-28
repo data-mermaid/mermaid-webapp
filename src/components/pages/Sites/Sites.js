@@ -3,7 +3,7 @@ import { CSVLink } from 'react-csv'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-
+import { getOptions } from '../../../library/getOptions'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
@@ -80,7 +80,6 @@ const Sites = () => {
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
-
   const tableColumns = useMemo(
     () => [
       {
@@ -131,7 +130,7 @@ const Sites = () => {
     [siteRecordsForUiDisplay],
   )
 
-  const names = getTableCellData.map((obj) => {
+  const name = getTableCellData.map((obj) => {
     return obj.name
   })
   const reefType = getTableCellData.map((obj) => {
@@ -160,6 +159,20 @@ const Sites = () => {
     return obj.country
   })
 
+  const countries_name = []
+
+  for (const [key, value] of Object.entries(choices)) {
+    for (const [key2, value2] of Object.entries(value)) {
+      for (let i = 0; i < value2.length; i++) {
+        for (let j = 0; j < country.length; j++) {
+          if (value2[i].id == country[j]) {
+            countries_name.push(value2[i].name)
+          }
+        }
+      }
+    }
+  }
+
   const headers = [
     'Country',
     'Name',
@@ -171,7 +184,7 @@ const Sites = () => {
     'Notes',
   ]
 
-  const data = [country, names, latitude, longitude, reefType, reefZone, exposure, notes]
+  const data = [countries_name, name, latitude, longitude, reefType, reefZone, exposure, notes]
 
   const transposeData = data[0].map((_, colIndex) => data.map((row) => row[colIndex]))
 
@@ -215,7 +228,6 @@ const Sites = () => {
       return filteredRows
     },
     [siteRecordsForUiDisplay],
-    // console.log(siteRecordsForUiDisplay),
   )
 
   const {
@@ -272,7 +284,6 @@ const Sites = () => {
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
-                  // console.log(column.Header)
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
                   )
