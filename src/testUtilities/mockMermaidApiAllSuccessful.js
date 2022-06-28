@@ -29,7 +29,6 @@ const mockMermaidApiAllSuccessful = setupServer(
     )
     // Returning status allows tests to pass but there an error is thrown from getBellNotifications because apiResults.data is undefined
     // return res(ctx.status(200))
-
   }),
   rest.post(`${apiBaseUrl}/push/`, (req, res, ctx) => {
     const reqCollectRecords = req.body.collect_records ?? []
