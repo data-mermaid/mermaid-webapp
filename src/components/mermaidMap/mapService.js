@@ -1,5 +1,7 @@
 import maplibregl from 'maplibre-gl'
 
+const coralAtlasAppId = process.env.REACT_APP_CORAL_ATLAS_APP_ID
+
 export const benthicColors = {
   'Coral/Algae': 'rgb(255, 97, 97)',
   'Benthic Microalgae': 'rgb(155, 204, 79)',
@@ -201,19 +203,21 @@ export const loadACALayers = (map) => {
 
   map.addSource('atlas-planet', {
     type: 'raster',
-    tiles: ['https://allencoralatlas.org/tiles/planet/visual/2019/{z}/{x}/{y}'],
+    tiles: [
+      `https://allencoralatlas.org/tiles/planet/visual/2019/{z}/{x}/{y}?appid=${coralAtlasAppId}`,
+    ],
   })
 
   map.addSource('atlas-geomorphic', {
     type: 'vector',
-    tiles: ['https://allencoralatlas.org/tiles/geomorphic/{z}/{x}/{y}'],
+    tiles: [`https://allencoralatlas.org/tiles/geomorphic/{z}/{x}/{y}?appid=${coralAtlasAppId}`],
     minZoom: 0,
     maxZoom: 22,
   })
 
   map.addSource('atlas-benthic', {
     type: 'vector',
-    tiles: ['https://allencoralatlas.org/tiles/benthic/{z}/{x}/{y}'],
+    tiles: [`https://allencoralatlas.org/tiles/benthic/{z}/{x}/{y}?appid=${coralAtlasAppId}`],
     minZoom: 0,
     maxZoom: 22,
   })
