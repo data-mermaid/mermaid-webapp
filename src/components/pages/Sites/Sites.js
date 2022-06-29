@@ -36,6 +36,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
+import ExportSitesToCsv from './ExportSitesToCsv/ExportSitesToCsv'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -117,78 +118,6 @@ const Sites = () => {
     [siteRecordsForUiDisplay, currentProjectPath],
   )
 
-  const getTableCellData = useMemo(
-    () =>
-      siteRecordsForUiDisplay.map(({ id, uiLabels }) => ({
-        name: uiLabels.name,
-        reefType: uiLabels.reefType,
-        reefZone: uiLabels.reefZone,
-        exposure: uiLabels.exposure,
-        id,
-      })),
-    [siteRecordsForUiDisplay],
-  )
-
-  const name = getTableCellData.map((obj) => {
-    return obj.name
-  })
-  const reefType = getTableCellData.map((obj) => {
-    return obj.reefType
-  })
-
-  const reefZone = getTableCellData.map((obj) => {
-    return obj.reefZone
-  })
-
-  const exposure = getTableCellData.map((obj) => {
-    return obj.exposure
-  })
-
-  const longitude = siteRecordsForUiDisplay.map((obj) => {
-    return obj.location.coordinates[0]
-  })
-
-  const latitude = siteRecordsForUiDisplay.map((obj) => {
-    return obj.location.coordinates[1]
-  })
-  const notes = siteRecordsForUiDisplay.map((obj) => {
-    return obj.notes
-  })
-  const country = siteRecordsForUiDisplay.map((obj) => {
-    return obj.country
-  })
-
-  const countries_name = []
-
-  for (const [, value] of Object.entries(choices)) {
-    for (const [, value2] of Object.entries(value)) {
-      for (let i = 0; i < value2.length; i++) {
-        // eslint-disable-next-line max-depth
-        for (let j = 0; j < country.length; j++) {
-          // eslint-disable-next-line max-depth
-          if (value2[i].id === country[j]) {
-            countries_name.push(value2[i].name)
-          }
-        }
-      }
-    }
-  }
-
-  const headers = [
-    'Country',
-    'Name',
-    'Latitude',
-    'Longitude',
-    'Reef type',
-    'Reef zone',
-    'Reef exposure',
-    'Notes',
-  ]
-
-  const data = [countries_name, name, latitude, longitude, reefType, reefZone, exposure, notes]
-
-  const transposeData = data[0].map((_, colIndex) => data.map((row) => row[colIndex]))
-
   const tableDefaultPrefs = useMemo(() => {
     return {
       sortBy: [
@@ -202,7 +131,7 @@ const Sites = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser && currentUser.id}-sitesTable`,
+    key: `${currentUser && currentUser.id}-sicountryNameable`,
     defaultValue: tableDefaultPrefs,
   })
 
@@ -373,14 +302,7 @@ const Sites = () => {
                 <IconCopy /> Copy sites from other projects
               </ButtonSecondary>
               <ButtonSecondary>
-                <CSVLink
-                  headers={headers}
-                  data={transposeData}
-                  filename="Export_sites.csv"
-                  style={{ margin: 0, textDecoration: 'none' }}
-                >
-                  <IconDownload /> Export sites
-                </CSVLink>
+                <ExportSitesToCsv />
               </ButtonSecondary>
             </ToolbarButtonWrapper>
           </ToolBarRow>
