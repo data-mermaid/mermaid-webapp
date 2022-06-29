@@ -15,6 +15,7 @@ env:
   REACT_APP_AUTH0_CLIENT_ID: f0WJPG2LHzAX3KLU0LwdmVOvtDo7jiu6
   REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
   REACT_APP_MERMAID_API: https://api.datamermaid.org/v1
+  REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
 
 jobs:
   build-and-deploy:
