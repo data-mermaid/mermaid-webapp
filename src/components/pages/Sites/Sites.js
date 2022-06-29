@@ -1,12 +1,11 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
-import { CSVLink } from 'react-csv'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
-import { IconPlus, IconCopy, IconDownload } from '../../icons'
+import { IconPlus, IconCopy } from '../../icons'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
