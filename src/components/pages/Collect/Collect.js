@@ -98,7 +98,7 @@ const Collect = () => {
         Header: 'Size',
         accessor: 'size',
         align: 'right',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Depth (m)',
