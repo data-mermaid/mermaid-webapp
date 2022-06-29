@@ -22,9 +22,8 @@ const ProjectHealthMixin = (Base) =>
 
       if (names.length > 1) {
         if (isDateInNames) {
+          // Remove the ending Date element from array
           names.splice(-1, 1)
-
-          return names[0]
         }
 
         return names.join(' ')
@@ -129,6 +128,7 @@ const ProjectHealthMixin = (Base) =>
       for (const site of recordGroupedBySite) {
         const siteId = site[0]
         const siteInfo = site[1]
+
         const siteName = this.#removeDateFromName(siteInfo.site_name)
 
         for (const protocol of availableProtocols) {
@@ -226,22 +226,22 @@ const ProjectHealthMixin = (Base) =>
       return this._isAuthenticatedAndReady
         ? this.getSampleUnitSummary(projectId).then((sampleUnitRecords) => {
             const sampleEventUnitRecords = []
-          const {
-            site_submitted_summary: siteSubmittedSummary,
-            site_collecting_summary: siteCollectingSummary,
-            protocols
-          } = sampleUnitRecords
+            const {
+              site_submitted_summary: siteSubmittedSummary,
+              site_collecting_summary: siteCollectingSummary,
+              protocols,
+            } = sampleUnitRecords
             const noBleachingProtocols = protocols.filter((protocol) => protocol !== 'bleachingqc')
 
-          this.#addRecordsToSites(sampleEventUnitRecords, siteSubmittedSummary)
+            this.#addRecordsToSites(sampleEventUnitRecords, siteSubmittedSummary)
 
-          this.#populateAdditionalRecords(sampleEventUnitRecords, noBleachingProtocols)
+            this.#populateAdditionalRecords(sampleEventUnitRecords, noBleachingProtocols)
 
-          const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
-            sampleEventUnitRecords,
-            siteCollectingSummary,
-            noBleachingProtocols,
-          )
+            const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
+              sampleEventUnitRecords,
+              siteCollectingSummary,
+              noBleachingProtocols,
+            )
 
             return sampleEventUnitWithSubmittedAndCollectingRecords
           })
