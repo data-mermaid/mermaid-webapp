@@ -61,6 +61,7 @@ export const inputTextareaSelectStyles = css`
   width: 100%;
   &:focus {
     outline: ${theme.color.outline};
+    outline-offset: -3px;
   }
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {

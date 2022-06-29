@@ -11,6 +11,9 @@ const InputAndButtonWrapper = styled.div`
     ${inputStyles};
     width: 100%;
     border-color: ${theme.color.border};
+    &:focus {
+      outline-offset: -3px;
+    }
   }
 `
 

@@ -76,7 +76,7 @@ const NavMenu = ({ subNavNode }) => {
       <NavList>
         <OfflineHide>
           <li>
-            <NavHeader>Project Overview</NavHeader>
+            <NavHeader>Project Health</NavHeader>
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/usersandtransects`}>
