@@ -713,43 +713,45 @@ const Users = () => {
   )
 
   const content = isAppOnline ? table : <PageUnavailableOffline />
-  const toolbar = isAppOnline ? (
+  const toolbar = (
     <>
       <H2>{language.pages.userTable.title}</H2>
-      <ToolbarRowWrapper>
-        <FilterSearchToolbar
-          name={
-            isAdminUser
-              ? language.pages.userTable.filterToolbarTextForAdmin
-              : language.pages.userTable.filterToolbarTextForCollector
-          }
-          handleGlobalFilterChange={handleGlobalFilterChange}
-          value={tableUserPrefs.globalFilter}
-        />
-        {isAdminUser && (
-          <InputAndButton
-            inputId="add-new-user-email"
-            labelText={language.pages.userTable.searchEmailToolbarText}
-            buttonChildren={
-              <>
-                <IconPlus />
-                Add User
-              </>
-            }
-            value={newUserEmail}
-            onChange={handleNewUserEmailOnChange}
-            buttonOnClick={addUser}
-          />
-        )}
-      </ToolbarRowWrapper>
-      {isReadonlyUserWithActiveSampleUnits && (
-        <WarningInlineMessage type="warning">
-          {language.pages.userTable.warningReadOnlyUser}
-        </WarningInlineMessage>
+      {isAppOnline && (
+        <>
+          <ToolbarRowWrapper>
+            <FilterSearchToolbar
+              name={
+                isAdminUser
+                  ? language.pages.userTable.filterToolbarTextForAdmin
+                  : language.pages.userTable.filterToolbarTextForCollector
+              }
+              handleGlobalFilterChange={handleGlobalFilterChange}
+              value={tableUserPrefs.globalFilter}
+            />
+            {isAdminUser && (
+              <InputAndButton
+                inputId="add-new-user-email"
+                labelText={language.pages.userTable.searchEmailToolbarText}
+                buttonChildren={
+                  <>
+                    <IconPlus />
+                    Add User
+                  </>
+                }
+                value={newUserEmail}
+                onChange={handleNewUserEmailOnChange}
+                buttonOnClick={addUser}
+              />
+            )}
+          </ToolbarRowWrapper>
+          {isReadonlyUserWithActiveSampleUnits && (
+            <WarningInlineMessage type="warning">
+              {language.pages.userTable.warningReadOnlyUser}
+            </WarningInlineMessage>
+          )}
+        </>
       )}
     </>
-  ) : (
-    <H2>Users</H2>
   )
 
   return idsNotAssociatedWithData.length ? (
