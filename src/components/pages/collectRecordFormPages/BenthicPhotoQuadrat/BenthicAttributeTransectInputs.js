@@ -20,6 +20,7 @@ const LENGTH_SURVEYED_VALIDATION_PATH = 'data.quadrat_transect.len_surveyed'
 const NOTES_VALIDATION_PATH = 'data.sample_event.notes'
 const NUM_POINTS_PER_QUADRAT_VALIDATION_PATH = 'data.quadrat_transect.num_points_per_quadrat'
 const NUM_QUADRATS_VALIDATION_PATH = 'data.quadrat_transect.num_quadrat'
+const QUADRAT_NUMBER_START_VALIDATION_PATH = 'data.quadrat_transect.quadrat_number_start'
 const QUADRAT_SIZE_VALIDATION_PATH = 'data.quadrat_transect.quadrat_size'
 const SAMPLE_TIME_VALIDATION_PATH = 'data.quadrat_transect.sample_time'
 const TRANSECT_NUMBER_VALIDATION_PATH = 'data.quadrat_transect.number'
@@ -66,6 +67,10 @@ const TransectInputs = ({
   )
   const lengthSurveyedValidationProperties = getValidationPropertiesForInput(
     quadrat_transect?.len_surveyed,
+    areValidationsShowing,
+  )
+  const quadratNumberStartValidationProperties = getValidationPropertiesForInput(
+    quadrat_transect?.quadrat_number_start,
     areValidationsShowing,
   )
   const quadratSizeValidationProperties = getValidationPropertiesForInput(
@@ -139,6 +144,14 @@ const TransectInputs = ({
       inputName: 'len_surveyed',
       validationProperties: lengthSurveyedValidationProperties,
       validationPath: LENGTH_SURVEYED_VALIDATION_PATH,
+    })
+    formik.handleChange(event)
+  }
+  const handleQuadratNumberStartChange = (event) => {
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'quadrat_number_start',
+      validationProperties: quadratNumberStartValidationProperties,
+      validationPath: QUADRAT_NUMBER_START_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
@@ -307,6 +320,28 @@ const TransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
+        />
+        <InputWithLabelAndValidation
+          label="Quadrat Number Start"
+          required={true}
+          id="quadrat_number_start"
+          testId="quadrat_number_start"
+          type="number"
+          step="any"
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({
+              validationPath: QUADRAT_NUMBER_START_VALIDATION_PATH,
+            })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({
+              validationPath: QUADRAT_NUMBER_START_VALIDATION_PATH,
+            })
+          }}
+          {...quadratSizeValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.quadrat_number_start}
+          onChange={handleQuadratNumberStartChange}
         />
         <InputWithLabelAndValidation
           label="Quadrat Size"

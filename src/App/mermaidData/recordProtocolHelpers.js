@@ -19,3 +19,13 @@ export const getRecordSampleUnit = (protocol) => {
     benthicpqt: 'quadrat_transect',
   }[protocol]
 }
+
+export const getIsFishBelt = (protocol) => {
+  return protocol === 'fishbelt'
+}
+
+export const getIsQuadratSampleUnit = (protocol) => {
+  return protocol === 'benthicpqt' || protocol === 'bleachingqc'
+}
+
+export const noLabelSymbol = '-'

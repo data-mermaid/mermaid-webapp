@@ -130,3 +130,11 @@ export const TableValidationList = styled.ul`
   margin: 0;
   list-style: none; ;
 `
+
+export const DeleteRecordButtonCautionWrapper = styled('div')`
+  padding: 0 ${theme.spacing.medium};
+  text-align: right;
+  ${mediaQueryTabletLandscapeOnly(css`
+    text-align: left;
+  `)}
+`

@@ -44,6 +44,7 @@ const getBenthicPhotoQuadratAdditionalValues = (collectRecord) => {
   const benthicPhotoQuadratData = collectRecord?.data?.quadrat_transect
 
   return {
+    quadrat_number_start: benthicPhotoQuadratData?.quadrat_number_start ?? '',
     quadrat_size: benthicPhotoQuadratData?.quadrat_size ?? '',
     num_quadrats: benthicPhotoQuadratData?.num_quadrats ?? '',
     num_points_per_quadrat: benthicPhotoQuadratData?.num_points_per_quadrat ?? '',

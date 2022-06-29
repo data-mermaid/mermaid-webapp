@@ -30,6 +30,10 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
+import {
+  getIsQuadratSampleUnit,
+  noLabelSymbol,
+} from '../../../App/mermaidData/recordProtocolHelpers'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -94,7 +98,7 @@ const Collect = () => {
         Header: 'Size',
         accessor: 'size',
         align: 'right',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Depth (m)',
@@ -118,20 +122,29 @@ const Collect = () => {
 
   const tableCellData = useMemo(
     () =>
-      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => ({
-        method: (
-          <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
-            {uiLabels.protocol}
-          </Link>
-        ),
-        site: uiLabels.site,
-        management: uiLabels.management,
-        sampleUnitNumber: uiLabels.sampleUnitNumber,
-        size: uiLabels.size,
-        depth: uiLabels.depth,
-        sampleDate: uiLabels.sampleDate,
-        observers: uiLabels.observers,
-      })),
+      collectRecordsForUiDisplay.map(({ id, data, uiLabels }) => {
+        const isQuadratSampleUnit = getIsQuadratSampleUnit(data.protocol)
+
+        return {
+          method: (
+            <Link to={`${currentProjectPath}/collecting/${data.protocol}/${id}`}>
+              {uiLabels.protocol}
+            </Link>
+          ),
+          site: uiLabels.site,
+          management: uiLabels.management,
+          sampleUnitNumber: uiLabels.sampleUnitNumber,
+          size: (
+            <>
+              {uiLabels.size}{' '}
+              {isQuadratSampleUnit && uiLabels.size !== noLabelSymbol && <sup>2</sup>}
+            </>
+          ),
+          depth: uiLabels.depth,
+          sampleDate: uiLabels.sampleDate,
+          observers: uiLabels.observers,
+        }
+      }),
     [collectRecordsForUiDisplay, currentProjectPath],
   )
 

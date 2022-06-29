@@ -5,13 +5,13 @@ import {
 } from './testHelpers.DatabseSwitchboard'
 
 describe('Offline delete fishbelt', () => {
-  test('deleteFishBelt offline returns error message upon dexie error', async () => {
+  test('deleteSampleUnit offline returns error message upon dexie error', async () => {
     const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError()
 
     expect.assertions(1)
 
     try {
-      await dbInstanceOffline.deleteFishBelt({
+      await dbInstanceOffline.deleteSampleUnit({
         record: { id: 'someId' },
         profileId: '1',
         projectId: '1',
@@ -20,7 +20,7 @@ describe('Offline delete fishbelt', () => {
       expect(error.message).toBeTruthy()
     }
   })
-  test('deleteFishBelt offline deletes the record if there is no corresponding server record', async () => {
+  test('deleteSampleUnit offline deletes the record if there is no corresponding server record', async () => {
     const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
 
     const fishBeltToBeDeleted = {
@@ -34,7 +34,7 @@ describe('Offline delete fishbelt', () => {
     // save a record in IDB so we can delete it
     await dbInstanceOffline.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
-    await dbInstanceOffline.deleteFishBelt({
+    await dbInstanceOffline.deleteSampleUnit({
       record: fishBeltToBeDeleted,
       profileId: '1',
       projectId: '1',
@@ -42,7 +42,7 @@ describe('Offline delete fishbelt', () => {
 
     expect(await dbInstanceOffline.getCollectRecord('foo')).toBeUndefined()
   })
-  test('deleteFishBelt offline marks the record with a _deleted property if there is a corresponding server record', async () => {
+  test('deleteSampleUnit offline marks the record with a _deleted property if there is a corresponding server record', async () => {
     const dbInstanceOffline = getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess()
 
     const fishBeltToBeDeleted = {
@@ -56,7 +56,7 @@ describe('Offline delete fishbelt', () => {
     // save a record in IDB so we can delete it
     await dbInstanceOffline.dexiePerUserDataInstance.collect_records.put(fishBeltToBeDeleted)
 
-    await dbInstanceOffline.deleteFishBelt({
+    await dbInstanceOffline.deleteSampleUnit({
       record: fishBeltToBeDeleted,
       profileId: '1',
       projectId: '1',

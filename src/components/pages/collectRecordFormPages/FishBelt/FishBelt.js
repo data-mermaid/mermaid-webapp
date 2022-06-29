@@ -4,9 +4,6 @@ import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 
-import styled, { css } from 'styled-components/macro'
-import { mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
-import theme from '../../../../theme'
 import {
   getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
@@ -46,17 +43,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordName } from '../../../../library/getRecordName'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
-
-/*
-  Fishbelt component lets a user edit and delete a record as well as create a new record.
-*/
-const DeleteRecordButtonCautionWrapper = styled('div')`
-  padding: 0 ${theme.spacing.medium};
-  text-align: right;
-  ${mediaQueryTabletLandscapeOnly(css`
-    text-align: left;
-  `)}
-`
+import { DeleteRecordButtonCautionWrapper } from '../CollectingFormPage.Styles'
 
 const FishBelt = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
@@ -233,7 +220,7 @@ const FishBelt = ({ isNewRecord }) => {
   const deleteRecord = () => {
     if (!isNewRecord) {
       databaseSwitchboardInstance
-        .deleteFishBelt({
+        .deleteSampleUnit({
           record: collectRecordBeingEdited,
           profileId: currentUser.id,
           projectId,

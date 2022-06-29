@@ -5,7 +5,13 @@ import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
-import { getRecordSampleUnitMethod, getRecordSampleUnit } from '../recordProtocolHelpers'
+import {
+  getRecordSampleUnitMethod,
+  getRecordSampleUnit,
+  getIsFishBelt,
+  getIsQuadratSampleUnit,
+  noLabelSymbol,
+} from '../recordProtocolHelpers'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
@@ -13,10 +19,6 @@ const CollectRecordsMixin = (Base) =>
       ok: 'Valid',
       error: 'Errors',
       warning: 'Warnings',
-    }
-
-    #getIsFishBelt = function getIsFishBelt(record) {
-      return record?.data?.protocol === 'fishbelt'
     }
 
     #formatFishbeltRecordForPush = function formatFishbeltRecordForPush({
@@ -59,25 +61,25 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
-      const transectMethod = getRecordSampleUnit(record.data.protocol)
-      const transectNumber = record.data?.[transectMethod]?.number
-      const labelName = record.data?.[transectMethod]?.label
+      const sampleUnitType = getRecordSampleUnit(record.data.protocol)
+      const transectNumber = record.data?.[sampleUnitType]?.number
+      const labelName = record.data?.[sampleUnitType]?.label
 
-      const sampleUnit = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
+      const sampleUnitLabel = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
 
-      return sampleUnit === '' ? undefined : sampleUnit
+      return sampleUnitLabel
     }
 
     #getDepthLabel = function getDepthLabel(record) {
-      const isFishBelt = this.#getIsFishBelt(record)
+      const sampleUnitType = getRecordSampleUnit(record.data.protocol)
 
-      return isFishBelt ? record.data.fishbelt_transect?.depth : record.data.benthic_transect?.depth
+      return record.data?.[sampleUnitType]?.depth
     }
 
     #getObserversLabel = function getObserversLabel(record) {
       const { observers } = record.data
 
-      return observers
+      return observers !== undefined && observers.length
         ? observers
             .reduce((observerList, observer) => {
               observerList.push(observer.profile_name)
@@ -85,7 +87,7 @@ const CollectRecordsMixin = (Base) =>
               return observerList
             }, [])
             .join(', ')
-        : undefined
+        : noLabelSymbol
     }
 
     #getStatusLabel = function getStatusLabel(record) {
@@ -96,40 +98,42 @@ const CollectRecordsMixin = (Base) =>
 
     #getSizeLabel = function getSizeLabel(record, choices) {
       const { belttransectwidths } = choices
-      const isFishBelt = this.#getIsFishBelt(record)
-      const noSizeLabel = '-'
+      const recordDataProtocol = record?.data?.protocol
+      const isFishBelt = getIsFishBelt(recordDataProtocol)
+      const isQuadratSampleUnit = getIsQuadratSampleUnit(recordDataProtocol)
 
       if (isFishBelt) {
-        const widthId = record.data.fishbelt_transect?.width
+        const widthId = record.data?.fishbelt_transect?.width
 
-        const widthNameWithoutUnit = getObjectById(belttransectwidths.data, widthId)?.name.slice(
-          0,
-          -1,
-        )
+        const fishBeltWidth = getObjectById(belttransectwidths.data, widthId)?.name.slice(0, -1)
 
-        const length = record.data.fishbelt_transect?.len_surveyed
+        const fishBeltLength = record.data.fishbelt_transect?.len_surveyed
 
-        if (length && widthNameWithoutUnit) {
-          return `${length}m x ${widthNameWithoutUnit}m`
-        }
-        if (length || widthNameWithoutUnit) {
-          return `${length || widthNameWithoutUnit}m`
+        if (fishBeltLength && fishBeltWidth) {
+          return `${fishBeltLength}m x ${fishBeltWidth}m`
         }
 
-        return noSizeLabel
+        if (fishBeltLength || fishBeltWidth) {
+          return `${fishBeltLength || fishBeltWidth}m`
+        }
+
+        return noLabelSymbol
       }
 
-      const length = record.data.benthic_transect?.len_surveyed
+      if (isQuadratSampleUnit) {
+        const quadratSize =
+          record.data?.quadrat_collection?.quadrat_size ||
+          record.data?.quadrat_transect?.quadrat_size
 
-      return length === undefined ? noSizeLabel : `${length}m`
+        return quadratSize ? `${quadratSize}m` : noLabelSymbol
+      }
+
+      const benthicLength = record.data?.benthic_transect?.len_surveyed
+
+      return benthicLength ? `${benthicLength}m` : noLabelSymbol
     }
 
-    saveSampleUnit = async function saveSampleUnit({
-      record,
-      profileId,
-      projectId,
-      protocol,
-    }) {
+    saveSampleUnit = async function saveSampleUnit({ record, profileId, projectId, protocol }) {
       if (!record || !profileId || !projectId || !protocol) {
         throw new Error(
           'saveFishBelt expects record, profileId, projectId, and protocol parameters',
@@ -253,9 +257,9 @@ const CollectRecordsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteFishBelt = async function deleteFishBelt({ record, profileId, projectId }) {
+    deleteSampleUnit = async function deleteSampleUnit({ record, profileId, projectId }) {
       if (!record || !profileId || !projectId) {
-        throw new Error('deleteFishBelt expects record, profileId, and projectId parameters')
+        throw new Error('deleteSampleUnit expects record, profileId, and projectId parameters')
       }
       const hasCorrespondingRecordInTheApi = !!record._last_revision_num
 
@@ -301,7 +305,7 @@ const CollectRecordsMixin = (Base) =>
 
             return Promise.reject(
               new Error(
-                'the API record returned from deleteFishBelt doesnt have a successful status code',
+                'the API record returned from deleteSampleUnit doesnt have a successful status code',
               ),
             )
           })
