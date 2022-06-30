@@ -48,6 +48,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { userRole } from '../../../App/mermaidData/userRole'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -116,28 +117,30 @@ const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_
 const getIsUserRoleReadOnly = (profile) => profile.role === 10
 
 const Users = () => {
-  const [
-    showRemoveUserWithActiveSampleUnitsWarning,
-    setShowRemoveUserWithActiveSampleUnitsWarning,
-  ] = useState(false)
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
   const [isReadonlyUserWithActiveSampleUnits, setIsReadonlyUserWithActiveSampleUnits] =
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
+  const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
+
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
   const [observerProfiles, setObserverProfiles] = useState([])
   const [projectName, setProjectName] = useState('')
+  const [
+    showRemoveUserWithActiveSampleUnitsWarning,
+    setShowRemoveUserWithActiveSampleUnitsWarning,
+  ] = useState(false)
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
+  const { currentUser, getProjectRole } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
-  const { currentUser, getProjectRole } = useCurrentUser()
-  const isMounted = useIsMounted()
+  const { setIsSyncInProgress } = useSyncStatus()
   const isAdminUser = getProjectRole(projectId) === userRole.admin
+  const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
@@ -274,9 +277,11 @@ const Users = () => {
   }
 
   const transferSampleUnits = () => {
+    setIsSyncInProgress(true) // hack to get collect record count to update, also shows a loader
+
     const fromUserProfileId = fromUser.profile
 
-    databaseSwitchboardInstance
+    return databaseSwitchboardInstance
       .transferSampleUnits(projectId, fromUserProfileId, toUserProfileId)
       .then((resp) => {
         const sampleUnitMsg = pluralize(
@@ -288,9 +293,12 @@ const Users = () => {
 
         fetchProjectProfiles()
         toast.success(...getToastArguments(`${numRecordTransferred} ${sampleUnitMsg} transferred`))
-      })
 
-    return Promise.resolve()
+        setIsSyncInProgress(false) // hack to get collect record count to update, also shows a loader
+      })
+      .catch(() => {
+        toast.error(...getToastArguments(language.error.transferSampleUnitsUnavailable))
+      })
   }
 
   const openTransferSampleUnitsModal = (profile, profile_name, email, num_active_sample_units) => {

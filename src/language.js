@@ -90,6 +90,7 @@ const error = {
   idNotFoundRecovery:
     "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
   homePageNavigation: 'Go back to the home page.',
+  transferSampleUnitsUnavailable: 'Something went wrong. Sample units are failed to transfer. Please try again.'
 }
 
 const success = {
