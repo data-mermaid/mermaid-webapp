@@ -277,7 +277,8 @@ const Users = () => {
   }
 
   const transferSampleUnits = () => {
-    setIsSyncInProgress(true) // hack to get collect record count to update, also shows a loader
+    setIsSyncInProgress(true)
+
     const fromUserProfileId = fromUser.profile
 
     return databaseSwitchboardInstance
@@ -293,10 +294,10 @@ const Users = () => {
         fetchProjectProfiles()
         toast.success(...getToastArguments(`${numRecordTransferred} ${sampleUnitMsg} transferred`))
 
-        setIsSyncInProgress(false) // hack to get collect record count to update, also shows a loader
+        setIsSyncInProgress(false)
       })
       .catch(() => {
-        // please add error toast or handle error
+        toast.error(...getToastArguments(language.error.transferSampleUnitsUnavailable))
       })
   }
 
