@@ -136,7 +136,7 @@ const CollectRecordsMixin = (Base) =>
     saveSampleUnit = async function saveSampleUnit({ record, profileId, projectId, protocol }) {
       if (!record || !profileId || !projectId || !protocol) {
         throw new Error(
-          'saveFishBelt expects record, profileId, projectId, and protocol parameters',
+          'saveSampleUnit expects record, profileId, projectId, and protocol parameters',
         )
       }
 
