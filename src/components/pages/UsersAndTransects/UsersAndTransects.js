@@ -27,6 +27,7 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const HeaderCenter = styled.div`
   text-align: center;
@@ -130,9 +131,14 @@ const UsersAndTransects = () => {
   const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
+  const { isSyncInProgress } = useSyncStatus()
 
   const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId) {
+    if (!isAppOnline) {
+      setIsLoading(false)
+    }
+
+    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getRecordsForUsersAndTransectsTable(projectId),
@@ -166,7 +172,7 @@ const UsersAndTransects = () => {
           toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress, isAppOnline])
 
   const getUserColumnHeaders = useCallback(() => {
     const filteredObservers = observerProfiles.filter(
@@ -475,6 +481,20 @@ const UsersAndTransects = () => {
   )
 
   const content = isAppOnline ? table : <PageUnavailableOffline />
+  const toolbar = (
+    <>
+      <H2>{language.pages.usersAndTransectsTable.title}</H2>
+      {isAppOnline && (
+        <ToolBarRow>
+          <FilterSearchToolbar
+            name={language.pages.usersAndTransectsTable.filterToolbarText}
+            value={tableUserPrefs.globalFilter}
+            handleGlobalFilterChange={handleGlobalFilterChange}
+          />
+        </ToolBarRow>
+      )}
+    </>
+  )
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
@@ -482,22 +502,7 @@ const UsersAndTransects = () => {
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout
-      isPageContentLoading={isAppOnline ? isLoading : false}
-      content={content}
-      toolbar={
-        <>
-          <H2>Users and Transects</H2>
-          <ToolBarRow>
-            <FilterSearchToolbar
-              name={language.pages.usersAndTransectsTable.filterToolbarText}
-              value={tableUserPrefs.globalFilter}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
-          </ToolBarRow>
-        </>
-      }
-    />
+    <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
   )
 }
 

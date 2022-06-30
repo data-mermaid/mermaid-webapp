@@ -164,7 +164,7 @@ const autocomplete = {
 }
 
 const header = {
-  noNotifications: 'There are currently no notifications'
+  noNotifications: 'There are currently no notifications',
 }
 
 const table = {
@@ -260,6 +260,7 @@ const pages = {
     noDataExtraText: `You can add management regimes by creating a new one or copying them from another project.`,
   },
   usersAndTransectsTable: {
+    title: 'Users and Transects',
     filterToolbarText: 'Filter sample units by site or method',
     missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',
