@@ -153,7 +153,12 @@ const UsersAndTransects = () => {
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
               .map((reducedRecords) => reducedRecords.label)
 
-            const uniqueNumbersAsc = [...new Set(numbersNew)].sort((a, b) => a - b)
+            const uniqueNumbersAsc = [...new Set(numbersNew)].sort((a, b) => {
+              return a.localeCompare(b, 'en', {
+                numeric: true,
+                caseFirst: 'upper',
+              })
+            })
 
             setObserverProfiles(projectProfilesResponse)
             setSubmittedRecords(sampleUnitRecordsResponse)
