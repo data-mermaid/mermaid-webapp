@@ -17,6 +17,7 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import { sortArray } from '../../../library/arrays/sortArray'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
@@ -126,12 +127,40 @@ const UsersAndTransects = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const [observerProfiles, setObserverProfiles] = useState([])
   const [submittedRecords, setSubmittedRecords] = useState([])
   const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
+  const [collectRecordsByProfile, setCollectRecordsByProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
   const { isSyncInProgress } = useSyncStatus()
+
+  const groupCollectSampleUnitsByProfileSummary = (records, observers) => {
+    const getObserverProfileName = (profileId) =>
+      observers.find((observer) => observer.profile === profileId)?.profile_name
+
+    const groupProfileResult = records.reduce((acc, record) => {
+      const profileSummary = record.profile_summary
+
+      for (const collectRecordProfile in profileSummary) {
+        if (Object.prototype.hasOwnProperty.call(profileSummary, collectRecordProfile)) {
+          const collectRecords = profileSummary[collectRecordProfile]?.labels
+
+          acc[collectRecordProfile] = acc[collectRecordProfile] || {}
+          acc[collectRecordProfile] = {
+            profileId: collectRecordProfile,
+            profileName: getObserverProfileName(collectRecordProfile),
+            collectRecords: acc[collectRecordProfile].collectRecords
+              ? acc[collectRecordProfile].collectRecords.concat(collectRecords)
+              : [...collectRecords],
+          }
+        }
+      }
+
+      return acc
+    }, {})
+
+    return groupProfileResult
+  }
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -149,20 +178,20 @@ const UsersAndTransects = () => {
               setIdsNotAssociatedWithData([projectId])
             }
 
-            const numbersNew = sampleUnitRecordsResponse
+            const sampleUnitTransectNumbers = sampleUnitRecordsResponse
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
               .map((reducedRecords) => reducedRecords.label)
 
-            const uniqueNumbersAsc = [...new Set(numbersNew)].sort((a, b) => {
-              return a.localeCompare(b, 'en', {
-                numeric: true,
-                caseFirst: 'upper',
-              })
-            })
+            const uniqueTransectNumbersAsc = sortArray([...new Set(sampleUnitTransectNumbers)])
 
-            setObserverProfiles(projectProfilesResponse)
+            setCollectRecordsByProfile(
+              groupCollectSampleUnitsByProfileSummary(
+                sampleUnitRecordsResponse,
+                projectProfilesResponse,
+              ),
+            )
             setSubmittedRecords(sampleUnitRecordsResponse)
-            setSubmittedTransectNumbers(uniqueNumbersAsc)
+            setSubmittedTransectNumbers(uniqueTransectNumbersAsc)
             setIsLoading(false)
           }
         })
@@ -179,28 +208,26 @@ const UsersAndTransects = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress, isAppOnline])
 
-  const getUserColumnHeaders = useCallback(() => {
-    const filteredObservers = observerProfiles.filter(
-      ({ num_active_sample_units }) => num_active_sample_units > 0,
-    )
+  const getUserColumnHeaders = useMemo(() => {
+    const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
 
-    return filteredObservers.map((user) => {
+    return collectRecordsByProfileValues.map((user) => {
       return {
         Header: (
           <UserColumnHeader>
-            <span>{user.profile_name}</span>
+            <span>{user.profileName}</span>
             <span>
-              <ActiveRecordsCount>{user.num_active_sample_units}</ActiveRecordsCount>
+              <ActiveRecordsCount>{user.collectRecords.length}</ActiveRecordsCount>
             </span>
           </UserColumnHeader>
         ),
-        accessor: user.profile,
+        accessor: user.profileId,
         disableSortBy: true,
       }
     })
-  }, [observerProfiles])
+  }, [collectRecordsByProfile])
 
-  const getSubmittedTransectNumberColumnHeaders = useCallback(() => {
+  const getSubmittedTransectNumberColumnHeaders = useMemo(() => {
     return submittedTransectNumbers.map((number) => {
       return {
         Header: number,
@@ -227,13 +254,13 @@ const UsersAndTransects = () => {
       {
         Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
         id: 'transect-numbers',
-        columns: getSubmittedTransectNumberColumnHeaders(),
+        columns: getSubmittedTransectNumberColumnHeaders,
         disableSortBy: true,
       },
       {
         Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
         id: 'user-headers',
-        columns: getUserColumnHeaders(),
+        columns: getUserColumnHeaders,
         disableSortBy: true,
       },
     ],
@@ -272,25 +299,30 @@ const UsersAndTransects = () => {
 
   const populateCollectNumberRow = useCallback(
     (rowRecord) => {
-      const collectTransectNumbersRow = observerProfiles.reduce((accumulator, record) => {
-        const replaceEmptyLabels = (labels) => {
-          return labels.map((label) => {
-            return label || language.pages.usersAndTransectsTable.missingLabelNumber
-          })
-        }
+      const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
 
-        accumulator[record.profile] = rowRecord.profile_summary[record.profile]
-          ? replaceEmptyLabels(rowRecord.profile_summary[record.profile].labels)
-              .sort((a, b) => a - b)
-              .join(', ')
-          : '-'
+      const collectTransectNumbersRow = collectRecordsByProfileValues.reduce(
+        (accumulator, record) => {
+          const replaceEmptyLabels = (labels) => {
+            return labels.map((label) => {
+              return label || language.pages.usersAndTransectsTable.missingLabelNumber
+            })
+          }
 
-        return accumulator
-      }, {})
+          accumulator[record.profileId] = rowRecord.profile_summary[record.profileId]
+            ? sortArray(
+                replaceEmptyLabels(rowRecord.profile_summary[record.profileId].labels),
+              ).join(', ')
+            : '-'
+
+          return accumulator
+        },
+        {},
+      )
 
       return collectTransectNumbersRow
     },
-    [observerProfiles],
+    [collectRecordsByProfile],
   )
 
   const tableCellData = useMemo(
