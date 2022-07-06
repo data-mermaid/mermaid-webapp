@@ -90,7 +90,8 @@ const error = {
   idNotFoundRecovery:
     "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
   homePageNavigation: 'Go back to the home page.',
-  transferSampleUnitsUnavailable: 'Something went wrong. Sample units are failed to transfer. Please try again.'
+  transferSampleUnitsUnavailable:
+    'Something went wrong. Sample units are failed to transfer. Please try again.',
 }
 
 const success = {
@@ -227,7 +228,7 @@ const pages = {
     newUserModalText: `will need to sign up because they're not already a MERMAID user. After they've signed up, they'll be added to this project.`,
     transferSampleUnitsModalTitle: `Transfer Sample Units`,
     removeUserModalTitle: 'Remove User From Project',
-    warningRemoveUser: `You must transfer sample units before you can remove the user from project.`,
+    warningRemoveUser: `You must transfer unsubmitted sample units before you can remove the user from project.`,
   },
   fishBeltForm: {
     title: 'Fish Belt',
