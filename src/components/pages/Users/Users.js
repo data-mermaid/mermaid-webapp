@@ -59,9 +59,12 @@ const ToolbarRowWrapper = styled('div')`
     grid-template-columns: auto;
   `)}
 `
-const WarningInlineMessage = styled(InlineMessage)`
-  margin: ${theme.spacing.medium} 0;
+
+const InlineStyle = styled('div')`
+  display: inline-flex;
+  margin-bottom: ${theme.spacing.small};
 `
+
 const ActiveSampleUnitsIconAlert = styled(IconAlert)`
   color: ${theme.color.textColor};
   margin: 0 ${theme.spacing.small};
@@ -364,15 +367,10 @@ const Users = () => {
         disableSortBy: true,
       },
       {
-        Header: 'Active Sample Units',
-        accessor: 'active',
-        sortType: reactTableNaturalSortReactNodesSecondChild,
-        align: 'right',
-      },
-      {
-        Header: 'Transfer Sample Units',
-        accessor: 'transfer',
+        Header: 'Unsubmitted Sample Units',
+        accessor: 'unsubmittedSampleUnits',
         disableSortBy: true,
+        align: 'right',
       },
       {
         Header: 'Remove From Project',
@@ -509,22 +507,30 @@ const Users = () => {
             />
           </TableRadioLabel>
         ),
-        active: (
+        unsubmittedSampleUnits: (
           <>
             {isActiveSampleUnitsWarningShowing ? <ActiveSampleUnitsIconAlert /> : null}
-            {num_active_sample_units}
+            {doesUserHaveActiveSampleUnits ? (
+              <>
+                {num_active_sample_units}{' '}
+                <ButtonSecondary
+                  type="button"
+                  onClick={() =>
+                    openTransferSampleUnitsModal(
+                      userId,
+                      profile_name,
+                      email,
+                      num_active_sample_units,
+                    )
+                  }
+                >
+                  <IconAccountConvert /> Transfer
+                </ButtonSecondary>
+              </>
+            ) : (
+              'No sample units'
+            )}
           </>
-        ),
-        transfer: (
-          <ButtonSecondary
-            type="button"
-            disabled={!doesUserHaveActiveSampleUnits}
-            onClick={() =>
-              openTransferSampleUnitsModal(userId, profile_name, email, num_active_sample_units)
-            }
-          >
-            <IconAccountConvert />
-          </ButtonSecondary>
         ),
         remove: (
           <ButtonSecondary
@@ -726,6 +732,13 @@ const Users = () => {
       <H2>{language.pages.userTable.title}</H2>
       {isAppOnline && (
         <>
+          {isReadonlyUserWithActiveSampleUnits && (
+            <InlineStyle>
+              <InlineMessage type="warning">
+                <p>{language.pages.userTable.warningReadOnlyUser}</p>
+              </InlineMessage>
+            </InlineStyle>
+          )}
           <ToolbarRowWrapper>
             <FilterSearchToolbar
               name={
@@ -752,11 +765,6 @@ const Users = () => {
               />
             )}
           </ToolbarRowWrapper>
-          {isReadonlyUserWithActiveSampleUnits && (
-            <WarningInlineMessage type="warning">
-              {language.pages.userTable.warningReadOnlyUser}
-            </WarningInlineMessage>
-          )}
         </>
       )}
     </>
