@@ -221,7 +221,7 @@ const pages = {
   userTable: {
     title: 'Users',
     filterToolbarTextForAdmin: 'Filter users by name or email',
-    filterToolbarTextForCollector: 'Filter users by name or role',
+    filterToolbarTextForNonAdmin: 'Filter users by name or role',
     searchEmailToolbarText: 'Enter email address of user to add',
     warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
     newUserModalTitle: `Invite new user`,
