@@ -413,64 +413,62 @@ const FishBeltObservationTable = ({
   ])
 
   return (
-    <>
-      <InputWrapper>
-        <H2 id="table-label">Observations</H2>
-        <StyledOverflowWrapper>
-          <StyledObservationTable aria-labelledby="table-label">
-            <StyledColgroup>
-              <col className="number" />
-              <col className="fishName" />
-              <col className="size" />
-              <col className="count" />
-              <col className="biomass" />
-              {areValidationsShowing ? <col className="validations" /> : null}
-              <col className="remove" />
-            </StyledColgroup>
-            <thead>
-              <Tr>
-                <Th> </Th>
-                <Th align="left" id="fish-name-label">
-                  Fish Name <RequiredIndicator />
-                </Th>
-                <Th align="right" id="fish-size-label">
-                  Size <RequiredIndicator />
-                </Th>
-                <Th align="right" id="fish-count-label">
-                  Count <RequiredIndicator />
-                </Th>
-                <Th align="right">
-                  Biomass
-                  <br />
-                  <small>(kg/ha)</small>
-                </Th>
-                {areValidationsShowing ? <Th align="center">Validations</Th> : null}
-                <Th> </Th>
-              </Tr>
-            </thead>
+    <InputWrapper>
+      <H2 id="table-label">Observations</H2>
+      <StyledOverflowWrapper>
+        <StyledObservationTable aria-labelledby="table-label">
+          <StyledColgroup>
+            <col className="number" />
+            <col className="fishName" />
+            <col className="size" />
+            <col className="count" />
+            <col className="biomass" />
+            {areValidationsShowing ? <col className="validations" /> : null}
+            <col className="remove" />
+          </StyledColgroup>
+          <thead>
+            <Tr>
+              <Th> </Th>
+              <Th align="left" id="fish-name-label">
+                Fish Name <RequiredIndicator />
+              </Th>
+              <Th align="right" id="fish-size-label">
+                Size <RequiredIndicator />
+              </Th>
+              <Th align="right" id="fish-count-label">
+                Count <RequiredIndicator />
+              </Th>
+              <Th align="right">
+                Biomass
+                <br />
+                <small>(kg/ha)</small>
+              </Th>
+              {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+              <Th> </Th>
+            </Tr>
+          </thead>
 
-            <tbody>{observationsRows}</tbody>
-          </StyledObservationTable>
-        </StyledOverflowWrapper>
-        <UnderTableRow>
-          <ButtonPrimary type="button" onClick={handleAddObservation}>
-            <IconPlus /> Add Row
-          </ButtonPrimary>
-          <ObservationsSummaryStats>
-            <tbody>
-              <Tr>
-                <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
-                <Td>{totalBiomass}</Td>
-              </Tr>
-              <Tr>
-                <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
-                <Td>{totalAbundance}</Td>
-              </Tr>
-            </tbody>
-          </ObservationsSummaryStats>
-        </UnderTableRow>
-      </InputWrapper>
-    </>
+          <tbody>{observationsRows}</tbody>
+        </StyledObservationTable>
+      </StyledOverflowWrapper>
+      <UnderTableRow>
+        <ButtonPrimary type="button" onClick={handleAddObservation}>
+          <IconPlus /> Add Row
+        </ButtonPrimary>
+        <ObservationsSummaryStats>
+          <tbody>
+            <Tr>
+              <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
+              <Td>{totalBiomass}</Td>
+            </Tr>
+            <Tr>
+              <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
+              <Td>{totalAbundance}</Td>
+            </Tr>
+          </tbody>
+        </ObservationsSummaryStats>
+      </UnderTableRow>
+    </InputWrapper>
   )
 }
 
