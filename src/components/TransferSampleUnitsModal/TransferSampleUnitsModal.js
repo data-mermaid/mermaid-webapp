@@ -29,7 +29,7 @@ const ModalBodyContainer = styled.div`
   }
 `
 
-const InlineStyle = styled('div')`
+const InlineFlex = styled('div')`
   display: inline-flex;
   margin-bottom: ${theme.spacing.small};
 `
@@ -78,11 +78,11 @@ const TransferSampleUnitsModal = ({
   const modalContent = (
     <>
       {showRemoveUserWithActiveSampleUnitsWarning && (
-        <InlineStyle>
+        <InlineFlex>
           <InlineMessage type="warning">
             <p>{language.pages.userTable.warningRemoveUser}</p>
           </InlineMessage>
-        </InlineStyle>
+        </InlineFlex>
       )}
       <form>
         <ModalBodyContainer>
