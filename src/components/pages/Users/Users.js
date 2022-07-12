@@ -59,9 +59,12 @@ const ToolbarRowWrapper = styled('div')`
     grid-template-columns: auto;
   `)}
 `
-const WarningInlineMessage = styled(InlineMessage)`
-  margin: ${theme.spacing.medium} 0;
+
+const InlineStyle = styled('div')`
+  display: inline-flex;
+  margin-bottom: ${theme.spacing.small};
 `
+
 const ActiveSampleUnitsIconAlert = styled(IconAlert)`
   color: ${theme.color.textColor};
   margin: 0 ${theme.spacing.small};
@@ -114,7 +117,7 @@ const getRoleLabel = (roleCode) => {
 }
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
-const getIsUserRoleReadOnly = (profile) => profile.role === 10
+const getIsUserRoleReadOnly = (profile) => profile.role === userRole.ready_only
 
 const Users = () => {
   const [fromUser, setFromUser] = useState({})
@@ -176,10 +179,10 @@ const Users = () => {
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)
     observerProfiles.forEach((profile) => {
-      const profileHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
-      const isProfileReadOnly = getIsUserRoleReadOnly(profile)
+      const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
+      const isUserRoleReadOnly = getIsUserRoleReadOnly(profile)
 
-      if (profileHasActiveSampleUnits && isProfileReadOnly) {
+      if (userHasActiveSampleUnits && isUserRoleReadOnly) {
         setIsReadonlyUserWithActiveSampleUnits(true)
       }
     })
@@ -364,15 +367,10 @@ const Users = () => {
         disableSortBy: true,
       },
       {
-        Header: 'Active Sample Units',
-        accessor: 'active',
-        sortType: reactTableNaturalSortReactNodesSecondChild,
-        align: 'right',
-      },
-      {
-        Header: 'Transfer Sample Units',
-        accessor: 'transfer',
+        Header: 'Unsubmitted Sample Units',
+        accessor: 'unsubmittedSampleUnits',
         disableSortBy: true,
+        align: 'right',
       },
       {
         Header: 'Remove From Project',
@@ -382,7 +380,7 @@ const Users = () => {
     ]
   }, [])
 
-  const tableColumnsForCollector = useMemo(() => {
+  const tableColumnsForNonAdmin = useMemo(() => {
     return [
       {
         Header: 'Name',
@@ -451,10 +449,10 @@ const Users = () => {
         profile: userId,
       } = profile
 
-      const doesUserHaveActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
+      const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
       const isUserRoleReadOnly = getIsUserRoleReadOnly(profile)
       const isCurrentUser = userId === currentUser.id
-      const isActiveSampleUnitsWarningShowing = doesUserHaveActiveSampleUnits && isUserRoleReadOnly
+      const isActiveSampleUnitsWarningShowing = userHasActiveSampleUnits && isUserRoleReadOnly
 
       return {
         name: (
@@ -468,10 +466,10 @@ const Users = () => {
           <TableRadioLabel htmlFor={`admin-${projectProfileId}`}>
             <input
               type="radio"
-              value={90}
+              value={userRole.admin}
               name={projectProfileId}
               id={`admin-${projectProfileId}`}
-              checked={role === 90}
+              checked={role === userRole.admin}
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
@@ -483,10 +481,10 @@ const Users = () => {
           <TableRadioLabel htmlFor={`collector-${projectProfileId}`}>
             <input
               type="radio"
-              value={50}
+              value={userRole.collector}
               name={projectProfileId}
               id={`collector-${projectProfileId}`}
-              checked={role === 50}
+              checked={role === userRole.collector}
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
@@ -498,10 +496,10 @@ const Users = () => {
           <TableRadioLabel htmlFor={`readonly-${projectProfileId}`}>
             <input
               type="radio"
-              value={10}
+              value={userRole.ready_only}
               name={projectProfileId}
               id={`readonly-${projectProfileId}`}
-              checked={role === 10}
+              checked={role === userRole.ready_only}
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
@@ -509,22 +507,30 @@ const Users = () => {
             />
           </TableRadioLabel>
         ),
-        active: (
+        unsubmittedSampleUnits: (
           <>
             {isActiveSampleUnitsWarningShowing ? <ActiveSampleUnitsIconAlert /> : null}
-            {num_active_sample_units}
+            {userHasActiveSampleUnits ? (
+              <>
+                {num_active_sample_units}{' '}
+                <ButtonSecondary
+                  type="button"
+                  onClick={() =>
+                    openTransferSampleUnitsModal(
+                      userId,
+                      profile_name,
+                      email,
+                      num_active_sample_units,
+                    )
+                  }
+                >
+                  <IconAccountConvert /> Transfer
+                </ButtonSecondary>
+              </>
+            ) : (
+              'No sample units'
+            )}
           </>
-        ),
-        transfer: (
-          <ButtonSecondary
-            type="button"
-            disabled={!doesUserHaveActiveSampleUnits}
-            onClick={() =>
-              openTransferSampleUnitsModal(userId, profile_name, email, num_active_sample_units)
-            }
-          >
-            <IconAccountConvert />
-          </ButtonSecondary>
         ),
         remove: (
           <ButtonSecondary
@@ -539,7 +545,7 @@ const Users = () => {
     })
   }, [observerProfiles, currentUser, handleRoleChange])
 
-  const tableCellDataForCollector = useMemo(
+  const tableCellDataForNonAdmin = useMemo(
     () =>
       observerProfiles.map((profile) => {
         const { profile_name, role } = profile
@@ -603,8 +609,8 @@ const Users = () => {
     setGlobalFilter,
   } = useTable(
     {
-      columns: isAdminUser ? tableColumnsForAdmin : tableColumnsForCollector,
-      data: isAdminUser ? tableCellDataForAdmin : tableCellDataForCollector,
+      columns: isAdminUser ? tableColumnsForAdmin : tableColumnsForNonAdmin,
+      data: isAdminUser ? tableCellDataForAdmin : tableCellDataForNonAdmin,
       initialState: {
         pageSize: 15,
         sortBy: tableUserPrefs.sortBy,
@@ -726,12 +732,19 @@ const Users = () => {
       <H2>{language.pages.userTable.title}</H2>
       {isAppOnline && (
         <>
+          {isReadonlyUserWithActiveSampleUnits && isAdminUser && (
+            <InlineStyle>
+              <InlineMessage type="warning">
+                <p>{language.pages.userTable.warningReadOnlyUser}</p>
+              </InlineMessage>
+            </InlineStyle>
+          )}
           <ToolbarRowWrapper>
             <FilterSearchToolbar
               name={
                 isAdminUser
                   ? language.pages.userTable.filterToolbarTextForAdmin
-                  : language.pages.userTable.filterToolbarTextForCollector
+                  : language.pages.userTable.filterToolbarTextForNonAdmin
               }
               handleGlobalFilterChange={handleGlobalFilterChange}
               value={tableUserPrefs.globalFilter}
@@ -752,11 +765,6 @@ const Users = () => {
               />
             )}
           </ToolbarRowWrapper>
-          {isReadonlyUserWithActiveSampleUnits && (
-            <WarningInlineMessage type="warning">
-              {language.pages.userTable.warningReadOnlyUser}
-            </WarningInlineMessage>
-          )}
         </>
       )}
     </>

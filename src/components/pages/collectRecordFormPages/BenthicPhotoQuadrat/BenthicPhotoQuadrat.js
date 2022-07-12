@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useMemo, useReducer, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useReducer, useCallback, useRef } from 'react'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useHistory, useParams } from 'react-router-dom'
@@ -46,6 +46,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilitie
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
+  const observationTableRef = useRef(null)
 
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
@@ -102,6 +103,11 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   }
   const closeDeleteConfirmPrompt = () => {
     setShowDeleteModal(false)
+  }
+  const handleScrollToObservation = () => {
+    observationTableRef.current.scrollIntoView({
+      behavior: 'smooth',
+    })
   }
 
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
@@ -524,6 +530,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               areValidationsShowing={areValidationsShowing}
               resetRecordLevelValidation={resetRecordLevelValidation}
               ignoreRecordLevelValidation={ignoreRecordLevelValidation}
+              handleScrollToObservation={handleScrollToObservation}
             />
             <form
               id="benthicpqt-form"
@@ -568,19 +575,21 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                   validationPropertiesWithDirtyResetOnInputChange
                 }
               />
-              <BenthicPhotoQuadratObservationTable
-                areObservationsInputsDirty={areObservationsInputsDirty}
-                areValidationsShowing={areValidationsShowing}
-                benthicAttributeOptions={benthicAttributeOptions}
-                choices={choices}
-                collectRecord={collectRecordBeingEdited}
-                observationsReducer={observationsReducer}
-                openNewBenthicAttributeModal={openNewBenthicAttributeModal}
-                persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-                ignoreObservationValidations={ignoreObservationValidations}
-                resetObservationValidations={resetObservationValidations}
-                setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-              />
+              <div ref={observationTableRef}>
+                <BenthicPhotoQuadratObservationTable
+                  areObservationsInputsDirty={areObservationsInputsDirty}
+                  areValidationsShowing={areValidationsShowing}
+                  benthicAttributeOptions={benthicAttributeOptions}
+                  choices={choices}
+                  collectRecord={collectRecordBeingEdited}
+                  observationsReducer={observationsReducer}
+                  openNewBenthicAttributeModal={openNewBenthicAttributeModal}
+                  persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+                  ignoreObservationValidations={ignoreObservationValidations}
+                  resetObservationValidations={resetObservationValidations}
+                  setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+                />
+              </div>
             </form>
 
             <DeleteRecordButtonCautionWrapper>

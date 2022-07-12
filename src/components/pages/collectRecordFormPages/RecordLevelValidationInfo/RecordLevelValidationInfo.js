@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { ButtonSecondary } from '../../../generic/buttons'
+import { ButtonSecondary, ButtonThatLooksLikeLink } from '../../../generic/buttons'
 import { hoverState } from '../../../../library/styling/mediaQueries'
 import { ValidationList } from '../../../generic/form'
 import InlineMessage from '../../../generic/InlineMessage/InlineMessage'
@@ -26,11 +26,29 @@ const InlineValidationItem = styled.li`
     background: ${theme.color.tableRowHover};
   `)}
 `
+
+const ScrollToButton = styled(ButtonThatLooksLikeLink)`
+  text-decoration: underline;
+  width: 250px;
+  font-size: smaller;
+`
+
+const checkScrollToObservation = (validationInfo) => {
+  const validationStatusNotOkay = validationInfo.status !== 'ok'
+  const observationTableValidationMessages = [
+    'data.obs_benthic_photo_quadrats',
+    'data.obs_belt_fishes',
+  ].some((obs) => validationInfo?.fields?.includes(obs))
+
+  return validationStatusNotOkay && observationTableValidationMessages
+}
+
 const RecordLevelValidationInfo = ({
   areValidationsShowing,
   ignoreRecordLevelValidation,
   resetRecordLevelValidation,
   validations,
+  handleScrollToObservation,
 }) => {
   const { projectId } = useParams()
 
@@ -45,12 +63,18 @@ const RecordLevelValidationInfo = ({
         const statusForStyling = isReset ? 'warning' : status
 
         const validationMessage = language.getValidationMessage(validation, projectId)
+        const isScrollToViewAvailable = checkScrollToObservation(validation)
 
         return (isError || isWarning || isIgnored || isReset) && areValidationsShowing ? (
           <InlineValidationItem key={validation_id}>
             <InlineMessage type={statusForStyling}>
               <p>{validationMessage}</p>
             </InlineMessage>
+            {isScrollToViewAvailable && (
+              <ScrollToButton onClick={handleScrollToObservation}>
+                Scroll to observations
+              </ScrollToButton>
+            )}
             {isWarning || isReset ? (
               <InlineValidationButton
                 type="button"
@@ -83,6 +107,7 @@ RecordLevelValidationInfo.propTypes = {
   ignoreRecordLevelValidation: PropTypes.func.isRequired,
   resetRecordLevelValidation: PropTypes.func.isRequired,
   validations: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string })).isRequired,
+  handleScrollToObservation: PropTypes.func.isRequired,
 }
 
 export default RecordLevelValidationInfo

@@ -11,6 +11,7 @@ import InlineMessage from '../generic/InlineMessage'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { pluralize } from '../../library/strings/pluralize'
 import { getProfileNameOrEmailForPendingUser } from '../../library/getProfileNameOrEmailForPendingUser'
+import theme from '../../theme'
 
 const ModalBoxItem = styled(Column)`
   width: 100%;
@@ -27,6 +28,12 @@ const ModalBodyContainer = styled.div`
     height: 4rem;
   }
 `
+
+const InlineFlex = styled('div')`
+  display: inline-flex;
+  margin-bottom: ${theme.spacing.small};
+`
+
 const TransferSampleUnitsModal = ({
   isOpen,
   onDismiss,
@@ -71,7 +78,11 @@ const TransferSampleUnitsModal = ({
   const modalContent = (
     <>
       {showRemoveUserWithActiveSampleUnitsWarning && (
-        <InlineMessage type="warning">{language.pages.userTable.warningRemoveUser}</InlineMessage>
+        <InlineFlex>
+          <InlineMessage type="warning">
+            <p>{language.pages.userTable.warningRemoveUser}</p>
+          </InlineMessage>
+        </InlineFlex>
       )}
       <form>
         <ModalBodyContainer>
