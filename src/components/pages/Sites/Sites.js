@@ -1,11 +1,12 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
-import { IconPlus, IconCopy } from '../../icons'
+import { IconPlus, IconCopy, IconDownload } from '../../icons'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -35,7 +36,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
-import ExportSitesToCsv from './ExportSitesToCsv/ExportSitesToCsv'
+// import ExportSitesToCsv from './ExportSitesToCsv/ExportSitesToCsv'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -205,6 +206,23 @@ const Sites = () => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
+  const getTableData = useMemo(
+    () =>
+      siteRecordsForUiDisplay.map((site) => {
+        return {
+          id: site.id,
+          name: site.uiLabels.name,
+          latitude: site.location.coordinates[1],
+          longitude: site.location.coordinates[0],
+          reefType: site.uiLabels.reefType,
+          reefZone: site.uiLabels.reefZone,
+          exposure: site.uiLabels.exposure,
+          notes: site.notes,
+        }
+      }),
+    [siteRecordsForUiDisplay],
+  )
+
   const table = siteRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
@@ -301,7 +319,13 @@ const Sites = () => {
                 <IconCopy /> Copy sites from other projects
               </ButtonSecondary>
               <ButtonSecondary>
-                <ExportSitesToCsv />
+                <CSVLink
+                  data={getTableData}
+                  filename="Export_sites.csv"
+                  style={{ margin: 0, textDecoration: 'none' }}
+                >
+                  <IconDownload /> Export sites
+                </CSVLink>
               </ButtonSecondary>
             </ToolbarButtonWrapper>
           </ToolBarRow>
