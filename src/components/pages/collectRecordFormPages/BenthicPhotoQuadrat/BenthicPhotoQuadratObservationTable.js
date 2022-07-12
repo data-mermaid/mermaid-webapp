@@ -419,67 +419,65 @@ const BenthicPhotoQuadratObservationTable = ({
   ])
 
   return (
-    <>
-      <InputWrapper>
-        <H2 id="table-label">Observations</H2>
-        <StyledOverflowWrapper>
-          <StyledObservationTable aria-labelledby="table-label">
-            <StyledColgroup>
-              <col className="number" />
-              <col className="quadrat" />
-              <col className="benthicAttribute" />
-              <col className="growthForm" />
-              <col className="numberOfPoints" />
-              {areValidationsShowing ? <col className="validations" /> : null}
-              <col className="remove" />
-            </StyledColgroup>
-            <thead>
-              <Tr>
-                <Th> </Th>
-                <Th align="right" id="quadrat-number-label">
-                  Quadrat <RequiredIndicator />
-                </Th>
-                <Th align="left" id="benthic-attribute-label">
-                  Benthic Attribute <RequiredIndicator />
-                </Th>
-                <Th align="right" id="growth-form-label">
-                  Growth Form
-                </Th>
-                <Th align="right" id="number-of-points-label">
-                  Number of Points <RequiredIndicator />
-                </Th>
-                {areValidationsShowing ? <Th align="center">Validations</Th> : null}
-                <Th> </Th>
-              </Tr>
-            </thead>
-            <tbody>{observationsRows}</tbody>
-          </StyledObservationTable>
-        </StyledOverflowWrapper>
-        <UnderTableRow>
-          <ButtonPrimary type="button" onClick={handleAddObservation}>
-            <IconPlus /> Add Row
-          </ButtonPrimary>
-          <ObservationsSummaryStats>
-            <tbody>
-              {observationCategoryPercentages.map((obs) => {
-                const isPercentageAvailable = !Number.isNaN(
-                  parseFloat(obs.benthicAttributePercentage),
-                )
+    <InputWrapper>
+      <H2 id="table-label">Observations</H2>
+      <StyledOverflowWrapper>
+        <StyledObservationTable aria-labelledby="table-label">
+          <StyledColgroup>
+            <col className="number" />
+            <col className="quadrat" />
+            <col className="benthicAttribute" />
+            <col className="growthForm" />
+            <col className="numberOfPoints" />
+            {areValidationsShowing ? <col className="validations" /> : null}
+            <col className="remove" />
+          </StyledColgroup>
+          <thead>
+            <Tr>
+              <Th> </Th>
+              <Th align="right" id="quadrat-number-label">
+                Quadrat <RequiredIndicator />
+              </Th>
+              <Th align="left" id="benthic-attribute-label">
+                Benthic Attribute <RequiredIndicator />
+              </Th>
+              <Th align="right" id="growth-form-label">
+                Growth Form
+              </Th>
+              <Th align="right" id="number-of-points-label">
+                Number of Points <RequiredIndicator />
+              </Th>
+              {areValidationsShowing ? <Th align="center">Validations</Th> : null}
+              <Th> </Th>
+            </Tr>
+          </thead>
+          <tbody>{observationsRows}</tbody>
+        </StyledObservationTable>
+      </StyledOverflowWrapper>
+      <UnderTableRow>
+        <ButtonPrimary type="button" onClick={handleAddObservation}>
+          <IconPlus /> Add Row
+        </ButtonPrimary>
+        <ObservationsSummaryStats>
+          <tbody>
+            {observationCategoryPercentages.map((obs) => {
+              const isPercentageAvailable = !Number.isNaN(
+                parseFloat(obs.benthicAttributePercentage),
+              )
 
-                return (
-                  isPercentageAvailable && (
-                    <Tr key={obs.benthicAttribute}>
-                      <Th>{`% ${obs.benthicAttribute}`}</Th>
-                      <Td>{obs.benthicAttributePercentage}</Td>
-                    </Tr>
-                  )
+              return (
+                isPercentageAvailable && (
+                  <Tr key={obs.benthicAttribute}>
+                    <Th>{`% ${obs.benthicAttribute}`}</Th>
+                    <Td>{obs.benthicAttributePercentage}</Td>
+                  </Tr>
                 )
-              })}
-            </tbody>
-          </ObservationsSummaryStats>
-        </UnderTableRow>
-      </InputWrapper>
-    </>
+              )
+            })}
+          </tbody>
+        </ObservationsSummaryStats>
+      </UnderTableRow>
+    </InputWrapper>
   )
 }
 
