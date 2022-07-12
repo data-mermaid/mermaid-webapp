@@ -2,7 +2,7 @@ import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useReducer, useState, useRef } from 'react'
 
 import {
   getCollectRecordDataInitialValues,
@@ -47,6 +47,7 @@ import { DeleteRecordButtonCautionWrapper } from '../CollectingFormPage.Styles'
 
 const FishBelt = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
+  const observationTableRef = useRef(null)
 
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
@@ -99,6 +100,11 @@ const FishBelt = ({ isNewRecord }) => {
   }
   const closeDeleteConfirmPrompt = () => {
     setShowDeleteModal(false)
+  }
+  const handleScrollToObservation = () => {
+    observationTableRef.current.scrollIntoView({
+      behavior: 'smooth',
+    })
   }
 
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
@@ -556,6 +562,7 @@ const FishBelt = ({ isNewRecord }) => {
               areValidationsShowing={areValidationsShowing}
               resetRecordLevelValidation={resetRecordLevelValidation}
               ignoreRecordLevelValidation={ignoreRecordLevelValidation}
+              handleScrollToObservation={handleScrollToObservation}
             />
             <form
               id="fishbelt-form"
@@ -602,23 +609,25 @@ const FishBelt = ({ isNewRecord }) => {
                   validationPropertiesWithDirtyResetOnInputChange
                 }
               />
-              <FishBeltObservationTable
-                areObservationsInputsDirty={areObservationsInputsDirty}
-                areValidationsShowing={areValidationsShowing}
-                choices={choices}
-                collectRecord={collectRecordBeingEdited}
-                fishBinSelected={formik.values.size_bin}
-                fishNameConstants={fishNameConstants}
-                fishNameOptions={fishNameOptions}
-                ignoreObservationValidations={ignoreObservationValidations}
-                observationsReducer={observationsReducer}
-                openNewFishNameModal={openNewFishNameModal}
-                persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-                resetObservationValidations={resetObservationValidations}
-                setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-                transectLengthSurveyed={formik.values.len_surveyed}
-                widthId={formik.values.width}
-              />
+              <div ref={observationTableRef}>
+                <FishBeltObservationTable
+                  areObservationsInputsDirty={areObservationsInputsDirty}
+                  areValidationsShowing={areValidationsShowing}
+                  choices={choices}
+                  collectRecord={collectRecordBeingEdited}
+                  fishBinSelected={formik.values.size_bin}
+                  fishNameConstants={fishNameConstants}
+                  fishNameOptions={fishNameOptions}
+                  ignoreObservationValidations={ignoreObservationValidations}
+                  observationsReducer={observationsReducer}
+                  openNewFishNameModal={openNewFishNameModal}
+                  persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+                  resetObservationValidations={resetObservationValidations}
+                  setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+                  transectLengthSurveyed={formik.values.len_surveyed}
+                  widthId={formik.values.width}
+                />
+              </div>
             </form>
 
             <DeleteRecordButtonCautionWrapper>
