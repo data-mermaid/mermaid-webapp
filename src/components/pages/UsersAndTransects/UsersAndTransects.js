@@ -138,25 +138,25 @@ const UsersAndTransects = () => {
     const getObserverProfileName = (profileId) =>
       observers.find((observer) => observer.profile === profileId)?.profile_name
 
-    const groupProfileResult = records.reduce((acc, record) => {
+    const groupProfileResult = records.reduce((accumulator, record) => {
       const profileSummary = record.profile_summary
 
       for (const collectRecordProfile in profileSummary) {
-        if (Object.prototype.hasOwnProperty.call(profileSummary, collectRecordProfile)) {
+        if (profileSummary[collectRecordProfile]) {
           const collectRecords = profileSummary[collectRecordProfile]?.labels
 
-          acc[collectRecordProfile] = acc[collectRecordProfile] || {}
-          acc[collectRecordProfile] = {
+          accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
+          accumulator[collectRecordProfile] = {
             profileId: collectRecordProfile,
             profileName: getObserverProfileName(collectRecordProfile),
-            collectRecords: acc[collectRecordProfile].collectRecords
-              ? acc[collectRecordProfile].collectRecords.concat(collectRecords)
+            collectRecords: accumulator[collectRecordProfile].collectRecords
+              ? accumulator[collectRecordProfile].collectRecords.concat(collectRecords)
               : [...collectRecords],
           }
         }
       }
 
-      return acc
+      return accumulator
     }, {})
 
     return groupProfileResult
@@ -182,7 +182,9 @@ const UsersAndTransects = () => {
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
               .map((reducedRecords) => reducedRecords.label)
 
-            const uniqueTransectNumbersAsc = sortArray([...new Set(sampleUnitTransectNumbers)])
+            const uniqueTransectNumbersAscending = sortArray([
+              ...new Set(sampleUnitTransectNumbers),
+            ])
 
             setCollectRecordsByProfile(
               groupCollectSampleUnitsByProfileSummary(
@@ -191,7 +193,7 @@ const UsersAndTransects = () => {
               ),
             )
             setSubmittedRecords(sampleUnitRecordsResponse)
-            setSubmittedTransectNumbers(uniqueTransectNumbersAsc)
+            setSubmittedTransectNumbers(uniqueTransectNumbersAscending)
             setIsLoading(false)
           }
         })
