@@ -34,13 +34,13 @@ const ScrollToButton = styled(ButtonThatLooksLikeLink)`
 `
 
 const checkScrollToObservation = (validationInfo) => {
-  const warningOrErrorValidation = validationInfo.status !== 'ok'
+  const validationStatusNotOkay = validationInfo.status !== 'ok'
   const observationTableValidationMessages = [
     'data.obs_benthic_photo_quadrats',
     'data.obs_belt_fishes',
-  ].some((obs) => validationInfo.fields.includes(obs))
+  ].some((obs) => validationInfo?.fields?.includes(obs))
 
-  return warningOrErrorValidation && observationTableValidationMessages
+  return validationStatusNotOkay && observationTableValidationMessages
 }
 
 const RecordLevelValidationInfo = ({
