@@ -117,7 +117,7 @@ const getRoleLabel = (roleCode) => {
 }
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
-const getIsUserRoleReadOnly = (profile) => profile.role === userRole.ready_only
+const getIsUserRoleReadOnly = (profile) => profile.role === userRole.read_only
 
 const Users = () => {
   const [fromUser, setFromUser] = useState({})
@@ -496,10 +496,10 @@ const Users = () => {
           <TableRadioLabel htmlFor={`readonly-${projectProfileId}`}>
             <input
               type="radio"
-              value={userRole.ready_only}
+              value={userRole.read_only}
               name={projectProfileId}
               id={`readonly-${projectProfileId}`}
-              checked={role === userRole.ready_only}
+              checked={role === userRole.read_only}
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
