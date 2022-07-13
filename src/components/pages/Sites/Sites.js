@@ -206,11 +206,28 @@ const Sites = () => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
-  const getTableData = useMemo(
+  const getDataForCSV = useMemo(
     () =>
       siteRecordsForUiDisplay.map((site) => {
+        const countryName = () => {
+          const countriesName = []
+
+          for (const value of Object.values(choices)) {
+            for (const valueTwo of Object.values(value)) {
+              for (let i = 0; i < valueTwo.length; i++) {
+                // eslint-disable-next-line max-depth
+                if (valueTwo[i].id === site.country) {
+                  countriesName.push(valueTwo[i].name)
+                }
+              }
+            }
+          }
+
+          return countriesName
+        }
+
         return {
-          id: site.id,
+          id: countryName(),
           name: site.uiLabels.name,
           latitude: site.location.coordinates[1],
           longitude: site.location.coordinates[0],
@@ -220,7 +237,7 @@ const Sites = () => {
           notes: site.notes,
         }
       }),
-    [siteRecordsForUiDisplay],
+    [siteRecordsForUiDisplay, choices],
   )
 
   const table = siteRecordsForUiDisplay.length ? (
@@ -320,7 +337,7 @@ const Sites = () => {
               </ButtonSecondary>
               <ButtonSecondary>
                 <CSVLink
-                  data={getTableData}
+                  data={getDataForCSV}
                   filename="Export_sites.csv"
                   style={{ margin: 0, textDecoration: 'none' }}
                 >
