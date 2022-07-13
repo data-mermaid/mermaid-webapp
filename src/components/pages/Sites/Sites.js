@@ -36,7 +36,6 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
-// import ExportSitesToCsv from './ExportSitesToCsv/ExportSitesToCsv'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -269,7 +268,6 @@ const Sites = () => {
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
-              // console.log(row)
 
               return (
                 <Tr {...row.getRowProps()}>
