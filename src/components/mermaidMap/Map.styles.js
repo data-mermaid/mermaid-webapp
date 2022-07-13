@@ -1,8 +1,13 @@
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 import { InputRow } from '../generic/form'
 
 export const MapInputRow = styled(InputRow)`
   grid-template-columns: 1fr;
+  ${(props) =>
+    props.isReadOnlyUser &&
+    css`
+      border-width: 0;
+    `}
 `
 export const MapContainer = styled.div`
   position: relative;
