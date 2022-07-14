@@ -20,6 +20,7 @@ import DataSharingInfoModal from '../../DataSharingInfoModal'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
+import { getDataSharingPolicyLabel } from '../../../library/getDataSharingPolicyLabel'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import theme from '../../../theme'
 import useDocumentTitle from '../../../library/useDocumentTitle'
@@ -51,14 +52,6 @@ const CheckBoxLabel = styled.label`
     cursor: pointer;
   }
 `
-
-const getDataSharingPolicyLabel = (policyCode) => {
-  return {
-    10: 'Private',
-    50: 'Public Summary',
-    100: 'Public',
-  }[policyCode]
-}
 
 const ReadOnlyDataSharingContent = ({ project }) => (
   <>
