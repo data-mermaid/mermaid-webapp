@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components/macro'
+import { NavLink } from 'react-router-dom'
 import theme from '../../theme'
 import {
   mediaQueryPhoneOnly,
@@ -42,37 +43,33 @@ export const CardWrapper = styled('div')`
   `)}
 `
 
-export const ProjectNameWrapper = styled('div')`
+export const ProjectCardHeader = styled('div')`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   background: ${theme.color.primaryColor};
+  color: ${theme.color.white};
+  ${theme.typography.noWordBreak};
+  padding: ${theme.spacing.xlarge};
+  ${mediaQueryPhoneOnly(css`
+    font-size: ${theme.typography.defaultFontSize};
+    padding: ${theme.spacing.small};
+  `)}
   h2 {
-    color: ${theme.color.white};
     margin: 0;
-    padding: ${theme.spacing.small} ${theme.spacing.medium};
-    ${theme.typography.noWordBreak};
-    ${mediaQueryPhoneOnly(css`
-      font-size: ${theme.typography.defaultFontSize};
-      padding: ${theme.spacing.small};
-    `)}
+  }
+  label {
+    margin-left: 10px;
   }
 `
-export const ProjectInfoWrapper = styled('div')`
-  margin: ${theme.spacing.small} ${theme.spacing.medium} 0 0;
-  p {
-    padding: 0 ${theme.spacing.medium};
-    &:first-child {
-      // countries
-      font-size: larger;
-      font-weight: 900;
-    }
-  }
-  ${mediaQueryPhoneOnly(css`
-    p {
-      padding: 0 ${theme.spacing.small};
-    }
-  `)}
+
+export const ProjectCardHeaderRightSection = styled(`div`)`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 `
 
 export const CheckBoxLabel = styled.label`
+  display: inline-block;
   background: ${theme.color.secondaryColor};
   padding: ${theme.spacing.buttonPadding};
   justify-self: end;
@@ -84,5 +81,71 @@ export const CheckBoxLabel = styled.label`
   `)}
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
+  }
+`
+
+export const SummaryCardGroups = styled('div')`
+  padding: ${theme.spacing.medium};
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+`
+
+export const SummaryCardWrapper = styled(NavLink)`
+  text-decoration: none;
+  border: 1px solid;
+  margin: 10px;
+  height: fit-content;
+  ${hoverState(css`
+    background-color: ${theme.color.secondaryHover};
+  `)}
+  &:active {
+    background-color: ${theme.color.secondaryActive};
+  }
+`
+
+export const SummaryTitle = styled('div')`
+  text-align: center;
+  padding: ${theme.spacing.buttonPadding};
+  background-color: ${theme.color.secondaryColor};
+  color: ${theme.color.secondaryText};
+`
+
+export const SubCardContent = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  div {
+    display: flex;
+    font-size: 3.2rem;
+    font-weight: bold;
+    margin: ${theme.spacing.large};
+    align-items: center;
+    svg {
+      width: ${(props) => props.theme.typography.xLargeIconSize};
+      height: ${(props) => props.theme.typography.xLargeIconSize};
+      margin-right: 10px;
+    }
+  }
+`
+
+export const SubCardTitle = styled('span')`
+  ${theme.typography.upperCase};
+  margin: ${theme.spacing.small};
+  font-size: ${theme.typography.smallFontSize};
+`
+
+export const SubCardContents = styled('div')`
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+`
+
+export const DataSharingPolicySubCardContent = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  div {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
   }
 `
