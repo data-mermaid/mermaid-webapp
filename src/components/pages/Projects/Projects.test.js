@@ -328,11 +328,7 @@ test('Projects can be sorted by updated on date', async () => {
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
   expect(within(topProjectCard).getByText('Project III'))
-  expect(
-    within(topProjectCard).getByText(
-      'Tue Jan 21 1992 08:00:00 GMT+0000 (Coordinated Universal Time)',
-    ),
-  )
+  expect(within(topProjectCard).getByText('Tue Jan 21 1992 08:00:00'))
 })
 
 test('Project sorted descending', async () => {
