@@ -121,8 +121,8 @@ export const SubCardContent = styled('div')`
     margin: ${theme.spacing.large};
     align-items: center;
     svg {
-      width: ${(props) => props.theme.typography.xLargeIconSize};
-      height: ${(props) => props.theme.typography.xLargeIconSize};
+      width: ${theme.typography.xLargeIconSize};
+      height: ${theme.typography.xLargeIconSize};
       margin-right: 10px;
     }
   }
@@ -148,4 +148,17 @@ export const DataSharingPolicySubCardContent = styled('div')`
     flex-direction: column;
     font-size: 1.5rem;
   }
+`
+
+export const ActiveCollectRecordsCount = styled.strong`
+  background: ${theme.color.callout};
+  border-radius: 100%;
+  border: solid 1px ${theme.color.white};
+  width: ${theme.typography.xLargeIconSize};
+  height: ${theme.typography.xLargeIconSize};
+  color: ${theme.color.white};
+  display: grid;
+  margin: 0.25rem 0.5rem;
+  place-items: center;
+  font-size: 2.4rem;
 `

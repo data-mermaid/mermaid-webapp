@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
-
 import {
+  ActiveCollectRecordsCount,
   DataSharingPolicySubCardContent,
   SubCardContents,
   SubCardContent,
@@ -39,6 +39,15 @@ const ProjectCardSummary = ({ project }) => {
     [currentUser],
   )
   const userCollectCount = getCurrentNumberActiveSampleUnits(id)
+  const collectingSampleUnitCounts =
+    userCollectCount > 0 ? (
+      <>
+        {num_active_sample_units} /{' '}
+        <ActiveCollectRecordsCount>{userCollectCount}</ActiveCollectRecordsCount>
+      </>
+    ) : (
+      <>{num_active_sample_units} </>
+    )
 
   return (
     <SummaryCardGroups>
@@ -51,7 +60,7 @@ const ProjectCardSummary = ({ project }) => {
           <SubCardTitle>Collecting Sample Units</SubCardTitle>
           <div>
             <IconCollect />
-            {num_active_sample_units} / {userCollectCount}
+            {collectingSampleUnitCounts}
           </div>
         </SubCardContent>
         <SummaryTitle>Collecting</SummaryTitle>
