@@ -30,7 +30,11 @@ const ProjectCardSummary = ({ project }) => {
 
   return (
     <SummaryCardGroups>
-      <SummaryCardWrapper to={`${projectUrl}/collecting`} onClick={stopEventPropagation}>
+      <SummaryCardWrapper
+        to={`${projectUrl}/collecting`}
+        aria-label="Collect"
+        onClick={stopEventPropagation}
+      >
         <SubCardContent>
           <SubCardTitle>Collecting Sample Units</SubCardTitle>
           <div>
@@ -40,7 +44,11 @@ const ProjectCardSummary = ({ project }) => {
         </SubCardContent>
         <SummaryTitle>Collecting</SummaryTitle>
       </SummaryCardWrapper>
-      <SummaryCardWrapper to={`${projectUrl}/data`} onClick={stopEventPropagation}>
+      <SummaryCardWrapper
+        to={`${projectUrl}/data`}
+        aria-label="Data"
+        onClick={stopEventPropagation}
+      >
         <SubCardContent>
           <SubCardTitle>Submitted Sample Units</SubCardTitle>
           <div>
@@ -50,7 +58,11 @@ const ProjectCardSummary = ({ project }) => {
         </SubCardContent>
         <SummaryTitle>Submitted</SummaryTitle>
       </SummaryCardWrapper>
-      <SummaryCardWrapper to={`${projectUrl}/admin`} onClick={stopEventPropagation}>
+      <SummaryCardWrapper
+        to={`${projectUrl}/admin`}
+        aria-label="Admin"
+        onClick={stopEventPropagation}
+      >
         <SubCardContents>
           <SubCardContent>
             <SubCardTitle>Sites</SubCardTitle>

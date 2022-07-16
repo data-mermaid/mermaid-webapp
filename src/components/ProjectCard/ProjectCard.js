@@ -17,7 +17,6 @@ import stopEventPropagation from '../../library/stopEventPropagation'
 import SyncApiDataIntoOfflineStorage from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { IconCopy } from '../icons'
-import OfflineHide from '../generic/OfflineHide'
 import { ButtonSecondary } from '../generic/buttons'
 import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
@@ -90,12 +89,10 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
         </div>
         <ProjectCardHeaderRightSection>
           <div>
-            <OfflineHide>
-              <ButtonSecondary onClick={stopEventPropagation} aria-label="Copy">
-                <IconCopy />
-                <span>Copy</span>
-              </ButtonSecondary>
-            </OfflineHide>
+            <ButtonSecondary onClick={stopEventPropagation} aria-label="Copy">
+              <IconCopy />
+              <span>Copy</span>
+            </ButtonSecondary>
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}
