@@ -132,9 +132,7 @@ test('A project card shows relevant data for a project', async () => {
   expect(offlineCheckbox)
   expect(offlineCheckbox).toBeChecked()
 
-  expect(
-    within(projectCard).getByText('Tue Jan 21 2020 00:00:00 GMT+0000 (Coordinated Universal Time)'),
-  )
+  expect(within(projectCard).getByText('Tue Jan 21 2020 00:00:00'))
 })
 
 test('A project card renders appropriately when offline', async () => {
