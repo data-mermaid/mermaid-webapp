@@ -63,7 +63,7 @@ const ProjectCardSummary = ({ project }) => {
             <SubCardTitle>Users</SubCardTitle>
             <div>
               <IconUsers />
-              {members.length}
+              {members?.length || 0}
             </div>
           </SubCardContent>
           <DataSharingPolicySubCardContent>
