@@ -31,8 +31,10 @@ const ProjectCardSummary = ({ project }) => {
   const projectUrl = `projects/${id}`
   const getCurrentNumberActiveSampleUnits = useCallback(
     (projectId) => {
-      return currentUser.projects.find(({ id: idToCheck }) => idToCheck === projectId)
-        ?.num_active_sample_units
+      return (
+        currentUser?.projects?.find(({ id: idToCheck }) => idToCheck === projectId)
+          ?.num_active_sample_units || 0
+      )
     },
     [currentUser],
   )
