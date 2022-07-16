@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import {
   DataSharingPolicySubCardContent,
@@ -13,8 +13,10 @@ import { getDataSharingPolicyLabel } from '../../library/getDataSharingPolicyLab
 import { IconCollect, IconData, IconSites, IconUsers } from '../icons'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import stopEventPropagation from '../../library/stopEventPropagation'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const ProjectCardSummary = ({ project }) => {
+  const { currentUser } = useCurrentUser()
   const {
     num_active_sample_units,
     num_sites,
@@ -27,6 +29,14 @@ const ProjectCardSummary = ({ project }) => {
   } = project
 
   const projectUrl = `projects/${id}`
+  const getCurrentNumberActiveSampleUnits = useCallback(
+    (projectId) => {
+      return currentUser.projects.find(({ id: idToCheck }) => idToCheck === projectId)
+        ?.num_active_sample_units
+    },
+    [currentUser],
+  )
+  const userCollectCount = getCurrentNumberActiveSampleUnits(id)
 
   return (
     <SummaryCardGroups>
@@ -39,7 +49,7 @@ const ProjectCardSummary = ({ project }) => {
           <SubCardTitle>Collecting Sample Units</SubCardTitle>
           <div>
             <IconCollect />
-            {num_active_sample_units}
+            {num_active_sample_units} / {userCollectCount}
           </div>
         </SubCardContent>
         <SummaryTitle>Collecting</SummaryTitle>
