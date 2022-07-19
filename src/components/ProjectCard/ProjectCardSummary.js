@@ -68,7 +68,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       <SummaryTitle>Submitted</SummaryTitle>
     </SummaryCard>
   ) : (
-    <OfflineSummaryCard onClick={stopEventPropagation}>
+    <OfflineSummaryCard aria-label="Data Offline" onClick={stopEventPropagation}>
       <DisabledSubCardContent>
         <SubCardTitle>Submitted Sample Units</SubCardTitle>
         {offlineMessage}
@@ -112,7 +112,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       <SummaryTitle>Info</SummaryTitle>
     </SummaryCard>
   ) : (
-    <OfflineSummaryCard onClick={stopEventPropagation}>
+    <OfflineSummaryCard aria-label="Admin Offline" onClick={stopEventPropagation}>
       <OfflineSubCardGroupContent>
         <SubCardTitle>Sites</SubCardTitle>
         <SubCardTitle>Users</SubCardTitle>

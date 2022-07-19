@@ -84,15 +84,12 @@ test('A project card renders with the expected UI elements for button groups', a
   const collectButton = within(projectCard).getByLabelText(/collect/i)
   const dataButton = within(projectCard).getByLabelText(/data/i)
   const adminButton = within(projectCard).getByLabelText(/admin/i)
-  // commented out for alpha, reactivate post alpha
-  // const copyButton = within(projectCard).getByLabelText(/copy/i)
+  const copyButton = within(projectCard).getByLabelText(/copy/i)
 
-  // commented out for alpha, reactivate post alpha
   expect(collectButton).toBeInTheDocument()
   expect(dataButton).toBeInTheDocument()
   expect(adminButton).toBeInTheDocument()
-  // commented out for alpha, reactivate post alpha
-  // expect(copyButton).toBeInTheDocument()
+  expect(copyButton).toBeInTheDocument()
 })
 
 test('A project card shows relevant data for a project', async () => {
@@ -157,12 +154,12 @@ test('A project card renders appropriately when offline', async () => {
 
   const projectCard = screen.getAllByRole('listitem')[0]
 
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/admin/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument())
+  expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/data offline/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/admin offline/i)).toBeInTheDocument()
 
   expect(screen.getByLabelText('Offline Ready')).toBeDisabled()
+  expect(screen.getByLabelText('Copy')).toBeDisabled()
 })
 
 test('A project card renders appropriately when online', async () => {
@@ -187,21 +184,24 @@ test('A project card renders appropriately when online', async () => {
 
   const projectCard = screen.getAllByRole('listitem')[0]
 
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/admin/i)).toBeInTheDocument())
-  // commented out for alpha, reactivate post alpha
-  // await waitFor(() =>
-  //   expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
-  // )
+  expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/data/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/admin/i)).toBeInTheDocument()
 
   const offlineReadyCheckboxes = screen.getAllByLabelText('Offline Ready')
+  const copyButtons = screen.getAllByLabelText('Copy')
 
   expect(offlineReadyCheckboxes[0]).toBeEnabled()
   expect(offlineReadyCheckboxes[1]).toBeEnabled()
   expect(offlineReadyCheckboxes[2]).toBeEnabled()
   expect(offlineReadyCheckboxes[3]).toBeEnabled()
   expect(offlineReadyCheckboxes[4]).toBeEnabled()
+
+  expect(copyButtons[0]).toBeEnabled()
+  expect(copyButtons[1]).toBeEnabled()
+  expect(copyButtons[2]).toBeEnabled()
+  expect(copyButtons[3]).toBeEnabled()
+  expect(copyButtons[4]).toBeEnabled()
 })
 
 test('Hide new project button in project toolbar when offline', async () => {
