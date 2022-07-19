@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { InputRow, CheckRadioLabel, CheckRadioWrapper } from '../../../generic/form'
-import { managementRegimePropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import InputValidationInfo from '../../../mermaidInputs/InputValidationInfo/InputValidationInfo'
-import mermaidInputsPropTypes from '../../../mermaidInputs/mermaidInputsPropTypes'
+import { InputRow, CheckRadioLabel, CheckRadioWrapper } from '../../generic/form'
+import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
+import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
+import mermaidInputsPropTypes from '../../mermaidInputs/mermaidInputsPropTypes'
 
 const partialRestrictionOptions = [
   { value: 'periodic_closure', label: 'Periodic Closure' },
