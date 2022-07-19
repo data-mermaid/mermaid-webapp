@@ -116,3 +116,7 @@ export const setCurrentUserProfile = async ({
 
   return Promise.reject(new Error(language.error.appNotAuthenticatedOrReady))
 }
+
+export const getProjectRole = (userProfile, projectId) => {
+  return userProfile?.projects?.find(({ id: idToCheck }) => idToCheck === projectId)?.role
+}

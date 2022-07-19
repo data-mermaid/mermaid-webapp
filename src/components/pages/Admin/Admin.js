@@ -34,6 +34,7 @@ import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { userRole } from '../../../App/mermaidData/userRole'
+import { getProjectRole } from '../../../App/currentUserProfileHelpers'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -169,9 +170,9 @@ const Admin = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
-  const { getProjectRole } = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
-  const isAdminUser = getProjectRole(projectId) === userRole.admin
+  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 

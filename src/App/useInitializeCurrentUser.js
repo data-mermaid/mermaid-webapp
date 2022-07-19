@@ -58,11 +58,5 @@ export const useInitializeCurrentUser = ({
     }
   }
 
-  const getProjectRole = useCallback(
-    (projectId) =>
-      currentUser ? currentUser.projects.find(({ id }) => id === projectId)?.role : null,
-    [currentUser],
-  )
-
-  return { currentUser, saveUserProfile, getProjectRole }
+  return { currentUser, saveUserProfile }
 }

@@ -35,6 +35,7 @@ import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { userRole } from '../../../App/mermaidData/userRole'
+import { getProjectRole } from '../../../App/currentUserProfileHelpers'
 
 const ReadOnlySiteContent = ({
   site,
@@ -84,8 +85,9 @@ const Site = ({ isNewSite }) => {
   const history = useHistory()
   const isMounted = useIsMounted()
   const currentProjectPath = useCurrentProjectPath()
-  const { getProjectRole } = useCurrentUser()
-  const isReadOnlyUser = getProjectRole(projectId) === userRole.read_only
+  const { currentUser } = useCurrentUser()
+
+  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {

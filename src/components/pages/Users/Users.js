@@ -49,6 +49,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { getProjectRole } from '../../../App/currentUserProfileHelpers'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -137,12 +138,12 @@ const Users = () => {
     setShowRemoveUserWithActiveSampleUnitsWarning,
   ] = useState(false)
   const [userToBeRemoved, setUserToBeRemoved] = useState({})
-  const { currentUser, getProjectRole } = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { setIsSyncInProgress } = useSyncStatus()
-  const isAdminUser = getProjectRole(projectId) === userRole.admin
+  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
