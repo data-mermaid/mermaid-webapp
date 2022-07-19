@@ -87,9 +87,13 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
           <h2>{name}</h2>
           <div>{countries.join(', ')}</div>
         </div>
-        <ProjectCardHeaderRightSection>
+        <ProjectCardHeaderRightSection onClick={stopEventPropagation}>
           <div>
-            <ButtonSecondary onClick={stopEventPropagation} aria-label="Copy">
+            <ButtonSecondary
+              onClick={stopEventPropagation}
+              aria-label="Copy"
+              disabled={!isAppOnline}
+            >
               <IconCopy />
               <span>Copy</span>
             </ButtonSecondary>
@@ -111,7 +115,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
           <div>{removeTimeZoneFromDate(updated_on)}</div>
         </ProjectCardHeaderRightSection>
       </ProjectCardHeader>
-      <ProjectCardSummary project={project} />
+      <ProjectCardSummary project={project} isAppOnline={isAppOnline} />
     </CardWrapper>
   )
 }

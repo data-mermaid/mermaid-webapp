@@ -84,17 +84,21 @@ export const CheckBoxLabel = styled.label`
   }
 `
 
-export const SummaryCardGroups = styled('div')`
+export const SummaryCardGroup = styled('div')`
   padding: ${theme.spacing.medium};
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
 `
 
-export const SummaryCardWrapper = styled(NavLink)`
+const linkStyles = css`
   text-decoration: none;
   border: 1px solid;
   margin: 10px;
   height: fit-content;
+`
+
+export const SummaryCard = styled(NavLink)`
+  ${linkStyles}
   ${hoverState(css`
     background-color: ${theme.color.secondaryHover};
   `)}
@@ -103,17 +107,25 @@ export const SummaryCardWrapper = styled(NavLink)`
   }
 `
 
+export const OfflineSummaryCard = styled('div')`
+  ${linkStyles}
+  cursor: not-allowed;
+  color: ${theme.color.secondaryDisabledColor};
+`
+
 export const SummaryTitle = styled('div')`
   text-align: center;
   padding: ${theme.spacing.buttonPadding};
   background-color: ${theme.color.secondaryColor};
-  color: ${theme.color.secondaryText};
+  color: ${(props) =>
+    props.isDisabled ? theme.color.secondaryDisabledColor : theme.color.secondaryText};
 `
 
 export const SubCardContent = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 10.6rem;
   div {
     display: flex;
     font-size: 3.2rem;
@@ -128,15 +140,38 @@ export const SubCardContent = styled('div')`
   }
 `
 
+export const DisabledSubCardContent = styled('div')`
+  display: grid;
+  min-height: 10.6rem;
+  justify-items: center;
+`
+
+export const OfflineMessage = styled('p')`
+  font-size: larger;
+  font-style: italic;
+  color: ${theme.color.secondaryColor};
+`
+
 export const SubCardTitle = styled('span')`
   ${theme.typography.upperCase};
   margin: ${theme.spacing.small};
   font-size: ${theme.typography.smallFontSize};
 `
 
-export const SubCardContents = styled('div')`
+export const SubCardGroupContent = styled('div')`
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
+`
+
+export const OfflineSubCardGroupContent = styled('div')`
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  justify-items: center;
+  min-height: 10.6rem;
+  p {
+    grid-column: 1 / 4;
+    grid-row: 2;
+  }
 `
 
 export const DataSharingPolicySubCardContent = styled('div')`
