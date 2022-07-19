@@ -352,11 +352,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           ) : (
             <H2 data-testid="edit-management-regime-form-title">{formik.values.name}</H2>
           )}
-          <SaveButton
-            formId="management-regime-form"
-            saveButtonState={saveButtonState}
-            formik={formik}
-          />
+          {!isReadOnlyUser && (
+            <SaveButton
+              formId="management-regime-form"
+              saveButtonState={saveButtonState}
+              formik={formik}
+            />
+          )}
         </ContentPageToolbarWrapper>
       }
     />
