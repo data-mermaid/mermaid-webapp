@@ -1,41 +1,41 @@
+import PropTypes from 'prop-types'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useHistory } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { getOptions } from '../../../library/getOptions'
+import { getProjectRole } from '../../../App/currentUserProfileHelpers'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
-import { InputRow, InputWrapper } from '../../generic/form'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
+import { InputRow, InputWrapper } from '../../generic/form'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
+import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import LoadingModal from '../../LoadingModal/LoadingModal'
+import language from '../../../language'
 import SaveButton from '../../generic/SaveButton'
 import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
+import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
+import { Table } from '../../generic/Table/table'
+import TableRowItem from '../../generic/Table/TableRowItem/TableRowItem'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
-import TableRowItem from '../../generic/Table/TableRowItem/TableRowItem'
-import { Table } from '../../generic/Table/table'
-import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
-import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const ReadOnlySiteContent = ({
   site,
@@ -217,6 +217,8 @@ const Site = ({ isNewSite }) => {
     [formikSetFieldValue],
   )
 
+  const displayIdNotFound = idsNotAssociatedWithData.length && !isNewSite
+
   const contentViewByRole = isReadOnlyUser ? (
     <ReadOnlySiteContent
       site={formik.values}
@@ -315,7 +317,7 @@ const Site = ({ isNewSite }) => {
     </>
   )
 
-  return idsNotAssociatedWithData.length && !isNewSite ? (
+  return displayIdNotFound ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
