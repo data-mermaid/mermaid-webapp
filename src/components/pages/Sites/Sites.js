@@ -205,39 +205,24 @@ const Sites = () => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
-  const getDataForCSV = useMemo(
-    () =>
-      siteRecordsForUiDisplay.map((site) => {
-        const countryName = () => {
-          const countriesName = []
+  const getDataForCSV = useMemo(() => {
+    const countryChoices = choices?.countries?.data
 
-          for (const value of Object.values(choices)) {
-            for (const valueTwo of Object.values(value)) {
-              for (let i = 0; i < valueTwo.length; i++) {
-                // eslint-disable-next-line max-depth
-                if (valueTwo[i].id === site.country) {
-                  countriesName.push(valueTwo[i].name)
-                }
-              }
-            }
-          }
+    return siteRecordsForUiDisplay.map((site) => {
+      const findCountry = countryChoices?.find((country) => country.id === site.country)
 
-          return countriesName
-        }
-
-        return {
-          id: countryName(),
-          name: site.uiLabels.name,
-          latitude: site.location.coordinates[1],
-          longitude: site.location.coordinates[0],
-          reefType: site.uiLabels.reefType,
-          reefZone: site.uiLabels.reefZone,
-          exposure: site.uiLabels.exposure,
-          notes: site.notes,
-        }
-      }),
-    [siteRecordsForUiDisplay, choices],
-  )
+      return {
+        Country: findCountry?.name,
+        Name: site.uiLabels.name,
+        Latitude: site.location.coordinates[1],
+        Longitude: site.location.coordinates[0],
+        ReefType: site.uiLabels.reefType,
+        ReefZone: site.uiLabels.reefZone,
+        Exposure: site.uiLabels.exposure,
+        Notes: site.notes,
+      }
+    })
+  }, [siteRecordsForUiDisplay, choices])
 
   const table = siteRecordsForUiDisplay.length ? (
     <>
