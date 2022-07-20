@@ -3,14 +3,14 @@ import { Route } from 'react-router-dom'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
-import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
   renderAuthenticatedOnline,
   screen,
   waitForElementToBeRemoved,
   within,
-} from '../../../../testUtilities/testingLibraryWithHelpers'
+} from '../../../testUtilities/testingLibraryWithHelpers'
 import ManagementRegime from './ManagementRegime'
 
 test('Edit Management Regime - shows name and rules required', async () => {
