@@ -10,6 +10,7 @@ import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
+import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 
 const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
@@ -45,7 +46,7 @@ const FishbeltTransectInputs = ({
     currents,
     tides,
   } = choices
-  const transectWidthSelectOptions = getOptions(belttransectwidths)
+  const transectWidthSelectOptions = sortArrayByObjectKey(getOptions(belttransectwidths), 'label')
   const fishSizeBinSelectOptions = getOptions(fishsizebins)
   const reefSlopeSelectOptions = [...getOptions(reefslopes), { label: 'not reported', value: '' }]
   const relativeDepthOptions = [...getOptions(relativedepths), { label: 'not reported', value: '' }]
