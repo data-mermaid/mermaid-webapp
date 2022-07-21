@@ -130,7 +130,7 @@ const Sites = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser && currentUser.id}-sicountryNameable`,
+    key: `${currentUser && currentUser.id}-sitesTable`,
     defaultValue: tableDefaultPrefs,
   })
 
