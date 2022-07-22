@@ -8,6 +8,7 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import { IconPen } from '../../../icons'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import { getBenthicOptions } from '../../../../library/getOptions'
+import { getProjectRole } from '../../../../App/currentUserProfileHelpers'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
@@ -27,7 +28,7 @@ import { userRole } from '../../../../App/mermaidData/userRole'
 
 const SubmittedBenthicPhotoQuadrat = () => {
   const currentProjectPath = useCurrentProjectPath()
-  const { getProjectRole } = useCurrentUser()
+  const { currentUser } = useCurrentUser()
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const history = useHistory()
@@ -46,7 +47,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
   const [submittedRecord, setSubmittedRecord] = useState()
   const [subNavNode, setSubNavNode] = useState(null)
 
-  const isAdminUser = getProjectRole(projectId) === userRole.admin
+  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
   const observers = submittedRecord?.observers ?? []
 
   const _getSupportingData = useEffect(() => {

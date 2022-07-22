@@ -21,6 +21,7 @@ const SingleSiteMap = ({
   formLongitudeValue,
   handleLatitudeChange,
   handleLongitudeChange,
+  isReadOnlyUser,
 }) => {
   const mapContainer = useRef(null)
   const map = useRef(null)
@@ -45,7 +46,7 @@ const SingleSiteMap = ({
         'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
     })
 
-    recordMarker.current = new maplibregl.Marker(el, { draggable: true })
+    recordMarker.current = new maplibregl.Marker(el, { draggable: !isReadOnlyUser })
 
     addMapController(map.current)
 
@@ -59,7 +60,7 @@ const SingleSiteMap = ({
       map.current.remove()
       recordMarker.current.remove()
     }
-  }, [])
+  }, [isReadOnlyUser])
 
   const _handleMapMarker = useEffect(() => {
     if (!map.current) {
@@ -105,7 +106,7 @@ const SingleSiteMap = ({
     setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-benthic', dataLayerFromLocalStorage)
 
   return (
-    <MapInputRow>
+    <MapInputRow isReadOnlyUser={isReadOnlyUser}>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
         {displayHelpText && (
@@ -124,13 +125,17 @@ const SingleSiteMap = ({
 SingleSiteMap.propTypes = {
   formLatitudeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   formLongitudeValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  handleLatitudeChange: PropTypes.func.isRequired,
-  handleLongitudeChange: PropTypes.func.isRequired,
+  handleLatitudeChange: PropTypes.func,
+  handleLongitudeChange: PropTypes.func,
+  isReadOnlyUser: PropTypes.bool,
 }
 
 SingleSiteMap.defaultProps = {
   formLatitudeValue: 0,
   formLongitudeValue: 0,
+  handleLatitudeChange: () => {},
+  handleLongitudeChange: () => {},
+  isReadOnlyUser: false,
 }
 
 export default SingleSiteMap

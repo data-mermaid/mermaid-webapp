@@ -1,5 +1,5 @@
 export const getObjectById = (arrayWithObjects, searchId) => {
-  if (arrayWithObjects.length <= 0 || !searchId) {
+  if (!arrayWithObjects || !searchId) {
     return undefined
   }
 

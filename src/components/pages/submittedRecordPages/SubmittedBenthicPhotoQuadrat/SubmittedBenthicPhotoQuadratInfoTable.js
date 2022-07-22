@@ -1,21 +1,13 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import { Table, Tr, Td } from '../../../generic/Table/table'
+import React from 'react'
 import {
   managementRegimePropType,
   sitePropType,
   choicesPropType,
   submittedBenthicPhotoQuadratPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { getObjectById } from '../../../../library/getObjectById'
-import { TdKey } from '../SubmittedFormPage.styles'
-
-const TableRowItem = ({ title, options, value }) => (
-  <Tr>
-    <TdKey>{title}</TdKey>
-    {options ? <Td>{getObjectById(options, value)?.name}</Td> : <Td>{value}</Td>}
-  </Tr>
-)
+import { Table } from '../../../generic/Table/table'
+import TableRowItem from '../../../generic/Table/TableRowItem/TableRowItem'
 
 const SubmittedBenthicPhotoQuadratInfoTable = ({
   sites,
