@@ -92,9 +92,9 @@ export const SummaryCardGroup = styled('div')`
 
 const linkStyles = css`
   text-decoration: none;
-  border: 1px solid;
   margin: 10px;
   height: fit-content;
+  background-color: #f3f2f7;
 `
 
 export const SummaryCard = styled(NavLink)`
@@ -110,7 +110,7 @@ export const SummaryCard = styled(NavLink)`
 export const OfflineSummaryCard = styled('div')`
   ${linkStyles}
   cursor: not-allowed;
-  color: ${theme.color.secondaryDisabledColor};
+  color: ${theme.color.disabledText};
 `
 
 export const SummaryTitle = styled('div')`
