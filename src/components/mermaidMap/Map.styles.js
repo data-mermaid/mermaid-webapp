@@ -3,6 +3,7 @@ import { InputRow } from '../generic/form'
 
 export const MapInputRow = styled(InputRow)`
   grid-template-columns: 1fr;
+  border-width: ${(props) => props.isReadOnlyUser && '0px'};
 `
 export const MapContainer = styled.div`
   position: relative;
