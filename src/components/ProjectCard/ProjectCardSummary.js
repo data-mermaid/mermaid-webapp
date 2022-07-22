@@ -15,7 +15,7 @@ import {
   SummaryCard,
 } from './ProjectCard.styles'
 import { getDataSharingPolicyLabel } from '../../library/getDataSharingPolicyLabel'
-import { IconCollect, IconSites, IconUsers } from '../icons'
+import { IconCollect, IconData, IconSites, IconUsers } from '../icons'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import { useCurrentUser } from '../../App/CurrentUserContext'
@@ -61,7 +61,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       <SubCardContent>
         <SubCardTitle>Submitted Sample Units</SubCardTitle>
         <div>
-          <IconCollect />
+          <IconData />
           {num_sample_units}
         </div>
       </SubCardContent>
