@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components/macro'
+import styled from 'styled-components/macro'
 import { InputRow } from '../generic/form'
 
 export const MapInputRow = styled(InputRow)`
