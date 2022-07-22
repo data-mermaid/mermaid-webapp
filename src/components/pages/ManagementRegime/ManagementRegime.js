@@ -26,7 +26,7 @@ import ManagementRulesInput from '../ManagementRulesInput'
 import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import SaveButton from '../../generic/SaveButton'
 import { Table } from '../../generic/Table/table'
-import TableRowItem from '../../generic/Table/TableRowItem/TableRowItem'
+import TableRowItem from '../../generic/Table/TableRowItem'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -73,13 +73,13 @@ const ReadOnlyManagementRegimeContent = ({
   return (
     <Table>
       <tbody>
-        <TableRowItem title="Secondary Name" value={[name_secondary]} />
-        <TableRowItem title="Year Established" value={[est_year]} />
-        <TableRowItem title="Area" value={[size]} />
+        <TableRowItem title="Secondary Name" value={name_secondary} />
+        <TableRowItem title="Year Established" value={est_year} />
+        <TableRowItem title="Area" value={size} />
         <TableRowItem title="Parities" options={managementParties} value={parties} />
-        <TableRowItem title="Compliance" options={managementCompliances} value={[compliance]} />
-        <TableRowItem title="Rules" value={[managementRules]} />
-        <TableRowItem title="Notes" value={[notes]} />
+        <TableRowItem title="Compliance" options={managementCompliances} value={compliance} />
+        <TableRowItem title="Rules" value={managementRules} />
+        <TableRowItem title="Notes" value={notes} />
       </tbody>
     </Table>
   )
