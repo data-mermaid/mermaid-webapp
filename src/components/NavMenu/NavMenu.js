@@ -15,6 +15,7 @@ import {
   IconUsers,
   IconSharing,
   IconUsersAndTransects,
+  IconManagementRegimesOverview,
 } from '../icons'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
@@ -81,6 +82,11 @@ const NavMenu = ({ subNavNode }) => {
               <li>
                 <NavLinkSidebar to={`${projectUrl}/usersandtransects`}>
                   <IconUsersAndTransects /> <span>Users and Transects</span>
+                </NavLinkSidebar>
+              </li>
+              <li>
+                <NavLinkSidebar to={`${projectUrl}/managementregimesoverview`}>
+                  <IconManagementRegimesOverview /> <span>Management Regimes Overview</span>
                 </NavLinkSidebar>
               </li>
             </ul>
