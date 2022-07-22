@@ -30,3 +30,6 @@ yarn-error.log*
 
 # IDE config
 jsconfig.json
+
+# vscode
+../.DS_Store

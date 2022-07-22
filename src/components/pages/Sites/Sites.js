@@ -1,8 +1,8 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
@@ -42,6 +42,7 @@ const Sites = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
   const [choices, setChoices] = useState({})
+
   const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
@@ -78,7 +79,6 @@ const Sites = () => {
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
   const currentProjectPath = useCurrentProjectPath()
-
   const tableColumns = useMemo(
     () => [
       {
@@ -205,6 +205,25 @@ const Sites = () => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
+  const getDataForCSV = useMemo(() => {
+    const countryChoices = choices?.countries?.data
+
+    return siteRecordsForUiDisplay.map((site) => {
+      const findCountry = countryChoices?.find((country) => country.id === site.country)
+
+      return {
+        Country: findCountry?.name,
+        Name: site.uiLabels.name,
+        Latitude: site.location.coordinates[1],
+        Longitude: site.location.coordinates[0],
+        ReefType: site.uiLabels.reefType,
+        ReefZone: site.uiLabels.reefZone,
+        Exposure: site.uiLabels.exposure,
+        Notes: site.notes,
+      }
+    })
+  }, [siteRecordsForUiDisplay, choices])
+
   const table = siteRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
@@ -291,6 +310,7 @@ const Sites = () => {
               value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
+
             <ToolbarButtonWrapper>
               <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
                 <IconPlus /> New site
@@ -299,7 +319,13 @@ const Sites = () => {
                 <IconCopy /> Copy sites from other projects
               </ButtonSecondary>
               <ButtonSecondary>
-                <IconDownload /> Export sites
+                <CSVLink
+                  data={getDataForCSV}
+                  filename="Export_sites.csv"
+                  style={{ margin: 0, textDecoration: 'none' }}
+                >
+                  <IconDownload /> Export sites
+                </CSVLink>
               </ButtonSecondary>
             </ToolbarButtonWrapper>
           </ToolBarRow>
