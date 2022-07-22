@@ -110,7 +110,6 @@ export const SummaryCard = styled(NavLink)`
 export const OfflineSummaryCard = styled('div')`
   ${linkStyles}
   cursor: not-allowed;
-  color: ${theme.color.disabledText};
 `
 
 export const SummaryTitle = styled('div')`
