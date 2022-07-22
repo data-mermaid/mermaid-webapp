@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import {
   ActiveCollectRecordsCount,
   DataSharingPolicySubCardContent,
-  DisabledSubCardContent,
+  OfflineSubCardContent,
   OfflineSummaryCard,
   OfflineMessage,
   OfflineSubCardGroupContent,
@@ -56,7 +56,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     )
   const offlineMessage = <OfflineMessage>Online Only</OfflineMessage>
 
-  const submittedCard = isAppOnline ? (
+  const submittedCardOnline = (
     <SummaryCard to={`${projectUrl}/data`} aria-label="Data" onClick={stopEventPropagation}>
       <SubCardContent>
         <SubCardTitle>Submitted Sample Units</SubCardTitle>
@@ -67,17 +67,19 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       </SubCardContent>
       <SummaryTitle>Submitted</SummaryTitle>
     </SummaryCard>
-  ) : (
+  )
+
+  const submittedCardOffline = (
     <OfflineSummaryCard aria-label="Data Offline" onClick={stopEventPropagation}>
-      <DisabledSubCardContent>
+      <OfflineSubCardContent>
         <SubCardTitle>Submitted Sample Units</SubCardTitle>
         {offlineMessage}
-      </DisabledSubCardContent>
+      </OfflineSubCardContent>
       <SummaryTitle isDisabled={!isAppOnline}>Submitted</SummaryTitle>
     </OfflineSummaryCard>
   )
 
-  const infoCard = isAppOnline ? (
+  const infoCardOnline = (
     <SummaryCard to={`${projectUrl}/admin`} aria-label="Admin" onClick={stopEventPropagation}>
       <SubCardGroupContent>
         <SubCardContent>
@@ -111,7 +113,8 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       </SubCardGroupContent>
       <SummaryTitle>Info</SummaryTitle>
     </SummaryCard>
-  ) : (
+  )
+  const infoCardOffline = (
     <OfflineSummaryCard aria-label="Admin Offline" onClick={stopEventPropagation}>
       <OfflineSubCardGroupContent>
         <SubCardTitle>Sites</SubCardTitle>
@@ -139,8 +142,8 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
         </SubCardContent>
         <SummaryTitle>Collecting</SummaryTitle>
       </SummaryCard>
-      {submittedCard}
-      {infoCard}
+      {isAppOnline ? submittedCardOnline : submittedCardOffline}
+      {isAppOnline ? infoCardOnline : infoCardOffline}
     </SummaryCardGroup>
   )
 }

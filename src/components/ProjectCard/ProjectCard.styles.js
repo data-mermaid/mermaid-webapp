@@ -140,7 +140,7 @@ export const SubCardContent = styled('div')`
   }
 `
 
-export const DisabledSubCardContent = styled('div')`
+export const OfflineSubCardContent = styled('div')`
   display: grid;
   min-height: 10.6rem;
   justify-items: center;
