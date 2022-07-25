@@ -1,6 +1,7 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
@@ -31,6 +32,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
+import Site from '../Site/Site'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -170,6 +172,21 @@ const ManagementRegimes = () => {
     return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
 
+  const getDataForCSV = useMemo(() => {
+    return managementRegimeRecordsForUiDisplay.map((site) => {
+      return {
+        Name: site.uiLabels.name,
+        EstYear: site.uiLabels.estYear,
+        Compliance: site.uiLabels.compliance,
+        OpenAccess: site.uiLabels.openAccess,
+        AccessRestriction: site.uiLabels.accessRestriction,
+        PeriodicClosure: site.uiLabels.periodicClosure,
+        SizeLimits: site.uiLabels.sizeLimits,
+        GearRestriction: site.uiLabels.gearRestriction,
+      }
+    })
+  }, [managementRegimeRecordsForUiDisplay])
+
   const {
     canNextPage,
     canPreviousPage,
@@ -307,7 +324,13 @@ const ManagementRegimes = () => {
                 <IconCopy /> Copy MRs from other projects
               </ButtonSecondary>
               <ButtonSecondary>
-                <IconDownload /> Export MRs
+                <CSVLink
+                  data={getDataForCSV}
+                  filename="Export_MRs.csv"
+                  style={{ margin: 0, textDecoration: 'none' }}
+                >
+                  <IconDownload /> Export MRs
+                </CSVLink>
               </ButtonSecondary>
             </ToolbarButtonWrapper>
           </ToolBarRow>
