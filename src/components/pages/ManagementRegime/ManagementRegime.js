@@ -9,6 +9,7 @@ import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
+import { formikPropType } from '../../../library/formikPropType'
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
 import { getProjectRole } from '../../../App/currentUserProfileHelpers'
@@ -37,7 +38,7 @@ import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const ReadOnlyManagementRegimeContent = ({
-  managementRegime,
+  managementRegimeFormikValues,
   managementCompliances,
   managementParties,
 }) => {
@@ -55,7 +56,7 @@ const ReadOnlyManagementRegimeContent = ({
     species_restriction,
     compliance,
     notes,
-  } = managementRegime
+  } = managementRegimeFormikValues
 
   const rules = [
     no_take && 'No Take',
@@ -82,6 +83,91 @@ const ReadOnlyManagementRegimeContent = ({
         <TableRowItem title="Notes" value={notes} />
       </tbody>
     </Table>
+  )
+}
+
+const ManagementRegimeForm = ({ formik, managementCompliances, managementParties }) => {
+  return (
+    <form id="management-regime-form" onSubmit={formik.handleSubmit}>
+      <InputWrapper>
+        <InputWithLabelAndValidation
+          required
+          label="Name"
+          id="name"
+          type="text"
+          {...formik.getFieldProps('name')}
+          validationType={formik.errors.name ? 'error' : null}
+          validationMessages={formik.errors.name}
+          testId="name"
+        />
+        <InputWithLabelAndValidation
+          label="Secondary Name"
+          id="name_secondary"
+          type="text"
+          {...formik.getFieldProps('name_secondary')}
+        />
+        <InputWithLabelAndValidation
+          label="Year Established"
+          id="est_year"
+          type="number"
+          {...formik.getFieldProps('est_year')}
+        />
+        <InputWithLabelAndValidation
+          label="Area"
+          id="size"
+          type="number"
+          unit="ha"
+          {...formik.getFieldProps('size')}
+        />
+        <InputCheckboxGroupWithLabelAndValidation
+          required={false}
+          label="Parties"
+          id="parties"
+          options={managementParties}
+          value={formik.getFieldProps('parties').value}
+          onChange={({ selectedItems }) => {
+            formik.setFieldValue('parties', selectedItems)
+          }}
+        />
+        <ManagementRulesInput
+          managementFormValues={formik.values}
+          onChange={(property, partialRestrictionRuleValues) => {
+            const openAccessAndNoTakeRules =
+              property === 'partial_restrictions'
+                ? { open_access: false, no_take: false }
+                : { open_access: property === 'open_access', no_take: property === 'no_take' }
+
+            const partialRestrictionRules = {
+              periodic_closure: partialRestrictionRuleValues.periodic_closure,
+              size_limits: partialRestrictionRuleValues.size_limits,
+              gear_restriction: partialRestrictionRuleValues.gear_restriction,
+              species_restriction: partialRestrictionRuleValues.species_restriction,
+              access_restriction: partialRestrictionRuleValues.access_restriction,
+            }
+
+            formik.setValues({
+              ...formik.values,
+              ...openAccessAndNoTakeRules,
+              ...partialRestrictionRules,
+            })
+          }}
+          validationType={formik.errors.rules ? 'error' : null}
+          validationMessages={formik.errors.rules}
+          data-testid="rules"
+        />
+        <InputRadioWithLabelAndValidation
+          label="Compliance"
+          id="compliance"
+          options={managementCompliances}
+          {...formik.getFieldProps('compliance')}
+        />
+        <TextareaWithLabelAndValidation
+          label="Notes"
+          id="notes"
+          {...formik.getFieldProps('notes')}
+        />
+      </InputWrapper>
+    </form>
   )
 }
 
@@ -240,101 +326,27 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     }
   }, [formik.dirty])
 
-  const displayIdNotFound = idsNotAssociatedWithData.length && !isNewManagementRegime
+  const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewManagementRegime
 
   const contentViewByRole = isReadOnlyUser ? (
     <ReadOnlyManagementRegimeContent
-      managementRegime={formik.values}
+      managementRegimeFormikValues={formik.values}
       managementCompliances={managementCompliances}
       managementParties={managementParties}
     />
   ) : (
     <>
-      <form id="management-regime-form" onSubmit={formik.handleSubmit}>
-        <InputWrapper>
-          <InputWithLabelAndValidation
-            required
-            label="Name"
-            id="name"
-            type="text"
-            {...formik.getFieldProps('name')}
-            validationType={formik.errors.name ? 'error' : null}
-            validationMessages={formik.errors.name}
-            testId="name"
-          />
-          <InputWithLabelAndValidation
-            label="Secondary Name"
-            id="name_secondary"
-            type="text"
-            {...formik.getFieldProps('name_secondary')}
-          />
-          <InputWithLabelAndValidation
-            label="Year Established"
-            id="est_year"
-            type="number"
-            {...formik.getFieldProps('est_year')}
-          />
-          <InputWithLabelAndValidation
-            label="Area"
-            id="size"
-            type="number"
-            unit="ha"
-            {...formik.getFieldProps('size')}
-          />
-          <InputCheckboxGroupWithLabelAndValidation
-            label="Parties"
-            id="parties"
-            options={managementParties}
-            value={formik.getFieldProps('parties').value}
-            onChange={({ selectedItems }) => {
-              formik.setFieldValue('parties', selectedItems)
-            }}
-          />
-          <ManagementRulesInput
-            managementFormValues={formik.values}
-            onChange={(property, partialRestrictionRuleValues) => {
-              const openAccessAndNoTakeRules =
-                property === 'partial_restrictions'
-                  ? { open_access: false, no_take: false }
-                  : { open_access: property === 'open_access', no_take: property === 'no_take' }
-
-              const partialRestrictionRules = {
-                periodic_closure: partialRestrictionRuleValues.periodic_closure,
-                size_limits: partialRestrictionRuleValues.size_limits,
-                gear_restriction: partialRestrictionRuleValues.gear_restriction,
-                species_restriction: partialRestrictionRuleValues.species_restriction,
-                access_restriction: partialRestrictionRuleValues.access_restriction,
-              }
-
-              formik.setValues({
-                ...formik.values,
-                ...openAccessAndNoTakeRules,
-                ...partialRestrictionRules,
-              })
-            }}
-            validationType={formik.errors.rules ? 'error' : null}
-            validationMessages={formik.errors.rules}
-            data-testid="rules"
-          />
-          <InputRadioWithLabelAndValidation
-            label="Compliance"
-            id="compliance"
-            options={managementCompliances}
-            {...formik.getFieldProps('compliance')}
-          />
-          <TextareaWithLabelAndValidation
-            label="Notes"
-            id="notes"
-            {...formik.getFieldProps('notes')}
-          />
-        </InputWrapper>
-      </form>
+      <ManagementRegimeForm
+        formik={formik}
+        managementCompliances={managementCompliances}
+        managementParties={managementParties}
+      />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 
-  return displayIdNotFound ? (
+  return displayIdNotFoundErrorPage ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
@@ -366,7 +378,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 }
 
 ReadOnlyManagementRegimeContent.propTypes = {
-  managementRegime: managementRegimePropType.isRequired,
+  managementRegimeFormikValues: managementRegimePropType.isRequired,
+  managementCompliances: inputOptionsPropTypes.isRequired,
+  managementParties: inputOptionsPropTypes.isRequired,
+}
+
+ManagementRegimeForm.propTypes = {
+  formik: formikPropType.isRequired,
   managementCompliances: inputOptionsPropTypes.isRequired,
   managementParties: inputOptionsPropTypes.isRequired,
 }
