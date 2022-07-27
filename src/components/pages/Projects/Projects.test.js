@@ -81,14 +81,14 @@ test('A project card renders with the expected UI elements for button groups', a
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
-  const collectButton = within(projectCard).getByLabelText(/collect/i)
-  const dataButton = within(projectCard).getByLabelText(/data/i)
-  const adminButton = within(projectCard).getByLabelText(/admin/i)
+  const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
+  const submitSummaryCard = within(projectCard).getByLabelText(/data/i)
+  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
   const copyButton = within(projectCard).getByLabelText(/copy/i)
 
-  expect(collectButton).toBeInTheDocument()
-  expect(dataButton).toBeInTheDocument()
-  expect(adminButton).toBeInTheDocument()
+  expect(collectingSummaryCard).toBeInTheDocument()
+  expect(submitSummaryCard).toBeInTheDocument()
+  expect(infoSummaryCard).toBeInTheDocument()
   expect(copyButton).toBeInTheDocument()
 })
 
@@ -97,7 +97,6 @@ test('A project card shows relevant data for a project', async () => {
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexiePerUserDataInstance,
-
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
@@ -106,7 +105,6 @@ test('A project card shows relevant data for a project', async () => {
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
     dexiePerUserDataInstance,
-
     isSyncInProgressOverride: true,
   })
 
@@ -115,10 +113,25 @@ test('A project card shows relevant data for a project', async () => {
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
+  const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
+  const submittedSummaryCard = within(projectCard).getByLabelText(/data/i)
+  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
 
   expect(within(projectCard).getByText('Project I'))
   expect(within(projectCard).getByText('Canada'))
-  expect(within(projectCard).getByText('13'))
+  expect(within(collectingSummaryCard).getByText('12'))
+  expect(within(submittedSummaryCard).getByText('9'))
+  expect(within(infoSummaryCard).getByText('13'))
+  expect(within(infoSummaryCard).getByText('5'))
+  expect(within(infoSummaryCard).getByTestId('fishbelt-policy')).toHaveTextContent(
+    'Fish belt: Private',
+  )
+  expect(within(infoSummaryCard).getByTestId('benthic-policy')).toHaveTextContent(
+    'Benthic: Public Summary',
+  )
+  expect(within(infoSummaryCard).getByTestId('bleaching-policy')).toHaveTextContent(
+    'Bleaching: Public',
+  )
 
   const offlineCheckbox = within(projectCard).getByRole('checkbox', {
     name: /offline ready/i,
@@ -137,14 +150,12 @@ test('A project card renders appropriately when offline', async () => {
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexiePerUserDataInstance,
-
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
     dexiePerUserDataInstance,
-
     isSyncInProgressOverride: true,
   })
 
@@ -153,10 +164,16 @@ test('A project card renders appropriately when offline', async () => {
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
+  const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
+  const submittedSummaryCard = within(projectCard).getByLabelText(/data/i)
+  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
 
   expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
   expect(within(projectCard).getByLabelText(/data offline/i)).toBeInTheDocument()
   expect(within(projectCard).getByLabelText(/admin offline/i)).toBeInTheDocument()
+  expect(within(collectingSummaryCard).getByText('12'))
+  expect(within(submittedSummaryCard).getByText('Online Only'))
+  expect(within(infoSummaryCard).getByText('Online Only'))
 
   expect(screen.getByLabelText('Offline Ready')).toBeDisabled()
   expect(screen.getByLabelText('Copy')).toBeDisabled()

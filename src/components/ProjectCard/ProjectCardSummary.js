@@ -99,13 +99,13 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
         <DataSharingPolicySubCardContent>
           <SubCardTitle>Data sharing</SubCardTitle>
           <div>
-            <span>
+            <span data-testid="fishbelt-policy">
               Fish belt: <strong>{getDataSharingPolicyLabel(data_policy_beltfish)}</strong>
             </span>
-            <span>
+            <span data-testid="benthic-policy">
               Benthic: <strong>{getDataSharingPolicyLabel(data_policy_benthiclit)}</strong>
             </span>
-            <span>
+            <span data-testid="bleaching-policy">
               Bleaching: <strong>{getDataSharingPolicyLabel(data_policy_bleachingqc)}</strong>
             </span>
           </div>
@@ -135,7 +135,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       >
         <SubCardContent>
           <SubCardTitle>Collecting Sample Units</SubCardTitle>
-          <div>
+          <div data-testid="collect-counts">
             <IconCollect />
             {collectingSampleUnitCounts}
           </div>
