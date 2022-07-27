@@ -1,48 +1,49 @@
+import PropTypes from 'prop-types'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useHistory } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
+import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
+import { formikPropType } from '../../../library/formikPropType'
 import { getOptions } from '../../../library/getOptions'
+import { getProjectRole } from '../../../App/currentUserProfileHelpers'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
-import { InputRow, InputWrapper } from '../../generic/form'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
+import { InputRow, InputWrapper } from '../../generic/form'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import language from '../../../language'
+import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import LoadingModal from '../../LoadingModal/LoadingModal'
+import language from '../../../language'
 import SaveButton from '../../generic/SaveButton'
 import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
+import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
+import { Table } from '../../generic/Table/table'
+import TableRowItem from '../../generic/Table/TableRowItem'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
-import TableRowItem from '../../generic/Table/TableRowItem/TableRowItem'
-import { Table } from '../../generic/Table/table'
-import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
-import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const ReadOnlySiteContent = ({
   site,
-  countries,
-  exposures,
-  reefTypes,
-  reefZones,
+  countryOptions,
+  exposureOptions,
+  reefTypeOptions,
+  reefZoneOptions,
   isReadOnlyUser,
 }) => {
   const { country, latitude, longitude, exposure, reef_type, reef_zone, notes } = site
@@ -51,12 +52,12 @@ const ReadOnlySiteContent = ({
     <>
       <Table>
         <tbody>
-          <TableRowItem title="Country" options={countries} value={country} />
+          <TableRowItem title="Country" options={countryOptions} value={country} />
           <TableRowItem title="Latitude" value={latitude} />
           <TableRowItem title="Longitude" value={longitude} />
-          <TableRowItem title="Exposure" options={exposures} value={exposure} />
-          <TableRowItem title="Reef Type" options={reefTypes} value={reef_type} />
-          <TableRowItem title="Reef Zone" options={reefZones} value={reef_zone} />
+          <TableRowItem title="Exposure" options={exposureOptions} value={exposure} />
+          <TableRowItem title="Reef Type" options={reefTypeOptions} value={reef_type} />
+          <TableRowItem title="Reef Zone" options={reefZoneOptions} value={reef_zone} />
           <TableRowItem title="Notes" value={notes} />
         </tbody>
       </Table>
@@ -66,6 +67,102 @@ const ReadOnlySiteContent = ({
         isReadOnlyUser={isReadOnlyUser}
       />
     </>
+  )
+}
+
+const SiteForm = ({
+  formik,
+  isAppOnline,
+  countryOptions,
+  exposureOptions,
+  reefTypeOptions,
+  reefZoneOptions,
+  handleLatitudeChange,
+  handleLongitudeChange,
+}) => {
+  return (
+    <form id="site-form" onSubmit={formik.handleSubmit}>
+      <InputWrapper>
+        <InputWithLabelAndValidation
+          required
+          label="Name"
+          id="name"
+          type="text"
+          {...formik.getFieldProps('name')}
+          validationType={formik.errors.name ? 'error' : null}
+          validationMessages={formik.errors.name}
+          testId="name"
+        />
+        <InputRow required data-testid="country-select">
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label id="country-label">Country</label>
+          <InputAutocomplete
+            id="country"
+            aria-labelledby="country-label"
+            options={countryOptions}
+            value={formik.values.country}
+            noResultsText={language.autocomplete.noResultsDefault}
+            onChange={(selectedItem) => {
+              formik.setFieldValue('country', selectedItem.value)
+            }}
+          />
+        </InputRow>
+        <InputWithLabelAndValidation
+          required
+          label="Latitude"
+          id="latitude"
+          type="number"
+          {...formik.getFieldProps('latitude')}
+          validationType={formik.errors.latitude ? 'error' : null}
+          validationMessages={formik.errors.latitude}
+          testId="latitude"
+        />
+        <InputWithLabelAndValidation
+          required
+          label="Longitude"
+          id="longitude"
+          type="number"
+          {...formik.getFieldProps('longitude')}
+          validationType={formik.errors.longitude ? 'error' : null}
+          validationMessages={formik.errors.longitude}
+          testId="longitude"
+        />
+        {isAppOnline && (
+          <SingleSiteMap
+            formLatitudeValue={formik.getFieldProps('latitude').value}
+            formLongitudeValue={formik.getFieldProps('longitude').value}
+            handleLatitudeChange={handleLatitudeChange}
+            handleLongitudeChange={handleLongitudeChange}
+          />
+        )}
+        <InputRadioWithLabelAndValidation
+          required
+          label="Exposure"
+          id="exposure"
+          options={exposureOptions}
+          {...formik.getFieldProps('exposure')}
+        />
+        <InputRadioWithLabelAndValidation
+          required
+          label="Reef Type"
+          id="reef_type"
+          options={reefTypeOptions}
+          {...formik.getFieldProps('reef_type')}
+        />
+        <InputRadioWithLabelAndValidation
+          required
+          label="Reef Zone"
+          id="reef_zone"
+          options={reefZoneOptions}
+          {...formik.getFieldProps('reef_zone')}
+        />
+        <TextareaWithLabelAndValidation
+          label="Notes"
+          id="notes"
+          {...formik.getFieldProps('notes')}
+        />
+      </InputWrapper>
+    </form>
   )
 }
 
@@ -217,105 +314,35 @@ const Site = ({ isNewSite }) => {
     [formikSetFieldValue],
   )
 
+  const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewSite
+
   const contentViewByRole = isReadOnlyUser ? (
     <ReadOnlySiteContent
       site={formik.values}
-      countries={countryOptions}
-      exposures={exposureOptions}
-      reefTypes={reefTypeOptions}
-      reefZones={reefZoneOptions}
+      countryOptions={countryOptions}
+      exposureOptions={exposureOptions}
+      reefTypeOptions={reefTypeOptions}
+      reefZoneOptions={reefZoneOptions}
       isReadOnlyUser={isReadOnlyUser}
     />
   ) : (
     <>
-      <form id="site-form" onSubmit={formik.handleSubmit}>
-        <InputWrapper>
-          <InputWithLabelAndValidation
-            required
-            label="Name"
-            id="name"
-            type="text"
-            {...formik.getFieldProps('name')}
-            validationType={formik.errors.name ? 'error' : null}
-            validationMessages={formik.errors.name}
-            testId="name"
-          />
-          <InputRow required data-testid="country-select">
-            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-            <label id="country-label">Country</label>
-            <InputAutocomplete
-              id="country"
-              aria-labelledby="country-label"
-              options={countryOptions}
-              value={formik.values.country}
-              noResultsText={language.autocomplete.noResultsDefault}
-              onChange={(selectedItem) => {
-                formik.setFieldValue('country', selectedItem.value)
-              }}
-            />
-          </InputRow>
-          <InputWithLabelAndValidation
-            required
-            label="Latitude"
-            id="latitude"
-            type="number"
-            {...formik.getFieldProps('latitude')}
-            validationType={formik.errors.latitude ? 'error' : null}
-            validationMessages={formik.errors.latitude}
-            testId="latitude"
-          />
-          <InputWithLabelAndValidation
-            required
-            label="Longitude"
-            id="longitude"
-            type="number"
-            {...formik.getFieldProps('longitude')}
-            validationType={formik.errors.longitude ? 'error' : null}
-            validationMessages={formik.errors.longitude}
-            testId="longitude"
-          />
-          {isAppOnline && (
-            <SingleSiteMap
-              formLatitudeValue={formik.getFieldProps('latitude').value}
-              formLongitudeValue={formik.getFieldProps('longitude').value}
-              handleLatitudeChange={handleLatitudeChange}
-              handleLongitudeChange={handleLongitudeChange}
-            />
-          )}
-          <InputRadioWithLabelAndValidation
-            required
-            label="Exposure"
-            id="exposure"
-            options={exposureOptions}
-            {...formik.getFieldProps('exposure')}
-          />
-          <InputRadioWithLabelAndValidation
-            required
-            label="Reef Type"
-            id="reef_type"
-            options={reefTypeOptions}
-            {...formik.getFieldProps('reef_type')}
-          />
-          <InputRadioWithLabelAndValidation
-            required
-            label="Reef Zone"
-            id="reef_zone"
-            options={reefZoneOptions}
-            {...formik.getFieldProps('reef_zone')}
-          />
-          <TextareaWithLabelAndValidation
-            label="Notes"
-            id="notes"
-            {...formik.getFieldProps('notes')}
-          />
-        </InputWrapper>
-      </form>
+      <SiteForm
+        formik={formik}
+        isAppOnline={isAppOnline}
+        countryOptions={countryOptions}
+        exposureOptions={exposureOptions}
+        reefTypeOptions={reefTypeOptions}
+        reefZoneOptions={reefZoneOptions}
+        handleLatitudeChange={handleLatitudeChange}
+        handleLongitudeChange={handleLongitudeChange}
+      />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
   )
 
-  return idsNotAssociatedWithData.length && !isNewSite ? (
+  return displayIdNotFoundErrorPage ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
@@ -340,11 +367,22 @@ const Site = ({ isNewSite }) => {
 
 ReadOnlySiteContent.propTypes = {
   site: sitePropType.isRequired,
-  countries: inputOptionsPropTypes.isRequired,
-  exposures: inputOptionsPropTypes.isRequired,
-  reefTypes: inputOptionsPropTypes.isRequired,
-  reefZones: inputOptionsPropTypes.isRequired,
+  countryOptions: inputOptionsPropTypes.isRequired,
+  exposureOptions: inputOptionsPropTypes.isRequired,
+  reefTypeOptions: inputOptionsPropTypes.isRequired,
+  reefZoneOptions: inputOptionsPropTypes.isRequired,
   isReadOnlyUser: PropTypes.bool.isRequired,
+}
+
+SiteForm.propTypes = {
+  formik: formikPropType.isRequired,
+  isAppOnline: PropTypes.bool.isRequired,
+  countryOptions: inputOptionsPropTypes.isRequired,
+  exposureOptions: inputOptionsPropTypes.isRequired,
+  reefTypeOptions: inputOptionsPropTypes.isRequired,
+  reefZoneOptions: inputOptionsPropTypes.isRequired,
+  handleLatitudeChange: PropTypes.func.isRequired,
+  handleLongitudeChange: PropTypes.func.isRequired,
 }
 
 Site.propTypes = { isNewSite: PropTypes.bool.isRequired }

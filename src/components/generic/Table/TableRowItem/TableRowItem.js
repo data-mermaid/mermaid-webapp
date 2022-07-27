@@ -9,10 +9,14 @@ const TdKey = styled(Td)`
   font-weight: 900;
   width: 0;
 `
+const getItemLabelOrName = (itemOptions, itemValue) =>
+  getObjectById(itemOptions, itemValue)?.name || getObjectById(itemOptions, itemValue)?.label
 
 const TableRowItem = ({ title, options, value }) => {
-  const optionNameOrLabel =
-    getObjectById(options, value)?.name || getObjectById(options, value)?.label
+  const optionNameOrLabel = Array.isArray(value)
+    ? value.map((item) => getItemLabelOrName(options, item)).join(', ')
+    : getItemLabelOrName(options, value)
+
   const rowItemValue = options ? optionNameOrLabel : value
 
   return (
@@ -30,7 +34,11 @@ TableRowItem.propTypes = {
       name: PropTypes.string,
     }),
   ),
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
 }
 
 TableRowItem.defaultProps = {
