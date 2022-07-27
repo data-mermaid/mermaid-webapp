@@ -60,21 +60,6 @@ const SubmittedFishBeltInfoTable = ({ sites, managementRegimes, choices, submitt
   )
 }
 
-TableRowItem.propTypes = {
-  title: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  ),
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-}
-
-TableRowItem.defaultProps = {
-  options: undefined,
-  value: undefined,
-}
-
 SubmittedFishBeltInfoTable.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,

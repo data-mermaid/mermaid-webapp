@@ -59,21 +59,6 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
   )
 }
 
-TableRowItem.propTypes = {
-  title: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string,
-    }),
-  ),
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-}
-
-TableRowItem.defaultProps = {
-  options: undefined,
-  value: undefined,
-}
-
 SubmittedBenthicPhotoQuadratInfoTable.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
