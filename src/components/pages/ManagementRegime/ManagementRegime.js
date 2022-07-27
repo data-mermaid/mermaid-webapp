@@ -39,8 +39,8 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
-  managementCompliances,
-  managementParties,
+  managementComplianceOptions,
+  managementPartyOptions,
 }) => {
   const {
     name_secondary,
@@ -77,8 +77,8 @@ const ReadOnlyManagementRegimeContent = ({
         <TableRowItem title="Secondary Name" value={name_secondary} />
         <TableRowItem title="Year Established" value={est_year} />
         <TableRowItem title="Area" value={size} />
-        <TableRowItem title="Parities" options={managementParties} value={parties} />
-        <TableRowItem title="Compliance" options={managementCompliances} value={compliance} />
+        <TableRowItem title="Parities" options={managementPartyOptions} value={parties} />
+        <TableRowItem title="Compliance" options={managementComplianceOptions} value={compliance} />
         <TableRowItem title="Rules" value={managementRules} />
         <TableRowItem title="Notes" value={notes} />
       </tbody>
@@ -86,7 +86,7 @@ const ReadOnlyManagementRegimeContent = ({
   )
 }
 
-const ManagementRegimeForm = ({ formik, managementCompliances, managementParties }) => {
+const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementPartyOptions }) => {
   return (
     <form id="management-regime-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -123,7 +123,7 @@ const ManagementRegimeForm = ({ formik, managementCompliances, managementParties
           required={false}
           label="Parties"
           id="parties"
-          options={managementParties}
+          options={managementPartyOptions}
           value={formik.getFieldProps('parties').value}
           onChange={({ selectedItems }) => {
             formik.setFieldValue('parties', selectedItems)
@@ -158,7 +158,7 @@ const ManagementRegimeForm = ({ formik, managementCompliances, managementParties
         <InputRadioWithLabelAndValidation
           label="Compliance"
           id="compliance"
-          options={managementCompliances}
+          options={managementComplianceOptions}
           {...formik.getFieldProps('compliance')}
         />
         <TextareaWithLabelAndValidation
@@ -174,8 +174,8 @@ const ManagementRegimeForm = ({ formik, managementCompliances, managementParties
 const ManagementRegime = ({ isNewManagementRegime }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [managementCompliances, setManagementCompliances] = useState([])
-  const [managementParties, setManagementParties] = useState([])
+  const [managementComplianceOptions, setManagementComplianceOptions] = useState([])
+  const [managementPartyOptions, setManagementPartyOptions] = useState([])
   const [managementRegimeBeingEdited, setManagementRegimeBeingEdited] = useState()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -209,8 +209,8 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
               setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
             }
 
-            setManagementParties(getOptions(choicesResponse.managementparties))
-            setManagementCompliances([
+            setManagementPartyOptions(getOptions(choicesResponse.managementparties))
+            setManagementComplianceOptions([
               ...getOptions(choicesResponse.managementcompliances),
               { label: 'not reported', value: '' },
             ])
@@ -331,15 +331,15 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const contentViewByRole = isReadOnlyUser ? (
     <ReadOnlyManagementRegimeContent
       managementRegimeFormikValues={formik.values}
-      managementCompliances={managementCompliances}
-      managementParties={managementParties}
+      managementComplianceOptions={managementComplianceOptions}
+      managementPartyOptions={managementPartyOptions}
     />
   ) : (
     <>
       <ManagementRegimeForm
         formik={formik}
-        managementCompliances={managementCompliances}
-        managementParties={managementParties}
+        managementComplianceOptions={managementComplianceOptions}
+        managementPartyOptions={managementPartyOptions}
       />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
@@ -379,14 +379,14 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
 
 ReadOnlyManagementRegimeContent.propTypes = {
   managementRegimeFormikValues: managementRegimePropType.isRequired,
-  managementCompliances: inputOptionsPropTypes.isRequired,
-  managementParties: inputOptionsPropTypes.isRequired,
+  managementComplianceOptions: inputOptionsPropTypes.isRequired,
+  managementPartyOptions: inputOptionsPropTypes.isRequired,
 }
 
 ManagementRegimeForm.propTypes = {
   formik: formikPropType.isRequired,
-  managementCompliances: inputOptionsPropTypes.isRequired,
-  managementParties: inputOptionsPropTypes.isRequired,
+  managementComplianceOptions: inputOptionsPropTypes.isRequired,
+  managementPartyOptions: inputOptionsPropTypes.isRequired,
 }
 
 ManagementRegime.propTypes = { isNewManagementRegime: PropTypes.bool.isRequired }
