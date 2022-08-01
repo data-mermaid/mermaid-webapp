@@ -36,6 +36,7 @@ import PageNoData from '../PageNoData'
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [managementParties, setManagementParties] = useState([])
   const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
@@ -48,15 +49,17 @@ const ManagementRegimes = () => {
   const _getManagementRegimeRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
+        databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getManagementRegimeRecordsForUiDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
       ])
-        .then(([managementRegimes, projectResponse]) => {
+        .then(([choicesResponse, managementRegimes, projectResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
             setManagementRegimeRecordsForUiDisplay(managementRegimes)
+            setManagementParties(choicesResponse.managementparties)
             setIsLoading(false)
           }
         })
@@ -172,19 +175,44 @@ const ManagementRegimes = () => {
   }, [])
 
   const getDataForCSV = useMemo(() => {
+    const managementPartiesChoices = managementParties?.data
+
     return managementRegimeRecordsForUiDisplay.map((site) => {
+      const findParty = managementPartiesChoices?.find((party) => party.id === site.parties[0])
+      // I havent found an elegant way of getting all the values for the site.paties
+      const isPartialRestrict =
+        site.periodic_closure ||
+        site.size_limits ||
+        site.gear_restriction ||
+        site.species_restriction ||
+        site.access_restriction
+
+      const no_take = site.no_take && 'No Take'
+      const open_access = site.open_access && 'Open Access'
+      const partial_restrictions =
+        isPartialRestrict &&
+        `${[
+          site.periodic_closure && 'Periodic Closures',
+          site.size_limits && 'Size Limits',
+          site.gear_restriction && 'Gear Restrictions',
+          site.species_restriction && 'Species Restrictions',
+          site.access_restriction && 'Access Restrictions',
+        ].filter((restriction) => restriction)}`
+
+      const rules = open_access || no_take || partial_restrictions || ''
+
       return {
         Name: site.uiLabels.name,
-        EstYear: site.uiLabels.estYear,
-        Compliance: site.uiLabels.compliance,
-        OpenAccess: site.uiLabels.openAccess,
-        AccessRestriction: site.uiLabels.accessRestriction,
-        PeriodicClosure: site.uiLabels.periodicClosure,
-        SizeLimits: site.uiLabels.sizeLimits,
-        GearRestriction: site.uiLabels.gearRestriction,
+        SecondaryName: site.name_secondary,
+        YearEstablished: site.uiLabels.estYear,
+        Size: site.size,
+        Governance: findParty?.name,
+        EstimateCompliance: site.uiLabels.compliance,
+        Rules: rules,
+        Notes: site.notes,
       }
     })
-  }, [managementRegimeRecordsForUiDisplay])
+  }, [managementRegimeRecordsForUiDisplay, managementParties])
 
   const {
     canNextPage,
