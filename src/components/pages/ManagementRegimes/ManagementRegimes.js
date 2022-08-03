@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-
+import { getObjectById } from '../../../library/getObjectById'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
@@ -178,8 +178,10 @@ const ManagementRegimes = () => {
     const managementPartiesChoices = managementParties?.data
 
     return managementRegimeRecordsForUiDisplay.map((site) => {
-      const findParty = managementPartiesChoices?.find((party) => party.id === site.parties[0])
-      // I havent found an elegant way of getting all the values for the site.paties
+      const governance = site.parties
+        .map((party) => getObjectById(managementPartiesChoices, party)?.name)
+        .join(', ')
+
       const isPartialRestrict =
         site.periodic_closure ||
         site.size_limits ||
@@ -206,7 +208,7 @@ const ManagementRegimes = () => {
         SecondaryName: site.name_secondary,
         YearEstablished: site.uiLabels.estYear,
         Size: site.size,
-        Governance: findParty?.name,
+        Governance: governance,
         EstimateCompliance: site.uiLabels.compliance,
         Rules: rules,
         Notes: site.notes,
