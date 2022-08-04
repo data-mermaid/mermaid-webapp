@@ -157,17 +157,5 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     setIsSyncInProgress,
     setSyncErrors,
     syncApiDataIntoOfflineStorage,
-  ], [
-    apiBaseUrl,
-    dexiePerUserDataInstance,
-    getAccessToken,
-    isAppOnline,
-    isMounted,
-    logoutMermaid,
-    location,
-    setIsOfflineStorageHydrated,
-    setIsSyncInProgress,
-    setSyncErrors,
-    syncApiDataIntoOfflineStorage,
   ])
 }
