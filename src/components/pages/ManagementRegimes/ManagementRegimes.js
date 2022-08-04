@@ -205,11 +205,11 @@ const ManagementRegimes = () => {
 
       return {
         Name: site.uiLabels.name,
-        SecondaryName: site.name_secondary,
-        YearEstablished: site.uiLabels.estYear,
+        'Secondary name': site.name_secondary,
+        'Year established': site.uiLabels.estYear,
         Size: site.size,
         Governance: governance,
-        EstimateCompliance: site.uiLabels.compliance,
+        'Estimate compliance': site.uiLabels.compliance,
         Rules: rules,
         Notes: site.notes,
       }
