@@ -114,40 +114,40 @@ function App({ dexieCurrentUserInstance }) {
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={{ currentUser, saveUserProfile }}>
           <LogoutProvider value={logoutMermaid}>
-          <BellNotificationProvider value={{ notifications, deleteNotification }}>
-            <GlobalStyle />
-            <CustomToastContainer limit={5} />
-            <Layout {...layoutProps}>
-              {
-                /** The isMermaidAuthenticated is needed here to prevent an
-                * infinite log in loop with authentication.
-                *
-                * The projects list route and project workflow pages will trigger
-                * a sync when they are routed to, making isOfflineStorageHydrated = true
-                */
-                isMermaidAuthenticated ? (
-                  <Switch>
-                    {routes.map(({ path, Component }) => (
-                      <Route
-                        exact
-                        path={path}
-                        key={path}
-                        render={() =>
-                          isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
-                        }
-                      />
-                    ))}
-                    <Route exact path="/">
-                      <Redirect to="/projects" />
-                    </Route>
-                    <Route component={PageNotFound} />
-                  </Switch>
-                ) : (
-                  <LoadingIndicator />
-                )
-              }
-            </Layout>
-          </BellNotificationProvider>
+            <BellNotificationProvider value={{ notifications, deleteNotification }}>
+              <GlobalStyle />
+              <CustomToastContainer limit={5} />
+              <Layout {...layoutProps}>
+                {
+                  /** The isMermaidAuthenticated is needed here to prevent an
+                   * infinite log in loop with authentication.
+                   *
+                   * The projects list route and project workflow pages will trigger
+                   * a sync when they are routed to, making isOfflineStorageHydrated = true
+                   */
+                  isMermaidAuthenticated ? (
+                    <Switch>
+                      {routes.map(({ path, Component }) => (
+                        <Route
+                          exact
+                          path={path}
+                          key={path}
+                          render={() =>
+                            isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
+                          }
+                        />
+                      ))}
+                      <Route exact path="/">
+                        <Redirect to="/projects" />
+                      </Route>
+                      <Route component={PageNotFound} />
+                    </Switch>
+                  ) : (
+                    <LoadingIndicator />
+                  )
+                }
+              </Layout>
+            </BellNotificationProvider>
           </LogoutProvider>
         </CurrentUserProvider>
       </DatabaseSwitchboardInstanceProvider>

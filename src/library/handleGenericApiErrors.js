@@ -26,9 +26,7 @@ const handleGenericApiErrors = ({ error, callback, logoutMermaid }) => {
     // User is unauthorized so logout and redirect to login screen
     if (logoutMermaid) {
       // Log an error to make it clear why redirect has occurred
-      console.error(
-        'A 401 error occurred. The user is unauthorized.',
-      )
+      console.error('A 401 error occurred. The user is unauthorized.')
       logoutMermaid()
     } else {
       throw new Error(

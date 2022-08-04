@@ -4,18 +4,14 @@ import React, { createContext, useContext } from 'react'
 const LogoutContext = createContext()
 
 const LogoutProvider = ({ children, value }) => {
-  return (
-    <LogoutContext.Provider value={value}>{children}</LogoutContext.Provider>
-  )
+  return <LogoutContext.Provider value={value}>{children}</LogoutContext.Provider>
 }
 
 const useLogout = () => {
   const context = useContext(LogoutContext)
 
   if (context === undefined) {
-    throw new Error(
-      'useLogout must be used within a LogoutProvider component',
-    )
+    throw new Error('useLogout must be used within a LogoutProvider component')
   }
 
   return context
