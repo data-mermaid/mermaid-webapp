@@ -216,9 +216,9 @@ const Sites = () => {
         Name: site.uiLabels.name,
         Latitude: site.location.coordinates[1],
         Longitude: site.location.coordinates[0],
-        ReefType: site.uiLabels.reefType,
-        ReefZone: site.uiLabels.reefZone,
-        Exposure: site.uiLabels.exposure,
+        'Reef type': site.uiLabels.reefType,
+        'Reef zone': site.uiLabels.reefZone,
+        'Reef exposure': site.uiLabels.exposure,
         Notes: site.notes,
       }
     })
