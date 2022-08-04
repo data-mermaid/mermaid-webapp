@@ -6,6 +6,7 @@ const handleGenericApiErrors = ({ error, callback, logoutMermaid }) => {
   const errorStatus = error?.response?.status
 
   if (!errorStatus) {
+    // If there is a general error which does not have a response status
     if (error) {
       throw error
     }
