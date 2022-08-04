@@ -5,6 +5,7 @@ import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from './SyncStatusContext'
+import handleGenericApiErrors from '../../../library/handleGenericApiErrors'
 
 const getProjectIdFromLocation = (location) => {
   const { pathname } = location
@@ -22,6 +23,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
   dexiePerUserDataInstance,
   isMounted,
   isAppOnline,
+  logoutMermaid,
 }) => {
   const location = useLocation()
   const isPageReload = useRef(true)
@@ -83,10 +85,16 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
             isPageReload.current = false
           }
         })
-        .catch(() => {
+        .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(...getToastArguments(language.error.apiDataSync))
+          handleGenericApiErrors({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.apiDataSync))
+            },
+            logoutMermaid,
+          })
         })
     }
 
@@ -94,7 +102,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
       setIsSyncInProgress(true)
       resetSyncErrors()
       syncApiDataIntoOfflineStorage
-        .pushThenPullEverythingForAProject(projectId)
+        .pushThenPullAllProjectData(projectId)
         .then(() => {
           if (isMounted.current) {
             setIsOfflineStorageHydrated(true)
@@ -102,10 +110,16 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
             isPageReload.current = false
           }
         })
-        .catch(() => {
+        .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(...getToastArguments(language.error.apiDataSync))
+          handleGenericApiErrors({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.apiDataSync))
+            },
+            logoutMermaid,
+          })
         })
     }
     if (isNotInitialLoadOnProjectPageAndOnline) {
@@ -113,16 +127,22 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
       setIsSyncInProgress(true)
       resetSyncErrors()
       syncApiDataIntoOfflineStorage
-        .pushThenPullEverythingForAProjectButChoices(projectId)
+        .pushThenPullAllProjectDataExceptChoices(projectId)
         .then(() => {
           if (isMounted.current) {
             setIsSyncInProgress(false)
           }
         })
-        .catch(() => {
+        .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(...getToastArguments(language.error.apiDataSync))
+          handleGenericApiErrors({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.apiDataSync))
+            },
+            logoutMermaid,
+          })
         })
     }
   }, [
@@ -131,6 +151,19 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     getAccessToken,
     isAppOnline,
     isMounted,
+    logoutMermaid,
+    location,
+    setIsOfflineStorageHydrated,
+    setIsSyncInProgress,
+    setSyncErrors,
+    syncApiDataIntoOfflineStorage,
+  ], [
+    apiBaseUrl,
+    dexiePerUserDataInstance,
+    getAccessToken,
+    isAppOnline,
+    isMounted,
+    logoutMermaid,
     location,
     setIsOfflineStorageHydrated,
     setIsSyncInProgress,

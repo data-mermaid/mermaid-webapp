@@ -18,6 +18,8 @@ import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import useIsMounted from '../../library/useIsMounted'
+import { useLogout } from '../../App/LogoutContext'
+import handleGenericApiErrors from '../../library/handleGenericApiErrors'
 
 const DetailsTable = styled(Table)`
   border: solid 1px ${theme.color.secondaryColor};
@@ -36,6 +38,7 @@ const InputContainer = styled.div`
 const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUser }) => {
   const isMounted = useIsMounted()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const logoutMermaid = useLogout()
   const [generaOptions, setGeneraOptions] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [projectName, setProjectName] = useState()
@@ -56,11 +59,17 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
             setGeneraOptions(genera.map((genus) => ({ label: genus.name, value: genus.id })))
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.generaUnavailable))
+        .catch((error) => {
+          handleGenericApiErrors({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.generaUnavailable))
+            },
+            logoutMermaid,
+          })
         })
     }
-  }, [databaseSwitchboardInstance, isMounted])
+  }, [databaseSwitchboardInstance, isMounted, logoutMermaid])
 
   const _getProjectName = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted.current) {
@@ -71,11 +80,17 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
             setProjectName(project.name)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.projectsUnavailable))
+        .catch((error) => {
+          handleGenericApiErrors({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.projectsUnavailable))
+            },
+            logoutMermaid,
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isMounted, logoutMermaid])
 
   const formikPage1 = useFormik({
     initialValues: { genusId: '', species: '' },

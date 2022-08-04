@@ -29,6 +29,8 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
+import { useLogout } from '../../../App/LogoutContext'
+import handleGenericApiErrors from '../../../library/handleGenericApiErrors'
 import PageNoData from '../PageNoData'
 import {
   getIsQuadratSampleUnit,
@@ -44,6 +46,7 @@ const Collect = () => {
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
+  const logoutMermaid = useLogout()
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -63,11 +66,17 @@ const Collect = () => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
+        .catch((error) => {
+          handleGenericApiErrors({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
+            },
+            logoutMermaid,
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, logoutMermaid])
 
   const currentProjectPath = useCurrentProjectPath()
 

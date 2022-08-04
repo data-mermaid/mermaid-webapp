@@ -35,7 +35,7 @@ const ProjectsMixin = (Base) =>
 
       return this._dexiePerUserDataInstance.projects.put(editedProject).then(() => {
         return this._apiSyncInstance
-          .pushThenPullEverythingForAProjectButChoices(projectId)
+          .pushThenPullAllProjectDataExceptChoices(projectId)
           .then((pullResponse) => {
             const editedProjectFromApi = pullResponse.data.projects.updates[0]
 
@@ -94,7 +94,7 @@ const ProjectsMixin = (Base) =>
 
         return this._dexiePerUserDataInstance.project_profiles.put(editedProfile).then(() =>
           this._apiSyncInstance
-            .pushThenPullEverythingForAProjectButChoices(projectId)
+            .pushThenPullAllProjectDataExceptChoices(projectId)
             .then((pullResponse) => {
               const editedProfileFromApi = pullResponse.data.project_profiles.updates[0]
 
@@ -145,7 +145,7 @@ const ProjectsMixin = (Base) =>
 
             if (isApiResponseSuccessful) {
               return this._apiSyncInstance
-                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then(() => {
                   return response.data
                 })
@@ -182,7 +182,7 @@ const ProjectsMixin = (Base) =>
 
             if (isApiResponseSuccessful) {
               return this._apiSyncInstance
-                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then(() => {
                   return response.data
                 })
@@ -216,7 +216,7 @@ const ProjectsMixin = (Base) =>
           )
           .then(() => {
             return this._apiSyncInstance
-              .pushThenPullEverythingForAProjectButChoices(projectId)
+              .pushThenPullAllProjectDataExceptChoices(projectId)
               .then((resp) => {
                 return resp
               })

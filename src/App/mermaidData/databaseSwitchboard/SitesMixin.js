@@ -102,7 +102,7 @@ const SitesMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const siteWithExtraPropertiesWrittenByApi = siteResponseFromApiPush.data
 

@@ -31,7 +31,7 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { validateEmail } from '../../../library/strings/validateEmail'
-import communicateGenericApiErrorsToUser from '../../../library/communicateGenericApiErrorsToUser'
+import handleGenericApiErrors from '../../../library/handleGenericApiErrors'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InlineMessage from '../../generic/InlineMessage'
@@ -211,7 +211,7 @@ const Users = () => {
         toast.success(...getToastArguments(language.success.newUserAdd))
       })
       .catch((error) => {
-        communicateGenericApiErrorsToUser({
+        handleGenericApiErrors({
           error,
           callback: () => {
             if (error.response.status === 400) {
@@ -268,7 +268,7 @@ const Users = () => {
         toast.success(...getToastArguments(language.success.newPendingUserAdd))
       })
       .catch((error) => {
-        communicateGenericApiErrorsToUser({
+        handleGenericApiErrors({
           error,
         })
       })

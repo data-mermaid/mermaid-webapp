@@ -4,6 +4,7 @@ import React, { useMemo } from 'react'
 
 import { CurrentUserProvider } from './CurrentUserContext'
 import { BellNotificationProvider } from './BellNotificationContext'
+import { LogoutProvider } from './LogoutContext'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useInitializeBellNotifications } from './useInitializeBellNotifications'
@@ -53,6 +54,7 @@ function App({ dexieCurrentUserInstance }) {
     dexiePerUserDataInstance,
     isMounted,
     isAppOnline,
+    logoutMermaid,
   })
 
   const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
@@ -111,18 +113,18 @@ function App({ dexieCurrentUserInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={{ currentUser, saveUserProfile }}>
+          <LogoutProvider value={logoutMermaid}>
           <BellNotificationProvider value={{ notifications, deleteNotification }}>
             <GlobalStyle />
             <CustomToastContainer limit={5} />
             <Layout {...layoutProps}>
               {
                 /** The isMermaidAuthenticated is needed here to prevent an
-                 * infinite log in loop with authentication.
-                 *
-                 * The projects list route and project workflow pages will trigger
-                 * a sync when they are routed to, making isOfflineStorageHydrated = true
-                 */
-
+                * infinite log in loop with authentication.
+                *
+                * The projects list route and project workflow pages will trigger
+                * a sync when they are routed to, making isOfflineStorageHydrated = true
+                */
                 isMermaidAuthenticated ? (
                   <Switch>
                     {routes.map(({ path, Component }) => (
@@ -146,6 +148,7 @@ function App({ dexieCurrentUserInstance }) {
               }
             </Layout>
           </BellNotificationProvider>
+          </LogoutProvider>
         </CurrentUserProvider>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
