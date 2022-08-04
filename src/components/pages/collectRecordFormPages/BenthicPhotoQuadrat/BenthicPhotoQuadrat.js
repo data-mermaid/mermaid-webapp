@@ -235,7 +235,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           error,
           callback: () => {
             if (error.message === 'Benthic attribute already exists') {
-              toast.warning(
+              toast.error(
                 ...getToastArguments(language.error.attributeAlreadyExists('benthic attribute')),
               )
 
