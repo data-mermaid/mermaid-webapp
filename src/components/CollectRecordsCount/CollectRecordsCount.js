@@ -45,8 +45,8 @@ const CollectRecordsCount = () => {
           handleGenericApiErrors({
             error,
             callback: () => {
-              toast.warn(
-                ...getToastArguments(language.error.apiDataSync.collectRecordsUnavailableError)
+              toast.error(
+                ...getToastArguments(language.error.collectRecordsUnavailable)
               )
             },
             logoutMermaid,
