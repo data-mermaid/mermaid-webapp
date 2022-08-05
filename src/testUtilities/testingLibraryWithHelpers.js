@@ -42,11 +42,11 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
           <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
-            <LogoutProvider value={() => { }}>
+            <LogoutProvider value={() => {}}>
               <BellNotificationProvider
                 value={{
                   notifications: mockMermaidData.notifications,
-                  deleteNotification: () => { },
+                  deleteNotification: () => {},
                 }}
               >
                 {children}
