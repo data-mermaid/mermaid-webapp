@@ -152,8 +152,16 @@ const Collect = () => {
     return {
       sortBy: [
         {
+          id: 'site',
+        },
+        {
           id: 'method',
-          desc: false,
+        },
+        {
+          id: 'sampleDate',
+        },
+        {
+          id: 'sampleUnitNumber',
         },
       ],
       globalFilter: '',
