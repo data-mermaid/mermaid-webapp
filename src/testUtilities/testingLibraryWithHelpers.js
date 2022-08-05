@@ -15,6 +15,7 @@ import {
 import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getFakeAccessToken } from './getFakeAccessToken'
 import { CurrentUserProvider } from '../App/CurrentUserContext'
+import { LogoutProvider } from '../App/LogoutContext'
 import { getMockDexieInstancesAllSuccess } from './mockDexie'
 import { DexiePerUserDataInstanceProvider } from '../App/dexiePerUserDataInstanceContext'
 import { BellNotificationProvider } from '../App/BellNotificationContext'
@@ -41,14 +42,16 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
           <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
-            <BellNotificationProvider
-              value={{
-                notifications: mockMermaidData.notifications,
-                deleteNotification: () => {},
-              }}
-            >
-              {children}
-            </BellNotificationProvider>
+            <LogoutProvider value={() => { }}>
+              <BellNotificationProvider
+                value={{
+                  notifications: mockMermaidData.notifications,
+                  deleteNotification: () => { },
+                }}
+              >
+                {children}
+              </BellNotificationProvider>
+            </LogoutProvider>
           </CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
