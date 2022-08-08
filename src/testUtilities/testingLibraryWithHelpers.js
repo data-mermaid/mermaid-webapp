@@ -71,7 +71,9 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
       <ThemeProvider theme={theme}>
         <SyncStatusProvider>
           <CurrentUserProvider value={undefined}>
-            <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
+            <LogoutProvider value={() => { }}>
+              <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
+            </LogoutProvider >
           </CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
