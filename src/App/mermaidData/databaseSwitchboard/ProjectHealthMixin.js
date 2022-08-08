@@ -1,3 +1,5 @@
+/* eslint-disable  max-depth */
+
 import axios from 'axios'
 import moment from 'moment'
 import language from '../../../language'
@@ -30,6 +32,19 @@ const ProjectHealthMixin = (Base) =>
       }
 
       return names[0]
+    }
+
+    #getDateFromName = function getDateFromName(name) {
+      const names = name.split(' ')
+      const isDateInNames = moment(names[names.length - 1], 'YYYY-MM-DD', true).isValid()
+
+      if (isDateInNames) {
+        const datePart = names.splice(-1, 1)[0]
+
+        return datePart
+      }
+
+      return ''
     }
 
     #groupSampleUnitNumbersBySampleDate = function groupSampleUnitNumbersBySampleDate(
@@ -148,6 +163,66 @@ const ProjectHealthMixin = (Base) =>
       }
     }
 
+    #fillCollectRecordWithSampleDateToSampleEvent =
+      function fillCollectRecordWithSampleDateToSampleEvent(
+        sampleEventUnitRecords,
+        siteCollectingSummary,
+      ) {
+        const sampleEventUnitRecordsCopy = [...sampleEventUnitRecords]
+        const sampleDates = sampleEventUnitRecordsCopy.map(({ site_name }) =>
+          this.#getDateFromName(site_name),
+        )
+        const filterNonEmptySampleDates = sampleDates.filter((date) => date !== '')
+
+        for (let idx = 0; idx < sampleEventUnitRecordsCopy.length; idx++) {
+          const { site_id, transect_protocol, site_name } = sampleEventUnitRecordsCopy[idx]
+          const sampleDateExtractFromName = this.#getDateFromName(site_name)
+
+          sampleEventUnitRecordsCopy[idx].profile_summary = {}
+
+          const collectingProfileSummary =
+            siteCollectingSummary[site_id]?.sample_unit_methods?.[transect_protocol]
+              ?.profile_summary
+
+          if (collectingProfileSummary) {
+            const updateProfileSummary = {}
+
+            for (const [profileId, profileInfo] of Object.entries(collectingProfileSummary)) {
+              const labelsWithSampleDatesInSampleEvent = profileInfo.labels.filter(
+                (label) => label.sample_date === sampleDateExtractFromName,
+              )
+
+              const labelsWithoutSampleDatesInSampleEvent = profileInfo.labels.filter(
+                (label) => !filterNonEmptySampleDates.includes(label.sample_date),
+              )
+
+              if (labelsWithSampleDatesInSampleEvent.length) {
+                // Fill collecting labels that has sample dates matched with any sample event's site names
+                updateProfileSummary[profileId] = {
+                  profile_name: profileInfo.profile_name,
+                  labels: labelsWithSampleDatesInSampleEvent,
+                }
+              }
+
+              if (
+                sampleDateExtractFromName === '' &&
+                labelsWithoutSampleDatesInSampleEvent.length
+              ) {
+                // Fill rest of collecting labels to sample event's site names that doesn't attach with any sample dates
+                updateProfileSummary[profileId] = {
+                  profile_name: profileInfo.profile_name,
+                  labels: labelsWithoutSampleDatesInSampleEvent,
+                }
+              }
+
+              sampleEventUnitRecordsCopy[idx].profile_summary = updateProfileSummary
+            }
+          }
+        }
+
+        return sampleEventUnitRecordsCopy
+      }
+
     #addCollectingRecords = function addCollectingRecords(
       sampleEventUnitRecords,
       siteCollectingSummary,
@@ -156,39 +231,20 @@ const ProjectHealthMixin = (Base) =>
       const sampleEventUnitRecordsCopy = [...sampleEventUnitRecords]
       const sampleEventSiteIds = sampleEventUnitRecordsCopy.map(({ site_id }) => site_id)
       const collectingSiteIds = Object.keys(siteCollectingSummary)
-      const collectingSiteIsWithoutSubmittedRecords = collectingSiteIds.filter(
+      const collectingSiteIdsWithoutSubmittedRecords = collectingSiteIds.filter(
         (site) => !sampleEventSiteIds.includes(site),
       )
 
-      for (let idx = 0; idx < sampleEventUnitRecordsCopy.length; idx++) {
-        const {
-          site_id,
-          transect_protocol,
-          site_name: sampleEventSiteName,
-        } = sampleEventUnitRecordsCopy[idx]
-        const isSiteExist = Object.prototype.hasOwnProperty.call(siteCollectingSummary, site_id)
+      const sampleEventUnitRecordsWithCollectRecordFilled =
+        this.#fillCollectRecordWithSampleDateToSampleEvent(
+          sampleEventUnitRecordsCopy,
+          siteCollectingSummary,
+        )
 
-        sampleEventUnitRecordsCopy[idx].profile_summary = {}
-
-        if (isSiteExist) {
-          const {
-            site_name: collectingSiteName,
-            sample_unit_methods: collectingSiteSampleUnitMethods,
-          } = siteCollectingSummary[site_id]
-
-          if (
-            sampleEventSiteName === collectingSiteName &&
-            collectingSiteSampleUnitMethods[transect_protocol]
-          ) {
-            sampleEventUnitRecordsCopy[idx].profile_summary =
-              collectingSiteSampleUnitMethods[transect_protocol].profile_summary
-          }
-        }
-      }
-
-      for (const siteId of collectingSiteIsWithoutSubmittedRecords) {
+      // Add new sample event records without submitted records, but with collecting records
+      for (const siteId of collectingSiteIdsWithoutSubmittedRecords) {
         for (const protocol of protocols) {
-          sampleEventUnitRecordsCopy.push({
+          sampleEventUnitRecordsWithCollectRecordFilled.push({
             site_id: siteId,
             site_name: this.#getSiteName(siteCollectingSummary[siteId].site_name),
             method: getRecordSampleUnitMethod(protocol),
@@ -200,7 +256,7 @@ const ProjectHealthMixin = (Base) =>
         }
       }
 
-      return sampleEventUnitRecordsCopy
+      return sampleEventUnitRecordsWithCollectRecordFilled
     }
 
     getSampleUnitSummary = async function getSampleUnitSummary(projectId) {
