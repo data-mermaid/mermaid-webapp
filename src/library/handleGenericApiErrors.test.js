@@ -94,7 +94,10 @@ test('if no callback is provided handleGenericApiErrors will produce a generic e
   const logoutMermaid = jest.fn()
 
   handleGenericApiErrors({
-    error: { response: { status: 'something that wont be handled in util function logic' }, logoutMermaid },
+    error: {
+      response: { status: 'something that wont be handled in util function logic' },
+      logoutMermaid,
+    },
   })
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong.', {
