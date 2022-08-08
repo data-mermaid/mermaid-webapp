@@ -2,32 +2,28 @@ import { toast } from 'react-toastify'
 import handleGenericApiErrors from './handleGenericApiErrors'
 
 test('handleGenericApiErrors throws if an error object with an improper schema is used', () => {
+  const logoutMermaid = jest.fn()
+
   expect(() =>
-    handleGenericApiErrors({ error: { foo: 'not the right schema' } }),
+    handleGenericApiErrors({ error: { foo: 'not the right schema' }, logoutMermaid }),
   ).toThrow()
 })
 test('handleGenericApiErrors produces the appropriate toast message if the status is 401', () => {
-  const toastSpy = jest.spyOn(toast, 'error')
-
   const callback = jest.fn()
+  const logoutMermaid = jest.fn()
 
-  handleGenericApiErrors({ error: { response: { status: 401 } }, callback })
+  handleGenericApiErrors({ error: { response: { status: 401 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith(
-    "There is something wrong with the user's credentials. You may want to try logging out and logging back in.",
-    {
-      toastId:
-        "There is something wrong with the user's credentials. You may want to try logging out and logging back in.",
-    },
-  )
+  expect(logoutMermaid).toHaveBeenCalled()
   expect(callback).not.toHaveBeenCalled()
 })
 test('handleGenericApiErrors produces the appropriate toast message if the status is 403', () => {
   const toastSpy = jest.spyOn(toast, 'error')
 
   const callback = jest.fn()
+  const logoutMermaid = jest.fn()
 
-  handleGenericApiErrors({ error: { response: { status: 403 } }, callback })
+  handleGenericApiErrors({ error: { response: { status: 403 } }, callback, logoutMermaid })
 
   expect(toastSpy).toHaveBeenCalledWith(
     'The current user does not have sufficient permission to do that.',
@@ -42,8 +38,9 @@ test('handleGenericApiErrors produces the appropriate toast message if the statu
   const toastSpy = jest.spyOn(toast, 'error')
 
   const callback = jest.fn()
+  const logoutMermaid = jest.fn()
 
-  handleGenericApiErrors({ error: { response: { status: 500 } }, callback })
+  handleGenericApiErrors({ error: { response: { status: 500 } }, callback, logoutMermaid })
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
     toastId: 'Something went wrong with the server.',
@@ -55,8 +52,9 @@ test('handleGenericApiErrors produces the appropriate toast message if the statu
   const toastSpy = jest.spyOn(toast, 'error')
 
   const callback = jest.fn()
+  const logoutMermaid = jest.fn()
 
-  handleGenericApiErrors({ error: { response: { status: 502 } }, callback })
+  handleGenericApiErrors({ error: { response: { status: 502 } }, callback, logoutMermaid })
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
     toastId: 'Something went wrong with the server.',
@@ -68,8 +66,9 @@ test('handleGenericApiErrors produces the appropriate toast message if the statu
   const toastSpy = jest.spyOn(toast, 'error')
 
   const callback = jest.fn()
+  const logoutMermaid = jest.fn()
 
-  handleGenericApiErrors({ error: { response: { status: 503 } }, callback })
+  handleGenericApiErrors({ error: { response: { status: 503 } }, callback, logoutMermaid })
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
     toastId: 'Something went wrong with the server.',
@@ -79,10 +78,12 @@ test('handleGenericApiErrors produces the appropriate toast message if the statu
 })
 test('handleGenericApiErrors can be extended with a callback function', () => {
   const callback = jest.fn()
+  const logoutMermaid = jest.fn()
 
   handleGenericApiErrors({
     error: { response: { status: 'something that wont be handled in util function logic' } },
     callback,
+    logoutMermaid,
   })
 
   expect(callback).toHaveBeenCalled()
@@ -90,8 +91,10 @@ test('handleGenericApiErrors can be extended with a callback function', () => {
 test('if no callback is provided handleGenericApiErrors will produce a generic error toast message f', () => {
   const toastSpy = jest.spyOn(toast, 'error')
 
+  const logoutMermaid = jest.fn()
+
   handleGenericApiErrors({
-    error: { response: { status: 'something that wont be handled in util function logic' } },
+    error: { response: { status: 'something that wont be handled in util function logic' }, logoutMermaid },
   })
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong.', {
@@ -103,8 +106,9 @@ test('If a callback is provided, handleGenericApiErrors will not produce a gener
   const toastSpy = jest.spyOn(toast, 'error')
 
   const callback = jest.fn()
+  const logoutMermaid = jest.fn()
 
-  handleGenericApiErrors({ error: { response: { status: 400 } }, callback })
+  handleGenericApiErrors({ error: { response: { status: 400 } }, callback, logoutMermaid })
 
   expect(toastSpy).not.toHaveBeenCalled()
 })
