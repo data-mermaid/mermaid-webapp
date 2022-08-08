@@ -94,6 +94,9 @@ export const projectPropType = PropTypes.shape({
   countries: PropTypes.arrayOf(PropTypes.string),
   num_sites: PropTypes.number,
   updated_on: PropTypes.string,
+  data_policy_beltfish: PropTypes.number,
+  data_policy_benthiclit: PropTypes.number,
+  data_policy_bleachingqc: PropTypes.number,
 })
 
 export const projectsPropType = PropTypes.arrayOf(projectPropType)

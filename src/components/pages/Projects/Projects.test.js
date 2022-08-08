@@ -81,20 +81,15 @@ test('A project card renders with the expected UI elements for button groups', a
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
-  const projectOverviewButton = within(projectCard).getByLabelText(/usersandtransects/i)
-  const collectButton = within(projectCard).getByLabelText(/collect/i)
-  const dataButton = within(projectCard).getByLabelText(/data/i)
-  const adminButton = within(projectCard).getByLabelText(/admin/i)
-  // commented out for alpha, reactivate post alpha
-  // const copyButton = within(projectCard).getByLabelText(/copy/i)
+  const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
+  const submitSummaryCard = within(projectCard).getByLabelText(/data/i)
+  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
+  const copyButton = within(projectCard).getByLabelText(/copy/i)
 
-  // commented out for alpha, reactivate post alpha
-  expect(projectOverviewButton).toBeInTheDocument()
-  expect(collectButton).toBeInTheDocument()
-  expect(dataButton).toBeInTheDocument()
-  expect(adminButton).toBeInTheDocument()
-  // commented out for alpha, reactivate post alpha
-  // expect(copyButton).toBeInTheDocument()
+  expect(collectingSummaryCard).toBeInTheDocument()
+  expect(submitSummaryCard).toBeInTheDocument()
+  expect(infoSummaryCard).toBeInTheDocument()
+  expect(copyButton).toBeInTheDocument()
 })
 
 test('A project card shows relevant data for a project', async () => {
@@ -102,7 +97,6 @@ test('A project card shows relevant data for a project', async () => {
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexiePerUserDataInstance,
-
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
@@ -111,7 +105,6 @@ test('A project card shows relevant data for a project', async () => {
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
     dexiePerUserDataInstance,
-
     isSyncInProgressOverride: true,
   })
 
@@ -120,10 +113,25 @@ test('A project card shows relevant data for a project', async () => {
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
+  const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
+  const submittedSummaryCard = within(projectCard).getByLabelText(/data/i)
+  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
 
   expect(within(projectCard).getByText('Project I'))
   expect(within(projectCard).getByText('Canada'))
-  expect(within(projectCard).getByText('13'))
+  expect(within(collectingSummaryCard).getByText('12'))
+  expect(within(submittedSummaryCard).getByText('9'))
+  expect(within(infoSummaryCard).getByText('13'))
+  expect(within(infoSummaryCard).getByText('5'))
+  expect(within(infoSummaryCard).getByTestId('fishbelt-policy')).toHaveTextContent(
+    'Fish belt: Private',
+  )
+  expect(within(infoSummaryCard).getByTestId('benthic-policy')).toHaveTextContent(
+    'Benthic: Public Summary',
+  )
+  expect(within(infoSummaryCard).getByTestId('bleaching-policy')).toHaveTextContent(
+    'Bleaching: Public',
+  )
 
   const offlineCheckbox = within(projectCard).getByRole('checkbox', {
     name: /offline ready/i,
@@ -132,9 +140,7 @@ test('A project card shows relevant data for a project', async () => {
   expect(offlineCheckbox)
   expect(offlineCheckbox).toBeChecked()
 
-  expect(
-    within(projectCard).getByText('Tue Jan 21 2020 00:00:00 GMT+0000 (Coordinated Universal Time)'),
-  )
+  expect(within(projectCard).getByText('Tue Jan 21 2020 00:00:00'))
 })
 
 test('A project card renders appropriately when offline', async () => {
@@ -144,14 +150,12 @@ test('A project card renders appropriately when offline', async () => {
 
   const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
     dexiePerUserDataInstance,
-
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
   })
 
   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
     dexiePerUserDataInstance,
-
     isSyncInProgressOverride: true,
   })
 
@@ -160,18 +164,19 @@ test('A project card renders appropriately when offline', async () => {
   )
 
   const projectCard = screen.getAllByRole('listitem')[0]
+  const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
+  const submittedSummaryCard = within(projectCard).getByLabelText(/data/i)
+  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
 
-  await waitFor(() =>
-    expect(within(projectCard).queryByLabelText(/usersandtransects/i)).not.toBeInTheDocument(),
-  )
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).not.toBeInTheDocument())
-  await waitFor(() =>
-    expect(within(projectCard).queryByLabelText(/admin/i)).not.toBeInTheDocument(),
-  )
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/copy/i)).not.toBeInTheDocument())
+  expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/data offline/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/admin offline/i)).toBeInTheDocument()
+  expect(within(collectingSummaryCard).getByText('12'))
+  expect(within(submittedSummaryCard).getByText('Online Only'))
+  expect(within(infoSummaryCard).getByText('Online Only'))
 
   expect(screen.getByLabelText('Offline Ready')).toBeDisabled()
+  expect(screen.getByLabelText('Copy')).toBeDisabled()
 })
 
 test('A project card renders appropriately when online', async () => {
@@ -196,24 +201,24 @@ test('A project card renders appropriately when online', async () => {
 
   const projectCard = screen.getAllByRole('listitem')[0]
 
-  await waitFor(() =>
-    expect(within(projectCard).queryByLabelText(/usersandtransects/i)).toBeInTheDocument(),
-  )
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/collect/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/data/i)).toBeInTheDocument())
-  await waitFor(() => expect(within(projectCard).queryByLabelText(/admin/i)).toBeInTheDocument())
-  // commented out for alpha, reactivate post alpha
-  // await waitFor(() =>
-  //   expect(within(projectCard).queryByLabelText(/copy/i)).toBeInTheDocument(),
-  // )
+  expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/data/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/admin/i)).toBeInTheDocument()
 
   const offlineReadyCheckboxes = screen.getAllByLabelText('Offline Ready')
+  const copyButtons = screen.getAllByLabelText('Copy')
 
   expect(offlineReadyCheckboxes[0]).toBeEnabled()
   expect(offlineReadyCheckboxes[1]).toBeEnabled()
   expect(offlineReadyCheckboxes[2]).toBeEnabled()
   expect(offlineReadyCheckboxes[3]).toBeEnabled()
   expect(offlineReadyCheckboxes[4]).toBeEnabled()
+
+  expect(copyButtons[0]).toBeEnabled()
+  expect(copyButtons[1]).toBeEnabled()
+  expect(copyButtons[2]).toBeEnabled()
+  expect(copyButtons[3]).toBeEnabled()
+  expect(copyButtons[4]).toBeEnabled()
 })
 
 test('Hide new project button in project toolbar when offline', async () => {
@@ -328,11 +333,7 @@ test('Projects can be sorted by updated on date', async () => {
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
   expect(within(topProjectCard).getByText('Project III'))
-  expect(
-    within(topProjectCard).getByText(
-      'Tue Jan 21 1992 08:00:00 GMT+0000 (Coordinated Universal Time)',
-    ),
-  )
+  expect(within(topProjectCard).getByText('Tue Jan 21 1992 08:00:00'))
 })
 
 test('Project sorted descending', async () => {

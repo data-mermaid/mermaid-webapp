@@ -5,7 +5,8 @@ const projects = [
     countries: ['Canada'],
     tags: ['WCS Fiji', 'WCS Kenya'],
     num_sites: 13,
-
+    num_active_sample_units: 12,
+    num_sample_units: 9,
     updated_on: '2020-01-21T00:00:00.000Z',
     notes: 'Fish are recorded',
     data_policy_beltfish: 10,
@@ -13,6 +14,13 @@ const projects = [
     data_policy_benthicpit: 50,
     data_policy_bleachingqc: 100,
     data_policy_habitatcomplexity: 50,
+    members: [
+      '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
+      '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+      '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      '58d44de5-ae15-4d97-8df5-11075c0730e9',
+      '697a1123-ef22-4acb-aea4-05abbd5589d0',
+    ],
   },
   {
     id: '2',
@@ -24,7 +32,8 @@ const projects = [
       'Land and Marine Environment Resource Group Pvt Ltd',
     ],
     num_sites: 36,
-
+    num_active_sample_units: 32,
+    num_sample_units: 2,
     updated_on: '2021-01-21T08:00:00.000Z',
     notes: '',
     data_policy_beltfish: 50,
@@ -32,6 +41,11 @@ const projects = [
     data_policy_benthicpit: 10,
     data_policy_bleachingqc: 100,
     data_policy_habitatcomplexity: 10,
+    members: [
+      '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
+      '4eb4bf65-6aee-4014-beee-04ad23484bcd',
+      '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+    ],
   },
   {
     id: '3',
@@ -39,7 +53,8 @@ const projects = [
     countries: ['England, Finland'],
     tags: ['California Academy of Sciences'],
     num_sites: 34,
-
+    num_active_sample_units: 2,
+    num_sample_units: 22,
     updated_on: '1992-01-21T08:00:00.000Z',
     notes: '',
     data_policy_beltfish: 50,
@@ -47,6 +62,7 @@ const projects = [
     data_policy_benthicpit: 50,
     data_policy_bleachingqc: 10,
     data_policy_habitatcomplexity: 50,
+    members: ['0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3', '697a1123-ef22-4acb-aea4-05abbd5589d0'],
   },
   {
     id: '4',
@@ -54,7 +70,8 @@ const projects = [
     countries: ['Canada'],
     tags: [],
     num_sites: 9,
-
+    num_active_sample_units: 13,
+    num_sample_units: 22,
     updated_on: '2011-12-31T08:00:00.000Z',
     notes: '',
     data_policy_beltfish: 100,
@@ -62,6 +79,12 @@ const projects = [
     data_policy_benthicpit: 50,
     data_policy_bleachingqc: 10,
     data_policy_habitatcomplexity: 50,
+    members: [
+      '0e6dc8a8-ae45-4c19-813c-6d688ed6a7c3',
+      '4ff5f714-43b3-4564-be1c-c6053f7c0487',
+      '58d44de5-ae15-4d97-8df5-11075c0730e9',
+      '697a1123-ef22-4acb-aea4-05abbd5589d0',
+    ],
   },
   {
     id: '5',
@@ -69,7 +92,8 @@ const projects = [
     countries: ['Mexico'],
     tags: [],
     num_sites: 33,
-
+    num_active_sample_units: 19,
+    num_sample_units: 29,
     updated_on: '2001-01-21T08:00:00.000Z',
     notes: '',
     data_policy_beltfish: 50,
@@ -77,6 +101,7 @@ const projects = [
     data_policy_benthicpit: 100,
     data_policy_bleachingqc: 10,
     data_policy_habitatcomplexity: 100,
+    members: ['697a1123-ef22-4acb-aea4-05abbd5589d0'],
   },
 ]
 

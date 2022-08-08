@@ -1,8 +1,9 @@
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-
+import { getObjectById } from '../../../library/getObjectById'
 import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
@@ -35,6 +36,7 @@ import PageNoData from '../PageNoData'
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [managementParties, setManagementParties] = useState([])
   const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
@@ -47,15 +49,17 @@ const ManagementRegimes = () => {
   const _getManagementRegimeRecords = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       Promise.all([
+        databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getManagementRegimeRecordsForUiDisplay(projectId),
         databaseSwitchboardInstance.getProject(projectId),
       ])
-        .then(([managementRegimes, projectResponse]) => {
+        .then(([choicesResponse, managementRegimes, projectResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
             setManagementRegimeRecordsForUiDisplay(managementRegimes)
+            setManagementParties(choicesResponse.managementparties)
             setIsLoading(false)
           }
         })
@@ -169,6 +173,48 @@ const ManagementRegimes = () => {
 
     return getTableFilteredRows(rows, keys, queryTerms)
   }, [])
+
+  const getDataForCSV = useMemo(() => {
+    const managementPartiesChoices = managementParties?.data
+
+    return managementRegimeRecordsForUiDisplay.map((site) => {
+      const governance = site.parties
+        .map((party) => getObjectById(managementPartiesChoices, party)?.name)
+        .join(', ')
+
+      const isPartialRestrict =
+        site.periodic_closure ||
+        site.size_limits ||
+        site.gear_restriction ||
+        site.species_restriction ||
+        site.access_restriction
+
+      const no_take = site.no_take && 'No Take'
+      const open_access = site.open_access && 'Open Access'
+      const partial_restrictions =
+        isPartialRestrict &&
+        `${[
+          site.periodic_closure && 'Periodic Closures',
+          site.size_limits && 'Size Limits',
+          site.gear_restriction && 'Gear Restrictions',
+          site.species_restriction && 'Species Restrictions',
+          site.access_restriction && 'Access Restrictions',
+        ].filter((restriction) => restriction)}`
+
+      const rules = open_access || no_take || partial_restrictions || ''
+
+      return {
+        Name: site.uiLabels.name,
+        'Secondary name': site.name_secondary,
+        'Year established': site.uiLabels.estYear,
+        Size: site.size,
+        Governance: governance,
+        'Estimate compliance': site.uiLabels.compliance,
+        Rules: rules,
+        Notes: site.notes,
+      }
+    })
+  }, [managementRegimeRecordsForUiDisplay, managementParties])
 
   const {
     canNextPage,
@@ -307,7 +353,13 @@ const ManagementRegimes = () => {
                 <IconCopy /> Copy MRs from other projects
               </ButtonSecondary>
               <ButtonSecondary>
-                <IconDownload /> Export MRs
+                <CSVLink
+                  data={getDataForCSV}
+                  filename="Export_MRs.csv"
+                  style={{ margin: 0, textDecoration: 'none' }}
+                >
+                  <IconDownload /> Export MRs
+                </CSVLink>
               </ButtonSecondary>
             </ToolbarButtonWrapper>
           </ToolBarRow>
