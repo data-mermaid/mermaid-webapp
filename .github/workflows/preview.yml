@@ -52,7 +52,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          yarn test
+          yarn test --watchAll=false --runInBand
 
       - name: yarn Build
         run: |
