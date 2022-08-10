@@ -28,7 +28,6 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const HeaderCenter = styled.div`
   text-align: center;
@@ -110,7 +109,7 @@ const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
   const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
     return (
       <span key={row.id}>
-        <Link to={`${currentProjectPath}/data/${rowRecord.transect_protocol}/${row.id}`}>
+        <Link to={`${currentProjectPath}/data/${rowRecord.sample_unit_protocol}/${row.id}`}>
           {row.label}
         </Link>
         {idx < sampleUnitNumbersRow.length - 1 && ', '}
@@ -132,7 +131,6 @@ const UsersAndTransects = () => {
   const [collectRecordsByProfile, setCollectRecordsByProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
-  const { isSyncInProgress } = useSyncStatus()
 
   const groupCollectSampleUnitsByProfileSummary = (records, observers) => {
     const getObserverProfileName = (profileId) =>
@@ -167,7 +165,7 @@ const UsersAndTransects = () => {
       setIsLoading(false)
     }
 
-    if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId) {
       Promise.all([
         databaseSwitchboardInstance.getProjectProfiles(projectId),
         databaseSwitchboardInstance.getRecordsForUsersAndTransectsTable(projectId),
@@ -208,7 +206,7 @@ const UsersAndTransects = () => {
           toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isSyncInProgress, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
 
   const getUserColumnHeaders = useMemo(() => {
     const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
@@ -331,7 +329,7 @@ const UsersAndTransects = () => {
     () =>
       submittedRecords.map((record) => ({
         site: record.site_name,
-        method: record.method,
+        method: record.sample_unit_method,
         ...populateTransectNumberRow(record),
         ...populateCollectNumberRow(record),
       })),
@@ -547,7 +545,7 @@ const UsersAndTransects = () => {
 
 SampleUnitLinks.propTypes = {
   rowRecord: PropTypes.shape({
-    transect_protocol: PropTypes.string,
+    sample_unit_protocol: PropTypes.string,
   }).isRequired,
   sampleUnitNumbersRow: PropTypes.arrayOf(
     PropTypes.shape({
