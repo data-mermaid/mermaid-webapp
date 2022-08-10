@@ -8,8 +8,10 @@ const handleGenericApiErrors = ({ error, callback, logoutMermaid }) => {
   if (!errorStatus) {
     // If there is a general error which does not have a response status
     if (error) {
-      return // why throw an error if this is only ever encountered because of axios being called after the test is destroyed
-      // throw error
+      // Don't throw an error. This should only ever encountered id axios is called after the a is destroyed
+      console.error(error)
+
+      return
     }
 
     throw new Error(
