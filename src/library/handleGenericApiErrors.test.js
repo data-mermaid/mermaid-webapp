@@ -1,13 +1,6 @@
 import { toast } from 'react-toastify'
 import handleGenericApiErrors from './handleGenericApiErrors'
 
-test('handleGenericApiErrors throws if an error object with an improper schema is used', () => {
-  const logoutMermaid = jest.fn()
-
-  expect(() =>
-    handleGenericApiErrors({ error: { foo: 'not the right schema' }, logoutMermaid }),
-  ).toThrow()
-})
 test('handleGenericApiErrors produces the appropriate toast message if the status is 401', () => {
   const callback = jest.fn()
   const logoutMermaid = jest.fn()
