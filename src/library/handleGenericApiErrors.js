@@ -9,14 +9,14 @@ const handleGenericApiErrors = ({ error, callback, logoutMermaid }) => {
     // If there is a general error which does not have a response status
     if (error) {
       // Don't throw an error. This should only ever encountered id axios is called after the a is destroyed
-      console.error(error)
-
-      return
+      toast.error(...getToastArguments(language.error.generic))
     }
 
-    throw new Error(
+    console.error(
       'handleGenericApiErrors needs to have an error object with the schema of error.response.status.',
     )
+
+    return
   }
 
   const errorStatusesToRespondTo = [401, 403, 500, 502, 503]
