@@ -134,10 +134,7 @@ const UsersAndTransects = () => {
   const { currentUser } = useCurrentUser()
   const { isSyncInProgress } = useSyncStatus()
 
-  const groupCollectSampleUnitsByProfileSummary = (records, observers) => {
-    const getObserverProfileName = (profileId) =>
-      observers.find((observer) => observer.profile === profileId)?.profile_name
-
+  const groupCollectSampleUnitsByProfileSummary = (records) => {
     const groupProfileResult = records.reduce((accumulator, record) => {
       const profileSummary = record.profile_summary
 
@@ -148,7 +145,7 @@ const UsersAndTransects = () => {
           accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
           accumulator[collectRecordProfile] = {
             profileId: collectRecordProfile,
-            profileName: getObserverProfileName(collectRecordProfile),
+            profileName: profileSummary[collectRecordProfile].profile_name,
             collectRecords: accumulator[collectRecordProfile].collectRecords
               ? accumulator[collectRecordProfile].collectRecords.concat(collectRecords)
               : [...collectRecords],
@@ -168,13 +165,11 @@ const UsersAndTransects = () => {
     }
 
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-      Promise.all([
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
-        databaseSwitchboardInstance.getRecordsForUsersAndTransectsTable(projectId),
-      ])
-        .then(([projectProfilesResponse, sampleUnitRecordsResponse]) => {
+      databaseSwitchboardInstance
+        .getRecordsForUsersAndTransectsTable(projectId)
+        .then((sampleUnitRecordsResponse) => {
           if (isMounted.current) {
-            if (!projectProfilesResponse && !sampleUnitRecordsResponse && projectId) {
+            if (!sampleUnitRecordsResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
 
@@ -187,10 +182,7 @@ const UsersAndTransects = () => {
             ])
 
             setCollectRecordsByProfile(
-              groupCollectSampleUnitsByProfileSummary(
-                sampleUnitRecordsResponse,
-                projectProfilesResponse,
-              ),
+              groupCollectSampleUnitsByProfileSummary(sampleUnitRecordsResponse),
             )
             setSubmittedRecords(sampleUnitRecordsResponse)
             setSubmittedTransectNumbers(uniqueTransectNumbersAscending)
