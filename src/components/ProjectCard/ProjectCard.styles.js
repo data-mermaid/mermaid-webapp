@@ -7,24 +7,6 @@ import {
   mediaQueryTabletLandscapeOnly,
 } from '../../library/styling/mediaQueries'
 
-export const ButtonGroups = styled('div')`
-  padding: ${theme.spacing.medium};
-  display: grid;
-  grid-template-columns: auto auto auto auto 1fr;
-  align-items: center;
-  gap: ${theme.spacing.small};
-  @media (hover: none) {
-    a {
-      display: none;
-    }
-  }
-  ${mediaQueryTabletLandscapeOnly(css`
-    a {
-      display: none;
-    }
-  `)}
-`
-
 export const CardWrapper = styled('div')`
   margin: ${theme.spacing.xlarge} auto 0 auto;
   width: ${theme.spacing.width};
@@ -32,7 +14,7 @@ export const CardWrapper = styled('div')`
   background: ${theme.color.white};
   cursor: pointer;
   ${hoverState(css`
-    background: ${theme.color.tableRowHover};
+    outline: solid 2px ${theme.color.primaryBorder};
   `)}
   }
   ${mediaQueryTabletLandscapeOnly(css`
@@ -42,30 +24,38 @@ export const CardWrapper = styled('div')`
     grid-template-rows: auto auto auto;
   `)}
 `
-
+export const DateAndCountryLabel = styled('span')`
+  opacity: 0.8;
+  font-size: ${theme.typography.smallFontSize};
+`
 export const ProjectCardHeader = styled('div')`
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  display: flex;
+  padding: ${theme.spacing.medium};
+  justify-content: space-between;
   background: ${theme.color.primaryColor};
   color: ${theme.color.white};
   ${theme.typography.noWordBreak};
-  padding: ${theme.spacing.xlarge};
   ${mediaQueryPhoneOnly(css`
     font-size: ${theme.typography.defaultFontSize};
     padding: ${theme.spacing.small};
+    flex-direction: column;
   `)}
   h2 {
-    margin: 0;
+    margin: 0 0 ${theme.spacing.medium} 0;
+    line-height: 1;
   }
   label {
-    margin-left: 10px;
+    margin-left: ${theme.spacing.medium};
   }
 `
 
-export const ProjectCardHeaderRightSection = styled(`div`)`
+export const ProjectCardHeaderButtonsAndDate = styled(`div`)`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  ${mediaQueryPhoneOnly(css`
+    align-items: flex-start;
+  `)}
 `
 
 export const CheckBoxLabel = styled.label`
@@ -84,27 +74,36 @@ export const CheckBoxLabel = styled.label`
   }
 `
 
-export const SummaryCardGroup = styled('div')`
-  padding: ${theme.spacing.medium};
-  display: grid;
-  grid-template-columns: 1fr 1fr 2fr;
-`
-
 const linkStyles = css`
   text-decoration: none;
-  margin: 10px;
-  height: fit-content;
-  background-color: #f3f2f7;
+  background-color: ${theme.color.grey2};
+`
+
+export const SummaryCardGroup = styled('div')`
+  padding: ${theme.spacing.small};
+  background: ${theme.color.grey3};
+  display: flex;
+  justify-content: space-between;
+  gap: ${theme.spacing.small};
 `
 
 export const SummaryCard = styled(NavLink)`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: space-between;
   ${linkStyles}
   ${hoverState(css`
-    background-color: ${theme.color.secondaryHover};
+    background-color: ${theme.color.white};
   `)}
   &:active {
     background-color: ${theme.color.secondaryActive};
   }
+  ${mediaQueryTabletLandscapeOnly(css`
+    &:last-child {
+      display: none;
+    }
+  `)}
 `
 
 export const OfflineSummaryCard = styled('div')`
@@ -112,10 +111,13 @@ export const OfflineSummaryCard = styled('div')`
   cursor: not-allowed;
 `
 
-export const SummaryTitle = styled('div')`
+export const SummaryTitle = styled('h3')`
   text-align: center;
+  display: none;
+  margin: 0;
+  font-weight: 400;
   padding: ${theme.spacing.buttonPadding};
-  background-color: ${theme.color.secondaryColor};
+  background-color: ${theme.color.grey1};
   color: ${(props) =>
     props.isDisabled ? theme.color.secondaryDisabledColor : theme.color.secondaryText};
 `
@@ -124,37 +126,34 @@ export const SubCardContent = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 10.6rem;
   div {
     display: flex;
-    font-size: 3.2rem;
-    font-weight: bold;
     margin: ${theme.spacing.large};
     align-items: center;
     svg {
       width: ${theme.typography.xLargeIconSize};
       height: ${theme.typography.xLargeIconSize};
-      margin-right: 10px;
     }
   }
 `
 
 export const OfflineSubCardContent = styled('div')`
   display: grid;
-  min-height: 10.6rem;
   justify-items: center;
 `
 
 export const OfflineMessage = styled('p')`
   font-size: larger;
-  font-style: italic;
   color: ${theme.color.secondaryColor};
 `
 
 export const SubCardTitle = styled('span')`
   ${theme.typography.upperCase};
   margin: ${theme.spacing.small};
-  font-size: ${theme.typography.smallFontSize};
+  display: block;
+  text-align: center;
+  padding: ${theme.spacing.small};
+  width: 100%;
 `
 
 export const SubCardGroupContent = styled('div')`
@@ -166,7 +165,6 @@ export const OfflineSubCardGroupContent = styled('div')`
   display: grid;
   grid-template-columns: 1fr 1fr 2fr;
   justify-items: center;
-  min-height: 10.6rem;
   p {
     grid-column: 1 / 4;
     grid-row: 2;
@@ -180,19 +178,15 @@ export const DataSharingPolicySubCardContent = styled('div')`
   div {
     display: flex;
     flex-direction: column;
-    font-size: 1.5rem;
   }
 `
 
 export const ActiveCollectRecordsCount = styled.strong`
   background: ${theme.color.callout};
-  border-radius: 100%;
-  border: solid 1px ${theme.color.white};
-  width: ${theme.typography.xLargeIconSize};
-  height: ${theme.typography.xLargeIconSize};
+  border-radius: 50%;
+  width: ${theme.typography.largeIconSize};
+  height: ${theme.typography.largeIconSize};
   color: ${theme.color.white};
   display: grid;
-  margin: 0.25rem 0.5rem;
   place-items: center;
-  font-size: 2.4rem;
 `

@@ -58,6 +58,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
 
   const submittedCardOnline = (
     <SummaryCard to={`${projectUrl}/data`} aria-label="Data" onClick={stopEventPropagation}>
+      <SummaryTitle>Submitted</SummaryTitle>
       <SubCardContent>
         <SubCardTitle>Submitted Sample Units</SubCardTitle>
         <div>
@@ -65,7 +66,6 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
           {num_sample_units}
         </div>
       </SubCardContent>
-      <SummaryTitle>Submitted</SummaryTitle>
     </SummaryCard>
   )
 
@@ -81,6 +81,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
 
   const infoCardOnline = (
     <SummaryCard to={`${projectUrl}/admin`} aria-label="Admin" onClick={stopEventPropagation}>
+      <SummaryTitle>Info</SummaryTitle>
       <SubCardGroupContent>
         <SubCardContent>
           <SubCardTitle>Sites</SubCardTitle>
@@ -111,7 +112,6 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
           </div>
         </DataSharingPolicySubCardContent>
       </SubCardGroupContent>
-      <SummaryTitle>Info</SummaryTitle>
     </SummaryCard>
   )
   const infoCardOffline = (
@@ -133,6 +133,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
         aria-label="Collect"
         onClick={stopEventPropagation}
       >
+        <SummaryTitle>Collecting</SummaryTitle>
         <SubCardContent>
           <SubCardTitle>Collecting Sample Units</SubCardTitle>
           <div data-testid="collect-counts">
@@ -140,7 +141,6 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
             {collectingSampleUnitCounts}
           </div>
         </SubCardContent>
-        <SummaryTitle>Collecting</SummaryTitle>
       </SummaryCard>
       {isAppOnline ? submittedCardOnline : submittedCardOffline}
       {isAppOnline ? infoCardOnline : infoCardOffline}

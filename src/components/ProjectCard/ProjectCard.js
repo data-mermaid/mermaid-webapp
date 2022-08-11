@@ -7,7 +7,8 @@ import {
   CardWrapper,
   CheckBoxLabel,
   ProjectCardHeader,
-  ProjectCardHeaderRightSection,
+  DateAndCountryLabel,
+  ProjectCardHeaderButtonsAndDate,
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
@@ -85,9 +86,9 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
       <ProjectCardHeader>
         <div>
           <h2>{name}</h2>
-          <div>{countries.join(', ')}</div>
+          <DateAndCountryLabel>{countries.join(', ')}</DateAndCountryLabel>
         </div>
-        <ProjectCardHeaderRightSection onClick={stopEventPropagation}>
+        <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div>
             <ButtonSecondary
               onClick={stopEventPropagation}
@@ -112,8 +113,8 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
               {language.pages.projectsList.offlineReadyCheckboxLabel}
             </CheckBoxLabel>
           </div>
-          <div>{removeTimeZoneFromDate(updated_on)}</div>
-        </ProjectCardHeaderRightSection>
+          <DateAndCountryLabel>{removeTimeZoneFromDate(updated_on)}</DateAndCountryLabel>
+        </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>
       <ProjectCardSummary project={project} isAppOnline={isAppOnline} />
     </CardWrapper>
