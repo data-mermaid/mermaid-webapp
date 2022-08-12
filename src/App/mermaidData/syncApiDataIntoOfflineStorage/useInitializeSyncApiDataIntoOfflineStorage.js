@@ -22,6 +22,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
   dexiePerUserDataInstance,
   isMounted,
   isAppOnline,
+  handleHttpResponseError,
 }) => {
   const location = useLocation()
   const isPageReload = useRef(true)
@@ -83,10 +84,15 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
             isPageReload.current = false
           }
         })
-        .catch(() => {
+        .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(...getToastArguments(language.error.apiDataSync))
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.apiDataSync))
+            },
+          })
         })
     }
 
@@ -94,7 +100,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
       setIsSyncInProgress(true)
       resetSyncErrors()
       syncApiDataIntoOfflineStorage
-        .pushThenPullEverythingForAProject(projectId)
+        .pushThenPullAllProjectData(projectId)
         .then(() => {
           if (isMounted.current) {
             setIsOfflineStorageHydrated(true)
@@ -102,10 +108,15 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
             isPageReload.current = false
           }
         })
-        .catch(() => {
+        .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(...getToastArguments(language.error.apiDataSync))
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.apiDataSync))
+            },
+          })
         })
     }
     if (isNotInitialLoadOnProjectPageAndOnline) {
@@ -113,16 +124,21 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
       setIsSyncInProgress(true)
       resetSyncErrors()
       syncApiDataIntoOfflineStorage
-        .pushThenPullEverythingForAProjectButChoices(projectId)
+        .pushThenPullAllProjectDataExceptChoices(projectId)
         .then(() => {
           if (isMounted.current) {
             setIsSyncInProgress(false)
           }
         })
-        .catch(() => {
+        .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          toast.error(...getToastArguments(language.error.apiDataSync))
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.apiDataSync))
+            },
+          })
         })
     }
   }, [
@@ -131,6 +147,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     getAccessToken,
     isAppOnline,
     isMounted,
+    handleHttpResponseError,
     location,
     setIsOfflineStorageHydrated,
     setIsSyncInProgress,

@@ -27,7 +27,7 @@ const SyncApiDataIntoOfflineStorage = class {
     this._getAccessToken = getAccessToken
   }
 
-  #pullEverythingButProjectRelated = () => {
+  #pullAllDataExceptSpecificProject = () => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'choices',
@@ -117,7 +117,7 @@ const SyncApiDataIntoOfflineStorage = class {
   pushThenPullEverything = async () => {
     await this.pushChanges()
 
-    return Promise.all([this.#pullEverythingButProjectRelated(), this.#pullOfflineProjects()])
+    return Promise.all([this.#pullAllDataExceptSpecificProject(), this.#pullOfflineProjects()])
   }
 
   pushThenPullFishOrBenthicAttributes = async (fishOrBenthicAttributesData) => {
@@ -131,7 +131,7 @@ const SyncApiDataIntoOfflineStorage = class {
     })
   }
 
-  pushThenPullEverythingForAProject = async (projectId) => {
+  pushThenPullAllProjectData = async (projectId) => {
     const allTheDataNames = [
       'benthic_attributes',
       'choices',
@@ -162,7 +162,7 @@ const SyncApiDataIntoOfflineStorage = class {
     return pullResponse
   }
 
-  pushThenPullEverythingForAProjectButChoices = async (projectId) => {
+  pushThenPullAllProjectDataExceptChoices = async (projectId) => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
       'collect_records',

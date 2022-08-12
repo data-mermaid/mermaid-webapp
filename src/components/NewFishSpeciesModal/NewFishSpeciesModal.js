@@ -18,6 +18,7 @@ import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import useIsMounted from '../../library/useIsMounted'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 
 const DetailsTable = styled(Table)`
   border: solid 1px ${theme.color.secondaryColor};
@@ -36,6 +37,7 @@ const InputContainer = styled.div`
 const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUser }) => {
   const isMounted = useIsMounted()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const [generaOptions, setGeneraOptions] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [projectName, setProjectName] = useState()
@@ -56,11 +58,16 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
             setGeneraOptions(genera.map((genus) => ({ label: genus.name, value: genus.id })))
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.generaUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.generaUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, isMounted])
+  }, [databaseSwitchboardInstance, handleHttpResponseError, isMounted])
 
   const _getProjectName = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted.current) {
@@ -71,11 +78,16 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
             setProjectName(project.name)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.projectsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.projectsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError])
 
   const formikPage1 = useFormik({
     initialValues: { genusId: '', species: '' },

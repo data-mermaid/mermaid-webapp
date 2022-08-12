@@ -43,6 +43,7 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
@@ -55,6 +56,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const isMounted = useIsMounted()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
@@ -175,15 +177,29 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
             }
           },
         )
-        .catch(() => {
-          const error = isNewRecord
-            ? language.error.collectRecordChoicesUnavailable
-            : language.error.collectRecordUnavailable
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorMessage = isNewRecord
+                ? language.error.collectRecordChoicesUnavailable
+                : language.error.collectRecordUnavailable
 
-          toast.error(...getToastArguments(error))
+              toast.error(...getToastArguments(errorMessage))
+            },
+          })
+
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId, projectId, isSyncInProgress])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isNewRecord,
+    recordId,
+    projectId,
+    isSyncInProgress,
+    handleHttpResponseError,
+  ])
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
@@ -221,21 +237,26 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         toast.success(...getToastArguments(language.success.attributeSave('benthic attribute')))
       })
       .catch((error) => {
-        if (error.message === 'Benthic attribute already exists') {
-          toast.warning(
-            ...getToastArguments(language.error.attributeAlreadyExists('benthic attribute')),
-          )
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            if (error.message === 'Benthic attribute already exists') {
+              toast.error(
+                ...getToastArguments(language.error.attributeAlreadyExists('benthic attribute')),
+              )
 
-          observationsDispatch({
-            type: 'updateBenthicAttribute',
-            payload: {
-              observationId: observationToAddAttributesTo,
-              newBenthicAttribute: error.existingBenthicAttribute.id,
-            },
-          })
-        } else {
-          toast.error(...getToastArguments(language.error.attributeSave('benthic attribute')))
-        }
+              observationsDispatch({
+                type: 'updateBenthicAttribute',
+                payload: {
+                  observationId: observationToAddAttributesTo,
+                  newBenthicAttribute: error.existingBenthicAttribute.id,
+                },
+              })
+            } else {
+              toast.error(...getToastArguments(language.error.attributeSave('benthic attribute')))
+            }
+          },
+        })
       })
 
     return Promise.resolve()
@@ -288,9 +309,14 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
         }
       })
-      .catch(() => {
+      .catch((error) => {
         setSaveButtonState(buttonGroupStates.unsaved)
-        toast.error(...getToastArguments(language.error.collectRecordSave))
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.collectRecordSave))
+          },
+        })
       })
   }
 
@@ -304,9 +330,14 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         setCollectRecordBeingEdited(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
       })
-      .catch(() => {
-        toast.error(...getToastArguments(language.error.collectRecordValidation))
+      .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.collectRecordValidation))
+          },
+        })
       })
   }
 
@@ -319,9 +350,14 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         toast.success(...getToastArguments(language.success.collectRecordSubmit))
         history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
-      .catch(() => {
-        toast.error(...getToastArguments(language.error.collectRecordSubmit))
+      .catch((error) => {
         setSubmitButtonState(buttonGroupStates.submittable)
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.collectRecordSubmit))
+          },
+        })
       })
   }
 
@@ -336,11 +372,16 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setCollectRecordBeingEdited(recordWithIgnoredValidations)
           setIsFormDirty(true)
         })
-        .catch(() => {
-          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordSubmit))
+            },
+          })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const ignoreNonObservationFieldValidations = useCallback(
@@ -354,11 +395,16 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setCollectRecordBeingEdited(recordWithIgnoredValidations)
           setIsFormDirty(true)
         })
-        .catch(() => {
-          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+            },
+          })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const ignoreObservationValidations = useCallback(
@@ -372,11 +418,16 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setCollectRecordBeingEdited(recordWithIgnoredValidations)
           setIsFormDirty(true)
         })
-        .catch(() => {
-          toast.warn(...getToastArguments(language.error.collectRecordValidationIgnore))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+            },
+          })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance],
+    [collectRecordBeingEdited.id, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const resetObservationValidations = useCallback(
@@ -388,11 +439,16 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
 
           setIsFormDirty(true)
         })
-        .catch(() => {
-          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+            },
+          })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const resetRecordLevelValidation = useCallback(
@@ -406,11 +462,16 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setCollectRecordBeingEdited(recordWithResetValidations)
           setIsFormDirty(true)
         })
-        .catch(() => {
-          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+            },
+          })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const resetNonObservationFieldValidations = useCallback(
@@ -424,11 +485,16 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setCollectRecordBeingEdited(recordWithResetValidations)
           setIsFormDirty(true)
         })
-        .catch(() => {
-          toast.warn(...getToastArguments(language.error.collectRecordValidationReset))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+            },
+          })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const _setIsFormDirty = useEffect(() => {
@@ -505,9 +571,14 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           toast.success(...getToastArguments(language.success.collectRecordDelete))
           history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.collectRecordDelete))
+        .catch((error) => {
           closeDeleteConfirmPrompt()
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordDelete))
+            },
+          })
         })
     }
   }

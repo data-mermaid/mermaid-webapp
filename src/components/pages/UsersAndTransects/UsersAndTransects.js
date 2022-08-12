@@ -299,7 +299,7 @@ const UsersAndTransects = () => {
         (accumulator, record) => {
           const replaceEmptyLabels = (labels) => {
             return labels.map((label) => {
-              return label || language.pages.usersAndTransectsTable.missingLabelNumber
+              return label.name || language.pages.usersAndTransectsTable.missingLabelNumber
             })
           }
 

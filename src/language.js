@@ -13,7 +13,6 @@ const inlineMessage = {
 }
 
 const error = {
-  401: "There is something wrong with the user's credentials. You may want to try logging out and logging back in.",
   403: 'The current user does not have sufficient permission to do that.',
   500: 'Something went wrong with the server.',
   502: 'Something went wrong with the server.',

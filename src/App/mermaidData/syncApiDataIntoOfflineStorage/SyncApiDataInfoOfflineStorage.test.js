@@ -6,7 +6,7 @@ import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { getFakeAccessToken } from '../../../testUtilities/getFakeAccessToken'
 
-test('pushThenPullEverythingForAProjectButChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -32,7 +32,7 @@ test('pushThenPullEverythingForAProjectButChoices keeps track of returned last_r
       }
 
       if (areLastRevisionNumbersNull && hasFirstPullCallHappened) {
-        // pushThenPullEverythingForAProjectButChoices shouldn't be sending nulls after
+        // pushThenPullAllProjectDataExceptChoices shouldn't be sending nulls after
         // it has received a response from the server so we want
         // to cause the test to fail here
         return res(ctx.status(400))
@@ -51,13 +51,13 @@ test('pushThenPullEverythingForAProjectButChoices keeps track of returned last_r
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pushThenPullEverythingForAProjectButChoices('1')
+  await apiSync.pushThenPullAllProjectDataExceptChoices('1')
 
   // second pull from api should have last revision numbers
-  await apiSync.pushThenPullEverythingForAProjectButChoices('1')
+  await apiSync.pushThenPullAllProjectDataExceptChoices('1')
 })
 
-test('pushThenPullEverythingForAProject keeps track of returned last_revision_nums and sends them with the next response', async () => {
+test('pushThenPullAllProjectData keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
 
   mockMermaidApiAllSuccessful.use(
@@ -103,10 +103,10 @@ test('pushThenPullEverythingForAProject keeps track of returned last_revision_nu
   })
 
   // initial pull from api with last revision numbers being null
-  await apiSync.pushThenPullEverythingForAProject('1')
+  await apiSync.pushThenPullAllProjectData('1')
 
   // second pull from api should have last revision numbers
-  await apiSync.pushThenPullEverythingForAProject('1')
+  await apiSync.pushThenPullAllProjectData('1')
 })
 
 test('pushThenPullEverything keeps track of returned last_revision_nums and sends them with the next response', async () => {
@@ -157,7 +157,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
   await apiSync.pushThenPullEverything()
 })
 
-test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', async () => {
+test('pushThenPullAllProjectDataExceptChoices updates IDB with API data', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
@@ -257,7 +257,7 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
   )
 
   expect.assertions(18)
-  await apiSync.pushThenPullEverythingForAProjectButChoices('1').then(async () => {
+  await apiSync.pushThenPullAllProjectDataExceptChoices('1').then(async () => {
     await Promise.all([
       dexiePerUserDataInstance.benthic_attributes.toArray(),
       dexiePerUserDataInstance.collect_records.toArray(),
@@ -330,7 +330,7 @@ test('pushThenPullEverythingForAProjectButChoices updates IDB with API data', as
   })
 })
 
-test('pushThenPullEverythingForAProject updates IDB with API data', async () => {
+test('pushThenPullAllProjectData updates IDB with API data', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   const apiSync = new SyncApiDataIntoOfflineStorage({
@@ -444,7 +444,7 @@ test('pushThenPullEverythingForAProject updates IDB with API data', async () => 
   )
 
   expect.assertions(20)
-  await apiSync.pushThenPullEverythingForAProject('1').then(async () => {
+  await apiSync.pushThenPullAllProjectData('1').then(async () => {
     await Promise.all([
       dexiePerUserDataInstance.benthic_attributes.toArray(),
       dexiePerUserDataInstance.choices.toArray(),
