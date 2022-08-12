@@ -5,7 +5,6 @@ import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from './SyncStatusContext'
-import handleHttpResponseError from '../../../library/handleHttpResponseError'
 
 const getProjectIdFromLocation = (location) => {
   const { pathname } = location
@@ -23,7 +22,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
   dexiePerUserDataInstance,
   isMounted,
   isAppOnline,
-  logoutMermaid,
+  handleHttpResponseError,
 }) => {
   const location = useLocation()
   const isPageReload = useRef(true)
@@ -93,7 +92,6 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
             callback: () => {
               toast.error(...getToastArguments(language.error.apiDataSync))
             },
-            logoutMermaid,
           })
         })
     }
@@ -118,7 +116,6 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
             callback: () => {
               toast.error(...getToastArguments(language.error.apiDataSync))
             },
-            logoutMermaid,
           })
         })
     }
@@ -141,7 +138,6 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
             callback: () => {
               toast.error(...getToastArguments(language.error.apiDataSync))
             },
-            logoutMermaid,
           })
         })
     }
@@ -151,7 +147,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     getAccessToken,
     isAppOnline,
     isMounted,
-    logoutMermaid,
+    handleHttpResponseError,
     location,
     setIsOfflineStorageHydrated,
     setIsSyncInProgress,

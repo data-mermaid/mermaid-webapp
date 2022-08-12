@@ -60,7 +60,7 @@ function App({ dexieCurrentUserInstance }) {
     dexiePerUserDataInstance,
     isMounted,
     isAppOnline,
-    logoutMermaid,
+    handleHttpResponseError: handleHttpResponseErrorWithLogoutFunction,
   })
 
   const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()

@@ -7,12 +7,9 @@ const handleHttpResponseError = ({ error, callback, logoutMermaid }) => {
 
   if (!errorStatus) {
     // If there is a general error which does not have a response status
-    if (error) {
-      // Don't throw an error. This should only ever encountered if axios is called after the the test is destroyed
-      toast.error(...getToastArguments(language.error.generic))
-      console.error(error)
-    }
-
+    // Don't throw an error. This should only ever encountered if axios is called after the the test is destroyed
+    toast.error(...getToastArguments(language.error.generic))
+    console.error(error)
     console.error(
       'handleHttpResponseError needs to have an error object with the schema of error.response.status.',
     )
