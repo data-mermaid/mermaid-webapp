@@ -83,12 +83,16 @@ test('A project card renders with the expected UI elements for button groups', a
   const projectCard = screen.getAllByRole('listitem')[0]
   const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
   const submitSummaryCard = within(projectCard).getByLabelText(/data/i)
-  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
+  const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
+  const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
+  const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
   const copyButton = within(projectCard).getByLabelText(/copy/i)
 
   expect(collectingSummaryCard).toBeInTheDocument()
   expect(submitSummaryCard).toBeInTheDocument()
-  expect(infoSummaryCard).toBeInTheDocument()
+  expect(sitesSummaryCard).toBeInTheDocument()
+  expect(usersSummaryCard).toBeInTheDocument()
+  expect(dataSharingSummaryCard).toBeInTheDocument()
   expect(copyButton).toBeInTheDocument()
 })
 
@@ -114,22 +118,24 @@ test('A project card shows relevant data for a project', async () => {
 
   const projectCard = screen.getAllByRole('listitem')[0]
   const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
-  const submittedSummaryCard = within(projectCard).getByLabelText(/data/i)
-  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
+  const submittedSummaryCard = within(projectCard).getByLabelText(/submitted/i)
+  const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
+  const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
+  const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
 
   expect(within(projectCard).getByText('Project I'))
   expect(within(projectCard).getByText('Canada'))
   expect(within(collectingSummaryCard).getByText('12'))
   expect(within(submittedSummaryCard).getByText('9'))
-  expect(within(infoSummaryCard).getByText('13'))
-  expect(within(infoSummaryCard).getByText('5'))
-  expect(within(infoSummaryCard).getByTestId('fishbelt-policy')).toHaveTextContent(
+  expect(within(sitesSummaryCard).getByText('13'))
+  expect(within(usersSummaryCard).getByText('5'))
+  expect(within(dataSharingSummaryCard).getByTestId('fishbelt-policy')).toHaveTextContent(
     'Fish belt: Private',
   )
-  expect(within(infoSummaryCard).getByTestId('benthic-policy')).toHaveTextContent(
+  expect(within(dataSharingSummaryCard).getByTestId('benthic-policy')).toHaveTextContent(
     'Benthic: Public Summary',
   )
-  expect(within(infoSummaryCard).getByTestId('bleaching-policy')).toHaveTextContent(
+  expect(within(dataSharingSummaryCard).getByTestId('bleaching-policy')).toHaveTextContent(
     'Bleaching: Public',
   )
 
@@ -166,14 +172,20 @@ test('A project card renders appropriately when offline', async () => {
   const projectCard = screen.getAllByRole('listitem')[0]
   const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
   const submittedSummaryCard = within(projectCard).getByLabelText(/data/i)
-  const infoSummaryCard = within(projectCard).getByLabelText(/admin/i)
+  const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
+  const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
+  const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
 
   expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
-  expect(within(projectCard).getByLabelText(/data offline/i)).toBeInTheDocument()
-  expect(within(projectCard).getByLabelText(/admin offline/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/submitted offline/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/sites offline/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/users offline/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/data-sharing offline/i)).toBeInTheDocument()
   expect(within(collectingSummaryCard).getByText('12'))
   expect(within(submittedSummaryCard).getByText('Online Only'))
-  expect(within(infoSummaryCard).getByText('Online Only'))
+  expect(within(sitesSummaryCard).getByText('Online Only'))
+  expect(within(usersSummaryCard).getByText('Online Only'))
+  expect(within(dataSharingSummaryCard).getByText('Online Only'))
 
   expect(screen.getByLabelText('Offline Ready')).toBeDisabled()
   expect(screen.getByLabelText('Copy')).toBeDisabled()
@@ -202,8 +214,11 @@ test('A project card renders appropriately when online', async () => {
   const projectCard = screen.getAllByRole('listitem')[0]
 
   expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
-  expect(within(projectCard).getByLabelText(/data/i)).toBeInTheDocument()
-  expect(within(projectCard).getByLabelText(/admin/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/submitted/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/sites/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/users/i)).toBeInTheDocument()
+  // Talk to AL or Melissa as to why this is commented.
+  // expect(within(projectCard).getByLabelText(/data sharing/i)).toBeInTheDocument()
 
   const offlineReadyCheckboxes = screen.getAllByLabelText('Offline Ready')
   const copyButtons = screen.getAllByLabelText('Copy')
