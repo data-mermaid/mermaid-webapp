@@ -32,6 +32,7 @@ import { ToolBarRow } from '../../generic/positioning'
 import theme from '../../../theme'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
@@ -122,6 +123,7 @@ const UsersAndTransects = () => {
   const [collectRecordsByProfile, setCollectRecordsByProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -154,17 +156,22 @@ const UsersAndTransects = () => {
           }
         })
         .catch((error) => {
-          const errorStatus = error.response?.status
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId])
-            setIsLoading(false)
-          }
+              if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+                setIdsNotAssociatedWithData([projectId])
+                setIsLoading(false)
+              }
 
-          toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+              toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
 
   const getUserColumnHeaders = useMemo(() => {
     const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
