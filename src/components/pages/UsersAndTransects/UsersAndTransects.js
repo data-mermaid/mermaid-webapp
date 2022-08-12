@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
 
@@ -17,29 +16,25 @@ import PageUnavailableOffline from '../PageUnavailableOffline'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import SampleUnitLinks from '../../SampleUnitLinks'
 import { sortArray } from '../../../library/arrays/sortArray'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  TableNavigation,
+  HeaderCenter,
+  StickyTableOverflowWrapper,
+  StickyTable,
+} from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
 import theme from '../../../theme'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-
-const HeaderCenter = styled.div`
-  text-align: center;
-`
-
-const InlineCell = styled.div`
-  white-space: nowrap;
-  text-align: inherit;
-  a {
-    color: inherit;
-  }
-`
 
 const UserColumnHeader = styled.div`
   display: inline-flex;
@@ -57,9 +52,6 @@ const ActiveRecordsCount = styled.strong`
   margin: 0.25rem 0.5rem;
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
-`
-const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
-  overflow: visible;
 `
 const UsersAndTransectsHeaderRow = styled(Tr)`
   th.transect-numbers {
@@ -95,29 +87,33 @@ const UsersAndTransectsRow = styled(Tr)`
     }
   }
 `
-const StickyTable = styled(Table)`
-  thead tr:nth-child(2) th {
-    white-space: nowrap;
-    z-index: 3;
-    position: sticky;
-    top: ${theme.spacing.headerHeight};
-  }
-`
-const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
-  const currentProjectPath = useCurrentProjectPath()
 
-  const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
-    return (
-      <span key={row.id}>
-        <Link to={`${currentProjectPath}/data/${rowRecord.sample_unit_protocol}/${row.id}`}>
-          {row.label}
-        </Link>
-        {idx < sampleUnitNumbersRow.length - 1 && ', '}
-      </span>
-    )
-  })
+const groupCollectSampleUnitsByProfileSummary = (records, observers) => {
+  const getObserverProfileName = (profileId) =>
+    observers.find((observer) => observer.profile === profileId)?.profile_name
 
-  return <InlineCell>{sampleUnitLinks}</InlineCell>
+  const groupProfileResult = records.reduce((accumulator, record) => {
+    const profileSummary = record.profile_summary
+
+    for (const collectRecordProfile in profileSummary) {
+      if (profileSummary[collectRecordProfile]) {
+        const collectRecords = profileSummary[collectRecordProfile]?.labels
+
+        accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
+        accumulator[collectRecordProfile] = {
+          profileId: collectRecordProfile,
+          profileName: getObserverProfileName(collectRecordProfile),
+          collectRecords: accumulator[collectRecordProfile].collectRecords
+            ? accumulator[collectRecordProfile].collectRecords.concat(collectRecords)
+            : [...collectRecords],
+        }
+      }
+    }
+
+    return accumulator
+  }, {})
+
+  return groupProfileResult
 }
 
 const UsersAndTransects = () => {
@@ -131,34 +127,6 @@ const UsersAndTransects = () => {
   const [collectRecordsByProfile, setCollectRecordsByProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
-
-  const groupCollectSampleUnitsByProfileSummary = (records, observers) => {
-    const getObserverProfileName = (profileId) =>
-      observers.find((observer) => observer.profile === profileId)?.profile_name
-
-    const groupProfileResult = records.reduce((accumulator, record) => {
-      const profileSummary = record.profile_summary
-
-      for (const collectRecordProfile in profileSummary) {
-        if (profileSummary[collectRecordProfile]) {
-          const collectRecords = profileSummary[collectRecordProfile]?.labels
-
-          accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
-          accumulator[collectRecordProfile] = {
-            profileId: collectRecordProfile,
-            profileName: getObserverProfileName(collectRecordProfile),
-            collectRecords: accumulator[collectRecordProfile].collectRecords
-              ? accumulator[collectRecordProfile].collectRecords.concat(collectRecords)
-              : [...collectRecords],
-          }
-        }
-      }
-
-      return accumulator
-    }, {})
-
-    return groupProfileResult
-  }
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -541,18 +509,6 @@ const UsersAndTransects = () => {
   ) : (
     <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
   )
-}
-
-SampleUnitLinks.propTypes = {
-  rowRecord: PropTypes.shape({
-    sample_unit_protocol: PropTypes.string,
-  }).isRequired,
-  sampleUnitNumbersRow: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      sample_unit_number: PropTypes.number,
-    }),
-  ).isRequired,
 }
 
 export default UsersAndTransects

@@ -137,3 +137,28 @@ export const Tr = styled.tr`
     background-color: ${theme.color.tableRowHover};
   `)}
 `
+
+export const HeaderCenter = styled.div`
+  text-align: center;
+`
+
+export const InlineCell = styled.div`
+  white-space: nowrap;
+  text-align: inherit;
+  a {
+    color: inherit;
+  }
+`
+
+export const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
+  overflow: visible;
+`
+
+export const StickyTable = styled(Table)`
+  thead tr:nth-child(2) th {
+    white-space: nowrap;
+    z-index: 3;
+    position: sticky;
+    top: ${theme.spacing.headerHeight};
+  }
+`

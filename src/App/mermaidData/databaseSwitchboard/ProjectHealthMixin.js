@@ -273,10 +273,10 @@ const ProjectHealthMixin = (Base) =>
               mr_id: item.management.id,
               labels: accumulator[item.management.id].labels
                 ? accumulator[item.management.id].labels.concat({
-                    sample_unit_number: item.label,
+                    label: item.label,
                     id: item.id,
                   })
-                : [{ sample_unit_number: item.label, id: item.id }],
+                : [{ label: item.label, id: item.id }],
             }
 
             return accumulator

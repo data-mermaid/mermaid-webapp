@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components/macro'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
@@ -16,43 +15,25 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
+import SampleUnitLinks from '../../SampleUnitLinks'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  TableNavigation,
+  HeaderCenter,
+  StickyTableOverflowWrapper,
+  StickyTable,
+} from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
-import theme from '../../../theme'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-
-const HeaderCenter = styled.div`
-  text-align: center;
-`
-
-const InlineCell = styled.div`
-  white-space: nowrap;
-  text-align: inherit;
-  a {
-    color: inherit;
-  }
-`
-
-const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
-  overflow: visible;
-`
-
-const StickyTable = styled(Table)`
-  thead tr:nth-child(2) th {
-    white-space: nowrap;
-    z-index: 3;
-    position: sticky;
-    top: ${theme.spacing.headerHeight};
-  }
-`
 
 const ManagementOverviewHeaderRow = styled(Tr)`
   th.management-regime-numbers {
@@ -78,21 +59,20 @@ const ManagementOverviewRow = styled(Tr)`
   }
 `
 
-const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
-  const currentProjectPath = useCurrentProjectPath()
+const groupManagementRegimes = (records) => {
+  return records.reduce((accumulator, record) => {
+    const { management_regimes } = record
 
-  const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
-    return (
-      <span key={row.id}>
-        <Link to={`${currentProjectPath}/data/${rowRecord.sample_unit_protocol}/${row.id}`}>
-          {row.sample_unit_number}
-        </Link>
-        {idx < sampleUnitNumbersRow.length - 1 && ', '}
-      </span>
-    )
-  })
+    for (const managementRegime of management_regimes) {
+      accumulator[managementRegime.mr_id] = accumulator[managementRegime.mr_id] || {}
+      accumulator[managementRegime.mr_id] = {
+        id: managementRegime.mr_id,
+        name: managementRegime.mr_name,
+      }
+    }
 
-  return <InlineCell>{sampleUnitLinks}</InlineCell>
+    return accumulator
+  }, {})
 }
 
 const ManagementRegimesOverview = () => {
@@ -116,23 +96,9 @@ const ManagementRegimesOverview = () => {
       databaseSwitchboardInstance
         .getRecordsForManagementRegimesOverviewTable(projectId)
         .then((sampleUnitWithManagementRegimeRecordsResponse) => {
-          const uniqueManagementRegimes = sampleUnitWithManagementRegimeRecordsResponse.reduce(
-            (accumulator, record) => {
-              const { management_regimes } = record
-
-              for (const managementRegime of management_regimes) {
-                accumulator[managementRegime.mr_id] = accumulator[managementRegime.mr_id] || {}
-                accumulator[managementRegime.mr_id] = {
-                  id: managementRegime.mr_id,
-                  name: managementRegime.mr_name,
-                }
-              }
-
-              return accumulator
-            },
-            {},
+          const uniqueManagementRegimes = groupManagementRegimes(
+            sampleUnitWithManagementRegimeRecordsResponse,
           )
-
           const uniqueManagementRegimeNamesAscending = sortArrayByObjectKey(
             Object.values(uniqueManagementRegimes),
             'name',
@@ -446,18 +412,6 @@ const ManagementRegimesOverview = () => {
   ) : (
     <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
   )
-}
-
-SampleUnitLinks.propTypes = {
-  rowRecord: PropTypes.shape({
-    sample_unit_protocol: PropTypes.string,
-  }).isRequired,
-  sampleUnitNumbersRow: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      sample_unit_number: PropTypes.string,
-    }),
-  ).isRequired,
 }
 
 export default ManagementRegimesOverview
