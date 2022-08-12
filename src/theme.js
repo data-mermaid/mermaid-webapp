@@ -9,12 +9,12 @@ const warning = colorHelper('#FEDD2F')
 const ignore = colorHelper('#D6DDE6')
 const white = colorHelper('#fff')
 const black = primary.mix(colorHelper('black'), 0.95)
-const grey1 = colorHelper.hsl(248, 13, 98)
-const grey2 = colorHelper.hsl(248, 13, 95)
+const grey1 = colorHelper.hsl(248, 13, 88)
+const grey2 = colorHelper.hsl(248, 13, 91)
 const grey3 = colorHelper.hsl(248, 13, 93)
-const grey4 = colorHelper.hsl(248, 13, 91)
-const grey5 = colorHelper.hsl(248, 13, 88)
-const background = grey5
+const grey4 = colorHelper.hsl(248, 13, 95)
+const grey5 = colorHelper.hsl(248, 13, 98)
+const background = grey1
 const textColor = colorHelper('#13124A')
 const valid = textColor
 
@@ -170,6 +170,7 @@ const timing = {
 }
 
 const typography = {
+  largeFontSize: '2.5rem',
   defaultFontSize: '1.6rem',
   smallFontSize: '1.2rem',
   xSmallFontSize: '1rem',
