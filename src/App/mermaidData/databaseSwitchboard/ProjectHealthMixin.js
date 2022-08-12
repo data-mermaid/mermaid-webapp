@@ -127,11 +127,11 @@ const ProjectHealthMixin = (Base) =>
         this.#groupSampleEventUnitBySite(sampleEventUnitRecords),
       )
 
-      const nonMissingCollectingSummary = Object.entries(siteCollectingSummary).filter(
+      const collectingSummaryWithNameIsNotNull = Object.entries(siteCollectingSummary).filter(
         (summary) => summary[0] !== '__null__',
       )
 
-      const collectingSummaryMethods = nonMissingCollectingSummary.reduce(
+      const collectingSummaryMethods = collectingSummaryWithNameIsNotNull.reduce(
         (accumulator, sampleUnit) => {
           const sampleUnitMethods = Object.keys(sampleUnit[1].sample_unit_methods).map((method) =>
             getRecordSampleUnitMethod(method),
