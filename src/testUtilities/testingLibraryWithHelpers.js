@@ -42,7 +42,7 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
           <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
-            <HttpResponseErrorHandlerProvider value={() => { }}>
+            <HttpResponseErrorHandlerProvider value={() => {}}>
               <BellNotificationProvider
                 value={{
                   notifications: mockMermaidData.notifications,
@@ -71,7 +71,7 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
       <ThemeProvider theme={theme}>
         <SyncStatusProvider>
           <CurrentUserProvider value={undefined}>
-            <HttpResponseErrorHandlerProvider value={() => { }}>
+            <HttpResponseErrorHandlerProvider value={() => {}}>
               <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
             </HttpResponseErrorHandlerProvider>
           </CurrentUserProvider>
