@@ -38,7 +38,7 @@ function App({ dexieCurrentUserInstance }) {
   })
 
   const handleHttpResponseErrorWithLogoutFunction = useCallback(
-    (error, callback) => handleHttpResponseError({ error, callback, logoutMermaid }),
+    ({ error, callback }) => handleHttpResponseError({ error, callback, logoutMermaid }),
     [logoutMermaid],
   )
 
