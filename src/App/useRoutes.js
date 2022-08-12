@@ -12,6 +12,7 @@ import Sites from '../components/pages/Sites'
 import Site from '../components/pages/Site'
 import Users from '../components/pages/Users'
 import UsersAndTransects from '../components/pages/UsersAndTransects'
+import ManagementRegimesOverview from '../components/pages/ManagementRegimesOverview'
 import FishBelt from '../components/pages/collectRecordFormPages/FishBelt'
 import SubmittedFishBelt from '../components/pages/submittedRecordPages/SubmittedFishBelt/SubmittedFishBelt'
 import BenthicPhotoQuadrat from '../components/pages/collectRecordFormPages/BenthicPhotoQuadrat'
@@ -26,6 +27,10 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/usersandtransects',
       Component: UsersAndTransects,
+    },
+    {
+      path: '/projects/:projectId/managementregimesoverview',
+      Component: ManagementRegimesOverview,
     },
     {
       path: '/projects/:projectId/collecting',

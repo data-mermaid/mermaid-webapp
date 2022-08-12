@@ -1,23 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import styled from 'styled-components/macro'
-import { useParams } from 'react-router-dom'
-import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { toast } from 'react-toastify'
+import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
+import { useParams } from 'react-router-dom'
 
 import { ContentPageLayout } from '../../Layout'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
-import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
-import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
 import PageUnavailableOffline from '../PageUnavailableOffline'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
+import { getToastArguments } from '../../../library/getToastArguments'
 import SampleUnitLinks from '../../SampleUnitLinks'
-import { sortArray } from '../../../library/arrays/sortArray'
+import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
   Tr,
@@ -29,81 +28,46 @@ import {
   StickyTable,
 } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
-import theme from '../../../theme'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import useIsMounted from '../../../library/useIsMounted'
+import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 
-const UserColumnHeader = styled.div`
-  display: inline-flex;
-  flex-direction: row;
-`
-
-const ActiveRecordsCount = styled.strong`
-  background: ${theme.color.callout};
-  border-radius: 100%;
-  border: solid 1px ${theme.color.white};
-  width: ${theme.spacing.xlarge};
-  height: ${theme.spacing.xlarge};
-  color: ${theme.color.white};
-  display: grid;
-  margin: 0.25rem 0.5rem;
-  place-items: center;
-  font-size: ${theme.typography.smallFontSize};
-`
-const UsersAndTransectsHeaderRow = styled(Tr)`
-  th.transect-numbers {
-    background: hsl(235, 10%, 90%);
-    &:after {
-      display: none;
-    }
-  }
-  th.user-headers {
+const ManagementOverviewHeaderRow = styled(Tr)`
+  th.management-regime-numbers {
     background: hsl(235, 10%, 85%);
     &:after {
       display: none;
     }
   }
 `
-const UsersAndTransectsRow = styled(Tr)`
+
+const ManagementOverviewRow = styled(Tr)`
   &:nth-child(odd) {
     background: hsl(0, 0%, 100%);
-    td.transect-numbers {
-      background: hsl(0, 0%, 95%);
-    }
-    td.user-headers {
+    td.management-regime-numbers {
       background: hsl(0, 0%, 90%);
     }
   }
   &:nth-child(even) {
     background: hsl(235, 10%, 95%);
-    td.transect-numbers {
-      background: hsl(235, 10%, 90%);
-    }
-    td.user-headers {
+    td.management-regime-numbers {
       background: hsl(235, 10%, 85%);
     }
   }
 `
 
-const groupCollectSampleUnitsByProfileSummary = (records) => {
+const groupManagementRegimes = (records) => {
   return records.reduce((accumulator, record) => {
-    const profileSummary = record.profile_summary
+    const { management_regimes } = record
 
-    for (const collectRecordProfile in profileSummary) {
-      if (profileSummary[collectRecordProfile]) {
-        const collectRecords = profileSummary[collectRecordProfile]?.labels
-
-        accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
-        accumulator[collectRecordProfile] = {
-          profileId: collectRecordProfile,
-          profileName: profileSummary[collectRecordProfile].profile_name,
-          collectRecords: accumulator[collectRecordProfile].collectRecords
-            ? accumulator[collectRecordProfile].collectRecords.concat(collectRecords)
-            : [...collectRecords],
-        }
+    for (const managementRegime of management_regimes) {
+      accumulator[managementRegime.mr_id] = accumulator[managementRegime.mr_id] || {}
+      accumulator[managementRegime.mr_id] = {
+        id: managementRegime.mr_id,
+        name: managementRegime.mr_name,
       }
     }
 
@@ -111,15 +75,15 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
   }, {})
 }
 
-const UsersAndTransects = () => {
+const ManagementRegimesOverview = () => {
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
-  const [submittedRecords, setSubmittedRecords] = useState([])
-  const [submittedTransectNumbers, setSubmittedTransectNumbers] = useState([])
-  const [collectRecordsByProfile, setCollectRecordsByProfile] = useState({})
+  const [sampleUnitWithManagementRegimeRecords, setSampleUnitWithManagementRegimeRecords] =
+    useState([])
+  const [managementRegimeRecordNames, setManagementRegimeRecordNames] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
 
@@ -130,28 +94,19 @@ const UsersAndTransects = () => {
 
     if (isAppOnline && databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getRecordsForUsersAndTransectsTable(projectId)
-        .then((sampleUnitRecordsResponse) => {
-          if (isMounted.current) {
-            if (!sampleUnitRecordsResponse && projectId) {
-              setIdsNotAssociatedWithData([projectId])
-            }
+        .getRecordsForManagementRegimesOverviewTable(projectId)
+        .then((sampleUnitWithManagementRegimeRecordsResponse) => {
+          const uniqueManagementRegimes = groupManagementRegimes(
+            sampleUnitWithManagementRegimeRecordsResponse,
+          )
+          const uniqueManagementRegimeNamesAscending = sortArrayByObjectKey(
+            Object.values(uniqueManagementRegimes),
+            'name',
+          )
 
-            const sampleUnitTransectNumbers = sampleUnitRecordsResponse
-              .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
-              .map((reducedRecords) => reducedRecords.label)
-
-            const uniqueTransectNumbersAscending = sortArray([
-              ...new Set(sampleUnitTransectNumbers),
-            ])
-
-            setCollectRecordsByProfile(
-              groupCollectSampleUnitsByProfileSummary(sampleUnitRecordsResponse),
-            )
-            setSubmittedRecords(sampleUnitRecordsResponse)
-            setSubmittedTransectNumbers(uniqueTransectNumbersAscending)
-            setIsLoading(false)
-          }
+          setSampleUnitWithManagementRegimeRecords(sampleUnitWithManagementRegimeRecordsResponse)
+          setManagementRegimeRecordNames(uniqueManagementRegimeNamesAscending)
+          setIsLoading(false)
         })
         .catch((error) => {
           const errorStatus = error.response?.status
@@ -166,34 +121,15 @@ const UsersAndTransects = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
 
-  const getUserColumnHeaders = useMemo(() => {
-    const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
-
-    return collectRecordsByProfileValues.map((user) => {
+  const getManagementRegimeTransectNumberColumnHeaders = useMemo(() => {
+    return managementRegimeRecordNames.map((mr) => {
       return {
-        Header: (
-          <UserColumnHeader>
-            <span>{user.profileName}</span>
-            <span>
-              <ActiveRecordsCount>{user.collectRecords.length}</ActiveRecordsCount>
-            </span>
-          </UserColumnHeader>
-        ),
-        accessor: user.profileId,
+        Header: mr.name,
+        accessor: mr.id,
         disableSortBy: true,
       }
     })
-  }, [collectRecordsByProfile])
-
-  const getSubmittedTransectNumberColumnHeaders = useMemo(() => {
-    return submittedTransectNumbers.map((number) => {
-      return {
-        Header: number,
-        accessor: number,
-        disableSortBy: true,
-      }
-    })
-  }, [submittedTransectNumbers])
+  }, [managementRegimeRecordNames])
 
   const tableColumns = useMemo(
     () => [
@@ -210,88 +146,52 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
-        Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
-        id: 'transect-numbers',
-        columns: getSubmittedTransectNumberColumnHeaders,
-        disableSortBy: true,
-      },
-      {
-        Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
-        id: 'user-headers',
-        columns: getUserColumnHeaders,
+        Header: () => <HeaderCenter>Transect Number / Management Regime</HeaderCenter>,
+        id: 'management-regime-numbers',
+        columns: getManagementRegimeTransectNumberColumnHeaders,
         disableSortBy: true,
       },
     ],
-    [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
+    [getManagementRegimeTransectNumberColumnHeaders],
   )
 
-  const populateTransectNumberRow = useCallback(
+  const populateSampleUnitNumbersByManagementRegimeRow = useCallback(
     (rowRecord) => {
-      const rowNumbers = rowRecord.sample_unit_numbers.map(({ label }) => label)
+      const { management_regimes } = rowRecord
 
-      const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
-        if (!accumulator[number]) {
-          accumulator[number] = '-'
-        }
-
-        if (rowNumbers.includes(number)) {
-          const filteredRowSampleUnitNumbers = rowRecord.sample_unit_numbers.filter(
-            ({ label }) => label === number,
-          )
-
-          accumulator[number] = (
-            <SampleUnitLinks
-              rowRecord={rowRecord}
-              sampleUnitNumbersRow={filteredRowSampleUnitNumbers}
-            />
-          )
-        }
-
-        return accumulator
-      }, {})
-
-      return submittedTransectNumbersRow
-    },
-    [submittedTransectNumbers],
-  )
-
-  const populateCollectNumberRow = useCallback(
-    (rowRecord) => {
-      const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)
-
-      const collectTransectNumbersRow = collectRecordsByProfileValues.reduce(
+      const rowRecordManagementRegimesWithoutNonEmptyValues = management_regimes.reduce(
         (accumulator, record) => {
-          const replaceEmptyLabels = (labels) => {
-            return labels.map((label) => {
-              return label.name || language.pages.usersAndTransectsTable.missingLabelNumber
-            })
-          }
-
-          accumulator[record.profileId] = rowRecord.profile_summary[record.profileId]
-            ? sortArray(
-                replaceEmptyLabels(rowRecord.profile_summary[record.profileId].labels),
-              ).join(', ')
-            : '-'
+          accumulator[record.mr_id] = (
+            <SampleUnitLinks rowRecord={rowRecord} sampleUnitNumbersRow={record.labels} />
+          )
 
           return accumulator
         },
         {},
       )
 
-      return collectTransectNumbersRow
+      const rowRecordManagementRegimes = managementRegimeRecordNames.reduce(
+        (accumulator, record) => {
+          accumulator[record.id] = rowRecordManagementRegimesWithoutNonEmptyValues[record.id] || '-'
+
+          return accumulator
+        },
+        {},
+      )
+
+      return rowRecordManagementRegimes
     },
-    [collectRecordsByProfile],
+    [managementRegimeRecordNames],
   )
 
   const tableCellData = useMemo(
     () =>
-      submittedRecords.map((record) => ({
+      sampleUnitWithManagementRegimeRecords.map((record) => ({
         site: record.site_name,
         method: record.sample_unit_method,
-        ...populateTransectNumberRow(record),
-        ...populateCollectNumberRow(record),
+        ...populateSampleUnitNumbersByManagementRegimeRow(record),
       })),
-    [submittedRecords, populateTransectNumberRow, populateCollectNumberRow],
+    [sampleUnitWithManagementRegimeRecords, populateSampleUnitNumbersByManagementRegimeRow],
   )
 
   const tableDefaultPrefs = useMemo(() => {
@@ -307,7 +207,7 @@ const UsersAndTransects = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-usersAndTransectsTable`,
+    key: `${currentUser.id}-managementRegimesOverviewTable`,
     defaultValue: tableDefaultPrefs,
   })
 
@@ -373,7 +273,7 @@ const UsersAndTransects = () => {
         <StickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <UsersAndTransectsHeaderRow {...headerGroup.getHeaderGroupProps()}>
+              <ManagementOverviewHeaderRow {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -398,42 +298,55 @@ const UsersAndTransects = () => {
                     </Th>
                   )
                 })}
-              </UsersAndTransectsHeaderRow>
+              </ManagementOverviewHeaderRow>
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
+              const managementRegimesRowCells = row.cells.filter(
+                (cell) => cell.column.Header !== 'Site' && cell.column.Header !== 'Method',
+              )
+              const managementRegimesRowCellsWithNonEmptyValue = managementRegimesRowCells.filter(
+                (cell) => cell.value !== '-',
+              )
+
+              const managementRegimeRowCellValues = managementRegimesRowCellsWithNonEmptyValue.map(
+                (cell) => cell.value.props.sampleUnitNumbersRow.length,
+              )
+
+              const maxSampleUnitCount = Math.max(...managementRegimeRowCellValues)
+
+              const isEqualToMaxSampleUnitCount = (currentValue) =>
+                currentValue === maxSampleUnitCount
+
+              const isEveryMRLabelsSameAsMax =
+                managementRegimeRowCellValues.length > 1 &&
+                managementRegimeRowCellValues.every(isEqualToMaxSampleUnitCount)
 
               return (
-                <UsersAndTransectsRow {...row.getRowProps()}>
+                <ManagementOverviewRow {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
-                    const cellRowValues = cell.row.values
 
-                    const cellRowValuesForSubmittedTransectNumbers = Object.entries(
-                      cellRowValues,
-                    ).filter((value) => submittedTransectNumbers.includes(value[0]))
+                    const managementRegimeCellNonEmpty =
+                      cell.value !== '-' && !(cellColumnId === 'site' || cellColumnId === 'method')
 
-                    const filteredEmptyCellValuesLength =
-                      cellRowValuesForSubmittedTransectNumbers.filter(
-                        (value) => value[1] === '-',
-                      ).length
+                    const isCellValueLessThanMaxSampleUnitCount =
+                      managementRegimeCellNonEmpty &&
+                      cell.value.props.sampleUnitNumbersRow.length < maxSampleUnitCount
 
-                    const isSubmittedNumberCellHightLighted =
-                      cell.value === '-' &&
-                      filteredEmptyCellValuesLength < submittedTransectNumbers.length &&
-                      submittedTransectNumbers.includes(cellColumnId)
+                    const isCellValueEqualToMaxSampleUnitCount =
+                      managementRegimeCellNonEmpty &&
+                      cell.value.props.sampleUnitNumbersRow.length === maxSampleUnitCount
 
-                    const isCollectingNumberCellHighLighted =
-                      cell.value !== '-' &&
-                      !submittedTransectNumbers.includes(cellColumnId) &&
-                      !(cellColumnId === 'site' || cellColumnId === 'method')
+                    const isManagementRegimeCellHighlighted = isEveryMRLabelsSameAsMax
+                      ? isCellValueEqualToMaxSampleUnitCount
+                      : isCellValueLessThanMaxSampleUnitCount
 
-                    const HighlightedClassName =
-                      isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
-                        ? 'highlighted'
-                        : undefined
+                    const HighlightedClassName = isManagementRegimeCellHighlighted
+                      ? 'highlighted'
+                      : undefined
 
                     const cellAlignment =
                       cell.column.parent.id === 'site' || cell.column.parent.id === 'method'
@@ -450,7 +363,7 @@ const UsersAndTransects = () => {
                       </Td>
                     )
                   })}
-                </UsersAndTransectsRow>
+                </ManagementOverviewRow>
               )
             })}
           </tbody>
@@ -478,7 +391,7 @@ const UsersAndTransects = () => {
   const content = isAppOnline ? table : <PageUnavailableOffline />
   const toolbar = (
     <>
-      <H2>{language.pages.usersAndTransectsTable.title}</H2>
+      <H2>{language.pages.managementRegimesOverview.title}</H2>
       {isAppOnline && (
         <ToolBarRow>
           <FilterSearchToolbar
@@ -501,4 +414,4 @@ const UsersAndTransects = () => {
   )
 }
 
-export default UsersAndTransects
+export default ManagementRegimesOverview
