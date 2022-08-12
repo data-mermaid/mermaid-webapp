@@ -32,6 +32,7 @@ import { ToolBarRow } from '../../generic/positioning'
 import theme from '../../../theme'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
@@ -88,11 +89,8 @@ const UsersAndTransectsRow = styled(Tr)`
   }
 `
 
-const groupCollectSampleUnitsByProfileSummary = (records, observers) => {
-  const getObserverProfileName = (profileId) =>
-    observers.find((observer) => observer.profile === profileId)?.profile_name
-
-  const groupProfileResult = records.reduce((accumulator, record) => {
+const groupCollectSampleUnitsByProfileSummary = (records) => {
+  return records.reduce((accumulator, record) => {
     const profileSummary = record.profile_summary
 
     for (const collectRecordProfile in profileSummary) {
@@ -102,7 +100,7 @@ const groupCollectSampleUnitsByProfileSummary = (records, observers) => {
         accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
         accumulator[collectRecordProfile] = {
           profileId: collectRecordProfile,
-          profileName: getObserverProfileName(collectRecordProfile),
+          profileName: profileSummary[collectRecordProfile].profile_name,
           collectRecords: accumulator[collectRecordProfile].collectRecords
             ? accumulator[collectRecordProfile].collectRecords.concat(collectRecords)
             : [...collectRecords],
@@ -112,8 +110,6 @@ const groupCollectSampleUnitsByProfileSummary = (records, observers) => {
 
     return accumulator
   }, {})
-
-  return groupProfileResult
 }
 
 const UsersAndTransects = () => {
@@ -127,6 +123,7 @@ const UsersAndTransects = () => {
   const [collectRecordsByProfile, setCollectRecordsByProfile] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -134,13 +131,11 @@ const UsersAndTransects = () => {
     }
 
     if (isAppOnline && databaseSwitchboardInstance && projectId) {
-      Promise.all([
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
-        databaseSwitchboardInstance.getRecordsForUsersAndTransectsTable(projectId),
-      ])
-        .then(([projectProfilesResponse, sampleUnitRecordsResponse]) => {
+      databaseSwitchboardInstance
+        .getRecordsForUsersAndTransectsTable(projectId)
+        .then((sampleUnitRecordsResponse) => {
           if (isMounted.current) {
-            if (!projectProfilesResponse && !sampleUnitRecordsResponse && projectId) {
+            if (!sampleUnitRecordsResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
 
@@ -153,10 +148,7 @@ const UsersAndTransects = () => {
             ])
 
             setCollectRecordsByProfile(
-              groupCollectSampleUnitsByProfileSummary(
-                sampleUnitRecordsResponse,
-                projectProfilesResponse,
-              ),
+              groupCollectSampleUnitsByProfileSummary(sampleUnitRecordsResponse),
             )
             setSubmittedRecords(sampleUnitRecordsResponse)
             setSubmittedTransectNumbers(uniqueTransectNumbersAscending)
@@ -164,17 +156,22 @@ const UsersAndTransects = () => {
           }
         })
         .catch((error) => {
-          const errorStatus = error.response?.status
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId])
-            setIsLoading(false)
-          }
+              if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+                setIdsNotAssociatedWithData([projectId])
+                setIsLoading(false)
+              }
 
-          toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+              toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
 
   const getUserColumnHeaders = useMemo(() => {
     const collectRecordsByProfileValues = Object.values(collectRecordsByProfile)

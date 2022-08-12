@@ -30,9 +30,10 @@ import {
 import { ToolBarRow } from '../../generic/positioning'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import useIsMounted from '../../../library/useIsMounted'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
 
 const ManagementOverviewHeaderRow = styled(Tr)`
@@ -86,6 +87,7 @@ const ManagementRegimesOverview = () => {
   const [managementRegimeRecordNames, setManagementRegimeRecordNames] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const { currentUser } = useCurrentUser()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
@@ -109,17 +111,22 @@ const ManagementRegimesOverview = () => {
           setIsLoading(false)
         })
         .catch((error) => {
-          const errorStatus = error.response?.status
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId])
-            setIsLoading(false)
-          }
+              if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+                setIdsNotAssociatedWithData([projectId])
+                setIsLoading(false)
+              }
 
-          toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+              toast.error(...getToastArguments(language.error.projectHealthRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
 
   const getManagementRegimeTransectNumberColumnHeaders = useMemo(() => {
     return managementRegimeRecordNames.map((mr) => {

@@ -59,6 +59,7 @@ const ProjectHealthMixin = (Base) =>
       return sampleEventUnitRecords.reduce((accumulator, record) => {
         accumulator[record.site_id] = accumulator[record.site_id] || {}
         accumulator[record.site_id] = {
+          site_id: record.site_id,
           site_name: record.site_name,
           site_names: accumulator[record.site_id].site_names
             ? accumulator[record.site_id].site_names.concat(
@@ -132,6 +133,7 @@ const ProjectHealthMixin = (Base) =>
       function populateAdditionalRecordsForUsersAndTransects(
         sampleEventUnitRecords,
         availableProtocols,
+        siteCollectingSummary,
       ) {
         /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
       Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
@@ -139,19 +141,43 @@ const ProjectHealthMixin = (Base) =>
           this.#groupSampleEventUnitBySite(sampleEventUnitRecords),
         )
 
+        const collectingSummaryWithNameIsNotNull = Object.entries(siteCollectingSummary).filter(
+          (summary) => summary[0] !== '__null__',
+        )
+
+        const collectingSummaryMethods = collectingSummaryWithNameIsNotNull.reduce(
+          (accumulator, sampleUnit) => {
+            const sampleUnitMethods = Object.keys(sampleUnit[1].sample_unit_methods).map((method) =>
+              getRecordSampleUnitMethod(method),
+            )
+
+            accumulator[sampleUnit[0]] = accumulator[sampleUnit[0]] || []
+            accumulator[sampleUnit[0]] = sampleUnitMethods
+
+            return accumulator
+          },
+          {},
+        )
+
         for (const [siteId, siteInfo] of recordGroupedBySite) {
           const siteName = this.#removeDateFromName(siteInfo.site_name)
+          const siteCollectingMethods = collectingSummaryMethods[siteId]
 
           for (const protocol of availableProtocols) {
             const protocolLabel = getRecordSampleUnitMethod(protocol)
             const siteAndMethodName = `${siteName} ${protocolLabel}`
+            const hasCollectingMethod =
+              siteCollectingMethods && siteCollectingMethods.includes(protocolLabel)
 
-            if (!siteInfo.site_names.includes(siteAndMethodName)) {
+            if (
+              (!siteInfo.site_names.includes(siteAndMethodName) && hasCollectingMethod) ||
+              !siteInfo.sample_unit_methods.includes(protocolLabel)
+            ) {
               sampleEventUnitRecords.push({
                 site_id: siteId,
                 site_name: siteName,
                 sample_unit_method: protocolLabel,
-                sample_unit_protocol: protocol,
+                transect_protocol: protocol,
                 sample_unit_numbers: [],
               })
             }
@@ -359,6 +385,7 @@ const ProjectHealthMixin = (Base) =>
             this.#populateAdditionalRecordsForUsersAndTransects(
               sampleEventUnitRecords,
               noBleachingProtocols,
+              siteCollectingSummary,
             )
 
             const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
