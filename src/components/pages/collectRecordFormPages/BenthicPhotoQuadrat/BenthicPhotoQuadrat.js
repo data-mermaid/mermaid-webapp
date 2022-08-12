@@ -43,8 +43,7 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
-import { useLogout } from '../../../../App/LogoutContext'
-import handleGenericApiErrors from '../../../../library/handleGenericApiErrors'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
@@ -57,7 +56,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const isMounted = useIsMounted()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
-  const logoutMermaid = useLogout()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const observationsReducer = useReducer(benthicpqtObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer
 
@@ -179,7 +178,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           },
         )
         .catch((error) => {
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               const errorMessage = isNewRecord
@@ -188,12 +187,19 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
 
               toast.error(...getToastArguments(errorMessage))
             },
-            logoutMermaid,
           })
 
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isNewRecord, recordId, projectId, isSyncInProgress, logoutMermaid])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isNewRecord,
+    recordId,
+    projectId,
+    isSyncInProgress,
+    handleHttpResponseError,
+  ])
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
@@ -231,7 +237,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         toast.success(...getToastArguments(language.success.attributeSave('benthic attribute')))
       })
       .catch((error) => {
-        handleGenericApiErrors({
+        handleHttpResponseError({
           error,
           callback: () => {
             if (error.message === 'Benthic attribute already exists') {
@@ -250,7 +256,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               toast.error(...getToastArguments(language.error.attributeSave('benthic attribute')))
             }
           },
-          logoutMermaid,
         })
       })
 
@@ -306,12 +311,11 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
       })
       .catch((error) => {
         setSaveButtonState(buttonGroupStates.unsaved)
-        handleGenericApiErrors({
+        handleHttpResponseError({
           error,
           callback: () => {
             toast.error(...getToastArguments(language.error.collectRecordSave))
           },
-          logoutMermaid,
         })
       })
   }
@@ -328,12 +332,11 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
       })
       .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)
-        handleGenericApiErrors({
+        handleHttpResponseError({
           error,
           callback: () => {
             toast.error(...getToastArguments(language.error.collectRecordValidation))
           },
-          logoutMermaid,
         })
       })
   }
@@ -349,12 +352,11 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
       })
       .catch((error) => {
         setSubmitButtonState(buttonGroupStates.submittable)
-        handleGenericApiErrors({
+        handleHttpResponseError({
           error,
           callback: () => {
             toast.error(...getToastArguments(language.error.collectRecordSubmit))
           },
-          logoutMermaid,
         })
       })
   }
@@ -371,16 +373,15 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setIsFormDirty(true)
         })
         .catch((error) => {
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.collectRecordSubmit))
             },
-            logoutMermaid,
           })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance, logoutMermaid],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const ignoreNonObservationFieldValidations = useCallback(
@@ -395,16 +396,15 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setIsFormDirty(true)
         })
         .catch((error) => {
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
             },
-            logoutMermaid,
           })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance, logoutMermaid],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const ignoreObservationValidations = useCallback(
@@ -419,16 +419,15 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setIsFormDirty(true)
         })
         .catch((error) => {
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
             },
-            logoutMermaid,
           })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance, logoutMermaid],
+    [collectRecordBeingEdited.id, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const resetObservationValidations = useCallback(
@@ -441,16 +440,15 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setIsFormDirty(true)
         })
         .catch((error) => {
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.collectRecordValidationReset))
             },
-            logoutMermaid,
           })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance, logoutMermaid],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const resetRecordLevelValidation = useCallback(
@@ -465,16 +463,15 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setIsFormDirty(true)
         })
         .catch((error) => {
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.collectRecordValidationReset))
             },
-            logoutMermaid,
           })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance, logoutMermaid],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const resetNonObservationFieldValidations = useCallback(
@@ -489,16 +486,15 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           setIsFormDirty(true)
         })
         .catch((error) => {
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.collectRecordValidationReset))
             },
-            logoutMermaid,
           })
         })
     },
-    [collectRecordBeingEdited, databaseSwitchboardInstance, logoutMermaid],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const _setIsFormDirty = useEffect(() => {
@@ -577,12 +573,11 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         })
         .catch((error) => {
           closeDeleteConfirmPrompt()
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.collectRecordDelete))
             },
-            logoutMermaid,
           })
         })
     }

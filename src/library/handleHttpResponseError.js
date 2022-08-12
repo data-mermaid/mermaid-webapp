@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from './getToastArguments'
 
-const handleGenericApiErrors = ({ error, callback, logoutMermaid }) => {
+const handleHttpResponseError = ({ error, callback, logoutMermaid }) => {
   const errorStatus = error?.response?.status
 
   if (!errorStatus) {
@@ -14,7 +14,7 @@ const handleGenericApiErrors = ({ error, callback, logoutMermaid }) => {
     }
 
     console.error(
-      'handleGenericApiErrors needs to have an error object with the schema of error.response.status.',
+      'handleHttpResponseError needs to have an error object with the schema of error.response.status.',
     )
   }
 
@@ -28,7 +28,7 @@ const handleGenericApiErrors = ({ error, callback, logoutMermaid }) => {
       logoutMermaid()
     } else {
       throw new Error(
-        'A 401 error occurred. handleGenericApiErrors requires a logoutMermaid function in its config object.',
+        'A 401 error occurred. handleHttpResponseError requires a logoutMermaid function in its config object.',
       )
     }
   }
@@ -49,4 +49,4 @@ const handleGenericApiErrors = ({ error, callback, logoutMermaid }) => {
   toast.error(...getToastArguments(language.error.generic))
 }
 
-export default handleGenericApiErrors
+export default handleHttpResponseError

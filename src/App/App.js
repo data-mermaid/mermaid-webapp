@@ -1,10 +1,10 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { CurrentUserProvider } from './CurrentUserContext'
 import { BellNotificationProvider } from './BellNotificationContext'
-import { LogoutProvider } from './LogoutContext'
+import { HttpResponseErrorHandlerProvider } from './HttpResponseErrorHandlerContext'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useInitializeBellNotifications } from './useInitializeBellNotifications'
@@ -26,6 +26,7 @@ import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
+import handleHttpResponseError from '../library/handleHttpResponseError'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
@@ -35,6 +36,11 @@ function App({ dexieCurrentUserInstance }) {
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
   })
+
+  const handleHttpResponseErrorWithLogoutFunction = useCallback(
+    (error, callback) => handleHttpResponseError({ error, callback, logoutMermaid }),
+    [logoutMermaid],
+  )
 
   const { currentUser, saveUserProfile } = useInitializeCurrentUser({
     apiBaseUrl,
@@ -113,7 +119,7 @@ function App({ dexieCurrentUserInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={{ currentUser, saveUserProfile }}>
-          <LogoutProvider value={logoutMermaid}>
+          <HttpResponseErrorHandlerProvider value={handleHttpResponseErrorWithLogoutFunction}>
             <BellNotificationProvider value={{ notifications, deleteNotification }}>
               <GlobalStyle />
               <CustomToastContainer limit={5} />
@@ -148,7 +154,7 @@ function App({ dexieCurrentUserInstance }) {
                 }
               </Layout>
             </BellNotificationProvider>
-          </LogoutProvider>
+          </HttpResponseErrorHandlerProvider>
         </CurrentUserProvider>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>

@@ -5,7 +5,7 @@ import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from './SyncStatusContext'
-import handleGenericApiErrors from '../../../library/handleGenericApiErrors'
+import handleHttpResponseError from '../../../library/handleHttpResponseError'
 
 const getProjectIdFromLocation = (location) => {
   const { pathname } = location
@@ -88,7 +88,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.apiDataSync))
@@ -113,7 +113,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.apiDataSync))
@@ -136,7 +136,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
         .catch((error) => {
           setIsSyncInProgress(false)
           appendSyncError(language.error.apiDataSync)
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.apiDataSync))

@@ -15,7 +15,7 @@ import {
 import { SyncStatusProvider } from '../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getFakeAccessToken } from './getFakeAccessToken'
 import { CurrentUserProvider } from '../App/CurrentUserContext'
-import { LogoutProvider } from '../App/LogoutContext'
+import { HttpResponseErrorHandlerProvider } from '../App/HttpResponseErrorHandlerContext'
 import { getMockDexieInstancesAllSuccess } from './mockDexie'
 import { DexiePerUserDataInstanceProvider } from '../App/dexiePerUserDataInstanceContext'
 import { BellNotificationProvider } from '../App/BellNotificationContext'
@@ -42,7 +42,7 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
       <ThemeProvider theme={theme}>
         <SyncStatusProvider value={isSyncInProgressOverride ? { isSyncInProgress: false } : {}}>
           <CurrentUserProvider value={{ currentUser: fakeCurrentUser }}>
-            <LogoutProvider value={() => {}}>
+            <HttpResponseErrorHandlerProvider value={() => { }}>
               <BellNotificationProvider
                 value={{
                   notifications: mockMermaidData.notifications,
@@ -51,7 +51,7 @@ const AuthenticatedProviders = ({ children, initialEntries, isSyncInProgressOver
               >
                 {children}
               </BellNotificationProvider>
-            </LogoutProvider>
+            </HttpResponseErrorHandlerProvider>
           </CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>
@@ -71,9 +71,9 @@ const UnauthenticatedProviders = ({ children, initialEntries }) => (
       <ThemeProvider theme={theme}>
         <SyncStatusProvider>
           <CurrentUserProvider value={undefined}>
-            <LogoutProvider value={() => {}}>
+            <HttpResponseErrorHandlerProvider value={() => { }}>
               <BellNotificationProvider value={undefined}>{children}</BellNotificationProvider>
-            </LogoutProvider>
+            </HttpResponseErrorHandlerProvider>
           </CurrentUserProvider>
         </SyncStatusProvider>
       </ThemeProvider>

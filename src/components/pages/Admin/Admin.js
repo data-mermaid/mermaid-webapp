@@ -35,8 +35,7 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { getProjectRole } from '../../../App/currentUserProfileHelpers'
-import { useLogout } from '../../../App/LogoutContext'
-import handleGenericApiErrors from '../../../library/handleGenericApiErrors'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -174,7 +173,7 @@ const Admin = () => {
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
-  const logoutMermaid = useLogout()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
@@ -213,16 +212,15 @@ const Admin = () => {
             setIdsNotAssociatedWithData([projectId])
             setIsLoading(false)
           }
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.projectsUnavailable))
             },
-            logoutMermaid,
           })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, logoutMermaid])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -243,12 +241,11 @@ const Admin = () => {
         })
         .catch((error) => {
           setSaveButtonState(buttonGroupStates.unsaved)
-          handleGenericApiErrors({
+          handleHttpResponseError({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.projectSave))
             },
-            logoutMermaid,
           })
         })
     },
