@@ -8,6 +8,7 @@ import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import useIsMounted from '../../library/useIsMounted'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 
 const CollectRecordsCountWrapper = styled.strong`
   background: ${theme.color.callout};
@@ -28,6 +29,7 @@ const CollectRecordsCount = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const _getCollectRecordCount = useEffect(() => {
     if (!isSyncInProgress && databaseSwitchboardInstance && projectId) {
@@ -38,13 +40,18 @@ const CollectRecordsCount = () => {
             setCollectRecordsCount(collectRecords.length)
           }
         })
-        .catch(() => {
-          toast.warn(
-            ...getToastArguments(language.error.apiDataSync.collectRecordsUnavailableError)
-          )
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(
+                ...getToastArguments(language.error.collectRecordsUnavailable)
+              )
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, isSyncInProgress, projectId, isMounted])
+  }, [databaseSwitchboardInstance, isSyncInProgress, projectId, isMounted, handleHttpResponseError])
 
   return (
     !!collectRecordsCount && (

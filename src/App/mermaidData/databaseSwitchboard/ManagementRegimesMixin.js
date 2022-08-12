@@ -121,7 +121,7 @@ const ManagementRegimesMixin = (Base) =>
 
             if (isManagementRegimeStatusCodeSuccessful) {
               return this._apiSyncInstance
-                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const managementRegimeWithExtraPropertiesWrittenByApi =
                     managementRegimeResponseFromApiPush.data

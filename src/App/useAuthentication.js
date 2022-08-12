@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useOnlineStatus } from '../library/onlineStatusContext'
 import pullRequestRedirectAuth0Hack from '../deployUtilities/pullRequestRedirectAuth0Hack'
 
@@ -7,14 +7,14 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
   const { isAppOnline } = useOnlineStatus()
   const [isMermaidAuthenticated, setIsMermaidAuthenticated] = useState(false)
 
-  const setAuthenticatedStates = () => {
+  const setAuthenticatedStates = useCallback(() => {
     localStorage.setItem('hasAuth0Authenticated', 'true')
     setIsMermaidAuthenticated(true)
-  }
-  const setUnauthenticatedStates = () => {
+  }, [])
+  const setUnauthenticatedStates = useCallback(() => {
     localStorage.removeItem('hasAuth0Authenticated')
     setIsMermaidAuthenticated(false)
-  }
+  }, [])
 
   const {
     isAuthenticated: isAuth0Authenticated,
@@ -60,12 +60,14 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
   }, [
     auth0LoginWithRedirect,
     getAuth0AccessTokenSilently,
+    setAuthenticatedStates,
+    setUnauthenticatedStates,
     isAuth0Authenticated,
     isAuth0Loading,
     isAppOnline,
   ])
 
-  const logoutMermaid = () => {
+  const logoutMermaid = useCallback(() => {
     if (isAppOnline) {
       // this isnt necessary to make logout to work, but is here to make sure users.
       // cant see profile data from the last logged in user if they go searching in dev tools.
@@ -74,7 +76,7 @@ const useAuthentication = ({ dexieCurrentUserInstance }) => {
       auth0Logout({ returnTo: window.location.origin })
       setUnauthenticatedStates()
     }
-  }
+  }, [auth0Logout, setUnauthenticatedStates, dexieCurrentUserInstance.currentUser, isAppOnline])
 
   return {
     isMermaidAuthenticated,

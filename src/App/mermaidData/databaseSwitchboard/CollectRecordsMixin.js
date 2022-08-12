@@ -172,7 +172,7 @@ const CollectRecordsMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const recordWithExtraPropertiesWrittenByApi = recordResponseFromApiPush.data
 
@@ -233,7 +233,7 @@ const CollectRecordsMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const recordWithExtraPropertiesWrittenByApi = recordResponseFromApiPush.data
 
@@ -299,7 +299,7 @@ const CollectRecordsMixin = (Base) =>
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
-                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then((_apiPullResponse) => apiPushResponse)
             }
 
@@ -343,7 +343,7 @@ const CollectRecordsMixin = (Base) =>
 
             if (isApiResponseStatusSuccessful) {
               return this._apiSyncInstance
-                .pushThenPullEverythingForAProjectButChoices(projectId)
+                .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then((_dataSetsReturnedFromApiPull) => {
                   const validatedData = _dataSetsReturnedFromApiPull.data.collect_records.updates[0]
 
@@ -377,7 +377,7 @@ const CollectRecordsMixin = (Base) =>
             const isApiResponseStatusSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseStatusSuccessful) {
-              return this._apiSyncInstance.pushThenPullEverythingForAProjectButChoices(projectId)
+              return this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
             }
 
             return Promise.reject(new Error('The API status is unsuccessful'))

@@ -29,6 +29,7 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import PageNoData from '../PageNoData'
 import {
   getIsQuadratSampleUnit,
@@ -44,6 +45,7 @@ const Collect = () => {
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -63,11 +65,16 @@ const Collect = () => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
 
   const currentProjectPath = useCurrentProjectPath()
 

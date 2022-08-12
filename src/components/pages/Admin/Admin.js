@@ -35,6 +35,7 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -172,6 +173,7 @@ const Admin = () => {
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
@@ -210,10 +212,15 @@ const Admin = () => {
             setIdsNotAssociatedWithData([projectId])
             setIsLoading(false)
           }
-          toast.error(...getToastArguments(language.error.projectsUnavailable))
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.projectsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
 
   const initialFormValues = useMemo(
     () => getProjectInitialValues(projectBeingEdited),
@@ -232,9 +239,14 @@ const Admin = () => {
           toast.success(...getToastArguments(language.success.projectSave))
           actions.resetForm({ values }) // resets formiks dirty state
         })
-        .catch(() => {
+        .catch((error) => {
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(...getToastArguments(language.error.projectSave))
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.projectSave))
+            },
+          })
         })
     },
     validate: (values) => {
