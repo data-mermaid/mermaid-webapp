@@ -35,7 +35,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
     if (isChecked) {
       setIsSyncInProgress(true)
       apiSyncInstance
-        .pushThenPullEverythingForAProjectButChoices(project.id)
+        .pushThenPullAllProjectDataExceptChoices(project.id)
         .then(() => {
           // we need to clear the sync status even if component no longer mounted
           setIsSyncInProgress(false)

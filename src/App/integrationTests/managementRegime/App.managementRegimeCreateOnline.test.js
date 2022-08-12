@@ -97,7 +97,7 @@ describe('Online', () => {
     ).toBeChecked()
     expect(within(screen.getByLabelText('Compliance')).getByLabelText('somewhat')).toBeChecked()
   })
-  test.only('New MR save success show new record in MR table', async () => {
+  test('New MR save success show new record in MR table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {

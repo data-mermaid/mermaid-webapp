@@ -1,9 +1,10 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { CurrentUserProvider } from './CurrentUserContext'
 import { BellNotificationProvider } from './BellNotificationContext'
+import { HttpResponseErrorHandlerProvider } from './HttpResponseErrorHandlerContext'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useInitializeBellNotifications } from './useInitializeBellNotifications'
@@ -25,6 +26,7 @@ import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
+import handleHttpResponseError from '../library/handleHttpResponseError'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
@@ -34,6 +36,11 @@ function App({ dexieCurrentUserInstance }) {
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
   })
+
+  const handleHttpResponseErrorWithLogoutFunction = useCallback(
+    (error, callback) => handleHttpResponseError({ error, callback, logoutMermaid }),
+    [logoutMermaid],
+  )
 
   const { currentUser, saveUserProfile } = useInitializeCurrentUser({
     apiBaseUrl,
@@ -53,6 +60,7 @@ function App({ dexieCurrentUserInstance }) {
     dexiePerUserDataInstance,
     isMounted,
     isAppOnline,
+    handleHttpResponseError: handleHttpResponseErrorWithLogoutFunction,
   })
 
   const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
@@ -111,41 +119,42 @@ function App({ dexieCurrentUserInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={{ currentUser, saveUserProfile }}>
-          <BellNotificationProvider value={{ notifications, deleteNotification }}>
-            <GlobalStyle />
-            <CustomToastContainer limit={5} />
-            <Layout {...layoutProps}>
-              {
-                /** The isMermaidAuthenticated is needed here to prevent an
-                 * infinite log in loop with authentication.
-                 *
-                 * The projects list route and project workflow pages will trigger
-                 * a sync when they are routed to, making isOfflineStorageHydrated = true
-                 */
-
-                isMermaidAuthenticated ? (
-                  <Switch>
-                    {routes.map(({ path, Component }) => (
-                      <Route
-                        exact
-                        path={path}
-                        key={path}
-                        render={() =>
-                          isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
-                        }
-                      />
-                    ))}
-                    <Route exact path="/">
-                      <Redirect to="/projects" />
-                    </Route>
-                    <Route component={PageNotFound} />
-                  </Switch>
-                ) : (
-                  <LoadingIndicator />
-                )
-              }
-            </Layout>
-          </BellNotificationProvider>
+          <HttpResponseErrorHandlerProvider value={handleHttpResponseErrorWithLogoutFunction}>
+            <BellNotificationProvider value={{ notifications, deleteNotification }}>
+              <GlobalStyle />
+              <CustomToastContainer limit={5} />
+              <Layout {...layoutProps}>
+                {
+                  /** The isMermaidAuthenticated is needed here to prevent an
+                   * infinite log in loop with authentication.
+                   *
+                   * The projects list route and project workflow pages will trigger
+                   * a sync when they are routed to, making isOfflineStorageHydrated = true
+                   */
+                  isMermaidAuthenticated ? (
+                    <Switch>
+                      {routes.map(({ path, Component }) => (
+                        <Route
+                          exact
+                          path={path}
+                          key={path}
+                          render={() =>
+                            isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
+                          }
+                        />
+                      ))}
+                      <Route exact path="/">
+                        <Redirect to="/projects" />
+                      </Route>
+                      <Route component={PageNotFound} />
+                    </Switch>
+                  ) : (
+                    <LoadingIndicator />
+                  )
+                }
+              </Layout>
+            </BellNotificationProvider>
+          </HttpResponseErrorHandlerProvider>
         </CurrentUserProvider>
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
