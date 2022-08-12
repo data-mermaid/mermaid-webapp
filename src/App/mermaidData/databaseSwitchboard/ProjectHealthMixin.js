@@ -61,24 +61,28 @@ const ProjectHealthMixin = (Base) =>
         accumulator[record.site_id] = {
           site_name: record.site_name,
           site_names: accumulator[record.site_id].site_names
-            ? accumulator[record.site_id].site_names.concat(`${record.site_name} ${record.method}`)
-            : [`${record.site_name} ${record.method}`],
-          transects: accumulator[record.site_id].transects
-            ? accumulator[record.site_id].transects.concat(record.transect_protocol)
-            : [record.transect_protocol],
-          methods: accumulator[record.site_id].methods
-            ? accumulator[record.site_id].methods.concat(record.method)
-            : [record.method],
+            ? accumulator[record.site_id].site_names.concat(
+                `${record.site_name} ${record.sample_unit_method}`,
+              )
+            : [`${record.site_name} ${record.sample_unit_method}`],
+          sample_unit_protocols: accumulator[record.site_id].sample_unit_protocols
+            ? accumulator[record.site_id].sample_unit_protocols.concat(record.sample_unit_protocol)
+            : [record.sample_unit_protocol],
+          sample_unit_methods: accumulator[record.site_id].sample_unit_methods
+            ? accumulator[record.site_id].sample_unit_methods.concat(record.sample_unit_method)
+            : [record.sample_unit_method],
         }
 
         return accumulator
       }, {})
     }
 
-    #addRecordsToSites = function addRecordsToSites(sampleEventUnitRecords, siteSubmittedSummary) {
-      for (const site of Object.entries(siteSubmittedSummary)) {
-        const siteId = site[0]
-        const siteRecordGroup = Object.values(site[1])
+    #addRecordsToUsersAndTransects = function addRecordsToUsersAndTransects(
+      sampleEventUnitRecords,
+      siteSubmittedSummary,
+    ) {
+      for (const [siteId, siteInfo] of Object.entries(siteSubmittedSummary)) {
+        const siteRecordGroup = Object.values(siteInfo)
 
         this.#addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId)
       }
@@ -88,37 +92,34 @@ const ProjectHealthMixin = (Base) =>
       const siteName = siteRecordGroup[0]
       const { bleachingqc, ...otherProtocols } = siteRecordGroup[1] // eslint-disable-line no-unused-vars
 
-      for (const transect of Object.entries(otherProtocols)) {
-        const transectMethod = transect[0]
-        const transectNumbers = transect[1]
-
+      for (const [sampleUnit, sampleUnitNumbers] of Object.entries(otherProtocols)) {
         const sampleEventRecord = {
           site_id: siteId,
           site_name: siteName,
-          method: getRecordSampleUnitMethod(transectMethod),
-          sample_unit_numbers: transectNumbers,
-          transect_protocol: transectMethod,
+          sample_unit_method: getRecordSampleUnitMethod(sampleUnit),
+          sample_unit_numbers: sampleUnitNumbers,
+          sample_unit_protocol: sampleUnit,
         }
 
-        const sampleUnitNumberLabels = transectNumbers.map(({ label }) => label)
-        const sampleDates = transectNumbers.map(({ sample_date }) => sample_date)
+        const sampleUnitNumberLabels = sampleUnitNumbers.map(({ label }) => label)
+        const sampleDates = sampleUnitNumbers.map(({ sample_date }) => sample_date)
 
         const hasDuplicateTransectNumbersInSampleUnit = this.#hasDuplicates(sampleUnitNumberLabels)
         const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
 
         if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
-          const sampleUnitNumbersGroup = Object.entries(
-            this.#groupSampleUnitNumbersBySampleDate(transectNumbers),
+          const sampleUnitNumbersGroupBySampleDate = Object.entries(
+            this.#groupSampleUnitNumbersBySampleDate(sampleUnitNumbers),
           )
 
-          for (const sampleUnit of sampleUnitNumbersGroup) {
-            const sampleDate = sampleUnit[0]
-            const sampleUnitNumbers = sampleUnit[1]
-
+          for (const [
+            sampleDate,
+            sampleUnitNumbersBySampleDate,
+          ] of sampleUnitNumbersGroupBySampleDate) {
             sampleEventUnitRecords.push({
               ...sampleEventRecord,
               site_name: `${siteName} ${sampleDate}`,
-              sample_unit_numbers: sampleUnitNumbers,
+              sample_unit_numbers: sampleUnitNumbersBySampleDate,
             })
           }
         } else {
@@ -127,38 +128,36 @@ const ProjectHealthMixin = (Base) =>
       }
     }
 
-    #populateAdditionalRecords = function populateAdditionalRecords(
-      sampleEventUnitRecords,
-      availableProtocols,
-    ) {
-      /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
+    #populateAdditionalRecordsForUsersAndTransects =
+      function populateAdditionalRecordsForUsersAndTransects(
+        sampleEventUnitRecords,
+        availableProtocols,
+      ) {
+        /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
       Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
-      const recordGroupedBySite = Object.entries(
-        this.#groupSampleEventUnitBySite(sampleEventUnitRecords),
-      )
+        const recordGroupedBySite = Object.entries(
+          this.#groupSampleEventUnitBySite(sampleEventUnitRecords),
+        )
 
-      for (const site of recordGroupedBySite) {
-        const siteId = site[0]
-        const siteInfo = site[1]
+        for (const [siteId, siteInfo] of recordGroupedBySite) {
+          const siteName = this.#removeDateFromName(siteInfo.site_name)
 
-        const siteName = this.#removeDateFromName(siteInfo.site_name)
+          for (const protocol of availableProtocols) {
+            const protocolLabel = getRecordSampleUnitMethod(protocol)
+            const siteAndMethodName = `${siteName} ${protocolLabel}`
 
-        for (const protocol of availableProtocols) {
-          const protocolLabel = getRecordSampleUnitMethod(protocol)
-          const siteAndMethodName = `${siteName} ${protocolLabel}`
-
-          if (!siteInfo.site_names.includes(siteAndMethodName)) {
-            sampleEventUnitRecords.push({
-              site_id: siteId,
-              site_name: siteName,
-              method: protocolLabel,
-              transect_protocol: protocol,
-              sample_unit_numbers: [],
-            })
+            if (!siteInfo.site_names.includes(siteAndMethodName)) {
+              sampleEventUnitRecords.push({
+                site_id: siteId,
+                site_name: siteName,
+                sample_unit_method: protocolLabel,
+                sample_unit_protocol: protocol,
+                sample_unit_numbers: [],
+              })
+            }
           }
         }
       }
-    }
 
     #updateProfileSummaryBySampleDate = function updateProfileSummaryBySampleDate(
       nonEmptySampleDates,
@@ -246,8 +245,8 @@ const ProjectHealthMixin = (Base) =>
           sampleEventUnitRecordsWithCollectRecordFilled.push({
             site_id: siteId,
             site_name: this.#getSiteName(siteCollectingSummary[siteId].site_name),
-            method: getRecordSampleUnitMethod(protocol),
-            transect_protocol: protocol,
+            sample_unit_method: getRecordSampleUnitMethod(protocol),
+            sample_unit_protocol: protocol,
             sample_unit_numbers: [],
             profile_summary:
               siteCollectingSummary[siteId].sample_unit_methods[protocol]?.profile_summary || {},
@@ -257,6 +256,73 @@ const ProjectHealthMixin = (Base) =>
 
       return sampleEventUnitRecordsWithCollectRecordFilled
     }
+
+    #addRecordsToManagementRegimesOverview = function addRecordsToManagementRegimesOverview(
+      sampleEventUnitRecords,
+      siteSubmittedSummary,
+    ) {
+      for (const [siteId, siteInfo] of Object.entries(siteSubmittedSummary)) {
+        const siteName = siteInfo.site_name
+        const { bleachingqc, ...otherProtocols } = siteInfo.sample_unit_methods // eslint-disable-line no-unused-vars
+
+        for (const [sampleUnit, sampleUnitNumbers] of Object.entries(otherProtocols)) {
+          const managements = sampleUnitNumbers.reduce((accumulator, item) => {
+            accumulator[item.management.id] = accumulator[item.management.id] || {}
+            accumulator[item.management.id] = {
+              mr_name: item.management.name,
+              mr_id: item.management.id,
+              labels: accumulator[item.management.id].labels
+                ? accumulator[item.management.id].labels.concat({
+                    label: item.label,
+                    id: item.id,
+                  })
+                : [{ label: item.label, id: item.id }],
+            }
+
+            return accumulator
+          }, {})
+
+          const sampleEventRecord = {
+            site_id: siteId,
+            site_name: siteName,
+            sample_unit_method: getRecordSampleUnitMethod(sampleUnit),
+            sample_unit_protocol: sampleUnit,
+            management_regimes: Object.values(managements),
+          }
+
+          sampleEventUnitRecords.push(sampleEventRecord)
+        }
+      }
+    }
+
+    #populateAdditionalRecordsForManagementRegimesOverview =
+      function populateAdditionalRecordsForManagementRegimesOverview(
+        sampleEventUnitRecords,
+        availableProtocols,
+      ) {
+        const recordGroupedBySite = Object.entries(
+          this.#groupSampleEventUnitBySite(sampleEventUnitRecords),
+        )
+
+        for (const [siteId, siteInfo] of recordGroupedBySite) {
+          const siteName = this.#removeDateFromName(siteInfo.site_name)
+
+          for (const protocol of availableProtocols) {
+            const protocolLabel = getRecordSampleUnitMethod(protocol)
+            const siteAndMethodName = `${siteName} ${protocolLabel}`
+
+            if (!siteInfo.site_names.includes(siteAndMethodName)) {
+              sampleEventUnitRecords.push({
+                site_id: siteId,
+                site_name: siteName,
+                sample_unit_method: protocolLabel,
+                sample_unit_protocol: protocol,
+                management_regimes: [],
+              })
+            }
+          }
+        }
+      }
 
     getSampleUnitSummary = async function getSampleUnitSummary(projectId) {
       if (!projectId) {
@@ -288,9 +354,12 @@ const ProjectHealthMixin = (Base) =>
             } = sampleUnitRecords
             const noBleachingProtocols = protocols.filter((protocol) => protocol !== 'bleachingqc')
 
-            this.#addRecordsToSites(sampleEventUnitRecords, siteSubmittedSummary)
+            this.#addRecordsToUsersAndTransects(sampleEventUnitRecords, siteSubmittedSummary)
 
-            this.#populateAdditionalRecords(sampleEventUnitRecords, noBleachingProtocols)
+            this.#populateAdditionalRecordsForUsersAndTransects(
+              sampleEventUnitRecords,
+              noBleachingProtocols,
+            )
 
             const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
               sampleEventUnitRecords,
@@ -302,6 +371,42 @@ const ProjectHealthMixin = (Base) =>
           })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    getRecordsForManagementRegimesOverviewTable =
+      function getRecordsForManagementRegimesOverviewTable(projectId) {
+        if (!projectId) {
+          Promise.reject(this._operationMissingParameterError)
+        }
+
+        return this._isAuthenticatedAndReady
+          ? this.getSampleUnitSummary(projectId).then((sampleUnitRecords) => {
+              const sampleEventUnitRecords = []
+              const { site_submitted_summary: siteSubmittedSummary } = sampleUnitRecords
+
+              this.#addRecordsToManagementRegimesOverview(
+                sampleEventUnitRecords,
+                siteSubmittedSummary,
+              )
+
+              const sampleEventUnitRecordsCopy = [...sampleEventUnitRecords]
+
+              const availableProtocols = [
+                ...new Set(
+                  sampleEventUnitRecordsCopy.map(
+                    ({ sample_unit_protocol }) => sample_unit_protocol,
+                  ),
+                ),
+              ]
+
+              this.#populateAdditionalRecordsForManagementRegimesOverview(
+                sampleEventUnitRecords,
+                availableProtocols,
+              )
+
+              return sampleEventUnitRecords
+            })
+          : Promise.reject(this._operationMissingParameterError)
+      }
   }
 
 export default ProjectHealthMixin

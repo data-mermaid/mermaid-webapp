@@ -266,6 +266,7 @@ const pages = {
     missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',
   },
+  managementRegimesOverview: { title: 'Management Regimes Overview' },
   benthicPhotoQuadratForm: {
     title: 'Benthic Photo Quadrat',
   },
