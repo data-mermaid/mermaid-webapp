@@ -159,7 +159,7 @@ export const ActiveCollectRecordsCount = styled.strong`
   height: ${theme.typography.largeIconSize};
   color: ${theme.color.white};
 `
-// offline stuff
+
 export const OfflineSummaryCard = styled('div')`
   ${summaryCardStyles}
   cursor: not-allowed;
@@ -168,6 +168,7 @@ export const OfflineSummaryCard = styled('div')`
     opacity: 0.4;
   }
 `
+
 export const OfflineMessage = styled('span')`
   font-size: larger;
   text-align: center;
