@@ -47,7 +47,7 @@ const BellNotificationDropDown = () => {
               <NotificationStatus status={notification.status} />
               <NotificationContent>
                 <NotificationHeader>
-                  <h1>{notification.title}</h1>
+                  <p>{notification.title}</p>
                   <NotificationCloseButton
                     onClick={(event) => dismissNotification(event, notification.id)}
                   >

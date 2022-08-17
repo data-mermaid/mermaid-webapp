@@ -3,16 +3,25 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import Logo from '../../assets/mermaid-logo.svg'
-import { IconBell, IconMenu, IconDown, IconUser } from '../icons'
+import { IconDown } from '../icons'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
 import {
+  AvatarWrapper,
   GlobalNav,
   HeaderButtonThatLooksLikeLink,
   StyledHeader,
+  LogoImg,
+  CurrentUserImg,
+  BiggerIconUser,
   StyledNavLink,
-  UserMenuButton
+  NotificationIndicator,
+  UserMenuButton,
+  UserMenu,
+  BiggerIconBell,
+  BiggerIconMenu,
+  LoggedInAs,
 } from './Header.styles'
 import ProfileModal from '../ProfileModal'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
@@ -61,35 +70,35 @@ const Header = ({ logout, currentUser }) => {
     // Avatar
     if (currentUser && currentUser.picture) {
       return (
-        <p>
-          <img src={currentUser.picture} alt="" />
-        </p>
+        <AvatarWrapper>
+          <CurrentUserImg src={currentUser.picture} alt="" />
+        </AvatarWrapper>
       )
     }
 
     // First name
     if (currentUser && currentUser.first_name) {
       return (
-        <p>
+        <AvatarWrapper>
           {currentUser && currentUser.first_name} <IconDown />
-        </p>
+        </AvatarWrapper>
       )
     }
 
     // Full name
     if (currentUser && currentUser.full_name) {
       return (
-        <p>
+        <AvatarWrapper>
           {currentUser && currentUser.full_name} <IconDown />
-        </p>
+        </AvatarWrapper>
       )
     }
 
     // User icon
     return (
-      <p>
-        <IconUser />
-      </p>
+      <AvatarWrapper>
+        <BiggerIconUser />
+      </AvatarWrapper>
     )
   }
 
@@ -108,60 +117,70 @@ const Header = ({ logout, currentUser }) => {
   return (
     <>
       <StyledHeader>
-      <Link to="/projects">
-        <img src={Logo} alt="MERMAID Logo" />
-      </Link>
-      <GlobalNav>
-        <div className="desktop">
-          <GlobalLinks />
-            {isAppOnline && <HideShow
-              button={<p><IconBell color={notifications?.results?.length ? 'red' : 'white'} />
-              </p>}
+        <Link to="/projects">
+          <LogoImg src={Logo} alt="MERMAID Logo" />
+        </Link>
+        <GlobalNav>
+          <div className="desktop">
+            <GlobalLinks />
+            {isAppOnline && (
+              <HideShow
+                button={
+                  <HeaderButtonThatLooksLikeLink>
+                    <BiggerIconBell />
+                    {notifications?.results?.length ? (
+                      <NotificationIndicator>&bull;</NotificationIndicator>
+                    ) : undefined}
+                  </HeaderButtonThatLooksLikeLink>
+                }
+                contents={
+                  <UserMenu>
+                    <BellNotificationDropDown />
+                  </UserMenu>
+                }
+              />
+            )}
+            <HideShow
+              button={getUserButton()}
               contents={
-                <div className="desktopUserMenu">
-                  <BellNotificationDropDown />
-                </div>
-              }
-            />}
-          <HideShow
-            button={getUserButton()}
-            contents={
-              <div className="desktopUserMenu">
-                <UserMenuDropDownContent />
-              </div>
-            }
-          />
-        </div>
-        <div className="mobile">
-            {isAppOnline && <HideShow
-            button={
-              <HeaderButtonThatLooksLikeLink>
-                  <IconBell color={notifications?.results?.length ? 'red' : 'white'} />
-              </HeaderButtonThatLooksLikeLink>
-            }
-            contents={
-              <div className="menuDropdown">
-                <div className="mobileUserMenu">
-                  <BellNotificationDropDown />
-                </div>
-              </div>
-            }
-            />}
-          <HideShow
-            button={
-              <HeaderButtonThatLooksLikeLink>
-                <IconMenu />
-              </HeaderButtonThatLooksLikeLink>
-            }
-            contents={
-              <div className="menuDropdown">
-                <GlobalLinks />
-                {currentUser && <p className="loggedInAs">Logged in as {getUserDisplayName()}</p>}
-                <div className="mobileUserMenu">
+                <UserMenu>
+                  {currentUser && <LoggedInAs>Logged in as {getUserDisplayName()}</LoggedInAs>}
                   <UserMenuDropDownContent />
-                </div>
-              </div>
-            }
+                </UserMenu>
+              }
+            />
+          </div>
+          <div className="mobile">
+            {isAppOnline && (
+              <HideShow
+                button={
+                  <HeaderButtonThatLooksLikeLink>
+                    <BiggerIconBell />
+                    {notifications?.results?.length ? (
+                      <NotificationIndicator>&bull;</NotificationIndicator>
+                    ) : undefined}
+                  </HeaderButtonThatLooksLikeLink>
+                }
+                contents={
+                  <UserMenu>
+                    <BellNotificationDropDown />
+                  </UserMenu>
+                }
+              />
+            )}
+            <HideShow
+              button={
+                <HeaderButtonThatLooksLikeLink>
+                  <BiggerIconMenu />
+                </HeaderButtonThatLooksLikeLink>
+              }
+              contents={
+                <UserMenu>
+                  <GlobalLinks />
+                  {currentUser && <LoggedInAs>Logged in as {getUserDisplayName()}</LoggedInAs>}
+                  <UserMenuDropDownContent />
+                </UserMenu>
+              }
             />
           </div>
         </GlobalNav>
@@ -178,7 +197,7 @@ Header.propTypes = {
 
 Header.defaultProps = {
   currentUser: undefined,
-  logout: () => { },
+  logout: () => {},
 }
 
 export default Header
