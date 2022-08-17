@@ -1,63 +1,45 @@
-import styled, { css } from 'styled-components/macro'
+import styled from 'styled-components/macro'
 
 import theme from '../../theme'
 import { CloseButton } from '../generic/buttons'
-import { mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
 
 export const NotificationCardWrapper = styled('div')`
+  background: ${theme.color.grey1};
   width: 80vw;
   max-width: 40rem;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
+  position: absolute;
+  right: 0;
 `
 
 export const NotificationCard = styled('div')`
-  &&& { // Increase specificity
-    display: flex;
-  }
-  margin: ${theme.spacing.small} ${theme.spacing.small};
+  display: grid;
+  grid-template-columns: calc(${theme.spacing.medium} * 2) auto;
+  margin: ${theme.spacing.medium};
+  background: ${theme.color.grey5};
   padding: ${theme.spacing.medium};
-  background-color: white;
-  width: 97%;
-  color: ${theme.color.primaryColor};
-  ${css`
-    h1 {
-      font-size: small;
-    };
-    span {
-      font-size: ${theme.typography.smallFontSize};
-      color: ${theme.color.black};
-    }
-
-  `}
 `
 
 export const NotificationCloseButton = styled(CloseButton)`
-  &&& {
-    margin-left: auto;
-    ${mediaQueryTabletLandscapeOnly(css`
-      height: auto;
-      width: auto;
-    `)}
-  }
+  margin-left: auto;
 `
 
-export const NotificationContent = styled('span')`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-`
+export const NotificationContent = styled('div')``
 
-export const NotificationDate = styled('span')`
+export const NotificationDate = styled('p')`
   font-size: ${theme.typography.smallFontSize};
-  &&& {
-    color: ${theme.color.primaryColor};
-  }
+  opacity: 0.7;
+  color: initial;
 `
 
-export const NotificationHeader = styled('span')`
-  display:flex; 
+export const NotificationHeader = styled('div')`
+  display: flex;
   flex-grow: 1;
+`
+export const NotificationTitle = styled('p')`
+  font-weight: 700;
+  margin-bottom: 0;
 `
 
 const getNotificationStatusColor = (props) => {
@@ -67,19 +49,22 @@ const getNotificationStatusColor = (props) => {
     error: theme.color.cautionColor,
   }
 
-  if (!props.status) { return theme.infoColor }
+  if (!props.status) {
+    return theme.infoColor
+  }
 
   return statusColors[props.status] || theme.infoColor
 }
 
 export const NotificationStatus = styled('span')`
-  flex-shrink: 0;
-  width: ${theme.spacing.small};
+  width: ${theme.spacing.medium};
   background-color: ${(props) => getNotificationStatusColor(props)};
-  margin: ${theme.spacing.small} ${theme.spacing.medium} 0 0;
 }
 `
 
 export const NoNotifications = styled('div')`
-  padding: ${theme.spacing.small} ${theme.spacing.large};
+  padding: ${theme.spacing.large};
+  text-align: center;
+  background: ${theme.color.grey1};
+  color: ${theme.color.textColor};
 `

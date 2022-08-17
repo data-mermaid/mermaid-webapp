@@ -47,6 +47,7 @@ export const LogoImg = styled('img')`
 const linkStyles = css`
   color: ${theme.color.white};
   cursor: pointer;
+  white-space: nowrap;
   height: ${theme.spacing.headerHeight};
   border-bottom: solid ${theme.spacing.borderLarge} transparent;
   text-decoration: none;

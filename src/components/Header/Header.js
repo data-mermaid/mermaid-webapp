@@ -133,11 +133,7 @@ const Header = ({ logout, currentUser }) => {
                     ) : undefined}
                   </HeaderButtonThatLooksLikeLink>
                 }
-                contents={
-                  <UserMenu>
-                    <BellNotificationDropDown />
-                  </UserMenu>
-                }
+                contents={<BellNotificationDropDown />}
               />
             )}
             <HideShow
@@ -161,11 +157,7 @@ const Header = ({ logout, currentUser }) => {
                     ) : undefined}
                   </HeaderButtonThatLooksLikeLink>
                 }
-                contents={
-                  <UserMenu>
-                    <BellNotificationDropDown />
-                  </UserMenu>
-                }
+                contents={<BellNotificationDropDown />}
               />
             )}
             <HideShow
