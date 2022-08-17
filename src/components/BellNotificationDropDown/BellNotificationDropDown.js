@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 
 import {
   NotificationCard,
@@ -13,20 +14,6 @@ import {
 import { IconClose } from '../icons'
 import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
-
-const getUpdatedOnText = (createdOn) => {
-  const locale = navigator.language ?? 'en-US'
-
-  const date = new Date(createdOn)
-  const dateText = date.toLocaleDateString(locale, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-  const timeText = date.toLocaleTimeString(locale)
-
-  return `${dateText}, ${timeText}`
-}
 
 const BellNotificationDropDown = () => {
   const { notifications, deleteNotification } = useBellNotifications()
@@ -54,7 +41,7 @@ const BellNotificationDropDown = () => {
                     <IconClose aria-label="close" />
                   </NotificationCloseButton>
                 </NotificationHeader>
-                <NotificationDate>{getUpdatedOnText(notification.created_on)}</NotificationDate>
+                <NotificationDate>{moment(notification.created_on).fromNow()}</NotificationDate>
                 <span>{notification.description}</span>
               </NotificationContent>
             </NotificationCard>
