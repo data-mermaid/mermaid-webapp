@@ -427,7 +427,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           })
         })
     },
-    [collectRecordBeingEdited.id, databaseSwitchboardInstance, handleHttpResponseError],
+    [collectRecordBeingEdited, databaseSwitchboardInstance, handleHttpResponseError],
   )
 
   const resetObservationValidations = useCallback(
