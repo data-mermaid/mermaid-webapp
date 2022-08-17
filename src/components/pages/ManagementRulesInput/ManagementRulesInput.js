@@ -46,7 +46,8 @@ const ManagementRulesInput = ({
         rules.periodic_closure ||
         rules.size_limits ||
         rules.gear_restriction ||
-        rules.species_restriction,
+        rules.species_restriction ||
+        false
     }
   }
 
@@ -174,6 +175,7 @@ const ManagementRulesInput = ({
             type="radio"
             id="partial-restrictions"
             name="rules"
+            value="partial_restrictions"
             checked={managementRulesRadioInputValue.partial_restrictions}
             onChange={handlePartialRestrictionChange}
           />
