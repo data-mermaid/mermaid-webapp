@@ -227,7 +227,7 @@ const Sites = () => {
     })
   }, [siteRecordsForUiDisplay, choices])
 
-  const ReadOnlySiteContent = () => {
+  const ReadOnlySiteHeaderContent = () => {
     return (
       <>
         <ButtonSecondary>
@@ -246,7 +246,7 @@ const Sites = () => {
   const contentViewByRole = isReadOnlyUser ? (
     <>
       <ToolbarButtonWrapper>
-        <ReadOnlySiteContent />
+        <ReadOnlySiteHeaderContent />
       </ToolbarButtonWrapper>
     </>
   ) : (
@@ -258,7 +258,7 @@ const Sites = () => {
         <ButtonSecondary>
           <IconCopy /> Copy sites from other projects
         </ButtonSecondary>
-        <ReadOnlySiteContent />
+        <ReadOnlySiteHeaderContent />
       </ToolbarButtonWrapper>
     </>
   )

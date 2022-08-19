@@ -265,7 +265,7 @@ const ManagementRegimes = () => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
-  const ReadOnlySiteContent = () => {
+  const ReadOnlyMrsHeaderContent = () => {
     return (
       <>
         <ButtonSecondary>
@@ -284,7 +284,7 @@ const ManagementRegimes = () => {
   const contentViewByRole = isReadOnlyUser ? (
     <>
       <ToolbarButtonWrapper>
-        <ReadOnlySiteContent />
+        <ReadOnlyMrsHeaderContent />
       </ToolbarButtonWrapper>
     </>
   ) : (
@@ -296,7 +296,7 @@ const ManagementRegimes = () => {
         <ButtonSecondary>
           <IconCopy /> Copy MRs from other projects
         </ButtonSecondary>
-        <ReadOnlySiteContent />
+        <ReadOnlyMrsHeaderContent />
       </ToolbarButtonWrapper>
     </>
   )
