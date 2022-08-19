@@ -36,6 +36,8 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageNoData from '../PageNoData'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
+import { userRole } from '../../../App/mermaidData/userRole'
+import { getProjectRole } from '../../../App/currentUserProfileHelpers'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -50,6 +52,7 @@ const Sites = () => {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
+  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -224,6 +227,40 @@ const Sites = () => {
     })
   }, [siteRecordsForUiDisplay, choices])
 
+  const ReadOnlySiteContent = () => {
+    return (
+      <>
+        <ButtonSecondary>
+          <CSVLink
+            data={getDataForCSV}
+            filename="Export_sites.csv"
+            style={{ margin: 0, textDecoration: 'none' }}
+          >
+            <IconDownload /> Export sites
+          </CSVLink>
+        </ButtonSecondary>
+      </>
+    )
+  }
+
+  const contentViewByRole = isReadOnlyUser ? (
+    <>
+      <ToolbarButtonWrapper>
+        <ReadOnlySiteContent />
+      </ToolbarButtonWrapper>
+    </>
+  ) : (
+    <ToolbarButtonWrapper>
+      <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
+        <IconPlus /> New site
+      </LinkLooksLikeButtonSecondary>
+      <ButtonSecondary>
+        <IconCopy /> Copy sites from other projects
+      </ButtonSecondary>
+      <ReadOnlySiteContent />
+    </ToolbarButtonWrapper>
+  )
+
   const table = siteRecordsForUiDisplay.length ? (
     <>
       <TableOverflowWrapper>
@@ -311,23 +348,7 @@ const Sites = () => {
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
 
-            <ToolbarButtonWrapper>
-              <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
-                <IconPlus /> New site
-              </LinkLooksLikeButtonSecondary>
-              <ButtonSecondary>
-                <IconCopy /> Copy sites from other projects
-              </ButtonSecondary>
-              <ButtonSecondary>
-                <CSVLink
-                  data={getDataForCSV}
-                  filename="Export_sites.csv"
-                  style={{ margin: 0, textDecoration: 'none' }}
-                >
-                  <IconDownload /> Export sites
-                </CSVLink>
-              </ButtonSecondary>
-            </ToolbarButtonWrapper>
+            <ToolbarButtonWrapper>{contentViewByRole}</ToolbarButtonWrapper>
           </ToolBarRow>
         </>
       }
