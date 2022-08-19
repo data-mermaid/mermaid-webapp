@@ -271,7 +271,7 @@ const ManagementRegimes = () => {
         <ButtonSecondary>
           <CSVLink
             data={getDataForCSV}
-            filename="Export_sites.csv"
+            filename="Export_MRs.csv"
             style={{ margin: 0, textDecoration: 'none' }}
           >
             <IconDownload /> Export MRs
