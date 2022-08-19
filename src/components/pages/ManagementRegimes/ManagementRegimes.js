@@ -289,7 +289,7 @@ const ManagementRegimes = () => {
     </>
   ) : (
     <ToolbarButtonWrapper>
-      <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
+      <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
         <IconPlus /> New MR
       </LinkLooksLikeButtonSecondary>
       <ButtonSecondary>
