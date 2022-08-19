@@ -288,15 +288,17 @@ const ManagementRegimes = () => {
       </ToolbarButtonWrapper>
     </>
   ) : (
-    <ToolbarButtonWrapper>
-      <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
-        <IconPlus /> New MR
-      </LinkLooksLikeButtonSecondary>
-      <ButtonSecondary>
-        <IconCopy /> Copy MRs from other projects
-      </ButtonSecondary>
-      <ReadOnlySiteContent />
-    </ToolbarButtonWrapper>
+    <>
+      <ToolbarButtonWrapper>
+        <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
+          <IconPlus /> New MR
+        </LinkLooksLikeButtonSecondary>
+        <ButtonSecondary>
+          <IconCopy /> Copy MRs from other projects
+        </ButtonSecondary>
+        <ReadOnlySiteContent />
+      </ToolbarButtonWrapper>
+    </>
   )
 
   const table = managementRegimeRecordsForUiDisplay.length ? (

@@ -250,15 +250,17 @@ const Sites = () => {
       </ToolbarButtonWrapper>
     </>
   ) : (
-    <ToolbarButtonWrapper>
-      <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
-        <IconPlus /> New site
-      </LinkLooksLikeButtonSecondary>
-      <ButtonSecondary>
-        <IconCopy /> Copy sites from other projects
-      </ButtonSecondary>
-      <ReadOnlySiteContent />
-    </ToolbarButtonWrapper>
+    <>
+      <ToolbarButtonWrapper>
+        <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
+          <IconPlus /> New site
+        </LinkLooksLikeButtonSecondary>
+        <ButtonSecondary>
+          <IconCopy /> Copy sites from other projects
+        </ButtonSecondary>
+        <ReadOnlySiteContent />
+      </ToolbarButtonWrapper>
+    </>
   )
 
   const table = siteRecordsForUiDisplay.length ? (
