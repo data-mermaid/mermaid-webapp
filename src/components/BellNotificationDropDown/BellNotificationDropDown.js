@@ -5,6 +5,7 @@ import {
   NotificationCardWrapper,
   NotificationCloseButton,
   NotificationContent,
+  NotificationTitle,
   NotificationDate,
   NotificationHeader,
   NotificationStatus,
@@ -39,7 +40,9 @@ const BellNotificationDropDown = () => {
   return (
     <NotificationCardWrapper>
       {!notifications?.results || !notifications.results?.length ? (
-        <NoNotifications>{language.header.noNotifications}</NoNotifications>
+        <NoNotifications>
+          <em>{language.header.noNotifications}</em>
+        </NoNotifications>
       ) : (
         notifications.results.map((notification) => {
           return (
@@ -47,15 +50,15 @@ const BellNotificationDropDown = () => {
               <NotificationStatus status={notification.status} />
               <NotificationContent>
                 <NotificationHeader>
-                  <h1>{notification.title}</h1>
+                  <NotificationTitle>{notification.title}</NotificationTitle>
                   <NotificationCloseButton
                     onClick={(event) => dismissNotification(event, notification.id)}
                   >
                     <IconClose aria-label="close" />
                   </NotificationCloseButton>
                 </NotificationHeader>
+                <p>{notification.description}</p>
                 <NotificationDate>{getUpdatedOnText(notification.created_on)}</NotificationDate>
-                <span>{notification.description}</span>
               </NotificationContent>
             </NotificationCard>
           )

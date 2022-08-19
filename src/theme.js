@@ -92,7 +92,7 @@ const color = {
   unitBackground: white.mix(colorHelper(black), 0.1),
   inputBackground: white,
   outline: `solid 2px ${primary}`,
-  headerDropdownMenuBackground: `rgba(0,0,0,0.8)`,
+  headerDropdownMenuBackground: `#174b82dd`,
   getMessageColorBackground: function getMessageColorBackground(messageType) {
     if (messageType === 'ignore') {
       return this.ignoreColor.alpha(0.15)
