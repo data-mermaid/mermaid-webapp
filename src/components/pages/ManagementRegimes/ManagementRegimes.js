@@ -382,9 +382,7 @@ const ManagementRegimes = () => {
               value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
-            <ToolbarButtonWrapper>
-              <ReadOnlySiteContent />
-            </ToolbarButtonWrapper>
+            <ToolbarButtonWrapper>{contentViewByRole}</ToolbarButtonWrapper>
           </ToolBarRow>
         </>
       }
