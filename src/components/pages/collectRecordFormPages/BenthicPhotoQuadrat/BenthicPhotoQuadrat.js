@@ -42,7 +42,7 @@ import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
+import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
@@ -202,12 +202,13 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   ])
 
   const {
+    persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputs')
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedBenthicPhotoQuadratSampleInfoInputs`)
 
   const persistUnsavedObservationsUtilities =
-    useUnsavedDirtyFormDataUtilities('unsavedObservations')
+    useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedBenthicPhotoQuadratObservations`)
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
@@ -276,6 +277,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const formik = useFormik({
     initialValues: initialFormikFormValues,
     enableReinitialize: true,
+    validate: persistUnsavedFormikData
   })
 
   const handleSave = () => {

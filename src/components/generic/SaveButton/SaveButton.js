@@ -1,15 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { formikPropType } from '../../../library/formikPropType'
 
 import { ButtonCallout } from '../buttons'
 import { IconSave } from '../../icons'
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 
-const SaveButton = ({ formId, saveButtonState, formik }) => {
-  const doesFormikHaveErrors = Object.keys(formik.errors).length
+const SaveButton = ({ formId, saveButtonState, formHasErrors, formDirty }) => {
   const isSaveButtonDisabled =
-    !formik.dirty || doesFormikHaveErrors || saveButtonState === buttonGroupStates.saving
+    !formDirty || formHasErrors || saveButtonState === buttonGroupStates.saving
 
   const getSaveButtonText = () => {
     switch (saveButtonState) {
@@ -31,7 +29,8 @@ const SaveButton = ({ formId, saveButtonState, formik }) => {
 }
 
 SaveButton.propTypes = {
-  formik: formikPropType.isRequired,
+  formHasErrors: PropTypes.bool.isRequired,
+  formDirty: PropTypes.bool.isRequired,
   formId: PropTypes.string.isRequired,
   saveButtonState: PropTypes.string.isRequired,
 }

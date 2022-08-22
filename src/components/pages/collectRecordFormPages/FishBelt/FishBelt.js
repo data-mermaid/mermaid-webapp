@@ -21,7 +21,7 @@ import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFishbeltRecord'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useUnsavedDirtyFormDataUtilities } from '../useUnsavedDirtyFormUtilities'
+import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import SampleEventInputs from '../SampleEventInputs'
@@ -213,10 +213,10 @@ const FishBelt = ({ isNewRecord }) => {
     persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities('unsavedSampleInfoInputs')
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedFishBeltSampleInfoInputs`)
 
   const persistUnsavedObservationsUtilities =
-    useUnsavedDirtyFormDataUtilities('unsavedObservations')
+    useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedFishBeltObservations`)
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,

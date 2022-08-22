@@ -37,6 +37,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 
 const ReadOnlySiteContent = ({
   site,
@@ -171,6 +172,7 @@ const Site = ({ isNewSite }) => {
   const [exposureOptions, setExposureOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isFormDirty, setIsFormDirty] = useState(false)
   const [reefTypeOptions, setReefTypeOptions] = useState([])
   const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
@@ -220,7 +222,15 @@ const Site = ({ isNewSite }) => {
     }
   }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId, isNewSite])
 
-  const initialFormValues = useMemo(() => getSiteInitialValues(siteBeingEdited), [siteBeingEdited])
+  const {
+    persistUnsavedFormData: persistUnsavedFormikData,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
+    getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSiteInputs`)
+
+  const initialFormValues = useMemo(() => {
+    return getPersistedUnsavedFormikData() ?? getSiteInitialValues(siteBeingEdited)
+  }, [getPersistedUnsavedFormikData, siteBeingEdited])
 
   const formik = useFormik({
     initialValues: initialFormValues,
@@ -247,7 +257,9 @@ const Site = ({ isNewSite }) => {
         .saveSite({ site: formattedSiteForApi, projectId })
         .then((response) => {
           toast.success(...getToastArguments(language.success.siteSave))
+          clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
+          setIsFormDirty(false)
           formikActions.resetForm({ values: formikValues }) // this resets formik's dirty state
 
           if (isNewSite) {
@@ -260,6 +272,7 @@ const Site = ({ isNewSite }) => {
         })
     },
     validate: (values) => {
+      persistUnsavedFormikData(values)
       const errors = {}
 
       if (!values.name) {
@@ -295,10 +308,10 @@ const Site = ({ isNewSite }) => {
   const { setFieldValue: formikSetFieldValue } = formik
 
   const _setSiteButtonUnsaved = useEffect(() => {
-    if (formik.dirty) {
+    if (isFormDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
-  }, [formik.dirty])
+  }, [isFormDirty])
 
   const handleLatitudeChange = useCallback(
     (value) => {
@@ -312,6 +325,11 @@ const Site = ({ isNewSite }) => {
       formikSetFieldValue('longitude', value)
     },
     [formikSetFieldValue],
+  )
+
+  const _setIsFormDirty = useEffect(() =>
+    setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
+    [formik.dirty, getPersistedUnsavedFormikData]
   )
 
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewSite
@@ -338,7 +356,7 @@ const Site = ({ isNewSite }) => {
         handleLongitudeChange={handleLongitudeChange}
       />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
-      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
+        <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>
   )
 
@@ -357,7 +375,7 @@ const Site = ({ isNewSite }) => {
         <ContentPageToolbarWrapper>
           {isNewSite ? <H2>{language.pages.siteForm.title}</H2> : <H2>{formik.values.name}</H2>}
           {!isReadOnlyUser && (
-            <SaveButton formId="site-form" saveButtonState={saveButtonState} formik={formik} />
+            <SaveButton formId="site-form" saveButtonState={saveButtonState} formHasErrors={!!Object.keys(formik.errors).length} formDirty={isFormDirty} />
           )}
         </ContentPageToolbarWrapper>
       }

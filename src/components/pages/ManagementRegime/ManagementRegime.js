@@ -36,6 +36,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -174,6 +175,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
 const ManagementRegime = ({ isNewManagementRegime }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isFormDirty, setIsFormDirty] = useState(false)
   const [managementComplianceOptions, setManagementComplianceOptions] = useState([])
   const [managementPartyOptions, setManagementPartyOptions] = useState([])
   const [managementRegimeBeingEdited, setManagementRegimeBeingEdited] = useState()
@@ -231,10 +233,15 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     projectId,
   ])
 
-  const initialFormValues = useMemo(
-    () => getManagementRegimeInitialValues(managementRegimeBeingEdited),
-    [managementRegimeBeingEdited],
-  )
+  const {
+    persistUnsavedFormData: persistUnsavedFormikData,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
+    getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedManagementRegimeInputs`)
+
+  const initialFormValues = useMemo(() => {
+    return getPersistedUnsavedFormikData() ?? getManagementRegimeInitialValues(managementRegimeBeingEdited)
+  }, [getPersistedUnsavedFormikData, managementRegimeBeingEdited])
 
   const formik = useFormik({
     initialValues: initialFormValues,
@@ -280,7 +287,9 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then((response) => {
           toast.success(language.success.managementRegimeSave)
+          clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
+          setIsFormDirty(false)
           formikActions.resetForm({ values: formikValues })
 
           if (isNewManagementRegime) {
@@ -295,6 +304,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         })
     },
     validate: (values) => {
+      persistUnsavedFormikData(values)
       const errors = {}
       const isPartialSelectionSelected =
         values.access_restriction ||
@@ -321,10 +331,15 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   )
 
   const _setSiteButtonUnsaved = useEffect(() => {
-    if (formik.dirty) {
+    if (isFormDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
-  }, [formik.dirty])
+  }, [isFormDirty])
+
+  const _setIsFormDirty = useEffect(() =>
+    setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
+    [formik.dirty, getPersistedUnsavedFormikData]
+  )
 
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewManagementRegime
 
@@ -342,7 +357,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         managementPartyOptions={managementPartyOptions}
       />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
-      <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
+        <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>
   )
 
@@ -368,7 +383,8 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             <SaveButton
               formId="management-regime-form"
               saveButtonState={saveButtonState}
-              formik={formik}
+              formHasErrors={!!Object.keys(formik.errors).length}
+              formDirty={isFormDirty}
             />
           )}
         </ContentPageToolbarWrapper>
