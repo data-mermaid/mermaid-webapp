@@ -121,7 +121,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           {...formik.getFieldProps('size')}
         />
         <InputCheckboxGroupWithLabelAndValidation
-          required={false} a
+          required={false}
           label="Parties"
           id="parties"
           options={managementPartyOptions}
