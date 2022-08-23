@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   CardWrapper,
@@ -21,7 +21,7 @@ import { IconCopy } from '../icons'
 import { ButtonSecondary } from '../generic/buttons'
 import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
-import Modal from './Modal'
+// import Modal from './Modal'
 
 const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps }) => {
   const { isAppOnline } = useOnlineStatus()
