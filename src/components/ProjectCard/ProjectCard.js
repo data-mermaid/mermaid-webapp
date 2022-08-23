@@ -82,11 +82,11 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   //   e.stopPropagation()
   // }
 
-  const [showModal, setShowModal] = useState(false)
+  // const [showModal, setShowModal] = useState(false)
 
-  const openModal = () => {
-    setShowModal((prev) => !prev)
-  }
+  // const openModal = () => {
+  //   setShowModal((prev) => !prev)
+  // }
 
   return (
     <CardWrapper onClick={handleCardClick} {...restOfProps}>
@@ -97,11 +97,16 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div>
-            <ButtonSecondary onClick={openModal} aria-label="Copy" disabled={!isAppOnline}>
+            <ButtonSecondary
+              onClick={stopEventPropagation}
+              aria-label="Copy"
+              disabled={!isAppOnline}
+            >
+              {/* <ButtonSecondary onClick={openModal} aria-label="Copy" disabled={!isAppOnline}> */}
               <IconCopy />
               <span>Copy</span>
             </ButtonSecondary>
-            <Modal showModal={showModal} setShowModal={setShowModal} />
+            {/* <Modal showModal={showModal} setShowModal={setShowModal} /> */}
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}
