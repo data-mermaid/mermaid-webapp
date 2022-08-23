@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   CardWrapper,
@@ -21,6 +21,7 @@ import { IconCopy } from '../icons'
 import { ButtonSecondary } from '../generic/buttons'
 import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
+import Modal from './Modal'
 
 const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps }) => {
   const { isAppOnline } = useOnlineStatus()
@@ -81,6 +82,12 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   //   e.stopPropagation()
   // }
 
+  const [showModal, setShowModal] = useState(false)
+
+  const openModal = () => {
+    setShowModal((prev) => !prev)
+  }
+
   return (
     <CardWrapper onClick={handleCardClick} {...restOfProps}>
       <ProjectCardHeader>
@@ -90,14 +97,11 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div>
-            <ButtonSecondary
-              onClick={stopEventPropagation}
-              aria-label="Copy"
-              disabled={!isAppOnline}
-            >
+            <ButtonSecondary onClick={openModal} aria-label="Copy" disabled={!isAppOnline}>
               <IconCopy />
               <span>Copy</span>
             </ButtonSecondary>
+            <Modal showModal={showModal} setShowModal={setShowModal} />
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}
