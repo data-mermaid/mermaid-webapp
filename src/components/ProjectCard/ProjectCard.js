@@ -9,6 +9,7 @@ import {
   ProjectCardHeader,
   DateAndCountryLabel,
   ProjectCardHeaderButtonsAndDate,
+  ProjectCardHeaderButtonWrapper,
 } from './ProjectCard.styles'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
@@ -89,7 +90,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
           <DateAndCountryLabel>{countries.join(', ')}</DateAndCountryLabel>
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
-          <div>
+          <ProjectCardHeaderButtonWrapper>
             <ButtonSecondary
               onClick={stopEventPropagation}
               aria-label="Copy"
@@ -112,7 +113,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
               />
               {language.pages.projectsList.offlineReadyCheckboxLabel}
             </CheckBoxLabel>
-          </div>
+          </ProjectCardHeaderButtonWrapper>
           <DateAndCountryLabel>{removeTimeZoneFromDate(updated_on)}</DateAndCountryLabel>
         </ProjectCardHeaderButtonsAndDate>
       </ProjectCardHeader>
