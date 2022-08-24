@@ -33,10 +33,8 @@ test('Projects component renders with the expected UI elements', async () => {
   await waitFor(() =>
     expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
   )
-  // expect count of projects renders is the same as the count in mock data
-  const projectList = screen.getByRole('list')
 
-  const projectListItems = within(projectList).getAllByRole('listitem')
+  const projectListItems = screen.getAllByTestId('project-card')
 
   expect(projectListItems).toHaveLength(5)
 
@@ -407,7 +405,7 @@ test('Project filter filters by name and country', async () => {
   // Filter by name
   userEvent.type(filterProjects, '"Project V"')
 
-  let projectCards = screen.getAllByRole('listitem')
+  let projectCards = screen.getAllByTestId('project-card')
 
   expect(projectCards.length).toEqual(1)
   expect(within(projectCards[0]).getByText('Project V'))
@@ -415,7 +413,7 @@ test('Project filter filters by name and country', async () => {
   // Filter by name and country
   userEvent.type(filterProjects, '{selectall}{del} "Project V" America')
 
-  projectCards = screen.getAllByRole('listitem')
+  projectCards = screen.getAllByTestId('project-card')
 
   expect(projectCards.length).toEqual(2)
 })

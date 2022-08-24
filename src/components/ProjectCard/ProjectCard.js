@@ -83,7 +83,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   // }
 
   return (
-    <CardWrapper onClick={handleCardClick} {...restOfProps}>
+    <CardWrapper onClick={handleCardClick} {...restOfProps} data-testid="project-card">
       <ProjectCardHeader>
         <div>
           <h2>{name}</h2>
