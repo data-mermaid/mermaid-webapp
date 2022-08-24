@@ -227,27 +227,23 @@ const Sites = () => {
     })
   }, [siteRecordsForUiDisplay, choices])
 
-  const ReadOnlySitesHeaderContent = () => {
-    return (
-      <>
-        <ButtonSecondary>
-          <CSVLink
-            data={getDataForCSV}
-            filename="Export_sites.csv"
-            style={{ margin: 0, textDecoration: 'none' }}
-          >
-            <IconDownload /> Export sites
-          </CSVLink>
-        </ButtonSecondary>
-      </>
-    )
-  }
+  const readOnlySitesHeaderContent = (
+    <>
+      <ButtonSecondary>
+        <CSVLink
+          data={getDataForCSV}
+          filename="Export_sites.csv"
+          style={{ margin: 0, textDecoration: 'none' }}
+        >
+          <IconDownload /> Export sites
+        </CSVLink>
+      </ButtonSecondary>
+    </>
+  )
 
   const contentViewByRole = isReadOnlyUser ? (
     <>
-      <ToolbarButtonWrapper>
-        <ReadOnlySitesHeaderContent />
-      </ToolbarButtonWrapper>
+      <ToolbarButtonWrapper>{readOnlySitesHeaderContent}</ToolbarButtonWrapper>
     </>
   ) : (
     <>
@@ -258,7 +254,7 @@ const Sites = () => {
         <ButtonSecondary>
           <IconCopy /> Copy sites from other projects
         </ButtonSecondary>
-        <ReadOnlySitesHeaderContent />
+        {readOnlySitesHeaderContent}
       </ToolbarButtonWrapper>
     </>
   )

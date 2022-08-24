@@ -265,27 +265,23 @@ const ManagementRegimes = () => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
 
-  const ReadOnlyMrsHeaderContent = () => {
-    return (
-      <>
-        <ButtonSecondary>
-          <CSVLink
-            data={getDataForCSV}
-            filename="Export_MRs.csv"
-            style={{ margin: 0, textDecoration: 'none' }}
-          >
-            <IconDownload /> Export MRs
-          </CSVLink>
-        </ButtonSecondary>
-      </>
-    )
-  }
+  const readOnlyMrsHeaderContent = (
+    <>
+      <ButtonSecondary>
+        <CSVLink
+          data={getDataForCSV}
+          filename="Export_MRs.csv"
+          style={{ margin: 0, textDecoration: 'none' }}
+        >
+          <IconDownload /> Export MRs
+        </CSVLink>
+      </ButtonSecondary>
+    </>
+  )
 
   const contentViewByRole = isReadOnlyUser ? (
     <>
-      <ToolbarButtonWrapper>
-        <ReadOnlyMrsHeaderContent />
-      </ToolbarButtonWrapper>
+      <ToolbarButtonWrapper>{readOnlyMrsHeaderContent}</ToolbarButtonWrapper>
     </>
   ) : (
     <>
@@ -296,7 +292,7 @@ const ManagementRegimes = () => {
         <ButtonSecondary>
           <IconCopy /> Copy MRs from other projects
         </ButtonSecondary>
-        <ReadOnlyMrsHeaderContent />
+        {readOnlyMrsHeaderContent}
       </ToolbarButtonWrapper>
     </>
   )
