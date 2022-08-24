@@ -108,7 +108,6 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   userEvent.click(project5OfflineCheckboxBeforeFirstClick)
 
-
   expect(await screen.findByText('The project, Project V, is now offline ready'))
 
   const project5OfflineCheckboxAfterFirstClick = within(
