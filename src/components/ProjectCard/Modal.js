@@ -92,20 +92,9 @@ const ModalContent = styled.div`
 `
 
 const Modal = ({ showModal, setShowModal }) => {
-  const modalRef = useRef()
-
-  const closeModal = (e) => {
-    if (modalRef.current === e.target) {
-      setShowModal(false)
-    }
-  }
-
   const CopyProject = () => {
     const formik = useFormik({
-      initialValues: { name: '' },
-      //   onSubmit: (values) => {
-      //     alert(JSON.stringify(values, null, 2))
-      //   },
+      initialValues: { name: '', notes: '', organizations: '' },
     })
 
     return (
