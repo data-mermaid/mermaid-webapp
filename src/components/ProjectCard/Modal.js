@@ -6,7 +6,6 @@ import stopEventPropagation from '../../library/stopEventPropagation'
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  //   background: rgba(0, 0, 0, 1);
   background: #fff;
   position: fixed;
   display: flex;
@@ -19,7 +18,6 @@ const Background = styled.div`
 const ModalWrapper = styled.div`
   width: 1000px;
   height: 500px;
-  //   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
   background: #fff;
   color: #000;
   display: flex;
@@ -109,35 +107,40 @@ const Modal = ({ showModal, setShowModal }) => {
       //     alert(JSON.stringify(values, null, 2))
       //   },
     })
+
     return (
       <form>
-        <label htmlFor="Name" />
-        <p>Name</p>
-        <input
-          id="name"
-          name="name"
-          type="text"
-          placeholder="Dev Team Test Project" //hardcoded for now
-          onChange={formik.handleChange}
-          value={formik.values.name}
-        />
-        <textarea
-          id="notes"
-          name="notes"
-          type="text"
-          onChange={formik.handleChange}
-          value={formik.values.notes}
-        />
-        <label htmlFor="organizations">
-          <p>Organizations</p>
+        <label htmlFor="Name">
+          Name
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Dev Team Test Project" // hardcoded for now
+            onChange={formik.handleChange}
+            value={formik.values.name}
+          />
         </label>
-        <input
-          id="organizations"
-          name="organizations"
-          type="text"
-          onChange={formik.handleChange}
-          value={formik.values.organizations}
-        />
+        <label htmlFor="notes">
+          Notes
+          <textarea
+            id="notes"
+            name="notes"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.notes}
+          />
+        </label>
+        <label htmlFor="organizations">
+          Organizations
+          <input
+            id="organizations"
+            name="organizations"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.organizations}
+          />
+        </label>
         <ButtonCancel
           type="button"
           aria-label="Close modal"
@@ -155,7 +158,7 @@ const Modal = ({ showModal, setShowModal }) => {
   return (
     <>
       {showModal ? (
-        <Background onClick={closeModal} ref={modalRef}>
+        <Background>
           <ModalWrapper showModal={showModal}>
             <ModalContent>
               <CopyProject />
