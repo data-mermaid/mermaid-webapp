@@ -42,20 +42,24 @@ export const ProjectCardHeader = styled('div')`
   `)}
   h2 {
     margin: 0 0 ${theme.spacing.medium} 0;
-    line-height: 1;
+    line-height: 1.2;
   }
   label {
     margin-left: ${theme.spacing.medium};
   }
 `
 
-export const ProjectCardHeaderButtonsAndDate = styled(`div`)`
+export const ProjectCardHeaderButtonsAndDate = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   ${mediaQueryPhoneOnly(css`
     align-items: flex-start;
   `)}
+`
+
+export const ProjectCardHeaderButtonWrapper = styled('div')`
+  white-space: nowrap;
 `
 
 export const CheckBoxLabel = styled.label`
@@ -111,7 +115,26 @@ export const SummaryCard = styled(NavLink)`
     background-color: ${theme.color.secondaryActive};
   }
 `
+export const DataSharingSummaryCard = styled(SummaryCard)`
+  display: grid;
+  &:before,
+  &:after {
+    content: '';
+  }
+  grid-template-columns: 1fr auto 1fr;
+  padding-bottom: ${theme.spacing.medium};
+  span {
+    text-align: start;
+    padding-inline: 0;
+  }
+`
 
+export const DataSharingList = styled('ul')`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: ${theme.typography.smallFontSize};
+`
 export const SubCardContent = styled('div')`
   display: flex;
   flex-direction: column;
@@ -138,15 +161,6 @@ export const SubCardTitle = styled('span')`
   display: block;
   text-align: center;
   padding: ${theme.spacing.small};
-`
-
-export const DataSharingPolicySubCardContent = styled('div')`
-  padding: ${theme.spacing.small};
-  text-align: left;
-  font-size: ${theme.typography.smallFontSize};
-  span {
-    display: block;
-  }
 `
 
 export const ActiveCollectRecordsCount = styled.strong`

@@ -165,7 +165,7 @@ test('Sync: initial page load already done, navigate to non project page', async
   expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(0)
 
-  const projectWithId5 = screen.getAllByRole('listitem')[4]
+  const projectWithId5 = screen.getAllByTestId('project-card')[4]
 
   userEvent.click(projectWithId5)
 
