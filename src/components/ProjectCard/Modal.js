@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+// import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 import { useFormik } from 'formik'
@@ -91,7 +91,7 @@ const ModalContent = styled.div`
     height: 15px;
   }
 `
-
+// eslint-disable-next-line
 const Modal = ({ showModal, setShowModal }) => {
   const CopyProject = () => {
     const formik = useFormik({
@@ -160,9 +160,9 @@ const Modal = ({ showModal, setShowModal }) => {
   )
 }
 
-Modal.propTypes = {
-  showModal: PropTypes.bool.isRequired,
-  setShowModal: PropTypes.func.isRequired,
-}
+// Modal.propTypes = {
+//   showModal: PropTypes.bool.isRequired,
+//   setShowModal: PropTypes.func.isRequired,
+// }
 
 export default Modal
