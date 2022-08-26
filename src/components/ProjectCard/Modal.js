@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 import { useFormik } from 'formik'
@@ -157,6 +158,11 @@ const Modal = ({ showModal, setShowModal }) => {
       ) : null}
     </>
   )
+}
+
+Modal.propTypes = {
+  showModal: PropTypes.bool.isRequired,
+  setShowModal: PropTypes.func.isRequired,
 }
 
 export default Modal
