@@ -69,7 +69,7 @@ const CopyProjectModal = ({ isOpen, onDismiss }) => {
 
   useEffect(() => {
     // POST request using fetch inside useEffect React hook
-    const requestOptions = {
+    const _requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
