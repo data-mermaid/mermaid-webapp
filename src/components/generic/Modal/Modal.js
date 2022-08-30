@@ -5,7 +5,7 @@ import { IconClose } from '../../icons'
 import theme from '../../../theme'
 import { CloseButton } from '../buttons'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import { InputRow } from '../../generic/form'
+import { InputRow } from "../form"
 
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);

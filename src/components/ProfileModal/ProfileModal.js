@@ -2,8 +2,6 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
 import { Input } from '../generic/form'
