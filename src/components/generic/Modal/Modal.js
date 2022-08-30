@@ -5,6 +5,7 @@ import { IconClose } from '../../icons'
 import theme from '../../../theme'
 import { CloseButton } from '../buttons'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
+import { InputRow } from '../../generic/form'
 
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
@@ -83,6 +84,19 @@ const RightFooter = styled('div')`
   justify-self: end;
 `
 
+const ModalInputRow = styled(InputRow)`
+  background: ${theme.color.white};
+  color: #000;
+  display: block;
+  border: none;
+  h4 {
+    margin: 0;
+  }
+  label {
+    font-weight: bold;
+  }
+`
+
 const Modal = ({
   title,
   mainContent,
@@ -137,4 +151,4 @@ Modal.defaultProps = {
 }
 
 export default Modal
-export { LeftFooter, RightFooter, StyledDialogOverlay, ModalContent }
+export { LeftFooter, RightFooter, StyledDialogOverlay, ModalContent, ModalInputRow }

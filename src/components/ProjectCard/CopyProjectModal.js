@@ -6,31 +6,17 @@ import styled from 'styled-components'
 
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
-import { Input, InputRow } from '../generic/form'
+import { Input } from '../generic/form'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
-import theme from '../../theme'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { RightFooter, ModalInputRow } from '../generic/Modal/Modal'
 
-const ModalInputRow = styled(InputRow)`
-  background: ${theme.color.white};
-  color: #000;
-  display: block;
-  border: none;
-  h4 {
-    margin: 0;
-  }
-  label {
-    font-weight: bold;
-  }
-`
 const CopyProjectModal = ({ isOpen, onDismiss }) => {
   const formik = useFormik({
     initialValues: { name: '' },
   })
 
   const handleOnSubmit = () => {
-    // saveUserProfile(formik.values)
     onDismiss()
     toast.success(...getToastArguments(language.success.userProfileUpdate))
   }
