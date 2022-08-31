@@ -156,6 +156,7 @@ const spacing = {
   maxTextWidth: '78ch',
   fullViewportWidth: 'calc(100vw - (100vw - 100%))',
   headerHeight: '4.9rem',
+  toolbarHeight: '7rem',
   sideNavWidth: '15rem',
   mobileSideNavWidth: '7rem',
   borderSmall: '1px',

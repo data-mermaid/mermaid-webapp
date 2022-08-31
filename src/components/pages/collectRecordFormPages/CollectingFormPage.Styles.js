@@ -69,7 +69,7 @@ export const StyledOverflowWrapper = styled(TableOverflowWrapper)`
   overflow-y: visible;
 `
 
-export const StyledObservationTable = styled(Table)`
+export const StickyObservationTable = styled(Table)`
   table-layout: auto;
   font-variant: tabular-nums;
   font-feature-settings: 'tnum';
@@ -81,6 +81,12 @@ export const StyledObservationTable = styled(Table)`
     }
     th {
       padding: ${theme.spacing.small};
+      position: sticky;
+      background: white;
+      z-index: 3;
+      top: calc(
+        ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small}
+      );
     }
     td {
       padding: 0rem;

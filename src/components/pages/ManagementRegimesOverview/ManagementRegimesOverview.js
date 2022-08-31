@@ -25,7 +25,7 @@ import {
   TableNavigation,
   HeaderCenter,
   StickyTableOverflowWrapper,
-  StickyTable,
+  ProjectHealthStickyTable,
 } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
@@ -277,7 +277,7 @@ const ManagementRegimesOverview = () => {
   const table = (
     <>
       <StickyTableOverflowWrapper>
-        <StickyTable {...getTableProps()}>
+        <ProjectHealthStickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <ManagementOverviewHeaderRow {...headerGroup.getHeaderGroupProps()}>
@@ -374,7 +374,7 @@ const ManagementRegimesOverview = () => {
               )
             })}
           </tbody>
-        </StickyTable>
+        </ProjectHealthStickyTable>
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector

@@ -33,9 +33,12 @@ export const TableOverflowWrapper = styled.div`
 `
 
 export const Table = styled.table`
+  table-layout: auto;
   background: ${theme.color.secondaryColor};
   min-width: 100%;
   border-collapse: collapse;
+  font-variant: tabular-nums;
+  font-feature-settings: 'tnum';
 `
 const getHeaderSortAfter = (isMultiSortColumn, sortedIndex, isSortedDescending) => {
   if (sortedIndex < 0) {
@@ -154,11 +157,21 @@ export const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
   overflow: visible;
 `
 
-export const StickyTable = styled(Table)`
+export const ProjectHealthStickyTable = styled(Table)`
   thead tr:nth-child(2) th {
     white-space: nowrap;
     z-index: 3;
     position: sticky;
     top: ${theme.spacing.headerHeight};
+  }
+`
+
+export const GenericStickyTable = styled(Table)`
+  tr th {
+    padding: ${theme.spacing.small};
+    position: sticky;
+    background: white;
+    z-index: 3;
+    top: calc(${theme.spacing.headerHeight} + ${theme.spacing.small});
   }
 `

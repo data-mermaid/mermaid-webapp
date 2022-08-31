@@ -4,7 +4,14 @@ import { toast } from 'react-toastify'
 import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import { getObjectById } from '../../../library/getObjectById'
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  TableNavigation,
+  GenericStickyTable,
+  StickyTableOverflowWrapper,
+} from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
@@ -299,8 +306,8 @@ const ManagementRegimes = () => {
 
   const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
-      <TableOverflowWrapper>
-        <Table {...getTableProps()}>
+      <StickyTableOverflowWrapper>
+        <GenericStickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
@@ -338,8 +345,8 @@ const ManagementRegimes = () => {
               )
             })}
           </tbody>
-        </Table>
-      </TableOverflowWrapper>
+        </GenericStickyTable>
+      </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}
