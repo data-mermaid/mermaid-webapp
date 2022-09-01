@@ -19,9 +19,10 @@ const PositionedAncestor = styled.div`
   width: max-content;
 `
 
-const HideShow = ({ contents, button }) => {
+const HideShow = ({ contents, button, closeOnClickWithin }) => {
   const [showItems, setShowItems] = useState(false)
   const buttonRef = useRef(null)
+  const contentsRef = useRef(null)
   const isMounted = useIsMounted()
 
   const toggleShowItems = () => {
@@ -29,24 +30,39 @@ const HideShow = ({ contents, button }) => {
   }
 
   useEffect(() => {
-    const currentButtonRef = buttonRef.current
+    const handleClick = (event) => {
+      const currentButtonRef = buttonRef.current
+      const currentContentsRef = contentsRef.current
 
-    window.addEventListener('click', event => {
+      // Proceed if the click is not on the button
       if (!(currentButtonRef && currentButtonRef.contains(event.target))) {
-        if (isMounted.current) {
+
+        if (closeOnClickWithin) {
           setShowItems(false)
         }
+
+        if (!closeOnClickWithin) {
+          // Check the click was not within the HideShow contents
+          // Use when contents have other click handlers e.g. bell notifications
+          if (currentContentsRef && !currentContentsRef.contains(event.target)) {
+            setShowItems(false)
+          }
+        }
+      }
+    }
+
+    window.addEventListener('click', event => {
+      if (isMounted.current) {
+        handleClick(event)
       }
     })
 
     return () => {
       window.removeEventListener('click', event => {
-        if (!(currentButtonRef && currentButtonRef.contains(event.target))) {
-          setShowItems(false)
-        }
+        handleClick(event)
       })
     }
-  }, [buttonRef, showItems, isMounted])
+  }, [buttonRef, contentsRef, closeOnClickWithin, isMounted])
 
   const buttonForRender = React.cloneElement(button, {
     ref: buttonRef,
@@ -56,14 +72,20 @@ const HideShow = ({ contents, button }) => {
   return (
     <PositionedAncestor>
       {buttonForRender}
-      {showItems && contents}
+      {showItems && <span ref={contentsRef}>{contents}</span>}
+      {/* {showItems && contents} */}
     </PositionedAncestor>
   )
+}
+
+HideShow.defaultProps = {
+  closeOnClickWithin: true
 }
 
 HideShow.propTypes = {
   button: PropTypes.node.isRequired,
   contents: PropTypes.node.isRequired,
+  closeOnClickWithin: PropTypes.bool,
 }
 
 export default HideShow
