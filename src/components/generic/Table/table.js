@@ -32,7 +32,7 @@ export const TableOverflowWrapper = styled.div`
   }
 `
 
-export const Table = styled.table`
+export const Table = styled('table')`
   table-layout: auto;
   background: ${theme.color.secondaryColor};
   min-width: 100%;
@@ -96,7 +96,7 @@ export const Td = styled.td(
     text-align: ${props.align || 'left'};
     padding: ${theme.spacing.medium};
     border-width: ${theme.spacing.borderSmall};
-    border-color: ${theme.color.backgroundColor};
+    border-color: ${theme.color.tableBorderColor};
     border-style: solid;
     position: relative;
     &.highlighted {
@@ -143,10 +143,11 @@ export const Tr = styled.tr`
 
 export const HeaderCenter = styled.div`
   text-align: center;
+  white-space: nowrap;
 `
 
 export const InlineCell = styled.div`
-  white-space: nowrap;
+  width: 26ch;
   text-align: inherit;
   a {
     color: inherit;
@@ -156,22 +157,33 @@ export const InlineCell = styled.div`
 export const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
   overflow: visible;
 `
+const stickyStyles = css`
+  position: sticky;
+  white-space: nowrap;
+  border: solid 1px ${theme.color.tableBorderColor};
+  z-index: 3;
+  top: calc(${theme.spacing.headerHeight} - 1px);
+  &:before {
+    // this is to account for the border-bottom
+    // dissapearing when scrolled.
+    content: '';
+    position: absolute;
+    height: 1px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: ${theme.color.tableBorderColor};
+  }
+`
 
 export const ProjectHealthStickyTable = styled(Table)`
   thead tr:nth-child(2) th {
-    white-space: nowrap;
-    z-index: 3;
-    position: sticky;
-    top: ${theme.spacing.headerHeight};
+    ${stickyStyles}
   }
 `
 
 export const GenericStickyTable = styled(Table)`
   tr th {
-    padding: ${theme.spacing.small};
-    position: sticky;
-    background: white;
-    z-index: 3;
-    top: calc(${theme.spacing.headerHeight} + ${theme.spacing.small});
+    ${stickyStyles}
   }
 `

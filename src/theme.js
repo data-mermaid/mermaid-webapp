@@ -82,6 +82,7 @@ const color = {
   disabledBorder: '#969696',
 
   border: white.mix(colorHelper(black), 0.5),
+  tableBorderColor: grey2,
   sideBarColor: black.mix(colorHelper(white), 0.9),
   headerColor: primary,
   footerColor: white,

@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components/macro'
 import theme from '../../../theme'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../library/styling/mediaQueries'
 import { ButtonCaution, ButtonThatLooksLikeLink, ButtonSecondary } from '../../generic/buttons'
-import { Table, TableOverflowWrapper, Tr, Td } from '../../generic/Table/table'
+import { Table, TableOverflowWrapper, Tr, Td, GenericStickyTable } from '../../generic/Table/table'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import { inputTextareaSelectStyles } from '../../generic/form'
 import { LinkThatLooksLikeButton } from '../../generic/links'
@@ -69,10 +69,7 @@ export const StyledOverflowWrapper = styled(TableOverflowWrapper)`
   overflow-y: visible;
 `
 
-export const StickyObservationTable = styled(Table)`
-  table-layout: auto;
-  font-variant: tabular-nums;
-  font-feature-settings: 'tnum';
+export const StickyObservationTable = styled(GenericStickyTable)`
   tr {
     &:focus-within button,
     &:hover button {
@@ -80,10 +77,6 @@ export const StickyObservationTable = styled(Table)`
       cursor: pointer;
     }
     th {
-      padding: ${theme.spacing.small};
-      position: sticky;
-      background: white;
-      z-index: 3;
       top: calc(
         ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small}
       );
