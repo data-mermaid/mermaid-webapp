@@ -1,4 +1,6 @@
 import React from 'react'
+import moment from 'moment'
+import styled from 'styled-components/macro'
 
 import {
   NotificationCard,
@@ -14,20 +16,18 @@ import {
 import { IconClose } from '../icons'
 import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
+import { TooltipWithText, TooltipPopup, Tooltip } from '../generic/tooltip'
 
-const getUpdatedOnText = (createdOn) => {
-  const locale = navigator.language ?? 'en-US'
+const DateTimeTooltip = styled(TooltipWithText)`
+  ${TooltipPopup} {
+    width: auto;
+    min-width: max-content;
+    text-align: center;
+  }
+  ${Tooltip} {
 
-  const date = new Date(createdOn)
-  const dateText = date.toLocaleDateString(locale, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-  const timeText = date.toLocaleTimeString(locale)
-
-  return `${dateText}, ${timeText}`
-}
+  }
+`
 
 const BellNotificationDropDown = () => {
   const { notifications, deleteNotification } = useBellNotifications()
@@ -44,7 +44,9 @@ const BellNotificationDropDown = () => {
           <em>{language.header.noNotifications}</em>
         </NoNotifications>
       ) : (
-        notifications.results.map((notification) => {
+          notifications.results.map((notification) => {
+            const dateTime = moment(notification.created_on)
+
           return (
             <NotificationCard key={`notification-card-${notification.id}`}>
               <NotificationStatus status={notification.status} />
@@ -58,7 +60,12 @@ const BellNotificationDropDown = () => {
                   </NotificationCloseButton>
                 </NotificationHeader>
                 <p>{notification.description}</p>
-                <NotificationDate>{getUpdatedOnText(notification.created_on)}</NotificationDate>
+                <DateTimeTooltip
+                  id={`aria-tooltip-label${notification.id}`}
+                  text={dateTime.fromNow()}
+                  forwardedAs={NotificationDate}
+                  tooltipText={dateTime.format('LLLL')}
+                />
               </NotificationContent>
             </NotificationCard>
           )
