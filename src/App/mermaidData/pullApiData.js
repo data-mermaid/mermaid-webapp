@@ -74,7 +74,9 @@ export const pullApiData = async ({
           const updatesWithPushToApiTagReset = resetPushToApiTagFromItems(updates)
           const deletes = apiData[apiDataType]?.deletes ?? []
           const deleteIds = deletes.map(({ id }) => id)
-          const errorIds = apiData[apiDataType]?.error?.record_ids ?? []
+          const error = apiData[apiDataType]?.error
+          const errorIds = (error && [401, 403].includes(error.code)) ? error.record_ids : []
+
           // Use Set to remove duplicates
           const bulkDeleteIds = Array.from(new Set([...deleteIds, ...errorIds]))
 
