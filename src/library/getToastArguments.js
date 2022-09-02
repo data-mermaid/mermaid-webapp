@@ -10,7 +10,7 @@ export const getToastArguments = (toastMessage) => {
     toastMessage,
     {
       toastId: toastMessage,
-      transition: Slide
-    }
+      transition: Slide,
+    },
   ]
 }
