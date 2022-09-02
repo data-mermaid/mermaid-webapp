@@ -79,18 +79,6 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
                     status: 'warning',
                   },
                 ],
-                notes: [
-                  {
-                    validation_id: Math.random(),
-                    code: 'firstWarning',
-                    status: 'warning',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    code: 'secondWarning',
-                    status: 'warning',
-                  },
-                ],
               },
               fishbelt_transect: {
                 depth: [
@@ -226,6 +214,18 @@ test('Validation: user can dismiss non-observations input warnings ', async () =
                   },
                 ],
                 tide: [
+                  {
+                    validation_id: Math.random(),
+                    code: 'firstWarning',
+                    status: 'warning',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    code: 'secondWarning',
+                    status: 'warning',
+                  },
+                ],
+                notes: [
                   {
                     validation_id: Math.random(),
                     code: 'firstWarning',

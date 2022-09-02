@@ -267,18 +267,6 @@ test('Validation: user edits non-observation input with ignored validation reset
                     status: 'ignore',
                   },
                 ],
-                notes: [
-                  {
-                    validation_id: Math.random(),
-                    name: 'firstWarning',
-                    status: 'ignore',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    name: 'secondWarning',
-                    status: 'ignore',
-                  },
-                ],
               },
               fishbelt_transect: {
                 depth: [
@@ -366,6 +354,18 @@ test('Validation: user edits non-observation input with ignored validation reset
                   },
                 ],
                 reef_slope: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                notes: [
                   {
                     validation_id: Math.random(),
                     name: 'firstWarning',
