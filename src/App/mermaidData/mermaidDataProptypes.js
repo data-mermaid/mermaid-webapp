@@ -4,7 +4,6 @@ const _sampleEventPropType = PropTypes.shape({
   site: PropTypes.string,
   management: PropTypes.string,
   sample_date: PropTypes.string,
-  notes: PropTypes.string,
 })
 
 const _observerPropType = PropTypes.shape({
@@ -32,6 +31,7 @@ const _fishBeltTransectPropType = PropTypes.shape({
   current: PropTypes.string,
   relative_depth: PropTypes.string,
   tide: PropTypes.string,
+  notes: PropTypes.string,
 })
 
 const _benthicPhotoQuadratTransectPropType = PropTypes.shape({
@@ -49,6 +49,7 @@ const _benthicPhotoQuadratTransectPropType = PropTypes.shape({
   quadrat_number_start: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   relative_depth: PropTypes.string,
   num_points_per_quadrat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  notes: PropTypes.string,
 })
 
 const _benthicPhotoQuadratObservationPropType = PropTypes.shape({

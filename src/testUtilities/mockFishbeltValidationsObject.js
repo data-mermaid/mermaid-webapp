@@ -12,13 +12,6 @@ export default {
         },
       ],
       sample_event: {
-        notes: [
-          {
-            validation_id: Math.random(),
-            code: 'required',
-            status: 'error',
-          },
-        ],
         site: [
           {
             code: 'required',
@@ -187,6 +180,13 @@ export default {
           },
         ],
         len_surveyed: [
+          {
+            validation_id: Math.random(),
+            code: 'required',
+            status: 'error',
+          },
+        ],
+        notes: [
           {
             validation_id: Math.random(),
             code: 'required',

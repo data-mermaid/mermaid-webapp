@@ -810,7 +810,6 @@ export const collectrecords = {
         ],
         sample_event: {
           site: '2531f9b3-2a95-4189-abd6-a250e33b1974',
-          notes: 'some lit note 123',
           management: '1d5f1545-ee80-46c6-b315-8c98291327d7',
           sample_date: '2021-3-2',
         },
@@ -825,6 +824,7 @@ export const collectrecords = {
           sample_time: '23:55',
           len_surveyed: 5,
           relative_depth: '8f381e71-219e-469c-8c13-231b088fb861',
+          notes: 'some lit note 123',
         },
         obs_benthic_lits: [
           {
