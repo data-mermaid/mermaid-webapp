@@ -27,6 +27,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   const { isAppOnline } = useOnlineStatus()
 
   const { name, countries, updated_on, id } = project
+
   const { setIsSyncInProgress } = useSyncStatus()
   const history = useHistory()
   const projectUrl = `projects/${id}`
@@ -103,7 +104,11 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
               <IconCopy />
               <span>Copy</span>
             </ButtonSecondary>
-            <CopyProjectModal isOpen={isCopyProjectModalOpen} onDismiss={closeCopyProjectModal} />
+            <CopyProjectModal
+              isOpen={isCopyProjectModalOpen}
+              onDismiss={closeCopyProjectModal}
+              project={project}
+            />
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}

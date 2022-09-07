@@ -158,6 +158,41 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    addProject = async function addProject(projectId, projectName) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isAuthenticatedAndReady) {
+        return axios
+          .post(
+            `${this._apiBaseUrl}/projects/copy_project/`,
+            {
+              new_project_name: projectName,
+              original_project_id: projectId,
+              notify_users: false,
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then((response) => {
+            const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
+
+            if (isApiResponseSuccessful) {
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then(() => {
+                  console.log(response.data)
+                  return response.data
+                })
+            }
+
+            return Promise.reject(new Error(`'The API status is unsuccessful',`))
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     transferSampleUnits = async function transferSampleUnits(
       projectId,
       fromProfileId,

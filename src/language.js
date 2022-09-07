@@ -32,6 +32,7 @@ const error = {
   collectRecordsUnavailable: 'Sample unit data is currently unavailable. Please try again',
   collectRecordUnavailable: 'Sample unit data is currently unavailable. Please try again',
   duplicateNewUserAdd: 'User has already been added to project.',
+  duplicateNewProject: 'A project with the same name already exists.',
   emptyEmailAdd: 'Please enter an email address.',
   error: 'Error',
   fishSpeciesAlreadyExists:
@@ -110,6 +111,7 @@ const success = {
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   userRemoved: 'User removed',
   projectSave: 'Project saved',
+  projectCopied: 'Project copied',
   siteSave: 'Site saved.',
   managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',

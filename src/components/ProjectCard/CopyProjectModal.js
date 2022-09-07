@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import React, { useState, useEffect } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
@@ -8,88 +8,57 @@ import { Input } from '../generic/form'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { RightFooter, ModalInputRow } from '../generic/Modal/Modal'
+import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import handleHttpResponseError from '../../library/handleHttpResponseError'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../library/useIsMounted'
-import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useOnlineStatus } from '../../library/onlineStatusContext'
-import { getObjectById } from '../../library/getObjectById'
-import useDocumentTitle from '../../library/useDocumentTitle'
 
-const CopyProjectModal = ({ isOpen, onDismiss }) => {
-  const formik = useFormik({
-    initialValues: { name: '' },
-  })
-  const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
-  const [projects, setProjects] = useState([])
+const CopyProjectModal = ({ isOpen, onDismiss, project }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isAppOnline } = useOnlineStatus()
-  const { isSyncInProgress } = useSyncStatus()
-  const isMounted = useIsMounted()
 
-  useDocumentTitle(`${language.pages.projectsList.title} - ${language.title.mermaid}`)
-
-  const _getProjectsInfo = useEffect(() => {
-    if (databaseSwitchboardInstance && !isSyncInProgress) {
-      Promise.all([
-        databaseSwitchboardInstance.getProjects(),
-        databaseSwitchboardInstance.getOfflineReadyProjectIds(),
-      ])
-        .then(([projectsResponse, offlineReadyProjectIdsResponse]) => {
-          if (isMounted.current) {
-            setProjects(projectsResponse)
-            setOfflineReadyProjectIds(offlineReadyProjectIdsResponse)
-          }
+  const fetchProjectProfiles = useCallback(() => {
+    if (databaseSwitchboardInstance) {
+      databaseSwitchboardInstance
+        .getProjectProfiles(project.id)
+        .then((projectProfilesResponse) => {
+          setObserverProfiles(projectProfilesResponse)
         })
         .catch(() => {
-          toast.error(...getToastArguments(language.error.projectsUnavailable))
+          toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
+  }, [databaseSwitchboardInstance, project.id])
 
-  const getAvailableProjects = () => {
-    if (isAppOnline) {
-      return projects
-    }
+  const copyExistingProject = () =>
+    databaseSwitchboardInstance
+      .addProject(project.id, 'Copy of ' + project.name)
+      .then(() => {
+        fetchProjectProfiles()
+        toast.success(...getToastArguments(language.success.projectCopied))
+      })
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            if (error.response.status === 400) {
+              toast.error(...getToastArguments(language.error.duplicateNewProject))
+            } else {
+              toast.error(...getToastArguments(language.error.generic))
+            }
+          },
+        })
+      })
 
-    return projects.filter((project) => getObjectById(offlineReadyProjectIds, project.id))
+  const copyProject = () => {
+    copyExistingProject()
   }
-
-  const projectId = getAvailableProjects().map((site) => {
-    return site.id
+  const formik = useFormik({
+    initialValues: { name: project.name },
   })
-
-  const projectName = getAvailableProjects().map((site) => {
-    return site.name
-  })
-
-  const foundProjectName = projectName.find((element) => element === 'Dev Team Test Project')
-  const foundProjectId = projectId.find(
-    (element) => element === '8c213ce8-7973-47a5-9359-3a0ef12ed201',
-  )
-
-  useEffect(() => {
-    // POST request using fetch inside useEffect React hook
-    const _requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        new_project_name: foundProjectName,
-        original_project_id: foundProjectId,
-        notify_users: false,
-      }),
-    }
-
-    // console.log(requestOptions)
-    // fetch('http://localhost:8080/v1/projects/copy_project', requestOptions).then((response) =>
-    //   response.json(),
-    // )
-    // .then((res) => console.log(res))
-  }, [foundProjectName, foundProjectId])
 
   const handleOnSubmit = () => {
+    copyProject()
     onDismiss()
-    // console.log(`Copied ${foundProjectName}`)
-    toast.success(...getToastArguments(language.success.copyProject))
+    toast.success(...getToastArguments(language.success.projectCopied))
   }
 
   const modalContent = (
@@ -103,9 +72,8 @@ const CopyProjectModal = ({ isOpen, onDismiss }) => {
           aria-labelledby="modal-input-for-projectname-label"
           id="modal-input-for-name"
           name="name"
-          //   value={formik.values.name}
           type="text"
-          placeholder={`Copy of ${foundProjectName}`}
+          placeholder={'Copy of ' + formik.initialValues.name}
           onChange={(event) => formik.setFieldValue('name', event.target.value)}
         />
       </ModalInputRow>
@@ -136,6 +104,11 @@ const CopyProjectModal = ({ isOpen, onDismiss }) => {
 CopyProjectModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  project: projectPropType,
+}
+
+CopyProjectModal.defaultProps = {
+  project: projectPropType.isRequired,
 }
 
 export default CopyProjectModal
