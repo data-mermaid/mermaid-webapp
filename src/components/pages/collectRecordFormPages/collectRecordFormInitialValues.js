@@ -15,7 +15,6 @@ const getSampleInfoInitialValues = (collectRecord) => {
     site: collectRecordSampleEventData?.site ?? '',
     management: collectRecordSampleEventData?.management ?? '',
     sample_date: dateFormat(collectRecordSampleEventData?.sample_date) ?? '',
-    notes: collectRecordSampleEventData?.notes ?? '',
   }
 }
 
@@ -37,6 +36,7 @@ const getTransectInitialValues = (collectRecord, sampleUnit) => {
     visibility: collectRecordSampleUnitData?.visibility,
     current: collectRecordSampleUnitData?.current,
     tide: collectRecordSampleUnitData?.tide,
+    notes: collectRecordSampleUnitData?.notes,
   }
 }
 

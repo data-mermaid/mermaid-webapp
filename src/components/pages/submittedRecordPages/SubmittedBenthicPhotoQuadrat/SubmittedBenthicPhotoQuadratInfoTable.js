@@ -15,7 +15,7 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
   choices,
   submittedRecord,
 }) => {
-  const { site, management, sample_date, notes } = submittedRecord.sample_event
+  const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
     sample_time,
@@ -31,6 +31,7 @@ const SubmittedBenthicPhotoQuadratInfoTable = ({
     current,
     relative_depth,
     tide,
+    notes,
   } = submittedRecord.quadrat_transect
 
   const { visibilities, currents, relativedepths, tides } = choices

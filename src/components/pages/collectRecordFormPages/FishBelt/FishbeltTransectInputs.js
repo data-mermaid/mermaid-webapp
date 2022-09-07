@@ -16,7 +16,7 @@ const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
 const LABEL_VALIDATION_PATH = 'data.fishbelt_transect.label'
 const LENGHT_SURVEYED_VALIDATION_PATH = 'data.fishbelt_transect.len_surveyed'
-const NOTES_VALIDATION_PATH = 'data.sample_event.notes'
+const NOTES_VALIDATION_PATH = 'data.fishbelt_transect.notes'
 const REEF_SLOPE_VALIDATION_PATH = 'data.fishbelt_transect.reef_slope'
 const RELATIVE_DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.relative_depth'
 const SAMPLE_TIME_VALIDATION_PATH = 'data.fishbelt_transect.sample_time'
@@ -55,7 +55,6 @@ const FishbeltTransectInputs = ({
   const tideOptions = [...getOptions(tides), { label: 'not reported', value: '' }]
   const validationsApiData = collectRecord?.validations?.results?.data
   const fishbelt_transect = validationsApiData?.fishbelt_transect
-  const sample_event = validationsApiData?.sample_event
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
@@ -102,7 +101,7 @@ const FishbeltTransectInputs = ({
   )
 
   const notesValidationProperties = getValidationPropertiesForInput(
-    sample_event?.notes,
+    fishbelt_transect?.notes,
     areValidationsShowing,
   )
 
