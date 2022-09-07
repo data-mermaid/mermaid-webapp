@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
@@ -17,20 +17,15 @@ const CopyProjectModal = ({ isOpen, onDismiss, project }) => {
 
   const fetchProjectProfiles = useCallback(() => {
     if (databaseSwitchboardInstance) {
-      databaseSwitchboardInstance
-        .getProjectProfiles(project.id)
-        .then((projectProfilesResponse) => {
-          setObserverProfiles(projectProfilesResponse)
-        })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.userRecordsUnavailable))
-        })
+      databaseSwitchboardInstance.getProjectProfiles(project.id).catch(() => {
+        toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+      })
     }
   }, [databaseSwitchboardInstance, project.id])
 
   const copyExistingProject = () =>
     databaseSwitchboardInstance
-      .addProject(project.id, 'Copy of ' + project.name)
+      .addProject(project.id, `Copy of ${project.name}`)
       .then(() => {
         fetchProjectProfiles()
         toast.success(...getToastArguments(language.success.projectCopied))
@@ -73,7 +68,7 @@ const CopyProjectModal = ({ isOpen, onDismiss, project }) => {
           id="modal-input-for-name"
           name="name"
           type="text"
-          placeholder={'Copy of ' + formik.initialValues.name}
+          placeholder={`Copy of ${formik.initialValues.name}`}
           onChange={(event) => formik.setFieldValue('name', event.target.value)}
         />
       </ModalInputRow>

@@ -181,7 +181,6 @@ const ProjectsMixin = (Base) =>
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
                 .then(() => {
-                  console.log(response.data)
                   return response.data
                 })
             }
