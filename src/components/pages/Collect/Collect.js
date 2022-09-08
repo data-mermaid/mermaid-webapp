@@ -30,7 +30,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import {
   getIsQuadratSampleUnit,
   noLabelSymbol,
@@ -307,11 +307,11 @@ const Collect = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageNoData mainText={language.pages.collectTable.noDataText} />
+    <PageUnavailable mainText={language.pages.collectTable.noDataText} />
   )
 
   const contentViewByRole = isReadOnlyUser ? (
-    <PageNoData mainText={language.error.pageReadOnly} />
+    <PageUnavailable mainText={language.error.pageReadOnly} />
   ) : (
     table
   )

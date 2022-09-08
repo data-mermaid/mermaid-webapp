@@ -40,7 +40,7 @@ import language from '../../../language'
 import NewUserModal from '../../NewUserModal'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import RemoveUserModal from '../../RemoveUserModal'
 import theme from '../../../theme'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
@@ -730,7 +730,7 @@ const Users = () => {
   const content = isAppOnline ? (
     table
   ) : (
-    <PageNoData mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
   )
   const toolbar = (
     <>

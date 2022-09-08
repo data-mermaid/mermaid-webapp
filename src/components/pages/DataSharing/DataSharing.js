@@ -21,7 +21,7 @@ import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { getDataSharingPolicyLabel } from '../../../library/getDataSharingPolicyLabel'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import theme from '../../../theme'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
@@ -300,7 +300,7 @@ const DataSharing = () => {
         isAppOnline ? (
           contentViewByRole
         ) : (
-          <PageNoData mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
         )
       }
       toolbar={

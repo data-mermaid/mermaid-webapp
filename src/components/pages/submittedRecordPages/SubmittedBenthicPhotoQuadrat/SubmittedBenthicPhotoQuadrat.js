@@ -12,7 +12,7 @@ import { getProjectRole } from '../../../../App/currentUserProfileHelpers'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
-import PageNoData from '../../PageNoData'
+import PageUnavailable from '../../PageUnavailable'
 import SubmittedBenthicPhotoQuadratInfoTable from './SubmittedBenthicPhotoQuadratInfoTable'
 import SubmittedBenthicPhotoQuadratObservationTable from './SubmittedBenthicPhotoQuadratObservationTable'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
@@ -164,7 +164,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
             />
           </>
         ) : (
-          <PageNoData mainText={language.error.pageUnavailableOffline} />
+          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
         )
       }
       toolbar={

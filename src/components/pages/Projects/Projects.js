@@ -15,7 +15,7 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getObjectById } from '../../../library/getObjectById'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 
@@ -96,7 +96,7 @@ const Projects = ({ apiSyncInstance }) => {
 
   const filteredSortedProjects = getFilteredSortedProjects()
 
-  const renderPageNoData = () => {
+  const renderPageUnavailable = () => {
     const {
       noFilterResults,
       noFilterResultsSubText,
@@ -121,7 +121,7 @@ const Projects = ({ apiSyncInstance }) => {
     }
 
     return (
-      <PageNoData mainText={mainText} subText={subText} />
+      <PageUnavailable mainText={mainText} subText={subText} />
     )
   }
 
@@ -135,7 +135,7 @@ const Projects = ({ apiSyncInstance }) => {
         isOfflineReady={getIsProjectOffline(project.id)}
       />
     ))
-  ) : (renderPageNoData())
+  ) : (renderPageUnavailable())
 
   return isLoading ? (
     <LoadingIndicator aria-label="projects list loading indicator" />

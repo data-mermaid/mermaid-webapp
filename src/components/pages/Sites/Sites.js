@@ -34,7 +34,7 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { getProjectRole } from '../../../App/currentUserProfileHelpers'
@@ -323,7 +323,7 @@ const Sites = () => {
       {isAppOnline && <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />}
     </>
   ) : (
-    <PageNoData
+    <PageUnavailable
       mainText={language.pages.siteTable.noDataText}
       subText={language.pages.siteTable.noDataExtraText}
     />

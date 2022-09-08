@@ -46,7 +46,7 @@ import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObje
 import { DeleteRecordButtonCautionWrapper } from '../CollectingFormPage.Styles'
 import { userRole } from '../../../../App/mermaidData/userRole'
 import { getProjectRole } from '../../../../App/currentUserProfileHelpers'
-import PageNoData from '../../PageNoData'
+import PageUnavailable from '../../PageUnavailable'
 
 const FishBelt = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
@@ -648,7 +648,7 @@ const FishBelt = ({ isNewRecord }) => {
               />
             </>
           ) : (
-            <PageNoData mainText={language.error.pageReadOnly} />
+            <PageUnavailable mainText={language.error.pageReadOnly} />
           )
         }
         toolbar={

@@ -27,7 +27,7 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 
 const getTransectReportProperties = (transect) => {
   return {
@@ -300,13 +300,13 @@ const Data = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageNoData mainText={language.pages.submittedTable.noDataText} />
+    <PageUnavailable mainText={language.pages.submittedTable.noDataText} />
   )
 
   const content = isAppOnline ? (
     <>{table}</>
   ) : (
-    <PageNoData mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
   )
   const toolbar = isAppOnline ? (
     <DataToolbarSection

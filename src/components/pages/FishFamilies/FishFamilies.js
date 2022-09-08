@@ -2,7 +2,7 @@ import React from 'react'
 import { H2 } from '../../generic/text'
 import { ContentPageLayout } from '../../Layout'
 import language from '../../../language'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const FishFamilies = () => {
@@ -11,7 +11,7 @@ const FishFamilies = () => {
   const content = isAppOnline ? (
     <>Fish Families Placeholder</>
   ) : (
-    <PageNoData mainText={language.error.pageUnavailableOffline} />
+    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
   )
 
   return (

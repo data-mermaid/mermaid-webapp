@@ -46,7 +46,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsaved
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { userRole } from '../../../../App/mermaidData/userRole'
 import { getProjectRole } from '../../../../App/currentUserProfileHelpers'
-import PageNoData from '../../PageNoData'
+import PageUnavailable from '../../PageUnavailable'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
@@ -684,7 +684,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               />
             </>
           ) : (
-            <PageNoData mainText={language.error.pageReadOnly} />
+            <PageUnavailable mainText={language.error.pageReadOnly} />
           )
         }
         toolbar={

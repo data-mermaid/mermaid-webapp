@@ -31,7 +31,7 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { getProjectRole } from '../../../App/currentUserProfileHelpers'
 
@@ -358,7 +358,7 @@ const ManagementRegimes = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageNoData
+    <PageUnavailable
       mainText={language.pages.managementRegimeTable.noDataText}
       subText={language.pages.managementRegimeTable.noDataExtraText}
     />
