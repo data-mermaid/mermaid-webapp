@@ -10,7 +10,7 @@ import { Table } from '../../../generic/Table/table'
 import TableRowItem from '../../../generic/Table/TableRowItem/TableRowItem'
 
 const SubmittedFishBeltInfoTable = ({ sites, managementRegimes, choices, submittedRecord }) => {
-  const { site, management, sample_date, notes } = submittedRecord.sample_event
+  const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
     sample_time,
@@ -25,6 +25,7 @@ const SubmittedFishBeltInfoTable = ({ sites, managementRegimes, choices, submitt
     current,
     relative_depth,
     tide,
+    notes,
   } = submittedRecord.fishbelt_transect
 
   const {

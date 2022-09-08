@@ -17,7 +17,7 @@ import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithL
 const DEPTH_VALIDATION_PATH = 'data.quadrat_transect.depth'
 const LABEL_VALIDATION_PATH = 'data.quadrat_transect.label'
 const LENGTH_SURVEYED_VALIDATION_PATH = 'data.quadrat_transect.len_surveyed'
-const NOTES_VALIDATION_PATH = 'data.sample_event.notes'
+const NOTES_VALIDATION_PATH = 'data.quadrat_transect.notes'
 const NUM_POINTS_PER_QUADRAT_VALIDATION_PATH = 'data.quadrat_transect.num_points_per_quadrat'
 const NUM_QUADRATS_VALIDATION_PATH = 'data.quadrat_transect.num_quadrat'
 const QUADRAT_NUMBER_START_VALIDATION_PATH = 'data.quadrat_transect.quadrat_number_start'
@@ -47,7 +47,6 @@ const TransectInputs = ({
   const visibilityOptions = [...getOptions(visibilities), { label: 'not reported', value: '' }]
   const validationsApiData = collectRecord?.validations?.results?.data
   const quadrat_transect = validationsApiData?.quadrat_transect
-  const sample_event = validationsApiData?.sample_event
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     quadrat_transect?.number,
@@ -103,7 +102,7 @@ const TransectInputs = ({
   )
 
   const notesValidationProperties = getValidationPropertiesForInput(
-    sample_event?.notes,
+    quadrat_transect?.notes,
     areValidationsShowing,
   )
 
