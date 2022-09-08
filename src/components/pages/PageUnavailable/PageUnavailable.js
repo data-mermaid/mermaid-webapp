@@ -4,7 +4,7 @@ import styled from 'styled-components/macro'
 import { Column } from '../../generic/positioning'
 import theme from '../../../theme'
 
-const PageNoDataContainer = styled(Column)`
+const PageUnavailableContainer = styled(Column)`
   padding-left ${theme.spacing.large};
   text-align: center;
   p {
@@ -13,23 +13,23 @@ const PageNoDataContainer = styled(Column)`
   }
 `
 
-const PageNoData = ({ mainText, subText }) => {
+const PageUnavailable = ({ mainText, subText }) => {
   return (
-    <PageNoDataContainer>
+    <PageUnavailableContainer>
       <h3>{mainText}</h3>
       <p>{subText}</p>
-    </PageNoDataContainer>
+    </PageUnavailableContainer>
   )
 }
 
-PageNoData.propTypes = {
+PageUnavailable.propTypes = {
   mainText: PropTypes.string,
   subText: PropTypes.string,
 }
 
-PageNoData.defaultProps = {
+PageUnavailable.defaultProps = {
   mainText: 'No Data',
   subText: '',
 }
 
-export default PageNoData
+export default PageUnavailable
