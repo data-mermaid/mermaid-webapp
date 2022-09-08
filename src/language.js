@@ -130,7 +130,6 @@ const success = {
   userProfileUpdate: 'Profile updated',
   attributeSave: (attribute) =>
     `Proposed benthic ${attribute} saved. The observation has been edited to show it selected.`,
-  copyProject: 'Project copied',
 }
 
 const deleteCollectRecord = {
