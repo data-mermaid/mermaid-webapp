@@ -85,6 +85,7 @@ const error = {
   pageUnavailableOffline: 'This page is unavailable offline.',
   pageNotFound: "This page can't be found.",
   pageNotFoundRecovery: 'Make sure the URL is correct.',
+  pageReadOnly: 'You are a read-only member of this project',
   idNotFound: "This item can't be found.",
   idNotFoundRecovery:
     "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
