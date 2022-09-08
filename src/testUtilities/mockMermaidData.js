@@ -3666,6 +3666,13 @@ const notifications = {
   ],
 }
 
+const projectsEndpoint = {
+  "count": 9,
+  "next": null,
+  "previous": null,
+  "results": projects
+}
+
 const mockMermaidData = {
   benthic_attributes,
   choices,
@@ -3679,6 +3686,7 @@ const mockMermaidData = {
   project_profiles,
   project_sites,
   projects,
+  projectsEndpoint,
   projecttags,
   sampleUnitMethods,
 }

@@ -56,6 +56,14 @@ const mockMermaidApiAllSuccessful = setupServer(
     return res(ctx.json(response))
   }),
 
+  rest.post(`${apiBaseUrl}/projects/`, (req, res, ctx) => {
+    const response = {
+      ...mockMermaidData.projectsEndpoint,
+    }
+
+    return res(ctx.json(response))
+  }),
+
   rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
     const response = {
       benthic_attributes: { updates: mockMermaidData.benthic_attributes },
