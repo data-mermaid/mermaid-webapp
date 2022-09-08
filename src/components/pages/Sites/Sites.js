@@ -241,7 +241,7 @@ const Sites = () => {
     </>
   )
 
-  const contentViewByRole = isReadOnlyUser ? (
+  const toolbarButtonsByRole = isReadOnlyUser ? (
     <>
       <ToolbarButtonWrapper>{readOnlySitesHeaderContent}</ToolbarButtonWrapper>
     </>
@@ -346,7 +346,7 @@ const Sites = () => {
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
 
-            <ToolbarButtonWrapper>{contentViewByRole}</ToolbarButtonWrapper>
+            <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>
           </ToolBarRow>
         </>
       }

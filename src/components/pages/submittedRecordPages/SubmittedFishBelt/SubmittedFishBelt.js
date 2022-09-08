@@ -15,7 +15,7 @@ import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import PageUnavailableOffline from '../../PageUnavailableOffline'
+import PageNoData from '../../PageNoData'
 import RecordFormTitle from '../../../RecordFormTitle'
 import SubmittedFishBeltInfoTable from './SubmittedFishBeltInfoTable'
 import SubmittedFishBeltObservationTable from './SubmittedFishBeltObservationTable'
@@ -181,7 +181,7 @@ const SubmittedFishBelt = () => {
             />
           </>
         ) : (
-          <PageUnavailableOffline />
+          <PageNoData mainText={language.error.pageUnavailableOffline} />
         )
       }
       toolbar={

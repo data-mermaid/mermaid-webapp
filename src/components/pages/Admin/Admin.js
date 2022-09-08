@@ -25,7 +25,7 @@ import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndVa
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import NewOrganizationModal from '../../NewOrganizationModal'
-import PageUnavailableOffline from '../PageUnavailableOffline'
+import PageNoData from '../PageNoData'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
@@ -349,7 +349,13 @@ const Admin = () => {
     <>
       <ContentPageLayout
         isPageContentLoading={isLoading}
-        content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
+        content={
+          isAppOnline ? (
+            contentViewByRole
+          ) : (
+            <PageNoData mainText={language.error.pageUnavailableOffline} />
+          )
+        }
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>{language.pages.projectInfo.title}</H2>

@@ -279,7 +279,7 @@ const ManagementRegimes = () => {
     </>
   )
 
-  const contentViewByRole = isReadOnlyUser ? (
+  const toolbarButtonsByRole = isReadOnlyUser ? (
     <>
       <ToolbarButtonWrapper>{readOnlyMrsHeaderContent}</ToolbarButtonWrapper>
     </>
@@ -380,7 +380,7 @@ const ManagementRegimes = () => {
               value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
-            <ToolbarButtonWrapper>{contentViewByRole}</ToolbarButtonWrapper>
+            <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>
           </ToolBarRow>
         </>
       }

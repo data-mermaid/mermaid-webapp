@@ -9,7 +9,7 @@ import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import { H2 } from '../../generic/text'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
-import PageUnavailableOffline from '../PageUnavailableOffline'
+import PageNoData from '../PageNoData'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
@@ -395,7 +395,11 @@ const ManagementRegimesOverview = () => {
     </>
   )
 
-  const content = isAppOnline ? table : <PageUnavailableOffline />
+  const content = isAppOnline ? (
+    table
+  ) : (
+    <PageNoData mainText={language.error.pageUnavailableOffline} />
+  )
   const toolbar = (
     <>
       <H2>{language.pages.managementRegimesOverview.title}</H2>

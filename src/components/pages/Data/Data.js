@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
-import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
@@ -304,7 +303,11 @@ const Data = () => {
     <PageNoData mainText={language.pages.submittedTable.noDataText} />
   )
 
-  const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
+  const content = isAppOnline ? (
+    <>{table}</>
+  ) : (
+    <PageNoData mainText={language.error.pageUnavailableOffline} />
+  )
   const toolbar = isAppOnline ? (
     <DataToolbarSection
       name={language.pages.submittedTable.filterToolbarText}

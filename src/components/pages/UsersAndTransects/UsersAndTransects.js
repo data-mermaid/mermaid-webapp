@@ -12,7 +12,7 @@ import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import language from '../../../language'
-import PageUnavailableOffline from '../PageUnavailableOffline'
+import PageNoData from '../PageNoData'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
@@ -482,7 +482,11 @@ const UsersAndTransects = () => {
     </>
   )
 
-  const content = isAppOnline ? table : <PageUnavailableOffline />
+  const content = isAppOnline ? (
+    table
+  ) : (
+    <PageNoData mainText={language.error.pageUnavailableOffline} />
+  )
   const toolbar = (
     <>
       <H2>{language.pages.usersAndTransectsTable.title}</H2>
