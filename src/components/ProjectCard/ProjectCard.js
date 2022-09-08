@@ -21,7 +21,7 @@ import { IconCopy } from '../icons'
 import { ButtonSecondary } from '../generic/buttons'
 import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
-import CopyProjectModal from './CopyProjectModal'
+import ProjectModal from './ProjectModal'
 
 const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps }) => {
   const { isAppOnline } = useOnlineStatus()
@@ -83,9 +83,9 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   //   e.stopPropagation()
   // }
 
-  const [isCopyProjectModalOpen, setIsCopyProjectModalOpen] = useState(false)
-  const openCopyProjectModal = () => setIsCopyProjectModalOpen(true)
-  const closeCopyProjectModal = () => setIsCopyProjectModalOpen(false)
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
+  const openProjectModal = () => setIsProjectModalOpen(true)
+  const closeProjectModal = () => setIsProjectModalOpen(false)
 
   return (
     <CardWrapper onClick={handleCardClick} {...restOfProps}>
@@ -96,17 +96,13 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
         </div>
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <div>
-            <ButtonSecondary
-              onClick={openCopyProjectModal}
-              aria-label="Copy"
-              disabled={!isAppOnline}
-            >
+            <ButtonSecondary onClick={openProjectModal} aria-label="Copy" disabled={!isAppOnline}>
               <IconCopy />
               <span>Copy</span>
             </ButtonSecondary>
-            <CopyProjectModal
-              isOpen={isCopyProjectModalOpen}
-              onDismiss={closeCopyProjectModal}
+            <ProjectModal
+              isOpen={isProjectModalOpen}
+              onDismiss={closeProjectModal}
               project={project}
             />
             <CheckBoxLabel

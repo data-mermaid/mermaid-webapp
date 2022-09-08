@@ -158,8 +158,8 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addProject = async function addProject(projectId, projectName) {
-      if (!projectId) {
+    addProject = async function addProject(originalProjectId, newProjectName) {
+      if (!originalProjectId) {
         Promise.reject(this._operationMissingParameterError)
       }
 
@@ -168,8 +168,8 @@ const ProjectsMixin = (Base) =>
           .post(
             `${this._apiBaseUrl}/projects/copy_project/`,
             {
-              new_project_name: projectName,
-              original_project_id: projectId,
+              new_project_name: newProjectName,
+              original_project_id: originalProjectId,
               notify_users: false,
             },
             await getAuthorizationHeaders(this._getAccessToken),
@@ -178,11 +178,9 @@ const ProjectsMixin = (Base) =>
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseSuccessful) {
-              return this._apiSyncInstance
-                .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then(() => {
-                  return response.data
-                })
+              return this._apiSyncInstance.pullAllProjects().then(() => {
+                return response.data
+              })
             }
 
             return Promise.reject(new Error(`'The API status is unsuccessful',`))
