@@ -104,7 +104,7 @@ export const pullApiData = async ({
             if (removedProjectIds.length) {
               // Delete the projects from IndexedDB
               // The user has been removed from these projects
-              dexiePerUserDataInstance[apiDataType].bulkDelete(removedProjectIds)
+              dexiePerUserDataInstance.projects.bulkDelete(removedProjectIds)
             }
           }
         }
