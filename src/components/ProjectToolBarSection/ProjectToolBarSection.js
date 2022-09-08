@@ -81,9 +81,8 @@ const ProjectToolBarSection = ({
   projectSortKey,
   setProjectSortKey,
   isProjectSortAsc,
-  setIsProjectSortAsc
+  setIsProjectSortAsc,
 }) => {
-
   const setFilter = (event) => {
     setProjectFilter(event.target.value)
   }
@@ -92,12 +91,12 @@ const ProjectToolBarSection = ({
     setProjectSortKey(event.target.value)
   }
 
-return (
+  return (
     <GlobalWrapper>
       <RowWrapper>
         <HeaderStyle>Projects</HeaderStyle>
         <OfflineHide>
-          <ButtonCallout>New Project</ButtonCallout>
+          <ButtonCallout>New Project </ButtonCallout>
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>
@@ -114,8 +113,11 @@ return (
             <option value="updated_on">Last Updated Date</option>
           </select>
         </SortByLabelWrapper>
-        <ButtonSecondary aria-label="sort-projects" onClick={() => setIsProjectSortAsc(!isProjectSortAsc)}>
-          { isProjectSortAsc ? <IconSortDown /> : <IconSortUp /> }
+        <ButtonSecondary
+          aria-label="sort-projects"
+          onClick={() => setIsProjectSortAsc(!isProjectSortAsc)}
+        >
+          {isProjectSortAsc ? <IconSortDown /> : <IconSortUp />}
         </ButtonSecondary>
       </FilterRowWrapper>
     </GlobalWrapper>
