@@ -44,6 +44,9 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import { userRole } from '../../../../App/mermaidData/userRole'
+import { getProjectRole } from '../../../../App/currentUserProfileHelpers'
+import PageNoData from '../../PageNoData'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
@@ -85,6 +88,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
     submitButtonState === buttonGroupStates.submitting
+  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
 
   const getValidationButtonStatus = (collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
@@ -188,7 +192,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               toast.error(...getToastArguments(errorMessage))
             },
           })
-
         })
     }
   }, [
@@ -205,10 +208,13 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedBenthicPhotoQuadratSampleInfoInputs`)
+  } = useUnsavedDirtyFormDataUtilities(
+    `${currentUser.id}-unsavedBenthicPhotoQuadratSampleInfoInputs`,
+  )
 
-  const persistUnsavedObservationsUtilities =
-    useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedBenthicPhotoQuadratObservations`)
+  const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
+    `${currentUser.id}-unsavedBenthicPhotoQuadratObservations`,
+  )
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
@@ -277,7 +283,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const formik = useFormik({
     initialValues: initialFormikFormValues,
     enableReinitialize: true,
-    validate: persistUnsavedFormikData
+    validate: persistUnsavedFormikData,
   })
 
   const handleSave = () => {
@@ -597,85 +603,89 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
         isToolbarSticky={true}
         subNavNode={subNavNode}
         content={
-          <>
-            <RecordLevelInputValidationInfo
-              validations={recordLevelValidations}
-              areValidationsShowing={areValidationsShowing}
-              resetRecordLevelValidation={resetRecordLevelValidation}
-              ignoreRecordLevelValidation={ignoreRecordLevelValidation}
-              handleScrollToObservation={handleScrollToObservation}
-            />
-            <form
-              id="benthicpqt-form"
-              aria-labelledby="benthicpqt-form-title"
-              onSubmit={formik.handleSubmit}
-            >
-              <SampleEventInputs
+          !isReadOnlyUser ? (
+            <>
+              <RecordLevelInputValidationInfo
+                validations={recordLevelValidations}
                 areValidationsShowing={areValidationsShowing}
-                collectRecord={collectRecordBeingEdited}
-                formik={formik}
-                managementRegimes={managementRegimes}
-                sites={sites}
-                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                validationPropertiesWithDirtyResetOnInputChange={
-                  validationPropertiesWithDirtyResetOnInputChange
-                }
+                resetRecordLevelValidation={resetRecordLevelValidation}
+                ignoreRecordLevelValidation={ignoreRecordLevelValidation}
+                handleScrollToObservation={handleScrollToObservation}
               />
-              <BenthicAttributeTransectInputs
-                areValidationsShowing={areValidationsShowing}
-                collectRecord={collectRecordBeingEdited}
-                choices={choices}
-                formik={formik}
-                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                validationPropertiesWithDirtyResetOnInputChange={
-                  validationPropertiesWithDirtyResetOnInputChange
-                }
-              />
-              <ObserversInput
-                data-testid="observers"
-                formik={formik}
-                observers={observerProfiles}
-                onObserversChange={handleObserversChange}
-                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                validationPath={OBSERVERS_VALIDATION_PATH}
-                validationProperties={observersValidationProperties}
-                validationPropertiesWithDirtyResetOnInputChange={
-                  validationPropertiesWithDirtyResetOnInputChange
-                }
-              />
-              <div ref={observationTableRef}>
-                <BenthicPhotoQuadratObservationTable
-                  areObservationsInputsDirty={areObservationsInputsDirty}
+              <form
+                id="benthicpqt-form"
+                aria-labelledby="benthicpqt-form-title"
+                onSubmit={formik.handleSubmit}
+              >
+                <SampleEventInputs
                   areValidationsShowing={areValidationsShowing}
-                  benthicAttributeOptions={benthicAttributeOptions}
-                  choices={choices}
                   collectRecord={collectRecordBeingEdited}
-                  observationsReducer={observationsReducer}
-                  openNewBenthicAttributeModal={openNewBenthicAttributeModal}
-                  persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-                  ignoreObservationValidations={ignoreObservationValidations}
-                  resetObservationValidations={resetObservationValidations}
-                  setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+                  formik={formik}
+                  managementRegimes={managementRegimes}
+                  sites={sites}
+                  handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                  ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                  resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                  validationPropertiesWithDirtyResetOnInputChange={
+                    validationPropertiesWithDirtyResetOnInputChange
+                  }
                 />
-              </div>
-            </form>
+                <BenthicAttributeTransectInputs
+                  areValidationsShowing={areValidationsShowing}
+                  collectRecord={collectRecordBeingEdited}
+                  choices={choices}
+                  formik={formik}
+                  handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                  ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                  resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                  validationPropertiesWithDirtyResetOnInputChange={
+                    validationPropertiesWithDirtyResetOnInputChange
+                  }
+                />
+                <ObserversInput
+                  data-testid="observers"
+                  formik={formik}
+                  observers={observerProfiles}
+                  onObserversChange={handleObserversChange}
+                  resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                  ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                  validationPath={OBSERVERS_VALIDATION_PATH}
+                  validationProperties={observersValidationProperties}
+                  validationPropertiesWithDirtyResetOnInputChange={
+                    validationPropertiesWithDirtyResetOnInputChange
+                  }
+                />
+                <div ref={observationTableRef}>
+                  <BenthicPhotoQuadratObservationTable
+                    areObservationsInputsDirty={areObservationsInputsDirty}
+                    areValidationsShowing={areValidationsShowing}
+                    benthicAttributeOptions={benthicAttributeOptions}
+                    choices={choices}
+                    collectRecord={collectRecordBeingEdited}
+                    observationsReducer={observationsReducer}
+                    openNewBenthicAttributeModal={openNewBenthicAttributeModal}
+                    persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+                    ignoreObservationValidations={ignoreObservationValidations}
+                    resetObservationValidations={resetObservationValidations}
+                    setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+                  />
+                </div>
+              </form>
 
-            <DeleteRecordButtonCautionWrapper>
-              <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>
-                Delete Record
-              </ButtonCaution>
-            </DeleteRecordButtonCautionWrapper>
-            <DeleteRecordConfirm
-              isOpen={showDeleteModal}
-              onDismiss={closeDeleteConfirmPrompt}
-              onConfirm={deleteRecord}
-            />
-          </>
+              <DeleteRecordButtonCautionWrapper>
+                <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>
+                  Delete Record
+                </ButtonCaution>
+              </DeleteRecordButtonCautionWrapper>
+              <DeleteRecordConfirm
+                isOpen={showDeleteModal}
+                onDismiss={closeDeleteConfirmPrompt}
+                onConfirm={deleteRecord}
+              />
+            </>
+          ) : (
+            <PageNoData mainText={language.error.pageReadOnly} />
+          )
         }
         toolbar={
           <ContentPageToolbarWrapper>
@@ -688,16 +698,17 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                 sampleUnit="quadrat_transect"
               />
             )}
-
-            <SaveValidateSubmitButtonGroup
-              isNewRecord={isNewRecord}
-              saveButtonState={saveButtonState}
-              validateButtonState={validateButtonState}
-              submitButtonState={submitButtonState}
-              onValidate={handleValidate}
-              onSave={handleSave}
-              onSubmit={handleSubmit}
-            />
+            {!isReadOnlyUser && (
+              <SaveValidateSubmitButtonGroup
+                isNewRecord={isNewRecord}
+                saveButtonState={saveButtonState}
+                validateButtonState={validateButtonState}
+                submitButtonState={submitButtonState}
+                onValidate={handleValidate}
+                onSave={handleSave}
+                onSubmit={handleSubmit}
+              />
+            )}
           </ContentPageToolbarWrapper>
         }
       />

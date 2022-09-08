@@ -35,6 +35,8 @@ import {
   getIsQuadratSampleUnit,
   noLabelSymbol,
 } from '../../../App/mermaidData/recordProtocolHelpers'
+import { userRole } from '../../../App/mermaidData/userRole'
+import { getProjectRole } from '../../../App/currentUserProfileHelpers'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -46,6 +48,7 @@ const Collect = () => {
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -307,6 +310,12 @@ const Collect = () => {
     <PageNoData mainText={language.pages.collectTable.noDataText} />
   )
 
+  const contentViewByRole = isReadOnlyUser ? (
+    <PageNoData mainText={language.error.pageReadOnly} />
+  ) : (
+    table
+  )
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -317,17 +326,19 @@ const Collect = () => {
       toolbar={
         <>
           <H2>{language.pages.collectTable.title}</H2>
-          <ToolBarRow>
-            <FilterSearchToolbar
-              name={language.pages.collectTable.filterToolbarText}
-              value={tableUserPrefs.globalFilter}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
-            <AddSampleUnitButton />
-          </ToolBarRow>
+          {!isReadOnlyUser && (
+            <ToolBarRow>
+              <FilterSearchToolbar
+                name={language.pages.collectTable.filterToolbarText}
+                value={tableUserPrefs.globalFilter}
+                handleGlobalFilterChange={handleGlobalFilterChange}
+              />
+              <AddSampleUnitButton />
+            </ToolBarRow>
+          )}
         </>
       }
-      content={table}
+      content={contentViewByRole}
       isPageContentLoading={isLoading}
     />
   )
