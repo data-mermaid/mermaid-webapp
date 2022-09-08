@@ -43,15 +43,12 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
         })
       })
 
-  const copyProject = () => {
-    copyExistingProject()
-  }
   const formik = useFormik({
     initialValues: { name: `Copy of ${project.name}` },
   })
 
   const handleOnSubmit = () => {
-    copyProject()
+    copyExistingProject()
     onDismiss()
     toast.success(...getToastArguments(language.success.projectCopied))
   }
@@ -102,8 +99,16 @@ ProjectModal.propTypes = {
   project: projectPropType,
 }
 
+const checkProps = (propType) => {
+  if (propType === undefined) {
+    return undefined
+  }
+
+  return projectPropType.isRequired
+}
+
 ProjectModal.defaultProps = {
-  project: projectPropType.isRequired,
+  project: { checkProps },
 }
 
 export default ProjectModal

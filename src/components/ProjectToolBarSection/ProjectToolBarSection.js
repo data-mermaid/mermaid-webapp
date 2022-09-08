@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
@@ -10,6 +10,7 @@ import { ButtonCallout, ButtonSecondary } from '../generic/buttons'
 import { IconSortDown, IconSortUp } from '../icons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
+import ProjectModal from "../ProjectCard/ProjectModal"
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -90,13 +91,17 @@ const ProjectToolBarSection = ({
   const setSortBy = (event) => {
     setProjectSortKey(event.target.value)
   }
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
+  const openProjectModal = () => setIsProjectModalOpen(true)
+  const closeProjectModal = () => setIsProjectModalOpen(false)
 
   return (
     <GlobalWrapper>
       <RowWrapper>
         <HeaderStyle>Projects</HeaderStyle>
         <OfflineHide>
-          <ButtonCallout>New Project </ButtonCallout>
+          <ButtonCallout onClick={openProjectModal}>New Project</ButtonCallout>
+          <ProjectModal isOpen={isProjectModalOpen} onDismiss={closeProjectModal} />
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>
