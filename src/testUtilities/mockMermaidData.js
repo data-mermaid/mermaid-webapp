@@ -3667,10 +3667,10 @@ const notifications = {
 }
 
 const projectsEndpoint = {
-  "count": 9,
-  "next": null,
-  "previous": null,
-  "results": projects
+  count: 9,
+  next: null,
+  previous: null,
+  results: projects,
 }
 
 const mockMermaidData = {
