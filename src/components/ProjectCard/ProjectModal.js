@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import React, { useCallback } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
@@ -15,19 +15,10 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 const ProjectModal = ({ isOpen, onDismiss, project }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
-  const fetchProjectProfiles = useCallback(() => {
-    if (databaseSwitchboardInstance) {
-      databaseSwitchboardInstance.getProjectProfiles(project.id).catch(() => {
-        toast.error(...getToastArguments(language.error.userRecordsUnavailable))
-      })
-    }
-  }, [databaseSwitchboardInstance, project.id])
-
   const copyExistingProject = () =>
     databaseSwitchboardInstance
       .addProject(project.id, `Copy of ${project.name}`)
       .then(() => {
-        fetchProjectProfiles()
         toast.success(...getToastArguments(language.success.projectCopied))
       })
       .catch((error) => {
@@ -35,9 +26,9 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
           error,
           callback: () => {
             if (error.response.status === 500) {
-              toast.error(...getToastArguments(language.error.duplicateNewProject))
-            } else {
               toast.error(...getToastArguments(language.error.generic))
+            } else {
+              toast.error(...getToastArguments(language.error.duplicateNewProject))
             }
           },
         })
@@ -50,7 +41,6 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
   const handleOnSubmit = () => {
     copyExistingProject()
     onDismiss()
-    toast.success(...getToastArguments(language.success.projectCopied))
   }
 
   const modalContent = (
