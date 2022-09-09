@@ -56,7 +56,7 @@ const mockMermaidApiAllSuccessful = setupServer(
     return res(ctx.json(response))
   }),
 
-  rest.post(`${apiBaseUrl}/projects/`, (req, res, ctx) => {
+  rest.get(`${apiBaseUrl}/projects/`, (req, res, ctx) => {
     const response = {
       ...mockMermaidData.projectsEndpoint,
     }
