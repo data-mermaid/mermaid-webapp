@@ -17,13 +17,14 @@ export const useInitializeCurrentUser = ({
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
 
-    if (isMermaidAuthenticated && apiBaseUrl && dexieCurrentUserInstance && isSyncInProgress) {
+    if (isMermaidAuthenticated && apiBaseUrl && dexieCurrentUserInstance) {
       getCurrentUserProfile({
         apiBaseUrl,
         getAccessToken,
         dexieCurrentUserInstance,
         isMermaidAuthenticated,
         isAppOnline,
+        isSyncInProgress
       })
         .then((user) => {
           if (isMounted && user) {
