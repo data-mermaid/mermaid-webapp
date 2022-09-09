@@ -158,7 +158,7 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addProject = async function addProject(originalProjectId, newProjectName) {
+    addProject = async function addProject(originalProjectId, newProjectName, sendEmail) {
       if (!originalProjectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -170,7 +170,7 @@ const ProjectsMixin = (Base) =>
             {
               new_project_name: newProjectName,
               original_project_id: originalProjectId,
-              notify_users: false,
+              notify_users: sendEmail,
             },
             await getAuthorizationHeaders(this._getAccessToken),
           )

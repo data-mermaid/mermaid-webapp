@@ -1,7 +1,8 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
 import { Input } from '../generic/form'
@@ -11,13 +12,21 @@ import Modal, { RightFooter, ModalInputRow } from '../generic/Modal/Modal'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import theme from '../../theme'
 
-const ProjectModal = ({ isOpen, onDismiss, project }) => {
+const CheckBoxLabel = styled.label`
+  display: inline-block;
+  input {
+    margin: 0 ${theme.spacing.xsmall} 0 0;
+    cursor: pointer;
+  }
+`
+const ProjectModal = ({ isOpen, onDismiss, project, sendEmail }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const copyExistingProject = () =>
     databaseSwitchboardInstance
-      .addProject(project.id, `Copy of ${project.name}`)
+      .addProject(project.id, `Copy of ${project.name}`, sendEmail)
       .then(() => {
         toast.success(...getToastArguments(language.success.projectCopied))
       })
@@ -38,6 +47,12 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
     initialValues: { name: `Copy of ${project.name}` },
   })
 
+  const [checked, setChecked] = useState(false)
+
+  const handleChange = () => {
+    setChecked((current) => !current)
+  }
+
   const handleOnSubmit = () => {
     copyExistingProject()
     onDismiss()
@@ -56,8 +71,17 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
           name="name"
           type="text"
           value={formik.initialValues.name}
+          placeholder="Name of project"
           onChange={(event) => formik.setFieldValue('name', event.target.value)}
         />
+        <p>
+          Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the
+          new project.
+        </p>
+        <CheckBoxLabel>
+          <input type="checkbox" checked={checked} onChange={handleChange} />
+          Notify users by email
+        </CheckBoxLabel>
       </ModalInputRow>
     </>
   )
@@ -86,19 +110,13 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
 ProjectModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  sendEmail: projectPropType,
   project: projectPropType,
 }
 
-const checkProps = (propType) => {
-  if (propType === undefined) {
-    return undefined
-  }
-
-  return projectPropType.isRequired
-}
-
 ProjectModal.defaultProps = {
-  project: { checkProps },
+  project: projectPropType.isRequired,
+  sendEmail: projectPropType.bool,
 }
 
 export default ProjectModal
