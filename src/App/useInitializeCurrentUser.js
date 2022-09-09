@@ -24,7 +24,7 @@ export const useInitializeCurrentUser = ({
         dexieCurrentUserInstance,
         isMermaidAuthenticated,
         isAppOnline,
-        isSyncInProgress
+        isSyncInProgress,
       })
         .then((user) => {
           if (isMounted && user) {

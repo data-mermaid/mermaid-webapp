@@ -49,7 +49,7 @@ function App({ dexieCurrentUserInstance }) {
     dexieCurrentUserInstance,
     isMermaidAuthenticated,
     isAppOnline,
-    isSyncInProgress
+    isSyncInProgress,
   })
 
   const { dexiePerUserDataInstance } = useDexiePerUserDataInstance({
@@ -64,7 +64,6 @@ function App({ dexieCurrentUserInstance }) {
     isAppOnline,
     handleHttpResponseError: handleHttpResponseErrorWithLogoutFunction,
   })
-
 
   const apiSyncInstance = useMemo(() => {
     return new SyncApiDataIntoOfflineStorage({
