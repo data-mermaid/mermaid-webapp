@@ -8,6 +8,9 @@ import { getAuthorizationHeaders } from '../../library/getAuthorizationHeaders'
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
 
+const isIndexedDBProjectInProjectResults = (indexedDBProject, projectsResults) =>
+  projectsResults.some((responseProject) => indexedDBProject.id === responseProject.id)
+
 export const pullApiData = async ({
   dexiePerUserDataInstance,
   getAccessToken,
@@ -36,6 +39,14 @@ export const pullApiData = async ({
     pullRequestBody,
     await getAuthorizationHeaders(getAccessToken),
   )
+
+  // If projects are part of the API pull determine if the user has been
+  // removed from a project. This is determined later in this function.
+  // If the user has been removed, the project will be removed from the IndexedDB.
+  const projectsResponse = apiDataNamesToPull.includes('projects')
+    ? await axios.get(`${apiBaseUrl}/projects/`, await getAuthorizationHeaders(getAccessToken))
+    : undefined
+  const indexedDbProjects = await dexiePerUserDataInstance.projects.toArray()
 
   const apiData = pullResponse.data
 
@@ -75,13 +86,37 @@ export const pullApiData = async ({
           const deletes = apiData[apiDataType]?.deletes ?? []
           const deleteIds = deletes.map(({ id }) => id)
           const error = apiData[apiDataType]?.error
-          const errorIds = (error && [401, 403].includes(error.code)) ? error.record_ids : []
+          const errorIds = error && [401, 403].includes(error.code) ? error.record_ids : []
 
           // Use Set to remove duplicates
           const bulkDeleteIds = Array.from(new Set([...deleteIds, ...errorIds]))
 
           dexiePerUserDataInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
           dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIds)
+        }
+
+        // If the user has been removed from a project, the backend does not treat
+        // it as a change to the project itself, therefore no revision is triggered.
+        // Only the project profile changes in this case.
+        // If the user remains online, project profile will not be updated by a pull.
+        // Determine if the user's project membership has changed based on the
+        // /projects endpoint response and delete the project in the IndexedDb if
+        // they have been removed.
+        if (projectsResponse && apiDataType === 'projects') {
+          const projectsResults = projectsResponse.data?.results
+          const indexedDBProjectsNeedToBeDeleted = projectsResults.length > indexedDbProjects.length
+
+          if (indexedDBProjectsNeedToBeDeleted) {
+            // Determine which projects in IndexedDB are not in the /projects API response
+            const deleteProjectIds = indexedDbProjects
+              .filter((indexedDBProject) => !isIndexedDBProjectInProjectResults(indexedDBProject, projectsResults))
+              .map((removedProject) => removedProject.id)
+
+            if (deleteProjectIds.length) {
+              // Delete the projects from IndexedDB as the user has been removed from them
+              dexiePerUserDataInstance.projects.bulkDelete(deleteProjectIds)
+            }
+          }
         }
       })
     },
