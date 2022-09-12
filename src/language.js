@@ -277,6 +277,9 @@ const pages = {
 const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
+const copyProjectMessage =
+  'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.'
+
 const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
@@ -350,4 +353,5 @@ export default {
   navigateAwayPrompt,
   getValidationMessage,
   inlineMessage,
+  copyProjectMessage,
 }
