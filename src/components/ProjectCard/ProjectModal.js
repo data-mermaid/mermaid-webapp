@@ -26,7 +26,7 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
   const formik = useFormik({
     initialValues: {
       name: `Copy of ${project.name}`,
-      sendEmail: false,
+      sendEmail: true,
     },
   })
 
@@ -77,7 +77,8 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
           <input
             type="checkbox"
             value={formik.values.sendEmail}
-            checked={formik.values.check}
+            name="sendEmail"
+            checked={formik.values.name}
             onChange={() => formik.setFieldValue('sendEmail', !formik.values.check)}
           />
           Notify users by email
