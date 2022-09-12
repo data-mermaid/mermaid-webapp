@@ -1,11 +1,10 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
-import { Input } from '../generic/form'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { RightFooter, ModalInputRow } from '../generic/Modal/Modal'
@@ -13,6 +12,7 @@ import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import handleHttpResponseError from '../../library/handleHttpResponseError'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import theme from '../../theme'
+import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValidation'
 
 const CheckBoxLabel = styled.label`
   display: inline-block;
@@ -21,12 +21,20 @@ const CheckBoxLabel = styled.label`
     cursor: pointer;
   }
 `
-const ProjectModal = ({ isOpen, onDismiss, project, sendEmail }) => {
+
+const ProjectModal = ({ isOpen, onDismiss, project }) => {
+  const formik = useFormik({
+    initialValues: {
+      name: `Copy of ${project.name}`,
+      sendEmail: false,
+    },
+  })
+
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const copyExistingProject = () =>
     databaseSwitchboardInstance
-      .addProject(project.id, `Copy of ${project.name}`, sendEmail)
+      .addProject(project.id, formik.initialValues.name)
       .then(() => {
         toast.success(...getToastArguments(language.success.projectCopied))
       })
@@ -43,16 +51,6 @@ const ProjectModal = ({ isOpen, onDismiss, project, sendEmail }) => {
         })
       })
 
-  const formik = useFormik({
-    initialValues: { name: `Copy of ${project.name}` },
-  })
-
-  const [checked, setChecked] = useState(false)
-
-  const handleChange = () => {
-    setChecked((current) => !current)
-  }
-
   const handleOnSubmit = () => {
     copyExistingProject()
     onDismiss()
@@ -62,24 +60,26 @@ const ProjectModal = ({ isOpen, onDismiss, project, sendEmail }) => {
     <>
       <ModalInputRow>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label id="modal-input-for-projectname-label" htmlFor="modal-input-for-projectname">
-          <h4>Project Name</h4>
-        </label>
-        <Input
-          aria-labelledby="modal-input-for-projectname-label"
-          id="modal-input-for-name"
-          name="name"
+        <label id="modal-input-for-projectname-label" htmlFor="modal-input-for-projectname" />
+        <InputWithLabelAndValidation
+          required
+          label="Project Name"
+          id="name"
           type="text"
-          value={formik.initialValues.name}
+          {...formik.getFieldProps('name')}
           placeholder="Name of project"
           onChange={(event) => formik.setFieldValue('name', event.target.value)}
+          validationType={formik.errors.name ? 'error' : null}
+          validationMessages={formik.errors.name}
         />
-        <p>
-          Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the
-          new project.
-        </p>
+        <p>{language.copyProjectMessage}</p>
         <CheckBoxLabel>
-          <input type="checkbox" checked={checked} onChange={handleChange} />
+          <input
+            type="checkbox"
+            value={formik.values.sendEmail}
+            checked={formik.values.check}
+            onChange={() => formik.setFieldValue('sendEmail', !formik.values.check)}
+          />
           Notify users by email
         </CheckBoxLabel>
       </ModalInputRow>
@@ -110,13 +110,11 @@ const ProjectModal = ({ isOpen, onDismiss, project, sendEmail }) => {
 ProjectModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  sendEmail: projectPropType,
   project: projectPropType,
 }
 
 ProjectModal.defaultProps = {
   project: projectPropType.isRequired,
-  sendEmail: projectPropType.bool,
 }
 
 export default ProjectModal
