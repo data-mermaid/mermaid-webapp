@@ -25,8 +25,9 @@ const CheckBoxLabel = styled.label`
 const StyledTextFooterModal = styled('div')`
   color: ${theme.color.black};
   float: left;
-  margin: 1px 0;
-  padding: ${theme.spacing.small};
+  position: relative;
+  overflow-wrap: break-word;
+  left: -85%;
 `
 
 const ProjectModal = ({ isOpen, onDismiss, project }) => {
