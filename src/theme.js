@@ -82,6 +82,7 @@ const color = {
   disabledBorder: '#969696',
 
   border: white.mix(colorHelper(black), 0.5),
+  tableBorderColor: grey2,
   sideBarColor: black.mix(colorHelper(white), 0.9),
   headerColor: primary,
   footerColor: white,
@@ -156,6 +157,7 @@ const spacing = {
   maxTextWidth: '78ch',
   fullViewportWidth: 'calc(100vw - (100vw - 100%))',
   headerHeight: '4.9rem',
+  toolbarHeight: '7rem',
   sideNavWidth: '15rem',
   mobileSideNavWidth: '7rem',
   borderSmall: '1px',
