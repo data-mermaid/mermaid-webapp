@@ -177,13 +177,20 @@ const SubmittedBenthicPhotoQuadrat = () => {
               sampleUnit="quadrat_transect"
             />
             <RowSpaceBetween>
-              <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
-              {isAdminUser && (
-                <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
+              <>
+                <p>
+                  {isAdminUser
+                    ? language.pages.submittedFishBeltForm.SampleUnitsAreReadOnly
+                    : language.pages.submittedFishBeltForm.AdminEditOnly}
+                </p>
+                <ButtonSecondary
+                  onClick={handleMoveToCollect}
+                  disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
+                >
                   <IconPen />
-                  Edit Sample Unit - move to Collecting
+                  {language.pages.submittedFishBeltForm.MoveSampleUnitButon}
                 </ButtonSecondary>
-              )}
+              </>
             </RowSpaceBetween>
           </>
         )

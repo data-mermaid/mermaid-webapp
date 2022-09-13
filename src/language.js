@@ -234,7 +234,10 @@ const pages = {
   },
   submittedFishBeltForm: {
     title: 'Fish Belt',
-    toolbarLabel: 'Submitted sample units are read-only',
+    sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
+    moveSampleUnitButon: 'Edit Sample Unit - move to Collecting',
+    adminEditOnly:
+      'Submitted sample units are read-only and can only be moved to Collecting by an admin.',
   },
   collectTable: {
     title: 'Collecting',
