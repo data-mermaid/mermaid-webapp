@@ -5,7 +5,7 @@ import { IconClose } from '../../icons'
 import theme from '../../../theme'
 import { CloseButton } from '../buttons'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import { InputRow } from "../form"
+import { InputRow } from '../../generic/form'
 
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
@@ -30,6 +30,7 @@ const StyledDialog = styled('div')`
 const ModalTitle = styled.div`
   padding: ${theme.spacing.medium};
   display: grid;
+  color: ${theme.color.primaryColor};
   grid-template-columns: auto auto;
   h2 {
     justify-self: start;
@@ -86,7 +87,7 @@ const RightFooter = styled('div')`
 
 const ModalInputRow = styled(InputRow)`
   background: ${theme.color.white};
-  color: #000;
+  color: ${theme.color.black};
   display: block;
   border: none;
   h4 {

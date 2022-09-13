@@ -22,6 +22,13 @@ const CheckBoxLabel = styled.label`
   }
 `
 
+const StyledTextFooterModal = styled('div')`
+  color: ${theme.color.black};
+  float: left;
+  margin: 1px 0;
+  padding: ${theme.spacing.small};
+`
+
 const ProjectModal = ({ isOpen, onDismiss, project }) => {
   const formik = useFormik({
     initialValues: {
@@ -34,7 +41,7 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
 
   const copyExistingProject = () =>
     databaseSwitchboardInstance
-      .addProject(project.id, formik.initialValues.name)
+      .addProject(project.id, formik.values.name, formik.values.sendEmail)
       .then(() => {
         toast.success(...getToastArguments(language.success.projectCopied))
       })
@@ -66,20 +73,20 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
           label="Project Name"
           id="name"
           type="text"
-          {...formik.getFieldProps('name')}
+          value={formik.values.name}
           placeholder="Name of project"
-          onChange={(event) => formik.setFieldValue('name', event.target.value)}
+          onChange={formik.handleChange}
           validationType={formik.errors.name ? 'error' : null}
           validationMessages={formik.errors.name}
         />
-        <p>{language.copyProjectMessage}</p>
+        <p>{language.projectModal.copyProjectMessage}</p>
         <CheckBoxLabel>
           <input
             type="checkbox"
             value={formik.values.sendEmail}
             name="sendEmail"
-            checked={formik.values.name}
-            onChange={() => formik.setFieldValue('sendEmail', !formik.values.check)}
+            checked={formik.values.sendEmail}
+            onChange={formik.handleChange}
           />
           Notify users by email
         </CheckBoxLabel>
@@ -89,6 +96,7 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
 
   const footerContent = (
     <RightFooter>
+      <StyledTextFooterModal>{language.projectModal.footerMessage}</StyledTextFooterModal>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
         Copy project
@@ -101,7 +109,7 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
     <Modal
       isOpen={isOpen}
       onDismiss={onDismiss}
-      title={language.title.userProfileModal}
+      title={language.projectModal.copyTitle}
       mainContent={modalContent}
       footerContent={footerContent}
     />

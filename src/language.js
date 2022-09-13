@@ -280,6 +280,13 @@ const navigateAwayPrompt =
 const copyProjectMessage =
   'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.'
 
+const projectModal = {
+  copyProjectMessage:
+    'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
+  copyTitle: 'Copy Project',
+  footerMessage: 'You will be an admin of this project',
+}
+
 const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
@@ -353,5 +360,5 @@ export default {
   navigateAwayPrompt,
   getValidationMessage,
   inlineMessage,
-  copyProjectMessage,
+  projectModal,
 }
