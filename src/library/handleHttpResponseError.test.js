@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify'
+import { toast, Slide } from 'react-toastify'
 import handleHttpResponseError from './handleHttpResponseError'
 
 test('handleHttpResponseError produces the appropriate toast message if the status is 401', () => {
@@ -22,6 +22,7 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
     'The current user does not have sufficient permission to do that.',
     {
       toastId: 'The current user does not have sufficient permission to do that.',
+      transition: Slide,
     },
   )
 
@@ -37,6 +38,7 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
     toastId: 'Something went wrong with the server.',
+    transition: Slide,
   })
 
   expect(callback).not.toHaveBeenCalled()
@@ -51,6 +53,7 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
     toastId: 'Something went wrong with the server.',
+    transition: Slide,
   })
 
   expect(callback).not.toHaveBeenCalled()
@@ -65,6 +68,7 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
     toastId: 'Something went wrong with the server.',
+    transition: Slide,
   })
 
   expect(callback).not.toHaveBeenCalled()
@@ -95,6 +99,7 @@ test('if no callback is provided handleHttpResponseError will produce a generic 
 
   expect(toastSpy).toHaveBeenCalledWith('Something went wrong.', {
     toastId: 'Something went wrong.',
+    transition: Slide,
   })
 })
 

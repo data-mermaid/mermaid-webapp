@@ -351,7 +351,6 @@ const fishBeltTransectMethods = [
       updated_on: '2021-07-20T19:31:39.383802Z',
       data: null,
       sample_date: '2019-11-05',
-      notes: '',
       validations: null,
       created_by: '4ff5f714-43b3-4564-be1c-c6053f7c0487',
       site: '3',
@@ -493,7 +492,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some fish notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -503,6 +501,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some fish notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 6,
@@ -574,7 +573,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2001-11-22',
       },
@@ -584,6 +582,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -609,7 +608,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2017-4-19',
       },
@@ -619,6 +617,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -648,7 +647,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2012-6-12',
       },
@@ -658,6 +656,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -691,7 +690,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2016-3-7',
       },
@@ -701,6 +699,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -726,7 +725,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2020-8-13',
       },
@@ -735,6 +733,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -756,7 +755,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2019-5-29',
       },
@@ -766,6 +764,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -787,7 +786,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2019-5-29',
       },
@@ -797,6 +795,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -822,7 +821,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -832,6 +830,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -853,7 +852,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -863,6 +861,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -888,7 +887,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -898,6 +896,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -923,7 +922,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -933,6 +931,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -958,7 +957,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -968,6 +966,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -993,7 +992,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -1003,6 +1001,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -1028,7 +1027,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -1038,6 +1036,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -1063,7 +1062,6 @@ const collect_records = [
       protocol: 'fishbelt',
       sample_event: {
         site: '4',
-        notes: 'some lit notes',
         management: '3',
         sample_date: '2021-3-2',
       },
@@ -1073,6 +1071,7 @@ const collect_records = [
         width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
         size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
         reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some lit notes',
         number: 2,
         sample_time: '11:55',
         len_surveyed: 5,
@@ -3667,6 +3666,13 @@ const notifications = {
   ],
 }
 
+const projectsEndpoint = {
+  count: 9,
+  next: null,
+  previous: null,
+  results: projects,
+}
+
 const mockMermaidData = {
   benthic_attributes,
   choices,
@@ -3680,6 +3686,7 @@ const mockMermaidData = {
   project_profiles,
   project_sites,
   projects,
+  projectsEndpoint,
   projecttags,
   sampleUnitMethods,
 }

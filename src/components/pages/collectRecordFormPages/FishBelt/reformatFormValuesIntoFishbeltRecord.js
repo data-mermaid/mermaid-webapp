@@ -30,6 +30,7 @@ export const reformatFormValuesIntoFishBeltRecord = (
         depth,
         label,
         len_surveyed,
+        notes,
         number,
         reef_slope,
         sample_time,
@@ -42,7 +43,6 @@ export const reformatFormValuesIntoFishBeltRecord = (
       },
       sample_event: {
         management,
-        notes,
         sample_date,
         site,
       },
