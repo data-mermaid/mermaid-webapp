@@ -1,6 +1,5 @@
 import React from 'react'
 import moment from 'moment'
-import styled from 'styled-components/macro'
 
 import {
   NotificationCard,
@@ -8,7 +7,9 @@ import {
   NotificationCloseButton,
   NotificationContent,
   NotificationTitle,
-  NotificationDate,
+  NotificationDateWrapper,
+  NotificationTimeAgoDate,
+  NotificationActualDate,
   NotificationHeader,
   NotificationStatus,
   NoNotifications,
@@ -16,17 +17,6 @@ import {
 import { IconClose } from '../icons'
 import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
-import { TooltipWithText, TooltipPopup, Tooltip } from '../generic/tooltip'
-
-const DateTimeTooltip = styled(TooltipWithText)`
-  ${TooltipPopup} {
-    width: auto;
-    min-width: max-content;
-    text-align: center;
-  }
-  ${Tooltip} {
-  }
-`
 
 const BellNotificationDropDown = () => {
   const { notifications, deleteNotification } = useBellNotifications()
@@ -59,12 +49,10 @@ const BellNotificationDropDown = () => {
                   </NotificationCloseButton>
                 </NotificationHeader>
                 <p>{notification.description}</p>
-                <DateTimeTooltip
-                  id={`aria-tooltip-label${notification.id}`}
-                  text={dateTime.fromNow()}
-                  forwardedAs={NotificationDate}
-                  tooltipText={dateTime.format('LLLL')}
-                />
+                <NotificationDateWrapper>
+                  <NotificationTimeAgoDate>{dateTime.fromNow()}</NotificationTimeAgoDate>
+                  <NotificationActualDate>{dateTime.format('LLLL')}</NotificationActualDate>
+                </NotificationDateWrapper>
               </NotificationContent>
             </NotificationCard>
           )

@@ -12,7 +12,6 @@ export const NotificationCardWrapper = styled('div')`
   position: absolute;
   right: 0;
 `
-
 export const NotificationCard = styled('div')`
   display: grid;
   grid-template-columns: calc(${theme.spacing.medium} * 2) auto;
@@ -20,27 +19,28 @@ export const NotificationCard = styled('div')`
   background: ${theme.color.grey5};
   padding: ${theme.spacing.medium};
 `
-
-export const NotificationCloseButton = styled(CloseButton)`
-  margin-left: auto;
-`
-
-export const NotificationContent = styled('div')``
-
-export const NotificationDate = styled('p')`
-  font-size: ${theme.typography.smallFontSize};
-  opacity: 0.7;
-  color: initial;
-`
-
 export const NotificationHeader = styled('div')`
-  display: flex;
-  flex-grow: 1;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
 `
 export const NotificationTitle = styled('p')`
   font-weight: 700;
-  margin-bottom: 0;
+  margin: 0;
 `
+export const NotificationDateWrapper = styled('div')`
+  * {
+    opacity: 0.7;
+    margin: 0;
+    color: ${theme.color.secondary};
+  }
+`
+export const NotificationActualDate = styled('p')`
+  font-size: ${theme.typography.xSmallFontSize};
+`
+export const NotificationTimeAgoDate = styled('p')``
+export const NotificationCloseButton = styled(CloseButton)``
+export const NotificationContent = styled('div')``
 
 const getNotificationStatusColor = (props) => {
   const statusColors = {
