@@ -176,7 +176,7 @@ const stickyStyles = css`
   }
 `
 
-export const ProjectHealthStickyTable = styled(Table)`
+export const StickyProjectHealthTable = styled(Table)`
   thead tr:nth-child(2) th {
     ${stickyStyles}
   }
