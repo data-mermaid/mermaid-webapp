@@ -80,6 +80,9 @@ export const StickyObservationTable = styled(GenericStickyTable)`
       top: calc(
         ${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + ${theme.spacing.small}
       );
+      ${mediaQueryTabletLandscapeOnly(css`
+        top: calc(${theme.spacing.headerHeight} + ${theme.spacing.mobileToolbarHeight} - 2px);
+      `)}
     }
     td {
       padding: 0rem;

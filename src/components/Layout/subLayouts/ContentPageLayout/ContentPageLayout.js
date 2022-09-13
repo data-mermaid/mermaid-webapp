@@ -3,10 +3,7 @@ import React from 'react'
 import styled, { css } from 'styled-components/macro'
 import { subNavNodePropTypes } from '../../../SubNavMenuRecordName/subNavNodePropTypes'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import {
-  mediaQueryPhoneOnly,
-  mediaQueryTabletLandscapeOnly,
-} from '../../../../library/styling/mediaQueries'
+import { mediaQueryTabletLandscapeOnly } from '../../../../library/styling/mediaQueries'
 import theme from '../../../../theme'
 import { Column } from '../../../generic/positioning'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
@@ -56,7 +53,7 @@ const ContentPageToolbarWrapper = styled('div')`
   justify-content: space-between;
   flex-direction: row;
   align-items: center;
-  ${mediaQueryPhoneOnly(css`
+  ${mediaQueryTabletLandscapeOnly(css`
     flex-direction: column;
     align-items: start;
   `)}
