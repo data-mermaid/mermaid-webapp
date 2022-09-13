@@ -22,6 +22,12 @@ ReactDOM.render(
       redirectUri={window.location.origin}
       audience={process.env.REACT_APP_AUTH0_AUDIENCE}
       useRefreshTokens={true}
+      // Note that while storing tokens in local storage provides persistence
+      // across page refreshes and browser tabs, it increases the risk of
+      // cross-site scripting (XSS) attacks.
+      // More information here: https://auth0.com/docs/libraries/auth0-single-page-app-sdk#change-storage-options
+      // Reccomend researching a different approach to authentication
+      cacheLocation="localstorage"
       scope="read:current_user update:current_user_metadata"
     >
       <BrowserRouter basename={process.env.PUBLIC_URL}>

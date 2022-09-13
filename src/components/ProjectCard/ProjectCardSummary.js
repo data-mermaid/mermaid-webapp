@@ -6,9 +6,10 @@ import {
   OfflineMessage,
   SubCardIconAndCount,
   SubCardTitle,
+  DataSharingSummaryCard,
   SummaryCardGroup,
   SummaryCard,
-  DataSharingPolicySubCardContent,
+  DataSharingList,
 } from './ProjectCard.styles'
 import { getDataSharingPolicyLabel } from '../../library/getDataSharingPolicyLabel'
 import { IconCollect, IconData, IconSites, IconUsers } from '../icons'
@@ -94,26 +95,28 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     </SummaryCard>
   )
   const dataSharingCardOnline = (
-    <SummaryCard
+    <DataSharingSummaryCard
       to={`${projectUrl}/data-sharing`}
       aria-label="Data-Sharing"
       onClick={stopEventPropagation}
     >
-      <SubCardTitle>Data sharing</SubCardTitle>
-      <DataSharingPolicySubCardContent>
-        <span data-testid="fishbelt-policy">
-          Fish belt: <strong>{getDataSharingPolicyLabel(data_policy_beltfish)}</strong>
-        </span>
-        <span data-testid="benthic-policy">
-          Benthic: <strong>{getDataSharingPolicyLabel(data_policy_benthiclit)}</strong>
-        </span>
-        <span data-testid="bleaching-policy">
-          Bleaching: <strong>{getDataSharingPolicyLabel(data_policy_bleachingqc)}</strong>
-        </span>
-      </DataSharingPolicySubCardContent>
-    </SummaryCard>
+      <div>
+        <SubCardTitle>Data sharing</SubCardTitle>
+        <DataSharingList>
+          <li data-testid="fishbelt-policy">
+            Fish belt: <strong>{getDataSharingPolicyLabel(data_policy_beltfish)}</strong>
+          </li>
+          <li data-testid="benthic-policy">
+            Benthic: <strong>{getDataSharingPolicyLabel(data_policy_benthiclit)}</strong>
+          </li>
+          <li data-testid="bleaching-policy">
+            Bleaching: <strong>{getDataSharingPolicyLabel(data_policy_bleachingqc)}</strong>
+          </li>
+        </DataSharingList>
+      </div>
+    </DataSharingSummaryCard>
   )
-  // Offline cards
+
   const submittedCardOffline = (
     <OfflineSummaryCard aria-label="submitted Offline" onClick={stopEventPropagation}>
       <SubCardTitle>Submitted</SubCardTitle>

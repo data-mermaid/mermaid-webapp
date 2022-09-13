@@ -1,11 +1,13 @@
 import React from 'react'
 import moment from 'moment'
+import styled from 'styled-components/macro'
 
 import {
   NotificationCard,
   NotificationCardWrapper,
   NotificationCloseButton,
   NotificationContent,
+  NotificationTitle,
   NotificationDate,
   NotificationHeader,
   NotificationStatus,
@@ -14,6 +16,17 @@ import {
 import { IconClose } from '../icons'
 import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
+import { TooltipWithText, TooltipPopup, Tooltip } from '../generic/tooltip'
+
+const DateTimeTooltip = styled(TooltipWithText)`
+  ${TooltipPopup} {
+    width: auto;
+    min-width: max-content;
+    text-align: center;
+  }
+  ${Tooltip} {
+  }
+`
 
 const BellNotificationDropDown = () => {
   const { notifications, deleteNotification } = useBellNotifications()
@@ -26,23 +39,32 @@ const BellNotificationDropDown = () => {
   return (
     <NotificationCardWrapper>
       {!notifications?.results || !notifications.results?.length ? (
-        <NoNotifications>{language.header.noNotifications}</NoNotifications>
+        <NoNotifications>
+          <em>{language.header.noNotifications}</em>
+        </NoNotifications>
       ) : (
         notifications.results.map((notification) => {
+          const dateTime = moment(notification.created_on)
+
           return (
             <NotificationCard key={`notification-card-${notification.id}`}>
               <NotificationStatus status={notification.status} />
               <NotificationContent>
                 <NotificationHeader>
-                  <h1>{notification.title}</h1>
+                  <NotificationTitle>{notification.title}</NotificationTitle>
                   <NotificationCloseButton
                     onClick={(event) => dismissNotification(event, notification.id)}
                   >
                     <IconClose aria-label="close" />
                   </NotificationCloseButton>
                 </NotificationHeader>
-                <NotificationDate>{moment(notification.created_on).fromNow()}</NotificationDate>
-                <span>{notification.description}</span>
+                <p>{notification.description}</p>
+                <DateTimeTooltip
+                  id={`aria-tooltip-label${notification.id}`}
+                  text={dateTime.fromNow()}
+                  forwardedAs={NotificationDate}
+                  tooltipText={dateTime.format('LLLL')}
+                />
               </NotificationContent>
             </NotificationCard>
           )
