@@ -7,12 +7,9 @@ import { useHistory, useParams } from 'react-router-dom'
 import BenthicAttributeTransectInputs from './BenthicAttributeTransectInputs'
 import BenthicPhotoQuadratObservationTable from './BenthicPhotoQuadratObservationTable'
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
-import { ButtonCaution } from '../../../generic/buttons'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import { DeleteRecordButtonCautionWrapper } from '../CollectingFormPage.Styles'
-import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import {
@@ -44,6 +41,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import DeleteRecordButton from '../DeleteRecordButton'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
@@ -74,7 +72,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [observationToAddAttributesTo, setObservationToAddAttributesTo] = useState()
   const [projectName, setProjectName] = useState('')
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [subNavNode, setSubNavNode] = useState(null)
@@ -99,12 +96,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
 
   const closeNewBenthicAttributeModal = () => {
     setIsNewBenthicAttributeModalOpen(false)
-  }
-  const showDeleteConfirmPrompt = () => {
-    setShowDeleteModal(true)
-  }
-  const closeDeleteConfirmPrompt = () => {
-    setShowDeleteModal(false)
   }
   const handleScrollToObservation = () => {
     observationTableRef.current.scrollIntoView({
@@ -188,7 +179,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               toast.error(...getToastArguments(errorMessage))
             },
           })
-
         })
     }
   }, [
@@ -205,10 +195,13 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedBenthicPhotoQuadratSampleInfoInputs`)
+  } = useUnsavedDirtyFormDataUtilities(
+    `${currentUser.id}-unsavedBenthicPhotoQuadratSampleInfoInputs`,
+  )
 
-  const persistUnsavedObservationsUtilities =
-    useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedBenthicPhotoQuadratObservations`)
+  const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
+    `${currentUser.id}-unsavedBenthicPhotoQuadratObservations`,
+  )
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
@@ -277,7 +270,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const formik = useFormik({
     initialValues: initialFormikFormValues,
     enableReinitialize: true,
-    validate: persistUnsavedFormikData
+    validate: persistUnsavedFormikData,
   })
 
   const handleSave = () => {
@@ -574,7 +567,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
         })
         .catch((error) => {
-          closeDeleteConfirmPrompt()
           handleHttpResponseError({
             error,
             callback: () => {
@@ -583,6 +575,8 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
           })
         })
     }
+
+    return Promise.resolve()
   }
 
   return idsNotAssociatedWithData.length ? (
@@ -664,17 +658,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                 />
               </div>
             </form>
-
-            <DeleteRecordButtonCautionWrapper>
-              <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>
-                Delete Record
-              </ButtonCaution>
-            </DeleteRecordButtonCautionWrapper>
-            <DeleteRecordConfirm
-              isOpen={showDeleteModal}
-              onDismiss={closeDeleteConfirmPrompt}
-              onConfirm={deleteRecord}
-            />
+            <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
           </>
         }
         toolbar={

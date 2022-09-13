@@ -9,7 +9,6 @@ import {
   getSampleInfoInitialValues,
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
-import { ButtonCaution } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
@@ -22,7 +21,6 @@ import { reformatFormValuesIntoFishBeltRecord } from './reformatFormValuesIntoFi
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
-import DeleteRecordConfirm from '../DeleteRecordConfirm/DeleteRecordConfirm'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import SampleEventInputs from '../SampleEventInputs'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
@@ -43,7 +41,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordName } from '../../../../library/getRecordName'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
-import { DeleteRecordButtonCautionWrapper } from '../CollectingFormPage.Styles'
+import DeleteRecordButton from '../DeleteRecordButton'
 
 const FishBelt = ({ isNewRecord }) => {
   const OBSERVERS_VALIDATION_PATH = 'data.observers'
@@ -65,7 +63,6 @@ const FishBelt = ({ isNewRecord }) => {
 
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [sites, setSites] = useState([])
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
@@ -94,12 +91,6 @@ const FishBelt = ({ isNewRecord }) => {
   }, [])
   const closeNewFishNameModal = () => {
     setIsNewFishNameModalOpen(false)
-  }
-  const showDeleteConfirmPrompt = () => {
-    setShowDeleteModal(true)
-  }
-  const closeDeleteConfirmPrompt = () => {
-    setShowDeleteModal(false)
   }
   const handleScrollToObservation = () => {
     observationTableRef.current.scrollIntoView({
@@ -215,8 +206,9 @@ const FishBelt = ({ isNewRecord }) => {
     getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
   } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedFishBeltSampleInfoInputs`)
 
-  const persistUnsavedObservationsUtilities =
-    useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedFishBeltObservations`)
+  const persistUnsavedObservationsUtilities = useUnsavedDirtyFormDataUtilities(
+    `${currentUser.id}-unsavedFishBeltObservations`,
+  )
 
   const {
     clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
@@ -239,10 +231,12 @@ const FishBelt = ({ isNewRecord }) => {
         })
         .catch(() => {
           toast.error(...getToastArguments(language.error.collectRecordDelete))
-          closeDeleteConfirmPrompt()
         })
     }
+
+    return Promise.resolve()
   }
+
   const handleSubmit = () => {
     setSubmitButtonState(buttonGroupStates.submitting)
 
@@ -257,6 +251,7 @@ const FishBelt = ({ isNewRecord }) => {
         setSubmitButtonState(buttonGroupStates.submittable)
       })
   }
+
   const handleValidate = () => {
     setValidateButtonState(buttonGroupStates.validating)
 
@@ -629,17 +624,7 @@ const FishBelt = ({ isNewRecord }) => {
                 />
               </div>
             </form>
-
-            <DeleteRecordButtonCautionWrapper>
-              <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>
-                Delete Record
-              </ButtonCaution>
-            </DeleteRecordButtonCautionWrapper>
-            <DeleteRecordConfirm
-              isOpen={showDeleteModal}
-              onDismiss={closeDeleteConfirmPrompt}
-              onConfirm={deleteRecord}
-            />
+            <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
           </>
         }
         toolbar={
