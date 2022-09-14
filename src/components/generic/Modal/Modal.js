@@ -87,7 +87,7 @@ const RightFooter = styled('div')`
 
 const ModalInputRow = styled(InputRow)`
   background: ${theme.color.white};
-  color: ${theme.color.black};
+  color: ${theme.color.primaryColor};
   display: block;
   border: none;
   h4 {
