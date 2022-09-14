@@ -250,15 +250,28 @@ export const notificationsPropType = PropTypes.shape({
   count: PropTypes.number,
   next: PropTypes.string,
   previous: PropTypes.string,
-  results: PropTypes.arrayOf(PropTypes.shape({
-    created_by: PropTypes.string,
-    created_on: PropTypes.string,
-    description: PropTypes.string,
-    id: PropTypes.string,
-    owner: PropTypes.string,
-    status: PropTypes.string,
-    title: PropTypes.string,
-    updated_by: PropTypes.string,
-    updated_on: PropTypes.string
-  })),
+  results: PropTypes.arrayOf(
+    PropTypes.shape({
+      created_by: PropTypes.string,
+      created_on: PropTypes.string,
+      description: PropTypes.string,
+      id: PropTypes.string,
+      owner: PropTypes.string,
+      status: PropTypes.string,
+      title: PropTypes.string,
+      updated_by: PropTypes.string,
+      updated_on: PropTypes.string,
+    }),
+  ),
 })
+
+export const observersValidationPropType = PropTypes.arrayOf(
+  PropTypes.shape({
+    code: PropTypes.string,
+    context: PropTypes.string,
+    fields: PropTypes.arrayOf(PropTypes.string),
+    name: PropTypes.string,
+    status: PropTypes.string,
+    validation_id: PropTypes.string,
+  }),
+)

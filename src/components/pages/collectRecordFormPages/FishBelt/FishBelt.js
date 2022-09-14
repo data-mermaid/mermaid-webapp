@@ -26,7 +26,6 @@ import SampleEventInputs from '../SampleEventInputs'
 import fishbeltObservationReducer from './fishbeltObservationReducer'
 import FishBeltObservationTable from './FishBeltObservationTable'
 import FishbeltTransectInputs from './FishbeltTransectInputs'
-import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
 import { getToastArguments } from '../../../../library/getToastArguments'
@@ -44,7 +43,6 @@ import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObje
 import DeleteRecordButton from '../DeleteRecordButton'
 
 const FishBelt = ({ isNewRecord }) => {
-  const OBSERVERS_VALIDATION_PATH = 'data.observers'
   const observationTableRef = useRef(null)
 
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -79,6 +77,7 @@ const FishBelt = ({ isNewRecord }) => {
   const [observationsState, observationsDispatch] = observationsReducer
 
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+  const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
 
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
@@ -499,11 +498,6 @@ const FishBelt = ({ isNewRecord }) => {
     }
   }
 
-  const observersValidationProperties = getValidationPropertiesForInput(
-    collectRecordBeingEdited?.validations?.results?.data?.observers,
-    areValidationsShowing,
-  )
-
   const handleChangeForDirtyIgnoredInput = ({
     validationProperties,
     validationPath,
@@ -515,15 +509,6 @@ const FishBelt = ({ isNewRecord }) => {
     if (doesFieldHaveIgnoredValidation && isInputDirty) {
       resetNonObservationFieldValidations({ validationPath })
     }
-  }
-
-  const handleObserversChange = ({ selectedObservers }) => {
-    handleChangeForDirtyIgnoredInput({
-      inputName: 'observers',
-      validationProperties: observersValidationProperties,
-      validationPath: OBSERVERS_VALIDATION_PATH,
-    })
-    formik.setFieldValue('observers', selectedObservers)
   }
 
   const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
@@ -593,13 +578,14 @@ const FishBelt = ({ isNewRecord }) => {
               />
               <ObserversInput
                 data-testid="observers"
+                areValidationsShowing={areValidationsShowing}
+                collectRecord={collectRecordBeingEdited}
                 formik={formik}
                 ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
                 observers={observerProfiles}
-                onObserversChange={handleObserversChange}
+                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
                 resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                validationPath={OBSERVERS_VALIDATION_PATH}
-                validationProperties={observersValidationProperties}
+                validationsApiData={validationsApiData}
                 validationPropertiesWithDirtyResetOnInputChange={
                   validationPropertiesWithDirtyResetOnInputChange
                 }

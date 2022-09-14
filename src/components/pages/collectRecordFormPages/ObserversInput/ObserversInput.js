@@ -6,20 +6,28 @@ import { getObserverNameOptions } from '../../../../library/observerHelpers'
 import { H2 } from '../../../generic/text'
 import InputCheckboxGroupWithLabelAndValidation from '../../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import { InputWrapper } from '../../../generic/form'
-import { observersPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import mermaidInputsPropTypes from '../../../mermaidInputs/mermaidInputsPropTypes'
+import {
+  observersPropType,
+  observersValidationPropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
+import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 
 const ObserversInput = ({
+  areValidationsShowing,
   formik,
   ignoreNonObservationFieldValidations,
   observers,
-  onObserversChange,
+  handleChangeForDirtyIgnoredInput,
   resetNonObservationFieldValidations,
-  validationPath,
-  validationProperties,
+  validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
   ...restOfProps
 }) => {
+  const validationPath = 'data.observers'
+  const validationProperties = getValidationPropertiesForInput(
+    validationsApiData?.observers,
+    areValidationsShowing,
+  )
   const observerNameOptions = getObserverNameOptions(observers)
   const observerNameValues = formik.values.observers.map(({ profile }) => profile)
 
@@ -27,6 +35,17 @@ const ObserversInput = ({
     [...observers].filter(({ profile }) =>
       !observerIds ? undefined : observerIds.includes(profile),
     )
+
+  const handleObserversChange = (selectedItems) => {
+    const selectedObservers = filterObserverProfiles(selectedItems)
+
+    formik.setFieldValue('observers', selectedObservers)
+    handleChangeForDirtyIgnoredInput({
+      inputName: 'observers',
+      validationProperties,
+      validationPath,
+    })
+  }
 
   return (
     <InputWrapper {...restOfProps}>
@@ -44,30 +63,20 @@ const ObserversInput = ({
           resetNonObservationFieldValidations({ validationPath })
         }}
         {...validationPropertiesWithDirtyResetOnInputChange(validationProperties, 'observers')}
-        onChange={({ selectedItems }) => {
-          const selectedObservers = filterObserverProfiles(selectedItems)
-
-          onObserversChange({
-            inputValidationPropertyName: 'observers',
-            selectedObservers,
-          })
-        }}
+        onChange={({ selectedItems }) => handleObserversChange(selectedItems)}
       />
     </InputWrapper>
   )
 }
 
 ObserversInput.propTypes = {
+  areValidationsShowing: PropTypes.bool.isRequired,
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   observers: observersPropType.isRequired,
-  onObserversChange: PropTypes.func.isRequired,
+  handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
-  validationPath: PropTypes.string.isRequired,
-  validationProperties: PropTypes.shape({
-    validationType: PropTypes.string,
-    validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
-  }).isRequired,
+  validationsApiData: PropTypes.shape({ observers: observersValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 

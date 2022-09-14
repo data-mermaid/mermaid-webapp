@@ -21,7 +21,6 @@ import {
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { H2 } from '../../../generic/text'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
@@ -44,7 +43,6 @@ import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHa
 import DeleteRecordButton from '../DeleteRecordButton'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
-  const OBSERVERS_VALIDATION_PATH = 'data.observers'
   const observationTableRef = useRef(null)
 
   const currentProjectPath = useCurrentProjectPath()
@@ -78,6 +76,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
 
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
+  const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
@@ -512,11 +511,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     }
   }, [isFormDirty])
 
-  const observersValidationProperties = getValidationPropertiesForInput(
-    collectRecordBeingEdited?.validations?.results?.data?.observers,
-    areValidationsShowing,
-  )
-
   const handleChangeForDirtyIgnoredInput = ({
     validationProperties,
     validationPath,
@@ -528,15 +522,6 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     if (doesFieldHaveIgnoredValidation && isInputDirty) {
       resetNonObservationFieldValidations({ validationPath })
     }
-  }
-
-  const handleObserversChange = ({ selectedObservers }) => {
-    handleChangeForDirtyIgnoredInput({
-      inputName: 'observers',
-      validationProperties: observersValidationProperties,
-      validationPath: OBSERVERS_VALIDATION_PATH,
-    })
-    formik.setFieldValue('observers', selectedObservers)
   }
 
   const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
@@ -631,13 +616,13 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
               />
               <ObserversInput
                 data-testid="observers"
+                areValidationsShowing={areValidationsShowing}
                 formik={formik}
-                observers={observerProfiles}
-                onObserversChange={handleObserversChange}
-                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
                 ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                validationPath={OBSERVERS_VALIDATION_PATH}
-                validationProperties={observersValidationProperties}
+                observers={observerProfiles}
+                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                validationsApiData={validationsApiData}
                 validationPropertiesWithDirtyResetOnInputChange={
                   validationPropertiesWithDirtyResetOnInputChange
                 }
