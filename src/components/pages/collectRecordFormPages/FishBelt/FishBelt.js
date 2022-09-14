@@ -579,7 +579,6 @@ const FishBelt = ({ isNewRecord }) => {
               <ObserversInput
                 data-testid="observers"
                 areValidationsShowing={areValidationsShowing}
-                collectRecord={collectRecordBeingEdited}
                 formik={formik}
                 ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
                 observers={observerProfiles}
