@@ -66,11 +66,8 @@ const BellNotificationDropDown = () => {
           )
       }
       )}
-
     </NotificationCardWrapper>
-
   )
-
 }
 
 export default BellNotificationDropDown
