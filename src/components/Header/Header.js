@@ -125,6 +125,7 @@ const Header = ({ logout, currentUser }) => {
             <GlobalLinks />
             {isAppOnline && (
               <HideShow
+                closeOnClickWithin={false}
                 button={
                   <HeaderButtonThatLooksLikeLink>
                     <BiggerIconBell />
@@ -137,6 +138,7 @@ const Header = ({ logout, currentUser }) => {
               />
             )}
             <HideShow
+              closeOnClickWithin={true}
               button={getUserButton()}
               contents={
                 <UserMenu>
