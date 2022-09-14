@@ -566,12 +566,12 @@ const FishBelt = ({ isNewRecord }) => {
               <FishbeltTransectInputs
                 areValidationsShowing={areValidationsShowing}
                 choices={choices}
-                collectRecord={collectRecordBeingEdited}
                 formik={formik}
                 handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
                 ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
                 onSizeBinChange={handleSizeBinChange}
                 resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                validationsApiData={validationsApiData}
                 validationPropertiesWithDirtyResetOnInputChange={
                   validationPropertiesWithDirtyResetOnInputChange
                 }

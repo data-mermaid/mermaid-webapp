@@ -610,6 +610,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
                 handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
                 ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
                 resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                validationsApiData={validationsApiData}
                 validationPropertiesWithDirtyResetOnInputChange={
                   validationPropertiesWithDirtyResetOnInputChange
                 }
