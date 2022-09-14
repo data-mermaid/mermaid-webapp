@@ -17,6 +17,7 @@ import { IconClose } from '../icons'
 import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { TooltipWithText, TooltipPopup, Tooltip } from '../generic/tooltip'
+import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 
 const DateTimeTooltip = styled(TooltipWithText)`
   ${TooltipPopup} {
@@ -37,15 +38,22 @@ const BellNotificationDropDown = () => {
     event.stopPropagation()
   }
 
-  return (
-    <NotificationCardWrapper>
-      {!notifications?.results || !notifications.results?.length ? (
+  if (!notifications?.results || !notifications.results?.length) {
+    return (
+      <NotificationCardWrapper>
         <NoNotifications>
           <em>{language.header.noNotifications}</em>
         </NoNotifications>
-      ) : (
-          notifications.results.map((notification) => {
-            const dateTime = moment(notification.created_on)
+      </NotificationCardWrapper>
+    )
+  }
+
+  const sortedNotifications = sortArrayByObjectKey(notifications.results, 'created_on', false)
+
+  return (
+    <NotificationCardWrapper>
+      {sortedNotifications.map((notification) => {
+        const dateTime = moment(notification.created_on)
 
           return (
             <NotificationCard key={`notification-card-${notification.id}`}>
@@ -69,10 +77,13 @@ const BellNotificationDropDown = () => {
               </NotificationContent>
             </NotificationCard>
           )
-        })
+      }
       )}
+
     </NotificationCardWrapper>
+
   )
+
 }
 
 export default BellNotificationDropDown
