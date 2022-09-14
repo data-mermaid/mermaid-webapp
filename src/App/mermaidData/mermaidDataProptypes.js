@@ -265,13 +265,57 @@ export const notificationsPropType = PropTypes.shape({
   ),
 })
 
-export const observersValidationPropType = PropTypes.arrayOf(
+// Start of PropTypes for validation object
+const validationObject = {
+  code: PropTypes.string,
+  context: PropTypes.string,
+  fields: PropTypes.arrayOf(PropTypes.string),
+  name: PropTypes.string,
+  status: PropTypes.string,
+  validation_id: PropTypes.string,
+}
+
+const _depthValidationContextPropType = PropTypes.oneOfType([
+  PropTypes.string,
   PropTypes.shape({
-    code: PropTypes.string,
-    context: PropTypes.string,
-    fields: PropTypes.arrayOf(PropTypes.string),
-    name: PropTypes.string,
-    status: PropTypes.string,
-    validation_id: PropTypes.string,
+    depth_range: PropTypes.arrayOf(PropTypes.number),
   }),
+])
+const _lenSurveyedValidationContextPropType = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.shape({
+    len_surveyed_range: PropTypes.arrayOf(PropTypes.number),
+  }),
+])
+
+const _validationsPropType = PropTypes.arrayOf(PropTypes.shape(validationObject))
+
+const _depthValidationPropType = PropTypes.arrayOf(
+  PropTypes.shape({ ...validationObject, context: _depthValidationContextPropType }),
 )
+
+const _lenSurveyedValidationPropType = PropTypes.arrayOf(
+  PropTypes.shape({ ...validationObject, context: _lenSurveyedValidationContextPropType }),
+)
+
+export const observersValidationPropType = _validationsPropType
+
+export const fishbeltValidationPropType = PropTypes.shape({
+  depth: _depthValidationPropType,
+  len_surveyed: _lenSurveyedValidationPropType,
+  number: _validationsPropType,
+  sample_time: _validationsPropType,
+  size_bin: _validationsPropType,
+  width: _validationsPropType,
+})
+
+export const benthicpqtValidationPropType = PropTypes.shape({
+  depth: _depthValidationPropType,
+  len_surveyed: _lenSurveyedValidationPropType,
+  num_points_per_quadrat: _validationsPropType,
+  num_quadrats: _validationsPropType,
+  quadrat_size: _validationsPropType,
+  number: _validationsPropType,
+  sample_time: _validationsPropType,
+})
+// End of PropTypes for validation object
