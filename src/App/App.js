@@ -32,6 +32,7 @@ function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const isMounted = useIsMounted()
+  const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
@@ -48,6 +49,7 @@ function App({ dexieCurrentUserInstance }) {
     dexieCurrentUserInstance,
     isMermaidAuthenticated,
     isAppOnline,
+    isSyncInProgress,
   })
 
   const { dexiePerUserDataInstance } = useDexiePerUserDataInstance({
@@ -62,8 +64,6 @@ function App({ dexieCurrentUserInstance }) {
     isAppOnline,
     handleHttpResponseError: handleHttpResponseErrorWithLogoutFunction,
   })
-
-  const { isOfflineStorageHydrated, syncErrors } = useSyncStatus()
 
   const apiSyncInstance = useMemo(() => {
     return new SyncApiDataIntoOfflineStorage({

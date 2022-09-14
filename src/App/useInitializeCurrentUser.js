@@ -10,6 +10,7 @@ export const useInitializeCurrentUser = ({
   dexieCurrentUserInstance,
   isMermaidAuthenticated,
   isAppOnline,
+  isSyncInProgress,
 }) => {
   const [currentUser, setCurrentUser] = useState()
 
@@ -23,6 +24,7 @@ export const useInitializeCurrentUser = ({
         dexieCurrentUserInstance,
         isMermaidAuthenticated,
         isAppOnline,
+        isSyncInProgress,
       })
         .then((user) => {
           if (isMounted && user) {
@@ -37,7 +39,14 @@ export const useInitializeCurrentUser = ({
     return () => {
       isMounted = false
     }
-  }, [apiBaseUrl, getAccessToken, dexieCurrentUserInstance, isMermaidAuthenticated, isAppOnline])
+  }, [
+    apiBaseUrl,
+    getAccessToken,
+    dexieCurrentUserInstance,
+    isMermaidAuthenticated,
+    isAppOnline,
+    isSyncInProgress,
+  ])
 
   const saveUserProfile = (userProfile) => {
     if (isMermaidAuthenticated && apiBaseUrl && dexieCurrentUserInstance) {
