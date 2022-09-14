@@ -36,6 +36,15 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
       name: `Copy of ${project.name}`,
       sendEmail: true,
     },
+    validate: (values) => {
+      const errors = {}
+
+      if (!values.name) {
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      return errors
+    },
   })
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -79,6 +88,7 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
           onChange={formik.handleChange}
           validationType={formik.errors.name ? 'error' : null}
           validationMessages={formik.errors.name}
+          setErrors={language.error.formValidation.required}
         />
         <p>{language.projectModal.copyProjectMessage}</p>
         <CheckBoxLabel>
