@@ -54,6 +54,8 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
       .addProject(project.id, formik.values.name, formik.values.sendEmail)
       .then(() => {
         toast.success(...getToastArguments(language.success.projectCopied))
+        onDismiss()
+        formik.resetForm()
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -70,7 +72,6 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
 
   const handleOnSubmit = () => {
     copyExistingProject()
-    onDismiss()
   }
 
   const modalContent = (
