@@ -27,6 +27,17 @@ const SyncApiDataIntoOfflineStorage = class {
     this._getAccessToken = getAccessToken
   }
 
+  pullAllProjects = () => {
+    const apiProjectsToPull = ['projects']
+
+    return pullApiData({
+      dexiePerUserDataInstance: this._dexiePerUserDataInstance,
+      getAccessToken: this._getAccessToken,
+      apiBaseUrl: this._apiBaseUrl,
+      apiDataNamesToPull: apiProjectsToPull,
+    })
+  }
+
   #pullAllDataExceptSpecificProject = () => {
     const apiDataNamesToPullNonProject = [
       'benthic_attributes',
