@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
@@ -13,6 +13,8 @@ import handleHttpResponseError from '../../library/handleHttpResponseError'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import theme from '../../theme'
 import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValidation'
+import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import LoadingModal from '../LoadingModal/LoadingModal'
 
 const CheckBoxLabel = styled.label`
   display: inline-block;
@@ -30,7 +32,10 @@ const StyledTextFooterModal = styled('div')`
   left: -85%;
 `
 
-const ProjectModal = ({ isOpen, onDismiss, project }) => {
+const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
+  const { setIsSyncInProgress } = useSyncStatus()
+  const [isLoading, setIsLoading] = useState(false)
+
   const formik = useFormik({
     initialValues: {
       name: `Copy of ${project.name}`,
@@ -49,13 +54,18 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
-  const copyExistingProject = () =>
+  const copyExistingProject = () => {
+    // setIsSyncInProgress(true)
+    setIsLoading(true)
     databaseSwitchboardInstance
       .addProject(project.id, formik.values.name, formik.values.sendEmail)
-      .then(() => {
+      .then((response) => {
         toast.success(...getToastArguments(language.success.projectCopied))
-        onDismiss()
         formik.resetForm()
+        addProjectToProjectsPage(response)
+        // setIsSyncInProgress(false)
+        setIsLoading(false)
+        onDismiss()
       })
       .catch((error) => {
         handleHttpResponseError({
@@ -68,7 +78,10 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
             }
           },
         })
+        // setIsSyncInProgress(false)
+        setIsLoading(false)
       })
+  }
 
   const handleOnSubmit = () => {
     copyExistingProject()
@@ -118,13 +131,17 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
   )
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onDismiss={onDismiss}
-      title={language.projectModal.copyTitle}
-      mainContent={modalContent}
-      footerContent={footerContent}
-    />
+    <>
+      <Modal
+        isOpen={isOpen}
+        onDismiss={onDismiss}
+        title={language.projectModal.copyTitle}
+        mainContent={modalContent}
+        footerContent={footerContent}
+      />
+      {isLoading && <LoadingModal />}
+    </>
+
   )
 }
 
@@ -132,6 +149,7 @@ ProjectModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   project: projectPropType,
+  addProjectToProjectsPage: PropTypes.func.isRequired,
 }
 
 ProjectModal.defaultProps = {
