@@ -76,6 +76,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           callback: () => {
             const isDuplicateError = [500, 400].includes(error.response.status)
               && error.response.data?.detail === '[IntegrityError] Copying project'
+
             if (isDuplicateError) {
               toast.error(...getToastArguments(...getToastArguments(language.error.duplicateNewProject)))
             }
