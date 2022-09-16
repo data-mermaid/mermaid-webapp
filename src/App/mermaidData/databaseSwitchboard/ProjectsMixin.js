@@ -187,7 +187,6 @@ const ProjectsMixin = (Base) =>
           })
           .catch((error) => {
             return Promise.reject(error)
-            // Need to handle errors here. e.g. 500 error for duplicates? (will be 400 error after M747)
           })
       }
 
