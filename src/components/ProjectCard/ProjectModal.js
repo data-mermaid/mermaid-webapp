@@ -13,7 +13,6 @@ import handleHttpResponseError from '../../library/handleHttpResponseError'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import theme from '../../theme'
 import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValidation'
-import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import LoadingModal from '../LoadingModal/LoadingModal'
 
 const CheckBoxLabel = styled.label`
@@ -33,7 +32,6 @@ const StyledTextFooterModal = styled('div')`
 `
 
 const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
-  const { setIsSyncInProgress } = useSyncStatus()
   const [isLoading, setIsLoading] = useState(false)
 
   const formik = useFormik({
@@ -55,7 +53,13 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   const copyExistingProject = () => {
-    // setIsSyncInProgress(true)
+    // setIsLoading and addProjectToProjectsPage are used in this function
+    // to display the loading modal and pass the new project back to the
+    // projects page.
+    // This is done because the projects page does not re-render after the
+    // sync has taken place.
+    // As an alternative they could be removed and  we could make use of
+    // setIsSyncInProgress in a way that is consitent with other components.
     setIsLoading(true)
     databaseSwitchboardInstance
       .addProject(project.id, formik.values.name, formik.values.sendEmail)
@@ -63,7 +67,6 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
         toast.success(...getToastArguments(language.success.projectCopied))
         formik.resetForm()
         addProjectToProjectsPage(response)
-        // setIsSyncInProgress(false)
         setIsLoading(false)
         onDismiss()
       })
@@ -71,14 +74,13 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
         handleHttpResponseError({
           error,
           callback: () => {
-            if (error.response.status === 500) {
-              toast.error(...getToastArguments(language.error.generic))
-            } else {
-              toast.error(...getToastArguments(language.error.duplicateNewProject))
+            const isDuplicateError = [500, 400].includes(error.response.status)
+              && error.response.data?.detail === '[IntegrityError] Copying project'
+            if (isDuplicateError) {
+              toast.error(...getToastArguments(...getToastArguments(language.error.duplicateNewProject)))
             }
           },
         })
-        // setIsSyncInProgress(false)
         setIsLoading(false)
       })
   }
