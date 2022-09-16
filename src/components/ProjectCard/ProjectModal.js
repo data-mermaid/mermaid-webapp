@@ -23,14 +23,6 @@ const CheckBoxLabel = styled.label`
   }
 `
 
-const StyledTextFooterModal = styled('div')`
-  color: ${theme.color.black};
-  float: left;
-  position: relative;
-  overflow-wrap: break-word;
-  left: -85%;
-`
-
 const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -107,7 +99,8 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           validationMessages={formik.errors.name}
           setErrors={language.error.formValidation.required}
         />
-        <p>{language.projectModal.copyProjectMessage}</p>
+      </ModalInputRow>
+      <ModalInputRow>
         <CheckBoxLabel>
           <input
             type="checkbox"
@@ -119,12 +112,13 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           Notify users by email
         </CheckBoxLabel>
       </ModalInputRow>
+      <p>{language.projectModal.copyProjectMessage}</p>
+      <p>{language.projectModal.footerMessage}</p>
     </>
   )
 
   const footerContent = (
     <RightFooter>
-      <StyledTextFooterModal>{language.projectModal.footerMessage}</StyledTextFooterModal>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
         Copy project

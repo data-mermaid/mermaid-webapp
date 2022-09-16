@@ -284,7 +284,7 @@ const projectModal = {
   copyProjectMessage:
     'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
   copyTitle: 'Copy Project',
-  footerMessage: 'You will be an admin of this project',
+  footerMessage: 'You will be an admin for this project.',
 }
 
 const getValidationMessage = (validation, projectId = '') => {

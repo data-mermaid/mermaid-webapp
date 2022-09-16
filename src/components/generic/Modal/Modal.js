@@ -19,6 +19,7 @@ const StyledDialogOverlay = styled('div')`
   place-items: center;
   grid-template-columns: 1fr;
   z-index: 103;
+  cursor: default;
 `
 const StyledDialog = styled('div')`
   padding: 0;
