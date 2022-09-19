@@ -110,6 +110,15 @@ export const sitePropType = PropTypes.shape({
   exposure: PropTypes.string,
 })
 
+export const fishNameConstantsPropType = PropTypes.arrayOf(
+  PropTypes.shape({
+    id: PropTypes.string,
+    biomass_constant_a: PropTypes.number,
+    biomass_constant_b: PropTypes.number,
+    biomass_constant_c: PropTypes.number,
+  }),
+)
+
 export const fishBeltPropType = PropTypes.shape({
   id: PropTypes.string,
   data: PropTypes.shape({
@@ -287,6 +296,12 @@ const _lenSurveyedValidationContextPropType = PropTypes.oneOfType([
     len_surveyed_range: PropTypes.arrayOf(PropTypes.number),
   }),
 ])
+const _sampleTimeValidationContextPropType = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.shape({
+    time_range: PropTypes.arrayOf(PropTypes.string),
+  }),
+])
 
 const _validationsPropType = PropTypes.arrayOf(PropTypes.shape(validationObject))
 
@@ -298,13 +313,17 @@ const _lenSurveyedValidationPropType = PropTypes.arrayOf(
   PropTypes.shape({ ...validationObject, context: _lenSurveyedValidationContextPropType }),
 )
 
+const _sampleTimeValidationPropType = PropTypes.arrayOf(
+  PropTypes.shape({ ...validationObject, context: _sampleTimeValidationContextPropType }),
+)
+
 export const observersValidationPropType = _validationsPropType
 
 export const fishbeltValidationPropType = PropTypes.shape({
   depth: _depthValidationPropType,
   len_surveyed: _lenSurveyedValidationPropType,
   number: _validationsPropType,
-  sample_time: _validationsPropType,
+  sample_time: _sampleTimeValidationPropType,
   size_bin: _validationsPropType,
   width: _validationsPropType,
 })
@@ -316,6 +335,12 @@ export const benthicpqtValidationPropType = PropTypes.shape({
   num_quadrats: _validationsPropType,
   quadrat_size: _validationsPropType,
   number: _validationsPropType,
-  sample_time: _validationsPropType,
+  sample_time: _sampleTimeValidationPropType,
 })
 // End of PropTypes for validation object
+
+export const subNavNodePropTypes = PropTypes.shape({
+  name: PropTypes.string,
+  number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  label: PropTypes.string,
+})
