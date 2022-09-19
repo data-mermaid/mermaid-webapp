@@ -1,9 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import {
   choicesPropType,
   submittedFishBeltPropType,
+  fishNameConstantsPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { Table, Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationBiomass } from '../../collectRecordFormPages/FishBelt/fishbeltBiomas'
@@ -101,14 +101,7 @@ const SubmittedFishBeltObservationTable = ({
 SubmittedFishBeltObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
-  fishNameConstants: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      biomass_constant_a: PropTypes.number,
-      biomass_constant_b: PropTypes.number,
-      biomass_constant_c: PropTypes.number,
-    }),
-  ).isRequired,
+  fishNameConstants: fishNameConstantsPropType.isRequired,
   submittedRecord: submittedFishBeltPropType,
 }
 
