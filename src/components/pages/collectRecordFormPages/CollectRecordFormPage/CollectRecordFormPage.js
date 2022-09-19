@@ -3,11 +3,17 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useHistory, useParams } from 'react-router-dom'
+import { H2 } from '../../../generic/text'
 import {
   managementRegimePropType,
   sitePropType,
   choicesPropType,
+  subNavNodePropTypes,
+  observationsReducerPropType,
+  observersPropType,
+  fishBeltPropType,
   benthicPhotoQuadratPropType,
+  fishNameConstantsPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import {
   getCollectRecordDataInitialValues,
@@ -26,6 +32,7 @@ import {
   reformatFormValuesIntoBenthicPQTRecord,
 } from './reformatFormValuesIntoRecord'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import { getFishBinLabel } from '../FishBelt/fishBeltBins'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
@@ -40,15 +47,23 @@ import LoadingModal from '../../../LoadingModal/LoadingModal'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
+import FishBeltObservationTable from '../FishBelt/FishBeltObservationTable'
+import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import FishbeltTransectInputs from '../FishBelt/FishbeltTransectInputs'
 
 import language from '../../../../language'
 
 const CollectRecordFormPage = ({
   isNewRecord,
+  sampleUnitName,
+  projectName,
   collectRecordBeingEdited,
   handleCollectRecordChange,
-  observationsState,
+  handleNewObservationAdd,
+  handleSubmitNewObservation,
+  observationsReducer,
   sites,
   managementRegimes,
   choices,
@@ -56,12 +71,8 @@ const CollectRecordFormPage = ({
   isLoading,
   subNavNode,
   observerProfiles,
-  saveButtonState,
-  validateButtonState,
-  submitButtonState,
-  handleSaveButtonStateChange,
-  handleValidateButtonStateChange,
-  handleSubmitButtonStateChange,
+  observationOptions,
+  fishNameConstants,
 }) => {
   const observationTableRef = useRef(null)
   const currentProjectPath = useCurrentProjectPath()
@@ -72,10 +83,15 @@ const CollectRecordFormPage = ({
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const [observationsState, observationsDispatch] = observationsReducer
 
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
+  const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
+  const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
 
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
@@ -83,6 +99,30 @@ const CollectRecordFormPage = ({
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
     submitButtonState === buttonGroupStates.submitting
+
+  const getValidationButtonStatus = (collectRecord) => {
+    return collectRecord?.validations?.status === 'ok'
+      ? buttonGroupStates.validated
+      : buttonGroupStates.validatable
+  }
+
+  const openNewObservationModal = useCallback(
+    (observationId) => {
+      handleNewObservationAdd(observationId)
+      setIsNewObservationModalOpen(true)
+    },
+    [handleNewObservationAdd],
+  )
+
+  const closeNewObservationModal = () => {
+    setIsNewObservationModalOpen(false)
+  }
+
+  const _checkValidateButton = useEffect(() => {
+    if (!isLoading) {
+      setValidateButtonState(getValidationButtonStatus(collectRecordBeingEdited))
+    }
+  }, [isLoading, collectRecordBeingEdited])
 
   const handleScrollToObservation = () => {
     observationTableRef.current.scrollIntoView({
@@ -105,32 +145,23 @@ const CollectRecordFormPage = ({
     getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
   } = persistUnsavedObservationsUtilities
 
-  const getValidationButtonStatus = (collectRecord) => {
-    return collectRecord?.validations?.status === 'ok'
-      ? buttonGroupStates.validated
-      : buttonGroupStates.validatable
-  }
+  const initialFormikFormValues = useMemo(() => {
+    const collectRecordInitialValues = getPersistedUnsavedFormikData() ?? {
+      ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
+      ...getSampleInfoInitialValues(collectRecordBeingEdited),
+    }
 
-  const initialFormikFormValues = useMemo(
-    (protocol) => {
-      const collectRecordInitialValues = getPersistedUnsavedFormikData() ?? {
-        ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
-        ...getSampleInfoInitialValues(collectRecordBeingEdited),
-      }
-
-      return protocol === 'benthicpqt'
-        ? {
-            ...collectRecordInitialValues,
-            ...getTransectInitialValues(collectRecordBeingEdited, 'quadrat_transect'),
-            ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
-          }
-        : {
-            ...collectRecordInitialValues,
-            ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
-          }
-    },
-    [collectRecordBeingEdited, getPersistedUnsavedFormikData],
-  )
+    return sampleUnitName === 'benthicpqt'
+      ? {
+          ...collectRecordInitialValues,
+          ...getTransectInitialValues(collectRecordBeingEdited, 'quadrat_transect'),
+          ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
+        }
+      : {
+          ...collectRecordInitialValues,
+          ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
+        }
+  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData, sampleUnitName])
 
   const formik = useFormik({
     initialValues: initialFormikFormValues,
@@ -138,9 +169,9 @@ const CollectRecordFormPage = ({
     validate: persistUnsavedFormikData,
   })
 
-  const handleSave = (protocol) => {
+  const handleSave = () => {
     const recordToSubmit =
-      protocol === 'benthicpqt'
+      sampleUnitName === 'benthicpqt'
         ? reformatFormValuesIntoBenthicPQTRecord(
             formik.values,
             observationsState,
@@ -152,7 +183,7 @@ const CollectRecordFormPage = ({
             collectRecordBeingEdited,
           )
 
-    handleSaveButtonStateChange(buttonGroupStates.saving)
+    setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
 
     databaseSwitchboardInstance
@@ -160,15 +191,15 @@ const CollectRecordFormPage = ({
         record: recordToSubmit,
         profileId: currentUser.id,
         projectId,
-        protocol,
+        protocol: sampleUnitName,
       })
       .then((response) => {
         toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsData()
         setAreObservationsInputsDirty(false)
-        handleSaveButtonStateChange(buttonGroupStates.saved)
-        handleValidateButtonStateChange(buttonGroupStates.validatable)
+        setSaveButtonState(buttonGroupStates.saved)
+        setValidateButtonState(buttonGroupStates.validatable)
         setIsFormDirty(false)
         formik.resetForm({ values: formik.values }) // this resets formik's dirty state
 
@@ -177,7 +208,7 @@ const CollectRecordFormPage = ({
         }
       })
       .catch((error) => {
-        handleSaveButtonStateChange(buttonGroupStates.unsaved)
+        setSaveButtonState(buttonGroupStates.unsaved)
         handleHttpResponseError({
           error,
           callback: () => {
@@ -188,17 +219,17 @@ const CollectRecordFormPage = ({
   }
 
   const handleValidate = () => {
-    handleValidateButtonStateChange(buttonGroupStates.validating)
+    setValidateButtonState(buttonGroupStates.validating)
 
     databaseSwitchboardInstance
       .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
-        handleValidateButtonStateChange(getValidationButtonStatus(validatedRecordResponse))
+        setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
       })
       .catch((error) => {
-        handleValidateButtonStateChange(buttonGroupStates.validatable)
+        setValidateButtonState(buttonGroupStates.validatable)
         handleHttpResponseError({
           error,
           callback: () => {
@@ -209,7 +240,7 @@ const CollectRecordFormPage = ({
   }
 
   const handleSubmit = () => {
-    handleSubmitButtonStateChange(buttonGroupStates.submitting)
+    setSubmitButtonState(buttonGroupStates.submitting)
 
     databaseSwitchboardInstance
       .submitSampleUnit({ recordId, projectId })
@@ -218,7 +249,7 @@ const CollectRecordFormPage = ({
         history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch((error) => {
-        handleSubmitButtonStateChange(buttonGroupStates.submittable)
+        setSubmitButtonState(buttonGroupStates.submittable)
         handleHttpResponseError({
           error,
           callback: () => {
@@ -410,9 +441,9 @@ const CollectRecordFormPage = ({
 
   const _setCollectButtonsUnsaved = useEffect(() => {
     if (isFormDirty) {
-      handleSaveButtonStateChange(buttonGroupStates.unsaved)
+      setSaveButtonState(buttonGroupStates.unsaved)
     }
-  }, [isFormDirty])
+  }, [isFormDirty, setSaveButtonState])
 
   const handleChangeForDirtyIgnoredInput = ({
     validationProperties,
@@ -467,6 +498,120 @@ const CollectRecordFormPage = ({
     return Promise.resolve()
   }
 
+  const handleSizeBinChange = (event) => {
+    const sizeBinId = event.target.value
+
+    formik.setFieldValue('size_bin', sizeBinId)
+
+    const fishBinSelectedLabel = getFishBinLabel(choices, sizeBinId)
+
+    const isSizeBinATypeThatRequiresSizeResetting = fishBinSelectedLabel !== '1'
+
+    if (isSizeBinATypeThatRequiresSizeResetting) {
+      observationsDispatch({ type: 'resetFishSizes' })
+    }
+  }
+
+  const sampleUnitTransectInputs =
+    sampleUnitName === 'benthicpqt' ? (
+      <BenthicAttributeTransectInputs
+        areValidationsShowing={areValidationsShowing}
+        choices={choices}
+        formik={formik}
+        handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        validationsApiData={validationsApiData}
+        validationPropertiesWithDirtyResetOnInputChange={
+          validationPropertiesWithDirtyResetOnInputChange
+        }
+      />
+    ) : (
+      <FishbeltTransectInputs
+        areValidationsShowing={areValidationsShowing}
+        choices={choices}
+        formik={formik}
+        handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        onSizeBinChange={handleSizeBinChange}
+        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+        validationsApiData={validationsApiData}
+        validationPropertiesWithDirtyResetOnInputChange={
+          validationPropertiesWithDirtyResetOnInputChange
+        }
+      />
+    )
+
+  const observationTable =
+    sampleUnitName === 'benthicpqt' ? (
+      <BenthicPhotoQuadratObservationTable
+        areObservationsInputsDirty={areObservationsInputsDirty}
+        areValidationsShowing={areValidationsShowing}
+        benthicAttributeOptions={observationOptions}
+        choices={choices}
+        collectRecord={collectRecordBeingEdited}
+        observationsReducer={observationsReducer}
+        openNewObservationModal={openNewObservationModal}
+        persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+        ignoreObservationValidations={ignoreObservationValidations}
+        resetObservationValidations={resetObservationValidations}
+        setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+      />
+    ) : (
+      <FishBeltObservationTable
+        areObservationsInputsDirty={areObservationsInputsDirty}
+        areValidationsShowing={areValidationsShowing}
+        formik={formik}
+        choices={choices}
+        collectRecord={collectRecordBeingEdited}
+        fishNameConstants={fishNameConstants}
+        fishNameOptions={observationOptions}
+        ignoreObservationValidations={ignoreObservationValidations}
+        observationsReducer={observationsReducer}
+        openNewObservationModal={openNewObservationModal}
+        persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+        resetObservationValidations={resetObservationValidations}
+        setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+      />
+    )
+
+  const observationModal =
+    sampleUnitName === 'benthicpqt' ? (
+      <NewBenthicAttributeModal
+        isOpen={isNewObservationModalOpen}
+        onDismiss={closeNewObservationModal}
+        onSubmit={handleSubmitNewObservation}
+        currentUser={currentUser}
+        projectName={projectName}
+        benthicAttributeOptions={observationOptions}
+      />
+    ) : (
+      <NewFishSpeciesModal
+        isOpen={isNewObservationModalOpen}
+        onDismiss={closeNewObservationModal}
+        onSubmit={handleSubmitNewObservation}
+        currentUser={currentUser}
+        projectId={projectId}
+      />
+    )
+
+  const recordTitle =
+    sampleUnitName === 'benthicpqt' ? (
+      <RecordFormTitle
+        submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
+        sites={sites}
+        primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.benthicPhotoQuadratForm.title}`}
+        sampleUnit="quadrat_transect"
+      />
+    ) : (
+      <RecordFormTitle
+        submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
+        sites={sites}
+        primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`}
+        sampleUnit="fishbelt_transect"
+      />
+    )
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -488,8 +633,8 @@ const CollectRecordFormPage = ({
               handleScrollToObservation={handleScrollToObservation}
             />
             <form
-              id="benthicpqt-form"
-              aria-labelledby="benthicpqt-form-title"
+              id="collect-record-form"
+              aria-labelledby="collect-record-form"
               onSubmit={formik.handleSubmit}
             >
               <SampleEventInputs
@@ -505,19 +650,7 @@ const CollectRecordFormPage = ({
                   validationPropertiesWithDirtyResetOnInputChange
                 }
               />
-              <BenthicAttributeTransectInputs
-                areValidationsShowing={areValidationsShowing}
-                collectRecord={collectRecordBeingEdited}
-                choices={choices}
-                formik={formik}
-                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                validationsApiData={validationsApiData}
-                validationPropertiesWithDirtyResetOnInputChange={
-                  validationPropertiesWithDirtyResetOnInputChange
-                }
-              />
+              {sampleUnitTransectInputs}
               <ObserversInput
                 data-testid="observers"
                 areValidationsShowing={areValidationsShowing}
@@ -531,21 +664,7 @@ const CollectRecordFormPage = ({
                   validationPropertiesWithDirtyResetOnInputChange
                 }
               />
-              {/* <div ref={observationTableRef}>
-                <BenthicPhotoQuadratObservationTable
-                  areObservationsInputsDirty={areObservationsInputsDirty}
-                  areValidationsShowing={areValidationsShowing}
-                  benthicAttributeOptions={benthicAttributeOptions}
-                  choices={choices}
-                  collectRecord={collectRecordBeingEdited}
-                  observationsReducer={observationsReducer}
-                  openNewBenthicAttributeModal={openNewBenthicAttributeModal}
-                  persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-                  ignoreObservationValidations={ignoreObservationValidations}
-                  resetObservationValidations={resetObservationValidations}
-                  setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-                />
-              </div> */}
+              <div ref={observationTableRef}>{observationTable}</div>
             </form>
             <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
           </>
@@ -553,15 +672,7 @@ const CollectRecordFormPage = ({
         toolbar={
           <ContentPageToolbarWrapper>
             {isNewRecord && <H2>{language.pages.benthicPhotoQuadratForm.title}</H2>}
-            {collectRecordBeingEdited && !isNewRecord && (
-              <RecordFormTitle
-                submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited.data}
-                sites={sites}
-                primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.benthicPhotoQuadratForm.title}`}
-                sampleUnit="quadrat_transect"
-              />
-            )}
-
+            {collectRecordBeingEdited && !isNewRecord && recordTitle}
             <SaveValidateSubmitButtonGroup
               isNewRecord={isNewRecord}
               saveButtonState={saveButtonState}
@@ -575,16 +686,7 @@ const CollectRecordFormPage = ({
         }
       />
 
-      {/* {!!projectId && !!currentUser && (
-        <NewBenthicAttributeModal
-          isOpen={isNewBenthicAttributeModalOpen}
-          onDismiss={closeNewBenthicAttributeModal}
-          onSubmit={onSubmitNewBenthicAttribute}
-          currentUser={currentUser}
-          projectName={projectName}
-          benthicAttributeOptions={benthicAttributeOptions}
-        />
-      )} */}
+      {!!projectId && !!currentUser && observationModal}
       {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
@@ -593,19 +695,29 @@ const CollectRecordFormPage = ({
 
 CollectRecordFormPage.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
+  sampleUnitName: PropTypes.string.isRequired,
+  projectName: PropTypes.string.isRequired,
+  collectRecordBeingEdited: PropTypes.oneOfType([fishBeltPropType, benthicPhotoQuadratPropType]),
   handleCollectRecordChange: PropTypes.func.isRequired,
+  handleNewObservationAdd: PropTypes.func.isRequired,
+  handleSubmitNewObservation: PropTypes.func.isRequired,
+  observationsReducer: observationsReducerPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   choices: choicesPropType.isRequired,
   idsNotAssociatedWithData: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoading: PropTypes.bool.isRequired,
-  subNavNode: PropTypes.string.isRequired,
-  saveButtonState: PropTypes.string.isRequired,
-  validateButtonState: PropTypes.string.isRequired,
-  submitButtonState: PropTypes.string.isRequired,
-  handleSaveButtonStateChange: PropTypes.func.isRequired,
-  handleValidateButtonStateChange: PropTypes.func.isRequired,
-  handleSubmitButtonStateChange: PropTypes.func.isRequired,
+  subNavNode: subNavNodePropTypes,
+  observerProfiles: observersPropType.isRequired,
+  observationOptions: inputOptionsPropTypes.isRequired,
+  fishNameConstants: fishNameConstantsPropType,
+}
+
+CollectRecordFormPage.defaultProps = {
+  collectRecordBeingEdited: undefined,
+  subNavNode: null,
+  observationsReducer: [],
+  fishNameConstants: [],
 }
 
 export default CollectRecordFormPage

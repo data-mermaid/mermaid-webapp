@@ -3,8 +3,9 @@ import React, { useState, useEffect, useCallback, useReducer } from 'react'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 
-import benthicpqtObservationReducer from '../BenthicPhotoQuadrat/benthicpqtObservationReducer'
-import { getBenthicOptions } from '../../../../library/getOptions'
+import fishbeltObservationReducer from '../FishBelt/fishbeltObservationReducer'
+import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
+import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
@@ -15,18 +16,19 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import CollectRecordFormPage from '../CollectRecordFormPage'
 
-const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
+const FishBeltForm = ({ isNewRecord }) => {
   const { recordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const observationsReducer = useReducer(benthicpqtObservationReducer, [])
+  const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
 
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
+  const [fishNameOptions, setFishNameOptions] = useState([])
+  const [fishNameConstants, setFishNameConstants] = useState([])
   const [observerProfiles, setObserverProfiles] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -44,7 +46,9 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getProjectProfiles(projectId),
-        databaseSwitchboardInstance.getBenthicAttributes(),
+        databaseSwitchboardInstance.getFishSpecies(),
+        databaseSwitchboardInstance.getFishGenera(),
+        databaseSwitchboardInstance.getFishFamilies(),
         databaseSwitchboardInstance.getProject(projectId),
       ]
 
@@ -58,7 +62,9 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
             managementRegimesResponse,
             choicesResponse,
             projectProfilesResponse,
-            benthicAttributes,
+            species,
+            genera,
+            families,
             projectResponse,
 
             // collectRecord needs to be last in array because its pushed to the promise array conditionally
@@ -71,21 +77,31 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
               if (!isNewRecord && !projectResponse && projectId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
               }
+              const updateFishNameConstants = getFishNameConstants({
+                species,
+                genera,
+                families,
+              })
+
+              const updateFishNameOptions = getFishNameOptions({
+                species,
+                genera,
+                families,
+              })
 
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
-                  ? getRecordName(collectRecordResponse.data, sitesResponse, 'quadrat_transect')
-                  : { name: 'Benthic Photo Quadrat' }
-
-              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+                  ? getRecordName(collectRecordResponse.data, sitesResponse, 'fishbelt_transect')
+                  : { name: 'Fish Belt' }
 
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
               setChoices(choicesResponse)
               setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
-              setBenthicAttributeOptions(updateBenthicAttributeOptions)
-              setProjectName(projectResponse.name)
               setCollectRecordBeingEdited(collectRecordResponse)
+              setProjectName(projectResponse.name)
+              setFishNameConstants(updateFishNameConstants)
+              setFishNameOptions(updateFishNameOptions)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
@@ -110,69 +126,66 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
     isNewRecord,
     recordId,
     projectId,
-    isSyncInProgress,
     handleHttpResponseError,
+    isSyncInProgress,
   ])
 
   const handleCollectRecordChange = (updatedCollectRecord) =>
     setCollectRecordBeingEdited(updatedCollectRecord)
 
-  const handleNewObservationToAdd = (observationAttributeId) =>
+  const handleNewObservationAdd = (observationAttributeId) =>
     setNewObservationToAdd(observationAttributeId)
 
-  const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
+  const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
-      databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        const updatedBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+      Promise.all([
+        databaseSwitchboardInstance.getFishSpecies(),
+        databaseSwitchboardInstance.getFishGenera(),
+        databaseSwitchboardInstance.getFishFamilies(),
+      ]).then(([species, genera, families]) => {
+        const updateFishNameOptions = getFishNameOptions({
+          species,
+          genera,
+          families,
+        })
 
-        setBenthicAttributeOptions(updatedBenthicAttributeOptions)
+        setFishNameOptions(updateFishNameOptions)
       })
     }
   }, [databaseSwitchboardInstance])
 
-  const onSubmitNewBenthicAttribute = ({
-    benthicAttributeParentId,
-    benthicAttributeParentName,
-    newBenthicAttributeName,
-  }) => {
+  const onSubmitNewFishSpecies = ({ genusId, genusName, speciesName }) => {
     databaseSwitchboardInstance
-      .addBenthicAttribute({
-        benthicAttributeParentId,
-        benthicAttributeParentName,
-        newBenthicAttributeName,
+      .addFishSpecies({
+        genusId,
+        genusName,
+        speciesName,
       })
-      .then((newBenthicAttribute) => {
+      .then((newFishSpecies) => {
         observationsDispatch({
-          type: 'updateBenthicAttribute',
+          type: 'updateFishName',
           payload: {
             observationId: newObservationToAdd,
-            newBenthicAttribute: newBenthicAttribute.id,
+            newFishName: newFishSpecies.id,
           },
         })
-        updateBenthicAttributeOptionsStateWithOfflineStorageData()
-        toast.success(...getToastArguments(language.success.attributeSave('benthic attribute')))
+        updateFishNameOptionsStateWithOfflineStorageData()
+        toast.success(...getToastArguments(language.success.fishSpeciesSave))
       })
       .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            if (error.message === 'Benthic attribute already exists') {
-              toast.error(
-                ...getToastArguments(language.error.attributeAlreadyExists('benthic attribute')),
-              )
+        if (error.message === 'Species already exists') {
+          toast.warning(...getToastArguments(language.error.fishSpeciesAlreadyExists))
 
-              observationsDispatch({
-                type: 'updateBenthicAttribute',
-                payload: {
-                  observationId: newObservationToAdd,
-                  newBenthicAttribute: error.existingBenthicAttribute.id,
-                },
-              })
-            } else {
-              toast.error(...getToastArguments(language.error.attributeSave('benthic attribute')))
-            }
-          },
-        })
+          observationsDispatch({
+            type: 'updateFishName',
+            payload: {
+              observationId: newObservationToAdd,
+              newFishName: error.existingSpecies.id,
+            },
+          })
+        } else {
+          toast.error(...getToastArguments(language.error.fishSpeciesSave))
+        }
       })
 
     return Promise.resolve()
@@ -181,12 +194,12 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   return (
     <CollectRecordFormPage
       isNewRecord={isNewRecord}
-      sampleUnitName="benthicpqt"
+      sampleUnitName="fishbelt"
       projectName={projectName}
       collectRecordBeingEdited={collectRecordBeingEdited}
       handleCollectRecordChange={handleCollectRecordChange}
-      handleNewObservationToAdd={handleNewObservationToAdd}
-      handleSubmitNewObservation={onSubmitNewBenthicAttribute}
+      handleNewObservationAdd={handleNewObservationAdd}
+      handleSubmitNewObservation={onSubmitNewFishSpecies}
       observationsReducer={observationsReducer}
       sites={sites}
       managementRegimes={managementRegimes}
@@ -195,17 +208,18 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       isLoading={isLoading}
       subNavNode={subNavNode}
       observerProfiles={observerProfiles}
-      observationOptions={benthicAttributeOptions}
+      observationOptions={fishNameOptions}
+      fishNameConstants={fishNameConstants}
     />
   )
 }
 
-BenthicPhotoQuadratForm.propTypes = {
+FishBeltForm.propTypes = {
   isNewRecord: PropTypes.bool,
 }
 
-BenthicPhotoQuadratForm.defaultProps = {
+FishBeltForm.defaultProps = {
   isNewRecord: true,
 }
 
-export default BenthicPhotoQuadratForm
+export default FishBeltForm

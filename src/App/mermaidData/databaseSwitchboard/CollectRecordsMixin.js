@@ -462,7 +462,11 @@ const CollectRecordsMixin = (Base) =>
 
       const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
-      const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
+      const recordToOperateOnFishBeltProtocol = recordToOperateOn.data.protocol === 'fishbelt'
+
+      const allObservationValidations = recordToOperateOnFishBeltProtocol
+        ? recordToOperateOn.validations.results.data.obs_belt_fishes
+        : recordToOperateOn.validations.results.data.obs_benthic_photo_quadrats
 
       const observationsValidationsWithIgnored = allObservationValidations.map(
         (singleObservationValidations) => {
@@ -480,9 +484,13 @@ const CollectRecordsMixin = (Base) =>
         },
       )
 
+      const validationPath = recordToOperateOnFishBeltProtocol
+        ? 'validations.results.data.obs_belt_fishes'
+        : 'validations.results.data.obs_benthic_photo_quadrats'
+
       const recordWithIgnoredObservationValidations = setObjectPropertyOnClone({
         object: recordToOperateOn,
-        path: 'validations.results.data.obs_belt_fishes',
+        path: validationPath,
         value: observationsValidationsWithIgnored,
       })
 
@@ -572,7 +580,11 @@ const CollectRecordsMixin = (Base) =>
 
       const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
 
-      const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
+      const recordToOperateOnFishBeltProtocol = recordToOperateOn.data.protocol === 'fishbelt'
+
+      const allObservationValidations = recordToOperateOnFishBeltProtocol
+        ? recordToOperateOn.validations.results.data.obs_belt_fishes
+        : recordToOperateOn.validations.results.data.obs_benthic_photo_quadrats
 
       const observationsValidationsWithReset = allObservationValidations.map(
         (singleObservationValidations) => {
@@ -589,9 +601,13 @@ const CollectRecordsMixin = (Base) =>
         },
       )
 
+      const validationPath = recordToOperateOnFishBeltProtocol
+        ? 'validations.results.data.obs_belt_fishes'
+        : 'validations.results.data.obs_benthic_photo_quadrats'
+
       const recordWithResetObservationValidations = setObjectPropertyOnClone({
         object: recordToOperateOn,
-        path: 'validations.results.data.obs_belt_fishes',
+        path: validationPath,
         value: observationsValidationsWithReset,
       })
 

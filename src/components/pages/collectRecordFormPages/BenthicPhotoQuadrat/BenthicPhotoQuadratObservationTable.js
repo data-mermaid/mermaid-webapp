@@ -78,7 +78,7 @@ const BenthicPhotoQuadratObservationTable = ({
   choices,
   collectRecord,
   observationsReducer,
-  openNewBenthicAttributeModal,
+  openNewObservationModal,
   persistUnsavedObservationsUtilities,
   ignoreObservationValidations,
   resetObservationValidations,
@@ -317,7 +317,7 @@ const BenthicPhotoQuadratObservationTable = ({
           ) : null}
         </CellValidation>
       )
-      const proposeNewBenthicAttributeClick = () => openNewBenthicAttributeModal(observationId)
+      const proposeNewBenthicAttributeClick = () => openNewObservationModal(observationId)
 
       return (
         <ObservationTr key={observationId}>
@@ -412,7 +412,7 @@ const BenthicPhotoQuadratObservationTable = ({
     choices,
     observationsDispatch,
     observationsState,
-    openNewBenthicAttributeModal,
+    openNewObservationModal,
     ignoreObservationValidations,
     resetObservationValidations,
     setAreObservationsInputsDirty,
@@ -488,7 +488,7 @@ BenthicPhotoQuadratObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
   observationsReducer: observationsReducerPropType,
-  openNewBenthicAttributeModal: PropTypes.func.isRequired,
+  openNewObservationModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
     persistUnsavedFormData: PropTypes.func,
     clearPersistedUnsavedFormData: PropTypes.func,

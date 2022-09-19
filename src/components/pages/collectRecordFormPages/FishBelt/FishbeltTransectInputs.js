@@ -49,7 +49,6 @@ const FishbeltTransectInputs = ({
     currents,
     tides,
   } = choices
-
   const transectWidthSelectOptions = sortArrayByObjectKey(getOptions(belttransectwidths), 'label')
   const fishSizeBinSelectOptions = getOptions(fishsizebins)
   const reefSlopeSelectOptions = [...getOptions(reefslopes), { label: 'not reported', value: '' }]
@@ -478,8 +477,7 @@ FishbeltTransectInputs.propTypes = {
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   onSizeBinChange: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
-  validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType })
-    .isRequired,
+  validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 

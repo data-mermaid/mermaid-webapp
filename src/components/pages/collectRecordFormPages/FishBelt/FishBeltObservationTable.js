@@ -7,7 +7,9 @@ import {
   choicesPropType,
   fishBeltPropType,
   observationsReducerPropType,
+  fishNameConstantsPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { formikPropType } from '../../../../library/formikPropType'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishbeltBiomas'
@@ -78,20 +80,23 @@ const getObservationValidations = (observationId, collectRecord) => {
 const FishBeltObservationTable = ({
   areObservationsInputsDirty,
   areValidationsShowing,
+  formik,
   choices,
   collectRecord,
-  fishBinSelected,
   fishNameConstants,
   fishNameOptions,
   ignoreObservationValidations,
   observationsReducer,
-  openNewFishNameModal,
+  openNewObservationModal,
   persistUnsavedObservationsUtilities,
   resetObservationValidations,
   setAreObservationsInputsDirty,
-  transectLengthSurveyed,
-  widthId,
 }) => {
+  const {
+    size_bin: fishBinSelected,
+    len_surveyed: transectLengthSurveyed,
+    width: widthId,
+  } = formik?.values
   const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
@@ -328,7 +333,7 @@ const FishBeltObservationTable = ({
         handleKeyDown({ event, index, observation, isCount: true })
       }
 
-      const proposeNewSpeciesClick = () => openNewFishNameModal(observationId)
+      const proposeNewSpeciesClick = () => openNewObservationModal(observationId)
 
       return (
         <ObservationTr key={observationId} messageType={validationType}>
@@ -407,7 +412,7 @@ const FishBeltObservationTable = ({
     observationsBiomass,
     observationsDispatch,
     observationsState,
-    openNewFishNameModal,
+    openNewObservationModal,
     resetObservationValidations,
     setAreObservationsInputsDirty,
   ])
@@ -475,21 +480,14 @@ const FishBeltObservationTable = ({
 FishBeltObservationTable.propTypes = {
   areObservationsInputsDirty: PropTypes.bool.isRequired,
   areValidationsShowing: PropTypes.bool.isRequired,
+  formik: formikPropType,
   choices: choicesPropType.isRequired,
   collectRecord: fishBeltPropType,
-  fishBinSelected: PropTypes.string,
-  fishNameConstants: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      biomass_constant_a: PropTypes.number,
-      biomass_constant_b: PropTypes.number,
-      biomass_constant_c: PropTypes.number,
-    }),
-  ).isRequired,
+  fishNameConstants: fishNameConstantsPropType.isRequired,
   fishNameOptions: inputOptionsPropTypes.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
-  openNewFishNameModal: PropTypes.func.isRequired,
+  openNewObservationModal: PropTypes.func.isRequired,
   persistUnsavedObservationsUtilities: PropTypes.shape({
     persistUnsavedFormData: PropTypes.func,
     clearPersistedUnsavedFormData: PropTypes.func,
@@ -497,16 +495,12 @@ FishBeltObservationTable.propTypes = {
   }).isRequired,
   resetObservationValidations: PropTypes.func.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
-  transectLengthSurveyed: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  widthId: PropTypes.string,
 }
 
 FishBeltObservationTable.defaultProps = {
   collectRecord: undefined,
   observationsReducer: [],
-  fishBinSelected: undefined,
-  transectLengthSurveyed: undefined,
-  widthId: undefined,
+  formik: undefined,
 }
 
 export default FishBeltObservationTable
