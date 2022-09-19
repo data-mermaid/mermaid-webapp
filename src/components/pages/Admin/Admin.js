@@ -357,7 +357,8 @@ const Admin = () => {
               <SaveButton
                 formId="project-info-form"
                 saveButtonState={saveButtonState}
-                formik={formik}
+                formHasErrors={!!Object.keys(formik.errors).length}
+                formDirty={formik.dirty}
               />
             )}
           </ContentPageToolbarWrapper>

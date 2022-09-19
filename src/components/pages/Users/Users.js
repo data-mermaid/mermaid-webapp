@@ -26,7 +26,14 @@ import {
 } from '../../generic/Table/reactTableNaturalSort'
 import { pluralize } from '../../../library/strings/pluralize'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  TableNavigation,
+  StickyTableOverflowWrapper,
+  GenericStickyTable,
+} from '../../generic/Table/table'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
@@ -640,8 +647,8 @@ const Users = () => {
 
   const table = (
     <>
-      <TableOverflowWrapper>
-        <Table {...getTableProps()}>
+      <StickyTableOverflowWrapper>
+        <GenericStickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -683,8 +690,8 @@ const Users = () => {
               )
             })}
           </tbody>
-        </Table>
-      </TableOverflowWrapper>
+        </GenericStickyTable>
+      </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}

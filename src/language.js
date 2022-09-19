@@ -32,6 +32,7 @@ const error = {
   collectRecordsUnavailable: 'Sample unit data is currently unavailable. Please try again',
   collectRecordUnavailable: 'Sample unit data is currently unavailable. Please try again',
   duplicateNewUserAdd: 'User has already been added to project.',
+  duplicateNewProject: 'A project with the same name already exists.',
   emptyEmailAdd: 'Please enter an email address.',
   error: 'Error',
   fishSpeciesAlreadyExists:
@@ -110,6 +111,7 @@ const success = {
   newPendingUserAdd: 'Sign-up email sent. New user added as Pending User.',
   userRemoved: 'User removed',
   projectSave: 'Project saved',
+  projectCopied: 'Project copied',
   siteSave: 'Site saved.',
   managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
@@ -234,7 +236,10 @@ const pages = {
   },
   submittedFishBeltForm: {
     title: 'Fish Belt',
-    toolbarLabel: 'Submitted sample units are read-only',
+    sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
+    moveSampleUnitButon: 'Edit Sample Unit - move to Collecting',
+    adminEditOnly:
+      'Submitted sample units are read-only and can only be moved to Collecting by an admin.',
   },
   collectTable: {
     title: 'Collecting',
@@ -274,6 +279,13 @@ const pages = {
 
 const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
+
+const projectModal = {
+  copyProjectMessage:
+    'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
+  copyTitle: 'Copy Project',
+  footerMessage: 'You will be an admin of this project',
+}
 
 const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
@@ -348,4 +360,5 @@ export default {
   navigateAwayPrompt,
   getValidationMessage,
   inlineMessage,
+  projectModal,
 }

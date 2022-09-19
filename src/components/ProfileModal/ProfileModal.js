@@ -2,29 +2,15 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconSend } from '../icons'
-import { Input, InputRow } from '../generic/form'
+import { Input } from '../generic/form'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
-import theme from '../../theme'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { RightFooter, ModalInputRow } from '../generic/Modal/Modal'
 import { getProfileInitialValues } from './profileFormInitialValues'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 
-const ModalInputRow = styled(InputRow)`
-  background: ${theme.color.white};
-  display: block;
-  border: none;
-  h4 {
-    margin: 0;
-  }
-  label {
-    font-weight: bold;
-  }
-`
 const ProfileModal = ({ isOpen, onDismiss }) => {
   const { currentUser, saveUserProfile } = useCurrentUser()
   const initialFormValues = useMemo(() => getProfileInitialValues(currentUser), [currentUser])

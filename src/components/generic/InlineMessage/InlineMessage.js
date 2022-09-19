@@ -12,6 +12,7 @@ const MessagePill = styled.span`
   color: ${theme.color.textColor};
   padding: ${theme.spacing.xxsmall} ${theme.spacing.medium};
   border-radius: 5px;
+  white-space: nowrap;
 `
 const InlineMessageWrapper = styled.div`
   padding: calc(${theme.spacing.xsmall} + 1px);

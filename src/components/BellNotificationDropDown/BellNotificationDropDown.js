@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 
 import {
   NotificationCard,
@@ -6,7 +7,9 @@ import {
   NotificationCloseButton,
   NotificationContent,
   NotificationTitle,
-  NotificationDate,
+  NotificationDateWrapper,
+  NotificationTimeAgoDate,
+  NotificationActualDate,
   NotificationHeader,
   NotificationStatus,
   NoNotifications,
@@ -14,20 +17,7 @@ import {
 import { IconClose } from '../icons'
 import language from '../../language'
 import { useBellNotifications } from '../../App/BellNotificationContext'
-
-const getUpdatedOnText = (createdOn) => {
-  const locale = navigator.language ?? 'en-US'
-
-  const date = new Date(createdOn)
-  const dateText = date.toLocaleDateString(locale, {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-  const timeText = date.toLocaleTimeString(locale)
-
-  return `${dateText}, ${timeText}`
-}
+import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 
 const BellNotificationDropDown = () => {
   const { notifications, deleteNotification } = useBellNotifications()
@@ -37,14 +27,23 @@ const BellNotificationDropDown = () => {
     event.stopPropagation()
   }
 
-  return (
-    <NotificationCardWrapper>
-      {!notifications?.results || !notifications.results?.length ? (
+  if (!notifications?.results || !notifications.results?.length) {
+    return (
+      <NotificationCardWrapper>
         <NoNotifications>
           <em>{language.header.noNotifications}</em>
         </NoNotifications>
-      ) : (
-        notifications.results.map((notification) => {
+      </NotificationCardWrapper>
+    )
+  }
+
+  const sortedNotifications = sortArrayByObjectKey(notifications.results, 'created_on', false)
+
+  return (
+    <NotificationCardWrapper>
+      {sortedNotifications.map((notification) => {
+        const dateTime = moment(notification.created_on)
+
           return (
             <NotificationCard key={`notification-card-${notification.id}`}>
               <NotificationStatus status={notification.status} />
@@ -58,11 +57,14 @@ const BellNotificationDropDown = () => {
                   </NotificationCloseButton>
                 </NotificationHeader>
                 <p>{notification.description}</p>
-                <NotificationDate>{getUpdatedOnText(notification.created_on)}</NotificationDate>
+                <NotificationDateWrapper>
+                  <NotificationTimeAgoDate>{dateTime.fromNow()}</NotificationTimeAgoDate>
+                  <NotificationActualDate>{dateTime.format('LLLL')}</NotificationActualDate>
+                </NotificationDateWrapper>
               </NotificationContent>
             </NotificationCard>
           )
-        })
+      }
       )}
     </NotificationCardWrapper>
   )
