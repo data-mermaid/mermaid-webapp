@@ -32,7 +32,7 @@ import {
   reformatFormValuesIntoBenthicPQTRecord,
 } from './reformatFormValuesIntoRecord'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
-import { getFishBinLabel } from '../FishBelt/fishBeltBins'
+import { getFishBinLabel } from '../FishBeltForm/fishBeltBins'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
@@ -41,17 +41,17 @@ import NewBenthicAttributeModal from '../../../NewBenthicAttributeModal'
 import ObserversInput from '../ObserversInput'
 import DeleteRecordButton from '../DeleteRecordButton'
 import SampleEventInputs from '../SampleEventInputs'
-import BenthicAttributeTransectInputs from '../BenthicPhotoQuadrat/BenthicAttributeTransectInputs'
-import BenthicPhotoQuadratObservationTable from '../BenthicPhotoQuadrat/BenthicPhotoQuadratObservationTable'
+import BenthicAttributeTransectInputs from '../BenthicPhotoQuadratForm/BenthicAttributeTransectInputs'
+import BenthicPhotoQuadratObservationTable from '../BenthicPhotoQuadratForm/BenthicPhotoQuadratObservationTable'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
-import FishBeltObservationTable from '../FishBelt/FishBeltObservationTable'
+import FishBeltObservationTable from '../FishBeltForm/FishBeltObservationTable'
 import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import FishbeltTransectInputs from '../FishBelt/FishbeltTransectInputs'
+import FishBeltTransectInputs from '../FishBeltForm/FishBeltTransectInputs'
 
 import language from '../../../../language'
 
@@ -527,7 +527,7 @@ const CollectRecordFormPage = ({
         }
       />
     ) : (
-      <FishbeltTransectInputs
+      <FishBeltTransectInputs
         areValidationsShowing={areValidationsShowing}
         choices={choices}
         formik={formik}

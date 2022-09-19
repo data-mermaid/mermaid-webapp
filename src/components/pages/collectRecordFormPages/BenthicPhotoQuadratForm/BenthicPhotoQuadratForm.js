@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useReducer } from 'react'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 
-import benthicpqtObservationReducer from '../BenthicPhotoQuadrat/benthicpqtObservationReducer'
+import benthicpqtObservationReducer from './benthicpqtObservationReducer'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
@@ -117,7 +117,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   const handleCollectRecordChange = (updatedCollectRecord) =>
     setCollectRecordBeingEdited(updatedCollectRecord)
 
-  const handleNewObservationToAdd = (observationAttributeId) =>
+  const handleNewObservationAdd = (observationAttributeId) =>
     setNewObservationToAdd(observationAttributeId)
 
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
@@ -185,7 +185,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       projectName={projectName}
       collectRecordBeingEdited={collectRecordBeingEdited}
       handleCollectRecordChange={handleCollectRecordChange}
-      handleNewObservationToAdd={handleNewObservationToAdd}
+      handleNewObservationAdd={handleNewObservationAdd}
       handleSubmitNewObservation={onSubmitNewBenthicAttribute}
       observationsReducer={observationsReducer}
       sites={sites}

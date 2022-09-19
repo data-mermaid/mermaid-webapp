@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useReducer } from 'react'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 
-import fishbeltObservationReducer from '../FishBelt/fishbeltObservationReducer'
+import fishbeltObservationReducer from './fishbeltObservationReducer'
 import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
 import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
 import { getRecordName } from '../../../../library/getRecordName'

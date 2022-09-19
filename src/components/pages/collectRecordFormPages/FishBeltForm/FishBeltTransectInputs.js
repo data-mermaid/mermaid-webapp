@@ -29,7 +29,7 @@ const TRANSECT_NUMBER_VALIDATION_PATH = 'data.fishbelt_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.fishbelt_transect.visibility'
 const WIDTH_VALIDATION_PATH = 'data.fishbelt_transect.width'
 
-const FishbeltTransectInputs = ({
+const FishBeltTransectInputs = ({
   areValidationsShowing,
   choices,
   formik,
@@ -469,7 +469,7 @@ const FishbeltTransectInputs = ({
   )
 }
 
-FishbeltTransectInputs.propTypes = {
+FishBeltTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
@@ -481,4 +481,4 @@ FishbeltTransectInputs.propTypes = {
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
-export default FishbeltTransectInputs
+export default FishBeltTransectInputs

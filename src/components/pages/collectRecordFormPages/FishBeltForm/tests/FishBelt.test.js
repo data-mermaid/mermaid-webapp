@@ -11,7 +11,7 @@ import {
   within,
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
-import FishBelt from '../FishBelt'
+import FishBeltForm from '../FishBeltForm'
 import { getMockDexieInstancesAllSuccess } from '../../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
@@ -22,7 +22,7 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -72,7 +72,7 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt />
+      <FishBeltForm />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -122,7 +122,7 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -178,7 +178,7 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -214,7 +214,7 @@ test('FishBelt component in EDIT mode - button group shows only save button when
 
   renderAuthenticatedOffline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -250,7 +250,7 @@ test('Fishbelt observations: add row button adds a row', async () => {
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -279,7 +279,7 @@ test('Fishbelt observations: delete observation button deleted observation', asy
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -312,7 +312,7 @@ test('FishBelt component in EDIT mode - when change binsize = 10, fish size valu
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -344,7 +344,7 @@ test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size v
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
@@ -376,7 +376,7 @@ test('FishBelt component in EDIT mode - when change binsize = 1, fish size value
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBelt isNewRecord={false} />
+      <FishBeltForm isNewRecord={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
