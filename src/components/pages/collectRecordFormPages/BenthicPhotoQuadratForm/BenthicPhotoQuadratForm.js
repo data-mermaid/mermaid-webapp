@@ -34,7 +34,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
   const [choices, setChoices] = useState({})
-  const [projectName, setProjectName] = useState('')
   const [newObservationToAdd, setNewObservationToAdd] = useState()
 
   const _getSupportingData = useEffect(() => {
@@ -84,7 +83,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
               setChoices(choicesResponse)
               setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setBenthicAttributeOptions(updateBenthicAttributeOptions)
-              setProjectName(projectResponse.name)
               setCollectRecordBeingEdited(collectRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -182,7 +180,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
     <CollectRecordFormPage
       isNewRecord={isNewRecord}
       sampleUnitName="benthicpqt"
-      projectName={projectName}
       collectRecordBeingEdited={collectRecordBeingEdited}
       handleCollectRecordChange={handleCollectRecordChange}
       handleNewObservationAdd={handleNewObservationAdd}

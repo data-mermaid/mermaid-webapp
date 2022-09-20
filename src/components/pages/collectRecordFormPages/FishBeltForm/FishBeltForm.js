@@ -99,7 +99,6 @@ const FishBeltForm = ({ isNewRecord }) => {
               setChoices(choicesResponse)
               setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setCollectRecordBeingEdited(collectRecordResponse)
-              setProjectName(projectResponse.name)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
               setSubNavNode(recordNameForSubNode)
@@ -107,17 +106,24 @@ const FishBeltForm = ({ isNewRecord }) => {
             }
           },
         )
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              const errorMessage = isNewRecord
-                ? language.error.collectRecordChoicesUnavailable
-                : language.error.collectRecordUnavailable
+        .catch(() => {
+          const error = isNewRecord
+            ? language.error.collectRecordChoicesUnavailable
+            : language.error.collectRecordUnavailable
 
-              toast.error(...getToastArguments(errorMessage))
-            },
-          })
+          toast.error(...getToastArguments(error))
+
+          // toast.error(...getToastArguments(error))
+          // handleHttpResponseError({
+          //   error,
+          //   callback: () => {
+          //     const errorMessage = isNewRecord
+          //       ? language.error.collectRecordChoicesUnavailable
+          //       : language.error.collectRecordUnavailable
+
+          //     toast.error(...getToastArguments(errorMessage))
+          //   },
+          // })
         })
     }
   }, [
@@ -195,7 +201,6 @@ const FishBeltForm = ({ isNewRecord }) => {
     <CollectRecordFormPage
       isNewRecord={isNewRecord}
       sampleUnitName="fishbelt"
-      projectName={projectName}
       collectRecordBeingEdited={collectRecordBeingEdited}
       handleCollectRecordChange={handleCollectRecordChange}
       handleNewObservationAdd={handleNewObservationAdd}

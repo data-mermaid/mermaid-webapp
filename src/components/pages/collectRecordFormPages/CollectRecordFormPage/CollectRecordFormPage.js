@@ -58,7 +58,6 @@ import language from '../../../../language'
 const CollectRecordFormPage = ({
   isNewRecord,
   sampleUnitName,
-  projectName,
   collectRecordBeingEdited,
   handleCollectRecordChange,
   handleNewObservationAdd,
@@ -582,7 +581,7 @@ const CollectRecordFormPage = ({
         onDismiss={closeNewObservationModal}
         onSubmit={handleSubmitNewObservation}
         currentUser={currentUser}
-        projectName={projectName}
+        projectId={projectId}
         benthicAttributeOptions={observationOptions}
       />
     ) : (
@@ -671,7 +670,13 @@ const CollectRecordFormPage = ({
         }
         toolbar={
           <ContentPageToolbarWrapper>
-            {isNewRecord && <H2>{language.pages.benthicPhotoQuadratForm.title}</H2>}
+            {isNewRecord && (
+              <H2>
+                {sampleUnitName === 'benthicpqt'
+                  ? language.pages.benthicPhotoQuadratForm.title
+                  : language.pages.fishBeltForm.title}
+              </H2>
+            )}
             {collectRecordBeingEdited && !isNewRecord && recordTitle}
             <SaveValidateSubmitButtonGroup
               isNewRecord={isNewRecord}
@@ -696,7 +701,6 @@ const CollectRecordFormPage = ({
 CollectRecordFormPage.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
   sampleUnitName: PropTypes.string.isRequired,
-  projectName: PropTypes.string.isRequired,
   collectRecordBeingEdited: PropTypes.oneOfType([fishBeltPropType, benthicPhotoQuadratPropType]),
   handleCollectRecordChange: PropTypes.func.isRequired,
   handleNewObservationAdd: PropTypes.func.isRequired,
