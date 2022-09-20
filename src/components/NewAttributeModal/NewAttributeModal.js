@@ -292,7 +292,7 @@ const NewAttributeModal = ({
   const pageOneFirstInputValue = isFishBeltSampleUnit
     ? formikPageOne.values.genusId
     : formikPageOne.values.benthicAttributeParentId
-  const pageTwoFirstLabel = isFishBeltSampleUnit ? genusText : newBenthicAttributeText
+  const pageTwoFirstLabel = isFishBeltSampleUnit ? speciesText : newBenthicAttributeText
   const pageOneSecondInputLabel = isFishBeltSampleUnit ? speciesText : newBenthicAttributeNameText
   const pageOneSecondInputValue = isFishBeltSampleUnit
     ? formikPageOne.values.species

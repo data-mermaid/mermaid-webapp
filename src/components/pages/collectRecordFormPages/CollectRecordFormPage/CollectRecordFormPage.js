@@ -75,11 +75,9 @@ const CollectRecordFormPage = ({
 }) => {
   const observationTableRef = useRef(null)
   const currentProjectPath = useCurrentProjectPath()
-
   const { recordId, projectId } = useParams()
   const history = useHistory()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const [observationsState, observationsDispatch] = observationsReducer
@@ -151,17 +149,17 @@ const CollectRecordFormPage = ({
       ...getSampleInfoInitialValues(collectRecordBeingEdited),
     }
 
-    return sampleUnitName === 'benthicpqt'
+    return isFishBeltSampleUnit
       ? {
+          ...collectRecordInitialValues,
+          ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
+        }
+      : {
           ...collectRecordInitialValues,
           ...getTransectInitialValues(collectRecordBeingEdited, 'quadrat_transect'),
           ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
         }
-      : {
-          ...collectRecordInitialValues,
-          ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
-        }
-  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData, sampleUnitName])
+  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData, isFishBeltSampleUnit])
 
   const formik = useFormik({
     initialValues: initialFormikFormValues,
@@ -170,18 +168,17 @@ const CollectRecordFormPage = ({
   })
 
   const handleSave = () => {
-    const recordToSubmit =
-      sampleUnitName === 'benthicpqt'
-        ? reformatFormValuesIntoBenthicPQTRecord(
-            formik.values,
-            observationsState,
-            collectRecordBeingEdited,
-          )
-        : reformatFormValuesIntoFishBeltRecord(
-            formik.values,
-            observationsState,
-            collectRecordBeingEdited,
-          )
+    const recordToSubmit = isFishBeltSampleUnit
+      ? reformatFormValuesIntoFishBeltRecord(
+          formik.values,
+          observationsState,
+          collectRecordBeingEdited,
+        )
+      : reformatFormValuesIntoBenthicPQTRecord(
+          formik.values,
+          observationsState,
+          collectRecordBeingEdited,
+        )
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
@@ -512,68 +509,66 @@ const CollectRecordFormPage = ({
     }
   }
 
-  const sampleUnitTransectInputs =
-    sampleUnitName === 'benthicpqt' ? (
-      <BenthicAttributeTransectInputs
-        areValidationsShowing={areValidationsShowing}
-        choices={choices}
-        formik={formik}
-        handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-        validationsApiData={validationsApiData}
-        validationPropertiesWithDirtyResetOnInputChange={
-          validationPropertiesWithDirtyResetOnInputChange
-        }
-      />
-    ) : (
-      <FishBeltTransectInputs
-        areValidationsShowing={areValidationsShowing}
-        choices={choices}
-        formik={formik}
-        handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-        ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-        onSizeBinChange={handleSizeBinChange}
-        resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-        validationsApiData={validationsApiData}
-        validationPropertiesWithDirtyResetOnInputChange={
-          validationPropertiesWithDirtyResetOnInputChange
-        }
-      />
-    )
+  const sampleUnitTransectInputs = isFishBeltSampleUnit ? (
+    <FishBeltTransectInputs
+      areValidationsShowing={areValidationsShowing}
+      choices={choices}
+      formik={formik}
+      handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+      ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+      onSizeBinChange={handleSizeBinChange}
+      resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+      validationsApiData={validationsApiData}
+      validationPropertiesWithDirtyResetOnInputChange={
+        validationPropertiesWithDirtyResetOnInputChange
+      }
+    />
+  ) : (
+    <BenthicAttributeTransectInputs
+      areValidationsShowing={areValidationsShowing}
+      choices={choices}
+      formik={formik}
+      handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+      ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+      resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+      validationsApiData={validationsApiData}
+      validationPropertiesWithDirtyResetOnInputChange={
+        validationPropertiesWithDirtyResetOnInputChange
+      }
+    />
+  )
 
-  const observationTable =
-    sampleUnitName === 'benthicpqt' ? (
-      <BenthicPhotoQuadratObservationTable
-        areObservationsInputsDirty={areObservationsInputsDirty}
-        areValidationsShowing={areValidationsShowing}
-        benthicAttributeOptions={observationOptions}
-        choices={choices}
-        collectRecord={collectRecordBeingEdited}
-        observationsReducer={observationsReducer}
-        openNewObservationModal={openNewObservationModal}
-        persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-        ignoreObservationValidations={ignoreObservationValidations}
-        resetObservationValidations={resetObservationValidations}
-        setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-      />
-    ) : (
-      <FishBeltObservationTable
-        areObservationsInputsDirty={areObservationsInputsDirty}
-        areValidationsShowing={areValidationsShowing}
-        formik={formik}
-        choices={choices}
-        collectRecord={collectRecordBeingEdited}
-        fishNameConstants={fishNameConstants}
-        fishNameOptions={observationOptions}
-        ignoreObservationValidations={ignoreObservationValidations}
-        observationsReducer={observationsReducer}
-        openNewObservationModal={openNewObservationModal}
-        persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
-        resetObservationValidations={resetObservationValidations}
-        setAreObservationsInputsDirty={setAreObservationsInputsDirty}
-      />
-    )
+  const observationTable = isFishBeltSampleUnit ? (
+    <FishBeltObservationTable
+      areObservationsInputsDirty={areObservationsInputsDirty}
+      areValidationsShowing={areValidationsShowing}
+      formik={formik}
+      choices={choices}
+      collectRecord={collectRecordBeingEdited}
+      fishNameConstants={fishNameConstants}
+      fishNameOptions={observationOptions}
+      ignoreObservationValidations={ignoreObservationValidations}
+      observationsReducer={observationsReducer}
+      openNewObservationModal={openNewObservationModal}
+      persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+      resetObservationValidations={resetObservationValidations}
+      setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+    />
+  ) : (
+    <BenthicPhotoQuadratObservationTable
+      areObservationsInputsDirty={areObservationsInputsDirty}
+      areValidationsShowing={areValidationsShowing}
+      benthicAttributeOptions={observationOptions}
+      choices={choices}
+      collectRecord={collectRecordBeingEdited}
+      observationsReducer={observationsReducer}
+      openNewObservationModal={openNewObservationModal}
+      persistUnsavedObservationsUtilities={persistUnsavedObservationsUtilities}
+      ignoreObservationValidations={ignoreObservationValidations}
+      resetObservationValidations={resetObservationValidations}
+      setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+    />
+  )
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
@@ -636,9 +631,9 @@ const CollectRecordFormPage = ({
           <ContentPageToolbarWrapper>
             {isNewRecord && (
               <H2>
-                {sampleUnitName === 'benthicpqt'
-                  ? language.pages.benthicPhotoQuadratForm.title
-                  : language.pages.fishBeltForm.title}
+                {isFishBeltSampleUnit
+                  ? language.pages.fishBeltForm.title
+                  : language.pages.benthicPhotoQuadratForm.title}
               </H2>
             )}
             {collectRecordBeingEdited && !isNewRecord && (
