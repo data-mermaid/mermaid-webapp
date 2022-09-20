@@ -193,6 +193,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       subNavNode={subNavNode}
       observerProfiles={observerProfiles}
       observationOptions={benthicAttributeOptions}
+      modalAttributeOptions={benthicAttributeOptions}
     />
   )
 }

@@ -36,8 +36,8 @@ const FishBeltForm = ({ isNewRecord }) => {
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
   const [choices, setChoices] = useState({})
-  const [projectName, setProjectName] = useState('')
   const [newObservationToAdd, setNewObservationToAdd] = useState()
+  const [modalAttributeOptions, setModalAttributeOptions] = useState([])
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -89,6 +89,8 @@ const FishBeltForm = ({ isNewRecord }) => {
                 families,
               })
 
+              const generaOptions = genera.map((genus) => ({ label: genus.name, value: genus.id }))
+
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
                   ? getRecordName(collectRecordResponse.data, sitesResponse, 'fishbelt_transect')
@@ -101,29 +103,23 @@ const FishBeltForm = ({ isNewRecord }) => {
               setCollectRecordBeingEdited(collectRecordResponse)
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
+              setModalAttributeOptions(generaOptions)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
           },
         )
-        .catch(() => {
-          const error = isNewRecord
-            ? language.error.collectRecordChoicesUnavailable
-            : language.error.collectRecordUnavailable
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorMessage = isNewRecord
+                ? language.error.collectRecordChoicesUnavailable
+                : language.error.collectRecordUnavailable
 
-          toast.error(...getToastArguments(error))
-
-          // toast.error(...getToastArguments(error))
-          // handleHttpResponseError({
-          //   error,
-          //   callback: () => {
-          //     const errorMessage = isNewRecord
-          //       ? language.error.collectRecordChoicesUnavailable
-          //       : language.error.collectRecordUnavailable
-
-          //     toast.error(...getToastArguments(errorMessage))
-          //   },
-          // })
+              toast.error(...getToastArguments(errorMessage))
+            },
+          })
         })
     }
   }, [
@@ -214,6 +210,7 @@ const FishBeltForm = ({ isNewRecord }) => {
       subNavNode={subNavNode}
       observerProfiles={observerProfiles}
       observationOptions={fishNameOptions}
+      modalAttributeOptions={modalAttributeOptions}
       fishNameConstants={fishNameConstants}
     />
   )

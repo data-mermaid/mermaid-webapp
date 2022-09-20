@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components/macro'
 
+import { inputOptionsPropTypes } from '../../library/miscPropTypes'
 import { ButtonThatLooksLikeLink, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { IconArrowBack, IconSend } from '../icons'
 import { Input } from '../generic/form'
@@ -34,11 +35,17 @@ const StyledRow = styled(Row)`
 const InputContainer = styled.div`
   width: 100%;
 `
-const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUser }) => {
+const NewFishSpeciesModal = ({
+  isOpen,
+  onDismiss,
+  onSubmit,
+  projectId,
+  currentUser,
+  modalAttributeOptions,
+}) => {
   const isMounted = useIsMounted()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const [generaOptions, setGeneraOptions] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [projectName, setProjectName] = useState()
   const [genusName, setGenusName] = useState()
@@ -48,26 +55,6 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
   const goToPage1 = () => {
     setCurrentPage(1)
   }
-
-  const _loadGenera = useEffect(() => {
-    if (databaseSwitchboardInstance && isMounted.current) {
-      databaseSwitchboardInstance
-        .getFishGenera()
-        .then((genera) => {
-          if (isMounted.current) {
-            setGeneraOptions(genera.map((genus) => ({ label: genus.name, value: genus.id })))
-          }
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.generaUnavailable))
-            },
-          })
-        })
-    }
-  }, [databaseSwitchboardInstance, handleHttpResponseError, isMounted])
 
   const _getProjectName = useEffect(() => {
     if (databaseSwitchboardInstance && isMounted.current) {
@@ -133,7 +120,7 @@ const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, projectId, currentUs
           <InputAutocomplete
             id="genus"
             aria-labelledby="genus-label"
-            options={generaOptions}
+            options={modalAttributeOptions}
             value={formikPage1.values.genusId}
             noResultsText={language.autocomplete.noResultsDefault}
             onChange={(selectedItem) => {
@@ -247,6 +234,7 @@ NewFishSpeciesModal.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   currentUser: currentUserPropType.isRequired,
   projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  modalAttributeOptions: inputOptionsPropTypes.isRequired,
 }
 
 export default NewFishSpeciesModal

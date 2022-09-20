@@ -38,17 +38,18 @@ const NewBenthicAttributeModal = ({
   isOpen,
   onDismiss,
   onSubmit,
-  projectId,
   currentUser,
-  benthicAttributeOptions,
+  projectId,
+  modalAttributeOptions,
 }) => {
+  
   const isMounted = useIsMounted()
   const [currentPage, setCurrentPage] = useState(1)
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const [projectName, setProjectName] = useState()
-
   const [benthicAttributeParentName, setBenthicAttributeParentName] = useState()
+
   const goToPage2 = () => {
     setCurrentPage(2)
   }
@@ -120,7 +121,7 @@ const NewBenthicAttributeModal = ({
           <InputAutocomplete
             id="benthic-attribute-parent"
             aria-labelledby="benthic-attribute-parent-label"
-            options={benthicAttributeOptions}
+            options={modalAttributeOptions}
             value={formikPage1.values.benthicAttributeParentId}
             noResultsText={language.autocomplete.noResultsDefault}
             onChange={(selectedItem) => {
@@ -241,7 +242,8 @@ NewBenthicAttributeModal.propTypes = {
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   currentUser: currentUserPropType.isRequired,
-  benthicAttributeOptions: inputOptionsPropTypes.isRequired,
+  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  modalAttributeOptions: inputOptionsPropTypes.isRequired,
 }
 
 export default NewBenthicAttributeModal

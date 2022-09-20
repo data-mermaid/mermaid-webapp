@@ -71,6 +71,7 @@ const CollectRecordFormPage = ({
   subNavNode,
   observerProfiles,
   observationOptions,
+  modalAttributeOptions,
   fishNameConstants,
 }) => {
   const observationTableRef = useRef(null)
@@ -582,7 +583,7 @@ const CollectRecordFormPage = ({
         onSubmit={handleSubmitNewObservation}
         currentUser={currentUser}
         projectId={projectId}
-        benthicAttributeOptions={observationOptions}
+        modalAttributeOptions={observationOptions}
       />
     ) : (
       <NewFishSpeciesModal
@@ -591,6 +592,7 @@ const CollectRecordFormPage = ({
         onSubmit={handleSubmitNewObservation}
         currentUser={currentUser}
         projectId={projectId}
+        modalAttributeOptions={modalAttributeOptions}
       />
     )
 
@@ -715,6 +717,7 @@ CollectRecordFormPage.propTypes = {
   observerProfiles: observersPropType.isRequired,
   observationOptions: inputOptionsPropTypes.isRequired,
   fishNameConstants: fishNameConstantsPropType,
+  modalAttributeOptions: inputOptionsPropTypes.isRequired,
 }
 
 CollectRecordFormPage.defaultProps = {
