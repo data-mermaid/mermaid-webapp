@@ -281,7 +281,7 @@ const validationObject = {
   fields: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string,
   status: PropTypes.string,
-  validation_id: PropTypes.string,
+  validation_id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }
 
 const _depthValidationContextPropType = PropTypes.oneOfType([
