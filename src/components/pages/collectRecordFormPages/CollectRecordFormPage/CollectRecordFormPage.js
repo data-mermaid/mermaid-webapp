@@ -37,7 +37,6 @@ import { getToastArguments } from '../../../../library/getToastArguments'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
-import NewBenthicAttributeModal from '../../../NewBenthicAttributeModal'
 import NewAttributeModal from '../../../NewAttributeModal'
 import ObserversInput from '../ObserversInput'
 import DeleteRecordButton from '../DeleteRecordButton'
@@ -49,7 +48,6 @@ import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import FishBeltObservationTable from '../FishBeltForm/FishBeltObservationTable'
-import NewFishSpeciesModal from '../../../NewFishSpeciesModal/NewFishSpeciesModal'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import FishBeltTransectInputs from '../FishBeltForm/FishBeltTransectInputs'
@@ -680,7 +678,7 @@ const CollectRecordFormPage = ({
           isOpen={isNewObservationModalOpen}
           onDismiss={closeNewObservationModal}
           onSubmit={handleSubmitNewObservation}
-          modalAttributeOptions={observationOptions}
+          modalAttributeOptions={modalAttributeOptions}
         />
       )}
       {displayLoadingModal && <LoadingModal />}
