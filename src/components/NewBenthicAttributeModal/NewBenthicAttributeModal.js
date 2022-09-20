@@ -1,7 +1,8 @@
+import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/macro'
 
 import { ButtonThatLooksLikeLink, ButtonPrimary, ButtonSecondary } from '../generic/buttons'
@@ -11,10 +12,14 @@ import { Row, RowSpaceBetween } from '../generic/positioning'
 import InputAutocomplete from '../generic/InputAutocomplete'
 import { Table, Td, Tr } from '../generic/Table/table'
 import language from '../../language'
+import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { inputOptionsPropTypes } from '../../library/miscPropTypes'
+import useIsMounted from '../../library/useIsMounted'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
+import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
 const DetailsTable = styled(Table)`
   border: solid 1px ${theme.color.secondaryColor};
@@ -33,11 +38,16 @@ const NewBenthicAttributeModal = ({
   isOpen,
   onDismiss,
   onSubmit,
+  projectId,
   currentUser,
-  projectName,
   benthicAttributeOptions,
 }) => {
+  const isMounted = useIsMounted()
   const [currentPage, setCurrentPage] = useState(1)
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const [projectName, setProjectName] = useState()
+
   const [benthicAttributeParentName, setBenthicAttributeParentName] = useState()
   const goToPage2 = () => {
     setCurrentPage(2)
@@ -45,6 +55,26 @@ const NewBenthicAttributeModal = ({
   const goToPage1 = () => {
     setCurrentPage(1)
   }
+
+  const _getProjectName = useEffect(() => {
+    if (databaseSwitchboardInstance && isMounted.current) {
+      databaseSwitchboardInstance
+        .getProject(projectId)
+        .then((project) => {
+          if (isMounted.current) {
+            setProjectName(project.name)
+          }
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.projectsUnavailable))
+            },
+          })
+        })
+    }
+  }, [databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError])
 
   const formikPage1 = useFormik({
     initialValues: { benthicAttributeParentId: '', newBenthicAttribute: '' },
@@ -211,7 +241,6 @@ NewBenthicAttributeModal.propTypes = {
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   currentUser: currentUserPropType.isRequired,
-  projectName: PropTypes.string.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
 }
 
