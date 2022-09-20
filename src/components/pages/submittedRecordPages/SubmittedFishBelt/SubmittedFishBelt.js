@@ -190,7 +190,6 @@ const SubmittedFishBelt = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.submittedFishBeltForm.title}`}
               sampleUnit="fishbelt_transect"
             />
             <RowSpaceBetween>

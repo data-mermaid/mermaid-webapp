@@ -29,14 +29,12 @@ const ProjectTooltip = styled(TooltipWithText)`
     text-align: center;
   }
 `
-const RecordFormTitle = ({
-  submittedRecordOrCollectRecordDataProperty,
-  sites,
-  primaryTitle,
-  sampleUnit,
-}) => {
+const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, sampleUnit }) => {
+  const primaryTitle =
+    sampleUnit === 'fishbelt_transect'
+      ? `${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`
+      : `${language.pages.collectRecord.title} - ${language.pages.benthicPhotoQuadratForm.title}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
-
   const siteName = getObjectById(sites, siteId)?.name ?? ''
   const transectNumber = submittedRecordOrCollectRecordDataProperty[sampleUnit]?.number ?? ''
   const label = submittedRecordOrCollectRecordDataProperty[sampleUnit]?.label ?? ''
@@ -75,13 +73,11 @@ const RecordFormTitle = ({
 RecordFormTitle.propTypes = {
   submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
-  primaryTitle: PropTypes.string,
   sampleUnit: PropTypes.string.isRequired,
 }
 
 RecordFormTitle.defaultProps = {
   submittedRecordOrCollectRecordDataProperty: undefined,
-  primaryTitle: undefined,
 }
 
 export default RecordFormTitle

@@ -575,23 +575,6 @@ const CollectRecordFormPage = ({
       />
     )
 
-  const recordTitle =
-    sampleUnitName === 'benthicpqt' ? (
-      <RecordFormTitle
-        submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
-        sites={sites}
-        primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.benthicPhotoQuadratForm.title}`}
-        sampleUnit="quadrat_transect"
-      />
-    ) : (
-      <RecordFormTitle
-        submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
-        sites={sites}
-        primaryTitle={`${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`}
-        sampleUnit="fishbelt_transect"
-      />
-    )
-
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -658,7 +641,13 @@ const CollectRecordFormPage = ({
                   : language.pages.fishBeltForm.title}
               </H2>
             )}
-            {collectRecordBeingEdited && !isNewRecord && recordTitle}
+            {collectRecordBeingEdited && !isNewRecord && (
+              <RecordFormTitle
+                submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
+                sites={sites}
+                sampleUnit={isFishBeltSampleUnit ? 'fishbelt_transect' : 'quadrat_transect'}
+              />
+            )}
             <SaveValidateSubmitButtonGroup
               isNewRecord={isNewRecord}
               saveButtonState={saveButtonState}
