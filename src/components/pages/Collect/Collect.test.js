@@ -162,7 +162,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('5 LIT-1'))
+  expect(within(tableRows[1]).getByText('5 FB-1'))
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -182,7 +182,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('5 LIT-1'))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('5 FB-1'))
 })
 
 test('Collect Records table sorts properly by size column', async () => {

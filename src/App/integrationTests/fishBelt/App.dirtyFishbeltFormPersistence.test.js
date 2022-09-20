@@ -90,7 +90,7 @@ test('Unsaved EDIT fishbelt form edits clear when the user navigates away and ba
   const formAfterNav = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(formAfterNav).getByLabelText('Depth')).toHaveValue(10)
+  expect(within(formAfterNav).getByLabelText('Depth')).toHaveValue(20)
 })
 test('Unsaved NEW fishbelt form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
