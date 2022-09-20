@@ -38,6 +38,7 @@ import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import NewBenthicAttributeModal from '../../../NewBenthicAttributeModal'
+import NewAttributeModal from '../../../NewAttributeModal'
 import ObserversInput from '../ObserversInput'
 import DeleteRecordButton from '../DeleteRecordButton'
 import SampleEventInputs from '../SampleEventInputs'
@@ -93,6 +94,7 @@ const CollectRecordFormPage = ({
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
 
+  const isFishBeltSampleUnit = sampleUnitName === 'fishbelt'
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
   const displayLoadingModal =
@@ -575,27 +577,6 @@ const CollectRecordFormPage = ({
       />
     )
 
-  const observationModal =
-    sampleUnitName === 'benthicpqt' ? (
-      <NewBenthicAttributeModal
-        isOpen={isNewObservationModalOpen}
-        onDismiss={closeNewObservationModal}
-        onSubmit={handleSubmitNewObservation}
-        currentUser={currentUser}
-        projectId={projectId}
-        modalAttributeOptions={observationOptions}
-      />
-    ) : (
-      <NewFishSpeciesModal
-        isOpen={isNewObservationModalOpen}
-        onDismiss={closeNewObservationModal}
-        onSubmit={handleSubmitNewObservation}
-        currentUser={currentUser}
-        projectId={projectId}
-        modalAttributeOptions={modalAttributeOptions}
-      />
-    )
-
   const recordTitle =
     sampleUnitName === 'benthicpqt' ? (
       <RecordFormTitle
@@ -693,7 +674,15 @@ const CollectRecordFormPage = ({
         }
       />
 
-      {!!projectId && !!currentUser && observationModal}
+      {!!projectId && !!currentUser && (
+        <NewAttributeModal
+          isFishBeltSampleUnit={isFishBeltSampleUnit}
+          isOpen={isNewObservationModalOpen}
+          onDismiss={closeNewObservationModal}
+          onSubmit={handleSubmitNewObservation}
+          modalAttributeOptions={observationOptions}
+        />
+      )}
       {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>

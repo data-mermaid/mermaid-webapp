@@ -1,5 +1,7 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
+import { useParams } from 'react-router-dom'
+
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
@@ -15,9 +17,9 @@ import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
-import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { inputOptionsPropTypes } from '../../library/miscPropTypes'
 import useIsMounted from '../../library/useIsMounted'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 
@@ -34,19 +36,14 @@ const StyledRow = styled(Row)`
 const InputContainer = styled.div`
   width: 100%;
 `
-const NewBenthicAttributeModal = ({
-  isOpen,
-  onDismiss,
-  onSubmit,
-  currentUser,
-  projectId,
-  modalAttributeOptions,
-}) => {
-  
-  const isMounted = useIsMounted()
-  const [currentPage, setCurrentPage] = useState(1)
+const NewBenthicAttributeModal = ({ isOpen, onDismiss, onSubmit, modalAttributeOptions }) => {
+  const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const isMounted = useIsMounted()
+  const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+
+  const [currentPage, setCurrentPage] = useState(1)
   const [projectName, setProjectName] = useState()
   const [benthicAttributeParentName, setBenthicAttributeParentName] = useState()
 
@@ -241,8 +238,6 @@ NewBenthicAttributeModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  currentUser: currentUserPropType.isRequired,
-  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   modalAttributeOptions: inputOptionsPropTypes.isRequired,
 }
 

@@ -151,7 +151,7 @@ const createNewOptionModal = {
   newBenthicAttribute: 'Benthic Attribute',
   benthicAttributeParent: 'Parent',
   newBenthicAttributeName: 'Name',
-  goToPage2: 'Next',
+  goToNextPage: 'Next',
   cancel: 'Cancel',
   back: 'Back',
   details: 'Details',

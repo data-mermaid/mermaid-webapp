@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
+import { useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
@@ -17,7 +18,7 @@ import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
 import Modal, { LeftFooter, RightFooter } from '../generic/Modal/Modal'
 import theme from '../../theme'
-import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 import useIsMounted from '../../library/useIsMounted'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 
@@ -35,20 +36,17 @@ const StyledRow = styled(Row)`
 const InputContainer = styled.div`
   width: 100%;
 `
-const NewFishSpeciesModal = ({
-  isOpen,
-  onDismiss,
-  onSubmit,
-  projectId,
-  currentUser,
-  modalAttributeOptions,
-}) => {
-  const isMounted = useIsMounted()
+const NewFishSpeciesModal = ({ isOpen, onDismiss, onSubmit, modalAttributeOptions }) => {
+  const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const isMounted = useIsMounted()
+  const { projectId } = useParams()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+
   const [currentPage, setCurrentPage] = useState(1)
   const [projectName, setProjectName] = useState()
   const [genusName, setGenusName] = useState()
+
   const goToPage2 = () => {
     setCurrentPage(2)
   }
@@ -232,8 +230,6 @@ NewFishSpeciesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  currentUser: currentUserPropType.isRequired,
-  projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   modalAttributeOptions: inputOptionsPropTypes.isRequired,
 }
 
