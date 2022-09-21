@@ -24,7 +24,7 @@ import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
 
-const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps }) => {
+const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
   const { isAppOnline } = useOnlineStatus()
 
   const { name, countries, updated_on, id } = project
@@ -107,6 +107,7 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
               isOpen={isProjectModalOpen}
               onDismiss={() => setIsProjectModalOpen(false)}
               project={project}
+              addProjectToProjectsPage={addProjectToProjectsPage}
             />
             <CheckBoxLabel
               htmlFor={project.id}
@@ -135,6 +136,7 @@ ProjectCard.propTypes = {
   apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage).isRequired,
   project: projectPropType.isRequired,
   isOfflineReady: PropTypes.bool.isRequired,
+  addProjectToProjectsPage: PropTypes.func.isRequired,
 }
 
 export default ProjectCard
