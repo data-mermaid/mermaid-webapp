@@ -179,15 +179,15 @@ const SubmittedBenthicPhotoQuadrat = () => {
               <>
                 <p>
                   {isAdminUser
-                    ? language.pages.submittedFishBeltForm.SampleUnitsAreReadOnly
-                    : language.pages.submittedFishBeltForm.AdminEditOnly}
+                    ? language.pages.submittedFishBeltForm.sampleUnitsAreReadOnly
+                    : language.pages.submittedFishBeltForm.adminEditOnly}
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
                   disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
                 >
                   <IconPen />
-                  {language.pages.submittedFishBeltForm.MoveSampleUnitButon}
+                  {language.pages.submittedFishBeltForm.moveSampleUnitButon}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>
