@@ -47,6 +47,7 @@ import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 
