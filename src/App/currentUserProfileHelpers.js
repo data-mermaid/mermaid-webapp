@@ -82,6 +82,7 @@ export const setCurrentUserProfile = async ({
   isMermaidAuthenticated,
   isAppOnline,
   userProfile,
+  isSyncInProgress,
 }) => {
   if (!apiBaseUrl) {
     throw new Error('setCurrentUserProfile needs an API base url')
@@ -93,7 +94,7 @@ export const setCurrentUserProfile = async ({
   const isAuthenticatedAndReady = isMermaidAuthenticated
   const isOnlineAuthenticatedAndReady = isAuthenticatedAndReady && isAppOnline
 
-  if (isOnlineAuthenticatedAndReady) {
+  if (isOnlineAuthenticatedAndReady && !isSyncInProgress) {
     return axios
       .put(`${apiBaseUrl}/me/`, userProfile, await getAuthorizationHeaders(getAccessToken))
       .then((apiResults) => {

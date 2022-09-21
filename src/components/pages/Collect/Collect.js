@@ -2,8 +2,14 @@ import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table
 import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  TableNavigation,
+  GenericStickyTable,
+  StickyTableOverflowWrapper,
+} from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -247,8 +253,8 @@ const Collect = () => {
 
   const table = collectRecordsForUiDisplay.length ? (
     <>
-      <TableOverflowWrapper>
-        <Table {...getTableProps()}>
+      <StickyTableOverflowWrapper>
+        <GenericStickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
@@ -286,8 +292,8 @@ const Collect = () => {
               )
             })}
           </tbody>
-        </Table>
-      </TableOverflowWrapper>
+        </GenericStickyTable>
+      </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}

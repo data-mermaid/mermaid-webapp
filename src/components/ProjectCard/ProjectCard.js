@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
   CardWrapper,
@@ -22,11 +22,13 @@ import { IconCopy } from '../icons'
 import { ButtonSecondary } from '../generic/buttons'
 import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
+import ProjectModal from './ProjectModal'
 
-const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps }) => {
+const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
   const { isAppOnline } = useOnlineStatus()
 
   const { name, countries, updated_on, id } = project
+
   const { setIsSyncInProgress } = useSyncStatus()
   const history = useHistory()
   const projectUrl = `projects/${id}`
@@ -82,6 +84,8 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
   //   e.stopPropagation()
   // }
 
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
+
   return (
     <CardWrapper onClick={handleCardClick} {...restOfProps} data-testid="project-card">
       <ProjectCardHeader>
@@ -92,13 +96,19 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, ...restOfProps 
         <ProjectCardHeaderButtonsAndDate onClick={stopEventPropagation}>
           <ProjectCardHeaderButtonWrapper>
             <ButtonSecondary
-              onClick={stopEventPropagation}
+              onClick={() => setIsProjectModalOpen(true)}
               aria-label="Copy"
               disabled={!isAppOnline}
             >
               <IconCopy />
               <span>Copy</span>
             </ButtonSecondary>
+            <ProjectModal
+              isOpen={isProjectModalOpen}
+              onDismiss={() => setIsProjectModalOpen(false)}
+              project={project}
+              addProjectToProjectsPage={addProjectToProjectsPage}
+            />
             <CheckBoxLabel
               htmlFor={project.id}
               onClick={stopEventPropagation}
@@ -126,6 +136,7 @@ ProjectCard.propTypes = {
   apiSyncInstance: PropTypes.instanceOf(SyncApiDataIntoOfflineStorage).isRequired,
   project: projectPropType.isRequired,
   isOfflineReady: PropTypes.bool.isRequired,
+  addProjectToProjectsPage: PropTypes.func.isRequired,
 }
 
 export default ProjectCard

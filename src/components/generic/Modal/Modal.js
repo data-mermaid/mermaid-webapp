@@ -5,6 +5,7 @@ import { IconClose } from '../../icons'
 import theme from '../../../theme'
 import { CloseButton } from '../buttons'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
+import { InputRow } from "../form"
 
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
@@ -18,6 +19,7 @@ const StyledDialogOverlay = styled('div')`
   place-items: center;
   grid-template-columns: 1fr;
   z-index: 103;
+  cursor: default;
 `
 const StyledDialog = styled('div')`
   padding: 0;
@@ -29,6 +31,7 @@ const StyledDialog = styled('div')`
 const ModalTitle = styled.div`
   padding: ${theme.spacing.medium};
   display: grid;
+  color: ${theme.color.primaryColor};
   grid-template-columns: auto auto;
   h2 {
     justify-self: start;
@@ -81,6 +84,19 @@ const LeftFooter = styled('div')`
 `
 const RightFooter = styled('div')`
   justify-self: end;
+`
+
+const ModalInputRow = styled(InputRow)`
+  background: ${theme.color.white};
+  color: ${theme.color.primaryColor};
+  display: block;
+  border: none;
+  h4 {
+    margin: 0;
+  }
+  label {
+    font-weight: bold;
+  }
 `
 
 const Modal = ({
@@ -137,4 +153,4 @@ Modal.defaultProps = {
 }
 
 export default Modal
-export { LeftFooter, RightFooter, StyledDialogOverlay, ModalContent }
+export { LeftFooter, RightFooter, StyledDialogOverlay, ModalContent, ModalInputRow }

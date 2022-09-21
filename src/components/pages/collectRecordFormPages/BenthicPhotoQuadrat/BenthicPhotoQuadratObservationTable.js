@@ -13,7 +13,7 @@ import {
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
-  StyledObservationTable,
+  StickyObservationTable,
   TableValidationList,
   UnderTableRow,
 } from '../CollectingFormPage.Styles'
@@ -422,7 +422,7 @@ const BenthicPhotoQuadratObservationTable = ({
     <InputWrapper>
       <H2 id="table-label">Observations</H2>
       <StyledOverflowWrapper>
-        <StyledObservationTable aria-labelledby="table-label">
+        <StickyObservationTable aria-labelledby="table-label">
           <StyledColgroup>
             <col className="number" />
             <col className="quadrat" />
@@ -452,7 +452,7 @@ const BenthicPhotoQuadratObservationTable = ({
             </Tr>
           </thead>
           <tbody>{observationsRows}</tbody>
-        </StyledObservationTable>
+        </StickyObservationTable>
       </StyledOverflowWrapper>
       <UnderTableRow>
         <ButtonPrimary type="button" onClick={handleAddObservation}>

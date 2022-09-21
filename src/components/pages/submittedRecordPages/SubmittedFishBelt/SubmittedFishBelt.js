@@ -194,13 +194,20 @@ const SubmittedFishBelt = () => {
               sampleUnit="fishbelt_transect"
             />
             <RowSpaceBetween>
-              <div>{language.pages.submittedFishBeltForm.toolbarLabel}</div>
-              {currentUserProfile.is_admin && (
-                <ButtonSecondary onClick={handleMoveToCollect} disabled={isMoveToButtonDisabled}>
+              <>
+                <p>
+                  {currentUserProfile.is_admin
+                    ? language.pages.submittedFishBeltForm.SampleUnitsAreReadOnly
+                    : language.pages.submittedFishBeltForm.AdminEditOnly}
+                </p>
+                <ButtonSecondary
+                  onClick={handleMoveToCollect}
+                  disabled={currentUserProfile.is_admin ? isMoveToButtonDisabled : 'false'}
+                >
                   <IconPen />
-                  Edit Sample Unit - move to Collecting
+                  {language.pages.submittedFishBeltForm.MoveSampleUnitButon}
                 </ButtonSecondary>
-              )}
+              </>
             </RowSpaceBetween>
           </>
         )

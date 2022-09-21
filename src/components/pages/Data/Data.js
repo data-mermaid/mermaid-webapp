@@ -8,7 +8,14 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  GenericStickyTable,
+  Tr,
+  Th,
+  Td,
+  TableNavigation,
+  StickyTableOverflowWrapper,
+} from '../../generic/Table/table'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodes,
@@ -241,8 +248,8 @@ const Data = () => {
 
   const table = submittedRecordsForUiDisplay.length ? (
     <>
-      <TableOverflowWrapper>
-        <Table {...getTableProps()}>
+      <StickyTableOverflowWrapper>
+        <GenericStickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
@@ -280,8 +287,8 @@ const Data = () => {
               )
             })}
           </tbody>
-        </Table>
-      </TableOverflowWrapper>
+        </GenericStickyTable>
+      </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}

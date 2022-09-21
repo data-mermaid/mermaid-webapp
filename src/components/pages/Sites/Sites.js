@@ -3,7 +3,14 @@ import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { CSVLink } from 'react-csv'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-import { Table, Tr, Th, Td, TableOverflowWrapper, TableNavigation } from '../../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  TableNavigation,
+  StickyTableOverflowWrapper,
+  GenericStickyTable,
+} from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import { H2 } from '../../generic/text'
 import { IconPlus, IconCopy, IconDownload } from '../../icons'
@@ -260,8 +267,8 @@ const Sites = () => {
 
   const table = siteRecordsForUiDisplay.length ? (
     <>
-      <TableOverflowWrapper>
-        <Table {...getTableProps()}>
+      <StickyTableOverflowWrapper>
+        <GenericStickyTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -301,8 +308,8 @@ const Sites = () => {
               )
             })}
           </tbody>
-        </Table>
-      </TableOverflowWrapper>
+        </GenericStickyTable>
+      </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
           onChange={handleRowsNumberChange}
