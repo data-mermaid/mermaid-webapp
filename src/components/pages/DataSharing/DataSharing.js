@@ -26,8 +26,7 @@ import theme from '../../../theme'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -75,7 +74,7 @@ const DataSharing = () => {
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
-  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 

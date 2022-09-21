@@ -12,7 +12,7 @@ import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlas
 import { formikPropType } from '../../../library/formikPropType'
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -34,7 +34,6 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
-import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 
@@ -188,7 +187,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {

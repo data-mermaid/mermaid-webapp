@@ -32,8 +32,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
-import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -45,7 +44,7 @@ const ManagementRegimes = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 

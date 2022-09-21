@@ -47,9 +47,8 @@ import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -143,7 +142,7 @@ const Users = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { setIsSyncInProgress } = useSyncStatus()
-  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)

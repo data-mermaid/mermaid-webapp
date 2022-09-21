@@ -8,7 +8,7 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import { IconPen } from '../../../icons'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import { getBenthicOptions } from '../../../../library/getOptions'
-import { getProjectRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
@@ -24,7 +24,6 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import RecordFormTitle from '../../../RecordFormTitle'
 import { RowSpaceBetween } from '../../../generic/positioning'
 import { FormSubTitle } from '../SubmittedFormPage.styles'
-import { userRole } from '../../../../App/mermaidData/userRole'
 
 const SubmittedBenthicPhotoQuadrat = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -47,7 +46,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
   const [submittedRecord, setSubmittedRecord] = useState()
   const [subNavNode, setSubNavNode] = useState(null)
 
-  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
 
   const _getSupportingData = useEffect(() => {

@@ -36,8 +36,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
-import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -52,7 +51,7 @@ const Sites = () => {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 

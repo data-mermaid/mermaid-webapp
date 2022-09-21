@@ -18,8 +18,7 @@ import {
   IconUsersAndTransects,
   IconManagementRegimesOverview,
 } from '../icons'
-import { userRole } from '../../App/mermaidData/userRole'
-import { getProjectRole } from '../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole } from '../../App/currentUserProfileHelpers'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 import SubNavMenuRecordName from '../SubNavMenuRecordName'
@@ -75,7 +74,7 @@ const NavMenu = ({ subNavNode }) => {
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   return (
     <NavWrapper data-testid="content-page-side-nav">

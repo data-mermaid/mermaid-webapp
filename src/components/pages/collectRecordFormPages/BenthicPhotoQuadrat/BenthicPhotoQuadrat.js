@@ -44,8 +44,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import { userRole } from '../../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
 import PageUnavailable from '../../PageUnavailable'
 
 const BenthicPhotoQuadrat = ({ isNewRecord }) => {
@@ -88,7 +87,7 @@ const BenthicPhotoQuadrat = ({ isNewRecord }) => {
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
     submitButtonState === buttonGroupStates.submitting
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   const getValidationButtonStatus = (collectRecord) => {
     return collectRecord?.validations?.status === 'ok'

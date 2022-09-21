@@ -44,8 +44,7 @@ import { getRecordName } from '../../../../library/getRecordName'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { DeleteRecordButtonCautionWrapper } from '../CollectingFormPage.Styles'
-import { userRole } from '../../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
 import PageUnavailable from '../../PageUnavailable'
 
 const FishBelt = ({ isNewRecord }) => {
@@ -80,7 +79,7 @@ const FishBelt = ({ isNewRecord }) => {
   const { currentUser } = useCurrentUser()
   const history = useHistory()
   const isMounted = useIsMounted()
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   const observationsReducer = useReducer(fishbeltObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer

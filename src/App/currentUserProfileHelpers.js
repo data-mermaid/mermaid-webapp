@@ -1,6 +1,7 @@
 import axios from 'axios'
 import language from '../language'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
+import { userRole } from './mermaidData/userRole'
 
 const getUserName = (user) => {
   const { first_name, last_name, email } = user
@@ -119,4 +120,12 @@ export const setCurrentUserProfile = async ({
 
 export const getProjectRole = (userProfile, projectId) => {
   return userProfile?.projects?.find(({ id: idToCheck }) => idToCheck === projectId)?.role
+}
+
+export const getIsReadOnlyUserRole = (userProfile, projectId) => {
+  return getProjectRole(userProfile, projectId) === userRole.read_only
+}
+
+export const getIsAdminUserRole = (userProfile, projectId) => {
+  return getProjectRole(userProfile, projectId) === userRole.admin
 }
