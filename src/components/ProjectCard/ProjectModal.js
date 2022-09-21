@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
@@ -13,6 +13,7 @@ import handleHttpResponseError from '../../library/handleHttpResponseError'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import theme from '../../theme'
 import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValidation'
+import LoadingModal from '../LoadingModal/LoadingModal'
 
 const CheckBoxLabel = styled.label`
   display: inline-block;
@@ -22,15 +23,9 @@ const CheckBoxLabel = styled.label`
   }
 `
 
-const StyledTextFooterModal = styled('div')`
-  color: ${theme.color.black};
-  float: left;
-  position: relative;
-  overflow-wrap: break-word;
-  left: -85%;
-`
+const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
+  const [isLoading, setIsLoading] = useState(false)
 
-const ProjectModal = ({ isOpen, onDismiss, project }) => {
   const formik = useFormik({
     initialValues: {
       name: `Copy of ${project.name}`,
@@ -49,26 +44,39 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
-  const copyExistingProject = () =>
+  const copyExistingProject = () => {
+    // setIsLoading and addProjectToProjectsPage are used in this function
+    // to display the loading modal and pass the new project back to the
+    // projects page.
+    // This is done because the projects page does not re-render after the
+    // sync has taken place.
+    // As an alternative they could be removed and  we could make use of
+    // setIsSyncInProgress in a way that is consitent with other components.
+    setIsLoading(true)
     databaseSwitchboardInstance
       .addProject(project.id, formik.values.name, formik.values.sendEmail)
-      .then(() => {
+      .then((response) => {
         toast.success(...getToastArguments(language.success.projectCopied))
-        onDismiss()
         formik.resetForm()
+        addProjectToProjectsPage(response)
+        setIsLoading(false)
+        onDismiss()
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            if (error.response.status === 500) {
-              toast.error(...getToastArguments(language.error.generic))
-            } else {
-              toast.error(...getToastArguments(language.error.duplicateNewProject))
+            const isDuplicateError = [500, 400].includes(error.response.status)
+              && error.response.data?.detail === '[IntegrityError] Copying project'
+
+            if (isDuplicateError) {
+              toast.error(...getToastArguments(...getToastArguments(language.error.duplicateNewProject)))
             }
           },
         })
+        setIsLoading(false)
       })
+  }
 
   const handleOnSubmit = () => {
     copyExistingProject()
@@ -91,7 +99,8 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
           validationMessages={formik.errors.name}
           setErrors={language.error.formValidation.required}
         />
-        <p>{language.projectModal.copyProjectMessage}</p>
+      </ModalInputRow>
+      <ModalInputRow>
         <CheckBoxLabel>
           <input
             type="checkbox"
@@ -103,12 +112,13 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
           Notify users by email
         </CheckBoxLabel>
       </ModalInputRow>
+      <p>{language.projectModal.copyProjectMessage}</p>
+      <p>{language.projectModal.footerMessage}</p>
     </>
   )
 
   const footerContent = (
     <RightFooter>
-      <StyledTextFooterModal>{language.projectModal.footerMessage}</StyledTextFooterModal>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
         Copy project
@@ -118,13 +128,17 @@ const ProjectModal = ({ isOpen, onDismiss, project }) => {
   )
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onDismiss={onDismiss}
-      title={language.projectModal.copyTitle}
-      mainContent={modalContent}
-      footerContent={footerContent}
-    />
+    <>
+      <Modal
+        isOpen={isOpen}
+        onDismiss={onDismiss}
+        title={language.projectModal.copyTitle}
+        mainContent={modalContent}
+        footerContent={footerContent}
+      />
+      {isLoading && <LoadingModal />}
+    </>
+
   )
 }
 
@@ -132,6 +146,7 @@ ProjectModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
   project: projectPropType,
+  addProjectToProjectsPage: PropTypes.func.isRequired,
 }
 
 ProjectModal.defaultProps = {

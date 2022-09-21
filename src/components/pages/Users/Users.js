@@ -47,7 +47,7 @@ import language from '../../../language'
 import NewUserModal from '../../NewUserModal'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
-import PageUnavailableOffline from '../PageUnavailableOffline'
+import PageUnavailable from '../PageUnavailable'
 import RemoveUserModal from '../../RemoveUserModal'
 import theme from '../../../theme'
 import TransferSampleUnitsModal from '../../TransferSampleUnitsModal'
@@ -56,7 +56,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -150,7 +150,7 @@ const Users = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { setIsSyncInProgress } = useSyncStatus()
-  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
@@ -734,7 +734,11 @@ const Users = () => {
     </>
   )
 
-  const content = isAppOnline ? table : <PageUnavailableOffline />
+  const content = isAppOnline ? (
+    table
+  ) : (
+    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+  )
   const toolbar = (
     <>
       <H2>{language.pages.userTable.title}</H2>

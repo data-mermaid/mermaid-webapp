@@ -86,6 +86,7 @@ const error = {
   pageUnavailableOffline: 'This page is unavailable offline.',
   pageNotFound: "This page can't be found.",
   pageNotFoundRecovery: 'Make sure the URL is correct.',
+  pageReadOnly: 'You are a read-only member of this project',
   idNotFound: "This item can't be found.",
   idNotFoundRecovery:
     "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
@@ -284,7 +285,7 @@ const projectModal = {
   copyProjectMessage:
     'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
   copyTitle: 'Copy Project',
-  footerMessage: 'You will be an admin of this project',
+  footerMessage: 'You will be an admin for this project.',
 }
 
 const getValidationMessage = (validation, projectId = '') => {

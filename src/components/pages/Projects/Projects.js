@@ -15,7 +15,7 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import SyncApiDataIntoOfflineStorage from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncApiDataIntoOfflineStorage'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getObjectById } from '../../../library/getObjectById'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 
@@ -96,6 +96,10 @@ const Projects = ({ apiSyncInstance }) => {
 
   const filteredSortedProjects = getFilteredSortedProjects()
 
+  const addProjectToProjectsPage = (project) => {
+    setProjects([...projects, project])
+  }
+
   const renderPageNoData = () => {
     const {
       noFilterResults,
@@ -120,18 +124,21 @@ const Projects = ({ apiSyncInstance }) => {
       subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
     }
 
-    return <PageNoData mainText={mainText} subText={subText} />
+    return (
+      <PageUnavailable mainText={mainText} subText={subText} />
+    )
   }
 
   const projectCardsList = filteredSortedProjects.length
     ? getFilteredSortedProjects().map((project) => (
-        <ProjectCard
-          role="listitem"
-          project={{ ...project }}
-          key={project.id}
-          apiSyncInstance={apiSyncInstance}
-          isOfflineReady={getIsProjectOffline(project.id)}
-        />
+      <ProjectCard
+        role="listitem"
+        project={{ ...project }}
+        key={project.id}
+        apiSyncInstance={apiSyncInstance}
+        isOfflineReady={getIsProjectOffline(project.id)}
+        addProjectToProjectsPage={addProjectToProjectsPage}
+      />
       ))
     : renderPageNoData()
 

@@ -25,7 +25,7 @@ import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndVa
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import NewOrganizationModal from '../../NewOrganizationModal'
-import PageUnavailableOffline from '../PageUnavailableOffline'
+import PageUnavailable from '../PageUnavailable'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import theme from '../../../theme'
 import useIsMounted from '../../../library/useIsMounted'
@@ -33,8 +33,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
@@ -174,7 +173,7 @@ const Admin = () => {
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -349,7 +348,13 @@ const Admin = () => {
     <>
       <ContentPageLayout
         isPageContentLoading={isLoading}
-        content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
+        content={
+          isAppOnline ? (
+            contentViewByRole
+          ) : (
+            <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+          )
+        }
         toolbar={
           <ContentPageToolbarWrapper>
             <H2>{language.pages.projectInfo.title}</H2>

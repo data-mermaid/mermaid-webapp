@@ -30,11 +30,15 @@ const handleHttpResponseError = ({ error, callback, logoutMermaid }) => {
     }
   }
 
-  // Make sure to only include status codes that would unlikely need a custom message for a given context
+  // Make sure to only include status codes that need a custom message for a given context
   if (errorStatusesToRespondTo.includes(errorStatus)) {
     toast.error(...getToastArguments(language.error[errorStatus]))
-  } else if (callback) {
-    // This allows for the logic to be extended.
+
+    return
+  }
+
+  if (callback) {
+    // This allows the logic to be extended.
     // If a callback is used, the user will want to
     // consider providing a generic message as well.
     callback()

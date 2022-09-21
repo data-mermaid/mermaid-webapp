@@ -41,10 +41,9 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
-import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -59,7 +58,7 @@ const Sites = () => {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -248,7 +247,7 @@ const Sites = () => {
     </>
   )
 
-  const contentViewByRole = isReadOnlyUser ? (
+  const toolbarButtonsByRole = isReadOnlyUser ? (
     <>
       <ToolbarButtonWrapper>{readOnlySitesHeaderContent}</ToolbarButtonWrapper>
     </>
@@ -330,7 +329,7 @@ const Sites = () => {
       {isAppOnline && <ProjectSitesMap sitesForMapMarkers={sitesForMapMarkers} choices={choices} />}
     </>
   ) : (
-    <PageNoData
+    <PageUnavailable
       mainText={language.pages.siteTable.noDataText}
       subText={language.pages.siteTable.noDataExtraText}
     />
@@ -353,7 +352,7 @@ const Sites = () => {
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
 
-            <ToolbarButtonWrapper>{contentViewByRole}</ToolbarButtonWrapper>
+            <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>
           </ToolBarRow>
         </>
       }

@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
 import { ContentPageLayout } from '../../Layout'
-import PageUnavailableOffline from '../PageUnavailableOffline'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
@@ -35,7 +34,7 @@ import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 
 const getTransectReportProperties = (transect) => {
   return {
@@ -308,10 +307,14 @@ const Data = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageNoData mainText={language.pages.submittedTable.noDataText} />
+    <PageUnavailable mainText={language.pages.submittedTable.noDataText} />
   )
 
-  const content = isAppOnline ? <>{table}</> : <PageUnavailableOffline />
+  const content = isAppOnline ? (
+    <>{table}</>
+  ) : (
+    <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+  )
   const toolbar = isAppOnline ? (
     <DataToolbarSection
       name={language.pages.submittedTable.filterToolbarText}

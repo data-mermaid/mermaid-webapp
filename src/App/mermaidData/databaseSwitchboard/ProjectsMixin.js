@@ -151,7 +151,7 @@ const ProjectsMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(new Error(`'The API status is unsuccessful',`))
+            return Promise.reject(new Error('The API status is unsuccessful'))
           })
       }
 
@@ -178,12 +178,15 @@ const ProjectsMixin = (Base) =>
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
 
             if (isApiResponseSuccessful) {
-              return this._apiSyncInstance.pullAllProjects().then(() => {
-                return response.data
+              return this._apiSyncInstance.pullAllProjects().then((pullResponse) => {
+                return pullResponse.data.projects.updates[0]
               })
             }
 
-            return Promise.reject(new Error(`'The API status is unsuccessful',`))
+            return Promise.reject(new Error('The API status is unsuccessful'))
+          })
+          .catch((error) => {
+            return Promise.reject(error)
           })
       }
 
@@ -220,7 +223,7 @@ const ProjectsMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(new Error(`'The API status is unsuccessful',`))
+            return Promise.reject(new Error('The API status is unsuccessful'))
           })
       }
 

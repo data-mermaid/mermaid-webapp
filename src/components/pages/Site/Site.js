@@ -11,7 +11,7 @@ import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { formikPropType } from '../../../library/formikPropType'
 import { getOptions } from '../../../library/getOptions'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
@@ -35,7 +35,6 @@ import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databas
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 
@@ -186,7 +185,7 @@ const Site = ({ isNewSite }) => {
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {

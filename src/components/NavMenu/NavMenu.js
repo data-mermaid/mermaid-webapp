@@ -5,6 +5,7 @@ import { subNavNodePropTypes } from '../SubNavMenuRecordName/subNavNodePropTypes
 import theme from '../../theme'
 import { NavLinkSidebar } from '../generic/links'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 import {
   IconCollect,
@@ -17,6 +18,7 @@ import {
   IconUsersAndTransects,
   IconManagementRegimesOverview,
 } from '../icons'
+import { getIsReadOnlyUserRole } from '../../App/currentUserProfileHelpers'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 import SubNavMenuRecordName from '../SubNavMenuRecordName'
@@ -65,12 +67,14 @@ const NavHeader = styled('p')`
 
 const NavMenu = ({ subNavNode }) => {
   const projectUrl = useCurrentProjectPath()
-  const { recordId, submittedRecordId, siteId, managementRegimeId } = useParams()
+  const { recordId, submittedRecordId, siteId, managementRegimeId, projectId } = useParams()
   const { pathname } = useLocation()
+  const { currentUser } = useCurrentUser()
 
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   return (
     <NavWrapper data-testid="content-page-side-nav">
@@ -95,13 +99,15 @@ const NavMenu = ({ subNavNode }) => {
         <li>
           <NavHeader>Collect</NavHeader>
           <ul>
-            <li>
-              <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
-                <IconCollect />
-                <span>Collecting</span>
-                <CollectRecordsCount />
-              </NavLinkSidebar>
-            </li>
+            {!isReadOnlyUser && (
+              <li>
+                <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
+                  <IconCollect />
+                  <span>Collecting</span>
+                  <CollectRecordsCount />
+                </NavLinkSidebar>
+              </li>
+            )}
             {isCollectingSubNode && <SubNavMenuRecordName subNavNode={subNavNode} />}
             <li>
               <NavLinkSidebar exact to={`${projectUrl}/sites`}>
