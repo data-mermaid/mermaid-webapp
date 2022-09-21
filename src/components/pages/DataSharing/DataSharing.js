@@ -21,13 +21,12 @@ import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { getDataSharingPolicyLabel } from '../../../library/getDataSharingPolicyLabel'
-import PageUnavailableOffline from '../PageUnavailableOffline'
+import PageUnavailable from '../PageUnavailable'
 import theme from '../../../theme'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -75,7 +74,7 @@ const DataSharing = () => {
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
-  const isAdminUser = getProjectRole(currentUser, projectId) === userRole.admin
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -296,7 +295,13 @@ const DataSharing = () => {
   ) : (
     <ContentPageLayout
       isPageContentLoading={isLoading}
-      content={isAppOnline ? contentViewByRole : <PageUnavailableOffline />}
+      content={
+        isAppOnline ? (
+          contentViewByRole
+        ) : (
+          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+        )
+      }
       toolbar={
         <ContentPageToolbarWrapper>
           <H2>{language.pages.dataSharing.title}</H2>

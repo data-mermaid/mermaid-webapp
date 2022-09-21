@@ -36,11 +36,12 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import PageNoData from '../PageNoData'
+import PageUnavailable from '../PageUnavailable'
 import {
   getIsQuadratSampleUnit,
   noLabelSymbol,
 } from '../../../App/mermaidData/recordProtocolHelpers'
+import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -52,6 +53,7 @@ const Collect = () => {
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 
@@ -310,7 +312,13 @@ const Collect = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageNoData mainText={language.pages.collectTable.noDataText} />
+    <PageUnavailable mainText={language.pages.collectTable.noDataText} />
+  )
+
+  const contentViewByRole = isReadOnlyUser ? (
+    <PageUnavailable mainText={language.error.pageReadOnly} />
+  ) : (
+    table
   )
 
   return idsNotAssociatedWithData.length ? (
@@ -323,17 +331,19 @@ const Collect = () => {
       toolbar={
         <>
           <H2>{language.pages.collectTable.title}</H2>
-          <ToolBarRow>
-            <FilterSearchToolbar
-              name={language.pages.collectTable.filterToolbarText}
-              value={tableUserPrefs.globalFilter}
-              handleGlobalFilterChange={handleGlobalFilterChange}
-            />
-            <AddSampleUnitButton />
-          </ToolBarRow>
+          {!isReadOnlyUser && (
+            <ToolBarRow>
+              <FilterSearchToolbar
+                name={language.pages.collectTable.filterToolbarText}
+                value={tableUserPrefs.globalFilter}
+                handleGlobalFilterChange={handleGlobalFilterChange}
+              />
+              <AddSampleUnitButton />
+            </ToolBarRow>
+          )}
         </>
       }
-      content={table}
+      content={contentViewByRole}
       isPageContentLoading={isLoading}
     />
   )

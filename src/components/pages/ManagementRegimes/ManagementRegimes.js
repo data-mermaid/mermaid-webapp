@@ -38,9 +38,8 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
-import PageNoData from '../PageNoData'
-import { userRole } from '../../../App/mermaidData/userRole'
-import { getProjectRole } from '../../../App/currentUserProfileHelpers'
+import PageUnavailable from '../PageUnavailable'
+import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -52,7 +51,7 @@ const ManagementRegimes = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
-  const isReadOnlyUser = getProjectRole(currentUser, projectId) === userRole.read_only
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -286,7 +285,7 @@ const ManagementRegimes = () => {
     </>
   )
 
-  const contentViewByRole = isReadOnlyUser ? (
+  const toolbarButtonsByRole = isReadOnlyUser ? (
     <>
       <ToolbarButtonWrapper>{readOnlyMrsHeaderContent}</ToolbarButtonWrapper>
     </>
@@ -365,7 +364,7 @@ const ManagementRegimes = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageNoData
+    <PageUnavailable
       mainText={language.pages.managementRegimeTable.noDataText}
       subText={language.pages.managementRegimeTable.noDataExtraText}
     />
@@ -387,7 +386,7 @@ const ManagementRegimes = () => {
               value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
             />
-            <ToolbarButtonWrapper>{contentViewByRole}</ToolbarButtonWrapper>
+            <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>
           </ToolBarRow>
         </>
       }
