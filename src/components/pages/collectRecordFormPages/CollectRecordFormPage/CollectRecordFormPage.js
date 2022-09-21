@@ -51,8 +51,9 @@ import FishBeltObservationTable from '../FishBeltForm/FishBeltObservationTable'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import FishBeltTransectInputs from '../FishBeltForm/FishBeltTransectInputs'
-
 import language from '../../../../language'
+import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
+import PageUnavailable from '../../PageUnavailable'
 
 const CollectRecordFormPage = ({
   isNewRecord,
@@ -90,6 +91,7 @@ const CollectRecordFormPage = ({
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
 
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const isFishBeltSampleUnit = sampleUnitName === 'fishbelt'
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
@@ -582,50 +584,54 @@ const CollectRecordFormPage = ({
         isToolbarSticky={true}
         subNavNode={subNavNode}
         content={
-          <>
-            <RecordLevelInputValidationInfo
-              validations={recordLevelValidations}
-              areValidationsShowing={areValidationsShowing}
-              resetRecordLevelValidation={resetRecordLevelValidation}
-              ignoreRecordLevelValidation={ignoreRecordLevelValidation}
-              handleScrollToObservation={handleScrollToObservation}
-            />
-            <form
-              id="collect-record-form"
-              aria-labelledby="collect-record-form"
-              onSubmit={formik.handleSubmit}
-            >
-              <SampleEventInputs
+          !isReadOnlyUser ? (
+            <>
+              <RecordLevelInputValidationInfo
+                validations={recordLevelValidations}
                 areValidationsShowing={areValidationsShowing}
-                collectRecord={collectRecordBeingEdited}
-                formik={formik}
-                managementRegimes={managementRegimes}
-                sites={sites}
-                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                validationPropertiesWithDirtyResetOnInputChange={
-                  validationPropertiesWithDirtyResetOnInputChange
-                }
+                resetRecordLevelValidation={resetRecordLevelValidation}
+                ignoreRecordLevelValidation={ignoreRecordLevelValidation}
+                handleScrollToObservation={handleScrollToObservation}
               />
-              {sampleUnitTransectInputs}
-              <ObserversInput
-                data-testid="observers"
-                areValidationsShowing={areValidationsShowing}
-                formik={formik}
-                ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                observers={observerProfiles}
-                handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-                resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                validationsApiData={validationsApiData}
-                validationPropertiesWithDirtyResetOnInputChange={
-                  validationPropertiesWithDirtyResetOnInputChange
-                }
-              />
-              <div ref={observationTableRef}>{observationTable}</div>
-            </form>
-            <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
-          </>
+              <form
+                id="collect-record-form"
+                aria-labelledby="collect-record-form"
+                onSubmit={formik.handleSubmit}
+              >
+                <SampleEventInputs
+                  areValidationsShowing={areValidationsShowing}
+                  collectRecord={collectRecordBeingEdited}
+                  formik={formik}
+                  managementRegimes={managementRegimes}
+                  sites={sites}
+                  handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                  ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                  resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                  validationPropertiesWithDirtyResetOnInputChange={
+                    validationPropertiesWithDirtyResetOnInputChange
+                  }
+                />
+                {sampleUnitTransectInputs}
+                <ObserversInput
+                  data-testid="observers"
+                  areValidationsShowing={areValidationsShowing}
+                  formik={formik}
+                  ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+                  observers={observerProfiles}
+                  handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+                  resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+                  validationsApiData={validationsApiData}
+                  validationPropertiesWithDirtyResetOnInputChange={
+                    validationPropertiesWithDirtyResetOnInputChange
+                  }
+                />
+                <div ref={observationTableRef}>{observationTable}</div>
+              </form>
+              <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
+            </>
+          ) : (
+            <PageUnavailable mainText={language.error.pageReadOnly} />
+          )
         }
         toolbar={
           <ContentPageToolbarWrapper>
@@ -643,15 +649,17 @@ const CollectRecordFormPage = ({
                 sampleUnit={isFishBeltSampleUnit ? 'fishbelt_transect' : 'quadrat_transect'}
               />
             )}
-            <SaveValidateSubmitButtonGroup
-              isNewRecord={isNewRecord}
-              saveButtonState={saveButtonState}
-              validateButtonState={validateButtonState}
-              submitButtonState={submitButtonState}
-              onValidate={handleValidate}
-              onSave={handleSave}
-              onSubmit={handleSubmit}
-            />
+            {!isReadOnlyUser && (
+              <SaveValidateSubmitButtonGroup
+                isNewRecord={isNewRecord}
+                saveButtonState={saveButtonState}
+                validateButtonState={validateButtonState}
+                submitButtonState={submitButtonState}
+                onValidate={handleValidate}
+                onSave={handleSave}
+                onSubmit={handleSubmit}
+              />
+            )}
           </ContentPageToolbarWrapper>
         }
       />
