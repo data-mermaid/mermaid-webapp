@@ -172,7 +172,6 @@ const SubmittedBenthicPhotoQuadrat = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              primaryTitle={`${language.pages.submittedTable.title} - ${language.pages.benthicPhotoQuadratForm.title}`}
               sampleUnit="quadrat_transect"
             />
             <RowSpaceBetween>

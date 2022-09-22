@@ -457,18 +457,26 @@ const collect_records = [
     project: '5',
     profile: 'fake-id',
     data: {
-      protocol: 'benthiclit',
+      protocol: 'fishbelt',
       sample_event: {
         site: '3',
         management: '2',
         sample_date: '2021-3-11',
       },
-      benthic_transect: {
+      fishbelt_transect: {
         depth: 20,
-        label: 'LIT-1',
+        label: 'FB-1',
+        width: 'ab438b26-1ddf-4f62-b683-75dd364e614b',
+        size_bin: 'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+        reef_slope: 'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+        notes: 'some fish notes',
         number: 5,
-        sample_time: '22:55',
+        sample_time: '11:55',
         len_surveyed: 10,
+        relative_depth: '8f381e71-219e-469c-8c13-231b088fb861',
+        visibility: '40702fad-754a-4982-8ca5-9b97106eca31',
+        current: 'e5dcb32c-614d-44ed-8155-5911b7ee774a',
+        tide: '79693274-4ec6-4052-afe1-4bb02eaa04ec',
       },
       observers: [
         {

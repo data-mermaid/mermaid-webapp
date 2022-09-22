@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { choicesPropType, fishBeltPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import {
+  choicesPropType,
+  fishbeltValidationPropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
@@ -26,15 +29,15 @@ const TRANSECT_NUMBER_VALIDATION_PATH = 'data.fishbelt_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.fishbelt_transect.visibility'
 const WIDTH_VALIDATION_PATH = 'data.fishbelt_transect.width'
 
-const FishbeltTransectInputs = ({
+const FishBeltTransectInputs = ({
   areValidationsShowing,
   choices,
-  collectRecord,
   formik,
   handleChangeForDirtyIgnoredInput,
   ignoreNonObservationFieldValidations,
   onSizeBinChange,
   resetNonObservationFieldValidations,
+  validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const {
@@ -53,7 +56,6 @@ const FishbeltTransectInputs = ({
   const visibilityOptions = [...getOptions(visibilities), { label: 'not reported', value: '' }]
   const currentOptions = [...getOptions(currents), { label: 'not reported', value: '' }]
   const tideOptions = [...getOptions(tides), { label: 'not reported', value: '' }]
-  const validationsApiData = collectRecord?.validations?.results?.data
   const fishbelt_transect = validationsApiData?.fishbelt_transect
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
@@ -467,20 +469,16 @@ const FishbeltTransectInputs = ({
   )
 }
 
-FishbeltTransectInputs.propTypes = {
+FishBeltTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
-  collectRecord: fishBeltPropType,
   formik: formikPropType.isRequired,
   handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   onSizeBinChange: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
-FishbeltTransectInputs.defaultProps = {
-  collectRecord: undefined,
-}
-
-export default FishbeltTransectInputs
+export default FishBeltTransectInputs

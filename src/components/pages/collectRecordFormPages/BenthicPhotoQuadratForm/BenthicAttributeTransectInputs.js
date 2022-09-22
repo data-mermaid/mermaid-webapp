@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 
 import {
-  benthicPhotoQuadratPropType,
+  benthicpqtValidationPropType,
   choicesPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
@@ -31,12 +31,12 @@ const TIDE_VALIDATION_PATH = 'data.quadrat_transect.tide'
 
 const TransectInputs = ({
   areValidationsShowing,
-  collectRecord,
   choices,
   formik,
   handleChangeForDirtyIgnoredInput,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
+  validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const { currents, relativedepths, tides, visibilities } = choices
@@ -45,7 +45,6 @@ const TransectInputs = ({
   const relativeDepthOptions = [...getOptions(relativedepths), { label: 'not reported', value: '' }]
   const tideOptions = [...getOptions(tides), { label: 'not reported', value: '' }]
   const visibilityOptions = [...getOptions(visibilities), { label: 'not reported', value: '' }]
-  const validationsApiData = collectRecord?.validations?.results?.data
   const quadrat_transect = validationsApiData?.quadrat_transect
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
@@ -489,17 +488,14 @@ const TransectInputs = ({
 
 TransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
-  collectRecord: benthicPhotoQuadratPropType,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
   handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
+  validationsApiData: PropTypes.shape({ quadrat_transect: benthicpqtValidationPropType })
+    .isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
-}
-
-TransectInputs.defaultProps = {
-  collectRecord: undefined,
 }
 
 export default TransectInputs

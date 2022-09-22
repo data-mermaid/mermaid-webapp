@@ -461,10 +461,14 @@ const CollectRecordsMixin = (Base) =>
       }
 
       const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
+      const sampleUnitName = recordToOperateOn.data.protocol
 
-      const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
+      const allObservationValidations = {
+        fishbelt: recordToOperateOn.validations.results.data.obs_belt_fishes,
+        benthicpqt: recordToOperateOn.validations.results.data.obs_benthic_photo_quadrats,
+      }
 
-      const observationsValidationsWithIgnored = allObservationValidations.map(
+      const observationsValidationsWithIgnored = allObservationValidations[sampleUnitName].map(
         (singleObservationValidations) => {
           return singleObservationValidations.map((validation) => {
             const isValidationBelongingToObservation =
@@ -480,9 +484,14 @@ const CollectRecordsMixin = (Base) =>
         },
       )
 
+      const validationPath = {
+        fishbelt: 'validations.results.data.obs_belt_fishes',
+        benthicpqt: 'validations.results.data.obs_benthic_photo_quadrats',
+      }
+
       const recordWithIgnoredObservationValidations = setObjectPropertyOnClone({
         object: recordToOperateOn,
-        path: 'validations.results.data.obs_belt_fishes',
+        path: validationPath[sampleUnitName],
         value: observationsValidationsWithIgnored,
       })
 
@@ -571,10 +580,14 @@ const CollectRecordsMixin = (Base) =>
       }
 
       const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
+      const sampleUnitName = recordToOperateOn.data.protocol
 
-      const allObservationValidations = recordToOperateOn.validations.results.data.obs_belt_fishes
+      const allObservationValidations = {
+        fishbelt: recordToOperateOn.validations.results.data.obs_belt_fishes,
+        benthicpqt: recordToOperateOn.validations.results.data.obs_benthic_photo_quadrats,
+      }
 
-      const observationsValidationsWithReset = allObservationValidations.map(
+      const observationsValidationsWithReset = allObservationValidations[sampleUnitName].map(
         (singleObservationValidations) => {
           return singleObservationValidations.map((validation) => {
             const isValidationBelongingToObservation =
@@ -589,9 +602,14 @@ const CollectRecordsMixin = (Base) =>
         },
       )
 
+      const validationPath = {
+        fishbelt: 'validations.results.data.obs_belt_fishes',
+        benthicpqt: 'validations.results.data.obs_benthic_photo_quadrats',
+      }
+
       const recordWithResetObservationValidations = setObjectPropertyOnClone({
         object: recordToOperateOn,
-        path: 'validations.results.data.obs_belt_fishes',
+        path: validationPath[sampleUnitName],
         value: observationsValidationsWithReset,
       })
 

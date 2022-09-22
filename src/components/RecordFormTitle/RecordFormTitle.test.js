@@ -26,14 +26,13 @@ test('RecordFormTitle shows the title as expected when all of site name, transec
     <RecordFormTitle
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.project_sites}
-      primaryTitle="Fish Belt"
       sampleUnit="fishbelt_transect"
     />,
   )
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Fish Belt'))
+  expect(within(formTitle).getByText('Collecting - Fish Belt'))
   expect(within(formTitle).getByText('Site D'))
   expect(within(formTitle).getByText('2'))
   expect(within(formTitle).getByText('FB-2'))
@@ -50,14 +49,13 @@ test('RecordFormTitle component renders a default title when site name, transect
         mockMissingSiteNameTransectNumberLabelCollectRecord.data
       }
       sites={mockMermaidData.project_sites}
-      primaryTitle="Fish Belt"
       sampleUnit="fishbelt_transect"
     />,
   )
 
   const formTitle = screen.getByTestId('edit-collect-record-form-title')
 
-  expect(within(formTitle).getByText('Fish Belt'))
+  expect(within(formTitle).getByText('Collecting - Fish Belt'))
 })
 
 test('RecordFormTitle component renders properly when site name is missing.', () => {
@@ -76,7 +74,6 @@ test('RecordFormTitle component renders properly when site name is missing.', ()
     <RecordFormTitle
       submittedRecordOrCollectRecordDataProperty={mockMissingSiteCollectRecord.data}
       sites={mockMermaidData.project_sites}
-      primaryTitle="Fish Belt"
       sampleUnit="fishbelt_transect"
     />,
   )
@@ -104,7 +101,6 @@ test('RecordFormTitle component renders properly when label is missing.', () => 
     <RecordFormTitle
       submittedRecordOrCollectRecordDataProperty={mockMissingLabelCollectRecord.data}
       sites={mockMermaidData.project_sites}
-      primaryTitle="Fish Belt"
       sampleUnit="fishbelt_transect"
     />,
   )

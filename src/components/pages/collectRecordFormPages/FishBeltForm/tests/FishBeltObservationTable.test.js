@@ -11,7 +11,7 @@ import {
   within,
 } from '../../../../../testUtilities/testingLibraryWithHelpers'
 
-import FishBelt from '../FishBelt'
+import FishBeltForm from '../FishBeltForm'
 import { getMockDexieInstancesAllSuccess } from '../../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
@@ -27,7 +27,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -54,7 +54,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -85,7 +85,7 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -118,7 +118,7 @@ test('FishBelt observations size shows a select input when fish bin size is 10',
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -151,7 +151,7 @@ test('FishBelt observations size shows a select input when fish bin size is AGRR
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -184,7 +184,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,
@@ -219,7 +219,7 @@ test('Fishbelt observations hide and show fish name reference link appropriately
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBelt isNewRecord={false} currentUser={fakeCurrentUser} />
+      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
     </Route>,
     {
       isSyncInProgressOverride: true,

@@ -34,7 +34,7 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('Benthic LIT'))
+  expect(within(tableRows[1]).getByText('Fish Belt'))
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -162,7 +162,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('5 LIT-1'))
+  expect(within(tableRows[1]).getByText('5 FB-1'))
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -182,7 +182,7 @@ test('Collect Records table sorts properly by sample unit # column', async () =>
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('5 LIT-1'))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('5 FB-1'))
 })
 
 test('Collect Records table sorts properly by size column', async () => {
@@ -207,7 +207,7 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('10m'))
+  expect(within(tableRows[1]).getByText('10m x 2m'))
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -227,7 +227,7 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('10m'))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('10m x 2m'))
 })
 
 test('Collect Records table sorts properly by depth column', async () => {
@@ -395,7 +395,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
   userEvent.dblClick(within(table).getByText('Sample Date'))
   userEvent.dblClick(within(table).getByText('Sample Unit #'))
 
-  expect(within(tableRows[1]).getByText('Benthic LIT'))
+  expect(within(tableRows[1]).getByText('Fish Belt'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Sample Date'))

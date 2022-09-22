@@ -13,9 +13,9 @@ import Site from '../components/pages/Site'
 import Users from '../components/pages/Users'
 import UsersAndTransects from '../components/pages/UsersAndTransects'
 import ManagementRegimesOverview from '../components/pages/ManagementRegimesOverview'
-import FishBelt from '../components/pages/collectRecordFormPages/FishBelt'
+import FishBeltForm from '../components/pages/collectRecordFormPages/FishBeltForm'
 import SubmittedFishBelt from '../components/pages/submittedRecordPages/SubmittedFishBelt/SubmittedFishBelt'
-import BenthicPhotoQuadrat from '../components/pages/collectRecordFormPages/BenthicPhotoQuadrat'
+import BenthicPhotoQuadratForm from '../components/pages/collectRecordFormPages/BenthicPhotoQuadratForm'
 import SubmittedBenthicPhotoQuadrat from '../components/pages/submittedRecordPages/SubmittedBenthicPhotoQuadrat'
 
 export const useRoutes = ({ apiSyncInstance }) => {
@@ -38,19 +38,19 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/fishbelt',
-      Component: () => <FishBelt isNewRecord={true} />,
+      Component: () => <FishBeltForm isNewRecord={true} />,
     },
     {
       path: '/projects/:projectId/collecting/fishbelt/:recordId',
-      Component: () => <FishBelt isNewRecord={false} />,
+      Component: () => <FishBeltForm isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/collecting/benthicpqt',
-      Component: () => <BenthicPhotoQuadrat isNewRecord={true} />,
+      Component: () => <BenthicPhotoQuadratForm isNewRecord={true} />,
     },
     {
       path: '/projects/:projectId/collecting/benthicpqt/:recordId',
-      Component: () => <BenthicPhotoQuadrat isNewRecord={false} />,
+      Component: () => <BenthicPhotoQuadratForm isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
