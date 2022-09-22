@@ -12,7 +12,7 @@ import {
 import { formikPropType } from '../../../../library/formikPropType'
 import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { getFishBinLabel } from './fishBeltBins'
-import { getObservationBiomass } from './fishBeltBiomas'
+import { getObservationBiomass } from './fishBeltBiomass'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'

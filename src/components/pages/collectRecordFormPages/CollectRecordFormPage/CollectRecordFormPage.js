@@ -54,6 +54,11 @@ import FishBeltTransectInputs from '../FishBeltForm/FishBeltTransectInputs'
 import language from '../../../../language'
 import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
 import PageUnavailable from '../../PageUnavailable'
+import {
+  getRecordSampleUnitMethod,
+  getRecordSampleUnit,
+  getIsFishBelt,
+} from '../../../../App/mermaidData/recordProtocolHelpers'
 
 const CollectRecordFormPage = ({
   isNewRecord,
@@ -92,7 +97,7 @@ const CollectRecordFormPage = ({
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
 
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
-  const isFishBeltSampleUnit = sampleUnitName === 'fishbelt'
+  const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
   const displayLoadingModal =
@@ -151,17 +156,22 @@ const CollectRecordFormPage = ({
       ...getSampleInfoInitialValues(collectRecordBeingEdited),
     }
 
-    return isFishBeltSampleUnit
-      ? {
+    switch (sampleUnitName) {
+      case 'fishbelt':
+        return {
           ...collectRecordInitialValues,
           ...getTransectInitialValues(collectRecordBeingEdited, 'fishbelt_transect'),
         }
-      : {
+      case 'benthicpqt':
+        return {
           ...collectRecordInitialValues,
           ...getTransectInitialValues(collectRecordBeingEdited, 'quadrat_transect'),
           ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
         }
-  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData, isFishBeltSampleUnit])
+      default:
+        return collectRecordInitialValues
+    }
+  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData, sampleUnitName])
 
   const formik = useFormik({
     initialValues: initialFormikFormValues,
@@ -170,17 +180,20 @@ const CollectRecordFormPage = ({
   })
 
   const handleSave = () => {
-    const recordToSubmit = isFishBeltSampleUnit
-      ? reformatFormValuesIntoFishBeltRecord(
-          formik.values,
-          observationsState,
-          collectRecordBeingEdited,
-        )
-      : reformatFormValuesIntoBenthicPQTRecord(
-          formik.values,
-          observationsState,
-          collectRecordBeingEdited,
-        )
+    const getRecordBySampleUnitType = {
+      fishbelt: reformatFormValuesIntoFishBeltRecord(
+        formik.values,
+        observationsState,
+        collectRecordBeingEdited,
+      ),
+      benthicpqt: reformatFormValuesIntoBenthicPQTRecord(
+        formik.values,
+        observationsState,
+        collectRecordBeingEdited,
+      ),
+    }
+
+    const recordToSubmit = getRecordBySampleUnitType[sampleUnitName]
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
@@ -572,6 +585,55 @@ const CollectRecordFormPage = ({
     />
   )
 
+  const contentViewByRole = !isReadOnlyUser ? (
+    <>
+      <RecordLevelInputValidationInfo
+        validations={recordLevelValidations}
+        areValidationsShowing={areValidationsShowing}
+        resetRecordLevelValidation={resetRecordLevelValidation}
+        ignoreRecordLevelValidation={ignoreRecordLevelValidation}
+        handleScrollToObservation={handleScrollToObservation}
+      />
+      <form
+        id="collect-record-form"
+        aria-labelledby="collect-record-form"
+        onSubmit={formik.handleSubmit}
+      >
+        <SampleEventInputs
+          areValidationsShowing={areValidationsShowing}
+          collectRecord={collectRecordBeingEdited}
+          formik={formik}
+          managementRegimes={managementRegimes}
+          sites={sites}
+          handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+          validationPropertiesWithDirtyResetOnInputChange={
+            validationPropertiesWithDirtyResetOnInputChange
+          }
+        />
+        {sampleUnitTransectInputs}
+        <ObserversInput
+          data-testid="observers"
+          areValidationsShowing={areValidationsShowing}
+          formik={formik}
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+          observers={observerProfiles}
+          handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+          resetNonObservationFieldValidations={resetNonObservationFieldValidations}
+          validationsApiData={validationsApiData}
+          validationPropertiesWithDirtyResetOnInputChange={
+            validationPropertiesWithDirtyResetOnInputChange
+          }
+        />
+        <div ref={observationTableRef}>{observationTable}</div>
+      </form>
+      <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
+    </>
+  ) : (
+    <PageUnavailable mainText={language.error.pageReadOnly} />
+  )
+
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -583,70 +645,15 @@ const CollectRecordFormPage = ({
         isPageContentLoading={isLoading}
         isToolbarSticky={true}
         subNavNode={subNavNode}
-        content={
-          !isReadOnlyUser ? (
-            <>
-              <RecordLevelInputValidationInfo
-                validations={recordLevelValidations}
-                areValidationsShowing={areValidationsShowing}
-                resetRecordLevelValidation={resetRecordLevelValidation}
-                ignoreRecordLevelValidation={ignoreRecordLevelValidation}
-                handleScrollToObservation={handleScrollToObservation}
-              />
-              <form
-                id="collect-record-form"
-                aria-labelledby="collect-record-form"
-                onSubmit={formik.handleSubmit}
-              >
-                <SampleEventInputs
-                  areValidationsShowing={areValidationsShowing}
-                  collectRecord={collectRecordBeingEdited}
-                  formik={formik}
-                  managementRegimes={managementRegimes}
-                  sites={sites}
-                  handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-                  ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                  resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                  validationPropertiesWithDirtyResetOnInputChange={
-                    validationPropertiesWithDirtyResetOnInputChange
-                  }
-                />
-                {sampleUnitTransectInputs}
-                <ObserversInput
-                  data-testid="observers"
-                  areValidationsShowing={areValidationsShowing}
-                  formik={formik}
-                  ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-                  observers={observerProfiles}
-                  handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
-                  resetNonObservationFieldValidations={resetNonObservationFieldValidations}
-                  validationsApiData={validationsApiData}
-                  validationPropertiesWithDirtyResetOnInputChange={
-                    validationPropertiesWithDirtyResetOnInputChange
-                  }
-                />
-                <div ref={observationTableRef}>{observationTable}</div>
-              </form>
-              <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
-            </>
-          ) : (
-            <PageUnavailable mainText={language.error.pageReadOnly} />
-          )
-        }
+        content={contentViewByRole}
         toolbar={
           <ContentPageToolbarWrapper>
-            {isNewRecord && (
-              <H2>
-                {isFishBeltSampleUnit
-                  ? language.pages.fishBeltForm.title
-                  : language.pages.benthicPhotoQuadratForm.title}
-              </H2>
-            )}
+            {isNewRecord && <H2>{getRecordSampleUnitMethod(sampleUnitName)}</H2>}
             {collectRecordBeingEdited && !isNewRecord && (
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
                 sites={sites}
-                sampleUnit={isFishBeltSampleUnit ? 'fishbelt_transect' : 'quadrat_transect'}
+                sampleUnit={getRecordSampleUnit(sampleUnitName)}
               />
             )}
             {!isReadOnlyUser && (

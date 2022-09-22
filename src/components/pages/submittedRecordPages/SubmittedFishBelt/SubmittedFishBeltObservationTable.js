@@ -6,7 +6,7 @@ import {
   fishNameConstantsPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { Table, Tr, Td, Th } from '../../../generic/Table/table'
-import { getObservationBiomass } from '../../collectRecordFormPages/FishBeltForm/fishBeltBiomas'
+import { getObservationBiomass } from '../../collectRecordFormPages/FishBeltForm/fishBeltBiomass'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import language from '../../../../language'
