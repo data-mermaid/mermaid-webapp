@@ -60,11 +60,11 @@ const NewOrganizationModal = ({ isOpen, onDismiss, onSubmit }) => {
 
   const footerContent = (
     <RightFooter>
+      <ButtonSecondary onClick={resetAndCloseModal}>Cancel</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
         Send to MERMAID for review
       </ButtonPrimary>
-      <ButtonSecondary onClick={resetAndCloseModal}>Cancel</ButtonSecondary>
     </RightFooter>
   )
 

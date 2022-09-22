@@ -62,11 +62,11 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
 
   const footerContent = (
     <RightFooter>
+      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
         Save Changes
       </ButtonPrimary>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
     </RightFooter>
   )
 

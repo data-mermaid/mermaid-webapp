@@ -66,11 +66,14 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
         handleHttpResponseError({
           error,
           callback: () => {
-            const isDuplicateError = [500, 400].includes(error.response.status)
-              && error.response.data?.detail === '[IntegrityError] Copying project'
+            const isDuplicateError =
+              [500, 400].includes(error.response.status) &&
+              error.response.data?.detail === '[IntegrityError] Copying project'
 
             if (isDuplicateError) {
-              toast.error(...getToastArguments(...getToastArguments(language.error.duplicateNewProject)))
+              toast.error(
+                ...getToastArguments(...getToastArguments(language.error.duplicateNewProject)),
+              )
             }
           },
         })
@@ -119,11 +122,11 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
 
   const footerContent = (
     <RightFooter>
+      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
         Copy project
       </ButtonPrimary>
-      <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
     </RightFooter>
   )
 
@@ -138,7 +141,6 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
       />
       {isLoading && <LoadingModal />}
     </>
-
   )
 }
 
