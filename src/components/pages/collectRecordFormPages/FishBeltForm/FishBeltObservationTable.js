@@ -420,6 +420,7 @@ const FishBeltObservationTable = ({
     openNewObservationModal,
     resetObservationValidations,
     setAreObservationsInputsDirty,
+    fishNameConstants,
   ])
 
   return (
