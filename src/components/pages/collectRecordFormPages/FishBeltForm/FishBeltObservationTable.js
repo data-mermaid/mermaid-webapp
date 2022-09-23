@@ -39,6 +39,7 @@ import {
   TableValidationList,
   UnderTableRow,
 } from '../CollectingFormPage.Styles'
+import { fishReferenceEndpoint } from '../../../../App/mermaidData/fishNameHelpers'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -192,6 +193,10 @@ const FishBeltObservationTable = ({
 
     return observationsState.map((observation, index) => {
       const { id: observationId, count, size, fish_attribute } = observation
+      const taxonomicRank = fishNameConstants.find(
+        ({ id }) => id === fish_attribute,
+      )?.taxonomic_rank
+      const fishMatchingUrl = fishReferenceEndpoint[taxonomicRank]
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -367,7 +372,7 @@ const FishBeltObservationTable = ({
                     aria-label="fish name reference"
                     target="_blank"
                     tabIndex="-1"
-                    href={`https://dev-collect.datamermaid.org/#/reference/fishattributes/species/${fish_attribute}`}
+                    href={`https://dev-collect.datamermaid.org/#/reference/fishattributes/${fishMatchingUrl}/${fish_attribute}`}
                   >
                     <IconLibraryBooks />
                   </StyledLinkThatLooksLikeButtonToReference>
