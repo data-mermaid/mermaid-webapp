@@ -29,6 +29,28 @@ const SitesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    getSitesTest = async function getSitesTest(projectId, pageNo = 1, orderingTerms) {
+      if (!projectId) {
+        return Promise.reject(this._operationMissingParameterError)
+      }
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .get(`${this._apiBaseUrl}/sites/`, {
+              params: {
+                exclude_projects: projectId,
+                include_fields: `country_name,project_name,reef_type_name,reef_zone_name,exposure_name`,
+                ordering: orderingTerms,
+                unique: projectId,
+                limit: 5,
+                page: pageNo,
+              },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            })
+            .then((apiResults) => apiResults.data)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     getSite = function getSite(id) {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
@@ -75,7 +97,7 @@ const SitesMixin = (Base) =>
       const siteToSubmit = this.#getSiteReadyForPush({ site, projectId })
 
       if (this._isOnlineAuthenticatedAndReady) {
-         // Add to IDB in case the there are network issues before the API responds
+        // Add to IDB in case the there are network issues before the API responds
         await this._dexiePerUserDataInstance.project_sites.put(siteToSubmit)
 
         return axios

@@ -44,6 +44,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
 import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import CopySitesModal from '../../CopySitesModal'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -59,6 +60,9 @@ const Sites = () => {
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
+  const openCopySitesModal = () => setIsCopySitesModalOpen(true)
+  const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -257,9 +261,10 @@ const Sites = () => {
         <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
           <IconPlus /> New site
         </LinkLooksLikeButtonSecondary>
-        <ButtonSecondary>
+        <ButtonSecondary type="button" onClick={openCopySitesModal}>
           <IconCopy /> Copy sites from other projects
         </ButtonSecondary>
+        <CopySitesModal isOpen={isCopySitesModalOpen} onDismiss={closeCopySitesModal} />
         {readOnlySitesHeaderContent}
       </ToolbarButtonWrapper>
     </>
