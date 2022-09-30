@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
 import React, { useState, useEffect, useMemo, useCallback, useRef, forwardRef } from 'react'
@@ -12,6 +13,8 @@ import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import PaginationForCopy from '../generic/Table/PaginationForCopy'
+import { getToastArguments } from '../../library/getToastArguments'
+import { pluralize } from '../../library/strings/pluralize'
 
 const getSortKey = {
   projectName: 'project__name',
@@ -37,7 +40,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   )
 })
 
-const CopySitesModal = ({ isOpen, onDismiss }) => {
+const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const { isAppOnline } = useOnlineStatus()
@@ -48,7 +51,7 @@ const CopySitesModal = ({ isOpen, onDismiss }) => {
   const [orderingTerms, setOrderingTerms] = useState()
   const [siteRecords, setSiteRecords] = useState([])
   const [siteRecordCount, setSiteRecordCount] = useState(0)
-  //   const [selectedRowsInfo, setSelectedRowsInfo] = useState([])
+  const [selectedRowsIds, setSelectedRowsIds] = useState([])
 
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -57,10 +60,9 @@ const CopySitesModal = ({ isOpen, onDismiss }) => {
 
     if (isAppOnline && databaseSwitchboardInstance && projectId) {
       databaseSwitchboardInstance
-        .getSitesTest(projectId, currentPage, orderingTerms)
+        .getSitesExcludedInCurrentProject(projectId, currentPage, orderingTerms)
         .then((sitesResponse) => {
           if (isMounted.current) {
-            //   console.log('sitesResponse ', sitesResponse)
             setSiteRecordCount(sitesResponse.count)
             setSiteRecords(sitesResponse.results)
             setIsLoading(false)
@@ -189,9 +191,24 @@ const CopySitesModal = ({ isOpen, onDismiss }) => {
   }, [handleServerSort, sortBy])
 
   useEffect(() => {
-    // const selectedRows = selectedFlatRows.map((rowInfo) => rowInfo.original)
-    // setSelectedRowsInfo(selectedRows)
+    const rowIds = selectedFlatRows.map((rowInfo) => rowInfo.original.id)
+
+    setSelectedRowsIds(rowIds)
   }, [selectedFlatRows])
+
+  const copySelectedSites = () => {
+    setIsLoading(true)
+
+    databaseSwitchboardInstance.copySitesToProject(projectId, selectedRowsIds).then((response) => {
+      const copiedSitesCount = response.length
+      const copiedSiteMsg = pluralize(copiedSitesCount, 'site', 'sites')
+
+      toast.success(...getToastArguments(`Add ${copiedSitesCount} ${copiedSiteMsg}`))
+      addCopiedSitesToSiteTable(response)
+      setIsLoading(false)
+      onDismiss()
+    })
+  }
 
   const table = siteRecords.length && (
     <>
@@ -201,7 +218,6 @@ const CopySitesModal = ({ isOpen, onDismiss }) => {
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
-                  //   console.log('column ', column)
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
                   )
@@ -247,14 +263,12 @@ const CopySitesModal = ({ isOpen, onDismiss }) => {
     </>
   )
 
-//   const modalContent = <></>
-
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={onDismiss}>
+      <ButtonPrimary onClick={copySelectedSites}>
         <IconSend />
-        Copy project
+        Copy selected sites to project
       </ButtonPrimary>
     </RightFooter>
   )
@@ -276,6 +290,7 @@ const CopySitesModal = ({ isOpen, onDismiss }) => {
 CopySitesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  addCopiedSitesToSiteTable: PropTypes.func.isRequired,
 }
 
 export default CopySitesModal

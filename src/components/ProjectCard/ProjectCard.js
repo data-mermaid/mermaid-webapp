@@ -24,7 +24,13 @@ import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
 
-const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, addProjectToProjectsPage, ...restOfProps }) => {
+const ProjectCard = ({
+  project,
+  apiSyncInstance,
+  isOfflineReady,
+  addProjectToProjectsPage,
+  ...restOfProps
+}) => {
   const { isAppOnline } = useOnlineStatus()
 
   const { name, countries, updated_on, id } = project
@@ -79,10 +85,6 @@ const ProjectCard = ({ project, apiSyncInstance, isOfflineReady, addProjectToPro
 
     history.push(destinationUrl)
   }
-  //  hiding for alpha release because leads nowhere useful
-  // const handleProjectCopyClick = (e) => {
-  //   e.stopPropagation()
-  // }
 
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
