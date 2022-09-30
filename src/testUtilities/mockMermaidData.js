@@ -3674,11 +3674,45 @@ const notifications = {
   ],
 }
 
+const sites = [
+  {
+    id: '01bef5c7-20bf-42a2-9926-928edbad17f1',
+    name: 'Hakauata SMA',
+    country: '02969773-87e9-48e9-94c6-29453c2ec4c1',
+    country_name: 'Tonga',
+    reef_type: '19534716-b138-49b1-bbd8-420df9243413',
+    reef_type_name: 'fringing',
+    reef_zone: '0e5ac2d0-d1cc-4f04-a696-f6d3db2b9ca8',
+    reef_zone_name: 'fore reef',
+    exposure: '997c6cb3-c5e5-4df6-9cfa-5814a58a7b9e',
+    exposure_name: 'exposed',
+  },
+  {
+    id: '0203cc6b-5dd0-411a-acf9-daf4acca0096',
+    name: 'Hakauata SMA',
+    country: 'c570ff86-4992-4fa1-939a-3ce433f80dcb',
+    country_name: '"Indonesia"',
+    reef_type: '7085ee02-2a2e-4b42-b61e-18a78f1b8d03',
+    reef_type_name: 'patch',
+    reef_zone: '0e5ac2d0-d1cc-4f04-a696-f6d3db2b9ca8',
+    reef_zone_name: 'fore reef',
+    exposure: '997c6cb3-c5e5-4df6-9cfa-5814a58a7b9e',
+    exposure_name: 'exposed',
+  },
+]
+
 const projectsEndpoint = {
   count: 9,
   next: null,
   previous: null,
   results: projects,
+}
+
+const sitesEndpoint = {
+  count: 2,
+  next: null,
+  previous: null,
+  results: sites,
 }
 
 const mockMermaidData = {
@@ -3697,6 +3731,7 @@ const mockMermaidData = {
   projectsEndpoint,
   projecttags,
   sampleUnitMethods,
+  sitesEndpoint,
 }
 
 export default mockMermaidData

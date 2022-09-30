@@ -15,6 +15,7 @@ import LoadingModal from '../LoadingModal/LoadingModal'
 import PaginationForCopy from '../generic/Table/PaginationForCopy'
 import { getToastArguments } from '../../library/getToastArguments'
 import { pluralize } from '../../library/strings/pluralize'
+import language from '../../language'
 
 const getSortKey = {
   projectName: 'project__name',
@@ -67,6 +68,9 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
             setSiteRecords(sitesResponse.results)
             setIsLoading(false)
           }
+        })
+        .catch(() => {
+          toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isAppOnline, isMounted, currentPage, orderingTerms])
