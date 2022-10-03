@@ -1,6 +1,8 @@
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
+import styled from 'styled-components'
+
 import React, { useState, useEffect, useMemo, useCallback, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
@@ -12,10 +14,16 @@ import { IconSend } from '../icons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingModal from '../LoadingModal/LoadingModal'
-import PaginationForCopy from '../generic/Table/PaginationForCopy'
 import { getToastArguments } from '../../library/getToastArguments'
 import { pluralize } from '../../library/strings/pluralize'
 import language from '../../language'
+import PageSelector from '../generic/Table/PageSelector'
+
+const DEFAULT_PAGE_SIZE = 5
+const PaginationWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
 
 const getSortKey = {
   projectName: 'project__name',
@@ -48,24 +56,26 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const isMounted = useIsMounted()
   const [isLoading, setIsLoading] = useState(false)
 
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState()
   const [orderingTerms, setOrderingTerms] = useState()
   const [siteRecords, setSiteRecords] = useState([])
-  const [siteRecordCount, setSiteRecordCount] = useState(0)
   const [selectedRowsIds, setSelectedRowsIds] = useState([])
+  const [controlledPageCount, setControlledPageCount] = useState(0)
 
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
       setIsLoading(false)
     }
 
-    if (isAppOnline && databaseSwitchboardInstance && projectId) {
+    if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
       databaseSwitchboardInstance
         .getSitesExcludedInCurrentProject(projectId, currentPage, orderingTerms)
         .then((sitesResponse) => {
           if (isMounted.current) {
-            setSiteRecordCount(sitesResponse.count)
+            const controlledCount = Math.ceil(sitesResponse.count / DEFAULT_PAGE_SIZE)
+
             setSiteRecords(sitesResponse.results)
+            setControlledPageCount(controlledCount)
             setIsLoading(false)
           }
         })
@@ -73,11 +83,15 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isAppOnline, isMounted, currentPage, orderingTerms])
-
-  const pageChangeHandler = (pageNo) => {
-    setCurrentPage(pageNo)
-  }
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isAppOnline,
+    isMounted,
+    currentPage,
+    orderingTerms,
+    isOpen,
+  ])
 
   const handleServerSort = useCallback((sortTerms) => {
     const sortTermQuery = sortTerms
@@ -93,6 +107,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       .join(',')
 
     setOrderingTerms(sortTermQuery)
+  }, [])
+
+  const handleSelectedRows = useCallback((flatRows) => {
+    setSelectedRowsIds(flatRows)
   }, [])
 
   const tableColumns = useMemo(
@@ -155,16 +173,25 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     getTableBodyProps,
     getTableProps,
     headerGroups,
-    rows,
+    page,
     prepareRow,
-    selectedFlatRows,
-    state: { sortBy },
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    gotoPage,
+    nextPage,
+    previousPage,
+    state: { sortBy, pageIndex, selectedRowIds },
+    toggleAllRowsSelected,
   } = useTable(
     {
       columns: tableColumns,
       data: tableCellData,
       manualPagination: true,
       manualSortBy: true,
+      pageCount: controlledPageCount,
+      autoResetSelectedRows: false,
+      getRowId: (row) => row.id,
       isMultiSortEvent: () => true,
     },
     useGlobalFilter,
@@ -194,11 +221,17 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     handleServerSort(sortBy)
   }, [handleServerSort, sortBy])
 
-  useEffect(() => {
-    const rowIds = selectedFlatRows.map((rowInfo) => rowInfo.original.id)
+  const _updateCurrentPage = useEffect(() => {
+    const currentPageNo = pageIndex + 1
 
-    setSelectedRowsIds(rowIds)
-  }, [selectedFlatRows])
+    setCurrentPage(currentPageNo)
+  }, [pageIndex])
+
+  useEffect(() => {
+    const rowIds = Object.keys(selectedRowIds)
+
+    handleSelectedRows(rowIds)
+  }, [handleSelectedRows, selectedRowIds])
 
   const copySelectedSites = () => {
     setIsLoading(true)
@@ -210,6 +243,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       toast.success(...getToastArguments(`Add ${copiedSitesCount} ${copiedSiteMsg}`))
       addCopiedSitesToSiteTable(response)
       setIsLoading(false)
+      toggleAllRowsSelected(false)
       onDismiss()
     })
   }
@@ -241,7 +275,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
+            {page.map((row) => {
               prepareRow(row)
 
               return (
@@ -259,11 +293,17 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           </tbody>
         </Table>
       </TableOverflowWrapper>
-      <PaginationForCopy
-        totalRows={siteRecordCount}
-        currentPage={currentPage}
-        pageChangeHandler={pageChangeHandler}
-      />
+      <PaginationWrapper>
+        <PageSelector
+          onPreviousClick={previousPage}
+          previousDisabled={!canPreviousPage}
+          onNextClick={nextPage}
+          nextDisabled={!canNextPage}
+          onGoToPage={gotoPage}
+          currentPageIndex={pageIndex}
+          pageCount={pageOptions.length}
+        />
+      </PaginationWrapper>
     </>
   )
 
