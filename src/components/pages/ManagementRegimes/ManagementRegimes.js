@@ -13,6 +13,8 @@ import {
   StickyTableOverflowWrapper,
 } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
+import CopyManagementRegimesModal from '../../CopyManagementRegimesModal'
+
 import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
@@ -52,6 +54,9 @@ const ManagementRegimes = () => {
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const [isCopyManagementRegimesModalOpen, setIsCopyManagementRegimesModalOpen] = useState(false)
+  const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
+  const closeCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(false)
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -295,11 +300,16 @@ const ManagementRegimes = () => {
         <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
           <IconPlus /> New MR
         </LinkLooksLikeButtonSecondary>
-        <ButtonSecondary>
+        <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
           <IconCopy /> Copy MRs from other projects
         </ButtonSecondary>
         {readOnlyMrsHeaderContent}
       </ToolbarButtonWrapper>
+      <CopyManagementRegimesModal
+        isOpen={isCopyManagementRegimesModalOpen}
+        onDismiss={closeCopyManagementRegimesModal}
+        // addCopiedSitesToSiteTable={addCopiedSitesToSiteTable}
+      />
     </>
   )
 

@@ -39,6 +39,27 @@ const ManagementRegimesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    getManagementRegimesExcludedInCurrentProject =
+      async function getManagementRegimesExcludedInCurrentProject(projectId) {
+        if (!projectId) {
+          return Promise.reject(this._operationMissingParameterError)
+        }
+
+        return this._isOnlineAuthenticatedAndReady
+          ? axios
+              .get(`${this._apiBaseUrl}/managements/`, {
+                params: {
+                  exclude_projects: projectId,
+                  include_fields: `project_name`,
+                  unique: projectId,
+                  limit: 2500,
+                },
+                ...(await getAuthorizationHeaders(this._getAccessToken)),
+              })
+              .then((apiResults) => apiResults.data)
+          : Promise.reject(this._notAuthenticatedAndReadyError)
+      }
+
     getManagementRegime = function getManagementRegime(id) {
       if (!id) {
         Promise.reject(this._operationMissingParameterError)
