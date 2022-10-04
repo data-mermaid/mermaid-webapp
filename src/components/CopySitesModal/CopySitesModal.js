@@ -93,7 +93,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     isOpen,
   ])
 
-  const handleServerSort = useCallback((sortTerms) => {
+  const handleSortBy = useCallback((sortTerms) => {
     const sortTermQuery = sortTerms
       .map(({ id, desc }) => {
         const sortKey = getSortKey[id] || id
@@ -109,12 +109,19 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     setOrderingTerms(sortTermQuery)
   }, [])
 
-  const handleSelectedRows = useCallback((flatRows) => {
-    setSelectedRowsIds(flatRows)
-  }, [])
-
   const tableColumns = useMemo(
     () => [
+      {
+        id: 'selection',
+        // The cell can use the individual row's getToggleRowSelectedProps method
+        // to the render a checkbox
+        /* eslint-disable react/prop-types */
+        Cell: ({ row }) => (
+          <div>
+            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+          </div>
+        ),
+      },
       {
         Header: 'Name',
         accessor: 'name',
@@ -198,28 +205,11 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     useSortBy,
     usePagination,
     useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
-        {
-          id: 'selection',
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          /* eslint-disable react/prop-types */
-          Cell: ({ row }) => (
-            <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
-        },
-        ...columns,
-      ])
-    },
   )
 
-  useEffect(() => {
-    handleServerSort(sortBy)
-  }, [handleServerSort, sortBy])
+  const _updateSort = useEffect(() => {
+    handleSortBy(sortBy)
+  }, [handleSortBy, sortBy])
 
   const _updateCurrentPage = useEffect(() => {
     const currentPageNo = pageIndex + 1
@@ -227,11 +217,11 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     setCurrentPage(currentPageNo)
   }, [pageIndex])
 
-  useEffect(() => {
+  const _updateSelectedRows = useEffect(() => {
     const rowIds = Object.keys(selectedRowIds)
 
-    handleSelectedRows(rowIds)
-  }, [handleSelectedRows, selectedRowIds])
+    setSelectedRowsIds(rowIds)
+  }, [selectedRowIds])
 
   const copySelectedSites = () => {
     setIsLoading(true)
