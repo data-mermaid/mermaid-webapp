@@ -32,6 +32,7 @@ const SitesMixin = (Base) =>
       projectId,
       pageNo = 1,
       orderingTerms,
+      searchTerms,
     ) {
       if (!projectId) {
         return Promise.reject(this._operationMissingParameterError)
@@ -47,6 +48,7 @@ const SitesMixin = (Base) =>
                 unique: projectId,
                 limit: 5,
                 page: pageNo,
+                search: searchTerms,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })

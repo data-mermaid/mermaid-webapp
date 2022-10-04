@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify'
-import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
+import { usePagination, useSortBy, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -18,6 +18,9 @@ import { getToastArguments } from '../../library/getToastArguments'
 import { pluralize } from '../../library/strings/pluralize'
 import language from '../../language'
 import PageSelector from '../generic/Table/PageSelector'
+import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
+import { ToolBarRow } from '../generic/positioning'
+import PageUnavailable from '../pages/PageUnavailable'
 
 const DEFAULT_PAGE_SIZE = 5
 const PaginationWrapper = styled.div`
@@ -54,10 +57,13 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const { projectId } = useParams()
   const { isAppOnline } = useOnlineStatus()
   const isMounted = useIsMounted()
-  const [isLoading, setIsLoading] = useState(false)
 
+  const [isLoading, setIsLoading] = useState(false)
+  const [isModalLoading, setIsModalLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState()
-  const [orderingTerms, setOrderingTerms] = useState()
+  const [orderingTerms, setOrderingTerms] = useState('')
+  const [searchTerms, setSearchTerms] = useState('')
+  const [searchTermsDebounce, setSearchTermsDebounce] = useState('')
   const [siteRecords, setSiteRecords] = useState([])
   const [selectedRowsIds, setSelectedRowsIds] = useState([])
   const [controlledPageCount, setControlledPageCount] = useState(0)
@@ -65,17 +71,24 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
       setIsLoading(false)
+      setIsModalLoading(false)
     }
 
     if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
       databaseSwitchboardInstance
-        .getSitesExcludedInCurrentProject(projectId, currentPage, orderingTerms)
+        .getSitesExcludedInCurrentProject(
+          projectId,
+          currentPage,
+          orderingTerms,
+          searchTermsDebounce,
+        )
         .then((sitesResponse) => {
           if (isMounted.current) {
             const controlledCount = Math.ceil(sitesResponse.count / DEFAULT_PAGE_SIZE)
 
             setSiteRecords(sitesResponse.results)
             setControlledPageCount(controlledCount)
+            setIsModalLoading(false)
             setIsLoading(false)
           }
         })
@@ -90,6 +103,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     isMounted,
     currentPage,
     orderingTerms,
+    searchTermsDebounce,
     isOpen,
   ])
 
@@ -107,6 +121,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       .join(',')
 
     setOrderingTerms(sortTermQuery)
+  }, [])
+
+  const handleGlobalFilterChange = useCallback((value) => {
+    setSearchTerms(value)
   }, [])
 
   const handleSelectedRows = useCallback((flatRows) => {
@@ -194,7 +212,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       getRowId: (row) => row.id,
       isMultiSortEvent: () => true,
     },
-    useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
@@ -233,6 +250,15 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     handleSelectedRows(rowIds)
   }, [handleSelectedRows, selectedRowIds])
 
+  const _searchTermDebounce = useEffect(() => {
+    const timeout = setTimeout(() => {
+      gotoPage(0)
+      setSearchTermsDebounce(searchTerms)
+    }, 500)
+
+    return () => clearTimeout(timeout)
+  }, [searchTerms, gotoPage])
+
   const copySelectedSites = () => {
     setIsLoading(true)
 
@@ -248,7 +274,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     })
   }
 
-  const table = siteRecords.length && (
+  const table = siteRecords.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -305,6 +331,21 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         />
       </PaginationWrapper>
     </>
+  ) : (
+    <PageUnavailable
+      mainText={language.table.noFilterResults}
+      subText={language.table.noFilterResultsSubText}
+    />
+  )
+
+  const toolbarContent = (
+    <ToolBarRow>
+      <FilterSearchToolbar
+        name={language.pages.copySiteTable.filterToolbarText}
+        value={searchTerms}
+        handleGlobalFilterChange={handleGlobalFilterChange}
+      />
+    </ToolBarRow>
   )
 
   const footerContent = (
@@ -322,9 +363,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title="Copy Sites"
-        mainContent={table}
+        title={language.pages.copySiteTable.title}
+        mainContent={isModalLoading ? 'Loading...' : table}
         footerContent={footerContent}
+        toolbarContent={toolbarContent}
       />
       {isLoading && <LoadingModal />}
     </>
