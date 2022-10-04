@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import language from '../../../language'
@@ -8,6 +9,7 @@ import {
   loadMapMarkersLayer,
   handleMapOnWheel,
 } from '../mapService'
+import { copySitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { MapContainer, CopySitesMapWrapper, MapZoomHelpMessage } from '../Map.styles'
 import usePrevious from '../../../library/usePrevious'
 
@@ -80,7 +82,7 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
 }
 
 CopySitesMap.propTypes = {
-  //   sitesForMapMarkers: PropTypes.arrayOf(sitePropType).isRequired,
+  sitesForMapMarkers: PropTypes.arrayOf(copySitePropType).isRequired,
 }
 
 export default CopySitesMap
