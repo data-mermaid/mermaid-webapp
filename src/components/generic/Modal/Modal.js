@@ -45,7 +45,7 @@ const ModalTitle = styled.div`
 `
 
 const ModalToolbar = styled.div`
-  padding: ${theme.spacing.medium};
+  padding: 0 ${theme.spacing.medium};
 `
 const ModalContent = styled.div`
   ${(props) =>
