@@ -18,6 +18,7 @@ import { getToastArguments } from '../../library/getToastArguments'
 import { pluralize } from '../../library/strings/pluralize'
 import language from '../../language'
 import PageSelector from '../generic/Table/PageSelector'
+import CopySitesMap from '../mermaidMap/CopySitesMap'
 
 const DEFAULT_PAGE_SIZE = 5
 const PaginationWrapper = styled.div`
@@ -68,6 +69,8 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     }
 
     if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
+      setIsLoading(true)
+
       databaseSwitchboardInstance
         .getSitesExcludedInCurrentProject(projectId, currentPage, orderingTerms)
         .then((sitesResponse) => {
@@ -116,6 +119,17 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const tableColumns = useMemo(
     () => [
       {
+        id: 'selection',
+        // The cell can use the individual row's getToggleRowSelectedProps method
+        // to the render a checkbox
+        /* eslint-disable react/prop-types */
+        Cell: ({ row }) => (
+          <div>
+            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+          </div>
+        ),
+      },
+      {
         Header: 'Name',
         accessor: 'name',
       },
@@ -155,6 +169,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           reef_zone_name,
           exposure_name,
           location,
+          project,
         }) => ({
           id,
           name,
@@ -164,6 +179,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           reefZone: reef_zone_name,
           exposure: exposure_name,
           location,
+          project,
         }),
       ),
     [siteRecords],
@@ -181,16 +197,20 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     gotoPage,
     nextPage,
     previousPage,
+    selectedFlatRows,
     state: { sortBy, pageIndex, selectedRowIds },
     toggleAllRowsSelected,
   } = useTable(
     {
       columns: tableColumns,
       data: tableCellData,
+      initialState: { pageIndex: 0 },
       manualPagination: true,
       manualSortBy: true,
       pageCount: controlledPageCount,
       autoResetSelectedRows: false,
+      autoResetSelectedCell: false,
+      autoResetSelectedColumn: false,
       getRowId: (row) => row.id,
       isMultiSortEvent: () => true,
     },
@@ -198,23 +218,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     useSortBy,
     usePagination,
     useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
-        {
-          id: 'selection',
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          /* eslint-disable react/prop-types */
-          Cell: ({ row }) => (
-            <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
-        },
-        ...columns,
-      ])
-    },
   )
 
   useEffect(() => {
@@ -304,6 +307,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           pageCount={pageOptions.length}
         />
       </PaginationWrapper>
+      <CopySitesMap sitesForMapMarkers={selectedFlatRows.map((r) => r.original)} />
     </>
   )
 
