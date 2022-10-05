@@ -49,14 +49,15 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const { projectId } = useParams()
   const { isAppOnline } = useOnlineStatus()
   const isMounted = useIsMounted()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isCopySitesLoading, setIsCopySitesLoading] = useState(false)
+  const [isModalContentLoading, setIsModalContentLoading] = useState(true)
 
   const [siteRecords, setSiteRecords] = useState([])
   const [selectedRowsIds, setSelectedRowsIds] = useState([])
 
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
-      setIsLoading(false)
+      setIsModalContentLoading(false)
     }
 
     if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
@@ -65,7 +66,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         .then((sitesResponse) => {
           if (isMounted.current) {
             setSiteRecords(sitesResponse.results)
-            setIsLoading(false)
+            setIsModalContentLoading(false)
           }
         })
         .catch(() => {
@@ -175,6 +176,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     pageOptions,
     prepareRow,
     previousPage,
+    selectedFlatRows,
     state: { pageIndex, sortBy, selectedRowIds },
     toggleAllRowsSelected,
   } = useTable(
@@ -206,7 +208,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   }, [selectedRowIds])
 
   const copySelectedSites = () => {
-    setIsLoading(true)
+    setIsCopySitesLoading(true)
 
     databaseSwitchboardInstance.copySitesToProject(projectId, selectedRowsIds).then((response) => {
       const copiedSitesCount = response.length
@@ -214,9 +216,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
 
       toast.success(...getToastArguments(`Add ${copiedSitesCount} ${copiedSiteMsg}`))
       addCopiedSitesToSiteTable(response)
-      setIsLoading(false)
+      setIsCopySitesLoading(false)
       toggleAllRowsSelected(false)
       onDismiss()
+      setIsModalContentLoading(true)
     })
   }
 
@@ -282,7 +285,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={copySelectedSites}>
+      <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedSites}>
         <IconSend />
         Copy selected sites to project
       </ButtonPrimary>
@@ -295,10 +298,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         isOpen={isOpen}
         onDismiss={onDismiss}
         title="Copy Sites"
-        mainContent={table}
+        mainContent={isModalContentLoading ? 'Loading...' : table}
         footerContent={footerContent}
       />
-      {isLoading && <LoadingModal />}
+      {isCopySitesLoading && <LoadingModal />}
     </>
   )
 }
