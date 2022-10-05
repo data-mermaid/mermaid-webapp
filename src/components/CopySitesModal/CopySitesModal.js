@@ -96,7 +96,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     isOpen,
   ])
 
-  const handleServerSort = useCallback((sortTerms) => {
+  const handleSortBy = useCallback((sortTerms) => {
     const sortTermQuery = sortTerms
       .map(({ id, desc }) => {
         const sortKey = getSortKey[id] || id
@@ -110,10 +110,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       .join(',')
 
     setOrderingTerms(sortTermQuery)
-  }, [])
-
-  const handleSelectedRows = useCallback((flatRows) => {
-    setSelectedRowsIds(flatRows)
   }, [])
 
   const tableColumns = useMemo(
@@ -220,9 +216,9 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     useRowSelect,
   )
 
-  useEffect(() => {
-    handleServerSort(sortBy)
-  }, [handleServerSort, sortBy])
+  const _updateSort = useEffect(() => {
+    handleSortBy(sortBy)
+  }, [handleSortBy, sortBy])
 
   const _updateCurrentPage = useEffect(() => {
     const currentPageNo = pageIndex + 1
@@ -230,11 +226,11 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     setCurrentPage(currentPageNo)
   }, [pageIndex])
 
-  useEffect(() => {
+  const _updateSelectedRows = useEffect(() => {
     const rowIds = Object.keys(selectedRowIds)
 
-    handleSelectedRows(rowIds)
-  }, [handleSelectedRows, selectedRowIds])
+    setSelectedRowsIds(rowIds)
+  }, [selectedRowIds])
 
   const copySelectedSites = () => {
     setIsLoading(true)
