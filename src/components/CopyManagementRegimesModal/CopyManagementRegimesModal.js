@@ -21,6 +21,7 @@ import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { pluralize } from '../../library/strings/pluralize'
+import PageUnavailable from '../pages/PageUnavailable'
 
 const PaginationWrapper = styled.div`
   display: flex;
@@ -50,12 +51,14 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
   const [isLoading, setIsLoading] = useState(false)
+  const [isModalContentLoading, setIsModalContentLoading] = useState(true)
   const [selectedRowsIds, setSelectedRowsIds] = useState([])
   const [managementRegimeRecords, setManagementRegimeRecords] = useState([])
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (!isAppOnline) {
       setIsLoading(false)
+      setIsModalContentLoading(false)
     }
 
     if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
@@ -65,6 +68,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           if (isMounted.current) {
             setManagementRegimeRecords(managementRegimesResponse.results)
             setIsLoading(false)
+            setIsModalContentLoading(false)
           }
         })
         .catch(() => {
@@ -248,7 +252,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       })
   }
 
-  const table = managementRegimeRecords.length && (
+  const table = managementRegimeRecords.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -305,6 +309,11 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         />
       </PaginationWrapper>
     </>
+  ) : (
+    <PageUnavailable
+      mainText={language.table.noFilterResults}
+      subText={language.table.noFilterResultsSubText}
+    />
   )
 
   const footerContent = (
@@ -323,7 +332,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         isOpen={isOpen}
         onDismiss={onDismiss}
         title="Copy Management Regimes"
-        mainContent={table}
+        mainContent={isModalContentLoading ? 'Loading...' : table}
         footerContent={footerContent}
       />
       {isLoading && <LoadingModal />}
