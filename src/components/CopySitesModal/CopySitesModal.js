@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify'
-import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
+import { usePagination, useSortBy, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import React, { useState, useEffect, useMemo, useCallback, useRef, forwardRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
 import useIsMounted from '../../library/useIsMounted'
@@ -13,26 +13,20 @@ import { getTableColumnHeaderProps } from '../../library/getTableColumnHeaderPro
 import { IconSend } from '../icons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import { getToastArguments } from '../../library/getToastArguments'
 import { pluralize } from '../../library/strings/pluralize'
 import language from '../../language'
+import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
 
-const DEFAULT_PAGE_SIZE = 5
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
 `
-
-const getSortKey = {
-  projectName: 'project__name',
-  countryName: 'country__name',
-  reefType: 'reef_type__name',
-  reefZone: 'reef_zone__name',
-  exposure: 'exposure__name',
-}
 
 // eslint-disable-next-line react/prop-types
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
@@ -52,16 +46,14 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 
 const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { currentUser } = useCurrentUser()
   const { projectId } = useParams()
   const { isAppOnline } = useOnlineStatus()
   const isMounted = useIsMounted()
   const [isLoading, setIsLoading] = useState(false)
 
-  const [currentPage, setCurrentPage] = useState()
-  const [orderingTerms, setOrderingTerms] = useState()
   const [siteRecords, setSiteRecords] = useState([])
   const [selectedRowsIds, setSelectedRowsIds] = useState([])
-  const [controlledPageCount, setControlledPageCount] = useState(0)
 
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -72,13 +64,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       setIsLoading(true)
 
       databaseSwitchboardInstance
-        .getSitesExcludedInCurrentProject(projectId, currentPage, orderingTerms)
+        .getSitesExcludedInCurrentProject(projectId)
         .then((sitesResponse) => {
           if (isMounted.current) {
-            const controlledCount = Math.ceil(sitesResponse.count / DEFAULT_PAGE_SIZE)
-
             setSiteRecords(sitesResponse.results)
-            setControlledPageCount(controlledCount)
             setIsLoading(false)
           }
         })
@@ -86,31 +75,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
         })
     }
-  }, [
-    databaseSwitchboardInstance,
-    projectId,
-    isAppOnline,
-    isMounted,
-    currentPage,
-    orderingTerms,
-    isOpen,
-  ])
-
-  const handleSortBy = useCallback((sortTerms) => {
-    const sortTermQuery = sortTerms
-      .map(({ id, desc }) => {
-        const sortKey = getSortKey[id] || id
-
-        if (desc) {
-          return `-${sortKey}`
-        }
-
-        return sortKey
-      })
-      .join(',')
-
-    setOrderingTerms(sortTermQuery)
-  }, [])
+  }, [databaseSwitchboardInstance, projectId, isAppOnline, isMounted, isOpen])
 
   const tableColumns = useMemo(
     () => [
@@ -128,26 +93,32 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       {
         Header: 'Name',
         accessor: 'name',
+        sortType: reactTableNaturalSort,
       },
       {
         Header: 'Project',
         accessor: 'projectName',
+        sortType: reactTableNaturalSort,
       },
       {
         Header: 'Country',
         accessor: 'countryName',
+        sortType: reactTableNaturalSort,
       },
       {
         Header: 'Reef Type',
         accessor: 'reefType',
+        sortType: reactTableNaturalSort,
       },
       {
         Header: 'Reef Zone',
         accessor: 'reefZone',
+        sortType: reactTableNaturalSort,
       },
       {
         Header: 'Exposure',
         accessor: 'exposure',
+        sortType: reactTableNaturalSort,
       },
     ],
     [],
@@ -181,17 +152,33 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     [siteRecords],
   )
 
+  const tableDefaultPrefs = useMemo(() => {
+    return {
+      sortBy: [
+        {
+          id: 'name',
+          desc: false,
+        },
+      ],
+    }
+  }, [])
+
+  const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
+    key: `${currentUser.id}-copySitesTable`,
+    defaultValue: tableDefaultPrefs,
+  })
+
   const {
+    canNextPage,
+    canPreviousPage,
     getTableBodyProps,
     getTableProps,
-    headerGroups,
-    page,
-    prepareRow,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
     gotoPage,
+    headerGroups,
     nextPage,
+    page,
+    pageOptions,
+    prepareRow,
     previousPage,
     selectedFlatRows,
     state: { sortBy, pageIndex, selectedRowIds },
@@ -200,31 +187,25 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     {
       columns: tableColumns,
       data: tableCellData,
-      initialState: { pageIndex: 0 },
-      manualPagination: true,
-      manualSortBy: true,
-      pageCount: controlledPageCount,
+      initialState: {
+        pageSize: 5,
+        sortBy: tableUserPrefs.sortBy,
+      },
       autoResetSelectedRows: false,
       autoResetSelectedCell: false,
       autoResetSelectedColumn: false,
       getRowId: (row) => row.id,
+      // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true,
     },
-    useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
   )
 
-  const _updateSort = useEffect(() => {
-    handleSortBy(sortBy)
-  }, [handleSortBy, sortBy])
-
-  const _updateCurrentPage = useEffect(() => {
-    const currentPageNo = pageIndex + 1
-
-    setCurrentPage(currentPageNo)
-  }, [pageIndex])
+  const _setSortByPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
+  }, [sortBy, handleSetTableUserPrefs])
 
   const _updateSelectedRows = useEffect(() => {
     const rowIds = Object.keys(selectedRowIds)
