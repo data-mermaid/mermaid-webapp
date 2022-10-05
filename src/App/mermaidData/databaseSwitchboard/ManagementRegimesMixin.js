@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
-import { getObjectById } from '../../../library/getObjectById'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const ManagementRegimesMixin = (Base) =>

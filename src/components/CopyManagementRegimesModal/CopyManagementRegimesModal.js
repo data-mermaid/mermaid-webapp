@@ -3,7 +3,7 @@ import { usePagination, useSortBy, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import React, { useState, useEffect, useMemo, useCallback, useRef, forwardRef } from 'react'
+import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
 import useIsMounted from '../../library/useIsMounted'
@@ -231,7 +231,6 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     databaseSwitchboardInstance
       .copyManagementRegimesToProject(projectId, selectedRowsIds)
       .then((response) => {
-        console.log(response)
         const copiedManagementRegimesCount = response.length
         const copiedManagementRegimesMsg = pluralize(
           copiedManagementRegimesCount,
