@@ -28,11 +28,7 @@ const SitesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSitesExcludedInCurrentProject = async function getSitesExcludedInCurrentProject(
-      projectId,
-      pageNo = 1,
-      orderingTerms,
-    ) {
+    getSitesExcludedInCurrentProject = async function getSitesExcludedInCurrentProject(projectId) {
       if (!projectId) {
         return Promise.reject(this._operationMissingParameterError)
       }
@@ -43,10 +39,8 @@ const SitesMixin = (Base) =>
               params: {
                 exclude_projects: projectId,
                 include_fields: `country_name,project_name,reef_type_name,reef_zone_name,exposure_name`,
-                ordering: orderingTerms,
                 unique: projectId,
-                limit: 5,
-                page: pageNo,
+                limit: 3000,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
