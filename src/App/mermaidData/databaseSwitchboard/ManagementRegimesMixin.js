@@ -52,6 +52,7 @@ const ManagementRegimesMixin = (Base) =>
                   exclude_projects: projectId,
                   include_fields: `project_name`,
                   unique: projectId,
+                  ordering: 'name',
                   limit: 2500,
                 },
                 ...(await getAuthorizationHeaders(this._getAccessToken)),
@@ -59,6 +60,45 @@ const ManagementRegimesMixin = (Base) =>
               .then((apiResults) => apiResults.data)
           : Promise.reject(this._notAuthenticatedAndReadyError)
       }
+
+    copyManagementRegimesToProject = async function copyManagementRegimesToProject(
+      projectId,
+      originalIds,
+    ) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isAuthenticatedAndReady) {
+        return axios
+          .post(
+            `${this._apiBaseUrl}/projects/${projectId}/managements/copy/`,
+            {
+              original_ids: originalIds,
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then((response) => {
+            const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
+
+            if (isApiResponseSuccessful) {
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then(() => {
+                  return response.data
+                })
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API site returned from copySitesToProject does not have a successful status code',
+              ),
+            )
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
 
     getManagementRegime = function getManagementRegime(id) {
       if (!id) {
@@ -80,29 +120,8 @@ const ManagementRegimesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? Promise.all([
-            this.getManagementRegimesWithoutOfflineDeleted(projectId),
-            this.getChoices(),
-          ]).then(([managementRegimes, choices]) => {
-            const { managementcompliances } = choices
-
-            return managementRegimes.map((record) => {
-              return {
-                ...record,
-                uiLabels: {
-                  name: record.name,
-                  estYear: record.est_year,
-                  compliance: getObjectById(managementcompliances.data, record.compliance)?.name,
-                  openAccess: record.open_access,
-                  accessRestriction: record.access_restriction,
-                  periodicClosure: record.periodic_closure,
-                  sizeLimits: record.size_limits,
-                  gearRestriction: record.gear_restriction,
-                  speciesRestriction: record.species_restriction,
-                  noTake: record.no_take,
-                },
-              }
-            })
+        ? this.getManagementRegimesWithoutOfflineDeleted(projectId).then((managementRegimes) => {
+            return managementRegimes.map((record) => record)
           })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
