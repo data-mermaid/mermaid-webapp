@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify'
-import { usePagination, useSortBy, useTable } from 'react-table'
+import { usePagination, useSortBy, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
 import useIsMounted from '../../library/useIsMounted'
@@ -20,20 +20,37 @@ import PageSelector from '../generic/Table/PageSelector'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
 import { useCurrentUser } from '../../App/CurrentUserContext'
+import { pluralize } from '../../library/strings/pluralize'
 
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
 `
 
-const CopyManagementRegimesModal = ({ isOpen, onDismiss }) => {
+// eslint-disable-next-line react/prop-types
+const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
+  const defaultRef = useRef()
+  const resolvedRef = ref || defaultRef
+
+  useEffect(() => {
+    resolvedRef.current.indeterminate = indeterminate
+  }, [resolvedRef, indeterminate])
+
+  return (
+    <>
+      <input type="checkbox" ref={resolvedRef} {...rest} />
+    </>
+  )
+})
+
+const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagementRegimeTable }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { projectId } = useParams()
   const { isAppOnline } = useOnlineStatus()
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
   const [isLoading, setIsLoading] = useState(false)
-
+  const [selectedRowsIds, setSelectedRowsIds] = useState([])
   const [managementRegimeRecords, setManagementRegimeRecords] = useState([])
 
   const _getManagementRegimeRecords = useEffect(() => {
@@ -60,17 +77,17 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss }) => {
 
   const tableColumns = useMemo(
     () => [
-      //   {
-      //     id: 'selection',
-      //     // The cell can use the individual row's getToggleRowSelectedProps method
-      //     // to the render a checkbox
-      //     /* eslint-disable react/prop-types */
-      //     Cell: ({ row }) => (
-      //       <div>
-      //         <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-      //       </div>
-      //     ),
-      //   },
+      {
+        id: 'selection',
+        // The cell can use the individual row's getToggleRowSelectedProps method
+        // to the render a checkbox
+        /* eslint-disable react/prop-types */
+        Cell: ({ row }) => (
+          <div>
+            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+          </div>
+        ),
+      },
       {
         Header: 'Name',
         accessor: 'name',
@@ -178,7 +195,8 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss }) => {
     pageOptions,
     prepareRow,
     previousPage,
-    state: { pageIndex, sortBy },
+    state: { pageIndex, sortBy, selectedRowIds },
+    toggleAllRowsSelected,
   } = useTable(
     {
       columns: tableColumns,
@@ -187,16 +205,49 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss }) => {
         pageSize: 5,
         sortBy: tableUserPrefs.sortBy,
       },
+      autoResetSelectedRows: false,
+      getRowId: (row) => row.id,
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true,
     },
     useSortBy,
     usePagination,
+    useRowSelect,
   )
 
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
+
+  const _updateSelectedRows = useEffect(() => {
+    const rowIds = Object.keys(selectedRowIds)
+
+    setSelectedRowsIds(rowIds)
+  }, [selectedRowIds])
+
+  const copySelectedManagementRegimes = () => {
+    setIsLoading(true)
+
+    databaseSwitchboardInstance
+      .copyManagementRegimesToProject(projectId, selectedRowsIds)
+      .then((response) => {
+        console.log(response)
+        const copiedManagementRegimesCount = response.length
+        const copiedManagementRegimesMsg = pluralize(
+          copiedManagementRegimesCount,
+          'management regime',
+          'management regimes',
+        )
+
+        toast.success(
+          ...getToastArguments(`Add ${copiedManagementRegimesCount} ${copiedManagementRegimesMsg}`),
+        )
+        addCopiedMRsToManagementRegimeTable(response)
+        setIsLoading(false)
+        toggleAllRowsSelected(false)
+        onDismiss()
+      })
+  }
 
   const table = managementRegimeRecords.length && (
     <>
@@ -260,7 +311,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss }) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={() => {}}>
+      <ButtonPrimary onClick={copySelectedManagementRegimes}>
         <IconSend />
         Copy selected MRs to project
       </ButtonPrimary>
@@ -284,6 +335,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss }) => {
 CopyManagementRegimesModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
+  addCopiedMRsToManagementRegimeTable: PropTypes.func.isRequired,
 }
 
 export default CopyManagementRegimesModal
