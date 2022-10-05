@@ -62,8 +62,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     }
 
     if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
-      setIsLoading(true)
-
       databaseSwitchboardInstance
         .getSitesExcludedInCurrentProject(projectId)
         .then((sitesResponse) => {

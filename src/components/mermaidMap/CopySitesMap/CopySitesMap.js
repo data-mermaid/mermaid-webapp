@@ -14,7 +14,7 @@ import { MapContainer, CopySitesMapWrapper, MapZoomHelpMessage } from '../Map.st
 import usePrevious from '../../../library/usePrevious'
 
 const defaultCenter = [20, 20]
-const defaultZoom = 3
+const defaultZoom = 1
 
 const CopySitesMap = ({ sitesForMapMarkers }) => {
   const mapContainer = useRef(null)
