@@ -180,7 +180,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     prepareRow,
     previousPage,
     selectedFlatRows,
-    state: { sortBy, pageIndex, selectedRowIds },
+    state: { pageIndex, sortBy, selectedRowIds },
     toggleAllRowsSelected,
   } = useTable(
     {
@@ -291,7 +291,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={copySelectedSites}>
+      <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedSites}>
         <IconSend />
         Copy selected sites to project
       </ButtonPrimary>
