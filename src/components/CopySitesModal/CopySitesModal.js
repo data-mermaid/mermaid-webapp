@@ -171,7 +171,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.name', 'values.reefType', 'values.reefZone', 'values.exposure']
+    const keys = ['values.name', 'values.projectName', 'values.countryName']
 
     const queryTerms = splitSearchQueryStrings(query)
     const filteredRows =
@@ -241,7 +241,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       const copiedSitesCount = response.length
       const copiedSiteMsg = pluralize(copiedSitesCount, 'site', 'sites')
 
-      toast.success(...getToastArguments(`Add ${copiedSitesCount} ${copiedSiteMsg}`))
+      toast.success(...getToastArguments(`Added ${copiedSitesCount} ${copiedSiteMsg}`))
       addCopiedSitesToSiteTable(response)
       setIsCopySitesLoading(false)
       toggleAllRowsSelected(false)
@@ -342,7 +342,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         title={language.pages.copySiteTable.title}
         mainContent={isModalContentLoading ? 'Loading...' : table}
         footerContent={footerContent}
-        toolbarContent={toolbarContent}
+        toolbarContent={!isModalContentLoading && toolbarContent}
       />
       {isCopySitesLoading && <LoadingModal />}
     </>
