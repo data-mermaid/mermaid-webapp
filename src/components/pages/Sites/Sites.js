@@ -1,8 +1,36 @@
-import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
-import { Link, useParams } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import { CSVLink } from 'react-csv'
+import { Link, useParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
+import { toast } from 'react-toastify'
+import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table'
+
+import { ContentPageLayout } from '../../Layout'
+import CopySitesModal from '../../CopySitesModal'
+import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
+import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { getObjectById } from '../../../library/getObjectById'
+import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
+import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
+import { getToastArguments } from '../../../library/getToastArguments'
+import { H2 } from '../../generic/text'
+import { IconPlus, IconCopy, IconDownload } from '../../icons'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import language from '../../../language'
+import PageSelector from '../../generic/Table/PageSelector'
+import PageSizeSelector from '../../generic/Table/PageSizeSelector'
+import PageUnavailable from '../PageUnavailable'
+import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
+import {
+  reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
+} from '../../generic/Table/reactTableNaturalSort'
+import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
+import {
+  ToolbarButtonWrapper,
+  ButtonSecondary,
+  LinkLooksLikeButtonSecondary,
+} from '../../generic/buttons'
+import { ToolBarRow } from '../../generic/positioning'
 import {
   Tr,
   Th,
@@ -11,39 +39,14 @@ import {
   StickyTableOverflowWrapper,
   GenericStickyTable,
 } from '../../generic/Table/table'
-import { ContentPageLayout } from '../../Layout'
-import { H2 } from '../../generic/text'
-import { IconPlus, IconCopy, IconDownload } from '../../icons'
-import {
-  reactTableNaturalSort,
-  reactTableNaturalSortReactNodes,
-} from '../../generic/Table/reactTableNaturalSort'
-import { ToolBarRow } from '../../generic/positioning'
-import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
-import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
-import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
-import {
-  ToolbarButtonWrapper,
-  ButtonSecondary,
-  LinkLooksLikeButtonSecondary,
-} from '../../generic/buttons'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import language from '../../../language'
-import { getToastArguments } from '../../../library/getToastArguments'
-import PageSelector from '../../generic/Table/PageSelector'
-import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
-import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
-import PageUnavailable from '../PageUnavailable'
-import ProjectSitesMap from '../../mermaidMap/ProjectSitesMap'
-import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -53,12 +56,16 @@ const Sites = () => {
 
   const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const currentProjectPath = useCurrentProjectPath()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
+  const openCopySitesModal = () => setIsCopySitesModalOpen(true)
+  const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
 
   useDocumentTitle(`${language.pages.siteTable.title} - ${language.title.mermaid}`)
 
@@ -87,7 +94,11 @@ const Sites = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
-  const currentProjectPath = useCurrentProjectPath()
+  const addCopiedSitesToSiteTable = (copiedSites) => {
+    setSiteRecordsForUiDisplay([...siteRecordsForUiDisplay, ...copiedSites])
+    setSitesForMapMarkers([...siteRecordsForUiDisplay, ...copiedSites])
+  }
+
   const tableColumns = useMemo(
     () => [
       {
@@ -114,17 +125,25 @@ const Sites = () => {
     [],
   )
 
-  const tableCellData = useMemo(
-    () =>
-      siteRecordsForUiDisplay.map(({ id, uiLabels }) => ({
-        name: <Link to={`${currentProjectPath}/sites/${id}`}>{uiLabels.name}</Link>,
-        reefType: uiLabels.reefType,
-        reefZone: uiLabels.reefZone,
-        exposure: uiLabels.exposure,
-        id,
-      })),
-    [siteRecordsForUiDisplay, currentProjectPath],
-  )
+  const tableCellData = useMemo(() => {
+    const reefTypeChoices = choices?.reeftypes?.data
+    const reefZoneChoices = choices?.reefzones?.data
+    const exposureChoices = choices?.reefexposures?.data
+
+    return siteRecordsForUiDisplay.map((site) => {
+      const reefTypeName = getObjectById(reefTypeChoices, site.reef_type)?.name
+      const reefZoneName = getObjectById(reefZoneChoices, site.reef_zone)?.name
+      const exposureName = getObjectById(exposureChoices, site.exposure)?.name
+
+      return {
+        name: <Link to={`${currentProjectPath}/sites/${site.id}`}>{site.name}</Link>,
+        reefType: reefTypeName,
+        reefZone: reefZoneName,
+        exposure: exposureName,
+        id: site.id,
+      }
+    })
+  }, [siteRecordsForUiDisplay, currentProjectPath, choices])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -216,18 +235,24 @@ const Sites = () => {
 
   const getDataForCSV = useMemo(() => {
     const countryChoices = choices?.countries?.data
+    const reefTypeChoices = choices?.reeftypes?.data
+    const reefZoneChoices = choices?.reefzones?.data
+    const exposureChoices = choices?.reefexposures?.data
 
     return siteRecordsForUiDisplay.map((site) => {
-      const findCountry = countryChoices?.find((country) => country.id === site.country)
+      const countryName = getObjectById(countryChoices, site.country)?.name
+      const reefTypeName = getObjectById(reefTypeChoices, site.reef_type)?.name
+      const reefZoneName = getObjectById(reefZoneChoices, site.reef_zone)?.name
+      const exposureName = getObjectById(exposureChoices, site.exposure)?.name
 
       return {
-        Country: findCountry?.name,
-        Name: site.uiLabels.name,
+        Country: countryName,
+        Name: site.name,
         Latitude: site.location.coordinates[1],
         Longitude: site.location.coordinates[0],
-        'Reef type': site.uiLabels.reefType,
-        'Reef zone': site.uiLabels.reefZone,
-        'Reef exposure': site.uiLabels.exposure,
+        'Reef type': reefTypeName,
+        'Reef zone': reefZoneName,
+        'Reef exposure': exposureName,
         Notes: site.notes,
       }
     })
@@ -257,11 +282,16 @@ const Sites = () => {
         <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
           <IconPlus /> New site
         </LinkLooksLikeButtonSecondary>
-        <ButtonSecondary>
+        <ButtonSecondary type="button" onClick={openCopySitesModal}>
           <IconCopy /> Copy sites from other projects
         </ButtonSecondary>
         {readOnlySitesHeaderContent}
       </ToolbarButtonWrapper>
+      <CopySitesModal
+        isOpen={isCopySitesModalOpen}
+        onDismiss={closeCopySitesModal}
+        addCopiedSitesToSiteTable={addCopiedSitesToSiteTable}
+      />
     </>
   )
 

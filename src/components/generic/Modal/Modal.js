@@ -5,7 +5,7 @@ import { IconClose } from '../../icons'
 import theme from '../../../theme'
 import { CloseButton } from '../buttons'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import { InputRow } from "../form"
+import { InputRow } from '../form'
 
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
@@ -25,7 +25,7 @@ const StyledDialog = styled('div')`
   padding: 0;
   margin: 0;
   max-width: calc(100vw - ${theme.spacing.medium});
-  width: 90rem;
+  width: 100rem;
   background: ${theme.color.white};
 `
 const ModalTitle = styled.div`

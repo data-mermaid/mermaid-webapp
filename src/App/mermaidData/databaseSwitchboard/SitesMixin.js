@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
-import { getObjectById } from '../../../library/getObjectById'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const SitesMixin = (Base) =>
@@ -29,6 +28,62 @@ const SitesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    getSitesExcludedInCurrentProject = async function getSitesExcludedInCurrentProject(projectId) {
+      if (!projectId) {
+        return Promise.reject(this._operationMissingParameterError)
+      }
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .get(`${this._apiBaseUrl}/sites/`, {
+              params: {
+                exclude_projects: projectId,
+                include_fields: `country_name,project_name,reef_type_name,reef_zone_name,exposure_name`,
+                unique: projectId,
+                limit: 10000,
+              },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            })
+            .then((apiResults) => apiResults.data)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    copySitesToProject = async function copySitesToProject(projectId, originalIds) {
+      if (!projectId) {
+        Promise.reject(this._operationMissingParameterError)
+      }
+
+      if (this._isAuthenticatedAndReady) {
+        return axios
+          .post(
+            `${this._apiBaseUrl}/projects/${projectId}/sites/copy/`,
+            {
+              original_ids: originalIds,
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then((response) => {
+            const isApiResponseSuccessful = this._isStatusCodeSuccessful(response.status)
+
+            if (isApiResponseSuccessful) {
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then(() => {
+                  return response.data
+                })
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API site returned from copySitesToProject does not have a successful status code',
+              ),
+            )
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     getSite = function getSite(id) {
       if (!id) {
         Promise.reject(this._operationMissingIdParameterError)
@@ -47,23 +102,9 @@ const SitesMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? Promise.all([this.getSitesWithoutOfflineDeleted(projectId), this.getChoices()]).then(
-            ([sites, choices]) => {
-              const { reeftypes, reefzones, reefexposures } = choices
-
-              return sites.map((record) => {
-                return {
-                  ...record,
-                  uiLabels: {
-                    name: record.name,
-                    reefType: getObjectById(reeftypes.data, record.reef_type).name,
-                    reefZone: getObjectById(reefzones.data, record.reef_zone).name,
-                    exposure: getObjectById(reefexposures.data, record.exposure).name,
-                  },
-                }
-              })
-            },
-          )
+        ? this.getSitesWithoutOfflineDeleted(projectId).then((sites) => {
+            return sites.map((record) => record)
+          })
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -75,7 +116,7 @@ const SitesMixin = (Base) =>
       const siteToSubmit = this.#getSiteReadyForPush({ site, projectId })
 
       if (this._isOnlineAuthenticatedAndReady) {
-         // Add to IDB in case the there are network issues before the API responds
+        // Add to IDB in case the there are network issues before the API responds
         await this._dexiePerUserDataInstance.project_sites.put(siteToSubmit)
 
         return axios

@@ -90,6 +90,13 @@ const mockMermaidApiAllSuccessful = setupServer(
   rest.get(`${apiBaseUrl}/projects/5/summary`, (req, res, ctx) => {
     return res(ctx.status(200))
   }),
+  rest.get(`${apiBaseUrl}/sites/`, (req, res, ctx) => {
+    const response = {
+      ...mockMermaidData.sitesEndpoint,
+    }
+
+    return res(ctx.json(response))
+  }),
 )
 
 mockMermaidApiAllSuccessful.listen({
