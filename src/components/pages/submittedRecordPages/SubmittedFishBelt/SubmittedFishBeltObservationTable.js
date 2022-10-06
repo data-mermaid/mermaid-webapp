@@ -1,11 +1,13 @@
 import React from 'react'
+import styled from 'styled-components/macro'
+import theme from '../../../../theme'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import {
   choicesPropType,
   submittedFishBeltPropType,
   fishNameConstantsPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { Table, Tr, Td, Th } from '../../../generic/Table/table'
+import { GenericStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
 import { getObservationBiomass } from '../../collectRecordFormPages/FishBeltForm/fishBeltBiomass'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
@@ -16,7 +18,17 @@ import {
   ObservationsSummaryStats,
   UnderTableRow,
 } from '../SubmittedFormPage.styles'
+import { InputWrapper } from '../../../generic/form'
+import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 
+const SubmittedObservationStickyTable = styled(GenericStickyTable)`
+  @media (min-width: 1200px) {
+    position: static;
+    tr th {
+      top: calc(${theme.spacing.headerHeight} + 13.3rem);
+    }
+  }
+`
 const SubmittedFishBeltObservationTable = ({
   choices,
   fishNameOptions,
@@ -66,20 +78,22 @@ const SubmittedFishBeltObservationTable = ({
   ))
 
   return (
-    <>
+    <InputWrapper>
       <FormSubTitle id="table-label">Observations</FormSubTitle>
-      <Table>
-        <thead>
-          <Tr>
-            <TheadItem> </TheadItem>
-            <TheadItem align="left">Fish Name</TheadItem>
-            <TheadItem align="right">Size (cm)</TheadItem>
-            <TheadItem align="right">Count</TheadItem>
-            <TheadItem align="right">Biomass (kg/ha)</TheadItem>
-          </Tr>
-        </thead>
-        <tbody>{observationBeltFish}</tbody>
-      </Table>
+      <StyledOverflowWrapper>
+        <SubmittedObservationStickyTable>
+          <thead>
+            <Tr>
+              <TheadItem> </TheadItem>
+              <TheadItem align="left">Fish Name</TheadItem>
+              <TheadItem align="right">Size (cm)</TheadItem>
+              <TheadItem align="right">Count</TheadItem>
+              <TheadItem align="right">Biomass (kg/ha)</TheadItem>
+            </Tr>
+          </thead>
+          <tbody>{observationBeltFish}</tbody>
+        </SubmittedObservationStickyTable>
+      </StyledOverflowWrapper>
       <UnderTableRow>
         <ObservationsSummaryStats>
           <tbody>
@@ -94,7 +108,7 @@ const SubmittedFishBeltObservationTable = ({
           </tbody>
         </ObservationsSummaryStats>
       </UnderTableRow>
-    </>
+    </InputWrapper>
   )
 }
 
