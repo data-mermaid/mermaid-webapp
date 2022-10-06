@@ -50,14 +50,13 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   const { isAppOnline } = useOnlineStatus()
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
-  const [isLoading, setIsLoading] = useState(false)
+  const [isCopyMRsLoading, setIsCopyMRsLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
   const [selectedRowsIds, setSelectedRowsIds] = useState([])
   const [managementRegimeRecords, setManagementRegimeRecords] = useState([])
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (!isAppOnline) {
-      setIsLoading(false)
       setIsModalContentLoading(false)
     }
 
@@ -67,7 +66,6 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         .then((managementRegimesResponse) => {
           if (isMounted.current) {
             setManagementRegimeRecords(managementRegimesResponse.results)
-            setIsLoading(false)
             setIsModalContentLoading(false)
           }
         })
@@ -199,6 +197,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     pageOptions,
     prepareRow,
     previousPage,
+    selectedFlatRows,
     state: { pageIndex, sortBy, selectedRowIds },
     toggleAllRowsSelected,
   } = useTable(
@@ -230,7 +229,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   }, [selectedRowIds])
 
   const copySelectedManagementRegimes = () => {
-    setIsLoading(true)
+    setIsCopyMRsLoading(true)
 
     databaseSwitchboardInstance
       .copyManagementRegimesToProject(projectId, selectedRowsIds)
@@ -246,9 +245,10 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           ...getToastArguments(`Add ${copiedManagementRegimesCount} ${copiedManagementRegimesMsg}`),
         )
         addCopiedMRsToManagementRegimeTable(response)
-        setIsLoading(false)
+        setIsCopyMRsLoading(false)
         toggleAllRowsSelected(false)
         onDismiss()
+        setIsModalContentLoading(true)
       })
   }
 
@@ -319,7 +319,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={copySelectedManagementRegimes}>
+      <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedManagementRegimes}>
         <IconSend />
         Copy selected MRs to project
       </ButtonPrimary>
@@ -335,7 +335,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         mainContent={isModalContentLoading ? 'Loading...' : table}
         footerContent={footerContent}
       />
-      {isLoading && <LoadingModal />}
+      {isCopyMRsLoading && <LoadingModal />}
     </>
   )
 }
