@@ -219,7 +219,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       const copiedSitesCount = response.length
       const copiedSiteMsg = pluralize(copiedSitesCount, 'site', 'sites')
 
-      toast.success(...getToastArguments(`Add ${copiedSitesCount} ${copiedSiteMsg}`))
+      toast.success(...getToastArguments(`Added ${copiedSitesCount} ${copiedSiteMsg}`))
       addCopiedSitesToSiteTable(response)
       setIsCopySitesLoading(false)
       toggleAllRowsSelected(false)
