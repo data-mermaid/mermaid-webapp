@@ -37,6 +37,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
+import PageUnavailable from '../PageUnavailable'
 
 const ReadOnlySiteContent = ({
   site,
@@ -326,14 +327,16 @@ const Site = ({ isNewSite }) => {
     [formikSetFieldValue],
   )
 
-  const _setIsFormDirty = useEffect(() =>
-    setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
-    [formik.dirty, getPersistedUnsavedFormikData]
+  const _setIsFormDirty = useEffect(
+    () => setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
+    [formik.dirty, getPersistedUnsavedFormikData],
   )
 
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewSite
 
-  const contentViewByRole = isReadOnlyUser ? (
+  const contentViewByReadOnlyRole = isNewSite ? (
+    <PageUnavailable mainText={language.error.pageReadOnly} />
+  ) : (
     <ReadOnlySiteContent
       site={formik.values}
       countryOptions={countryOptions}
@@ -342,6 +345,10 @@ const Site = ({ isNewSite }) => {
       reefZoneOptions={reefZoneOptions}
       isReadOnlyUser={isReadOnlyUser}
     />
+  )
+
+  const contentViewByRole = isReadOnlyUser ? (
+    contentViewByReadOnlyRole
   ) : (
     <>
       <SiteForm
@@ -355,7 +362,7 @@ const Site = ({ isNewSite }) => {
         handleLongitudeChange={handleLongitudeChange}
       />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
-        <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
+      <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>
   )
 
@@ -374,7 +381,12 @@ const Site = ({ isNewSite }) => {
         <ContentPageToolbarWrapper>
           {isNewSite ? <H2>{language.pages.siteForm.title}</H2> : <H2>{formik.values.name}</H2>}
           {!isReadOnlyUser && (
-            <SaveButton formId="site-form" saveButtonState={saveButtonState} formHasErrors={!!Object.keys(formik.errors).length} formDirty={isFormDirty} />
+            <SaveButton
+              formId="site-form"
+              saveButtonState={saveButtonState}
+              formHasErrors={!!Object.keys(formik.errors).length}
+              formDirty={isFormDirty}
+            />
           )}
         </ContentPageToolbarWrapper>
       }

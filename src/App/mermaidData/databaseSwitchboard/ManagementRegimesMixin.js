@@ -51,8 +51,7 @@ const ManagementRegimesMixin = (Base) =>
                   exclude_projects: projectId,
                   include_fields: `project_name`,
                   unique: projectId,
-                  ordering: 'name',
-                  limit: 2500,
+                  limit: 10000,
                 },
                 ...(await getAuthorizationHeaders(this._getAccessToken)),
               })

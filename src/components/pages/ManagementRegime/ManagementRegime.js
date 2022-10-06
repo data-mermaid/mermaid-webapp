@@ -36,6 +36,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
+import PageUnavailable from '../PageUnavailable'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -239,7 +240,10 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedManagementRegimeInputs`)
 
   const initialFormValues = useMemo(() => {
-    return getPersistedUnsavedFormikData() ?? getManagementRegimeInitialValues(managementRegimeBeingEdited)
+    return (
+      getPersistedUnsavedFormikData() ??
+      getManagementRegimeInitialValues(managementRegimeBeingEdited)
+    )
   }, [getPersistedUnsavedFormikData, managementRegimeBeingEdited])
 
   const formik = useFormik({
@@ -335,19 +339,25 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     }
   }, [isFormDirty])
 
-  const _setIsFormDirty = useEffect(() =>
-    setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
-    [formik.dirty, getPersistedUnsavedFormikData]
+  const _setIsFormDirty = useEffect(
+    () => setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
+    [formik.dirty, getPersistedUnsavedFormikData],
   )
 
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewManagementRegime
 
-  const contentViewByRole = isReadOnlyUser ? (
+  const contentViewByReadOnlyRole = isNewManagementRegime ? (
+    <PageUnavailable mainText={language.error.pageReadOnly} />
+  ) : (
     <ReadOnlyManagementRegimeContent
       managementRegimeFormikValues={formik.values}
       managementComplianceOptions={managementComplianceOptions}
       managementPartyOptions={managementPartyOptions}
     />
+  )
+
+  const contentViewByRole = isReadOnlyUser ? (
+    contentViewByReadOnlyRole
   ) : (
     <>
       <ManagementRegimeForm
@@ -356,7 +366,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         managementPartyOptions={managementPartyOptions}
       />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
-        <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
+      <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>
   )
 

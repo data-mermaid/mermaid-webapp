@@ -242,7 +242,9 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         )
 
         toast.success(
-          ...getToastArguments(`Add ${copiedManagementRegimesCount} ${copiedManagementRegimesMsg}`),
+          ...getToastArguments(
+            `Added ${copiedManagementRegimesCount} ${copiedManagementRegimesMsg}`,
+          ),
         )
         addCopiedMRsToManagementRegimeTable(response)
         setIsCopyMRsLoading(false)
