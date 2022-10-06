@@ -84,6 +84,7 @@ const BenthicPhotoQuadratObservationTable = ({
   resetObservationValidations,
   setAreObservationsInputsDirty,
 }) => {
+  const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
   const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
@@ -356,7 +357,7 @@ const BenthicPhotoQuadratObservationTable = ({
                     aria-label="benthic attribute reference"
                     target="_blank"
                     tabIndex="-1"
-                    href={`https://dev-collect.datamermaid.org/#/reference/benthicattributes/${attribute}`}
+                    href={`${mermaidReferenceLink}/benthicattributes/${attribute}`}
                   >
                     <IconLibraryBooks />
                   </StyledLinkThatLooksLikeButtonToReference>

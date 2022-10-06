@@ -93,6 +93,7 @@ const FishBeltObservationTable = ({
   resetObservationValidations,
   setAreObservationsInputsDirty,
 }) => {
+  const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
   const {
     size_bin: fishBinSelected,
     len_surveyed: transectLengthSurveyed,
@@ -372,7 +373,7 @@ const FishBeltObservationTable = ({
                     aria-label="fish name reference"
                     target="_blank"
                     tabIndex="-1"
-                    href={`https://dev-collect.datamermaid.org/#/reference/fishattributes/${fishMatchingUrl}/${fish_attribute}`}
+                    href={`${mermaidReferenceLink}/fishattributes/${fishMatchingUrl}/${fish_attribute}`}
                   >
                     <IconLibraryBooks />
                   </StyledLinkThatLooksLikeButtonToReference>

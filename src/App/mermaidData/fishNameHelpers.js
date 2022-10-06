@@ -11,9 +11,9 @@ export const fishReferenceEndpoint = {
 }
 
 export const getFishNameConstants = ({ species, genera, families }) => {
-  const fishNameMungedObject = [...species, ...genera, ...families]
+  const fishNameMergedObject = [...species, ...genera, ...families]
 
-  return fishNameMungedObject.map((fishNameObject) => {
+  return fishNameMergedObject.map((fishNameObject) => {
     const { id, biomass_constant_a, biomass_constant_b, biomass_constant_c } = fishNameObject
 
     let taxonomic_rank = FAMILY_RANK
