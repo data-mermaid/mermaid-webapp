@@ -6,6 +6,8 @@ import theme from '../../theme'
 
 const size = '3.5rem'
 const speed = '20s'
+const animationDelay = '4s'
+const initialRotation = '15deg'
 
 const LoadingIndicatorContainer = styled.div`
   display: grid;
@@ -38,14 +40,18 @@ const LoadingIndicatorContainer = styled.div`
       position: relative;
       width: 100%;
       height: 100%;
-      animation: spin ${speed} linear infinite;
+      transform: rotate(${initialRotation});
+      animation: spin ${speed} ease-in infinite;
+      animation-delay: ${animationDelay};
 
       div {
         background: ${theme.color.white};
         position: absolute;
         width: ${size};
         height: ${size};
-        animation: objCounter ${speed} linear infinite;
+        transform: rotate(-${initialRotation});
+        animation: objCounter ${speed} ease-in infinite;
+        animation-delay: ${animationDelay};
       }
       .triangle {
         top: 0%;
@@ -105,7 +111,7 @@ const LoadingIndicatorContainer = styled.div`
   }
   @keyframes spin {
     from {
-      transform: rotate(0deg);
+      transform: rotate(${initialRotation});
     }
     to {
       transform: rotate(360deg);
@@ -113,10 +119,10 @@ const LoadingIndicatorContainer = styled.div`
   }
   @keyframes objCounter {
     from {
-      transform: rotate(0deg);
+      transform: rotate(-${initialRotation});
     }
     to {
-      transform: rotate(-360deg);
+      transform: rotate(calc(-360deg - ${initialRotation}));
     }
   }
 `
@@ -128,17 +134,17 @@ const LoadingIndicator = ({
   displaySecondaryTimingSeconds,
   ...props
 }) => {
-    const [isDisplaySecondaryTime, setIsDisplaySecondaryTime] = useState(false)
+  const [isDisplaySecondaryTime, setIsDisplaySecondaryTime] = useState(false)
 
-    useEffect(() => {
-      const timeout = setTimeout(() => {
-        setIsDisplaySecondaryTime(true)
-      }, displaySecondaryTimingSeconds * 1000)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsDisplaySecondaryTime(true)
+    }, displaySecondaryTimingSeconds * 1000)
 
-      return () => {
-        clearTimeout(timeout)
-      }
-    })
+    return () => {
+      clearTimeout(timeout)
+    }
+  })
 
   const isDisplaySecondary = displaySecondary && secondaryMessage && isDisplaySecondaryTime
 
@@ -154,7 +160,7 @@ const LoadingIndicator = ({
           <div className="x">&nbsp;</div>
         </div>
         <p className="loadingPrimary">{primaryMessage}</p>
-        { (isDisplaySecondary) && <p className="loadingSecondary">{secondaryMessage}</p> }
+        {isDisplaySecondary && <p className="loadingSecondary">{secondaryMessage}</p>}
       </div>
     </LoadingIndicatorContainer>
   )
