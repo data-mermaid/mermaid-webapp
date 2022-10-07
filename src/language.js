@@ -288,11 +288,6 @@ const projectModal = {
   footerMessage: 'You will be an admin for this project.',
 }
 
-const map = {
-  attribution:
-    'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
-}
-
 const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
@@ -367,5 +362,4 @@ export default {
   getValidationMessage,
   inlineMessage,
   projectModal,
-  map,
 }

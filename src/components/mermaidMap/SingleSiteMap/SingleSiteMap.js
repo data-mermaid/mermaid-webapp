@@ -42,7 +42,8 @@ const SingleSiteMap = ({
       zoom: defaultZoom,
       maxZoom: 16,
       attributionControl: true,
-      customAttribution: language.map.attribution,
+      customAttribution:
+        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
     })
 
     recordMarker.current = new maplibregl.Marker(el, { draggable: !isReadOnlyUser })

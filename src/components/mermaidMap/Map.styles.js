@@ -11,7 +11,6 @@ export const MapContainer = styled.div`
   width: 100%;
   height: 100%;
 `
-
 export const MapWrapper = styled.div`
   height: 100%;
   min-height: 70vh;
@@ -23,11 +22,6 @@ export const MapWrapper = styled.div`
     height: 44px;
     cursor: pointer;
   }
-`
-
-export const CopySitesMapWrapper = styled.div`
-  height: 100%;
-  min-height: 30vh;
 `
 
 export const MapZoomHelpMessage = styled('div')`

@@ -110,20 +110,6 @@ export const sitePropType = PropTypes.shape({
   exposure: PropTypes.string,
 })
 
-export const copySitePropType = PropTypes.shape({
-  id: PropTypes.string,
-  name: PropTypes.string,
-  project: PropTypes.string,
-  projectName: PropTypes.string,
-  countryName: PropTypes.string,
-  reefType: PropTypes.string,
-  reefZone: PropTypes.string,
-  exposure: PropTypes.string,
-  location: PropTypes.shape({
-    coordinates: PropTypes.arrayOf(PropTypes.number),
-  }),
-})
-
 export const fishNameConstantsPropType = PropTypes.arrayOf(
   PropTypes.shape({
     id: PropTypes.string,

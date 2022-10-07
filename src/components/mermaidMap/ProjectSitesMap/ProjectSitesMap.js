@@ -28,7 +28,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
   const popUpRef = useRef(new maplibregl.Popup({ offset: 10 }))
   const previousSitesForMapMarkers = usePrevious(sitesForMapMarkers)
   const [displayHelpText, setDisplayHelpText] = useState(false)
-  const [isMapInitialized, setIsMapInitialized] = useState(false)
+  const [isMapInitialIzed, setIsMapInitialIzed] = useState(false)
 
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
 
@@ -40,7 +40,8 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       zoom: defaultZoom,
       maxZoom: 17,
       attributionControl: true,
-      customAttribution: language.map.attribution
+      customAttribution:
+        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
     })
 
     addMapController(map.current)
@@ -49,7 +50,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
       loadACALayers(map.current)
       loadMapMarkersLayer(map.current)
       handleMapOnWheel(map.current, handleZoomDisplayHelpText)
-      setIsMapInitialized(true)
+      setIsMapInitialIzed(true)
     })
 
     // clean up on unmount
@@ -66,7 +67,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
     const { markersData, bounds } = getMapMarkersFeature(sitesForMapMarkers)
 
     if (
-      isMapInitialized ||
+      isMapInitialIzed ||
       JSON.stringify(sitesForMapMarkers) !== JSON.stringify(previousSitesForMapMarkers)
     ) {
       if (map.current.getSource('mapMarkers') !== undefined) {
@@ -76,7 +77,7 @@ const ProjectSitesMap = ({ sitesForMapMarkers, choices }) => {
         map.current.fitBounds(bounds, { padding: 25, animate: false })
       }
     }
-  }, [isMapInitialized, sitesForMapMarkers, previousSitesForMapMarkers])
+  }, [isMapInitialIzed, sitesForMapMarkers, previousSitesForMapMarkers])
 
   const _handleMapMarkersEvent = useEffect(() => {
     if (!map.current) {

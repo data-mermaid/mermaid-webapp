@@ -21,7 +21,6 @@ import { pluralize } from '../../library/strings/pluralize'
 import language from '../../language'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
-import CopySitesMap from '../mermaidMap/CopySitesMap'
 
 const PaginationWrapper = styled.div`
   display: flex;
@@ -135,7 +134,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           reef_zone_name,
           exposure_name,
           location,
-          project,
         }) => ({
           id,
           name,
@@ -145,7 +143,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           reefZone: reef_zone_name,
           exposure: exposure_name,
           location,
-          project,
         }),
       ),
     [siteRecords],
@@ -191,8 +188,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         sortBy: tableUserPrefs.sortBy,
       },
       autoResetSelectedRows: false,
-      autoResetSelectedCell: false,
-      autoResetSelectedColumn: false,
       getRowId: (row) => row.id,
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true,
@@ -284,7 +279,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           pageCount={pageOptions.length}
         />
       </PaginationWrapper>
-      <CopySitesMap sitesForMapMarkers={selectedFlatRows.map((r) => r.original)} />
     </>
   )
 

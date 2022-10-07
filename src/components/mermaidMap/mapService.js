@@ -269,8 +269,8 @@ export const getMapMarkersFeature = (records) => {
       name: rec.name,
       project_id: rec.project,
       exposure: rec.exposure,
-      reef_type: rec.reef_type || rec.reefType,
-      reef_zone: rec.reef_zone || rec.reefZone,
+      reef_type: rec.reef_type,
+      reef_zone: rec.reef_zone,
     }
 
     const recPoint = {

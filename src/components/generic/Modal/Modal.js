@@ -49,7 +49,7 @@ const ModalContent = styled.div`
     css`
       overflow: auto;
     `}
-  max-height: 80vh;
+  max-height: 50vh;
   padding: ${theme.spacing.medium};
 `
 const ModalFooter = styled.div`
