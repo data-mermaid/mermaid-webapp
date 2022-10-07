@@ -6,12 +6,11 @@ import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
 const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit }) => {
-  const modalBodyText = (
+  const modalContent = (
     <p>
       <strong>{newUser}</strong> {language.pages.userTable.newUserModalText}
     </p>
   )
-  const modalContent = <p>{modalBodyText}</p>
 
   const footerContent = (
     <RightFooter>

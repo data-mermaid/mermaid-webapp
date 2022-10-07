@@ -227,7 +227,7 @@ const pages = {
     searchEmailToolbarText: 'Enter email address of user to add',
     warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
     newUserModalTitle: `Invite new user`,
-    newUserModalText: `will need to sign up because they're not already a MERMAID user. After they've signed up, they'll be added to this project.`,
+    newUserModalText: `will need to sign up because they're not already a MERMAID user.`,
     transferSampleUnitsModalTitle: `Transfer Sample Units`,
     removeUserModalTitle: 'Remove User From Project',
     warningRemoveUser: `You must transfer unsubmitted sample units before you can remove the user from project.`,

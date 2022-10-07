@@ -190,9 +190,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         pageSize: 5,
         sortBy: tableUserPrefs.sortBy,
       },
-      autoResetSelectedRows: false,
-      autoResetSelectedCell: false,
-      autoResetSelectedColumn: false,
       getRowId: (row) => row.id,
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true,
