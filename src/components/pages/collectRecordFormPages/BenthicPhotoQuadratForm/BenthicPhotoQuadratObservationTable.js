@@ -84,7 +84,6 @@ const BenthicPhotoQuadratObservationTable = ({
   resetObservationValidations,
   setAreObservationsInputsDirty,
 }) => {
-  const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
   const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
@@ -167,6 +166,7 @@ const BenthicPhotoQuadratObservationTable = ({
   }, [observationsState, benthicAttributeOptions])
 
   const observationsRows = useMemo(() => {
+    const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
     const growthFormOptions = getOptions(choices.growthforms)
 
     const handleKeyDown = ({ event, index, observation, isBenthicAttribute, isNumberOfPoints }) => {

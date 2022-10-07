@@ -93,7 +93,6 @@ const FishBeltObservationTable = ({
   resetObservationValidations,
   setAreObservationsInputsDirty,
 }) => {
-  const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
   const {
     size_bin: fishBinSelected,
     len_surveyed: transectLengthSurveyed,
@@ -166,6 +165,8 @@ const FishBeltObservationTable = ({
   )
 
   const observationsRows = useMemo(() => {
+    const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
+
     const handleKeyDown = ({ event, index, observation, isCount, isFishName }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
