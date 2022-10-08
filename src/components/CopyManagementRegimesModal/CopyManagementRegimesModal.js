@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify'
-import { usePagination, useSortBy, useTable, useRowSelect } from 'react-table'
+import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
+import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
 import useIsMounted from '../../library/useIsMounted'
@@ -21,7 +21,10 @@ import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { pluralize } from '../../library/strings/pluralize'
-import PageUnavailable from '../pages/PageUnavailable'
+import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
+import { ToolBarRow } from '../generic/positioning'
+import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
+import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 
 const PaginationWrapper = styled.div`
   display: flex;
@@ -70,7 +73,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           }
         })
         .catch(() => {
-          toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+          toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
         })
     }
   }, [databaseSwitchboardInstance, projectId, isAppOnline, isMounted, isOpen])
@@ -177,6 +180,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           desc: false,
         },
       ],
+      globalFilter: '',
     }
   }, [])
 
@@ -184,6 +188,16 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     key: `${currentUser.id}-copyManagementRegimesTable`,
     defaultValue: tableDefaultPrefs,
   })
+
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = ['values.name', '', 'values.estYear']
+
+    const queryTerms = splitSearchQueryStrings(query)
+    const filteredRows =
+      !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+
+    return filteredRows
+  }, [])
 
   const {
     canNextPage,
@@ -198,8 +212,9 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     prepareRow,
     previousPage,
     selectedFlatRows,
-    state: { pageIndex, sortBy, selectedRowIds },
+    state: { pageIndex, sortBy, globalFilter, selectedRowIds },
     toggleAllRowsSelected,
+    setGlobalFilter,
   } = useTable(
     {
       columns: tableColumns,
@@ -210,17 +225,26 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       },
       autoResetSelectedRows: false,
       getRowId: (row) => row.id,
+      globalFilter: tableGlobalFilters,
+
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true,
     },
+    useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
   )
 
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const _updateSelectedRows = useEffect(() => {
     const rowIds = Object.keys(selectedRowIds)
@@ -254,7 +278,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       })
   }
 
-  const table = managementRegimeRecords.length ? (
+  const table = managementRegimeRecords.length && (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -311,11 +335,16 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         />
       </PaginationWrapper>
     </>
-  ) : (
-    <PageUnavailable
-      mainText={language.table.noFilterResults}
-      subText={language.table.noFilterResultsSubText}
-    />
+  )
+
+  const toolbarContent = (
+    <ToolBarRow>
+      <FilterSearchToolbar
+        name={language.pages.copyManagementRegimeTable.filterToolbarText}
+        value={tableUserPrefs.globalFilter}
+        handleGlobalFilterChange={handleGlobalFilterChange}
+      />
+    </ToolBarRow>
   )
 
   const footerContent = (
@@ -323,7 +352,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedManagementRegimes}>
         <IconSend />
-        Copy selected MRs to project
+        {language.pages.copyManagementRegimeTable.copyButtonText}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -333,9 +362,10 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title="Copy Management Regimes"
+        title={language.pages.copyManagementRegimeTable.title}
         mainContent={isModalContentLoading ? 'Loading...' : table}
         footerContent={footerContent}
+        toolbarContent={!isModalContentLoading && toolbarContent}
       />
       {isCopyMRsLoading && <LoadingModal />}
     </>
