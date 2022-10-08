@@ -281,6 +281,12 @@ const pages = {
   copySiteTable: {
     title: 'Copy Sites',
     filterToolbarText: 'Filter sites by name, project or country',
+    copyButtonText: 'Copy selected sites to project',
+  },
+  copyManagementRegimeTable: {
+    title: 'Copy Management Regimes',
+    filterToolbarText: 'Filter management regimes by name or year',
+    copyButtonText: 'Copy selected MRs to project',
   },
 }
 
