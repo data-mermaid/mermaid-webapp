@@ -13,9 +13,14 @@ import {
   StickyTableOverflowWrapper,
 } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
+import CopyManagementRegimesModal from '../../CopyManagementRegimesModal'
+
 import { H2 } from '../../generic/text'
 import { IconCheck, IconPlus, IconCopy, IconDownload } from '../../icons'
-import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import {
+  reactTableNaturalSort,
+  reactTableNaturalSortReactNodes,
+} from '../../generic/Table/reactTableNaturalSort'
 import { ToolBarRow } from '../../generic/positioning'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
@@ -44,7 +49,7 @@ import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [managementParties, setManagementParties] = useState([])
+  const [choices, setChoices] = useState({})
   const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
@@ -52,6 +57,9 @@ const ManagementRegimes = () => {
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const [isCopyManagementRegimesModalOpen, setIsCopyManagementRegimesModalOpen] = useState(false)
+  const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
+  const closeCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(false)
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -68,7 +76,7 @@ const ManagementRegimes = () => {
               setIdsNotAssociatedWithData([projectId])
             }
             setManagementRegimeRecordsForUiDisplay(managementRegimes)
-            setManagementParties(choicesResponse.managementparties)
+            setChoices(choicesResponse)
             setIsLoading(false)
           }
         })
@@ -81,12 +89,19 @@ const ManagementRegimes = () => {
   const currentProjectPath = useCurrentProjectPath()
   const getIconCheckLabel = (property) => property && <IconCheck />
 
+  const addCopiedMRsToManagementRegimeTable = (copiedManagementRegimes) => {
+    setManagementRegimeRecordsForUiDisplay([
+      ...managementRegimeRecordsForUiDisplay,
+      ...copiedManagementRegimes,
+    ])
+  }
+
   const tableColumns = useMemo(
     () => [
       {
         Header: 'Management Regime Name',
         accessor: 'name',
-        sortType: reactTableNaturalSort,
+        sortType: reactTableNaturalSortReactNodes,
       },
       {
         Header: 'Year Est.',
@@ -137,22 +152,30 @@ const ManagementRegimes = () => {
     [],
   )
 
-  const tableCellData = useMemo(
-    () =>
-      managementRegimeRecordsForUiDisplay.map(({ id, uiLabels }) => ({
-        name: <Link to={`${currentProjectPath}/management-regimes/${id}`}>{uiLabels.name}</Link>,
-        estYear: uiLabels.estYear,
-        compliance: uiLabels.compliance,
-        openAccess: getIconCheckLabel(uiLabels.openAccess),
-        accessRestriction: getIconCheckLabel(uiLabels.accessRestriction),
-        periodicClosure: getIconCheckLabel(uiLabels.periodicClosure),
-        sizeLimits: getIconCheckLabel(uiLabels.sizeLimits),
-        gearRestriction: getIconCheckLabel(uiLabels.gearRestriction),
-        speciesRestriction: getIconCheckLabel(uiLabels.speciesRestriction),
-        noTake: getIconCheckLabel(uiLabels.noTake),
-      })),
-    [managementRegimeRecordsForUiDisplay, currentProjectPath],
-  )
+  const tableCellData = useMemo(() => {
+    const complianceChoices = choices?.managementcompliances?.data
+
+    return managementRegimeRecordsForUiDisplay.map((managementRegime) => {
+      const complianceName = getObjectById(complianceChoices, managementRegime.compliance)?.name
+
+      return {
+        name: (
+          <Link to={`${currentProjectPath}/management-regimes/${managementRegime.id}`}>
+            {managementRegime.name}
+          </Link>
+        ),
+        estYear: managementRegime.est_year,
+        compliance: complianceName,
+        openAccess: getIconCheckLabel(managementRegime.open_access),
+        accessRestriction: getIconCheckLabel(managementRegime.access_restriction),
+        periodicClosure: getIconCheckLabel(managementRegime.periodic_closure),
+        sizeLimits: getIconCheckLabel(managementRegime.size_limits),
+        gearRestriction: getIconCheckLabel(managementRegime.gear_restriction),
+        speciesRestriction: getIconCheckLabel(managementRegime.species_restriction),
+        noTake: getIconCheckLabel(managementRegime.no_take),
+      }
+    })
+  }, [managementRegimeRecordsForUiDisplay, currentProjectPath, choices])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -184,46 +207,48 @@ const ManagementRegimes = () => {
   }, [])
 
   const getDataForCSV = useMemo(() => {
-    const managementPartiesChoices = managementParties?.data
+    const managementPartiesChoices = choices?.managementparties?.data
+    const complianceChoices = choices?.managementcompliances?.data
 
-    return managementRegimeRecordsForUiDisplay.map((site) => {
-      const governance = site.parties
+    return managementRegimeRecordsForUiDisplay.map((managementRegime) => {
+      const complianceName = getObjectById(complianceChoices, managementRegime.compliance)?.name
+      const governance = managementRegime.parties
         .map((party) => getObjectById(managementPartiesChoices, party)?.name)
         .join(', ')
 
       const isPartialRestrict =
-        site.periodic_closure ||
-        site.size_limits ||
-        site.gear_restriction ||
-        site.species_restriction ||
-        site.access_restriction
+        managementRegime.periodic_closure ||
+        managementRegime.size_limits ||
+        managementRegime.gear_restriction ||
+        managementRegime.species_restriction ||
+        managementRegime.access_restriction
 
-      const no_take = site.no_take && 'No Take'
-      const open_access = site.open_access && 'Open Access'
+      const no_take = managementRegime.no_take && 'No Take'
+      const open_access = managementRegime.open_access && 'Open Access'
       const partial_restrictions =
         isPartialRestrict &&
         `${[
-          site.periodic_closure && 'Periodic Closures',
-          site.size_limits && 'Size Limits',
-          site.gear_restriction && 'Gear Restrictions',
-          site.species_restriction && 'Species Restrictions',
-          site.access_restriction && 'Access Restrictions',
+          managementRegime.periodic_closure && 'Periodic Closures',
+          managementRegime.size_limits && 'Size Limits',
+          managementRegime.gear_restriction && 'Gear Restrictions',
+          managementRegime.species_restriction && 'Species Restrictions',
+          managementRegime.access_restriction && 'Access Restrictions',
         ].filter((restriction) => restriction)}`
 
       const rules = open_access || no_take || partial_restrictions || ''
 
       return {
-        Name: site.uiLabels.name,
-        'Secondary name': site.name_secondary,
-        'Year established': site.uiLabels.estYear,
-        Size: site.size,
+        Name: managementRegime.name,
+        'Secondary name': managementRegime.name_secondary,
+        'Year established': managementRegime.est_year,
+        Size: managementRegime.size,
         Governance: governance,
-        'Estimate compliance': site.uiLabels.compliance,
+        'Estimate compliance': complianceName,
         Rules: rules,
-        Notes: site.notes,
+        Notes: managementRegime.notes,
       }
     })
-  }, [managementRegimeRecordsForUiDisplay, managementParties])
+  }, [managementRegimeRecordsForUiDisplay, choices])
 
   const {
     canNextPage,
@@ -295,11 +320,16 @@ const ManagementRegimes = () => {
         <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
           <IconPlus /> New MR
         </LinkLooksLikeButtonSecondary>
-        <ButtonSecondary>
+        <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
           <IconCopy /> Copy MRs from other projects
         </ButtonSecondary>
         {readOnlyMrsHeaderContent}
       </ToolbarButtonWrapper>
+      <CopyManagementRegimesModal
+        isOpen={isCopyManagementRegimesModalOpen}
+        onDismiss={closeCopyManagementRegimesModal}
+        addCopiedMRsToManagementRegimeTable={addCopiedMRsToManagementRegimeTable}
+      />
     </>
   )
 

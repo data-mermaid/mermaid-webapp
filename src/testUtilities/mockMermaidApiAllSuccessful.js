@@ -97,6 +97,13 @@ const mockMermaidApiAllSuccessful = setupServer(
 
     return res(ctx.json(response))
   }),
+  rest.get(`${apiBaseUrl}/managementRegimes/`, (req, res, ctx) => {
+    const response = {
+      ...mockMermaidData.managementRegimesEndpoint,
+    }
+
+    return res(ctx.json(response))
+  }),
 )
 
 mockMermaidApiAllSuccessful.listen({

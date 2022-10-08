@@ -3701,6 +3701,87 @@ const sites = [
   },
 ]
 
+const managementRegimes = [
+  {
+    id: '0031d438-2bcd-4492-a68e-cc3378e684ac',
+    updated_by: '6bf68af6-c8a9-4c1a-bd8e-a2d3608e470f',
+    rules: 'No Take',
+    project_name: 'SERF2_PatrickSmallhornWest',
+    size: 25.0,
+    created_on: '2020-07-10T07:37:28.191455Z',
+    updated_on: '2020-07-10T07:37:28.198612Z',
+    data: null,
+    name: 'Matafonua Village FHR - No Take',
+    name_secondary: 'Fish Habitat Reserve',
+    est_year: 2018,
+    notes: '',
+    boundary: null,
+    no_take: true,
+    periodic_closure: false,
+    open_access: false,
+    size_limits: false,
+    gear_restriction: false,
+    species_restriction: false,
+    access_restriction: false,
+    validations: {
+      status: 'ok',
+      results: {
+        _root_: {
+          validate_exists: {
+            status: 'ok',
+            message: '',
+          },
+        },
+      },
+      last_validated: '2020-07-10 07:37:28.198612+00:00',
+    },
+    created_by: '6bf68af6-c8a9-4c1a-bd8e-a2d3608e470f',
+    project: '7cfa3d8e-f474-4c16-881c-15fecb9b18eb',
+    compliance: '1579b2df-a572-4f88-a07a-593cc573317a',
+    predecessor: null,
+    parties: ['c1baac4b-6ca2-4a1b-8d74-ec7836629c42', 'c2035972-572e-43fe-b261-4536793856b5'],
+  },
+  {
+    id: '004bb21c-6cd4-45e4-8baf-e108019c67f2',
+    updated_by: '6bf68af6-c8a9-4c1a-bd8e-a2d3608e470f',
+    rules: 'No Take',
+    project_name: 'SERF2_DavidFeary_AndrewBauman_FraserJanuchowskiHartley',
+    size: null,
+    created_on: '2020-06-25T04:47:36.253856Z',
+    updated_on: '2020-06-25T04:47:36.261348Z',
+    data: null,
+    name: 'Pulau Tioman - Restricted',
+    name_secondary: '',
+    est_year: null,
+    notes: '',
+    boundary: null,
+    no_take: true,
+    periodic_closure: false,
+    open_access: false,
+    size_limits: false,
+    gear_restriction: false,
+    species_restriction: false,
+    access_restriction: false,
+    validations: {
+      status: 'ok',
+      results: {
+        _root_: {
+          validate_exists: {
+            status: 'ok',
+            message: '',
+          },
+        },
+      },
+      last_validated: '2020-06-25 04:47:36.261348+00:00',
+    },
+    created_by: '6bf68af6-c8a9-4c1a-bd8e-a2d3608e470f',
+    project: '71f19e9b-051a-4b69-9cb6-c79e5a7a82d2',
+    compliance: 'f76d7866-5b0d-428d-928c-738c2912d6e0',
+    predecessor: null,
+    parties: ['c1baac4b-6ca2-4a1b-8d74-ec7836629c42', 'c2035972-572e-43fe-b261-4536793856b5'],
+  },
+]
+
 const projectsEndpoint = {
   count: 9,
   next: null,
@@ -3713,6 +3794,12 @@ const sitesEndpoint = {
   next: null,
   previous: null,
   results: sites,
+}
+const managementRegimesEndpoint = {
+  count: 2,
+  next: null,
+  previous: null,
+  results: managementRegimes,
 }
 
 const mockMermaidData = {
@@ -3732,6 +3819,7 @@ const mockMermaidData = {
   projecttags,
   sampleUnitMethods,
   sitesEndpoint,
+  managementRegimesEndpoint,
 }
 
 export default mockMermaidData
