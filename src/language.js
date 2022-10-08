@@ -175,6 +175,8 @@ const table = {
   sortAscendingTitle: 'Sort ascending',
   sortDescendingTitle: 'Sort descending',
   sortRemoveTitle: 'Remove sort',
+  noFilterResults: 'No results',
+  noFilterResultsSubText: 'No records match the current filter term.',
 }
 
 const title = {
@@ -275,6 +277,10 @@ const pages = {
   managementRegimesOverview: { title: 'Management Regimes Overview' },
   benthicPhotoQuadratForm: {
     title: 'Benthic Photo Quadrat',
+  },
+  copySiteTable: {
+    title: 'Copy Sites',
+    filterToolbarText: 'Filter sites by name, project or country',
   },
 }
 

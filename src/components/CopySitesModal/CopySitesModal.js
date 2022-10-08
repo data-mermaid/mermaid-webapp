@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify'
-import { usePagination, useSortBy, useTable, useRowSelect } from 'react-table'
+import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import React, { useState, useEffect, useMemo, useRef, forwardRef } from 'react'
+import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
 import useIsMounted from '../../library/useIsMounted'
@@ -21,6 +21,11 @@ import { pluralize } from '../../library/strings/pluralize'
 import language from '../../language'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
+import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
+import { ToolBarRow } from '../generic/positioning'
+import PageUnavailable from '../pages/PageUnavailable'
+import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
+import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
 
 const PaginationWrapper = styled.div`
@@ -159,6 +164,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           desc: false,
         },
       ],
+      globalFilter: '',
     }
   }, [])
 
@@ -166,6 +172,16 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     key: `${currentUser.id}-copySitesTable`,
     defaultValue: tableDefaultPrefs,
   })
+
+  const tableGlobalFilters = useCallback((rows, id, query) => {
+    const keys = ['values.name', 'values.projectName', 'values.countryName']
+
+    const queryTerms = splitSearchQueryStrings(query)
+    const filteredRows =
+      !queryTerms || !queryTerms.length ? rows : getTableFilteredRows(rows, keys, queryTerms)
+
+    return filteredRows
+  }, [])
 
   const {
     canNextPage,
@@ -180,8 +196,9 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     prepareRow,
     previousPage,
     selectedFlatRows,
-    state: { pageIndex, sortBy, selectedRowIds },
+    state: { pageIndex, sortBy, globalFilter, selectedRowIds },
     toggleAllRowsSelected,
+    setGlobalFilter,
   } = useTable(
     {
       columns: tableColumns,
@@ -189,19 +206,29 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       initialState: {
         pageSize: 5,
         sortBy: tableUserPrefs.sortBy,
+        globalFilter: tableUserPrefs.globalFilter,
       },
       getRowId: (row) => row.id,
+      globalFilter: tableGlobalFilters,
+
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true,
     },
+    useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
   )
 
+  const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
   }, [sortBy, handleSetTableUserPrefs])
+
+  const _setFilterPrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
+  }, [globalFilter, handleSetTableUserPrefs])
 
   const _updateSelectedRows = useEffect(() => {
     const rowIds = Object.keys(selectedRowIds)
@@ -225,7 +252,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     })
   }
 
-  const table = siteRecords.length && (
+  const table = siteRecords.length ? (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -283,6 +310,21 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       </PaginationWrapper>
       <CopySitesMap sitesForMapMarkers={selectedFlatRows.map((r) => r.original)} />
     </>
+  ) : (
+    <PageUnavailable
+      mainText={language.table.noFilterResults}
+      subText={language.table.noFilterResultsSubText}
+    />
+  )
+
+  const toolbarContent = (
+    <ToolBarRow>
+      <FilterSearchToolbar
+        name={language.pages.copySiteTable.filterToolbarText}
+        value={tableUserPrefs.globalFilter}
+        handleGlobalFilterChange={handleGlobalFilterChange}
+      />
+    </ToolBarRow>
   )
 
   const footerContent = (
@@ -300,9 +342,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title="Copy Sites"
+        title={language.pages.copySiteTable.title}
         mainContent={isModalContentLoading ? 'Loading...' : table}
         footerContent={footerContent}
+        toolbarContent={!isModalContentLoading && toolbarContent}
       />
       {isCopySitesLoading && <LoadingModal />}
     </>
