@@ -84,10 +84,13 @@ const ProjectToolBarSection = ({
   setProjectSortKey,
   isProjectSortAsc,
   setIsProjectSortAsc,
+  // eslint-disable-next-line react/prop-types
+  addProjectToProjectsPage,
 }) => {
   const setFilter = (event) => {
     setProjectFilter(event.target.value)
   }
+
   const { isAppOnline } = useOnlineStatus()
 
   const setSortBy = (event) => {
@@ -103,7 +106,7 @@ const ProjectToolBarSection = ({
         <OfflineHide>
           <ButtonCallout
             onClick={() => setIsNewProjectModalOpen(true)}
-            aria-label="Copy"
+            aria-label="New Project"
             disabled={!isAppOnline}
           >
             <span>New Project</span>
@@ -111,8 +114,7 @@ const ProjectToolBarSection = ({
           <NewProjectModal
             isOpen={isNewProjectModalOpen}
             onDismiss={() => setIsNewProjectModalOpen(false)}
-            // project={None}
-            //  ={addProjectToProjectsPage}
+            addProjectToProjectsPage={addProjectToProjectsPage}
           />
         </OfflineHide>
       </RowWrapper>
@@ -150,4 +152,5 @@ ProjectToolBarSection.propTypes = {
   setProjectSortKey: PropTypes.func.isRequired,
   isProjectSortAsc: PropTypes.bool.isRequired,
   setIsProjectSortAsc: PropTypes.func.isRequired,
+  // addProjectToProjectsPage: PropTypes.func.isRequired,
 }

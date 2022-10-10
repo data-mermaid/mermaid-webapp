@@ -15,7 +15,8 @@ import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSw
 import InputWithLabelAndValidation from '../mermaidInputs/InputWithLabelAndValidation'
 import LoadingModal from '../LoadingModal/LoadingModal'
 
-const NewProjectModal = ({ isOpen, onDismiss }) => {
+// eslint-disable-next-line react/prop-types
+const NewProjectModal = ({ isOpen, onDismiss, addProjectToProjectsPage }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const formik = useFormik({
@@ -36,7 +37,7 @@ const NewProjectModal = ({ isOpen, onDismiss }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
   // eslint-disable-next-line no-unused-vars
-  const copyExistingProject = () => {
+  const createNewProject = () => {
     // setIsLoading and addProjectToProjectsPage are used in this function
     // to display the loading modal and pass the new project back to the
     // projects page.
@@ -47,11 +48,10 @@ const NewProjectModal = ({ isOpen, onDismiss }) => {
     setIsLoading(true)
     databaseSwitchboardInstance
       // eslint-disable-next-line no-undef
-      .addProject(project.id, formik.values.name, formik.values.sendEmail)
+      .addNewProject(formik.values.name)
       .then((response) => {
-        toast.success(...getToastArguments(language.success.projectCopied))
+        toast.success(...getToastArguments(language.success.projectCreated))
         formik.resetForm()
-        // eslint-disable-next-line no-undef
         addProjectToProjectsPage(response)
         setIsLoading(false)
         onDismiss()
@@ -62,7 +62,7 @@ const NewProjectModal = ({ isOpen, onDismiss }) => {
           callback: () => {
             const isDuplicateError =
               [500, 400].includes(error.response.status) &&
-              error.response.data?.detail === '[IntegrityError] Copying project'
+              error.response.data?.detail === '[IntegrityError] Creating project'
 
             if (isDuplicateError) {
               toast.error(
@@ -76,7 +76,7 @@ const NewProjectModal = ({ isOpen, onDismiss }) => {
   }
 
   const handleOnSubmit = () => {
-    // copyExistingProject()
+    createNewProject()
   }
 
   const modalContent = (
@@ -90,15 +90,12 @@ const NewProjectModal = ({ isOpen, onDismiss }) => {
           id="name"
           type="text"
           value={formik.values.name}
-          //   placeholder="Name of project"
           onChange={formik.handleChange}
           validationType={formik.errors.name ? 'error' : null}
           validationMessages={formik.errors.name}
           setErrors={language.error.formValidation.required}
         />
       </ModalInputRow>
-      {/* <ModalInputRow></ModalInputRow> */}
-
       <p>{language.projectModal.footerMessage}</p>
     </>
   )
@@ -118,7 +115,7 @@ const NewProjectModal = ({ isOpen, onDismiss }) => {
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title={language.projectModal.copyTitle}
+        title={language.projectModal.createProjectTitle}
         mainContent={modalContent}
         footerContent={footerContent}
       />
@@ -130,12 +127,7 @@ const NewProjectModal = ({ isOpen, onDismiss }) => {
 NewProjectModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,
-  //   project: projectPropType,
   //   addProjectToProjectsPage: PropTypes.func.isRequired,
 }
-
-// NewProjectModal.defaultProps = {
-//   project: projectPropType.isRequired,
-// }
 
 export default NewProjectModal
