@@ -32,6 +32,7 @@ const error = {
   collectRecordsUnavailable: 'Sample unit data is currently unavailable. Please try again',
   collectRecordUnavailable: 'Sample unit data is currently unavailable. Please try again',
   duplicateNewUserAdd: 'User has already been added to project.',
+  duplicateCreateProject: 'A project with this name already exists.',
   duplicateNewProject: 'A project with the same name already exists.',
   emptyEmailAdd: 'Please enter an email address.',
   error: 'Error',
@@ -113,6 +114,7 @@ const success = {
   userRemoved: 'User removed',
   projectSave: 'Project saved',
   projectCopied: 'Project copied',
+  projectCreated: 'Project created',
   siteSave: 'Site saved.',
   managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
@@ -285,6 +287,7 @@ const projectModal = {
   copyProjectMessage:
     'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
   copyTitle: 'Copy Project',
+  createProjectTitle: 'Create Project',
   footerMessage: 'You will be an admin for this project.',
 }
 
