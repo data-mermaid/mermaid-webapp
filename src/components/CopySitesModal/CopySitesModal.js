@@ -72,7 +72,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const [isCopySitesLoading, setIsCopySitesLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
   const [isViewSelectedOnly, setIsViewSelectedOnly] = useState(false)
-
   const [siteRecords, setSiteRecords] = useState([])
   const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
 
@@ -223,7 +222,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       },
       getRowId: (row) => row.id,
       globalFilter: tableGlobalFilters,
-
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true,
     },
@@ -233,7 +231,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     useRowSelect,
   )
 
-  const handleSelectedViewOnlyChange = () => {
+  const handleViewSelectedOnlyChange = () => {
     setIsViewSelectedOnly(!isViewSelectedOnly)
   }
 
@@ -372,7 +370,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           id="viewSelectedOnly"
           type="checkbox"
           checked={isViewSelectedOnly}
-          onChange={handleSelectedViewOnlyChange}
+          onChange={handleViewSelectedOnlyChange}
         />
         View Selected Only
       </CheckBoxLabel>
