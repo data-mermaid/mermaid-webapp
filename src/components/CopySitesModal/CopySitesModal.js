@@ -71,10 +71,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const isMounted = useIsMounted()
   const [isCopySitesLoading, setIsCopySitesLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
-  const [isSelectedViewOnly, setIsSelectedViewOnly] = useState(false)
+  const [isViewSelectedOnly, setIsViewSelectedOnly] = useState(false)
 
   const [siteRecords, setSiteRecords] = useState([])
-  const [selectedRowsIds, setSelectedRowsIds] = useState([])
+  const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
 
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -234,7 +234,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   )
 
   const handleSelectedViewOnlyChange = () => {
-    setIsSelectedViewOnly(!isSelectedViewOnly)
+    setIsViewSelectedOnly(!isViewSelectedOnly)
   }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
@@ -250,33 +250,35 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const _updateSelectedRows = useEffect(() => {
     const rowIds = Object.keys(selectedRowIds)
 
-    setSelectedRowsIds(rowIds)
+    setSelectedRowIdsForCopy(rowIds)
   }, [selectedRowIds])
 
   const _resetToPageOneWhenViewSelectedRowsIsOn = useEffect(() => {
-    if (isSelectedViewOnly) {
+    if (isViewSelectedOnly) {
       gotoPage(0)
     }
-  }, [isSelectedViewOnly, gotoPage])
+  }, [isViewSelectedOnly, gotoPage])
 
   const copySelectedSites = () => {
     setIsCopySitesLoading(true)
 
-    databaseSwitchboardInstance.copySitesToProject(projectId, selectedRowsIds).then((response) => {
-      const copiedSitesCount = response.length
-      const copiedSiteMsg = pluralize(copiedSitesCount, 'site', 'sites')
+    databaseSwitchboardInstance
+      .copySitesToProject(projectId, selectedRowIdsForCopy)
+      .then((response) => {
+        const copiedSitesCount = response.length
+        const copiedSiteMsg = pluralize(copiedSitesCount, 'site', 'sites')
 
-      toast.success(...getToastArguments(`Added ${copiedSitesCount} ${copiedSiteMsg}`))
-      addCopiedSitesToSiteTable(response)
-      setIsCopySitesLoading(false)
-      toggleAllRowsSelected(false)
-      onDismiss()
-      setIsModalContentLoading(true)
-    })
+        toast.success(...getToastArguments(`Added ${copiedSitesCount} ${copiedSiteMsg}`))
+        addCopiedSitesToSiteTable(response)
+        setIsCopySitesLoading(false)
+        toggleAllRowsSelected(false)
+        onDismiss()
+        setIsModalContentLoading(true)
+      })
   }
 
   const selectedRowsPaginationSize = Math.ceil(selectedFlatRows.length / DEFAULT_PAGE_SIZE)
-  const pageCount = isSelectedViewOnly ? selectedRowsPaginationSize : pageOptions.length
+  const pageCount = isViewSelectedOnly ? selectedRowsPaginationSize : pageOptions.length
   const selectedRowsPageStartIndex = pageIndex * DEFAULT_PAGE_SIZE
   const selectedRowsPageEndIndex = selectedRowsPageStartIndex + DEFAULT_PAGE_SIZE
 
@@ -307,7 +309,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {isSelectedViewOnly
+            {isViewSelectedOnly
               ? selectedFlatRows
                   .slice(selectedRowsPageStartIndex, selectedRowsPageEndIndex)
                   .map((row) => {
@@ -369,7 +371,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         <input
           id="viewSelectedOnly"
           type="checkbox"
-          checked={isSelectedViewOnly}
+          checked={isViewSelectedOnly}
           onChange={handleSelectedViewOnlyChange}
         />
         View Selected Only
