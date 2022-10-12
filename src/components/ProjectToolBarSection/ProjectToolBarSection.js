@@ -84,7 +84,6 @@ const ProjectToolBarSection = ({
   setProjectSortKey,
   isProjectSortAsc,
   setIsProjectSortAsc,
-  // eslint-disable-next-line react/prop-types
   addProjectToProjectsPage,
 }) => {
   const setFilter = (event) => {
@@ -152,5 +151,5 @@ ProjectToolBarSection.propTypes = {
   setProjectSortKey: PropTypes.func.isRequired,
   isProjectSortAsc: PropTypes.bool.isRequired,
   setIsProjectSortAsc: PropTypes.func.isRequired,
-  // addProjectToProjectsPage: PropTypes.func.isRequired,
+  addProjectToProjectsPage: PropTypes.func.isRequired,
 }
