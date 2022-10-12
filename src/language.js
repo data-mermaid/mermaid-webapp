@@ -32,7 +32,6 @@ const error = {
   collectRecordsUnavailable: 'Sample unit data is currently unavailable. Please try again',
   collectRecordUnavailable: 'Sample unit data is currently unavailable. Please try again',
   duplicateNewUserAdd: 'User has already been added to project.',
-  duplicateCreateProject: 'A project with this name already exists.',
   duplicateNewProject: 'A project with the same name already exists.',
   emptyEmailAdd: 'Please enter an email address.',
   error: 'Error',
