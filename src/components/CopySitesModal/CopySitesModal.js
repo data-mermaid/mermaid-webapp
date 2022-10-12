@@ -5,7 +5,15 @@ import styled from 'styled-components'
 
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  Table,
+  TableOverflowWrapper,
+  CopyModalToolbarWrapper,
+  CopyModalPaginationWrapper,
+} from '../generic/Table/table'
 import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
@@ -22,15 +30,21 @@ import language from '../../language'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
-import { ToolBarRow } from '../generic/positioning'
 import PageUnavailable from '../pages/PageUnavailable'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
+import theme from '../../theme'
 
-const PaginationWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
+const DEFAULT_PAGE_SIZE = 5
+
+const CheckBoxLabel = styled.label`
+  display: inline-block;
+  flex-grow: 1;
+  input {
+    margin: 0 ${theme.spacing.medium} 0 0;
+    cursor: pointer;
+  }
 `
 
 // eslint-disable-next-line react/prop-types
@@ -57,6 +71,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const isMounted = useIsMounted()
   const [isCopySitesLoading, setIsCopySitesLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
+  const [isSelectedViewOnly, setIsSelectedViewOnly] = useState(false)
 
   const [siteRecords, setSiteRecords] = useState([])
   const [selectedRowsIds, setSelectedRowsIds] = useState([])
@@ -128,33 +143,31 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     [],
   )
 
-  const tableCellData = useMemo(
-    () =>
-      siteRecords.map(
-        ({
-          id,
-          name,
-          project_name,
-          country_name,
-          reef_type_name,
-          reef_zone_name,
-          exposure_name,
-          location,
-          project,
-        }) => ({
-          id,
-          name,
-          projectName: project_name,
-          countryName: country_name,
-          reefType: reef_type_name,
-          reefZone: reef_zone_name,
-          exposure: exposure_name,
-          location,
-          project,
-        }),
-      ),
-    [siteRecords],
-  )
+  const tableCellData = useMemo(() => {
+    return siteRecords.map(
+      ({
+        id,
+        name,
+        project_name,
+        country_name,
+        reef_type_name,
+        reef_zone_name,
+        exposure_name,
+        location,
+        project,
+      }) => ({
+        id,
+        name,
+        projectName: project_name,
+        countryName: country_name,
+        reefType: reef_type_name,
+        reefZone: reef_zone_name,
+        exposure: exposure_name,
+        location,
+        project,
+      }),
+    )
+  }, [siteRecords])
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -204,7 +217,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: 5,
+        pageSize: DEFAULT_PAGE_SIZE,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -219,6 +232,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     usePagination,
     useRowSelect,
   )
+
+  const handleSelectedViewOnlyChange = () => {
+    setIsSelectedViewOnly(!isSelectedViewOnly)
+  }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
@@ -236,6 +253,12 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     setSelectedRowsIds(rowIds)
   }, [selectedRowIds])
 
+  const _resetToPageOneWhenViewSelectedRowsIsOn = useEffect(() => {
+    if (isSelectedViewOnly) {
+      gotoPage(0)
+    }
+  }, [isSelectedViewOnly, gotoPage])
+
   const copySelectedSites = () => {
     setIsCopySitesLoading(true)
 
@@ -251,6 +274,11 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       setIsModalContentLoading(true)
     })
   }
+
+  const selectedRowsPaginationSize = Math.ceil(selectedFlatRows.length / DEFAULT_PAGE_SIZE)
+  const pageCount = isSelectedViewOnly ? selectedRowsPaginationSize : pageOptions.length
+  const selectedRowsPageStartIndex = pageIndex * DEFAULT_PAGE_SIZE
+  const selectedRowsPageEndIndex = selectedRowsPageStartIndex + DEFAULT_PAGE_SIZE
 
   const table = siteRecords.length ? (
     <>
@@ -279,25 +307,43 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row)
+            {isSelectedViewOnly
+              ? selectedFlatRows
+                  .slice(selectedRowsPageStartIndex, selectedRowsPageEndIndex)
+                  .map((row) => {
+                    prepareRow(row)
 
-              return (
-                <Tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
                     return (
-                      <Td {...cell.getCellProps()} align={cell.column.align}>
-                        {cell.render('Cell')}
-                      </Td>
+                      <Tr {...row.getRowProps()}>
+                        {row.cells.map((cell) => {
+                          return (
+                            <Td {...cell.getCellProps()} align={cell.column.align}>
+                              {cell.render('Cell')}
+                            </Td>
+                          )
+                        })}
+                      </Tr>
                     )
-                  })}
-                </Tr>
-              )
-            })}
+                  })
+              : page.map((row) => {
+                  prepareRow(row)
+
+                  return (
+                    <Tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => {
+                        return (
+                          <Td {...cell.getCellProps()} align={cell.column.align}>
+                            {cell.render('Cell')}
+                          </Td>
+                        )
+                      })}
+                    </Tr>
+                  )
+                })}
           </tbody>
         </Table>
       </TableOverflowWrapper>
-      <PaginationWrapper>
+      <CopyModalPaginationWrapper>
         <PageSelector
           onPreviousClick={previousPage}
           previousDisabled={!canPreviousPage}
@@ -305,9 +351,9 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           nextDisabled={!canNextPage}
           onGoToPage={gotoPage}
           currentPageIndex={pageIndex}
-          pageCount={pageOptions.length}
+          pageCount={pageCount}
         />
-      </PaginationWrapper>
+      </CopyModalPaginationWrapper>
       <CopySitesMap sitesForMapMarkers={selectedFlatRows.map((r) => r.original)} />
     </>
   ) : (
@@ -318,13 +364,22 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   )
 
   const toolbarContent = (
-    <ToolBarRow>
+    <CopyModalToolbarWrapper>
+      <CheckBoxLabel htmlFor="viewSelectedOnly">
+        <input
+          id="viewSelectedOnly"
+          type="checkbox"
+          checked={isSelectedViewOnly}
+          onChange={handleSelectedViewOnlyChange}
+        />
+        View Selected Only
+      </CheckBoxLabel>
       <FilterSearchToolbar
         name={language.pages.copySiteTable.filterToolbarText}
         value={tableUserPrefs.globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
       />
-    </ToolBarRow>
+    </CopyModalToolbarWrapper>
   )
 
   const footerContent = (
