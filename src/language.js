@@ -194,6 +194,8 @@ const pages = {
     noDataTextOffline: `You don't have any offline projects.`,
     noFilterResults: 'No results',
     noFilterResultsSubText: 'No projects match the current filter term.',
+    readOnlyUserWithActiveSampleUnits:
+      'You can’t submit these collect records because you have read-only access to this project. Please contact a project admin.',
   },
   collectRecord: {
     title: 'Collecting',

@@ -95,6 +95,7 @@ const summaryCardStyles = css`
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+  width: 100%;
   ${mediaQueryTabletLandscapeOnly(css`
     &:nth-child(3),
     &:nth-child(4),
@@ -106,7 +107,6 @@ const summaryCardStyles = css`
 
 export const SummaryCard = styled(NavLink)`
   ${summaryCardStyles}
-  justify-content: space-between;
   ${linkStyles}
   ${hoverState(css`
     background-color: ${theme.color.white};
@@ -183,7 +183,9 @@ export const OfflineSummaryCard = styled('div')`
   }
 `
 
-export const OfflineMessage = styled('span')`
-  font-size: larger;
+export const OfflineOrReadOnlyContent = styled('span')`
+  font-size: ${(props) =>
+    props.longText ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
   text-align: center;
+  padding: 1rem;
 `

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
-import React, { useCallback } from 'react'
+import React, { useMemo } from 'react'
 import {
   ActiveCollectRecordsCount,
   OfflineSummaryCard,
-  OfflineMessage,
+  OfflineOrReadOnlyContent,
   SubCardIconAndCount,
   SubCardTitle,
   DataSharingSummaryCard,
@@ -16,6 +16,8 @@ import { IconCollect, IconData, IconSites, IconUsers } from '../icons'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import { useCurrentUser } from '../../App/CurrentUserContext'
+import { getIsReadOnlyUserRole } from '../../App/currentUserProfileHelpers'
+import language from '../../language'
 
 const ProjectCardSummary = ({ project, isAppOnline }) => {
   const { currentUser } = useCurrentUser()
@@ -30,19 +32,17 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     id,
   } = project
 
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, id)
   const projectUrl = `projects/${id}`
-  const getCurrentNumberActiveSampleUnits = useCallback(
-    (projectId) => {
-      return (
-        currentUser?.projects?.find(({ id: idToCheck }) => idToCheck === projectId)
-          ?.num_active_sample_units || 0
-      )
-    },
-    [currentUser],
-  )
 
-  const userCollectCount = getCurrentNumberActiveSampleUnits(id)
-  const collectingSampleUnitCounts =
+  const userCollectCount = useMemo(() => {
+    return (
+      currentUser?.projects?.find(({ id: idToCheck }) => idToCheck === id)
+        ?.num_active_sample_units || 0
+    )
+  }, [currentUser, id])
+
+  const collectCardContent =
     userCollectCount > 0 ? (
       <>
         {num_active_sample_units} /{' '}
@@ -51,10 +51,18 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     ) : (
       <>{num_active_sample_units} </>
     )
-  const offlineMessage = <OfflineMessage>Online Only</OfflineMessage>
+  const offlineMessage = <OfflineOrReadOnlyContent>Online Only</OfflineOrReadOnlyContent>
 
-  // Online cards
-  const collectingCardOnline = (
+  const readOnlyUserCollectCardContent =
+    userCollectCount > 0 ? (
+      <OfflineOrReadOnlyContent longText>
+        {language.pages.projectsList.readOnlyUserWithActiveSampleUnits}
+      </OfflineOrReadOnlyContent>
+    ) : (
+      <OfflineOrReadOnlyContent>Read Only</OfflineOrReadOnlyContent>
+    )
+
+  const collectingCard = (
     <SummaryCard
       to={`${projectUrl}/collecting`}
       aria-label="Collect"
@@ -63,10 +71,18 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       <SubCardTitle>Collecting</SubCardTitle>
       <SubCardIconAndCount data-testid="collect-counts">
         <IconCollect />
-        <span>{collectingSampleUnitCounts}</span>
+        <>{collectCardContent}</>
       </SubCardIconAndCount>
     </SummaryCard>
   )
+
+  const readOnlyCollectingCard = (
+    <OfflineSummaryCard aria-label="Collect" onClick={stopEventPropagation}>
+      <SubCardTitle>Collecting</SubCardTitle>
+      {readOnlyUserCollectCardContent}
+    </OfflineSummaryCard>
+  )
+
   const submittedCardOnline = (
     <SummaryCard to={`${projectUrl}/data`} aria-label="Submitted" onClick={stopEventPropagation}>
       <SubCardTitle>Submitted</SubCardTitle>
@@ -76,6 +92,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       </SubCardIconAndCount>
     </SummaryCard>
   )
+
   const sitesCardOnline = (
     <SummaryCard to={`${projectUrl}/sites`} aria-label="Sites" onClick={stopEventPropagation}>
       <SubCardTitle>Sites</SubCardTitle>
@@ -85,6 +102,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       </SubCardIconAndCount>
     </SummaryCard>
   )
+
   const usersCardOnline = (
     <SummaryCard to={`${projectUrl}/users`} aria-label="Users" onClick={stopEventPropagation}>
       <SubCardTitle>Users</SubCardTitle>
@@ -94,6 +112,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
       </SubCardIconAndCount>
     </SummaryCard>
   )
+
   const dataSharingCardOnline = (
     <DataSharingSummaryCard
       to={`${projectUrl}/data-sharing`}
@@ -118,23 +137,26 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   )
 
   const submittedCardOffline = (
-    <OfflineSummaryCard aria-label="submitted Offline" onClick={stopEventPropagation}>
+    <OfflineSummaryCard aria-label="Submitted Offline" onClick={stopEventPropagation}>
       <SubCardTitle>Submitted</SubCardTitle>
       {offlineMessage}
     </OfflineSummaryCard>
   )
+
   const sitesCardOffline = (
     <OfflineSummaryCard aria-label="Sites Offline" onClick={stopEventPropagation}>
       <SubCardTitle>Sites</SubCardTitle>
       {offlineMessage}
     </OfflineSummaryCard>
   )
+
   const usersCardOffline = (
     <OfflineSummaryCard aria-label="Users Offline" onClick={stopEventPropagation}>
       <SubCardTitle>Users</SubCardTitle>
       {offlineMessage}
     </OfflineSummaryCard>
   )
+
   const dataSharingCardOffline = (
     <OfflineSummaryCard aria-label="Data-sharing Offline" onClick={stopEventPropagation}>
       <SubCardTitle>Data Sharing</SubCardTitle>
@@ -144,7 +166,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
 
   return (
     <SummaryCardGroup>
-      {collectingCardOnline}
+      {isReadOnlyUser ? readOnlyCollectingCard : collectingCard}
       {isAppOnline ? submittedCardOnline : submittedCardOffline}
       {isAppOnline ? sitesCardOnline : sitesCardOffline}
       {isAppOnline ? usersCardOnline : usersCardOffline}

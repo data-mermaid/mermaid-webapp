@@ -173,6 +173,7 @@ const timing = {
 
 const typography = {
   largeFontSize: '2.5rem',
+  mediumFontSize: '2rem',
   defaultFontSize: '1.6rem',
   smallFontSize: '1.2rem',
   xSmallFontSize: '1rem',
