@@ -4,8 +4,10 @@ import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 
 import fishbeltObservationReducer from './fishbeltObservationReducer'
-import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
-import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
+import {
+  getFishNameConstants,
+  getFishNameOptions,
+} from '../../../../App/mermaidData/fishNameHelpers'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'

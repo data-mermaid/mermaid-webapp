@@ -9,6 +9,9 @@ import {
 } from '../../testUtilities/testingLibraryWithHelpers'
 import Header from '.'
 
+const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
+const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
+
 test('Header component shows projects, reports, reference, and global dashboard links and their proper href links when online', () => {
   renderAuthenticatedOnline(<Header />)
 
@@ -24,7 +27,7 @@ test('Header component shows projects, reports, reference, and global dashboard 
   })
 
   expect(reference).toBeInTheDocument()
-  expect(reference).toHaveAttribute('href', 'https://dev-collect.datamermaid.org/#/reference/home')
+  expect(reference).toHaveAttribute('href', `${mermaidReferenceLink}/home`)
 
   const reportsLink = screen.getByRole('link', {
     name: /reports/i,
@@ -37,7 +40,7 @@ test('Header component shows projects, reports, reference, and global dashboard 
   })
 
   expect(globalDashboardLink).toBeInTheDocument()
-  expect(globalDashboardLink).toHaveAttribute('href', 'https://dashboard.datamermaid.org/')
+  expect(globalDashboardLink).toHaveAttribute('href', mermaidDashboardLink)
 })
 test('Header component shows projects, reference; and hide reports, global dashboard links when offline', async () => {
   renderAuthenticatedOffline(<Header />)
