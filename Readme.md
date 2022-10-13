@@ -49,7 +49,7 @@ There are two main layout compoenets. One for general page layout (header and fo
 As a tradeoff between mixing concerns and having an overlycomplex, it was decided to track some ui state on the Mermaid data itself. These properties are prefized with `uiState_`, and are removed before pushing the data to the API. It is questionable in hindsight if this was the best approach. Noteworthy ui state:
 
 - ` uiState_pushToApi` set to true if you want an entity to be included in the next push to the API
-- API stuff:
+- API stuff
   - `last_revision_num` is tricky and there are no API docs for it. Definitely Dustin for an overview if you need to touch it (I cant remember the details).
   - a `_deleted` property is stored and sent to the api to let it know to delete an item.
 
@@ -61,8 +61,7 @@ There are currently two ways the application warns the user about navigating awa
 2. `<Prompt>` from `react-router-dom` to handle navigation occurring within the application through react router.
    These have been combined into a single high order component named `<EnhancedPrompt>` which has been added to all forms in the application.
 
-React router v6 will eventually provide a hook called `usePrompt` which will cover both of the above and will display the same default modal/popup for both. Another similar hook named `useBlocker` will be provided too. [Good reference](https://stackoverflow.com/questions/62792342/in-react-router-v6-how-to-check-form-is-dirty-before-leaving-page-route) with link to a demo. These hooks were available in the v6 alpha, but have been removed until later in the stable v6 ([upgrade guide](https://reactrouter.com/docs/en/v6/upgrading/v5#prompt-is-not-currently-supported))
-
+At one point, it looked like React router v6 would eventually provide a hook called `usePrompt` which would cover both of the above and will display the same default modal/popup for both. Another similar hook named `useBlocker` would be provided too. [Good reference](https://stackoverflow.com/questions/62792342/in-react-router-v6-how-to-check-form-is-dirty-before-leaving-page-route) with link to a demo. HOWEVER, these hooks were available in the v6 alpha release, but as of October 2022 it sounds like there is no longer a plan to include them in a stable release for v6 ([source](https://github.com/remix-run/react-router/issues/8139#issuecomment-1262630360)). Becuase of this we are keeping the current implementation of `useBeforeUnloadPrompt`.
 #### Testing
 
 The goal of testing is not 100% test coverage. Its to test critical path features or any complex code. Currently we are focusing test effort on offline functionality, and ignoring online-only functionality.
