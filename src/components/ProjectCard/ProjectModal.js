@@ -69,8 +69,8 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
     setIsLoading(false)
   }
 
-  const handleSuccessResponse = (response, languageSuccessMesage) => {
-    toast.success(...getToastArguments(languageSuccessMesage))
+  const handleSuccessResponse = (response, languageSuccessMessage) => {
+    toast.success(...getToastArguments(languageSuccessMessage))
     formik.resetForm()
     addProjectToProjectsPage(response)
     setIsLoading(false)
