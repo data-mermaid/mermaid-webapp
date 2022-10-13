@@ -28,29 +28,30 @@ import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificati
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 
-const GlobalLinks = () => (
-  <>
-    <StyledNavLink href="/projects">Projects</StyledNavLink>
-    <OfflineHide>
-      <StyledNavLink href="/#" disabledLink>
-        Reports
-      </StyledNavLink>
-    </OfflineHide>
+const GlobalLinks = () => {
+  const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
+  const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
 
-    <StyledNavLink
-      href="https://dev-collect.datamermaid.org/#/reference/home"
-      target="_blank"
-      rel="noreferrer"
-    >
-      Reference
-    </StyledNavLink>
-    <OfflineHide>
-      <StyledNavLink href="https://dashboard.datamermaid.org/" target="_blank" rel="noreferrer">
-        Global Dashboard
+  return (
+    <>
+      <StyledNavLink href="/projects">Projects</StyledNavLink>
+      <OfflineHide>
+        <StyledNavLink href="/#" disabledLink>
+          Reports
+        </StyledNavLink>
+      </OfflineHide>
+
+      <StyledNavLink href={`${mermaidReferenceLink}/home`} target="_blank" rel="noreferrer">
+        Reference
       </StyledNavLink>
-    </OfflineHide>
-  </>
-)
+      <OfflineHide>
+        <StyledNavLink href={mermaidDashboardLink} target="_blank" rel="noreferrer">
+          Global Dashboard
+        </StyledNavLink>
+      </OfflineHide>
+    </>
+  )
+}
 
 const Header = ({ logout, currentUser }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false)

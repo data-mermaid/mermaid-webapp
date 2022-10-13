@@ -5,8 +5,10 @@ import React, { useState, useEffect } from 'react'
 import { ButtonSecondary } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import { getFishNameConstants } from '../../../../App/mermaidData/getFishNameConstants'
-import { getFishNameOptions } from '../../../../App/mermaidData/getFishNameOptions'
+import {
+  getFishNameConstants,
+  getFishNameOptions,
+} from '../../../../App/mermaidData/fishNameHelpers'
 import { IconPen } from '../../../icons'
 import { RowSpaceBetween } from '../../../generic/positioning'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
