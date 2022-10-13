@@ -23,7 +23,6 @@ import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
 import { ToolBarRow } from '../generic/positioning'
-import PageUnavailable from '../pages/PageUnavailable'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
@@ -252,7 +251,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     })
   }
 
-  const table = siteRecords.length ? (
+  const table = !!siteRecords.length && (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -310,11 +309,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       </PaginationWrapper>
       <CopySitesMap sitesForMapMarkers={selectedFlatRows.map((r) => r.original)} />
     </>
-  ) : (
-    <PageUnavailable
-      mainText={language.table.noFilterResults}
-      subText={language.table.noFilterResultsSubText}
-    />
   )
 
   const toolbarContent = (
@@ -332,7 +326,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedSites}>
         <IconSend />
-        Copy selected sites to project
+        {language.pages.copySiteTable.copyButtonText}
       </ButtonPrimary>
     </RightFooter>
   )
