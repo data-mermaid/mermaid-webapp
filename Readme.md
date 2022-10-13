@@ -49,7 +49,7 @@ There are two main layout compoenets. One for general page layout (header and fo
 As a tradeoff between mixing concerns and having an overlycomplex, it was decided to track some ui state on the Mermaid data itself. These properties are prefized with `uiState_`, and are removed before pushing the data to the API. It is questionable in hindsight if this was the best approach. Noteworthy ui state:
 
 - ` uiState_pushToApi` set to true if you want an entity to be included in the next push to the API
-- API stuff
+- API stuff:
   - `last_revision_num` is tricky and there are no API docs for it. Definitely Dustin for an overview if you need to touch it (I cant remember the details).
   - a `_deleted` property is stored and sent to the api to let it know to delete an item.
 
