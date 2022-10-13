@@ -190,7 +190,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.name', '', 'values.estYear']
+    const keys = ['values.name', 'values.estYear']
 
     const queryTerms = splitSearchQueryStrings(query)
     const filteredRows =
@@ -278,7 +278,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
       })
   }
 
-  const table = managementRegimeRecords.length && (
+  const table = !!managementRegimeRecords.length && (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>

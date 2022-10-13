@@ -251,7 +251,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     })
   }
 
-  const table = siteRecords.length && (
+  const table = !!siteRecords.length && (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
