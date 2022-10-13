@@ -11,7 +11,7 @@ import { ButtonCallout, ButtonSecondary } from '../generic/buttons'
 import { IconSortDown, IconSortUp } from '../icons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
-import NewProjectModal from './NewProjectModal'
+import ProjectModal from '../ProjectCard/ProjectModal'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -110,9 +110,10 @@ const ProjectToolBarSection = ({
           >
             <span>New Project</span>
           </ButtonCallout>
-          <NewProjectModal
+          <ProjectModal
             isOpen={isNewProjectModalOpen}
             onDismiss={() => setIsNewProjectModalOpen(false)}
+            project={null}
             addProjectToProjectsPage={addProjectToProjectsPage}
           />
         </OfflineHide>

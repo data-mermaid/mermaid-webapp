@@ -158,7 +158,7 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addProject = async function addProject(originalProjectId, newProjectName, sendEmail) {
+    copyProject = async function addProject(originalProjectId, newProjectName, sendEmail) {
       if (!originalProjectId) {
         Promise.reject(this._operationMissingParameterError)
       }
