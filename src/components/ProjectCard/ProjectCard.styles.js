@@ -188,7 +188,7 @@ export const OfflineSummaryCard = styled('div')`
 
 export const OfflineOrReadOnlyContent = styled('span')`
   font-size: ${(props) =>
-    props.longText ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
+    props.smallFont ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
   text-align: center;
   padding: 1rem;
 `

@@ -55,7 +55,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
 
   const readOnlyUserCollectCardContent =
     userCollectCount > 0 ? (
-      <OfflineOrReadOnlyContent longText>
+      <OfflineOrReadOnlyContent smallFont>
         {language.pages.projectsList.readOnlyUserWithActiveSampleUnits}
       </OfflineOrReadOnlyContent>
     ) : (
