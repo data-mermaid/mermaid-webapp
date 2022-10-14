@@ -84,11 +84,14 @@ const linkStyles = css`
 `
 
 export const SummaryCardGroup = styled('div')`
-  padding: ${theme.spacing.small};
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   background: ${theme.color.grey2};
-  display: flex;
-  justify-content: space-between;
   gap: ${theme.spacing.small};
+  padding: ${theme.spacing.small};
+  ${mediaQueryTabletLandscapeOnly(css`
+    grid-template-columns: repeat(2, 1fr);
+  `)}
 `
 
 const summaryCardStyles = css`
