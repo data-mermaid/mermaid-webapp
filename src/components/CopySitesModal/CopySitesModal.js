@@ -5,7 +5,15 @@ import styled from 'styled-components'
 
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  Table,
+  TableOverflowWrapper,
+  CopyModalToolbarWrapper,
+  CopyModalPaginationWrapper,
+} from '../generic/Table/table'
 import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
@@ -22,15 +30,20 @@ import language from '../../language'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
-import { ToolBarRow } from '../generic/positioning'
-import PageUnavailable from '../pages/PageUnavailable'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
+import theme from '../../theme'
 
-const PaginationWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
+const DEFAULT_PAGE_SIZE = 5
+
+const CheckBoxLabel = styled.label`
+  display: inline-block;
+  flex-grow: 1;
+  input {
+    margin: 0 ${theme.spacing.medium} 0 0;
+    cursor: pointer;
+  }
 `
 
 // eslint-disable-next-line react/prop-types
@@ -57,9 +70,9 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const isMounted = useIsMounted()
   const [isCopySitesLoading, setIsCopySitesLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
-
+  const [isViewSelectedOnly, setIsViewSelectedOnly] = useState(false)
   const [siteRecords, setSiteRecords] = useState([])
-  const [selectedRowsIds, setSelectedRowsIds] = useState([])
+  const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
 
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -204,13 +217,12 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: 5,
+        pageSize: DEFAULT_PAGE_SIZE,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
       getRowId: (row) => row.id,
       globalFilter: tableGlobalFilters,
-
       // Disables requirement to hold shift to enable multi-sort
       isMultiSortEvent: () => true,
     },
@@ -219,6 +231,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     usePagination,
     useRowSelect,
   )
+
+  const handleViewSelectedOnlyChange = () => {
+    setIsViewSelectedOnly(!isViewSelectedOnly)
+  }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
@@ -233,26 +249,42 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const _updateSelectedRows = useEffect(() => {
     const rowIds = Object.keys(selectedRowIds)
 
-    setSelectedRowsIds(rowIds)
+    setSelectedRowIdsForCopy(rowIds)
   }, [selectedRowIds])
+
+  const _resetToPageOneWhenViewSelectedRowsIsOn = useEffect(() => {
+    if (isViewSelectedOnly) {
+      gotoPage(0)
+    }
+  }, [isViewSelectedOnly, gotoPage])
 
   const copySelectedSites = () => {
     setIsCopySitesLoading(true)
 
-    databaseSwitchboardInstance.copySitesToProject(projectId, selectedRowsIds).then((response) => {
-      const copiedSitesCount = response.length
-      const copiedSiteMsg = pluralize(copiedSitesCount, 'site', 'sites')
+    databaseSwitchboardInstance
+      .copySitesToProject(projectId, selectedRowIdsForCopy)
+      .then((response) => {
+        const copiedSitesCount = response.length
+        const copiedSiteMsg = pluralize(copiedSitesCount, 'site', 'sites')
 
-      toast.success(...getToastArguments(`Added ${copiedSitesCount} ${copiedSiteMsg}`))
-      addCopiedSitesToSiteTable(response)
-      setIsCopySitesLoading(false)
-      toggleAllRowsSelected(false)
-      onDismiss()
-      setIsModalContentLoading(true)
-    })
+        toast.success(...getToastArguments(`Added ${copiedSitesCount} ${copiedSiteMsg}`))
+        addCopiedSitesToSiteTable(response)
+        setIsCopySitesLoading(false)
+        toggleAllRowsSelected(false)
+        onDismiss()
+        setIsModalContentLoading(true)
+      })
   }
 
-  const table = siteRecords.length ? (
+  const selectedRowsPaginationSize = Math.ceil(selectedFlatRows.length / DEFAULT_PAGE_SIZE)
+  const pageCount = isViewSelectedOnly ? selectedRowsPaginationSize : pageOptions.length
+  const selectedRowsPageStartIndex = pageIndex * DEFAULT_PAGE_SIZE
+  const selectedRowsPageEndIndex = selectedRowsPageStartIndex + DEFAULT_PAGE_SIZE
+  const tableBodyRow = isViewSelectedOnly
+    ? selectedFlatRows.slice(selectedRowsPageStartIndex, selectedRowsPageEndIndex)
+    : page
+
+  const table = !!siteRecords.length && (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -279,7 +311,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {tableBodyRow.map((row) => {
               prepareRow(row)
 
               return (
@@ -297,7 +329,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           </tbody>
         </Table>
       </TableOverflowWrapper>
-      <PaginationWrapper>
+      <CopyModalPaginationWrapper>
         <PageSelector
           onPreviousClick={previousPage}
           previousDisabled={!canPreviousPage}
@@ -305,26 +337,30 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
           nextDisabled={!canNextPage}
           onGoToPage={gotoPage}
           currentPageIndex={pageIndex}
-          pageCount={pageOptions.length}
+          pageCount={pageCount}
         />
-      </PaginationWrapper>
+      </CopyModalPaginationWrapper>
       <CopySitesMap sitesForMapMarkers={selectedFlatRows.map((r) => r.original)} />
     </>
-  ) : (
-    <PageUnavailable
-      mainText={language.table.noFilterResults}
-      subText={language.table.noFilterResultsSubText}
-    />
   )
 
   const toolbarContent = (
-    <ToolBarRow>
+    <CopyModalToolbarWrapper>
+      <CheckBoxLabel htmlFor="viewSelectedOnly">
+        <input
+          id="viewSelectedOnly"
+          type="checkbox"
+          checked={isViewSelectedOnly}
+          onChange={handleViewSelectedOnlyChange}
+        />
+        View Selected Only
+      </CheckBoxLabel>
       <FilterSearchToolbar
         name={language.pages.copySiteTable.filterToolbarText}
         value={tableUserPrefs.globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
       />
-    </ToolBarRow>
+    </CopyModalToolbarWrapper>
   )
 
   const footerContent = (
@@ -332,7 +368,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedSites}>
         <IconSend />
-        Copy selected sites to project
+        {language.pages.copySiteTable.copyButtonText}
       </ButtonPrimary>
     </RightFooter>
   )
