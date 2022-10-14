@@ -84,17 +84,21 @@ const linkStyles = css`
 `
 
 export const SummaryCardGroup = styled('div')`
-  padding: ${theme.spacing.small};
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   background: ${theme.color.grey2};
-  display: flex;
-  justify-content: space-between;
   gap: ${theme.spacing.small};
+  padding: ${theme.spacing.small};
+  ${mediaQueryTabletLandscapeOnly(css`
+    grid-template-columns: repeat(2, 1fr);
+  `)}
 `
 
 const summaryCardStyles = css`
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+  width: 100%;
   ${mediaQueryTabletLandscapeOnly(css`
     &:nth-child(3),
     &:nth-child(4),
@@ -106,7 +110,6 @@ const summaryCardStyles = css`
 
 export const SummaryCard = styled(NavLink)`
   ${summaryCardStyles}
-  justify-content: space-between;
   ${linkStyles}
   ${hoverState(css`
     background-color: ${theme.color.white};
@@ -183,7 +186,9 @@ export const OfflineSummaryCard = styled('div')`
   }
 `
 
-export const OfflineMessage = styled('span')`
-  font-size: larger;
+export const OfflineOrReadOnlyContent = styled('span')`
+  font-size: ${(props) =>
+    props.smallFont ? theme.typography.smallFontSize : theme.typography.mediumFontSize};
   text-align: center;
+  padding: 1rem;
 `
