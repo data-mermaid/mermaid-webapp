@@ -5,7 +5,15 @@ import styled from 'styled-components'
 
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
-import { Tr, Th, Td, Table, TableOverflowWrapper } from '../generic/Table/table'
+import {
+  Tr,
+  Th,
+  Td,
+  Table,
+  TableOverflowWrapper,
+  CopyModalToolbarWrapper,
+  CopyModalPaginationWrapper,
+} from '../generic/Table/table'
 import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
@@ -22,13 +30,19 @@ import usePersistUserTablePreferences from '../generic/Table/usePersistUserTable
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { pluralize } from '../../library/strings/pluralize'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
-import { ToolBarRow } from '../generic/positioning'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
+import theme from '../../theme'
 
-const PaginationWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
+const DEFAULT_PAGE_SIZE = 5
+
+const CheckBoxLabel = styled.label`
+  display: inline-block;
+  flex-grow: 1;
+  input {
+    margin: 0 ${theme.spacing.medium} 0 0;
+    cursor: pointer;
+  }
 `
 
 // eslint-disable-next-line react/prop-types
@@ -53,10 +67,12 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   const { isAppOnline } = useOnlineStatus()
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
+
   const [isCopyMRsLoading, setIsCopyMRsLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
-  const [selectedRowsIds, setSelectedRowsIds] = useState([])
+  const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
   const [managementRegimeRecords, setManagementRegimeRecords] = useState([])
+  const [isViewSelectedOnly, setIsViewSelectedOnly] = useState(false)
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -236,6 +252,9 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     useRowSelect,
   )
 
+  const handleViewSelectedOnlyChange = () => {
+    setIsViewSelectedOnly(!isViewSelectedOnly)
+  }
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const _setSortByPrefs = useEffect(() => {
@@ -249,14 +268,20 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   const _updateSelectedRows = useEffect(() => {
     const rowIds = Object.keys(selectedRowIds)
 
-    setSelectedRowsIds(rowIds)
+    setSelectedRowIdsForCopy(rowIds)
   }, [selectedRowIds])
+
+  const _resetToPageOneWhenViewSelectedRowsIsOn = useEffect(() => {
+    if (isViewSelectedOnly) {
+      gotoPage(0)
+    }
+  }, [isViewSelectedOnly, gotoPage])
 
   const copySelectedManagementRegimes = () => {
     setIsCopyMRsLoading(true)
 
     databaseSwitchboardInstance
-      .copyManagementRegimesToProject(projectId, selectedRowsIds)
+      .copyManagementRegimesToProject(projectId, selectedRowIdsForCopy)
       .then((response) => {
         const copiedManagementRegimesCount = response.length
         const copiedManagementRegimesMsg = pluralize(
@@ -277,6 +302,14 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         setIsModalContentLoading(true)
       })
   }
+
+  const selectedRowsPaginationSize = Math.ceil(selectedFlatRows.length / DEFAULT_PAGE_SIZE)
+  const pageCount = isViewSelectedOnly ? selectedRowsPaginationSize : pageOptions.length
+  const selectedRowsPageStartIndex = pageIndex * DEFAULT_PAGE_SIZE
+  const selectedRowsPageEndIndex = selectedRowsPageStartIndex + DEFAULT_PAGE_SIZE
+  const tableBodyRow = isViewSelectedOnly
+    ? selectedFlatRows.slice(selectedRowsPageStartIndex, selectedRowsPageEndIndex)
+    : page
 
   const table = !!managementRegimeRecords.length && (
     <>
@@ -305,7 +338,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {tableBodyRow.map((row) => {
               prepareRow(row)
 
               return (
@@ -323,7 +356,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           </tbody>
         </Table>
       </TableOverflowWrapper>
-      <PaginationWrapper>
+      <CopyModalPaginationWrapper>
         <PageSelector
           onPreviousClick={previousPage}
           previousDisabled={!canPreviousPage}
@@ -331,20 +364,29 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           nextDisabled={!canNextPage}
           onGoToPage={gotoPage}
           currentPageIndex={pageIndex}
-          pageCount={pageOptions.length}
+          pageCount={pageCount}
         />
-      </PaginationWrapper>
+      </CopyModalPaginationWrapper>
     </>
   )
 
   const toolbarContent = (
-    <ToolBarRow>
+    <CopyModalToolbarWrapper>
+      <CheckBoxLabel htmlFor="viewSelectedOnly">
+        <input
+          id="viewSelectedOnly"
+          type="checkbox"
+          checked={isViewSelectedOnly}
+          onChange={handleViewSelectedOnlyChange}
+        />
+        View Selected Only
+      </CheckBoxLabel>
       <FilterSearchToolbar
         name={language.pages.copyManagementRegimeTable.filterToolbarText}
         value={tableUserPrefs.globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
       />
-    </ToolBarRow>
+    </CopyModalToolbarWrapper>
   )
 
   const footerContent = (

@@ -187,3 +187,13 @@ export const GenericStickyTable = styled(Table)`
     ${stickyStyles}
   }
 `
+
+export const CopyModalToolbarWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const CopyModalPaginationWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
