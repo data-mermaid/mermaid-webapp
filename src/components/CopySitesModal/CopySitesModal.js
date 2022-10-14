@@ -30,7 +30,6 @@ import language from '../../language'
 import { reactTableNaturalSort } from '../generic/Table/reactTableNaturalSort'
 import PageSelector from '../generic/Table/PageSelector'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
-import PageUnavailable from '../pages/PageUnavailable'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
@@ -142,31 +141,33 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     [],
   )
 
-  const tableCellData = useMemo(() => {
-    return siteRecords.map(
-      ({
-        id,
-        name,
-        project_name,
-        country_name,
-        reef_type_name,
-        reef_zone_name,
-        exposure_name,
-        location,
-        project,
-      }) => ({
-        id,
-        name,
-        projectName: project_name,
-        countryName: country_name,
-        reefType: reef_type_name,
-        reefZone: reef_zone_name,
-        exposure: exposure_name,
-        location,
-        project,
-      }),
-    )
-  }, [siteRecords])
+  const tableCellData = useMemo(
+    () =>
+      siteRecords.map(
+        ({
+          id,
+          name,
+          project_name,
+          country_name,
+          reef_type_name,
+          reef_zone_name,
+          exposure_name,
+          location,
+          project,
+        }) => ({
+          id,
+          name,
+          projectName: project_name,
+          countryName: country_name,
+          reefType: reef_type_name,
+          reefZone: reef_zone_name,
+          exposure: exposure_name,
+          location,
+          project,
+        }),
+      ),
+    [siteRecords],
+  )
 
   const tableDefaultPrefs = useMemo(() => {
     return {
@@ -279,8 +280,11 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const pageCount = isViewSelectedOnly ? selectedRowsPaginationSize : pageOptions.length
   const selectedRowsPageStartIndex = pageIndex * DEFAULT_PAGE_SIZE
   const selectedRowsPageEndIndex = selectedRowsPageStartIndex + DEFAULT_PAGE_SIZE
+  const tableBodyRow = isViewSelectedOnly
+    ? selectedFlatRows.slice(selectedRowsPageStartIndex, selectedRowsPageEndIndex)
+    : page
 
-  const table = siteRecords.length ? (
+  const table = !!siteRecords.length && (
     <>
       <TableOverflowWrapper>
         <Table {...getTableProps()}>
@@ -307,39 +311,21 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {isViewSelectedOnly
-              ? selectedFlatRows
-                  .slice(selectedRowsPageStartIndex, selectedRowsPageEndIndex)
-                  .map((row) => {
-                    prepareRow(row)
+            {tableBodyRow.map((row) => {
+              prepareRow(row)
 
+              return (
+                <Tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
                     return (
-                      <Tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => {
-                          return (
-                            <Td {...cell.getCellProps()} align={cell.column.align}>
-                              {cell.render('Cell')}
-                            </Td>
-                          )
-                        })}
-                      </Tr>
+                      <Td {...cell.getCellProps()} align={cell.column.align}>
+                        {cell.render('Cell')}
+                      </Td>
                     )
-                  })
-              : page.map((row) => {
-                  prepareRow(row)
-
-                  return (
-                    <Tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
-                        return (
-                          <Td {...cell.getCellProps()} align={cell.column.align}>
-                            {cell.render('Cell')}
-                          </Td>
-                        )
-                      })}
-                    </Tr>
-                  )
-                })}
+                  })}
+                </Tr>
+              )
+            })}
           </tbody>
         </Table>
       </TableOverflowWrapper>
@@ -356,11 +342,6 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       </CopyModalPaginationWrapper>
       <CopySitesMap sitesForMapMarkers={selectedFlatRows.map((r) => r.original)} />
     </>
-  ) : (
-    <PageUnavailable
-      mainText={language.table.noFilterResults}
-      subText={language.table.noFilterResultsSubText}
-    />
   )
 
   const toolbarContent = (
@@ -387,7 +368,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedSites}>
         <IconSend />
-        Copy selected sites to project
+        {language.pages.copySiteTable.copyButtonText}
       </ButtonPrimary>
     </RightFooter>
   )

@@ -104,18 +104,15 @@ export const pullApiData = async ({
         // they have been removed.
         if (projectsResponse && apiDataType === 'projects') {
           const projectsResults = projectsResponse.data?.results
-          const indexedDBProjectsNeedToBeDeleted = projectsResults.length > indexedDbProjects.length
 
-          if (indexedDBProjectsNeedToBeDeleted) {
-            // Determine which projects in IndexedDB are not in the /projects API response
-            const deleteProjectIds = indexedDbProjects
-              .filter((indexedDBProject) => !isIndexedDBProjectInProjectResults(indexedDBProject, projectsResults))
-              .map((removedProject) => removedProject.id)
+          // Determine which projects in IndexedDB are not in the /projects API response
+          const deleteProjectIds = indexedDbProjects
+            .filter((indexedDBProject) => !isIndexedDBProjectInProjectResults(indexedDBProject, projectsResults))
+            .map((removedProject) => removedProject.id)
 
-            if (deleteProjectIds.length) {
-              // Delete the projects from IndexedDB as the user has been removed from them
-              dexiePerUserDataInstance.projects.bulkDelete(deleteProjectIds)
-            }
+          if (deleteProjectIds.length) {
+            // Delete the projects from IndexedDB as the user has been removed from them
+            dexiePerUserDataInstance.projects.bulkDelete(deleteProjectIds)
           }
         }
       })

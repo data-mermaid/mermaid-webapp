@@ -166,6 +166,7 @@ const BenthicPhotoQuadratObservationTable = ({
   }, [observationsState, benthicAttributeOptions])
 
   const observationsRows = useMemo(() => {
+    const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
     const growthFormOptions = getOptions(choices.growthforms)
 
     const handleKeyDown = ({ event, index, observation, isBenthicAttribute, isNumberOfPoints }) => {
@@ -356,7 +357,7 @@ const BenthicPhotoQuadratObservationTable = ({
                     aria-label="benthic attribute reference"
                     target="_blank"
                     tabIndex="-1"
-                    href={`https://dev-collect.datamermaid.org/#/reference/benthicattributes/${attribute}`}
+                    href={`${mermaidReferenceLink}/benthicattributes/${attribute}`}
                   >
                     <IconLibraryBooks />
                   </StyledLinkThatLooksLikeButtonToReference>
