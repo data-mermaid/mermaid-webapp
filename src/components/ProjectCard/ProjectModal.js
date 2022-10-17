@@ -78,13 +78,6 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   }
 
   const copyExistingProject = () => {
-    // setIsLoading and addProjectToProjectsPage are used in this function
-    // to display the loading modal and pass the new project back to the
-    // projects page.
-    // This is done because the projects page does not re-render after the
-    // sync has taken place.
-    // As an alternative they could be removed and  we could make use of
-    // setIsSyncInProgress in a way that is consitent with other components.
     setIsLoading(true)
     databaseSwitchboardInstance
       .copyProject(project.id, formik.values.name, formik.values.sendEmail)
@@ -111,9 +104,8 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   const handleOnSubmit = () => {
     project ? copyExistingProject() : createNewProject()
   }
-
-  const modalContentCopyProject = (
-    <>
+  const modalContent = (placeholderName) => {
+    return (
       <ModalInputRow>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label id="modal-input-for-projectname-label" htmlFor="modal-input-for-projectname" />
@@ -123,13 +115,19 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           id="name"
           type="text"
           value={formik.values.name}
-          placeholder="Name of project"
           onChange={formik.handleChange}
           validationType={formik.errors.name ? 'error' : null}
+          placeholder={placeholderName}
           validationMessages={formik.errors.name}
           setErrors={language.error.formValidation.required}
         />
       </ModalInputRow>
+    )
+  }
+  const switchBetweenModalContent = project ? (
+    <>
+      {modalContent('Name of project')}
+
       <ModalInputRow>
         <CheckBoxLabel>
           <input
@@ -145,32 +143,14 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
       <p>{language.projectModal.copyProjectMessage}</p>
       <p>{language.projectModal.footerMessage}</p>
     </>
-  )
-
-  const modalContentCreateProject = (
+  ) : (
     <>
-      <ModalInputRow>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-        <label id="modal-input-for-projectname-label" htmlFor="modal-input-for-projectname" />
-        <InputWithLabelAndValidation
-          required
-          label="Project Name"
-          id="name"
-          type="text"
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          validationType={formik.errors.name ? 'error' : null}
-          validationMessages={formik.errors.name}
-          setErrors={language.error.formValidation.required}
-        />
-      </ModalInputRow>
+      {modalContent(null)}
       <p>{language.projectModal.footerMessage}</p>
     </>
   )
 
-  const switchBetweenModalContent = project ? modalContentCopyProject : modalContentCreateProject
-
-  const switchBetweenMesages = project ? `Copy project` : ` Create project`
+  const switchBetweenMesages = project ? `Copy project` : `Create project`
 
   const footerContent = (
     <RightFooter>
