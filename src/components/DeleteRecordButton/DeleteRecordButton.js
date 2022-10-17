@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import { ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
-import language from '../../../../language'
-import Modal, { RightFooter } from '../../../generic/Modal/Modal'
-import { DeleteRecordButtonCautionWrapper } from '../CollectingFormPage.Styles'
+import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
+import Modal, { RightFooter } from '../generic/Modal/Modal'
+import { DeleteRecordButtonCautionWrapper } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 
-const DeleteRecordButton = ({ isNewRecord, deleteRecord }) => {
+const DeleteRecordButton = ({ isNewRecord, deleteRecord, modalText }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const showDeleteConfirmPrompt = () => {
@@ -25,20 +24,18 @@ const DeleteRecordButton = ({ isNewRecord, deleteRecord }) => {
     <>
       <DeleteRecordButtonCautionWrapper>
         <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>
-          Delete Record
+          {modalText.title}
         </ButtonCaution>
       </DeleteRecordButtonCautionWrapper>
       <Modal
-        title={language.deleteCollectRecord.title}
+        title={modalText.title}
         isOpen={showDeleteModal}
         onDismiss={closeDeleteConfirmPrompt}
-        mainContent={language.deleteCollectRecord.prompt}
+        mainContent={modalText.prompt}
         footerContent={
           <RightFooter>
-            <ButtonSecondary onClick={closeDeleteConfirmPrompt}>
-              {language.deleteCollectRecord.no}
-            </ButtonSecondary>
-            <ButtonCaution onClick={handleDeleteRecord}>{language.deleteCollectRecord.yes}</ButtonCaution>
+            <ButtonSecondary onClick={closeDeleteConfirmPrompt}>{modalText.no}</ButtonSecondary>
+            <ButtonCaution onClick={handleDeleteRecord}>{modalText.yes}</ButtonCaution>
           </RightFooter>
         }
       />
@@ -49,6 +46,12 @@ const DeleteRecordButton = ({ isNewRecord, deleteRecord }) => {
 DeleteRecordButton.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
   deleteRecord: PropTypes.func.isRequired,
+  modalText: PropTypes.shape({
+    title: PropTypes.string,
+    prompt: PropTypes.string,
+    yes: PropTypes.string,
+    no: PropTypes.string,
+  }).isRequired,
 }
 
 export default DeleteRecordButton

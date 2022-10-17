@@ -39,7 +39,7 @@ import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPag
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import NewAttributeModal from '../../../NewAttributeModal'
 import ObserversInput from '../ObserversInput'
-import DeleteRecordButton from '../DeleteRecordButton'
+import DeleteRecordButton from '../../../DeleteRecordButton'
 import SampleEventInputs from '../SampleEventInputs'
 import BenthicAttributeTransectInputs from '../BenthicPhotoQuadratForm/BenthicAttributeTransectInputs'
 import BenthicPhotoQuadratObservationTable from '../BenthicPhotoQuadratForm/BenthicPhotoQuadratObservationTable'
@@ -628,7 +628,11 @@ const CollectRecordFormPage = ({
         />
         <div ref={observationTableRef}>{observationTable}</div>
       </form>
-      <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
+      <DeleteRecordButton
+        isNewRecord={isNewRecord}
+        deleteRecord={deleteRecord}
+        modalText={language.deleteCollectRecord}
+      />
     </>
   ) : (
     <PageUnavailable mainText={language.error.pageReadOnly} />
