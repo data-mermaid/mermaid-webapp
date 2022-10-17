@@ -164,6 +164,10 @@ const SitesMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    deleteSite = async function deleteSite() {
+      return Promise.reject(new Error('can not delete site'))
+    }
   }
 
 export default SitesMixin

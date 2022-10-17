@@ -139,6 +139,16 @@ const deleteCollectRecord = {
   yes: 'Delete Record',
   no: 'Cancel',
 }
+const deleteSiteRecord = {
+  title: 'Delete Site',
+  prompt: 'Are you sure you want to delete this site?',
+  yes: 'Delete Site',
+  no: 'Cancel',
+  confirmDeleteText1:
+    'You can not delete this site because it is used in the following sample units:',
+  confirmDeleteText2:
+    'You have to remove this site from all sample units before you can delete it.',
+}
 
 const loadingIndicator = {
   loadingPrimary: 'Loading',
@@ -370,6 +380,7 @@ export default {
   error,
   success,
   deleteCollectRecord,
+  deleteSiteRecord,
   loadingIndicator,
   autocomplete,
   header,

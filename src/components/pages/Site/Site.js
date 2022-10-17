@@ -38,6 +38,8 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 import PageUnavailable from '../PageUnavailable'
+import DeleteRecordButton from '../../DeleteRecordButton'
+import DeleteConfirmModal from '../../DeleteConfirmModal/DeleteConfirmModal'
 
 const ReadOnlySiteContent = ({
   site,
@@ -168,15 +170,6 @@ const SiteForm = ({
 }
 
 const Site = ({ isNewSite }) => {
-  const [countryOptions, setCountryOptions] = useState([])
-  const [exposureOptions, setExposureOptions] = useState([])
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isFormDirty, setIsFormDirty] = useState(false)
-  const [reefTypeOptions, setReefTypeOptions] = useState([])
-  const [reefZoneOptions, setReefZoneOptions] = useState([])
-  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [siteBeingEdited, setSiteBeingEdited] = useState()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
@@ -186,7 +179,25 @@ const Site = ({ isNewSite }) => {
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
+  const [countryOptions, setCountryOptions] = useState([])
+  const [exposureOptions, setExposureOptions] = useState([])
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isFormDirty, setIsFormDirty] = useState(false)
+  const [reefTypeOptions, setReefTypeOptions] = useState([])
+  const [reefZoneOptions, setReefZoneOptions] = useState([])
+  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [siteBeingEdited, setSiteBeingEdited] = useState()
+  const [isSiteNotAllowedToBeDeleted, setIsSiteNotAllowedToBeDeleted] = useState(false)
+
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+
+  const openDeleteConfirmPrompt = () => {
+    setIsSiteNotAllowedToBeDeleted(true)
+  }
+  const closeDeleteConfirmPrompt = () => {
+    setIsSiteNotAllowedToBeDeleted(false)
+  }
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -332,6 +343,17 @@ const Site = ({ isNewSite }) => {
     [formik.dirty, getPersistedUnsavedFormikData],
   )
 
+  const deleteRecord = () => {
+    if (!isNewSite) {
+      databaseSwitchboardInstance
+        .deleteSite()
+        .then()
+        .catch(() => openDeleteConfirmPrompt())
+    }
+
+    return Promise.resolve()
+  }
+
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewSite
 
   const contentViewByReadOnlyRole = isNewSite ? (
@@ -360,6 +382,15 @@ const Site = ({ isNewSite }) => {
         reefZoneOptions={reefZoneOptions}
         handleLatitudeChange={handleLatitudeChange}
         handleLongitudeChange={handleLongitudeChange}
+      />
+      <DeleteRecordButton
+        isNewRecord={isNewSite}
+        deleteRecord={deleteRecord}
+        modalText={language.deleteSiteRecord}
+      />
+      <DeleteConfirmModal
+        isOpen={isSiteNotAllowedToBeDeleted}
+        onDismiss={closeDeleteConfirmPrompt}
       />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
