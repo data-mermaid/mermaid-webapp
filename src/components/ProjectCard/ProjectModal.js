@@ -150,14 +150,14 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
     </>
   )
 
-  const switchBetweenMesages = project ? `Copy project` : `Create project`
+  const switchBetweenMessages = project ? `Copy project` : `Create project`
 
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
-        {switchBetweenMesages}
+        {switchBetweenMessages}
       </ButtonPrimary>
     </RightFooter>
   )
