@@ -37,6 +37,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 import PageUnavailable from '../PageUnavailable'
+import { sortManagementComplianceChoices } from '../../../library/arrays/sortManagementComplianceChoices'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -211,11 +212,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
               setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
             }
 
-            setManagementPartyOptions(getOptions(choicesResponse.managementparties))
-            setManagementComplianceOptions([
+            const sortedManagementComplianceOptions = sortManagementComplianceChoices([
               ...getOptions(choicesResponse.managementcompliances),
               { label: 'not reported', value: '' },
             ])
+
+            setManagementPartyOptions(getOptions(choicesResponse.managementparties))
+            setManagementComplianceOptions(sortedManagementComplianceOptions)
             setManagementRegimeBeingEdited(managementRegimeResponse)
             setIsLoading(false)
           }
