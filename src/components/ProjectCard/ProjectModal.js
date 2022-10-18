@@ -50,13 +50,13 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
-  const handleResponseError = (error, error_message) => {
+  const handleResponseError = (error) => {
     handleHttpResponseError({
       error,
       callback: () => {
         const isDuplicateError =
           [500, 400].includes(error.response.status) &&
-          error.response.data?.detail === `[IntegrityError] ${error_message} project`
+          error.response.data?.new_project_name === 'Project name already exists'
 
         if (isDuplicateError) {
           toast.error(
@@ -117,7 +117,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           value={formik.values.name}
           onChange={formik.handleChange}
           validationType={formik.errors.name ? 'error' : null}
-          placeholder={placeholderName}
+          placeholder={placeholderName || ''}
           validationMessages={formik.errors.name}
           setErrors={language.error.formValidation.required}
         />
@@ -145,7 +145,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
     </>
   ) : (
     <>
-      {modalContent(null)}
+      {modalContent()}
       <p>{language.projectModal.footerMessage}</p>
     </>
   )
