@@ -78,22 +78,10 @@ const ProjectHealthMixin = (Base) =>
       }, {})
     }
 
-    #addRecordsToUsersAndTransects = function addRecordsToUsersAndTransects(
-      sampleEventUnitRecords,
-      siteSubmittedSummary,
-    ) {
-      for (const [siteId, siteInfo] of Object.entries(siteSubmittedSummary)) {
-        const siteRecordGroup = Object.values(siteInfo)
-
-        this.#addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId)
-      }
-    }
-
     #addRecordsBySite = function addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId) {
-      const siteName = siteRecordGroup[0]
-      const { bleachingqc, ...otherProtocols } = siteRecordGroup[1] // eslint-disable-line no-unused-vars
+      const [siteName, siteAvailableProtocols] = siteRecordGroup
 
-      for (const [sampleUnit, sampleUnitNumbers] of Object.entries(otherProtocols)) {
+      for (const [sampleUnit, sampleUnitNumbers] of Object.entries(siteAvailableProtocols)) {
         const sampleEventRecord = {
           site_id: siteId,
           site_name: siteName,
@@ -129,11 +117,22 @@ const ProjectHealthMixin = (Base) =>
       }
     }
 
+    #addRecordsToUsersAndTransects = function addRecordsToUsersAndTransects(
+      sampleEventUnitRecords,
+      siteSubmittedSummary,
+    ) {
+      for (const [siteId, siteInfo] of Object.entries(siteSubmittedSummary)) {
+        const siteRecordGroup = Object.values(siteInfo)
+
+        this.#addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId)
+      }
+    }
+
     #populateAdditionalRecordsForUsersAndTransects =
       function populateAdditionalRecordsForUsersAndTransects(
         sampleEventUnitRecords,
-        availableProtocols,
         siteCollectingSummary,
+        availableProtocols,
       ) {
         /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
       Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
@@ -378,20 +377,19 @@ const ProjectHealthMixin = (Base) =>
               site_collecting_summary: siteCollectingSummary,
               protocols,
             } = sampleUnitRecords
-            const noBleachingProtocols = protocols.filter((protocol) => protocol !== 'bleachingqc')
 
             this.#addRecordsToUsersAndTransects(sampleEventUnitRecords, siteSubmittedSummary)
 
             this.#populateAdditionalRecordsForUsersAndTransects(
               sampleEventUnitRecords,
-              noBleachingProtocols,
               siteCollectingSummary,
+              protocols,
             )
 
             const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
               sampleEventUnitRecords,
               siteCollectingSummary,
-              noBleachingProtocols,
+              protocols,
             )
 
             return sampleEventUnitWithSubmittedAndCollectingRecords
