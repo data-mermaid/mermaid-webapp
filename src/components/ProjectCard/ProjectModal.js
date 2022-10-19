@@ -26,11 +26,17 @@ const CheckBoxLabel = styled.label`
 const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
   const [isLoading, setIsLoading] = useState(false)
 
+  const initialFormValues = project
+    ? {
+        name: `Copy of ${project.name}`,
+        sendEmail: true,
+      }
+    : {
+        name: '',
+      }
+
   const formik = useFormik({
-    initialValues: {
-      name: `Copy of ${project.name}`,
-      sendEmail: true,
-    },
+    initialValues: initialFormValues,
     validate: (values) => {
       const errors = {}
 
@@ -44,49 +50,62 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
 
+  const handleResponseError = (error) => {
+    handleHttpResponseError({
+      error,
+      callback: () => {
+        const isDuplicateError =
+          [500, 400].includes(error.response.status) &&
+          error.response.data?.new_project_name === 'Project name already exists'
+
+        if (isDuplicateError) {
+          toast.error(
+            ...getToastArguments(...getToastArguments(language.error.duplicateNewProject)),
+          )
+        }
+      },
+    })
+
+    setIsLoading(false)
+  }
+
+  const handleSuccessResponse = (response, languageSuccessMessage) => {
+    toast.success(...getToastArguments(languageSuccessMessage))
+    formik.resetForm()
+    addProjectToProjectsPage(response)
+    setIsLoading(false)
+    onDismiss()
+  }
+
   const copyExistingProject = () => {
-    // setIsLoading and addProjectToProjectsPage are used in this function
-    // to display the loading modal and pass the new project back to the
-    // projects page.
-    // This is done because the projects page does not re-render after the
-    // sync has taken place.
-    // As an alternative they could be removed and  we could make use of
-    // setIsSyncInProgress in a way that is consitent with other components.
     setIsLoading(true)
     databaseSwitchboardInstance
-      .addProject(project.id, formik.values.name, formik.values.sendEmail)
+      .copyProject(project.id, formik.values.name, formik.values.sendEmail)
       .then((response) => {
-        toast.success(...getToastArguments(language.success.projectCopied))
-        formik.resetForm()
-        addProjectToProjectsPage(response)
-        setIsLoading(false)
-        onDismiss()
+        handleSuccessResponse(response, language.success.projectCopied)
       })
       .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            const isDuplicateError =
-              [500, 400].includes(error.response.status) &&
-              error.response.data?.detail === '[IntegrityError] Copying project'
+        handleResponseError(error, 'Copying')
+      })
+  }
 
-            if (isDuplicateError) {
-              toast.error(
-                ...getToastArguments(...getToastArguments(language.error.duplicateNewProject)),
-              )
-            }
-          },
-        })
-        setIsLoading(false)
+  const createNewProject = () => {
+    setIsLoading(true)
+    databaseSwitchboardInstance
+      .addNewProject(formik.values.name)
+      .then((response) => {
+        handleSuccessResponse(response, language.success.projectCreated)
+      })
+      .catch((error) => {
+        handleResponseError(error, 'Creating')
       })
   }
 
   const handleOnSubmit = () => {
-    copyExistingProject()
+    project ? copyExistingProject() : createNewProject()
   }
-
-  const modalContent = (
-    <>
+  const modalContent = (placeholderName) => {
+    return (
       <ModalInputRow>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label id="modal-input-for-projectname-label" htmlFor="modal-input-for-projectname" />
@@ -96,13 +115,19 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           id="name"
           type="text"
           value={formik.values.name}
-          placeholder="Name of project"
           onChange={formik.handleChange}
           validationType={formik.errors.name ? 'error' : null}
+          placeholder={placeholderName || ''}
           validationMessages={formik.errors.name}
           setErrors={language.error.formValidation.required}
         />
       </ModalInputRow>
+    )
+  }
+  const switchBetweenModalContent = project ? (
+    <>
+      {modalContent('Name of project')}
+
       <ModalInputRow>
         <CheckBoxLabel>
           <input
@@ -118,14 +143,21 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
       <p>{language.projectModal.copyProjectMessage}</p>
       <p>{language.projectModal.footerMessage}</p>
     </>
+  ) : (
+    <>
+      {modalContent()}
+      <p>{language.projectModal.footerMessage}</p>
+    </>
   )
+
+  const switchBetweenMessages = project ? `Copy project` : `Create project`
 
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
-        Copy project
+        {switchBetweenMessages}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -136,7 +168,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
         isOpen={isOpen}
         onDismiss={onDismiss}
         title={language.projectModal.copyTitle}
-        mainContent={modalContent}
+        mainContent={switchBetweenModalContent}
         footerContent={footerContent}
       />
       {isLoading && <LoadingModal />}

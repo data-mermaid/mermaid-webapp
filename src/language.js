@@ -113,6 +113,7 @@ const success = {
   userRemoved: 'User removed',
   projectSave: 'Project saved',
   projectCopied: 'Project copied',
+  projectCreated: 'Project created',
   siteSave: 'Site saved.',
   managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
@@ -299,6 +300,7 @@ const projectModal = {
   copyProjectMessage:
     'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
   copyTitle: 'Copy Project',
+  createProjectTitle: 'Create Project',
   footerMessage: 'You will be an admin for this project.',
 }
 
