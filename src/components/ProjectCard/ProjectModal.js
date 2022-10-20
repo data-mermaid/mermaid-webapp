@@ -78,6 +78,13 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   }
 
   const copyExistingProject = () => {
+    // setIsLoading and addProjectToProjectsPage are used in this function
+    // to display the loading modal and pass the new project back to the
+    // projects page.
+    // This is done because the projects page does not re-render after the
+    // sync has taken place.
+    // As an alternative they could be removed and  we could make use of
+    // setIsSyncInProgress in a way that is consistent with other components.
     setIsLoading(true)
     databaseSwitchboardInstance
       .copyProject(project.id, formik.values.name, formik.values.sendEmail)
@@ -92,7 +99,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   const createNewProject = () => {
     setIsLoading(true)
     databaseSwitchboardInstance
-      .addNewProject(formik.values.name)
+      .addProject(formik.values.name)
       .then((response) => {
         handleSuccessResponse(response, language.success.projectCreated)
       })
@@ -104,7 +111,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   const handleOnSubmit = () => {
     project ? copyExistingProject() : createNewProject()
   }
-  const modalContent = (placeholderName) => {
+  const getModalContent = (placeholderName) => {
     return (
       <ModalInputRow>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -124,9 +131,9 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
       </ModalInputRow>
     )
   }
-  const switchBetweenModalContent = project ? (
+  const modalContent = project ? (
     <>
-      {modalContent('Name of project')}
+      {getModalContent('Name of project')}
 
       <ModalInputRow>
         <CheckBoxLabel>
@@ -140,24 +147,24 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           Notify users by email
         </CheckBoxLabel>
       </ModalInputRow>
-      <p>{language.projectModal.copyProjectMessage}</p>
+      <p>{language.projectModal.copyMessage}</p>
       <p>{language.projectModal.footerMessage}</p>
     </>
   ) : (
     <>
-      {modalContent()}
+      {getModalContent()}
       <p>{language.projectModal.footerMessage}</p>
     </>
   )
 
-  const switchBetweenMessages = project ? `Copy project` : `Create project`
+  const modalTitle = project ? language.projectModal.copyTitle : language.projectModal.createTitle
 
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
         <IconSend />
-        {switchBetweenMessages}
+        {modalTitle}
       </ButtonPrimary>
     </RightFooter>
   )
@@ -167,8 +174,8 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
       <Modal
         isOpen={isOpen}
         onDismiss={onDismiss}
-        title={language.projectModal.copyTitle}
-        mainContent={switchBetweenModalContent}
+        title={modalTitle}
+        mainContent={modalContent}
         footerContent={footerContent}
       />
       {isLoading && <LoadingModal />}

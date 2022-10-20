@@ -297,10 +297,10 @@ const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
 const projectModal = {
-  copyProjectMessage:
+  copyMessage:
     'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
   copyTitle: 'Copy Project',
-  createProjectTitle: 'Create Project',
+  createTitle: 'Create Project',
   footerMessage: 'You will be an admin for this project.',
 }
 
