@@ -367,6 +367,14 @@ const getValidationMessage = (validation, projectId = '') => {
   return (validationMessages[code] || validationMessages.default)()
 }
 
+const getSiteErrorMessage = (siteError) => {
+  const errorMessages = Object.entries(siteError)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n')
+
+  return `The site has not been saved.\n ${errorMessages}}`
+}
+
 export default {
   projectCodes,
   error,
@@ -384,4 +392,5 @@ export default {
   inlineMessage,
   projectModal,
   map,
+  getSiteErrorMessage,
 }

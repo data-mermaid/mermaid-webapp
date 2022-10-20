@@ -18,7 +18,7 @@ import { H2 } from '../../generic/text'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputAutocomplete from '../../generic/InputAutocomplete'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
-import { InputRow, InputWrapper } from '../../generic/form'
+import { InputRow, InputWrapper, RequiredIndicator } from '../../generic/form'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
 import LoadingModal from '../../LoadingModal/LoadingModal'
@@ -38,6 +38,7 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 import PageUnavailable from '../PageUnavailable'
+import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 
 const ReadOnlySiteContent = ({
   site,
@@ -97,9 +98,14 @@ const SiteForm = ({
           validationMessages={formik.errors.name}
           testId="name"
         />
-        <InputRow required data-testid="country-select">
+        <InputRow
+          validationType={formik.errors.country ? 'error' : null}
+          data-testid="country-select"
+        >
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label id="country-label">Country</label>
+          <label id="country-label">
+            Country <RequiredIndicator />{' '}
+          </label>
           <InputAutocomplete
             id="country"
             aria-labelledby="country-label"
@@ -109,6 +115,10 @@ const SiteForm = ({
             onChange={(selectedItem) => {
               formik.setFieldValue('country', selectedItem.value)
             }}
+          />
+          <InputValidationInfo
+            validationType={formik.errors.country ? 'error' : null}
+            validationMessages={formik.errors.country}
           />
         </InputRow>
         <InputWithLabelAndValidation
@@ -145,6 +155,8 @@ const SiteForm = ({
           id="exposure"
           options={exposureOptions}
           {...formik.getFieldProps('exposure')}
+          validationType={formik.errors.exposure ? 'error' : null}
+          validationMessages={formik.errors.exposure}
         />
         <InputRadioWithLabelAndValidation
           required
@@ -152,6 +164,8 @@ const SiteForm = ({
           id="reef_type"
           options={reefTypeOptions}
           {...formik.getFieldProps('reef_type')}
+          validationType={formik.errors.reef_type ? 'error' : null}
+          validationMessages={formik.errors.reef_type}
         />
         <InputRadioWithLabelAndValidation
           required
@@ -159,6 +173,8 @@ const SiteForm = ({
           id="reef_zone"
           options={reefZoneOptions}
           {...formik.getFieldProps('reef_zone')}
+          validationType={formik.errors.reef_zone ? 'error' : null}
+          validationMessages={formik.errors.reef_zone}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
@@ -269,9 +285,9 @@ const Site = ({ isNewSite }) => {
             history.push(`${ensureTrailingSlash(currentProjectPath)}sites/${response.id}`)
           }
         })
-        .catch(() => {
+        .catch((error) => {
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(...getToastArguments(language.error.siteSave))
+          toast.error(...getToastArguments(language.getSiteErrorMessage(error)))
         })
     },
     validate: (values) => {
@@ -280,6 +296,10 @@ const Site = ({ isNewSite }) => {
 
       if (!values.name) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      if (!values.country) {
+        errors.country = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       if (!values.latitude) {
@@ -298,6 +318,18 @@ const Site = ({ isNewSite }) => {
         errors.longitude = [
           { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
         ]
+      }
+
+      if (!values.exposure) {
+        errors.exposure = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      if (!values.reef_type) {
+        errors.reef_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
+
+      if (!values.reef_zone) {
+        errors.reef_zone = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
       return errors
@@ -340,15 +372,15 @@ const Site = ({ isNewSite }) => {
   const contentViewByReadOnlyRole = isNewSite ? (
     <PageUnavailable mainText={language.error.pageReadOnly} />
   ) : (
-      <ReadOnlySiteContent
-        site={formik.values}
-        countryOptions={countryOptions}
-        exposureOptions={exposureOptions}
-        reefTypeOptions={reefTypeOptions}
-        reefZoneOptions={reefZoneOptions}
-        isReadOnlyUser={isReadOnlyUser}
-        isAppOnline={isAppOnline}
-      />
+    <ReadOnlySiteContent
+      site={formik.values}
+      countryOptions={countryOptions}
+      exposureOptions={exposureOptions}
+      reefTypeOptions={reefTypeOptions}
+      reefZoneOptions={reefZoneOptions}
+      isReadOnlyUser={isReadOnlyUser}
+      isAppOnline={isAppOnline}
+    />
   )
 
   const contentViewByRole = isReadOnlyUser ? (
