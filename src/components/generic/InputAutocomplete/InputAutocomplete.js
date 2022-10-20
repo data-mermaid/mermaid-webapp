@@ -74,6 +74,7 @@ const InputAutocomplete = ({
       }
 
       if (inputValue === '') {
+        onChange('')
         setIsMenuOpen(false)
       }
     },
