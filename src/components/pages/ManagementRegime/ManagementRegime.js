@@ -304,9 +304,20 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             )
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          const errorTitle = language.getErrorTitle('management regime')
+          const errorLang = language.getErrorMessages(error)
+
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(language.error.managementRegimeSave)
+          toast.error(
+            ...getToastArguments(
+              <div>
+                {errorTitle}
+                <br />
+                {errorLang}
+              </div>,
+            ),
+          )
         })
     },
     validate: (values) => {

@@ -286,8 +286,19 @@ const Site = ({ isNewSite }) => {
           }
         })
         .catch((error) => {
+          const errorTitle = language.getErrorTitle('site')
+          const errorLang = language.getErrorMessages(error)
+
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(...getToastArguments(language.getSiteErrorMessage(error)))
+          toast.error(
+            ...getToastArguments(
+              <div>
+                {errorTitle}
+                <br />
+                {errorLang}
+              </div>,
+            ),
+          )
         })
     },
     validate: (values) => {
