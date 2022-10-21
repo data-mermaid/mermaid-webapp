@@ -133,7 +133,12 @@ describe('Online', () => {
   test('new site save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    dexiePerUserDataInstance.project_sites.put = () => Promise.reject()
+    const mockSiteErrorData = {
+      name: 'This field may not be blank.',
+      country: 'This field is required.',
+    }
+
+    dexiePerUserDataInstance.project_sites.put = () => Promise.reject(mockSiteErrorData)
 
     renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/sites/new'],
@@ -143,7 +148,9 @@ describe('Online', () => {
 
     await saveSite()
 
-    expect(await screen.findByText('Something went wrong. The site has not been saved.'))
+    expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
+      `The site has not been saved. name: This field may not be blank. country: This field is required.`,
+    )
 
     // ensure the were not in edit mode, but new site mode
     expect(

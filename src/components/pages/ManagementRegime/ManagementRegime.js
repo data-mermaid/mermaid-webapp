@@ -311,7 +311,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           setSaveButtonState(buttonGroupStates.unsaved)
           toast.error(
             ...getToastArguments(
-              <div>
+              <div data-testid="management-regime-toast-error">
                 {errorTitle}
                 <br />
                 {errorLang}

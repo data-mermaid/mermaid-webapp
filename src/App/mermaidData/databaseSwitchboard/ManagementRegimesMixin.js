@@ -135,6 +135,8 @@ const ManagementRegimesMixin = (Base) =>
       })
 
       if (this._isOnlineAuthenticatedAndReady) {
+        await this._dexiePerUserDataInstance.project_managements.put(managementToSubmit)
+
         return axios
           .post(
             `${this._apiBaseUrl}/push/`,

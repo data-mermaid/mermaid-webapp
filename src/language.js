@@ -367,7 +367,7 @@ const getValidationMessage = (validation, projectId = '') => {
   return (validationMessages[code] || validationMessages.default)()
 }
 
-const getErrorTitle = (page) => `The ${page} has not been saved.`
+const getErrorTitle = (page) => `The ${page} has not been saved. `
 
 const getErrorMessages = (pageError) => {
   return Object.entries(pageError)

@@ -99,10 +99,15 @@ test('Offline: edit site save stored site in dexie', async () => {
 test('Offline: Edit site  save failure shows toast message with new edits persisting', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
+  const mockSiteErrorData = {
+    name: 'This field may not be blank.',
+    country: 'This field is required.',
+  }
+
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   // make sure the next save will fail
-  dexiePerUserDataInstance.project_sites.put = jest.fn().mockRejectedValueOnce()
+  dexiePerUserDataInstance.project_sites.put = jest.fn().mockRejectedValueOnce(mockSiteErrorData)
 
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -124,7 +129,10 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
     }),
   )
 
-  expect(await screen.findByText('Something went wrong. The site has not been saved.'))
+  // expect(await screen.findByText('Something went wrong. The site has not been saved.'))
+  expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
+    `The site has not been saved. name: This field may not be blank. country: This field is required.`,
+  )
 
   expect(siteNameInput).toHaveValue('OOF')
 })

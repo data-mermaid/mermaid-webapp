@@ -116,6 +116,9 @@ const SitesMixin = (Base) =>
       const siteToSubmit = this.#getSiteReadyForPush({ site, projectId })
 
       if (this._isOnlineAuthenticatedAndReady) {
+        // Add to IDB in case the there are network issues before the API responds
+        await this._dexiePerUserDataInstance.project_sites.put(siteToSubmit)
+
         return axios
           .post(
             `${this._apiBaseUrl}/push/`,
