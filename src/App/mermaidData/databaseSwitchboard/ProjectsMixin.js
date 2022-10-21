@@ -193,7 +193,7 @@ const ProjectsMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    addNewProject = async function addNewProject(newProjectName) {
+    addProject = async function addProject(newProjectName) {
       if (this._isAuthenticatedAndReady) {
         return axios
           .post(
