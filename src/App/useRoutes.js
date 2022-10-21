@@ -1,15 +1,15 @@
 import React from 'react'
-import Admin from '../components/pages/Admin'
 import Collect from '../components/pages/Collect'
-import Data from '../components/pages/Data'
 import DataSharing from '../components/pages/DataSharing'
 import FishFamilies from '../components/pages/FishFamilies'
 import GraphsAndMaps from '../components/pages/GraphsAndMaps'
 import ManagementRegimes from '../components/pages/ManagementRegimes'
 import ManagementRegime from '../components/pages/ManagementRegime'
+import ProjectInfo from '../components/pages/ProjectInfo'
 import Projects from '../components/pages/Projects'
 import Sites from '../components/pages/Sites'
 import Site from '../components/pages/Site'
+import Submitted from '../components/pages/Submitted'
 import Users from '../components/pages/Users'
 import UsersAndTransects from '../components/pages/UsersAndTransects'
 import ManagementRegimesOverview from '../components/pages/ManagementRegimesOverview'
@@ -25,11 +25,11 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <Projects apiSyncInstance={apiSyncInstance} />,
     },
     {
-      path: '/projects/:projectId/usersandtransects',
+      path: '/projects/:projectId/users-and-transects',
       Component: UsersAndTransects,
     },
     {
-      path: '/projects/:projectId/managementregimesoverview',
+      path: '/projects/:projectId/management-regimes-overview',
       Component: ManagementRegimesOverview,
     },
     {
@@ -45,11 +45,11 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <FishBeltForm isNewRecord={false} />,
     },
     {
-      path: '/projects/:projectId/collecting/benthicpqt',
+      path: '/projects/:projectId/collecting/benthic-photo-quadrat',
       Component: () => <BenthicPhotoQuadratForm isNewRecord={true} />,
     },
     {
-      path: '/projects/:projectId/collecting/benthicpqt/:recordId',
+      path: '/projects/:projectId/collecting/benthic-photo-quadrat/:recordId',
       Component: () => <BenthicPhotoQuadratForm isNewRecord={false} />,
     },
     {
@@ -73,20 +73,20 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <> Placeholder create bleaching collect record page </>,
     },
     {
-      path: '/projects/:projectId/data',
-      Component: Data,
+      path: '/projects/:projectId/submitted',
+      Component: Submitted,
     },
     {
-      path: '/projects/:projectId/data/fishbelt/:submittedRecordId',
+      path: '/projects/:projectId/submitted/fishbelt/:submittedRecordId',
       Component: () => <SubmittedFishBelt />,
     },
     {
-      path: '/projects/:projectId/data/benthicpqt/:submittedRecordId',
+      path: '/projects/:projectId/submitted/benthic-photo-quadrat/:submittedRecordId',
       Component: () => <SubmittedBenthicPhotoQuadrat />,
     },
     {
-      path: '/projects/:projectId/admin',
-      Component: () => <Admin />,
+      path: '/projects/:projectId/project-info',
+      Component: () => <ProjectInfo />,
     },
 
     {

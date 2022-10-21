@@ -11,7 +11,7 @@ const SampleUnitLinks = ({ rowRecord, sampleUnitNumbersRow }) => {
   const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
     return (
       <span key={row.id}>
-        <Link to={`${currentProjectPath}/data/${rowRecord.sample_unit_protocol}/${row.id}`}>
+        <Link to={`${currentProjectPath}/submitted/${rowRecord.sample_unit_protocol}/${row.id}`}>
           {row.label}
         </Link>
         {idx < sampleUnitNumbersRow.length - 1 && ', '}

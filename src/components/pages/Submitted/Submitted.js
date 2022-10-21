@@ -28,7 +28,7 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
-import DataToolbarSection from './DataToolbarSection'
+import SubmittedToolbarSection from './SubmittedToolbarSection'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import useDocumentTitle from '../../../library/useDocumentTitle'
@@ -47,7 +47,7 @@ const getTransectReportProperties = (transect) => {
   }[transect]
 }
 
-const Data = () => {
+const Submitted = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -139,7 +139,7 @@ const Data = () => {
     () =>
       submittedRecordsForUiDisplay.map(({ id, protocol, uiLabels }) => ({
         method: (
-          <Link to={`${currentProjectPath}/data/${protocol}/${id}`}>{uiLabels.protocol}</Link>
+          <Link to={`${currentProjectPath}/submitted/${protocol}/${id}`}>{uiLabels.protocol}</Link>
         ),
         site: uiLabels.site,
         management: uiLabels.management,
@@ -316,7 +316,7 @@ const Data = () => {
     <PageUnavailable mainText={language.error.pageUnavailableOffline} />
   )
   const toolbar = isAppOnline ? (
-    <DataToolbarSection
+    <SubmittedToolbarSection
       name={language.pages.submittedTable.filterToolbarText}
       handleGlobalFilterChange={handleGlobalFilterChange}
       handleExportToCSV={handleExportToCSV}
@@ -336,4 +336,4 @@ const Data = () => {
   )
 }
 
-export default Data
+export default Submitted
