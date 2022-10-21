@@ -301,50 +301,50 @@ const Site = ({ isNewSite }) => {
           )
         })
     },
-    // validate: (values) => {
-    //   persistUnsavedFormikData(values)
-    //   const errors = {}
+    validate: (values) => {
+      persistUnsavedFormikData(values)
+      const errors = {}
 
-    //   if (!values.name) {
-    //     errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
-    //   }
+      if (!values.name) {
+        errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-    //   if (!values.country) {
-    //     errors.country = [{ code: language.error.formValidation.required, id: 'Required' }]
-    //   }
+      if (!values.country) {
+        errors.country = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-    //   if (!values.latitude) {
-    //     errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
-    //   }
+      if (!values.latitude) {
+        errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-    //   if (values.latitude > 90 || values.latitude < -90) {
-    //     errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
-    //   }
+      if (values.latitude > 90 || values.latitude < -90) {
+        errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
+      }
 
-    //   if (!values.longitude) {
-    //     errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
-    //   }
+      if (!values.longitude) {
+        errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-    //   if (values.longitude > 180 || values.longitude < -180) {
-    //     errors.longitude = [
-    //       { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
-    //     ]
-    //   }
+      if (values.longitude > 180 || values.longitude < -180) {
+        errors.longitude = [
+          { code: language.error.formValidation.longitude, id: 'Invalid Longitude' },
+        ]
+      }
 
-    //   if (!values.exposure) {
-    //     errors.exposure = [{ code: language.error.formValidation.required, id: 'Required' }]
-    //   }
+      if (!values.exposure) {
+        errors.exposure = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-    //   if (!values.reef_type) {
-    //     errors.reef_type = [{ code: language.error.formValidation.required, id: 'Required' }]
-    //   }
+      if (!values.reef_type) {
+        errors.reef_type = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-    //   if (!values.reef_zone) {
-    //     errors.reef_zone = [{ code: language.error.formValidation.required, id: 'Required' }]
-    //   }
+      if (!values.reef_zone) {
+        errors.reef_zone = [{ code: language.error.formValidation.required, id: 'Required' }]
+      }
 
-    //   return errors
-    // },
+      return errors
+    },
   })
 
   useDocumentTitle(
