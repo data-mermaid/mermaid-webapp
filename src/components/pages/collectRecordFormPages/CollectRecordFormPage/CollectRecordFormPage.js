@@ -59,6 +59,8 @@ import {
   getRecordSampleUnit,
   getIsFishBelt,
 } from '../../../../App/mermaidData/recordProtocolHelpers'
+import { useScrollCheckError } from '../../../../library/useScrollCheckError'
+import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
 
 const CollectRecordFormPage = ({
   isNewRecord,
@@ -104,6 +106,8 @@ const CollectRecordFormPage = ({
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
     submitButtonState === buttonGroupStates.submitting
+
+  const { isErrorAbove, isErrorBelow } = useScrollCheckError()
 
   const getValidationButtonStatus = (collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
@@ -585,6 +589,13 @@ const CollectRecordFormPage = ({
     />
   )
 
+  const errorBoxContent = (
+    <ErrorBox>
+      {<ErrorText isErrorShown={isErrorAbove}>There are warnings/errors above</ErrorText>}
+      {<ErrorText isErrorShown={isErrorBelow}>There are warnings/errors below</ErrorText>}
+    </ErrorBox>
+  )
+
   const contentViewByRole = !isReadOnlyUser ? (
     <>
       <RecordLevelInputValidationInfo
@@ -629,6 +640,7 @@ const CollectRecordFormPage = ({
         <div ref={observationTableRef}>{observationTable}</div>
       </form>
       <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
+      {errorBoxContent}
     </>
   ) : (
     <PageUnavailable mainText={language.error.pageReadOnly} />
