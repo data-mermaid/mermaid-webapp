@@ -36,7 +36,6 @@ export class StaticSite extends Construct {
 
     // Content bucket
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
-      bucketName: siteDomain,
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 
@@ -77,12 +76,13 @@ export class StaticSite extends Construct {
       defaultRootObject: "index.html",
       domainNames: [siteDomain],
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+      // if you do a hard refresh, then the app goes to an error page. We need it to
+      // redirect to index.html
       errorResponses: [
         {
-          httpStatus: 403,
-          responseHttpStatus: 403,
-          responsePagePath: '/error.html',
-          ttl: Duration.minutes(30),
+          httpStatus: 200,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
         }
       ],
       defaultBehavior: {
