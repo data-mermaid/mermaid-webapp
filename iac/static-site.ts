@@ -77,14 +77,14 @@ export class StaticSite extends Construct {
       defaultRootObject: "index.html",
       domainNames: [siteDomain],
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      // errorResponses: [
-      //   {
-      //     httpStatus: 403,
-      //     responseHttpStatus: 403,
-      //     responsePagePath: '/error.html',
-      //     ttl: Duration.minutes(30),
-      //   }
-      // ],
+      errorResponses: [
+        {
+          httpStatus: 403,
+          responseHttpStatus: 403,
+          responsePagePath: '/error.html',
+          ttl: Duration.minutes(30),
+        }
+      ],
       defaultBehavior: {
         origin: new cloudfront_origins.S3Origin(siteBucket, { originAccessIdentity: cloudfrontOAI }),
         compress: true,
