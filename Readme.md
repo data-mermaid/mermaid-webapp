@@ -1,5 +1,10 @@
 # Mermaid Webapp
 
+## Requirements
+
+- yarn (`v1.22`)
+- node 16 (`lts/gallium`)
+
 ## Steps to Set Up Development Environment
 
 1. Set up a local Mermaid back end
