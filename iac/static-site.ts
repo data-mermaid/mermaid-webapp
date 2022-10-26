@@ -80,8 +80,7 @@ export class StaticSite extends Construct {
       // redirect to index.html
       errorResponses: [
         {
-          httpStatus: 200,
-          responseHttpStatus: 200,
+          httpStatus: 400,
           responsePagePath: '/index.html',
         }
       ],
