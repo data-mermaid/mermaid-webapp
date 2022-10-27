@@ -50,11 +50,15 @@ jobs:
         uses: actions/cache@v3
         with:
           path: build
-          key: ${{ runner.os }}-build_cache-${{ github.sha }}
+          key: ${{ runner.os }}-build_cache-${{ hashFiles('build/asset-manifest.json') }}
           restore-keys: |
             ${{ runner.os }}-build_cache-
             ${{ runner.os }}-build_cache-
             ${{ runner.os }}-
+      
+      - if: ${{ steps.build_cache.outputs.cache-hit != 'true' }}
+        name: Yarn Build
+        run: yarn build
 
       - name: CDK Diff
         env:
