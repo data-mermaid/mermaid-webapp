@@ -36,23 +36,18 @@ jobs:
         run: |
           yarn install
 
-      - name: Run Unit Tests
-        run: |
-          yarn test
+      # - name: Run Unit Tests
+      #   run: |
+      #     yarn test
 
       - name: Yarn Build
         run: |
           yarn build
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
-          aws-region: us-east-1
-
       - name: CDK Diff
         env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
           CDK_DEFAULT_ACCOUNT: "${{ secrets.CDK_DEFAULT_ACCOUNT }}"
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_EVENT_PATH: ${{ github.event_path }}
