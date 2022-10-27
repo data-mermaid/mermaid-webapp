@@ -68,7 +68,7 @@ export class StaticSite extends Construct {
       region: 'us-east-1', // Cloudfront only checks this region for certificates.
     })
 
-    new CfnOutput(this, 'Certificate', { value: certificate.certificateArn })
+    new CfnOutput(this, 'CertificateArn', { value: certificate.certificateArn })
 
     // CloudFront distribution
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
