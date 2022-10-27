@@ -1,0 +1,62 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+env:
+  REACT_APP_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
+  REACT_APP_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
+  REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
+  REACT_APP_MERMAID_API: https://dev.api2.datamermaid.org/v1
+  REACT_APP_MERMAID_REFERENCE_LINK: https://dev-collect.datamermaid.org/#/reference
+  REACT_APP_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
+  REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
+
+jobs:
+  cdk-diff:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Cache Node Modules
+        id: yarn_cache
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-v1-${{ hashFiles('yarn.lock') }}
+
+      - name: Yarn Install
+        if: steps.yarn_cache.outputs.cache-hit != 'true'
+        run: |
+          yarn install
+
+      - name: Run Unit Tests
+        run: |
+          yarn test
+
+      - name: Yarn Build
+        run: |
+          yarn build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
+          aws-region: us-east-1
+
+      - name: CDK Diff
+        env:
+          CDK_DEFAULT_ACCOUNT: "${{ secrets.CDK_DEFAULT_ACCOUNT }}"
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+        run: |
+          cd iac && ./cdk_diff.sh
