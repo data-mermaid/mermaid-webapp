@@ -7,7 +7,7 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront'
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment'
 import * as targets from 'aws-cdk-lib/aws-route53-targets'
 import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins'
-import { CfnOutput, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib'
+import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib'
 import * as iam from 'aws-cdk-lib/aws-iam'
 import { Construct } from 'constructs'
 
@@ -28,14 +28,14 @@ export class StaticSite extends Construct {
 
     const zone = route53.HostedZone.fromLookup(this, 'Zone', { domainName: props.domainName })
     const siteDomain = `${props.siteSubDomain}.${props.domainName}`
-    const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'cloudfront-OAI', {
+    const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudfrontOAI', {
       comment: `OAI for ${name}`
     })
 
     new CfnOutput(this, 'Site', { value: `https://${siteDomain}` })
 
     // Content bucket
-    const siteBucket = new s3.Bucket(this, 'SiteBucket', {
+    const siteBucket = new s3.Bucket(this, 'Bucket', {
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 
@@ -59,10 +59,10 @@ export class StaticSite extends Construct {
       resources: [siteBucket.arnForObjects('*')],
       principals: [new iam.CanonicalUserPrincipal(cloudfrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId)]
     }))
-    new CfnOutput(this, 'Bucket', { value: siteBucket.bucketName })
+    new CfnOutput(this, 'BucketName', { value: siteBucket.bucketName })
 
     // TLS certificate
-    const certificate = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
+    const certificate = new acm.DnsValidatedCertificate(this, 'Certificate', {
       domainName: siteDomain,
       hostedZone: zone,
       region: 'us-east-1', // Cloudfront only checks this region for certificates.
@@ -71,7 +71,7 @@ export class StaticSite extends Construct {
     new CfnOutput(this, 'Certificate', { value: certificate.certificateArn })
 
     // CloudFront distribution
-    const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
+    const distribution = new cloudfront.Distribution(this, 'Distribution', {
       certificate,
       defaultRootObject: "index.html",
       domainNames: [siteDomain],
@@ -96,7 +96,7 @@ export class StaticSite extends Construct {
     new CfnOutput(this, 'DistributionId', { value: distribution.distributionId })
 
     // Route53 alias record for the CloudFront distribution
-    new route53.ARecord(this, 'SiteAliasRecord', {
+    new route53.ARecord(this, 'AliasRecord', {
       recordName: siteDomain,
       target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
       zone

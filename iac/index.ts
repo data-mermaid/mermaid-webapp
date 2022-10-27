@@ -20,12 +20,12 @@ class StaticSiteStack extends cdk.Stack {
     }
 }
 
+const app = new cdk.App()
+
 const tags = {
   "Owner": "sysadmin@datamermaid.org",
 }
-
-const app = new cdk.App()
-
+const siteSubDomain = app.node.tryGetContext('subdomain') || 'dev'
 const cdkEnv = {
   account: app.node.tryGetContext('accountId'),
   /**
@@ -35,7 +35,7 @@ const cdkEnv = {
   region: 'us-east-1',
 }
 
-new StaticSiteStack(app, 'Webapp', {
+new StaticSiteStack(app, `${siteSubDomain}-webapp`, {
     /**
      * env is required for our use of hosted-zone lookup.
      *
