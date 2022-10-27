@@ -1,0 +1,49 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - develop
+    tags:
+      - 'w[0-9]+.[0-9]+'        # eg: v1.1
+      - 'w[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
+
+concurrency:
+  group: ci-pre-release-${{ github.ref }}-1
+  cancel-in-progress: true
+
+env:
+  REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
+  REACT_APP_MERMAID_REFERENCE_LINK: https://dev-collect.datamermaid.org/#/reference
+  REACT_APP_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
+  REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
+
+jobs:
+  deps-cache:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: yarn install --frozen-lockfile
+  
+  call-cdk-deploy:
+    needs: [deps-cache]
+    uses: ./.github/workflows/_cdk-deploy.yml
