@@ -15,7 +15,8 @@ env:
   REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
 
 jobs:
-  cdk-diff:
+
+  deps:
     runs-on: ubuntu-20.04
 
     steps:
@@ -24,34 +25,86 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Cache Node Modules
+      - name: &node_cache Fetch node_modules cache
         id: yarn_cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
+        env:
+          cache-name: node-modules-cache
         with:
           path: node_modules
-          key: ${{ runner.os }}-v1-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
-      - name: Yarn Install
-        if: steps.yarn_cache.outputs.cache-hit != 'true'
-        run: |
-          yarn install
+      - if: ${{ steps.yarn_cache.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: yarn install
 
-      # - name: Run Unit Tests
-      #   run: |
-      #     yarn test
+  build:
+    needs: deps
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: *node_cache
 
       - name: Yarn Build
-        run: |
-          yarn build
+        run: yarn build
 
-      - name: CDK Diff
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
-          CDK_DEFAULT_ACCOUNT: "${{ secrets.CDK_DEFAULT_ACCOUNT }}"
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_WORKFLOW: ${{ github.workflow }}
-        run: |
-          cd iac && ./cdk_diff.sh
+      # - name: Archive build artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: Build dir
+      #     path: build
+
+  # test:
+  #   needs: deps
+  #   runs-on: ubuntu-20.04
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version-file: '.nvmrc'
+
+  #     - name: Fetch node_modules Cache
+  #       id: yarn_cache
+  #       uses: actions/cache@v3
+  #       env:
+  #         cache-name: node-modules-cache
+  #       with:
+  #         path: node_modules
+  #         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('yarn.lock') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-build-${{ env.cache-name }}-
+  #           ${{ runner.os }}-build-
+  #           ${{ runner.os }}-
+
+  #     - name: Run Unit Tests
+  #       run: yarn test
+
+
+  # cdk-diff:
+  #   needs: build
+  #   runs-on: ubuntu-20.04
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - name: CDK Diff
+  #       env:
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
+  #         CDK_DEFAULT_ACCOUNT: "${{ secrets.CDK_DEFAULT_ACCOUNT }}"
+  #         GITHUB_EVENT_NAME: ${{ github.event_name }}
+  #         GITHUB_EVENT_PATH: ${{ github.event_path }}
+  #         GITHUB_TOKEN: ${{ github.token }}
+  #         GITHUB_WORKFLOW: ${{ github.workflow }}
+  #       run: |
+  #         cd iac && ./cdk_diff.sh
