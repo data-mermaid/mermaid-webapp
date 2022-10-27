@@ -14,6 +14,13 @@ import { SyncStatusProvider } from './App/mermaidData/syncApiDataIntoOfflineStor
 import dexieCurrentUserInstance from './App/dexieCurrentUserInstance'
 import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstanceContext'
 
+if (process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line import/no-extraneous-dependencies, global-require
+  const axe = require('@axe-core/react')
+
+  axe(React, ReactDOM, 1000)
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <Auth0Provider

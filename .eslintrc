@@ -1,11 +1,13 @@
 {
   "extends": [
     "@sparkgeo/eslint-config-react",
-    "plugin:testing-library/recommended",
+    "plugin:jest-dom/recommended",
+    "plugin:jsx-a11y/strict",
+    "plugin:styled-components-a11y/recommended",
     "plugin:testing-library/react",
-    "plugin:jest-dom/recommended"
+    "plugin:testing-library/recommended"
   ],
-  "plugins": ["react-hooks"],
+  "plugins": ["react-hooks", "jsx-a11y", "styled-components-a11y"],
   "rules": {
     "camelcase": "off",
     "curly": ["error", "all"],
@@ -27,5 +29,10 @@
       "files": ["*.stories.js", "src/testUtilities/**/*"],
       "rules": { "import/no-extraneous-dependencies": "off" }
     }
-  ]
+  ],
+  "settings": {
+    "jsx-a11y": {
+      "components": {}
+    }
+  }
 }
