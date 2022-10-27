@@ -1,0 +1,93 @@
+name: Build & Test
+
+on:
+  push:
+
+jobs:
+
+  deps:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Fetch node_cache
+        id: node_cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_cache-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_cache-
+            ${{ runner.os }}-node_cache-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.node_cache.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: yarn install
+
+  build:
+    needs: deps
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Fetch node_cache
+        id: node_cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_cache-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_cache-
+            ${{ runner.os }}-node_cache-
+            ${{ runner.os }}-
+
+      - name: Fetch build_cache
+        id: build_cache
+        uses: actions/cache@v3
+        with:
+          path: build
+          key: ${{ runner.os }}-build_cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build_cache-
+            ${{ runner.os }}-build_cache-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.build_cache.outputs.cache-hit != 'true' }}
+        name: Yarn Build
+        run: yarn build
+
+  test:
+    needs: deps
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Fetch node_cache
+        id: node_cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_cache-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_cache-
+            ${{ runner.os }}-node_cache-
+            ${{ runner.os }}-
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Run Unit Tests
+        run: yarn test
