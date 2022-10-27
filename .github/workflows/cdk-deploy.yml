@@ -1,6 +1,10 @@
-name: Build & Deploy
+name: CDK Deploy
 
 on:
+  workflow_run:
+    workflows: [Build, Test]
+    types:
+      - completed
   push:
     branches:
       - develop
@@ -15,7 +19,7 @@ env:
   REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-20.04
 
     steps:
@@ -24,25 +28,32 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Cache Node Modules
-        id: yarn_cache
-        uses: actions/cache@v2
+      - name: Fetch iac_node_cache
+        id: iac_node_cache
+        uses: actions/cache@v3
         with:
-          path: node_modules
-          key: ${{ runner.os }}-v1-${{ hashFiles('yarn.lock') }}
+          path: iac/node_modules
+          key: ${{ runner.os }}-iac_node_cache-${{ hashFiles('iac/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-iac_node_cache-
+            ${{ runner.os }}-iac_node_cache-
+            ${{ runner.os }}-
 
-      - name: Yarn Install
-        if: steps.yarn_cache.outputs.cache-hit != 'true'
-        run: |
-          yarn install
+      - if: ${{ steps.iac_node_cache.outputs.cache-hit != 'true' }}
+        name: Install CDK Dependencies
+        working-directory: iac
+        run: yarn install
 
-      - name: Run Unit Tests
-        run: |
-          yarn test
-
-      - name: Yarn Build
-        run: |
-          yarn build
+      - name: Fetch build_cache
+        id: build_cache
+        uses: actions/cache@v3
+        with:
+          path: build
+          key: ${{ runner.os }}-build_cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build_cache-
+            ${{ runner.os }}-build_cache-
+            ${{ runner.os }}-
 
       - name: Set target for dev
         if: startsWith(github.ref, 'refs/heads/develop')

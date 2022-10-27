@@ -1,0 +1,70 @@
+name: CDK Diff
+
+on:
+  workflow_run:
+    workflows: [Build]
+    types:
+      - completed
+  pull_request:
+    branches:
+      - develop
+
+env:
+  REACT_APP_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
+  REACT_APP_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
+  REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
+  REACT_APP_MERMAID_API: https://dev.api2.datamermaid.org/v1
+  REACT_APP_MERMAID_REFERENCE_LINK: https://dev-collect.datamermaid.org/#/reference
+  REACT_APP_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
+  REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
+
+jobs:
+
+  cdk-diff:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Fetch iac_node_cache
+        id: iac_node_cache
+        uses: actions/cache@v3
+        with:
+          path: iac/node_modules
+          key: ${{ runner.os }}-iac_node_cache-${{ hashFiles('iac/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-iac_node_cache-
+            ${{ runner.os }}-iac_node_cache-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.iac_node_cache.outputs.cache-hit != 'true' }}
+        name: Install CDK Dependencies
+        working-directory: iac
+        run: yarn install
+
+      - name: Fetch build_cache
+        id: build_cache
+        uses: actions/cache@v3
+        with:
+          path: build
+          key: ${{ runner.os }}-build_cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build_cache-
+            ${{ runner.os }}-build_cache-
+            ${{ runner.os }}-
+
+      - name: CDK Diff
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
+          CDK_DEFAULT_ACCOUNT: "${{ secrets.CDK_DEFAULT_ACCOUNT }}"
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+        working-directory: iac
+        run: |
+          ./cdk_diff.sh
