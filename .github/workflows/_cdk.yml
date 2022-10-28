@@ -59,8 +59,7 @@ jobs:
 
       # Setup TARGET
       - name: Set target for dev
-        if: |
-          (startsWith(github.base_ref, 'refs/heads/develop') && github.event == 'pull_request') || startsWith(github.ref, 'refs/heads/develop')
+        if: (startsWith(github.base_ref, 'refs/heads/develop') && github.event == 'pull_request') || startsWith(github.ref, 'refs/heads/develop')
         run: |
           echo "TARGET=dev" >> "$GITHUB_ENV"
           echo "AUTH0_CLIENT_ID=4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5" >> "$GITHUB_ENV"

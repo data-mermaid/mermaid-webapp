@@ -9,8 +9,7 @@ on:
       - ready_for_review
       - converted_to_draft
     branches:
-      # - develop
-      - M1701-test-target
+      - develop
 
 # Saving Computation Time by Stopping Obsolete Workflows
 concurrency:
@@ -18,37 +17,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # deps-cache:
-  #   if: github.event.pull_request.draft == false
-  #   runs-on: ubuntu-20.04
+  deps-cache:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-20.04
 
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version-file: '.nvmrc'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
 
-  #     - uses: actions/cache@v3
-  #       id: yarn-cache
-  #       with:
-  #         path: node_modules
-  #         key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
 
-  #     - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
-  #       name: Install dependencies
-  #       run: yarn install --frozen-lockfile
+      - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-  # call-lint:
-  #   if: github.event.pull_request.draft == false
-  #   needs: [deps-cache]
-  #   uses: ./.github/workflows/_lint.yml
+  call-lint:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache]
+    uses: ./.github/workflows/_lint.yml
   
-  # call-test:
-  #   if: github.event.pull_request.draft == false
-  #   needs: [call-lint]
-  #   uses: ./.github/workflows/_test.yml
+  call-test:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache]
+    uses: ./.github/workflows/_test.yml
 
   # call-preview:
   #   if: github.event.pull_request.draft == false
@@ -57,7 +54,7 @@ jobs:
 
   call-cdk-diff:
     if: github.event.pull_request.draft == false
-    # needs: [deps-cache]
+    needs: [deps-cache]
     uses: ./.github/workflows/_cdk.yml
     with:
       cdk_subcommand: diff

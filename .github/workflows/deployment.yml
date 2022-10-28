@@ -9,18 +9,14 @@ on:
       - 'w[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
 
 concurrency:
-  group: ci-pre-release-${{ github.ref }}-1
+  group: ci-deployment-${{ github.ref }}
   cancel-in-progress: true
-
-env:
-  REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
-  REACT_APP_MERMAID_REFERENCE_LINK: https://dev-collect.datamermaid.org/#/reference
-  REACT_APP_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
-  REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
 
 jobs:
   deps-cache:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-20.04
+
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -38,7 +34,21 @@ jobs:
       - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         name: Install dependencies
         run: yarn install --frozen-lockfile
+
+  call-lint:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache]
+    uses: ./.github/workflows/_lint.yml
   
+  call-test:
+    if: github.event.pull_request.draft == false
+    needs: [call-lint]
+    uses: ./.github/workflows/_test.yml
+
   call-cdk-deploy:
     needs: [deps-cache]
-    uses: ./.github/workflows/_cdk-deploy.yml
+    uses: ./.github/workflows/_cdk.yml
+    with:
+      cdk_subcommand: deploy
+    secrets: inherit
+  
