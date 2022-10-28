@@ -68,4 +68,5 @@ jobs:
     if: github.event.pull_request.draft == false
     needs: [deps-cache]
     uses: ./.github/workflows/_cdk-diff.yml
+    secrets: inherit
   
