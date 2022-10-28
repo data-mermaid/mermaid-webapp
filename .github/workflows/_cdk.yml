@@ -1,6 +1,11 @@
-name: CDK Diff
+name: CDK
 
-on: workflow_call
+on: 
+  workflow_call:
+    inputs: 
+      cdk_subcommand:
+        required: true
+        type: string
 
 env:
   REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
@@ -16,9 +21,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-
-      # - name: Install CDK
-      #   run: npm install -g aws-cdk
 
       - name: Fetch yarn cache
         uses: actions/cache@v3
@@ -57,7 +59,9 @@ jobs:
 
       # Setup TARGET
       - name: Set target for dev
-        # if: startsWith(github.base_ref, 'refs/heads/develop')
+        if: |
+          (startsWith(github.base_ref, 'refs/heads/develop') && github.event == 'pull_request') || \
+          startsWith(github.ref, 'refs/heads/develop')
         run: |
           echo "TARGET=dev" >> "$GITHUB_ENV"
           echo "AUTH0_CLIENT_ID=4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5" >> "$GITHUB_ENV"
@@ -71,8 +75,11 @@ jobs:
       - name: CDK Diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
-          cdk_subcommand: diff
-          cdk_args: -c domain=app2.datamermaid.org -c subdomain=${{ env.TARGET }}
+          cdk_subcommand: ${{ inputs.config-path }}
+          cdk_args: |
+            --require-approval never \
+            -c domain=app2.datamermaid.org \
+            -c subdomain=${{ env.TARGET }}
           actions_comment: true
           working_dir: iac
         env:
@@ -85,24 +92,3 @@ jobs:
           REACT_APP_MERMAID_API: "https://${{ env.TARGET }}.api2.datamermaid.org/v1"
           REACT_APP_AUTH0_AUDIENCE: "https://${{ env.TARGET }}-api.datamermaid.org"
           REACT_APP_AUTH0_CLIENT_ID: "${{ env.AUTH0_CLIENT_ID }}"
-
-      # Diff
-      # - name: CDK Diff
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
-      #     CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-      #     # 
-      #     GITHUB_EVENT_NAME: ${{ github.event_name }}
-      #     GITHUB_EVENT_PATH: ${{ github.event_path }}
-      #     GITHUB_TOKEN: ${{ github.token }}
-      #     GITHUB_WORKFLOW: ${{ github.workflow }}
-      #     # 
-      #     REACT_APP_MERMAID_API: "https://${{ env.TARGET }}.api2.datamermaid.org/v1"
-      #     REACT_APP_AUTH0_AUDIENCE: "https://${{ env.TARGET }}-api.datamermaid.org"
-      #     REACT_APP_AUTH0_CLIENT_ID: "${{ env.AUTH0_CLIENT_ID }}"
-      #   working-directory: iac
-      #   run: |
-      #     cdk diff -c domain=app2.datamermaid.org -c subdomain=${{ env.TARGET }}
-
-# ./cdk_diff.sh
