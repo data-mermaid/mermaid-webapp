@@ -1,7 +1,7 @@
 function diff(){
-	echo "Run cdk diff - ${GITHUB_EVENT_NAME}"
+	echo "Run cdk diff - ${TARGET}"
 	set -o pipefail
-	npm run cdk -- diff -c domain=app2.datamermaid.org -c subdomain=dev -c accountId="${CDK_DEFAULT_ACCOUNT}" 2>&1 | tee output.log
+	npm run cdk -- diff -c domain=app2.datamermaid.org -c subdomain=dev 2>&1 | tee output.log
 	exitCode=${?}
 	set +o pipefail
 	echo ::set-output name=status_code::${exitCode}

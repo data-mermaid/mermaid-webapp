@@ -7,7 +7,7 @@ import { StaticSite } from './static-site'
 
 /**
  * This stack relies on getting the domain name from CDK context.
- * Use 'cdk --profile mermaid synth -c domain=app2.datamermaid.org -c subdomain=dev -c accountId=1234567890'
+ * Use 'cdk [--profile mermaid] synth -c domain=app2.datamermaid.org -c subdomain=dev'
 **/
 class StaticSiteStack extends cdk.Stack {
     constructor(parent: cdk.App, name: string, props: cdk.StackProps) {
@@ -26,23 +26,13 @@ const tags = {
   "Owner": "sysadmin@datamermaid.org",
 }
 const siteSubDomain = app.node.tryGetContext('subdomain') || 'dev'
+
 const cdkEnv = {
-  account: app.node.tryGetContext('accountId'),
-  /**
-   * Stack must be in us-east-1, because the ACM certificate for a
-   * global CloudFront distribution must be requested in us-east-1.
-   */
-  region: 'us-east-1',
+  account: process.env.CDK_DEFAULT_ACCOUNT,
+  region: process.env.CDK_DEFAULT_REGION || 'us-east-1',
 }
 
 new StaticSiteStack(app, `${siteSubDomain}-webapp`, {
-    /**
-     * env is required for our use of hosted-zone lookup.
-     *
-     * Lookups do not work at all without an explicit environment
-     * specified; to use them, you must specify env.
-     * @see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
-     */
     env: cdkEnv,
     tags,
 })
