@@ -14,7 +14,7 @@ on:
 
 # Saving Computation Time by Stopping Obsolete Workflows
 concurrency:
-  group: ci-tests-${{ github.ref }}-1
+  group: ci-pr-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
