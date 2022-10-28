@@ -93,6 +93,8 @@ const error = {
   homePageNavigation: 'Go back to the home page.',
   transferSampleUnitsUnavailable:
     'Something went wrong. Sample units are failed to transfer. Please try again.',
+  onPageWarningAbove: 'Warning or error',
+  onPageWarningBelow: 'Warning or error',
 }
 
 const success = {

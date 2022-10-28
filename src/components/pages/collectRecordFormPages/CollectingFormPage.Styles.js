@@ -139,48 +139,49 @@ export const DeleteRecordButtonCautionWrapper = styled('div')`
 `
 
 export const ErrorText = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: fixed;
   visibility: ${(props) => (props.isErrorShown ? 'shown' : 'hidden')};
-  font-size: 1.5rem;
-  color: ${theme.color.calloutColor};
-  background: ${theme.color.cautionColor};
-  width: 100%;
+  font-size: ${theme.typography.smallFontSize};
+  pointer-events: auto;
+  white-space: nowrap;
+  border: solid 1px ${theme.color.textColor};
+  text-transform: uppercase;
+  background: ${theme.color.inlineErrorColor};
+  color: ${theme.color.textColor};
+  padding: 0.1rem 1rem;
+  border-radius: 5px;
+  right: 5px;
+  &:after {
+    position: absolute;
+    content: '';
+    background: ${theme.color.inlineErrorColor};
+    width: 10px;
+    height: 10px;
+    left: calc(50% - 5px);
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+    border-color: ${theme.color.textColor};
+  }
 `
 
 export const ErrorBox = styled.div`
-  z-index: 1000;
   position: fixed;
-  display: block;
-  top: 130px;
-  left: 170px;
-  width: 200px;
-  bottom: 10px;
+  pointer-events: none;
+  top: calc(${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + 20px);
+  bottom: ${theme.spacing.small};
   div:nth-child(1) {
-    padding: 20px 10px 10px 10px;
-    clip-path: polygon(
-      0 10px,
-      calc(50% - 10px) 10px,
-      50% 0,
-      calc(50% + 10px) 10px,
-      100% 10px,
-      100% 100%,
-      0 100%
-    );
+    &:after {
+      /* top */
+      top: -6px;
+      transform: rotate(45deg);
+    }
   }
   div:nth-child(2) {
-    position: absolute;
-    bottom: 0;
-    padding: 10px 10px 20px 10px;
-    clip-path: polygon(
-      0 0,
-      100% 0,
-      100% calc(100% - 10px),
-      calc(50% - 10px) calc(100% - 10px),
-      50% 100%,
-      calc(50% + 10px) calc(100% - 10px),
-      0 calc(100% - 10px)
-    );
+    bottom: 10px;
+    &:after {
+      /* bottom */
+      bottom: -6px;
+      transform: rotate(-135deg);
+    }
   }
 `

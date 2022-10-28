@@ -591,8 +591,8 @@ const CollectRecordFormPage = ({
 
   const errorBoxContent = (
     <ErrorBox>
-      {<ErrorText isErrorShown={isErrorAbove}>There are warnings/errors above</ErrorText>}
-      {<ErrorText isErrorShown={isErrorBelow}>There are warnings/errors below</ErrorText>}
+      {<ErrorText isErrorShown={isErrorAbove}>{language.error.onPageWarningAbove}</ErrorText>}
+      {<ErrorText isErrorShown={isErrorBelow}>{language.error.onPageWarningBelow}</ErrorText>}
     </ErrorBox>
   )
 
