@@ -53,11 +53,12 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
-          CDK_DEFAULT_ACCOUNT: "${{ secrets.CDK_DEFAULT_ACCOUNT }}"
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_EVENT_PATH: ${{ github.event_path }}
           GITHUB_TOKEN: ${{ github.token }}
           GITHUB_WORKFLOW: ${{ github.workflow }}
         working-directory: iac
         run: |
+          echo "npm run cdk -- diff -c domain=app2.datamermaid.org -c subdomain=dev -c accountId=${env.CDK_DEFAULT_ACCOUNT}"
           ./cdk_diff.sh
