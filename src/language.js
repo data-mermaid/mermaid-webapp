@@ -45,6 +45,7 @@ const error = {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
     required: 'This field is required',
+    managementPartialRestrictionRequired: 'At least one rule is required',
   },
   generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
   generic: 'Something went wrong.',
@@ -239,7 +240,7 @@ const pages = {
     deleteUnsyncedButton: 'Delete Unsynced Sample Units',
     removeUserModalTitle: 'Remove User From Project',
     removeUserButton: 'Remove User',
-    cancelButton: 'cancel'
+    cancelButton: 'cancel',
   },
   fishBeltForm: {
     title: 'Fish Belt',
