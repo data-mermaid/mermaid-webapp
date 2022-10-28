@@ -98,7 +98,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
-          validationType={formik.errors.name ? 'error' : null}
+          validationType={formik.errors.name && formik.touched.name ? 'error' : null}
           validationMessages={formik.errors.name}
           testId="name"
         />
@@ -329,13 +329,17 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         values.size_limits ||
         values.gear_restriction ||
         values.species_restriction
+
       const isOneOfRulesSelected =
         values.open_access || values.no_take || isPartialSelectionSelected
 
       if (!values.name) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
-      if (!isOneOfRulesSelected) {
+
+      // Mimic the formik touched for rules input.
+      // Show required error only when Partial Restrictions radio button is selected, but not any child checkboxes are selected.
+      if (!isOneOfRulesSelected && isPartialSelectionSelected === false) {
         errors.rules = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 

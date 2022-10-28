@@ -129,7 +129,6 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
     }),
   )
 
-  // expect(await screen.findByText('Something went wrong. The site has not been saved.'))
   expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
     `The site has not been saved. name: This field may not be blank. country: This field is required.`,
   )

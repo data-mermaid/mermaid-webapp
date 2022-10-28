@@ -94,12 +94,12 @@ const SiteForm = ({
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
-          validationType={formik.errors.name ? 'error' : null}
+          validationType={formik.errors.name && formik.touched.name ? 'error' : null}
           validationMessages={formik.errors.name}
           testId="name"
         />
         <InputRow
-          validationType={formik.errors.country ? 'error' : null}
+          validationType={formik.errors.country && formik.touched.country ? 'error' : null}
           data-testid="country-select"
         >
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
@@ -117,7 +117,7 @@ const SiteForm = ({
             }}
           />
           <InputValidationInfo
-            validationType={formik.errors.country ? 'error' : null}
+            validationType={formik.errors.country && formik.touched.country ? 'error' : null}
             validationMessages={formik.errors.country}
           />
         </InputRow>
@@ -127,7 +127,7 @@ const SiteForm = ({
           id="latitude"
           type="number"
           {...formik.getFieldProps('latitude')}
-          validationType={formik.errors.latitude ? 'error' : null}
+          validationType={formik.errors.latitude && formik.touched.latitude ? 'error' : null}
           validationMessages={formik.errors.latitude}
           testId="latitude"
         />
@@ -137,7 +137,7 @@ const SiteForm = ({
           id="longitude"
           type="number"
           {...formik.getFieldProps('longitude')}
-          validationType={formik.errors.longitude ? 'error' : null}
+          validationType={formik.errors.longitude && formik.touched.longitude ? 'error' : null}
           validationMessages={formik.errors.longitude}
           testId="longitude"
         />
@@ -155,7 +155,7 @@ const SiteForm = ({
           id="exposure"
           options={exposureOptions}
           {...formik.getFieldProps('exposure')}
-          validationType={formik.errors.exposure ? 'error' : null}
+          validationType={formik.errors.exposure && formik.touched.exposure ? 'error' : null}
           validationMessages={formik.errors.exposure}
         />
         <InputRadioWithLabelAndValidation
@@ -164,7 +164,7 @@ const SiteForm = ({
           id="reef_type"
           options={reefTypeOptions}
           {...formik.getFieldProps('reef_type')}
-          validationType={formik.errors.reef_type ? 'error' : null}
+          validationType={formik.errors.reef_type && formik.touched.reef_type ? 'error' : null}
           validationMessages={formik.errors.reef_type}
         />
         <InputRadioWithLabelAndValidation
@@ -173,7 +173,7 @@ const SiteForm = ({
           id="reef_zone"
           options={reefZoneOptions}
           {...formik.getFieldProps('reef_zone')}
-          validationType={formik.errors.reef_zone ? 'error' : null}
+          validationType={formik.errors.reef_zone && formik.touched.reef_zone ? 'error' : null}
           validationMessages={formik.errors.reef_zone}
         />
         <TextareaWithLabelAndValidation
