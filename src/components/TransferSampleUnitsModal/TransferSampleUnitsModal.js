@@ -80,7 +80,7 @@ const TransferSampleUnitsModal = ({
       {showRemoveUserWithActiveSampleUnitsWarning && (
         <InlineFlex>
           <InlineMessage type="warning">
-            <p>{language.pages.userTable.warningRemoveUser}</p>
+            <p>{language.pages.userTable.warningTransferSampleUnits}</p>
           </InlineMessage>
         </InlineFlex>
       )}

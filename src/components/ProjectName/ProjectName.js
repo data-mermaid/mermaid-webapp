@@ -13,7 +13,7 @@ const ProjectNameWrapper = styled('div')`
   background: ${theme.color.white};
   h2 {
     padding: ${theme.spacing.medium};
-    min-height: 55px;
+    min-height: 60px;
     margin: 0;
   }
   a {
