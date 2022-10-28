@@ -50,7 +50,7 @@ jobs:
 
       # Setup TARGET
       - name: Set target for dev
-        if: startsWith(github.ref, 'refs/heads/develop')
+        # if: startsWith(github.ref, 'refs/heads/develop')
         run: |
           echo "TARGET=dev" >> "$GITHUB_ENV"
           echo "AUTH0_CLIENT_ID=4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5" >> "$GITHUB_ENV"
