@@ -17,8 +17,8 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Install CDK
-        run: npm install -g aws-cdk
+      # - name: Install CDK
+      #   run: npm install -g aws-cdk
 
       - name: Fetch yarn cache
         uses: actions/cache@v3
@@ -26,8 +26,6 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
 
       - name: Install yarn dependencies
         if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
@@ -51,8 +49,6 @@ jobs:
         with:
           path: iac/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('iac/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: Install CDK dependancies
         if: ${{ steps.cdk-cache.outputs.cache-hit != 'true' }}
@@ -72,44 +68,41 @@ jobs:
           echo "TARGET=prod" >> "$GITHUB_ENV"
           echo "AUTH0_CLIENT_ID=XXX" >> "$GITHUB_ENV"
 
+      - name: CDK Diff
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: diff
+          cdk_args: -c domain=app2.datamermaid.org -c subdomain=${{ env.TARGET }}
+          actions_comment: true
+          working_dir: iac
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+          AWS_DEFAULT_REGION: 'us-east-1'
+          GITHUB_TOKEN: ${{ github.token }}
+
+          REACT_APP_MERMAID_API: "https://${{ env.TARGET }}.api2.datamermaid.org/v1"
+          REACT_APP_AUTH0_AUDIENCE: "https://${{ env.TARGET }}-api.datamermaid.org"
+          REACT_APP_AUTH0_CLIENT_ID: "${{ env.AUTH0_CLIENT_ID }}"
+
+      # Diff
       # - name: CDK Diff
-      #   uses: youyo/aws-cdk-github-actions@v2
-      #   with:
-      #     cdk_subcommand: 'diff'
-      #     cdk_args: -c domain=app2.datamermaid.org -c subdomain=${{ env.TARGET }}
-      #     actions_comment: true
-      #     working_dir: iac
       #   env:
       #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
       #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
       #     CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-      #     AWS_DEFAULT_REGION: 'us-east-1'
+      #     # 
+      #     GITHUB_EVENT_NAME: ${{ github.event_name }}
+      #     GITHUB_EVENT_PATH: ${{ github.event_path }}
       #     GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
-          aws-region: us-east-1
-
-      # Diff
-      - name: CDK Diff
-        env:
-          # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
-          # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
-          CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
-          # 
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
-          GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_WORKFLOW: ${{ github.workflow }}
-          # 
-          REACT_APP_MERMAID_API: "https://${{ env.TARGET }}.api2.datamermaid.org/v1"
-          REACT_APP_AUTH0_AUDIENCE: "https://${{ env.TARGET }}-api.datamermaid.org"
-          REACT_APP_AUTH0_CLIENT_ID: "${{ env.AUTH0_CLIENT_ID }}"
-        working-directory: iac
-        run: |
-          cdk diff -c domain=app2.datamermaid.org -c subdomain=${{ env.TARGET }}
+      #     GITHUB_WORKFLOW: ${{ github.workflow }}
+      #     # 
+      #     REACT_APP_MERMAID_API: "https://${{ env.TARGET }}.api2.datamermaid.org/v1"
+      #     REACT_APP_AUTH0_AUDIENCE: "https://${{ env.TARGET }}-api.datamermaid.org"
+      #     REACT_APP_AUTH0_CLIENT_ID: "${{ env.AUTH0_CLIENT_ID }}"
+      #   working-directory: iac
+      #   run: |
+      #     cdk diff -c domain=app2.datamermaid.org -c subdomain=${{ env.TARGET }}
 
 # ./cdk_diff.sh
