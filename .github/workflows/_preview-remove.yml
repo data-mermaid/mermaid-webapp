@@ -7,7 +7,7 @@ on:
   workflow_call:
 
 env:
-  S3_BUCKET: preview2.datamermaid.org
+  S3_BUCKET: preview.app2.datamermaid.org
   PR_NUMBER: ${{ github.event.number }}
 
 jobs:

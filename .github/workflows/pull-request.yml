@@ -47,10 +47,10 @@ jobs:
     needs: [deps-cache]
     uses: ./.github/workflows/_test.yml
 
-  # call-preview:
-  #   if: github.event.pull_request.draft == false
-  #   needs: [deps-cache]
-  #   uses: ./.github/workflows/_preview-create.yml
+  call-preview:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache]
+    uses: ./.github/workflows/_preview-create.yml
 
   call-cdk-diff:
     if: github.event.pull_request.draft == false

@@ -9,13 +9,19 @@ import { StaticSite } from './static-site'
  * This stack relies on getting the domain name from CDK context.
  * Use 'cdk [--profile mermaid] synth -c domain=app2.datamermaid.org -c subdomain=dev'
 **/
+
+interface StaticSiteStackProps extends cdk.StackProps {
+  domainName: string;
+  siteSubDomain: string;
+}
+
 class StaticSiteStack extends cdk.Stack {
-    constructor(parent: cdk.App, name: string, props: cdk.StackProps) {
+    constructor(parent: cdk.App, name: string, props: StaticSiteStackProps) {
         super(parent, name, props)
 
         new StaticSite(this, 'StaticSite', {
-            domainName: this.node.tryGetContext('domain'),
-            siteSubDomain: this.node.tryGetContext('subdomain'),
+            domainName: props.domainName,
+            siteSubDomain: props.siteSubDomain,
         })
     }
 }
@@ -35,6 +41,15 @@ const cdkEnv = {
 new StaticSiteStack(app, `${siteSubDomain}-webapp`, {
     env: cdkEnv,
     tags,
+    domainName: app.node.tryGetContext('domain'),
+    siteSubDomain: app.node.tryGetContext('subdomain')
+})
+
+new StaticSiteStack(app, `preview-webapp`, {
+  env: cdkEnv,
+  tags,
+  domainName: app.node.tryGetContext('domain'),
+  siteSubDomain: "preview",
 })
 
 app.synth()
