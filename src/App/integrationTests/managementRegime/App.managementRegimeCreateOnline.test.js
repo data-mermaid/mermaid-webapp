@@ -57,7 +57,7 @@ describe('Online', () => {
     expect(within(parties).getByLabelText('private sector')).not.toBeChecked()
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
-    ).not.toBeChecked()
+    ).toBeChecked()
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('No Take', { exact: false }),
     ).not.toBeChecked()
