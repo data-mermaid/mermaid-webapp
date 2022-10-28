@@ -234,8 +234,12 @@ const pages = {
     newUserModalTitle: `Invite new user`,
     newUserModalText: `will need to sign up because they're not already a MERMAID user.`,
     transferSampleUnitsModalTitle: `Transfer Sample Units`,
+    warningTransferSampleUnits: `You must transfer unsubmitted sample units before you can remove the user from project.`,
+    deleteUnsyncedModalTitle: 'Delete Unsynced Sample Units',
+    deleteUnsyncedButton: 'Delete Unsynced Sample Units',
     removeUserModalTitle: 'Remove User From Project',
-    warningRemoveUser: `You must transfer unsubmitted sample units before you can remove the user from project.`,
+    removeUserButton: 'Remove User',
+    cancelButton: 'cancel'
   },
   fishBeltForm: {
     title: 'Fish Belt',
