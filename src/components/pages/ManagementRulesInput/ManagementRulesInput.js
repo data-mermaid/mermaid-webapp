@@ -38,16 +38,31 @@ const ManagementRulesInput = ({
   ...restOfProps
 }) => {
   const getManagementRulesRadioInputValue = (rules) => {
+    const {
+      open_access,
+      no_take,
+      access_restriction,
+      periodic_closure,
+      size_limits,
+      gear_restriction,
+      species_restriction,
+    } = rules
+
+    const partialRestrictionRules =
+      access_restriction ||
+      periodic_closure ||
+      size_limits ||
+      gear_restriction ||
+      species_restriction
+
+    // For new MR, set default rule to Open Access
+    const defaultRuleValue =
+      (!open_access && !no_take && partialRestrictionRules === undefined) || open_access
+
     return {
-      open_access: rules.open_access,
+      open_access: defaultRuleValue,
       no_take: rules.no_take,
-      partial_restrictions:
-        rules.access_restriction ||
-        rules.periodic_closure ||
-        rules.size_limits ||
-        rules.gear_restriction ||
-        rules.species_restriction ||
-        false
+      partial_restrictions: partialRestrictionRules,
     }
   }
 
@@ -136,11 +151,9 @@ const ManagementRulesInput = ({
     ))
 
   return (
-    <InputRow {...restOfProps}>
+    <InputRow {...restOfProps} validationType={validationType}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label id={`${id}-management-rules-input`}>
-        {label} <RequiredIndicator />
-      </label>
+      <label id={`${id}-management-rules-input`}>{label}</label>
       <div aria-labelledby={`${id}-management-rules-input`}>
         <StyledCheckRadioWrapper>
           <input
@@ -176,6 +189,7 @@ const ManagementRulesInput = ({
             id="partial-restrictions"
             name="rules"
             value="partial_restrictions"
+            touched={managementRulesRadioInputValue.partial_restrictions}
             checked={managementRulesRadioInputValue.partial_restrictions}
             onChange={handlePartialRestrictionChange}
           />
