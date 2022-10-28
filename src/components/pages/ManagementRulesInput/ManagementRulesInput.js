@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { InputRow, CheckRadioLabel, CheckRadioWrapper, RequiredIndicator } from '../../generic/form'
+import { InputRow, CheckRadioLabel, CheckRadioWrapper } from '../../generic/form'
 import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../../mermaidInputs/mermaidInputsPropTypes'
@@ -189,7 +189,6 @@ const ManagementRulesInput = ({
             id="partial-restrictions"
             name="rules"
             value="partial_restrictions"
-            touched={managementRulesRadioInputValue.partial_restrictions}
             checked={managementRulesRadioInputValue.partial_restrictions}
             onChange={handlePartialRestrictionChange}
           />
