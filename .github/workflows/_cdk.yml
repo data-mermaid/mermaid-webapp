@@ -73,7 +73,7 @@ jobs:
       - name: CDK Diff
         uses: youyo/aws-cdk-github-actions@v2
         with:
-          cdk_subcommand: ${{ inputs.config-path }}
+          cdk_subcommand: ${{ inputs.cdk_subcommand }}
           cdk_args: |
             --require-approval never \
             -c domain=app2.datamermaid.org \
