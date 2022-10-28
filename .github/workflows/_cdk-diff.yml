@@ -17,6 +17,9 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
+      - name: Install CDK
+        run: npm install -g aws-cdk
+
       - name: Fetch yarn cache
         uses: actions/cache@v3
         id: yarn-cache
@@ -100,6 +103,6 @@ jobs:
           REACT_APP_AUTH0_CLIENT_ID: "${{ env.AUTH0_CLIENT_ID }}"
         working-directory: iac
         run: |
-          npm run cdk -- diff -c domain=app2.datamermaid.org -c subdomain=${{ env.TARGET }}
+          cdk diff -c domain=app2.datamermaid.org -c subdomain=${{ env.TARGET }}
 
 # ./cdk_diff.sh
