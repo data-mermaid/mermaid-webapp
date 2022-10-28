@@ -60,5 +60,6 @@ jobs:
           GITHUB_WORKFLOW: ${{ github.workflow }}
         working-directory: iac
         run: |
-          echo "npm run cdk -- diff -c domain=app2.datamermaid.org -c subdomain=dev -c accountId=${env.CDK_DEFAULT_ACCOUNT}"
-          ./cdk_diff.sh
+          npm run cdk -- diff -c domain=app2.datamermaid.org -c subdomain=dev -c accountId="${{ secrets.CDK_DEFAULT_ACCOUNT }}"
+
+# ./cdk_diff.sh
