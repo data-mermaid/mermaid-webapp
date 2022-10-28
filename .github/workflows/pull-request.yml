@@ -10,7 +10,7 @@ on:
       - converted_to_draft
     branches:
       # - develop
-      - alain
+      - M1701-test-target
 
 # Saving Computation Time by Stopping Obsolete Workflows
 concurrency:
