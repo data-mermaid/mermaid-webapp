@@ -330,17 +330,20 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         values.gear_restriction ||
         values.species_restriction
 
-      const isOneOfRulesSelected =
-        values.open_access || values.no_take || isPartialSelectionSelected
+      const noPartialRestrictionRulesSelected =
+        !values.open_access && !values.no_take && isPartialSelectionSelected === false
 
       if (!values.name) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
-      // Mimic the formik touched for rules input.
-      // Show required error only when Partial Restrictions radio button is selected, but not any child checkboxes are selected.
-      if (!isOneOfRulesSelected && isPartialSelectionSelected === false) {
-        errors.rules = [{ code: language.error.formValidation.required, id: 'Required' }]
+      if (noPartialRestrictionRulesSelected) {
+        errors.rules = [
+          {
+            code: language.error.formValidation.managementPartialRestrictionRequired,
+            id: 'Partial Restriction Required',
+          },
+        ]
       }
 
       return errors
