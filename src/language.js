@@ -238,7 +238,8 @@ const pages = {
     deleteUnsyncedModalTitle: 'Delete Unsynced Sample Units',
     deleteUnsyncedButton: 'Delete Unsynced Sample Units',
     removeUserModalTitle: 'Remove User From Project',
-    removeUserButton: 'Remove User'
+    removeUserButton: 'Remove User',
+    cancelButton: 'cancel'
   },
   fishBeltForm: {
     title: 'Fish Belt',

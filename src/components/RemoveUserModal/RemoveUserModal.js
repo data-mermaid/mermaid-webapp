@@ -54,7 +54,7 @@ const RemoveUserModal = ({ isOpen, onDismiss, onSubmit, userNameToBeRemoved, pro
   const mainContentPageTwo = (
     <p>
       Are you sure you want to remove <strong>{userNameToBeRemoved}</strong> from{' '}
-      <strong>{projectName}</strong>?
+      <strong>{projectName}</strong>
     </p>
   )
 
@@ -65,7 +65,9 @@ const RemoveUserModal = ({ isOpen, onDismiss, onSubmit, userNameToBeRemoved, pro
     </>
   )
 
-  const cancelButton = <ButtonSecondary onClick={closeModal}>Cancel</ButtonSecondary>
+  const cancelButton = (
+    <ButtonSecondary onClick={closeModal}>{language.pages.userTable.cancelButton}</ButtonSecondary>
+  )
 
   const footerContentPageOne = (
     <RightFooter>
