@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
+import { useOnlineStatus } from '../../library/onlineStatusContext'
 import {
   mediaQueryPhoneOnly,
   mediaQueryTabletLandscapeOnly,
@@ -10,6 +11,7 @@ import { ButtonCallout, ButtonSecondary } from '../generic/buttons'
 import { IconSortDown, IconSortUp } from '../icons'
 import { Input, inputStyles } from '../generic/form'
 import OfflineHide from '../generic/OfflineHide'
+import ProjectModal from '../ProjectCard/ProjectModal'
 
 const GlobalWrapper = styled.div`
   width: 100%;
@@ -82,21 +84,38 @@ const ProjectToolBarSection = ({
   setProjectSortKey,
   isProjectSortAsc,
   setIsProjectSortAsc,
+  addProjectToProjectsPage,
 }) => {
   const setFilter = (event) => {
     setProjectFilter(event.target.value)
   }
 
+  const { isAppOnline } = useOnlineStatus()
+
   const setSortBy = (event) => {
     setProjectSortKey(event.target.value)
   }
+
+  const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false)
 
   return (
     <GlobalWrapper>
       <RowWrapper>
         <HeaderStyle>Projects</HeaderStyle>
         <OfflineHide>
-          <ButtonCallout>New Project</ButtonCallout>
+          <ButtonCallout
+            onClick={() => setIsNewProjectModalOpen(true)}
+            aria-label="New Project"
+            disabled={!isAppOnline}
+          >
+            <span>New Project</span>
+          </ButtonCallout>
+          <ProjectModal
+            isOpen={isNewProjectModalOpen}
+            onDismiss={() => setIsNewProjectModalOpen(false)}
+            project={null}
+            addProjectToProjectsPage={addProjectToProjectsPage}
+          />
         </OfflineHide>
       </RowWrapper>
       <FilterRowWrapper>
@@ -133,4 +152,5 @@ ProjectToolBarSection.propTypes = {
   setProjectSortKey: PropTypes.func.isRequired,
   isProjectSortAsc: PropTypes.bool.isRequired,
   setIsProjectSortAsc: PropTypes.func.isRequired,
+  addProjectToProjectsPage: PropTypes.func.isRequired,
 }

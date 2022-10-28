@@ -30,6 +30,7 @@ export const NavLinkSidebar = styled(NavLink)`
   text-decoration: none;
   display: grid;
   grid-template-columns: 3rem auto auto;
+  align-items: center;
   ${theme.typography.noWordBreak};
   ${hoverState(css`
     background-color: ${theme.color.primaryHover};

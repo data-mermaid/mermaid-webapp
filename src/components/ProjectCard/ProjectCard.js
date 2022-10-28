@@ -23,6 +23,8 @@ import { ButtonSecondary } from '../generic/buttons'
 import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
+import { getIsReadOnlyUserRole } from '../../App/currentUserProfileHelpers'
+import { useCurrentUser } from '../../App/CurrentUserContext'
 
 const ProjectCard = ({
   project,
@@ -32,9 +34,9 @@ const ProjectCard = ({
   ...restOfProps
 }) => {
   const { isAppOnline } = useOnlineStatus()
-
   const { name, countries, updated_on, id } = project
-
+  const { currentUser } = useCurrentUser()
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, id)
   const { setIsSyncInProgress } = useSyncStatus()
   const history = useHistory()
   const projectUrl = `projects/${id}`
@@ -79,6 +81,8 @@ const ProjectCard = ({
   }
 
   const handleCardClick = () => {
+    if (isReadOnlyUser) { return }
+
     const destinationUrl = isAppOnline
       ? `${projectUrl}/usersandtransects`
       : `${projectUrl}/collecting`
@@ -89,7 +93,11 @@ const ProjectCard = ({
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false)
 
   return (
-    <CardWrapper onClick={handleCardClick} {...restOfProps} data-testid="project-card">
+    <CardWrapper
+      onClick={handleCardClick}
+      {...restOfProps}
+      disabled={isReadOnlyUser && !isAppOnline}
+      data-testid="project-card">
       <ProjectCardHeader>
         <div>
           <h2>{name}</h2>

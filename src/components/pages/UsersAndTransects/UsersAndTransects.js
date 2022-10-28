@@ -37,6 +37,8 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 
+const EMPTY_VALUE = '-'
+
 const UserColumnHeader = styled.div`
   display: inline-flex;
   flex-direction: row;
@@ -238,7 +240,7 @@ const UsersAndTransects = () => {
 
       const submittedTransectNumbersRow = submittedTransectNumbers.reduce((accumulator, number) => {
         if (!accumulator[number]) {
-          accumulator[number] = '-'
+          accumulator[number] = EMPTY_VALUE
         }
 
         if (rowNumbers.includes(number)) {
@@ -278,7 +280,7 @@ const UsersAndTransects = () => {
             ? sortArray(
                 replaceEmptyLabels(rowRecord.profile_summary[record.profileId].labels),
               ).join(', ')
-            : '-'
+            : EMPTY_VALUE
 
           return accumulator
         },
@@ -417,6 +419,10 @@ const UsersAndTransects = () => {
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellRowValues = cell.row.values
+                    const cellRowValuesMethod = cell.row.values.method
+                    const isNotBleachingMethodRow = cellRowValuesMethod !== 'Bleaching'
+                    const isCellInSubmittedTransectNumberColumns =
+                      submittedTransectNumbers.includes(cellColumnId)
 
                     const cellRowValuesForSubmittedTransectNumbers = Object.entries(
                       cellRowValues,
@@ -424,17 +430,21 @@ const UsersAndTransects = () => {
 
                     const filteredEmptyCellValuesLength =
                       cellRowValuesForSubmittedTransectNumbers.filter(
-                        (value) => value[1] === '-',
+                        (value) => value[1] === EMPTY_VALUE,
                       ).length
 
+                    const isNotRowWithAllEmptyCellValues =
+                      filteredEmptyCellValuesLength < submittedTransectNumbers.length
+
                     const isSubmittedNumberCellHightLighted =
-                      cell.value === '-' &&
-                      filteredEmptyCellValuesLength < submittedTransectNumbers.length &&
-                      submittedTransectNumbers.includes(cellColumnId)
+                      cell.value === EMPTY_VALUE &&
+                      isNotBleachingMethodRow &&
+                      isNotRowWithAllEmptyCellValues &&
+                      isCellInSubmittedTransectNumberColumns
 
                     const isCollectingNumberCellHighLighted =
-                      cell.value !== '-' &&
-                      !submittedTransectNumbers.includes(cellColumnId) &&
+                      cell.value !== EMPTY_VALUE &&
+                      !isCellInSubmittedTransectNumberColumns &&
                       !(cellColumnId === 'site' || cellColumnId === 'method')
 
                     const HighlightedClassName =
@@ -487,6 +497,7 @@ const UsersAndTransects = () => {
   ) : (
     <PageUnavailable mainText={language.error.pageUnavailableOffline} />
   )
+
   const toolbar = (
     <>
       <H2>{language.pages.usersAndTransectsTable.title}</H2>

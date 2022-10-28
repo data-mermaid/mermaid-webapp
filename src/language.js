@@ -86,7 +86,7 @@ const error = {
   pageUnavailableOffline: 'This page is unavailable offline.',
   pageNotFound: "This page can't be found.",
   pageNotFoundRecovery: 'Make sure the URL is correct.',
-  pageReadOnly: 'You are a read-only member of this project',
+  pageReadOnly: 'You cannot access this page because you are a read-only member of this project.',
   idNotFound: "This item can't be found.",
   idNotFoundRecovery:
     "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
@@ -113,6 +113,7 @@ const success = {
   userRemoved: 'User removed',
   projectSave: 'Project saved',
   projectCopied: 'Project copied',
+  projectCreated: 'Project created',
   siteSave: 'Site saved.',
   managementRegimeSave: 'Management Regime saved.',
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
@@ -243,8 +244,12 @@ const pages = {
     newUserModalTitle: `Invite new user`,
     newUserModalText: `will need to sign up because they're not already a MERMAID user.`,
     transferSampleUnitsModalTitle: `Transfer Sample Units`,
+    warningTransferSampleUnits: `You must transfer unsubmitted sample units before you can remove the user from project.`,
+    deleteUnsyncedModalTitle: 'Delete Unsynced Sample Units',
+    deleteUnsyncedButton: 'Delete Unsynced Sample Units',
     removeUserModalTitle: 'Remove User From Project',
-    warningRemoveUser: `You must transfer unsubmitted sample units before you can remove the user from project.`,
+    removeUserButton: 'Remove User',
+    cancelButton: 'cancel'
   },
   fishBeltForm: {
     title: 'Fish Belt',
@@ -306,9 +311,10 @@ const navigateAwayPrompt =
   'Are you sure you want to leave this page? You have some unsaved changes.'
 
 const projectModal = {
-  copyProjectMessage:
+  copyMessage:
     'Sites, Management Regimes, Data Sharing, and Users and their roles will be copied to the new project.',
   copyTitle: 'Copy Project',
+  createTitle: 'Create Project',
   footerMessage: 'You will be an admin for this project.',
 }
 

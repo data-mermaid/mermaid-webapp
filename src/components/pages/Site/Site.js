@@ -48,6 +48,7 @@ const ReadOnlySiteContent = ({
   reefTypeOptions,
   reefZoneOptions,
   isReadOnlyUser,
+  isAppOnline,
 }) => {
   const { country, latitude, longitude, exposure, reef_type, reef_zone, notes } = site
 
@@ -64,11 +65,13 @@ const ReadOnlySiteContent = ({
           <TableRowItem title="Notes" value={notes} />
         </tbody>
       </Table>
-      <SingleSiteMap
-        formLatitudeValue={latitude}
-        formLongitudeValue={longitude}
-        isReadOnlyUser={isReadOnlyUser}
-      />
+      {isAppOnline && (
+        <SingleSiteMap
+          formLatitudeValue={latitude}
+          formLongitudeValue={longitude}
+          isReadOnlyUser={isReadOnlyUser}
+        />
+      )}
     </>
   )
 }
@@ -359,14 +362,15 @@ const Site = ({ isNewSite }) => {
   const contentViewByReadOnlyRole = isNewSite ? (
     <PageUnavailable mainText={language.error.pageReadOnly} />
   ) : (
-    <ReadOnlySiteContent
-      site={formik.values}
-      countryOptions={countryOptions}
-      exposureOptions={exposureOptions}
-      reefTypeOptions={reefTypeOptions}
-      reefZoneOptions={reefZoneOptions}
-      isReadOnlyUser={isReadOnlyUser}
-    />
+      <ReadOnlySiteContent
+        site={formik.values}
+        countryOptions={countryOptions}
+        exposureOptions={exposureOptions}
+        reefTypeOptions={reefTypeOptions}
+        reefZoneOptions={reefZoneOptions}
+        isReadOnlyUser={isReadOnlyUser}
+        isAppOnline={isAppOnline}
+      />
   )
 
   const contentViewByRole = isReadOnlyUser ? (
@@ -432,6 +436,7 @@ ReadOnlySiteContent.propTypes = {
   reefTypeOptions: inputOptionsPropTypes.isRequired,
   reefZoneOptions: inputOptionsPropTypes.isRequired,
   isReadOnlyUser: PropTypes.bool.isRequired,
+  isAppOnline: PropTypes.bool.isRequired,
 }
 
 SiteForm.propTypes = {

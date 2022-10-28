@@ -124,21 +124,19 @@ const Projects = ({ apiSyncInstance }) => {
       subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
     }
 
-    return (
-      <PageUnavailable mainText={mainText} subText={subText} />
-    )
+    return <PageUnavailable mainText={mainText} subText={subText} />
   }
 
   const projectCardsList = filteredSortedProjects.length
     ? getFilteredSortedProjects().map((project) => (
-      <ProjectCard
-        role="listitem"
-        project={{ ...project }}
-        key={project.id}
-        apiSyncInstance={apiSyncInstance}
-        isOfflineReady={getIsProjectOffline(project.id)}
-        addProjectToProjectsPage={addProjectToProjectsPage}
-      />
+        <ProjectCard
+          role="listitem"
+          project={{ ...project }}
+          key={project.id}
+          apiSyncInstance={apiSyncInstance}
+          isOfflineReady={getIsProjectOffline(project.id)}
+          addProjectToProjectsPage={addProjectToProjectsPage}
+        />
       ))
     : renderPageNoData()
 
@@ -154,6 +152,7 @@ const Projects = ({ apiSyncInstance }) => {
           setProjectSortKey={setProjectSortKey}
           isProjectSortAsc={isProjectSortAsc}
           setIsProjectSortAsc={setIsProjectSortAsc}
+          addProjectToProjectsPage={addProjectToProjectsPage}
         />
       }
       bottomRow={<div role="list">{projectCardsList}</div>}

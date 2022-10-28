@@ -18,7 +18,6 @@ const CollectRecordsCountWrapper = styled.strong`
   height: ${theme.spacing.xlarge};
   color: ${theme.color.white};
   display: grid;
-  margin: 0.5rem auto;
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
 `
@@ -44,9 +43,7 @@ const CollectRecordsCount = () => {
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(
-                ...getToastArguments(language.error.collectRecordsUnavailable)
-              )
+              toast.error(...getToastArguments(language.error.collectRecordsUnavailable))
             },
           })
         })

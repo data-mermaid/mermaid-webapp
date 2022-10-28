@@ -19,8 +19,8 @@ const InlineMessageWrapper = styled.div`
   border: none;
   width: 100%;
   font-size: smaller;
+  margin: 0 0 0 ${theme.spacing.small};
   p {
-    margin: 0 0 0 ${theme.spacing.small};
     max-width: ${theme.spacing.maxTextWidth};
     display: inline;
     align-self: center;
