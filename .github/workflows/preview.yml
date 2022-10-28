@@ -8,6 +8,8 @@ name: PR Build & Deploy
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+    branches:
+      - develop
 
 env:
   S3_BUCKET: preview.datamermaid.org
