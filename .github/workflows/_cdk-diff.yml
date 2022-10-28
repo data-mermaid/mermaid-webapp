@@ -65,7 +65,7 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'diff'
-          cdk_args: -c domain=app2.datamermaid.org -c subdomain="${{ env.TARGET }}"
+          cdk_args: '-c domain=app2.datamermaid.org -c subdomain="${{ env.TARGET }}"'
           actions_comment: true
           working_dir: iac
         env:
