@@ -23,6 +23,8 @@ export interface StaticSiteProps {
  * Route53 alias record, and ACM certificate.
  */
 export class StaticSite extends Construct {
+  bucket: s3.Bucket
+
   constructor(parent: Stack, name: string, props: StaticSiteProps) {
     super(parent, name)
 
@@ -105,6 +107,7 @@ export class StaticSite extends Construct {
 
     // Deploy site contents to S3 bucket
     let s3Asset = s3deploy.Source.asset('../build')
+
     if (props.siteSubDomain === 'preview') {
       s3Asset = s3deploy.Source.asset('../preview')
     }
@@ -114,5 +117,8 @@ export class StaticSite extends Construct {
       distribution,
       distributionPaths: ['/*'],
     })
+
+    // export
+    this.bucket = siteBucket
   }
 }
