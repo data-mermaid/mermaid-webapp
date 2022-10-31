@@ -1,4 +1,4 @@
-name: CDK
+name: Infrastructure Workflow
 
 on: 
   workflow_call:
@@ -44,16 +44,16 @@ jobs:
         if: ${{ steps.build-cache.outputs.cache-hit != 'true' }}
         run: yarn build
 
-      # CDK deps
-      - name: Fetch cdk node cache
+      # IaC deps
+      - name: Fetch iac node cache
         uses: actions/cache@v3
-        id: cdk-cache
+        id: iac-cache
         with:
           path: iac/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('iac/package-lock.json') }}
 
-      - name: Install CDK dependancies
-        if: ${{ steps.cdk-cache.outputs.cache-hit != 'true' }}
+      - name: Install IaC dependancies
+        if: ${{ steps.iac-cache.outputs.cache-hit != 'true' }}
         working-directory: iac
         run: npm ci
 

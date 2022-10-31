@@ -94,6 +94,6 @@ Since this app can exist in multiple states (online, offline, various states of 
 - Available at [app.datamermaid.org](https://app.datamermaid.org)
 - Is updated on tag creation
 
-### IaC
+### Infrastructure as Code (IaC)
 
 - see `iac/README.md`
