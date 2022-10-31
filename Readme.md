@@ -7,7 +7,7 @@
    1. To get the server up and running, run `make freshinstall && make runserver` the first time or `make up && make runserver`
 1. Set up local front end
    1. clone this repo
-   1. obtain values for `.env` file (see `.env.sample`, bug Dustin for the DAshlane file with all the secrets.)
+   1. obtain values for `.env` and `.env.test` files. (see `.env.sample` and `env.test.sample`, bug Dustin for the Dashlane file with all the secrets.)
    1. yarn install
    1. yarn start
 
@@ -62,6 +62,7 @@ There are currently two ways the application warns the user about navigating awa
    These have been combined into a single high order component named `<EnhancedPrompt>` which has been added to all forms in the application.
 
 At one point, it looked like React router v6 would eventually provide a hook called `usePrompt` which would cover both of the above and will display the same default modal/popup for both. Another similar hook named `useBlocker` would be provided too. [Good reference](https://stackoverflow.com/questions/62792342/in-react-router-v6-how-to-check-form-is-dirty-before-leaving-page-route) with link to a demo. HOWEVER, these hooks were available in the v6 alpha release, but as of October 2022 it sounds like there is no longer a plan to include them in a stable release for v6 ([source](https://github.com/remix-run/react-router/issues/8139#issuecomment-1262630360)). Because of this we are keeping the current implementation of `useBeforeUnloadPrompt`.
+
 #### Testing
 
 The goal of testing is not 100% test coverage. Its to test critical path features or any complex code. Currently we are focusing test effort on offline functionality, and ignoring online-only functionality.
