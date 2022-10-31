@@ -66,20 +66,26 @@ export class StaticSite extends Construct {
     new CfnOutput(this, 'BucketName', { value: siteBucket.bucketName })
 
     // TLS certificate
-    const certificate = new acm.DnsValidatedCertificate(this, 'Certificate', {
-      domainName: siteDomain,
-      hostedZone: zone,
-      region: 'us-east-1', // Cloudfront only checks this region for certificates.
-    })
-
-    new CfnOutput(this, 'CertificateArn', { value: certificate.certificateArn })
+    // NOTE: This depends on the cert already created (manually)
+    const certificate = acm.Certificate.fromCertificateArn(this, 'DefaultSSLCert',
+      `arn:aws:acm:us-east-1:${parent.account}:certificate/783d7a91-1ebd-4387-9518-e28521086db6`
+    )
 
     // CloudFront distribution
+    const domainNames = [siteDomain]
+
+    // allow the prod/preview domain into the cloudfront distribution
+    if (props.siteSubDomain === 'prod') {
+      domainNames.push("app.datamermaid.org")
+    }
+    if (props.siteSubDomain === 'preview') {
+      domainNames.push("preview.datamermaid.org")
+    }
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       certificate,
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
       defaultRootObject: "index.html",
-      domainNames: [siteDomain],
+      domainNames,
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       // if you do a hard refresh, then the app goes to an error page. We need it to
       // redirect to index.html
