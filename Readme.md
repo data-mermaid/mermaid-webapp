@@ -7,7 +7,7 @@
    1. To get the server up and running, run `make freshinstall && make runserver` the first time or `make up && make runserver`
 1. Set up local front end
    1. clone this repo
-   1. obtain values for `.env` and `.end.local` files. (see `.env.sample` and `env.local.sample`, bug Dustin for the Dashlane file with all the secrets.)
+   1. obtain values for `.env` and `.env.test` files. (see `.env.sample` and `env.test.sample`, bug Dustin for the Dashlane file with all the secrets.)
    1. yarn install
    1. yarn start
 
