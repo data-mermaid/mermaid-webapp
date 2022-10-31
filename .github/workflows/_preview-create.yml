@@ -41,12 +41,6 @@ jobs:
         if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
         run: yarn install --frozen-lockfile
 
-      - name: Debug PR preview comment variables
-        run: |
-          echo '::debug::github.event.action is ${{github.event.action}}'
-          echo '::debug::preview url will be https://${{env.S3_BUCKET}}/${{env.PR_NUMBER}}'
-        id: debug-preview-comment-vars
-
       - name: SED Add homepage route based on PR Number
         run: |
           find . -name 'package.json' -exec sed -i "s/\"homepage\": \"\"/\"homepage\": \"${PR_NUMBER}\"/g" {} +
@@ -69,5 +63,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            var msg = `**Here is a preview of this pull request:** <br> https://${process.env.S3_BUCKET}/${issue_number}`
+            var msg = `**Here is a preview of this pull request:** <br> https://${process.env.S3_BUCKET}/${issue_number}/index.html`
             github.issues.createComment({ issue_number, owner, repo, body: msg });
