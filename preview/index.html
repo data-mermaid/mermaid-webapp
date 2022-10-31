@@ -7,7 +7,7 @@
 <body>
   <script>
     const PRNumber = localStorage.getItem("pullRequestNumber");
-    const redirectURL = `${window.location.origin}${PRNumber}/${window.location.search}`
+    const redirectURL = `${window.location.origin}${PRNumber}/index.html${window.location.search}`
   
     if (PRNumber) {
       window.location.replace(redirectURL)

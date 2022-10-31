@@ -14,6 +14,7 @@ import { Construct } from 'constructs'
 export interface StaticSiteProps {
   domainName: string;
   siteSubDomain: string;
+  isPreview?: boolean
 }
 
 /**
@@ -76,6 +77,7 @@ export class StaticSite extends Construct {
     // CloudFront distribution
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       certificate,
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
       defaultRootObject: "index.html",
       domainNames: [siteDomain],
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
@@ -89,6 +91,8 @@ export class StaticSite extends Construct {
         }
       ],
       defaultBehavior: {
+        cachePolicy: props.isPreview ?
+          cloudfront.CachePolicy.CACHING_DISABLED : cloudfront.CachePolicy.CACHING_OPTIMIZED,
         origin: new cloudfront_origins.S3Origin(siteBucket, { originAccessIdentity: cloudfrontOAI }),
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,

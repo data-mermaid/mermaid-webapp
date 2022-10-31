@@ -146,6 +146,9 @@ function App({ dexieCurrentUserInstance }) {
                       <Route exact path="/">
                         <Redirect to="/projects" />
                       </Route>
+                      <Route exact path="/index.html">
+                        <Redirect to="/projects" />
+                      </Route>
                       <Route component={PageNotFound} />
                     </Switch>
                   ) : (

@@ -24,6 +24,7 @@ export class StaticSiteStack extends cdk.Stack {
         const site = new StaticSite(this, 'StaticSite', {
             domainName: props.domainName,
             siteSubDomain: props.siteSubDomain,
+            isPreview: props.isPreview,
         })
 
         if (props.isPreview) {
