@@ -104,8 +104,12 @@ export class StaticSite extends Construct {
     })
 
     // Deploy site contents to S3 bucket
+    let s3Asset = s3deploy.Source.asset('../build')
+    if (props.siteSubDomain === 'preview') {
+      s3Asset = s3deploy.Source.asset('../preview')
+    }
     new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
-      sources: [s3deploy.Source.asset('../build')],
+      sources: [s3Asset],
       destinationBucket: siteBucket,
       distribution,
       distributionPaths: ['/*'],
