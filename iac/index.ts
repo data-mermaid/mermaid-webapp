@@ -31,24 +31,26 @@ const app = new cdk.App()
 const tags = {
   "Owner": "sysadmin@datamermaid.org",
 }
-const siteSubDomain = app.node.tryGetContext('subdomain') || 'dev'
+
+const subdomain = app.node.tryGetContext('subdomain') || 'dev'
+const domain = app.node.tryGetContext('domain') || 'app2.datamermaid.org'
 
 const cdkEnv = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
   region: process.env.CDK_DEFAULT_REGION || 'us-east-1',
 }
 
-new StaticSiteStack(app, `${siteSubDomain}-webapp`, {
+new StaticSiteStack(app, `${subdomain}-webapp`, {
     env: cdkEnv,
     tags,
-    domainName: app.node.tryGetContext('domain'),
-    siteSubDomain: app.node.tryGetContext('subdomain')
+    domainName: domain,
+    siteSubDomain: subdomain
 })
 
 new StaticSiteStack(app, `preview-webapp`, {
   env: cdkEnv,
   tags,
-  domainName: app.node.tryGetContext('domain'),
+  domainName: domain,
   siteSubDomain: "preview",
 })
 
