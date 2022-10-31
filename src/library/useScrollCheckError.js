@@ -32,7 +32,7 @@ export const useScrollCheckError = () => {
   useEffect(() => {
     const handleScroll = () => {
       const errorAndWarningElements = document.querySelectorAll(
-        'span[type="error"], span[type="warning"]',
+        'span[type="error"], span[type="warning"], li[type="error"], li[type="warning"]',
       )
       const positionTypes = getPositionTypes(errorAndWarningElements)
 

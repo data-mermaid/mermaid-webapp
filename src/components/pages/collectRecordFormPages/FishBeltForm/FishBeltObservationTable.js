@@ -299,7 +299,9 @@ const FishBeltObservationTable = ({
           {hasErrorValidation || hasWarningValidation ? (
             <TableValidationList>
               {observationValidationMessages.map((validation) => (
-                <li key={validation.id}>{language.getValidationMessage(validation)}</li>
+                <li type="warning" key={validation.id}>
+                  {language.getValidationMessage(validation)}
+                </li>
               ))}
             </TableValidationList>
           ) : null}
