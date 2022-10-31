@@ -77,8 +77,7 @@ jobs:
           cdk_args: |
             --require-approval never \
             -c domain=app2.datamermaid.org \
-            -c subdomain=${{ env.TARGET }} \
-            --all
+            -c subdomain=${{ env.TARGET }}
           actions_comment: true
           working_dir: iac
         env:
