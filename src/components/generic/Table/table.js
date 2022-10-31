@@ -147,7 +147,8 @@ export const HeaderCenter = styled.div`
 `
 
 export const InlineCell = styled.div`
-  width: 26ch;
+  min-width: 10ch;
+  max-width: 26ch;
   text-align: inherit;
   a {
     color: inherit;

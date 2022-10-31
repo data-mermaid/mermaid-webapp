@@ -137,3 +137,51 @@ export const DeleteRecordButtonCautionWrapper = styled('div')`
     text-align: left;
   `)}
 `
+
+export const ErrorText = styled.div`
+  position: fixed;
+  visibility: ${(props) => (props.isErrorShown ? 'shown' : 'hidden')};
+  font-size: ${theme.typography.smallFontSize};
+  pointer-events: auto;
+  white-space: nowrap;
+  border: solid 1px ${theme.color.textColor};
+  text-transform: uppercase;
+  background: ${theme.color.inlineErrorColor};
+  color: ${theme.color.textColor};
+  padding: 0.1rem 1rem;
+  border-radius: 5px;
+  right: 5px;
+  &:after {
+    position: absolute;
+    content: '';
+    background: ${theme.color.inlineErrorColor};
+    width: 10px;
+    height: 10px;
+    left: calc(50% - 5px);
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+    border-color: ${theme.color.textColor};
+  }
+`
+
+export const ErrorBox = styled.div`
+  position: fixed;
+  pointer-events: none;
+  top: calc(${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + 20px);
+  bottom: ${theme.spacing.small};
+  div:nth-child(1) {
+    &:after {
+      /* top */
+      top: -6px;
+      transform: rotate(45deg);
+    }
+  }
+  div:nth-child(2) {
+    bottom: 10px;
+    &:after {
+      /* bottom */
+      bottom: -6px;
+      transform: rotate(-135deg);
+    }
+  }
+`
