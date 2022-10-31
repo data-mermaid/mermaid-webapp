@@ -4,10 +4,12 @@ import language from '../../../language'
 import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
+const MISSING_SITE_NAME = '__null__'
+
 const ProjectHealthMixin = (Base) =>
   class extends Base {
     #getSiteName = function getSiteName(siteName) {
-      return siteName === '__null__'
+      return siteName === MISSING_SITE_NAME
         ? language.pages.usersAndTransectsTable.missingSiteName
         : siteName
     }
@@ -141,7 +143,7 @@ const ProjectHealthMixin = (Base) =>
         )
 
         const collectingSummaryWithNameIsNotNull = Object.entries(siteCollectingSummary).filter(
-          (summary) => summary[0] !== '__null__',
+          (summary) => summary[0] !== MISSING_SITE_NAME,
         )
 
         const collectingSummaryMethods = collectingSummaryWithNameIsNotNull.reduce(
@@ -258,7 +260,6 @@ const ProjectHealthMixin = (Base) =>
       const collectingSiteIdsWithoutSubmittedRecords = collectingSiteIds.filter(
         (site) => !sampleEventSiteIds.includes(site),
       )
-
       const sampleEventUnitRecordsWithCollectRecordFilled = this.#fillCollectRecordWithSampleDate(
         sampleEventUnitRecordsCopy,
         siteCollectingSummary,
@@ -266,16 +267,34 @@ const ProjectHealthMixin = (Base) =>
 
       // Add new sample event records without submitted records, but with collecting records
       for (const siteId of collectingSiteIdsWithoutSubmittedRecords) {
-        for (const protocol of protocols) {
-          sampleEventUnitRecordsWithCollectRecordFilled.push({
-            site_id: siteId,
-            site_name: this.#getSiteName(siteCollectingSummary[siteId].site_name),
-            sample_unit_method: getRecordSampleUnitMethod(protocol),
-            sample_unit_protocol: protocol,
-            sample_unit_numbers: [],
-            profile_summary:
-              siteCollectingSummary[siteId].sample_unit_methods[protocol]?.profile_summary || {},
-          })
+        const { site_name, sample_unit_methods } = siteCollectingSummary[siteId]
+        const newSampleEventUnitRecords = {
+          site_id: siteId,
+          site_name: this.#getSiteName(site_name),
+          sample_unit_numbers: [],
+        }
+
+        if (site_name === MISSING_SITE_NAME) {
+          // Don't create empty method rows when site name is missing
+          for (const [missingSiteNameProtocol, missingSiteNameProtocolInfo] of Object.entries(
+            sample_unit_methods,
+          )) {
+            sampleEventUnitRecordsWithCollectRecordFilled.push({
+              ...newSampleEventUnitRecords,
+              sample_unit_protocol: missingSiteNameProtocol,
+              sample_unit_method: getRecordSampleUnitMethod(missingSiteNameProtocol),
+              profile_summary: missingSiteNameProtocolInfo.profile_summary,
+            })
+          }
+        } else {
+          for (const protocol of protocols) {
+            sampleEventUnitRecordsWithCollectRecordFilled.push({
+              ...newSampleEventUnitRecords,
+              sample_unit_protocol: protocol,
+              sample_unit_method: getRecordSampleUnitMethod(protocol),
+              profile_summary: sample_unit_methods[protocol]?.profile_summary || {},
+            })
+          }
         }
       }
 
