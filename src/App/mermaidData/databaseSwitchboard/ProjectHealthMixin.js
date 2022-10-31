@@ -176,7 +176,7 @@ const ProjectHealthMixin = (Base) =>
                 site_id: siteId,
                 site_name: siteName,
                 sample_unit_method: protocolLabel,
-                transect_protocol: protocol,
+                sample_unit_protocol: protocol,
                 sample_unit_numbers: [],
               })
             }
@@ -189,10 +189,10 @@ const ProjectHealthMixin = (Base) =>
       siteCollectingSummary,
       sampleEventUnit,
     ) {
-      const { site_id, transect_protocol, site_name } = sampleEventUnit
+      const { site_id, sample_unit_protocol, site_name } = sampleEventUnit
       const sampleDateExtractFromName = this.#getDateFromName(site_name)
       const collectingProfileSummary =
-        siteCollectingSummary[site_id]?.sample_unit_methods?.[transect_protocol]?.profile_summary
+        siteCollectingSummary[site_id]?.sample_unit_methods?.[sample_unit_protocol]?.profile_summary
       const updateProfileSummary = {}
 
       if (collectingProfileSummary) {
