@@ -51,6 +51,7 @@ jobs:
     if: github.event.pull_request.draft == false
     needs: [deps-cache]
     uses: ./.github/workflows/_preview-create.yml
+    secrets: inherit
 
   call-cdk-diff:
     if: github.event.pull_request.draft == false
