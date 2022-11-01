@@ -97,6 +97,15 @@ const CollectRecordFormPage = ({
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
+  const [isDeletingSite, setIsDeletingSite] = useState(false)
+  const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+
+  const openDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(true)
+  }
+  const closeDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(false)
+  }
 
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
@@ -488,30 +497,31 @@ const CollectRecordFormPage = ({
   }
 
   const deleteRecord = () => {
-    if (!isNewRecord) {
-      databaseSwitchboardInstance
-        .deleteSampleUnit({
-          record: collectRecordBeingEdited,
-          profileId: currentUser.id,
-          projectId,
-        })
-        .then(() => {
-          clearPersistedUnsavedFormikData()
-          clearPersistedUnsavedObservationsData()
-          toast.success(...getToastArguments(language.success.collectRecordDelete))
-          history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordDelete))
-            },
-          })
-        })
-    }
+    setIsDeletingSite(true)
 
-    return Promise.resolve()
+    databaseSwitchboardInstance
+      .deleteSampleUnit({
+        record: collectRecordBeingEdited,
+        profileId: currentUser.id,
+        projectId,
+      })
+      .then(() => {
+        clearPersistedUnsavedFormikData()
+        clearPersistedUnsavedObservationsData()
+        closeDeleteRecordModal()
+        setIsDeletingSite(false)
+        toast.success(...getToastArguments(language.success.collectRecordDelete))
+        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+      })
+      .catch((error) => {
+        setIsDeletingSite(false)
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.collectRecordDelete))
+          },
+        })
+      })
   }
 
   const handleSizeBinChange = (event) => {
@@ -643,6 +653,10 @@ const CollectRecordFormPage = ({
         isNewRecord={isNewRecord}
         deleteRecord={deleteRecord}
         modalText={language.deleteCollectRecord}
+        isOpen={isDeleteRecordModalOpen}
+        onDismiss={closeDeleteRecordModal}
+        openModal={openDeleteRecordModal}
+        isLoading={isDeletingSite}
       />
     </>
   ) : (
