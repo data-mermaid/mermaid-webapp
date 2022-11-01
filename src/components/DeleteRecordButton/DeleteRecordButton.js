@@ -1,44 +1,76 @@
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React from 'react'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { DeleteRecordButtonCautionWrapper } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
+import language from '../../language'
+import LoadingModal from '../LoadingModal/LoadingModal'
 
-const DeleteRecordButton = ({ isNewRecord, deleteRecord, modalText }) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
+const DeleteRecordButton = ({
+  isNewRecord,
+  deleteRecord,
+  modalText,
+  isOpen,
+  onDismiss,
+  openModal,
+  errorData,
+  currentPage,
+  isLoading,
+}) => {
+  const mainContentPageTwo = (
+    <>
+      <p>{language.deleteSiteRecord.confirmDeleteText1}</p>
+      <ul>
+        {errorData.map((error) => (
+          <li key={error.id}>{error.label}</li>
+        ))}
+      </ul>
+      <p>{language.deleteSiteRecord.confirmDeleteText2}</p>
+    </>
+  )
 
-  const showDeleteConfirmPrompt = () => {
-    setShowDeleteModal(true)
-  }
-  const closeDeleteConfirmPrompt = () => {
-    setShowDeleteModal(false)
-  }
+  const footerContentPageOne = (
+    <RightFooter>
+      <ButtonSecondary onClick={onDismiss}>{modalText.no}</ButtonSecondary>
+      <ButtonCaution onClick={deleteRecord}>{modalText.yes}</ButtonCaution>
+    </RightFooter>
+  )
 
-  const handleDeleteRecord = () => {
-    deleteRecord().then(() => {
-      closeDeleteConfirmPrompt()
-    })
-  }
+  const footerContentPageTwo = (
+    <RightFooter>
+      <ButtonSecondary onClick={onDismiss}>Close</ButtonSecondary>
+    </RightFooter>
+  )
+
+  const mainContent = (
+    <>
+      {currentPage === 1 && modalText.prompt}
+      {currentPage === 2 && mainContentPageTwo}
+    </>
+  )
+
+  const footerContent = (
+    <>
+      {currentPage === 1 && footerContentPageOne}
+      {currentPage === 2 && footerContentPageTwo}
+    </>
+  )
 
   return (
     <>
       <DeleteRecordButtonCautionWrapper>
-        <ButtonCaution onClick={showDeleteConfirmPrompt} disabled={isNewRecord}>
+        <ButtonCaution onClick={openModal} disabled={isNewRecord}>
           {modalText.title}
         </ButtonCaution>
       </DeleteRecordButtonCautionWrapper>
       <Modal
         title={modalText.title}
-        isOpen={showDeleteModal}
-        onDismiss={closeDeleteConfirmPrompt}
-        mainContent={modalText.prompt}
-        footerContent={
-          <RightFooter>
-            <ButtonSecondary onClick={closeDeleteConfirmPrompt}>{modalText.no}</ButtonSecondary>
-            <ButtonCaution onClick={handleDeleteRecord}>{modalText.yes}</ButtonCaution>
-          </RightFooter>
-        }
+        isOpen={isOpen}
+        onDismiss={onDismiss}
+        mainContent={mainContent}
+        footerContent={footerContent}
       />
+      {isLoading && <LoadingModal />}
     </>
   )
 }
@@ -52,6 +84,23 @@ DeleteRecordButton.propTypes = {
     yes: PropTypes.string,
     no: PropTypes.string,
   }).isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onDismiss: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
+  errorData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      site: PropTypes.string,
+      label: PropTypes.string,
+    }),
+  ),
+  currentPage: PropTypes.number,
+  isLoading: PropTypes.bool.isRequired,
+}
+
+DeleteRecordButton.defaultProps = {
+  errorData: [],
+  currentPage: 1,
 }
 
 export default DeleteRecordButton
