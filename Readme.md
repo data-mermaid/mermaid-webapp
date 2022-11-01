@@ -92,7 +92,7 @@ Since this app can exist in multiple states (online, offline, various states of 
 ### Production
 
 - Available at [app.datamermaid.org](https://app.datamermaid.org)
-- Is updated on tag creation
+- Is updated on specific (eg: `v2.0` or `v2.0.0`) tag creation
 
 ### Infrastructure as Code (IaC)
 

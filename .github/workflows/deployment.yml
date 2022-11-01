@@ -5,8 +5,8 @@ on:
     branches:
       - develop
     tags:
-      - 'w[0-9]+.[0-9]+'        # eg: v1.1
-      - 'w[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
+      - 'v[0-9]+.[0-9]+'        # eg: v1.1
+      - 'v[0-9]+.[0-9]+.[0-9]+' # eg: v1.1.1
 
 concurrency:
   group: ci-deployment-${{ github.ref }}
