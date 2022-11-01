@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -14,6 +15,20 @@ const SitesMixin = (Base) =>
         project: projectIdToSubmit,
         uiState_pushToApi: true,
       }
+    }
+
+    #getSiteLabel = function getSiteLabel(sites) {
+      return sites.length
+        ? sites.map(({ id, site_name, protocol, depth, label, sample_date, site }) => {
+            const protocolName = getRecordSampleUnitMethod(protocol)
+
+            return {
+              id,
+              site,
+              label: `${protocolName} - ${site_name} - ${depth} - ${label} (${sample_date})`,
+            }
+          })
+        : []
     }
 
     getSitesWithoutOfflineDeleted = async function getSitesWithoutOfflineDeleted(projectId) {
@@ -165,8 +180,61 @@ const SitesMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteSite = async function deleteSite() {
-      return Promise.reject(new Error('can not delete site'))
+    deleteSite = async function deleteSite(record, projectId) {
+      if (!record) {
+        throw new Error('deleteSite expects record, profileId, and projectId parameters')
+      }
+
+      const hasCorrespondingRecordInTheApi = !!record._last_revision_num
+
+      const recordMarkedToBeDeleted = {
+        ...record,
+        _deleted: true,
+        uiState_pushToApi: true,
+      }
+
+      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
+        // Add to IDB in case the there are network issues before the API responds
+        // await this._dexiePerUserDataInstance.project_sites.put(recordMarkedToBeDeleted)
+
+        return axios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              project_sites: [recordMarkedToBeDeleted],
+            },
+            {
+              params: {
+                force: true,
+              },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            },
+          )
+          .then((apiPushResponse) => {
+            const recordReturnedFromApiPush = apiPushResponse.data.project_sites[0]
+            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              recordReturnedFromApiPush.status_code,
+            )
+
+            // eslint-disable-next-line no-unused-vars
+            const { sampleevent, ...otherProtocols } = recordReturnedFromApiPush.data
+
+            if (isRecordStatusCodeSuccessful) {
+              // do a pull of data related to collect records
+              // to make sure it is all updated/deleted in IDB
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then((_apiPullResponse) => apiPushResponse)
+            }
+
+            const otherProtocolValues = Object.values(otherProtocols).flat()
+            const otherProtocolLabels = this.#getSiteLabel(otherProtocolValues)
+
+            return Promise.reject(otherProtocolLabels)
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
     }
   }
 
