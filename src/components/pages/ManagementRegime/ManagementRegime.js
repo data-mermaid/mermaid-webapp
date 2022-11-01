@@ -38,6 +38,7 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 import PageUnavailable from '../PageUnavailable'
 import { sortManagementComplianceChoices } from '../../../library/arrays/sortManagementComplianceChoices'
+import DeleteRecordButton from '../../DeleteRecordButton'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -174,6 +175,14 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
 }
 
 const ManagementRegime = ({ isNewManagementRegime }) => {
+  const currentProjectPath = useCurrentProjectPath()
+  const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { managementRegimeId, projectId } = useParams()
+  const history = useHistory()
+  const isMounted = useIsMounted()
+
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isFormDirty, setIsFormDirty] = useState(false)
@@ -181,13 +190,24 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const [managementPartyOptions, setManagementPartyOptions] = useState([])
   const [managementRegimeBeingEdited, setManagementRegimeBeingEdited] = useState()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
-  const { managementRegimeId, projectId } = useParams()
-  const history = useHistory()
-  const isMounted = useIsMounted()
-  const currentProjectPath = useCurrentProjectPath()
-  const { currentUser } = useCurrentUser()
+  const [siteDeleteErrorData, setSiteDeleteErrorData] = useState([])
+  const [isDeletingSite, setIsDeletingSite] = useState(false)
+  const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+  const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
+
+  const goToPageOneOfDeleteRecordModal = () => {
+    setCurrentDeleteRecordModalPage(1)
+  }
+  const goToPageTwoOfDeleteRecordModal = () => {
+    setCurrentDeleteRecordModalPage(2)
+  }
+  const openDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(true)
+  }
+  const closeDeleteRecordModal = () => {
+    goToPageOneOfDeleteRecordModal()
+    setIsDeleteRecordModalOpen(false)
+  }
 
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
@@ -347,6 +367,25 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     [formik.dirty, getPersistedUnsavedFormikData],
   )
 
+  const deleteRecord = () => {
+    setIsDeletingSite(true)
+
+    databaseSwitchboardInstance
+      .deleteManagementRegime(managementRegimeBeingEdited, projectId)
+      .then(() => {
+        clearPersistedUnsavedFormikData()
+        closeDeleteRecordModal()
+        setIsDeletingSite(false)
+        toast.success(...getToastArguments(language.success.collectRecordDelete))
+        history.push(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
+      })
+      .catch((error) => {
+        setSiteDeleteErrorData(error)
+        setIsDeletingSite(false)
+        goToPageTwoOfDeleteRecordModal()
+      })
+  }
+
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewManagementRegime
 
   const contentViewByReadOnlyRole = isNewManagementRegime ? (
@@ -367,6 +406,17 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         formik={formik}
         managementComplianceOptions={managementComplianceOptions}
         managementPartyOptions={managementPartyOptions}
+      />
+      <DeleteRecordButton
+        isNewRecord={isNewManagementRegime}
+        deleteRecord={deleteRecord}
+        modalText={language.deleteRecord('Management Regime')}
+        isOpen={isDeleteRecordModalOpen}
+        onDismiss={closeDeleteRecordModal}
+        openModal={openDeleteRecordModal}
+        errorData={siteDeleteErrorData}
+        currentPage={currentDeleteRecordModalPage}
+        isLoading={isDeletingSite}
       />
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={isFormDirty} />

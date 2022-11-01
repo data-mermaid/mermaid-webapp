@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
@@ -17,6 +18,22 @@ const ManagementRegimesMixin = (Base) =>
         project: projectIdToSubmit,
         uiState_pushToApi: true,
       }
+    }
+
+    #getManagementRegimeLabel = function getManagementRegimeLabel(submittedSampleUnits) {
+      return submittedSampleUnits.length
+        ? submittedSampleUnits.map(
+            ({ id, management_name, protocol, depth, label, sample_date, management_regime }) => {
+              const protocolName = getRecordSampleUnitMethod(protocol)
+
+              return {
+                id,
+                management_regime,
+                label: `${protocolName} - ${management_name} - ${depth} - ${label} (${sample_date})`,
+              }
+            },
+          )
+        : []
     }
 
     getManagementRegimesWithoutOfflineDeleted = function getManagementRegimesWithoutOfflineDeleted(
@@ -179,6 +196,63 @@ const ManagementRegimesMixin = (Base) =>
         return this._dexiePerUserDataInstance.project_managements
           .put(managementToSubmit)
           .then(() => managementToSubmit)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    deleteManagementRegime = async function deleteManagementRegime(record, projectId) {
+      if (!record) {
+        throw new Error('deleteSite expects record, profileId, and projectId parameters')
+      }
+
+      const hasCorrespondingRecordInTheApi = !!record._last_revision_num
+
+      const recordMarkedToBeDeleted = {
+        ...record,
+        _deleted: true,
+        uiState_pushToApi: true,
+      }
+
+      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
+        // Add to IDB in case the there are network issues before the API responds
+        // await this._dexiePerUserDataInstance.project_sites.put(recordMarkedToBeDeleted)
+
+        return axios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              project_managements: [recordMarkedToBeDeleted],
+            },
+            {
+              params: {
+                force: true,
+              },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            },
+          )
+          .then((apiPushResponse) => {
+            const recordReturnedFromApiPush = apiPushResponse.data.project_managements[0]
+            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              recordReturnedFromApiPush.status_code,
+            )
+
+            const { sampleevent, ...sampleUnitProtocols } = recordReturnedFromApiPush.data // eslint-disable-line no-unused-vars
+
+            if (isRecordStatusCodeSuccessful) {
+              // do a pull of data related to collect records
+              // to make sure it is all updated/deleted in IDB
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then((_apiPullResponse) => apiPushResponse)
+            }
+
+            const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
+            const sampleUnitProtocolLabels =
+              this.#getManagementRegimeLabel(sampleUnitProtocolValues)
+
+            return Promise.reject(sampleUnitProtocolLabels)
+          })
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
