@@ -1,8 +1,6 @@
-# This workflow creates deploy previews for pull requests in the S3 Bucket: "preview.datamermaid.org"
+# This workflow creates deploy previews for pull requests in the S3 Bucket: "preview.app2.datamermaid.org"
 # Deploy previews are created in the subfolders of the S3 bucket, allowing multiple react applications to be running in a single bucket
-# Note: This workflow requires the bucket to already have been created,
-#       along with the right bucket policy to allow actions on s3 objects,
-#       as well as public read access
+# Note: This workflow requires the bucket to already have been created via the CDK stack, 'preview-webapp'
 
 name: Create preview
 

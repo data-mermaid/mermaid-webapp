@@ -79,7 +79,7 @@ Since this app can exist in multiple states (online, offline, various states of 
 
 ### Pull Request Previews
 
-- Available at `preview.datamermaid.org/<pull-request-number-here>/`
+- Available at `preview.app2.datamermaid.org/<pull-request-number-here>/index.html`
 - A preview of the application is created when a pull request is opened, sychronized (commit is made), or re-opened.
 - A bot will add a PR comment with the link to the preview, once it is ready.
 - Once a pull request is merged or closed, the respective preview will be deleted.
