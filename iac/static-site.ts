@@ -48,13 +48,13 @@ export class StaticSite extends Construct {
        * the new bucket, and it will remain in your account until manually deleted. By setting the policy to
        * DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
        */
-      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+      removalPolicy: props.siteSubDomain === 'dev' ? RemovalPolicy.DESTROY : RemovalPolicy.RETAIN,
 
       /**
        * For sample purposes only, if you create an S3 bucket then populate it, stack destruction fails.  This
-       * setting will enable full cleanup of the demo.
+       * setting will enable full cleanup.
        */
-      autoDeleteObjects: true, // NOT recommended for production code
+      autoDeleteObjects: props.siteSubDomain === 'dev',
     })
 
     // Grant access to cloudfront
@@ -74,7 +74,7 @@ export class StaticSite extends Construct {
     // CloudFront distribution
     const domainNames = [siteDomain]
 
-    // allow the prod/preview domain into the cloudfront distribution
+    // allow the prod/preview domains into the cloudfront distribution
     if (props.siteSubDomain === 'prod') {
       domainNames.push("app.datamermaid.org")
     }
