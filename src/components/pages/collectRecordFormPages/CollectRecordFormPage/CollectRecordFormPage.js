@@ -59,6 +59,8 @@ import {
   getRecordSampleUnit,
   getIsFishBelt,
 } from '../../../../App/mermaidData/recordProtocolHelpers'
+import { useScrollCheckError } from '../../../../library/useScrollCheckError'
+import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
 
 const CollectRecordFormPage = ({
   isNewRecord,
@@ -104,6 +106,8 @@ const CollectRecordFormPage = ({
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
     submitButtonState === buttonGroupStates.submitting
+
+  const { isErrorAbove, isErrorBelow } = useScrollCheckError()
 
   const getValidationButtonStatus = (collectRecord) => {
     return collectRecord?.validations?.status === 'ok'
@@ -583,6 +587,13 @@ const CollectRecordFormPage = ({
       resetObservationValidations={resetObservationValidations}
       setAreObservationsInputsDirty={setAreObservationsInputsDirty}
     />
+  )
+
+  const errorBoxContent = (
+    <ErrorBox>
+      {<ErrorText isErrorShown={isErrorAbove}>{language.error.onPageWarningAbove}</ErrorText>}
+      {<ErrorText isErrorShown={isErrorBelow}>{language.error.onPageWarningBelow}</ErrorText>}
+    </ErrorBox>
   )
 
   const contentViewByRole = !isReadOnlyUser ? (

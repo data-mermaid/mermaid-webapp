@@ -69,6 +69,7 @@ const color = {
   cautionBorder: caution.mix(colorHelper(black), 0.2),
   cautionActive: caution.mix(colorHelper(white), 0.7),
   cautionDisabledColor: caution.mix(colorHelper('black'), 0.2),
+  inlineErrorColor: '#F6DCD9',
 
   calloutColor: white,
   calloutHover: callout.mix(colorHelper(white), 0.9),
