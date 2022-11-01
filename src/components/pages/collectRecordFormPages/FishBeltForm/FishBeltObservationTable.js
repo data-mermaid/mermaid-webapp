@@ -429,7 +429,7 @@ const FishBeltObservationTable = ({
     <InputWrapper>
       <H2 id="table-label">Observations</H2>
       <StyledOverflowWrapper>
-        <StickyObservationTable aria-labelledby="table-label">
+        <StickyObservationTable data-testid="fish-observations-table" aria-labelledby="table-label">
           <StyledColgroup>
             <col className="number" />
             <col className="fishName" />

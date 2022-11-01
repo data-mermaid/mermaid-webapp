@@ -54,7 +54,6 @@ const InputWithLabelAndValidation = ({
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
       </div>
       <InputValidationInfo
-        label={label}
         validationType={validationType}
         validationMessages={validationMessages}
         ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}

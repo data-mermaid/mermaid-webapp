@@ -20,7 +20,7 @@ test('Edit Site page - Save button initially disabled, then enabled when form di
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites/:siteId">
-      <Site />
+      <Site isNewSite={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/sites/1'],
@@ -49,7 +49,7 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites/:siteId">
-      <Site />
+      <Site isNewSite={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/sites/1'],
@@ -59,13 +59,16 @@ test('Edit Site page - Save button disabled and "Required" error valudation mess
   )
 
   const siteNameInput = await screen.findByRole('textbox', { name: 'Name' })
+  const countryInput = await screen.findByRole('textbox', { name: 'Country' })
 
   userEvent.clear(siteNameInput)
+  userEvent.click(countryInput)
 
-  expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
   expect(
     await within(screen.getByTestId('name')).findByText('This field is required'),
   ).toBeInTheDocument()
+
+  expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
 })
 
 test('Edit Site page - clear latitude or longitude inputs shows inline error validation message "This field is required"', async () => {
@@ -75,7 +78,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites/:siteId">
-      <Site />
+      <Site isNewSite={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/sites/1'],
@@ -88,8 +91,10 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
 
   // Clear latitude input field => "Required" in validation message showed, Save button disabled
   const latitudeInput = screen.getByLabelText('Latitude')
+  const countryInput = await screen.findByRole('textbox', { name: 'Country' })
 
   userEvent.clear(latitudeInput)
+  userEvent.click(countryInput)
 
   expect(
     await within(screen.getByTestId('latitude')).findByText('This field is required'),
@@ -106,6 +111,7 @@ test('Edit Site page - clear latitude or longitude inputs shows inline error val
   const longitudeInput = screen.getByLabelText('Longitude')
 
   userEvent.clear(longitudeInput)
+  userEvent.click(countryInput)
 
   expect(
     await within(screen.getByTestId('longitude')).findByText('This field is required'),
@@ -126,7 +132,7 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites/:siteId">
-      <Site />
+      <Site isNewSite={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/sites/1'],
@@ -138,9 +144,11 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const latitudeInput = screen.getByLabelText('Latitude')
+  const countryInput = screen.getByLabelText('Country')
 
   userEvent.clear(latitudeInput)
   userEvent.type(latitudeInput, '91')
+  userEvent.click(countryInput)
 
   expect(
     await within(screen.getByTestId('latitude')).findByText(
@@ -152,6 +160,7 @@ test('Edit Site page - enter invalid inputs to latitude shows inline error valid
 
   userEvent.clear(latitudeInput)
   userEvent.type(latitudeInput, '20')
+  userEvent.click(countryInput)
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
 })
@@ -163,7 +172,7 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/sites/:siteId">
-      <Site />
+      <Site isNewSite={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/sites/1'],
@@ -175,9 +184,11 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const longitudeInput = screen.getByLabelText('Longitude')
+  const countryInput = screen.getByLabelText('Country')
 
   userEvent.clear(longitudeInput)
   userEvent.type(longitudeInput, '181')
+  userEvent.click(countryInput)
 
   expect(
     await within(screen.getByTestId('longitude')).findByText(
@@ -189,6 +200,7 @@ test('Edit Site page - enter invalid inputs to longitude shows inline error vali
 
   userEvent.clear(longitudeInput)
   userEvent.type(longitudeInput, '20')
+  userEvent.click(countryInput)
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
 })

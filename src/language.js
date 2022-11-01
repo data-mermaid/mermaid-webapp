@@ -45,6 +45,7 @@ const error = {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
     required: 'This field is required',
+    managementPartialRestrictionRequired: 'At least one rule is required',
   },
   generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
   generic: 'Something went wrong.',
@@ -241,7 +242,7 @@ const pages = {
     deleteUnsyncedButton: 'Delete Unsynced Sample Units',
     removeUserModalTitle: 'Remove User From Project',
     removeUserButton: 'Remove User',
-    cancelButton: 'cancel'
+    cancelButton: 'cancel',
   },
   fishBeltForm: {
     title: 'Fish Belt',
@@ -373,6 +374,14 @@ const getValidationMessage = (validation, projectId = '') => {
   return (validationMessages[code] || validationMessages.default)()
 }
 
+const getErrorTitle = (page) => `The ${page} has not been saved. `
+
+const getErrorMessages = (pageError) => {
+  return Object.entries(pageError)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n')
+}
+
 export default {
   projectCodes,
   error,
@@ -390,4 +399,6 @@ export default {
   inlineMessage,
   projectModal,
   map,
+  getErrorTitle,
+  getErrorMessages,
 }
