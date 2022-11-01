@@ -299,7 +299,9 @@ const BenthicPhotoQuadratObservationTable = ({
           {hasErrorValidation || hasWarningValidation ? (
             <TableValidationList>
               {observationValidationMessages.map((validation) => (
-                <li key={validation.id}>{language.getValidationMessage(validation)}</li>
+                <li className={`${validationType}-indicator`} key={validation.id}>
+                  {language.getValidationMessage(validation)}
+                </li>
               ))}
             </TableValidationList>
           ) : null}
