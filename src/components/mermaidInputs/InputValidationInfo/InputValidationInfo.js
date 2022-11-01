@@ -26,7 +26,11 @@ const InputValidationInfo = ({
       (validationType === 'error' || validationType === 'warning') ? (
         <>
           {validationMessages.map((validation) => (
-            <InlineMessage type={validationType} key={validation.id}>
+            <InlineMessage
+              type={validationType}
+              key={validation.id}
+              className={`${validationType}-indicator`}
+            >
               <p>{language.getValidationMessage(validation)}</p>
             </InlineMessage>
           ))}
