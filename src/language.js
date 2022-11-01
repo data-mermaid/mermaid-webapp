@@ -136,21 +136,15 @@ const success = {
     `Proposed benthic ${attribute} saved. The observation has been edited to show it selected.`,
 }
 
-const deleteCollectRecord = {
-  title: 'Delete Record',
-  prompt: 'Are you sure you want to delete this record?',
-  yes: 'Delete Record',
-  no: 'Cancel',
-}
-const deleteSiteRecord = {
-  title: 'Delete Site',
-  prompt: 'Are you sure you want to delete this site?',
-  yes: 'Delete Site',
-  no: 'Cancel',
-  confirmDeleteText1:
-    'You can not delete this site because it is used in the following sample units:',
-  confirmDeleteText2:
-    'You have to remove this site from all sample units before you can delete it.',
+const deleteRecord = (pageName) => {
+  return {
+    title: `Delete ${pageName}`,
+    prompt: `Are you sure you want to delete this ${pageName.toLowerCase()}?`,
+    yes: `Delete ${pageName}`,
+    no: 'Cancel',
+    confirmDeleteText1: `You can not delete this ${pageName.toLowerCase()} because it is used in the following sample units:`,
+    confirmDeleteText2: `You have to remove this ${pageName.toLowerCase()} from all sample units before you can delete it.`,
+  }
 }
 
 const loadingIndicator = {
@@ -251,7 +245,7 @@ const pages = {
     deleteUnsyncedButton: 'Delete Unsynced Sample Units',
     removeUserModalTitle: 'Remove User From Project',
     removeUserButton: 'Remove User',
-    cancelButton: 'cancel'
+    cancelButton: 'cancel',
   },
   fishBeltForm: {
     title: 'Fish Belt',
@@ -387,8 +381,7 @@ export default {
   projectCodes,
   error,
   success,
-  deleteCollectRecord,
-  deleteSiteRecord,
+  deleteRecord,
   loadingIndicator,
   autocomplete,
   header,

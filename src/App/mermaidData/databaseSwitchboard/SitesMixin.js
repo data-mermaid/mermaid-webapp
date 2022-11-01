@@ -17,17 +17,19 @@ const SitesMixin = (Base) =>
       }
     }
 
-    #getSiteLabel = function getSiteLabel(sites) {
-      return sites.length
-        ? sites.map(({ id, site_name, protocol, depth, label, sample_date, site }) => {
-            const protocolName = getRecordSampleUnitMethod(protocol)
+    #getSiteLabel = function getSiteLabel(submittedSampleUnits) {
+      return submittedSampleUnits.length
+        ? submittedSampleUnits.map(
+            ({ id, site_name, protocol, depth, label, sample_date, site }) => {
+              const protocolName = getRecordSampleUnitMethod(protocol)
 
-            return {
-              id,
-              site,
-              label: `${protocolName} - ${site_name} - ${depth} - ${label} (${sample_date})`,
-            }
-          })
+              return {
+                id,
+                site,
+                label: `${protocolName} - ${site_name} - ${depth} - ${label} (${sample_date})`,
+              }
+            },
+          )
         : []
     }
 
@@ -216,8 +218,7 @@ const SitesMixin = (Base) =>
               recordReturnedFromApiPush.status_code,
             )
 
-            // eslint-disable-next-line no-unused-vars
-            const { sampleevent, ...otherProtocols } = recordReturnedFromApiPush.data
+            const { sampleevent, ...sampleUnitProtocols } = recordReturnedFromApiPush.data // eslint-disable-line no-unused-vars
 
             if (isRecordStatusCodeSuccessful) {
               // do a pull of data related to collect records
@@ -227,10 +228,10 @@ const SitesMixin = (Base) =>
                 .then((_apiPullResponse) => apiPushResponse)
             }
 
-            const otherProtocolValues = Object.values(otherProtocols).flat()
-            const otherProtocolLabels = this.#getSiteLabel(otherProtocolValues)
+            const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
+            const sampleUnitProtocolLabels = this.#getSiteLabel(sampleUnitProtocolValues)
 
-            return Promise.reject(otherProtocolLabels)
+            return Promise.reject(sampleUnitProtocolLabels)
           })
       }
 

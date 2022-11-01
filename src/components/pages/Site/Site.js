@@ -407,7 +407,7 @@ const Site = ({ isNewSite }) => {
       <DeleteRecordButton
         isNewRecord={isNewSite}
         deleteRecord={deleteRecord}
-        modalText={language.deleteSiteRecord}
+        modalText={language.deleteRecord('Site')}
         isOpen={isDeleteRecordModalOpen}
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}

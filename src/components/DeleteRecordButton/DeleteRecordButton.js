@@ -3,7 +3,6 @@ import React from 'react'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { DeleteRecordButtonCautionWrapper } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
-import language from '../../language'
 import LoadingModal from '../LoadingModal/LoadingModal'
 
 const DeleteRecordButton = ({
@@ -19,13 +18,13 @@ const DeleteRecordButton = ({
 }) => {
   const mainContentPageTwo = (
     <>
-      <p>{language.deleteSiteRecord.confirmDeleteText1}</p>
+      <p>{modalText.confirmDeleteText1}</p>
       <ul>
         {errorData.map((error) => (
           <li key={error.id}>{error.label}</li>
         ))}
       </ul>
-      <p>{language.deleteSiteRecord.confirmDeleteText2}</p>
+      <p>{modalText.confirmDeleteText2}</p>
     </>
   )
 
@@ -83,6 +82,8 @@ DeleteRecordButton.propTypes = {
     prompt: PropTypes.string,
     yes: PropTypes.string,
     no: PropTypes.string,
+    confirmDeleteText1: PropTypes.string,
+    confirmDeleteText2: PropTypes.string,
   }).isRequired,
   isOpen: PropTypes.bool.isRequired,
   onDismiss: PropTypes.func.isRequired,

@@ -652,7 +652,7 @@ const CollectRecordFormPage = ({
       <DeleteRecordButton
         isNewRecord={isNewRecord}
         deleteRecord={deleteRecord}
-        modalText={language.deleteCollectRecord}
+        modalText={language.deleteRecord('Record')}
         isOpen={isDeleteRecordModalOpen}
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}
