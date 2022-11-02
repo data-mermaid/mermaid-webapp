@@ -658,6 +658,7 @@ const CollectRecordFormPage = ({
         openModal={openDeleteRecordModal}
         isLoading={isDeletingSite}
       />
+      {errorBoxContent}
     </>
   ) : (
     <PageUnavailable mainText={language.error.pageReadOnly} />
