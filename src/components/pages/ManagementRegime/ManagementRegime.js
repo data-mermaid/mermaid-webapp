@@ -12,7 +12,7 @@ import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlas
 import { formikPropType } from '../../../library/formikPropType'
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
-import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -210,6 +210,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   }
 
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -407,17 +408,19 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         managementComplianceOptions={managementComplianceOptions}
         managementPartyOptions={managementPartyOptions}
       />
-      <DeleteRecordButton
-        isNewRecord={isNewManagementRegime}
-        deleteRecord={deleteRecord}
-        modalText={language.deleteRecord('Management Regime')}
-        isOpen={isDeleteRecordModalOpen}
-        onDismiss={closeDeleteRecordModal}
-        openModal={openDeleteRecordModal}
-        errorData={siteDeleteErrorData}
-        currentPage={currentDeleteRecordModalPage}
-        isLoading={isDeletingSite}
-      />
+      {isAdminUser && (
+        <DeleteRecordButton
+          isNewRecord={isNewManagementRegime}
+          deleteRecord={deleteRecord}
+          modalText={language.deleteRecord('Management Regime')}
+          isOpen={isDeleteRecordModalOpen}
+          onDismiss={closeDeleteRecordModal}
+          openModal={openDeleteRecordModal}
+          errorData={siteDeleteErrorData}
+          currentPage={currentDeleteRecordModalPage}
+          isLoading={isDeletingSite}
+        />
+      )}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>

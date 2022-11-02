@@ -11,7 +11,7 @@ import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { formikPropType } from '../../../library/formikPropType'
 import { getOptions } from '../../../library/getOptions'
-import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
@@ -210,6 +210,7 @@ const Site = ({ isNewSite }) => {
   }
 
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -404,17 +405,19 @@ const Site = ({ isNewSite }) => {
         handleLatitudeChange={handleLatitudeChange}
         handleLongitudeChange={handleLongitudeChange}
       />
-      <DeleteRecordButton
-        isNewRecord={isNewSite}
-        deleteRecord={deleteRecord}
-        modalText={language.deleteRecord('Site')}
-        isOpen={isDeleteRecordModalOpen}
-        onDismiss={closeDeleteRecordModal}
-        openModal={openDeleteRecordModal}
-        errorData={siteDeleteErrorData}
-        currentPage={currentDeleteRecordModalPage}
-        isLoading={isDeletingSite}
-      />
+      {isAdminUser && (
+        <DeleteRecordButton
+          isNewRecord={isNewSite}
+          deleteRecord={deleteRecord}
+          modalText={language.deleteRecord('Site')}
+          isOpen={isDeleteRecordModalOpen}
+          onDismiss={closeDeleteRecordModal}
+          openModal={openDeleteRecordModal}
+          errorData={siteDeleteErrorData}
+          currentPage={currentDeleteRecordModalPage}
+          isLoading={isDeletingSite}
+        />
+      )}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>
