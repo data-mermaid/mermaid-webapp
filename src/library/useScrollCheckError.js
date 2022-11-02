@@ -11,7 +11,8 @@ const getErrorPositionRelativeToCurrentlyVisibleViewportArea = (errorElementDOMR
   ) {
     relativePositionToViewport = 'below'
   } else if (
-    errorElementDOMRectangleObject.top <= 0 &&
+    // roughly the height of the header and toolbar
+    errorElementDOMRectangleObject.top <= 120 &&
     errorElementDOMRectangleObject.bottom <= (window.innerHeight || html.clientHeight)
   ) {
     relativePositionToViewport = 'above'
