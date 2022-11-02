@@ -130,7 +130,7 @@ const NavMenu = ({ subNavNode }) => {
             <NavHeader>Data</NavHeader>
             <ul>
               <li>
-                <NavLinkSidebar exact to={`${projectUrl}/data`}>
+                <NavLinkSidebar exact to={`${projectUrl}/submitted`}>
                   <IconData />
                   <span>Submitted</span>
                 </NavLinkSidebar>

@@ -80,7 +80,7 @@ test('A project card renders with the expected UI elements for button groups', a
 
   const projectCard = screen.getAllByRole('listitem')[0]
   const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
-  const submitSummaryCard = within(projectCard).getByLabelText(/data/i)
+  const submitSummaryCard = within(projectCard).getByLabelText(/submitted/i)
   const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
   const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
   const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
@@ -169,7 +169,7 @@ test('A project card renders appropriately when offline', async () => {
 
   const projectCard = screen.getAllByRole('listitem')[0]
   const collectingSummaryCard = within(projectCard).getByLabelText(/collect/i)
-  const submittedSummaryCard = within(projectCard).getByLabelText(/data/i)
+  const submittedSummaryCard = within(projectCard).getByLabelText(/submitted/i)
   const sitesSummaryCard = within(projectCard).getByLabelText(/sites/i)
   const usersSummaryCard = within(projectCard).getByLabelText(/users/i)
   const dataSharingSummaryCard = within(projectCard).getByLabelText(/data-sharing/i)
