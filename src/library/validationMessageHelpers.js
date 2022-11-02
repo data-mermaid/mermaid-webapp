@@ -22,7 +22,7 @@ export const getSystemValidationErrorMessage = (drySubmitContext) => {
 }
 
 export const getDuplicateSampleUnitLink = (duplicateTransectMethodContext, projectId) => {
-  const linkToSampleUnit = `/projects/${projectId}/data/fishbelt/${duplicateTransectMethodContext}`
+  const linkToSampleUnit = `/projects/${projectId}/submitted/fishbelt/${duplicateTransectMethodContext}`
 
   return (
     <span>

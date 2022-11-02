@@ -299,7 +299,9 @@ const FishBeltObservationTable = ({
           {hasErrorValidation || hasWarningValidation ? (
             <TableValidationList>
               {observationValidationMessages.map((validation) => (
-                <li key={validation.id}>{language.getValidationMessage(validation)}</li>
+                <li className={`${validationType}-indicator`} type="warning" key={validation.id}>
+                  {language.getValidationMessage(validation)}
+                </li>
               ))}
             </TableValidationList>
           ) : null}
@@ -429,7 +431,7 @@ const FishBeltObservationTable = ({
     <InputWrapper>
       <H2 id="table-label">Observations</H2>
       <StyledOverflowWrapper>
-        <StickyObservationTable aria-labelledby="table-label">
+        <StickyObservationTable data-testid="fish-observations-table" aria-labelledby="table-label">
           <StyledColgroup>
             <col className="number" />
             <col className="fishName" />

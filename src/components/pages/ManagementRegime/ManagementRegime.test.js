@@ -20,7 +20,7 @@ test('Edit Management Regime - shows name and rules required', async () => {
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
-      <ManagementRegime />
+      <ManagementRegime isNewManagementRegime={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/management-regimes/1'],
@@ -33,8 +33,10 @@ test('Edit Management Regime - shows name and rules required', async () => {
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
   const nameInput = screen.getByLabelText('Name')
+  const secondaryNameInput = screen.getByLabelText('Secondary Name')
 
   userEvent.clear(nameInput)
+  userEvent.click(secondaryNameInput)
 
   expect(
     await within(screen.getByTestId('name')).findByText('This field is required'),
@@ -44,8 +46,9 @@ test('Edit Management Regime - shows name and rules required', async () => {
 
   expect(gearRestrictionCheckbox).toBeChecked()
   userEvent.click(gearRestrictionCheckbox)
+
   expect(
-    await within(screen.getByTestId('rules')).findByText('This field is required'),
+    await within(screen.getByTestId('rules')).findByText('At least one rule is required'),
   ).toBeInTheDocument()
 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeDisabled()
@@ -64,7 +67,7 @@ test('Management Regime component renders with the expected UI elements', async 
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
-      <ManagementRegime />
+      <ManagementRegime isNewManagementRegime={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/management-regimes/2'],
@@ -98,7 +101,7 @@ test('Management Regime component - form inputs are initialized with the correct
 
   renderAuthenticatedOnline(
     <Route path="/projects/:projectId/management-regimes/:managementRegimeId">
-      <ManagementRegime />
+      <ManagementRegime isNewManagementRegime={false} />
     </Route>,
     {
       initialEntries: ['/projects/5/management-regimes/2'],

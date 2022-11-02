@@ -45,6 +45,7 @@ const error = {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
     required: 'This field is required',
+    managementPartialRestrictionRequired: 'At least one rule is required',
   },
   generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
   generic: 'Something went wrong.',
@@ -347,7 +348,7 @@ const getValidationMessage = (validation, projectId = '') => {
     invalid_sample_date: () => 'Invalid date',
     len_surveyed_out_of_range: () =>
       `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
-    low_density: () => `Fish biomass less than ${context?.biomass_range[1]} kg/ha`,
+    low_density: () => `Fish biomass less than ${context?.biomass_range[0]} kg/ha`,
     management_not_found: () => 'Management Regime record not available for similarity validation',
     max_depth: () =>
       `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`,
@@ -361,7 +362,7 @@ const getValidationMessage = (validation, projectId = '') => {
     not_unique_site: () => 'Site: Similar records detected',
     not_unique_management: () =>
       'Management Regime: Other sample events at this site have a different management regime',
-    high_density: () => `Fish biomass greater than ${context?.biomass_range[0]} kg/ha`,
+    high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
@@ -375,6 +376,14 @@ const getValidationMessage = (validation, projectId = '') => {
   }
 
   return (validationMessages[code] || validationMessages.default)()
+}
+
+const getErrorTitle = (page) => `The ${page} has not been saved. `
+
+const getErrorMessages = (pageError) => {
+  return Object.entries(pageError)
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n')
 }
 
 export default {
@@ -394,4 +403,6 @@ export default {
   inlineMessage,
   projectModal,
   map,
+  getErrorTitle,
+  getErrorMessages,
 }

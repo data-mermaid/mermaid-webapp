@@ -60,7 +60,7 @@ describe('Offline', () => {
     expect(within(parties).getByLabelText('private sector')).not.toBeChecked()
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('Open Access', { exact: false }),
-    ).not.toBeChecked()
+    ).toBeChecked()
     expect(
       within(screen.getByLabelText('Rules')).getByLabelText('No Take', { exact: false }),
     ).not.toBeChecked()
@@ -135,9 +135,14 @@ describe('Offline', () => {
   test('New MR save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
+    const mockManagementRegimeErrorData = {
+      name: 'This field may not be blank.',
+    }
+
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    dexiePerUserDataInstance.project_managements.put = () => Promise.reject()
+    dexiePerUserDataInstance.project_managements.put = () =>
+      Promise.reject(mockManagementRegimeErrorData)
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/management-regimes/new'],
@@ -147,8 +152,8 @@ describe('Offline', () => {
 
     await saveMR()
 
-    expect(
-      await screen.findByText('Something went wrong. The management regime has not been saved.'),
+    expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
+      `The management regime has not been saved. name: This field may not be blank.`,
     )
 
     // ensure the were not in edit mode, but new management regime mode

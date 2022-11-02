@@ -13,7 +13,7 @@ test('App renders show page unavailable offline when navigate to Project Health 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/usersandtransects'],
+    initialEntries: ['/projects/5/users-and-transects'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -25,7 +25,7 @@ test('App renders show page unavailable offline when navigate to Submitted page 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/data'],
+    initialEntries: ['/projects/5/submitted'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -44,11 +44,11 @@ test('App renders show page unavailable offline when navigate to Graphs and Maps
   expect(await screen.findByText('This page is unavailable offline.'))
 })
 
-test('App renders show page unavailable offline when navigate to Admin page while offline.', async () => {
+test('App renders show page unavailable offline when navigate to Project Info page while offline.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/admin'],
+    initialEntries: ['/projects/5/project-info'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

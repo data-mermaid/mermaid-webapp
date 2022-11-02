@@ -81,10 +81,12 @@ const ProjectCard = ({
   }
 
   const handleCardClick = () => {
-    if (isReadOnlyUser) { return }
+    if (isReadOnlyUser && !isAppOnline) {
+      return
+    }
 
     const destinationUrl = isAppOnline
-      ? `${projectUrl}/usersandtransects`
+      ? `${projectUrl}/users-and-transects`
       : `${projectUrl}/collecting`
 
     history.push(destinationUrl)
@@ -97,7 +99,8 @@ const ProjectCard = ({
       onClick={handleCardClick}
       {...restOfProps}
       disabled={isReadOnlyUser && !isAppOnline}
-      data-testid="project-card">
+      data-testid="project-card"
+    >
       <ProjectCardHeader>
         <div>
           <h2>{name}</h2>

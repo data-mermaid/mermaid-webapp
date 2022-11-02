@@ -5,9 +5,9 @@ import '@testing-library/jest-dom/extend-expect'
 //   screen,
 // } from '../../../testUtilities/testingLibraryWithHelpers'
 
-// import Admin from './Admin'
+// import ProjectInfo from './ProjectInfo'
 
-test('Admin component renders with the expected UI elements', () => {
+test('ProjectInfo component renders with the expected UI elements', () => {
   // const utilities = renderAuthenticatedOnline(<Admin />)
   // expect(screen.getByText('I should fail'))
 })

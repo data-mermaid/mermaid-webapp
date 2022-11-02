@@ -10,13 +10,13 @@ import App from '../../App'
 
 // this test suite is broken up into two for performance reasons
 
-test('App renders show page unavailable offline when navigate to Admin page while offline.', async () => {
+test('App renders show page unavailable offline when navigate to Project Info page while offline.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/admin'],
+    initialEntries: ['/projects/5/project-info'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

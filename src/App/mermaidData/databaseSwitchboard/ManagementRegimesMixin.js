@@ -169,6 +169,7 @@ const ManagementRegimesMixin = (Base) =>
           )
           .then((response) => {
             const [managementRegimeResponseFromApiPush] = response.data.project_managements
+            const projectManagementsErrorData = managementRegimeResponseFromApiPush.data
 
             const isManagementRegimeStatusCodeSuccessful = this._isStatusCodeSuccessful(
               managementRegimeResponseFromApiPush.status_code,
@@ -185,11 +186,7 @@ const ManagementRegimesMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(
-              new Error(
-                'the API management regime returned from saveManagementRegime doesnt have a successful status code',
-              ),
-            )
+            return Promise.reject(projectManagementsErrorData)
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {

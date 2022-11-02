@@ -151,6 +151,7 @@ const SitesMixin = (Base) =>
           )
           .then((response) => {
             const [siteResponseFromApiPush] = response.data.project_sites
+            const projectSitesErrorData = siteResponseFromApiPush.data
 
             const isSiteStatusCodeSuccessful = this._isStatusCodeSuccessful(
               siteResponseFromApiPush.status_code,
@@ -168,11 +169,10 @@ const SitesMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(
-              new Error('the API site returned from saveSite doesnt have a successful status code'),
-            )
+            return Promise.reject(projectSitesErrorData)
           })
       }
+
       if (this._isOfflineAuthenticatedAndReady) {
         return this._dexiePerUserDataInstance.project_sites
           .put(siteToSubmit)

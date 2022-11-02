@@ -99,7 +99,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
-          validationType={formik.errors.name ? 'error' : null}
+          validationType={formik.errors.name && formik.touched.name ? 'error' : null}
           validationMessages={formik.errors.name}
           testId="name"
         />
@@ -325,9 +325,20 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             )
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          const errorTitle = language.getErrorTitle('management regime')
+          const errorLang = language.getErrorMessages(error)
+
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(language.error.managementRegimeSave)
+          toast.error(
+            ...getToastArguments(
+              <div data-testid="management-regime-toast-error">
+                {errorTitle}
+                <br />
+                {errorLang}
+              </div>,
+            ),
+          )
         })
     },
     validate: (values) => {
@@ -339,14 +350,21 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         values.size_limits ||
         values.gear_restriction ||
         values.species_restriction
-      const isOneOfRulesSelected =
-        values.open_access || values.no_take || isPartialSelectionSelected
+
+      const noPartialRestrictionRulesSelected =
+        !values.open_access && !values.no_take && isPartialSelectionSelected === false
 
       if (!values.name) {
         errors.name = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
-      if (!isOneOfRulesSelected) {
-        errors.rules = [{ code: language.error.formValidation.required, id: 'Required' }]
+
+      if (noPartialRestrictionRulesSelected) {
+        errors.rules = [
+          {
+            code: language.error.formValidation.managementPartialRestrictionRequired,
+            id: 'Partial Restriction Required',
+          },
+        ]
       }
 
       return errors
