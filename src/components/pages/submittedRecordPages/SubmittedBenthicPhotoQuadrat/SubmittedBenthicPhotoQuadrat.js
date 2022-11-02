@@ -121,7 +121,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpqt/${submittedRecordId}`,
+          `${ensureTrailingSlash(currentProjectPath)}collecting/benthic-photo-quadrat/${submittedRecordId}`,
         )
       })
       .catch(() => {

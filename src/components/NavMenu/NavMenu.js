@@ -84,12 +84,12 @@ const NavMenu = ({ subNavNode }) => {
             <NavHeader>Project Health</NavHeader>
             <ul>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/usersandtransects`}>
+                <NavLinkSidebar to={`${projectUrl}/users-and-transects`}>
                   <IconUsersAndTransects /> <span>Users and Transects</span>
                 </NavLinkSidebar>
               </li>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/managementregimesoverview`}>
+                <NavLinkSidebar to={`${projectUrl}/management-regimes-overview`}>
                   <IconManagementRegimesOverview /> <span>Management Regimes Overview</span>
                 </NavLinkSidebar>
               </li>
@@ -130,7 +130,7 @@ const NavMenu = ({ subNavNode }) => {
             <NavHeader>Data</NavHeader>
             <ul>
               <li>
-                <NavLinkSidebar exact to={`${projectUrl}/data`}>
+                <NavLinkSidebar exact to={`${projectUrl}/submitted`}>
                   <IconData />
                   <span>Submitted</span>
                 </NavLinkSidebar>
@@ -149,7 +149,7 @@ const NavMenu = ({ subNavNode }) => {
             <NavHeader>Admin</NavHeader>
             <ul>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/admin`}>
+                <NavLinkSidebar to={`${projectUrl}/project-info`}>
                   <IconInfo />
                   <span>Project Info</span>
                 </NavLinkSidebar>

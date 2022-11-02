@@ -2,9 +2,9 @@ import '@testing-library/jest-dom/extend-expect'
 // import React from 'react'
 // import { renderAuthenticatedOnline } from '../../../testUtilities/testingLibraryWithHelpers'
 
-// import Data from './Data'
+// import Submitted from './Submitted'
 
-test('Data component renders with the expected UI elements', () => {
-  // const utilities = renderAuthenticatedOnline(<Data />)
+test('Submitted component renders with the expected UI elements', () => {
+  // const utilities = renderAuthenticatedOnline(<Submitted />)
   // expect(utilities.getByText('I should fail'))
 })

@@ -161,7 +161,7 @@ const ReadOnlyAdminContent = ({ project }) => (
   </ReadOnlyContentWrapper>
 )
 
-const Admin = () => {
+const ProjectInfo = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [projectBeingEdited, setProjectBeingEdited] = useState()
@@ -388,4 +388,4 @@ ReadOnlyAdminContent.propTypes = {
   }).isRequired,
 }
 
-export default Admin
+export default ProjectInfo

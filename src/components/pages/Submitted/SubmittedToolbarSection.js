@@ -24,7 +24,7 @@ const DropdownItemStyle = styled.button`
   `)}
 `
 
-const DataToolbarSection = ({ name, handleGlobalFilterChange, handleExportToCSV, filterValue }) => {
+const SubmittedToolbarSection = ({ name, handleGlobalFilterChange, handleExportToCSV, filterValue }) => {
   const label = (
     <>
       <IconDownload /> Export To CSV
@@ -53,15 +53,15 @@ const DataToolbarSection = ({ name, handleGlobalFilterChange, handleExportToCSV,
   )
 }
 
-DataToolbarSection.defaultProps = {
+SubmittedToolbarSection.defaultProps = {
   filterValue: undefined
 }
 
-DataToolbarSection.propTypes = {
+SubmittedToolbarSection.propTypes = {
   name: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
   handleExportToCSV: PropTypes.func.isRequired,
   filterValue: PropTypes.string,
 }
 
-export default DataToolbarSection
+export default SubmittedToolbarSection

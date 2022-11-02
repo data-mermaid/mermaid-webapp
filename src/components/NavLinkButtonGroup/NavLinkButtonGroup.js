@@ -13,8 +13,8 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
     <>
       <OfflineHide>
         <NavLinkThatLooksLikeButtonIcon
-          to={`${projectUrl}/usersandtransects`}
-          aria-label="Usersandtransects"
+          to={`${projectUrl}/users-and-transects`}
+          aria-label="Users And Transects"
           onClick={stopEventPropagation}
         >
           <IconProjectOverview />
@@ -31,8 +31,8 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
       </NavLinkThatLooksLikeButtonIcon>
       <OfflineHide>
         <NavLinkThatLooksLikeButtonIcon
-          to={`${projectUrl}/data`}
-          aria-label="Data"
+          to={`${projectUrl}/submitted`}
+          aria-label="Submitted"
           onClick={stopEventPropagation}
         >
           <IconData />
@@ -41,8 +41,8 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
       </OfflineHide>
       <OfflineHide>
         <NavLinkThatLooksLikeButtonIcon
-          to={`${projectUrl}/admin`}
-          aria-label="Admin"
+          to={`${projectUrl}/project-info`}
+          aria-label="Project Info"
           onClick={stopEventPropagation}
         >
           <IconInfo />

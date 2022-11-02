@@ -84,7 +84,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   )
 
   const submittedCardOnline = (
-    <SummaryCard to={`${projectUrl}/data`} aria-label="Submitted" onClick={stopEventPropagation}>
+    <SummaryCard to={`${projectUrl}/submitted`} aria-label="Submitted" onClick={stopEventPropagation}>
       <SubCardTitle>Submitted</SubCardTitle>
       <SubCardIconAndCount>
         <IconData />
