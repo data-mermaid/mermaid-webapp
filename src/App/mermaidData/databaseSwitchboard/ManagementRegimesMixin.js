@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
+import { getSampleUnitLabel } from '../getSampleUnitLabel'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
@@ -18,22 +18,6 @@ const ManagementRegimesMixin = (Base) =>
         project: projectIdToSubmit,
         uiState_pushToApi: true,
       }
-    }
-
-    #getManagementRegimeLabel = function getManagementRegimeLabel(submittedSampleUnits) {
-      return submittedSampleUnits.length
-        ? submittedSampleUnits.map(
-            ({ id, management_name, protocol, depth, label, sample_date, management_regime }) => {
-              const protocolName = getRecordSampleUnitMethod(protocol)
-
-              return {
-                id,
-                management_regime,
-                label: `${protocolName} - ${management_name} - ${depth} - ${label} (${sample_date})`,
-              }
-            },
-          )
-        : []
     }
 
     getManagementRegimesWithoutOfflineDeleted = function getManagementRegimesWithoutOfflineDeleted(
@@ -245,8 +229,7 @@ const ManagementRegimesMixin = (Base) =>
             }
 
             const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
-            const sampleUnitProtocolLabels =
-              this.#getManagementRegimeLabel(sampleUnitProtocolValues)
+            const sampleUnitProtocolLabels = getSampleUnitLabel(sampleUnitProtocolValues)
 
             return Promise.reject(sampleUnitProtocolLabels)
           })

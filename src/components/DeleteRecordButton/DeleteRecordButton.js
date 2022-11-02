@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { DeleteRecordButtonCautionWrapper } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import LoadingModal from '../LoadingModal/LoadingModal'
+import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 
 const DeleteRecordButton = ({
   isNewRecord,
@@ -16,12 +18,18 @@ const DeleteRecordButton = ({
   currentPage,
   isLoading,
 }) => {
+  const currentProjectPath = useCurrentProjectPath()
+
   const mainContentPageTwo = (
     <>
       <p>{modalText.confirmDeleteText1}</p>
       <ul>
         {errorData.map((error) => (
-          <li key={error.id}>{error.label}</li>
+          <li key={error.id}>
+            <Link to={`${currentProjectPath}/submitted/${error.protocol}/${error.id}`}>
+              {error.sampleUnitLabel}
+            </Link>
+          </li>
         ))}
       </ul>
       <p>{modalText.confirmDeleteText2}</p>
@@ -92,7 +100,7 @@ DeleteRecordButton.propTypes = {
     PropTypes.shape({
       id: PropTypes.string,
       site: PropTypes.string,
-      label: PropTypes.string,
+      sampleUnitLabel: PropTypes.string,
     }),
   ),
   currentPage: PropTypes.number,

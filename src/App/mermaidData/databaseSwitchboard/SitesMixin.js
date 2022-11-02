@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
+import { getSampleUnitLabel } from '../getSampleUnitLabel'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -15,22 +15,6 @@ const SitesMixin = (Base) =>
         project: projectIdToSubmit,
         uiState_pushToApi: true,
       }
-    }
-
-    #getSiteLabel = function getSiteLabel(submittedSampleUnits) {
-      return submittedSampleUnits.length
-        ? submittedSampleUnits.map(
-            ({ id, site_name, protocol, depth, label, sample_date, site }) => {
-              const protocolName = getRecordSampleUnitMethod(protocol)
-
-              return {
-                id,
-                site,
-                label: `${protocolName} - ${site_name} - ${depth} - ${label} (${sample_date})`,
-              }
-            },
-          )
-        : []
     }
 
     getSitesWithoutOfflineDeleted = async function getSitesWithoutOfflineDeleted(projectId) {
@@ -229,7 +213,7 @@ const SitesMixin = (Base) =>
             }
 
             const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
-            const sampleUnitProtocolLabels = this.#getSiteLabel(sampleUnitProtocolValues)
+            const sampleUnitProtocolLabels = getSampleUnitLabel(sampleUnitProtocolValues)
 
             return Promise.reject(sampleUnitProtocolLabels)
           })
