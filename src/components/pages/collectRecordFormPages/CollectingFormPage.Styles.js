@@ -144,7 +144,7 @@ export const ErrorText = styled.div`
   font-size: ${theme.typography.smallFontSize};
   pointer-events: auto;
   white-space: nowrap;
-  border: solid 1px ${theme.color.textColor};
+  border: solid 1px ${theme.color.border};
   text-transform: uppercase;
   background: ${theme.color.inlineErrorColor};
   color: ${theme.color.textColor};
@@ -160,12 +160,13 @@ export const ErrorText = styled.div`
     left: calc(50% - 5px);
     border-style: solid;
     border-width: 1px 0 0 1px;
-    border-color: ${theme.color.textColor};
+    border-color: ${theme.color.border};
   }
 `
 
 export const ErrorBox = styled.div`
   position: fixed;
+  z-index: 4;
   pointer-events: none;
   top: calc(${theme.spacing.headerHeight} + ${theme.spacing.toolbarHeight} + 20px);
   bottom: ${theme.spacing.small};
