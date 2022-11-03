@@ -39,6 +39,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDir
 import PageUnavailable from '../PageUnavailable'
 import { sortManagementComplianceChoices } from '../../../library/arrays/sortManagementComplianceChoices'
 import DeleteRecordButton from '../../DeleteRecordButton'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -182,6 +183,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const { managementRegimeId, projectId } = useParams()
   const history = useHistory()
   const isMounted = useIsMounted()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -190,8 +192,8 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const [managementPartyOptions, setManagementPartyOptions] = useState([])
   const [managementRegimeBeingEdited, setManagementRegimeBeingEdited] = useState()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const [siteDeleteErrorData, setSiteDeleteErrorData] = useState([])
-  const [isDeletingSite, setIsDeletingSite] = useState(false)
+  const [deleteErrorData, setDeleteErrorData] = useState([])
+  const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
   const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
 
@@ -244,8 +246,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
+            },
+          })
         })
     }
   }, [
@@ -255,6 +262,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     isSyncInProgress,
     managementRegimeId,
     projectId,
+    handleHttpResponseError,
   ])
 
   const {
@@ -375,7 +383,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     `${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
   )
 
-  const _setSiteButtonUnsaved = useEffect(() => {
+  const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
@@ -387,21 +395,26 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   )
 
   const deleteRecord = () => {
-    setIsDeletingSite(true)
+    setIsDeletingRecord(true)
 
     databaseSwitchboardInstance
       .deleteManagementRegime(managementRegimeBeingEdited, projectId)
       .then(() => {
         clearPersistedUnsavedFormikData()
         closeDeleteRecordModal()
-        setIsDeletingSite(false)
+        setIsDeletingRecord(false)
         toast.success(...getToastArguments(language.success.collectRecordDelete))
         history.push(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
       })
       .catch((error) => {
-        setSiteDeleteErrorData(error)
-        setIsDeletingSite(false)
-        goToPageTwoOfDeleteRecordModal()
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            setDeleteErrorData(error)
+            setIsDeletingRecord(false)
+            goToPageTwoOfDeleteRecordModal()
+          },
+        })
       })
   }
 
@@ -428,15 +441,15 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       />
       {isAdminUser && (
         <DeleteRecordButton
+          currentPage={currentDeleteRecordModalPage}
+          errorData={deleteErrorData}
+          isLoading={isDeletingRecord}
           isNewRecord={isNewManagementRegime}
-          deleteRecord={deleteRecord}
-          modalText={language.deleteRecord('Management Regime')}
           isOpen={isDeleteRecordModalOpen}
+          modalText={language.deleteRecord('Management Regime')}
+          deleteRecord={deleteRecord}
           onDismiss={closeDeleteRecordModal}
           openModal={openDeleteRecordModal}
-          errorData={siteDeleteErrorData}
-          currentPage={currentDeleteRecordModalPage}
-          isLoading={isDeletingSite}
         />
       )}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}

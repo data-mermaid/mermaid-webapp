@@ -181,7 +181,7 @@ const SitesMixin = (Base) =>
 
       if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
         // Add to IDB in case the there are network issues before the API responds
-        // await this._dexiePerUserDataInstance.project_sites.put(recordMarkedToBeDeleted)
+        await this._dexiePerUserDataInstance.project_sites.put(recordMarkedToBeDeleted)
 
         return axios
           .post(

@@ -259,7 +259,7 @@ const ProjectInfo = () => {
     },
   })
 
-  const _setSiteButtonUnsaved = useEffect(() => {
+  const _setSaveButtonUnsaved = useEffect(() => {
     if (formik.dirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }

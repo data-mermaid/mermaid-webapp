@@ -40,6 +40,7 @@ import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDir
 import PageUnavailable from '../PageUnavailable'
 import DeleteRecordButton from '../../DeleteRecordButton'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const ReadOnlySiteContent = ({
   site,
@@ -196,6 +197,7 @@ const Site = ({ isNewSite }) => {
   const isMounted = useIsMounted()
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [countryOptions, setCountryOptions] = useState([])
   const [exposureOptions, setExposureOptions] = useState([])
@@ -256,11 +258,24 @@ const Site = ({ isNewSite }) => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.siteRecordUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.siteRecordUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId, isNewSite])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isSyncInProgress,
+    projectId,
+    siteId,
+    isNewSite,
+    handleHttpResponseError,
+  ])
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
@@ -374,7 +389,7 @@ const Site = ({ isNewSite }) => {
 
   const { setFieldValue: formikSetFieldValue } = formik
 
-  const _setSiteButtonUnsaved = useEffect(() => {
+  const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
@@ -412,9 +427,14 @@ const Site = ({ isNewSite }) => {
         history.push(`${ensureTrailingSlash(currentProjectPath)}sites/`)
       })
       .catch((error) => {
-        setSiteDeleteErrorData(error)
-        setIsDeletingSite(false)
-        goToPageTwoOfDeleteRecordModal()
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            setSiteDeleteErrorData(error)
+            setIsDeletingSite(false)
+            goToPageTwoOfDeleteRecordModal()
+          },
+        })
       })
   }
 
@@ -450,15 +470,15 @@ const Site = ({ isNewSite }) => {
       />
       {isAdminUser && (
         <DeleteRecordButton
+          currentPage={currentDeleteRecordModalPage}
+          errorData={siteDeleteErrorData}
+          isLoading={isDeletingSite}
           isNewRecord={isNewSite}
-          deleteRecord={deleteRecord}
-          modalText={language.deleteRecord('Site')}
           isOpen={isDeleteRecordModalOpen}
+          modalText={language.deleteRecord('Site')}
+          deleteRecord={deleteRecord}
           onDismiss={closeDeleteRecordModal}
           openModal={openDeleteRecordModal}
-          errorData={siteDeleteErrorData}
-          currentPage={currentDeleteRecordModalPage}
-          isLoading={isDeletingSite}
         />
       )}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}

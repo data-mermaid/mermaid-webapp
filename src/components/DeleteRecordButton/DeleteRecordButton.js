@@ -8,15 +8,15 @@ import LoadingModal from '../LoadingModal/LoadingModal'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 
 const DeleteRecordButton = ({
+  currentPage,
+  errorData,
+  isLoading,
   isNewRecord,
-  deleteRecord,
-  modalText,
   isOpen,
+  modalText,
+  deleteRecord,
   onDismiss,
   openModal,
-  errorData,
-  currentPage,
-  isLoading,
 }) => {
   const currentProjectPath = useCurrentProjectPath()
 
@@ -83,8 +83,17 @@ const DeleteRecordButton = ({
 }
 
 DeleteRecordButton.propTypes = {
+  currentPage: PropTypes.number,
+  errorData: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      site: PropTypes.string,
+      sampleUnitLabel: PropTypes.string,
+    }),
+  ),
+  isLoading: PropTypes.bool.isRequired,
   isNewRecord: PropTypes.bool.isRequired,
-  deleteRecord: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   modalText: PropTypes.shape({
     title: PropTypes.string,
     prompt: PropTypes.string,
@@ -93,23 +102,14 @@ DeleteRecordButton.propTypes = {
     confirmDeleteText1: PropTypes.string,
     confirmDeleteText2: PropTypes.string,
   }).isRequired,
-  isOpen: PropTypes.bool.isRequired,
+  deleteRecord: PropTypes.func.isRequired,
   onDismiss: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
-  errorData: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      site: PropTypes.string,
-      sampleUnitLabel: PropTypes.string,
-    }),
-  ),
-  currentPage: PropTypes.number,
-  isLoading: PropTypes.bool.isRequired,
 }
 
 DeleteRecordButton.defaultProps = {
-  errorData: [],
   currentPage: 1,
+  errorData: [],
 }
 
 export default DeleteRecordButton

@@ -97,7 +97,7 @@ const CollectRecordFormPage = ({
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
-  const [isDeletingSite, setIsDeletingSite] = useState(false)
+  const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
 
   const openDeleteRecordModal = () => {
@@ -497,7 +497,7 @@ const CollectRecordFormPage = ({
   }
 
   const deleteRecord = () => {
-    setIsDeletingSite(true)
+    setIsDeletingRecord(true)
 
     databaseSwitchboardInstance
       .deleteSampleUnit({
@@ -509,12 +509,12 @@ const CollectRecordFormPage = ({
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsData()
         closeDeleteRecordModal()
-        setIsDeletingSite(false)
+        setIsDeletingRecord(false)
         toast.success(...getToastArguments(language.success.collectRecordDelete))
         history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
       })
       .catch((error) => {
-        setIsDeletingSite(false)
+        setIsDeletingRecord(false)
         handleHttpResponseError({
           error,
           callback: () => {
@@ -650,13 +650,13 @@ const CollectRecordFormPage = ({
         <div ref={observationTableRef}>{observationTable}</div>
       </form>
       <DeleteRecordButton
+        isLoading={isDeletingRecord}
         isNewRecord={isNewRecord}
-        deleteRecord={deleteRecord}
-        modalText={language.deleteRecord('Record')}
         isOpen={isDeleteRecordModalOpen}
+        modalText={language.deleteRecord('Record')}
+        deleteRecord={deleteRecord}
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}
-        isLoading={isDeletingSite}
       />
       {errorBoxContent}
     </>
