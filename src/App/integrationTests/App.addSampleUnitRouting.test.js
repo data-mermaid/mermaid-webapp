@@ -74,5 +74,5 @@ test('Clicking Add Sample Unit then click Benthic PIT link expects to see New Be
 
   screen.debug(newBenthicPITTitle)
 
-  expect(newBenthicPITTitle).toBeInTheDocument()
+  expect(newBenthicPITTitle)
 })
