@@ -64,13 +64,15 @@ test('Clicking Add Sample Unit then click Benthic PIT link expects to see New Be
 
   userEvent.click(
     within(sampleUnitNav).getByRole('link', {
-      name: /Benthic PIT/i,
+      name: 'Benthic PIT',
     }),
   )
 
   const newBenthicPITTitle = await screen.findByText('Benthic PIT', {
     selector: 'h2',
   })
+
+  screen.debug(newBenthicPITTitle)
 
   expect(newBenthicPITTitle).toBeInTheDocument()
 })
