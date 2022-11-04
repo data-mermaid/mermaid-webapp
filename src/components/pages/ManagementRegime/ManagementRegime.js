@@ -12,7 +12,7 @@ import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlas
 import { formikPropType } from '../../../library/formikPropType'
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
-import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
@@ -38,6 +38,9 @@ import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineSt
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 import PageUnavailable from '../PageUnavailable'
 import { sortManagementComplianceChoices } from '../../../library/arrays/sortManagementComplianceChoices'
+import DeleteRecordButton from '../../DeleteRecordButton'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -174,6 +177,16 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
 }
 
 const ManagementRegime = ({ isNewManagementRegime }) => {
+  const { isAppOnline } = useOnlineStatus()
+  const currentProjectPath = useCurrentProjectPath()
+  const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { managementRegimeId, projectId } = useParams()
+  const history = useHistory()
+  const isMounted = useIsMounted()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isFormDirty, setIsFormDirty] = useState(false)
@@ -181,15 +194,27 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   const [managementPartyOptions, setManagementPartyOptions] = useState([])
   const [managementRegimeBeingEdited, setManagementRegimeBeingEdited] = useState()
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isSyncInProgress } = useSyncStatus()
-  const { managementRegimeId, projectId } = useParams()
-  const history = useHistory()
-  const isMounted = useIsMounted()
-  const currentProjectPath = useCurrentProjectPath()
-  const { currentUser } = useCurrentUser()
+  const [deleteErrorData, setDeleteErrorData] = useState([])
+  const [isDeletingRecord, setIsDeletingRecord] = useState(false)
+  const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+  const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
+
+  const goToPageOneOfDeleteRecordModal = () => {
+    setCurrentDeleteRecordModalPage(1)
+  }
+  const goToPageTwoOfDeleteRecordModal = () => {
+    setCurrentDeleteRecordModalPage(2)
+  }
+  const openDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(true)
+  }
+  const closeDeleteRecordModal = () => {
+    goToPageOneOfDeleteRecordModal()
+    setIsDeleteRecordModalOpen(false)
+  }
 
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -223,8 +248,13 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.managementRegimeRecordUnavailable))
+            },
+          })
         })
     }
   }, [
@@ -234,6 +264,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     isSyncInProgress,
     managementRegimeId,
     projectId,
+    handleHttpResponseError,
   ])
 
   const {
@@ -354,7 +385,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     `${language.pages.managementRegimeForm.title} - ${formik.values.name} - ${language.title.mermaid}`,
   )
 
-  const _setSiteButtonUnsaved = useEffect(() => {
+  const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
@@ -364,6 +395,30 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     () => setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
     [formik.dirty, getPersistedUnsavedFormikData],
   )
+
+  const deleteRecord = () => {
+    setIsDeletingRecord(true)
+
+    databaseSwitchboardInstance
+      .deleteManagementRegime(managementRegimeBeingEdited, projectId)
+      .then(() => {
+        clearPersistedUnsavedFormikData()
+        closeDeleteRecordModal()
+        setIsDeletingRecord(false)
+        toast.success(...getToastArguments(language.success.collectRecordDelete))
+        history.push(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
+      })
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            setDeleteErrorData(error)
+            setIsDeletingRecord(false)
+            goToPageTwoOfDeleteRecordModal()
+          },
+        })
+      })
+  }
 
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewManagementRegime
 
@@ -386,6 +441,19 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         managementComplianceOptions={managementComplianceOptions}
         managementPartyOptions={managementPartyOptions}
       />
+      {isAdminUser && isAppOnline && (
+        <DeleteRecordButton
+          currentPage={currentDeleteRecordModalPage}
+          errorData={deleteErrorData}
+          isLoading={isDeletingRecord}
+          isNewRecord={isNewManagementRegime}
+          isOpen={isDeleteRecordModalOpen}
+          modalText={language.deleteRecord('Management Regime')}
+          deleteRecord={deleteRecord}
+          onDismiss={closeDeleteRecordModal}
+          openModal={openDeleteRecordModal}
+        />
+      )}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>

@@ -39,7 +39,7 @@ import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPag
 import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import NewAttributeModal from '../../../NewAttributeModal'
 import ObserversInput from '../ObserversInput'
-import DeleteRecordButton from '../DeleteRecordButton'
+import DeleteRecordButton from '../../../DeleteRecordButton'
 import SampleEventInputs from '../SampleEventInputs'
 import BenthicAttributeTransectInputs from '../BenthicPhotoQuadratForm/BenthicAttributeTransectInputs'
 import BenthicPhotoQuadratObservationTable from '../BenthicPhotoQuadratForm/BenthicPhotoQuadratObservationTable'
@@ -97,6 +97,15 @@ const CollectRecordFormPage = ({
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
+  const [isDeletingRecord, setIsDeletingRecord] = useState(false)
+  const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+
+  const openDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(true)
+  }
+  const closeDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(false)
+  }
 
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
@@ -488,30 +497,31 @@ const CollectRecordFormPage = ({
   }
 
   const deleteRecord = () => {
-    if (!isNewRecord) {
-      databaseSwitchboardInstance
-        .deleteSampleUnit({
-          record: collectRecordBeingEdited,
-          profileId: currentUser.id,
-          projectId,
-        })
-        .then(() => {
-          clearPersistedUnsavedFormikData()
-          clearPersistedUnsavedObservationsData()
-          toast.success(...getToastArguments(language.success.collectRecordDelete))
-          history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordDelete))
-            },
-          })
-        })
-    }
+    setIsDeletingRecord(true)
 
-    return Promise.resolve()
+    databaseSwitchboardInstance
+      .deleteSampleUnit({
+        record: collectRecordBeingEdited,
+        profileId: currentUser.id,
+        projectId,
+      })
+      .then(() => {
+        clearPersistedUnsavedFormikData()
+        clearPersistedUnsavedObservationsData()
+        closeDeleteRecordModal()
+        setIsDeletingRecord(false)
+        toast.success(...getToastArguments(language.success.collectRecordDelete))
+        history.push(`${ensureTrailingSlash(currentProjectPath)}collecting/`)
+      })
+      .catch((error) => {
+        setIsDeletingRecord(false)
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.collectRecordDelete))
+          },
+        })
+      })
   }
 
   const handleSizeBinChange = (event) => {
@@ -639,7 +649,15 @@ const CollectRecordFormPage = ({
         />
         <div ref={observationTableRef}>{observationTable}</div>
       </form>
-      <DeleteRecordButton isNewRecord={isNewRecord} deleteRecord={deleteRecord} />
+      <DeleteRecordButton
+        isLoading={isDeletingRecord}
+        isNewRecord={isNewRecord}
+        isOpen={isDeleteRecordModalOpen}
+        modalText={language.deleteRecord('Record')}
+        deleteRecord={deleteRecord}
+        onDismiss={closeDeleteRecordModal}
+        openModal={openDeleteRecordModal}
+      />
       {errorBoxContent}
     </>
   ) : (

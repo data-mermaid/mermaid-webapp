@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { getSampleUnitLabel } from '../getSampleUnitLabel'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -160,6 +161,62 @@ const SitesMixin = (Base) =>
         return this._dexiePerUserDataInstance.project_sites
           .put(siteToSubmit)
           .then(() => siteToSubmit)
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    deleteSite = async function deleteSite(record, projectId) {
+      if (!record) {
+        throw new Error('deleteSite expects record, profileId, and projectId parameters')
+      }
+
+      const hasCorrespondingRecordInTheApi = !!record._last_revision_num
+
+      const recordMarkedToBeDeleted = {
+        ...record,
+        _deleted: true,
+        uiState_pushToApi: true,
+      }
+
+      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
+        // Add to IDB in case the there are network issues before the API responds
+        await this._dexiePerUserDataInstance.project_sites.put(recordMarkedToBeDeleted)
+
+        return axios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              project_sites: [recordMarkedToBeDeleted],
+            },
+            {
+              params: {
+                force: true,
+              },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            },
+          )
+          .then((apiPushResponse) => {
+            const recordReturnedFromApiPush = apiPushResponse.data.project_sites[0]
+            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              recordReturnedFromApiPush.status_code,
+            )
+
+            const { sampleevent, ...sampleUnitProtocols } = recordReturnedFromApiPush.data // eslint-disable-line no-unused-vars
+
+            if (isRecordStatusCodeSuccessful) {
+              // do a pull of data related to collect records
+              // to make sure it is all updated/deleted in IDB
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then((_apiPullResponse) => apiPushResponse)
+            }
+
+            const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
+            const sampleUnitProtocolLabels = getSampleUnitLabel(sampleUnitProtocolValues)
+
+            return Promise.reject(sampleUnitProtocolLabels)
+          })
       }
 
       return Promise.reject(this._notAuthenticatedAndReadyError)

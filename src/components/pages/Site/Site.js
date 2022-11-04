@@ -11,7 +11,7 @@ import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { formikPropType } from '../../../library/formikPropType'
 import { getOptions } from '../../../library/getOptions'
-import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
@@ -38,7 +38,9 @@ import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
 import PageUnavailable from '../PageUnavailable'
+import DeleteRecordButton from '../../DeleteRecordButton'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const ReadOnlySiteContent = ({
   site,
@@ -187,6 +189,16 @@ const SiteForm = ({
 }
 
 const Site = ({ isNewSite }) => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
+  const { isSyncInProgress } = useSyncStatus()
+  const { siteId, projectId } = useParams()
+  const history = useHistory()
+  const isMounted = useIsMounted()
+  const currentProjectPath = useCurrentProjectPath()
+  const { currentUser } = useCurrentUser()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+
   const [countryOptions, setCountryOptions] = useState([])
   const [exposureOptions, setExposureOptions] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -196,16 +208,27 @@ const Site = ({ isNewSite }) => {
   const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [siteBeingEdited, setSiteBeingEdited] = useState()
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { isAppOnline } = useOnlineStatus()
-  const { isSyncInProgress } = useSyncStatus()
-  const { siteId, projectId } = useParams()
-  const history = useHistory()
-  const isMounted = useIsMounted()
-  const currentProjectPath = useCurrentProjectPath()
-  const { currentUser } = useCurrentUser()
+  const [siteDeleteErrorData, setSiteDeleteErrorData] = useState([])
+  const [isDeletingSite, setIsDeletingSite] = useState(false)
+  const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+  const [currentDeleteRecordModalPage, setCurrentDeleteRecordModalPage] = useState(1)
+
+  const goToPageOneOfDeleteRecordModal = () => {
+    setCurrentDeleteRecordModalPage(1)
+  }
+  const goToPageTwoOfDeleteRecordModal = () => {
+    setCurrentDeleteRecordModalPage(2)
+  }
+  const openDeleteRecordModal = () => {
+    setIsDeleteRecordModalOpen(true)
+  }
+  const closeDeleteRecordModal = () => {
+    goToPageOneOfDeleteRecordModal()
+    setIsDeleteRecordModalOpen(false)
+  }
 
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -235,11 +258,24 @@ const Site = ({ isNewSite }) => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.siteRecordUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.siteRecordUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, projectId, siteId, isNewSite])
+  }, [
+    databaseSwitchboardInstance,
+    isMounted,
+    isSyncInProgress,
+    projectId,
+    siteId,
+    isNewSite,
+    handleHttpResponseError,
+  ])
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
@@ -353,7 +389,7 @@ const Site = ({ isNewSite }) => {
 
   const { setFieldValue: formikSetFieldValue } = formik
 
-  const _setSiteButtonUnsaved = useEffect(() => {
+  const _setSaveButtonUnsaved = useEffect(() => {
     if (isFormDirty) {
       setSaveButtonState(buttonGroupStates.unsaved)
     }
@@ -377,6 +413,30 @@ const Site = ({ isNewSite }) => {
     () => setIsFormDirty(!!formik.dirty || !!getPersistedUnsavedFormikData()),
     [formik.dirty, getPersistedUnsavedFormikData],
   )
+
+  const deleteRecord = () => {
+    setIsDeletingSite(true)
+
+    databaseSwitchboardInstance
+      .deleteSite(siteBeingEdited, projectId)
+      .then(() => {
+        clearPersistedUnsavedFormikData()
+        closeDeleteRecordModal()
+        setIsDeletingSite(false)
+        toast.success(...getToastArguments(language.success.collectRecordDelete))
+        history.push(`${ensureTrailingSlash(currentProjectPath)}sites/`)
+      })
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            setSiteDeleteErrorData(error)
+            setIsDeletingSite(false)
+            goToPageTwoOfDeleteRecordModal()
+          },
+        })
+      })
+  }
 
   const displayIdNotFoundErrorPage = idsNotAssociatedWithData.length && !isNewSite
 
@@ -408,6 +468,19 @@ const Site = ({ isNewSite }) => {
         handleLatitudeChange={handleLatitudeChange}
         handleLongitudeChange={handleLongitudeChange}
       />
+      {isAdminUser && isAppOnline && (
+        <DeleteRecordButton
+          currentPage={currentDeleteRecordModalPage}
+          errorData={siteDeleteErrorData}
+          isLoading={isDeletingSite}
+          isNewRecord={isNewSite}
+          isOpen={isDeleteRecordModalOpen}
+          modalText={language.deleteRecord('Site')}
+          deleteRecord={deleteRecord}
+          onDismiss={closeDeleteRecordModal}
+          openModal={openDeleteRecordModal}
+        />
+      )}
       {saveButtonState === buttonGroupStates.saving && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={isFormDirty} />
     </>

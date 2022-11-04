@@ -137,11 +137,15 @@ const success = {
     `Proposed benthic ${attribute} saved. The observation has been edited to show it selected.`,
 }
 
-const deleteCollectRecord = {
-  title: 'Delete Record',
-  prompt: 'Are you sure you want to delete this record?',
-  yes: 'Delete Record',
-  no: 'Cancel',
+const deleteRecord = (pageName) => {
+  return {
+    title: `Delete ${pageName}`,
+    prompt: `Are you sure you want to delete this ${pageName.toLowerCase()}?`,
+    yes: `Delete ${pageName}`,
+    no: 'Cancel',
+    confirmDeleteText1: `You can not delete this ${pageName.toLowerCase()} because it is used in the following sample units:`,
+    confirmDeleteText2: `You have to remove this ${pageName.toLowerCase()} from all sample units before you can delete it.`,
+  }
 }
 
 const loadingIndicator = {
@@ -386,7 +390,7 @@ export default {
   projectCodes,
   error,
   success,
-  deleteCollectRecord,
+  deleteRecord,
   loadingIndicator,
   autocomplete,
   header,
