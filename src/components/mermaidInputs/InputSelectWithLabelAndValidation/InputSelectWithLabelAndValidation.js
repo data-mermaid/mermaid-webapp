@@ -38,9 +38,7 @@ const InputSelectWithLabelAndValidation = ({
           id={id}
           {...restOfProps}
         >
-          <option value="" disabled>
-            Choose...
-          </option>
+          <option value="">Choose...</option>
           {optionList}
         </Select>
         {helperText && <HelperText id={`aria-descp${id}`}>{helperText}</HelperText>}
