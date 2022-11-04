@@ -90,8 +90,17 @@ const SingleSiteMap = ({
     recordMarker.current.on('dragend', () => {
       const lngLat = recordMarker.current.getLngLat()
 
+      // Adjust lng at international dateline
+      let adjustedLng = lngLat.lng
+
+      if (lngLat.lng < -180) {
+        adjustedLng = 360 + lngLat.lng
+      } else if (lngLat.lng > 180) {
+        adjustedLng = lngLat.lng - 360
+      }
+
       handleLatitudeChange(lngLat.lat)
-      handleLongitudeChange(lngLat.lng)
+      handleLongitudeChange(adjustedLng)
     })
   }, [handleLatitudeChange, handleLongitudeChange])
 
