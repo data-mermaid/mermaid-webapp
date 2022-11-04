@@ -72,7 +72,5 @@ test('Clicking Add Sample Unit then click Benthic PIT link expects to see New Be
     selector: 'h2',
   })
 
-  screen.debug(newBenthicPITTitle)
-
   expect(newBenthicPITTitle)
 })
