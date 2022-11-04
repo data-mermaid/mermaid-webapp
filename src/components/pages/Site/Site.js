@@ -468,7 +468,7 @@ const Site = ({ isNewSite }) => {
         handleLatitudeChange={handleLatitudeChange}
         handleLongitudeChange={handleLongitudeChange}
       />
-      {isAdminUser && (
+      {isAdminUser && isAppOnline && (
         <DeleteRecordButton
           currentPage={currentDeleteRecordModalPage}
           errorData={siteDeleteErrorData}

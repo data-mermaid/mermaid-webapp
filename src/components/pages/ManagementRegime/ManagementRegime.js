@@ -40,6 +40,7 @@ import PageUnavailable from '../PageUnavailable'
 import { sortManagementComplianceChoices } from '../../../library/arrays/sortManagementComplianceChoices'
 import DeleteRecordButton from '../../DeleteRecordButton'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -176,6 +177,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
 }
 
 const ManagementRegime = ({ isNewManagementRegime }) => {
+  const { isAppOnline } = useOnlineStatus()
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -439,7 +441,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         managementComplianceOptions={managementComplianceOptions}
         managementPartyOptions={managementPartyOptions}
       />
-      {isAdminUser && (
+      {isAdminUser && isAppOnline && (
         <DeleteRecordButton
           currentPage={currentDeleteRecordModalPage}
           errorData={deleteErrorData}
