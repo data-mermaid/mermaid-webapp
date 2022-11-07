@@ -37,7 +37,7 @@ const AddSampleUnitButton = () => {
         </CustomNavLink>
         <DisabledCustomNavLink as="span">Benthic LIT</DisabledCustomNavLink>
         <DisabledCustomNavLink as="span">Habitat Complexity</DisabledCustomNavLink>
-        <DisabledCustomNavLink as="span">Bleaching</DisabledCustomNavLink>
+        <CustomNavLink to={`${currentProjectPath}/collecting/bleaching`}>Bleaching</CustomNavLink>
       </Column>
     </StyledButtonSecondaryDropdown>
   )
