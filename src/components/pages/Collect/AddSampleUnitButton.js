@@ -36,7 +36,9 @@ const AddSampleUnitButton = () => {
           Benthic PIT
         </CustomNavLink>
         <DisabledCustomNavLink as="span">Benthic LIT</DisabledCustomNavLink>
-        <DisabledCustomNavLink as="span">Habitat Complexity</DisabledCustomNavLink>
+        <CustomNavLink to={`${currentProjectPath}/collecting/habitatcomplexity`}>
+          Habitat Complexity
+        </CustomNavLink>
         <DisabledCustomNavLink as="span">Bleaching</DisabledCustomNavLink>
       </Column>
     </StyledButtonSecondaryDropdown>

@@ -74,3 +74,35 @@ test('Clicking Add Sample Unit then click Benthic PIT link expects to see New Be
 
   expect(newBenthicPITTitle)
 })
+
+test('Clicking Add Sample Unit then click Habitat Complexity link expects to see New Habitat Complexity page.', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
+
+  await screen.findByLabelText('project pages loading indicator')
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+
+  userEvent.click(
+    await screen.findByRole('button', {
+      name: /Add Sample Unit/i,
+    }),
+  )
+  const sampleUnitNav = screen.getByTestId('new-sample-unit-nav')
+
+  userEvent.click(
+    within(sampleUnitNav).getByRole('link', {
+      name: 'Habitat Complexity',
+    }),
+  )
+
+  const newHabitatComplexityTitle = await screen.findByText('Habitat Complexity', {
+    selector: 'h2',
+  })
+
+  expect(newHabitatComplexityTitle)
+})
