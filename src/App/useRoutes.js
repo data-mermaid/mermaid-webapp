@@ -18,6 +18,7 @@ import SubmittedFishBelt from '../components/pages/submittedRecordPages/Submitte
 import BenthicPhotoQuadratForm from '../components/pages/collectRecordFormPages/BenthicPhotoQuadratForm'
 import SubmittedBenthicPhotoQuadrat from '../components/pages/submittedRecordPages/SubmittedBenthicPhotoQuadrat'
 import BenthicPITForm from '../components/pages/collectRecordFormPages/BenthicPITForm/BenthicPITForm'
+import BenthicLITForm from '../components/pages/collectRecordFormPages/BenthicLITForm/BenthicLITForm'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
@@ -55,7 +56,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
-      Component: () => <> Placeholder create benthic LIT collect record page </>,
+      Component: () => <BenthicLITForm />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
