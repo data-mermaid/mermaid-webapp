@@ -32,8 +32,10 @@ const AddSampleUnitButton = () => {
         <CustomNavLink to={`${currentProjectPath}/collecting/benthic-photo-quadrat`}>
           Benthic Photo Quadrat
         </CustomNavLink>
+        <CustomNavLink to={`${currentProjectPath}/collecting/benthicpit`}>
+          Benthic PIT
+        </CustomNavLink>
         <DisabledCustomNavLink as="span">Benthic LIT</DisabledCustomNavLink>
-        <DisabledCustomNavLink as="span">Benthic PIT</DisabledCustomNavLink>
         <DisabledCustomNavLink as="span">Habitat Complexity</DisabledCustomNavLink>
         <DisabledCustomNavLink as="span">Bleaching</DisabledCustomNavLink>
       </Column>
