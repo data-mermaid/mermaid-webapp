@@ -19,6 +19,8 @@ import BenthicPhotoQuadratForm from '../components/pages/collectRecordFormPages/
 import SubmittedBenthicPhotoQuadrat from '../components/pages/submittedRecordPages/SubmittedBenthicPhotoQuadrat'
 import BenthicPITForm from '../components/pages/collectRecordFormPages/BenthicPITForm/BenthicPITForm'
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
+import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
+import BenthicLITForm from '../components/pages/collectRecordFormPages/BenthicLITForm/BenthicLITForm'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
@@ -56,7 +58,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
-      Component: () => <> Placeholder create benthic LIT collect record page </>,
+      Component: () => <BenthicLITForm />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
@@ -68,7 +70,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/habitatcomplexity/',
-      Component: () => <> Placeholder create habitat complexity collect record page </>,
+      Component: () => <HabitatComplexityForm />,
     },
     {
       path: '/projects/:projectId/collecting/bleaching/',
