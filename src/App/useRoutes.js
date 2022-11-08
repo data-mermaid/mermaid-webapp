@@ -85,7 +85,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <SubmittedFishBelt />,
     },
     {
-      path: '/projects/:projectId/submitted/benthic-photo-quadrat/:submittedRecordId',
+      path: '/projects/:projectId/submitted/benthicpqt/:submittedRecordId',
       Component: () => <SubmittedBenthicPhotoQuadrat />,
     },
     {
