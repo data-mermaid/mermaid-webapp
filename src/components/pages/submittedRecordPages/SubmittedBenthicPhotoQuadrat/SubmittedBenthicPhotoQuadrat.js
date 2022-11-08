@@ -172,7 +172,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              sampleUnit="quadrat_transect"
+              sampleUnitName="benthicpqt"
             />
             <RowSpaceBetween>
               <>

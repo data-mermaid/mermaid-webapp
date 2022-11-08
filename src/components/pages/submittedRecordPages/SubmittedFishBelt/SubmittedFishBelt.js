@@ -192,7 +192,7 @@ const SubmittedFishBelt = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              sampleUnit="fishbelt_transect"
+              sampleUnitName="fishbelt"
             />
             <RowSpaceBetween>
               <>
