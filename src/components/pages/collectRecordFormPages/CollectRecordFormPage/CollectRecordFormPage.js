@@ -56,7 +56,6 @@ import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers
 import PageUnavailable from '../../PageUnavailable'
 import {
   getRecordSampleUnitMethod,
-  getRecordSampleUnit,
   getIsFishBelt,
 } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { useScrollCheckError } from '../../../../library/useScrollCheckError'
@@ -683,7 +682,7 @@ const CollectRecordFormPage = ({
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
                 sites={sites}
-                sampleUnit={getRecordSampleUnit(sampleUnitName)}
+                sampleUnitName={sampleUnitName}
               />
             )}
             {!isReadOnlyUser && (

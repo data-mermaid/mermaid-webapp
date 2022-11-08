@@ -8,6 +8,7 @@ import { TooltipWithText, TooltipPopup } from '../generic/tooltip'
 import { fishBeltPropType, sitePropType } from '../../App/mermaidData/mermaidDataProptypes'
 import useDocumentTitle from '../../library/useDocumentTitle'
 import language from '../../language'
+import { getRecordSampleUnit } from '../../App/mermaidData/recordProtocolHelpers'
 
 const TitleContainer = styled('div')`
   display: flex;
@@ -29,11 +30,11 @@ const ProjectTooltip = styled(TooltipWithText)`
     text-align: center;
   }
 `
-const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, sampleUnit }) => {
-  const primaryTitle =
-    sampleUnit === 'fishbelt_transect'
-      ? `${language.pages.collectRecord.title} - ${language.pages.fishBeltForm.title}`
-      : `${language.pages.collectRecord.title} - ${language.pages.benthicPhotoQuadratForm.title}`
+
+const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, sampleUnitName }) => {
+  const sampleUnit = getRecordSampleUnit(sampleUnitName)
+  const protocolType = language.protocolTitles[sampleUnitName] ?? ''
+  const primaryTitle = `${language.pages.collectRecord.title} - ${protocolType}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
   const transectNumber = submittedRecordOrCollectRecordDataProperty[sampleUnit]?.number ?? ''
@@ -73,7 +74,7 @@ const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, sa
 RecordFormTitle.propTypes = {
   submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
-  sampleUnit: PropTypes.string.isRequired,
+  sampleUnitName: PropTypes.string.isRequired,
 }
 
 RecordFormTitle.defaultProps = {

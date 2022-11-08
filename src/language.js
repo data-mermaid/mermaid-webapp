@@ -193,6 +193,16 @@ const title = {
   userProfileModal: 'Your Profile',
 }
 
+// property names are protocol types and derived from api data values
+const protocolTitles = {
+  fishbelt: 'Fish Belt',
+  benthiclit: 'Benthic LIT',
+  benthicpit: 'Benthic PIT',
+  habitatcomplexity: 'Habitat Complexity',
+  bleachingqc: 'Bleaching',
+  benthicpqt: 'Benthic Photo Quadrat',
+}
+
 const pages = {
   projectsList: {
     title: 'Projects',
@@ -248,9 +258,6 @@ const pages = {
     removeUserButton: 'Remove User',
     cancelButton: 'cancel',
   },
-  fishBeltForm: {
-    title: 'Fish Belt',
-  },
   submittedFishBeltForm: {
     title: 'Fish Belt',
     sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
@@ -289,9 +296,6 @@ const pages = {
     missingLabelNumber: 'missing number',
   },
   managementRegimesOverview: { title: 'Management Regimes Overview' },
-  benthicPhotoQuadratForm: {
-    title: 'Benthic Photo Quadrat',
-  },
   copySiteTable: {
     title: 'Copy Sites',
     filterToolbarText: 'Filter sites by name, project or country',
@@ -387,22 +391,23 @@ const getErrorMessages = (pageError) => {
 }
 
 export default {
-  projectCodes,
-  error,
-  success,
-  deleteRecord,
-  loadingIndicator,
   autocomplete,
+  createNewOptionModal,
+  deleteRecord,
+  error,
+  getErrorMessages,
+  getErrorTitle,
+  getValidationMessage,
   header,
+  inlineMessage,
+  loadingIndicator,
+  map,
+  navigateAwayPrompt,
+  pages,
+  projectCodes,
+  projectModal,
+  protocolTitles,
+  success,
   table,
   title,
-  pages,
-  createNewOptionModal,
-  navigateAwayPrompt,
-  getValidationMessage,
-  inlineMessage,
-  projectModal,
-  map,
-  getErrorTitle,
-  getErrorMessages,
 }
