@@ -39,6 +39,10 @@ const AddSampleUnitButton = () => {
         <CustomNavLink to={`${currentProjectPath}/collecting/habitatcomplexity`}>
           Habitat Complexity
         </CustomNavLink>
+        <CustomNavLink to={`${currentProjectPath}/collecting/benthiclit`}>
+          Benthic LIT
+        </CustomNavLink>
+        <DisabledCustomNavLink as="span">Habitat Complexity</DisabledCustomNavLink>
         <DisabledCustomNavLink as="span">Bleaching</DisabledCustomNavLink>
       </Column>
     </StyledButtonSecondaryDropdown>
