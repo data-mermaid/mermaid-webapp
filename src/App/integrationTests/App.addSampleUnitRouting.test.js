@@ -43,7 +43,7 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
   expect(newFishBeltTitle).toBeInTheDocument()
 })
 
-test('Clicking Add Sample Unit then click Benthic PIT link expects to see New Benthic PIT page.', async () => {
+test('Clicking Add Sample Unit then click Benthic Pit link expects to see New Benthic PIT page.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
@@ -64,15 +64,15 @@ test('Clicking Add Sample Unit then click Benthic PIT link expects to see New Be
 
   userEvent.click(
     within(sampleUnitNav).getByRole('link', {
-      name: 'Benthic PIT',
+      name: 'Benthic Pit',
     }),
   )
 
-  const newBenthicPITTitle = await screen.findByText('Benthic PIT', {
+  const newBenthicPitTitle = await screen.findByText('Benthic PIT', {
     selector: 'h2',
   })
 
-  expect(newBenthicPITTitle)
+  expect(newBenthicPitTitle)
 })
 
 test('Clicking Add Sample Unit then click Habitat Complexity link expects to see New Habitat Complexity page.', async () => {

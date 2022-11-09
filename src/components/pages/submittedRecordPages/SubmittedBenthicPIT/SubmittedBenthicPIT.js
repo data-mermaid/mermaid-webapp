@@ -11,7 +11,7 @@ import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
 
-const SubmittedBenthicPIT = () => {
+const SubmittedBenthicPit = () => {
   const { isAppOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { submittedRecordId, projectId } = useParams()
@@ -105,4 +105,4 @@ const Header = styled.div`
   margin-top: 5em;
 `
 
-export default SubmittedBenthicPIT
+export default SubmittedBenthicPit
