@@ -29,7 +29,7 @@ const ObserversInput = ({
     areValidationsShowing,
   )
   const observerNameOptions = getObserverNameOptions(observers)
-  const observerNameValues = formik.values.observers.map(({ profile }) => profile)
+  const observerNameValues = formik.values.observers?.map(({ profile }) => profile) ?? []
 
   const filterObserverProfiles = (observerIds) =>
     [...observers].filter(({ profile }) =>

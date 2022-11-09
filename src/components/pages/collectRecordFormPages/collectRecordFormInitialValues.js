@@ -51,9 +51,17 @@ const getBenthicPhotoQuadratAdditionalValues = (collectRecord) => {
   }
 }
 
+const getBenthicPitAdditionalValues = (collectRecord) => {
+  return {
+    interval_start: collectRecord?.data?.interval_start ?? '',
+    interval_size: collectRecord?.data?.interval_size ?? '',
+  }
+}
+
 export {
   getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
   getBenthicPhotoQuadratAdditionalValues,
+  getBenthicPitAdditionalValues,
 }
