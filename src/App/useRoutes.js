@@ -17,6 +17,7 @@ import FishBeltForm from '../components/pages/collectRecordFormPages/FishBeltFor
 import SubmittedFishBelt from '../components/pages/submittedRecordPages/SubmittedFishBelt/SubmittedFishBelt'
 import BenthicPhotoQuadratForm from '../components/pages/collectRecordFormPages/BenthicPhotoQuadratForm'
 import SubmittedBenthicPhotoQuadrat from '../components/pages/submittedRecordPages/SubmittedBenthicPhotoQuadrat'
+import SubmittedBenthicPIT from '../components/pages/submittedRecordPages/SubmittedBenthicPIT/SubmittedBenthicPIT'
 import BenthicPITForm from '../components/pages/collectRecordFormPages/BenthicPITForm/BenthicPITForm'
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
@@ -87,6 +88,10 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/submitted/benthicpqt/:submittedRecordId',
       Component: () => <SubmittedBenthicPhotoQuadrat />,
+    },
+    {
+      path: '/projects/:projectId/submitted/benthicpit/:submittedRecordId',
+      Component: () => <SubmittedBenthicPIT />,
     },
     {
       path: '/projects/:projectId/project-info',

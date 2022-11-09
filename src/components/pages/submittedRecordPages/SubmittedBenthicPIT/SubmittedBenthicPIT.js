@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import styled from 'styled-components/macro'
 
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -92,6 +93,16 @@ const SubmittedBenthicPIT = () => {
     isAppOnline,
     isSyncInProgress,
   ])
+
+  return (
+    <Header>
+      <h2>Submitted Benthic PIT</h2>
+    </Header>
+  )
 }
+
+const Header = styled.div`
+  margin-top: 5em;
+`
 
 export default SubmittedBenthicPIT
