@@ -1,0 +1,282 @@
+import { useCallback, useEffect } from 'react'
+import { toast } from 'react-toastify'
+import language from '../../../../language'
+import { buttonGroupStates } from '../../../../library/buttonGroupStates'
+import { getToastArguments } from '../../../../library/getToastArguments'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+
+const useCollectRecordValidation = ({
+  collectRecordBeingEdited,
+  databaseSwitchboardInstance,
+  formikInstance,
+  handleCollectRecordChange,
+  isParentDataLoading,
+  observationTableRef,
+  projectId,
+  recordId,
+  setAreValidationsShowing,
+  setIsFormDirty,
+  setValidateButtonState,
+}) => {
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const getValidationButtonStatus = useCallback((collectRecord) => {
+    return collectRecord?.validations?.status === 'ok'
+      ? buttonGroupStates.validated
+      : buttonGroupStates.validatable
+  }, [])
+
+  useEffect(
+    function checkValidateButton() {
+      if (!isParentDataLoading) {
+        setValidateButtonState(getValidationButtonStatus(collectRecordBeingEdited))
+      }
+    },
+    [
+      isParentDataLoading,
+      collectRecordBeingEdited,
+      getValidationButtonStatus,
+      setValidateButtonState,
+    ],
+  )
+
+  const handleValidate = () => {
+    setValidateButtonState(buttonGroupStates.validating)
+
+    databaseSwitchboardInstance
+      .validateSampleUnit({ recordId, projectId })
+      .then((validatedRecordResponse) => {
+        setAreValidationsShowing(true)
+        handleCollectRecordChange(validatedRecordResponse)
+        setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
+      })
+      .catch((error) => {
+        setValidateButtonState(buttonGroupStates.validatable)
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.collectRecordValidation))
+          },
+        })
+      })
+  }
+
+  const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
+    // for UX purpose only, validation is cleared when input is on change after page is validated
+    const validationDirtyCheck =
+      formikInstance.values[property] !== formikInstance.initialValues[property]
+        ? null
+        : validationProperties.validationType
+
+    return {
+      ...validationProperties,
+      validationType: validationDirtyCheck,
+    }
+  }
+
+  const handleScrollToObservation = () => {
+    observationTableRef.current.scrollIntoView({
+      behavior: 'smooth',
+    })
+  }
+
+  const ignoreObservationValidations = useCallback(
+    ({ observationId }) => {
+      databaseSwitchboardInstance
+        .ignoreObservationValidations({
+          recordId: collectRecordBeingEdited.id,
+          observationId,
+        })
+        .then((recordWithIgnoredValidations) => {
+          handleCollectRecordChange(recordWithIgnoredValidations)
+          setIsFormDirty(true)
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+            },
+          })
+        })
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+    ],
+  )
+
+  const ignoreNonObservationFieldValidations = useCallback(
+    ({ validationPath }) => {
+      databaseSwitchboardInstance
+        .ignoreNonObservationFieldValidations({
+          record: collectRecordBeingEdited,
+          validationPath,
+        })
+        .then((recordWithIgnoredValidations) => {
+          handleCollectRecordChange(recordWithIgnoredValidations)
+          setIsFormDirty(true)
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+            },
+          })
+        })
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+    ],
+  )
+
+  const resetObservationValidations = useCallback(
+    ({ observationId }) => {
+      databaseSwitchboardInstance
+        .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
+        .then((recordWithResetValidations) => {
+          handleCollectRecordChange(recordWithResetValidations)
+
+          setIsFormDirty(true)
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+            },
+          })
+        })
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+    ],
+  )
+
+  const resetRecordLevelValidation = useCallback(
+    ({ validationId }) => {
+      databaseSwitchboardInstance
+        .resetRecordLevelValidation({
+          record: collectRecordBeingEdited,
+          validationId,
+        })
+        .then((recordWithResetValidations) => {
+          handleCollectRecordChange(recordWithResetValidations)
+          setIsFormDirty(true)
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+            },
+          })
+        })
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+    ],
+  )
+
+  const resetNonObservationFieldValidations = useCallback(
+    ({ validationPath }) => {
+      databaseSwitchboardInstance
+        .resetNonObservationFieldValidations({
+          record: collectRecordBeingEdited,
+          validationPath,
+        })
+        .then((recordWithResetValidations) => {
+          handleCollectRecordChange(recordWithResetValidations)
+          setIsFormDirty(true)
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+            },
+          })
+        })
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+    ],
+  )
+
+  const ignoreRecordLevelValidation = useCallback(
+    ({ validationId }) => {
+      databaseSwitchboardInstance
+        .ignoreRecordLevelValidation({
+          record: collectRecordBeingEdited,
+          validationId,
+        })
+        .then((recordWithIgnoredValidations) => {
+          handleCollectRecordChange(recordWithIgnoredValidations)
+          setIsFormDirty(true)
+        })
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.collectRecordSubmit))
+            },
+          })
+        })
+    },
+    [
+      collectRecordBeingEdited,
+      databaseSwitchboardInstance,
+      handleCollectRecordChange,
+      handleHttpResponseError,
+      setIsFormDirty,
+    ],
+  )
+
+  const handleChangeForDirtyIgnoredInput = ({
+    validationProperties,
+    validationPath,
+    inputName,
+  }) => {
+    const isInputDirty =
+      formikInstance.initialValues[inputName] === formikInstance.values[inputName]
+    const doesFieldHaveIgnoredValidation = validationProperties.validationType === 'ignore'
+
+    if (doesFieldHaveIgnoredValidation && isInputDirty) {
+      resetNonObservationFieldValidations({ validationPath })
+    }
+  }
+
+  return {
+    handleChangeForDirtyIgnoredInput,
+    handleScrollToObservation,
+    handleValidate,
+    ignoreNonObservationFieldValidations,
+    ignoreObservationValidations,
+    ignoreRecordLevelValidation,
+    resetNonObservationFieldValidations,
+    resetObservationValidations,
+    resetRecordLevelValidation,
+    validationPropertiesWithDirtyResetOnInputChange,
+  }
+}
+
+export default useCollectRecordValidation

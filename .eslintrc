@@ -20,7 +20,8 @@
         "varsIgnorePattern": "^_",
         "argsIgnorePattern": "^_" // ignore unused vars and args that start with _. These vars are unsued, but named for readability/maintainability of code.
       }
-    ]
+    ],
+    "no-useless-return": "off"
   },
   "overrides": [
     {

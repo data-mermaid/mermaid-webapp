@@ -1,0 +1,3 @@
+import CollectRecordFormPageAlternative from './CollectRecordFormPageAlternative'
+
+export default CollectRecordFormPageAlternative
