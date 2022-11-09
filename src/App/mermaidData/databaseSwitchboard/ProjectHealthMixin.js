@@ -1,7 +1,6 @@
 import axios from 'axios'
 import moment from 'moment'
 import language from '../../../language'
-import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const MISSING_SITE_NAME = '__null__'
@@ -87,7 +86,7 @@ const ProjectHealthMixin = (Base) =>
         const sampleEventRecord = {
           site_id: siteId,
           site_name: siteName,
-          sample_unit_method: getRecordSampleUnitMethod(sampleUnit),
+          sample_unit_method: language.protocolTitles[sampleUnit],
           sample_unit_numbers: sampleUnitNumbers,
           sample_unit_protocol: sampleUnit,
         }
@@ -148,8 +147,8 @@ const ProjectHealthMixin = (Base) =>
 
         const collectingSummaryMethods = collectingSummaryWithNameIsNotNull.reduce(
           (accumulator, sampleUnit) => {
-            const sampleUnitMethods = Object.keys(sampleUnit[1].sample_unit_methods).map((method) =>
-              getRecordSampleUnitMethod(method),
+            const sampleUnitMethods = Object.keys(sampleUnit[1].sample_unit_methods).map(
+              (method) => language.protocolTitles[method],
             )
 
             accumulator[sampleUnit[0]] = accumulator[sampleUnit[0]] || []
@@ -165,7 +164,7 @@ const ProjectHealthMixin = (Base) =>
           const siteCollectingMethods = collectingSummaryMethods[siteId]
 
           for (const protocol of availableProtocols) {
-            const protocolLabel = getRecordSampleUnitMethod(protocol)
+            const protocolLabel = language.protocolTitles[protocol]
             const siteAndMethodName = `${siteName} ${protocolLabel}`
             const hasCollectingMethod =
               siteCollectingMethods && siteCollectingMethods.includes(protocolLabel)
@@ -282,7 +281,7 @@ const ProjectHealthMixin = (Base) =>
             sampleEventUnitRecordsWithCollectRecordFilled.push({
               ...newSampleEventUnitRecords,
               sample_unit_protocol: missingSiteNameProtocol,
-              sample_unit_method: getRecordSampleUnitMethod(missingSiteNameProtocol),
+              sample_unit_method: language.protocolTitles[missingSiteNameProtocol],
               profile_summary: missingSiteNameProtocolInfo.profile_summary,
             })
           }
@@ -291,7 +290,7 @@ const ProjectHealthMixin = (Base) =>
             sampleEventUnitRecordsWithCollectRecordFilled.push({
               ...newSampleEventUnitRecords,
               sample_unit_protocol: protocol,
-              sample_unit_method: getRecordSampleUnitMethod(protocol),
+              sample_unit_method: language.protocolTitles[protocol],
               profile_summary: sample_unit_methods[protocol]?.profile_summary || {},
             })
           }
@@ -329,7 +328,7 @@ const ProjectHealthMixin = (Base) =>
           const sampleEventRecord = {
             site_id: siteId,
             site_name: siteName,
-            sample_unit_method: getRecordSampleUnitMethod(sampleUnit),
+            sample_unit_method: language.protocolTitles[sampleUnit],
             sample_unit_protocol: sampleUnit,
             management_regimes: Object.values(managements),
           }
@@ -352,7 +351,7 @@ const ProjectHealthMixin = (Base) =>
           const siteName = this.#removeDateFromName(siteInfo.site_name)
 
           for (const protocol of availableProtocols) {
-            const protocolLabel = getRecordSampleUnitMethod(protocol)
+            const protocolLabel = language.protocolTitles[protocol]
             const siteAndMethodName = `${siteName} ${protocolLabel}`
 
             if (!siteInfo.site_names.includes(siteAndMethodName)) {
