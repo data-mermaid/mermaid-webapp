@@ -67,7 +67,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
-              if (!isNewRecord && !projectResponse && projectId) {
+              if (!projectResponse && projectId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
               }
 
