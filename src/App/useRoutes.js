@@ -20,7 +20,7 @@ import SubmittedBenthicPhotoQuadrat from '../components/pages/submittedRecordPag
 import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPitForm/BenthicPitForm'
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
-import BenthicLitForm from '../components/pages/collectRecordFormPages/BenthicLITForm/BenthicLitForm'
+import BenthicLitForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [

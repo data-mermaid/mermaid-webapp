@@ -1,13 +1,10 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
-import {
-  screen,
-  renderAuthenticatedOffline,
-} from '../../../testUtilities/testingLibraryWithHelpers'
-import App from '../../App'
-import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
-import { initiallyHydrateOfflineStorageWithMockData } from '../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+import { screen, renderAuthenticatedOffline } from '../../testUtilities/testingLibraryWithHelpers'
+import App from '../App'
+import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 test('Collect page only shows records that arent marked to be deleted next sync', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
@@ -31,7 +28,7 @@ test('Collect page only shows records that arent marked to be deleted next sync'
 
   const rows = await screen.findAllByRole('row')
 
-  expect(rows).toHaveLength(16)
+  expect(rows).toHaveLength(17)
 })
 
 test('Sites page only shows records that arent marked to be deleted next sync', async () => {
