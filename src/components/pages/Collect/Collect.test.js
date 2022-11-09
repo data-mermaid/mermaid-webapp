@@ -32,9 +32,7 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const table = screen.getByRole('table')
 
-  const tableRows = within(table).getAllByRole('row')
-
-  expect(within(tableRows[1]).getByText('Fish Belt'))
+  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -45,9 +43,15 @@ test('Collect Records table sorts properly by method column', async () => {
   // click twice to change to descending order
   userEvent.dblClick(within(table).getByText('Method'))
 
-  const tableRowsAfter = within(table).getAllByRole('row')
+  const tableRowsAfterDescending = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfter[1]).getByText('Fish Belt'))
+  expect(within(tableRowsAfterDescending[1]).getByText('Fish Belt'))
+
+  userEvent.dblClick(within(table).getByText('Method'))
+
+  const tableRowsAfterAscending = within(table).getAllByRole('row')
+
+  expect(within(tableRowsAfterAscending[1]).getByText('Benthic PIT'))
 })
 
 test('Collect Records table sorts properly by site column', async () => {
@@ -207,7 +211,9 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('10m x 2m'))
+  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
+
+  expect(within(tableRows[1]).getByText('10m'))
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -227,7 +233,7 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRowsAfterFirstClick = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterFirstClick[1]).getByText('10m x 2m'))
+  expect(within(tableRowsAfterFirstClick[1]).getByText('10m'))
 })
 
 test('Collect Records table sorts properly by depth column', async () => {
@@ -294,9 +300,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const table = screen.getByRole('table')
 
-  const tableRows = within(table).getAllByRole('row')
-
-  expect(within(tableRows[1]).getByText('March 11, 2021'))
+  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -317,7 +321,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
   // test last row. (heads up, this is a multi page table)
-  expect(within(tableRowsAfterSecondClick[15]).getByText('June 12, 2012'))
+  expect(within(tableRowsAfterSecondClick[16]).getByText('June 12, 2012'))
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
@@ -387,15 +391,11 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const table = screen.getByRole('table')
 
-  const tableRows = within(table).getAllByRole('row')
-
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
   userEvent.dblClick(within(table).getByText('Method'))
   userEvent.dblClick(within(table).getByText('Sample Date'))
   userEvent.dblClick(within(table).getByText('Sample Unit #'))
-
-  expect(within(tableRows[1]).getByText('Fish Belt'))
 
   // click once to change to ascending order
   userEvent.click(within(table).getByText('Sample Date'))
@@ -439,8 +439,8 @@ test('Collect Records table changes number of rows visible size when pagination 
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  // 16 + header row
-  expect(tableRowsAfter.length).toEqual(17)
+  // 17 + header row
+  expect(tableRowsAfter.length).toEqual(18)
 })
 
 test('Collect Records table change pages when different page is selected ', async () => {
@@ -471,8 +471,7 @@ test('Collect Records table change pages when different page is selected ', asyn
 
   userEvent.click(within(PageSelector).getByText('2'))
 
-  const tableRowsAfter = within(table).getAllByRole('row')
+  const linksToCollectRecords = within(table).getAllByRole('link')
 
-  // 1 + header row
-  expect(tableRowsAfter.length).toEqual(2)
+  expect(linksToCollectRecords).toHaveLength(2)
 })

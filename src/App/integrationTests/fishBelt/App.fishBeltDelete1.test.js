@@ -46,11 +46,11 @@ describe('Offline', () => {
 
     userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
 
-    // row length = 16 because 16 mock records, now minus 1 + 1 header row
-    expect(
-      screen.getAllByRole('row', {
-        hidden: true,
-      }).length,
-    ).toEqual(16)
+    const table = await screen.findByRole('table')
+
+    const linksToFishbeltRecords = within(table).getAllByRole('link', { name: 'Fish Belt' })
+
+    // row length = 15 because 16 mock records, now minus 1
+    expect(linksToFishbeltRecords).toHaveLength(15)
   })
 })

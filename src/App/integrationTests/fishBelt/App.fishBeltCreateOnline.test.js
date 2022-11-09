@@ -94,10 +94,10 @@ describe('Online', () => {
     userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
     const table = await screen.findByRole('table')
 
-    const tableRows = await screen.findAllByRole('row')
+    const linksToFishbeltRecords = within(table).getAllByRole('link', { name: 'Fish Belt' })
 
-    // 18 here because the header row + the 16 mock records + the one we just created
-    expect(tableRows).toHaveLength(18)
+    // 17 the 16 mock records + the one we just created
+    expect(linksToFishbeltRecords).toHaveLength(17)
 
     // expect unique depth as proxy for new fishbelt
     expect(await within(table).findByText('10000'))
