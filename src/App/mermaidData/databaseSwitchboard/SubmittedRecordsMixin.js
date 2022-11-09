@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getSampleDateLabel } from '../getSampleDateLabel'
-import { getRecordSampleUnitMethod } from '../recordProtocolHelpers'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import language from '../../../language'
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
@@ -61,7 +61,7 @@ const SubmittedRecordsMixin = (Base) =>
                 depth: record.depth,
                 management: record.management_name,
                 observers: record.observers.join(', '),
-                protocol: getRecordSampleUnitMethod(record.protocol),
+                protocol: language.protocolTitles[record.protocol],
                 sampleDate: getSampleDateLabel(record.sample_date),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 site: record.site_name,
@@ -92,9 +92,7 @@ const SubmittedRecordsMixin = (Base) =>
               {},
               await getAuthorizationHeaders(this._getAccessToken),
             )
-            .then(() =>
-              this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId),
-            )
+            .then(() => this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId))
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 

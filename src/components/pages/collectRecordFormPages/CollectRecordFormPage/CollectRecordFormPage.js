@@ -54,10 +54,7 @@ import FishBeltTransectInputs from '../FishBeltForm/FishBeltTransectInputs'
 import language from '../../../../language'
 import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
 import PageUnavailable from '../../PageUnavailable'
-import {
-  getRecordSampleUnitMethod,
-  getIsFishBelt,
-} from '../../../../App/mermaidData/recordProtocolHelpers'
+import { getIsFishBelt } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { useScrollCheckError } from '../../../../library/useScrollCheckError'
 import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
 
@@ -677,7 +674,7 @@ const CollectRecordFormPage = ({
         content={contentViewByRole}
         toolbar={
           <ContentPageToolbarWrapper>
-            {isNewRecord && <H2>{getRecordSampleUnitMethod(sampleUnitName)}</H2>}
+            {isNewRecord && <H2>{language.protocolTitles[sampleUnitName]}</H2>}
             {collectRecordBeingEdited && !isNewRecord && (
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}

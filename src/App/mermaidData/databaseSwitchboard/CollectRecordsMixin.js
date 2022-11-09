@@ -6,12 +6,12 @@ import setObjectPropertyOnClone from '../../../library/objects/setObjectProperty
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import {
-  getRecordSampleUnitMethod,
   getRecordSampleUnit,
   getIsFishBelt,
   getIsQuadratSampleUnit,
   noLabelSymbol,
 } from '../recordProtocolHelpers'
+import language from '../../../language'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
@@ -667,7 +667,7 @@ const CollectRecordsMixin = (Base) =>
                 management: getObjectById(managementRegimes, record.data.sample_event.management)
                   ?.name,
                 observers: this.#getObserversLabel(record),
-                protocol: getRecordSampleUnitMethod(record.data.protocol),
+                protocol: language.protocolTitles[record.data.protocol],
                 sampleDate: getSampleDateLabel(record.data.sample_event.sample_date),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
                 site: getObjectById(sites, record.data.sample_event.site)?.name,
