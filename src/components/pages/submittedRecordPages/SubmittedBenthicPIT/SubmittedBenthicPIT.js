@@ -113,14 +113,12 @@ const SubmittedBenthicPit = () => {
       .moveToCollect({
         projectId,
         submittedRecordId,
-        sampleUnitMethod: 'benthicphotoquadrattransectmethods',
+        sampleUnitMethod: 'benthicpittransectmethods',
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
-          `${ensureTrailingSlash(
-            currentProjectPath,
-          )}collecting/benthic-photo-quadrat/${submittedRecordId}`,
+          `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpit/${submittedRecordId}`,
         )
       })
       .catch(() => {

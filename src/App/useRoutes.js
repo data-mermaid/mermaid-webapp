@@ -67,7 +67,11 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/benthicpit/',
-      Component: () => <BenthicPitForm />,
+      Component: () => <BenthicPitForm isNewRecord={true} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/benthicpit/:recordId',
+      Component: () => <BenthicPitForm isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/collecting/habitatcomplexity/',
