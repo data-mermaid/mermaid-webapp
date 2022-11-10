@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
 import { getBenthicOptions } from '../../../../library/getOptions'
-import { getRecordName } from '../../../../library/getRecordName'
+import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
@@ -73,7 +73,11 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
 
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
-                  ? getRecordName(collectRecordResponse.data, sitesResponse, 'quadrat_transect')
+                  ? getRecordSubNavNodeInfo(
+                      collectRecordResponse.data,
+                      sitesResponse,
+                      'quadrat_transect',
+                    )
                   : { name: 'Benthic Photo Quadrat' }
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)

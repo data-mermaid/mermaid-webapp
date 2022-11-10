@@ -6,7 +6,7 @@ import setObjectPropertyOnClone from '../../../library/objects/setObjectProperty
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import {
-  getRecordSampleUnit,
+  getProtocolTransectType,
   getIsFishBelt,
   getIsQuadratSampleUnit,
   noLabelSymbol,
@@ -61,9 +61,9 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getSampleUnitLabel = function getSampleUnitLabel(record) {
-      const sampleUnitType = getRecordSampleUnit(record.data.protocol)
-      const transectNumber = record.data?.[sampleUnitType]?.number
-      const labelName = record.data?.[sampleUnitType]?.label
+      const protocolTransectType = getProtocolTransectType(record.data.protocol)
+      const transectNumber = record.data?.[protocolTransectType]?.number
+      const labelName = record.data?.[protocolTransectType]?.label
 
       const sampleUnitLabel = `${transectNumber ?? ''} ${labelName ?? ''}`.trim()
 
@@ -71,9 +71,9 @@ const CollectRecordsMixin = (Base) =>
     }
 
     #getDepthLabel = function getDepthLabel(record) {
-      const sampleUnitType = getRecordSampleUnit(record.data.protocol)
+      const protocolTransectType = getProtocolTransectType(record.data.protocol)
 
-      return record.data?.[sampleUnitType]?.depth
+      return record.data?.[protocolTransectType]?.depth
     }
 
     #getObserversLabel = function getObserversLabel(record) {

@@ -8,7 +8,7 @@ import {
   getFishNameConstants,
   getFishNameOptions,
 } from '../../../../App/mermaidData/fishNameHelpers'
-import { getRecordName } from '../../../../library/getRecordName'
+import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
@@ -95,7 +95,11 @@ const FishBeltForm = ({ isNewRecord }) => {
 
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
-                  ? getRecordName(collectRecordResponse.data, sitesResponse, 'fishbelt_transect')
+                  ? getRecordSubNavNodeInfo(
+                      collectRecordResponse.data,
+                      sitesResponse,
+                      'fishbelt_transect',
+                    )
                   : { name: 'Fish Belt' }
 
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
