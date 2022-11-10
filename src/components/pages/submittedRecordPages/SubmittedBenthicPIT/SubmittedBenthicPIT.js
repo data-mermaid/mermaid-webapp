@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -18,19 +20,12 @@ const SubmittedBenthicPit = () => {
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
 
-  // eslint-disable-next-line no-unused-vars
   const [sites, setSites] = useState([])
-  // eslint-disable-next-line no-unused-vars
   const [managementRegimes, setManagementRegimes] = useState([])
-  // eslint-disable-next-line no-unused-vars
   const [choices, setChoices] = useState({})
-  // eslint-disable-next-line no-unused-vars
   const [submittedRecord, setSubmittedRecord] = useState()
-  // eslint-disable-next-line no-unused-vars
   const [subNavNode, setSubNavNode] = useState(null)
-  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(true)
-  // eslint-disable-next-line no-unused-vars
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
 
   const _getSupportingData = useEffect(() => {
@@ -59,8 +54,7 @@ const SubmittedBenthicPit = () => {
               const recordNameForSubNode = getRecordName(
                 submittedRecordResponse,
                 sitesResponse,
-                // what is quadrat_transect and does it relate to Benthic PIT
-                'quadrat_transect',
+                'benthic_transect',
               )
 
               //   const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
@@ -93,6 +87,8 @@ const SubmittedBenthicPit = () => {
     isAppOnline,
     isSyncInProgress,
   ])
+
+  console.log({ submittedRecord })
 
   return (
     <Header>
