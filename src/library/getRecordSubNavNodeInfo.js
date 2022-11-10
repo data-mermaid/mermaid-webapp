@@ -1,9 +1,5 @@
 import { getObjectById } from './getObjectById'
-
-const transectDefaultName = {
-  fishbelt_transect: 'Fish Belt',
-  quadrat_transect: 'Benthic Photo Quadrat',
-}
+import language from '../language'
 
 /**
  *
@@ -13,9 +9,10 @@ const transectDefaultName = {
  * @returns {name: string, number: number || string, label: string}
  */
 
-export const getRecordName = (recordData, sites, sampleUnit) => {
+export const getRecordSubNavNodeInfo = (recordData, sites, sampleUnit) => {
   const recordSiteId = recordData?.sample_event?.site
-  const siteName = getObjectById(sites, recordSiteId)?.name ?? transectDefaultName[sampleUnit]
+  const siteName =
+    getObjectById(sites, recordSiteId)?.name ?? language.protocolTitles[recordData.protocol]
   const transectNumber = recordData[sampleUnit]?.number ?? ''
   const label = recordData[sampleUnit]?.label ?? ''
 

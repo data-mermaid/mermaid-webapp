@@ -23,7 +23,7 @@ import SubmittedFishBeltInfoTable from './SubmittedFishBeltInfoTable'
 import SubmittedFishBeltObservationTable from './SubmittedFishBeltObservationTable'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import { getRecordName } from '../../../../library/getRecordName'
+import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { FormSubTitle } from '../SubmittedFormPage.styles'
 
@@ -91,7 +91,7 @@ const SubmittedFishBelt = () => {
                 families,
               })
 
-              const recordNameForSubNode = getRecordName(
+              const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
                 'fishbelt_transect',
@@ -192,7 +192,7 @@ const SubmittedFishBelt = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              sampleUnitName="fishbelt"
+              protocol="fishbelt"
             />
             <RowSpaceBetween>
               <>

@@ -8,7 +8,7 @@ import { TooltipWithText, TooltipPopup } from '../generic/tooltip'
 import { fishBeltPropType, sitePropType } from '../../App/mermaidData/mermaidDataProptypes'
 import useDocumentTitle from '../../library/useDocumentTitle'
 import language from '../../language'
-import { getRecordSampleUnit } from '../../App/mermaidData/recordProtocolHelpers'
+import { getProtocolTransectType } from '../../App/mermaidData/recordProtocolHelpers'
 
 const TitleContainer = styled('div')`
   display: flex;
@@ -31,14 +31,14 @@ const ProjectTooltip = styled(TooltipWithText)`
   }
 `
 
-const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, sampleUnitName }) => {
-  const sampleUnit = getRecordSampleUnit(sampleUnitName)
-  const protocolType = language.protocolTitles[sampleUnitName] ?? ''
-  const primaryTitle = `${language.pages.collectRecord.title} - ${protocolType}`
+const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, protocol }) => {
+  const transectType = getProtocolTransectType(protocol)
+  const protocolTitle = language.protocolTitles[protocol] ?? ''
+  const primaryTitle = `${language.pages.collectRecord.title} - ${protocolTitle}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
-  const transectNumber = submittedRecordOrCollectRecordDataProperty[sampleUnit]?.number ?? ''
-  const label = submittedRecordOrCollectRecordDataProperty[sampleUnit]?.label ?? ''
+  const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
+  const label = submittedRecordOrCollectRecordDataProperty[transectType]?.label ?? ''
 
   useDocumentTitle(
     `${primaryTitle && `${primaryTitle} `}${siteName} ${transectNumber} - ${
@@ -74,7 +74,7 @@ const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, sa
 RecordFormTitle.propTypes = {
   submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
-  sampleUnitName: PropTypes.string.isRequired,
+  protocol: PropTypes.string.isRequired,
 }
 
 RecordFormTitle.defaultProps = {
