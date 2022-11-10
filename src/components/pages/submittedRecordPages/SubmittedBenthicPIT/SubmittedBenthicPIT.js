@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import styled from 'styled-components/macro'
 
+import { ContentPageLayout } from '../../../Layout'
+import IdsNotFound from '../../IdsNotFound/IdsNotFound'
+import PageUnavailable from '../../PageUnavailable'
 import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -12,10 +14,23 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordName } from '../../../../library/getRecordName'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
+import { FormSubTitle } from '../SubmittedFormPage.styles'
+import RecordFormTitle from '../../../RecordFormTitle'
+import { RowSpaceBetween } from '../../../generic/positioning'
+import { IconPen } from '../../../icons'
+import { ButtonSecondary } from '../../../generic/buttons'
+import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 
 const SubmittedBenthicPit = () => {
+  const currentProjectPath = useCurrentProjectPath()
+  const { currentUser } = useCurrentUser()
+
   const { isAppOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const history = useHistory()
   const { submittedRecordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
@@ -27,6 +42,10 @@ const SubmittedBenthicPit = () => {
   const [subNavNode, setSubNavNode] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
+
+  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const observers = submittedRecord?.observers ?? []
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -88,17 +107,96 @@ const SubmittedBenthicPit = () => {
     isSyncInProgress,
   ])
 
+  const handleMoveToCollect = () => {
+    setIsMoveToButtonDisabled(true)
+    databaseSwitchboardInstance
+      .moveToCollect({
+        projectId,
+        submittedRecordId,
+        sampleUnitMethod: 'benthicphotoquadrattransectmethods',
+      })
+      .then(() => {
+        toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
+        history.push(
+          `${ensureTrailingSlash(
+            currentProjectPath,
+          )}collecting/benthic-photo-quadrat/${submittedRecordId}`,
+        )
+      })
+      .catch(() => {
+        toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+        setIsMoveToButtonDisabled(false)
+      })
+  }
+
+  console.log({ sites })
   console.log({ submittedRecord })
 
-  return (
-    <Header>
-      <h2>Submitted Benthic PIT</h2>
-    </Header>
+  return idsNotAssociatedWithData.length ? (
+    <ContentPageLayout
+      isPageContentLoading={isLoading}
+      content={<IdsNotFound ids={idsNotAssociatedWithData} />}
+    />
+  ) : (
+    <ContentPageLayout
+      isPageContentLoading={isAppOnline ? isLoading : false}
+      isToolbarSticky={true}
+      subNavNode={subNavNode}
+      content={
+        isAppOnline ? (
+          <>
+            {/* <SubmittedBenthicPhotoQuadratInfoTable
+              choices={choices}
+              sites={sites}
+              managementRegimes={managementRegimes}
+              submittedRecord={submittedRecord}
+            /> */}
+            <FormSubTitle>Observers</FormSubTitle>
+            <ul>
+              {observers.map((observer) => (
+                <li key={observer.id}>{observer.profile_name}</li>
+              ))}
+            </ul>
+
+            {/* <SubmittedBenthicPhotoQuadratObservationTable
+              choices={choices}
+              benthicAttributeOptions={benthicAttributeOptions}
+              submittedRecord={submittedRecord}
+            /> */}
+          </>
+        ) : (
+          <PageUnavailable mainText={language.error.pageUnavailableOffline} />
+        )
+      }
+      toolbar={
+        isAppOnline && (
+          <>
+            <RecordFormTitle
+              submittedRecordOrCollectRecordDataProperty={submittedRecord}
+              sites={sites}
+              sampleUnitName="benthicpit"
+            />
+            <RowSpaceBetween>
+              <>
+                <p>
+                  {isAdminUser
+                    ? language.pages.submittedFishBeltForm.sampleUnitsAreReadOnly
+                    : language.pages.submittedFishBeltForm.adminEditOnly}
+                </p>
+                <ButtonSecondary
+                  onClick={handleMoveToCollect}
+                  disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
+                >
+                  <IconPen />
+                  {language.pages.submittedFishBeltForm.moveSampleUnitButon}
+                </ButtonSecondary>
+              </>
+            </RowSpaceBetween>
+          </>
+        )
+      }
+    />
   )
 }
-
-const Header = styled.div`
-  margin-top: 5em;
-`
 
 export default SubmittedBenthicPit
