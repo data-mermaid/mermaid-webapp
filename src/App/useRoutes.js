@@ -50,11 +50,11 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <FishBeltForm isNewRecord={false} />,
     },
     {
-      path: '/projects/:projectId/collecting/benthic-photo-quadrat',
+      path: '/projects/:projectId/collecting/benthicpqt',
       Component: () => <BenthicPhotoQuadratForm isNewRecord={true} />,
     },
     {
-      path: '/projects/:projectId/collecting/benthic-photo-quadrat/:recordId',
+      path: '/projects/:projectId/collecting/benthicpqt/:recordId',
       Component: () => <BenthicPhotoQuadratForm isNewRecord={false} />,
     },
     {
