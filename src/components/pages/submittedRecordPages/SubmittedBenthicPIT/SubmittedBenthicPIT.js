@@ -142,6 +142,7 @@ const SubmittedBenthicPit = () => {
       content={
         isAppOnline ? (
           <>
+            <h2>Benthic PIT</h2>
             {/* <SubmittedBenthicPhotoQuadratInfoTable
               choices={choices}
               sites={sites}
