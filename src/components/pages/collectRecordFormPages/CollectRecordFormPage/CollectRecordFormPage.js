@@ -679,7 +679,7 @@ const CollectRecordFormPage = ({
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
                 sites={sites}
-                sampleUnitName={sampleUnitName}
+                protocol={sampleUnitName}
               />
             )}
             {!isReadOnlyUser && (

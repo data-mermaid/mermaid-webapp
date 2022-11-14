@@ -9,7 +9,7 @@ import { IconPen } from '../../../icons'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
-import { getRecordName } from '../../../../library/getRecordName'
+import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
 import PageUnavailable from '../../PageUnavailable'
@@ -73,7 +73,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
-              const recordNameForSubNode = getRecordName(
+              const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
                 'quadrat_transect',
@@ -121,7 +121,9 @@ const SubmittedBenthicPhotoQuadrat = () => {
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/benthic-photo-quadrat/${submittedRecordId}`,
+          `${ensureTrailingSlash(
+            currentProjectPath,
+          )}collecting/benthic-photo-quadrat/${submittedRecordId}`,
         )
       })
       .catch(() => {
@@ -172,7 +174,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              sampleUnitName="benthicpqt"
+              protocol="benthicpqt"
             />
             <RowSpaceBetween>
               <>

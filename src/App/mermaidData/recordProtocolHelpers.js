@@ -1,4 +1,4 @@
-export const getRecordSampleUnit = (protocol) => {
+export const getProtocolTransectType = (protocol) => {
   return {
     fishbelt: 'fishbelt_transect',
     benthiclit: 'benthic_transect',
