@@ -198,15 +198,15 @@ const SubmittedFishBelt = () => {
               <>
                 <p>
                   {currentUserProfile.is_admin
-                    ? language.pages.submittedFishBeltForm.sampleUnitsAreReadOnly
-                    : language.pages.submittedFishBeltForm.adminEditOnly}
+                    ? language.pages.submittedForm.sampleUnitsAreReadOnly
+                    : language.pages.submittedForm.adminEditOnly}
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
                   disabled={currentUserProfile.is_admin ? isMoveToButtonDisabled : 'false'}
                 >
                   <IconPen />
-                  {language.pages.submittedFishBeltForm.moveSampleUnitButon}
+                  {language.pages.submittedForm.moveSampleUnitButon}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>

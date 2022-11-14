@@ -23,6 +23,7 @@ import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
+import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
 
 const SubmittedBenthicPit = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -127,6 +128,7 @@ const SubmittedBenthicPit = () => {
       })
   }
 
+  console.log({ sites })
   console.log({ submittedRecord })
 
   return idsNotAssociatedWithData.length ? (
@@ -142,13 +144,12 @@ const SubmittedBenthicPit = () => {
       content={
         isAppOnline ? (
           <>
-            <h2>Benthic PIT</h2>
-            {/* <SubmittedBenthicPhotoQuadratInfoTable
+            <SubmittedBenthicPitInfoTable
               choices={choices}
               sites={sites}
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
-            /> */}
+            />
             <FormSubTitle>Observers</FormSubTitle>
             <ul>
               {observers.map((observer) => (
@@ -178,15 +179,15 @@ const SubmittedBenthicPit = () => {
               <>
                 <p>
                   {isAdminUser
-                    ? language.pages.submittedFishBeltForm.sampleUnitsAreReadOnly
-                    : language.pages.submittedFishBeltForm.adminEditOnly}
+                    ? language.pages.submittedForm.sampleUnitsAreReadOnly
+                    : language.pages.submittedForm.adminEditOnly}
                 </p>
                 <ButtonSecondary
                   onClick={handleMoveToCollect}
                   disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
                 >
                   <IconPen />
-                  {language.pages.submittedFishBeltForm.moveSampleUnitButon}
+                  {language.pages.submittedForm.moveSampleUnitButon}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>

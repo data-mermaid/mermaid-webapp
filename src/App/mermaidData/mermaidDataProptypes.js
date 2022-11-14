@@ -171,6 +171,10 @@ export const submittedBenthicPhotoQuadratPropType = PropTypes.shape({
   obs_benthic_photo_quadrats: PropTypes.arrayOf(_submittedBenthicPhotoQuadratObservationPropType),
 })
 
+export const submittedBenthicPitPropType = PropTypes.shape({
+  id: PropTypes.string,
+})
+
 export const managementRegimePropType = PropTypes.shape({
   id: PropTypes.string,
   name: PropTypes.string,
