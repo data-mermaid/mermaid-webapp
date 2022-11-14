@@ -104,14 +104,14 @@ const BenthicPitForm = ({ isNewRecord }) => {
     <CollectRecordFormPageAlternative
       collectRecordBeingEdited={collectRecordBeingEdited}
       handleCollectRecordChange={handleCollectRecordChange}
-      idsNotAssociatedWithData={idsNotAssociatedWithData} // maybe handle this too
+      idsNotAssociatedWithData={idsNotAssociatedWithData}
       initialFormikFormValues={initialFormikFormValues}
       isNewRecord={isNewRecord}
       isParentDataLoading={isLoading}
       observationsReducer={observationsReducer}
       ObservationTable={() => <>OBSERVATIONS SECTION COMING SOON</>}
       sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicPitRecord}
-      sampleUnitName="benthicpit" // maybe use this to derive form name form name
+      sampleUnitName="benthicpit"
       SampleUnitTransectInputs={BenthicPitTransectInputs}
       handleSubmitNewAttribute={() => {}}
       areObservationsInputsDirty={areObservationsInputsDirty}
