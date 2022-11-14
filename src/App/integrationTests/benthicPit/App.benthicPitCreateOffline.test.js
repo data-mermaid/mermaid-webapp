@@ -31,7 +31,7 @@ const saveBenthicPitRecord = async () => {
 }
 
 describe('Offline', () => {
-  test('New benthicPit save success shows saved input values, toast, and navigates to edit fishbelt page for new record', async () => {
+  test('New Benthic Pit save success shows saved input values, toast, and navigates to edit fishbelt page for new record', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -66,7 +66,7 @@ describe('Offline', () => {
     expect(within(screen.getByTestId('tide')).getByLabelText('falling')).toBeChecked()
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
-  test('New benthicPit save success show new record in collecting table', async () => {
+  test('New Benthic Pit save success show new record in collecting table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -97,7 +97,7 @@ describe('Offline', () => {
     // expect unique depth as proxy for New Benthic Pit
     expect(await within(table).findByText('10000'))
   })
-  test('New benthicPit save failure shows toast message with edits persisting', async () => {
+  test('New Benthic Pit save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
