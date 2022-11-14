@@ -11,7 +11,7 @@ import { useOnlineStatus } from '../../../../library/onlineStatusContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import useIsMounted from '../../../../library/useIsMounted'
-import { getRecordName } from '../../../../library/getRecordName'
+import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
 import { FormSubTitle } from '../SubmittedFormPage.styles'
@@ -70,7 +70,7 @@ const SubmittedBenthicPit = () => {
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
-              const recordNameForSubNode = getRecordName(
+              const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
                 'benthic_transect',
@@ -127,7 +127,6 @@ const SubmittedBenthicPit = () => {
       })
   }
 
-  console.log({ sites })
   console.log({ submittedRecord })
 
   return idsNotAssociatedWithData.length ? (
