@@ -11,9 +11,6 @@ const CustomNavLink = styled(NavLink)`
   padding: ${theme.spacing.buttonPadding};
   text-decoration: none;
 `
-const DisabledCustomNavLink = styled(CustomNavLink)`
-  color: ${theme.color.disabledColor};
-`
 const StyledButtonSecondaryDropdown = styled(ButtonSecondaryDropdown)`
   white-space: nowrap;
 `
