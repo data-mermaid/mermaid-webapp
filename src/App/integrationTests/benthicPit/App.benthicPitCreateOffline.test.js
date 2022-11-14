@@ -94,7 +94,7 @@ describe('Offline', () => {
     // 19 here because the header row + the 17 mock records + the one we just created
     expect(tableRows).toHaveLength(19)
 
-    // expect unique depth as proxy for New benthicPit
+    // expect unique depth as proxy for New Benthic Pit
     expect(await within(table).findByText('10000'))
   })
   test('New benthicPit save failure shows toast message with edits persisting', async () => {
