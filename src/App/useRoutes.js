@@ -21,7 +21,7 @@ import SubmittedBenthicPit from '../components/pages/submittedRecordPages/Submit
 import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPitForm/BenthicPitForm'
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
-import BenthicLITForm from '../components/pages/collectRecordFormPages/BenthicLITForm/BenthicLITForm'
+import BenthicLITForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
