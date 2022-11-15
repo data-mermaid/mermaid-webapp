@@ -12,18 +12,19 @@ import App from '../../App'
 
 // test suite cut up into 2 parts for performance reasons
 describe('Offline', () => {
-  test('Delete fishbelt prompt confirm deletes the record with the proper UI response and messaging', async () => {
+  test('Delete benthic PIT prompt confirm deletes the record with the proper UI response and messaging', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
     })
+    const deleteButton = await screen.findByText('Delete Record')
 
-    userEvent.click(await screen.findByText('Delete Record'))
+    userEvent.click(deleteButton)
 
     expect(screen.getByText('Are you sure you want to delete this record?'))
 
@@ -46,11 +47,10 @@ describe('Offline', () => {
 
     userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
 
-    const table = await screen.findByRole('table')
+    const table = screen.getByRole('table')
+    const collectRecordLinks = within(table).getAllByRole('link')
 
-    const linksToFishbeltRecords = within(table).getAllByRole('link', { name: 'Fish Belt' })
-
-    // row length = 15 because 16 mock records, now minus 1
-    expect(linksToFishbeltRecords).toHaveLength(15)
+    // row length = 16 because 17 mock records, now minus 1
+    expect(collectRecordLinks.length).toEqual(16)
   })
 })
