@@ -18,10 +18,10 @@ import SubmittedFishBelt from '../components/pages/submittedRecordPages/Submitte
 import BenthicPhotoQuadratForm from '../components/pages/collectRecordFormPages/BenthicPhotoQuadratForm'
 import SubmittedBenthicPhotoQuadrat from '../components/pages/submittedRecordPages/SubmittedBenthicPhotoQuadrat'
 import SubmittedBenthicPit from '../components/pages/submittedRecordPages/SubmittedBenthicPit/SubmittedBenthicPit'
-import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPITForm/BenthicPitForm'
+import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPitForm/BenthicPitForm'
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
-import BenthicLITForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
+import BenthicLitForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
