@@ -49,6 +49,9 @@ describe('Online', () => {
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-collect-record-form-title'))
 
+    // we constrain some queries to the form element because the form title has similar text that will also be selected
+    const form = screen.getByRole('form')
+
     // Site select
     expect(screen.getByDisplayValue('Site A'))
     // Management select
@@ -56,8 +59,8 @@ describe('Online', () => {
     expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
-    expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
-    expect(screen.getByLabelText('Label')).toHaveValue('some label')
+    expect(within(form).getByLabelText('Transect Number')).toHaveValue(56)
+    expect(within(form).getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
     expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
     expect(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor')).toBeChecked()
