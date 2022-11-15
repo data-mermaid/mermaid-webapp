@@ -3,13 +3,12 @@ import React from 'react'
 import {
   managementRegimePropType,
   sitePropType,
-  choicesPropType,
   submittedBenthicPitPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { Table } from '../../../generic/Table/table'
 import TableRowItem from '../../../generic/Table/TableRowItem/TableRowItem'
 
-const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, choices, submittedRecord }) => {
+const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, submittedRecord }) => {
   const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
@@ -18,8 +17,6 @@ const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, choices, submi
     number,
     label,
     len_surveyed,
-    // interval_size,
-    // interval_start,
     reef_slope,
     visibility,
     current,
@@ -28,16 +25,7 @@ const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, choices, submi
     notes,
   } = submittedRecord.benthic_transect
 
-  // eslint-disable-next-line no-empty-pattern
-  const {
-    // belttransectwidths,
-    // fishsizebins,
-    // reefslopes,
-    // visibilities,
-    // currents,
-    // relativedepths,
-    // tides,
-  } = choices
+  const { interval_size, interval_start } = submittedRecord
 
   return (
     <Table>
@@ -49,8 +37,8 @@ const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, choices, submi
         <TableRowItem title="Transect Number" value={number} />
         <TableRowItem title="Label" value={label} />
         <TableRowItem title="Transect Length Surveyed" value={len_surveyed} />
-        {/* <TableRowItem title="Interval Size" value={width} /> */}
-        {/* <TableRowItem title="Interval Start" value={size_bin} /> */}
+        <TableRowItem title="Interval Size" value={interval_size} />
+        <TableRowItem title="Interval Start" value={interval_start} />
         <TableRowItem title="Reef Slope" value={reef_slope} />
         <TableRowItem title="Visibility" value={visibility} />
         <TableRowItem title="Current" value={current} />
@@ -65,7 +53,6 @@ const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, choices, submi
 SubmittedBenthicPitInfoTable.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
-  choices: choicesPropType.isRequired,
   submittedRecord: submittedBenthicPitPropType,
 }
 

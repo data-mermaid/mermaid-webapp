@@ -145,7 +145,6 @@ const SubmittedBenthicPit = () => {
         isAppOnline ? (
           <>
             <SubmittedBenthicPitInfoTable
-              choices={choices}
               sites={sites}
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
