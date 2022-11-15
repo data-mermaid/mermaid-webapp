@@ -163,7 +163,7 @@ const SubmittedBenthicPit = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              sampleUnitName="benthicpit"
+              protocol="benthicpit"
             />
             <RowSpaceBetween>
               <>
