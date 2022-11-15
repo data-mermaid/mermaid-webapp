@@ -64,7 +64,7 @@ test('Clicking Add Sample Unit then click Benthic Pit link expects to see New Be
 
   userEvent.click(
     within(sampleUnitNav).getByRole('link', {
-      name: 'Benthic Pit',
+      name: 'Benthic PIT',
     }),
   )
 
