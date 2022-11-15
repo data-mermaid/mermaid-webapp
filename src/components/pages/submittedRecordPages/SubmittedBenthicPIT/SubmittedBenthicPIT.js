@@ -24,6 +24,7 @@ import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
+import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
 
 const SubmittedBenthicPit = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -67,7 +68,6 @@ const SubmittedBenthicPit = () => {
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
-            // benthicAttributes,
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
@@ -128,7 +128,6 @@ const SubmittedBenthicPit = () => {
       })
   }
 
-  console.log({ sites })
   console.log({ submittedRecord })
 
   return idsNotAssociatedWithData.length ? (
@@ -156,11 +155,11 @@ const SubmittedBenthicPit = () => {
               ))}
             </ul>
 
-            {/* <SubmittedBenthicPhotoQuadratObservationTable
+            <SubmittedBenthicPitObservationTable
               choices={choices}
-              benthicAttributeOptions={benthicAttributeOptions}
+              // benthicAttributeOptions={benthicAttributeOptions}
               submittedRecord={submittedRecord}
-            /> */}
+            />
           </>
         ) : (
           <PageUnavailable mainText={language.error.pageUnavailableOffline} />

@@ -34,14 +34,13 @@ const _fishBeltTransectPropType = PropTypes.shape({
   notes: PropTypes.string,
 })
 
-// confirm prop type validations with Melissa
 const _benthicPitTransectPropType = PropTypes.shape({
-  reef_slope: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  visibility: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  current: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  reef_slope: PropTypes.string,
+  visibility: PropTypes.string,
+  current: PropTypes.string,
   relative_depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  tide: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  notes: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  tide: PropTypes.string,
+  notes: PropTypes.string,
 })
 
 const _benthicPhotoQuadratTransectPropType = PropTypes.shape({
