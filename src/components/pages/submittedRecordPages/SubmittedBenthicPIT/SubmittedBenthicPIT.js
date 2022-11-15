@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -77,12 +75,9 @@ const SubmittedBenthicPit = () => {
                 'benthic_transect',
               )
 
-              //   const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
-
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
-              //   setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setSubmittedRecord(submittedRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -128,8 +123,6 @@ const SubmittedBenthicPit = () => {
       })
   }
 
-  console.log({ submittedRecord })
-
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
       isPageContentLoading={isLoading}
@@ -157,7 +150,6 @@ const SubmittedBenthicPit = () => {
 
             <SubmittedBenthicPitObservationTable
               choices={choices}
-              // benthicAttributeOptions={benthicAttributeOptions}
               submittedRecord={submittedRecord}
             />
           </>

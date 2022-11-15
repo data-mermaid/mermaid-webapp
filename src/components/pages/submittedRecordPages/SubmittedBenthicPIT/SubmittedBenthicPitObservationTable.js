@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components/macro'
 import theme from '../../../../theme'
 import { submittedBenthicPitPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { GenericStickyTable, Tr, Td } from '../../../generic/Table/table'
+import { GenericStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
 import {
   TheadItem,
   FormSubTitle,
-  //   ObservationsSummaryStats,
+  ObservationsSummaryStats,
   UnderTableRow,
 } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
@@ -49,18 +49,18 @@ const SubmittedBenthicPitObservationTable = ({ submittedRecord }) => {
         </SubmittedObservationStickyTable>
       </StyledOverflowWrapper>
       <UnderTableRow>
-        {/* <ObservationsSummaryStats>
+        <ObservationsSummaryStats>
           <tbody>
             <Tr>
-              <Th>{language.pages.collectRecord.totalBiomassLabel}</Th>
-              <Td>{totalBiomass}</Td>
+              <Th>placeholder label</Th>
+              <Td>placeholder item</Td>
             </Tr>
             <Tr>
-              <Th>{language.pages.collectRecord.totalAbundanceLabel}</Th>
-              <Td>{totalAbundance}</Td>
+              <Th>placeholder label</Th>
+              <Td>placeholder item</Td>
             </Tr>
           </tbody>
-        </ObservationsSummaryStats> */}
+        </ObservationsSummaryStats>
       </UnderTableRow>
     </InputWrapper>
   )
