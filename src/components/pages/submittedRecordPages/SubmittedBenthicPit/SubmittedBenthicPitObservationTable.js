@@ -1,8 +1,6 @@
 import React from 'react'
-import styled from 'styled-components/macro'
-import theme from '../../../../theme'
 import { submittedBenthicPitPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { GenericStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
+import { SubmittedObservationStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
 import {
   TheadItem,
   FormSubTitle,
@@ -12,14 +10,6 @@ import {
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 
-const SubmittedObservationStickyTable = styled(GenericStickyTable)`
-  @media (min-width: 1200px) {
-    position: static;
-    tr th {
-      top: calc(${theme.spacing.headerHeight} + 13.3rem);
-    }
-  }
-`
 const SubmittedBenthicPitObservationTable = ({ submittedRecord }) => {
   const { obs_benthic_pits } = submittedRecord
 
