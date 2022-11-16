@@ -34,6 +34,15 @@ const _fishBeltTransectPropType = PropTypes.shape({
   notes: PropTypes.string,
 })
 
+const _benthicPitTransectPropType = PropTypes.shape({
+  reef_slope: PropTypes.string,
+  visibility: PropTypes.string,
+  current: PropTypes.string,
+  relative_depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  tide: PropTypes.string,
+  notes: PropTypes.string,
+})
+
 const _benthicPhotoQuadratTransectPropType = PropTypes.shape({
   tide: PropTypes.string,
   depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -169,6 +178,13 @@ export const submittedBenthicPhotoQuadratPropType = PropTypes.shape({
   quadrat_transect: _benthicPhotoQuadratTransectPropType,
   observers: PropTypes.arrayOf(_observerPropType),
   obs_benthic_photo_quadrats: PropTypes.arrayOf(_submittedBenthicPhotoQuadratObservationPropType),
+})
+
+export const submittedBenthicPitPropType = PropTypes.shape({
+  id: PropTypes.string,
+  interval_size: PropTypes.number,
+  inetrval_start: PropTypes.number,
+  benthic_transect: _benthicPitTransectPropType,
 })
 
 export const managementRegimePropType = PropTypes.shape({
@@ -351,6 +367,7 @@ export const benthicpqtValidationPropType = PropTypes.shape({
   number: _validationsPropType,
   sample_time: _sampleTimeValidationPropType,
 })
+
 // End of PropTypes for validation object
 
 export const subNavNodePropTypes = PropTypes.shape({

@@ -198,3 +198,12 @@ export const CopyModalPaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
 `
+
+export const SubmittedObservationStickyTable = styled(GenericStickyTable)`
+  @media (min-width: 1200px) {
+    position: static;
+    tr th {
+      top: calc(${theme.spacing.headerHeight} + 13.3rem);
+    }
+  }
+`

@@ -17,10 +17,11 @@ import FishBeltForm from '../components/pages/collectRecordFormPages/FishBeltFor
 import SubmittedFishBelt from '../components/pages/submittedRecordPages/SubmittedFishBelt/SubmittedFishBelt'
 import BenthicPhotoQuadratForm from '../components/pages/collectRecordFormPages/BenthicPhotoQuadratForm'
 import SubmittedBenthicPhotoQuadrat from '../components/pages/submittedRecordPages/SubmittedBenthicPhotoQuadrat'
+import SubmittedBenthicPit from '../components/pages/submittedRecordPages/SubmittedBenthicPit/SubmittedBenthicPit'
+import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPitForm/BenthicPitForm'
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
 import BenthicLitForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
-import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPitForm/BenthicPitForm'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
@@ -65,7 +66,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <> Placeholder edit benthic LIT collect record page </>,
     },
     {
-      path: '/projects/:projectId/collecting/benthicpit',
+      path: '/projects/:projectId/collecting/benthicpit/',
       Component: () => <BenthicPitForm isNewRecord={true} />,
     },
     {
@@ -91,6 +92,10 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/submitted/benthicpqt/:submittedRecordId',
       Component: () => <SubmittedBenthicPhotoQuadrat />,
+    },
+    {
+      path: '/projects/:projectId/submitted/benthicpit/:submittedRecordId',
+      Component: () => <SubmittedBenthicPit />,
     },
     {
       path: '/projects/:projectId/project-info',

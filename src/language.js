@@ -258,8 +258,7 @@ const pages = {
     removeUserButton: 'Remove User',
     cancelButton: 'cancel',
   },
-  submittedFishBeltForm: {
-    title: 'Fish Belt',
+  submittedForm: {
     sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
     moveSampleUnitButon: 'Edit Sample Unit - move to Collecting',
     adminEditOnly:
