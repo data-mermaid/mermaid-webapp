@@ -3,7 +3,7 @@ import {
   choicesPropType,
   submittedBenthicPitPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-// import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { SubmittedObservationStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
 import {
   TheadItem,
@@ -17,21 +17,18 @@ import { getObjectById } from '../../../../library/getObjectById'
 import { getOptions } from '../../../../library/getOptions'
 
 const SubmittedBenthicPitObservationTable = ({
-  // benthicAttributeOptions,
+  benthicAttributeOptions,
   choices,
   submittedRecord,
 }) => {
   const { obs_benthic_pits } = submittedRecord
   const growthFormOptions = getOptions(choices.growthforms)
 
-  // eslint-disable-next-line no-console
-  console.log({ growthFormOptions })
-
   const observationsBenthicPit = obs_benthic_pits.map((item, index) => (
     <Tr key={item.id}>
       <Td align="center">{index + 1}</Td>
       <Td align="left">{item.interval}</Td>
-      {/* <Td align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td> */}
+      <Td align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
       <Td align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
     </Tr>
   ))
@@ -72,7 +69,7 @@ const SubmittedBenthicPitObservationTable = ({
 
 SubmittedBenthicPitObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
-  // benthicAttributeOptions: inputOptionsPropTypes.isRequired,
+  benthicAttributeOptions: inputOptionsPropTypes.isRequired,
   submittedRecord: submittedBenthicPitPropType,
 }
 

@@ -53,6 +53,7 @@ const SubmittedBenthicPit = () => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        databaseSwitchboardInstance.getBenthicAttributes(),
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(

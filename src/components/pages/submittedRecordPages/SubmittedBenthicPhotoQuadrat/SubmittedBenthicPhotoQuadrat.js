@@ -7,7 +7,7 @@ import { ContentPageLayout } from '../../../Layout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { IconPen } from '../../../icons'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-// import { getBenthicOptions } from '../../../../library/getOptions'
+import { getBenthicOptions } from '../../../../library/getOptions'
 import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
@@ -36,7 +36,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
   const { isSyncInProgress } = useSyncStatus()
   const { submittedRecordId, projectId } = useParams()
 
-  // const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
+  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
   const [choices, setChoices] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -69,7 +69,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
             sitesResponse,
             managementRegimesResponse,
             choicesResponse,
-            // benthicAttributes,
+            benthicAttributes,
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
@@ -79,12 +79,12 @@ const SubmittedBenthicPhotoQuadrat = () => {
                 'quadrat_transect',
               )
 
-              // const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
-              // setBenthicAttributeOptions(updateBenthicAttributeOptions)
+              setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setSubmittedRecord(submittedRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -160,7 +160,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
 
             <SubmittedBenthicPhotoQuadratObservationTable
               choices={choices}
-              // benthicAttributeOptions={benthicAttributeOptions}
+              benthicAttributeOptions={benthicAttributeOptions}
               submittedRecord={submittedRecord}
             />
           </>
