@@ -33,3 +33,7 @@ jsconfig.json
 
 # vscode
 ../.DS_Store
+
+# pycharm/IDEA/pyenv
+.idea/
+.python-version

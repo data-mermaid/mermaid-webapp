@@ -146,6 +146,12 @@ function App({ dexieCurrentUserInstance }) {
                       <Route exact path="/">
                         <Redirect to="/projects" />
                       </Route>
+                      {/* The following route is required b/c of how Cloudfront handles root paths. This is
+                          required for preview urls. When viewing a preview, you will need to append /index.html
+                          like so: https://preview.app2.datamermaid.org/123/index.html */}
+                      <Route exact path="/index.html">
+                        <Redirect to="/projects" />
+                      </Route>
                       <Route component={PageNotFound} />
                     </Switch>
                   ) : (
