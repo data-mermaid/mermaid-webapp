@@ -1,5 +1,10 @@
 # Mermaid Webapp
 
+## Requirements
+
+- yarn (`v1.22`)
+- node 16 (`lts/gallium`)
+
 ## Steps to Set Up Development Environment
 
 1. Set up a local Mermaid back end
@@ -75,7 +80,7 @@ Since this app can exist in multiple states (online, offline, various states of 
 
 ### Pull Request Previews
 
-- Available at `preview.datamermaid.org/<pull-request-number-here>/`
+- Available at `preview.app2.datamermaid.org/<pull-request-number-here>/index.html`
 - A preview of the application is created when a pull request is opened, sychronized (commit is made), or re-opened.
 - A bot will add a PR comment with the link to the preview, once it is ready.
 - Once a pull request is merged or closed, the respective preview will be deleted.
@@ -88,4 +93,8 @@ Since this app can exist in multiple states (online, offline, various states of 
 ### Production
 
 - Available at [app.datamermaid.org](https://app.datamermaid.org)
-- Is updated on tag creation
+- Is updated on specific (eg: `v2.0` or `v2.0.0`) tag creation
+
+### Infrastructure as Code (IaC)
+
+- see `iac/README.md`

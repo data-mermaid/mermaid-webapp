@@ -1,0 +1,65 @@
+# This workflow creates deploy previews for pull requests in the S3 Bucket: "preview.app2.datamermaid.org"
+# Deploy previews are created in the subfolders of the S3 bucket, allowing multiple react applications to be running in a single bucket
+# Note: This workflow requires the bucket to already have been created via the CDK stack, 'preview-webapp'
+
+name: Create preview
+
+on: 
+  workflow_call:
+
+env:
+  S3_BUCKET: preview.app2.datamermaid.org
+  PR_NUMBER: ${{ github.event.number }}
+  REACT_APP_AUTH0_AUDIENCE: https://dev-api.datamermaid.org
+  REACT_APP_AUTH0_CLIENT_ID: 4AHcVFcwxHb7p1VFB9sFWG52WL7pdNm5
+  REACT_APP_AUTH0_DOMAIN: datamermaid.auth0.com
+  REACT_APP_MERMAID_API: https://dev.api2.datamermaid.org/v1
+  REACT_APP_MERMAID_REFERENCE_LINK: https://dev-collect.datamermaid.org/#/reference
+  REACT_APP_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
+  REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
+
+jobs:
+  build-and-push-to-s3:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Fetch yarn cache
+        uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Install yarn dependencies
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        run: yarn install --frozen-lockfile
+
+      - name: SED Add homepage route based on PR Number
+        run: |
+          find . -name 'package.json' -exec sed -i "s/\"homepage\": \"\"/\"homepage\": \"${PR_NUMBER}\"/g" {} +
+
+      - name: Yarn Build
+        run: yarn build
+
+      - name: Upload files to S3 with AWS CLI
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_CDK }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_CDK }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          aws s3 sync build/ s3://${S3_BUCKET}/${PR_NUMBER} --delete
+
+      - name: 'PR Preview Comment'
+        uses: actions/github-script@0.3.0
+        if: github.event.action == 'opened'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
+            var msg = `**Here is a preview of this pull request:** <br> https://${process.env.S3_BUCKET}/${issue_number}/index.html`
+            github.issues.createComment({ issue_number, owner, repo, body: msg });
