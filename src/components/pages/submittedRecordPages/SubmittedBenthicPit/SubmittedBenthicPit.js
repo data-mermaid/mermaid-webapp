@@ -23,6 +23,7 @@ import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
 import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
+import { getBenthicOptions } from '../../../../library/getOptions'
 
 const SubmittedBenthicPit = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -43,6 +44,7 @@ const SubmittedBenthicPit = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
+  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
 
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
@@ -51,6 +53,7 @@ const SubmittedBenthicPit = () => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        databaseSwitchboardInstance.getBenthicAttributes(),
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
@@ -64,6 +67,7 @@ const SubmittedBenthicPit = () => {
         .then(
           ([
             sitesResponse,
+            benthicAttributes,
             managementRegimesResponse,
             choicesResponse,
             submittedRecordResponse,
@@ -75,9 +79,12 @@ const SubmittedBenthicPit = () => {
                 'benthic_transect',
               )
 
+              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
+              setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setSubmittedRecord(submittedRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -149,6 +156,7 @@ const SubmittedBenthicPit = () => {
             </ul>
 
             <SubmittedBenthicPitObservationTable
+              benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
               submittedRecord={submittedRecord}
             />
