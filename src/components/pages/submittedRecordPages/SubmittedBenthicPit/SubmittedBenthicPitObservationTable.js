@@ -1,5 +1,9 @@
 import React from 'react'
-import { submittedBenthicPitPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import {
+  choicesPropType,
+  submittedBenthicPitPropType,
+} from '../../../../App/mermaidData/mermaidDataProptypes'
+// import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { SubmittedObservationStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
 import {
   TheadItem,
@@ -9,16 +13,26 @@ import {
 } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
+import { getObjectById } from '../../../../library/getObjectById'
+import { getOptions } from '../../../../library/getOptions'
 
-const SubmittedBenthicPitObservationTable = ({ submittedRecord }) => {
+const SubmittedBenthicPitObservationTable = ({
+  // benthicAttributeOptions,
+  choices,
+  submittedRecord,
+}) => {
   const { obs_benthic_pits } = submittedRecord
+  const growthFormOptions = getOptions(choices.growthforms)
+
+  // eslint-disable-next-line no-console
+  console.log({ growthFormOptions })
 
   const observationsBenthicPit = obs_benthic_pits.map((item, index) => (
     <Tr key={item.id}>
       <Td align="center">{index + 1}</Td>
       <Td align="left">{item.interval}</Td>
-      <Td align="right">{item.attribute}</Td>
-      <Td align="right">{item.growth_form}</Td>
+      {/* <Td align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td> */}
+      <Td align="right">{getObjectById(growthFormOptions, item.growth_form)?.label}</Td>
     </Tr>
   ))
 
@@ -57,6 +71,8 @@ const SubmittedBenthicPitObservationTable = ({ submittedRecord }) => {
 }
 
 SubmittedBenthicPitObservationTable.propTypes = {
+  choices: choicesPropType.isRequired,
+  // benthicAttributeOptions: inputOptionsPropTypes.isRequired,
   submittedRecord: submittedBenthicPitPropType,
 }
 
