@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import {
+  choicesPropType,
   managementRegimePropType,
   sitePropType,
   submittedBenthicPitPropType,
@@ -8,7 +9,7 @@ import {
 import { Table } from '../../../generic/Table/table'
 import TableRowItem from '../../../generic/Table/TableRowItem/TableRowItem'
 
-const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, submittedRecord }) => {
+const SubmittedBenthicPitInfoTable = ({ choices, sites, managementRegimes, submittedRecord }) => {
   const { site, management, sample_date } = submittedRecord.sample_event
 
   const {
@@ -27,6 +28,8 @@ const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, submittedRecor
 
   const { interval_size, interval_start } = submittedRecord
 
+  const { visibilities, currents, relativedepths, reefslopes, tides } = choices
+
   return (
     <Table>
       <tbody>
@@ -39,11 +42,11 @@ const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, submittedRecor
         <TableRowItem title="Transect Length Surveyed" value={len_surveyed} />
         <TableRowItem title="Interval Size" value={interval_size} />
         <TableRowItem title="Interval Start" value={interval_start} />
-        <TableRowItem title="Reef Slope" value={reef_slope} />
-        <TableRowItem title="Visibility" value={visibility} />
-        <TableRowItem title="Current" value={current} />
-        <TableRowItem title="Relative Depth" value={relative_depth} />
-        <TableRowItem title="Tide" value={tide} />
+        <TableRowItem title="Reef Slope" options={reefslopes.data} value={reef_slope} />
+        <TableRowItem title="Visibility" options={visibilities.data} value={visibility} />
+        <TableRowItem title="Current" options={currents.data} value={current} />
+        <TableRowItem title="Relative Depth" options={relativedepths.data} value={relative_depth} />
+        <TableRowItem title="Tide" options={tides.data} value={tide} />
         <TableRowItem title="Notes" value={notes} />
       </tbody>
     </Table>
@@ -51,6 +54,7 @@ const SubmittedBenthicPitInfoTable = ({ sites, managementRegimes, submittedRecor
 }
 
 SubmittedBenthicPitInfoTable.propTypes = {
+  choices: choicesPropType.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   submittedRecord: submittedBenthicPitPropType,

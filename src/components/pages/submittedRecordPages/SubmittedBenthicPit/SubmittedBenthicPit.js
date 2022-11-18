@@ -145,6 +145,7 @@ const SubmittedBenthicPit = () => {
           <>
             <SubmittedBenthicPitInfoTable
               sites={sites}
+              choices={choices}
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
             />
