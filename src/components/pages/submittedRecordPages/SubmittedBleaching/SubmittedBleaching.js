@@ -59,7 +59,7 @@ const SubmittedBleaching = () => {
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
           projectId,
           submittedRecordId,
-          'bleachingtransectmethods',
+          'bleachingquadratcollectionmethods',
         ),
       ]
 
