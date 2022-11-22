@@ -82,6 +82,8 @@ const SubmittedBleaching = () => {
 
               //   const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
+              console.log({ submittedRecordResponse })
+
               setSites(sitesResponse)
               //   setManagementRegimes(managementRegimesResponse)
               //   setChoices(choicesResponse)
@@ -130,10 +132,6 @@ const SubmittedBleaching = () => {
         setIsMoveToButtonDisabled(false)
       })
   }
-
-  console.log({ submittedRecord })
-  console.log({ submittedRecordId })
-  console.log({ projectId })
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
