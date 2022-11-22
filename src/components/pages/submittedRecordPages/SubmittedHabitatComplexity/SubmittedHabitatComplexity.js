@@ -1,50 +1,50 @@
-import { toast } from 'react-toastify'
+import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
 
-import { ButtonSecondary } from '../../../generic/buttons'
 import { ContentPageLayout } from '../../../Layout'
-import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import { IconPen } from '../../../icons'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
-import { getBenthicOptions } from '../../../../library/getOptions'
-import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
+import PageUnavailable from '../../PageUnavailable'
+import { useOnlineStatus } from '../../../../library/onlineStatusContext'
+import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
-import PageUnavailable from '../../PageUnavailable'
-import SubmittedBenthicPhotoQuadratInfoTable from './SubmittedBenthicPhotoQuadratInfoTable'
-import SubmittedBenthicPhotoQuadratObservationTable from './SubmittedBenthicPhotoQuadratObservationTable'
-import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
-import { useCurrentUser } from '../../../../App/CurrentUserContext'
-import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../../../library/useIsMounted'
-import { useOnlineStatus } from '../../../../library/onlineStatusContext'
-import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { FormSubTitle } from '../SubmittedFormPage.styles'
 import RecordFormTitle from '../../../RecordFormTitle'
 import { RowSpaceBetween } from '../../../generic/positioning'
-import { FormSubTitle } from '../SubmittedFormPage.styles'
+import { IconPen } from '../../../icons'
+import { ButtonSecondary } from '../../../generic/buttons'
+import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
+import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
+import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
+// import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
+// import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
+// import { getBenthicOptions } from '../../../../library/getOptions'
 
-const SubmittedBenthicPhotoQuadrat = () => {
+const SubmittedHabitatComplexity = () => {
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
+  const { isAppOnline } = useOnlineStatus()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const history = useHistory()
-  const { isAppOnline } = useOnlineStatus()
-  const isMounted = useIsMounted()
-  const { isSyncInProgress } = useSyncStatus()
   const { submittedRecordId, projectId } = useParams()
+  const { isSyncInProgress } = useSyncStatus()
+  const isMounted = useIsMounted()
 
-  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
-  const [choices, setChoices] = useState({})
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
-  const [managementRegimes, setManagementRegimes] = useState([])
   const [sites, setSites] = useState([])
+  //   const [managementRegimes, setManagementRegimes] = useState([])
+  //   const [choices, setChoices] = useState({})
   const [submittedRecord, setSubmittedRecord] = useState()
   const [subNavNode, setSubNavNode] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
+  //   const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
 
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
@@ -53,13 +53,13 @@ const SubmittedBenthicPhotoQuadrat = () => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        databaseSwitchboardInstance.getBenthicAttributes(),
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getBenthicAttributes(),
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
           projectId,
           submittedRecordId,
-          'benthicphotoquadrattransectmethods',
+          'habitatcomplexitytransectmethods',
         ),
       ]
 
@@ -67,24 +67,24 @@ const SubmittedBenthicPhotoQuadrat = () => {
         .then(
           ([
             sitesResponse,
-            managementRegimesResponse,
-            choicesResponse,
-            benthicAttributes,
+            // benthicAttributes,
+            // managementRegimesResponse,
+            // choicesResponse,
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
-                'quadrat_transect',
+                'benthic_transect',
               )
 
-              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+              //   const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
               setSites(sitesResponse)
-              setManagementRegimes(managementRegimesResponse)
-              setChoices(choicesResponse)
-              setBenthicAttributeOptions(updateBenthicAttributeOptions)
+              //   setManagementRegimes(managementRegimesResponse)
+              //   setChoices(choicesResponse)
+              //   setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setSubmittedRecord(submittedRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -116,14 +116,14 @@ const SubmittedBenthicPhotoQuadrat = () => {
       .moveToCollect({
         projectId,
         submittedRecordId,
-        sampleUnitMethod: 'benthicphotoquadrattransectmethods',
+        sampleUnitMethod: 'habitatcomplexitytransectmethods',
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
           `${ensureTrailingSlash(
             currentProjectPath,
-          )}collecting/habitatcomplexity/${submittedRecordId}`,
+          )}collecting/habitat-complexity/${submittedRecordId}`,
         )
       })
       .catch(() => {
@@ -145,12 +145,12 @@ const SubmittedBenthicPhotoQuadrat = () => {
       content={
         isAppOnline ? (
           <>
-            <SubmittedBenthicPhotoQuadratInfoTable
-              choices={choices}
+            {/* <SubmittedBenthicPitInfoTable
               sites={sites}
+              choices={choices}
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
-            />
+            /> */}
             <FormSubTitle>Observers</FormSubTitle>
             <ul>
               {observers.map((observer) => (
@@ -158,11 +158,11 @@ const SubmittedBenthicPhotoQuadrat = () => {
               ))}
             </ul>
 
-            <SubmittedBenthicPhotoQuadratObservationTable
-              choices={choices}
+            {/* <SubmittedBenthicPitObservationTable
               benthicAttributeOptions={benthicAttributeOptions}
+              choices={choices}
               submittedRecord={submittedRecord}
-            />
+            /> */}
           </>
         ) : (
           <PageUnavailable mainText={language.error.pageUnavailableOffline} />
@@ -174,7 +174,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              protocol="benthicpqt"
+              protocol="habitatcomplexity"
             />
             <RowSpaceBetween>
               <>
@@ -199,4 +199,4 @@ const SubmittedBenthicPhotoQuadrat = () => {
   )
 }
 
-export default SubmittedBenthicPhotoQuadrat
+export default SubmittedHabitatComplexity

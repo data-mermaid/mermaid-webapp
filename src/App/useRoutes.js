@@ -22,6 +22,7 @@ import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPi
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
 import BenthicLitForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
+import SubmittedHabitatComplexity from '../components/pages/submittedRecordPages/SubmittedHabitatComplexity/SubmittedHabitatComplexity'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
@@ -96,6 +97,10 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/submitted/benthicpit/:submittedRecordId',
       Component: () => <SubmittedBenthicPit />,
+    },
+    {
+      path: '/projects/:projectId/submitted/habitatcomplexity/:submittedRecordId',
+      Component: () => <SubmittedHabitatComplexity />,
     },
     {
       path: '/projects/:projectId/project-info',
