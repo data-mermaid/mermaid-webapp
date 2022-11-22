@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -129,6 +130,10 @@ const SubmittedBleaching = () => {
         setIsMoveToButtonDisabled(false)
       })
   }
+
+  console.log({ submittedRecord })
+  console.log({ submittedRecordId })
+  console.log({ projectId })
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
