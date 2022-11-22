@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -79,6 +80,8 @@ const SubmittedHabitatComplexity = () => {
                 'benthic_transect',
               )
 
+              console.log({ submittedRecordResponse })
+
               //   const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
               setSites(sitesResponse)
@@ -123,7 +126,7 @@ const SubmittedHabitatComplexity = () => {
         history.push(
           `${ensureTrailingSlash(
             currentProjectPath,
-          )}collecting/habitat-complexity/${submittedRecordId}`,
+          )}collecting/habitatcomplexity/${submittedRecordId}`,
         )
       })
       .catch(() => {
