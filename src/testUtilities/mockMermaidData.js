@@ -2252,6 +2252,65 @@ const choices = {
       },
     ],
   },
+  growthforms: {
+    data: [
+      {
+        id: '7e71833a-fc29-4176-91cb-1df6723089ed',
+        name: 'Arborescent',
+        updated_on: '2018-03-17T14:55:16.768564Z',
+      },
+      {
+        id: 'cf2deca6-53b8-4096-916f-32c2c71d14bf',
+        name: 'Branching',
+        updated_on: '2018-03-17T14:55:16.773963Z',
+      },
+      {
+        id: 'cbff6080-6387-44e5-b7ad-35f35f3db3a7',
+        name: 'Columnar',
+        updated_on: '2020-07-10T01:36:06.957974Z',
+      },
+      {
+        id: '1dd23b35-32d7-489f-bee1-3985e17c113f',
+        name: 'Corymbose',
+        updated_on: '2018-03-17T14:55:16.778893Z',
+      },
+      {
+        id: 'eb67cf91-533d-465c-bace-c7c6d3901516',
+        name: 'Digitate',
+        updated_on: '2018-04-10T13:13:10.776923Z',
+      },
+      {
+        id: 'b406252b-c160-4fd6-b7f9-f61d5e2779a5',
+        name: 'Encrusting',
+        updated_on: '2018-03-17T14:55:16.783763Z',
+      },
+      {
+        id: 'e149db12-9398-4a10-8642-5db70d1a8505',
+        name: 'Foliose',
+        updated_on: '2018-03-17T14:55:16.788727Z',
+      },
+      {
+        id: '888609b5-b58a-4d57-addc-a6935bba284b',
+        name: 'Massive',
+        updated_on: '2018-03-17T14:55:16.793549Z',
+      },
+      {
+        id: '7a3be72b-a96e-4434-9c42-a817fe3fc765',
+        name: 'Mushroom coral',
+        updated_on: '2018-03-17T14:55:16.808645Z',
+      },
+      {
+        id: '6b2aabb4-d16f-445e-933f-16341030fdba',
+        name: 'Plates or tables',
+        updated_on: '2018-03-17T14:55:16.803568Z',
+      },
+      {
+        id: '66f2cd86-a949-414e-96ac-5ea1fb702c5c',
+        name: 'Submassive',
+        updated_on: '2018-03-17T14:55:16.798383Z',
+      },
+    ],
+  },
 }
 
 const projecttags = [
