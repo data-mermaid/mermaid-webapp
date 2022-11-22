@@ -1,6 +1,31 @@
 import { createUuid } from '../../../../library/createUuid'
 
 const benthicPitObservationReducer = (state, action) => {
+  const getObservationsWithRecalculatedIntervals = ({
+    observations,
+    intervalStart,
+    intervalSize,
+  }) => {
+    const recalculatedObservations = []
+    const isIntervalStart = intervalStart !== ''
+    const intervalStartToUse = isIntervalStart ? intervalStart : intervalSize
+
+    if (!intervalSize) {
+      return observations.map((observation) => ({ ...observation, interval: '-' }))
+    }
+
+    observations.forEach((observation, index) => {
+      const previousObservation = recalculatedObservations[index - 1]
+      const interval = !previousObservation
+        ? intervalStartToUse
+        : previousObservation.interval + intervalSize
+
+      recalculatedObservations.push({ ...observation, interval })
+    })
+
+    return recalculatedObservations
+  }
+
   switch (action.type) {
     case 'loadObservationsFromApi': {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
@@ -11,47 +36,82 @@ const benthicPitObservationReducer = (state, action) => {
       return updateObservationsWithIds
     }
 
+    case 'recalculateObservationIntervals': {
+      const { intervalStart, intervalSize } = action.payload
+
+      return getObservationsWithRecalculatedIntervals({
+        observations: state,
+        intervalSize,
+        intervalStart,
+      })
+    }
+
     case 'deleteObservation': {
-      const observationIdToBeRemoved = action.payload
+      const {
+        observationId: observationIdToBeRemoved,
+        intervalStart,
+        intervalSize,
+      } = action.payload
 
       const observationsWithTheRightOneRemoved = state.filter(
         (observation) => observation.id !== observationIdToBeRemoved,
       )
 
-      return observationsWithTheRightOneRemoved
+      return getObservationsWithRecalculatedIntervals({
+        observations: observationsWithTheRightOneRemoved,
+        intervalSize,
+        intervalStart,
+      })
     }
 
-    case 'addObservation':
-      return [...state, { id: createUuid(), count: null, size: null }]
+    case 'addObservation': {
+      const { intervalStart, intervalSize } = action.payload
+
+      return getObservationsWithRecalculatedIntervals({
+        observations: [...state, { id: createUuid(), attribute: '', growth_form: '' }],
+        intervalSize,
+        intervalStart,
+      })
+    }
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
-      const { referenceObservationIndex } = action.payload
+      const { referenceObservationIndex, intervalSize, intervalStart } = action.payload
       const indexToInsertAt = referenceObservationIndex + 1
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
         id: createUuid(),
-        attribute: null,
-        growth_form: null,
-        interval: null,
+        attribute: '',
+        growth_form: '',
       })
 
-      return observationsWithInsertedRow
+      return getObservationsWithRecalculatedIntervals({
+        observations: observationsWithInsertedRow,
+        intervalSize,
+        intervalStart,
+      })
     }
 
     case 'duplicateLastObservation': {
+      const { intervalSize, intervalStart, referenceObservation } = action.payload
       const observationWithNewId = {
-        ...action.payload.referenceObservation,
+        ...referenceObservation,
         id: createUuid(),
       }
 
-      return [...state, observationWithNewId]
+      return getObservationsWithRecalculatedIntervals({
+        observations: [...state, observationWithNewId],
+        intervalSize,
+        intervalStart,
+      })
     }
-    case 'updateAttribute':
+    case 'updateBenthicAttribute':
       return state.map((observation) => {
-        const isObservationToUpdate = observation.id === action.payload.observationId
-        const { newAttribute } = action.payload
+        const isObservationToUpdate = observation?.id === action.payload.observationId
+        const { newBenthicAttribute } = action.payload
 
-        return isObservationToUpdate ? { ...observation, attribute: newAttribute } : observation
+        return isObservationToUpdate
+          ? { ...observation, attribute: newBenthicAttribute }
+          : observation
       })
     case 'updateGrowthForm':
       return state.map((observation) => {
