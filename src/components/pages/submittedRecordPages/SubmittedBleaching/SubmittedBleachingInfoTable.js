@@ -15,10 +15,7 @@ const SubmittedBleachingInfoTable = ({ choices, sites, managementRegimes, submit
   const {
     sample_time,
     depth,
-    number,
     label,
-    // len_surveyed,
-    // reef_slope,
     visibility,
     current,
     quadrat_size,
@@ -26,8 +23,6 @@ const SubmittedBleachingInfoTable = ({ choices, sites, managementRegimes, submit
     tide,
     notes,
   } = submittedRecord.quadrat_collection
-
-  // const { interval_size, interval_start } = submittedRecord
 
   const { visibilities, currents, relativedepths, tides } = choices
 
@@ -40,9 +35,6 @@ const SubmittedBleachingInfoTable = ({ choices, sites, managementRegimes, submit
         <TableRowItem title="Depth" value={depth} />
         <TableRowItem title="Label" value={label} />
         <TableRowItem title="Quadrat Size" value={quadrat_size} />
-        {/* <TableRowItem title="Interval Size" value={interval_size} />
-        <TableRowItem title="Interval Start" value={interval_start} /> */}
-        {/* <TableRowItem title="Reef Slope" options={reefslopes.data} value={reef_slope} /> */}
         <TableRowItem title="Visibility" options={visibilities.data} value={visibility} />
         <TableRowItem title="Current" options={currents.data} value={current} />
         <TableRowItem title="Relative Depth" options={relativedepths.data} value={relative_depth} />

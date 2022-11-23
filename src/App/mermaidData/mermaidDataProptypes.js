@@ -61,6 +61,18 @@ const _benthicPhotoQuadratTransectPropType = PropTypes.shape({
   notes: PropTypes.string,
 })
 
+const _bleachingQuadratPropType = PropTypes.shape({
+  id: PropTypes.string,
+  depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  label: PropTypes.string,
+  visibility: PropTypes.string,
+  current: PropTypes.string,
+  quadrat_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  relative_depth: PropTypes.string,
+  tide: PropTypes.string,
+  noes: PropTypes.string,
+})
+
 const _benthicPhotoQuadratObservationPropType = PropTypes.shape({
   id: PropTypes.string,
   attribute: PropTypes.string,
@@ -189,6 +201,7 @@ export const submittedBenthicPitPropType = PropTypes.shape({
 
 export const submittedBleachingPropType = PropTypes.shape({
   id: PropTypes.string,
+  quadrat_collection: _bleachingQuadratPropType,
 })
 
 export const managementRegimePropType = PropTypes.shape({
