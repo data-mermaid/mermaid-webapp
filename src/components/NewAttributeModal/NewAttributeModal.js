@@ -225,8 +225,9 @@ const NewAttributeModal = ({
 
   const handleNewAttributeChange = (event) => {
     const attributeProperty = isFishBeltSampleUnit ? 'species' : 'newBenthicAttribute'
+    const valueToUse = isFishBeltSampleUnit ? event.target.value.toLowerCase() : event.target.value
 
-    formikPageOne.setFieldValue(attributeProperty, event.target.value.toLowerCase())
+    formikPageOne.setFieldValue(attributeProperty, valueToUse)
   }
 
   const formValuesOnSubmit = isFishBeltSampleUnit

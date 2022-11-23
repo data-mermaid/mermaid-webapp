@@ -12,10 +12,11 @@ import {
 import App from '../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
+import mockBenthicPitCollectRecords from '../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Fishbelt Validation: user can dismiss non-observations input warnings ', async () => {
+test('Benthic PIT validation: user can dismiss non-observations input warnings ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -25,7 +26,7 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
+        ...mockBenthicPitCollectRecords[0],
         validations: {
           status: 'error',
           results: {
@@ -80,7 +81,31 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
                   },
                 ],
               },
-              fishbelt_transect: {
+              interval_start: [
+                {
+                  validation_id: Math.random(),
+                  code: 'firstWarning',
+                  status: 'warning',
+                },
+                {
+                  validation_id: Math.random(),
+                  code: 'secondWarning',
+                  status: 'warning',
+                },
+              ],
+              interval_size: [
+                {
+                  validation_id: Math.random(),
+                  code: 'firstWarning',
+                  status: 'warning',
+                },
+                {
+                  validation_id: Math.random(),
+                  code: 'secondWarning',
+                  status: 'warning',
+                },
+              ],
+              benthic_transect: {
                 depth: [
                   {
                     validation_id: Math.random(),
@@ -130,30 +155,6 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
                   },
                 ],
                 len_surveyed: [
-                  {
-                    validation_id: Math.random(),
-                    code: 'firstWarning',
-                    status: 'warning',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    code: 'secondWarning',
-                    status: 'warning',
-                  },
-                ],
-                width: [
-                  {
-                    validation_id: Math.random(),
-                    code: 'firstWarning',
-                    status: 'warning',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    code: 'secondWarning',
-                    status: 'warning',
-                  },
-                ],
-                size_bin: [
                   {
                     validation_id: Math.random(),
                     code: 'firstWarning',
@@ -238,6 +239,7 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
                   },
                 ],
               },
+              obs_benthic_pits: [],
             },
           },
         },
@@ -263,7 +265,7 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -281,8 +283,8 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
   const transectNumberRow = screen.getByTestId('transect_number')
   const labelRow = screen.getByTestId('label')
   const lengthSurveyedRow = screen.getByTestId('len_surveyed')
-  const widthRow = screen.getByTestId('width')
-  const sizeBinRow = screen.getByTestId('size_bin')
+  const intervalSizeRow = screen.getByTestId('interval_size')
+  const intervalStartRow = screen.getByTestId('interval_start')
   const reefSlopeRow = screen.getByTestId('reef_slope')
   const relativeDepthRow = screen.getByTestId('relative_depth')
   const visibilityRow = screen.getByTestId('visibility')
@@ -307,10 +309,10 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
   expect(within(labelRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(lengthSurveyedRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(lengthSurveyedRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(widthRow).getByText('firstWarning')).toBeInTheDocument()
-  expect(within(widthRow).getByText('secondWarning')).toBeInTheDocument()
-  expect(within(sizeBinRow).getByText('firstWarning')).toBeInTheDocument()
-  expect(within(sizeBinRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(intervalSizeRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(intervalSizeRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(intervalStartRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(intervalStartRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(reefSlopeRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(reefSlopeRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(relativeDepthRow).getByText('firstWarning')).toBeInTheDocument()
@@ -388,19 +390,21 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
   expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(lengthSurveyedRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(widthRow).getByRole('button', { name: 'Ignore warning' }))
-
-  await waitFor(() => expect(within(widthRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(widthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(widthRow).getByText('Ignored')).toBeInTheDocument()
-
-  userEvent.click(within(sizeBinRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(intervalSizeRow).getByRole('button', { name: 'Ignore warning' }))
 
   await waitFor(() =>
-    expect(within(sizeBinRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(intervalSizeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
   )
-  expect(within(sizeBinRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sizeBinRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(intervalSizeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(intervalSizeRow).getByText('Ignored')).toBeInTheDocument()
+
+  userEvent.click(within(intervalStartRow).getByRole('button', { name: 'Ignore warning' }))
+
+  await waitFor(() =>
+    expect(within(intervalStartRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+  )
+  expect(within(intervalStartRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(intervalStartRow).getByText('Ignored')).toBeInTheDocument()
 
   userEvent.click(within(reefSlopeRow).getByRole('button', { name: 'Ignore warning' }))
 
@@ -455,7 +459,7 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
   expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
 }, 50000)
 
-test('Fishbelt Validation: user can dismiss record-level warnings ', async () => {
+test('Benthic PIT validation: user can dismiss record-level warnings ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -465,7 +469,7 @@ test('Fishbelt Validation: user can dismiss record-level warnings ', async () =>
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
+        ...mockBenthicPitCollectRecords[0],
         validations: {
           status: 'error',
           results: {
@@ -500,7 +504,7 @@ test('Fishbelt Validation: user can dismiss record-level warnings ', async () =>
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -536,7 +540,7 @@ test('Fishbelt Validation: user can dismiss record-level warnings ', async () =>
   expect(isFormDirtyAfterIgnore)
 }, 50000)
 
-test('Fishbelt Validation: user can dismiss observation warnings ', async () => {
+test('Benthic PIT validation: user can dismiss observation warnings ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -546,27 +550,27 @@ test('Fishbelt Validation: user can dismiss observation warnings ', async () => 
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
+        ...mockBenthicPitCollectRecords[0],
         validations: {
           status: 'error',
           results: {
             data: {
-              obs_belt_fishes: [
+              obs_benthic_pits: [
                 [
                   {
-                    context: { observation_id: '9' },
+                    context: { observation_id: '1' },
                     code: 'firstWarning',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
                   },
                   {
-                    context: { observation_id: '9' },
+                    context: { observation_id: '1' },
                     code: 'secondWarning',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
                   },
                   {
-                    context: { observation_id: 'not9' },
+                    context: { observation_id: 'not1' },
                     code: 'someOtherObservationWarning',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
@@ -574,13 +578,13 @@ test('Fishbelt Validation: user can dismiss observation warnings ', async () => 
                 ],
                 [
                   {
-                    context: { observation_id: 'not9' },
+                    context: { observation_id: 'not1' },
                     code: 'firstOtherObservationWarning',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
                   },
                   {
-                    context: { observation_id: 'not9' },
+                    context: { observation_id: 'not1' },
                     code: 'secondOtherObservationWarning',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
@@ -612,7 +616,7 @@ test('Fishbelt Validation: user can dismiss observation warnings ', async () => 
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -642,7 +646,7 @@ test('Fishbelt Validation: user can dismiss observation warnings ', async () => 
   expect(isFormDirtyAfterIgnore)
 }, 60000)
 
-test('Fishbelt validation: user can reset dismissed non-observation input warnings', async () => {
+test('Benthic PIT validation: user can reset dismissed non-observation input warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -652,23 +656,47 @@ test('Fishbelt validation: user can reset dismissed non-observation input warnin
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
+        ...mockBenthicPitCollectRecords[0],
         validations: {
           status: 'error',
           results: {
             data: {
-              observers: [
+              interval_start: [
                 {
                   validation_id: Math.random(),
                   name: 'firstWarning',
                   status: 'ignore',
-                  context: { observation_id: '7' },
                 },
                 {
                   validation_id: Math.random(),
                   name: 'secondWarning',
                   status: 'ignore',
-                  context: { observation_id: '7' },
+                },
+              ],
+              interval_size: [
+                {
+                  validation_id: Math.random(),
+                  name: 'firstWarning',
+                  status: 'ignore',
+                },
+                {
+                  validation_id: Math.random(),
+                  name: 'secondWarning',
+                  status: 'ignore',
+                },
+              ],
+              observers: [
+                {
+                  validation_id: Math.random(),
+                  name: 'firstWarning',
+                  status: 'ignore',
+                  context: { observation_id: '1' },
+                },
+                {
+                  validation_id: Math.random(),
+                  name: 'secondWarning',
+                  status: 'ignore',
+                  context: { observation_id: '1' },
                 },
               ],
               sample_event: {
@@ -709,19 +737,7 @@ test('Fishbelt validation: user can reset dismissed non-observation input warnin
                   },
                 ],
               },
-              fishbelt_transect: {
-                notes: [
-                  {
-                    validation_id: Math.random(),
-                    name: 'firstWarning',
-                    status: 'ignore',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    name: 'secondWarning',
-                    status: 'ignore',
-                  },
-                ],
+              benthic_transect: {
                 depth: [
                   {
                     validation_id: Math.random(),
@@ -771,30 +787,6 @@ test('Fishbelt validation: user can reset dismissed non-observation input warnin
                   },
                 ],
                 len_surveyed: [
-                  {
-                    validation_id: Math.random(),
-                    name: 'firstWarning',
-                    status: 'ignore',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    name: 'secondWarning',
-                    status: 'ignore',
-                  },
-                ],
-                width: [
-                  {
-                    validation_id: Math.random(),
-                    name: 'firstWarning',
-                    status: 'ignore',
-                  },
-                  {
-                    validation_id: Math.random(),
-                    name: 'secondWarning',
-                    status: 'ignore',
-                  },
-                ],
-                size_bin: [
                   {
                     validation_id: Math.random(),
                     name: 'firstWarning',
@@ -866,6 +858,18 @@ test('Fishbelt validation: user can reset dismissed non-observation input warnin
                     status: 'ignore',
                   },
                 ],
+                notes: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
               },
             },
           },
@@ -892,7 +896,7 @@ test('Fishbelt validation: user can reset dismissed non-observation input warnin
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
   )
@@ -909,8 +913,8 @@ test('Fishbelt validation: user can reset dismissed non-observation input warnin
   const transectNumberRow = screen.getByTestId('transect_number')
   const labelRow = screen.getByTestId('label')
   const lengthSurveyedRow = screen.getByTestId('len_surveyed')
-  const widthRow = screen.getByTestId('width')
-  const sizeBinRow = screen.getByTestId('size_bin')
+  const intervalSizeRow = screen.getByTestId('interval_size')
+  const intervalStartRow = screen.getByTestId('interval_start')
   const reefSlopeRow = screen.getByTestId('reef_slope')
   const relativeDepthRow = screen.getByTestId('relative_depth')
   const visibilityRow = screen.getByTestId('visibility')
@@ -1017,26 +1021,30 @@ test('Fishbelt validation: user can reset dismissed non-observation input warnin
   expect(within(lengthSurveyedRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(widthRow).getByRole('button', {
+    within(intervalSizeRow).getByRole('button', {
       name: 'Reset validations',
     }),
   )
 
-  await waitFor(() => expect(within(widthRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(widthRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(widthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(widthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  await waitFor(() =>
+    expect(within(intervalSizeRow).queryByText('Ignored')).not.toBeInTheDocument(),
+  )
+  expect(within(intervalSizeRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(intervalSizeRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(intervalSizeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(sizeBinRow).getByRole('button', {
+    within(intervalStartRow).getByRole('button', {
       name: 'Reset validations',
     }),
   )
 
-  await waitFor(() => expect(within(sizeBinRow).queryByText('Ignored')).not.toBeInTheDocument())
-  expect(within(sizeBinRow).queryByText('firstWarning')).not.toBeInTheDocument()
-  expect(within(sizeBinRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sizeBinRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
+  await waitFor(() =>
+    expect(within(intervalStartRow).queryByText('Ignored')).not.toBeInTheDocument(),
+  )
+  expect(within(intervalStartRow).queryByText('firstWarning')).not.toBeInTheDocument()
+  expect(within(intervalStartRow).queryByText('secondWarning')).not.toBeInTheDocument()
+  expect(within(intervalStartRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
     within(reefSlopeRow).getByRole('button', {
