@@ -13,6 +13,9 @@ import { OnlineStatusProvider } from './library/onlineStatusContext'
 import { SyncStatusProvider } from './App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import dexieCurrentUserInstance from './App/dexieCurrentUserInstance'
 import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstanceContext'
+import { versionNumber } from './version'
+
+console.log(versionNumber) // eslint-disable-line
 
 ReactDOM.render(
   <React.StrictMode>

@@ -45,6 +45,11 @@ jobs:
         with:
           path: build
           key: ${{ runner.os }}-build-${{ hashFiles('src') }}-${{ hashFiles('public') }}
+      
+      - name: Create version file
+        run: |
+          echo "export const versionNumber = '${{ github.ref_name }}'" > src/version.js
+          cat src/version.js
 
       - name: Yarn Build
         if: ${{ steps.build-cache.outputs.cache-hit != 'true' }}
