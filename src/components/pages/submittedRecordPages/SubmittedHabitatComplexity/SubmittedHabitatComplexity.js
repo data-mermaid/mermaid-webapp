@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
@@ -22,9 +23,9 @@ import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-// import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
-// import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
-// import { getBenthicOptions } from '../../../../library/getOptions'
+import SubmittedHabitatComplexityInfoTable from './SubmittedHabitatComplexityInfoTable'
+// import SubmittedHabitatComplexityObservationTable from './SubmittedHabitatComplexityObservationTable'
+import { getBenthicOptions } from '../../../../library/getOptions'
 
 const SubmittedHabitatComplexity = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -38,14 +39,14 @@ const SubmittedHabitatComplexity = () => {
   const isMounted = useIsMounted()
 
   const [sites, setSites] = useState([])
-  //   const [managementRegimes, setManagementRegimes] = useState([])
-  //   const [choices, setChoices] = useState({})
+  const [managementRegimes, setManagementRegimes] = useState([])
+  const [choices, setChoices] = useState({})
   const [submittedRecord, setSubmittedRecord] = useState()
   const [subNavNode, setSubNavNode] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
-  //   const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
+  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
 
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
@@ -68,9 +69,9 @@ const SubmittedHabitatComplexity = () => {
         .then(
           ([
             sitesResponse,
-            // benthicAttributes,
-            // managementRegimesResponse,
-            // choicesResponse,
+            benthicAttributes,
+            managementRegimesResponse,
+            choicesResponse,
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
@@ -82,12 +83,12 @@ const SubmittedHabitatComplexity = () => {
 
               console.log({ submittedRecordResponse })
 
-              //   const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
               setSites(sitesResponse)
-              //   setManagementRegimes(managementRegimesResponse)
-              //   setChoices(choicesResponse)
-              //   setBenthicAttributeOptions(updateBenthicAttributeOptions)
+              setManagementRegimes(managementRegimesResponse)
+              setChoices(choicesResponse)
+              setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setSubmittedRecord(submittedRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -148,12 +149,12 @@ const SubmittedHabitatComplexity = () => {
       content={
         isAppOnline ? (
           <>
-            {/* <SubmittedBenthicPitInfoTable
+            <SubmittedHabitatComplexityInfoTable
               sites={sites}
               choices={choices}
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
-            /> */}
+            />
             <FormSubTitle>Observers</FormSubTitle>
             <ul>
               {observers.map((observer) => (
@@ -161,7 +162,7 @@ const SubmittedHabitatComplexity = () => {
               ))}
             </ul>
 
-            {/* <SubmittedBenthicPitObservationTable
+            {/* <SubmittedHabitatComplexityObservationTable
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
               submittedRecord={submittedRecord}
