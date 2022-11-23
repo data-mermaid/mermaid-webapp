@@ -24,7 +24,7 @@ import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import SubmittedBleachingPitInfoTable from './SubmittedBleachingInfoTable'
-// import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
+import SubmittedBleachingObservationTable from './SubmittedBleachingObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
 
 const SubmittedBleaching = () => {
@@ -160,11 +160,11 @@ const SubmittedBleaching = () => {
               ))}
             </ul>
 
-            {/* <SubmittedBenthicPitObservationTable
+            <SubmittedBleachingObservationTable
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
               submittedRecord={submittedRecord}
-            /> */}
+            />
           </>
         ) : (
           <PageUnavailable mainText={language.error.pageUnavailableOffline} />
