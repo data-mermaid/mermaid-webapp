@@ -189,6 +189,8 @@ export const submittedBenthicPitPropType = PropTypes.shape({
 
 export const submittedHabitatComplexityPropType = PropTypes.shape({
   id: PropTypes.string,
+  interval_size: PropTypes.number,
+  benthic_transect: _benthicPitTransectPropType,
 })
 
 export const managementRegimePropType = PropTypes.shape({
