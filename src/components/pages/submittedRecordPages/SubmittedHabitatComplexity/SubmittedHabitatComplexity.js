@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -24,7 +22,7 @@ import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import SubmittedHabitatComplexityInfoTable from './SubmittedHabitatComplexityInfoTable'
-// import SubmittedHabitatComplexityObservationTable from './SubmittedHabitatComplexityObservationTable'
+import SubmittedHabitatComplexityObservationTable from './SubmittedHabitatComplexityObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
 
 const SubmittedHabitatComplexity = () => {
@@ -80,8 +78,6 @@ const SubmittedHabitatComplexity = () => {
                 sitesResponse,
                 'benthic_transect',
               )
-
-              console.log({ submittedRecordResponse })
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
@@ -162,11 +158,11 @@ const SubmittedHabitatComplexity = () => {
               ))}
             </ul>
 
-            {/* <SubmittedHabitatComplexityObservationTable
+            <SubmittedHabitatComplexityObservationTable
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
               submittedRecord={submittedRecord}
-            /> */}
+            />
           </>
         ) : (
           <PageUnavailable mainText={language.error.pageUnavailableOffline} />
