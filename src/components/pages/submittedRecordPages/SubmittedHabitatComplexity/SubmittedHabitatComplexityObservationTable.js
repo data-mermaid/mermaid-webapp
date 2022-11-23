@@ -3,14 +3,8 @@ import {
   choicesPropType,
   submittedHabitatComplexityPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-// import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { SubmittedObservationStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
-import {
-  TheadItem,
-  FormSubTitle,
-  ObservationsSummaryStats,
-  UnderTableRow,
-} from '../SubmittedFormPage.styles'
+import { SubmittedObservationStickyTable, Tr, Td } from '../../../generic/Table/table'
+import { TheadItem, FormSubTitle } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { getObjectById } from '../../../../library/getObjectById'
@@ -43,20 +37,6 @@ const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord }
           <tbody>{observationsHabitatComplexity}</tbody>
         </SubmittedObservationStickyTable>
       </StyledOverflowWrapper>
-      <UnderTableRow>
-        <ObservationsSummaryStats>
-          <tbody>
-            <Tr>
-              <Th>placeholder label</Th>
-              <Td>placeholder item</Td>
-            </Tr>
-            <Tr>
-              <Th>placeholder label</Th>
-              <Td>placeholder item</Td>
-            </Tr>
-          </tbody>
-        </ObservationsSummaryStats>
-      </UnderTableRow>
     </InputWrapper>
   )
 }
