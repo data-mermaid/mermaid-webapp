@@ -189,7 +189,7 @@ test('FishBelt component in EDIT mode - button group shows save, validate and su
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
+  const collectButtonGroups = screen.getByTestId('collect-record-form-buttons')
   const saveButton = within(collectButtonGroups).getByRole('button', {
     name: 'Saved',
   })
@@ -225,7 +225,7 @@ test('FishBelt component in EDIT mode - button group shows only save button when
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  const collectButtonGroups = screen.getByTestId('fishbelt-form-buttons')
+  const collectButtonGroups = screen.getByTestId('collect-record-form-buttons')
   const saveButton = within(collectButtonGroups).getByRole('button', {
     name: 'Saved',
   })

@@ -330,7 +330,7 @@ export const notificationsPropType = PropTypes.shape({
 // Start of PropTypes for validation object
 const validationObject = {
   code: PropTypes.string,
-  context: PropTypes.string,
+  context: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({})]),
   fields: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string,
   status: PropTypes.string,
@@ -389,6 +389,18 @@ export const benthicpqtValidationPropType = PropTypes.shape({
   quadrat_size: _validationsPropType,
   number: _validationsPropType,
   sample_time: _sampleTimeValidationPropType,
+})
+
+export const benthicPitValidationPropType = PropTypes.shape({
+  benthic_transect: PropTypes.shape({
+    depth: _depthValidationPropType,
+    len_surveyed: _lenSurveyedValidationPropType,
+    number: _validationsPropType,
+    sample_time: _sampleTimeValidationPropType,
+  }),
+  interval_start: _validationsPropType,
+  interval_size: _validationsPropType,
+  obs_benthic_pits: PropTypes.arrayOf(_validationsPropType),
 })
 
 // End of PropTypes for validation object

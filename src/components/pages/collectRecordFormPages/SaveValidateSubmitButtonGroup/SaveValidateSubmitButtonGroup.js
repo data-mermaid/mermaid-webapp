@@ -93,7 +93,7 @@ const SaveValidateSubmitButtonGroup = ({
   )
 
   return (
-    <SaveValidateSubmitButtonWrapper data-testid="fishbelt-form-buttons">
+    <SaveValidateSubmitButtonWrapper data-testid="collect-record-form-buttons">
       {saveButton}
       {!isNewRecord && (
         <OfflineHide>
