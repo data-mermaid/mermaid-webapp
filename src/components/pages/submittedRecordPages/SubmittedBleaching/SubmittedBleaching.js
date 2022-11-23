@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
@@ -22,9 +23,9 @@ import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-// import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
+import SubmittedBleachingPitInfoTable from './SubmittedBleachingInfoTable'
 // import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
-// import { getBenthicOptions } from '../../../../library/getOptions'
+import { getBenthicOptions } from '../../../../library/getOptions'
 
 const SubmittedBleaching = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -38,14 +39,14 @@ const SubmittedBleaching = () => {
   const isMounted = useIsMounted()
 
   const [sites, setSites] = useState([])
-  //   const [managementRegimes, setManagementRegimes] = useState([])
-  //   const [choices, setChoices] = useState({})
+  const [managementRegimes, setManagementRegimes] = useState([])
+  const [choices, setChoices] = useState({})
   const [submittedRecord, setSubmittedRecord] = useState()
   const [subNavNode, setSubNavNode] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
-  //   const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
+  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
 
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
@@ -54,7 +55,7 @@ const SubmittedBleaching = () => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
-        // databaseSwitchboardInstance.getBenthicAttributes(),
+        databaseSwitchboardInstance.getBenthicAttributes(),
         databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
         databaseSwitchboardInstance.getChoices(),
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
@@ -68,9 +69,9 @@ const SubmittedBleaching = () => {
         .then(
           ([
             sitesResponse,
-            // benthicAttributes,
-            // managementRegimesResponse,
-            // choicesResponse,
+            benthicAttributes,
+            managementRegimesResponse,
+            choicesResponse,
             submittedRecordResponse,
           ]) => {
             if (isMounted.current) {
@@ -80,14 +81,14 @@ const SubmittedBleaching = () => {
                 'quadrat_collection',
               )
 
-              //   const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
+              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
               console.log({ submittedRecordResponse })
 
               setSites(sitesResponse)
-              //   setManagementRegimes(managementRegimesResponse)
-              //   setChoices(choicesResponse)
-              //   setBenthicAttributeOptions(updateBenthicAttributeOptions)
+              setManagementRegimes(managementRegimesResponse)
+              setChoices(choicesResponse)
+              setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setSubmittedRecord(submittedRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
@@ -146,12 +147,12 @@ const SubmittedBleaching = () => {
       content={
         isAppOnline ? (
           <>
-            {/* <SubmittedBenthicPitInfoTable
+            <SubmittedBleachingPitInfoTable
               sites={sites}
               choices={choices}
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
-            /> */}
+            />
             <FormSubTitle>Observers</FormSubTitle>
             <ul>
               {observers.map((observer) => (

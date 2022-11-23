@@ -187,6 +187,10 @@ export const submittedBenthicPitPropType = PropTypes.shape({
   benthic_transect: _benthicPitTransectPropType,
 })
 
+export const submittedBleachingPropType = PropTypes.shape({
+  id: PropTypes.string,
+})
+
 export const managementRegimePropType = PropTypes.shape({
   id: PropTypes.string,
   name: PropTypes.string,
