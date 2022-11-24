@@ -25,6 +25,7 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import SubmittedBleachingPitInfoTable from './SubmittedBleachingInfoTable'
 import SubmittedBleachingObservationTable from './SubmittedBleachingObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const SubmittedBleaching = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -36,6 +37,7 @@ const SubmittedBleaching = () => {
   const { submittedRecordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
@@ -82,8 +84,6 @@ const SubmittedBleaching = () => {
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
-              console.log({ submittedRecordResponse })
-
               setSites(sitesResponse)
               setManagementRegimes(managementRegimesResponse)
               setChoices(choicesResponse)
@@ -95,13 +95,18 @@ const SubmittedBleaching = () => {
           },
         )
         .catch((error) => {
-          const errorStatus = error.response?.status
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId, submittedRecordId])
-            setIsLoading(false)
-          }
-          toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+                setIdsNotAssociatedWithData([projectId, submittedRecordId])
+                setIsLoading(false)
+              }
+              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+            },
+          })
         })
     }
   }, [
@@ -111,6 +116,7 @@ const SubmittedBleaching = () => {
     projectId,
     isAppOnline,
     isSyncInProgress,
+    handleHttpResponseError,
   ])
 
   const handleMoveToCollect = () => {
@@ -127,9 +133,14 @@ const SubmittedBleaching = () => {
           `${ensureTrailingSlash(currentProjectPath)}collecting/bleaching/${submittedRecordId}`,
         )
       })
-      .catch(() => {
-        toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
-        setIsMoveToButtonDisabled(false)
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            setIsMoveToButtonDisabled(false)
+          },
+        })
       })
   }
 
