@@ -23,6 +23,7 @@ import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPi
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
 import BenthicLitForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
+import SubmittedHabitatComplexity from '../components/pages/submittedRecordPages/SubmittedHabitatComplexity/SubmittedHabitatComplexity'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
@@ -51,11 +52,11 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <FishBeltForm isNewRecord={false} />,
     },
     {
-      path: '/projects/:projectId/collecting/benthic-photo-quadrat',
+      path: '/projects/:projectId/collecting/benthicpqt',
       Component: () => <BenthicPhotoQuadratForm isNewRecord={true} />,
     },
     {
-      path: '/projects/:projectId/collecting/benthic-photo-quadrat/:recordId',
+      path: '/projects/:projectId/collecting/benthicpqt/:recordId',
       Component: () => <BenthicPhotoQuadratForm isNewRecord={false} />,
     },
     {
@@ -101,6 +102,10 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/submitted/bleachingqc/:submittedRecordId',
       Component: () => <SubmittedBleaching />,
+    },
+    {
+      path: '/projects/:projectId/submitted/habitatcomplexity/:submittedRecordId',
+      Component: () => <SubmittedHabitatComplexity />,
     },
     {
       path: '/projects/:projectId/project-info',

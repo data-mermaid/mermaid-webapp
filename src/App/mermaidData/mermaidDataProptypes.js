@@ -204,6 +204,12 @@ export const submittedBleachingPropType = PropTypes.shape({
   quadrat_collection: _bleachingQuadratPropType,
 })
 
+export const submittedHabitatComplexityPropType = PropTypes.shape({
+  id: PropTypes.string,
+  interval_size: PropTypes.number,
+  benthic_transect: _benthicPitTransectPropType,
+})
+
 export const managementRegimePropType = PropTypes.shape({
   id: PropTypes.string,
   name: PropTypes.string,
