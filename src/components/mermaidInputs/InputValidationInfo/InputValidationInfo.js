@@ -6,12 +6,14 @@ import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
 import { InlineValidationButton } from '../../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import language from '../../../language'
+import { checkDuplicateWarningInValidationMessages } from '../../../library/validationMessageHelpers'
 
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
   display: flex;
   align-items: flex-start;
 `
+
 const InputValidationInfo = ({
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
@@ -19,6 +21,18 @@ const InputValidationInfo = ({
   validationType,
 }) => {
   const areThereValidationMessages = validationMessages.length
+  const foundDuplicateWarningInValidationMessages =
+    checkDuplicateWarningInValidationMessages(validationMessages)
+  const isWarningValidation = areThereValidationMessages && validationType === 'warning'
+  const warningValidationButton = foundDuplicateWarningInValidationMessages ? (
+    <InlineValidationButton type="button" onClick={() => {}}>
+      Resolve duplicate
+    </InlineValidationButton>
+  ) : (
+    <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
+      Ignore warning
+    </InlineValidationButton>
+  )
 
   return (
     <ValidationWrapper>
@@ -36,11 +50,7 @@ const InputValidationInfo = ({
           ))}
         </>
       ) : null}
-      {areThereValidationMessages && validationType === 'warning' ? (
-        <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
-          Ignore warning
-        </InlineValidationButton>
-      ) : null}
+      {isWarningValidation ? warningValidationButton : null}
       {validationType === 'ok' ? <span aria-label="Passed Validation">&nbsp;</span> : null}
       {validationType === 'ignore' ? (
         <>
@@ -61,6 +71,7 @@ InputValidationInfo.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
+  label: PropTypes.string,
 }
 
 InputValidationInfo.defaultProps = {
