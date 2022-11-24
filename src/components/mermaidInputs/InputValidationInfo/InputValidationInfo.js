@@ -26,7 +26,7 @@ const InputValidationInfo = ({
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
   const warningValidationButton = foundDuplicateWarningInValidationMessages ? (
     <InlineValidationButton type="button" onClick={() => {}}>
-      Resolve duplicate
+      Resolve
     </InlineValidationButton>
   ) : (
     <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
