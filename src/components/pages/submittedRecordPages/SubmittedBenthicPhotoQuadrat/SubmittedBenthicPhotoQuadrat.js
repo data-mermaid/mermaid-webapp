@@ -123,7 +123,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
         history.push(
           `${ensureTrailingSlash(
             currentProjectPath,
-          )}collecting/habitatcomplexity/${submittedRecordId}`,
+          )}collecting/benthic-photo-quadrat/${submittedRecordId}`,
         )
       })
       .catch(() => {
