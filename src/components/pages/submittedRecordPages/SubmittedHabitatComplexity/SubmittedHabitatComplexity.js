@@ -24,6 +24,7 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import SubmittedHabitatComplexityInfoTable from './SubmittedHabitatComplexityInfoTable'
 import SubmittedHabitatComplexityObservationTable from './SubmittedHabitatComplexityObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const SubmittedHabitatComplexity = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -35,6 +36,7 @@ const SubmittedHabitatComplexity = () => {
   const { submittedRecordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
@@ -92,13 +94,18 @@ const SubmittedHabitatComplexity = () => {
           },
         )
         .catch((error) => {
-          const errorStatus = error.response?.status
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId, submittedRecordId])
-            setIsLoading(false)
-          }
-          toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+                setIdsNotAssociatedWithData([projectId, submittedRecordId])
+                setIsLoading(false)
+              }
+              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+            },
+          })
         })
     }
   }, [
@@ -108,6 +115,7 @@ const SubmittedHabitatComplexity = () => {
     projectId,
     isAppOnline,
     isSyncInProgress,
+    handleHttpResponseError,
   ])
 
   const handleMoveToCollect = () => {
@@ -126,9 +134,14 @@ const SubmittedHabitatComplexity = () => {
           )}collecting/habitatcomplexity/${submittedRecordId}`,
         )
       })
-      .catch(() => {
-        toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
-        setIsMoveToButtonDisabled(false)
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            setIsMoveToButtonDisabled(false)
+          },
+        })
       })
   }
 
