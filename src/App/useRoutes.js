@@ -18,6 +18,7 @@ import SubmittedFishBelt from '../components/pages/submittedRecordPages/Submitte
 import BenthicPhotoQuadratForm from '../components/pages/collectRecordFormPages/BenthicPhotoQuadratForm'
 import SubmittedBenthicPhotoQuadrat from '../components/pages/submittedRecordPages/SubmittedBenthicPhotoQuadrat'
 import SubmittedBenthicPit from '../components/pages/submittedRecordPages/SubmittedBenthicPit/SubmittedBenthicPit'
+import SubmittedBleaching from '../components/pages/submittedRecordPages/SubmittedBleaching/SubmittedBleaching'
 import BenthicPitForm from '../components/pages/collectRecordFormPages/BenthicPitForm/BenthicPitForm'
 import BleachingForm from '../components/pages/collectRecordFormPages/BleachingForm/BleachingForm'
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
@@ -97,6 +98,10 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/submitted/benthicpit/:submittedRecordId',
       Component: () => <SubmittedBenthicPit />,
+    },
+    {
+      path: '/projects/:projectId/submitted/bleachingqc/:submittedRecordId',
+      Component: () => <SubmittedBleaching />,
     },
     {
       path: '/projects/:projectId/submitted/habitatcomplexity/:submittedRecordId',
