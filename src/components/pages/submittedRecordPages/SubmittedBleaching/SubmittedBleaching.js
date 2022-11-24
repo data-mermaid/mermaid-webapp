@@ -26,6 +26,7 @@ import SubmittedBleachingPitInfoTable from './SubmittedBleachingInfoTable'
 import SubmittedBleachingObservationTable from './SubmittedBleachingObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import SubmittedBleachingPercentageSummaryTable from './SubmittedBleachingPercentageSummaryTable'
 
 const SubmittedBleaching = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -91,6 +92,8 @@ const SubmittedBleaching = () => {
               setSubmittedRecord(submittedRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
+
+              console.log({ submittedRecordResponse })
             }
           },
         )
@@ -175,6 +178,8 @@ const SubmittedBleaching = () => {
               choices={choices}
               submittedRecord={submittedRecord}
             />
+
+            <SubmittedBleachingPercentageSummaryTable submittedRecord={submittedRecord} />
           </>
         ) : (
           <PageUnavailable mainText={language.error.pageUnavailableOffline} />
