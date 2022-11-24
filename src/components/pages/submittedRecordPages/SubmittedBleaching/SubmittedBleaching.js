@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -92,8 +91,6 @@ const SubmittedBleaching = () => {
               setSubmittedRecord(submittedRecordResponse)
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
-
-              console.log({ submittedRecordResponse })
             }
           },
         )
