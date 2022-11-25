@@ -24,6 +24,7 @@ import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflin
 import RecordFormTitle from '../../../RecordFormTitle'
 import { RowSpaceBetween } from '../../../generic/positioning'
 import { FormSubTitle } from '../SubmittedFormPage.styles'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const SubmittedBenthicPhotoQuadrat = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -45,6 +46,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
   const [sites, setSites] = useState([])
   const [submittedRecord, setSubmittedRecord] = useState()
   const [subNavNode, setSubNavNode] = useState(null)
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
@@ -92,22 +94,28 @@ const SubmittedBenthicPhotoQuadrat = () => {
           },
         )
         .catch((error) => {
-          const errorStatus = error.response?.status
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId, submittedRecordId])
-            setIsLoading(false)
-          }
-          toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+                setIdsNotAssociatedWithData([projectId, submittedRecordId])
+                setIsLoading(false)
+              }
+              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+            },
+          })
         })
     }
   }, [
     databaseSwitchboardInstance,
-    isMounted,
-    submittedRecordId,
-    projectId,
+    handleHttpResponseError,
     isAppOnline,
+    isMounted,
     isSyncInProgress,
+    projectId,
+    submittedRecordId,
   ])
 
   const handleMoveToCollect = () => {
@@ -124,9 +132,14 @@ const SubmittedBenthicPhotoQuadrat = () => {
           `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpqt/${submittedRecordId}`,
         )
       })
-      .catch(() => {
-        toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
-        setIsMoveToButtonDisabled(false)
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            setIsMoveToButtonDisabled(false)
+          },
+        })
       })
   }
 

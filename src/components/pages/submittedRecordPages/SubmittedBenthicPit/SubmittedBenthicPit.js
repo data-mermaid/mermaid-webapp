@@ -24,6 +24,7 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
 import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const SubmittedBenthicPit = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -35,6 +36,7 @@ const SubmittedBenthicPit = () => {
   const { submittedRecordId, projectId } = useParams()
   const { isSyncInProgress } = useSyncStatus()
   const isMounted = useIsMounted()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [sites, setSites] = useState([])
   const [managementRegimes, setManagementRegimes] = useState([])
@@ -92,22 +94,28 @@ const SubmittedBenthicPit = () => {
           },
         )
         .catch((error) => {
-          const errorStatus = error.response?.status
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId, submittedRecordId])
-            setIsLoading(false)
-          }
-          toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+                setIdsNotAssociatedWithData([projectId, submittedRecordId])
+                setIsLoading(false)
+              }
+              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+            },
+          })
         })
     }
   }, [
     databaseSwitchboardInstance,
-    isMounted,
-    submittedRecordId,
-    projectId,
+    handleHttpResponseError,
     isAppOnline,
+    isMounted,
     isSyncInProgress,
+    projectId,
+    submittedRecordId,
   ])
 
   const handleMoveToCollect = () => {
@@ -124,9 +132,14 @@ const SubmittedBenthicPit = () => {
           `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpit/${submittedRecordId}`,
         )
       })
-      .catch(() => {
-        toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
-        setIsMoveToButtonDisabled(false)
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            setIsMoveToButtonDisabled(false)
+          },
+        })
       })
   }
 
