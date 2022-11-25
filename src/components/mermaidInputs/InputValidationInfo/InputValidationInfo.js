@@ -7,6 +7,7 @@ import InlineMessage from '../../generic/InlineMessage/InlineMessage'
 import { InlineValidationButton } from '../../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import language from '../../../language'
 import { checkDuplicateWarningInValidationMessages } from '../../../library/validationMessageHelpers'
+import ResolveDuplicateButton from '../../ResolveDuplicateButton/ResolveDuplicateButton'
 
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
@@ -19,15 +20,17 @@ const InputValidationInfo = ({
   resetNonObservationFieldValidations,
   validationMessages,
   validationType,
+  currentSelectValue,
 }) => {
   const areThereValidationMessages = validationMessages.length
   const foundDuplicateWarningInValidationMessages =
     checkDuplicateWarningInValidationMessages(validationMessages)
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
   const warningValidationButton = foundDuplicateWarningInValidationMessages ? (
-    <InlineValidationButton type="button" onClick={() => {}}>
-      Resolve
-    </InlineValidationButton>
+    <ResolveDuplicateButton
+      currentSelectValue={currentSelectValue}
+      validationMessages={validationMessages}
+    />
   ) : (
     <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
       Ignore warning
@@ -71,7 +74,7 @@ InputValidationInfo.propTypes = {
   resetNonObservationFieldValidations: PropTypes.func,
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
-  label: PropTypes.string,
+  currentSelectValue: PropTypes.string,
 }
 
 InputValidationInfo.defaultProps = {
@@ -79,6 +82,7 @@ InputValidationInfo.defaultProps = {
   resetNonObservationFieldValidations: () => {},
   validationMessages: [],
   validationType: undefined,
+  currentSelectValue: undefined,
 }
 
 export default InputValidationInfo

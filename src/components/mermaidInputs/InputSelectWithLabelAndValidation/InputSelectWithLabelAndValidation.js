@@ -19,6 +19,7 @@ const InputSelectWithLabelAndValidation = ({
   testId,
   ...restOfProps
 }) => {
+  const currentSelectValue = restOfProps?.value
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
       {item.label}
@@ -48,6 +49,7 @@ const InputSelectWithLabelAndValidation = ({
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
+        currentSelectValue={currentSelectValue}
       />
     </InputRow>
   )
