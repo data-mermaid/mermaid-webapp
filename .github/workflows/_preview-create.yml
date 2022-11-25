@@ -43,6 +43,11 @@ jobs:
         run: |
           find . -name 'package.json' -exec sed -i "s/\"homepage\": \"\"/\"homepage\": \"${PR_NUMBER}\"/g" {} +
 
+      - name: Create version file
+        run: |
+          echo "export const versionNumber = '${{ github.ref_name }}'" > src/version.js
+          cat src/version.js
+
       - name: Yarn Build
         run: yarn build
 
