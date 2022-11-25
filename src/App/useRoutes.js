@@ -77,11 +77,19 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/habitatcomplexity/',
-      Component: () => <HabitatComplexityForm />,
+      Component: () => <HabitatComplexityForm isNewRecord={true} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/habitatcomplexity/:recordId',
+      Component: () => <HabitatComplexityForm isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/collecting/bleaching/',
-      Component: () => <BleachingForm />,
+      Component: () => <BleachingForm isNewRecord={true} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/bleaching/:recordId',
+      Component: () => <BleachingForm isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/submitted',
