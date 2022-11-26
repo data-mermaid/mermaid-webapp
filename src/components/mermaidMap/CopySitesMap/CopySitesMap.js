@@ -10,7 +10,7 @@ import {
   handleMapOnWheel,
 } from '../mapService'
 import { copySitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
-import { MapContainer, CopySitesMapWrapper, MapZoomHelpMessage, MapWrapper } from '../Map.styles'
+import { MapContainer, MapZoomHelpMessage, MapWrapper } from '../Map.styles'
 import usePrevious from '../../../library/usePrevious'
 
 const defaultCenter = [20, 20]

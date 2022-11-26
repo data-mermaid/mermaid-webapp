@@ -1,51 +1,26 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import language from '../../language'
-import { getObjectById } from '../../library/getObjectById'
 import { getOptions } from '../../library/getOptions'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
-import { Table, TableOverflowWrapper, Tr, Td } from '../generic/Table/table'
+import { Table, TableOverflowWrapper, Tr, Td, TdKey } from '../generic/Table/table'
 import { InlineValidationButton } from '../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import ResolveDuplicateSiteMap from '../mermaidMap/ResolveDuplicateSiteMap'
+import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
+import TableRowItem from '../generic/Table/TableRowItem'
 
 const Thead = styled.th`
   background-color: ${theme.color.primaryColor};
   color: white;
   padding: 20px;
 `
-
-const TdKey = styled(Td)`
-  white-space: nowrap;
-  font-weight: 900;
-  width: 0;
-`
-
-const getItemLabelOrName = (itemOptions, itemValue) =>
-  getObjectById(itemOptions, itemValue)?.name || getObjectById(itemOptions, itemValue)?.label
-
-const TableRowItem = ({ title, options, value, duplicateValue }) => {
-  const optionNameOrLabel = (rowValue) =>
-    Array.isArray(rowValue)
-      ? rowValue.map((item) => getItemLabelOrName(options, item)).join(', ')
-      : getItemLabelOrName(options, rowValue)
-
-  const rowItemValue = options ? optionNameOrLabel(value) : value
-  const rowItemDuplicateValue = options ? optionNameOrLabel(duplicateValue) : duplicateValue
-
-  return (
-    <Tr>
-      <TdKey>{title}</TdKey>
-      <Td>{rowItemValue}</Td>
-      <Td>{rowItemDuplicateValue}</Td>
-    </Tr>
-  )
-}
 
 const ResolveDuplicateButton = ({ currentSelectValue, validationMessages }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -110,23 +85,23 @@ const ResolveDuplicateButton = ({ currentSelectValue, validationMessages }) => {
           <TableRowItem
             title="Name"
             value={currentSiteData.name}
-            duplicateValue={duplicateSiteData.name}
+            extraValue={duplicateSiteData.name}
           />
           <TableRowItem
             title="Country"
             options={countryOptions}
             value={currentSiteData.country}
-            duplicateValue={duplicateSiteData.country}
+            extraValue={duplicateSiteData.country}
           />
           <TableRowItem
             title="Latitude"
             value={currentSiteData?.location?.coordinates[1]}
-            duplicateValue={duplicateSiteData?.location?.coordinates[1]}
+            extraValue={duplicateSiteData?.location?.coordinates[1]}
           />
           <TableRowItem
             title="Longitude"
             value={currentSiteData?.location?.coordinates[0]}
-            duplicateValue={duplicateSiteData?.location?.coordinates[0]}
+            extraValue={duplicateSiteData?.location?.coordinates[0]}
           />
           <Tr>
             <TdKey>Map</TdKey>
@@ -147,24 +122,24 @@ const ResolveDuplicateButton = ({ currentSelectValue, validationMessages }) => {
             title="Exposure"
             options={exposureOptions}
             value={currentSiteData.exposure}
-            duplicateValue={duplicateSiteData.exposure}
+            extraValue={duplicateSiteData.exposure}
           />
           <TableRowItem
             title="Reef Type"
             options={reefTypeOptions}
             value={currentSiteData.reef_type}
-            duplicateValue={duplicateSiteData.reef_type}
+            extraValue={duplicateSiteData.reef_type}
           />
           <TableRowItem
             title="Reef Zone"
             options={reefZoneOptions}
             value={currentSiteData.reef_zone}
-            duplicateValue={duplicateSiteData.reef_zone}
+            extraValue={duplicateSiteData.reef_zone}
           />
           <TableRowItem
             title="Notes"
             value={currentSiteData.notes}
-            duplicateValue={duplicateSiteData.notes}
+            extraValue={duplicateSiteData.notes}
           />
         </tbody>
       </Table>
@@ -192,6 +167,11 @@ const ResolveDuplicateButton = ({ currentSelectValue, validationMessages }) => {
       />
     </>
   )
+}
+
+ResolveDuplicateButton.propTypes = {
+  currentSelectValue: PropTypes.string.isRequired,
+  validationMessages: mermaidInputsPropTypes.validationMessagesPropType.isRequired,
 }
 
 export default ResolveDuplicateButton
