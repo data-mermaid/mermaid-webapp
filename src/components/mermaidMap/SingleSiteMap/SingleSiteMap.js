@@ -114,7 +114,7 @@ const SingleSiteMap = ({
     setGeomorphicOrBenthicLayerProperty(map.current, 'atlas-benthic', dataLayerFromLocalStorage)
 
   return (
-    <MapInputRow isReadOnlyUser={isReadOnlyUser}>
+    <MapInputRow noBorderWidth={isReadOnlyUser}>
       <MapContainer>
         <MapWrapper ref={mapContainer} />
         {displayHelpText && (

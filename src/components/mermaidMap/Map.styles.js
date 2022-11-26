@@ -3,7 +3,7 @@ import { InputRow } from '../generic/form'
 
 export const MapInputRow = styled(InputRow)`
   grid-template-columns: 1fr;
-  border-width: ${(props) => props.isReadOnlyUser && '0px'};
+  border-width: ${(props) => props.noBorderWidth && '0px'};
 `
 export const MapContainer = styled.div`
   position: relative;
@@ -14,7 +14,7 @@ export const MapContainer = styled.div`
 
 export const MapWrapper = styled.div`
   height: 100%;
-  min-height: 70vh;
+  min-height: ${(props) => (props.minHeight ? props.minHeight : '70vh')};
 
   #marker {
     background-image: url('https://maplibre.org/maplibre-gl-js-docs/assets/custom_marker.png');
@@ -23,11 +23,6 @@ export const MapWrapper = styled.div`
     height: 44px;
     cursor: pointer;
   }
-`
-
-export const CopySitesMapWrapper = styled.div`
-  height: 100%;
-  min-height: 30vh;
 `
 
 export const MapZoomHelpMessage = styled('div')`
