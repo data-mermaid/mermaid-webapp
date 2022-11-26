@@ -12,9 +12,9 @@ import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { Table, TableOverflowWrapper, Tr, Td } from '../generic/Table/table'
 import { InlineValidationButton } from '../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
+import ResolveDuplicateSiteMap from '../mermaidMap/ResolveDuplicateSiteMap'
 
 const Thead = styled.th`
-  /* text-align: center; */
   background-color: ${theme.color.primaryColor};
   color: white;
   padding: 20px;
@@ -130,8 +130,18 @@ const ResolveDuplicateButton = ({ currentSelectValue, validationMessages }) => {
           />
           <Tr>
             <TdKey>Map</TdKey>
-            <Td>{}</Td>
-            <Td>{}</Td>
+            <Td>
+              <ResolveDuplicateSiteMap
+                formLatitudeValue={currentSiteData?.location?.coordinates[1]}
+                formLongitudeValue={currentSiteData?.location?.coordinates[0]}
+              />
+            </Td>
+            <Td>
+              <ResolveDuplicateSiteMap
+                formLatitudeValue={duplicateSiteData?.location?.coordinates[1]}
+                formLongitudeValue={duplicateSiteData?.location?.coordinates[0]}
+              />
+            </Td>
           </Tr>
           <TableRowItem
             title="Exposure"
