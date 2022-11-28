@@ -199,6 +199,13 @@ export const submittedBenthicPitPropType = PropTypes.shape({
   benthic_transect: _benthicPitTransectPropType,
 })
 
+export const submittedBenthicLitPropType = PropTypes.shape({
+  id: PropTypes.string,
+  interval_size: PropTypes.number,
+  inetrval_start: PropTypes.number,
+  benthic_transect: _benthicPitTransectPropType,
+})
+
 export const submittedBleachingPropType = PropTypes.shape({
   id: PropTypes.string,
   quadrat_collection: _bleachingQuadratPropType,

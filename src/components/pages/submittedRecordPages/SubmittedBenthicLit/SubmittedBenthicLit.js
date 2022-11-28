@@ -22,7 +22,7 @@ import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-// import SubmittedBenthicLitInfoTable from './SubmittedBenthicLitInfoTable'
+import SubmittedBenthicLitInfoTable from './SubmittedBenthicLitInfoTable'
 // import SubmittedBenthicLitObservationTable from './SubmittedBenthicLitObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
 
@@ -147,12 +147,12 @@ const SubmittedBenthicLit = () => {
       content={
         isAppOnline ? (
           <>
-            {/* <SubmittedBenthicLitInfoTable
+            <SubmittedBenthicLitInfoTable
               sites={sites}
               choices={choices}
               managementRegimes={managementRegimes}
               submittedRecord={submittedRecord}
-            /> */}
+            />
             <FormSubTitle>Observers</FormSubTitle>
             <ul>
               {observers.map((observer) => (
