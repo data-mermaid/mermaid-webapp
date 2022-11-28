@@ -34,7 +34,7 @@ const ProjectTooltip = styled(TooltipWithText)`
 const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, protocol }) => {
   const transectType = getProtocolTransectType(protocol)
   const protocolTitle = language.protocolTitles[protocol] ?? ''
-  const primaryTitle = `${language.pages.collectRecord.title} - ${protocolTitle}`
+  const primaryTitle = `${protocolTitle}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
   const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
