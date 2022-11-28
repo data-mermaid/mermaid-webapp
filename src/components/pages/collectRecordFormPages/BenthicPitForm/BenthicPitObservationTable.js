@@ -22,7 +22,7 @@ import {
   benthicPhotoQuadratPropType,
   observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonPrimary } from '../../../generic/buttons'
+import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
@@ -267,7 +267,7 @@ const BenthicPitObservationsTable = ({
       }
 
       return (
-        <ObservationTr key={observationId}>
+        <ObservationTr key={observationId} data-testid="observation-row">
           <Td align="center">{rowNumber}</Td>
           <Td align="right" aria-labelledby="interval-label">
             {interval}m
@@ -321,14 +321,14 @@ const BenthicPitObservationsTable = ({
 
           {areValidationsShowing ? validationsMarkup : null}
           <Td align="center">
-            <ButtonRemoveRow
+            <ButtonCaution
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
               aria-label="Delete Observation"
             >
               <IconClose />
-            </ButtonRemoveRow>
+            </ButtonCaution>
           </Td>
         </ObservationTr>
       )
