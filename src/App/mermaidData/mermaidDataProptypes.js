@@ -34,7 +34,7 @@ const _fishBeltTransectPropType = PropTypes.shape({
   notes: PropTypes.string,
 })
 
-const _benthicPitTransectPropType = PropTypes.shape({
+const _benthicTransectPropType = PropTypes.shape({
   reef_slope: PropTypes.string,
   visibility: PropTypes.string,
   current: PropTypes.string,
@@ -196,14 +196,14 @@ export const submittedBenthicPitPropType = PropTypes.shape({
   id: PropTypes.string,
   interval_size: PropTypes.number,
   inetrval_start: PropTypes.number,
-  benthic_transect: _benthicPitTransectPropType,
+  benthic_transect: _benthicTransectPropType,
 })
 
 export const submittedBenthicLitPropType = PropTypes.shape({
   id: PropTypes.string,
   interval_size: PropTypes.number,
   inetrval_start: PropTypes.number,
-  benthic_transect: _benthicPitTransectPropType,
+  benthic_transect: _benthicTransectPropType,
 })
 
 export const submittedBleachingPropType = PropTypes.shape({
@@ -214,7 +214,7 @@ export const submittedBleachingPropType = PropTypes.shape({
 export const submittedHabitatComplexityPropType = PropTypes.shape({
   id: PropTypes.string,
   interval_size: PropTypes.number,
-  benthic_transect: _benthicPitTransectPropType,
+  benthic_transect: _benthicTransectPropType,
 })
 
 export const managementRegimePropType = PropTypes.shape({
