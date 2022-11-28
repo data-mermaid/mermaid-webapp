@@ -23,7 +23,7 @@ import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import SubmittedBenthicLitInfoTable from './SubmittedBenthicLitInfoTable'
-// import SubmittedBenthicLitObservationTable from './SubmittedBenthicLitObservationTable'
+import SubmittedBenthicLitObservationTable from './SubmittedBenthicLitObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
 
 const SubmittedBenthicLit = () => {
@@ -90,9 +90,6 @@ const SubmittedBenthicLit = () => {
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
-
-            // eslint-disable-next-line no-console
-            console.log({ submittedRecordResponse })
           },
         )
         .catch((error) => {
@@ -160,11 +157,11 @@ const SubmittedBenthicLit = () => {
               ))}
             </ul>
 
-            {/* <SubmittedBenthicLitObservationTable
+            <SubmittedBenthicLitObservationTable
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
               submittedRecord={submittedRecord}
-            /> */}
+            />
           </>
         ) : (
           <PageUnavailable mainText={language.error.pageUnavailableOffline} />
