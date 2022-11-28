@@ -216,7 +216,6 @@ const pages = {
       'You cannot submit these collect records because you only have read-only access to this project. Please contact a project admin.',
   },
   collectRecord: {
-    title: 'Collecting',
     newFishSpeciesLink: 'Propose New Species...',
     totalAbundanceLabel: 'Total Abundance',
     totalBiomassLabel: 'Total Biomass (kg/ha)',

@@ -173,6 +173,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
               protocol="benthicpqt"
+              recordType="Submitted"
             />
             <RowSpaceBetween>
               <>

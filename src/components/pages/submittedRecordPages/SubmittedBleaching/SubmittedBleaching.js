@@ -189,6 +189,7 @@ const SubmittedBleaching = () => {
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
               protocol="bleachingqc"
+              recordType="Submitted"
             />
             <RowSpaceBetween>
               <>

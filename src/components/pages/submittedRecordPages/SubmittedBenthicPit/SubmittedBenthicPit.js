@@ -173,6 +173,7 @@ const SubmittedBenthicPit = () => {
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
               protocol="benthicpit"
+              recordType="Submitted"
             />
             <RowSpaceBetween>
               <>

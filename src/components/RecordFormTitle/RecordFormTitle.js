@@ -31,10 +31,15 @@ const ProjectTooltip = styled(TooltipWithText)`
   }
 `
 
-const RecordFormTitle = ({ submittedRecordOrCollectRecordDataProperty, sites, protocol }) => {
+const RecordFormTitle = ({
+  submittedRecordOrCollectRecordDataProperty,
+  sites,
+  protocol,
+  recordType,
+}) => {
   const transectType = getProtocolTransectType(protocol)
   const protocolTitle = language.protocolTitles[protocol] ?? ''
-  const primaryTitle = `${language.pages.collectRecord.title} - ${protocolTitle}`
+  const primaryTitle = `${recordType} - ${protocolTitle}`
   const siteId = submittedRecordOrCollectRecordDataProperty.sample_event?.site
   const siteName = getObjectById(sites, siteId)?.name ?? ''
   const transectNumber = submittedRecordOrCollectRecordDataProperty[transectType]?.number ?? ''
@@ -75,6 +80,7 @@ RecordFormTitle.propTypes = {
   submittedRecordOrCollectRecordDataProperty: fishBeltPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   protocol: PropTypes.string.isRequired,
+  recordType: PropTypes.string.isRequired,
 }
 
 RecordFormTitle.defaultProps = {

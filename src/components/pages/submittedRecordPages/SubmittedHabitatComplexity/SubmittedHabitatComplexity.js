@@ -188,6 +188,7 @@ const SubmittedHabitatComplexity = () => {
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
               protocol="habitatcomplexity"
+              recordType="Submitted"
             />
             <RowSpaceBetween>
               <>

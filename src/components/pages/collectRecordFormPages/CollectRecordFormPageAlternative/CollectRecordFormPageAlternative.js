@@ -467,6 +467,7 @@ const CollectRecordFormPageAlternative = ({
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
                 sites={sites}
                 protocol={sampleUnitName}
+                recordType="Collecting"
               />
             )}
             {!isReadOnlyUser && (
