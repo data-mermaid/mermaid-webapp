@@ -24,6 +24,7 @@ import BleachingForm from '../components/pages/collectRecordFormPages/BleachingF
 import HabitatComplexityForm from '../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
 import BenthicLitForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
 import SubmittedHabitatComplexity from '../components/pages/submittedRecordPages/SubmittedHabitatComplexity/SubmittedHabitatComplexity'
+import SubmittedBenthicLit from '../components/pages/submittedRecordPages/SubmittedBenthicLit/SubmittedBenthicLit'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
@@ -77,19 +78,11 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/habitatcomplexity/',
-      Component: () => <HabitatComplexityForm isNewRecord={true} />,
-    },
-    {
-      path: '/projects/:projectId/collecting/habitatcomplexity/:recordId',
-      Component: () => <HabitatComplexityForm isNewRecord={false} />,
+      Component: () => <HabitatComplexityForm />,
     },
     {
       path: '/projects/:projectId/collecting/bleaching/',
-      Component: () => <BleachingForm isNewRecord={true} />,
-    },
-    {
-      path: '/projects/:projectId/collecting/bleaching/:recordId',
-      Component: () => <BleachingForm isNewRecord={false} />,
+      Component: () => <BleachingForm />,
     },
     {
       path: '/projects/:projectId/submitted',
@@ -114,6 +107,10 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/submitted/habitatcomplexity/:submittedRecordId',
       Component: () => <SubmittedHabitatComplexity />,
+    },
+    {
+      path: '/projects/:projectId/submitted/benthiclit/:submittedRecordId',
+      Component: () => <SubmittedBenthicLit />,
     },
     {
       path: '/projects/:projectId/project-info',

@@ -60,7 +60,7 @@ const SubmittedBenthicLit = () => {
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
           projectId,
           submittedRecordId,
-          'benthicpittransectmethods',
+          'benthiclittransectmethods',
         ),
       ]
 
@@ -90,6 +90,9 @@ const SubmittedBenthicLit = () => {
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
+
+            // eslint-disable-next-line no-console
+            console.log({ submittedRecordResponse })
           },
         )
         .catch((error) => {
@@ -117,12 +120,12 @@ const SubmittedBenthicLit = () => {
       .moveToCollect({
         projectId,
         submittedRecordId,
-        sampleUnitMethod: 'benthicpittransectmethods',
+        sampleUnitMethod: 'benthiclittransectmethods',
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpit/${submittedRecordId}`,
+          `${ensureTrailingSlash(currentProjectPath)}collecting/benthiclit/${submittedRecordId}`,
         )
       })
       .catch(() => {
@@ -173,7 +176,7 @@ const SubmittedBenthicLit = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              protocol="benthicpit"
+              protocol="benthiclit"
             />
             <RowSpaceBetween>
               <>
