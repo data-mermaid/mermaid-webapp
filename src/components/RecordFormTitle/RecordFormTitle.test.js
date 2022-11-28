@@ -27,6 +27,7 @@ test('RecordFormTitle shows the title as expected when all of site name, transec
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="fishbelt"
+      recordType="Collecting"
     />,
   )
 
@@ -50,6 +51,7 @@ test('RecordFormTitle component renders a default title when site name, transect
       }
       sites={mockMermaidData.project_sites}
       protocol="fishbelt"
+      recordType="Collecting"
     />,
   )
 
@@ -75,6 +77,7 @@ test('RecordFormTitle component renders properly when site name is missing.', ()
       submittedRecordOrCollectRecordDataProperty={mockMissingSiteCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="fishbelt"
+      recordType="Collecting"
     />,
   )
 
@@ -102,6 +105,7 @@ test('RecordFormTitle component renders properly when label is missing.', () => 
       submittedRecordOrCollectRecordDataProperty={mockMissingLabelCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="fishbelt"
+      recordType="Collecting"
     />,
   )
 
@@ -129,6 +133,7 @@ test('RecordFormTitle component renders properly when transect number is missing
       submittedRecordOrCollectRecordDataProperty={mockMissingTransectNumberCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="fishbelt"
+      recordType="Collecting"
     />,
   )
 
@@ -156,6 +161,7 @@ test('RecordFormTitle displays Benthic PIT titles correctly', () => {
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="benthicpit"
+      recordType="Collecting"
     />,
   )
 
@@ -184,6 +190,7 @@ test('RecordFormTitle displays Benthic Photo Quadrat titles correctly', () => {
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="benthicpqt"
+      recordType="Collecting"
     />,
   )
 
@@ -213,6 +220,7 @@ test('RecordFormTitle displays Benthic LIT titles correctly', () => {
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="benthiclit"
+      recordType="Collecting"
     />,
   )
 
@@ -242,6 +250,7 @@ test('RecordFormTitle displays Habitat Complexity titles correctly', () => {
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="habitatcomplexity"
+      recordType="Collecting"
     />,
   )
 
@@ -271,6 +280,7 @@ test('RecordFormTitle displays Bleaching titles correctly', () => {
       submittedRecordOrCollectRecordDataProperty={mockCollectRecord.data}
       sites={mockMermaidData.project_sites}
       protocol="bleachingqc"
+      recordType="Collecting"
     />,
   )
 
