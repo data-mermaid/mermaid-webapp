@@ -39,7 +39,7 @@ const SubmittedBleachingObservationTable = ({
     </Tr>
   ))
 
-  const getTotalNumberOfColonies = () => {
+  const getTotalOfColonies = () => {
     const totals = obs_colonies_bleached.map(
       (item) =>
         item.count_20 +
@@ -73,7 +73,7 @@ const SubmittedBleachingObservationTable = ({
     }
 
     return (
-      (totals.reduce((acc, currentVal) => acc + currentVal, 0) / getTotalNumberOfColonies()) *
+      (totals.reduce((acc, currentVal) => acc + currentVal, 0) / getTotalOfColonies()) *
       100
     ).toFixed(1)
   }
@@ -105,7 +105,7 @@ const SubmittedBleachingObservationTable = ({
           <tbody>
             <Tr>
               <Th>Total number of colonies</Th>
-              <Td>{getTotalNumberOfColonies()}</Td>
+              <Td>{getTotalOfColonies()}</Td>
             </Tr>
             <Tr>
               <Th>Total number of coral genera</Th>
