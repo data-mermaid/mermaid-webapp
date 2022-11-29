@@ -4,8 +4,13 @@ import {
   submittedBleachingPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { SubmittedObservationStickyTable, Tr, Td } from '../../../generic/Table/table'
-import { TheadItem, FormSubTitle } from '../SubmittedFormPage.styles'
+import { SubmittedObservationStickyTable, Tr, Td, Th } from '../../../generic/Table/table'
+import {
+  TheadItem,
+  FormSubTitle,
+  ObservationsSummaryStats,
+  UnderTableRow,
+} from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { getObjectById } from '../../../../library/getObjectById'
@@ -56,6 +61,32 @@ const SubmittedBleachingObservationTable = ({
           <tbody>{observationsBleaching}</tbody>
         </SubmittedObservationStickyTable>
       </StyledOverflowWrapper>
+      <UnderTableRow>
+        <ObservationsSummaryStats>
+          <tbody>
+            <Tr>
+              <Th>Total number of colonies</Th>
+              <Td>placeholder item</Td>
+            </Tr>
+            <Tr>
+              <Th>Total number of coral genera</Th>
+              <Td>placeholder item</Td>
+            </Tr>
+            <Tr>
+              <Th>% Normal colonies</Th>
+              <Td>placeholder item</Td>
+            </Tr>
+            <Tr>
+              <Th>% Pale colonies</Th>
+              <Td>placeholder item</Td>
+            </Tr>
+            <Tr>
+              <Th>% Bleached colonies</Th>
+              <Td>placeholder item</Td>
+            </Tr>
+          </tbody>
+        </ObservationsSummaryStats>
+      </UnderTableRow>
     </InputWrapper>
   )
 }

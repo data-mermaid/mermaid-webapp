@@ -92,6 +92,9 @@ const SubmittedBleaching = () => {
               setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
+
+            // eslint-disable-next-line no-console
+            console.log({ submittedRecordResponse })
           },
         )
         .catch((error) => {
