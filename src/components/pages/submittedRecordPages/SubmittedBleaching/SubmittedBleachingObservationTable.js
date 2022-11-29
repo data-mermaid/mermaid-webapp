@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react'
 import {
   choicesPropType,
@@ -39,6 +40,21 @@ const SubmittedBleachingObservationTable = ({
     </Tr>
   ))
 
+  const getSumOftotalNumberOfColonies = () => {
+    const totals = obs_colonies_bleached.map(
+      (item) =>
+        item.count_20 +
+        item.count_50 +
+        item.count_80 +
+        item.count_100 +
+        item.count_dead +
+        item.count_normal +
+        item.count_pale,
+    )
+
+    return totals.reduce((acc, currentVal) => acc + currentVal, 0)
+  }
+
   return (
     <InputWrapper>
       <FormSubTitle id="table-label">Observations</FormSubTitle>
@@ -66,7 +82,7 @@ const SubmittedBleachingObservationTable = ({
           <tbody>
             <Tr>
               <Th>Total number of colonies</Th>
-              <Td>placeholder item</Td>
+              <Td>{getSumOftotalNumberOfColonies()}</Td>
             </Tr>
             <Tr>
               <Th>Total number of coral genera</Th>
