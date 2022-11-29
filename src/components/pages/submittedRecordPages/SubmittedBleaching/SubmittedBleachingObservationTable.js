@@ -56,7 +56,6 @@ const SubmittedBleachingObservationTable = ({
   }
 
   const getTotalOfCoralGenera = () => {
-    // we only want to count attributes with unique ids
     const attributeIds = obs_colonies_bleached.map((item) => item.attribute)
     const uniqueAttributeIds = [...new Set(attributeIds)]
 
@@ -64,18 +63,15 @@ const SubmittedBleachingObservationTable = ({
   }
 
   const percentageOfColonies = (colonyType) => {
-    const normalTotals = obs_colonies_bleached.map((item) => item[colonyType])
+    let totals = 0
 
-    return (
-      (normalTotals.reduce((acc, currentVal) => acc + currentVal, 0) / getTotalNumberOfColonies()) *
-      100
-    ).toFixed(1)
-  }
-
-  const percentageOfBleachedColonies = () => {
-    const totals = obs_colonies_bleached.map(
-      (item) => item.count_20 + item.count_50 + item.count_80 + item.count_100 + item.count_dead,
-    )
+    if (colonyType === 'bleached') {
+      totals = obs_colonies_bleached.map(
+        (item) => item.count_20 + item.count_50 + item.count_80 + item.count_100 + item.count_dead,
+      )
+    } else {
+      totals = obs_colonies_bleached.map((item) => item[colonyType])
+    }
 
     return (
       (totals.reduce((acc, currentVal) => acc + currentVal, 0) / getTotalNumberOfColonies()) *
@@ -126,7 +122,7 @@ const SubmittedBleachingObservationTable = ({
             </Tr>
             <Tr>
               <Th>% Bleached colonies</Th>
-              <Td>{percentageOfBleachedColonies()}</Td>
+              <Td>{percentageOfColonies('bleached')}</Td>
             </Tr>
           </tbody>
         </ObservationsSummaryStats>
