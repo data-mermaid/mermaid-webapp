@@ -61,7 +61,7 @@ const SubmittedBleachingObservationTable = ({
     return uniqueAttributeIds.length
   }
 
-  const percentageOfColonies = (colonyType) => {
+  const getPercentageOfColonies = (colonyType) => {
     let totals = 0
 
     if (colonyType === 'bleached') {
@@ -113,15 +113,15 @@ const SubmittedBleachingObservationTable = ({
             </Tr>
             <Tr>
               <Th>% Normal colonies</Th>
-              <Td>{percentageOfColonies('count_normal')}</Td>
+              <Td>{getPercentageOfColonies('count_normal')}</Td>
             </Tr>
             <Tr>
               <Th>% Pale colonies</Th>
-              <Td>{percentageOfColonies('count_pale')}</Td>
+              <Td>{getPercentageOfColonies('count_pale')}</Td>
             </Tr>
             <Tr>
               <Th>% Bleached colonies</Th>
-              <Td>{percentageOfColonies('bleached')}</Td>
+              <Td>{getPercentageOfColonies('bleached')}</Td>
             </Tr>
           </tbody>
         </ObservationsSummaryStats>
