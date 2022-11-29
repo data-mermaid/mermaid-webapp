@@ -40,7 +40,7 @@ const SubmittedBleachingObservationTable = ({
     </Tr>
   ))
 
-  const getSumOftotalNumberOfColonies = () => {
+  const getTotalNumberOfColonies = () => {
     const totals = obs_colonies_bleached.map(
       (item) =>
         item.count_20 +
@@ -53,6 +53,14 @@ const SubmittedBleachingObservationTable = ({
     )
 
     return totals.reduce((acc, currentVal) => acc + currentVal, 0)
+  }
+
+  const getTotalOfCoralGenera = () => {
+    // we only want to count attributes with unique ids
+    const attributeIds = obs_colonies_bleached.map((item) => item.attribute)
+    const uniqueAttributeIds = [...new Set(attributeIds)]
+
+    return uniqueAttributeIds.length
   }
 
   return (
@@ -82,11 +90,11 @@ const SubmittedBleachingObservationTable = ({
           <tbody>
             <Tr>
               <Th>Total number of colonies</Th>
-              <Td>{getSumOftotalNumberOfColonies()}</Td>
+              <Td>{getTotalNumberOfColonies()}</Td>
             </Tr>
             <Tr>
               <Th>Total number of coral genera</Th>
-              <Td>placeholder item</Td>
+              <Td>{getTotalOfCoralGenera()}</Td>
             </Tr>
             <Tr>
               <Th>% Normal colonies</Th>
