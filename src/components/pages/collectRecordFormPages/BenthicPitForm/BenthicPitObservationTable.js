@@ -22,17 +22,17 @@ import {
   benthicPhotoQuadratPropType,
   observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
-import { ButtonCaution, ButtonPrimary } from '../../../generic/buttons'
+import { ButtonPrimary } from '../../../generic/buttons'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
+import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
 import language from '../../../../language'
-import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -93,43 +93,43 @@ const BenthicPitObservationsTable = ({
     observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
   }
 
-  const observationCategoryPercentages = useMemo(() => {
-    const getCategory = (benthicAttributeId) =>
+  const observationTopLevelAttributeCategoryOccurance = useMemo(() => {
+    const totalNumberOfObservations = observationsState.length
+
+    const getBenthicAttributeById = (benthicAttributeId) =>
       benthicAttributeSelectOptions.find((benthic) => benthic.value === benthicAttributeId)
 
-    const addTopCategoryInfoToObservation = observationsState.map((obs) => {
-      const benthicAttribute = getCategory(obs.attribute)
-
-      return { ...obs, top_level_category: benthicAttribute?.topLevelCategory }
-    })
-
-    const categoryGroups = addTopCategoryInfoToObservation.reduce((accumulator, obs) => {
-      const benthicAttributeName = getCategory(obs.top_level_category)?.label
-
-      accumulator[benthicAttributeName] = accumulator[benthicAttributeName] || []
-      accumulator[benthicAttributeName].push(obs)
-
-      return accumulator
-    }, {})
-
-    const categoryNames = Object.keys(categoryGroups).sort()
-    const totalNumberOfPoints = summarizeArrayObjectValuesByProperty(
-      observationsState,
-      'num_points',
-    )
-    const categoryPercentages = categoryNames.map((category) => {
-      const categoryPercentage =
-        (summarizeArrayObjectValuesByProperty(categoryGroups[category], 'num_points') /
-          totalNumberOfPoints) *
-        100
+    const observationsWithTopLevelCategoryNames = observationsState.map((observation) => {
+      const benthicAttribute = getBenthicAttributeById(observation.attribute)
 
       return {
-        benthicAttribute: category,
-        benthicAttributePercentage: roundToOneDecimal(categoryPercentage),
+        ...observation,
+        topLevelCategoryName: getBenthicAttributeById(benthicAttribute?.topLevelCategory)?.label,
       }
     })
 
-    return categoryPercentages
+    const observationsGroupedByTopLevelCategory = observationsWithTopLevelCategoryNames.reduce(
+      (accumulator, observation) => {
+        const { topLevelCategoryName } = observation
+
+        accumulator[topLevelCategoryName] = accumulator[topLevelCategoryName] || []
+        accumulator[topLevelCategoryName].push(observation)
+
+        return accumulator
+      },
+      {},
+    )
+
+    const topLevelCategoryNamesWithObservationOccurance = Object.entries(
+      observationsGroupedByTopLevelCategory,
+    ).map(([topLevelCategory, observationsBelongingToTopLevelCategory]) => ({
+      topLevelCategory,
+      percent: roundToOneDecimal(
+        (observationsBelongingToTopLevelCategory.length / totalNumberOfObservations) * 100,
+      ),
+    }))
+
+    return sortArrayByObjectKey(topLevelCategoryNamesWithObservationOccurance, 'topLevelCategory')
   }, [observationsState, benthicAttributeSelectOptions])
 
   const observationsRows = useMemo(() => {
@@ -267,7 +267,7 @@ const BenthicPitObservationsTable = ({
       }
 
       return (
-        <ObservationTr key={observationId} data-testid="observation-row">
+        <ObservationTr key={observationId}>
           <Td align="center">{rowNumber}</Td>
           <Td align="right" aria-labelledby="interval-label">
             {interval}m
@@ -321,14 +321,14 @@ const BenthicPitObservationsTable = ({
 
           {areValidationsShowing ? validationsMarkup : null}
           <Td align="center">
-            <ButtonCaution
+            <ButtonRemoveRow
               tabIndex="-1"
               type="button"
               onClick={handleDeleteObservation}
               aria-label="Delete Observation"
             >
               <IconClose />
-            </ButtonCaution>
+            </ButtonRemoveRow>
           </Td>
         </ObservationTr>
       )
@@ -390,16 +390,14 @@ const BenthicPitObservationsTable = ({
             </ButtonPrimary>
             <ObservationsSummaryStats>
               <tbody>
-                {observationCategoryPercentages.map((obs) => {
-                  const isPercentageAvailable = !Number.isNaN(
-                    parseFloat(obs.benthicAttributePercentage),
-                  )
+                {observationTopLevelAttributeCategoryOccurance.map((occurance) => {
+                  const isPercentageAvailable = !Number.isNaN(parseFloat(occurance.percent))
 
                   return (
                     isPercentageAvailable && (
-                      <Tr key={obs.benthicAttribute}>
-                        <Th>{`% ${obs.benthicAttribute}`}</Th>
-                        <Td>{obs.benthicAttributePercentage}</Td>
+                      <Tr key={occurance.topLevelCategory}>
+                        <Th>{`% ${occurance.topLevelCategory}`}</Th>
+                        <Td>{occurance.percent}</Td>
                       </Tr>
                     )
                   )
