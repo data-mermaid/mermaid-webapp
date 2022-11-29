@@ -63,6 +63,26 @@ const SubmittedBleachingObservationTable = ({
     return uniqueAttributeIds.length
   }
 
+  const percentageOfColonies = (colonyType) => {
+    const normalTotals = obs_colonies_bleached.map((item) => item[colonyType])
+
+    return (
+      (normalTotals.reduce((acc, currentVal) => acc + currentVal, 0) / getTotalNumberOfColonies()) *
+      100
+    ).toFixed(1)
+  }
+
+  const percentageOfBleachedColonies = () => {
+    const totals = obs_colonies_bleached.map(
+      (item) => item.count_20 + item.count_50 + item.count_80 + item.count_100 + item.count_dead,
+    )
+
+    return (
+      (totals.reduce((acc, currentVal) => acc + currentVal, 0) / getTotalNumberOfColonies()) *
+      100
+    ).toFixed(1)
+  }
+
   return (
     <InputWrapper>
       <FormSubTitle id="table-label">Observations</FormSubTitle>
@@ -98,15 +118,15 @@ const SubmittedBleachingObservationTable = ({
             </Tr>
             <Tr>
               <Th>% Normal colonies</Th>
-              <Td>placeholder item</Td>
+              <Td>{percentageOfColonies('count_normal')}</Td>
             </Tr>
             <Tr>
               <Th>% Pale colonies</Th>
-              <Td>placeholder item</Td>
+              <Td>{percentageOfColonies('count_pale')}</Td>
             </Tr>
             <Tr>
               <Th>% Bleached colonies</Th>
-              <Td>placeholder item</Td>
+              <Td>{percentageOfBleachedColonies()}</Td>
             </Tr>
           </tbody>
         </ObservationsSummaryStats>
