@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
-  ButtonRemoveRow,
   CellValidation,
   CellValidationButton,
   InputAutocompleteContainer,
@@ -16,6 +15,7 @@ import {
   StickyObservationTable,
   TableValidationList,
   UnderTableRow,
+  ButtonRemoveRow,
 } from '../CollectingFormPage.Styles'
 import {
   choicesPropType,
@@ -69,6 +69,7 @@ const BenthicPitObservationsTable = ({
   setAreObservationsInputsDirty,
   setIsNewBenthicAttributeModalOpen,
   setObservationIdToAddNewBenthicAttributeTo,
+  testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
@@ -268,7 +269,9 @@ const BenthicPitObservationsTable = ({
       return (
         <ObservationTr key={observationId}>
           <Td align="center">{rowNumber}</Td>
-          <Td align="right">{interval}m</Td>
+          <Td align="right" aria-labelledby="interval-label">
+            {interval}m
+          </Td>
           <Td align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
@@ -349,7 +352,7 @@ const BenthicPitObservationsTable = ({
 
   return (
     <>
-      <InputWrapper>
+      <InputWrapper data-testid={testId}>
         <H2 id="table-label">Observations</H2>
         <>
           <StyledOverflowWrapper>
@@ -427,6 +430,7 @@ BenthicPitObservationsTable.propTypes = {
   }).isRequired,
   setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
+  testId: PropTypes.string.isRequired,
 }
 
 BenthicPitObservationsTable.defaultProps = {
