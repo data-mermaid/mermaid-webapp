@@ -379,7 +379,7 @@ const getValidationMessage = (validation, projectId = '') => {
       'Management Regime: Other sample events at this site have a different management regime',
     observations_total_length_incorrect: () =>
       `Total length of observations (${context?.total_obs_length}) not within 50% of transect length`,
-    required: () => `Required`,
+    // required: () => `Required`,
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
