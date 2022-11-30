@@ -418,6 +418,7 @@ const CollectRecordFormPageAlternative = ({
         />
         <div ref={observationTableRef}>
           <ObservationTable
+            testId="observations-section"
             areValidationsShowing={areValidationsShowing}
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
             choices={choices}
