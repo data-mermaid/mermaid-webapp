@@ -58,10 +58,30 @@ const getBenthicPitAdditionalValues = (collectRecord) => {
   }
 }
 
+const getBleachingQuadratCollection = (collectRecord) => {
+  const quadratCollection = collectRecord?.data?.quadrat_collection
+
+  return {
+    depth: quadratCollection?.depth ?? '',
+    number: quadratCollection?.number ?? '',
+    label: quadratCollection?.label ?? '',
+    quadrat_size: quadratCollection?.quadrat_size ?? '',
+    width: quadratCollection?.width,
+    sample_time: quadratCollection?.sample_time ?? '',
+    size_bin: quadratCollection?.size_bin,
+    relative_depth: quadratCollection?.relative_depth,
+    visibility: quadratCollection?.visibility,
+    current: quadratCollection?.current,
+    tide: quadratCollection?.tide,
+    notes: quadratCollection?.notes,
+  }
+}
+
 export {
+  getBenthicPhotoQuadratAdditionalValues,
+  getBenthicPitAdditionalValues,
+  getBleachingQuadratCollection,
   getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
-  getBenthicPhotoQuadratAdditionalValues,
-  getBenthicPitAdditionalValues,
 }
