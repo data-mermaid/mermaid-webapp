@@ -222,24 +222,24 @@ test('Validating an empty collect record, and then editing an input with errors 
     ),
   )
 
-  expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
 
   userEvent.type(screen.getByLabelText('Depth'), '1')
 
   // validations remain showing, except Depth is changed
-  expect(await within(screen.getByTestId('site')).findByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect_number')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len_surveyed')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval_size')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval_start')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef_slope')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
+  expect(await within(screen.getByTestId('site')).findByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('interval_size')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('interval_start')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
   expect(
     within(screen.getByLabelText('Observations')).getByText('observation error'),
   ).toBeInTheDocument()
@@ -263,19 +263,19 @@ test('Validating an empty collect record, and then editing an input with errors 
   )
 
   // validations hide
-  expect(within(screen.getByTestId('site')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('management')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_date')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_time')).queryByText('Required')).not.toBeInTheDocument()
   expect(
-    within(screen.getByTestId('transect_number')).queryByText('required'),
+    within(screen.getByTestId('transect_number')).queryByText('Required'),
   ).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('len_surveyed')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('reef_slope')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).queryByText('required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).queryByText('required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('label')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('len_surveyed')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('reef_slope')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('notes')).queryByText('Required')).not.toBeInTheDocument()
+  expect(within(screen.getByTestId('observers')).queryByText('Required')).not.toBeInTheDocument()
   expect(
     within(screen.getByLabelText('Observations')).queryByText('observation error'),
   ).not.toBeInTheDocument()
@@ -306,17 +306,17 @@ test('Validating an empty collect record, and then editing an input with errors 
   )
 
   // validations show again
-  expect(within(screen.getByTestId('site')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('management')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('depth')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_date')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('sample_time')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect_number')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('label')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len_surveyed')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef_slope')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('notes')).getByText('required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('observers')).getByText('required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('site')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('management')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
   expect(
     within(screen.getByLabelText('Observations')).getByText('observation error'),
   ).toBeInTheDocument()

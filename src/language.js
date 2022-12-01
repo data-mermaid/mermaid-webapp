@@ -343,19 +343,24 @@ const getValidationMessage = (validation, projectId = '') => {
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
     future_sample_date: () => 'Sample date is in the future',
     high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
-    incorrect_observation_count: () => `Incorrect number of observations; expected ${context?.expected_count}`,
+    incorrect_observation_count: () =>
+      `Incorrect number of observations; expected ${context?.expected_count}`,
     interval_size_not_positive: () => 'Interval size must be a positive number',
-    invalid_benthic_transect: () => 'One or more invalid transect fields: site, management, date, number, depth',
+    invalid_benthic_transect: () =>
+      'One or more invalid transect fields: site, management, date, number, depth',
     invalid_depth: () => `Depth invalid or not greater than ${context?.depth_range[0]} m`,
     invalid_fish_count: () => 'Fish count must be a non-negative integer',
     invalid_fish_size: () => `Invalid fish size`,
-    invalid_fishbelt_transect: () => 'One or more invalid transect fields: site, management, date, number, width, depth',
+    invalid_fishbelt_transect: () =>
+      'One or more invalid transect fields: site, management, date, number, width, depth',
     invalid_number_of_points: () =>
       `Total number of points entered for quadrats: ${context?.invalid_quadrat_numbers} does not match defined number of points per quadrat`,
     invalid_percent_value: () => 'Percent value must be a non-negative number',
-    invalid_quadrat_collection: () => 'One or more invalid transect fields: site, management, date, depth',
+    invalid_quadrat_collection: () =>
+      'One or more invalid transect fields: site, management, date, depth',
     invalid_quadrat_size: () => 'Invalid quadrat size',
-    invalid_quadrat_transect: () => 'One or more invalid transect fields: site, management, date, number, depth',
+    invalid_quadrat_transect: () =>
+      'One or more invalid transect fields: site, management, date, number, depth',
     invalid_sample_date: () => 'Invalid date',
     invalid_score: () => `Invalid score`,
     invalid_site: () => `Invalid site`,
@@ -365,14 +370,12 @@ const getValidationMessage = (validation, projectId = '') => {
       `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
     low_density: () => `Fish biomass less than ${context?.biomass_range[0]} kg/ha`,
     management_not_found: () => 'Management Regime record not available for similarity validation',
-    max_depth: () =>
-      `Depth exceeds ${context?.depth_range[1]} m`,
+    max_depth: () => `Depth exceeds ${context?.depth_range[1]} m`,
     max_fish_size: () => 'Fish size is larger than maximum observed size',
     minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
     missing_quadrat_numbers: () => `Missing quadrat numbers ${context?.missing_quadrat_numbers}`,
     no_region_match: () => 'Coral or fish not previously observed in site region',
-    not_part_of_fish_family_subset: () =>
-      `Fish is not part of project-defined fish families`,
+    not_part_of_fish_family_subset: () => `Fish is not part of project-defined fish families`,
     not_positive_integer: () => 'Value is not greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
     not_unique_management: () =>
