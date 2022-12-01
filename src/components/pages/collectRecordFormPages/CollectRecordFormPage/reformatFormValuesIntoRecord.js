@@ -161,3 +161,51 @@ export const reformatFormValuesIntoBenthicPitRecord = (
     },
   }
 }
+export const reformatFormValuesIntoBleachingRecord = (
+  formikValues,
+  coloniesBleachedObservationValues,
+  // percentCoverObservationValues,
+  collectRecordBeingEdited,
+) => {
+  const {
+    current,
+    depth,
+    label,
+    management,
+    notes,
+    number,
+    observers,
+    quadrat_size,
+    relative_depth,
+    sample_date,
+    sample_time,
+    site,
+    tide,
+    visibility,
+  } = formikValues
+
+  return {
+    ...collectRecordBeingEdited,
+    data: {
+      quadrat_collection: {
+        current,
+        depth,
+        label,
+        notes,
+        number,
+        quadrat_size,
+        relative_depth,
+        sample_time,
+        tide,
+        visibility,
+      },
+      sample_event: {
+        management,
+        sample_date,
+        site,
+      },
+      obs_colonies_bleached: coloniesBleachedObservationValues,
+      observers,
+    },
+  }
+}
