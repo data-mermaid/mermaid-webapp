@@ -8,7 +8,6 @@ import {
   InputAutocompleteContainer,
   NewOptionButton,
   ObservationAutocomplete,
-  ObservationsSummaryStats,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
@@ -28,11 +27,10 @@ import { H2 } from '../../../generic/text'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
-import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
-import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
 import language from '../../../../language'
+import BenthicPitObservationSummaryStats from '../../../BenthicPitObservationSummaryStats/BenthicPitObservationSummaryStats'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -92,45 +90,6 @@ const BenthicPitObservationsTable = ({
 
     observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
   }
-
-  const observationTopLevelAttributeCategoryOccurance = useMemo(() => {
-    const totalNumberOfObservations = observationsState.length
-
-    const getBenthicAttributeById = (benthicAttributeId) =>
-      benthicAttributeSelectOptions.find((benthic) => benthic.value === benthicAttributeId)
-
-    const observationsWithTopLevelCategoryNames = observationsState.map((observation) => {
-      const benthicAttribute = getBenthicAttributeById(observation.attribute)
-
-      return {
-        ...observation,
-        topLevelCategoryName: getBenthicAttributeById(benthicAttribute?.topLevelCategory)?.label,
-      }
-    })
-
-    const observationsGroupedByTopLevelCategory = observationsWithTopLevelCategoryNames.reduce(
-      (accumulator, observation) => {
-        const { topLevelCategoryName } = observation
-
-        accumulator[topLevelCategoryName] = accumulator[topLevelCategoryName] || []
-        accumulator[topLevelCategoryName].push(observation)
-
-        return accumulator
-      },
-      {},
-    )
-
-    const topLevelCategoryNamesWithObservationOccurance = Object.entries(
-      observationsGroupedByTopLevelCategory,
-    ).map(([topLevelCategory, observationsBelongingToTopLevelCategory]) => ({
-      topLevelCategory,
-      percent: roundToOneDecimal(
-        (observationsBelongingToTopLevelCategory.length / totalNumberOfObservations) * 100,
-      ),
-    }))
-
-    return sortArrayByObjectKey(topLevelCategoryNamesWithObservationOccurance, 'topLevelCategory')
-  }, [observationsState, benthicAttributeSelectOptions])
 
   const observationsRows = useMemo(() => {
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
@@ -388,22 +347,10 @@ const BenthicPitObservationsTable = ({
             <ButtonPrimary type="button" onClick={handleAddObservation}>
               <IconPlus /> Add Row
             </ButtonPrimary>
-            <ObservationsSummaryStats>
-              <tbody>
-                {observationTopLevelAttributeCategoryOccurance.map((occurance) => {
-                  const isPercentageAvailable = !Number.isNaN(parseFloat(occurance.percent))
-
-                  return (
-                    isPercentageAvailable && (
-                      <Tr key={occurance.topLevelCategory}>
-                        <Th>{`% ${occurance.topLevelCategory}`}</Th>
-                        <Td>{occurance.percent}</Td>
-                      </Tr>
-                    )
-                  )
-                })}
-              </tbody>
-            </ObservationsSummaryStats>
+            <BenthicPitObservationSummaryStats
+              benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+              observations={observationsState}
+            />
           </UnderTableRow>
         </>
       </InputWrapper>

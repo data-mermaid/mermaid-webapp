@@ -117,9 +117,7 @@ const BenthicPitForm = ({ isNewRecord }) => {
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        const updatedBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
-
-        setBenthicAttributeSelectOptions(updatedBenthicAttributeOptions)
+        setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributes))
       })
     }
   }, [databaseSwitchboardInstance])
