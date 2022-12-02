@@ -76,3 +76,5 @@ SubmittedBenthicPitObservationTable.propTypes = {
 SubmittedBenthicPitObservationTable.defaultProps = {
   submittedRecord: undefined,
 }
+
+export default SubmittedBenthicPitObservationTable
