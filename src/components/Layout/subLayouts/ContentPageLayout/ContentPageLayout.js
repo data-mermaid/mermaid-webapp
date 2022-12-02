@@ -61,10 +61,7 @@ const ContentPageToolbarWrapper = styled('div')`
     align-items: start;
   `)}
   ${mediaQueryTabletLandscapeOnly(css`
-    &,
-    button {
-      padding: ${theme.spacing.small};
-    }
+    padding: ${theme.spacing.small};
   `)}
 `
 
