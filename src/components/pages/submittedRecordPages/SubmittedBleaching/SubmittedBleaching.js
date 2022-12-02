@@ -21,12 +21,13 @@ import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
-import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
+import SubmittedBleachingPitInfoTable from './SubmittedBleachingInfoTable'
+import SubmittedBleachingObservationTable from './SubmittedBleachingObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
+import SubmittedBleachingPercentageSummaryTable from './SubmittedBleachingPercentageSummaryTable'
 
-const SubmittedBenthicPit = () => {
+const SubmittedBleaching = () => {
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
@@ -61,7 +62,7 @@ const SubmittedBenthicPit = () => {
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
           projectId,
           submittedRecordId,
-          'benthicpittransectmethods',
+          'bleachingquadratcollectionmethods',
         ),
       ]
 
@@ -78,7 +79,7 @@ const SubmittedBenthicPit = () => {
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
-                'benthic_transect',
+                'quadrat_collection',
               )
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
@@ -110,12 +111,12 @@ const SubmittedBenthicPit = () => {
     }
   }, [
     databaseSwitchboardInstance,
-    handleHttpResponseError,
-    isAppOnline,
     isMounted,
-    isSyncInProgress,
-    projectId,
     submittedRecordId,
+    projectId,
+    isAppOnline,
+    isSyncInProgress,
+    handleHttpResponseError,
   ])
 
   const handleMoveToCollect = () => {
@@ -124,12 +125,12 @@ const SubmittedBenthicPit = () => {
       .moveToCollect({
         projectId,
         submittedRecordId,
-        sampleUnitMethod: 'benthicpittransectmethods',
+        sampleUnitMethod: 'bleachingtransectmethods',
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpit/${submittedRecordId}`,
+          `${ensureTrailingSlash(currentProjectPath)}collecting/bleaching/${submittedRecordId}`,
         )
       })
       .catch((error) => {
@@ -156,7 +157,7 @@ const SubmittedBenthicPit = () => {
       content={
         isAppOnline ? (
           <>
-            <SubmittedBenthicPitInfoTable
+            <SubmittedBleachingPitInfoTable
               sites={sites}
               choices={choices}
               managementRegimes={managementRegimes}
@@ -169,11 +170,13 @@ const SubmittedBenthicPit = () => {
               ))}
             </ul>
 
-            <SubmittedBenthicPitObservationTable
+            <SubmittedBleachingObservationTable
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
               submittedRecord={submittedRecord}
             />
+
+            <SubmittedBleachingPercentageSummaryTable submittedRecord={submittedRecord} />
           </>
         ) : (
           <PageUnavailable mainText={language.error.pageUnavailableOffline} />
@@ -185,7 +188,7 @@ const SubmittedBenthicPit = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              protocol="benthicpit"
+              protocol="bleachingqc"
             />
             <RowSpaceBetween>
               <>
@@ -210,4 +213,4 @@ const SubmittedBenthicPit = () => {
   )
 }
 
-export default SubmittedBenthicPit
+export default SubmittedBleaching

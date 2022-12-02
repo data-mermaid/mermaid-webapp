@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
+  benthicPitValidationPropType,
   choicesPropType,
-  fishbeltValidationPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
@@ -25,8 +25,8 @@ const SAMPLE_TIME_VALIDATION_PATH = 'data.benthic_transect.sample_time'
 const TIDE_VALIDATION_PATH = 'data.benthic_transect.tide'
 const TRANSECT_NUMBER_VALIDATION_PATH = 'data.benthic_transect.number'
 const VISIBILITY_VALIDATION_PATH = 'data.benthic_transect.visibility'
-const INTERVAL_SIZE_VALIDATION_PATH = 'data.benthic_transect.interval_size'
-const INTERVAL_START_VALIDATION_PATH = 'data.benthic_transect.interval_start'
+const INTERVAL_SIZE_VALIDATION_PATH = 'data.interval_size'
+const INTERVAL_START_VALIDATION_PATH = 'data.interval_start'
 
 const BenthicPitTransectInputs = ({
   areValidationsShowing,
@@ -98,12 +98,12 @@ const BenthicPitTransectInputs = ({
   )
 
   const intervalSizeValidationProperties = getValidationPropertiesForInput(
-    benthic_transect?.interval_size,
+    validationsApiData?.interval_size,
     areValidationsShowing,
   )
 
   const intervalStartValidationProperties = getValidationPropertiesForInput(
-    benthic_transect?.interval_start,
+    validationsApiData?.interval_start,
     areValidationsShowing,
   )
 
@@ -348,15 +348,17 @@ const BenthicPitTransectInputs = ({
           required={true}
           id="interval_start"
           ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: INTERVAL_SIZE_VALIDATION_PATH })
+            ignoreNonObservationFieldValidations({
+              validationPath: INTERVAL_START_VALIDATION_PATH,
+            })
           }}
           resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: INTERVAL_SIZE_VALIDATION_PATH })
+            resetNonObservationFieldValidations({ validationPath: INTERVAL_START_VALIDATION_PATH })
           }}
           testId="interval_start"
           type="number"
           {...validationPropertiesWithDirtyResetOnInputChange(
-            intervalSizeValidationProperties,
+            intervalStartValidationProperties,
             'interval_start',
           )}
           onBlur={formik.handleBlur}
@@ -477,7 +479,7 @@ BenthicPitTransectInputs.propTypes = {
   handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
-  validationsApiData: PropTypes.shape({ benthic_transect: fishbeltValidationPropType }).isRequired,
+  validationsApiData: benthicPitValidationPropType.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 

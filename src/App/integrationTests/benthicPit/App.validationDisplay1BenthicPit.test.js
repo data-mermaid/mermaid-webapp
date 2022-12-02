@@ -10,12 +10,13 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
-import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltValidationsObject'
+import mockBenthicValidationsObject from '../../../testUtilities/mockBenthicValidationsObject'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
+import mockBenthicPitCollectRecords from '../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Fishbelt validations will show the all warnings when there are multiple warnings and no errors', async () => {
+test('Benthic PIT validations will show the all warnings when there are multiple warnings and no errors', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -25,30 +26,30 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
+        ...mockBenthicPitCollectRecords[0],
         validations: {
           status: 'error',
           results: {
             data: {
-              obs_belt_fishes: [
+              obs_benthic_pits: [
                 [
                   {
                     code: `observation validation with ok status shouldn't show`,
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation warning 1',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation warning 2',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                 ],
               ],
@@ -91,7 +92,7 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -146,8 +147,8 @@ test('Validating an empty collect record, and then editing an input with errors 
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
-        validations: mockFishbeltValidationsObject,
+        ...mockBenthicPitCollectRecords[0],
+        validations: mockBenthicValidationsObject,
       }
 
       const response = {
@@ -190,7 +191,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -234,8 +235,8 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('width')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('size_bin')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('interval_size')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('interval_start')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
@@ -272,8 +273,6 @@ test('Validating an empty collect record, and then editing an input with errors 
   ).not.toBeInTheDocument()
   expect(within(screen.getByTestId('label')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('width')).queryByText('Required')).not.toBeInTheDocument()
-  expect(within(screen.getByTestId('size_bin')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('reef_slope')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).queryByText('Required')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).queryByText('Required')).not.toBeInTheDocument()
@@ -315,8 +314,6 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('width')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('size_bin')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
@@ -325,7 +322,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   ).toBeInTheDocument()
 }, 60000)
 
-test('Fishbelt validations will show passed input validations', async () => {
+test('Benthic PIT validations will show passed input validations', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -335,7 +332,7 @@ test('Fishbelt validations will show passed input validations', async () => {
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
+        ...mockBenthicPitCollectRecords[0],
         validations: {},
       }
 
@@ -359,7 +356,7 @@ test('Fishbelt validations will show passed input validations', async () => {
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

@@ -21,12 +21,12 @@ import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
-import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
+import SubmittedHabitatComplexityInfoTable from './SubmittedHabitatComplexityInfoTable'
+import SubmittedHabitatComplexityObservationTable from './SubmittedHabitatComplexityObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
-const SubmittedBenthicPit = () => {
+const SubmittedHabitatComplexity = () => {
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
@@ -61,7 +61,7 @@ const SubmittedBenthicPit = () => {
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
           projectId,
           submittedRecordId,
-          'benthicpittransectmethods',
+          'habitatcomplexitytransectmethods',
         ),
       ]
 
@@ -110,12 +110,12 @@ const SubmittedBenthicPit = () => {
     }
   }, [
     databaseSwitchboardInstance,
-    handleHttpResponseError,
-    isAppOnline,
     isMounted,
-    isSyncInProgress,
-    projectId,
     submittedRecordId,
+    projectId,
+    isAppOnline,
+    isSyncInProgress,
+    handleHttpResponseError,
   ])
 
   const handleMoveToCollect = () => {
@@ -124,12 +124,14 @@ const SubmittedBenthicPit = () => {
       .moveToCollect({
         projectId,
         submittedRecordId,
-        sampleUnitMethod: 'benthicpittransectmethods',
+        sampleUnitMethod: 'habitatcomplexitytransectmethods',
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpit/${submittedRecordId}`,
+          `${ensureTrailingSlash(
+            currentProjectPath,
+          )}collecting/habitatcomplexity/${submittedRecordId}`,
         )
       })
       .catch((error) => {
@@ -156,7 +158,7 @@ const SubmittedBenthicPit = () => {
       content={
         isAppOnline ? (
           <>
-            <SubmittedBenthicPitInfoTable
+            <SubmittedHabitatComplexityInfoTable
               sites={sites}
               choices={choices}
               managementRegimes={managementRegimes}
@@ -169,7 +171,7 @@ const SubmittedBenthicPit = () => {
               ))}
             </ul>
 
-            <SubmittedBenthicPitObservationTable
+            <SubmittedHabitatComplexityObservationTable
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
               submittedRecord={submittedRecord}
@@ -185,7 +187,7 @@ const SubmittedBenthicPit = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              protocol="benthicpit"
+              protocol="habitatcomplexity"
             />
             <RowSpaceBetween>
               <>
@@ -210,4 +212,4 @@ const SubmittedBenthicPit = () => {
   )
 }
 
-export default SubmittedBenthicPit
+export default SubmittedHabitatComplexity

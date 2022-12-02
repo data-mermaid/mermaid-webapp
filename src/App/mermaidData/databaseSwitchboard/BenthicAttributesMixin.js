@@ -20,9 +20,11 @@ const BenthicAttributesMixin = (Base) =>
       }
 
       const existingBenthicAttribute = await this.getBenthicAttributes()
+
       const existingMatchingBenthicAttribute = existingBenthicAttribute.filter(
         (benthicAttribute) => benthicAttribute.name === newBenthicAttributeName,
       )
+
       const proposedBenthicAttributeExists = existingMatchingBenthicAttribute.length > 0
 
       if (proposedBenthicAttributeExists) {

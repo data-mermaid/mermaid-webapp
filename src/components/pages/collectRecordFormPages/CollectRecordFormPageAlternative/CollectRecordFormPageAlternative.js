@@ -30,7 +30,6 @@ import EnhancedPrompt from '../../../generic/EnhancedPrompt'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import language from '../../../../language'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
-import NewAttributeModal from '../../../NewAttributeModal'
 import ObserversInput from '../ObserversInput'
 import PageUnavailable from '../../PageUnavailable'
 import RecordFormTitle from '../../../RecordFormTitle'
@@ -40,10 +39,11 @@ import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
 import useCollectRecordValidation from './useCollectRecordValidation'
-import useCollectRecordObservations from './useCollectRecordObservations'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 
 const CollectRecordFormPageAlternative = ({
   areObservationsInputsDirty,
+  benthicAttributeSelectOptions,
   collectRecordBeingEdited,
   handleCollectRecordChange,
   idsNotAssociatedWithData,
@@ -57,6 +57,8 @@ const CollectRecordFormPageAlternative = ({
   SampleUnitTransectInputs,
   setAreObservationsInputsDirty,
   setIdsNotAssociatedWithData,
+  setIsNewBenthicAttributeModalOpen,
+  setObservationIdToAddNewBenthicAttributeTo,
   subNavNode,
 }) => {
   // This component is a more flexible abstraction for collect records.
@@ -71,7 +73,7 @@ const CollectRecordFormPageAlternative = ({
   const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
-  const [newBenthicAttributeGeneraOptions, setNewBenthicAttributeGeneraOptions] = useState([])
+  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
@@ -97,6 +99,12 @@ const CollectRecordFormPageAlternative = ({
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const observationTableRef = useRef(null)
 
+  const {
+    persistUnsavedFormData: persistUnsavedObservationsData,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedObservations`)
+
   useEffect(
     function loadDataCommonToCertainProtocols() {
       if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -104,7 +112,6 @@ const CollectRecordFormPageAlternative = ({
           databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
           databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
           databaseSwitchboardInstance.getProjectProfiles(projectId),
-          databaseSwitchboardInstance.getFishGenera(),
           databaseSwitchboardInstance.getChoices(),
           databaseSwitchboardInstance.getProject(projectId),
         ]
@@ -115,7 +122,6 @@ const CollectRecordFormPageAlternative = ({
               sitesResponse,
               managementRegimesResponse,
               projectProfilesResponse,
-              generaResponse,
               choicesResponse,
               projectResponse,
             ]) => {
@@ -123,15 +129,10 @@ const CollectRecordFormPageAlternative = ({
                 if (!projectResponse && projectId) {
                   setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
                 }
-                const benthicAttributeGeneraOptions = generaResponse.map((genus) => ({
-                  label: genus.name,
-                  value: genus.id,
-                }))
 
                 setSites(sortArrayByObjectKey(sitesResponse, 'name'))
                 setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
                 setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
-                setNewBenthicAttributeGeneraOptions(benthicAttributeGeneraOptions)
                 setChoices(choicesResponse)
 
                 setIsCommonProtocolDataLoading(false)
@@ -164,6 +165,15 @@ const CollectRecordFormPageAlternative = ({
   )
 
   useEffect(
+    function ensureUnsavedObservationsArePersisted() {
+      if (areObservationsInputsDirty) {
+        persistUnsavedObservationsData(observationsState)
+      }
+    },
+    [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData],
+  )
+
+  useEffect(
     function setCollectButtonsUnsavedIfFormDirty() {
       if (isFormDirty) {
         setSaveButtonState(buttonGroupStates.unsaved)
@@ -186,15 +196,6 @@ const CollectRecordFormPageAlternative = ({
     validate: persistUnsavedFormikData,
   })
 
-  const {
-    closeNewBenthicAttributeModal,
-    isNewBenthicAttributeModalOpen,
-    onSubmitNewBenthicAttribute,
-    openNewObservationModal,
-    clearPersistedUnsavedObservationsData,
-    getPersistedUnsavedObservationsData,
-  } = useCollectRecordObservations({ observationsReducer })
-
   const _setIsFormDirty = useEffect(() => {
     setIsFormDirty(
       areObservationsInputsDirty ||
@@ -208,6 +209,30 @@ const CollectRecordFormPageAlternative = ({
     getPersistedUnsavedFormikData,
     getPersistedUnsavedObservationsData,
   ])
+
+  useEffect(
+    function loadObservationsFromCollectRecordIntoState() {
+      if (!apiObservationsLoaded && collectRecordBeingEdited) {
+        const observationsFromApi = collectRecordBeingEdited.data.obs_benthic_pits ?? []
+
+        const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
+        const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
+
+        observationsDispatch({
+          type: 'loadObservationsFromApi',
+          payload: initialObservationsToLoad,
+        })
+
+        setApiObservationsLoaded(true)
+      }
+    },
+    [
+      apiObservationsLoaded,
+      collectRecordBeingEdited,
+      getPersistedUnsavedObservationsData,
+      observationsDispatch,
+    ],
+  )
 
   const {
     handleChangeForDirtyIgnoredInput,
@@ -367,9 +392,6 @@ const CollectRecordFormPageAlternative = ({
         />
         <SampleUnitTransectInputs
           areValidationsShowing={areValidationsShowing}
-          openNewObservationModal={openNewObservationModal}
-          ignoreObservationValidations={ignoreObservationValidations}
-          resetObservationValidations={resetObservationValidations}
           choices={choices}
           formik={formik}
           handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
@@ -396,9 +418,18 @@ const CollectRecordFormPageAlternative = ({
         />
         <div ref={observationTableRef}>
           <ObservationTable
-            openNewObservationModal={openNewObservationModal}
+            testId="observations-section"
+            areValidationsShowing={areValidationsShowing}
+            benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+            choices={choices}
+            collectRecord={collectRecordBeingEdited}
+            formik={formik}
             ignoreObservationValidations={ignoreObservationValidations}
+            observationsReducer={observationsReducer}
             resetObservationValidations={resetObservationValidations}
+            setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+            setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
+            setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
           />
         </div>
       </form>
@@ -419,7 +450,7 @@ const CollectRecordFormPageAlternative = ({
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
-      isPageContentLoading={isParentDataLoading}
+      isPageContentLoading={isLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
@@ -436,7 +467,7 @@ const CollectRecordFormPageAlternative = ({
               <RecordFormTitle
                 submittedRecordOrCollectRecordDataProperty={collectRecordBeingEdited?.data}
                 sites={sites}
-                sampleUnitName={sampleUnitName}
+                protocol={sampleUnitName}
               />
             )}
             {!isReadOnlyUser && (
@@ -454,15 +485,6 @@ const CollectRecordFormPageAlternative = ({
         }
       />
 
-      {!!projectId && !!currentUser && (
-        <NewAttributeModal
-          isFishBeltSampleUnit={false}
-          isOpen={isNewBenthicAttributeModalOpen}
-          onDismiss={closeNewBenthicAttributeModal}
-          onSubmit={onSubmitNewBenthicAttribute}
-          modalAttributeOptions={newBenthicAttributeGeneraOptions}
-        />
-      )}
       {displayLoadingModal && <LoadingModal />}
       <EnhancedPrompt shouldPromptTrigger={formik.dirty} />
     </>
@@ -471,6 +493,7 @@ const CollectRecordFormPageAlternative = ({
 
 CollectRecordFormPageAlternative.propTypes = {
   areObservationsInputsDirty: PropTypes.bool.isRequired,
+  benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   collectRecordBeingEdited: PropTypes.oneOfType([fishBeltPropType, benthicPhotoQuadratPropType]),
   handleCollectRecordChange: PropTypes.func.isRequired,
   idsNotAssociatedWithData: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -484,6 +507,8 @@ CollectRecordFormPageAlternative.propTypes = {
   SampleUnitTransectInputs: PropTypes.elementType.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   setIdsNotAssociatedWithData: PropTypes.func.isRequired,
+  setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
+  setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
   subNavNode: subNavNodePropTypes,
 }
 

@@ -21,12 +21,12 @@ import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import SubmittedBenthicPitInfoTable from './SubmittedBenthicPitInfoTable'
-import SubmittedBenthicPitObservationTable from './SubmittedBenthicPitObservationTable'
+import SubmittedBenthicLitInfoTable from './SubmittedBenthicLitInfoTable'
+import SubmittedBenthicLitObservationTable from './SubmittedBenthicLitObservationTable'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
-const SubmittedBenthicPit = () => {
+const SubmittedBenthicLit = () => {
   const currentProjectPath = useCurrentProjectPath()
   const { currentUser } = useCurrentUser()
 
@@ -61,7 +61,7 @@ const SubmittedBenthicPit = () => {
         databaseSwitchboardInstance.getSubmittedSampleUnitRecord(
           projectId,
           submittedRecordId,
-          'benthicpittransectmethods',
+          'benthiclittransectmethods',
         ),
       ]
 
@@ -110,12 +110,12 @@ const SubmittedBenthicPit = () => {
     }
   }, [
     databaseSwitchboardInstance,
-    handleHttpResponseError,
-    isAppOnline,
     isMounted,
-    isSyncInProgress,
-    projectId,
     submittedRecordId,
+    projectId,
+    isAppOnline,
+    isSyncInProgress,
+    handleHttpResponseError,
   ])
 
   const handleMoveToCollect = () => {
@@ -124,12 +124,12 @@ const SubmittedBenthicPit = () => {
       .moveToCollect({
         projectId,
         submittedRecordId,
-        sampleUnitMethod: 'benthicpittransectmethods',
+        sampleUnitMethod: 'benthiclittransectmethods',
       })
       .then(() => {
         toast.success(...getToastArguments(language.success.submittedRecordMoveToCollect))
         history.push(
-          `${ensureTrailingSlash(currentProjectPath)}collecting/benthicpit/${submittedRecordId}`,
+          `${ensureTrailingSlash(currentProjectPath)}collecting/benthiclit/${submittedRecordId}`,
         )
       })
       .catch((error) => {
@@ -156,7 +156,7 @@ const SubmittedBenthicPit = () => {
       content={
         isAppOnline ? (
           <>
-            <SubmittedBenthicPitInfoTable
+            <SubmittedBenthicLitInfoTable
               sites={sites}
               choices={choices}
               managementRegimes={managementRegimes}
@@ -169,7 +169,7 @@ const SubmittedBenthicPit = () => {
               ))}
             </ul>
 
-            <SubmittedBenthicPitObservationTable
+            <SubmittedBenthicLitObservationTable
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
               submittedRecord={submittedRecord}
@@ -185,7 +185,7 @@ const SubmittedBenthicPit = () => {
             <RecordFormTitle
               submittedRecordOrCollectRecordDataProperty={submittedRecord}
               sites={sites}
-              protocol="benthicpit"
+              protocol="benthiclit"
             />
             <RowSpaceBetween>
               <>
@@ -210,4 +210,4 @@ const SubmittedBenthicPit = () => {
   )
 }
 
-export default SubmittedBenthicPit
+export default SubmittedBenthicLit

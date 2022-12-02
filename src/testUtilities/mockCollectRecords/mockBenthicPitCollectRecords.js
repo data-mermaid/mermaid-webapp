@@ -17,7 +17,7 @@ export default [
       ],
       sample_event: {
         site: '3',
-        management: '2',
+        management: '3',
         sample_date: '2020-4-19',
       },
       interval_size: 2,
@@ -35,7 +35,26 @@ export default [
         current: 'e5dcb32c-614d-44ed-8155-5911b7ee774a',
         tide: '79693274-4ec6-4052-afe1-4bb02eaa04ec',
       },
-      obs_benthic_pits: [],
+      obs_benthic_pits: [
+        {
+          id: '1',
+          interval: '0',
+          attribute: 'fcf25ee3-701b-4d15-9a17-71f40406db4c',
+          growth_form: 'cf2deca6-53b8-4096-916f-32c2c71d14bf',
+        },
+        {
+          id: '2',
+          interval: '2',
+          attribute: 'fcf25ee3-701b-4d15-9a17-71f40406db4c',
+          growth_form: 'cbff6080-6387-44e5-b7ad-35f35f3db3a7',
+        },
+        {
+          id: '3',
+          interval: '4',
+          attribute: 'fcf25ee3-701b-4d15-9a17-71f40406db4c',
+          growth_form: '7e71833a-fc29-4176-91cb-1df6723089ed',
+        },
+      ],
     },
     validations: null,
   },

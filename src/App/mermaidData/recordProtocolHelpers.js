@@ -18,3 +18,11 @@ export const getIsQuadratSampleUnit = (protocol) => {
 }
 
 export const noLabelSymbol = '-'
+
+export const getProtocolObservationsValidationsPropertyName = (collectRecord) => {
+  return {
+    fishbelt: 'obs_belt_fishes',
+    benthicpit: 'obs_benthic_pits',
+    benthicpqt: 'obs_benthic_photo_quadrats',
+  }[collectRecord?.data?.protocol]
+}

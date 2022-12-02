@@ -121,7 +121,7 @@ test('Collect Records table sorts properly by management column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  expect(within(tableRows[1]).getByText('Management Regimes B'))
+  expect(within(tableRows[1]).getByText('Management Regimes C'))
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))

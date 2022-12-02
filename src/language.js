@@ -327,45 +327,62 @@ const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
   const validationMessages = {
+    all_attributes_same_category: () => `All benthic attributes are ${context?.category}`,
     all_equal: () => 'All observations are the same',
     diff_num_quadrats: () => 'Defined number of quadrats does not match',
+    duplicate_benthic_transect: () =>
+      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
     duplicate_fishbelt_transect: () =>
       getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
     duplicate_quadrat_collection: () =>
-      `Duplicate sample unit ${context?.duplicate_transect_method}`,
-    duplicate_quadrat_transect: () => `Duplicate sample unit ${context?.duplicate_transect_method}`,
+      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
+    duplicate_quadrat_transect: () =>
+      getDuplicateSampleUnitLink(context?.duplicate_transect_method, projectId),
     duplicate_transect: () => 'Transect already exists',
     duplicate_values: () => 'Duplicate',
     exceed_total_colonies: () => 'Maximum number of colonies exceeded',
     future_sample_date: () => 'Sample date is in the future',
-    invalid_depth: () => 'Invalid depth',
-    invalid_fish_count: () => 'Invalid fish count',
-    invalid_fishbelt_transect: () => 'Invalid sample unit',
-    invalid_number_of_points: () => 'Invalid number of points per quadrat',
-    invalid_percent_value: () => 'Not a valid percent value',
-    invalid_quadrat_collection: () => 'Invalid sample unit',
-    invalid_quadrat_numbers: () =>
-      `Number of points entered for quadrat numbers ${context?.invalid_quadrat_numbers}, does not match defined number of points per quadrat`,
+    high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
+    incorrect_observation_count: () =>
+      `Incorrect number of observations; expected ${context?.expected_count}`,
+    interval_size_not_positive: () => 'Interval size must be a positive number',
+    invalid_benthic_transect: () =>
+      'One or more invalid transect fields: site, management, date, number, depth',
+    invalid_depth: () => `Depth invalid or not greater than ${context?.depth_range[0]} m`,
+    invalid_fish_count: () => 'Fish count must be a non-negative integer',
+    invalid_fish_size: () => `Invalid fish size`,
+    invalid_fishbelt_transect: () =>
+      'One or more invalid transect fields: site, management, date, number, width, depth',
+    invalid_number_of_points: () =>
+      `Total number of points entered for quadrats: ${context?.invalid_quadrat_numbers} does not match defined number of points per quadrat`,
+    invalid_percent_value: () => 'Percent value must be a non-negative number',
+    invalid_quadrat_collection: () =>
+      'One or more invalid transect fields: site, management, date, depth',
     invalid_quadrat_size: () => 'Invalid quadrat size',
-    invalid_quadrat_transect: () => 'Invalid quadrat transect',
+    invalid_quadrat_transect: () =>
+      'One or more invalid transect fields: site, management, date, number, depth',
     invalid_sample_date: () => 'Invalid date',
+    invalid_score: () => `Invalid score`,
+    invalid_site: () => `Invalid site`,
+    invalid_total_percent: () => `Sum of percents must not be less than 0 or greater than 100`,
+    len_surveyed_not_positive: () => 'Transect length must be a non-negative number',
     len_surveyed_out_of_range: () =>
       `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
     low_density: () => `Fish biomass less than ${context?.biomass_range[0]} kg/ha`,
     management_not_found: () => 'Management Regime record not available for similarity validation',
-    max_depth: () =>
-      `Depth value outside range of ${context?.depth_range[0]} and ${context?.depth_range[1]}`,
-    max_fish_size: () => 'Fish size is larger than species max size',
+    max_depth: () => `Depth exceeds ${context?.depth_range[1]} m`,
+    max_fish_size: () => 'Fish size is larger than maximum observed size',
     minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
     missing_quadrat_numbers: () => `Missing quadrat numbers ${context?.missing_quadrat_numbers}`,
-    no_region_match: () => 'Attributes outside of site region',
-    not_part_of_fish_family_subset: () =>
-      'There are fish that are not part of project defined fish families',
+    no_region_match: () => 'Coral or fish not previously observed in site region',
+    not_part_of_fish_family_subset: () => `Fish is not part of project-defined fish families`,
     not_positive_integer: () => 'Value is not greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
     not_unique_management: () =>
       'Management Regime: Other sample events at this site have a different management regime',
-    high_density: () => `Fish biomass greater than ${context?.biomass_range[1]} kg/ha`,
+    observations_total_length_incorrect: () =>
+      `Total length of observations (${context?.total_obs_length}) not within 50% of transect length`,
+    required: () => `Required`,
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,

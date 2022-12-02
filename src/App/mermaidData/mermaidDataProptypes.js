@@ -34,7 +34,7 @@ const _fishBeltTransectPropType = PropTypes.shape({
   notes: PropTypes.string,
 })
 
-const _benthicPitTransectPropType = PropTypes.shape({
+const _benthicTransectPropType = PropTypes.shape({
   reef_slope: PropTypes.string,
   visibility: PropTypes.string,
   current: PropTypes.string,
@@ -59,6 +59,18 @@ const _benthicPhotoQuadratTransectPropType = PropTypes.shape({
   relative_depth: PropTypes.string,
   num_points_per_quadrat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   notes: PropTypes.string,
+})
+
+const _bleachingQuadratPropType = PropTypes.shape({
+  id: PropTypes.string,
+  depth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  label: PropTypes.string,
+  visibility: PropTypes.string,
+  current: PropTypes.string,
+  quadrat_size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  relative_depth: PropTypes.string,
+  tide: PropTypes.string,
+  noes: PropTypes.string,
 })
 
 const _benthicPhotoQuadratObservationPropType = PropTypes.shape({
@@ -184,7 +196,25 @@ export const submittedBenthicPitPropType = PropTypes.shape({
   id: PropTypes.string,
   interval_size: PropTypes.number,
   inetrval_start: PropTypes.number,
-  benthic_transect: _benthicPitTransectPropType,
+  benthic_transect: _benthicTransectPropType,
+})
+
+export const submittedBenthicLitPropType = PropTypes.shape({
+  id: PropTypes.string,
+  interval_size: PropTypes.number,
+  inetrval_start: PropTypes.number,
+  benthic_transect: _benthicTransectPropType,
+})
+
+export const submittedBleachingPropType = PropTypes.shape({
+  id: PropTypes.string,
+  quadrat_collection: _bleachingQuadratPropType,
+})
+
+export const submittedHabitatComplexityPropType = PropTypes.shape({
+  id: PropTypes.string,
+  interval_size: PropTypes.number,
+  benthic_transect: _benthicTransectPropType,
 })
 
 export const managementRegimePropType = PropTypes.shape({
@@ -307,7 +337,7 @@ export const notificationsPropType = PropTypes.shape({
 // Start of PropTypes for validation object
 const validationObject = {
   code: PropTypes.string,
-  context: PropTypes.string,
+  context: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({})]),
   fields: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string,
   status: PropTypes.string,
@@ -366,6 +396,18 @@ export const benthicpqtValidationPropType = PropTypes.shape({
   quadrat_size: _validationsPropType,
   number: _validationsPropType,
   sample_time: _sampleTimeValidationPropType,
+})
+
+export const benthicPitValidationPropType = PropTypes.shape({
+  benthic_transect: PropTypes.shape({
+    depth: _depthValidationPropType,
+    len_surveyed: _lenSurveyedValidationPropType,
+    number: _validationsPropType,
+    sample_time: _sampleTimeValidationPropType,
+  }),
+  interval_start: _validationsPropType,
+  interval_size: _validationsPropType,
+  obs_benthic_pits: PropTypes.arrayOf(_validationsPropType),
 })
 
 // End of PropTypes for validation object

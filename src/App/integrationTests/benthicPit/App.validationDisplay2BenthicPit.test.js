@@ -10,12 +10,13 @@ import {
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
-import mockFishbeltValidationsObject from '../../../testUtilities/mockFishbeltValidationsObject'
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
+import mockBenthicPitCollectRecords from '../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
+import mockBenthicValidationsObject from '../../../testUtilities/mockBenthicValidationsObject'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Validating an empty collect record shows validations (proof of wire-up)', async () => {
+test('Validating an empty benthic PIT collect record shows validations (proof of wire-up)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -25,8 +26,8 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
-        validations: mockFishbeltValidationsObject,
+        ...mockBenthicPitCollectRecords[0],
+        validations: mockBenthicValidationsObject,
       }
 
       const response = {
@@ -49,7 +50,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -96,11 +97,10 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('width')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('size_bin')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('interval_size')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('interval_start')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('relative_depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('visibility')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('current')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('tide')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
@@ -117,7 +117,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   ).not.toBeInTheDocument()
 })
 
-test('Fishbelt validations will show only the first error when there are multiple errors and warnings', async () => {
+test('Benthic PIT validations will show only the first error when there are multiple errors and warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -127,42 +127,42 @@ test('Fishbelt validations will show only the first error when there are multipl
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
+        ...mockBenthicPitCollectRecords[0],
         validations: {
           status: 'error',
           results: {
             data: {
-              obs_belt_fishes: [
+              obs_benthic_pits: [
                 [
                   {
                     code: `observation validation with ok status shouldn't show`,
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation error 1',
                     status: 'error',
                     validation_id: '2b289dc99c02e9ae1c764e8a71cca3cc',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation warning 1',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation error 2',
                     status: 'error',
                     validation_id: '2b289dc99c02e9ae1c764e8a71cca3c8',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation warning 2',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                 ],
               ],
@@ -215,7 +215,7 @@ test('Fishbelt validations will show only the first error when there are multipl
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

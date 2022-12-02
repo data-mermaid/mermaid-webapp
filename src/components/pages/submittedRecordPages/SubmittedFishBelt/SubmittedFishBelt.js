@@ -26,6 +26,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { FormSubTitle } from '../SubmittedFormPage.styles'
+import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 
 const SubmittedFishBelt = () => {
   const [choices, setChoices] = useState({})
@@ -48,6 +49,7 @@ const SubmittedFishBelt = () => {
   const observers = submittedRecord?.observers ?? []
   const { currentUser } = useCurrentUser()
   const [currentUserProfile, setCurrentUserProfile] = useState({})
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const _getSupportingData = useEffect(() => {
     if (isAppOnline && databaseSwitchboardInstance && projectId && !isSyncInProgress) {
@@ -114,23 +116,29 @@ const SubmittedFishBelt = () => {
           },
         )
         .catch((error) => {
-          const errorStatus = error.response?.status
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const errorStatus = error.response?.status
 
-          if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
-            setIdsNotAssociatedWithData([projectId, submittedRecordId])
-            setIsLoading(false)
-          }
-          toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+              if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
+                setIdsNotAssociatedWithData([projectId, submittedRecordId])
+                setIsLoading(false)
+              }
+              toast.error(...getToastArguments(language.error.submittedRecordUnavailable))
+            },
+          })
         })
     }
   }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    submittedRecordId,
-    projectId,
-    isAppOnline,
-    isSyncInProgress,
     currentUser,
+    databaseSwitchboardInstance,
+    handleHttpResponseError,
+    isAppOnline,
+    isMounted,
+    isSyncInProgress,
+    projectId,
+    submittedRecordId,
   ])
 
   const handleMoveToCollect = () => {
@@ -143,9 +151,14 @@ const SubmittedFishBelt = () => {
           `${ensureTrailingSlash(currentProjectPath)}collecting/fishbelt/${submittedRecordId}`,
         )
       })
-      .catch(() => {
-        toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
-        setIsMoveToButtonDisabled(false)
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            toast.error(...getToastArguments(language.error.submittedRecordMoveToCollect))
+            setIsMoveToButtonDisabled(false)
+          },
+        })
       })
   }
 

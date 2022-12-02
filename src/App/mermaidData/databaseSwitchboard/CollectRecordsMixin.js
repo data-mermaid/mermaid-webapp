@@ -464,8 +464,9 @@ const CollectRecordsMixin = (Base) =>
       const sampleUnitName = recordToOperateOn.data.protocol
 
       const allObservationValidations = {
-        fishbelt: recordToOperateOn.validations.results.data.obs_belt_fishes,
+        benthicpit: recordToOperateOn.validations.results.data.obs_benthic_pits,
         benthicpqt: recordToOperateOn.validations.results.data.obs_benthic_photo_quadrats,
+        fishbelt: recordToOperateOn.validations.results.data.obs_belt_fishes,
       }
 
       const observationsValidationsWithIgnored = allObservationValidations[sampleUnitName].map(
@@ -485,6 +486,7 @@ const CollectRecordsMixin = (Base) =>
       )
 
       const validationPath = {
+        benthicpit: 'validations.results.data.obs_benthic_pits',
         fishbelt: 'validations.results.data.obs_belt_fishes',
         benthicpqt: 'validations.results.data.obs_benthic_photo_quadrats',
       }
@@ -585,6 +587,7 @@ const CollectRecordsMixin = (Base) =>
       const allObservationValidations = {
         fishbelt: recordToOperateOn.validations.results.data.obs_belt_fishes,
         benthicpqt: recordToOperateOn.validations.results.data.obs_benthic_photo_quadrats,
+        benthicpit: recordToOperateOn.validations.results.data.obs_benthic_pits,
       }
 
       const observationsValidationsWithReset = allObservationValidations[sampleUnitName].map(
@@ -605,6 +608,7 @@ const CollectRecordsMixin = (Base) =>
       const validationPath = {
         fishbelt: 'validations.results.data.obs_belt_fishes',
         benthicpqt: 'validations.results.data.obs_benthic_photo_quadrats',
+        benthicpit: 'validations.results.data.obs_benthic_pits',
       }
 
       const recordWithResetObservationValidations = setObjectPropertyOnClone({
