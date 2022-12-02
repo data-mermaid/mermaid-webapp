@@ -217,6 +217,20 @@ export const submittedHabitatComplexityPropType = PropTypes.shape({
   benthic_transect: _benthicTransectPropType,
 })
 
+export const obsColoniesBleachedPropType = PropTypes.arrayOf(
+  PropTypes.shape({
+    count_20: PropTypes.number,
+    count_50: PropTypes.number,
+    count_80: PropTypes.number,
+    attribute: PropTypes.string,
+    count_100: PropTypes.number,
+    count_dead: PropTypes.number,
+    count_pale: PropTypes.number,
+    growth_form: PropTypes.string,
+    count_normal: PropTypes.number,
+  }),
+)
+
 export const managementRegimePropType = PropTypes.shape({
   id: PropTypes.string,
   name: PropTypes.string,

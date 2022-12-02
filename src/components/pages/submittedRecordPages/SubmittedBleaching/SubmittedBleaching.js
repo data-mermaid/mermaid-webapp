@@ -22,7 +22,7 @@ import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import SubmittedBleachingPitInfoTable from './SubmittedBleachingInfoTable'
-import SubmittedBleachingObservationTable from './SubmittedBleachingObservationTable'
+import BleachingObservationSummaryStats from '../../../BleachingObservationSummaryStats'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import SubmittedBleachingPercentageSummaryTable from './SubmittedBleachingPercentageSummaryTable'
@@ -170,10 +170,10 @@ const SubmittedBleaching = () => {
               ))}
             </ul>
 
-            <SubmittedBleachingObservationTable
+            <BleachingObservationSummaryStats
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
-              submittedRecord={submittedRecord}
+              obsColoniesBleached={submittedRecord?.obs_colonies_bleached}
             />
 
             <SubmittedBleachingPercentageSummaryTable submittedRecord={submittedRecord} />
