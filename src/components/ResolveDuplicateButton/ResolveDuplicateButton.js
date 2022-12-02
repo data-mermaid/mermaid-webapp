@@ -23,6 +23,7 @@ const Thead = styled.th`
 `
 
 const ResolveDuplicateButton = ({ currentSelectValue, validationMessages }) => {
+  const { thisSite, anotherSite, keepThisSite, editSite, keepBoth, cancel } = language.resolveModal
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
@@ -77,8 +78,14 @@ const ResolveDuplicateButton = ({ currentSelectValue, validationMessages }) => {
         <thead>
           <Tr>
             <Thead />
-            <Thead>This sample unit site</Thead>
-            <Thead>Site in other sample units </Thead>
+            <Thead>
+              {thisSite} <ButtonCaution>{keepThisSite}</ButtonCaution>{' '}
+              <ButtonCaution>{editSite}</ButtonCaution>
+            </Thead>
+            <Thead>
+              {anotherSite} <ButtonCaution>{keepThisSite}</ButtonCaution>{' '}
+              <ButtonCaution>{editSite}</ButtonCaution>
+            </Thead>
           </Tr>
         </thead>
         <tbody>
@@ -148,8 +155,8 @@ const ResolveDuplicateButton = ({ currentSelectValue, validationMessages }) => {
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={closeResolveDuplicateModal}>Cancel</ButtonSecondary>
-      <ButtonCaution onClick={closeResolveDuplicateModal}>Keep Both</ButtonCaution>
+      <ButtonSecondary onClick={closeResolveDuplicateModal}>{cancel}</ButtonSecondary>
+      <ButtonCaution onClick={closeResolveDuplicateModal}>{keepBoth}</ButtonCaution>
     </RightFooter>
   )
 
