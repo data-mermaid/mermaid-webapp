@@ -1,0 +1,3 @@
+import BleachingObservationSummaryStats from './BleachingObservationSummaryStats'
+
+export default BleachingObservationSummaryStats
