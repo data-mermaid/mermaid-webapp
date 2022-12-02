@@ -108,11 +108,11 @@ export const reformatFormValuesIntoBenthicPQTRecord = (
   }
 }
 
-export const reformatFormValuesIntoBenthicPitRecord = (
+export const reformatFormValuesIntoBenthicPitRecord = ({
   formikValues,
-  observationsValues,
+  observationTable1State,
   collectRecordBeingEdited,
-) => {
+}) => {
   const {
     current,
     depth,
@@ -156,17 +156,17 @@ export const reformatFormValuesIntoBenthicPitRecord = (
       },
       interval_size,
       interval_start,
-      obs_benthic_pits: observationsValues,
+      obs_benthic_pits: observationTable1State,
       observers,
     },
   }
 }
-export const reformatFormValuesIntoBleachingRecord = (
+export const reformatFormValuesIntoBleachingRecord = ({
   formikValues,
-  coloniesBleachedObservationValues,
-  // percentCoverObservationValues,
+  observationTable1State,
+  observationTable2State,
   collectRecordBeingEdited,
-) => {
+}) => {
   const {
     current,
     depth,
@@ -204,7 +204,8 @@ export const reformatFormValuesIntoBleachingRecord = (
         sample_date,
         site,
       },
-      obs_colonies_bleached: coloniesBleachedObservationValues,
+      obs_colonies_bleached: observationTable1State,
+      obs_quadrat_benthic_percent: observationTable2State,
       observers,
     },
   }

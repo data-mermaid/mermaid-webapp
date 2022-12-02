@@ -122,7 +122,7 @@ const benthicPitObservationReducer = (state, action) => {
       })
 
     default:
-      throw new Error("This action isn't supported by the observationReducer")
+      throw new Error(`This action (${action.type}) isn't supported by the observationReducer`)
   }
 }
 

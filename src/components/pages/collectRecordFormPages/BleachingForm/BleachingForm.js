@@ -8,8 +8,9 @@ import {
   getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
 } from '../collectRecordFormInitialValues'
-
 import { getBenthicOptions } from '../../../../library/getOptions'
+import { getProtocolTransectType } from '../../../../App/mermaidData/recordProtocolHelpers'
+import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBleachingRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
@@ -17,15 +18,13 @@ import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/data
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
-import coloniesBleachedObservationReducer from './coloniesBleachedObservationReducer'
-
+import BleachingTransectInputs from './BleachingTransectInputs'
 import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import coloniesBleachedObservationReducer from './coloniesBleachedObservationsReducer'
+import ColoniesBleachedObservationsTable from './ColoniesBleachedObservationsTable'
 import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
-import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
-import BleachingTransectInputs from './BleachingTransectInputs'
-import { getProtocolTransectType } from '../../../../App/mermaidData/recordProtocolHelpers'
 
 const BleachingForm = ({ isNewRecord }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -42,9 +41,9 @@ const BleachingForm = ({ isNewRecord }) => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
+  const coloniesBleachedReducer = useReducer(coloniesBleachedObservationReducer, [])
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
-  const coloniesBleachedReducer = useReducer(coloniesBleachedObservationReducer, [])
 
   const [, coloniesBleachedDispatch] = coloniesBleachedReducer
 
@@ -197,8 +196,8 @@ const BleachingForm = ({ isNewRecord }) => {
         initialFormikFormValues={initialFormikFormValues}
         isNewRecord={isNewRecord}
         isParentDataLoading={isLoading}
-        observationsReducer={coloniesBleachedReducer}
-        ObservationTable={() => <>WIP</>}
+        observationsTable1Reducer={coloniesBleachedReducer}
+        ObservationTable1={ColoniesBleachedObservationsTable}
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBleachingRecord}
         sampleUnitName="bleachingqc"
         SampleUnitTransectInputs={BleachingTransectInputs}

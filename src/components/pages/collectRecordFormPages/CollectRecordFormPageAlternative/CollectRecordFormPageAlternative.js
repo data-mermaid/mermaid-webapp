@@ -6,9 +6,9 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import {
   subNavNodePropTypes,
-  observationsReducerPropType,
   fishBeltPropType,
   benthicPhotoQuadratPropType,
+  observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
@@ -16,8 +16,10 @@ import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPag
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
 import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
+import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
+import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -36,10 +38,9 @@ import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
 import SampleEventInputs from '../SampleEventInputs'
 import SaveValidateSubmitButtonGroup from '../SaveValidateSubmitButtonGroup'
+import useCollectRecordValidation from './useCollectRecordValidation'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
-import useCollectRecordValidation from './useCollectRecordValidation'
-import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 
 const CollectRecordFormPageAlternative = ({
   areObservationsInputsDirty,
@@ -50,8 +51,8 @@ const CollectRecordFormPageAlternative = ({
   initialFormikFormValues,
   isNewRecord,
   isParentDataLoading,
-  observationsReducer,
-  ObservationTable,
+  observationsTable1Reducer,
+  ObservationTable1,
   sampleUnitFormatSaveFunction,
   sampleUnitName,
   SampleUnitTransectInputs,
@@ -73,8 +74,8 @@ const CollectRecordFormPageAlternative = ({
   const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
-  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
-  const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
+  const [apiObservationsTable1Loaded, setApiObservationsTable1Loaded] = useState(false)
+  const [observationsTable1State, observationsTable1Dispatch] = observationsTable1Reducer // eslint-disable-line no-unused-vars
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [sites, setSites] = useState([])
@@ -167,10 +168,10 @@ const CollectRecordFormPageAlternative = ({
   useEffect(
     function ensureUnsavedObservationsArePersisted() {
       if (areObservationsInputsDirty) {
-        persistUnsavedObservationsData(observationsState)
+        persistUnsavedObservationsData(observationsTable1State)
       }
     },
-    [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData],
+    [areObservationsInputsDirty, observationsTable1State, persistUnsavedObservationsData],
   )
 
   useEffect(
@@ -212,25 +213,28 @@ const CollectRecordFormPageAlternative = ({
 
   useEffect(
     function loadObservationsFromCollectRecordIntoState() {
-      if (!apiObservationsLoaded && collectRecordBeingEdited) {
-        const observationsFromApi = collectRecordBeingEdited.data.obs_benthic_pits ?? []
+      if (!apiObservationsTable1Loaded && collectRecordBeingEdited) {
+        const observationsFromApiTable1 =
+          collectRecordBeingEdited.data[
+            getObservationsPropertyNames(collectRecordBeingEdited)[0]
+          ] ?? []
 
         const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-        const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
+        const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApiTable1
 
-        observationsDispatch({
+        observationsTable1Dispatch({
           type: 'loadObservationsFromApi',
           payload: initialObservationsToLoad,
         })
 
-        setApiObservationsLoaded(true)
+        setApiObservationsTable1Loaded(true)
       }
     },
     [
-      apiObservationsLoaded,
+      apiObservationsTable1Loaded,
       collectRecordBeingEdited,
       getPersistedUnsavedObservationsData,
-      observationsDispatch,
+      observationsTable1Dispatch,
     ],
   )
 
@@ -260,11 +264,11 @@ const CollectRecordFormPageAlternative = ({
   })
 
   const handleSave = () => {
-    const recordToSubmit = sampleUnitFormatSaveFunction(
-      formik.values,
-      observationsState,
+    const recordToSubmit = sampleUnitFormatSaveFunction({
+      formikValues: formik.values,
+      observationTable1State: observationsTable1State,
       collectRecordBeingEdited,
-    )
+    })
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
@@ -417,7 +421,7 @@ const CollectRecordFormPageAlternative = ({
           }
         />
         <div ref={observationTableRef}>
-          <ObservationTable
+          <ObservationTable1
             testId="observations-section"
             areValidationsShowing={areValidationsShowing}
             benthicAttributeSelectOptions={benthicAttributeSelectOptions}
@@ -425,7 +429,7 @@ const CollectRecordFormPageAlternative = ({
             collectRecord={collectRecordBeingEdited}
             formik={formik}
             ignoreObservationValidations={ignoreObservationValidations}
-            observationsReducer={observationsReducer}
+            observationsReducer={observationsTable1Reducer}
             resetObservationValidations={resetObservationValidations}
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
@@ -500,8 +504,8 @@ CollectRecordFormPageAlternative.propTypes = {
   initialFormikFormValues: PropTypes.shape({}).isRequired,
   isNewRecord: PropTypes.bool.isRequired,
   isParentDataLoading: PropTypes.bool.isRequired,
-  observationsReducer: observationsReducerPropType,
-  ObservationTable: PropTypes.elementType.isRequired,
+  observationsTable1Reducer: observationsReducerPropType,
+  ObservationTable1: PropTypes.elementType.isRequired,
   sampleUnitFormatSaveFunction: PropTypes.func.isRequired,
   sampleUnitName: PropTypes.string.isRequired,
   SampleUnitTransectInputs: PropTypes.elementType.isRequired,
@@ -515,7 +519,7 @@ CollectRecordFormPageAlternative.propTypes = {
 CollectRecordFormPageAlternative.defaultProps = {
   collectRecordBeingEdited: undefined,
   subNavNode: null,
-  observationsReducer: [],
+  observationsTable1Reducer: [],
 }
 
 export default CollectRecordFormPageAlternative
