@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components/macro'
 
 import { ButtonSecondary } from '../generic/buttons'
 import { IconCheck, IconClose } from '../icons'
-import { Table, Tr, TableOverflowWrapper } from '../generic/Table/table'
+import { Table, Td, Tr, TableOverflowWrapper } from '../generic/Table/table'
 import language from '../../language'
 import theme from '../../theme'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
@@ -13,19 +13,24 @@ const Thead = styled.th`
   text-align: center;
   background-color: ${theme.color.primaryColor};
   color: white;
-  padding: 20px;
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  vertical-align: top;
+  span {
+    white-space: nowrap;
+  }
+  small {
+    display: block;
+  }
 `
 
-const Tcell = styled.td`
-  padding: 10px;
-  ${props =>
+const Tcell = styled(Td)`
+  ${(props) =>
     props.cellWithText
       ? css`
           text-align: left;
         `
       : css`
           text-align: center;
-          width: 100px;
         `};
 `
 
@@ -40,14 +45,40 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
           <Tr>
             <Thead>Project-level information</Thead>
             <Thead>Private</Thead>
-            <Thead>Public Summary (default)</Thead>
+            <Thead>
+              <span>Public Summary</span>
+              <small>(default)</small>
+            </Thead>
             <Thead>Public</Thead>
           </Tr>
         </thead>
         <tbody>
           <Tr>
+            <Td colSpan="4">
+              <strong>Contact info</strong>
+            </Td>
+          </Tr>
+          <Tr>
+            <Tcell cellWithText>Organization and admin names</Tcell>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+            <Tcell>
+              <IconCheck />
+            </Tcell>
+          </Tr>
+          <Tr>
+            <Td colSpan="4" cellWithText>
+              <strong>Metadata</strong>
+            </Td>
+          </Tr>
+          <Tr>
             <Tcell cellWithText>
-              <strong>Contact info:</strong> organization, admin name and admin email
+              Project name and notes, country, site name and location, survey date, depth, habitat
+              (reef zone, reef type and exposure), management regime name, number of transects
             </Tcell>
             <Tcell>
               <IconCheck />
@@ -60,28 +91,12 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>
-              <strong>Metadata</strong> project name and notes, country, site name and location,
-              survey date, depth, habitat (reef zone, reef type and exposure), management regime
-              name, # of transects
-            </Tcell>
-            <Tcell>
-              <IconCheck />
-            </Tcell>
-            <Tcell>
-              <IconCheck />
-            </Tcell>
-            <Tcell>
-              <IconCheck />
-            </Tcell>
+            <Td colSpan="4" cellWithText>
+              <strong>Site-level averages</strong>
+            </Td>
           </Tr>
           <Tr>
-            <Tcell cellWithText>
-              <strong>Site-level averages</strong> accessible via summary API:
-            </Tcell>
-          </Tr>
-          <Tr>
-            <Tcell cellWithText>Average benthic cover, %</Tcell>
+            <Tcell cellWithText>Average benthic cover (%)</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -93,7 +108,7 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>Average total reef fish biomass, kg/ha</Tcell>
+            <Tcell cellWithText>Average total reef fish biomass (kg/ha)</Tcell>
             <TcellWithIconClose>
               <IconClose />
             </TcellWithIconClose>
@@ -117,9 +132,9 @@ const DataSharingInfoModal = ({ isOpen, onDismiss }) => {
             </Tcell>
           </Tr>
           <Tr>
-            <Tcell cellWithText>
-              <strong>Transec-level observations</strong> ​​​​​​​can be downloaded:
-            </Tcell>
+            <Td colSpan="4" cellWithText>
+              <strong>Transect-level observations</strong>
+            </Td>
           </Tr>
           <Tr>
             <Tcell cellWithText>Benthic observations and growth forms</Tcell>

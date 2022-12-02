@@ -31,7 +31,7 @@ const StyledDialog = styled('div')`
 const ModalTitle = styled.div`
   padding: ${theme.spacing.medium};
   display: grid;
-  color: ${theme.color.primaryColor};
+  color: ${theme.color.textColor};
   grid-template-columns: auto auto;
   h2 {
     justify-self: start;
