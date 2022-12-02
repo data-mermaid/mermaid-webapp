@@ -217,7 +217,7 @@ export const submittedHabitatComplexityPropType = PropTypes.shape({
   benthic_transect: _benthicTransectPropType,
 })
 
-export const obsColoniesBleachedPropType = PropTypes.arrayOf(
+export const observationsColoniesBleachedPropType = PropTypes.arrayOf(
   PropTypes.shape({
     count_20: PropTypes.number,
     count_50: PropTypes.number,

@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   choicesPropType,
-  obsColoniesBleachedPropType,
+  observationsColoniesBleachedPropType,
 } from '../../App/mermaidData/mermaidDataProptypes'
 import { inputOptionsPropTypes } from '../../library/miscPropTypes'
 import { SubmittedObservationStickyTable, Tr, Td, Th } from '../generic/Table/table'
@@ -19,11 +19,11 @@ import { getOptions } from '../../library/getOptions'
 const BleachingObservationSummaryStats = ({
   benthicAttributeOptions,
   choices,
-  obsColoniesBleached,
+  observationsColoniesBleached,
 }) => {
   const growthFormOptions = getOptions(choices.growthforms)
 
-  const observationsBleaching = obsColoniesBleached.map((item, index) => (
+  const observationsBleaching = observationsColoniesBleached.map((item, index) => (
     <Tr key={item.id}>
       <Td align="center">{index + 1}</Td>
       <Td align="right">{getObjectById(benthicAttributeOptions, item.attribute)?.label}</Td>
@@ -39,7 +39,7 @@ const BleachingObservationSummaryStats = ({
   ))
 
   const getTotalOfColonies = () => {
-    const totals = obsColoniesBleached.map(
+    const totals = observationsColoniesBleached.map(
       (item) =>
         item.count_20 +
         item.count_50 +
@@ -54,7 +54,7 @@ const BleachingObservationSummaryStats = ({
   }
 
   const getTotalOfCoralGenera = () => {
-    const attributeIds = obsColoniesBleached.map((item) => item.attribute)
+    const attributeIds = observationsColoniesBleached.map((item) => item.attribute)
     const uniqueAttributeIds = [...new Set(attributeIds)]
 
     return uniqueAttributeIds.length
@@ -64,11 +64,11 @@ const BleachingObservationSummaryStats = ({
     let totals = 0
 
     if (colonyType === 'bleached') {
-      totals = obsColoniesBleached.map(
+      totals = observationsColoniesBleached.map(
         (item) => item.count_20 + item.count_50 + item.count_80 + item.count_100 + item.count_dead,
       )
     } else {
-      totals = obsColoniesBleached.map((item) => item[colonyType])
+      totals = observationsColoniesBleached.map((item) => item[colonyType])
     }
 
     return (
@@ -132,11 +132,11 @@ const BleachingObservationSummaryStats = ({
 BleachingObservationSummaryStats.propTypes = {
   choices: choicesPropType.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
-  obsColoniesBleached: obsColoniesBleachedPropType,
+  observationsColoniesBleached: observationsColoniesBleachedPropType,
 }
 
 BleachingObservationSummaryStats.defaultProps = {
-  obsColoniesBleached: undefined,
+  observationsColoniesBleached: undefined,
 }
 
 export default BleachingObservationSummaryStats
