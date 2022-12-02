@@ -199,8 +199,8 @@ const BenthicPitForm = ({ isNewRecord }) => {
         initialFormikFormValues={initialFormikFormValues}
         isNewRecord={isNewRecord}
         isParentDataLoading={isLoading}
-        observationsReducer={observationsReducer}
-        ObservationTable={BenthicPitObservationsTable}
+        observationsTable1Reducer={observationsReducer}
+        ObservationTable1={BenthicPitObservationsTable}
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicPitRecord}
         sampleUnitName="benthicpit"
         SampleUnitTransectInputs={BenthicPitTransectInputs}
