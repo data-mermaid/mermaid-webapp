@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleUnitLabel } from '../getSampleUnitLabel'

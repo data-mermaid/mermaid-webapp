@@ -1,6 +1,6 @@
-import axios from 'axios'
 import PropTypes from 'prop-types'
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import axios from './axiosRetry'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 const OnlineStatusContext = createContext()

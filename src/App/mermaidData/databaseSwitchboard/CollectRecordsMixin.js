@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
 import getObjectProperty from '../../../library/objects/getObjectProperty'

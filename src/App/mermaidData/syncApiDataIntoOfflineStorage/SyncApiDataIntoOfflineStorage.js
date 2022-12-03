@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../library/axiosRetry'
 import { pullApiData } from '../pullApiData'
 
 // const removeObjectKeysReducer = (previous, current) => {
