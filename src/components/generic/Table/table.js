@@ -129,6 +129,13 @@ export const Td = styled.td(
     `)}
   `,
 )
+
+export const TdKey = styled(Td)`
+  white-space: nowrap;
+  font-weight: 900;
+  width: 0;
+`
+
 export const Tr = styled.tr`
   &:nth-child(odd) {
     background-color: ${theme.color.tableRowOdd};
