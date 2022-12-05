@@ -19,7 +19,6 @@ import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
-import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
@@ -44,7 +43,6 @@ import useIsMounted from '../../../../library/useIsMounted'
 
 const CollectRecordFormPageAlternative = ({
   areObservationsInputsDirty,
-  benthicAttributeSelectOptions,
   collectRecordBeingEdited,
   handleCollectRecordChange,
   idsNotAssociatedWithData,
@@ -424,7 +422,6 @@ const CollectRecordFormPageAlternative = ({
           <ObservationTable1
             testId="observations-section"
             areValidationsShowing={areValidationsShowing}
-            benthicAttributeSelectOptions={benthicAttributeSelectOptions}
             choices={choices}
             collectRecord={collectRecordBeingEdited}
             formik={formik}
@@ -497,7 +494,6 @@ const CollectRecordFormPageAlternative = ({
 
 CollectRecordFormPageAlternative.propTypes = {
   areObservationsInputsDirty: PropTypes.bool.isRequired,
-  benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   collectRecordBeingEdited: PropTypes.oneOfType([fishBeltPropType, benthicPhotoQuadratPropType]),
   handleCollectRecordChange: PropTypes.func.isRequired,
   idsNotAssociatedWithData: PropTypes.arrayOf(PropTypes.string).isRequired,
