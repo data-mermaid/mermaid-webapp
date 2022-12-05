@@ -260,7 +260,7 @@ const pages = {
   },
   submittedForm: {
     sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
-    moveSampleUnitButon: 'Edit Sample Unit - move to Collecting',
+    moveSampleUnitButton: 'Edit Sample Unit - move to Collecting',
     adminEditOnly:
       'Submitted sample units are read-only and can only be moved to Collecting by an admin.',
   },

@@ -202,7 +202,7 @@ const SubmittedBleaching = () => {
                   disabled={isAdminUser ? isMoveToButtonDisabled : 'false'}
                 >
                   <IconPen />
-                  {language.pages.submittedForm.moveSampleUnitButon}
+                  {language.pages.submittedForm.moveSampleUnitButton}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>

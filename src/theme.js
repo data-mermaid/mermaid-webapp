@@ -80,6 +80,7 @@ const color = {
 
   disabledColor: '#D5D5DD',
   disabledText: 'rgba(255,255,255,0.5)',
+  disabledTextDark: 'rgba(0,0,0,0.5)',
   disabledBorder: '#969696',
 
   border: white.mix(colorHelper(black), 0.5),
