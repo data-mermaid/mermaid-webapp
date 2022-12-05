@@ -6,7 +6,8 @@ export const Row = styled.div`
 `
 export const RowSpaceBetween = styled(Row)`
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  gap: 1rem;
 `
 export const RowRight = styled(Row)`
   justify-content: flex-end;

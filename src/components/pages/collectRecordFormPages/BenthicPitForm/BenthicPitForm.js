@@ -11,6 +11,8 @@ import {
 } from '../collectRecordFormInitialValues'
 
 import { getBenthicOptions } from '../../../../library/getOptions'
+import { getProtocolTransectType } from '../../../../App/mermaidData/recordProtocolHelpers'
+import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBenthicPitRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
@@ -35,6 +37,7 @@ const BenthicPitForm = ({ isNewRecord }) => {
   const [isNewBenthicAttributeModalOpen, setIsNewBenthicAttributeModalOpen] = useState(false)
   const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
     useState()
+  const [subNavNode, setSubNavNode] = useState()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -53,21 +56,34 @@ const BenthicPitForm = ({ isNewRecord }) => {
           setIsLoading(false)
         }
 
-        const promises = [databaseSwitchboardInstance.getBenthicAttributes()]
+        const promises = [
+          databaseSwitchboardInstance.getBenthicAttributes(),
+          databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        ]
 
         if (recordId && !isNewRecord) {
           promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
         }
 
         Promise.all(promises)
-          .then(([benthicAttributesResponse, collectRecordResponse]) => {
+          .then(([benthicAttributesResponse, sitesResponse, collectRecordResponse]) => {
             if (isMounted.current) {
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
 
+              const recordNameForSubNode =
+                !isNewRecord && collectRecordResponse
+                  ? getRecordSubNavNodeInfo(
+                      collectRecordResponse.data,
+                      sitesResponse,
+                      getProtocolTransectType(collectRecordResponse?.protocol),
+                    )
+                  : { name: language.protocolTitles.benthicpit }
+
               setCollectRecordBeingEdited(collectRecordResponse)
               setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributesResponse))
+              setSubNavNode(recordNameForSubNode)
 
               setIsLoading(false)
             }
@@ -175,6 +191,8 @@ const BenthicPitForm = ({ isNewRecord }) => {
   return (
     <>
       <CollectRecordFormPageAlternative
+        areObservationsInputsDirty={areObservationsInputsDirty}
+        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
         idsNotAssociatedWithData={idsNotAssociatedWithData}
@@ -186,13 +204,11 @@ const BenthicPitForm = ({ isNewRecord }) => {
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicPitRecord}
         sampleUnitName="benthicpit"
         SampleUnitTransectInputs={BenthicPitTransectInputs}
-        handleSubmitNewAttribute={() => {}}
-        areObservationsInputsDirty={areObservationsInputsDirty}
         setAreObservationsInputsDirty={setAreObservationsInputsDirty}
         setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
-        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
-        setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
+        setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
+        subNavNode={subNavNode}
       />
       {!!projectId && !!currentUser && (
         <NewAttributeModal

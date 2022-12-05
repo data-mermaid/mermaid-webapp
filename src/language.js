@@ -260,7 +260,7 @@ const pages = {
   },
   submittedForm: {
     sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
-    moveSampleUnitButon: 'Edit Sample Unit - move to Collecting',
+    moveSampleUnitButton: 'Edit Sample Unit - move to Collecting',
     adminEditOnly:
       'Submitted sample units are read-only and can only be moved to Collecting by an admin.',
   },
@@ -372,7 +372,6 @@ const getValidationMessage = (validation, projectId = '') => {
       'One or more invalid transect fields: site, management, date, number, depth',
     invalid_sample_date: () => 'Invalid date',
     invalid_score: () => `Invalid score`,
-    invalid_site: () => `Invalid site`,
     invalid_total_percent: () => `Sum of percents must not be less than 0 or greater than 100`,
     len_surveyed_not_positive: () => 'Transect length must be a non-negative number',
     len_surveyed_out_of_range: () =>
