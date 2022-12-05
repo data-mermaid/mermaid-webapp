@@ -37,6 +37,7 @@ const InputSelectWithLabelAndValidation = ({
           aria-labelledby={`aria-label${id}`}
           aria-describedby={`aria-descp${id}`}
           id={id}
+          value={value}
           {...restOfProps}
         >
           <option value="">Choose...</option>
@@ -64,7 +65,7 @@ InputSelectWithLabelAndValidation.propTypes = {
   options: inputOptionsPropTypes.isRequired,
   resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
 }
@@ -74,6 +75,7 @@ InputSelectWithLabelAndValidation.defaultProps = {
   validationMessages: [],
   helperText: undefined,
   testId: undefined,
+  value: '',
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},
 }
