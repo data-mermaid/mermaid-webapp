@@ -24,7 +24,7 @@ const clipPath = `polygon(
   ${pointerSize} 50%,
   0% 0%)`
 
-const SvsArrowButton = styled(ButtonCallout)`
+const ArrowRightButton = styled(ButtonCallout)`
   clip-path: ${clipPath};
   z-index: 1;
   margin-right: calc(-${pointerSize} + 2px);
@@ -113,24 +113,24 @@ const SaveValidateSubmitButtonGroup = ({
     saveButtonState === buttonGroupStates.saving
 
   const saveButton = (
-    <SvsArrowButton type="button" disabled={isSaveDisabled} onClick={onSave}>
+    <ArrowRightButton type="button" disabled={isSaveDisabled} onClick={onSave}>
       <IconSave />
       {getSaveButtonText()}
-    </SvsArrowButton>
+    </ArrowRightButton>
   )
 
   const validateButton = (
-    <SvsArrowButton onClick={onValidate} disabled={isValidateDisabled}>
+    <ArrowRightButton onClick={onValidate} disabled={isValidateDisabled}>
       <IconCheck />
       {getValidateButtonText()}
-    </SvsArrowButton>
+    </ArrowRightButton>
   )
 
   const submitButton = (
-    <SvsArrowButton disabled={isSubmitDisabled} onClick={onSubmit}>
+    <ArrowRightButton disabled={isSubmitDisabled} onClick={onSubmit}>
       <IconUpload />
       {getSubmitButtonText()}
-    </SvsArrowButton>
+    </ArrowRightButton>
   )
 
   return (
