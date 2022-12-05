@@ -31,9 +31,9 @@ const SingleSiteMap = ({
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
 
   const _initializeMap = useEffect(() => {
-    const el = document.createElement('div')
+    const markerElement = document.createElement('div')
 
-    el.id = 'marker'
+    markerElement.id = 'marker'
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
@@ -45,7 +45,7 @@ const SingleSiteMap = ({
       customAttribution: language.map.attribution,
     })
 
-    recordMarker.current = new maplibregl.Marker(el, { draggable: !isReadOnlyUser })
+    recordMarker.current = new maplibregl.Marker(markerElement, { draggable: !isReadOnlyUser })
 
     addMapController(map.current)
 

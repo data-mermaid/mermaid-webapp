@@ -14,9 +14,9 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue, formLongitudeValue }) => {
   const recordMarker = useRef(null)
 
   const _initializeMap = useEffect(() => {
-    const el = document.createElement('div')
+    const markerElement = document.createElement('div')
 
-    el.id = 'marker'
+    markerElement.id = 'marker'
 
     map.current = new maplibregl.Map({
       container: mapContainer.current,
@@ -28,7 +28,7 @@ const ResolveDuplicateSiteMap = ({ formLatitudeValue, formLongitudeValue }) => {
       customAttribution: language.map.attribution,
     })
 
-    recordMarker.current = new maplibregl.Marker(el, { draggable: false })
+    recordMarker.current = new maplibregl.Marker(markerElement, { draggable: false })
 
     // clean up on unmount
     return () => {

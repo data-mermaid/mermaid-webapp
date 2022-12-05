@@ -17,9 +17,9 @@ const InputSelectWithLabelAndValidation = ({
   resetNonObservationFieldValidations,
   validationType,
   testId,
+  value,
   ...restOfProps
 }) => {
-  const currentSelectValue = restOfProps?.value
   const optionList = options.map((item) => (
     <option key={item.value} value={item.value}>
       {item.label}
@@ -49,7 +49,7 @@ const InputSelectWithLabelAndValidation = ({
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
-        currentSelectValue={currentSelectValue}
+        currentSelectValue={value}
       />
     </InputRow>
   )
@@ -64,6 +64,7 @@ InputSelectWithLabelAndValidation.propTypes = {
   options: inputOptionsPropTypes.isRequired,
   resetNonObservationFieldValidations: PropTypes.func,
   testId: PropTypes.string,
+  value: PropTypes.string.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
 }
