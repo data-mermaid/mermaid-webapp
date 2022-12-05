@@ -25,6 +25,7 @@ const CheckBoxLabel = styled.label`
 
 const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
   const [isLoading, setIsLoading] = useState(false)
+  // const [projectNameAlreadyExists, setProjectNameAlreadyExists] = useState(false)
 
   const initialFormValues = project
     ? {
@@ -55,8 +56,9 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
       error,
       callback: () => {
         const isDuplicateError =
-          [500, 400].includes(error.response.status) &&
-          error.response.data?.new_project_name === 'Project name already exists'
+          error.response.status === 400 ||
+          (error.response.status === 500 &&
+            error.response.data?.new_project_name === 'Project name already exists')
 
         if (isDuplicateError) {
           toast.error(
