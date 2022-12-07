@@ -135,6 +135,8 @@ const Users = () => {
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
+  const [isAddingUser, setIsAddingUser] = useState(false)
+  const [isRemovingUser, setIsRemovingUser] = useState(false)
 
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
@@ -209,12 +211,14 @@ const Users = () => {
     }
   }, [databaseSwitchboardInstance, projectId])
 
-  const addExistingUser = () =>
+  const addExistingUser = () => {
+    setIsAddingUser(true)
     databaseSwitchboardInstance
       .addUser(newUserEmail, projectId)
       .then(() => {
         fetchProjectProfiles()
         setNewUserEmail('')
+        setIsAddingUser(false)
         toast.success(...getToastArguments(language.success.newUserAdd))
       })
       .catch((error) => {
@@ -226,9 +230,11 @@ const Users = () => {
             } else {
               toast.error(...getToastArguments(language.error.generic))
             }
+            setIsAddingUser(false)
           },
         })
       })
+  }
 
   const notifyUserIfEmailInvalid = () => {
     if (newUserEmail === '') {
@@ -266,17 +272,23 @@ const Users = () => {
   const closeSendEmailToNewUserPrompt = () => setIsSendEmailToNewUserPromptOpen(false)
 
   const addNewUserAndSendEmail = () => {
+    setIsAddingUser(true)
+
     return databaseSwitchboardInstance
       .addUser(newUserEmail, projectId)
       .then(() => {
         fetchProjectProfiles()
         setNewUserEmail('')
         closeSendEmailToNewUserPrompt()
+        setIsAddingUser(false)
         toast.success(...getToastArguments(language.success.newPendingUserAdd))
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
+          callback: () => {
+            setIsAddingUser(false)
+          },
         })
       })
   }
@@ -339,10 +351,23 @@ const Users = () => {
   }
 
   const removeUserProfile = () => {
-    databaseSwitchboardInstance.removeUser(userToBeRemoved, projectId).then(() => {
-      fetchProjectProfiles()
-      toast.success(...getToastArguments(language.success.userRemoved))
-    })
+    setIsRemovingUser(true)
+
+    databaseSwitchboardInstance
+      .removeUser(userToBeRemoved, projectId)
+      .then(() => {
+        fetchProjectProfiles()
+        setIsRemovingUser(false)
+        toast.success(...getToastArguments(language.success.userRemoved))
+      })
+      .catch((error) => {
+        handleHttpResponseError({
+          error,
+          callback: () => {
+            setIsRemovingUser(false)
+          },
+        })
+      })
 
     return Promise.resolve()
   }
@@ -726,6 +751,7 @@ const Users = () => {
       />
       <RemoveUserModal
         isOpen={isRemoveUserModalOpen}
+        isLoading={isRemovingUser}
         onDismiss={closeRemoveUserModal}
         onSubmit={removeUserProfile}
         userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
@@ -765,6 +791,7 @@ const Users = () => {
               <InputAndButton
                 inputId="add-new-user-email"
                 labelText={language.pages.userTable.searchEmailToolbarText}
+                isLoading={isAddingUser}
                 buttonChildren={
                   <>
                     <IconPlus />
