@@ -188,6 +188,24 @@ const BenthicPitForm = ({ isNewRecord }) => {
       })
   }
 
+  const PartiallyAppliedBenthicPitObservationsTable = useCallback(
+    (props) => {
+      // the conditional here makes tests happy
+      if (benthicAttributeSelectOptions.length) {
+        return (
+          <BenthicPitObservationsTable
+            benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+            {...props}
+          />
+        )
+      }
+
+      return null
+    },
+
+    [benthicAttributeSelectOptions],
+  )
+
   return (
     <>
       <CollectRecordFormPageAlternative
@@ -199,8 +217,8 @@ const BenthicPitForm = ({ isNewRecord }) => {
         initialFormikFormValues={initialFormikFormValues}
         isNewRecord={isNewRecord}
         isParentDataLoading={isLoading}
-        observationsReducer={observationsReducer}
-        ObservationTable={BenthicPitObservationsTable}
+        observationsTable1Reducer={observationsReducer}
+        ObservationTable1={PartiallyAppliedBenthicPitObservationsTable}
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicPitRecord}
         sampleUnitName="benthicpit"
         SampleUnitTransectInputs={BenthicPitTransectInputs}

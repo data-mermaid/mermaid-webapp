@@ -45,6 +45,7 @@ const error = {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
     required: 'This field is required',
+    projectNameExists: 'Project name already exists',
     managementPartialRestrictionRequired: 'At least one rule is required',
   },
   generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
@@ -260,7 +261,7 @@ const pages = {
   },
   submittedForm: {
     sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
-    moveSampleUnitButon: 'Edit Sample Unit - move to Collecting',
+    moveSampleUnitButton: 'Edit Sample Unit - move to Collecting',
     adminEditOnly:
       'Submitted sample units are read-only and can only be moved to Collecting by an admin.',
   },
@@ -323,6 +324,15 @@ const map = {
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
 }
 
+const resolveModal = {
+  thisSite: 'This sample unit site',
+  anotherSite: 'Site in other sample units',
+  keepThisSite: 'Keep site',
+  editSite: 'Edit site',
+  keepBoth: 'Keep both',
+  cancel: 'Cancel'
+}
+
 const getValidationMessage = (validation, projectId = '') => {
   const { code, context, name } = validation
 
@@ -363,7 +373,6 @@ const getValidationMessage = (validation, projectId = '') => {
       'One or more invalid transect fields: site, management, date, number, depth',
     invalid_sample_date: () => 'Invalid date',
     invalid_score: () => `Invalid score`,
-    invalid_site: () => `Invalid site`,
     invalid_total_percent: () => `Sum of percents must not be less than 0 or greater than 100`,
     len_surveyed_not_positive: () => 'Transect length must be a non-negative number',
     len_surveyed_out_of_range: () =>
@@ -426,4 +435,5 @@ export default {
   success,
   table,
   title,
+  resolveModal,
 }

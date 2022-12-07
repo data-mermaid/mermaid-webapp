@@ -25,6 +25,12 @@ const CheckBoxLabel = styled.label`
 
 const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [nameAlreadyExists, setNameAlreadyExists] = useState(false)
+  const [existingName, setExistingName] = useState('')
+  // using same error format as Formik so message can be used in InputWithLabelAndValidation
+  const nameExistsError = [
+    { code: language.error.formValidation.projectNameExists, id: 'Name Exists' },
+  ]
 
   const initialFormValues = project
     ? {
@@ -55,10 +61,13 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
       error,
       callback: () => {
         const isDuplicateError =
-          [500, 400].includes(error.response.status) &&
-          error.response.data?.new_project_name === 'Project name already exists'
+          error.response.status === 400 ||
+          (error.response.status === 500 &&
+            error.response.data?.new_project_name === 'Project name already exists')
 
         if (isDuplicateError) {
+          setNameAlreadyExists(true)
+          setExistingName(formik.values.name)
           toast.error(
             ...getToastArguments(...getToastArguments(language.error.duplicateNewProject)),
           )
@@ -74,6 +83,8 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
     formik.resetForm()
     addProjectToProjectsPage(response)
     setIsLoading(false)
+    setNameAlreadyExists(false)
+    setExistingName('')
     onDismiss()
   }
 
@@ -111,6 +122,19 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   const handleOnSubmit = () => {
     project ? copyExistingProject() : createNewProject()
   }
+
+  const checkValidationMessage = () => {
+    let errorMessage = []
+
+    if (formik.errors.name) {
+      errorMessage = formik.errors.name
+    } else if (nameAlreadyExists) {
+      errorMessage = nameExistsError
+    }
+
+    return errorMessage
+  }
+
   const getModalContent = (placeholderName) => {
     return (
       <ModalInputRow>
@@ -123,9 +147,13 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           type="text"
           value={formik.values.name}
           onChange={formik.handleChange}
-          validationType={formik.errors.name ? 'error' : null}
+          validationType={
+            formik.errors.name || (existingName && existingName === formik.values.name)
+              ? 'error'
+              : null
+          }
           placeholder={placeholderName || ''}
-          validationMessages={formik.errors.name}
+          validationMessages={checkValidationMessage()}
           setErrors={language.error.formValidation.required}
         />
       </ModalInputRow>

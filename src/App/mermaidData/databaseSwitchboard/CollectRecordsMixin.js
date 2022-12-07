@@ -1,3 +1,4 @@
+<<<<<<< M590-axios-retry
 import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getObjectById } from '../../../library/getObjectById'
@@ -5,13 +6,24 @@ import getObjectProperty from '../../../library/objects/getObjectProperty'
 import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleDateLabel } from '../getSampleDateLabel'
+=======
+import axios from 'axios'
+
+>>>>>>> develop
 import {
   getProtocolTransectType,
   getIsFishBelt,
   getIsQuadratSampleUnit,
   noLabelSymbol,
+  getObservationsPropertyNames,
 } from '../recordProtocolHelpers'
+import { createUuid } from '../../../library/createUuid'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { getObjectById } from '../../../library/getObjectById'
+import { getSampleDateLabel } from '../getSampleDateLabel'
+import getObjectProperty from '../../../library/objects/getObjectProperty'
 import language from '../../../language'
+import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
 
 const CollectRecordsMixin = (Base) =>
   class extends Base {
@@ -460,47 +472,49 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
-      const sampleUnitName = recordToOperateOn.data.protocol
-
-      const allObservationValidations = {
-        benthicpit: recordToOperateOn.validations.results.data.obs_benthic_pits,
-        benthicpqt: recordToOperateOn.validations.results.data.obs_benthic_photo_quadrats,
-        fishbelt: recordToOperateOn.validations.results.data.obs_belt_fishes,
-      }
-
-      const observationsValidationsWithIgnored = allObservationValidations[sampleUnitName].map(
-        (singleObservationValidations) => {
-          return singleObservationValidations.map((validation) => {
-            const isValidationBelongingToObservation =
-              validation.context?.observation_id === observationId
-            const isWarning = validation.status === 'warning'
-
-            return {
-              ...validation,
-              status:
-                isValidationBelongingToObservation && isWarning ? 'ignore' : validation.status,
-            }
-          })
-        },
+      const unmodifiedCollectRecord = await this._dexiePerUserDataInstance.collect_records.get(
+        recordId,
       )
 
-      const validationPath = {
-        benthicpit: 'validations.results.data.obs_benthic_pits',
-        fishbelt: 'validations.results.data.obs_belt_fishes',
-        benthicpqt: 'validations.results.data.obs_benthic_photo_quadrats',
-      }
+      const observationTableNames = getObservationsPropertyNames(unmodifiedCollectRecord)
 
-      const recordWithIgnoredObservationValidations = setObjectPropertyOnClone({
-        object: recordToOperateOn,
-        path: validationPath[sampleUnitName],
-        value: observationsValidationsWithIgnored,
+      let modifiedCollectRegordWithIgnoredObservationValidation = { ...unmodifiedCollectRecord }
+
+      // some records have multiple observation tables, eg: bleaching records
+      observationTableNames.forEach((observationTableName) => {
+        const observationTable =
+          modifiedCollectRegordWithIgnoredObservationValidation.validations.results.data[
+            observationTableName
+          ]
+        const observationsValidationsWithIgnored = observationTable.map(
+          (singleObservationValidations) => {
+            return singleObservationValidations.map((validation) => {
+              const isValidationBelongingToObservation =
+                validation.context?.observation_id === observationId
+              const isWarning = validation.status === 'warning'
+
+              return {
+                ...validation,
+                status:
+                  isValidationBelongingToObservation && isWarning ? 'ignore' : validation.status,
+              }
+            })
+          },
+        )
+
+        const validationPath = `validations.results.data.${observationTableName}`
+
+        modifiedCollectRegordWithIgnoredObservationValidation = setObjectPropertyOnClone({
+          object: modifiedCollectRegordWithIgnoredObservationValidation,
+          path: validationPath,
+          value: observationsValidationsWithIgnored,
+        })
       })
 
       // user form will be dirty, and a save will cause a push to the api
       return this._dexiePerUserDataInstance.collect_records
-        .put(recordWithIgnoredObservationValidations)
-        .then(() => recordWithIgnoredObservationValidations)
+        .put(modifiedCollectRegordWithIgnoredObservationValidation)
+        .then(() => modifiedCollectRegordWithIgnoredObservationValidation)
     }
 
     resetRecordLevelValidation = function resetRecordLevelValidation({ record, validationId }) {
@@ -581,45 +595,48 @@ const CollectRecordsMixin = (Base) =>
         )
       }
 
-      const recordToOperateOn = await this._dexiePerUserDataInstance.collect_records.get(recordId)
-      const sampleUnitName = recordToOperateOn.data.protocol
-
-      const allObservationValidations = {
-        fishbelt: recordToOperateOn.validations.results.data.obs_belt_fishes,
-        benthicpqt: recordToOperateOn.validations.results.data.obs_benthic_photo_quadrats,
-        benthicpit: recordToOperateOn.validations.results.data.obs_benthic_pits,
-      }
-
-      const observationsValidationsWithReset = allObservationValidations[sampleUnitName].map(
-        (singleObservationValidations) => {
-          return singleObservationValidations.map((validation) => {
-            const isValidationBelongingToObservation =
-              validation.context?.observation_id === observationId
-            const isIgnored = validation.status === 'ignore'
-
-            return {
-              ...validation,
-              status: isValidationBelongingToObservation && isIgnored ? 'reset' : validation.status,
-            }
-          })
-        },
+      const unmodifiedCollectRecord = await this._dexiePerUserDataInstance.collect_records.get(
+        recordId,
       )
 
-      const validationPath = {
-        fishbelt: 'validations.results.data.obs_belt_fishes',
-        benthicpqt: 'validations.results.data.obs_benthic_photo_quadrats',
-        benthicpit: 'validations.results.data.obs_benthic_pits',
-      }
+      const observationTableNames = getObservationsPropertyNames(unmodifiedCollectRecord)
 
-      const recordWithResetObservationValidations = setObjectPropertyOnClone({
-        object: recordToOperateOn,
-        path: validationPath[sampleUnitName],
-        value: observationsValidationsWithReset,
+      let modifiedCollectRecordWithResetObservationValidations = { ...unmodifiedCollectRecord }
+
+      // some records have multiple observation tables, eg: bleaching records
+      observationTableNames.forEach((observationTableName) => {
+        const observationTable =
+          modifiedCollectRecordWithResetObservationValidations.validations.results.data[
+            observationTableName
+          ]
+        const observationsValidationsWithReset = observationTable.map(
+          (singleObservationValidations) => {
+            return singleObservationValidations.map((validation) => {
+              const isValidationBelongingToObservation =
+                validation.context?.observation_id === observationId
+              const isIgnored = validation.status === 'ignore'
+
+              return {
+                ...validation,
+                status:
+                  isValidationBelongingToObservation && isIgnored ? 'reset' : validation.status,
+              }
+            })
+          },
+        )
+
+        const validationPath = `validations.results.data.${observationTableName}`
+
+        modifiedCollectRecordWithResetObservationValidations = setObjectPropertyOnClone({
+          object: modifiedCollectRecordWithResetObservationValidations,
+          path: validationPath,
+          value: observationsValidationsWithReset,
+        })
       })
 
       return this._dexiePerUserDataInstance.collect_records
-        .put(recordWithResetObservationValidations)
-        .then(() => recordWithResetObservationValidations)
+        .put(modifiedCollectRecordWithResetObservationValidations)
+        .then(() => modifiedCollectRecordWithResetObservationValidations)
     }
 
     getCollectRecord = function getCollectRecord(id) {

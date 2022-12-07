@@ -81,8 +81,12 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <HabitatComplexityForm />,
     },
     {
-      path: '/projects/:projectId/collecting/bleaching/',
-      Component: () => <BleachingForm />,
+      path: '/projects/:projectId/collecting/bleachingqc/',
+      Component: () => <BleachingForm isNewRecord={true} />,
+    },
+    {
+      path: '/projects/:projectId/collecting/bleachingqc/:recordId',
+      Component: () => <BleachingForm isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/submitted',

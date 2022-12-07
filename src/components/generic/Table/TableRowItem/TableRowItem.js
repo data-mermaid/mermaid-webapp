@@ -9,20 +9,26 @@ const TdKey = styled(Td)`
   font-weight: 900;
   width: 0;
 `
+
 const getItemLabelOrName = (itemOptions, itemValue) =>
   getObjectById(itemOptions, itemValue)?.name || getObjectById(itemOptions, itemValue)?.label
 
-const TableRowItem = ({ title, options, value }) => {
-  const optionNameOrLabel = Array.isArray(value)
-    ? value.map((item) => getItemLabelOrName(options, item)).join(', ')
-    : getItemLabelOrName(options, value)
+const getOptionsByItemLabelOrName = (rowValue, options) => {
+  return Array.isArray(rowValue)
+    ? rowValue.map((item) => getItemLabelOrName(options, item)).join(', ')
+    : getItemLabelOrName(options, rowValue)
+}
 
-  const rowItemValue = options ? optionNameOrLabel : value
+const TableRowItem = ({ title, options, value, extraValue }) => {
+  const rowItemValue = options ? getOptionsByItemLabelOrName(value, options) : value
+  const extraRowItemValue = options ? getOptionsByItemLabelOrName(extraValue, options) : extraValue
+  const showExtraRowItem = extraValue || extraValue === ''
 
   return (
     <Tr>
       <TdKey>{title}</TdKey>
       <Td>{rowItemValue}</Td>
+      {showExtraRowItem && <Td>{extraRowItemValue}</Td>}
     </Tr>
   )
 }
@@ -39,11 +45,17 @@ TableRowItem.propTypes = {
     PropTypes.number,
     PropTypes.arrayOf(PropTypes.string),
   ]),
+  extraValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
 }
 
 TableRowItem.defaultProps = {
   options: undefined,
   value: undefined,
+  extraValue: undefined,
 }
 
 export default TableRowItem

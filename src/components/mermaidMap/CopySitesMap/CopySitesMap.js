@@ -10,7 +10,7 @@ import {
   handleMapOnWheel,
 } from '../mapService'
 import { copySitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
-import { MapContainer, CopySitesMapWrapper, MapZoomHelpMessage } from '../Map.styles'
+import { MapContainer, MapZoomHelpMessage, MapWrapper } from '../Map.styles'
 import usePrevious from '../../../library/usePrevious'
 
 const defaultCenter = [20, 20]
@@ -72,7 +72,7 @@ const CopySitesMap = ({ sitesForMapMarkers }) => {
 
   return (
     <MapContainer>
-      <CopySitesMapWrapper ref={mapContainer} />
+      <MapWrapper ref={mapContainer} minHeight="30vh" />
       {displayHelpText && (
         <MapZoomHelpMessage>{language.pages.siteTable.controlZoomText}</MapZoomHelpMessage>
       )}

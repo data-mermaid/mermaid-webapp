@@ -6,16 +6,57 @@ import { ButtonCallout } from '../../../generic/buttons'
 import { IconSave, IconCheck, IconUpload } from '../../../icons'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import OfflineHide from '../../../generic/OfflineHide'
+import theme from '../../../../theme'
 
 const SaveValidateSubmitButtonWrapper = styled('div')`
-  justify-self: end;
-  display: flex;
-  gap: 1px;
+  padding-right: ${theme.spacing.xlarge};
   button {
     white-space: nowrap;
   }
 `
+const pointerSize = '1rem'
+const borderSize = '1px'
+const clipPath = `polygon(
+  calc(100% - ${pointerSize}) 0%,
+  100% 50%,
+  calc(100% - ${pointerSize}) 100%,
+  0% 100%,
+  ${pointerSize} 50%,
+  0% 0%)`
 
+const ArrowRightButton = styled(ButtonCallout)`
+  clip-path: ${clipPath};
+  z-index: 1;
+  margin-right: calc(-${pointerSize} + 2px);
+  color: ${theme.color.calloutText};
+  border: none;
+  padding: ${theme.spacing.small} ${theme.spacing.xlarge};
+  position: relative;
+  background: ${theme.color.calloutBorder};
+  &:before {
+    clip-path: ${clipPath};
+    z-index: -1;
+    background: ${theme.color.white};
+    pointer-events: none;
+    content: '';
+    position: absolute;
+    top: ${borderSize};
+    left: ${borderSize};
+    right: ${borderSize};
+    bottom: ${borderSize};
+  }
+  &:not(:disabled):hover {
+    cursor: pointer;
+    background: ${theme.color.calloutBorder};
+    &:before {
+      background: ${theme.color.calloutHover};
+    }
+  }
+  &:disabled {
+    background-color: ${theme.color.disabledColor};
+    color: ${theme.color.disabledTextDark};
+  }
+`
 const SaveValidateSubmitButtonGroup = ({
   isNewRecord,
   onSave,
@@ -72,24 +113,24 @@ const SaveValidateSubmitButtonGroup = ({
     saveButtonState === buttonGroupStates.saving
 
   const saveButton = (
-    <ButtonCallout type="button" disabled={isSaveDisabled} onClick={onSave}>
+    <ArrowRightButton type="button" disabled={isSaveDisabled} onClick={onSave}>
       <IconSave />
       {getSaveButtonText()}
-    </ButtonCallout>
+    </ArrowRightButton>
   )
 
   const validateButton = (
-    <ButtonCallout onClick={onValidate} disabled={isValidateDisabled}>
+    <ArrowRightButton onClick={onValidate} disabled={isValidateDisabled}>
       <IconCheck />
       {getValidateButtonText()}
-    </ButtonCallout>
+    </ArrowRightButton>
   )
 
   const submitButton = (
-    <ButtonCallout disabled={isSubmitDisabled} onClick={onSubmit}>
+    <ArrowRightButton disabled={isSubmitDisabled} onClick={onSubmit}>
       <IconUpload />
       {getSubmitButtonText()}
-    </ButtonCallout>
+    </ArrowRightButton>
   )
 
   return (

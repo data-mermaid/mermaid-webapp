@@ -219,7 +219,7 @@ const SubmittedFishBelt = () => {
                   disabled={currentUserProfile.is_admin ? isMoveToButtonDisabled : 'false'}
                 >
                   <IconPen />
-                  {language.pages.submittedForm.moveSampleUnitButon}
+                  {language.pages.submittedForm.moveSampleUnitButton}
                 </ButtonSecondary>
               </>
             </RowSpaceBetween>
