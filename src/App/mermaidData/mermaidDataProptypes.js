@@ -192,11 +192,21 @@ export const submittedBenthicPhotoQuadratPropType = PropTypes.shape({
   obs_benthic_photo_quadrats: PropTypes.arrayOf(_submittedBenthicPhotoQuadratObservationPropType),
 })
 
-export const submittedBenthicPitPropType = PropTypes.shape({
+export const benthicPitRecordPropType = PropTypes.shape({
   id: PropTypes.string,
-  interval_size: PropTypes.number,
-  inetrval_start: PropTypes.number,
-  benthic_transect: _benthicTransectPropType,
+  data: PropTypes.shape({
+    interval_size: PropTypes.number,
+    inetrval_start: PropTypes.number,
+    benthic_transect: _benthicTransectPropType,
+    obs_benthic_pits: PropTypes.arrayOf(
+      PropTypes.shape({
+        attribute: PropTypes.string,
+        growth_form: PropTypes.string,
+        id: PropTypes.string,
+        interval: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      }),
+    ),
+  }),
 })
 
 export const submittedBenthicLitPropType = PropTypes.shape({
@@ -206,9 +216,34 @@ export const submittedBenthicLitPropType = PropTypes.shape({
   benthic_transect: _benthicTransectPropType,
 })
 
-export const submittedBleachingPropType = PropTypes.shape({
+export const bleachingRecordPropType = PropTypes.shape({
   id: PropTypes.string,
-  quadrat_collection: _bleachingQuadratPropType,
+  data: PropTypes.shape({
+    quadrat_collection: _bleachingQuadratPropType,
+    obs_quadrat_benthic_percent: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        percent_algae: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        percent_hard: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        percent_soft: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        quadrat_number: PropTypes.number,
+      }),
+    ),
+    obs_colonies_bleached: PropTypes.arrayOf(
+      PropTypes.shape({
+        attribute: PropTypes.string,
+        count_100: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        count_20: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        count_50: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        count_80: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        count_dead: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        count_normal: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        count_pale: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        growth_form: PropTypes.string,
+        id: PropTypes.string,
+      }),
+    ),
+  }),
 })
 
 export const submittedHabitatComplexityPropType = PropTypes.shape({

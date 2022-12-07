@@ -1,5 +1,5 @@
 import React from 'react'
-import { submittedBleachingPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { bleachingRecordPropType } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import { FormSubTitle, ObservationsSummaryStats, UnderTableRow } from '../SubmittedFormPage.styles'
 import { InputWrapper } from '../../../generic/form'
@@ -46,7 +46,7 @@ const SubmittedBleachingPercentageSummaryTable = ({ submittedRecord }) => {
 }
 
 SubmittedBleachingPercentageSummaryTable.propTypes = {
-  submittedRecord: submittedBleachingPropType,
+  submittedRecord: bleachingRecordPropType,
 }
 
 SubmittedBleachingPercentageSummaryTable.defaultProps = {

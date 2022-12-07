@@ -20,10 +20,12 @@ export const getIsQuadratSampleUnit = (protocol) => {
 export const noLabelSymbol = '-'
 
 export const getObservationsPropertyNames = (collectRecord) => {
-  return {
-    fishbelt: ['obs_belt_fishes'],
-    benthicpit: ['obs_benthic_pits'],
-    benthicpqt: ['obs_benthic_photo_quadrats'],
-    bleachingqc: ['obs_colonies_bleached'],
-  }[collectRecord?.data?.protocol]
+  return (
+    {
+      fishbelt: ['obs_belt_fishes'],
+      benthicpit: ['obs_benthic_pits'],
+      benthicpqt: ['obs_benthic_photo_quadrats'],
+      bleachingqc: ['obs_colonies_bleached', 'obs_quadrat_benthic_percent'],
+    }[collectRecord?.data?.protocol] ?? []
+  )
 }
