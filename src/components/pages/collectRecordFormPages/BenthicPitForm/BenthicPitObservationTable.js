@@ -18,8 +18,8 @@ import {
 } from '../CollectingFormPage.Styles'
 import {
   choicesPropType,
-  benthicPhotoQuadratPropType,
   observationsReducerPropType,
+  benthicPitRecordPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonPrimary } from '../../../generic/buttons'
 import { getOptions } from '../../../../library/getOptions'
@@ -31,6 +31,7 @@ import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
 import language from '../../../../language'
 import BenthicPitObservationSummaryStats from '../../../BenthicPitObservationSummaryStats/BenthicPitObservationSummaryStats'
+import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -136,7 +137,12 @@ const BenthicPitObservationsTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
-      } = getObservationValidationInfo({ observationId, collectRecord, areValidationsShowing })
+      } = getObservationValidationInfo({
+        observationId,
+        collectRecord,
+        areValidationsShowing,
+        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+      })
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -362,7 +368,7 @@ BenthicPitObservationsTable.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
-  collectRecord: benthicPhotoQuadratPropType,
+  collectRecord: benthicPitRecordPropType,
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,

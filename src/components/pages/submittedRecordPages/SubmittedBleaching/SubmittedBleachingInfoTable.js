@@ -4,7 +4,7 @@ import {
   choicesPropType,
   managementRegimePropType,
   sitePropType,
-  submittedBleachingPropType,
+  bleachingRecordPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { Table } from '../../../generic/Table/table'
 import TableRowItem from '../../../generic/Table/TableRowItem/TableRowItem'
@@ -49,7 +49,7 @@ SubmittedBleachingInfoTable.propTypes = {
   choices: choicesPropType.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
-  submittedRecord: submittedBleachingPropType,
+  submittedRecord: bleachingRecordPropType,
 }
 
 SubmittedBleachingInfoTable.defaultProps = {

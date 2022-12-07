@@ -24,6 +24,8 @@ import coloniesBleachedObservationReducer from './coloniesBleachedObservationsRe
 import ColoniesBleachedObservationsTable from './ColoniesBleachedObservationsTable'
 import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
+import percentCoverObservationsReducer from './percentCoverObservationsReducer'
+import PercentCoverObservationTable from './PercentCoverObservationsTable'
 import useIsMounted from '../../../../library/useIsMounted'
 
 const BleachingForm = ({ isNewRecord }) => {
@@ -42,6 +44,7 @@ const BleachingForm = ({ isNewRecord }) => {
   const { isSyncInProgress } = useSyncStatus()
   const { recordId, projectId } = useParams()
   const coloniesBleachedReducer = useReducer(coloniesBleachedObservationReducer, [])
+  const percentCoverReducer = useReducer(percentCoverObservationsReducer, [])
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
 
@@ -157,10 +160,11 @@ const BleachingForm = ({ isNewRecord }) => {
           type: 'updateBenthicAttribute',
           payload: {
             observationId: observationIdToAddNewBenthicAttributeTo,
-            newBenthicAttribute: newBenthicAttribute.id,
+            newValue: newBenthicAttribute.id,
           },
         })
         updateBenthicAttributeOptionsStateWithOfflineStorageData()
+        setAreObservationsInputsDirty(true)
         toast.success(...getToastArguments(language.success.attributeSave('benthic attribute')))
       })
       .catch((error) => {
@@ -176,9 +180,10 @@ const BleachingForm = ({ isNewRecord }) => {
                 type: 'updateBenthicAttribute',
                 payload: {
                   observationId: observationIdToAddNewBenthicAttributeTo,
-                  newBenthicAttribute: error.existingBenthicAttribute.id,
+                  newValue: error.existingBenthicAttribute.id,
                 },
               })
+              setAreObservationsInputsDirty(true)
             } else {
               toast.error(...getToastArguments(language.error.attributeSave('benthic attribute')))
             }
@@ -197,14 +202,20 @@ const BleachingForm = ({ isNewRecord }) => {
         isNewRecord={isNewRecord}
         isParentDataLoading={isLoading}
         observationsTable1Reducer={coloniesBleachedReducer}
-        ObservationTable1={ColoniesBleachedObservationsTable}
+        observationsTable2Reducer={percentCoverReducer}
+        ObservationTable1={(props) => (
+          <ColoniesBleachedObservationsTable
+            benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+            {...props}
+          />
+        )}
+        ObservationTable2={PercentCoverObservationTable}
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBleachingRecord}
         sampleUnitName="bleachingqc"
         SampleUnitTransectInputs={BleachingTransectInputs}
         areObservationsInputsDirty={areObservationsInputsDirty}
         setAreObservationsInputsDirty={setAreObservationsInputsDirty}
         setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
-        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
         setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
         subNavNode={subNavNode}

@@ -34,6 +34,7 @@ import { getOptions } from '../../../../library/getOptions'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
+import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -203,7 +204,11 @@ const BenthicPhotoQuadratObservationTable = ({
       const growthFormOrEmptyStringToAvoidInputValueErrors = growth_form ?? ''
       const numberOfPointsOrEmptyStringToAvoidInputValueErrors = num_points ?? ''
 
-      const observationValidations = getObservationValidations(observationId, collectRecord)
+      const observationValidations = getObservationValidations({
+        observationId,
+        collectRecord,
+        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+      })
       const observationValidationsToDisplay = getValidationPropertiesForInput(
         observationValidations,
         areValidationsShowing,
