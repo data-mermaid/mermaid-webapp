@@ -127,10 +127,7 @@ const ResolveDuplicateButton = ({
   }
 
   const handleKeepThisSite = () => {
-    const confirmationText = confirmMergeModalContent(
-      anotherSite.toLowerCase(),
-      thisSite.toLowerCase(),
-    )
+    const confirmationText = confirmMergeModalContent(thisSite.toLowerCase())
 
     setConfirmationModalContent(confirmationText)
     setRecordToKeep(thisSite)
@@ -138,10 +135,7 @@ const ResolveDuplicateButton = ({
   }
 
   const handleKeepAnotherSite = () => {
-    const confirmationText = confirmMergeModalContent(
-      thisSite.toLowerCase(),
-      anotherSite.toLowerCase(),
-    )
+    const confirmationText = confirmMergeModalContent(anotherSite.toLowerCase())
 
     setConfirmationModalContent(confirmationText)
     setRecordToKeep(anotherSite)
