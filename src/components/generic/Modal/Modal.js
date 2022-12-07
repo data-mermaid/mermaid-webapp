@@ -49,7 +49,7 @@ const ModalToolbar = styled.div`
 `
 const ModalContent = styled.div`
   ${(props) =>
-    !props.contentOverflowIsvisible &&
+    !props.contentOverflowIsVisible &&
     css`
       overflow: auto;
     `}
@@ -109,7 +109,7 @@ const Modal = ({
   isOpen,
   onDismiss,
   footerContent,
-  contentOverflowIsvisible,
+  contentOverflowIsVisible,
   toolbarContent,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
@@ -135,7 +135,7 @@ const Modal = ({
             </CloseButton>
           </ModalTitle>
           <ModalToolbar>{toolbarContent}</ModalToolbar>
-          <ModalContent contentOverflowIsvisible={contentOverflowIsvisible} id="modal-content">
+          <ModalContent contentOverflowIsVisible={contentOverflowIsVisible} id="modal-content">
             {mainContent}
           </ModalContent>
           <ModalFooter>{footerContent}</ModalFooter>
@@ -151,12 +151,12 @@ Modal.propTypes = {
   mainContent: PropTypes.node.isRequired,
   onDismiss: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  contentOverflowIsvisible: PropTypes.bool,
+  contentOverflowIsVisible: PropTypes.bool,
   toolbarContent: PropTypes.node,
 }
 
 Modal.defaultProps = {
-  contentOverflowIsvisible: false,
+  contentOverflowIsVisible: false,
   toolbarContent: undefined,
 }
 
