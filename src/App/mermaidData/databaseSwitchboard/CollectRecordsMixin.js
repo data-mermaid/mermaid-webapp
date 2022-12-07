@@ -1,15 +1,4 @@
-<<<<<<< M590-axios-retry
 import axios from '../../../library/axiosRetry'
-import { createUuid } from '../../../library/createUuid'
-import { getObjectById } from '../../../library/getObjectById'
-import getObjectProperty from '../../../library/objects/getObjectProperty'
-import setObjectPropertyOnClone from '../../../library/objects/setObjectPropertyOnClone'
-import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getSampleDateLabel } from '../getSampleDateLabel'
-=======
-import axios from 'axios'
-
->>>>>>> develop
 import {
   getProtocolTransectType,
   getIsFishBelt,
