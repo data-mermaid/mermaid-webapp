@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
 import theme from '../../../theme'
@@ -21,15 +21,20 @@ const InputValidationInfo = ({
   validationMessages,
   validationType,
   currentSelectValue,
+  updateValueAndResetValidationForDuplicateWarning,
 }) => {
   const areThereValidationMessages = validationMessages.length
   const foundDuplicateWarningInValidationMessages =
     checkDuplicateWarningInValidationMessages(validationMessages)
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
+
   const warningValidationButton = foundDuplicateWarningInValidationMessages ? (
     <ResolveDuplicateButton
       currentSelectValue={currentSelectValue}
       validationMessages={validationMessages}
+      updateValueAndResetValidationForDuplicateWarning={
+        updateValueAndResetValidationForDuplicateWarning
+      }
     />
   ) : (
     <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
@@ -75,6 +80,7 @@ InputValidationInfo.propTypes = {
   validationType: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   currentSelectValue: PropTypes.string,
+  updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
 }
 
 InputValidationInfo.defaultProps = {
@@ -83,6 +89,7 @@ InputValidationInfo.defaultProps = {
   validationMessages: [],
   validationType: undefined,
   currentSelectValue: undefined,
+  updateValueAndResetValidationForDuplicateWarning: () => {},
 }
 
 export default InputValidationInfo
