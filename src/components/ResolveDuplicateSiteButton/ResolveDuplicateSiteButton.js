@@ -28,10 +28,11 @@ const Thead = styled.th`
   padding: 20px;
 `
 
-const ResolveDuplicateButton = ({
+const ResolveDuplicateSiteButton = ({
   currentSelectValue,
   validationMessages,
   updateValueAndResetValidationForDuplicateWarning,
+  ignoreNonObservationFieldValidations,
 }) => {
   const {
     thisSite,
@@ -156,6 +157,27 @@ const ResolveDuplicateButton = ({
     history.push(`${ensureTrailingSlash(currentProjectPath)}sites/${siteId}`)
   }
 
+  const handleKeepBoth = () => {
+    ignoreNonObservationFieldValidations()
+    closeResolveDuplicateModal()
+  }
+
+  const handleCloseModal = () => {
+    setRecordToKeep()
+    closeResolveDuplicateModal()
+  }
+
+  const confirmationModalMainContent = <>{confirmationModalContent}</>
+
+  const confirmationModalFooterContent = (
+    <RightFooter>
+      <ButtonSecondary onClick={closeConfirmationModalOpen}>{cancel}</ButtonSecondary>
+      <ButtonCaution onClick={handleMergeSite}>
+        <IconClose /> {mergeSite}
+      </ButtonCaution>
+    </RightFooter>
+  )
+
   const mainContent = (
     <TableOverflowWrapper>
       <Table>
@@ -266,15 +288,8 @@ const ResolveDuplicateButton = ({
         title="Confirm Merge Site"
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
-        mainContent={<>{confirmationModalContent}</>}
-        footerContent={
-          <RightFooter>
-            <ButtonSecondary onClick={closeConfirmationModalOpen}>{cancel}</ButtonSecondary>
-            <ButtonCaution onClick={handleMergeSite}>
-              <IconClose /> {mergeSite}
-            </ButtonCaution>
-          </RightFooter>
-        }
+        mainContent={confirmationModalMainContent}
+        footerContent={confirmationModalFooterContent}
       />
       {isResolveDuplicateModalLoading && <LoadingModal />}
     </TableOverflowWrapper>
@@ -282,15 +297,8 @@ const ResolveDuplicateButton = ({
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary
-        onClick={() => {
-          setRecordToKeep(undefined)
-          closeResolveDuplicateModal()
-        }}
-      >
-        {cancel}
-      </ButtonSecondary>
-      <ButtonCaution onClick={closeResolveDuplicateModal}>
+      <ButtonSecondary onClick={handleCloseModal}>{cancel}</ButtonSecondary>
+      <ButtonCaution onClick={handleKeepBoth}>
         <IconCheckAll />
         {keepBoth}
       </ButtonCaution>
@@ -313,14 +321,11 @@ const ResolveDuplicateButton = ({
   )
 }
 
-ResolveDuplicateButton.propTypes = {
+ResolveDuplicateSiteButton.propTypes = {
   currentSelectValue: PropTypes.string.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType.isRequired,
-  updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
+  updateValueAndResetValidationForDuplicateWarning: PropTypes.func.isRequired,
+  ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
 }
 
-ResolveDuplicateButton.defaultProps = {
-  updateValueAndResetValidationForDuplicateWarning: () => {},
-}
-
-export default ResolveDuplicateButton
+export default ResolveDuplicateSiteButton
