@@ -61,7 +61,7 @@ const ResolveDuplicateSiteButton = ({
   const [isResolveDuplicateModalOpen, setIsResolveDuplicateModalOpen] = useState(false)
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
   const [confirmationModalContent, setConfirmationModalContent] = useState('')
-  const [recordToKeep, setRecordToKeep] = useState()
+  const [recordIdToKeep, setRecordIdToKeep] = useState()
 
   useEffect(
     function loadSites() {
@@ -102,13 +102,13 @@ const ResolveDuplicateSiteButton = ({
   const closeConfirmationModalOpen = () => setIsConfirmationModalOpen(false)
 
   const isOriginalSiteSelected = useMemo(
-    () => recordToKeep === currentSiteData?.id,
-    [recordToKeep, currentSiteData],
+    () => recordIdToKeep === currentSiteData?.id,
+    [recordIdToKeep, currentSiteData],
   )
 
   const isDuplicateSiteSelected = useMemo(
-    () => recordToKeep === duplicateSiteData?.id,
-    [recordToKeep, duplicateSiteData],
+    () => recordIdToKeep === duplicateSiteData?.id,
+    [recordIdToKeep, duplicateSiteData],
   )
 
   const handleMergeSite = () => {
@@ -149,7 +149,7 @@ const ResolveDuplicateSiteButton = ({
         : confirmMergeModalContent(anotherSite.toLowerCase())
 
     setConfirmationModalContent(confirmationText)
-    setRecordToKeep(siteId)
+    setRecordIdToKeep(siteId)
     openConfirmationModalOpen()
   }
 
@@ -163,7 +163,7 @@ const ResolveDuplicateSiteButton = ({
   }
 
   const handleCloseModal = () => {
-    setRecordToKeep()
+    setRecordIdToKeep()
     closeResolveDuplicateModal()
   }
 
