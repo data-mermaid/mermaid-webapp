@@ -18,6 +18,7 @@ import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
 import TableRowItem from '../generic/Table/TableRowItem'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
+import { IconCheck, IconCheckAll, IconClose, IconPen } from '../icons'
 
 const Thead = styled.th`
   background-color: ${theme.color.primaryColor};
@@ -149,13 +150,24 @@ const ResolveDuplicateButton = ({
           <Tr>
             <Thead />
             <Thead>
-              {thisSite} <ButtonCaution onClick={handleKeepThisSite}>{keepThisSite}</ButtonCaution>{' '}
-              <ButtonCaution>{editSite}</ButtonCaution>
+              {thisSite}{' '}
+              <ButtonCaution onClick={handleKeepThisSite}>
+                <IconCheck />
+                {keepThisSite}
+              </ButtonCaution>{' '}
+              <ButtonCaution>
+                <IconPen /> {editSite}
+              </ButtonCaution>
             </Thead>
             <Thead>
               {anotherSite}{' '}
-              <ButtonCaution onClick={handleKeepAnotherSite}>{keepThisSite}</ButtonCaution>{' '}
-              <ButtonCaution>{editSite}</ButtonCaution>
+              <ButtonCaution onClick={handleKeepAnotherSite}>
+                <IconCheck />
+                {keepThisSite}
+              </ButtonCaution>{' '}
+              <ButtonCaution>
+                <IconPen /> {editSite}
+              </ButtonCaution>
             </Thead>
           </Tr>
         </thead>
@@ -237,7 +249,9 @@ const ResolveDuplicateButton = ({
         footerContent={
           <RightFooter>
             <ButtonSecondary onClick={closeConfirmationModalOpen}>{cancel}</ButtonSecondary>
-            <ButtonCaution onClick={handleMergeSite}>{mergeSite}</ButtonCaution>
+            <ButtonCaution onClick={handleMergeSite}>
+              <IconClose /> {mergeSite}
+            </ButtonCaution>
           </RightFooter>
         }
       />
@@ -248,7 +262,10 @@ const ResolveDuplicateButton = ({
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={closeResolveDuplicateModal}>{cancel}</ButtonSecondary>
-      <ButtonCaution onClick={closeResolveDuplicateModal}>{keepBoth}</ButtonCaution>
+      <ButtonCaution onClick={closeResolveDuplicateModal}>
+        <IconCheckAll />
+        {keepBoth}
+      </ButtonCaution>
     </RightFooter>
   )
 
