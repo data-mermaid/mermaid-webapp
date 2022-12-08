@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import language from '../../language'
@@ -19,6 +19,8 @@ import TableRowItem from '../generic/Table/TableRowItem'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import { IconCheck, IconCheckAll, IconClose, IconPen } from '../icons'
+import { ensureTrailingSlash } from '../../library/strings/ensureTrailingSlash'
+import useCurrentProjectPath from '../../library/useCurrentProjectPath'
 
 const Thead = styled.th`
   background-color: ${theme.color.primaryColor};
@@ -44,6 +46,8 @@ const ResolveDuplicateButton = ({
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
+  const history = useHistory()
+  const currentProjectPath = useCurrentProjectPath()
 
   const [currentSiteData, setCurrentSiteData] = useState({})
   const [duplicateSiteData, setDuplicateSiteData] = useState({})
@@ -96,11 +100,21 @@ const ResolveDuplicateButton = ({
   const openConfirmationModalOpen = () => setIsConfirmationModalOpen(true)
   const closeConfirmationModalOpen = () => setIsConfirmationModalOpen(false)
 
+  const isOriginalSiteSelected = useMemo(
+    () => recordToKeep === currentSiteData?.id,
+    [recordToKeep, currentSiteData],
+  )
+
+  const isDuplicateSiteSelected = useMemo(
+    () => recordToKeep === duplicateSiteData?.id,
+    [recordToKeep, duplicateSiteData],
+  )
+
   const handleMergeSite = () => {
     setIsResolveDuplicateModalLoading(true)
 
-    const findRecordId = recordToKeep === thisSite ? duplicateSiteData.id : currentSiteData.id
-    const replaceRecordId = recordToKeep === thisSite ? currentSiteData.id : duplicateSiteData.id
+    const findRecordId = isOriginalSiteSelected ? duplicateSiteData.id : currentSiteData.id
+    const replaceRecordId = isOriginalSiteSelected ? currentSiteData.id : duplicateSiteData.id
 
     databaseSwitchboardInstance
       .findAndReplaceSite(projectId, findRecordId, replaceRecordId)
@@ -127,20 +141,19 @@ const ResolveDuplicateButton = ({
       })
   }
 
-  const handleKeepThisSite = () => {
-    const confirmationText = confirmMergeModalContent(thisSite.toLowerCase())
+  const handleKeepSite = (siteId) => {
+    const confirmationText =
+      siteId === currentSiteData?.id
+        ? confirmMergeModalContent(thisSite.toLowerCase())
+        : confirmMergeModalContent(anotherSite.toLowerCase())
 
     setConfirmationModalContent(confirmationText)
-    setRecordToKeep(thisSite)
+    setRecordToKeep(siteId)
     openConfirmationModalOpen()
   }
 
-  const handleKeepAnotherSite = () => {
-    const confirmationText = confirmMergeModalContent(anotherSite.toLowerCase())
-
-    setConfirmationModalContent(confirmationText)
-    setRecordToKeep(anotherSite)
-    openConfirmationModalOpen()
+  const handleEditSite = (siteId) => {
+    history.push(`${ensureTrailingSlash(currentProjectPath)}sites/${siteId}`)
   }
 
   const mainContent = (
@@ -151,21 +164,21 @@ const ResolveDuplicateButton = ({
             <Thead />
             <Thead>
               {thisSite}{' '}
-              <ButtonCaution onClick={handleKeepThisSite}>
+              <ButtonCaution onClick={() => handleKeepSite(currentSiteData?.id)}>
                 <IconCheck />
                 {keepThisSite}
               </ButtonCaution>{' '}
-              <ButtonCaution>
+              <ButtonCaution onClick={() => handleEditSite(currentSiteData?.id)}>
                 <IconPen /> {editSite}
               </ButtonCaution>
             </Thead>
             <Thead>
               {anotherSite}{' '}
-              <ButtonCaution onClick={handleKeepAnotherSite}>
+              <ButtonCaution onClick={() => handleKeepSite(duplicateSiteData?.id)}>
                 <IconCheck />
                 {keepThisSite}
               </ButtonCaution>{' '}
-              <ButtonCaution>
+              <ButtonCaution onClick={() => handleEditSite(duplicateSiteData?.id)}>
                 <IconPen /> {editSite}
               </ButtonCaution>
             </Thead>
@@ -176,36 +189,40 @@ const ResolveDuplicateButton = ({
             title="Name"
             value={currentSiteData?.name}
             extraValue={duplicateSiteData?.name}
-            recordToBeReplaced={recordToKeep}
+            isOriginalSiteSelected={isOriginalSiteSelected}
+            isDuplicateSiteSelected={isDuplicateSiteSelected}
           />
           <TableRowItem
             title="Country"
             options={countryOptions}
             value={currentSiteData?.country}
             extraValue={duplicateSiteData?.country}
-            recordToBeReplaced={recordToKeep}
+            isOriginalSiteSelected={isOriginalSiteSelected}
+            isDuplicateSiteSelected={isDuplicateSiteSelected}
           />
           <TableRowItem
             title="Latitude"
             value={currentSiteData?.location?.coordinates[1]}
             extraValue={duplicateSiteData?.location?.coordinates[1]}
-            recordToBeReplaced={recordToKeep}
+            isOriginalSiteSelected={isOriginalSiteSelected}
+            isDuplicateSiteSelected={isDuplicateSiteSelected}
           />
           <TableRowItem
             title="Longitude"
             value={currentSiteData?.location?.coordinates[0]}
             extraValue={duplicateSiteData?.location?.coordinates[0]}
-            recordToBeReplaced={recordToKeep}
+            isOriginalSiteSelected={isOriginalSiteSelected}
+            isDuplicateSiteSelected={isDuplicateSiteSelected}
           />
           <Tr>
             <TdKey>Map</TdKey>
-            <Td className={recordToKeep === anotherSite ? 'highlighted' : undefined}>
+            <Td className={isDuplicateSiteSelected ? 'highlighted' : undefined}>
               <ResolveDuplicateSiteMap
                 formLatitudeValue={currentSiteData?.location?.coordinates[1]}
                 formLongitudeValue={currentSiteData?.location?.coordinates[0]}
               />
             </Td>
-            <Td className={recordToKeep === thisSite ? 'highlighted' : undefined}>
+            <Td className={isOriginalSiteSelected ? 'highlighted' : undefined}>
               <ResolveDuplicateSiteMap
                 formLatitudeValue={duplicateSiteData?.location?.coordinates[1]}
                 formLongitudeValue={duplicateSiteData?.location?.coordinates[0]}
@@ -217,27 +234,31 @@ const ResolveDuplicateButton = ({
             options={exposureOptions}
             value={currentSiteData?.exposure}
             extraValue={duplicateSiteData?.exposure}
-            recordToBeReplaced={recordToKeep}
+            isOriginalSiteSelected={isOriginalSiteSelected}
+            isDuplicateSiteSelected={isDuplicateSiteSelected}
           />
           <TableRowItem
             title="Reef Type"
             options={reefTypeOptions}
             value={currentSiteData?.reef_type}
             extraValue={duplicateSiteData?.reef_type}
-            recordToBeReplaced={recordToKeep}
+            isOriginalSiteSelected={isOriginalSiteSelected}
+            isDuplicateSiteSelected={isDuplicateSiteSelected}
           />
           <TableRowItem
             title="Reef Zone"
             options={reefZoneOptions}
             value={currentSiteData?.reef_zone}
             extraValue={duplicateSiteData?.reef_zone}
-            recordToBeReplaced={recordToKeep}
+            isOriginalSiteSelected={isOriginalSiteSelected}
+            isDuplicateSiteSelected={isDuplicateSiteSelected}
           />
           <TableRowItem
             title="Notes"
             value={currentSiteData?.notes}
             extraValue={duplicateSiteData?.notes}
-            recordToBeReplaced={recordToKeep}
+            isOriginalSiteSelected={isOriginalSiteSelected}
+            isDuplicateSiteSelected={isDuplicateSiteSelected}
           />
         </tbody>
       </Table>
@@ -261,7 +282,14 @@ const ResolveDuplicateButton = ({
 
   const footerContent = (
     <RightFooter>
-      <ButtonSecondary onClick={closeResolveDuplicateModal}>{cancel}</ButtonSecondary>
+      <ButtonSecondary
+        onClick={() => {
+          setRecordToKeep(undefined)
+          closeResolveDuplicateModal()
+        }}
+      >
+        {cancel}
+      </ButtonSecondary>
       <ButtonCaution onClick={closeResolveDuplicateModal}>
         <IconCheckAll />
         {keepBoth}

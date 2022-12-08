@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components/macro'
-import language from '../../../../language'
 import { getObjectById } from '../../../../library/getObjectById'
 import { Tr, Td } from '../table'
 
@@ -20,13 +19,19 @@ const getOptionsByItemLabelOrName = (rowValue, options) => {
     : getItemLabelOrName(options, rowValue)
 }
 
-const TableRowItem = ({ title, options, value, extraValue, recordToBeReplaced }) => {
-  const { thisSite, anotherSite } = language.resolveModal
+const TableRowItem = ({
+  title,
+  options,
+  value,
+  extraValue,
+  isOriginalSiteSelected,
+  isDuplicateSiteSelected,
+}) => {
   const rowItemValue = options ? getOptionsByItemLabelOrName(value, options) : value
   const extraRowItemValue = options ? getOptionsByItemLabelOrName(extraValue, options) : extraValue
   const showExtraRowItem = extraValue || extraValue === ''
-  const highlightedCurrentSite = recordToBeReplaced === thisSite ? 'highlighted' : undefined
-  const highlightedDuplicateSite = recordToBeReplaced === anotherSite ? 'highlighted' : undefined
+  const highlightedCurrentSite = isOriginalSiteSelected ? 'highlighted' : undefined
+  const highlightedDuplicateSite = isDuplicateSiteSelected ? 'highlighted' : undefined
 
   return (
     <Tr>
@@ -54,14 +59,16 @@ TableRowItem.propTypes = {
     PropTypes.number,
     PropTypes.arrayOf(PropTypes.string),
   ]),
-  recordToBeReplaced: PropTypes.string,
+  isOriginalSiteSelected: PropTypes.bool,
+  isDuplicateSiteSelected: PropTypes.bool,
 }
 
 TableRowItem.defaultProps = {
   options: undefined,
   value: undefined,
   extraValue: undefined,
-  recordToBeReplaced: undefined,
+  isOriginalSiteSelected: false,
+  isDuplicateSiteSelected: false,
 }
 
 export default TableRowItem
