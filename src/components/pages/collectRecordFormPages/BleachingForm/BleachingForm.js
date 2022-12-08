@@ -25,6 +25,7 @@ import ColoniesBleachedObservationsTable from './ColoniesBleachedObservationsTab
 import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
+import ErrorBoundary from '../../../ErrorBoundary'
 
 const BleachingForm = ({ isNewRecord }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -188,7 +189,7 @@ const BleachingForm = ({ isNewRecord }) => {
   }
 
   return (
-    <>
+    <ErrorBoundary>
       <CollectRecordFormPageAlternative
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
@@ -218,7 +219,7 @@ const BleachingForm = ({ isNewRecord }) => {
           modalAttributeOptions={benthicAttributeSelectOptions}
         />
       )}
-    </>
+    </ErrorBoundary >
   )
 }
 

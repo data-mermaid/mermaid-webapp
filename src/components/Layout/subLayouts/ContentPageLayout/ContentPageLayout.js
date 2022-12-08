@@ -12,6 +12,7 @@ import { Column } from '../../../generic/positioning'
 import LoadingIndicator from '../../../LoadingIndicator/LoadingIndicator'
 import NavMenu from '../../../NavMenu'
 import ProjectName from '../../../ProjectName'
+import ErrorBoundary from '../../../ErrorBoundary'
 
 const contentPadding = theme.spacing.xsmall
 const MainContentPageLayout = styled('div')`
@@ -76,27 +77,36 @@ const ContentPageLayout = ({
 
   return (
     <>
-      <MainContentPageLayout>
-        <ProjectName />
-
-        <NavAndContentLayout>
-          <Column>
-            <NavMenu subNavNode={subNavNode} />
-          </Column>
-          <ContentWrapper>
-            {isPageContentLoading || isSyncInProgress ? (
-              <LoadingIndicator aria-label="project pages loading indicator" />
-            ) : (
-              <>
-                {toolbar && (
-                  <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
-                )}
-                <Content>{content}</Content>
-              </>
-            )}
-          </ContentWrapper>
-        </NavAndContentLayout>
-      </MainContentPageLayout>
+      <ErrorBoundary>
+        <MainContentPageLayout>
+          <ProjectName />
+          <ErrorBoundary>
+            <NavAndContentLayout>
+              <ErrorBoundary>
+                <Column>
+                  <NavMenu subNavNode={subNavNode} />
+                </Column>
+              </ErrorBoundary>
+              <ErrorBoundary>
+                <ContentWrapper>
+                  {isPageContentLoading || isSyncInProgress ? (
+                    <LoadingIndicator aria-label="project pages loading indicator" />
+                  ) : (
+                    <>
+                      {toolbar && (
+                        <ContentToolbar isToolbarSticky={isToolbarSticky}>{toolbar}</ContentToolbar>
+                      )}
+                        <ErrorBoundary>
+                          <Content>{content}</Content>
+                        </ErrorBoundary>
+                    </>
+                  )}
+                </ContentWrapper>
+              </ErrorBoundary>
+            </NavAndContentLayout>
+          </ErrorBoundary>
+        </MainContentPageLayout>
+      </ErrorBoundary>
     </>
   )
 }

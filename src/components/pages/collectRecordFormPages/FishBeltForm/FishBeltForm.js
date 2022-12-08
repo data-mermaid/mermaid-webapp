@@ -17,6 +17,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import CollectRecordFormPage from '../CollectRecordFormPage'
+import ErrorBoundary from '../../../ErrorBoundary'
 
 const FishBeltForm = ({ isNewRecord }) => {
   const { recordId, projectId } = useParams()
@@ -42,6 +43,7 @@ const FishBeltForm = ({ isNewRecord }) => {
   const [modalAttributeOptions, setModalAttributeOptions] = useState([])
 
   const _getSupportingData = useEffect(() => {
+
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
@@ -200,25 +202,27 @@ const FishBeltForm = ({ isNewRecord }) => {
   }
 
   return (
-    <CollectRecordFormPage
-      isNewRecord={isNewRecord}
-      sampleUnitName="fishbelt"
-      collectRecordBeingEdited={collectRecordBeingEdited}
-      handleCollectRecordChange={handleCollectRecordChange}
-      handleNewObservationAdd={handleNewObservationAdd}
-      handleSubmitNewObservation={onSubmitNewFishSpecies}
-      observationsReducer={observationsReducer}
-      sites={sites}
-      managementRegimes={managementRegimes}
-      choices={choices}
-      idsNotAssociatedWithData={idsNotAssociatedWithData}
-      isLoading={isLoading}
-      subNavNode={subNavNode}
-      observerProfiles={observerProfiles}
-      observationOptions={fishNameOptions}
-      modalAttributeOptions={modalAttributeOptions}
-      fishNameConstants={fishNameConstants}
-    />
+    <ErrorBoundary>
+      <CollectRecordFormPage
+        isNewRecord={isNewRecord}
+        sampleUnitName="fishbelt"
+        collectRecordBeingEdited={collectRecordBeingEdited}
+        handleCollectRecordChange={handleCollectRecordChange}
+        handleNewObservationAdd={handleNewObservationAdd}
+        handleSubmitNewObservation={onSubmitNewFishSpecies}
+        observationsReducer={observationsReducer}
+        sites={sites}
+        managementRegimes={managementRegimes}
+        choices={choices}
+        idsNotAssociatedWithData={idsNotAssociatedWithData}
+        isLoading={isLoading}
+        subNavNode={subNavNode}
+        observerProfiles={observerProfiles}
+        observationOptions={fishNameOptions}
+        modalAttributeOptions={modalAttributeOptions}
+        fishNameConstants={fishNameConstants}
+      />
+    </ErrorBoundary>
   )
 }
 
