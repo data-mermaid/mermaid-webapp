@@ -734,6 +734,7 @@ const Users = () => {
         />
       </TableNavigation>
       <NewUserModal
+        isLoading={isAddingUser}
         isOpen={isSendEmailToNewUserPromptOpen}
         onDismiss={closeSendEmailToNewUserPrompt}
         newUser={newUserEmail}
