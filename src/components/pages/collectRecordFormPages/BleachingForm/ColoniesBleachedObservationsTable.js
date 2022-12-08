@@ -32,6 +32,7 @@ import getObservationValidationInfo from '../CollectRecordFormPageAlternative/ge
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
 
 const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
 
@@ -454,6 +455,9 @@ const ColoniesBleachedObservationTable = ({
             <ButtonPrimary type="button" onClick={handleAddObservation}>
               <IconPlus /> Add Row
             </ButtonPrimary>
+            <BleachincColoniesBleachedSummaryStats
+              observationsColoniesBleached={observationsState}
+            />
           </UnderTableRow>
         </>
       </InputWrapper>

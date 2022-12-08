@@ -1,0 +1,3 @@
+import BleachingColoniesBleachedObservations from './BleachingColoniesBleachedObservations'
+
+export default BleachingColoniesBleachedObservations

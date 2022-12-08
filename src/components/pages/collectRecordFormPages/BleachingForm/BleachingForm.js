@@ -192,6 +192,16 @@ const BleachingForm = ({ isNewRecord }) => {
       })
   }
 
+  const ColoniesBleachedObservationsTablePartiallyApplied = useCallback(
+    (props) => (
+      <ColoniesBleachedObservationsTable
+        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+        {...props}
+      />
+    ),
+    [benthicAttributeSelectOptions],
+  )
+
   return (
     <>
       <CollectRecordFormPageAlternative
@@ -203,12 +213,7 @@ const BleachingForm = ({ isNewRecord }) => {
         isParentDataLoading={isLoading}
         observationsTable1Reducer={coloniesBleachedReducer}
         observationsTable2Reducer={percentCoverReducer}
-        ObservationTable1={(props) => (
-          <ColoniesBleachedObservationsTable
-            benthicAttributeSelectOptions={benthicAttributeSelectOptions}
-            {...props}
-          />
-        )}
+        ObservationTable1={ColoniesBleachedObservationsTablePartiallyApplied}
         ObservationTable2={PercentCoverObservationTable}
         sampleUnitFormatSaveFunction={reformatFormValuesIntoBleachingRecord}
         sampleUnitName="bleachingqc"
