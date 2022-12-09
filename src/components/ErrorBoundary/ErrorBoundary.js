@@ -11,7 +11,6 @@ const StyledErrorBoundary = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  /* height: 175px; */
   z-index: 102;
 `
 
@@ -30,10 +29,7 @@ class ErrorBoundary extends React.Component {
     return { errorMessage: error.toString() }
   }
 
-  /* componentDidCatch(error, errorInfo) {
-    // Uncaught errors will automatically be logged to the console by react
-    // Could do something here like log the error to an error reporting service though
-  }*/
+  // There is also potential to use the componentDidCatch() lifecycle method here if we want to do something with the error itself
 
   render() {
     const { errorMessage } = this.state

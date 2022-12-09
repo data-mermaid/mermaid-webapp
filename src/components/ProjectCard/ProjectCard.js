@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 
 import {
   CardWrapper,
@@ -115,14 +115,6 @@ const ProjectCard = ({
             >
               <IconCopy />
               <span>Copy</span>
-            </ButtonSecondary>
-            <ButtonSecondary
-              onClick={() => setCount(count + 1)}
-              aria-label="Copy"
-              disabled={!isAppOnline}
-            >
-              <span>add</span>
-
             </ButtonSecondary>
 
             <ProjectModal
