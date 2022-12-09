@@ -220,6 +220,33 @@ const SitesMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    findAndReplaceSite = async function findAndReplaceSite(
+      projectId,
+      findRecordId,
+      replaceRecordId,
+    ) {
+      if (!projectId || !findRecordId || !replaceRecordId) {
+        throw new Error('deleteSite expects record, profileId, and projectId parameters')
+      }
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        return axios
+          .put(
+            `${this._apiBaseUrl}/projects/${projectId}/find_and_replace_sites/`,
+            {
+              find: [findRecordId],
+              replace: replaceRecordId,
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then(() => {
+            return this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default SitesMixin

@@ -144,6 +144,8 @@ const FishBeltForm = ({ isNewRecord }) => {
   const handleNewObservationAdd = (observationAttributeId) =>
     setNewObservationToAdd(observationAttributeId)
 
+  const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
+
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       Promise.all([
@@ -209,6 +211,7 @@ const FishBeltForm = ({ isNewRecord }) => {
       handleSubmitNewObservation={onSubmitNewFishSpecies}
       observationsReducer={observationsReducer}
       sites={sites}
+      handleSitesChange={handleSitesChange}
       managementRegimes={managementRegimes}
       choices={choices}
       idsNotAssociatedWithData={idsNotAssociatedWithData}

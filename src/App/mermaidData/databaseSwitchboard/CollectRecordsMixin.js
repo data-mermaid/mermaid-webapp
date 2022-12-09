@@ -559,7 +559,10 @@ const CollectRecordsMixin = (Base) =>
 
         return {
           ...currentValidationObject,
-          status: currentValidationStatus === 'ignore' ? 'reset' : currentValidationStatus,
+          status:
+            currentValidationStatus === 'ignore' || currentValidationStatus === 'warning'
+              ? 'reset'
+              : currentValidationStatus,
         }
       })
 
