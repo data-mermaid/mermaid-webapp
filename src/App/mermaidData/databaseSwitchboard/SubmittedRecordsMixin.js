@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../library/axiosRetry'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import language from '../../../language'

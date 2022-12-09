@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
 const ProjectsMixin = (Base) =>
