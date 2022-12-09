@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import {
   CardWrapper,
@@ -40,14 +40,6 @@ const ProjectCard = ({
   const { setIsSyncInProgress } = useSyncStatus()
   const history = useHistory()
   const projectUrl = `projects/${id}`
-
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (count === 2) {
-      throw new Error("we're at 2")
-    }
-  }, [count])
 
   const handleProjectOfflineReadyClick = (event) => {
     const isChecked = event.target.checked
