@@ -18,6 +18,7 @@ import closeIcon from '@iconify-icons/mdi/close'
 import contentCopy from '@iconify-icons/mdi/content-copy'
 import contentSave from '@iconify-icons/mdi/content-save'
 import download from '@iconify-icons/mdi/download'
+import excel from '@iconify-icons/mdi/microsoft-excel'
 import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
 import filterOutline from '@iconify-icons/mdi/filter-outline'
 import fish from '@iconify-icons/mdi/fish'
@@ -97,6 +98,7 @@ export const IconUsersAndTransects = (props) => <InlineIcon icon={usersAndTranse
 export const IconProjectProgress = (props) => <InlineIcon icon={playButton} {...props} />
 export const IconManagementRegimes = (props) => <InlineIcon icon={fileTable} {...props} />
 export const IconProjectOverview = (props) => <InlineIcon icon={clipboardCheck} {...props} />
+export const IconExcel = (props) => <InlineIcon icon={excel} {...props} />
 export const IconManagementRegimesOverview = (props) => (
   <InlineIcon icon={multiFileTable} {...props} />
 )
