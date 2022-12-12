@@ -225,7 +225,7 @@ const Collect = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: 15,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 15,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -250,6 +250,10 @@ const Collect = () => {
   const _setFilterPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
+
+  const _setPageSizePrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
+  }, [pageSize, handleSetTableUserPrefs])
 
   const table = collectRecordsForUiDisplay.length ? (
     <>
