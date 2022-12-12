@@ -39,7 +39,9 @@ const DeleteRecordButton = ({
   const footerContentPageOne = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>{modalText.no}</ButtonSecondary>
-      <ButtonCaution onClick={deleteRecord}>{modalText.yes}</ButtonCaution>
+      <ButtonCaution disabled={isLoading} onClick={deleteRecord}>
+        {modalText.yes}
+      </ButtonCaution>
     </RightFooter>
   )
 
