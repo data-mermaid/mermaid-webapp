@@ -12,7 +12,7 @@ import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerC
 
 const CollectRecordsCountWrapper = styled.strong`
   background: ${theme.color.callout};
-  border-radius: 100%;
+  border-radius: 50%;
   border: solid 1px ${theme.color.white};
   width: ${theme.spacing.xlarge};
   height: ${theme.spacing.xlarge};
@@ -20,6 +20,10 @@ const CollectRecordsCountWrapper = styled.strong`
   display: grid;
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
+  z-index: 2;
+  position: absolute;
+  right: 0.25rem;
+  top: 1rem;
 `
 
 const CollectRecordsCount = () => {
