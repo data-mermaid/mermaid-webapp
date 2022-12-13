@@ -123,6 +123,9 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
     setNewObservationToAdd(observationAttributeId)
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
+  
+  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
+    setManagementRegimes(updatedManagementRegimeRecords)
 
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
@@ -194,6 +197,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       sites={sites}
       handleSitesChange={handleSitesChange}
       managementRegimes={managementRegimes}
+      handleManagementRegimesChange={handleManagementRegimesChange}
       choices={choices}
       idsNotAssociatedWithData={idsNotAssociatedWithData}
       isLoading={isLoading}

@@ -146,6 +146,9 @@ const FishBeltForm = ({ isNewRecord }) => {
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
 
+  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
+    setManagementRegimes(updatedManagementRegimeRecords)
+
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       Promise.all([
@@ -213,6 +216,7 @@ const FishBeltForm = ({ isNewRecord }) => {
       sites={sites}
       handleSitesChange={handleSitesChange}
       managementRegimes={managementRegimes}
+      handleManagementRegimesChange={handleManagementRegimesChange}
       choices={choices}
       idsNotAssociatedWithData={idsNotAssociatedWithData}
       isLoading={isLoading}

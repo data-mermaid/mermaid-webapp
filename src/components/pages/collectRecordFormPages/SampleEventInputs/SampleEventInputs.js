@@ -23,6 +23,7 @@ const SampleEventInputs = ({
   collectRecord,
   formik,
   managementRegimes,
+  handleManagementRegimesChange,
   sites,
   handleSitesChange,
   handleChangeForDirtyIgnoredInput,
@@ -84,7 +85,7 @@ const SampleEventInputs = ({
   }
   const updateValueAndResetValidationForMR = (managementRegimeValue, managementRegimeOptions) => {
     formik.setFieldValue('management', managementRegimeValue)
-    handleSitesChange(managementRegimeOptions)
+    handleManagementRegimesChange(managementRegimeOptions)
     resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
   }
 
@@ -163,6 +164,7 @@ SampleEventInputs.propTypes = {
   collectRecord: benthicPhotoQuadratPropType,
   formik: formikPropType.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
+  handleManagementRegimesChange: PropTypes.func.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   handleSitesChange: PropTypes.func.isRequired,
   handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
