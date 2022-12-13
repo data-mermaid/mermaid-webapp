@@ -352,7 +352,7 @@ const UsersAndTransects = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: 100,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 100,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -375,6 +375,10 @@ const UsersAndTransects = () => {
   const _setFilterPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
+
+  const _setPageSizePrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
+  }, [pageSize, handleSetTableUserPrefs])
 
   const table = (
     <>
