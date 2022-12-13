@@ -36,6 +36,9 @@ const LiCollecting = styled('li')`
   border-color: ${theme.color.primaryColor};
   border-width: 2px 0;
   position: relative;
+  ${mediaQueryPhoneOnly(css`
+    border: none;
+  `)}
 `
 const CollectionAvatar = styled('img')`
   border-radius: 50%;
@@ -46,20 +49,21 @@ const CollectionAvatar = styled('img')`
   width: 32px;
   aspect-ratio: 1 / 1;
   z-index: 1;
+  ${mediaQueryPhoneOnly(css`
+    display: none;
+  `)}
 `
 const LiNavPrimary = styled('li')`
   background: ${theme.color.white};
-  font-size: larger;
-  p {
-    font-size: 2.4rem;
-  }
+  font-size: ${theme.typography.defaultFontSize};
+  font-weight: 700;
+  ${mediaQueryPhoneOnly(css`
+    font-size: 1.2rem;
+  `)}
 `
 const LiNavSecondary = styled('li')`
   background: ${theme.color.grey4};
-  font-size: smaller;
-  p {
-    font-size: 1.4rem;
-  }
+  font-size: ${theme.typography.smallFontSize};
 `
 const NavList = styled('ul')`
   position: sticky;
@@ -83,17 +87,25 @@ const NavList = styled('ul')`
 const NavHeader = styled('p')`
   margin: 0;
   color: ${theme.color.textColor};
-  padding: ${theme.spacing.large} 0 0 ${theme.spacing.medium};
+  padding: ${theme.spacing.large} 0 ${theme.spacing.medium} ${theme.spacing.medium};
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-weight: 900;
+  font-weight: 700;
+  font-size: ${theme.typography.largeFontSize};
   ${mediaQueryPhoneOnly(css`
-    padding-left: 0;
-    font-size: ${theme.typography.xSmallFontSize};
+    font-size: ${theme.typography.defaultFontSize};
+    padding-left: ${theme.spacing.xsmall};
+  `)}
+`
+const NavHeaderSecondary = styled(NavHeader)`
+  font-size: 1.4rem;
+  ${mediaQueryPhoneOnly(css`
+    font-size: 1.2rem;
+    letter-spacing: 1px;
   `)}
 `
 const NavLinkSidebar = styled(NavLink)`
-  padding: ${theme.spacing.small};
+  padding: 0.75rem ${theme.spacing.small};
   text-decoration: none;
   display: grid;
   grid-template-columns: 3rem auto;
@@ -107,17 +119,13 @@ const NavLinkSidebar = styled(NavLink)`
     background-color: ${theme.color.primaryActive};
   }
   & > svg {
-    margin: ${theme.spacing.small};
+    margin: 0.25rem ${theme.spacing.small} 0 ${theme.spacing.small};
   }
   &.active {
     background-color: ${theme.color.primaryColor};
     color: ${theme.color.white};
   }
-  span {
-    white-space: break-spaces;
-  }
   ${mediaQueryPhoneOnly(css`
-    padding: 0 ${theme.spacing.small};
     display: block;
     svg {
       display: none;
@@ -144,7 +152,7 @@ const NavMenu = ({ subNavNode }) => {
             {!isReadOnlyUser && (
               <LiCollecting>
                 <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
-                  <CollectionAvatar src="https://picsum.photos/seed/picsum/100/100" />
+                  <CollectionAvatar src="https://lh3.googleusercontent.com/a-/AFdZucrj66CrECK0M8bVED0w_CIygseu6Xp67vu4IZlovg=s96-c" />
                   <IconCollect />
                   <span>Collecting</span>
                   <CollectRecordsCount />
@@ -164,7 +172,7 @@ const NavMenu = ({ subNavNode }) => {
           </ul>
         </LiNavPrimary>
         <LiNavSecondary>
-          <NavHeader>Metadata</NavHeader>
+          <NavHeaderSecondary>Metadata</NavHeaderSecondary>
           <ul>
             <li>
               <NavLinkSidebar exact to={`${projectUrl}/sites`}>
@@ -184,7 +192,7 @@ const NavMenu = ({ subNavNode }) => {
         </LiNavSecondary>
         <OfflineHide>
           <LiNavSecondary>
-            <NavHeader>Overview</NavHeader>
+            <NavHeaderSecondary>Overview</NavHeaderSecondary>
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/users-and-transects`}>
@@ -199,7 +207,7 @@ const NavMenu = ({ subNavNode }) => {
             </ul>
           </LiNavSecondary>
           <LiNavSecondary>
-            <NavHeader>Admin</NavHeader>
+            <NavHeaderSecondary>Admin</NavHeaderSecondary>
             <ul>
               <li>
                 <NavLinkSidebar to={`${projectUrl}/project-info`}>

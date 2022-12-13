@@ -161,7 +161,7 @@ const spacing = {
   headerHeight: '4.9rem',
   toolbarHeight: '7rem',
   sideNavWidth: '17.5rem',
-  mobileSideNavWidth: '7rem',
+  mobileSideNavWidth: '8rem',
   borderSmall: '1px',
   borderMedium: '2px',
   borderLarge: '4px',

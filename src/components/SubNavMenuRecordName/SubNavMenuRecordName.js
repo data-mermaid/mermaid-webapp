@@ -1,7 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { subNavNodePropTypes } from './subNavNodePropTypes'
 import theme from '../../theme'
+import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 const SubNavList = styled('li')`
   background-color: ${theme.color.primaryColor};
@@ -18,24 +19,39 @@ const NavListSubItem = styled('span')`
   line-height: 1.2;
   padding: ${theme.spacing.small} 0;
   word-wrap: break-word;
+  ${mediaQueryPhoneOnly(css`
+    line-height: 1;
+  `)}
 `
 const FullRecord = styled(SubNavList)`
+  justify-content: space-around;
+  flex-wrap: wrap;
   &:before {
     content: '↳';
   }
-  justify-content: space-around;
-  flex-wrap: wrap;
   span {
     margin: 0 0.25rem;
   }
+  ${mediaQueryPhoneOnly(css`
+    &:before {
+      content: '';
+    }
+    flex-direction: column;
+  `)}
 `
 const PartialRecord = styled(SubNavList)`
+  justify-content: space-between;
   &:before {
     content: '↳';
   }
-  justify-content: space-between;
+  ${mediaQueryPhoneOnly(css`
+    &:before {
+      content: '';
+    }
+    flex-direction: column;
+  `)}
 `
-const SingleRecord = styled('span')`
+const SingleRecord = styled(SubNavList)`
   text-decoration: none;
 `
 
