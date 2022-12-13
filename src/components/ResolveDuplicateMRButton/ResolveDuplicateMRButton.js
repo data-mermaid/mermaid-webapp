@@ -82,8 +82,6 @@ const ResolveDuplicateMRButton = ({
               currentManagementRegimeResponse,
               duplicateManagementRegimeResponse,
             ]) => {
-              console.log('currentManagementRegimeResponse ', currentManagementRegimeResponse)
-              console.log('duplicateManagementRegimeResponse ', duplicateManagementRegimeResponse)
               setManagementPartyOptions(getOptions(choicesResponse.managementparties))
               setManagementComplianceOptions(getOptions(choicesResponse.managementcompliances))
               setCurrentManagementRegimeData(currentManagementRegimeResponse)

@@ -123,7 +123,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
     setNewObservationToAdd(observationAttributeId)
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
-  
+
   const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
     setManagementRegimes(updatedManagementRegimeRecords)
 
