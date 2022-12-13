@@ -29,6 +29,7 @@ const InputAndButton = ({
   buttonOnClick,
   buttonType,
   inputId,
+  isLoading,
   labelText,
   ...restOfProps
 }) => {
@@ -39,7 +40,7 @@ const InputAndButton = ({
       <label htmlFor={inputId}>{labelText}</label>
       <InputAndButtonWrapper>
         <Input {...textPropsWithoutPlaceholder} id={inputId} type="text" />
-        <InputButton type={buttonType} onClick={buttonOnClick}>
+        <InputButton type={buttonType} onClick={buttonOnClick} disabled={isLoading}>
           {buttonChildren}
         </InputButton>
       </InputAndButtonWrapper>
@@ -53,6 +54,7 @@ InputAndButton.propTypes = {
   buttonType: PropTypes.string,
   inputId: PropTypes.string.isRequired,
   labelText: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 }
 InputAndButton.defaultProps = { buttonType: 'button' }
 

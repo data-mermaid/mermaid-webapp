@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import Logo from '../../assets/mermaid-logo.svg'
-import { IconDown } from '../icons'
+import { IconDown, IconExcel } from '../icons'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
@@ -42,7 +42,8 @@ const GlobalLinks = () => {
       </OfflineHide>
 
       <StyledNavLink href={`${mermaidReferenceLink}/home`} target="_blank" rel="noreferrer">
-        Reference
+        Reference&nbsp;
+        <IconExcel />
       </StyledNavLink>
       <OfflineHide>
         <StyledNavLink href={mermaidDashboardLink} target="_blank" rel="noreferrer">
