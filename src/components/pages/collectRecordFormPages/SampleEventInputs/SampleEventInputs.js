@@ -82,6 +82,11 @@ const SampleEventInputs = ({
     handleSitesChange(siteOptions)
     resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
   }
+  const updateValueAndResetValidationForMR = (managementRegimeValue, managementRegimeOptions) => {
+    formik.setFieldValue('management', managementRegimeValue)
+    handleSitesChange(managementRegimeOptions)
+    resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
+  }
 
   return (
     <>
@@ -125,6 +130,7 @@ const SampleEventInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.management}
           onChange={handleManagementChange}
+          updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForMR}
         />
         <InputWithLabelAndValidation
           label="Sample Date"

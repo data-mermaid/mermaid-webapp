@@ -11,9 +11,8 @@ import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
-import { Table, TableOverflowWrapper, Tr, Td, TdKey } from '../generic/Table/table'
+import { Table, TableOverflowWrapper, Tr } from '../generic/Table/table'
 import { InlineValidationButton } from '../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
-import ResolveDuplicateSiteMap from '../mermaidMap/ResolveDuplicateSiteMap'
 import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
 import TableRowItem from '../generic/Table/TableRowItem'
 import LoadingModal from '../LoadingModal/LoadingModal'
@@ -28,7 +27,7 @@ const Thead = styled.th`
   padding: 20px;
 `
 
-const ResolveDuplicateSiteButton = ({
+const ResolveDuplicateMRButton = ({
   currentSelectValue,
   validationMessages,
   updateValueAndResetValidationForDuplicateWarning,
@@ -43,19 +42,17 @@ const ResolveDuplicateSiteButton = ({
     cancel,
     merge,
     confirmMergeModalContent,
-  } = language.resolveModal('site')
+  } = language.resolveModal('MR')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
   const history = useHistory()
   const currentProjectPath = useCurrentProjectPath()
 
-  const [currentSiteData, setCurrentSiteData] = useState({})
-  const [duplicateSiteData, setDuplicateSiteData] = useState({})
-  const [countryOptions, setCountryOptions] = useState([])
-  const [reefTypeOptions, setReefTypeOptions] = useState([])
-  const [reefZoneOptions, setReefZoneOptions] = useState([])
-  const [exposureOptions, setExposureOptions] = useState([])
+  const [currentManagementRegimeData, setCurrentManagementRegimeData] = useState({})
+  const [duplicateManagementRegimeData, setDuplicateManagementRegimeData] = useState({})
+  const [managementPartyOptions, setManagementPartyOptions] = useState([])
+  const [managementComplianceOptions, setManagementComplianceOptions] = useState([])
   const [isResolveDuplicateModalLoading, setIsResolveDuplicateModalLoading] = useState(false)
 
   const [isResolveDuplicateModalOpen, setIsResolveDuplicateModalOpen] = useState(false)
@@ -64,31 +61,40 @@ const ResolveDuplicateSiteButton = ({
   const [recordIdToKeep, setRecordIdToKeep] = useState()
 
   useEffect(
-    function loadSites() {
-      const isDuplicateSiteMessage = validationMessages[0]?.code === 'not_unique_site'
-      const duplicateSiteId = isDuplicateSiteMessage && validationMessages[0]?.context?.matches[0]
+    function loadManagementRegimes() {
+      const isDuplicateManagementRegimeMessage =
+        validationMessages[0]?.code === 'not_unique_management'
 
-      if (databaseSwitchboardInstance && currentSelectValue && duplicateSiteId) {
+      const duplicateManagementRegimeId =
+        isDuplicateManagementRegimeMessage && validationMessages[0]?.context?.matches?.matches[0]
+
+      if (databaseSwitchboardInstance && currentSelectValue && duplicateManagementRegimeId) {
         const promises = [
           databaseSwitchboardInstance.getChoices(),
-          databaseSwitchboardInstance.getSite(currentSelectValue),
-          databaseSwitchboardInstance.getSite(duplicateSiteId),
+          databaseSwitchboardInstance.getManagementRegime(currentSelectValue),
+          databaseSwitchboardInstance.getManagementRegime(duplicateManagementRegimeId),
         ]
 
         Promise.all(promises)
-          .then(([choicesResponse, currentSiteResponse, duplicateSiteResponse]) => {
-            setCountryOptions(getOptions(choicesResponse.countries))
-            setExposureOptions(getOptions(choicesResponse.reefexposures))
-            setReefTypeOptions(getOptions(choicesResponse.reeftypes))
-            setReefZoneOptions(getOptions(choicesResponse.reefzones))
-            setCurrentSiteData(currentSiteResponse)
-            setDuplicateSiteData(duplicateSiteResponse)
-          })
+          .then(
+            ([
+              choicesResponse,
+              currentManagementRegimeResponse,
+              duplicateManagementRegimeResponse,
+            ]) => {
+              console.log('currentManagementRegimeResponse ', currentManagementRegimeResponse)
+              console.log('duplicateManagementRegimeResponse ', duplicateManagementRegimeResponse)
+              setManagementPartyOptions(getOptions(choicesResponse.managementparties))
+              setManagementComplianceOptions(getOptions(choicesResponse.managementcompliances))
+              setCurrentManagementRegimeData(currentManagementRegimeResponse)
+              setDuplicateManagementRegimeData(duplicateManagementRegimeResponse)
+            },
+          )
           .catch((error) => {
             handleHttpResponseError({
               error,
               callback: () => {
-                toast.error(...getToastArguments(language.error.siteRecordUnavailable))
+                toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
               },
             })
           })
@@ -103,30 +109,69 @@ const ResolveDuplicateSiteButton = ({
   const closeConfirmationModalOpen = () => setIsConfirmationModalOpen(false)
 
   const isOriginalSelected = useMemo(
-    () => recordIdToKeep === currentSiteData?.id,
-    [recordIdToKeep, currentSiteData],
+    () => recordIdToKeep === currentManagementRegimeData?.id,
+    [recordIdToKeep, currentManagementRegimeData],
   )
 
   const isDuplicateSelected = useMemo(
-    () => recordIdToKeep === duplicateSiteData?.id,
-    [recordIdToKeep, duplicateSiteData],
+    () => recordIdToKeep === duplicateManagementRegimeData?.id,
+    [recordIdToKeep, duplicateManagementRegimeData],
   )
 
-  const handleMergeSite = () => {
+  const getManagementRegimeRules = (managementRegime) => {
+    const {
+      no_take,
+      open_access,
+      access_restriction,
+      periodic_closure,
+      size_limits,
+      gear_restriction,
+      species_restriction,
+    } = managementRegime
+
+    const rules = [
+      no_take && 'No Take',
+      open_access && 'Open Access',
+      access_restriction && 'Access Restriction',
+      periodic_closure && 'Periodic Closure',
+      size_limits && 'Size Limits',
+      gear_restriction && 'Gear Restrictions',
+      species_restriction && 'Species Restrictions',
+    ]
+    const filteredRules = rules.filter((rule) => !!rule)
+    const managementRules =
+      no_take || open_access
+        ? filteredRules[0]
+        : `Partial Restrictions: ${filteredRules.join(', ')}`
+
+    return managementRules
+  }
+
+  const handleMergeManagementRegime = () => {
     setIsResolveDuplicateModalLoading(true)
 
-    const findRecordId = isOriginalSelected ? duplicateSiteData.id : currentSiteData.id
-    const replaceRecordId = isOriginalSelected ? currentSiteData.id : duplicateSiteData.id
+    const findRecordId = isOriginalSelected
+      ? duplicateManagementRegimeData.id
+      : currentManagementRegimeData.id
+    const replaceRecordId = isOriginalSelected
+      ? currentManagementRegimeData.id
+      : duplicateManagementRegimeData.id
 
     databaseSwitchboardInstance
-      .findAndReplaceSite(projectId, findRecordId, replaceRecordId)
+      .findAndReplaceManagementRegime(projectId, findRecordId, replaceRecordId)
       .then(() => {
         databaseSwitchboardInstance
-          .getSitesWithoutOfflineDeleted(projectId)
-          .then((sitesResponse) => {
-            const sortedSitesResponse = sortArrayByObjectKey(sitesResponse, 'name')
+          .getManagementRegimesWithoutOfflineDeleted(projectId)
+          .then((managementRegimesResponse) => {
+            const sortedManagementRegimesResponse = sortArrayByObjectKey(
+              managementRegimesResponse,
+              'name',
+            )
 
-            updateValueAndResetValidationForDuplicateWarning(replaceRecordId, sortedSitesResponse)
+            updateValueAndResetValidationForDuplicateWarning(
+              replaceRecordId,
+              sortedManagementRegimesResponse,
+            )
             setIsResolveDuplicateModalLoading(false)
             closeConfirmationModalOpen()
             closeResolveDuplicateModal()
@@ -137,25 +182,27 @@ const ResolveDuplicateSiteButton = ({
         handleHttpResponseError({
           error,
           callback: () => {
-            toast.error(...getToastArguments('Failing find and replace site'))
+            toast.error(...getToastArguments('Failing find and replace management regime'))
           },
         })
       })
   }
 
-  const handleKeepSite = (siteId) => {
+  const handleKeepManagementRegime = (managementRegimeId) => {
     const confirmationText =
-      siteId === currentSiteData?.id
+      managementRegimeId === currentManagementRegimeData?.id
         ? confirmMergeModalContent(original.toLowerCase())
         : confirmMergeModalContent(duplicate.toLowerCase())
 
     setConfirmationModalContent(confirmationText)
-    setRecordIdToKeep(siteId)
+    setRecordIdToKeep(managementRegimeId)
     openConfirmationModalOpen()
   }
 
-  const handleEditSite = (siteId) => {
-    history.push(`${ensureTrailingSlash(currentProjectPath)}sites/${siteId}`)
+  const handleEditManagementRegime = (managementRegimeId) => {
+    history.push(
+      `${ensureTrailingSlash(currentProjectPath)}managementregimes/${managementRegimeId}`,
+    )
   }
 
   const handleKeepBoth = () => {
@@ -173,7 +220,7 @@ const ResolveDuplicateSiteButton = ({
   const confirmationModalFooterContent = (
     <RightFooter>
       <ButtonSecondary onClick={closeConfirmationModalOpen}>{cancel}</ButtonSecondary>
-      <ButtonCaution onClick={handleMergeSite}>
+      <ButtonCaution onClick={handleMergeManagementRegime}>
         <IconClose /> {merge}
       </ButtonCaution>
     </RightFooter>
@@ -187,21 +234,29 @@ const ResolveDuplicateSiteButton = ({
             <Thead />
             <Thead>
               {original}{' '}
-              <ButtonCaution onClick={() => handleKeepSite(currentSiteData?.id)}>
+              <ButtonCaution
+                onClick={() => handleKeepManagementRegime(currentManagementRegimeData?.id)}
+              >
                 <IconCheck />
                 {keepEither}
               </ButtonCaution>{' '}
-              <ButtonCaution onClick={() => handleEditSite(currentSiteData?.id)}>
+              <ButtonCaution
+                onClick={() => handleEditManagementRegime(currentManagementRegimeData?.id)}
+              >
                 <IconPen /> {editEither}
               </ButtonCaution>
             </Thead>
             <Thead>
               {duplicate}{' '}
-              <ButtonCaution onClick={() => handleKeepSite(duplicateSiteData?.id)}>
+              <ButtonCaution
+                onClick={() => handleKeepManagementRegime(duplicateManagementRegimeData?.id)}
+              >
                 <IconCheck />
                 {keepEither}
               </ButtonCaution>{' '}
-              <ButtonCaution onClick={() => handleEditSite(duplicateSiteData?.id)}>
+              <ButtonCaution
+                onClick={() => handleEditManagementRegime(duplicateManagementRegimeData?.id)}
+              >
                 <IconPen /> {editEither}
               </ButtonCaution>
             </Thead>
@@ -210,76 +265,59 @@ const ResolveDuplicateSiteButton = ({
         <tbody>
           <TableRowItem
             title="Name"
-            value={currentSiteData?.name}
-            extraValue={duplicateSiteData?.name}
+            value={currentManagementRegimeData?.name}
+            extraValue={duplicateManagementRegimeData?.name}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Country"
-            options={countryOptions}
-            value={currentSiteData?.country}
-            extraValue={duplicateSiteData?.country}
+            title="Secondary Name"
+            value={currentManagementRegimeData?.name_secondary}
+            extraValue={duplicateManagementRegimeData?.name_secondary}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Latitude"
-            value={currentSiteData?.location?.coordinates[1]}
-            extraValue={duplicateSiteData?.location?.coordinates[1]}
+            title="Year Established"
+            value={currentManagementRegimeData?.est_year}
+            extraValue={duplicateManagementRegimeData?.est_year}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Longitude"
-            value={currentSiteData?.location?.coordinates[0]}
-            extraValue={duplicateSiteData?.location?.coordinates[0]}
-            isOriginalSelected={isOriginalSelected}
-            isDuplicateSelected={isDuplicateSelected}
-          />
-          <Tr>
-            <TdKey>Map</TdKey>
-            <Td className={isDuplicateSelected ? 'highlighted' : undefined}>
-              <ResolveDuplicateSiteMap
-                formLatitudeValue={currentSiteData?.location?.coordinates[1]}
-                formLongitudeValue={currentSiteData?.location?.coordinates[0]}
-              />
-            </Td>
-            <Td className={isOriginalSelected ? 'highlighted' : undefined}>
-              <ResolveDuplicateSiteMap
-                formLatitudeValue={duplicateSiteData?.location?.coordinates[1]}
-                formLongitudeValue={duplicateSiteData?.location?.coordinates[0]}
-              />
-            </Td>
-          </Tr>
-          <TableRowItem
-            title="Exposure"
-            options={exposureOptions}
-            value={currentSiteData?.exposure}
-            extraValue={duplicateSiteData?.exposure}
+            title="Area"
+            value={currentManagementRegimeData?.size}
+            extraValue={duplicateManagementRegimeData?.size}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Reef Type"
-            options={reefTypeOptions}
-            value={currentSiteData?.reef_type}
-            extraValue={duplicateSiteData?.reef_type}
+            title="Parities"
+            options={managementPartyOptions}
+            value={currentManagementRegimeData?.parties}
+            extraValue={duplicateManagementRegimeData?.parties}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
-            title="Reef Zone"
-            options={reefZoneOptions}
-            value={currentSiteData?.reef_zone}
-            extraValue={duplicateSiteData?.reef_zone}
+            title="Compliance"
+            options={managementComplianceOptions}
+            value={currentManagementRegimeData?.compliance}
+            extraValue={duplicateManagementRegimeData?.compliance}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
+          />
+          <TableRowItem
+            title="Rules"
+            value={getManagementRegimeRules(currentManagementRegimeData)}
+            extraValue={getManagementRegimeRules(duplicateManagementRegimeData)}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
           <TableRowItem
             title="Notes"
-            value={currentSiteData?.notes}
-            extraValue={duplicateSiteData?.notes}
+            value={currentManagementRegimeData?.notes}
+            extraValue={duplicateManagementRegimeData?.notes}
             isOriginalSelected={isOriginalSelected}
             isDuplicateSelected={isDuplicateSelected}
           />
@@ -322,11 +360,11 @@ const ResolveDuplicateSiteButton = ({
   )
 }
 
-ResolveDuplicateSiteButton.propTypes = {
+ResolveDuplicateMRButton.propTypes = {
   currentSelectValue: PropTypes.string.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType.isRequired,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
 }
 
-export default ResolveDuplicateSiteButton
+export default ResolveDuplicateMRButton

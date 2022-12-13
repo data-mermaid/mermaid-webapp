@@ -236,6 +236,35 @@ const ManagementRegimesMixin = (Base) =>
 
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
+
+    findAndReplaceManagementRegime = async function findAndReplaceManagementRegime(
+      projectId,
+      findRecordId,
+      replaceRecordId,
+    ) {
+      if (!projectId || !findRecordId || !replaceRecordId) {
+        throw new Error(
+          'findAndReplaceManagementRegime expects projectId, findRecordId, and replaceRecordId parameters',
+        )
+      }
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        return axios
+          .put(
+            `${this._apiBaseUrl}/projects/${projectId}/find_and_replace_managements/`,
+            {
+              find: [findRecordId],
+              replace: replaceRecordId,
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then(() => {
+            return this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
   }
 
 export default ManagementRegimesMixin

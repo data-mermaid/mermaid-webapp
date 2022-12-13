@@ -6,8 +6,8 @@ import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
 import { InlineValidationButton } from '../../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import language from '../../../language'
-import { checkDuplicateWarningInValidationMessages } from '../../../library/validationMessageHelpers'
 import ResolveDuplicateSiteButton from '../../ResolveDuplicateSiteButton/ResolveDuplicateSiteButton'
+import ResolveDuplicateMRButton from '../../ResolveDuplicateMRButton/ResolveDuplicateMRButton'
 
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
@@ -24,24 +24,41 @@ const InputValidationInfo = ({
   updateValueAndResetValidationForDuplicateWarning,
 }) => {
   const areThereValidationMessages = validationMessages.length
-  const foundDuplicateWarningInValidationMessages =
-    checkDuplicateWarningInValidationMessages(validationMessages)
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
 
-  const warningValidationButton = foundDuplicateWarningInValidationMessages ? (
-    <ResolveDuplicateSiteButton
-      currentSelectValue={currentSelectValue}
-      validationMessages={validationMessages}
-      updateValueAndResetValidationForDuplicateWarning={
-        updateValueAndResetValidationForDuplicateWarning
-      }
-      ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
-    />
-  ) : (
-    <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
-      Ignore warning
-    </InlineValidationButton>
-  )
+  const warningValidationButton = () => {
+    if (validationMessages[0]?.code === 'not_unique_site') {
+      return (
+        <ResolveDuplicateSiteButton
+          currentSelectValue={currentSelectValue}
+          validationMessages={validationMessages}
+          updateValueAndResetValidationForDuplicateWarning={
+            updateValueAndResetValidationForDuplicateWarning
+          }
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        />
+      )
+    }
+
+    if (validationMessages[0]?.code === 'not_unique_management') {
+      return (
+        <ResolveDuplicateMRButton
+          currentSelectValue={currentSelectValue}
+          validationMessages={validationMessages}
+          updateValueAndResetValidationForDuplicateWarning={
+            updateValueAndResetValidationForDuplicateWarning
+          }
+          ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
+        />
+      )
+    }
+
+    return (
+      <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
+        Ignore warning
+      </InlineValidationButton>
+    )
+  }
 
   return (
     <ValidationWrapper>
@@ -59,7 +76,7 @@ const InputValidationInfo = ({
           ))}
         </>
       ) : null}
-      {isWarningValidation ? warningValidationButton : null}
+      {isWarningValidation ? warningValidationButton() : null}
       {validationType === 'ok' ? <span aria-label="Passed Validation">&nbsp;</span> : null}
       {validationType === 'ignore' ? (
         <>
