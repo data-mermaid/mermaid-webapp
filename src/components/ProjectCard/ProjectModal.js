@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
@@ -24,6 +25,7 @@ const CheckBoxLabel = styled.label`
 `
 
 const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) => {
+  const history = useHistory()
   const [isLoading, setIsLoading] = useState(false)
   const [nameAlreadyExists, setNameAlreadyExists] = useState(false)
   const [existingName, setExistingName] = useState('')
@@ -86,6 +88,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
     setNameAlreadyExists(false)
     setExistingName('')
     onDismiss()
+    history.push(`/projects/${response.id}/sites`)
   }
 
   const copyExistingProject = () => {
@@ -190,7 +193,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={handleOnSubmit}>
+      <ButtonPrimary disabled={isLoading} onClick={handleOnSubmit}>
         <IconSend />
         {modalTitle}
       </ButtonPrimary>
