@@ -7,7 +7,7 @@ import { roundToOneDecimal } from '../../library/numbers/roundToOneDecimal'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import { Td, Th, Tr } from '../generic/Table/table'
 
-const BenthicPitObservationSummaryStats = ({ benthicAttributeSelectOptions, observations }) => {
+const BenthicPitLitObservationSummaryStats = ({ benthicAttributeSelectOptions, observations }) => {
   const observationTopLevelAttributeCategoryOccurance = useMemo(() => {
     const totalNumberOfObservations = observations.length
 
@@ -67,10 +67,10 @@ const BenthicPitObservationSummaryStats = ({ benthicAttributeSelectOptions, obse
   )
 }
 
-BenthicPitObservationSummaryStats.propTypes = {
+BenthicPitLitObservationSummaryStats.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   observations: PropTypes.arrayOf(PropTypes.shape({})),
 }
-BenthicPitObservationSummaryStats.defaultProps = { observations: [] }
+BenthicPitLitObservationSummaryStats.defaultProps = { observations: [] }
 
-export default BenthicPitObservationSummaryStats
+export default BenthicPitLitObservationSummaryStats

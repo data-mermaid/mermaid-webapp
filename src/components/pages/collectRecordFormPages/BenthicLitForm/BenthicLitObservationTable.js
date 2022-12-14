@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -22,46 +22,34 @@ import {
   benthicPitRecordPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonPrimary } from '../../../generic/buttons'
+import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
-import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import language from '../../../../language'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
-import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
+import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit'
+import language from '../../../../language'
 
 const StyledColgroup = styled('colgroup')`
   col {
-    &.number {
+    &.small-width {
       width: 5rem;
     }
-    &.interval {
-      width: 15rem;
-    }
-    &.benthicAttribute {
+    &.auto-width {
       width: auto;
-    }
-    &.growthForm {
-      width: 20%;
-    }
-    &.validation {
-      width: auto;
-    }
-    &.remove {
-      width: 5rem;
     }
   }
 `
 
-const BenthicPitObservationsTable = ({
+const BenthicLitObservationsTable = ({
   areValidationsShowing,
   benthicAttributeSelectOptions,
   choices,
   collectRecord,
-  formik,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -73,40 +61,28 @@ const BenthicPitObservationsTable = ({
   const [observationsState, observationsDispatch] = observationsReducer
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
-  const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
-
-  useEffect(
-    function recalculateObservationIntervals() {
-      observationsDispatch({
-        type: 'recalculateObservationIntervals',
-        payload: { intervalStart, intervalSize },
-      })
-    },
-    [intervalSize, intervalStart, observationsDispatch],
-  )
-
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
 
-    observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
+    observationsDispatch({ type: 'addObservation' })
   }
 
   const observationsRows = useMemo(() => {
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
     const growthFormSelectOptions = getOptions(choices.growthforms)
 
-    const handleKeyDown = ({ event, index, observation, isGrowthForm, isBenthicAttribute }) => {
+    const handleKeyDown = ({ event, index, observation, isLastCell, isBenthicAttribute }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
 
-      if (isTabKey && isLastRow && isGrowthForm) {
+      if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
-          payload: { referenceObservation: observation, intervalStart, intervalSize },
+          payload: { referenceObservation: observation },
         })
         setAreObservationsInputsDirty(true)
       }
@@ -118,8 +94,6 @@ const BenthicPitObservationsTable = ({
           type: 'addNewObservationBelow',
           payload: {
             referenceObservationIndex: index,
-            intervalSize,
-            intervalStart,
           },
         })
         setAreObservationsInputsDirty(true)
@@ -128,7 +102,7 @@ const BenthicPitObservationsTable = ({
 
     return observationsState.map((observation, index) => {
       const rowNumber = index + 1
-      const { id: observationId, attribute, growth_form = '', interval } = observation
+      const { id: observationId, attribute, growth_form = '', length = '' } = observation
 
       const {
         isObservationValid,
@@ -149,31 +123,44 @@ const BenthicPitObservationsTable = ({
 
         observationsDispatch({
           type: 'deleteObservation',
-          payload: { observationId, intervalSize, intervalStart },
+          payload: { observationId },
         })
       }
 
       const handleBenthicAttributeChange = (selectedOption) => {
-        const newBenthicAttribute = selectedOption.value
+        const newValue = selectedOption.value
 
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateBenthicAttribute',
           payload: {
-            newBenthicAttribute,
+            newValue,
             observationId,
           },
         })
       }
 
       const handleGrowthFormChange = (selectedOption) => {
-        const newGrowthForm = selectedOption.target.value
+        const newValue = selectedOption.target.value
 
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateGrowthForm',
           payload: {
-            newGrowthForm,
+            newValue,
+            observationId,
+          },
+        })
+      }
+
+      const handleLengthChange = (event) => {
+        const newValue = event.target.value
+
+        setAreObservationsInputsDirty(true)
+        observationsDispatch({
+          type: 'updateLength',
+          payload: {
+            newValue,
             observationId,
           },
         })
@@ -183,8 +170,8 @@ const BenthicPitObservationsTable = ({
         handleKeyDown({ event, index, observation, isBenthicAttribute: true })
       }
 
-      const handleGrowthFormKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isGrowthForm: true })
+      const handleLastCellKeyDown = (event) => {
+        handleKeyDown({ event, index, observation, isLastCell: true })
       }
 
       const handleIgnoreObservationValidations = () => {
@@ -206,6 +193,7 @@ const BenthicPitObservationsTable = ({
               {observationValidationMessages.map((validation) => (
                 <li className={`${observationValidationType}-indicator`} key={validation.id}>
                   {language.getValidationMessage(validation)}
+                  {JSON.stringify(validation)}
                 </li>
               ))}
             </TableValidationList>
@@ -234,9 +222,7 @@ const BenthicPitObservationsTable = ({
       return (
         <ObservationTr key={observationId}>
           <Td align="center">{rowNumber}</Td>
-          <Td align="right" aria-labelledby="interval-label">
-            {interval}m
-          </Td>
+
           <Td align="left">
             {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
@@ -271,7 +257,6 @@ const BenthicPitObservationsTable = ({
           <Td align="right">
             <Select
               onChange={handleGrowthFormChange}
-              onKeyDown={handleGrowthFormKeyDown}
               value={growth_form}
               aria-labelledby="growth-form-label"
             >
@@ -282,6 +267,15 @@ const BenthicPitObservationsTable = ({
                 </option>
               ))}
             </Select>
+          </Td>
+          <Td align="right">
+            <InputNumberNoScrollWithUnit
+              value={length}
+              unit="m"
+              aria-labelledby="length-label"
+              onChange={handleLengthChange}
+              onKeyDown={handleLastCellKeyDown}
+            />
           </Td>
 
           {areValidationsShowing ? validationsMarkup : null}
@@ -305,8 +299,6 @@ const BenthicPitObservationsTable = ({
     choices,
     collectRecord,
     ignoreObservationValidations,
-    intervalSize,
-    intervalStart,
     observationsDispatch,
     observationsState,
     resetObservationValidations,
@@ -318,29 +310,32 @@ const BenthicPitObservationsTable = ({
   return (
     <>
       <InputWrapper data-testid={testId}>
-        <H2 id="table-label">Observations</H2>
+        <H2 id="observations-label">Observations</H2>
         <>
           <StyledOverflowWrapper>
-            <StickyObservationTable aria-labelledby="table-label">
+            <StickyObservationTable aria-labelledby="observations-label">
               <StyledColgroup>
-                <col className="number" />
-                <col className="interval" />
-                <col className="benthicAttribute" />
-                <col className="growthForm" />
-                {areValidationsShowing ? <col className="validations" /> : null}
-                <col className="remove" />
+                <col className="small-width" />
+                <col className="auto-width" />
+                <col className="auto-width" />
+                <col className="auto-width" />
+                {areValidationsShowing ? <col className="auto-width" /> : null}
+                <col className="small-width" />
               </StyledColgroup>
               <thead>
                 <Tr>
                   <Th> </Th>
-                  <Th align="right" id="interval-label">
-                    Interval
-                  </Th>
+
                   <Th align="left" id="benthic-attribute-label">
-                    Benthic Attribute <RequiredIndicator />
+                    Benthic Attribute
+                    <RequiredIndicator />
                   </Th>
                   <Th align="right" id="growth-form-label">
                     Growth Form
+                  </Th>
+                  <Th align="right" id="length-label">
+                    Length
+                    <RequiredIndicator />
                   </Th>
                   {areValidationsShowing ? <Th align="center">Validations</Th> : null}
                   <Th> </Th>
@@ -364,7 +359,7 @@ const BenthicPitObservationsTable = ({
   )
 }
 
-BenthicPitObservationsTable.propTypes = {
+BenthicLitObservationsTable.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
@@ -384,9 +379,9 @@ BenthicPitObservationsTable.propTypes = {
   testId: PropTypes.string.isRequired,
 }
 
-BenthicPitObservationsTable.defaultProps = {
+BenthicLitObservationsTable.defaultProps = {
   collectRecord: undefined,
   observationsReducer: [],
 }
 
-export default BenthicPitObservationsTable
+export { BenthicLitObservationsTable }

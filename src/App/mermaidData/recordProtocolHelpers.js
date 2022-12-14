@@ -24,6 +24,8 @@ export const getObservationsPropertyNames = (collectRecord) => {
     {
       fishbelt: ['obs_belt_fishes'],
       benthicpit: ['obs_benthic_pits'],
+      benthiclit: ['obs_benthic_lits'],
+      habitatcomplexity: ['obs_habitat_complexities'],
       benthicpqt: ['obs_benthic_photo_quadrats'],
       bleachingqc: ['obs_colonies_bleached', 'obs_quadrat_benthic_percent'],
     }[collectRecord?.data?.protocol] ?? []

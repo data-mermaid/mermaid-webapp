@@ -1,13 +1,7 @@
 import { createUuid } from '../../../../library/createUuid'
 import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
-const getObservationsWithRecalculatedQuadratNumbers = (observations) => {
-  return observations.map((observation, index) => {
-    return { ...observation, quadrat_number: index + 1 }
-  })
-}
-
-const percentCoverObservationsReducer = (state, action) => {
+const benthicLitObservationReducer = (state, action) => {
   switch (action.type) {
     case 'loadObservationsFromApi': {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
@@ -25,24 +19,12 @@ const percentCoverObservationsReducer = (state, action) => {
         (observation) => observation.id !== observationIdToBeRemoved,
       )
 
-      return getObservationsWithRecalculatedQuadratNumbers(observationsWithTheRightOneRemoved)
+      return observationsWithTheRightOneRemoved
     }
 
     case 'addObservation': {
-      const quadrat_number = state.length + 1
-
-      return [
-        ...state,
-        {
-          id: createUuid(),
-          percent_hard: '',
-          percent_soft: '',
-          percent_algae: '',
-          quadrat_number,
-        },
-      ]
+      return [...state, { id: createUuid(), attribute: '', growth_form: '', length: '' }]
     }
-
     case 'addNewObservationBelow': {
       const observationsWithInsertedRow = [...state]
       const { referenceObservationIndex } = action.payload
@@ -50,36 +32,39 @@ const percentCoverObservationsReducer = (state, action) => {
 
       observationsWithInsertedRow.splice(indexToInsertAt, 0, {
         id: createUuid(),
-        percent_hard: '',
-        percent_soft: '',
-        percent_algae: '',
+        attribute: '',
+        growth_form: '',
+        length: '',
       })
 
-      return getObservationsWithRecalculatedQuadratNumbers(observationsWithInsertedRow)
+      return observationsWithInsertedRow
     }
 
     case 'duplicateLastObservation': {
       const { referenceObservation } = action.payload
-      const quadrat_number = state.length + 1
-
       const observationWithNewId = {
         ...referenceObservation,
         id: createUuid(),
-        quadrat_number,
       }
 
       return [...state, observationWithNewId]
     }
-    case 'updateSoftCoralPercent':
-      return updateObservationReducerValue({ state, action, propertyToUpdate: 'percent_soft' })
-    case 'updateHardCoralPercent':
-      return updateObservationReducerValue({ state, action, propertyToUpdate: 'percent_hard' })
-    case 'updateAlgaePercent':
-      return updateObservationReducerValue({ state, action, propertyToUpdate: 'percent_algae' })
+    case 'updateBenthicAttribute':
+      return state.map((observation) => {
+        const isObservationToUpdate = observation?.id === action.payload.observationId
+        const { newValue } = action.payload
+
+        return isObservationToUpdate ? { ...observation, attribute: newValue } : observation
+      })
+    case 'updateGrowthForm':
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'growth_form' })
+
+    case 'updateLength':
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'length' })
 
     default:
       throw new Error(`This action (${action.type}) isn't supported by the observationReducer`)
   }
 }
 
-export default percentCoverObservationsReducer
+export { benthicLitObservationReducer }

@@ -161,6 +161,57 @@ export const reformatFormValuesIntoBenthicPitRecord = ({
     },
   }
 }
+
+export const reformatFormValuesIntoBenthicLitRecord = ({
+  formikValues,
+  observationsTable1State,
+  collectRecordBeingEdited,
+}) => {
+  const {
+    current,
+    depth,
+    label,
+    len_surveyed,
+    management,
+    notes,
+    number,
+    observers,
+    reef_slope,
+    relative_depth,
+    sample_date,
+    sample_time,
+    site,
+    tide,
+    visibility,
+  } = formikValues
+
+  return {
+    ...collectRecordBeingEdited,
+    data: {
+      benthic_transect: {
+        current,
+        depth,
+        label,
+        len_surveyed,
+        notes,
+        number,
+        reef_slope,
+        relative_depth,
+        sample_time,
+        tide,
+        visibility,
+      },
+      sample_event: {
+        management,
+        sample_date,
+        site,
+      },
+      obs_benthic_lits: observationsTable1State,
+      observers,
+    },
+  }
+}
+
 export const reformatFormValuesIntoBleachingRecord = ({
   formikValues,
   observationsTable1State,
