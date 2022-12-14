@@ -12,8 +12,6 @@ import NavMenu from '.'
 test('NavMenu component shows Overview, Metadata, data, admin links when online', async () => {
   renderAuthenticatedOnline(<NavMenu />)
 
-  // expect(await screen.findByText('Overview')).toBeInTheDocument()
-  // expect(screen.getByText('Overview')).toBeInTheDocument()
   expect(screen.getByText('Metadata')).toBeInTheDocument()
   expect(screen.getByText('Collecting')).toBeInTheDocument()
   expect(screen.getByText('Sites')).toBeInTheDocument()
@@ -23,7 +21,6 @@ test('NavMenu component shows Overview, Metadata, data, admin links when online'
   expect(screen.getByText('Admin')).toBeInTheDocument()
   expect(screen.getByText('Overview')).toBeInTheDocument()
   expect(screen.getByText('Users')).toBeInTheDocument()
-  // expect(screen.getByText('Fish Families')).toBeInTheDocument()
   expect(screen.getByText('Data Sharing')).toBeInTheDocument()
 })
 
@@ -63,12 +60,4 @@ test('NavMenu component shows Metadata links; and hide Overview, data, admin lin
   await waitFor(() => {
     expect(screen.queryByText('data sharing')).not.toBeInTheDocument()
   })
-
-  // await waitFor(() => {
-  //   expect(screen.queryByText('graphs and maps')).not.toBeInTheDocument()
-  // })
-
-  // await waitFor(() => {
-  //   expect(screen.queryByText('fish families')).not.toBeInTheDocument()
-  // })
 })
