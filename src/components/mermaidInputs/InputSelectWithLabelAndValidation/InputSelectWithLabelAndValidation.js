@@ -18,6 +18,7 @@ const InputSelectWithLabelAndValidation = ({
   validationType,
   testId,
   value,
+  updateValueAndResetValidationForDuplicateWarning,
   ...restOfProps
 }) => {
   const optionList = options.map((item) => (
@@ -51,6 +52,9 @@ const InputSelectWithLabelAndValidation = ({
         validationMessages={validationMessages}
         validationType={validationType}
         currentSelectValue={value}
+        updateValueAndResetValidationForDuplicateWarning={
+          updateValueAndResetValidationForDuplicateWarning
+        }
       />
     </InputRow>
   )
@@ -68,6 +72,7 @@ InputSelectWithLabelAndValidation.propTypes = {
   value: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
+  updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
 }
 
 InputSelectWithLabelAndValidation.defaultProps = {
@@ -78,5 +83,6 @@ InputSelectWithLabelAndValidation.defaultProps = {
   value: '',
   ignoreNonObservationFieldValidations: () => {},
   resetNonObservationFieldValidations: () => {},
+  updateValueAndResetValidationForDuplicateWarning: () => {},
 }
 export default InputSelectWithLabelAndValidation

@@ -12,11 +12,13 @@ import chartBar from '@iconify-icons/mdi/chart-bar'
 import checkCircleOutline from '@iconify-icons/mdi/check-circle-outline'
 import checkIcon from '@iconify-icons/mdi/check'
 import checkOutline from '@iconify-icons/mdi/check-outline'
+import checkAllIcon from '@iconify-icons/mdi/check-all'
 import circleEditOutline from '@iconify-icons/mdi/circle-edit-outline'
 import closeIcon from '@iconify-icons/mdi/close'
 import contentCopy from '@iconify-icons/mdi/content-copy'
 import contentSave from '@iconify-icons/mdi/content-save'
 import download from '@iconify-icons/mdi/download'
+import excel from '@iconify-icons/mdi/microsoft-excel'
 import fileAccountOutline from '@iconify-icons/mdi/file-account-outline'
 import filterOutline from '@iconify-icons/mdi/filter-outline'
 import fish from '@iconify-icons/mdi/fish'
@@ -61,6 +63,7 @@ export const IconArrowRight = (props) => <InlineIcon icon={arrowRight} {...props
 export const IconBell = (props) => <InlineIcon icon={bellIcon} {...props} />
 export const IconCheck = (props) => <InlineIcon icon={checkIcon} {...props} />
 export const IconCheckOutline = (props) => <InlineIcon icon={checkOutline} {...props} />
+export const IconCheckAll = (props) => <InlineIcon icon={checkAllIcon} {...props} />
 export const IconClose = (props) => <InlineIcon icon={closeIcon} {...props} />
 export const IconCollect = (props) => <InlineIcon icon={circleEditOutline} {...props} />
 export const IconCopy = (props) => <InlineIcon icon={contentCopy} {...props} />
@@ -95,6 +98,7 @@ export const IconUsersAndTransects = (props) => <InlineIcon icon={usersAndTranse
 export const IconProjectProgress = (props) => <InlineIcon icon={playButton} {...props} />
 export const IconManagementRegimes = (props) => <InlineIcon icon={fileTable} {...props} />
 export const IconProjectOverview = (props) => <InlineIcon icon={clipboardCheck} {...props} />
+export const IconExcel = (props) => <InlineIcon icon={excel} {...props} />
 export const IconManagementRegimesOverview = (props) => (
   <InlineIcon icon={multiFileTable} {...props} />
 )

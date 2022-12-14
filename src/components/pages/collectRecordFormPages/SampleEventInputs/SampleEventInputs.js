@@ -24,6 +24,7 @@ const SampleEventInputs = ({
   formik,
   managementRegimes,
   sites,
+  handleSitesChange,
   handleChangeForDirtyIgnoredInput,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
@@ -76,6 +77,12 @@ const SampleEventInputs = ({
     formik.handleChange(event)
   }
 
+  const updateValueAndResetValidationForSite = (siteValue, siteOptions) => {
+    formik.setFieldValue('site', siteValue)
+    handleSitesChange(siteOptions)
+    resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
+  }
+
   return (
     <>
       <InputWrapper>
@@ -97,6 +104,7 @@ const SampleEventInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.site}
           onChange={handleSiteChange}
+          updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForSite}
         />
         <InputSelectWithLabelAndValidation
           label="Management"
@@ -150,6 +158,7 @@ SampleEventInputs.propTypes = {
   formik: formikPropType.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
+  handleSitesChange: PropTypes.func.isRequired,
   handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,

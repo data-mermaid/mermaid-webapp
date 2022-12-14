@@ -101,6 +101,8 @@ const CollectRecordFormPageAlternative = ({
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const observationTableRef = useRef(null)
 
+  const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
+
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
     clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
@@ -421,6 +423,7 @@ const CollectRecordFormPageAlternative = ({
           formik={formik}
           managementRegimes={managementRegimes}
           sites={sites}
+          handleSitesChange={handleSitesChange}
           handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}

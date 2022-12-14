@@ -120,7 +120,7 @@ const Footer = () => {
       </StyledToggleLabel>
       <FooterNav>
         <a href={MermaidDocs} target="_blank" rel="noreferrer">
-          Help
+          Help (PDF)
         </a>
         <OfflineHide>
           <a href="https://datamermaid.org/terms-of-service" target="_blank" rel="noreferrer">

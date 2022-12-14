@@ -67,6 +67,7 @@ const CollectRecordFormPage = ({
   handleSubmitNewObservation,
   observationsReducer,
   sites,
+  handleSitesChange,
   managementRegimes,
   choices,
   idsNotAssociatedWithData,
@@ -622,6 +623,7 @@ const CollectRecordFormPage = ({
           formik={formik}
           managementRegimes={managementRegimes}
           sites={sites}
+          handleSitesChange={handleSitesChange}
           handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
@@ -721,6 +723,7 @@ CollectRecordFormPage.propTypes = {
   handleSubmitNewObservation: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
+  handleSitesChange: PropTypes.func.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   choices: choicesPropType.isRequired,
   idsNotAssociatedWithData: PropTypes.arrayOf(PropTypes.string).isRequired,

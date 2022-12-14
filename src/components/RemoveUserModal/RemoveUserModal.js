@@ -14,7 +14,14 @@ const InlineFlex = styled('div')`
   align-items: center;
 `
 
-const RemoveUserModal = ({ isOpen, onDismiss, onSubmit, userNameToBeRemoved, projectName }) => {
+const RemoveUserModal = ({
+  isOpen,
+  onDismiss,
+  onSubmit,
+  userNameToBeRemoved,
+  projectName,
+  isLoading,
+}) => {
   const [currentPage, setCurrentPage] = useState(1)
 
   const goToPageOne = () => {
@@ -72,7 +79,7 @@ const RemoveUserModal = ({ isOpen, onDismiss, onSubmit, userNameToBeRemoved, pro
   const footerContentPageOne = (
     <RightFooter>
       {cancelButton}
-      <ButtonCaution onClick={goToPageTwo}>
+      <ButtonCaution onClick={goToPageTwo} disabled={isLoading}>
         {language.pages.userTable.deleteUnsyncedButton}
       </ButtonCaution>
     </RightFooter>
@@ -111,6 +118,7 @@ RemoveUserModal.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   userNameToBeRemoved: PropTypes.string,
   projectName: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 }
 
 RemoveUserModal.defaultProps = {
