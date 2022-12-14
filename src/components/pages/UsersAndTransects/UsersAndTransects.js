@@ -401,7 +401,11 @@ const UsersAndTransects = () => {
                   const ThClassName = column.parent ? column.parent.id : undefined
 
                   const headerAlignment =
-                    column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+                    column.Header === 'Site' ||
+                    column.Header === 'Method' ||
+                    column.Header === 'Date'
+                      ? 'left'
+                      : 'right'
 
                   return (
                     <Th
