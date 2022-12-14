@@ -6,27 +6,30 @@ import theme from '../../../theme'
 import { CloseButton } from '../buttons'
 import { mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
 import { InputRow } from '../form'
+import { TableOverflowWrapper } from '../Table/table'
 
 const StyledDialogOverlay = styled('div')`
   background: rgba(0, 0, 0, 0.5);
-  width: ${theme.spacing.fullViewportWidth};
+  width: 100vw;
   height: 100vh;
-  right: 0;
+  top: 0;
   left: 0;
-  bottom: 0;
   position: fixed;
   display: grid;
   place-items: center;
-  grid-template-columns: 1fr;
   z-index: 103;
   cursor: default;
 `
 const StyledDialog = styled('div')`
   padding: 0;
   margin: 0;
-  max-width: calc(100vw - 15rem);
-  width: 100rem;
+  min-width: 30rem;
+  width: calc(100vw - 4rem);
+  max-width: 96rem;
   background: ${theme.color.white};
+  max-height: 98vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
 `
 const ModalTitle = styled.div`
   padding: ${theme.spacing.medium};
@@ -103,6 +106,9 @@ const ModalInputRow = styled(InputRow)`
   }
 `
 
+export const ModalTableOverflowWrapper = styled(TableOverflowWrapper)`
+  max-width: 100%;
+`
 const Modal = ({
   title,
   mainContent,
