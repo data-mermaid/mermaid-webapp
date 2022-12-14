@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react'
 
 import { observationsQuadratBenthicPercentPropType } from '../../App/mermaidData/mermaidDataProptypes'
@@ -5,11 +6,11 @@ import { getAverage } from '../../library/getAverage'
 import { ObservationsSummaryStats } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Td, Th } from '../generic/Table/table'
 
-const BleachingPercentCoverSummaryStats = ({ obs_quadrat_benthic_percent }) => {
-  const hardPercentages = obs_quadrat_benthic_percent.map((item) => item.percent_hard)
-  const softPercentages = obs_quadrat_benthic_percent.map((item) => item.percent_soft)
-  const algaePercentages = obs_quadrat_benthic_percent.map((item) => item.percent_algae)
-  const quadratCounts = obs_quadrat_benthic_percent.map((item) => item.quadrat_number)
+const BleachingPercentCoverSummaryStats = ({ observations }) => {
+  const hardPercentages = observations.map((item) => Number(item.percent_hard))
+  const softPercentages = observations.map((item) => Number(item.percent_soft))
+  const algaePercentages = observations.map((item) => Number(item.percent_algae))
+  const quadratCounts = observations.map((item) => Number(item.quadrat_number))
 
   return (
     <ObservationsSummaryStats>
@@ -36,8 +37,8 @@ const BleachingPercentCoverSummaryStats = ({ obs_quadrat_benthic_percent }) => {
 }
 
 BleachingPercentCoverSummaryStats.propTypes = {
-  obs_quadrat_benthic_percent: observationsQuadratBenthicPercentPropType,
+  observations: observationsQuadratBenthicPercentPropType,
 }
-BleachingPercentCoverSummaryStats.defaultProps = { obs_quadrat_benthic_percent: [] }
+BleachingPercentCoverSummaryStats.defaultProps = { observations: [] }
 
 export default BleachingPercentCoverSummaryStats
