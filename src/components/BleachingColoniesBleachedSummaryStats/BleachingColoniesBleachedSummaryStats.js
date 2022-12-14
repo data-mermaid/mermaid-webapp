@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react'
 import { observationsColoniesBleachedPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { Td, Th, Tr } from '../generic/Table/table'
@@ -28,7 +29,11 @@ const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached })
   }
 
   const getPercentageOfColonies = (colonyType) => {
-    let totals = 0
+    if (!observationsColoniesBleached.length) {
+      return 0
+    }
+
+    let totals
 
     if (colonyType === 'bleached') {
       totals = observationsColoniesBleached.map((item) => {
