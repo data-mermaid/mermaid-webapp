@@ -1,13 +1,5 @@
 import { createUuid } from '../../../../library/createUuid'
-
-const updateObservationValue = ({ state, propertyToUpdate, action }) => {
-  return state.map((observation) => {
-    const isObservationToUpdate = observation.id === action.payload.observationId
-    const { newValue } = action.payload
-
-    return isObservationToUpdate ? { ...observation, [propertyToUpdate]: newValue } : observation
-  })
-}
+import { updateObservationReducerValue } from '../updateObservationReducerValue'
 
 const coloniesBleachedObservationsReducer = (state, action) => {
   switch (action.type) {
@@ -79,23 +71,23 @@ const coloniesBleachedObservationsReducer = (state, action) => {
       return [...state, observationWithNewId]
     }
     case 'updateBenthicAttribute':
-      return updateObservationValue({ state, action, propertyToUpdate: 'attribute' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'attribute' })
     case 'updateGrowthForm':
-      return updateObservationValue({ state, action, propertyToUpdate: 'growth_form' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'growth_form' })
     case 'updateNormal':
-      return updateObservationValue({ state, action, propertyToUpdate: 'count_normal' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'count_normal' })
     case 'updatePale':
-      return updateObservationValue({ state, action, propertyToUpdate: 'count_pale' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'count_pale' })
     case 'update20Bleached':
-      return updateObservationValue({ state, action, propertyToUpdate: 'count_20' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'count_20' })
     case 'update50Bleached':
-      return updateObservationValue({ state, action, propertyToUpdate: 'count_50' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'count_50' })
     case 'update80Bleached':
-      return updateObservationValue({ state, action, propertyToUpdate: 'count_80' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'count_80' })
     case 'update100Bleached':
-      return updateObservationValue({ state, action, propertyToUpdate: 'count_100' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'count_100' })
     case 'updateRecentlyDead':
-      return updateObservationValue({ state, action, propertyToUpdate: 'count_dead' })
+      return updateObservationReducerValue({ state, action, propertyToUpdate: 'count_dead' })
 
     default:
       throw new Error(`This action (${action.type}) isn't supported by the observationReducer`)

@@ -62,11 +62,11 @@ export const useRoutes = ({ apiSyncInstance }) => {
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/',
-      Component: () => <BenthicLitForm />,
+      Component: () => <BenthicLitForm isNewRecord={true} />,
     },
     {
       path: '/projects/:projectId/collecting/benthiclit/:recordId',
-      Component: () => <> Placeholder edit benthic LIT collect record page </>,
+      Component: () => <BenthicLitForm isNewRecord={false} />,
     },
     {
       path: '/projects/:projectId/collecting/benthicpit/',
