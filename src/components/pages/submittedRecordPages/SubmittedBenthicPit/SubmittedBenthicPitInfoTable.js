@@ -36,12 +36,12 @@ const SubmittedBenthicPitInfoTable = ({ choices, sites, managementRegimes, submi
         <TableRowItem title="Site" options={sites} value={site} />
         <TableRowItem title="Management" options={managementRegimes} value={management} />
         <TableRowItem title="Sample Date Time" value={`${sample_date} ${sample_time || ''}`} />
-        <TableRowItem title="Depth" value={depth} />
+        <TableRowItem title="Depth (m)" value={depth} />
         <TableRowItem title="Transect Number" value={number} />
         <TableRowItem title="Label" value={label} />
-        <TableRowItem title="Transect Length Surveyed" value={len_surveyed} />
-        <TableRowItem title="Interval Size" value={interval_size} />
-        <TableRowItem title="Interval Start" value={interval_start} />
+        <TableRowItem title="Transect Length Surveyed (m)" value={len_surveyed} />
+        <TableRowItem title="Interval Size (m)" value={interval_size} />
+        <TableRowItem title="Interval Start (m)" value={interval_start} />
         <TableRowItem title="Reef Slope" options={reefslopes.data} value={reef_slope} />
         <TableRowItem title="Visibility" options={visibilities.data} value={visibility} />
         <TableRowItem title="Current" options={currents.data} value={current} />
