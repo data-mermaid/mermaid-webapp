@@ -387,7 +387,7 @@ test('Benthic PIT validations will show passed input validations', async () => {
     ),
   )
 
-  // regular imputs
+  // regular inputs
 
   expect(within(screen.getByTestId('site')).getByLabelText('Passed Validation')).toBeInTheDocument()
 

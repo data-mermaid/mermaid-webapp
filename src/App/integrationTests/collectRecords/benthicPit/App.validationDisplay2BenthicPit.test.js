@@ -246,7 +246,7 @@ test('Benthic PIT validations will show only the first error when there are mult
     ),
   )
 
-  // regular imputs
+  // regular inputs
 
   expect(within(screen.getByTestId('site')).getByText('firstError')).toBeInTheDocument()
   expect(within(screen.getByTestId('site')).queryByText('secondError')).not.toBeInTheDocument()

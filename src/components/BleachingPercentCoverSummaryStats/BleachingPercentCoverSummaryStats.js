@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { observationsQuadratBenthicPercentPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import { observationsPercentCoverProptype } from '../../App/mermaidData/mermaidDataProptypes'
 import { getAverage } from '../../library/getAverage'
 import { ObservationsSummaryStats } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Td, Th } from '../generic/Table/table'
@@ -36,7 +36,7 @@ const BleachingPercentCoverSummaryStats = ({ observations }) => {
 }
 
 BleachingPercentCoverSummaryStats.propTypes = {
-  observations: observationsQuadratBenthicPercentPropType,
+  observations: observationsPercentCoverProptype,
 }
 BleachingPercentCoverSummaryStats.defaultProps = { observations: [] }
 

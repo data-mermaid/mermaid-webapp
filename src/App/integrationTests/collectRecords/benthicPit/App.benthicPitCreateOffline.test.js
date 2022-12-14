@@ -91,10 +91,9 @@ describe('Offline', () => {
     userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
     const table = await screen.findByRole('table')
 
-    const tableRows = await screen.findAllByRole('row')
+    const linksToBenthicPitRecords = within(table).getAllByRole('link', { name: 'Benthic PIT' })
 
-    // 19 here because the header row + the 17 mock records + the one we just created
-    expect(tableRows).toHaveLength(19)
+    expect(linksToBenthicPitRecords).toHaveLength(2)
 
     // expect unique depth as proxy for New Benthic Pit
     expect(await within(table).findByText('10000'))
