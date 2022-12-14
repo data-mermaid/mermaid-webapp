@@ -475,7 +475,7 @@ const CollectRecordsMixin = (Base) =>
           modifiedCollectRegordWithIgnoredObservationValidation.validations.results.data[
             observationTableName
           ]
-        const observationsValidationsWithIgnored = observationTable.map(
+        const observationsValidationsWithIgnored = observationTable?.map(
           (singleObservationValidations) => {
             return singleObservationValidations.map((validation) => {
               const isValidationBelongingToObservation =

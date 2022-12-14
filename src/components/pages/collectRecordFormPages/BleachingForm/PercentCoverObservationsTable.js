@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -54,10 +54,11 @@ const PercentCoverObservationTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
-
+    setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -69,7 +70,7 @@ const PercentCoverObservationTable = ({
 
       if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
-
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -79,6 +80,7 @@ const PercentCoverObservationTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -185,16 +187,19 @@ const PercentCoverObservationTable = ({
 
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="hard-coral-percent-cover-label"
               value={percent_hard}
               min="0"
               step="any"
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateHardCoralPercent' })
               }}
+              autoFocus={autoFocusAllowed}
             />
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="soft-coral-percent-cover-label"
               value={percent_soft}
               min="0"
               step="any"
@@ -205,6 +210,7 @@ const PercentCoverObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="microalgae-percent-cover-label"
               value={percent_algae}
               min="0"
               step="any"
@@ -231,6 +237,7 @@ const PercentCoverObservationTable = ({
     })
   }, [
     areValidationsShowing,
+    autoFocusAllowed,
     collectRecord,
     ignoreObservationValidations,
     observationsDispatch,
@@ -242,10 +249,10 @@ const PercentCoverObservationTable = ({
   return (
     <>
       <InputWrapper data-testid={testId}>
-        <H2 id="table-label">Observations - Percent Cover</H2>
+        <H2 id="percent-cover-label">Observations - Percent Cover</H2>
         <>
           <StyledOverflowWrapper>
-            <StickyObservationTable aria-labelledby="table-label">
+            <StickyObservationTable aria-labelledby="percent-cover-label">
               <StyledColgroup>
                 <col className="number" />
                 <col className="quadratNumber" />
@@ -261,13 +268,13 @@ const PercentCoverObservationTable = ({
                   <Th align="center" id="quadrat-number">
                     Quadrat
                   </Th>
-                  <Th align="center" id="hard-coral-percent-cover">
+                  <Th align="center" id="hard-coral-percent-cover-label">
                     Hard coral % cover <RequiredIndicator />
                   </Th>
-                  <Th align="center" id="Soft-coral-percent-cover">
+                  <Th align="center" id="soft-coral-percent-cover-label">
                     Soft coral % cover <RequiredIndicator />
                   </Th>
-                  <Th align="center" id="microalgae-percent-cover">
+                  <Th align="center" id="microalgae-percent-cover-label">
                     Microalgae % cover <RequiredIndicator />
                   </Th>
                   {areValidationsShowing ? <Th align="center">Validations</Th> : null}

@@ -12,13 +12,13 @@ import App from '../../../App'
 
 // test suite cut up into 2 parts for performance reasons
 describe('Offline', () => {
-  test('Delete benthic PIT prompt confirm deletes the record with the proper UI response and messaging', async () => {
+  test('Delete bleaching prompt confirm deletes the record with the proper UI response and messaging', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
     })
@@ -48,9 +48,8 @@ describe('Offline', () => {
     userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
 
     const table = screen.getByRole('table')
+    const linkToBleachingRecord = within(table).queryByRole('link', { name: 'Bleaching' })
 
-    const linkToBenthicPitRecord = within(table).queryByRole('link', { name: 'Benthic PIT' })
-
-    expect(linkToBenthicPitRecord).not.toBeInTheDocument()
+    expect(linkToBleachingRecord).not.toBeInTheDocument()
   })
 })

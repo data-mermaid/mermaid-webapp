@@ -287,6 +287,7 @@ const ColoniesBleachedObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="normal-label"
               value={count_normal}
               min="0"
               step="any"
@@ -297,6 +298,7 @@ const ColoniesBleachedObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="pale-label"
               value={count_pale}
               min="0"
               step="any"
@@ -307,6 +309,7 @@ const ColoniesBleachedObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="20-bleached-label"
               value={count_20}
               min="0"
               step="any"
@@ -317,6 +320,7 @@ const ColoniesBleachedObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="50-bleached-label"
               value={count_50}
               min="0"
               step="any"
@@ -327,6 +331,7 @@ const ColoniesBleachedObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="80-bleached-label"
               value={count_80}
               min="0"
               step="any"
@@ -337,6 +342,7 @@ const ColoniesBleachedObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="100-bleached-label"
               value={count_100}
               min="0"
               step="any"
@@ -347,6 +353,7 @@ const ColoniesBleachedObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
+              aria-labelledby="recently-dead-label"
               value={count_dead}
               min="0"
               step="any"
@@ -389,10 +396,10 @@ const ColoniesBleachedObservationTable = ({
   return (
     <>
       <InputWrapper data-testid={testId}>
-        <H2 id="table-label">Observations - Colonies Bleached</H2>
+        <H2 id="colonies-bleached-label">Observations - Colonies Bleached</H2>
         <>
           <StyledOverflowWrapper>
-            <StickyObservationTable aria-labelledby="table-label">
+            <StickyObservationTable aria-labelledby="colonies-bleached-label">
               <StyledColgroup>
                 <col className="number" />
                 <col className="autoWidth" />

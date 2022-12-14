@@ -10,12 +10,13 @@ import {
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import mockFishbeltValidationsObject from '../../../../testUtilities/mockFishbeltValidationsObject'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
+import mockBleachingValidationsObject from '../../../../testUtilities/mockBleachingValidationsObject'
+import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBleachingCollectRecords'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Validating an empty collect record shows validations (proof of wire-up)', async () => {
+test('Validating an empty bleaching collect record collect record shows validations (proof of wire-up)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -25,8 +26,8 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
-        validations: mockFishbeltValidationsObject,
+        ...mockBleachingCollectRecords[0],
+        validations: mockBleachingValidationsObject,
       }
 
       const response = {
@@ -49,7 +50,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -93,31 +94,46 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   expect(within(screen.getByTestId('depth')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_date')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('sample_time')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
+  expect(within(screen.getByTestId('quadrat_size')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('width')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('size_bin')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('relative_depth')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('visibility')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('current')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('tide')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
 
-  // observations table (has one empty observation)
+  // observations tables (have one observation error each)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const observationsColoniesBleachedTable = screen.getByLabelText(
+    'Observations - Colonies Bleached',
+  )
 
-  expect(within(observationsTable).getByText('observation error')).toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning')).not.toBeInTheDocument()
   expect(
-    within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
+    within(observationsColoniesBleachedTable).getByText('observation error'),
+  ).toBeInTheDocument()
+  expect(
+    within(observationsColoniesBleachedTable).queryByText('observation warning'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(observationsColoniesBleachedTable).queryByText(
+      `observation validation with ok status shouldn't show`,
+    ),
+  ).not.toBeInTheDocument()
+
+  const observationsPercentCover = screen.getByLabelText('Observations - Percent Cover')
+
+  expect(within(observationsPercentCover).getByText('observation error')).toBeInTheDocument()
+  expect(
+    within(observationsPercentCover).queryByText('observation warning'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(observationsPercentCover).queryByText(
+      `observation validation with ok status shouldn't show`,
+    ),
   ).not.toBeInTheDocument()
 })
 
-test('Fishbelt validations will show only the first error when there are multiple errors and warnings', async () => {
+test('bleaching collect record validations will show only the first error when there are multiple errors and warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -127,42 +143,42 @@ test('Fishbelt validations will show only the first error when there are multipl
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockMermaidData.collect_records[0],
+        ...mockBleachingCollectRecords[0],
         validations: {
           status: 'error',
           results: {
             data: {
-              obs_belt_fishes: [
+              obs_colonies_bleached: [
                 [
                   {
                     code: `observation validation with ok status shouldn't show`,
                     status: 'ok',
                     validation_id: 'fcb7300140f0df8b9a794fa286549bd2',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation error 1',
                     status: 'error',
                     validation_id: '2b289dc99c02e9ae1c764e8a71cca3cc',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation warning 1',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a19',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation error 2',
                     status: 'error',
                     validation_id: '2b289dc99c02e9ae1c764e8a71cca3c8',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                   {
                     code: 'observation warning 2',
                     status: 'warning',
                     validation_id: 'ccb38683efc25838ec9b7ff026e78a18',
-                    context: { observation_id: '7' },
+                    context: { observation_id: '1' },
                   },
                 ],
               ],
@@ -215,7 +231,7 @@ test('Fishbelt validations will show only the first error when there are multipl
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/fishbelt/1'],
+      initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -253,15 +269,27 @@ test('Fishbelt validations will show only the first error when there are multipl
   expect(within(screen.getByTestId('site')).queryByText('firstWarning')).not.toBeInTheDocument()
   expect(within(screen.getByTestId('site')).queryByText('secondWarning')).not.toBeInTheDocument()
 
-  // observations table (has one empty observation)
+  // observations tables (have one observation error each)
 
-  const observationsTable = screen.getByLabelText('Observations')
+  const coloniesBleachedObservationsTable = screen.getByLabelText(
+    'Observations - Colonies Bleached',
+  )
 
-  expect(within(observationsTable).getByText('observation error 1')).toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation error 2')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning 1')).not.toBeInTheDocument()
-  expect(within(observationsTable).queryByText('observation warning 2')).not.toBeInTheDocument()
   expect(
-    within(observationsTable).queryByText(`observation validation with ok status shouldn't show`),
+    within(coloniesBleachedObservationsTable).getByText('observation error 1'),
+  ).toBeInTheDocument()
+  expect(
+    within(coloniesBleachedObservationsTable).queryByText('observation error 2'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(coloniesBleachedObservationsTable).queryByText('observation warning 1'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(coloniesBleachedObservationsTable).queryByText('observation warning 2'),
+  ).not.toBeInTheDocument()
+  expect(
+    within(coloniesBleachedObservationsTable).queryByText(
+      `observation validation with ok status shouldn't show`,
+    ),
   ).not.toBeInTheDocument()
 })
