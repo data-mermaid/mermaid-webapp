@@ -25,6 +25,7 @@ import getObservationValidationInfo from '../CollectRecordFormPageAlternative/ge
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -280,6 +281,7 @@ const PercentCoverObservationTable = ({
             <ButtonPrimary type="button" onClick={handleAddObservation}>
               <IconPlus /> Add Row
             </ButtonPrimary>
+            <BleachingPercentCoverSummaryStats observations={observationsState} />
           </UnderTableRow>
         </>
       </InputWrapper>
