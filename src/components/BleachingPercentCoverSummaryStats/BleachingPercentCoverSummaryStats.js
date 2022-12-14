@@ -1,15 +1,15 @@
 import React from 'react'
 
-import { bleachingRecordPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import { observationsQuadratBenthicPercentPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { getAverage } from '../../library/getAverage'
 import { ObservationsSummaryStats } from '../pages/collectRecordFormPages/CollectingFormPage.Styles'
 import { Tr, Td, Th } from '../generic/Table/table'
 
 const BleachingPercentCoverSummaryStats = ({ observations }) => {
-  const hardPercentages = observations.map((item) => item.percent_hard)
-  const softPercentages = observations.map((item) => item.percent_soft)
-  const algaePercentages = observations.map((item) => item.percent_algae)
-  const quadratCounts = observations.map((item) => item.quadrat_number)
+  const hardPercentages = observations.map((item) => Number(item.percent_hard))
+  const softPercentages = observations.map((item) => Number(item.percent_soft))
+  const algaePercentages = observations.map((item) => Number(item.percent_algae))
+  const quadratCounts = observations.map((item) => Number(item.quadrat_number))
 
   return (
     <ObservationsSummaryStats>
@@ -20,22 +20,24 @@ const BleachingPercentCoverSummaryStats = ({ observations }) => {
         </Tr>
         <Tr>
           <Th>Avg Hard Coral %</Th>
-          <Td>{getAverage(hardPercentages).toFixed(1)}</Td>
+          <Td>{getAverage(hardPercentages)}</Td>
         </Tr>
         <Tr>
           <Th>Avg Soft Coral %</Th>
-          <Td>{getAverage(softPercentages).toFixed(1)}</Td>
+          <Td>{getAverage(softPercentages)}</Td>
         </Tr>
         <Tr>
           <Th>Avg Marcroalgae Cover %</Th>
-          <Td>{getAverage(algaePercentages).toFixed(1)}</Td>
+          <Td>{getAverage(algaePercentages)}</Td>
         </Tr>
       </tbody>
     </ObservationsSummaryStats>
   )
 }
 
-BleachingPercentCoverSummaryStats.propTypes = { observations: bleachingRecordPropType }
+BleachingPercentCoverSummaryStats.propTypes = {
+  observations: observationsQuadratBenthicPercentPropType,
+}
 BleachingPercentCoverSummaryStats.defaultProps = { observations: [] }
 
 export default BleachingPercentCoverSummaryStats
