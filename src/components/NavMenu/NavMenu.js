@@ -152,7 +152,7 @@ const NavMenu = ({ subNavNode }) => {
             {!isReadOnlyUser && (
               <LiCollecting>
                 <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
-                  <CollectionAvatar src="https://lh3.googleusercontent.com/a-/AFdZucrj66CrECK0M8bVED0w_CIygseu6Xp67vu4IZlovg=s96-c" />
+                  <CollectionAvatar src={currentUser.picture} />
                   <IconCollect />
                   <span>Collecting</span>
                   <CollectRecordsCount />
