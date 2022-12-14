@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import { observationsColoniesBleachedPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { Td, Th, Tr } from '../generic/Table/table'
