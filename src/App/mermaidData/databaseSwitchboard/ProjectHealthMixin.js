@@ -2,6 +2,7 @@ import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const MISSING_SITE_NAME = '__null__'
 
@@ -15,27 +16,6 @@ const ProjectHealthMixin = (Base) =>
 
     #hasDuplicates = function hasDuplicates(array) {
       return new Set(array).size !== array.length
-    }
-
-    #removeDateFromName = function removeDateFromName(name) {
-      const elementsInName = name.split(' ')
-
-      const isDateInNames = moment(
-        elementsInName[elementsInName.length - 1],
-        'YYYY-MM-DD',
-        true,
-      ).isValid()
-
-      if (elementsInName.length > 1) {
-        if (isDateInNames) {
-          // Remove the ending Date element from array
-          elementsInName.pop()
-        }
-
-        return elementsInName.join(' ')
-      }
-
-      return elementsInName[0]
     }
 
     #getDateFromName = function getDateFromName(name) {
@@ -86,6 +66,7 @@ const ProjectHealthMixin = (Base) =>
         const sampleEventRecord = {
           site_id: siteId,
           site_name: siteName,
+          sample_date: '',
           sample_unit_method: language.protocolTitles[sampleUnit],
           sample_unit_numbers: sampleUnitNumbers,
           sample_unit_protocol: sampleUnit,
@@ -108,7 +89,7 @@ const ProjectHealthMixin = (Base) =>
           ] of sampleUnitNumbersGroupBySampleDate) {
             sampleEventUnitRecords.push({
               ...sampleEventRecord,
-              site_name: `${siteName} ${sampleDate}`,
+              sample_date: getSampleDateLabel(sampleDate),
               sample_unit_numbers: sampleUnitNumbersBySampleDate,
             })
           }
@@ -160,7 +141,7 @@ const ProjectHealthMixin = (Base) =>
         )
 
         for (const [siteId, siteInfo] of recordGroupedBySite) {
-          const siteName = this.#removeDateFromName(siteInfo.site_name)
+          const siteName = siteInfo.site_name
           const siteCollectingMethods = collectingSummaryMethods[siteId]
 
           for (const protocol of availableProtocols) {
@@ -176,6 +157,7 @@ const ProjectHealthMixin = (Base) =>
               sampleEventUnitRecords.push({
                 site_id: siteId,
                 site_name: siteName,
+                sample_date: '',
                 sample_unit_method: protocolLabel,
                 sample_unit_protocol: protocol,
                 sample_unit_numbers: [],
@@ -270,6 +252,7 @@ const ProjectHealthMixin = (Base) =>
         const newSampleEventUnitRecords = {
           site_id: siteId,
           site_name: this.#getSiteName(site_name),
+          sample_date: '',
           sample_unit_numbers: [],
         }
 
@@ -348,7 +331,7 @@ const ProjectHealthMixin = (Base) =>
         )
 
         for (const [siteId, siteInfo] of recordGroupedBySite) {
-          const siteName = this.#removeDateFromName(siteInfo.site_name)
+          const siteName = siteInfo.site_name
 
           for (const protocol of availableProtocols) {
             const protocolLabel = language.protocolTitles[protocol]

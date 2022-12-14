@@ -214,6 +214,12 @@ const UsersAndTransects = () => {
       },
       {
         Header: () => '',
+        id: 'date',
+        columns: [{ Header: 'Date', accessor: 'date', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
+      {
+        Header: () => '',
         id: 'method',
         columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
         disableSortBy: true,
@@ -296,6 +302,7 @@ const UsersAndTransects = () => {
     () =>
       submittedRecords.map((record) => ({
         site: record.site_name,
+        date: record.sample_date,
         method: record.sample_unit_method,
         ...populateTransectNumberRow(record),
         ...populateCollectNumberRow(record),
@@ -394,7 +401,11 @@ const UsersAndTransects = () => {
                   const ThClassName = column.parent ? column.parent.id : undefined
 
                   const headerAlignment =
-                    column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+                    column.Header === 'Site' ||
+                    column.Header === 'Method' ||
+                    column.Header === 'Date'
+                      ? 'left'
+                      : 'right'
 
                   return (
                     <Th
@@ -449,7 +460,11 @@ const UsersAndTransects = () => {
                     const isCollectingNumberCellHighLighted =
                       cell.value !== EMPTY_VALUE &&
                       !isCellInSubmittedTransectNumberColumns &&
-                      !(cellColumnId === 'site' || cellColumnId === 'method')
+                      !(
+                        cellColumnId === 'site' ||
+                        cellColumnId === 'method' ||
+                        cellColumnId === 'date'
+                      )
 
                     const HighlightedClassName =
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
@@ -457,7 +472,9 @@ const UsersAndTransects = () => {
                         : undefined
 
                     const cellAlignment =
-                      cell.column.parent.id === 'site' || cell.column.parent.id === 'method'
+                      cellColumnId === 'site' ||
+                      cellColumnId === 'method' ||
+                      cellColumnId === 'date'
                         ? 'left'
                         : 'right'
 
