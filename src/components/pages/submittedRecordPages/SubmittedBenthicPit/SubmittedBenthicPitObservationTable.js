@@ -10,7 +10,7 @@ import { InputWrapper } from '../../../generic/form'
 import { StyledOverflowWrapper } from '../../collectRecordFormPages/CollectingFormPage.Styles'
 import { getObjectById } from '../../../../library/getObjectById'
 import { getOptions } from '../../../../library/getOptions'
-import BenthicPitObservationSummaryStats from '../../../BenthicPitObservationSummaryStats'
+import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats'
 
 const SubmittedBenthicPitObservationTable = ({
   benthicAttributeOptions,
@@ -46,7 +46,7 @@ const SubmittedBenthicPitObservationTable = ({
         </SubmittedObservationStickyTable>
       </StyledOverflowWrapper>
       <UnderTableRow>
-        <BenthicPitObservationSummaryStats
+        <BenthicPitLitObservationSummaryStats
           benthicAttributeSelectOptions={benthicAttributeOptions}
           observations={obs_benthic_pits}
         />
