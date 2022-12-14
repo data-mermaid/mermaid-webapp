@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
@@ -9,10 +9,11 @@ import theme from '../../theme'
 import { useSyncStatus } from '../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import useIsMounted from '../../library/useIsMounted'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
+import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
 const CollectRecordsCountWrapper = styled.strong`
   background: ${theme.color.callout};
-  border-radius: 100%;
+  border-radius: 50%;
   border: solid 1px ${theme.color.white};
   width: ${theme.spacing.xlarge};
   height: ${theme.spacing.xlarge};
@@ -20,6 +21,17 @@ const CollectRecordsCountWrapper = styled.strong`
   display: grid;
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
+  z-index: 2;
+  position: absolute;
+  right: 0.25rem;
+  top: 1rem;
+  ${mediaQueryPhoneOnly(css`
+    line-height: ${theme.typography.xSmallFontSize};
+    width: ${theme.spacing.large};
+    height: ${theme.spacing.large};
+    font-size: ${theme.typography.xSmallFontSize};
+    top: 0.75rem;
+  `)}
 `
 
 const CollectRecordsCount = () => {
