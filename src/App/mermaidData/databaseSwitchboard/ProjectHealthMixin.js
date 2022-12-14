@@ -2,6 +2,7 @@ import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const MISSING_SITE_NAME = '__null__'
 
@@ -86,6 +87,7 @@ const ProjectHealthMixin = (Base) =>
         const sampleEventRecord = {
           site_id: siteId,
           site_name: siteName,
+          sample_date: '',
           sample_unit_method: language.protocolTitles[sampleUnit],
           sample_unit_numbers: sampleUnitNumbers,
           sample_unit_protocol: sampleUnit,
@@ -108,7 +110,7 @@ const ProjectHealthMixin = (Base) =>
           ] of sampleUnitNumbersGroupBySampleDate) {
             sampleEventUnitRecords.push({
               ...sampleEventRecord,
-              site_name: `${siteName} ${sampleDate}`,
+              sample_date: getSampleDateLabel(sampleDate),
               sample_unit_numbers: sampleUnitNumbersBySampleDate,
             })
           }
@@ -176,6 +178,7 @@ const ProjectHealthMixin = (Base) =>
               sampleEventUnitRecords.push({
                 site_id: siteId,
                 site_name: siteName,
+                sample_date: '',
                 sample_unit_method: protocolLabel,
                 sample_unit_protocol: protocol,
                 sample_unit_numbers: [],
@@ -270,6 +273,7 @@ const ProjectHealthMixin = (Base) =>
         const newSampleEventUnitRecords = {
           site_id: siteId,
           site_name: this.#getSiteName(site_name),
+          sample_date: '',
           sample_unit_numbers: [],
         }
 
