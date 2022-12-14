@@ -18,27 +18,6 @@ const ProjectHealthMixin = (Base) =>
       return new Set(array).size !== array.length
     }
 
-    #removeDateFromName = function removeDateFromName(name) {
-      const elementsInName = name.split(' ')
-
-      const isDateInNames = moment(
-        elementsInName[elementsInName.length - 1],
-        'YYYY-MM-DD',
-        true,
-      ).isValid()
-
-      if (elementsInName.length > 1) {
-        if (isDateInNames) {
-          // Remove the ending Date element from array
-          elementsInName.pop()
-        }
-
-        return elementsInName.join(' ')
-      }
-
-      return elementsInName[0]
-    }
-
     #getDateFromName = function getDateFromName(name) {
       const lastElementInName = name.split(' ').pop()
       const isDateInNames = moment(lastElementInName, 'YYYY-MM-DD', true).isValid()
@@ -162,7 +141,7 @@ const ProjectHealthMixin = (Base) =>
         )
 
         for (const [siteId, siteInfo] of recordGroupedBySite) {
-          const siteName = this.#removeDateFromName(siteInfo.site_name)
+          const siteName = siteInfo.site_name
           const siteCollectingMethods = collectingSummaryMethods[siteId]
 
           for (const protocol of availableProtocols) {
@@ -352,7 +331,7 @@ const ProjectHealthMixin = (Base) =>
         )
 
         for (const [siteId, siteInfo] of recordGroupedBySite) {
-          const siteName = this.#removeDateFromName(siteInfo.site_name)
+          const siteName = siteInfo.site_name
 
           for (const protocol of availableProtocols) {
             const protocolLabel = language.protocolTitles[protocol]
