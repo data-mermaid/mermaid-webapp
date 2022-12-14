@@ -25,7 +25,7 @@ const SampleEventInputs = ({
   managementRegimes,
   sites,
   handleSitesChange,
-  handleChangeForDirtyIgnoredInput,
+  setIgnoredItemsToBeRevalidated,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
@@ -51,7 +51,7 @@ const SampleEventInputs = ({
   )
 
   const handleSiteChange = (event) => {
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'site',
       validationProperties: siteValidationProperties,
       validationPath: SITE_VALIDATION_PATH,
@@ -60,7 +60,7 @@ const SampleEventInputs = ({
   }
 
   const handleManagementChange = (event) => {
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'management',
       validationProperties: managementValidationProperties,
       validationPath: MANAGEMENT_VALIDATION_PATH,
@@ -69,7 +69,7 @@ const SampleEventInputs = ({
   }
 
   const handleSampleDateChange = (event) => {
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'sample_date',
       validationProperties: sampleDateValidationProperties,
       validationPath: SAMPLE_DATE_VALIDATION_PATH,
@@ -159,7 +159,7 @@ SampleEventInputs.propTypes = {
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   handleSitesChange: PropTypes.func.isRequired,
-  handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
+  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,

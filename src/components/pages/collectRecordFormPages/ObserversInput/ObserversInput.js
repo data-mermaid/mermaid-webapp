@@ -17,7 +17,7 @@ const ObserversInput = ({
   formik,
   ignoreNonObservationFieldValidations,
   observers,
-  handleChangeForDirtyIgnoredInput,
+  setIgnoredItemsToBeRevalidated,
   resetNonObservationFieldValidations,
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
@@ -40,7 +40,7 @@ const ObserversInput = ({
     const selectedObservers = filterObserverProfiles(selectedItems)
 
     formik.setFieldValue('observers', selectedObservers)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'observers',
       validationProperties,
       validationPath,
@@ -74,7 +74,7 @@ ObserversInput.propTypes = {
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   observers: observersPropType.isRequired,
-  handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
+  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ observers: observersValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
