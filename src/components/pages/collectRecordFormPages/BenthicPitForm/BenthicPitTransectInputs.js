@@ -282,7 +282,7 @@ const BenthicPitTransectInputs = ({
           onChange={handleSampleTimeChange}
         />
         <InputWithLabelAndValidation
-          label="Depth"
+          label="Depth (m)"
           required={true}
           id="depth"
           ignoreNonObservationFieldValidations={() => {
@@ -300,7 +300,7 @@ const BenthicPitTransectInputs = ({
           unit="m"
         />
         <InputWithLabelAndValidation
-          label="Transect Length Surveyed"
+          label="Transect Length Surveyed (m)"
           required={true}
           id="len_surveyed"
           testId="len_surveyed"

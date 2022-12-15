@@ -24,8 +24,8 @@ describe('Offline', () => {
 
     // make an unsaved change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    userEvent.clear(await screen.findByLabelText('Depth (m)'))
+    userEvent.type(screen.getByLabelText('Depth (m)'), '45')
 
     userEvent.click(screen.getByText('Delete Record'))
 
@@ -43,6 +43,6 @@ describe('Offline', () => {
       screen.queryByText('Are you sure you want to delete this record?'),
     ).not.toBeInTheDocument()
 
-    expect(await screen.findByLabelText('Depth')).toHaveValue(45)
+    expect(await screen.findByLabelText('Depth (m)')).toHaveValue(45)
   })
 })

@@ -13,13 +13,13 @@ import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtil
 const saveBenthicPitRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
   userEvent.selectOptions(screen.getByLabelText('Management'), '2')
-  userEvent.type(screen.getByLabelText('Depth'), '10000')
+  userEvent.type(screen.getByLabelText('Depth (m)'), '10000')
   userEvent.type(screen.getByLabelText('Sample Date'), '2021-04-21')
   userEvent.type(screen.getByLabelText('Sample Time'), '12:34')
 
   userEvent.type(screen.getByLabelText('Transect Number'), '56')
   userEvent.type(screen.getByLabelText('Label'), 'some label')
-  userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
+  userEvent.type(screen.getByLabelText('Transect Length Surveyed (m)'), '2')
   userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('flat'))
   userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor'))
   userEvent.click(within(screen.getByTestId('current')).getByLabelText('high'))
@@ -55,12 +55,12 @@ describe('Offline', () => {
     expect(screen.getByDisplayValue('Site A'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes B'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
+    expect(screen.getByLabelText('Depth (m)')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(within(form).getByLabelText('Transect Number')).toHaveValue(56)
     expect(within(form).getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
+    expect(screen.getByLabelText('Transect Length Surveyed (m)')).toHaveValue(2)
     expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
     expect(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor')).toBeChecked()
     expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
@@ -125,12 +125,12 @@ describe('Offline', () => {
     expect(screen.getByDisplayValue('Site A'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes B'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
+    expect(screen.getByLabelText('Depth (m)')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
+    expect(screen.getByLabelText('Transect Length Surveyed (m)')).toHaveValue(2)
     // reef slope radio checked on flat value
     expect(screen.getByLabelText('flat')).toBeChecked()
 

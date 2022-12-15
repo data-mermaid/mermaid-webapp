@@ -26,8 +26,8 @@ describe('Offline', () => {
 
     // make a change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    userEvent.clear(await screen.findByLabelText('Depth (m)'))
+    userEvent.type(screen.getByLabelText('Depth (m)'), '45')
 
     userEvent.click(
       screen.getByText('Save', {
@@ -41,12 +41,12 @@ describe('Offline', () => {
     expect(screen.getByDisplayValue('Site C'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes C'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(45)
+    expect(screen.getByLabelText('Depth (m)')).toHaveValue(45)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2020-04-19')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(5)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(10)
+    expect(screen.getByLabelText('Transect Length Surveyed (m)')).toHaveValue(10)
     expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
     expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
     expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
@@ -127,7 +127,7 @@ describe('Offline', () => {
     })
 
     // make an unsaved change
-    const depthInput = await screen.findByLabelText('Depth')
+    const depthInput = await screen.findByLabelText('Depth (m)')
 
     userEvent.clear(depthInput)
     userEvent.type(depthInput, '45')
@@ -139,7 +139,7 @@ describe('Offline', () => {
 
     expect(await screen.findByText('Something went wrong. The sample unit has not been saved.'))
 
-    expect(await screen.findByLabelText('Depth')).toHaveValue(45)
+    expect(await screen.findByLabelText('Depth (m)')).toHaveValue(45)
   })
 
   test('Edit Benthic PIT can "unselect" non required radio group inputs', async () => {
