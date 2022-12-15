@@ -438,6 +438,10 @@ const UsersAndTransects = () => {
                     const isNotBleachingMethodRow = cellRowValuesMethod !== 'Bleaching'
                     const isCellInSubmittedTransectNumberColumns =
                       submittedTransectNumbers.includes(cellColumnId)
+                    const areSiteMethodOrDateColumns =
+                      cellColumnId === 'site' ||
+                      cellColumnId === 'method' ||
+                      cellColumnId === 'date'
 
                     const cellRowValuesForSubmittedTransectNumbers = Object.entries(
                       cellRowValues,
@@ -460,30 +464,17 @@ const UsersAndTransects = () => {
                     const isCollectingNumberCellHighLighted =
                       cell.value !== EMPTY_VALUE &&
                       !isCellInSubmittedTransectNumberColumns &&
-                      !(
-                        cellColumnId === 'site' ||
-                        cellColumnId === 'method' ||
-                        cellColumnId === 'date'
-                      )
+                      !areSiteMethodOrDateColumns
 
-                    const HighlightedClassName =
+                    const cellAlignment = areSiteMethodOrDateColumns ? 'left' : 'right'
+
+                    const cellClassName =
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
-                        ? 'highlighted'
-                        : undefined
-
-                    const cellAlignment =
-                      cellColumnId === 'site' ||
-                      cellColumnId === 'method' ||
-                      cellColumnId === 'date'
-                        ? 'left'
-                        : 'right'
+                        ? `${cell.column.parent.id} highlighted`
+                        : cell.column.parent.id
 
                     return (
-                      <Td
-                        {...cell.getCellProps()}
-                        align={cellAlignment}
-                        className={`${cell.column.parent.id} ${HighlightedClassName}`}
-                      >
+                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
                         <span>{cell.render('Cell')}</span>
                       </Td>
                     )
