@@ -1,0 +1,3 @@
+import BleachingColoniesBleachedSummaryStats from './BleachingColoniesBleachedSummaryStats'
+
+export default BleachingColoniesBleachedSummaryStats

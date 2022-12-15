@@ -10,7 +10,6 @@ import {
   Th,
   Td,
   Table,
-  TableOverflowWrapper,
   CopyModalToolbarWrapper,
   CopyModalPaginationWrapper,
 } from '../generic/Table/table'
@@ -19,7 +18,7 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { getTableColumnHeaderProps } from '../../library/getTableColumnHeaderProps'
 import { IconCheck, IconSend } from '../icons'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { ModalTableOverflowWrapper, RightFooter } from '../generic/Modal/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import LoadingModal from '../LoadingModal/LoadingModal'
 import { getToastArguments } from '../../library/getToastArguments'
@@ -313,7 +312,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
 
   const table = !!managementRegimeRecords.length && (
     <>
-      <TableOverflowWrapper>
+      <ModalTableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -355,7 +354,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
             })}
           </tbody>
         </Table>
-      </TableOverflowWrapper>
+      </ModalTableOverflowWrapper>
       <CopyModalPaginationWrapper>
         <PageSelector
           onPreviousClick={previousPage}

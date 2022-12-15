@@ -1,0 +1,3 @@
+import BleachingPercentCoverSummaryStats from './BleachingPercentCoverSummaryStats'
+
+export default BleachingPercentCoverSummaryStats

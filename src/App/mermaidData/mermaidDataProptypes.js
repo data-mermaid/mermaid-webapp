@@ -215,34 +215,47 @@ export const submittedBenthicLitPropType = PropTypes.shape({
   inetrval_start: PropTypes.number,
   benthic_transect: _benthicTransectPropType,
 })
+export const observationsColoniesBleachedPropType = PropTypes.arrayOf(
+  PropTypes.shape({
+    id: PropTypes.string,
+    attribute: PropTypes.string,
+    count_100: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    count_20: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    count_50: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    count_80: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    count_dead: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    count_normal: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    count_pale: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    growth_form: PropTypes.string,
+  }),
+)
+
+export const observationsQuadratBenthicPercentPropType = PropTypes.arrayOf(
+  PropTypes.shape({
+    id: PropTypes.string,
+    percent_algae: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    percent_hard: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    percent_soft: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    quadrat_number: PropTypes.number,
+  }),
+)
+
+export const observationsPercentCoverProptype = PropTypes.arrayOf(
+  PropTypes.shape({
+    id: PropTypes.string,
+    percent_algae: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    percent_hard: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    percent_soft: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    quadrat_number: PropTypes.number,
+  }),
+)
 
 export const bleachingRecordPropType = PropTypes.shape({
   id: PropTypes.string,
   data: PropTypes.shape({
     quadrat_collection: _bleachingQuadratPropType,
-    obs_quadrat_benthic_percent: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string,
-        percent_algae: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        percent_hard: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        percent_soft: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        quadrat_number: PropTypes.number,
-      }),
-    ),
-    obs_colonies_bleached: PropTypes.arrayOf(
-      PropTypes.shape({
-        attribute: PropTypes.string,
-        count_100: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        count_20: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        count_50: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        count_80: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        count_dead: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        count_normal: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        count_pale: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        growth_form: PropTypes.string,
-        id: PropTypes.string,
-      }),
-    ),
+    obs_quadrat_benthic_percent: observationsPercentCoverProptype,
+    obs_colonies_bleached: observationsColoniesBleachedPropType,
   }),
 })
 
@@ -251,20 +264,6 @@ export const submittedHabitatComplexityPropType = PropTypes.shape({
   interval_size: PropTypes.number,
   benthic_transect: _benthicTransectPropType,
 })
-
-export const observationsColoniesBleachedPropType = PropTypes.arrayOf(
-  PropTypes.shape({
-    count_20: PropTypes.number,
-    count_50: PropTypes.number,
-    count_80: PropTypes.number,
-    attribute: PropTypes.string,
-    count_100: PropTypes.number,
-    count_dead: PropTypes.number,
-    count_pale: PropTypes.number,
-    growth_form: PropTypes.string,
-    count_normal: PropTypes.number,
-  }),
-)
 
 export const managementRegimePropType = PropTypes.shape({
   id: PropTypes.string,

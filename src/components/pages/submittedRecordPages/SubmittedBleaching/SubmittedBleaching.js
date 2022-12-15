@@ -22,10 +22,10 @@ import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
 import SubmittedBleachingPitInfoTable from './SubmittedBleachingInfoTable'
-import BleachingObservationSummaryStats from '../../../BleachingObservationSummaryStats'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import SubmittedBleachingPercentageSummaryTable from './SubmittedBleachingPercentageSummaryTable'
+import BleachingPercentCoverObservations from './BleachingPercentCoverObservations'
+import BleachingColoniesBleachedObservations from './BleachingColoniesBleachedObservations/BleachingColoniesBleachedObservations'
 
 const SubmittedBleaching = () => {
   const currentProjectPath = useCurrentProjectPath()
@@ -170,13 +170,13 @@ const SubmittedBleaching = () => {
               ))}
             </ul>
 
-            <BleachingObservationSummaryStats
+            <BleachingColoniesBleachedObservations
               benthicAttributeOptions={benthicAttributeOptions}
               choices={choices}
-              obsColoniesBleached={submittedRecord?.obs_colonies_bleached}
+              observationsColoniesBleached={submittedRecord?.obs_colonies_bleached}
             />
 
-            <SubmittedBleachingPercentageSummaryTable submittedRecord={submittedRecord} />
+            <BleachingPercentCoverObservations record={submittedRecord} />
           </>
         ) : (
           <PageUnavailable mainText={language.error.pageUnavailableOffline} />
