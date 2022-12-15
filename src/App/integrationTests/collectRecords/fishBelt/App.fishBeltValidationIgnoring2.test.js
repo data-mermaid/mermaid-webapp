@@ -447,7 +447,7 @@ test('Validation: user edits non-observation input with ignored validation reset
   userEvent.selectOptions(within(managementRow).getByLabelText('Management'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(depthRow).getByLabelText('Depth'), '1')
+  userEvent.type(within(depthRow).getByLabelText('Depth (m)'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
@@ -464,7 +464,7 @@ test('Validation: user edits non-observation input with ignored validation reset
   userEvent.type(within(labelRow).getByLabelText('Label'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(lengthSurveyedRow).getByLabelText('Transect Length Surveyed'), '1')
+  userEvent.type(within(lengthSurveyedRow).getByLabelText('Transect Length Surveyed (m)'), '1')
   await waitFor(() =>
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )

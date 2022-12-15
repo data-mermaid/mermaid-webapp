@@ -12,13 +12,13 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 const saveFishbeltRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
   userEvent.selectOptions(screen.getByLabelText('Management'), '2')
-  userEvent.type(screen.getByLabelText('Depth'), '10000')
+  userEvent.type(screen.getByLabelText('Depth (m)'), '10000')
   userEvent.type(screen.getByLabelText('Sample Date'), '2021-04-21')
   userEvent.type(screen.getByLabelText('Sample Time'), '12:34')
 
   userEvent.type(screen.getByLabelText('Transect Number'), '56')
   userEvent.type(screen.getByLabelText('Label'), 'some label')
-  userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
+  userEvent.type(screen.getByLabelText('Transect Length Surveyed (m)'), '2')
   userEvent.click(within(screen.getByTestId('width')).getByLabelText('10m'))
   userEvent.click(within(screen.getByTestId('size_bin')).getByLabelText('1'))
   userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('flat'))
@@ -55,12 +55,12 @@ describe('Online', () => {
     expect(screen.getByDisplayValue('Site A'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes B'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
+    expect(screen.getByLabelText('Depth (m)')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
+    expect(screen.getByLabelText('Transect Length Surveyed (m)')).toHaveValue(2)
     expect(within(screen.getByTestId('width')).getByLabelText('10m')).toBeChecked()
     expect(within(screen.getByTestId('size_bin')).getByLabelText('1')).toBeChecked()
     expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
@@ -127,12 +127,12 @@ describe('Online', () => {
     expect(screen.getByDisplayValue('Site A'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes B'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(10000)
+    expect(screen.getByLabelText('Depth (m)')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
+    expect(screen.getByLabelText('Transect Length Surveyed (m)')).toHaveValue(2)
     // width radio checked on 1
     expect(screen.getByLabelText('10m')).toBeChecked()
     // fish size bin radio checked on 1

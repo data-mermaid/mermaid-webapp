@@ -52,12 +52,12 @@ test('FishBelt component in EDIT mode renders with the expected UI elements', as
 
   expect(screen.getByLabelText('Site'))
   expect(screen.getByLabelText('Management'))
-  expect(screen.getByLabelText('Depth'))
+  expect(screen.getByLabelText('Depth (m)'))
   expect(screen.getByLabelText('Sample Date'))
   expect(screen.getByLabelText('Sample Time'))
   expect(screen.getByLabelText('Transect Number'))
   expect(screen.getByLabelText('Label'))
-  expect(screen.getByLabelText('Transect Length Surveyed'))
+  expect(screen.getByLabelText('Transect Length Surveyed (m)'))
   expect(screen.getByText(/width/i))
   expect(screen.getByText(/fish size bin/i))
   expect(screen.getByText(/reef slope/i))
@@ -102,12 +102,12 @@ test('FishBelt component in CREATE NEW mode renders with the expected UI element
 
   expect(screen.getByLabelText('Site'))
   expect(screen.getByLabelText('Management'))
-  expect(screen.getByLabelText('Depth'))
+  expect(screen.getByLabelText('Depth (m)'))
   expect(screen.getByLabelText('Sample Date'))
   expect(screen.getByLabelText('Sample Time'))
   expect(screen.getByLabelText('Transect Number'))
   expect(screen.getByLabelText('Label'))
-  expect(screen.getByLabelText('Transect Length Surveyed'))
+  expect(screen.getByLabelText('Transect Length Surveyed (m)'))
   expect(screen.getByText(/width/i))
   expect(screen.getByText(/fish size bin/i))
   expect(screen.getByText(/reef slope/i))
@@ -137,12 +137,12 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   expect(screen.getByDisplayValue('Site D'))
   // Management select
   expect(screen.getByDisplayValue('Management Regimes C'))
-  expect(screen.getByLabelText('Depth')).toHaveValue(10)
+  expect(screen.getByLabelText('Depth (m)')).toHaveValue(10)
   expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-03-02')
   expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
   expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
   expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
-  expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
+  expect(screen.getByLabelText('Transect Length Surveyed (m)')).toHaveValue(6)
   // width radio
   expect(screen.getByLabelText('2m')).toBeChecked()
   // fish size bin radio
@@ -331,11 +331,11 @@ test('FishBelt component in EDIT mode - when change binsize = 10, fish size valu
 
   const observationsTable = await screen.findByLabelText('Observations')
 
-  expect(within(observationsTable).getAllByLabelText('Size')[0]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[0]).not.toHaveValue()
 
-  expect(within(observationsTable).getAllByLabelText('Size')[1]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[1]).not.toHaveValue()
 
-  expect(within(observationsTable).getAllByLabelText('Size')[2]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[2]).not.toHaveValue()
 })
 test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size values is not selected/null', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
@@ -363,11 +363,11 @@ test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size v
 
   const observationsTable = await screen.findByLabelText('Observations')
 
-  expect(within(observationsTable).getAllByLabelText('Size')[0]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[0]).not.toHaveValue()
 
-  expect(within(observationsTable).getAllByLabelText('Size')[1]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[1]).not.toHaveValue()
 
-  expect(within(observationsTable).getAllByLabelText('Size')[2]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[2]).not.toHaveValue()
 })
 test('FishBelt component in EDIT mode - when change binsize = 1, fish size values get transfered to numeric inputs', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()

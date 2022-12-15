@@ -26,8 +26,8 @@ describe('Offline', () => {
 
     // make a change
 
-    userEvent.clear(await screen.findByLabelText('Depth'))
-    userEvent.type(screen.getByLabelText('Depth'), '45')
+    userEvent.clear(await screen.findByLabelText('Depth (m)'))
+    userEvent.type(screen.getByLabelText('Depth (m)'), '45')
 
     userEvent.click(
       screen.getByText('Save', {
@@ -41,12 +41,12 @@ describe('Offline', () => {
     expect(screen.getByDisplayValue('Site D'))
     // Management select
     expect(screen.getByDisplayValue('Management Regimes C'))
-    expect(screen.getByLabelText('Depth')).toHaveValue(45)
+    expect(screen.getByLabelText('Depth (m)')).toHaveValue(45)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-03-02')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')
     expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
-    expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
+    expect(screen.getByLabelText('Transect Length Surveyed (m)')).toHaveValue(6)
     expect(within(screen.getByTestId('width')).getByLabelText('2m')).toBeChecked()
     expect(within(screen.getByTestId('size_bin')).getByLabelText('5')).toBeChecked()
     expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
@@ -84,7 +84,7 @@ describe('Offline', () => {
 
     const newFishNameInput = screen.getAllByLabelText('Fish Name')[3]
     // the first record technically has two size inputs (because its 50+), so this one is at index 4
-    const newSizeInput = screen.getAllByLabelText('Size')[4]
+    const newSizeInput = screen.getAllByLabelText('Size (cm)')[4]
     const newCountInput = screen.getAllByLabelText('Count')[3]
 
     userEvent.type(newFishNameInput, 'neb')
@@ -144,11 +144,11 @@ describe('Offline', () => {
     expect(observationRows.length).toEqual(5)
 
     // the first record technically has two size inputs (because its 50+), so this one is at index 4
-    const newSizeInput = screen.getAllByLabelText('Size')[4]
+    const newSizeInput = screen.getAllByLabelText('Size (cm)')[4]
 
     userEvent.selectOptions(newSizeInput, '50')
 
-    const newSizePlus50Input = screen.getAllByLabelText('Size')[5]
+    const newSizePlus50Input = screen.getAllByLabelText('Size (cm)')[5]
 
     // we cant use userEvent.clear or {backspace} for whatever reason here. Maybe related to this issue https://github.com/testing-library/user-event/issues/356
     // so this typing is just appending to the existing '50' in the input.
@@ -184,7 +184,7 @@ describe('Offline', () => {
     })
 
     // make an unsaved change
-    const depthInput = await screen.findByLabelText('Depth')
+    const depthInput = await screen.findByLabelText('Depth (m)')
 
     userEvent.clear(depthInput)
     userEvent.type(depthInput, '45')
@@ -196,7 +196,7 @@ describe('Offline', () => {
 
     expect(await screen.findByText('Something went wrong. The sample unit has not been saved.'))
 
-    expect(await screen.findByLabelText('Depth')).toHaveValue(45)
+    expect(await screen.findByLabelText('Depth (m)')).toHaveValue(45)
   })
 
   test('Edit fishbelt can "unselect" non required radio group inputs', async () => {

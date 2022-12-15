@@ -448,7 +448,7 @@ const FishBeltObservationTable = ({
                 Fish Name <RequiredIndicator />
               </Th>
               <Th align="right" id="fish-size-label">
-                Size <RequiredIndicator />
+                Size (cm) <RequiredIndicator />
               </Th>
               <Th align="right" id="fish-count-label">
                 Count <RequiredIndicator />
