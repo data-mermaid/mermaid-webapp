@@ -281,7 +281,7 @@ const TransectInputs = ({
           onChange={handleSampleTimeChange}
         />
         <InputWithLabelAndValidation
-          label="Depth"
+          label="Depth (m)"
           required={true}
           id="depth"
           ignoreNonObservationFieldValidations={() => {
@@ -298,7 +298,7 @@ const TransectInputs = ({
           onChange={handleDepthChange}
         />
         <InputWithLabelAndValidation
-          label="Transect Length Surveyed"
+          label="Transect Length Surveyed (m)"
           required={true}
           id="len_surveyed"
           testId="len_surveyed"
@@ -342,7 +342,7 @@ const TransectInputs = ({
           onChange={handleQuadratNumberStartChange}
         />
         <InputWithLabelAndValidation
-          label="Quadrat Size"
+          label="Quadrat Size (m²)"
           required={true}
           id="quadrat_size"
           testId="quadrat_size"

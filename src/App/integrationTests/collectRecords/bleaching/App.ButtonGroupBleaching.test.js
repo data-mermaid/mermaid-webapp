@@ -24,8 +24,8 @@ test('Edit Bleaching collect record - Save button starts with Saved status, make
     dexieCurrentUserInstance,
   })
 
-  userEvent.clear(await screen.findByLabelText('Depth'))
-  userEvent.type(screen.getByLabelText('Depth'), '45')
+  userEvent.clear(await screen.findByLabelText('Depth (m)'))
+  userEvent.type(screen.getByLabelText('Depth (m)'), '45')
 
   expect(screen.getByText('Save', { selector: 'button' }))
 

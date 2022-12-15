@@ -543,7 +543,7 @@ test('Bleaching validation: user edits non-observation input with ignored valida
   userEvent.selectOptions(within(managementRow).getByLabelText('Management'), '1')
   await waitFor(() => expect(within(managementRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(depthRow).getByLabelText('Depth'), '1')
+  userEvent.type(within(depthRow).getByLabelText('Depth (m)'), '1')
   await waitFor(() => expect(within(depthRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.type(within(sampleDateRow).getByLabelText('Sample Date'), '2021-11-09')
@@ -555,7 +555,7 @@ test('Bleaching validation: user edits non-observation input with ignored valida
   userEvent.type(within(labelRow).getByLabelText('Label'), '1')
   await waitFor(() => expect(within(labelRow).queryByText('Ignored')).not.toBeInTheDocument())
 
-  userEvent.type(within(quadratSizeRow).getByLabelText('Quadrat Size'), '1')
+  userEvent.type(within(quadratSizeRow).getByLabelText('Quadrat Size (m²)'), '1')
   await waitFor(() => expect(within(quadratSizeRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.type(within(notesRow).getByLabelText('Notes'), '1')

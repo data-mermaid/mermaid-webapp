@@ -201,7 +201,7 @@ const BleachingTransectInputs = ({
           onChange={handleSampleTimeChange}
         />
         <InputWithLabelAndValidation
-          label="Depth"
+          label="Depth (m)"
           required={true}
           id="depth"
           ignoreNonObservationFieldValidations={() => {
@@ -219,7 +219,7 @@ const BleachingTransectInputs = ({
           unit="m"
         />
         <InputWithLabelAndValidation
-          label="Quadrat Size"
+          label="Quadrat Size (m²)"
           required={true}
           id="quadrat_size"
           testId="quadrat_size"

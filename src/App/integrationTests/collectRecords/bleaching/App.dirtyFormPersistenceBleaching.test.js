@@ -21,12 +21,12 @@ test('Unsaved NEW bleaching form edits clear when the user navigates away and ba
 
   const form = await screen.findByRole('form')
 
-  expect(within(form).getByLabelText('Depth')).not.toHaveValue()
+  expect(within(form).getByLabelText('Depth (m)')).not.toHaveValue()
 
   // enter a depth
-  userEvent.type(await within(form).findByLabelText('Depth'), '45')
+  userEvent.type(await within(form).findByLabelText('Depth (m)'), '45')
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth (m)')).toHaveValue(45)
 
   // nav away
   const sideNav = await screen.findByTestId('content-page-side-nav')
@@ -63,15 +63,15 @@ test('Unsaved EDIT bleaching form edits clear when the user navigates away and b
   const form = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(form).getByLabelText('Depth')).toHaveValue(20)
+  expect(within(form).getByLabelText('Depth (m)')).toHaveValue(20)
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText('Depth')
+  const depthInput = await within(form).findByLabelText('Depth (m)')
 
   userEvent.clear(depthInput)
   userEvent.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth (m)')).toHaveValue(45)
 
   // nav away
   const sideNav = screen.getByTestId('content-page-side-nav')
@@ -103,20 +103,20 @@ test('Unsaved NEW bleaching form edits persist through change in online/offline 
 
   const form = await screen.findByRole('form')
 
-  expect(within(form).getByLabelText('Depth')).not.toHaveValue()
+  expect(within(form).getByLabelText('Depth (m)')).not.toHaveValue()
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText('Depth')
+  const depthInput = await within(form).findByLabelText('Depth (m)')
 
   userEvent.clear(depthInput)
   userEvent.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth (m)')).toHaveValue(45)
   expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
 
   userEvent.click(screen.getByTestId('offline-toggle-switch-label'))
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth (m)')).toHaveValue(45)
   expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
 })
 
@@ -132,19 +132,19 @@ test('Unsaved EDIT bleaching form edits persist through change in online/offline
   const form = await screen.findByRole('form')
 
   // initial unedited depth value
-  expect(within(form).getByLabelText('Depth')).toHaveValue(20)
+  expect(within(form).getByLabelText('Depth (m)')).toHaveValue(20)
 
   // enter a depth
-  const depthInput = await within(form).findByLabelText('Depth')
+  const depthInput = await within(form).findByLabelText('Depth (m)')
 
   userEvent.clear(depthInput)
   userEvent.type(depthInput, '45')
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth (m)')).toHaveValue(45)
   expect(screen.getByRole('button', { name: 'Save' })).toBeEnabled()
 
   userEvent.click(screen.getByTestId('offline-toggle-switch-label'))
 
-  expect(await within(form).findByLabelText('Depth')).toHaveValue(45)
+  expect(await within(form).findByLabelText('Depth (m)')).toHaveValue(45)
   expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
 })

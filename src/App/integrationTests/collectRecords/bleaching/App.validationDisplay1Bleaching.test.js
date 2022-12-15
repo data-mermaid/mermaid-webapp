@@ -258,7 +258,7 @@ test('Validating an empty collect record, and then editing an input with errors 
 
   expect(await within(screen.getByTestId('depth')).findByText('Required')).toBeInTheDocument()
 
-  userEvent.type(screen.getByLabelText('Depth'), '1')
+  userEvent.type(screen.getByLabelText('Depth (m)'), '1')
 
   // validations remain showing, except Depth is changed
   expect(await within(screen.getByTestId('site')).findByText('Required')).toBeInTheDocument()
@@ -279,7 +279,7 @@ test('Validating an empty collect record, and then editing an input with errors 
     within(screen.getByLabelText('Observations - Percent Cover')).getByText('observation error'),
   ).toBeInTheDocument()
 
-  userEvent.type(screen.getByLabelText('Depth'), '{backspace}')
+  userEvent.type(screen.getByLabelText('Depth (m)'), '{backspace}')
 
   userEvent.click(
     await screen.findByRole('button', {
