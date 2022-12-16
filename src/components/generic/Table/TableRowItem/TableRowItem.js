@@ -19,16 +19,25 @@ const getOptionsByItemLabelOrName = (rowValue, options) => {
     : getItemLabelOrName(options, rowValue)
 }
 
-const TableRowItem = ({ title, options, value, extraValue }) => {
+const TableRowItem = ({
+  title,
+  options,
+  value,
+  extraValue,
+  isOriginalSiteSelected,
+  isDuplicateSiteSelected,
+}) => {
   const rowItemValue = options ? getOptionsByItemLabelOrName(value, options) : value
   const extraRowItemValue = options ? getOptionsByItemLabelOrName(extraValue, options) : extraValue
   const showExtraRowItem = extraValue || extraValue === ''
+  const highlightedCurrentSite = isOriginalSiteSelected ? 'highlighted' : undefined
+  const highlightedDuplicateSite = isDuplicateSiteSelected ? 'highlighted' : undefined
 
   return (
     <Tr>
       <TdKey>{title}</TdKey>
-      <Td>{rowItemValue}</Td>
-      {showExtraRowItem && <Td>{extraRowItemValue}</Td>}
+      <Td className={highlightedDuplicateSite}>{rowItemValue}</Td>
+      {showExtraRowItem && <Td className={highlightedCurrentSite}>{extraRowItemValue}</Td>}
     </Tr>
   )
 }
@@ -50,12 +59,16 @@ TableRowItem.propTypes = {
     PropTypes.number,
     PropTypes.arrayOf(PropTypes.string),
   ]),
+  isOriginalSiteSelected: PropTypes.bool,
+  isDuplicateSiteSelected: PropTypes.bool,
 }
 
 TableRowItem.defaultProps = {
   options: undefined,
   value: undefined,
   extraValue: undefined,
+  isOriginalSiteSelected: false,
+  isDuplicateSiteSelected: false,
 }
 
 export default TableRowItem

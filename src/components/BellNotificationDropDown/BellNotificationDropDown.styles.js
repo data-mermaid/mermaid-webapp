@@ -23,6 +23,7 @@ export const NotificationHeader = styled('div')`
   display: grid;
   grid-template-columns: auto auto;
   align-items: center;
+  justify-content: space-between;
 `
 export const NotificationTitle = styled('p')`
   font-weight: 700;

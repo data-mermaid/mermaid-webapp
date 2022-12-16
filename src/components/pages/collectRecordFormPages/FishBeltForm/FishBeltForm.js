@@ -146,6 +146,8 @@ const FishBeltForm = ({ isNewRecord }) => {
   const handleNewObservationAdd = (observationAttributeId) =>
     setNewObservationToAdd(observationAttributeId)
 
+  const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
+
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       Promise.all([
@@ -202,27 +204,28 @@ const FishBeltForm = ({ isNewRecord }) => {
   }
 
   return (
-    <ErrorBoundary>
-      <CollectRecordFormPage
-        isNewRecord={isNewRecord}
-        sampleUnitName="fishbelt"
-        collectRecordBeingEdited={collectRecordBeingEdited}
-        handleCollectRecordChange={handleCollectRecordChange}
-        handleNewObservationAdd={handleNewObservationAdd}
-        handleSubmitNewObservation={onSubmitNewFishSpecies}
-        observationsReducer={observationsReducer}
-        sites={sites}
-        managementRegimes={managementRegimes}
-        choices={choices}
-        idsNotAssociatedWithData={idsNotAssociatedWithData}
-        isLoading={isLoading}
-        subNavNode={subNavNode}
-        observerProfiles={observerProfiles}
-        observationOptions={fishNameOptions}
-        modalAttributeOptions={modalAttributeOptions}
-        fishNameConstants={fishNameConstants}
-      />
-    </ErrorBoundary>
+  <ErrorBoundary>
+    <CollectRecordFormPage
+      isNewRecord={isNewRecord}
+      sampleUnitName="fishbelt"
+      collectRecordBeingEdited={collectRecordBeingEdited}
+      handleCollectRecordChange={handleCollectRecordChange}
+      handleNewObservationAdd={handleNewObservationAdd}
+      handleSubmitNewObservation={onSubmitNewFishSpecies}
+      observationsReducer={observationsReducer}
+      sites={sites}
+      handleSitesChange={handleSitesChange}
+      managementRegimes={managementRegimes}
+      choices={choices}
+      idsNotAssociatedWithData={idsNotAssociatedWithData}
+      isLoading={isLoading}
+      subNavNode={subNavNode}
+      observerProfiles={observerProfiles}
+      observationOptions={fishNameOptions}
+      modalAttributeOptions={modalAttributeOptions}
+      fishNameConstants={fishNameConstants}
+    />
+  </ErrorBoundary>
   )
 }
 

@@ -67,6 +67,7 @@ const CollectRecordFormPage = ({
   handleSubmitNewObservation,
   observationsReducer,
   sites,
+  handleSitesChange,
   managementRegimes,
   choices,
   idsNotAssociatedWithData,
@@ -466,11 +467,7 @@ const CollectRecordFormPage = ({
     }
   }, [isFormDirty, setSaveButtonState])
 
-  const handleChangeForDirtyIgnoredInput = ({
-    validationProperties,
-    validationPath,
-    inputName,
-  }) => {
+  const setIgnoredItemsToBeRevalidated = ({ validationProperties, validationPath, inputName }) => {
     const isInputDirty = formik.initialValues[inputName] === formik.values[inputName]
     const doesFieldHaveIgnoredValidation = validationProperties.validationType === 'ignore'
 
@@ -539,7 +536,7 @@ const CollectRecordFormPage = ({
       areValidationsShowing={areValidationsShowing}
       choices={choices}
       formik={formik}
-      handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+      setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
       ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
       onSizeBinChange={handleSizeBinChange}
       resetNonObservationFieldValidations={resetNonObservationFieldValidations}
@@ -553,7 +550,7 @@ const CollectRecordFormPage = ({
       areValidationsShowing={areValidationsShowing}
       choices={choices}
       formik={formik}
-      handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+      setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
       ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
       resetNonObservationFieldValidations={resetNonObservationFieldValidations}
       validationsApiData={validationsApiData}
@@ -622,7 +619,8 @@ const CollectRecordFormPage = ({
           formik={formik}
           managementRegimes={managementRegimes}
           sites={sites}
-          handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+          handleSitesChange={handleSitesChange}
+          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationPropertiesWithDirtyResetOnInputChange={
@@ -636,7 +634,7 @@ const CollectRecordFormPage = ({
           formik={formik}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           observers={observerProfiles}
-          handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationsApiData={validationsApiData}
           validationPropertiesWithDirtyResetOnInputChange={
@@ -721,6 +719,7 @@ CollectRecordFormPage.propTypes = {
   handleSubmitNewObservation: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
+  handleSitesChange: PropTypes.func.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   choices: choicesPropType.isRequired,
   idsNotAssociatedWithData: PropTypes.arrayOf(PropTypes.string).isRequired,

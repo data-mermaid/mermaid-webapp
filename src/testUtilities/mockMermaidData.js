@@ -1,4 +1,5 @@
 import mockBenthicPitCollectRecords from './mockCollectRecords/mockBenthicPitCollectRecords'
+import mockBleachingCollectRecords from './mockCollectRecords/mockBleachingCollectRecords'
 import mockFishbeltCollectRecords from './mockCollectRecords/mockFishbeltCollectRecords'
 
 const projects = [
@@ -454,7 +455,11 @@ const fishBeltTransectMethods = [
   },
 ]
 
-const collect_records = [...mockFishbeltCollectRecords, ...mockBenthicPitCollectRecords]
+const collect_records = [
+  ...mockFishbeltCollectRecords,
+  ...mockBenthicPitCollectRecords,
+  ...mockBleachingCollectRecords,
+]
 
 const project_sites = [
   {

@@ -270,7 +270,7 @@ const ManagementRegimes = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: 15,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 15,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -286,6 +286,9 @@ const ManagementRegimes = () => {
     setPageSize(Number(e.target.value))
   }
 
+  // eslint-disable-next-line no-console
+  // console.log(tableUserPrefs.pageSize)
+
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const _setSortByPrefs = useEffect(() => {
@@ -295,6 +298,10 @@ const ManagementRegimes = () => {
   const _setFilterPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'globalFilter', currentValue: globalFilter })
   }, [globalFilter, handleSetTableUserPrefs])
+
+  const _setPageSizePrefs = useEffect(() => {
+    handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
+  }, [pageSize, handleSetTableUserPrefs])
 
   const readOnlyMrsHeaderContent = (
     <>

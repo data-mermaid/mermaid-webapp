@@ -329,12 +329,15 @@ const map = {
 }
 
 const resolveModal = {
-  thisSite: 'This sample unit site',
-  anotherSite: 'Site in other sample units',
+  thisSite: 'Original Site',
+  anotherSite: 'Duplicate Site',
   keepThisSite: 'Keep site',
   editSite: 'Edit site',
   keepBoth: 'Keep both',
-  cancel: 'Cancel'
+  cancel: 'Cancel',
+  mergeSite: 'Merge',
+  confirmMergeModalContent: (anotherSite) =>
+    `All instances of this site will be replaced with ${anotherSite}`,
 }
 
 const getValidationMessage = (validation, projectId = '') => {

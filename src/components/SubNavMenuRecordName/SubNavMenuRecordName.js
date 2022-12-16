@@ -1,42 +1,81 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { subNavNodePropTypes } from './subNavNodePropTypes'
 import theme from '../../theme'
+import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
-const SubNavList = styled.li`
+const SubNavList = styled('li')`
   background-color: ${theme.color.primaryColor};
   color: ${theme.color.white};
-  padding: ${theme.spacing.small};
-  span {
-    line-height: 1.2;
-    padding: ${theme.spacing.small} 0;
-    display: block;
-    word-wrap: break-word;
-    > span {
-      border-bottom: solid 1px white;
-    }
+  padding: ${theme.spacing.xsmall};
+  display: flex;
+  width: 100%;
+`
+const NavListSubItem = styled('span')`
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 2px;
+  flex: 0;
+  line-height: 1.2;
+  padding: ${theme.spacing.small} 0;
+  word-wrap: break-word;
+  ${mediaQueryPhoneOnly(css`
+    line-height: 1;
+  `)}
+`
+const FullRecord = styled(SubNavList)`
+  justify-content: space-around;
+  flex-wrap: wrap;
+  &:before {
+    content: '↳';
   }
+  span {
+    margin: 0 0.25rem;
+  }
+  ${mediaQueryPhoneOnly(css`
+    &:before {
+      content: '';
+    }
+    flex-direction: column;
+  `)}
+`
+const PartialRecord = styled(SubNavList)`
+  justify-content: space-between;
+  &:before {
+    content: '↳';
+  }
+  ${mediaQueryPhoneOnly(css`
+    &:before {
+      content: '';
+    }
+    flex-direction: column;
+  `)}
+`
+const SingleRecord = styled(SubNavList)`
+  text-decoration: none;
 `
 
 const RecordName = ({ subNavNode }) => {
   const { name, number, label } = subNavNode
 
   if (!number && !label) {
-    return <span>{name}</span>
+    return <SingleRecord>↳{name}</SingleRecord>
   }
   if (!name) {
     return (
-      <span>
-        {number} {label}
-      </span>
+      <PartialRecord>
+        <NavListSubItem>{number}</NavListSubItem>
+        <NavListSubItem>{label}</NavListSubItem>
+      </PartialRecord>
     )
   }
 
   return (
-    <span>
-      <span>{name}</span>
-      {number} {label}
-    </span>
+    <FullRecord>
+      <NavListSubItem>{name}</NavListSubItem>
+      <NavListSubItem>{number}</NavListSubItem>
+      <NavListSubItem>{label}</NavListSubItem>
+    </FullRecord>
   )
 }
 

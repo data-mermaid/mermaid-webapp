@@ -50,7 +50,9 @@ const CollectRecordFormPageAlternative = ({
   isNewRecord,
   isParentDataLoading,
   observationsTable1Reducer,
+  observationsTable2Reducer,
   ObservationTable1,
+  ObservationTable2,
   sampleUnitFormatSaveFunction,
   sampleUnitName,
   SampleUnitTransectInputs,
@@ -72,8 +74,9 @@ const CollectRecordFormPageAlternative = ({
   const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
-  const [apiObservationsTable1Loaded, setApiObservationsTable1Loaded] = useState(false)
-  const [observationsTable1State, observationsTable1Dispatch] = observationsTable1Reducer // eslint-disable-line no-unused-vars
+  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
+  const [observationsTable1State, observationsTable1Dispatch] = observationsTable1Reducer
+  const [observationsTable2State, observationsTable2Dispatch = () => {}] = observationsTable2Reducer
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
   const [sites, setSites] = useState([])
@@ -98,11 +101,25 @@ const CollectRecordFormPageAlternative = ({
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const observationTableRef = useRef(null)
 
+  const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
+
   const {
-    persistUnsavedFormData: persistUnsavedObservationsData,
-    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsData,
-    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
-  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedObservations`)
+    persistUnsavedFormData: persistUnsavedFormikData,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
+    getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSampleInfoInputs`)
+
+  const {
+    persistUnsavedFormData: persistUnsavedObservationsTable1Data,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsTable1Data,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsTable1Data,
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedObservationsTable1`)
+
+  const {
+    persistUnsavedFormData: persistUnsavedObservationsTable2Data,
+    clearPersistedUnsavedFormData: clearPersistedUnsavedObservationsTable2Data,
+    getPersistedUnsavedFormData: getPersistedUnsavedObservationsTable2Data,
+  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedObservationsTable2`)
 
   useEffect(
     function loadDataCommonToCertainProtocols() {
@@ -166,10 +183,17 @@ const CollectRecordFormPageAlternative = ({
   useEffect(
     function ensureUnsavedObservationsArePersisted() {
       if (areObservationsInputsDirty) {
-        persistUnsavedObservationsData(observationsTable1State)
+        persistUnsavedObservationsTable1Data(observationsTable1State)
+        persistUnsavedObservationsTable2Data(observationsTable2State)
       }
     },
-    [areObservationsInputsDirty, observationsTable1State, persistUnsavedObservationsData],
+    [
+      areObservationsInputsDirty,
+      observationsTable1State,
+      observationsTable2State,
+      persistUnsavedObservationsTable1Data,
+      persistUnsavedObservationsTable2Data,
+    ],
   )
 
   useEffect(
@@ -183,12 +207,6 @@ const CollectRecordFormPageAlternative = ({
 
   const { isErrorAbove, isErrorBelow } = useScrollCheckError()
 
-  const {
-    persistUnsavedFormData: persistUnsavedFormikData,
-    clearPersistedUnsavedFormData: clearPersistedUnsavedFormikData,
-    getPersistedUnsavedFormData: getPersistedUnsavedFormikData,
-  } = useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSampleInfoInputs`)
-
   const formik = useFormik({
     initialValues: initialFormikFormValues,
     enableReinitialize: true,
@@ -200,44 +218,61 @@ const CollectRecordFormPageAlternative = ({
       areObservationsInputsDirty ||
         !!formik.dirty ||
         !!getPersistedUnsavedFormikData() ||
-        !!getPersistedUnsavedObservationsData(),
+        !!getPersistedUnsavedObservationsTable1Data() ||
+        !!getPersistedUnsavedObservationsTable2Data(),
     )
   }, [
     areObservationsInputsDirty,
     formik.dirty,
     getPersistedUnsavedFormikData,
-    getPersistedUnsavedObservationsData,
+    getPersistedUnsavedObservationsTable1Data,
+    getPersistedUnsavedObservationsTable2Data,
   ])
 
   useEffect(
     function loadObservationsFromCollectRecordIntoState() {
-      if (!apiObservationsTable1Loaded && collectRecordBeingEdited) {
+      if (!apiObservationsLoaded && collectRecordBeingEdited) {
         const observationsFromApiTable1 =
           collectRecordBeingEdited.data[
             getObservationsPropertyNames(collectRecordBeingEdited)[0]
           ] ?? []
+        const observationsFromApiTable2 =
+          collectRecordBeingEdited.data[
+            getObservationsPropertyNames(collectRecordBeingEdited)[1]
+          ] ?? []
 
-        const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-        const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApiTable1
+        const persistedUnsavedObservationsTable1 = getPersistedUnsavedObservationsTable1Data()
+        const persistedUnsavedObservationsTable2 = getPersistedUnsavedObservationsTable2Data()
+        const initialObservationsToLoadTable1 =
+          persistedUnsavedObservationsTable1 ?? observationsFromApiTable1
+        const initialObservationsToLoadTable2 =
+          persistedUnsavedObservationsTable2 ?? observationsFromApiTable2
 
         observationsTable1Dispatch({
           type: 'loadObservationsFromApi',
-          payload: initialObservationsToLoad,
+          payload: initialObservationsToLoadTable1,
         })
 
-        setApiObservationsTable1Loaded(true)
+        observationsTable2Dispatch({
+          type: 'loadObservationsFromApi',
+          payload: initialObservationsToLoadTable2,
+        })
+
+        setApiObservationsLoaded(true)
       }
     },
     [
-      apiObservationsTable1Loaded,
+      apiObservationsLoaded,
       collectRecordBeingEdited,
-      getPersistedUnsavedObservationsData,
+      getPersistedUnsavedObservationsTable1Data,
+      getPersistedUnsavedObservationsTable2Data,
       observationsTable1Dispatch,
+      observationsTable2Dispatch,
     ],
   )
 
   const {
-    handleChangeForDirtyIgnoredInput,
+    setIgnoredItemsToBeRevalidated,
     handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,
@@ -263,9 +298,10 @@ const CollectRecordFormPageAlternative = ({
 
   const handleSave = () => {
     const recordToSubmit = sampleUnitFormatSaveFunction({
-      formikValues: formik.values,
-      observationTable1State: observationsTable1State,
       collectRecordBeingEdited,
+      formikValues: formik.values,
+      observationsTable1State,
+      observationsTable2State,
     })
 
     setSaveButtonState(buttonGroupStates.saving)
@@ -281,7 +317,8 @@ const CollectRecordFormPageAlternative = ({
       .then((response) => {
         toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
-        clearPersistedUnsavedObservationsData()
+        clearPersistedUnsavedObservationsTable1Data()
+        clearPersistedUnsavedObservationsTable2Data()
         setAreObservationsInputsDirty(false)
         setSaveButtonState(buttonGroupStates.saved)
         setValidateButtonState(buttonGroupStates.validatable)
@@ -341,7 +378,8 @@ const CollectRecordFormPageAlternative = ({
       })
       .then(() => {
         clearPersistedUnsavedFormikData()
-        clearPersistedUnsavedObservationsData()
+        clearPersistedUnsavedObservationsTable1Data()
+        clearPersistedUnsavedObservationsTable2Data()
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
         toast.success(...getToastArguments(language.success.collectRecordDelete))
@@ -385,7 +423,8 @@ const CollectRecordFormPageAlternative = ({
           formik={formik}
           managementRegimes={managementRegimes}
           sites={sites}
-          handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+          handleSitesChange={handleSitesChange}
+          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationPropertiesWithDirtyResetOnInputChange={
@@ -396,7 +435,7 @@ const CollectRecordFormPageAlternative = ({
           areValidationsShowing={areValidationsShowing}
           choices={choices}
           formik={formik}
-          handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationsApiData={validationsApiData}
@@ -411,7 +450,7 @@ const CollectRecordFormPageAlternative = ({
           formik={formik}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           observers={observerProfiles}
-          handleChangeForDirtyIgnoredInput={handleChangeForDirtyIgnoredInput}
+          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationsApiData={validationsApiData}
           validationPropertiesWithDirtyResetOnInputChange={
@@ -433,6 +472,21 @@ const CollectRecordFormPageAlternative = ({
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
           />
         </div>
+        {ObservationTable2 ? (
+          <ObservationTable2
+            testId="observations2-section"
+            areValidationsShowing={areValidationsShowing}
+            choices={choices}
+            collectRecord={collectRecordBeingEdited}
+            formik={formik}
+            ignoreObservationValidations={ignoreObservationValidations}
+            observationsReducer={observationsTable2Reducer}
+            resetObservationValidations={resetObservationValidations}
+            setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+            setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
+            setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
+          />
+        ) : null}
       </form>
       <DeleteRecordButton
         isLoading={isDeletingRecord}
@@ -501,7 +555,9 @@ CollectRecordFormPageAlternative.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
   isParentDataLoading: PropTypes.bool.isRequired,
   observationsTable1Reducer: observationsReducerPropType,
+  observationsTable2Reducer: observationsReducerPropType,
   ObservationTable1: PropTypes.elementType.isRequired,
+  ObservationTable2: PropTypes.elementType,
   sampleUnitFormatSaveFunction: PropTypes.func.isRequired,
   sampleUnitName: PropTypes.string.isRequired,
   SampleUnitTransectInputs: PropTypes.elementType.isRequired,
@@ -516,6 +572,8 @@ CollectRecordFormPageAlternative.defaultProps = {
   collectRecordBeingEdited: undefined,
   subNavNode: null,
   observationsTable1Reducer: [],
+  observationsTable2Reducer: [[], () => {}],
+  ObservationTable2: undefined,
 }
 
 export default CollectRecordFormPageAlternative

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import { getSampleUnitLabel } from '../getSampleUnitLabel'
@@ -215,6 +215,33 @@ const SitesMixin = (Base) =>
             const sampleUnitProtocolLabels = getSampleUnitLabel(sampleUnitProtocolValues)
 
             return Promise.reject(sampleUnitProtocolLabels)
+          })
+      }
+
+      return Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    findAndReplaceSite = async function findAndReplaceSite(
+      projectId,
+      findRecordId,
+      replaceRecordId,
+    ) {
+      if (!projectId || !findRecordId || !replaceRecordId) {
+        throw new Error('deleteSite expects record, profileId, and projectId parameters')
+      }
+
+      if (this._isOnlineAuthenticatedAndReady) {
+        return axios
+          .put(
+            `${this._apiBaseUrl}/projects/${projectId}/find_and_replace_sites/`,
+            {
+              find: [findRecordId],
+              replace: replaceRecordId,
+            },
+            await getAuthorizationHeaders(this._getAccessToken),
+          )
+          .then(() => {
+            return this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
           })
       }
 

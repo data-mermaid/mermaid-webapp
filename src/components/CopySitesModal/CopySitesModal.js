@@ -10,7 +10,6 @@ import {
   Th,
   Td,
   Table,
-  TableOverflowWrapper,
   CopyModalToolbarWrapper,
   CopyModalPaginationWrapper,
 } from '../generic/Table/table'
@@ -19,7 +18,7 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { getTableColumnHeaderProps } from '../../library/getTableColumnHeaderProps'
 import { IconSend } from '../icons'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { ModalTableOverflowWrapper, RightFooter } from '../generic/Modal/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
 import { useCurrentUser } from '../../App/CurrentUserContext'
@@ -286,7 +285,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
 
   const table = !!siteRecords.length && (
     <>
-      <TableOverflowWrapper>
+      <ModalTableOverflowWrapper>
         <Table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
@@ -328,7 +327,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
             })}
           </tbody>
         </Table>
-      </TableOverflowWrapper>
+      </ModalTableOverflowWrapper>
       <CopyModalPaginationWrapper>
         <PageSelector
           onPreviousClick={previousPage}

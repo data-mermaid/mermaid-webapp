@@ -5,7 +5,7 @@ import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import language from '../../language'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
 
-const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit }) => {
+const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit, isLoading }) => {
   const modalContent = (
     <p>
       <strong>{newUser}</strong> {language.pages.userTable.newUserModalText}
@@ -15,7 +15,9 @@ const NewUserModal = ({ isOpen, onDismiss, newUser, onSubmit }) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
-      <ButtonPrimary onClick={onSubmit}>Send email</ButtonPrimary>
+      <ButtonPrimary onClick={onSubmit} disabled={isLoading}>
+        Send email
+      </ButtonPrimary>
     </RightFooter>
   )
 
@@ -35,6 +37,7 @@ NewUserModal.propTypes = {
   onDismiss: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
   newUser: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 }
 
 export default NewUserModal

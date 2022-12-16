@@ -1,20 +1,30 @@
-import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 
-const getObservationValidations = ({ observationId, collectRecord }) => {
+const getObservationValidations = ({ observationId, collectRecord, observationsPropertyName }) => {
   const allObservationsValidations =
-    collectRecord?.validations?.results?.data?.[getObservationsPropertyNames(collectRecord)[0]] ??
-    []
-
+    collectRecord?.validations?.results?.data?.[observationsPropertyName] ?? []
   const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
-    return validation.context?.observation_id === observationId
+    // api is inconsistent between id and observation_id
+    return (
+      validation.context?.observation_id === observationId ||
+      validation.context?.id === observationId
+    )
   })
 
   return justThisObservationsValidations
 }
 
-const getObservationValidationInfo = ({ observationId, collectRecord, areValidationsShowing }) => {
-  const observationValidations = getObservationValidations({ observationId, collectRecord })
+const getObservationValidationInfo = ({
+  observationId,
+  collectRecord,
+  areValidationsShowing,
+  observationsPropertyName,
+}) => {
+  const observationValidations = getObservationValidations({
+    observationId,
+    collectRecord,
+    observationsPropertyName,
+  })
   const observationValidationsToDisplay = getValidationPropertiesForInput(
     observationValidations,
     areValidationsShowing,

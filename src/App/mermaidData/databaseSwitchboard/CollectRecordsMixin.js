@@ -1,5 +1,4 @@
-import axios from 'axios'
-
+import axios from '../../../library/axiosRetry'
 import {
   getProtocolTransectType,
   getIsFishBelt,
@@ -476,7 +475,7 @@ const CollectRecordsMixin = (Base) =>
           modifiedCollectRegordWithIgnoredObservationValidation.validations.results.data[
             observationTableName
           ]
-        const observationsValidationsWithIgnored = observationTable.map(
+        const observationsValidationsWithIgnored = observationTable?.map(
           (singleObservationValidations) => {
             return singleObservationValidations.map((validation) => {
               const isValidationBelongingToObservation =
@@ -560,7 +559,10 @@ const CollectRecordsMixin = (Base) =>
 
         return {
           ...currentValidationObject,
-          status: currentValidationStatus === 'ignore' ? 'reset' : currentValidationStatus,
+          status:
+            currentValidationStatus === 'ignore' || currentValidationStatus === 'warning'
+              ? 'reset'
+              : currentValidationStatus,
         }
       })
 

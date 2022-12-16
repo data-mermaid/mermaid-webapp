@@ -123,6 +123,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   const handleNewObservationAdd = (observationAttributeId) =>
     setNewObservationToAdd(observationAttributeId)
 
+  const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
+
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
@@ -192,6 +194,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
         handleSubmitNewObservation={onSubmitNewBenthicAttribute}
         observationsReducer={observationsReducer}
         sites={sites}
+        handleSitesChange={handleSitesChange}
         managementRegimes={managementRegimes}
         choices={choices}
         idsNotAssociatedWithData={idsNotAssociatedWithData}
@@ -202,6 +205,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
         modalAttributeOptions={benthicAttributeOptions}
       />
     </ErrorBoundary>
+
   )
 }
 

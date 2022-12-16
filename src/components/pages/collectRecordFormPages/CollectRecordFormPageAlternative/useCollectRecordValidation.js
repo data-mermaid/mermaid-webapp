@@ -251,7 +251,7 @@ const useCollectRecordValidation = ({
     ],
   )
 
-  const handleChangeForDirtyIgnoredInput = ({
+  const setIgnoredItemsToBeRevalidated = ({
     validationProperties,
     validationPath,
     inputName,
@@ -266,7 +266,7 @@ const useCollectRecordValidation = ({
   }
 
   return {
-    handleChangeForDirtyIgnoredInput,
+    setIgnoredItemsToBeRevalidated,
     handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,

@@ -24,7 +24,8 @@ const SampleEventInputs = ({
   formik,
   managementRegimes,
   sites,
-  handleChangeForDirtyIgnoredInput,
+  handleSitesChange,
+  setIgnoredItemsToBeRevalidated,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
@@ -50,7 +51,7 @@ const SampleEventInputs = ({
   )
 
   const handleSiteChange = (event) => {
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'site',
       validationProperties: siteValidationProperties,
       validationPath: SITE_VALIDATION_PATH,
@@ -59,7 +60,7 @@ const SampleEventInputs = ({
   }
 
   const handleManagementChange = (event) => {
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'management',
       validationProperties: managementValidationProperties,
       validationPath: MANAGEMENT_VALIDATION_PATH,
@@ -68,12 +69,18 @@ const SampleEventInputs = ({
   }
 
   const handleSampleDateChange = (event) => {
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'sample_date',
       validationProperties: sampleDateValidationProperties,
       validationPath: SAMPLE_DATE_VALIDATION_PATH,
     })
     formik.handleChange(event)
+  }
+
+  const updateValueAndResetValidationForSite = (siteValue, siteOptions) => {
+    formik.setFieldValue('site', siteValue)
+    handleSitesChange(siteOptions)
+    resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
   }
 
   return (
@@ -97,6 +104,7 @@ const SampleEventInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.site}
           onChange={handleSiteChange}
+          updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForSite}
         />
         <InputSelectWithLabelAndValidation
           label="Management"
@@ -150,7 +158,8 @@ SampleEventInputs.propTypes = {
   formik: formikPropType.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
-  handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
+  handleSitesChange: PropTypes.func.isRequired,
+  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,

@@ -28,7 +28,7 @@ const BleachingTransectInputs = ({
   areValidationsShowing,
   choices,
   formik,
-  handleChangeForDirtyIgnoredInput,
+  setIgnoredItemsToBeRevalidated,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationsApiData,
@@ -84,7 +84,7 @@ const BleachingTransectInputs = ({
 
   const handleLabelChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'label',
       validationProperties: labelValidationProperties,
       validationPath: LABEL_VALIDATION_PATH,
@@ -93,7 +93,7 @@ const BleachingTransectInputs = ({
 
   const handleQuadratSizeChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'quadrat_size',
       validationProperties: quadratSizeValidationProperties,
       validationPath: QUADRAT_SIZE_VALIDATION_PATH,
@@ -102,7 +102,7 @@ const BleachingTransectInputs = ({
 
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'relative_depth',
       validationProperties: relativeDepthValidationProperties,
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
@@ -110,7 +110,7 @@ const BleachingTransectInputs = ({
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'visibility',
       validationProperties: visibilityValidationProperties,
       validationPath: VISIBILITY_VALIDATION_PATH,
@@ -118,7 +118,7 @@ const BleachingTransectInputs = ({
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'current',
       validationProperties: currentValidationProperties,
       validationPath: CURRENT_VALIDATION_PATH,
@@ -127,7 +127,7 @@ const BleachingTransectInputs = ({
 
   const handleNotesChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'notes',
       validationProperties: notesValidationProperties,
       validationPath: NOTES_VALIDATION_PATH,
@@ -135,7 +135,7 @@ const BleachingTransectInputs = ({
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'tide',
       validationProperties: tideValidationProperties,
       validationPath: TIDE_VALIDATION_PATH,
@@ -144,7 +144,7 @@ const BleachingTransectInputs = ({
 
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'sample_time',
       validationProperties: sampleTimeValidationProperties,
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
@@ -153,7 +153,7 @@ const BleachingTransectInputs = ({
 
   const handleDepthChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'depth',
       validationProperties: depthValidationProperties,
       validationPath: DEPTH_VALIDATION_PATH,
@@ -334,7 +334,7 @@ BleachingTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
-  handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
+  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,

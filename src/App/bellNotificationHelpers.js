@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../library/axiosRetry'
 import language from '../language'
 import { getAuthorizationHeaders } from '../library/getAuthorizationHeaders'
 
