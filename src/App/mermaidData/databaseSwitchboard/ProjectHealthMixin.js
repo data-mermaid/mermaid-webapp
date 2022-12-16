@@ -2,7 +2,6 @@ import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const MISSING_SITE_NAME = '__null__'
 
@@ -59,55 +58,69 @@ const ProjectHealthMixin = (Base) =>
       }, {})
     }
 
-    #addRecordsBySite = function addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId) {
-      const [siteName, siteAvailableProtocols] = siteRecordGroup
+    #addSubmittedRecordsToSampleEventUnitRecord =
+      function addSubmittedRecordsToSampleEventUnitRecord(
+        sampleEventUnitRecords,
+        siteRecordGroup,
+        siteId,
+      ) {
+        const [siteName, siteAvailableProtocols] = siteRecordGroup
 
-      for (const [sampleUnit, sampleUnitNumbers] of Object.entries(siteAvailableProtocols)) {
-        const sampleEventRecord = {
-          site_id: siteId,
-          site_name: siteName,
-          sample_date: '',
-          sample_unit_method: language.protocolTitles[sampleUnit],
-          sample_unit_numbers: sampleUnitNumbers,
-          sample_unit_protocol: sampleUnit,
-        }
-
-        const sampleUnitNumberLabels = sampleUnitNumbers.map(({ label }) => label)
-        const sampleDates = sampleUnitNumbers.map(({ sample_date }) => sample_date)
-
-        const hasDuplicateTransectNumbersInSampleUnit = this.#hasDuplicates(sampleUnitNumberLabels)
-        const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
-
-        if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
-          const sampleUnitNumbersGroupBySampleDate = Object.entries(
-            this.#groupSampleUnitNumbersBySampleDate(sampleUnitNumbers),
-          )
-
-          for (const [
-            sampleDate,
-            sampleUnitNumbersBySampleDate,
-          ] of sampleUnitNumbersGroupBySampleDate) {
-            sampleEventUnitRecords.push({
-              ...sampleEventRecord,
-              sample_date: getSampleDateLabel(sampleDate),
-              sample_unit_numbers: sampleUnitNumbersBySampleDate,
-            })
+        for (const [sampleUnit, sampleUnitNumbers] of Object.entries(siteAvailableProtocols)) {
+          const sampleEventUnitRecord = {
+            site_id: siteId,
+            site_name: siteName,
+            sample_date: '',
+            sample_unit_method: language.protocolTitles[sampleUnit],
+            sample_unit_numbers: sampleUnitNumbers,
+            sample_unit_protocol: sampleUnit,
           }
-        } else {
-          sampleEventUnitRecords.push(sampleEventRecord)
+
+          const sampleUnitNumberLabels = sampleUnitNumbers.map(({ label }) => label)
+          const sampleDates = sampleUnitNumbers.map(({ sample_date }) => sample_date)
+
+          const hasDuplicateTransectNumbersInSampleUnit =
+            this.#hasDuplicates(sampleUnitNumberLabels)
+          const hasMoreThanOneSampleDatesInSampleUnit = new Set(sampleDates).size > 1
+
+          if (hasDuplicateTransectNumbersInSampleUnit && hasMoreThanOneSampleDatesInSampleUnit) {
+            const sampleUnitNumbersGroupBySampleDate = Object.entries(
+              this.#groupSampleUnitNumbersBySampleDate(sampleUnitNumbers),
+            )
+
+            for (const [
+              sampleDate,
+              sampleUnitNumbersBySampleDate,
+            ] of sampleUnitNumbersGroupBySampleDate) {
+              sampleEventUnitRecords.push({
+                ...sampleEventUnitRecord,
+                sample_date: sampleDate,
+                sample_unit_numbers: sampleUnitNumbersBySampleDate,
+              })
+            }
+          } else {
+            sampleEventUnitRecords.push(sampleEventUnitRecord)
+          }
         }
       }
-    }
 
-    #addRecordsToUsersAndTransects = function addRecordsToUsersAndTransects(
+    #addSubmittedRecordsToUsersAndTransects = function addSubmittedRecordsToUsersAndTransects(
       sampleEventUnitRecords,
       siteSubmittedSummary,
     ) {
+      const sampleEventUnitRecordsCopy = [...sampleEventUnitRecords]
+
       for (const [siteId, siteInfo] of Object.entries(siteSubmittedSummary)) {
         const siteRecordGroup = Object.values(siteInfo)
 
-        this.#addRecordsBySite(sampleEventUnitRecords, siteRecordGroup, siteId)
+        this.#addSubmittedRecordsToSampleEventUnitRecord(
+          sampleEventUnitRecordsCopy,
+          siteRecordGroup,
+          siteId,
+        )
       }
+
+      return sampleEventUnitRecordsCopy
     }
 
     #populateAdditionalRecordsForUsersAndTransects =
@@ -118,8 +131,10 @@ const ProjectHealthMixin = (Base) =>
       ) {
         /* Rule: If at least one submitted sample unit has a method, show that method in each site row.
       Example: there is only ONE sample unit submitted with the Habitat Complexity property, but it is given its own row in every site row */
+        const sampleEventUnitRecordsCopy = [...sampleEventUnitRecords]
+
         const recordGroupedBySite = Object.entries(
-          this.#groupSampleEventUnitBySite(sampleEventUnitRecords),
+          this.#groupSampleEventUnitBySite(sampleEventUnitRecordsCopy),
         )
 
         const collectingSummaryWithNameIsNotNull = Object.entries(siteCollectingSummary).filter(
@@ -154,7 +169,7 @@ const ProjectHealthMixin = (Base) =>
               (!siteInfo.site_names.includes(siteAndMethodName) && hasCollectingMethod) ||
               !siteInfo.sample_unit_methods.includes(protocolLabel)
             ) {
-              sampleEventUnitRecords.push({
+              sampleEventUnitRecordsCopy.push({
                 site_id: siteId,
                 site_name: siteName,
                 sample_date: '',
@@ -165,72 +180,148 @@ const ProjectHealthMixin = (Base) =>
             }
           }
         }
+
+        return sampleEventUnitRecordsCopy
       }
 
-    #updateProfileSummaryBySampleDate = function updateProfileSummaryBySampleDate(
-      nonEmptySampleDates,
-      siteCollectingSummary,
-      sampleEventUnit,
+    #getFilteredSampleEventUnitRecords = function getFilteredSampleEventUnitRecords(
+      sampleEventUnitRecords,
+      siteId,
     ) {
-      const { site_id, sample_unit_protocol, site_name } = sampleEventUnit
-      const sampleDateExtractFromName = this.#getDateFromName(site_name)
-      const collectingProfileSummary =
-        siteCollectingSummary[site_id]?.sample_unit_methods?.[sample_unit_protocol]?.profile_summary
-      const updateProfileSummary = {}
+      return sampleEventUnitRecords.filter(({ site_id }) => site_id === siteId)
+    }
+
+    #updateProfileSummary = function updateProfileSummary(
+      filteredSampleEventUnitRecords,
+      sampleEventUnitSampleDate,
+      collectingProfileSummary,
+    ) {
+      const sampleUnitProfileSummary = {}
 
       if (collectingProfileSummary) {
         for (const [profileId, profileInfo] of Object.entries(collectingProfileSummary)) {
           const labelsWithSampleDatesInSampleEvent = profileInfo.labels.filter(
-            (label) => label.sample_date === sampleDateExtractFromName,
+            (label) =>
+              sampleEventUnitSampleDate !== '' && label.sample_date === sampleEventUnitSampleDate,
           )
 
-          const labelsWithoutSampleDatesInSampleEvent = profileInfo.labels.filter(
-            (label) => !nonEmptySampleDates.includes(label.sample_date),
+          const specialLabels = profileInfo.labels.filter(
+            (label) =>
+              sampleEventUnitSampleDate === '' &&
+              !filteredSampleEventUnitRecords.includes(label.sample_date),
           )
 
           if (labelsWithSampleDatesInSampleEvent.length) {
-            // Fill collecting labels that has sample dates matched with any sample event's site names
-            updateProfileSummary[profileId] = {
+            sampleUnitProfileSummary[profileId] = {
               profile_name: profileInfo.profile_name,
               labels: labelsWithSampleDatesInSampleEvent,
             }
           }
 
-          if (sampleDateExtractFromName === '' && labelsWithoutSampleDatesInSampleEvent.length) {
-            // Fill rest of collecting labels to sample event's site names that doesn't attach with any sample dates
-            updateProfileSummary[profileId] = {
+          if (specialLabels.length) {
+            sampleUnitProfileSummary[profileId] = {
               profile_name: profileInfo.profile_name,
-              labels: labelsWithoutSampleDatesInSampleEvent,
+              labels: specialLabels,
             }
           }
         }
       }
 
-      return updateProfileSummary
+      return sampleUnitProfileSummary
     }
 
-    #fillCollectRecordWithSampleDate = function fillCollectRecordWithSampleDate(
+    #fillCollectRecordsWithSampleDates = function fillCollectRecordsWithSampleDates(
       sampleEventUnitRecords,
       siteCollectingSummary,
     ) {
       const sampleEventUnitRecordsCopy = [...sampleEventUnitRecords]
-      const sampleDates = sampleEventUnitRecordsCopy.map(({ site_name }) =>
-        this.#getDateFromName(site_name),
-      )
-      const filterNonEmptySampleDates = sampleDates.filter((date) => date !== '')
 
       for (const sampleEventUnit of sampleEventUnitRecordsCopy) {
-        sampleEventUnit.profile_summary = this.#updateProfileSummaryBySampleDate(
-          filterNonEmptySampleDates,
-          siteCollectingSummary,
-          sampleEventUnit,
+        const { site_id, sample_unit_protocol, sample_date } = sampleEventUnit
+
+        const filteredSampleEventUnitRecordsBySiteId = this.#getFilteredSampleEventUnitRecords(
+          sampleEventUnitRecordsCopy,
+          site_id,
         )
+          .filter((filteredRecords) => filteredRecords.sample_date !== '')
+          .map((record) => record.sample_date)
+
+        const collectingProfileSummary =
+          siteCollectingSummary[site_id]?.sample_unit_methods?.[sample_unit_protocol]
+            ?.profile_summary
+
+        const updatedSampleEventUnitProfileSummary = this.#updateProfileSummary(
+          filteredSampleEventUnitRecordsBySiteId,
+          sample_date,
+          collectingProfileSummary,
+        )
+
+        sampleEventUnit.profile_summary = updatedSampleEventUnitProfileSummary
       }
 
       return sampleEventUnitRecordsCopy
     }
 
-    #addCollectingRecords = function addCollectingRecords(
+    #createAdditionalSampleEventUnitRecords = function createAdditionalSampleEventUnitRecords(
+      sampleEventUnitRecords,
+      siteCollectingSummary,
+    ) {
+      /* Rule: check collecting summary profile records.
+        If records with empty sample date or different sample date from shown sample dates in any sample event unit records,
+        create new sample event unit record to contain the collecting records
+      */
+      const sampleEventUnitRecordsCopy = [...sampleEventUnitRecords]
+
+      for (const [siteId, siteProfile] of Object.entries(siteCollectingSummary)) {
+        const { sample_unit_methods, site_name } = siteProfile
+
+        const filteredSampleEventUnitRecordsBySiteId = this.#getFilteredSampleEventUnitRecords(
+          sampleEventUnitRecordsCopy,
+          siteId,
+        )
+
+        for (const [protocol, protocolInfo] of Object.entries(sample_unit_methods)) {
+          const profileSummaryLabels = []
+          const protocolProfileSummary = protocolInfo.profile_summary
+
+          const filteredProtocolProfileSampleDates = filteredSampleEventUnitRecordsBySiteId
+            .filter(({ sample_unit_protocol }) => sample_unit_protocol === protocol)
+            .map(({ sample_date }) => sample_date)
+
+          for (const profile of Object.values(protocolProfileSummary)) {
+            profileSummaryLabels.push(...profile.labels)
+          }
+
+          const profileSummaryLabelSampleDates = profileSummaryLabels.map(
+            ({ sample_date }) => sample_date,
+          )
+
+          const sampleDatesNotInAnySampleEventUnitRecords = profileSummaryLabelSampleDates.filter(
+            (date) => !filteredProtocolProfileSampleDates.includes(date),
+          )
+
+          if (
+            !filteredProtocolProfileSampleDates.includes('') &&
+            sampleDatesNotInAnySampleEventUnitRecords.length > 0 &&
+            site_name !== MISSING_SITE_NAME
+          ) {
+            sampleEventUnitRecordsCopy.push({
+              site_id: siteId,
+              site_name,
+              sample_date: '',
+              sample_unit_numbers: [],
+              sample_unit_protocol: protocol,
+              sample_unit_method: language.protocolTitles[protocol],
+              profile_summary: {},
+            })
+          }
+        }
+      }
+
+      return sampleEventUnitRecordsCopy
+    }
+
+    #addCollectingRecordsToUsersAndTransects = function addCollectingRecordsToUsersAndTransects(
       sampleEventUnitRecords,
       siteCollectingSummary,
       protocols,
@@ -241,15 +332,20 @@ const ProjectHealthMixin = (Base) =>
       const collectingSiteIdsWithoutSubmittedRecords = collectingSiteIds.filter(
         (site) => !sampleEventSiteIds.includes(site),
       )
-      const sampleEventUnitRecordsWithCollectRecordFilled = this.#fillCollectRecordWithSampleDate(
+
+      const sampleEventUnitRecordsExtra = this.#createAdditionalSampleEventUnitRecords(
         sampleEventUnitRecordsCopy,
         siteCollectingSummary,
       )
 
-      // Add new sample event records without submitted records, but with collecting records
+      const sampleEventUnitRecordsWithCollectRecordFilled = this.#fillCollectRecordsWithSampleDates(
+        sampleEventUnitRecordsExtra,
+        siteCollectingSummary,
+      )
+
       for (const siteId of collectingSiteIdsWithoutSubmittedRecords) {
         const { site_name, sample_unit_methods } = siteCollectingSummary[siteId]
-        const newSampleEventUnitRecords = {
+        const sampleEventUnitRecord = {
           site_id: siteId,
           site_name: this.#getSiteName(site_name),
           sample_date: '',
@@ -262,7 +358,7 @@ const ProjectHealthMixin = (Base) =>
             sample_unit_methods,
           )) {
             sampleEventUnitRecordsWithCollectRecordFilled.push({
-              ...newSampleEventUnitRecords,
+              ...sampleEventUnitRecord,
               sample_unit_protocol: missingSiteNameProtocol,
               sample_unit_method: language.protocolTitles[missingSiteNameProtocol],
               profile_summary: missingSiteNameProtocolInfo.profile_summary,
@@ -271,7 +367,7 @@ const ProjectHealthMixin = (Base) =>
         } else {
           for (const protocol of protocols) {
             sampleEventUnitRecordsWithCollectRecordFilled.push({
-              ...newSampleEventUnitRecords,
+              ...sampleEventUnitRecord,
               sample_unit_protocol: protocol,
               sample_unit_method: language.protocolTitles[protocol],
               profile_summary: sample_unit_methods[protocol]?.profile_summary || {},
@@ -379,19 +475,24 @@ const ProjectHealthMixin = (Base) =>
               protocols,
             } = sampleUnitRecords
 
-            this.#addRecordsToUsersAndTransects(sampleEventUnitRecords, siteSubmittedSummary)
-
-            this.#populateAdditionalRecordsForUsersAndTransects(
+            const initialSampleEventUnitRecords = this.#addSubmittedRecordsToUsersAndTransects(
               sampleEventUnitRecords,
-              siteCollectingSummary,
-              protocols,
+              siteSubmittedSummary,
             )
 
-            const sampleEventUnitWithSubmittedAndCollectingRecords = this.#addCollectingRecords(
-              sampleEventUnitRecords,
-              siteCollectingSummary,
-              protocols,
-            )
+            const sampleEventUnitRecordsWithAdditionalProtocolRecords =
+              this.#populateAdditionalRecordsForUsersAndTransects(
+                initialSampleEventUnitRecords,
+                siteCollectingSummary,
+                protocols,
+              )
+
+            const sampleEventUnitWithSubmittedAndCollectingRecords =
+              this.#addCollectingRecordsToUsersAndTransects(
+                sampleEventUnitRecordsWithAdditionalProtocolRecords,
+                siteCollectingSummary,
+                protocols,
+              )
 
             return sampleEventUnitWithSubmittedAndCollectingRecords
           })
