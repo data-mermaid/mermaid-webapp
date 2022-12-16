@@ -4,24 +4,54 @@ import styled from 'styled-components/macro'
 
 import theme from '../../theme'
 import { ButtonPrimary } from '../generic/buttons'
+import language from '../../language'
+import { IconRefresh } from '../icons'
 
 const StyledErrorBoundary = styled.div`
   background-color: ${theme.color.background};
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 100%;
   z-index: 102;
+  border: 1px;
 `
 
-const StyledErrorButton = styled(ButtonPrimary)`
-  margin-left: 20px;  
+const ErrorBoundaryContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const ErrorBoundaryPrimaryText = styled.span`
+  font-weight: 700;
+`
+
+const ErrorBoundaryStatusContainer = styled.span`
+  margin: 0 1rem 0 0;
+`
+
+const ErrorBoundaryStatus = styled.div`
+  height: 9rem;
+  width: 1rem;
+  background-color: ${theme.color.cautionColor};
+`
+
+const ErrorButtonContainer = styled.span`
+  min-width: 160px;
+`
+
+const ErrorButton = styled(ButtonPrimary)`
+  margin-left: 5rem;
 `
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { errorMessage: '' }
+    this.state = {
+      errorMessage: '',
+      attemptedRerender: false,
+    }
   }
 
   static getDerivedStateFromError(error) {
@@ -32,19 +62,36 @@ class ErrorBoundary extends React.Component {
   // There is also potential to use the componentDidCatch() lifecycle method here if we want to do something with the error itself
 
   render() {
-    const { errorMessage } = this.state
+    const { errorMessage, attemptedRerender } = this.state
     const { children } = this.props
 
     if (errorMessage) {
       // Render a fallback UI
       // There is potential to pass this in as a property to make the error boundary customizable
       return <StyledErrorBoundary>
-        <p>Something went wrong.</p>
-        <StyledErrorButton
-          onClick={() => this.setState({ errorMessage: '' })}
-        >
-          Try again
-        </StyledErrorButton>
+        <ErrorBoundaryStatusContainer>
+          <ErrorBoundaryStatus />
+        </ErrorBoundaryStatusContainer>
+        <ErrorBoundaryContentContainer>
+          <ErrorBoundaryPrimaryText>{language.error.errorBoundaryPrimary}</ErrorBoundaryPrimaryText>
+          <p>{language.error.errorBoundarySecondary} <a target="_blank" href="https://datamermaid.org/contact-us" rel="noreferrer">{language.error.errorBoundaryContactUs}</a>.</p>
+        </ErrorBoundaryContentContainer>
+        <ErrorButtonContainer>
+          {!attemptedRerender &&
+            <ErrorButton
+              onClick={() => {
+                this.setState({
+                  errorMessage: '',
+                  attemptedRerender: true,
+                })
+              }}
+            >
+              <IconRefresh />
+              <span> {language.error.errorBoundaryTryAgain}</span>
+            </ErrorButton>
+          }
+        </ErrorButtonContainer>
+
       </StyledErrorBoundary>
     }
 
