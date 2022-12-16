@@ -5,6 +5,7 @@ import theme from '../../theme'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 
 import { Column } from '../generic/positioning'
+import ErrorBoundary from '../ErrorBoundary'
 
 const LayoutContainer = styled(Column)`
   & main {
@@ -30,10 +31,18 @@ const Layout = ({ children, footer, header }) => {
 
   return (
     <LayoutContainer>
-      <OfflineIndicatorStyles isAppOnline={isAppOnline} />
-      {header}
-      <main>{children}</main>
-      {footer}
+      <ErrorBoundary>
+        <OfflineIndicatorStyles isAppOnline={isAppOnline} />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        {header}
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <main>{children}</main>
+      </ErrorBoundary>
+      <ErrorBoundary>
+        {footer}
+      </ErrorBoundary>
     </LayoutContainer>
   )
 }
