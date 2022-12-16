@@ -40,7 +40,10 @@ const InputValidationInfo = ({
       )
     }
 
-    if (validationMessages[0]?.code === 'not_unique_management') {
+    if (
+      validationMessages[0]?.code === 'not_unique_management' ||
+      validationMessages[0]?.code === 'similar_name'
+    ) {
       return (
         <ResolveDuplicateMRButton
           currentSelectValue={currentSelectValue}

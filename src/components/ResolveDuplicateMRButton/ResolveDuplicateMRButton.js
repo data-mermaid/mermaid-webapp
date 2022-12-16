@@ -63,10 +63,11 @@ const ResolveDuplicateMRButton = ({
   useEffect(
     function loadManagementRegimes() {
       const isDuplicateManagementRegimeMessage =
-        validationMessages[0]?.code === 'not_unique_management'
+        validationMessages[0]?.code === 'not_unique_management' ||
+        validationMessages[0]?.code === 'similar_name'
 
       const duplicateManagementRegimeId =
-        isDuplicateManagementRegimeMessage && validationMessages[0]?.context?.matches?.matches[0]
+        isDuplicateManagementRegimeMessage && validationMessages[0]?.context?.matches[0]
 
       if (databaseSwitchboardInstance && currentSelectValue && duplicateManagementRegimeId) {
         const promises = [
