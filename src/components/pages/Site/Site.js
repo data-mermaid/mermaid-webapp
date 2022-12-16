@@ -132,6 +132,7 @@ const SiteForm = ({
           validationType={formik.errors.latitude && formik.touched.latitude ? 'error' : null}
           validationMessages={formik.errors.latitude}
           testId="latitude"
+          helperText="Decimal Degrees"
         />
         <InputWithLabelAndValidation
           required
@@ -142,6 +143,7 @@ const SiteForm = ({
           validationType={formik.errors.longitude && formik.touched.longitude ? 'error' : null}
           validationMessages={formik.errors.longitude}
           testId="longitude"
+          helperText="Decimal Degrees"
         />
         {isAppOnline && (
           <SingleSiteMap
