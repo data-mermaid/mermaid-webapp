@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-
-import Logo from '../../assets/mermaid-logo.svg'
-import { IconDown, IconExcel } from '../icons'
+import Logo from '../../assets/mermaid-beta-white-logo.svg'
+import { IconDown, IconExcel, IconOpenInNew } from '../icons'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import HideShow from '../generic/HideShow'
 import OfflineHide from '../generic/OfflineHide'
@@ -18,6 +17,7 @@ import {
   StyledNavLink,
   NotificationIndicator,
   UserMenuButton,
+  WhatsNewLink,
   UserMenu,
   BiggerIconBell,
   BiggerIconMenu,
@@ -31,16 +31,11 @@ import { useOnlineStatus } from '../../library/onlineStatusContext'
 const GlobalLinks = () => {
   const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
   const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
+  const mermaidWhatsNewLink = process.env.REACT_APP_MERMAID_WHATS_NEW_LINK
 
   return (
     <>
       <StyledNavLink href="/projects">Projects</StyledNavLink>
-      <OfflineHide>
-        <StyledNavLink href="/#" disabledLink>
-          Reports
-        </StyledNavLink>
-      </OfflineHide>
-
       <StyledNavLink href={`${mermaidReferenceLink}/home`} target="_blank" rel="noreferrer">
         Reference&nbsp;
         <IconExcel />
@@ -49,6 +44,10 @@ const GlobalLinks = () => {
         <StyledNavLink href={mermaidDashboardLink} target="_blank" rel="noreferrer">
           Global Dashboard
         </StyledNavLink>
+        <WhatsNewLink href={mermaidWhatsNewLink} target="_blank" rel="noreferrer">
+          What&apos;s new&nbsp;
+          <IconOpenInNew />
+        </WhatsNewLink>
       </OfflineHide>
     </>
   )
@@ -120,7 +119,7 @@ const Header = ({ logout, currentUser }) => {
     <>
       <StyledHeader>
         <Link to="/projects">
-          <LogoImg src={Logo} alt="MERMAID Logo" />
+          <LogoImg src={Logo} alt="MERMAID Beta Logo" />
         </Link>
         <GlobalNav>
           <div className="desktop">
