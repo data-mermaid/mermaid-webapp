@@ -240,11 +240,21 @@ export const observationsQuadratBenthicPercentPropType = PropTypes.arrayOf(
   }),
 )
 
+export const observationsPercentCoverProptype = PropTypes.arrayOf(
+  PropTypes.shape({
+    id: PropTypes.string,
+    percent_algae: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    percent_hard: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    percent_soft: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    quadrat_number: PropTypes.number,
+  }),
+)
+
 export const bleachingRecordPropType = PropTypes.shape({
   id: PropTypes.string,
   data: PropTypes.shape({
     quadrat_collection: _bleachingQuadratPropType,
-    obs_quadrat_benthic_percent: observationsQuadratBenthicPercentPropType,
+    obs_quadrat_benthic_percent: observationsPercentCoverProptype,
     obs_colonies_bleached: observationsColoniesBleachedPropType,
   }),
 })

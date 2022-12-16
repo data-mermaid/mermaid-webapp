@@ -32,7 +32,7 @@ const BenthicPitTransectInputs = ({
   areValidationsShowing,
   choices,
   formik,
-  handleChangeForDirtyIgnoredInput,
+  setIgnoredItemsToBeRevalidated,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationsApiData,
@@ -109,7 +109,7 @@ const BenthicPitTransectInputs = ({
 
   const handleTransectNumberChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'number',
       validationProperties: transectNumberValidationProperties,
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
@@ -118,7 +118,7 @@ const BenthicPitTransectInputs = ({
 
   const handleLabelChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'label',
       validationProperties: labelValidationProperties,
       validationPath: LABEL_VALIDATION_PATH,
@@ -127,7 +127,7 @@ const BenthicPitTransectInputs = ({
 
   const handleLengthSurveyedChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'len_surveyed',
       validationProperties: lengthSurveyedValidationProperties,
       validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
@@ -136,7 +136,7 @@ const BenthicPitTransectInputs = ({
 
   const handleReefSlopeChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'reef_slope',
       validationProperties: reefSlopeValidationProperties,
       validationPath: REEF_SLOPE_VALIDATION_PATH,
@@ -144,7 +144,7 @@ const BenthicPitTransectInputs = ({
   }
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'relative_depth',
       validationProperties: relativeDepthValidationProperties,
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
@@ -152,7 +152,7 @@ const BenthicPitTransectInputs = ({
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'visibility',
       validationProperties: visibilityValidationProperties,
       validationPath: VISIBILITY_VALIDATION_PATH,
@@ -160,7 +160,7 @@ const BenthicPitTransectInputs = ({
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'current',
       validationProperties: currentValidationProperties,
       validationPath: CURRENT_VALIDATION_PATH,
@@ -169,7 +169,7 @@ const BenthicPitTransectInputs = ({
 
   const handleNotesChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'notes',
       validationProperties: notesValidationProperties,
       validationPath: NOTES_VALIDATION_PATH,
@@ -177,7 +177,7 @@ const BenthicPitTransectInputs = ({
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'tide',
       validationProperties: tideValidationProperties,
       validationPath: TIDE_VALIDATION_PATH,
@@ -186,7 +186,7 @@ const BenthicPitTransectInputs = ({
 
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'sample_time',
       validationProperties: sampleTimeValidationProperties,
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
@@ -195,7 +195,7 @@ const BenthicPitTransectInputs = ({
 
   const handleDepthChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'depth',
       validationProperties: depthValidationProperties,
       validationPath: DEPTH_VALIDATION_PATH,
@@ -204,7 +204,7 @@ const BenthicPitTransectInputs = ({
 
   const handleIntervalSizeChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'interval_size',
       validationProperties: intervalSizeValidationProperties,
       validationPath: INTERVAL_SIZE_VALIDATION_PATH,
@@ -213,7 +213,7 @@ const BenthicPitTransectInputs = ({
 
   const handleIntervalStartChange = (event) => {
     formik.handleChange(event)
-    handleChangeForDirtyIgnoredInput({
+    setIgnoredItemsToBeRevalidated({
       inputName: 'interval_start',
       validationProperties: intervalStartValidationProperties,
       validationPath: INTERVAL_START_VALIDATION_PATH,
@@ -476,7 +476,7 @@ BenthicPitTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
-  handleChangeForDirtyIgnoredInput: PropTypes.func.isRequired,
+  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,

@@ -27,6 +27,7 @@ import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
 import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
 import handleHttpResponseError from '../library/handleHttpResponseError'
+import ErrorBoundary from '../components/ErrorBoundary'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
@@ -123,42 +124,50 @@ function App({ dexieCurrentUserInstance }) {
             <BellNotificationProvider value={{ notifications, deleteNotification }}>
               <GlobalStyle />
               <CustomToastContainer limit={5} />
-              <Layout {...layoutProps}>
-                {
-                  /** The isMermaidAuthenticated is needed here to prevent an
-                   * infinite log in loop with authentication.
-                   *
-                   * The projects list route and project workflow pages will trigger
-                   * a sync when they are routed to, making isOfflineStorageHydrated = true
-                   */
-                  isMermaidAuthenticated ? (
-                    <Switch>
-                      {routes.map(({ path, Component }) => (
-                        <Route
-                          exact
-                          path={path}
-                          key={path}
-                          render={() =>
-                            isMermaidAuthenticatedAndReady ? <Component /> : <LoadingIndicator />
-                          }
-                        />
-                      ))}
-                      <Route exact path="/">
-                        <Redirect to="/projects" />
-                      </Route>
-                      {/* The following route is required b/c of how Cloudfront handles root paths. This is
-                          required for preview urls. When viewing a preview, you will need to append /index.html
-                          like so: https://preview.app2.datamermaid.org/123/index.html */}
-                      <Route exact path="/index.html">
-                        <Redirect to="/projects" />
-                      </Route>
-                      <Route component={PageNotFound} />
-                    </Switch>
-                  ) : (
-                    <LoadingIndicator />
-                  )
-                }
-              </Layout>
+              <ErrorBoundary>
+                <Layout {...layoutProps}>
+                  {
+                    /** The isMermaidAuthenticated is needed here to prevent an
+                     * infinite log in loop with authentication.
+                     *
+                     * The projects list route and project workflow pages will trigger
+                     * a sync when they are routed to, making isOfflineStorageHydrated = true
+                     */
+                    isMermaidAuthenticated ? (
+                      <ErrorBoundary>
+                        <Switch>
+                          {routes.map(({ path, Component }) => (
+                            <Route
+                              exact
+                              path={path}
+                              key={path}
+                              render={() =>
+                                isMermaidAuthenticatedAndReady ? (
+                                  <Component />
+                                ) : (
+                                  <LoadingIndicator />
+                                )
+                              }
+                            />
+                          ))}
+                          <Route exact path="/">
+                            <Redirect to="/projects" />
+                          </Route>
+                          {/* The following route is required b/c of how Cloudfront handles root paths. This is
+                            required for preview urls. When viewing a preview, you will need to append /index.html
+                            like so: https://preview.app2.datamermaid.org/123/index.html */}
+                          <Route exact path="/index.html">
+                            <Redirect to="/projects" />
+                          </Route>
+                          <Route component={PageNotFound} />
+                        </Switch>
+                      </ErrorBoundary>
+                    ) : (
+                      <LoadingIndicator />
+                    )
+                  }
+                </Layout>
+              </ErrorBoundary>
             </BellNotificationProvider>
           </HttpResponseErrorHandlerProvider>
         </CurrentUserProvider>

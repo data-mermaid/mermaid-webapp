@@ -97,6 +97,10 @@ const error = {
     'Something went wrong. Sample units are failed to transfer. Please try again.',
   onPageWarningAbove: 'Warning or error',
   onPageWarningBelow: 'Warning or error',
+  errorBoundaryPrimary: "A part of this page didn't load correctly.",
+  errorBoundarySecondary: 'If you keep seeing this error, try reloading this page, or you can',
+  errorBoundaryContactUs: 'contact us',
+  errorBoundaryTryAgain: 'Try Again',
 }
 
 const success = {

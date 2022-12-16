@@ -321,7 +321,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
   // test last row. (heads up, this is a multi page table)
-  expect(within(tableRowsAfterSecondClick[16]).getByText('June 12, 2012'))
+  expect(within(tableRowsAfterSecondClick[17]).getByText('June 12, 2012'))
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
@@ -439,8 +439,8 @@ test('Collect Records table changes number of rows visible size when pagination 
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  // 17 + header row
-  expect(tableRowsAfter.length).toEqual(18)
+  // 18 mock records + header row
+  expect(tableRowsAfter.length).toEqual(19)
 })
 
 test('Collect Records table change pages when different page is selected ', async () => {
@@ -473,5 +473,5 @@ test('Collect Records table change pages when different page is selected ', asyn
 
   const linksToCollectRecords = within(table).getAllByRole('link')
 
-  expect(linksToCollectRecords).toHaveLength(2)
+  expect(linksToCollectRecords).toHaveLength(3)
 })

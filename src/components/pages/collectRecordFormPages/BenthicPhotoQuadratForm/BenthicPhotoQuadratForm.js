@@ -14,6 +14,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import CollectRecordFormPage from '../CollectRecordFormPage'
+import ErrorBoundary from '../../../ErrorBoundary'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   const { recordId, projectId } = useParams()
@@ -186,26 +187,28 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   }
 
   return (
-    <CollectRecordFormPage
-      isNewRecord={isNewRecord}
-      sampleUnitName="benthicpqt"
-      collectRecordBeingEdited={collectRecordBeingEdited}
-      handleCollectRecordChange={handleCollectRecordChange}
-      handleNewObservationAdd={handleNewObservationAdd}
-      handleSubmitNewObservation={onSubmitNewBenthicAttribute}
-      observationsReducer={observationsReducer}
-      sites={sites}
-      handleSitesChange={handleSitesChange}
-      managementRegimes={managementRegimes}
-      handleManagementRegimesChange={handleManagementRegimesChange}
-      choices={choices}
-      idsNotAssociatedWithData={idsNotAssociatedWithData}
-      isLoading={isLoading}
-      subNavNode={subNavNode}
-      observerProfiles={observerProfiles}
-      observationOptions={benthicAttributeOptions}
-      modalAttributeOptions={benthicAttributeOptions}
-    />
+    <ErrorBoundary>
+      <CollectRecordFormPage
+        isNewRecord={isNewRecord}
+        sampleUnitName="benthicpqt"
+        collectRecordBeingEdited={collectRecordBeingEdited}
+        handleCollectRecordChange={handleCollectRecordChange}
+        handleNewObservationAdd={handleNewObservationAdd}
+        handleSubmitNewObservation={onSubmitNewBenthicAttribute}
+        observationsReducer={observationsReducer}
+        sites={sites}
+        handleSitesChange={handleSitesChange}
+        managementRegimes={managementRegimes}
+        handleManagementRegimesChange={handleManagementRegimesChange}
+        choices={choices}
+        idsNotAssociatedWithData={idsNotAssociatedWithData}
+        isLoading={isLoading}
+        subNavNode={subNavNode}
+        observerProfiles={observerProfiles}
+        observationOptions={benthicAttributeOptions}
+        modalAttributeOptions={benthicAttributeOptions}
+      />
+    </ErrorBoundary>
   )
 }
 
