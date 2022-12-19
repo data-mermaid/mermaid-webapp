@@ -342,7 +342,6 @@ const TransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}
-          unit="(m²)"
         />
         <InputWithLabelAndValidation
           label="Quadrat Size"
@@ -350,7 +349,7 @@ const TransectInputs = ({
           id="quadrat_size"
           testId="quadrat_size"
           type="number"
-          unit="m2"
+          unit="m²"
           step="any"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: QUADRAT_SIZE_VALIDATION_PATH })
