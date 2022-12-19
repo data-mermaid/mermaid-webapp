@@ -16,20 +16,26 @@ export const StyledHeader = styled('header')`
   z-index: 102;
   height: ${theme.spacing.headerHeight};
 `
-export const AvatarWrapper = styled('div')`
+export const AvatarWrapper = styled('button')`
   cursor: pointer;
   height: ${theme.spacing.headerHeight};
-  line-height: ${theme.spacing.headerHeight};
-  ${hoverState(
-    css`
-      border-bottom: solid 3px ${theme.color.callout};
-    `,
-  )}
+  width: ${theme.spacing.headerHeight};
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: none;
 `
 export const CurrentUserImg = styled('img')`
   height: calc(${theme.spacing.headerHeight} - 10px);
-  padding: 0 ${theme.spacing.small};
-  margin-top: 5px;
+  width: calc(${theme.spacing.headerHeight} - 10px);
+  border-radius: 50%;
+  /* border: solid 2px ${theme.color.white}; */
+  ${hoverState(
+    css`
+      outline: solid 3px ${theme.color.callout};
+    `,
+  )};
   ${mediaQueryTabletLandscapeOnly(css`
     height: calc(${theme.spacing.headerHeight} - 15px);
     margin-top: 7px;
@@ -77,6 +83,16 @@ export const StyledNavLink = styled('a')`
     `} 
   }
 `
+
+export const WhatsNewLink = styled(StyledNavLink)`
+  background: ${theme.color.white};
+  color: ${theme.color.primaryColor};
+  border-style: solid;
+  border-width: 2px 0;
+  border-color: ${theme.color.primaryColor};
+  padding: 0 ${theme.spacing.medium};
+  line-height: calc(${theme.spacing.headerHeight} - (2px * 2));
+`
 export const UserMenu = styled('div')`
   position: absolute;
   top: ${theme.spacing.headerHeight};
@@ -86,7 +102,7 @@ export const UserMenu = styled('div')`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: ${theme.spacing.small};
+  padding: ${theme.spacing.medium};
 `
 
 export const LoggedInAs = styled('p')`
