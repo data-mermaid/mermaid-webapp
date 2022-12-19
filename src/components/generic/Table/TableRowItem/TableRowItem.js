@@ -24,14 +24,14 @@ const TableRowItem = ({
   options,
   value,
   extraValue,
-  isOriginalSiteSelected,
-  isDuplicateSiteSelected,
+  isOriginalSelected,
+  isDuplicateSelected,
 }) => {
   const rowItemValue = options ? getOptionsByItemLabelOrName(value, options) : value
   const extraRowItemValue = options ? getOptionsByItemLabelOrName(extraValue, options) : extraValue
-  const showExtraRowItem = extraValue || extraValue === ''
-  const highlightedCurrentSite = isOriginalSiteSelected ? 'highlighted' : undefined
-  const highlightedDuplicateSite = isDuplicateSiteSelected ? 'highlighted' : undefined
+  const showExtraRowItem = extraValue !== undefined
+  const highlightedCurrentSite = isOriginalSelected ? 'highlighted' : undefined
+  const highlightedDuplicateSite = isDuplicateSelected ? 'highlighted' : undefined
 
   return (
     <Tr>
@@ -59,16 +59,16 @@ TableRowItem.propTypes = {
     PropTypes.number,
     PropTypes.arrayOf(PropTypes.string),
   ]),
-  isOriginalSiteSelected: PropTypes.bool,
-  isDuplicateSiteSelected: PropTypes.bool,
+  isOriginalSelected: PropTypes.bool,
+  isDuplicateSelected: PropTypes.bool,
 }
 
 TableRowItem.defaultProps = {
   options: undefined,
   value: undefined,
   extraValue: undefined,
-  isOriginalSiteSelected: false,
-  isDuplicateSiteSelected: false,
+  isOriginalSelected: false,
+  isDuplicateSelected: false,
 }
 
 export default TableRowItem

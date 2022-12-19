@@ -27,6 +27,7 @@ import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternativ
 import language from '../../../../language'
 import NewAttributeModal from '../../../NewAttributeModal'
 import useIsMounted from '../../../../library/useIsMounted'
+import ErrorBoundary from '../../../ErrorBoundary'
 
 const BenthicPitForm = ({ isNewRecord }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
@@ -207,7 +208,7 @@ const BenthicPitForm = ({ isNewRecord }) => {
   )
 
   return (
-    <>
+    <ErrorBoundary>
       <CollectRecordFormPageAlternative
         areObservationsInputsDirty={areObservationsInputsDirty}
         benthicAttributeSelectOptions={benthicAttributeSelectOptions}
@@ -237,7 +238,7 @@ const BenthicPitForm = ({ isNewRecord }) => {
           modalAttributeOptions={benthicAttributeSelectOptions}
         />
       )}
-    </>
+    </ErrorBoundary>
   )
 }
 

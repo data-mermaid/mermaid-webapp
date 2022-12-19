@@ -17,6 +17,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import CollectRecordFormPage from '../CollectRecordFormPage'
+import ErrorBoundary from '../../../ErrorBoundary'
 
 const FishBeltForm = ({ isNewRecord }) => {
   const { recordId, projectId } = useParams()
@@ -42,6 +43,7 @@ const FishBeltForm = ({ isNewRecord }) => {
   const [modalAttributeOptions, setModalAttributeOptions] = useState([])
 
   const _getSupportingData = useEffect(() => {
+
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
@@ -146,6 +148,9 @@ const FishBeltForm = ({ isNewRecord }) => {
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
 
+  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
+    setManagementRegimes(updatedManagementRegimeRecords)
+
   const updateFishNameOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       Promise.all([
@@ -202,6 +207,7 @@ const FishBeltForm = ({ isNewRecord }) => {
   }
 
   return (
+  <ErrorBoundary>
     <CollectRecordFormPage
       isNewRecord={isNewRecord}
       sampleUnitName="fishbelt"
@@ -213,6 +219,7 @@ const FishBeltForm = ({ isNewRecord }) => {
       sites={sites}
       handleSitesChange={handleSitesChange}
       managementRegimes={managementRegimes}
+      handleManagementRegimesChange={handleManagementRegimesChange}
       choices={choices}
       idsNotAssociatedWithData={idsNotAssociatedWithData}
       isLoading={isLoading}
@@ -222,6 +229,7 @@ const FishBeltForm = ({ isNewRecord }) => {
       modalAttributeOptions={modalAttributeOptions}
       fishNameConstants={fishNameConstants}
     />
+  </ErrorBoundary>
   )
 }
 

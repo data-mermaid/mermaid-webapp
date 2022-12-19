@@ -14,6 +14,7 @@ import useIsMounted from '../../../../library/useIsMounted'
 import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
 import CollectRecordFormPage from '../CollectRecordFormPage'
+import ErrorBoundary from '../../../ErrorBoundary'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   const { recordId, projectId } = useParams()
@@ -124,6 +125,9 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
 
+  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
+    setManagementRegimes(updatedManagementRegimeRecords)
+
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
@@ -183,7 +187,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   }
 
   return (
-    <CollectRecordFormPage
+    <ErrorBoundary>
+      <CollectRecordFormPage
       isNewRecord={isNewRecord}
       sampleUnitName="benthicpqt"
       collectRecordBeingEdited={collectRecordBeingEdited}
@@ -194,6 +199,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       sites={sites}
       handleSitesChange={handleSitesChange}
       managementRegimes={managementRegimes}
+      handleManagementRegimesChange={handleManagementRegimesChange}
       choices={choices}
       idsNotAssociatedWithData={idsNotAssociatedWithData}
       isLoading={isLoading}
@@ -202,6 +208,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       observationOptions={benthicAttributeOptions}
       modalAttributeOptions={benthicAttributeOptions}
     />
+    </ErrorBoundary>
+
   )
 }
 

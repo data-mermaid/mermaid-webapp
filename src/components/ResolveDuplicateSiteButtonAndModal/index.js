@@ -1,0 +1,3 @@
+import ResolveDuplicateSiteButtonAndModal from './ResolveDuplicateSiteButtonAndModal'
+
+export default ResolveDuplicateSiteButtonAndModal

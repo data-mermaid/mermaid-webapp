@@ -9,7 +9,7 @@ import {
 } from '../../testUtilities/testingLibraryWithHelpers'
 import Footer from '.'
 
-test('Footer component shows help, terms, contact, changelog, credits links when online', () => {
+test('Footer component shows help, terms, contact, credits links when online', () => {
   renderAuthenticatedOnline(<Footer />)
 
   const helpLink = screen.getByRole('link', {
@@ -22,9 +22,6 @@ test('Footer component shows help, terms, contact, changelog, credits links when
   const contactLink = screen.getByRole('link', {
     name: /contact/i,
   })
-  const changelogLink = screen.getByRole('link', {
-    name: /changelog/i,
-  })
   const creditsLink = screen.getByRole('link', {
     name: /credits/i,
   })
@@ -32,10 +29,9 @@ test('Footer component shows help, terms, contact, changelog, credits links when
   expect(helpLink).toBeInTheDocument()
   expect(termsLink).toBeInTheDocument()
   expect(contactLink).toBeInTheDocument()
-  expect(changelogLink).toBeInTheDocument()
   expect(creditsLink).toBeInTheDocument()
 })
-test('Footer component shows help, and hide terms, contact, changelog, credits links when offline', async () => {
+test('Footer component shows help, and hide terms, contact, credits links when offline', async () => {
   renderAuthenticatedOffline(<Footer />)
 
   const helpLink = screen.getByRole('link', {
@@ -48,9 +44,6 @@ test('Footer component shows help, and hide terms, contact, changelog, credits l
   const contactLink = screen.queryByRole('link', {
     name: /contact/i,
   })
-  const changelogLink = screen.queryByRole('link', {
-    name: /changelog/i,
-  })
   const creditsLink = screen.queryByRole('link', {
     name: /credits/i,
   })
@@ -61,9 +54,6 @@ test('Footer component shows help, and hide terms, contact, changelog, credits l
   })
   await waitFor(() => {
     expect(contactLink).not.toBeInTheDocument()
-  })
-  await waitFor(() => {
-    expect(changelogLink).not.toBeInTheDocument()
   })
   await waitFor(() => {
     expect(creditsLink).not.toBeInTheDocument()

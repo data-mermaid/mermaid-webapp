@@ -31,6 +31,7 @@ import mapMarkerRadiusOutline from '@iconify-icons/mdi/map-marker-radius-outline
 import menu from '@iconify-icons/mdi/menu'
 import menuDown from '@iconify-icons/mdi/menu-down'
 import menuUp from '@iconify-icons/mdi/menu-up'
+import openInNew from '@iconify-icons/mdi/open-in-new'
 import pencilIcon from '@iconify-icons/mdi/pencil'
 import plus from '@iconify-icons/mdi/plus'
 import React from 'react'
@@ -80,6 +81,7 @@ export const IconInfo = (props) => <InlineIcon icon={informationIcon} {...props}
 export const IconLibraryBooks = (props) => <InlineIcon icon={libraryBooks} {...props} />
 export const IconMenu = (props) => <InlineIcon icon={menu} {...props} />
 export const IconMgmt = (props) => <InlineIcon icon={fileTable} {...props} />
+export const IconOpenInNew = (props) => <InlineIcon icon={openInNew} {...props} />
 export const IconPen = (props) => <InlineIcon icon={pencilIcon} {...props} />
 export const IconPlus = (props) => <InlineIcon icon={plus} {...props} />
 export const IconRefresh = (props) => <InlineIcon icon={sync} {...props} />

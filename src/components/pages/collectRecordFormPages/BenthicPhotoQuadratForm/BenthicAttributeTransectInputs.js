@@ -296,6 +296,7 @@ const TransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
+          unit="m"
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -318,6 +319,7 @@ const TransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
+          unit="m"
         />
         <InputWithLabelAndValidation
           label="Quadrat Number Start"
@@ -347,7 +349,7 @@ const TransectInputs = ({
           id="quadrat_size"
           testId="quadrat_size"
           type="number"
-          unit="m2"
+          unit="m²"
           step="any"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: QUADRAT_SIZE_VALIDATION_PATH })

@@ -12,7 +12,7 @@ import Header from '.'
 const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
 const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
 
-test('Header component shows projects, reports, reference, and global dashboard links and their proper href links when online', () => {
+test('Header component shows projects, whats new, reference, and global dashboard links and their proper href links when online', () => {
   renderAuthenticatedOnline(<Header />)
 
   const projectsLink = screen.getByRole('link', {
@@ -29,11 +29,9 @@ test('Header component shows projects, reports, reference, and global dashboard 
   expect(reference).toBeInTheDocument()
   expect(reference).toHaveAttribute('href', `${mermaidReferenceLink}/home`)
 
-  const reportsLink = screen.getByRole('link', {
-    name: /reports/i,
-  })
+  const whatsNewLink = screen.queryByText("What's new")
 
-  expect(reportsLink).toBeInTheDocument()
+  expect(whatsNewLink).toBeInTheDocument()
 
   const globalDashboardLink = screen.getByRole('link', {
     name: /global dashboard/i,
@@ -42,16 +40,14 @@ test('Header component shows projects, reports, reference, and global dashboard 
   expect(globalDashboardLink).toBeInTheDocument()
   expect(globalDashboardLink).toHaveAttribute('href', mermaidDashboardLink)
 })
-test('Header component shows projects, reference; and hide reports, global dashboard links when offline', async () => {
+test('Header component shows projects, reference; and hide whats new, global dashboard links when offline', async () => {
   renderAuthenticatedOffline(<Header />)
 
   const projectsLink = screen.getByRole('link', {
     name: /projects/i,
   })
 
-  const reportsLink = screen.queryByRole('link', {
-    name: /reports/i,
-  })
+  const whatsNewLink = screen.queryByText(/What&pos;s new/i)
   const reference = screen.getByRole('link', {
     name: /reference/i,
   })
@@ -61,7 +57,7 @@ test('Header component shows projects, reference; and hide reports, global dashb
 
   expect(projectsLink).toBeInTheDocument()
   await waitFor(() => {
-    expect(reportsLink).not.toBeInTheDocument()
+    expect(whatsNewLink).not.toBeInTheDocument()
   })
   expect(reference).toBeInTheDocument()
   await waitFor(() => {

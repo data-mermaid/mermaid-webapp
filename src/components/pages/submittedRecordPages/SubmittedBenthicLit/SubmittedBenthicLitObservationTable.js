@@ -43,7 +43,7 @@ const SubmittedBenthicLitObservationTable = ({
               <TheadItem> </TheadItem>
               <TheadItem align="right">Benthic Attribute</TheadItem>
               <TheadItem align="right">Growth Form</TheadItem>
-              <TheadItem align="left">Length</TheadItem>
+              <TheadItem align="left">Length (cm)</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationsBenthicLit}</tbody>

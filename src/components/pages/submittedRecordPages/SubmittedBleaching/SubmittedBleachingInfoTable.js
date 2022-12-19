@@ -32,9 +32,9 @@ const SubmittedBleachingInfoTable = ({ choices, sites, managementRegimes, submit
         <TableRowItem title="Site" options={sites} value={site} />
         <TableRowItem title="Management" options={managementRegimes} value={management} />
         <TableRowItem title="Sample Date Time" value={`${sample_date} ${sample_time || ''}`} />
-        <TableRowItem title="Depth" value={depth} />
+        <TableRowItem title="Depth (m)" value={depth} />
         <TableRowItem title="Label" value={label} />
-        <TableRowItem title="Quadrat Size" value={quadrat_size} />
+        <TableRowItem title="Quadrat Size (m²)" value={quadrat_size} />
         <TableRowItem title="Visibility" options={visibilities.data} value={visibility} />
         <TableRowItem title="Current" options={currents.data} value={current} />
         <TableRowItem title="Relative Depth" options={relativedepths.data} value={relative_depth} />

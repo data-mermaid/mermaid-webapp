@@ -116,6 +116,7 @@ const ProjectCard = ({
               <IconCopy />
               <span>Copy</span>
             </ButtonSecondary>
+
             <ProjectModal
               isOpen={isProjectModalOpen}
               onDismiss={() => setIsProjectModalOpen(false)}

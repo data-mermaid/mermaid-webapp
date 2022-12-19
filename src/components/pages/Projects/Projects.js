@@ -18,6 +18,7 @@ import { getObjectById } from '../../../library/getObjectById'
 import PageUnavailable from '../PageUnavailable'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
+import ErrorBoundary from '../../ErrorBoundary'
 
 /**
  * All Projects page (lists projects)
@@ -129,6 +130,7 @@ const Projects = ({ apiSyncInstance }) => {
 
   const projectCardsList = filteredSortedProjects.length
     ? getFilteredSortedProjects().map((project) => (
+      <ErrorBoundary>
         <ProjectCard
           role="listitem"
           project={{ ...project }}
@@ -137,6 +139,7 @@ const Projects = ({ apiSyncInstance }) => {
           isOfflineReady={getIsProjectOffline(project.id)}
           addProjectToProjectsPage={addProjectToProjectsPage}
         />
+      </ErrorBoundary>
       ))
     : renderPageNoData()
 

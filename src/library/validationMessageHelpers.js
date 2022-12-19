@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/macro'
 
-const duplicateWarningCodes = ['not_unique_site', 'not_unique_management']
-
 const SystemValidationMessageBlock = styled.span`
   display: block;
 `
@@ -31,14 +29,4 @@ export const getDuplicateSampleUnitLink = (duplicateTransectMethodContext, proje
       Duplicate sample unit <a href={linkToSampleUnit}>{duplicateTransectMethodContext}</a>
     </span>
   )
-}
-
-export const checkDuplicateWarningInValidationMessages = (validationMessages) => {
-  for (const message of validationMessages) {
-    if (duplicateWarningCodes.includes(message.code)) {
-      return true
-    }
-  }
-
-  return false
 }

@@ -129,9 +129,6 @@ const Footer = () => {
           <a href="https://datamermaid.org/contact-us" target="_blank" rel="noreferrer">
             Contact
           </a>
-          <a href="https://datamermaid.org/changelog" target="_blank" rel="noreferrer">
-            Changelog
-          </a>
           <a href="https://datamermaid.org/partners-and-teams/" target="_blank" rel="noreferrer">
             Credits
           </a>

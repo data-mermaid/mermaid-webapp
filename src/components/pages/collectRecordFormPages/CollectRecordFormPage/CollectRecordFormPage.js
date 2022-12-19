@@ -69,6 +69,7 @@ const CollectRecordFormPage = ({
   sites,
   handleSitesChange,
   managementRegimes,
+  handleManagementRegimesChange,
   choices,
   idsNotAssociatedWithData,
   isLoading,
@@ -618,6 +619,7 @@ const CollectRecordFormPage = ({
           collectRecord={collectRecordBeingEdited}
           formik={formik}
           managementRegimes={managementRegimes}
+          handleManagementRegimesChange={handleManagementRegimesChange}
           sites={sites}
           handleSitesChange={handleSitesChange}
           setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
@@ -721,6 +723,7 @@ CollectRecordFormPage.propTypes = {
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   handleSitesChange: PropTypes.func.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
+  handleManagementRegimesChange: PropTypes.func.isRequired,
   choices: choicesPropType.isRequired,
   idsNotAssociatedWithData: PropTypes.arrayOf(PropTypes.string).isRequired,
   isLoading: PropTypes.bool.isRequired,
