@@ -84,7 +84,7 @@ describe('Offline', () => {
 
     const newFishNameInput = screen.getAllByLabelText('Fish Name')[3]
     // the first record technically has two size inputs (because its 50+), so this one is at index 4
-    const newSizeInput = screen.getAllByLabelText('Size')[4]
+    const newSizeInput = screen.getAllByLabelText('Size (cm)')[4]
     const newCountInput = screen.getAllByLabelText('Count')[3]
 
     userEvent.type(newFishNameInput, 'neb')
@@ -144,11 +144,11 @@ describe('Offline', () => {
     expect(observationRows.length).toEqual(5)
 
     // the first record technically has two size inputs (because its 50+), so this one is at index 4
-    const newSizeInput = screen.getAllByLabelText('Size')[4]
+    const newSizeInput = screen.getAllByLabelText('Size (cm)')[4]
 
     userEvent.selectOptions(newSizeInput, '50')
 
-    const newSizePlus50Input = screen.getAllByLabelText('Size')[5]
+    const newSizePlus50Input = screen.getAllByLabelText('Size (cm)')[5]
 
     // we cant use userEvent.clear or {backspace} for whatever reason here. Maybe related to this issue https://github.com/testing-library/user-event/issues/356
     // so this typing is just appending to the existing '50' in the input.

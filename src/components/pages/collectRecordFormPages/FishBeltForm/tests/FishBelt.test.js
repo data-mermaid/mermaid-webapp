@@ -331,11 +331,11 @@ test('FishBelt component in EDIT mode - when change binsize = 10, fish size valu
 
   const observationsTable = await screen.findByLabelText('Observations')
 
-  expect(within(observationsTable).getAllByLabelText('Size')[0]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[0]).not.toHaveValue()
 
-  expect(within(observationsTable).getAllByLabelText('Size')[1]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[1]).not.toHaveValue()
 
-  expect(within(observationsTable).getAllByLabelText('Size')[2]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[2]).not.toHaveValue()
 })
 test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size values is not selected/null', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
@@ -363,11 +363,11 @@ test('FishBelt component in EDIT mode - when change binsize = AGRRA, fish size v
 
   const observationsTable = await screen.findByLabelText('Observations')
 
-  expect(within(observationsTable).getAllByLabelText('Size')[0]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[0]).not.toHaveValue()
 
-  expect(within(observationsTable).getAllByLabelText('Size')[1]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[1]).not.toHaveValue()
 
-  expect(within(observationsTable).getAllByLabelText('Size')[2]).not.toHaveValue()
+  expect(within(observationsTable).getAllByLabelText('Size (cm)')[2]).not.toHaveValue()
 })
 test('FishBelt component in EDIT mode - when change binsize = 1, fish size values get transfered to numeric inputs', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()

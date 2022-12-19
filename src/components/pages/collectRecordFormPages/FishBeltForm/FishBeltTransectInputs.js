@@ -291,6 +291,7 @@ const FishBeltTransectInputs = ({
           label="Depth"
           required={true}
           id="depth"
+          unit="m"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: DEPTH_VALIDATION_PATH })
           }}
@@ -310,6 +311,7 @@ const FishBeltTransectInputs = ({
           id="len_surveyed"
           testId="len_surveyed"
           type="number"
+          unit="m"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({
               validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
@@ -345,7 +347,7 @@ const FishBeltTransectInputs = ({
           onChange={handleWidthChange}
         />
         <InputRadioWithLabelAndValidation
-          label="Fish Size Bin"
+          label="Fish Size Bin (cm)"
           required={true}
           id="size_bin"
           testId="size_bin"

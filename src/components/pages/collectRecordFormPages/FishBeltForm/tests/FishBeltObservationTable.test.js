@@ -42,7 +42,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
-  const sizeInput = within(observationsTable).getByLabelText('Size')
+  const sizeInput = within(observationsTable).getByLabelText('Size (cm)')
 
   expect(sizeInput).toHaveAttribute('type', 'number')
 })
@@ -73,7 +73,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
-  const sizeInput = await within(observationsTable).findByLabelText('Size')
+  const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
 
   expect(sizeInput).toHaveAttribute('type', 'number')
 })
@@ -104,7 +104,7 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
-  const sizeInput = await within(observationsTable).findByLabelText('Size')
+  const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
 
   const areSizeOptions = within(sizeInput).getAllByRole('option').length > 0
 
@@ -137,7 +137,7 @@ test('FishBelt observations size shows a select input when fish bin size is 10',
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
-  const sizeInput = await within(observationsTable).findByLabelText('Size')
+  const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
 
   const areSizeOptions = within(sizeInput).getAllByRole('option').length > 0
 
@@ -170,7 +170,7 @@ test('FishBelt observations size shows a select input when fish bin size is AGRR
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
-  const sizeInput = await within(observationsTable).findByLabelText('Size')
+  const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
 
   const areSizeOptions = within(sizeInput).getAllByRole('option').length > 0
 
@@ -203,11 +203,11 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
-  const sizeInput = await within(observationsTable).findByLabelText('Size')
+  const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
 
   userEvent.selectOptions(sizeInput, '50')
 
-  const sizeInputs = await within(observationsTable).findAllByLabelText('Size')
+  const sizeInputs = await within(observationsTable).findAllByLabelText('Size (cm)')
 
   await waitFor(() => expect(sizeInputs.length).toEqual(2))
 })
@@ -233,7 +233,7 @@ test('Fishbelt observations hide and show fish name reference link appropriately
   userEvent.click(await screen.findByRole('button', { name: 'Add Row' }))
 
   // wait for new row to show up
-  await screen.findByLabelText('Size')
+  await screen.findByLabelText('Size (cm)')
 
   expect(screen.queryByLabelText('fish name reference')).not.toBeInTheDocument()
 
