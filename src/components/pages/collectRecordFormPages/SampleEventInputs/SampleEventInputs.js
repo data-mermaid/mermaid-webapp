@@ -23,6 +23,7 @@ const SampleEventInputs = ({
   collectRecord,
   formik,
   managementRegimes,
+  handleManagementRegimesChange,
   sites,
   handleSitesChange,
   setIgnoredItemsToBeRevalidated,
@@ -82,6 +83,11 @@ const SampleEventInputs = ({
     handleSitesChange(siteOptions)
     resetNonObservationFieldValidations({ validationPath: SITE_VALIDATION_PATH })
   }
+  const updateValueAndResetValidationForMR = (managementRegimeValue, managementRegimeOptions) => {
+    formik.setFieldValue('management', managementRegimeValue)
+    handleManagementRegimesChange(managementRegimeOptions)
+    resetNonObservationFieldValidations({ validationPath: MANAGEMENT_VALIDATION_PATH })
+  }
 
   return (
     <>
@@ -125,6 +131,7 @@ const SampleEventInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.management}
           onChange={handleManagementChange}
+          updateValueAndResetValidationForDuplicateWarning={updateValueAndResetValidationForMR}
         />
         <InputWithLabelAndValidation
           label="Sample Date"
@@ -157,6 +164,7 @@ SampleEventInputs.propTypes = {
   collectRecord: benthicPhotoQuadratPropType,
   formik: formikPropType.isRequired,
   managementRegimes: PropTypes.arrayOf(managementRegimePropType).isRequired,
+  handleManagementRegimesChange: PropTypes.func.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   handleSitesChange: PropTypes.func.isRequired,
   setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,

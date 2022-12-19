@@ -125,6 +125,9 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
 
+  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
+    setManagementRegimes(updatedManagementRegimeRecords)
+
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
@@ -186,24 +189,25 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   return (
     <ErrorBoundary>
       <CollectRecordFormPage
-        isNewRecord={isNewRecord}
-        sampleUnitName="benthicpqt"
-        collectRecordBeingEdited={collectRecordBeingEdited}
-        handleCollectRecordChange={handleCollectRecordChange}
-        handleNewObservationAdd={handleNewObservationAdd}
-        handleSubmitNewObservation={onSubmitNewBenthicAttribute}
-        observationsReducer={observationsReducer}
-        sites={sites}
-        handleSitesChange={handleSitesChange}
-        managementRegimes={managementRegimes}
-        choices={choices}
-        idsNotAssociatedWithData={idsNotAssociatedWithData}
-        isLoading={isLoading}
-        subNavNode={subNavNode}
-        observerProfiles={observerProfiles}
-        observationOptions={benthicAttributeOptions}
-        modalAttributeOptions={benthicAttributeOptions}
-      />
+      isNewRecord={isNewRecord}
+      sampleUnitName="benthicpqt"
+      collectRecordBeingEdited={collectRecordBeingEdited}
+      handleCollectRecordChange={handleCollectRecordChange}
+      handleNewObservationAdd={handleNewObservationAdd}
+      handleSubmitNewObservation={onSubmitNewBenthicAttribute}
+      observationsReducer={observationsReducer}
+      sites={sites}
+      handleSitesChange={handleSitesChange}
+      managementRegimes={managementRegimes}
+      handleManagementRegimesChange={handleManagementRegimesChange}
+      choices={choices}
+      idsNotAssociatedWithData={idsNotAssociatedWithData}
+      isLoading={isLoading}
+      subNavNode={subNavNode}
+      observerProfiles={observerProfiles}
+      observationOptions={benthicAttributeOptions}
+      modalAttributeOptions={benthicAttributeOptions}
+    />
     </ErrorBoundary>
 
   )

@@ -328,16 +328,18 @@ const map = {
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
 }
 
-const resolveModal = {
-  thisSite: 'Original Site',
-  anotherSite: 'Duplicate Site',
-  keepThisSite: 'Keep site',
-  editSite: 'Edit site',
-  keepBoth: 'Keep both',
-  cancel: 'Cancel',
-  mergeSite: 'Merge',
-  confirmMergeModalContent: (anotherSite) =>
-    `All instances of this site will be replaced with ${anotherSite}`,
+const getResolveModalLanguage = (siteOrManagementRegime) => {
+  return {
+    original: `Original ${siteOrManagementRegime}`,
+    duplicate: `Duplicate ${siteOrManagementRegime}`,
+    keepEither: `Keep ${siteOrManagementRegime}`,
+    editEither: `Edit ${siteOrManagementRegime}`,
+    keepBoth: 'Keep both',
+    cancel: 'Cancel',
+    merge: 'Merge',
+    getConfirmMergeMessage: (anotherSite) =>
+      `All instances of this site will be replaced with ${anotherSite}`,
+  }
 }
 
 const getValidationMessage = (validation, projectId = '') => {
@@ -442,5 +444,5 @@ export default {
   success,
   table,
   title,
-  resolveModal,
+  getResolveModalLanguage,
 }

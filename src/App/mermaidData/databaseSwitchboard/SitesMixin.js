@@ -227,7 +227,9 @@ const SitesMixin = (Base) =>
       replaceRecordId,
     ) {
       if (!projectId || !findRecordId || !replaceRecordId) {
-        throw new Error('deleteSite expects record, profileId, and projectId parameters')
+        throw new Error(
+          'findAndReplaceSite expects record, findRecordId, and replaceRecordId parameters',
+        )
       }
 
       if (this._isOnlineAuthenticatedAndReady) {

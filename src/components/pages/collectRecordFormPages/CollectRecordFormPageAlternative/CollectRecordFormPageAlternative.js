@@ -102,6 +102,8 @@ const CollectRecordFormPageAlternative = ({
   const observationTableRef = useRef(null)
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
+  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
+    setManagementRegimes(updatedManagementRegimeRecords)
 
   const {
     persistUnsavedFormData: persistUnsavedFormikData,
@@ -422,6 +424,7 @@ const CollectRecordFormPageAlternative = ({
           collectRecord={collectRecordBeingEdited}
           formik={formik}
           managementRegimes={managementRegimes}
+          handleManagementRegimesChange={handleManagementRegimesChange}
           sites={sites}
           handleSitesChange={handleSitesChange}
           setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
