@@ -1,0 +1,3 @@
+import ResolveDuplicateMRButtonAndModal from './ResolveDuplicateMRButtonAndModal'
+
+export default ResolveDuplicateMRButtonAndModal

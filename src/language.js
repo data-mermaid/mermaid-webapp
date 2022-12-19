@@ -328,7 +328,7 @@ const map = {
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
 }
 
-const resolveModal = (siteOrManagementRegime) => {
+const getResolveModalLanguage = (siteOrManagementRegime) => {
   return {
     original: `Original ${siteOrManagementRegime}`,
     duplicate: `Duplicate ${siteOrManagementRegime}`,
@@ -337,7 +337,7 @@ const resolveModal = (siteOrManagementRegime) => {
     keepBoth: 'Keep both',
     cancel: 'Cancel',
     merge: 'Merge',
-    confirmMergeModalContent: (anotherSite) =>
+    getConfirmMergeMessage: (anotherSite) =>
       `All instances of this site will be replaced with ${anotherSite}`,
   }
 }
@@ -444,5 +444,5 @@ export default {
   success,
   table,
   title,
-  resolveModal,
+  getResolveModalLanguage,
 }

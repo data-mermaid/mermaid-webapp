@@ -6,8 +6,8 @@ import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
 import { InlineValidationButton } from '../../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import language from '../../../language'
-import ResolveDuplicateSiteButton from '../../ResolveDuplicateSiteButton/ResolveDuplicateSiteButton'
-import ResolveDuplicateMRButton from '../../ResolveDuplicateMRButton/ResolveDuplicateMRButton'
+import ResolveDuplicateSiteButtonAndModal from '../../ResolveDuplicateSiteButtonAndModal/ResolveDuplicateSiteButtonAndModal'
+import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndModal/ResolveDuplicateMRButtonAndModal'
 
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
@@ -26,10 +26,10 @@ const InputValidationInfo = ({
   const areThereValidationMessages = validationMessages.length
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
 
-  const warningValidationButton = () => {
+  const getWarningValidationButtons = () => {
     if (validationMessages[0]?.code === 'not_unique_site') {
       return (
-        <ResolveDuplicateSiteButton
+        <ResolveDuplicateSiteButtonAndModal
           currentSelectValue={currentSelectValue}
           validationMessages={validationMessages}
           updateValueAndResetValidationForDuplicateWarning={
@@ -45,7 +45,7 @@ const InputValidationInfo = ({
       validationMessages[0]?.code === 'similar_name'
     ) {
       return (
-        <ResolveDuplicateMRButton
+        <ResolveDuplicateMRButtonAndModal
           currentSelectValue={currentSelectValue}
           validationMessages={validationMessages}
           updateValueAndResetValidationForDuplicateWarning={
@@ -79,7 +79,7 @@ const InputValidationInfo = ({
           ))}
         </>
       ) : null}
-      {isWarningValidation ? warningValidationButton() : null}
+      {isWarningValidation ? getWarningValidationButtons() : null}
       {validationType === 'ok' ? <span aria-label="Passed Validation">&nbsp;</span> : null}
       {validationType === 'ignore' ? (
         <>

@@ -27,7 +27,7 @@ const Thead = styled.th`
   padding: 20px;
 `
 
-const ResolveDuplicateMRButton = ({
+const ResolveDuplicateMRButtonAndModal = ({
   currentSelectValue,
   validationMessages,
   updateValueAndResetValidationForDuplicateWarning,
@@ -41,8 +41,8 @@ const ResolveDuplicateMRButton = ({
     keepBoth,
     cancel,
     merge,
-    confirmMergeModalContent,
-  } = language.resolveModal('MR')
+    getConfirmMergeMessage,
+  } = language.getResolveModalLanguage('MR')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
@@ -190,8 +190,8 @@ const ResolveDuplicateMRButton = ({
   const handleKeepManagementRegime = (managementRegimeId) => {
     const confirmationText =
       managementRegimeId === currentManagementRegimeData?.id
-        ? confirmMergeModalContent(original.toLowerCase())
-        : confirmMergeModalContent(duplicate.toLowerCase())
+        ? getConfirmMergeMessage(original.toLowerCase())
+        : getConfirmMergeMessage(duplicate.toLowerCase())
 
     setConfirmationModalContent(confirmationText)
     setRecordIdToKeep(managementRegimeId)
@@ -359,11 +359,11 @@ const ResolveDuplicateMRButton = ({
   )
 }
 
-ResolveDuplicateMRButton.propTypes = {
+ResolveDuplicateMRButtonAndModal.propTypes = {
   currentSelectValue: PropTypes.string.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType.isRequired,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
 }
 
-export default ResolveDuplicateMRButton
+export default ResolveDuplicateMRButtonAndModal

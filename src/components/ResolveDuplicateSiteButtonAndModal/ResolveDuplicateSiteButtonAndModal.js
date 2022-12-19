@@ -28,7 +28,7 @@ const Thead = styled.th`
   padding: 20px;
 `
 
-const ResolveDuplicateSiteButton = ({
+const ResolveDuplicateSiteButtonAndModal = ({
   currentSelectValue,
   validationMessages,
   updateValueAndResetValidationForDuplicateWarning,
@@ -42,8 +42,8 @@ const ResolveDuplicateSiteButton = ({
     keepBoth,
     cancel,
     merge,
-    confirmMergeModalContent,
-  } = language.resolveModal('site')
+    getConfirmMergeMessage,
+  } = language.getResolveModalLanguage('site')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const { projectId } = useParams()
@@ -146,8 +146,8 @@ const ResolveDuplicateSiteButton = ({
   const handleKeepSite = (siteId) => {
     const confirmationText =
       siteId === currentSiteData?.id
-        ? confirmMergeModalContent(original.toLowerCase())
-        : confirmMergeModalContent(duplicate.toLowerCase())
+        ? getConfirmMergeMessage(original.toLowerCase())
+        : getConfirmMergeMessage(duplicate.toLowerCase())
 
     setConfirmationModalContent(confirmationText)
     setRecordIdToKeep(siteId)
@@ -322,11 +322,11 @@ const ResolveDuplicateSiteButton = ({
   )
 }
 
-ResolveDuplicateSiteButton.propTypes = {
+ResolveDuplicateSiteButtonAndModal.propTypes = {
   currentSelectValue: PropTypes.string.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType.isRequired,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
 }
 
-export default ResolveDuplicateSiteButton
+export default ResolveDuplicateSiteButtonAndModal

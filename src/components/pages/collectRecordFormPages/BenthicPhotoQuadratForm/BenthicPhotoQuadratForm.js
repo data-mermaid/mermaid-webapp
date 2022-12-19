@@ -189,26 +189,27 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   return (
     <ErrorBoundary>
       <CollectRecordFormPage
-        isNewRecord={isNewRecord}
-        sampleUnitName="benthicpqt"
-        collectRecordBeingEdited={collectRecordBeingEdited}
-        handleCollectRecordChange={handleCollectRecordChange}
-        handleNewObservationAdd={handleNewObservationAdd}
-        handleSubmitNewObservation={onSubmitNewBenthicAttribute}
-        observationsReducer={observationsReducer}
-        sites={sites}
-        handleSitesChange={handleSitesChange}
-        managementRegimes={managementRegimes}
-        handleManagementRegimesChange={handleManagementRegimesChange}
-        choices={choices}
-        idsNotAssociatedWithData={idsNotAssociatedWithData}
-        isLoading={isLoading}
-        subNavNode={subNavNode}
-        observerProfiles={observerProfiles}
-        observationOptions={benthicAttributeOptions}
-        modalAttributeOptions={benthicAttributeOptions}
-      />
+      isNewRecord={isNewRecord}
+      sampleUnitName="benthicpqt"
+      collectRecordBeingEdited={collectRecordBeingEdited}
+      handleCollectRecordChange={handleCollectRecordChange}
+      handleNewObservationAdd={handleNewObservationAdd}
+      handleSubmitNewObservation={onSubmitNewBenthicAttribute}
+      observationsReducer={observationsReducer}
+      sites={sites}
+      handleSitesChange={handleSitesChange}
+      managementRegimes={managementRegimes}
+      handleManagementRegimesChange={handleManagementRegimesChange}
+      choices={choices}
+      idsNotAssociatedWithData={idsNotAssociatedWithData}
+      isLoading={isLoading}
+      subNavNode={subNavNode}
+      observerProfiles={observerProfiles}
+      observationOptions={benthicAttributeOptions}
+      modalAttributeOptions={benthicAttributeOptions}
+    />
     </ErrorBoundary>
+
   )
 }
 
