@@ -1,4 +1,3 @@
-import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
@@ -15,13 +14,6 @@ const ProjectHealthMixin = (Base) =>
 
     #hasDuplicates = function hasDuplicates(array) {
       return new Set(array).size !== array.length
-    }
-
-    #getDateFromName = function getDateFromName(name) {
-      const lastElementInName = name.split(' ').pop()
-      const isDateInNames = moment(lastElementInName, 'YYYY-MM-DD', true).isValid()
-
-      return isDateInNames ? lastElementInName : ''
     }
 
     #groupSampleUnitNumbersBySampleDate = function groupSampleUnitNumbersBySampleDate(

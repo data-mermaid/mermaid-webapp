@@ -36,6 +36,7 @@ import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandl
 import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
+import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 
 const EMPTY_VALUE = '-'
 
@@ -302,7 +303,7 @@ const UsersAndTransects = () => {
     () =>
       submittedRecords.map((record) => ({
         site: record.site_name,
-        date: record.sample_date,
+        date: getSampleDateLabel(record.sample_date),
         method: record.sample_unit_method,
         ...populateTransectNumberRow(record),
         ...populateCollectNumberRow(record),
