@@ -175,7 +175,7 @@ const BenthicLitform = ({ isNewRecord }) => {
                 type: 'updateBenthicAttribute',
                 payload: {
                   observationId: observationIdToAddNewBenthicAttributeTo,
-                  newBenthicAttribute: error.existingBenthicAttribute.id,
+                  newValue: error.existingBenthicAttribute.id,
                 },
               })
             } else {

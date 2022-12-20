@@ -42,7 +42,7 @@ test('Unsaved NEW benthic pit form edits clear when the user navigates away and 
 
   userEvent.click(
     within(sampleUnitNav).getByRole('link', {
-      name: /fish belt/i,
+      name: 'Benthic PIT',
     }),
   )
 
@@ -83,7 +83,7 @@ test('Unsaved EDIT benthic pit form edits clear when the user navigates away and
 
   userEvent.click(
     within(table).getAllByRole('link', {
-      name: /fish belt/i,
+      name: 'Benthic PIT',
     })[0],
   )
 

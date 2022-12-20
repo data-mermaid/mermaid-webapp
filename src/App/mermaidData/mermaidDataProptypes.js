@@ -195,8 +195,8 @@ export const submittedBenthicPhotoQuadratPropType = PropTypes.shape({
 export const benthicPitRecordPropType = PropTypes.shape({
   id: PropTypes.string,
   data: PropTypes.shape({
-    interval_size: PropTypes.number,
-    inetrval_start: PropTypes.number,
+    interval_size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    inetrval_start: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     benthic_transect: _benthicTransectPropType,
     obs_benthic_pits: PropTypes.arrayOf(
       PropTypes.shape({
