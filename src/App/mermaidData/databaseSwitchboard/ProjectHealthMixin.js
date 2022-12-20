@@ -264,9 +264,9 @@ const ProjectHealthMixin = (Base) =>
       sampleEventUnitRows,
       siteCollectingSummary,
     ) {
-      /* Rule: check collecting summary profile records.
-        If records with empty sample date or different sample date from shown sample dates in any sample event unit records,
-        create new sample event unit record to contain the collecting records
+      /* Rules for extra rows:
+        1) Sample event unit rows with only collecting records (including _null_ site name)
+        2) Existing sample event unit rows with submitted records, which includes collecting records with empty or different sample dates from a shown date in date column.
       */
       const sampleEventUnitRowsCopy = [...sampleEventUnitRows]
 
@@ -298,14 +298,14 @@ const ProjectHealthMixin = (Base) =>
             (date) => !filteredProtocolProfileSampleDates.includes(date),
           )
 
-          if (
+          const emptyOrDifferentSampleDatesInCollectRecords =
             !filteredProtocolProfileSampleDates.includes('') &&
-            sampleDatesNotInAnySampleEventUnitRows.length > 0 &&
-            site_name !== MISSING_SITE_NAME
-          ) {
+            sampleDatesNotInAnySampleEventUnitRows.length > 0
+
+          if (emptyOrDifferentSampleDatesInCollectRecords) {
             sampleEventUnitRowsCopy.push({
               site_id: siteId,
-              site_name,
+              site_name: this.#getSiteName(site_name),
               sample_date: '',
               sample_unit_numbers: [],
               sample_unit_protocol: protocol,
@@ -322,14 +322,8 @@ const ProjectHealthMixin = (Base) =>
     #addCollectingRecordsToUsersAndTransects = function addCollectingRecordsToUsersAndTransects(
       sampleEventUnitRows,
       siteCollectingSummary,
-      protocols,
     ) {
       const sampleEventUnitRowsCopy = [...sampleEventUnitRows]
-      const sampleEventSiteIds = sampleEventUnitRowsCopy.map(({ site_id }) => site_id)
-      const collectingSiteIds = Object.keys(siteCollectingSummary)
-      const collectingSiteIdsWithoutSubmittedRecords = collectingSiteIds.filter(
-        (site) => !sampleEventSiteIds.includes(site),
-      )
 
       const extraSampleEventUnitRows = this.#createAdditionalSampleEventUnitRows(
         sampleEventUnitRowsCopy,
@@ -340,39 +334,6 @@ const ProjectHealthMixin = (Base) =>
         extraSampleEventUnitRows,
         siteCollectingSummary,
       )
-
-      for (const siteId of collectingSiteIdsWithoutSubmittedRecords) {
-        const { site_name, sample_unit_methods } = siteCollectingSummary[siteId]
-        const sampleEventUnitRow = {
-          site_id: siteId,
-          site_name: this.#getSiteName(site_name),
-          sample_date: '',
-          sample_unit_numbers: [],
-        }
-
-        if (site_name === MISSING_SITE_NAME) {
-          // Don't create empty method rows when site name is missing
-          for (const [missingSiteNameProtocol, missingSiteNameProtocolInfo] of Object.entries(
-            sample_unit_methods,
-          )) {
-            sampleEventUnitRowsWithCollectRecords.push({
-              ...sampleEventUnitRow,
-              sample_unit_protocol: missingSiteNameProtocol,
-              sample_unit_method: language.protocolTitles[missingSiteNameProtocol],
-              profile_summary: missingSiteNameProtocolInfo.profile_summary,
-            })
-          }
-        } else {
-          for (const protocol of protocols) {
-            sampleEventUnitRowsWithCollectRecords.push({
-              ...sampleEventUnitRow,
-              sample_unit_protocol: protocol,
-              sample_unit_method: language.protocolTitles[protocol],
-              profile_summary: sample_unit_methods[protocol]?.profile_summary || {},
-            })
-          }
-        }
-      }
 
       return sampleEventUnitRowsWithCollectRecords
     }
