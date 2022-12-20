@@ -39,7 +39,7 @@ const SubmittedBleachingInfoTable = ({ choices, sites, managementRegimes, submit
         <TableRowItem title="Current" options={currents.data} value={current} />
         <TableRowItem title="Relative Depth" options={relativedepths.data} value={relative_depth} />
         <TableRowItem title="Tide" options={tides.data} value={tide} />
-        <TableRowItem title="Notes" value={notes} />
+        <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
       </tbody>
     </Table>
   )
