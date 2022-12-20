@@ -4,7 +4,7 @@ import { subNavNodePropTypes } from './subNavNodePropTypes'
 import theme from '../../theme'
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 
-const SubNavList = styled('li')`
+const SubNavListLi = styled('li')`
   background-color: ${theme.color.primaryColor};
   color: ${theme.color.white};
   padding: ${theme.spacing.xsmall};
@@ -23,7 +23,7 @@ const NavListSubItem = styled('span')`
     line-height: 1;
   `)}
 `
-const FullRecord = styled(SubNavList)`
+const NavListSubItemWrapper = styled('div')`
   justify-content: space-around;
   flex-wrap: wrap;
   &:before {
@@ -39,54 +39,36 @@ const FullRecord = styled(SubNavList)`
     flex-direction: column;
   `)}
 `
-const PartialRecord = styled(SubNavList)`
-  justify-content: space-between;
-  &:before {
-    content: '↳';
-  }
-  ${mediaQueryPhoneOnly(css`
-    &:before {
-      content: '';
-    }
-    flex-direction: column;
-  `)}
-`
-const SingleRecord = styled(SubNavList)`
-  text-decoration: none;
-`
-
 const RecordName = ({ subNavNode }) => {
   const { name, number, label } = subNavNode
 
   if (!number && !label) {
-    return <SingleRecord>↳{name}</SingleRecord>
+    return <NavListSubItemWrapper>{name}</NavListSubItemWrapper>
   }
   if (!name) {
     return (
-      <PartialRecord>
+      <NavListSubItemWrapper>
         <NavListSubItem>{number}</NavListSubItem>
         <NavListSubItem>{label}</NavListSubItem>
-      </PartialRecord>
+      </NavListSubItemWrapper>
     )
   }
 
   return (
-    <FullRecord>
+    <NavListSubItemWrapper>
       <NavListSubItem>{name}</NavListSubItem>
       <NavListSubItem>{number}</NavListSubItem>
       <NavListSubItem>{label}</NavListSubItem>
-    </FullRecord>
+    </NavListSubItemWrapper>
   )
 }
 
 const SubNavMenuRecordName = ({ subNavNode }) => {
   return subNavNode ? (
-    <SubNavList>
+    <SubNavListLi>
       <RecordName subNavNode={subNavNode} />
-    </SubNavList>
-  ) : (
-    <></>
-  )
+    </SubNavListLi>
+  ) : null
 }
 
 RecordName.propTypes = {
