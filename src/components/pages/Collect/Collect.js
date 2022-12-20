@@ -316,7 +316,7 @@ const Collect = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageUnavailable mainText={language.pages.collectTable.noDataText} />
+    <PageUnavailable mainText={language.pages.collectTable.noDataMainText} />
   )
 
   const contentViewByRole = isReadOnlyUser ? (

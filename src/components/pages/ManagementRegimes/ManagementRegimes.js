@@ -402,8 +402,8 @@ const ManagementRegimes = () => {
     </>
   ) : (
     <PageUnavailable
-      mainText={language.pages.managementRegimeTable.noDataText}
-      subText={language.pages.managementRegimeTable.noDataExtraText}
+      mainText={language.pages.managementRegimeTable.noDataMainText}
+      subText={language.pages.managementRegimeTable.noDataSubText}
     />
   )
 
