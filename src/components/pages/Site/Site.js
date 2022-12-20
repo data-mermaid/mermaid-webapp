@@ -63,7 +63,7 @@ const ReadOnlySiteContent = ({
           <TableRowItem title="Exposure" options={exposureOptions} value={exposure} />
           <TableRowItem title="Reef Type" options={reefTypeOptions} value={reef_type} />
           <TableRowItem title="Reef Zone" options={reefZoneOptions} value={reef_zone} />
-          <TableRowItem title="Notes" value={notes} />
+          <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
         </tbody>
       </Table>
       {isAppOnline && (

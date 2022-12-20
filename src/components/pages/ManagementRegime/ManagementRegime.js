@@ -85,7 +85,7 @@ const ReadOnlyManagementRegimeContent = ({
         <TableRowItem title="Parities" options={managementPartyOptions} value={parties} />
         <TableRowItem title="Compliance" options={managementComplianceOptions} value={compliance} />
         <TableRowItem title="Rules" value={managementRules} />
-        <TableRowItem title="Notes" value={notes} />
+        <TableRowItem title="Notes" value={notes} isAllowNewlines={true} />
       </tbody>
     </Table>
   )

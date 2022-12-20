@@ -26,6 +26,7 @@ const TableRowItem = ({
   extraValue,
   isOriginalSelected,
   isDuplicateSelected,
+  isAllowNewlines,
 }) => {
   const rowItemValue = options ? getOptionsByItemLabelOrName(value, options) : value
   const extraRowItemValue = options ? getOptionsByItemLabelOrName(extraValue, options) : extraValue
@@ -36,7 +37,12 @@ const TableRowItem = ({
   return (
     <Tr>
       <TdKey>{title}</TdKey>
-      <Td className={highlightedDuplicateSite}>{rowItemValue}</Td>
+      <Td
+        className={highlightedDuplicateSite}
+        style={isAllowNewlines ? { whiteSpace: 'pre-wrap' } : {}}
+      >
+        {rowItemValue}
+      </Td>
       {showExtraRowItem && <Td className={highlightedCurrentSite}>{extraRowItemValue}</Td>}
     </Tr>
   )
@@ -61,6 +67,7 @@ TableRowItem.propTypes = {
   ]),
   isOriginalSelected: PropTypes.bool,
   isDuplicateSelected: PropTypes.bool,
+  isAllowNewlines: PropTypes.bool,
 }
 
 TableRowItem.defaultProps = {
@@ -69,6 +76,7 @@ TableRowItem.defaultProps = {
   extraValue: undefined,
   isOriginalSelected: false,
   isDuplicateSelected: false,
+  isAllowNewlines: false,
 }
 
 export default TableRowItem
