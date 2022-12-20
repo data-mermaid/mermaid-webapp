@@ -2,7 +2,6 @@ import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getSampleDateLabel } from '../getSampleDateLabel'
 
 const MISSING_SITE_NAME = '__null__'
 
