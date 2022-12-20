@@ -115,6 +115,17 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
   }, {})
 }
 
+const NoDataBodyText = () => (
+  <>
+    <div>{language.pages.usersAndTransectsTable.noDataSubTextTitle}</div>
+    <ul>
+      {language.pages.usersAndTransectsTable.noDataSubTexts.map((text) => (
+        <li key={text}>{text}</li>
+      ))}
+    </ul>
+  </>
+)
+
 const UsersAndTransects = () => {
   const { isAppOnline } = useOnlineStatus()
   const [isLoading, setIsLoading] = useState(true)
@@ -388,7 +399,7 @@ const UsersAndTransects = () => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  const table = (
+  const table = submittedRecords.length ? (
     <>
       <StickyTableOverflowWrapper>
         <StickyProjectHealthTable {...getTableProps()}>
@@ -503,6 +514,11 @@ const UsersAndTransects = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageUnavailable
+      mainText={language.pages.usersAndTransectsTable.noDataMainText}
+      subText={<NoDataBodyText />}
+    />
   )
 
   const content = isAppOnline ? (

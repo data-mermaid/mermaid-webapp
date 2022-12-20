@@ -212,9 +212,9 @@ const pages = {
   projectsList: {
     title: 'Projects',
     offlineReadyCheckboxLabel: 'Offline Ready',
-    noDataTextOnline: `You aren't part of any projects yet.`,
+    noDataMainTextOnline: `You aren't part of any projects yet.`,
     noDataSubText: `Create a new project or get your admin to add you to some.`,
-    noDataTextOffline: `You don't have any offline projects.`,
+    noDataMainTextOffline: `You don't have any offline projects.`,
     noFilterResults: 'No results',
     noFilterResultsSubText: 'No projects match the current filter term.',
     readOnlyUserWithActiveSampleUnits:
@@ -245,7 +245,7 @@ const pages = {
   submittedTable: {
     title: 'Submitted',
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
-    noDataText: `This project has no submitted sample units.`,
+    noDataMainText: `This project has no submitted sample units.`,
   },
   userTable: {
     title: 'Users',
@@ -272,7 +272,7 @@ const pages = {
   collectTable: {
     title: 'Collecting',
     filterToolbarText: 'Filter sample units by method, site, management, or observer',
-    noDataText: `You don't have any active sample units`,
+    noDataMainText: `You don't have any active sample units`,
   },
   siteForm: {
     title: 'Site',
@@ -280,8 +280,8 @@ const pages = {
   siteTable: {
     title: 'Sites',
     filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
-    noDataText: `This project has no sites.`,
-    noDataExtraText: `You can add sites by creating a new one or copying them from another project.`,
+    noDataMainText: `This project has no sites.`,
+    noDataSubText: `You can add sites by creating a new one or copying them from another project.`,
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
   },
   managementRegimeForm: {
@@ -290,16 +290,28 @@ const pages = {
   managementRegimeTable: {
     title: 'Management Regimes',
     filterToolbarText: 'Filter management regimes by name or year',
-    noDataText: `This project has no management regimes.`,
-    noDataExtraText: `You can add management regimes by creating a new one or copying them from another project.`,
+    noDataMainText: `This project has no management regimes.`,
+    noDataSubText: `You can add management regimes by creating a new one or copying them from another project.`,
   },
   usersAndTransectsTable: {
     title: 'Users and Transects',
     filterToolbarText: 'Filter sample units by site or method',
     missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',
+    noDataMainText: 'This project has no submitted sample units yet.',
+    noDataSubTextTitle: 'This page will show:',
+    noDataSubTexts: [
+      'Who has unsubmited sample units?',
+      'Which sample units are missing?',
+      'Transect number for submitted and unsubmitted sample units?',
+    ],
   },
-  managementRegimesOverview: { title: 'Management Regimes Overview' },
+  managementRegimesOverview: {
+    title: 'Management Regimes Overview',
+    noDataMainText: 'This project has no submitted sample units yet.',
+    noDataSubText:
+      'This page will show the management regime of submitted sample units by method and site.',
+  },
   copySiteTable: {
     title: 'Copy Sites',
     filterToolbarText: 'Filter sites by name, project or country',
