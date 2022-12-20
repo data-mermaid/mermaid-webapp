@@ -1,21 +1,7 @@
-export default {
+export const mockBenthicLitValidationsObject = {
   status: 'error',
   results: {
     data: {
-      interval_size: [
-        {
-          validation_id: Math.random(),
-          code: 'required',
-          status: 'error',
-        },
-      ],
-      interval_start: [
-        {
-          validation_id: Math.random(),
-          code: 'required',
-          status: 'error',
-        },
-      ],
       observers: [
         {
           code: 'required',
@@ -77,7 +63,7 @@ export default {
           },
         ],
       },
-      obs_benthic_pits: [
+      obs_benthic_lits: [
         [
           {
             name: 'observation validation with ok status shoulnt show',

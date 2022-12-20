@@ -286,9 +286,6 @@ const ManagementRegimes = () => {
     setPageSize(Number(e.target.value))
   }
 
-  // eslint-disable-next-line no-console
-  // console.log(tableUserPrefs.pageSize)
-
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
 
   const _setSortByPrefs = useEffect(() => {

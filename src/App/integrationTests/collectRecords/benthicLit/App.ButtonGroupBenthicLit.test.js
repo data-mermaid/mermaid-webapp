@@ -6,20 +6,20 @@ import {
   screen,
   renderAuthenticatedOnline,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
-import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
+import { mockBenthicLitCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
+import { mockBenthicLitValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
+import App from '../../../App'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-import mockBenthicPitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
-import { mockBenthicPitValidationsObject } from '../../../../testUtilities/mockBenthicPitValidationsObject'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Edit Benthic PIT - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
+test('Edit Benthic LIT - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/benthicPit/50'],
+    initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -46,11 +46,11 @@ test('Edit Benthic PIT - Save button starts with Saved status, make changes, Sav
   expect(screen.getByText('Submit', { selector: 'button' })).toBeDisabled()
 })
 
-test('Validate Benthic PIT: fails to validate, shows button able to run validation again.', async () => {
+test('Validate Benthic LIT: fails to validate, shows button able to run validation again.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/benthicpit/50'],
+    initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -61,8 +61,8 @@ test('Validate Benthic PIT: fails to validate, shows button able to run validati
     // append the validated data on the pull response, because that is what the UI uses to update itself
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicPitCollectRecords[0],
-        validations: mockBenthicPitValidationsObject, // fails validation
+        ...mockBenthicLitCollectRecords[0],
+        validations: mockBenthicLitValidationsObject, // fails validation
       }
 
       const response = {
@@ -90,11 +90,11 @@ test('Validate Benthic PIT: fails to validate, shows button able to run validati
   ).not.toBeInTheDocument()
 })
 
-test('Validate & submit Benthic PIT: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
+test('Validate & submit Benthic LIT: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/benthicpit/50'],
+    initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -103,8 +103,8 @@ test('Validate & submit Benthic PIT: validation passes, shows validate button di
     // append the validated data on the pull response, because that is what the UI uses to update itself
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidationFailing = {
-        ...mockBenthicPitCollectRecords[0],
-        validations: mockBenthicPitValidationsObject, // fails validation
+        ...mockBenthicLitCollectRecords[0],
+        validations: mockBenthicLitValidationsObject, // fails validation
       }
 
       const firstPullResponse = {
@@ -124,7 +124,7 @@ test('Validate & submit Benthic PIT: validation passes, shows validate button di
     }),
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidationOk = {
-        ...mockBenthicPitCollectRecords[0],
+        ...mockBenthicLitCollectRecords[0],
         validations: { status: 'ok' },
       }
 
@@ -165,7 +165,7 @@ test('Initial load of successfully validated record', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/benthicpit/50'],
+    initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -176,7 +176,7 @@ test('Initial load of successfully validated record', async () => {
     // append the validated data on the pull response, because that is what the UI uses to update itself
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicPitCollectRecords[0],
+        ...mockBenthicLitCollectRecords[0],
         validations: { status: 'ok' },
       }
 

@@ -8,19 +8,19 @@ import {
   renderAuthenticatedOnline,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { mockBenthicPitValidationsObject } from '../../../../testUtilities/mockBenthicPitValidationsObject'
+import { mockBenthicLitValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
 import App from '../../../App'
-import mockBenthicPitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
+import { mockBenthicLitCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Submit Benthic PIT success shows toast message and redirects to collect record list page', async () => {
+test('Submit Benthic LIT success shows toast message and redirects to collect record list page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/benthicpit/50'],
+    initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -29,8 +29,8 @@ test('Submit Benthic PIT success shows toast message and redirects to collect re
     // append the validated data on the pull response, because that is what the UI uses to update itself
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidationFailing = {
-        ...mockBenthicPitCollectRecords[0],
-        validations: mockBenthicPitValidationsObject, // fails validation
+        ...mockBenthicLitCollectRecords[0],
+        validations: mockBenthicLitValidationsObject, // fails validation
       }
 
       const firstPullResponse = {
@@ -50,7 +50,7 @@ test('Submit Benthic PIT success shows toast message and redirects to collect re
     }),
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidationOk = {
-        ...mockBenthicPitCollectRecords[0],
+        ...mockBenthicLitCollectRecords[0],
         validations: { status: 'ok' },
       }
 
@@ -83,11 +83,11 @@ test('Submit Benthic PIT success shows toast message and redirects to collect re
   // of sync + the api.Post submit pulls updates and deletes.
 })
 
-test('Submit Benthic PIT failure shows toast message and an enabled submit button', async () => {
+test('Submit Benthic LIT failure shows toast message and an enabled submit button', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/benthicpit/50'],
+    initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -96,8 +96,8 @@ test('Submit Benthic PIT failure shows toast message and an enabled submit butto
     // append the validated data on the pull response, because that is what the UI uses to update itself
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidationFailing = {
-        ...mockBenthicPitCollectRecords[0],
-        validations: mockBenthicPitValidationsObject, // fails validation
+        ...mockBenthicLitCollectRecords[0],
+        validations: mockBenthicLitValidationsObject, // fails validation
       }
 
       const firstPullResponse = {
@@ -117,7 +117,7 @@ test('Submit Benthic PIT failure shows toast message and an enabled submit butto
     }),
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidationOk = {
-        ...mockBenthicPitCollectRecords[0],
+        ...mockBenthicLitCollectRecords[0],
         validations: { status: 'ok' },
       }
 

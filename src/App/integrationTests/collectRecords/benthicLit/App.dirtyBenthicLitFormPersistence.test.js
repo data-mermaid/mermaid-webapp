@@ -10,11 +10,11 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
-test('Unsaved NEW bleaching form edits clear when the user navigates away and back', async () => {
+test('Unsaved NEW benthic LIT form edits clear when the user navigates away and back', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc'],
+    initialEntries: ['/projects/5/collecting/benthiclit'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -42,7 +42,7 @@ test('Unsaved NEW bleaching form edits clear when the user navigates away and ba
 
   userEvent.click(
     within(sampleUnitNav).getByRole('link', {
-      name: 'Bleaching',
+      name: 'Benthic LIT',
     }),
   )
 
@@ -51,11 +51,11 @@ test('Unsaved NEW bleaching form edits clear when the user navigates away and ba
   expect(within(formAfterNav).getByLabelText('Depth')).not.toHaveValue()
 })
 
-test('Unsaved EDIT bleaching form edits clear when the user navigates away and back', async () => {
+test('Unsaved EDIT benthic LIT form edits clear when the user navigates away and back', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+    initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -83,7 +83,7 @@ test('Unsaved EDIT bleaching form edits clear when the user navigates away and b
 
   userEvent.click(
     within(table).getAllByRole('link', {
-      name: 'Bleaching',
+      name: 'Benthic LIT',
     })[0],
   )
 
@@ -92,11 +92,11 @@ test('Unsaved EDIT bleaching form edits clear when the user navigates away and b
   // initial unedited depth value
   expect(within(formAfterNav).getByLabelText('Depth')).toHaveValue(20)
 })
-test('Unsaved NEW bleaching form edits persist through change in online/offline status', async () => {
+test('Unsaved NEW benthic LIT form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc'],
+    initialEntries: ['/projects/5/collecting/benthiclit'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -120,11 +120,11 @@ test('Unsaved NEW bleaching form edits persist through change in online/offline 
   expect(await screen.findByRole('button', { name: 'Save' })).toBeEnabled()
 })
 
-test('Unsaved EDIT bleaching form edits persist through change in online/offline status', async () => {
+test('Unsaved EDIT benthic LIT form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/bleachingqc/60'],
+    initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

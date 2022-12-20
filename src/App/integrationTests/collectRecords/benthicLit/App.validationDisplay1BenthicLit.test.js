@@ -9,14 +9,14 @@ import {
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { mockBenthicPitValidationsObject } from '../../../../testUtilities/mockBenthicPitValidationsObject'
+import { mockBenthicLitCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
 import App from '../../../App'
-import mockBenthicPitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
+import { mockBenthicLitValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Benthic PIT validations will show the all warnings when there are multiple warnings and no errors', async () => {
+test('Benthic LIT validations will show the all warnings when there are multiple warnings and no errors', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -26,12 +26,12 @@ test('Benthic PIT validations will show the all warnings when there are multiple
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicPitCollectRecords[0],
+        ...mockBenthicLitCollectRecords[0],
         validations: {
           status: 'error',
           results: {
             data: {
-              obs_benthic_pits: [
+              obs_benthic_lits: [
                 [
                   {
                     code: `observation validation with ok status shouldn't show`,
@@ -92,7 +92,7 @@ test('Benthic PIT validations will show the all warnings when there are multiple
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
+      initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -147,8 +147,8 @@ test('Validating an empty collect record, and then editing an input with errors 
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicPitCollectRecords[0],
-        validations: mockBenthicPitValidationsObject,
+        ...mockBenthicLitCollectRecords[0],
+        validations: mockBenthicLitValidationsObject,
       }
 
       const response = {
@@ -191,7 +191,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
+      initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -235,8 +235,6 @@ test('Validating an empty collect record, and then editing an input with errors 
   expect(within(screen.getByTestId('transect_number')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval_size')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval_start')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('notes')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('observers')).getByText('Required')).toBeInTheDocument()
@@ -322,7 +320,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   ).toBeInTheDocument()
 }, 60000)
 
-test('Benthic PIT validations will show passed input validations', async () => {
+test('Benthic LIT validations will show passed input validations', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -332,7 +330,7 @@ test('Benthic PIT validations will show passed input validations', async () => {
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicPitCollectRecords[0],
+        ...mockBenthicLitCollectRecords[0],
         validations: {},
       }
 
@@ -356,7 +354,7 @@ test('Benthic PIT validations will show passed input validations', async () => {
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
+      initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

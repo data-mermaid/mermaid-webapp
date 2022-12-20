@@ -45,13 +45,13 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const tableRowsAfterDescending = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterDescending[1]).getByText('Fish Belt'))
+  expect(within(tableRowsAfterDescending[1]).getByText('Habitat Complexity'))
 
   userEvent.dblClick(within(table).getByText('Method'))
 
   const tableRowsAfterAscending = within(table).getAllByRole('row')
 
-  expect(within(tableRowsAfterAscending[1]).getByText('Benthic PIT'))
+  expect(within(tableRowsAfterAscending[1]).getByText('Benthic LIT'))
 })
 
 test('Collect Records table sorts properly by site column', async () => {
@@ -321,7 +321,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
   const tableRowsAfterSecondClick = within(table).getAllByRole('row')
 
   // test last row. (heads up, this is a multi page table)
-  expect(within(tableRowsAfterSecondClick[17]).getByText('June 12, 2012'))
+  expect(within(tableRowsAfterSecondClick[19]).getByText('June 12, 2012'))
 })
 
 test('Collect Records table sorts properly by observers column', async () => {
@@ -439,8 +439,8 @@ test('Collect Records table changes number of rows visible size when pagination 
 
   const tableRowsAfter = within(table).getAllByRole('row')
 
-  // 18 mock records + header row
-  expect(tableRowsAfter.length).toEqual(19)
+  // 20 mock records + header row
+  expect(tableRowsAfter.length).toEqual(21)
 })
 
 test('Collect Records table change pages when different page is selected ', async () => {
@@ -473,5 +473,5 @@ test('Collect Records table change pages when different page is selected ', asyn
 
   const linksToCollectRecords = within(table).getAllByRole('link')
 
-  expect(linksToCollectRecords).toHaveLength(3)
+  expect(linksToCollectRecords).toHaveLength(5)
 })

@@ -193,7 +193,6 @@ const BenthicLitObservationsTable = ({
               {observationValidationMessages.map((validation) => (
                 <li className={`${observationValidationType}-indicator`} key={validation.id}>
                   {language.getValidationMessage(validation)}
-                  {JSON.stringify(validation)}
                 </li>
               ))}
             </TableValidationList>

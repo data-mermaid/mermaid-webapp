@@ -8,15 +8,15 @@ import {
   screen,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
-import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
+import { mockBenthicLitCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
+import { mockBenthicLitValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
+import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-import mockBenthicPitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
-import { mockBenthicPitValidationsObject } from '../../../../testUtilities/mockBenthicPitValidationsObject'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Validating an empty benthic PIT collect record shows validations (proof of wire-up)', async () => {
+test('Validating an empty benthic LIT collect record shows validations (proof of wire-up)', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -26,8 +26,8 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicPitCollectRecords[0],
-        validations: mockBenthicPitValidationsObject,
+        ...mockBenthicLitCollectRecords[0],
+        validations: mockBenthicLitValidationsObject,
       }
 
       const response = {
@@ -50,7 +50,7 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
+      initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -98,8 +98,6 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
   expect(within(screen.getByTestId('label')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('len_surveyed')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('reef_slope')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval_size')).getByText('Required')).toBeInTheDocument()
-  expect(within(screen.getByTestId('interval_start')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('relative_depth')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('current')).getByText('Required')).toBeInTheDocument()
   expect(within(screen.getByTestId('tide')).getByText('Required')).toBeInTheDocument()
@@ -117,7 +115,7 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
   ).not.toBeInTheDocument()
 })
 
-test('Benthic PIT validations will show only the first error when there are multiple errors and warnings', async () => {
+test('benthic LIT validations will show only the first error when there are multiple errors and warnings', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -127,12 +125,12 @@ test('Benthic PIT validations will show only the first error when there are mult
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicPitCollectRecords[0],
+        ...mockBenthicLitCollectRecords[0],
         validations: {
           status: 'error',
           results: {
             data: {
-              obs_benthic_pits: [
+              obs_benthic_lits: [
                 [
                   {
                     code: `observation validation with ok status shouldn't show`,
@@ -215,7 +213,7 @@ test('Benthic PIT validations will show only the first error when there are mult
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/benthicpit/50'],
+      initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
