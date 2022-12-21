@@ -364,8 +364,8 @@ const Sites = () => {
     </>
   ) : (
     <PageUnavailable
-      mainText={language.pages.siteTable.noDataText}
-      subText={language.pages.siteTable.noDataExtraText}
+      mainText={language.pages.siteTable.noDataMainText}
+      subText={language.pages.siteTable.noDataSubText}
     />
   )
 

@@ -106,8 +106,8 @@ const Projects = ({ apiSyncInstance }) => {
       noFilterResults,
       noFilterResultsSubText,
       noDataSubText,
-      noDataTextOnline,
-      noDataTextOffline,
+      noDataMainTextOnline,
+      noDataMainTextOffline,
     } = language.pages.projectsList
     const isProjectFilter = projectFilter !== ''
 
@@ -116,30 +116,30 @@ const Projects = ({ apiSyncInstance }) => {
     let subText
 
     if (isAppOnline) {
-      mainText = isProjectFilter ? noFilterResults : noDataTextOnline
+      mainText = isProjectFilter ? noFilterResults : noDataMainTextOnline
       subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
     }
 
     if (!isAppOnline) {
-      mainText = isProjectFilter ? noFilterResults : noDataTextOffline
+      mainText = isProjectFilter ? noFilterResults : noDataMainTextOffline
       subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
     }
 
-    return <PageUnavailable mainText={mainText} subText={subText} />
+    return <PageUnavailable mainText={mainText} subText={subText} align="center" />
   }
 
   const projectCardsList = filteredSortedProjects.length
     ? getFilteredSortedProjects().map((project) => (
-      <ErrorBoundary>
-        <ProjectCard
-          role="listitem"
-          project={{ ...project }}
-          key={project.id}
-          apiSyncInstance={apiSyncInstance}
-          isOfflineReady={getIsProjectOffline(project.id)}
-          addProjectToProjectsPage={addProjectToProjectsPage}
-        />
-      </ErrorBoundary>
+        <ErrorBoundary>
+          <ProjectCard
+            role="listitem"
+            project={{ ...project }}
+            key={project.id}
+            apiSyncInstance={apiSyncInstance}
+            isOfflineReady={getIsProjectOffline(project.id)}
+            addProjectToProjectsPage={addProjectToProjectsPage}
+          />
+        </ErrorBoundary>
       ))
     : renderPageNoData()
 

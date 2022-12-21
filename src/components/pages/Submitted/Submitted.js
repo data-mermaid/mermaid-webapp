@@ -311,7 +311,7 @@ const Submitted = () => {
       </TableNavigation>
     </>
   ) : (
-    <PageUnavailable mainText={language.pages.submittedTable.noDataText} />
+    <PageUnavailable mainText={language.pages.submittedTable.noDataMainText} />
   )
 
   const content = isAppOnline ? (

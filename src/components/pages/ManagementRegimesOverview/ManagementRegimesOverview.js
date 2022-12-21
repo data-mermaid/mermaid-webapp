@@ -278,7 +278,7 @@ const ManagementRegimesOverview = () => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  const table = (
+  const table = sampleUnitWithManagementRegimeRecords.length ? (
     <>
       <StickyTableOverflowWrapper>
         <StickyProjectHealthTable {...getTableProps()}>
@@ -397,6 +397,11 @@ const ManagementRegimesOverview = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageUnavailable
+      mainText={language.pages.managementRegimesOverview.noDataMainText}
+      subText={language.pages.managementRegimesOverview.noDataSubText}
+    />
   )
 
   const content = isAppOnline ? (
