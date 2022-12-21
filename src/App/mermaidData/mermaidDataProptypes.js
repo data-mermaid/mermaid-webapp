@@ -209,6 +209,21 @@ export const benthicPitRecordPropType = PropTypes.shape({
   }),
 })
 
+export const habitatComplexityPropType = PropTypes.shape({
+  id: PropTypes.string,
+  data: PropTypes.shape({
+    interval_size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    benthic_transect: _benthicTransectPropType,
+    obs_habitat_complexities: PropTypes.arrayOf(
+      PropTypes.shape({
+        score: PropTypes.string,
+        id: PropTypes.string,
+        interval: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      }),
+    ),
+  }),
+})
+
 export const submittedBenthicLitPropType = PropTypes.shape({
   id: PropTypes.string,
   interval_size: PropTypes.number,
@@ -456,6 +471,17 @@ export const benthicPitValidationPropType = PropTypes.shape({
   interval_start: _validationsPropType,
   interval_size: _validationsPropType,
   obs_benthic_pits: PropTypes.arrayOf(_validationsPropType),
+})
+
+export const habitatComplexityValidationPropType = PropTypes.shape({
+  benthic_transect: PropTypes.shape({
+    depth: _depthValidationPropType,
+    len_surveyed: _lenSurveyedValidationPropType,
+    number: _validationsPropType,
+    sample_time: _sampleTimeValidationPropType,
+  }),
+  interval_size: _validationsPropType,
+  obs_habitat_complexities: PropTypes.arrayOf(_validationsPropType),
 })
 
 // End of PropTypes for validation object
