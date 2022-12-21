@@ -106,8 +106,8 @@ const Projects = ({ apiSyncInstance }) => {
       noFilterResults,
       noFilterResultsSubText,
       noDataSubText,
+      noDataMainTextOnline,
       noDataMainTextOffline,
-      noDataTextOffline,
     } = language.pages.projectsList
     const isProjectFilter = projectFilter !== ''
 
@@ -116,7 +116,7 @@ const Projects = ({ apiSyncInstance }) => {
     let subText
 
     if (isAppOnline) {
-      mainText = isProjectFilter ? noFilterResults : noDataMainTextOffline
+      mainText = isProjectFilter ? noFilterResults : noDataMainTextOnline
       subText = isProjectFilter ? noFilterResultsSubText : noDataSubText
     }
 
