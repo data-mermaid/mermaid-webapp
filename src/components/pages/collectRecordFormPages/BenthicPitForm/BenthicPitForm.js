@@ -211,7 +211,6 @@ const BenthicPitForm = ({ isNewRecord }) => {
     <ErrorBoundary>
       <CollectRecordFormPageAlternative
         areObservationsInputsDirty={areObservationsInputsDirty}
-        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
         idsNotAssociatedWithData={idsNotAssociatedWithData}

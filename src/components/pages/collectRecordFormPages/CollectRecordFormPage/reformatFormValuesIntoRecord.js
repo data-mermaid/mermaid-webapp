@@ -261,3 +261,55 @@ export const reformatFormValuesIntoBleachingRecord = ({
     },
   }
 }
+
+export const reformatFormValuesIntoHabitatComplexityRecord = ({
+  formikValues,
+  observationsTable1State,
+  collectRecordBeingEdited,
+}) => {
+  const {
+    current,
+    depth,
+    interval_size,
+    label,
+    len_surveyed,
+    management,
+    notes,
+    number,
+    observers,
+    reef_slope,
+    relative_depth,
+    sample_date,
+    sample_time,
+    site,
+    tide,
+    visibility,
+  } = formikValues
+
+  return {
+    ...collectRecordBeingEdited,
+    data: {
+      benthic_transect: {
+        current,
+        depth,
+        label,
+        len_surveyed,
+        notes,
+        number,
+        reef_slope,
+        relative_depth,
+        sample_time,
+        tide,
+        visibility,
+      },
+      sample_event: {
+        management,
+        sample_date,
+        site,
+      },
+      interval_size,
+      obs_habitat_complexities: observationsTable1State,
+      observers,
+    },
+  }
+}

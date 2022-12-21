@@ -58,6 +58,12 @@ const getBenthicPitAdditionalValues = (collectRecord) => {
   }
 }
 
+const getHabitatComplexityAdditionalValues = (collectRecord) => {
+  return {
+    interval_size: collectRecord?.data?.interval_size ?? '',
+  }
+}
+
 const getBleachingQuadratCollection = (collectRecord) => {
   const quadratCollection = collectRecord?.data?.quadrat_collection
 
@@ -82,6 +88,7 @@ export {
   getBenthicPitAdditionalValues,
   getBleachingQuadratCollection,
   getCollectRecordDataInitialValues,
+  getHabitatComplexityAdditionalValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
 }
