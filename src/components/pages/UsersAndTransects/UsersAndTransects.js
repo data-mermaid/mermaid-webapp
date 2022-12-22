@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { useParams } from 'react-router-dom'
@@ -92,6 +93,18 @@ const UsersAndTransectsRow = styled(Tr)`
   }
 `
 
+const checkDateAndGetSiteName = (name) => {
+  const elementsInName = name.split(' ')
+  const lastItemInName = elementsInName.pop()
+  const isDateValid = moment(lastItemInName, 'YYYY-MM-DD', true).isValid()
+
+  if (isDateValid) {
+    return `${elementsInName.join(' ')} ${getSampleDateLabel(lastItemInName)}`
+  }
+
+  return name
+}
+
 const groupCollectSampleUnitsByProfileSummary = (records) => {
   return records.reduce((accumulator, record) => {
     const profileSummary = record.profile_summary
@@ -114,17 +127,6 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
     return accumulator
   }, {})
 }
-
-const NoDataBodyText = () => (
-  <>
-    <div>{language.pages.usersAndTransectsTable.noDataSubTextTitle}</div>
-    <ul>
-      {language.pages.usersAndTransectsTable.noDataSubTexts.map((text) => (
-        <li key={text}>{text}</li>
-      ))}
-    </ul>
-  </>
-)
 
 const UsersAndTransects = () => {
   const { isAppOnline } = useOnlineStatus()
@@ -226,12 +228,6 @@ const UsersAndTransects = () => {
       },
       {
         Header: () => '',
-        id: 'date',
-        columns: [{ Header: 'Date', accessor: 'date', sortType: reactTableNaturalSort }],
-        disableSortBy: true,
-      },
-      {
-        Header: () => '',
         id: 'method',
         columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
         disableSortBy: true,
@@ -312,13 +308,16 @@ const UsersAndTransects = () => {
 
   const tableCellData = useMemo(
     () =>
-      submittedRecords.map((record) => ({
-        site: record.site_name,
-        date: getSampleDateLabel(record.sample_date),
-        method: record.sample_unit_method,
-        ...populateTransectNumberRow(record),
-        ...populateCollectNumberRow(record),
-      })),
+      submittedRecords.map((record) => {
+        const siteName = checkDateAndGetSiteName(record.site_name)
+
+        return {
+          site: siteName,
+          method: record.sample_unit_method,
+          ...populateTransectNumberRow(record),
+          ...populateCollectNumberRow(record),
+        }
+      }),
     [submittedRecords, populateTransectNumberRow, populateCollectNumberRow],
   )
 
@@ -399,7 +398,7 @@ const UsersAndTransects = () => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  const table = submittedRecords.length ? (
+  const table = (
     <>
       <StickyTableOverflowWrapper>
         <StickyProjectHealthTable {...getTableProps()}>
@@ -413,11 +412,7 @@ const UsersAndTransects = () => {
                   const ThClassName = column.parent ? column.parent.id : undefined
 
                   const headerAlignment =
-                    column.Header === 'Site' ||
-                    column.Header === 'Method' ||
-                    column.Header === 'Date'
-                      ? 'left'
-                      : 'right'
+                    column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
 
                   return (
                     <Th
@@ -450,10 +445,8 @@ const UsersAndTransects = () => {
                     const isNotBleachingMethodRow = cellRowValuesMethod !== 'Bleaching'
                     const isCellInSubmittedTransectNumberColumns =
                       submittedTransectNumbers.includes(cellColumnId)
-                    const areSiteMethodOrDateColumns =
-                      cellColumnId === 'site' ||
-                      cellColumnId === 'method' ||
-                      cellColumnId === 'date'
+                    const areSiteOrMethodColumns =
+                      cellColumnId === 'site' || cellColumnId === 'method'
 
                     const cellRowValuesForSubmittedTransectNumbers = Object.entries(
                       cellRowValues,
@@ -476,9 +469,9 @@ const UsersAndTransects = () => {
                     const isCollectingNumberCellHighLighted =
                       cell.value !== EMPTY_VALUE &&
                       !isCellInSubmittedTransectNumberColumns &&
-                      !areSiteMethodOrDateColumns
+                      !areSiteOrMethodColumns
 
-                    const cellAlignment = areSiteMethodOrDateColumns ? 'left' : 'right'
+                    const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
 
                     const cellClassName =
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
@@ -514,11 +507,6 @@ const UsersAndTransects = () => {
         />
       </TableNavigation>
     </>
-  ) : (
-    <PageUnavailable
-      mainText={language.pages.usersAndTransectsTable.noDataMainText}
-      subText={<NoDataBodyText />}
-    />
   )
 
   const content = isAppOnline ? (
