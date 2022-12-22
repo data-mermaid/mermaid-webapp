@@ -1,4 +1,4 @@
-import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
+import { dateFormat } from '../../../library/strings/dateFormat'
 
 const getCollectRecordDataInitialValues = (collectRecord) => {
   const collectRecordData = collectRecord?.data
@@ -11,10 +11,12 @@ const getCollectRecordDataInitialValues = (collectRecord) => {
 const getSampleInfoInitialValues = (collectRecord) => {
   const collectRecordSampleEventData = collectRecord?.data?.sample_event
 
+  console.log('collectRecordSampleEventData ', collectRecordSampleEventData)
+
   return {
     site: collectRecordSampleEventData?.site ?? '',
     management: collectRecordSampleEventData?.management ?? '',
-    sample_date: getSampleDateLabel(collectRecordSampleEventData?.sample_date) ?? '',
+    sample_date: dateFormat(collectRecordSampleEventData?.sample_date) ?? '',
   }
 }
 
