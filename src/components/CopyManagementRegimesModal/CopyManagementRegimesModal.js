@@ -114,6 +114,11 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         sortType: reactTableNaturalSort,
       },
       {
+        Header: 'Project',
+        accessor: 'projectName',
+        sortType: reactTableNaturalSort,
+      },
+      {
         Header: 'Year Est.',
         accessor: 'estYear',
         sortType: reactTableNaturalSort,
@@ -161,19 +166,21 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     () =>
       managementRegimeRecords.map(
         ({
+          access_restriction,
+          est_year,
+          gear_restriction,
           id,
           name,
-          est_year,
+          no_take,
           open_access,
           periodic_closure,
+          project_name,
           size_limits,
-          gear_restriction,
-          access_restriction,
           species_restriction,
-          no_take,
         }) => ({
           id,
           name,
+          projectName: project_name,
           estYear: est_year,
           openAccess: getIconCheckLabel(open_access),
           periodicClosure: getIconCheckLabel(periodic_closure),
@@ -205,7 +212,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
   })
 
   const tableGlobalFilters = useCallback((rows, id, query) => {
-    const keys = ['values.name', 'values.estYear']
+    const keys = ['values.name', 'values.estYear', 'values.projectName']
 
     const queryTerms = splitSearchQueryStrings(query)
     const filteredRows =
