@@ -1,4 +1,3 @@
-import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components/macro'
 import { useParams } from 'react-router-dom'
@@ -92,18 +91,6 @@ const UsersAndTransectsRow = styled(Tr)`
     }
   }
 `
-
-const checkDateAndGetSiteName = (name) => {
-  const elementsInName = name.split(' ')
-  const lastItemInName = elementsInName.pop()
-  const isDateValid = moment(lastItemInName, 'YYYY-MM-DD', true).isValid()
-
-  if (isDateValid) {
-    return `${elementsInName.join(' ')} ${getSampleDateLabel(lastItemInName)}`
-  }
-
-  return name
-}
 
 const groupCollectSampleUnitsByProfileSummary = (records) => {
   return records.reduce((accumulator, record) => {
@@ -239,6 +226,12 @@ const UsersAndTransects = () => {
       },
       {
         Header: () => '',
+        id: 'date',
+        columns: [{ Header: 'Date', accessor: 'date', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
+      {
+        Header: () => '',
         id: 'method',
         columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
         disableSortBy: true,
@@ -319,16 +312,13 @@ const UsersAndTransects = () => {
 
   const tableCellData = useMemo(
     () =>
-      submittedRecords.map((record) => {
-        const siteName = checkDateAndGetSiteName(record.site_name)
-
-        return {
-          site: siteName,
-          method: record.sample_unit_method,
-          ...populateTransectNumberRow(record),
-          ...populateCollectNumberRow(record),
-        }
-      }),
+      submittedRecords.map((record) => ({
+        site: record.site_name,
+        date: getSampleDateLabel(record.sample_date),
+        method: record.sample_unit_method,
+        ...populateTransectNumberRow(record),
+        ...populateCollectNumberRow(record),
+      })),
     [submittedRecords, populateTransectNumberRow, populateCollectNumberRow],
   )
 
@@ -423,7 +413,11 @@ const UsersAndTransects = () => {
                   const ThClassName = column.parent ? column.parent.id : undefined
 
                   const headerAlignment =
-                    column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
+                    column.Header === 'Site' ||
+                    column.Header === 'Method' ||
+                    column.Header === 'Date'
+                      ? 'left'
+                      : 'right'
 
                   return (
                     <Th
@@ -456,8 +450,10 @@ const UsersAndTransects = () => {
                     const isNotBleachingMethodRow = cellRowValuesMethod !== 'Bleaching'
                     const isCellInSubmittedTransectNumberColumns =
                       submittedTransectNumbers.includes(cellColumnId)
-                    const areSiteOrMethodColumns =
-                      cellColumnId === 'site' || cellColumnId === 'method'
+                    const areSiteMethodOrDateColumns =
+                      cellColumnId === 'site' ||
+                      cellColumnId === 'method' ||
+                      cellColumnId === 'date'
 
                     const cellRowValuesForSubmittedTransectNumbers = Object.entries(
                       cellRowValues,
@@ -480,9 +476,9 @@ const UsersAndTransects = () => {
                     const isCollectingNumberCellHighLighted =
                       cell.value !== EMPTY_VALUE &&
                       !isCellInSubmittedTransectNumberColumns &&
-                      !areSiteOrMethodColumns
+                      !areSiteMethodOrDateColumns
 
-                    const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
+                    const cellAlignment = areSiteMethodOrDateColumns ? 'left' : 'right'
 
                     const cellClassName =
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
