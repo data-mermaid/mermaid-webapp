@@ -24,11 +24,19 @@ export const fishBeltBins = {
   ],
   AGRRA: [
     { label: '0 - 5', value: 2.5 },
-    { label: '6 - 10', value: 7.4 },
+    { label: '6 - 10', value: 7.5 },
     { label: '11 - 20', value: 15 },
     { label: '21 - 30', value: 25 },
     { label: '31 - 40', value: 35 },
     { label: '41 - 50', value: 45 },
+    { label: '50+', value: 50 },
+  ],
+  'WCS India': [
+    { label: '0 - 5', value: 2.5 },
+    { label: '5 - 10', value: 7.5 },
+    { label: '10 - 20', value: 15 },
+    { label: '20 - 30', value: 25 },
+    { label: '30 - 50', value: 40 },
     { label: '50+', value: 50 },
   ],
 }
