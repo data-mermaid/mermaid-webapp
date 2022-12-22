@@ -1,11 +1,24 @@
 import React from 'react'
 import styled, { css } from 'styled-components/macro'
-import OfflineToggle from '../OfflineToggle'
-import theme from '../../theme'
+
 import { mediaQueryPhoneOnly } from '../../library/styling/mediaQueries'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
-import OfflineHide from '../generic/OfflineHide'
+import { versionNumber } from '../../version'
 import MermaidDocs from '../../docs/MERMAID User Documentation 2021-09-28.pdf'
+import OfflineHide from '../generic/OfflineHide'
+import OfflineToggle from '../OfflineToggle'
+import theme from '../../theme'
+
+const smallFooterTextStyle = css`
+  font-size: ${theme.typography.smallFontSize};
+  ${mediaQueryPhoneOnly(css`
+    margin: ${theme.spacing.small} 0;
+  `)}
+`
+
+const VersionWrapper = styled('span')`
+  ${smallFooterTextStyle}
+`
 
 const StyledFooter = styled('footer')`
   text-align: end;
@@ -19,10 +32,7 @@ const StyledFooter = styled('footer')`
   label,
   nav a,
   button {
-    font-size: ${theme.typography.smallFontSize};
-    ${mediaQueryPhoneOnly(css`
-      margin: ${theme.spacing.small} 0;
-    `)}
+    ${smallFooterTextStyle}
   }
 `
 const offlineToggleSize = theme.typography.defaultIconSize
@@ -133,6 +143,7 @@ const Footer = () => {
             Credits
           </a>
         </OfflineHide>
+        <VersionWrapper>{versionNumber}</VersionWrapper>
       </FooterNav>
     </StyledFooter>
   )
