@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-unused-expressions */
 import React from 'react'
 import { observationsColoniesBleachedPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import { Td, Th, Tr } from '../generic/Table/table'
@@ -28,7 +30,7 @@ const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached })
   }
 
   const getPercentageOfColonies = (colonyType) => {
-    if (!observationsColoniesBleached.length) {
+    if (!observationsColoniesBleached.length || getTotalOfColonies() === 0) {
       return 0
     }
 
