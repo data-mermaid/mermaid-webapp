@@ -11,8 +11,6 @@ const getCollectRecordDataInitialValues = (collectRecord) => {
 const getSampleInfoInitialValues = (collectRecord) => {
   const collectRecordSampleEventData = collectRecord?.data?.sample_event
 
-  console.log('collectRecordSampleEventData ', collectRecordSampleEventData)
-
   return {
     site: collectRecordSampleEventData?.site ?? '',
     management: collectRecordSampleEventData?.management ?? '',
