@@ -82,7 +82,7 @@ describe('Offline', () => {
 
     const newBenthicAttributeInput = screen.getAllByLabelText('Benthic Attribute')[3]
     const newGrowthFromInput = screen.getAllByLabelText('Growth Form')[3]
-    const newLengthInput = screen.getAllByLabelText('Length')[3]
+    const newLengthInput = screen.getAllByLabelText('Length (cm)')[3]
 
     userEvent.type(newBenthicAttributeInput, 'dead')
 
