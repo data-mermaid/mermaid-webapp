@@ -319,7 +319,7 @@ const pages = {
   },
   copyManagementRegimeTable: {
     title: 'Copy Management Regimes',
-    filterToolbarText: 'Filter this table by name or year',
+    filterToolbarText: 'Filter management regimes by name, project, or year',
     copyButtonText: 'Copy selected MRs to project',
   },
 }
