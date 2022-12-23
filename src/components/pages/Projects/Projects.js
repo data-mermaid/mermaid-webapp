@@ -130,11 +130,10 @@ const Projects = ({ apiSyncInstance }) => {
 
   const projectCardsList = filteredSortedProjects.length
     ? getFilteredSortedProjects().map((project) => (
-        <ErrorBoundary>
+        <ErrorBoundary key={project.id}>
           <ProjectCard
             role="listitem"
             project={{ ...project }}
-            key={project.id}
             apiSyncInstance={apiSyncInstance}
             isOfflineReady={getIsProjectOffline(project.id)}
             addProjectToProjectsPage={addProjectToProjectsPage}
