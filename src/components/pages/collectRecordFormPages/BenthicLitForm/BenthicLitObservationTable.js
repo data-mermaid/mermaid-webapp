@@ -333,7 +333,7 @@ const BenthicLitObservationsTable = ({
                     Growth Form
                   </Th>
                   <Th align="right" id="length-label">
-                    Length
+                    Length (cm)
                     <RequiredIndicator />
                   </Th>
                   {areValidationsShowing ? <Th align="center">Validations</Th> : null}

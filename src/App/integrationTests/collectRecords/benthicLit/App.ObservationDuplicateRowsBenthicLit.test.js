@@ -29,7 +29,7 @@ test('Benthic LIT observations: tab in count input on last row duplicates row', 
   // one header row and three observations
   expect(within(observationsTableBeforeTabKey).getAllByRole('row').length).toEqual(4)
 
-  const lastLengthInput = within(observationsTableBeforeTabKey).getAllByLabelText('Length')[2]
+  const lastLengthInput = within(observationsTableBeforeTabKey).getAllByLabelText('Length (cm)')[2]
 
   // userEvent doesnt work as expected for tab
   fireEvent.keyDown(lastLengthInput, { key: 'Tab', code: 'Tab' })
@@ -68,7 +68,9 @@ test('Benthic LIT observations: enter key adds a new empty row below row where k
   // one header row and three observations
   expect(within(observationsTableBeforeEnterKey).getAllByRole('row').length).toEqual(4)
 
-  const firstLengthInput = within(observationsTableBeforeEnterKey).getAllByLabelText('Length')[0]
+  const firstLengthInput = within(observationsTableBeforeEnterKey).getAllByLabelText(
+    'Length (cm)',
+  )[0]
 
   // userEvent doesnt work as expected for Enter
   fireEvent.keyDown(firstLengthInput, { key: 'Enter', code: 'Enter' })
