@@ -109,6 +109,23 @@ const projects = [
     data_policy_habitatcomplexity: 100,
     members: ['697a1123-ef22-4acb-aea4-05abbd5589d0'],
   },
+  {
+    id: '6',
+    name: "Project Z has an apostrophe foo's",
+    countries: ['Mexico'],
+    tags: [],
+    num_sites: 33,
+    num_active_sample_units: 19,
+    num_sample_units: 29,
+    updated_on: '2001-01-21T08:00:00.000Z',
+    notes: '',
+    data_policy_beltfish: 50,
+    data_policy_benthiclit: 100,
+    data_policy_benthicpit: 100,
+    data_policy_bleachingqc: 10,
+    data_policy_habitatcomplexity: 100,
+    members: ['697a1123-ef22-4acb-aea4-05abbd5589d0'],
+  },
 ]
 
 const sampleUnitMethods = [

@@ -36,7 +36,7 @@ test('Projects component renders with the expected UI elements', async () => {
 
   const projectListItems = screen.getAllByTestId('project-card')
 
-  expect(projectListItems).toHaveLength(5)
+  expect(projectListItems).toHaveLength(6)
 
   // expect filter bar, sort buttons, new project button
   const newProjectButton = screen.getByRole('button', { name: 'New Project' })
@@ -375,7 +375,7 @@ test('Project sorted descending', async () => {
 
   const topProjectCard = screen.getAllByRole('listitem')[0]
 
-  expect(within(topProjectCard).getByText('Project V'))
+  expect(within(topProjectCard).getByText("Project Z has an apostrophe foo's"))
 })
 
 test('Project filter filters by name and country', async () => {
@@ -416,4 +416,36 @@ test('Project filter filters by name and country', async () => {
   projectCards = screen.getAllByTestId('project-card')
 
   expect(projectCards.length).toEqual(2)
+})
+test('Project filter can accomodate words containing apostrophes', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  const apiSyncInstance = new SyncApiDataIntoOfflineStorage({
+    dexiePerUserDataInstance,
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    getAccessToken: getFakeAccessToken,
+  })
+
+  renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
+    dexiePerUserDataInstance,
+    isSyncInProgressOverride: true,
+  })
+
+  await waitFor(() =>
+    expect(screen.queryByLabelText('projects list loading indicator')).not.toBeInTheDocument(),
+  )
+
+  const filterProjects = screen.getByRole('textbox', {
+    name: /Filter Projects By Name or Country/i,
+  })
+
+  // Filter by name
+  userEvent.type(filterProjects, '"foo\'s"')
+
+  const projectCards = screen.getAllByTestId('project-card')
+
+  expect(projectCards.length).toEqual(1)
+  expect(within(projectCards[0]).getByText("Project Z has an apostrophe foo's"))
 })
