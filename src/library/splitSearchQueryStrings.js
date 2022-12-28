@@ -4,8 +4,12 @@
 // Also supports multi quotes in string.
 // example B: splitSearchQueryStrings(`"to the" dustin "kim"`)
 export const splitSearchQueryStrings = (words) => {
-  // eslint-disable-next-line no-useless-escape
-  const regex = /"(.*?)"|([a-zA-Z0-9_,;\-\+]+)|(\|)/
+  const anythingInDoubleQuotes = /"(.*?)"/.source
+  const alphaNumericAndSomeOtherSymbolsIncludingApostrophe = /([a-zA-Z0-9_,;'/-/+]+)/.source
+  const pipeCharacter = /(\|)/.source
+  const regex = new RegExp(
+    `${anythingInDoubleQuotes}|${alphaNumericAndSomeOtherSymbolsIncludingApostrophe}|${pipeCharacter}`,
+  )
   const parts = words.split(regex)
   const searchItems = []
 
