@@ -130,13 +130,12 @@ const getIsUserRoleReadOnly = (profile) => profile.role === userRole.read_only
 const Users = () => {
   const [fromUser, setFromUser] = useState({})
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [isPageLoading, setIsPageLoading] = useState(true)
+  const [isTableUpdating, setIsTableUpdating] = useState(false)
   const [isReadonlyUserWithActiveSampleUnits, setIsReadonlyUserWithActiveSampleUnits] =
     useState(false)
   const [isRemoveUserModalOpen, setIsRemoveUserModalOpen] = useState(false)
   const [isSendEmailToNewUserPromptOpen, setIsSendEmailToNewUserPromptOpen] = useState(false)
-  const [isAddingUser, setIsAddingUser] = useState(false)
-  const [isRemovingUser, setIsRemovingUser] = useState(false)
 
   const [isTransferSampleUnitsModalOpen, setIsTransferSampleUnitsModalOpen] = useState(false)
   const [newUserEmail, setNewUserEmail] = useState('')
@@ -161,7 +160,7 @@ const Users = () => {
 
   const _getSupportingData = useEffect(() => {
     if (!isAppOnline) {
-      setIsLoading(false)
+      setIsPageLoading(false)
     }
 
     if (isAppOnline && databaseSwitchboardInstance && projectId) {
@@ -177,7 +176,7 @@ const Users = () => {
 
             setProjectName(projectResponse?.name)
             setObserverProfiles(projectProfilesResponse)
-            setIsLoading(false)
+            setIsPageLoading(false)
           }
         })
         .catch(() => {
@@ -200,25 +199,29 @@ const Users = () => {
 
   const fetchProjectProfiles = useCallback(() => {
     if (databaseSwitchboardInstance) {
-      databaseSwitchboardInstance
+      return databaseSwitchboardInstance
         .getProjectProfiles(projectId)
         .then((projectProfilesResponse) => {
-          setObserverProfiles(projectProfilesResponse)
+          return setObserverProfiles(projectProfilesResponse)
         })
         .catch(() => {
           toast.error(...getToastArguments(language.error.userRecordsUnavailable))
         })
     }
+
+    return Promise.reject(new Error('databaseSwitchboardInstance isnt defined'))
   }, [databaseSwitchboardInstance, projectId])
 
   const addExistingUser = () => {
-    setIsAddingUser(true)
+    setIsTableUpdating(true)
     databaseSwitchboardInstance
       .addUser(newUserEmail, projectId)
       .then(() => {
-        fetchProjectProfiles()
+        return fetchProjectProfiles()
+      })
+      .then(() => {
         setNewUserEmail('')
-        setIsAddingUser(false)
+        setIsTableUpdating(false)
         toast.success(...getToastArguments(language.success.newUserAdd))
       })
       .catch((error) => {
@@ -230,7 +233,7 @@ const Users = () => {
             } else {
               toast.error(...getToastArguments(language.error.generic))
             }
-            setIsAddingUser(false)
+            setIsTableUpdating(false)
           },
         })
       })
@@ -272,22 +275,24 @@ const Users = () => {
   const closeSendEmailToNewUserPrompt = () => setIsSendEmailToNewUserPromptOpen(false)
 
   const addNewUserAndSendEmail = () => {
-    setIsAddingUser(true)
+    setIsTableUpdating(true)
 
     return databaseSwitchboardInstance
       .addUser(newUserEmail, projectId)
       .then(() => {
-        fetchProjectProfiles()
+        return fetchProjectProfiles()
+      })
+      .then(() => {
         setNewUserEmail('')
         closeSendEmailToNewUserPrompt()
-        setIsAddingUser(false)
+        setIsTableUpdating(false)
         toast.success(...getToastArguments(language.success.newPendingUserAdd))
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            setIsAddingUser(false)
+            setIsTableUpdating(false)
           },
         })
       })
@@ -306,21 +311,24 @@ const Users = () => {
 
     return databaseSwitchboardInstance
       .transferSampleUnits(projectId, fromUserProfileId, toUserProfileId)
-      .then((resp) => {
+      .then((transferSampleUnitsResponse) => {
+        return fetchProjectProfiles().then(() => transferSampleUnitsResponse)
+      })
+      .then((transferSampleUnitsResponse) => {
         const sampleUnitMsg = pluralize(
           fromUser.num_active_sample_units,
           'sample unit',
           'sample units',
         )
-        const numRecordTransferred = resp.num_collect_records_transferred
+        const numRecordTransferred = transferSampleUnitsResponse.num_collect_records_transferred
 
-        fetchProjectProfiles()
         toast.success(...getToastArguments(`${numRecordTransferred} ${sampleUnitMsg} transferred`))
 
         setIsSyncInProgress(false) // hack to get collect record count to update, also shows a loader
       })
       .catch(() => {
         toast.error(...getToastArguments(language.error.transferSampleUnitsUnavailable))
+        setIsSyncInProgress(false)
       })
   }
 
@@ -351,20 +359,22 @@ const Users = () => {
   }
 
   const removeUserProfile = () => {
-    setIsRemovingUser(true)
+    setIsTableUpdating(true)
 
     databaseSwitchboardInstance
       .removeUser(userToBeRemoved, projectId)
       .then(() => {
-        fetchProjectProfiles()
-        setIsRemovingUser(false)
+        return fetchProjectProfiles()
+      })
+      .then(() => {
+        setIsTableUpdating(false)
         toast.success(...getToastArguments(language.success.userRemoved))
       })
       .catch((error) => {
         handleHttpResponseError({
           error,
           callback: () => {
-            setIsRemovingUser(false)
+            setIsTableUpdating(false)
           },
         })
       })
@@ -432,6 +442,8 @@ const Users = () => {
     ({ event, projectProfileId }) => {
       const roleCode = parseInt(event.target.value, 10)
 
+      setIsTableUpdating(true)
+
       databaseSwitchboardInstance
         .editProjectProfileRole({
           profileId: projectProfileId,
@@ -455,6 +467,7 @@ const Users = () => {
               }),
             ),
           )
+          setIsTableUpdating(false)
         })
         .catch(() => {
           const userToBeEdited = observerProfiles.find(({ id }) => id === projectProfileId)
@@ -464,7 +477,7 @@ const Users = () => {
               language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name),
             ),
           )
-          setIsLoading(false)
+          setIsTableUpdating(false)
         })
     },
     [databaseSwitchboardInstance, observerProfiles, projectId],
@@ -506,7 +519,7 @@ const Users = () => {
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
-              disabled={isCurrentUser}
+              disabled={isCurrentUser || isTableUpdating}
             />
           </TableRadioLabel>
         ),
@@ -521,7 +534,7 @@ const Users = () => {
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
-              disabled={isCurrentUser}
+              disabled={isCurrentUser || isTableUpdating}
             />
           </TableRadioLabel>
         ),
@@ -536,7 +549,7 @@ const Users = () => {
               onChange={(event) => {
                 handleRoleChange({ event, projectProfileId })
               }}
-              disabled={isCurrentUser}
+              disabled={isCurrentUser || isTableUpdating}
             />
           </TableRadioLabel>
         ),
@@ -547,6 +560,7 @@ const Users = () => {
               <>
                 {num_active_sample_units}{' '}
                 <ButtonSecondary
+                  disabled={isTableUpdating}
                   type="button"
                   onClick={() =>
                     openTransferSampleUnitsModal(
@@ -568,7 +582,7 @@ const Users = () => {
         remove: (
           <ButtonSecondary
             type="button"
-            disabled={isCurrentUser}
+            disabled={isCurrentUser || isTableUpdating}
             onClick={() => openRemoveUserModal(profile)}
           >
             <IconAccountRemove />
@@ -576,7 +590,7 @@ const Users = () => {
         ),
       }
     })
-  }, [observerProfiles, currentUser, handleRoleChange])
+  }, [observerProfiles, currentUser, handleRoleChange, isTableUpdating])
 
   const tableCellDataForNonAdmin = useMemo(
     () =>
@@ -738,7 +752,7 @@ const Users = () => {
         />
       </TableNavigation>
       <NewUserModal
-        isLoading={isAddingUser}
+        isLoading={isTableUpdating}
         isOpen={isSendEmailToNewUserPromptOpen}
         onDismiss={closeSendEmailToNewUserPrompt}
         newUser={newUserEmail}
@@ -756,7 +770,7 @@ const Users = () => {
       />
       <RemoveUserModal
         isOpen={isRemoveUserModalOpen}
-        isLoading={isRemovingUser}
+        isLoading={isTableUpdating}
         onDismiss={closeRemoveUserModal}
         onSubmit={removeUserProfile}
         userNameToBeRemoved={getProfileNameOrEmailForPendingUser(userToBeRemoved)}
@@ -796,7 +810,7 @@ const Users = () => {
               <InputAndButton
                 inputId="add-new-user-email"
                 labelText={language.pages.userTable.searchEmailToolbarText}
-                isLoading={isAddingUser}
+                isLoading={isTableUpdating}
                 buttonChildren={
                   <>
                     <IconPlus />
@@ -816,11 +830,11 @@ const Users = () => {
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
-      isPageContentLoading={isLoading}
+      isPageContentLoading={isPageLoading}
       content={<IdsNotFound ids={idsNotAssociatedWithData} />}
     />
   ) : (
-    <ContentPageLayout isPageContentLoading={isLoading} content={content} toolbar={toolbar} />
+    <ContentPageLayout isPageContentLoading={isPageLoading} content={content} toolbar={toolbar} />
   )
 }
 
