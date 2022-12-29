@@ -391,6 +391,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         name={language.pages.copyManagementRegimeTable.filterToolbarText}
         value={tableUserPrefs.globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
+        id="copy-management-regimes-filter"
       />
     </CopyModalToolbarWrapper>
   )
