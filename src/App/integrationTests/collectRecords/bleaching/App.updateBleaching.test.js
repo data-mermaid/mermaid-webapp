@@ -103,6 +103,14 @@ describe('Offline', () => {
 
     userEvent.selectOptions(newGrowthFromInput, 'Columnar')
 
+    userEvent.clear(newNormalInput)
+    userEvent.clear(newPaleInput)
+    userEvent.clear(new20BleachedInput)
+    userEvent.clear(new50BleachedInput)
+    userEvent.clear(new80BleachedInput)
+    userEvent.clear(new100BleachedInput)
+    userEvent.clear(newRecentlyDeadInput)
+
     userEvent.type(newNormalInput, '1')
     userEvent.type(newPaleInput, '1')
     userEvent.type(new20BleachedInput, '1')

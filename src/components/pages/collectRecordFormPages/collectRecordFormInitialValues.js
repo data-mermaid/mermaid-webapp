@@ -44,8 +44,8 @@ const getBenthicPhotoQuadratAdditionalValues = (collectRecord) => {
   const benthicPhotoQuadratData = collectRecord?.data?.quadrat_transect
 
   return {
-    quadrat_number_start: benthicPhotoQuadratData?.quadrat_number_start ?? '',
-    quadrat_size: benthicPhotoQuadratData?.quadrat_size ?? '',
+    quadrat_number_start: benthicPhotoQuadratData?.quadrat_number_start ?? 1,
+    quadrat_size: benthicPhotoQuadratData?.quadrat_size ?? 1,
     num_quadrats: benthicPhotoQuadratData?.num_quadrats ?? '',
     num_points_per_quadrat: benthicPhotoQuadratData?.num_points_per_quadrat ?? '',
   }
@@ -69,7 +69,7 @@ const getBleachingQuadratCollection = (collectRecord) => {
 
   return {
     depth: quadratCollection?.depth ?? '',
-    number: quadratCollection?.number ?? '',
+    number: quadratCollection?.number ?? 1,
     label: quadratCollection?.label ?? '',
     quadrat_size: quadratCollection?.quadrat_size ?? '',
     width: quadratCollection?.width,
