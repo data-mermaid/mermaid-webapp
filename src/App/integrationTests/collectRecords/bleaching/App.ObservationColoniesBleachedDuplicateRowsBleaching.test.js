@@ -81,5 +81,5 @@ test('Bleaching colonies bleached observations: enter key adds a new empty row b
   // 0 and 1 are the headers
   const secondObservationRow = within(observationsTableAfterEnterKey).getAllByRole('row')[3]
 
-  expect(within(secondObservationRow).queryAllByDisplayValue('').length).toEqual(9)
+  expect(within(secondObservationRow).queryAllByDisplayValue('').length).toEqual(2)
 })
