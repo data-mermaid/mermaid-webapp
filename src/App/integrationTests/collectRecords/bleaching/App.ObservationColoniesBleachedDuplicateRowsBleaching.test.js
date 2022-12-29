@@ -81,5 +81,7 @@ test('Bleaching colonies bleached observations: enter key adds a new empty row b
   // 0 and 1 are the headers
   const secondObservationRow = within(observationsTableAfterEnterKey).getAllByRole('row')[3]
 
-  expect(within(secondObservationRow).queryAllByDisplayValue('').length).toEqual(2)
+  // assert new observation uses default values and doesnt copy previous row values
+  expect(within(secondObservationRow).queryAllByDisplayValue('').length).toEqual(2) // select inputs
+  expect(within(secondObservationRow).queryAllByDisplayValue('0').length).toEqual(7) // numeric inputs
 })
