@@ -339,9 +339,11 @@ const ManagementRegimesOverview = () => {
                 <ManagementOverviewRow {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
+                    const areSiteOrMethodColumns =
+                      cellColumnId === 'site' || cellColumnId === 'method'
 
                     const managementRegimeCellNonEmpty =
-                      cell.value !== '-' && !(cellColumnId === 'site' || cellColumnId === 'method')
+                      cell.value !== '-' && !areSiteOrMethodColumns
 
                     const isCellValueLessThanMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
@@ -355,21 +357,14 @@ const ManagementRegimesOverview = () => {
                       ? isCellValueEqualToMaxSampleUnitCount
                       : isCellValueLessThanMaxSampleUnitCount
 
-                    const HighlightedClassName = isManagementRegimeCellHighlighted
-                      ? 'highlighted'
-                      : undefined
+                    const cellClassName = isManagementRegimeCellHighlighted
+                      ? `${cell.column.parent.id} highlighted`
+                      : cell.column.parent.id
 
-                    const cellAlignment =
-                      cell.column.parent.id === 'site' || cell.column.parent.id === 'method'
-                        ? 'left'
-                        : 'right'
+                    const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
 
                     return (
-                      <Td
-                        {...cell.getCellProps()}
-                        align={cellAlignment}
-                        className={`${cell.column.parent.id} ${HighlightedClassName}`}
-                      >
+                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
                         <span>{cell.render('Cell')}</span>
                       </Td>
                     )
