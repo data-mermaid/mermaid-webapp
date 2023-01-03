@@ -5,18 +5,15 @@ import { Column } from '../../generic/positioning'
 import theme from '../../../theme'
 
 const PageUnavailableContainer = styled(Column)`
-  padding-left ${theme.spacing.large};
+  padding-left: ${theme.spacing.large};
   text-align: ${(props) => props.align};
-  div.bodyText {
-    font-size: ${theme.typography.smallFontSize};
-  }
 `
 
 const PageUnavailable = ({ mainText, subText, align }) => {
   return (
     <PageUnavailableContainer align={align}>
       <h3>{mainText}</h3>
-      <div className="bodyText">{subText}</div>
+      <p>{subText}</p>
     </PageUnavailableContainer>
   )
 }
@@ -30,7 +27,7 @@ PageUnavailable.propTypes = {
 PageUnavailable.defaultProps = {
   mainText: 'No Data',
   subText: '',
-  align: 'left',
+  align: 'start',
 }
 
 export default PageUnavailable
