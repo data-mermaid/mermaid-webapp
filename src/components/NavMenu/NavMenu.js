@@ -152,7 +152,7 @@ const NavMenu = ({ subNavNode }) => {
             {!isReadOnlyUser && (
               <LiCollecting>
                 <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
-                  <CollectionAvatar src={currentUser.picture} />
+                  {currentUser.picture ? <CollectionAvatar src={currentUser.picture} /> : null}
                   <IconCollect />
                   <span>Collecting</span>
                   <CollectRecordsCount />
