@@ -361,8 +361,8 @@ const ManagementRegimesOverview = () => {
 
                     const cellAlignment =
                       cell.column.parent.id === 'site' || cell.column.parent.id === 'method'
-                        ? 'left'
-                        : 'right'
+                        ? 'start'
+                        : 'end'
 
                     return (
                       <Td
