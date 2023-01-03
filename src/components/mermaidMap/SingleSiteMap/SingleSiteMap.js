@@ -14,7 +14,7 @@ import {
 import { MapInputRow, MapContainer, MapWrapper, MapZoomHelpMessage } from '../Map.styles'
 
 const defaultCenter = [0, 0]
-const defaultZoom = 11
+const defaultZoom = 1
 
 const SingleSiteMap = ({
   formLatitudeValue,
@@ -45,7 +45,7 @@ const SingleSiteMap = ({
       customAttribution: language.map.attribution,
     })
 
-    recordMarker.current = new maplibregl.Marker(markerElement, { draggable: !isReadOnlyUser })
+    recordMarker.current = new maplibregl.Marker(markerElement)
 
     addMapController(map.current)
 
@@ -54,55 +54,61 @@ const SingleSiteMap = ({
       handleMapOnWheel(map.current, handleZoomDisplayHelpText)
     })
 
+    map.current.on('click', (event) => {
+      if (!isReadOnlyUser) {
+        const { lngLat } = event
+
+        recordMarker.current.setLngLat(lngLat)
+
+        // Adjust lng at international dateline
+        let adjustedLng = lngLat.lng
+
+        if (lngLat.lng < -180) {
+          adjustedLng = 360 + lngLat.lng
+        } else if (lngLat.lng > 180) {
+          adjustedLng = lngLat.lng - 360
+        }
+
+        handleLatitudeChange(lngLat.lat)
+        handleLongitudeChange(adjustedLng)
+      }
+    })
+
     // clean up on unmount
     return () => {
       map.current.remove()
       recordMarker.current.remove()
     }
-  }, [isReadOnlyUser])
+  }, [isReadOnlyUser, handleLatitudeChange, handleLongitudeChange])
 
-  const _handleMapMarker = useEffect(() => {
-    if (!map.current) {
-      return
-    }
-
-    const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
-
-    if (outOfRangeLatitude) {
-      recordMarker.current.remove()
-    } else {
-      recordMarker.current.setLngLat([formLongitudeValue, formLatitudeValue]).addTo(map.current)
-    }
-
-    if (
-      formLatitudeValue !== undefined &&
-      formLongitudeValue !== undefined &&
-      !outOfRangeLatitude
-    ) {
-      map.current.jumpTo({
-        center: [formLongitudeValue, formLatitudeValue],
-        zoom: map.current.getZoom(),
-      })
-    }
-  }, [formLatitudeValue, formLongitudeValue])
-
-  const _handleMapMarkerOnDrag = useEffect(() => {
-    recordMarker.current.on('dragend', () => {
-      const lngLat = recordMarker.current.getLngLat()
-
-      // Adjust lng at international dateline
-      let adjustedLng = lngLat.lng
-
-      if (lngLat.lng < -180) {
-        adjustedLng = 360 + lngLat.lng
-      } else if (lngLat.lng > 180) {
-        adjustedLng = lngLat.lng - 360
+  useEffect(
+    function centerMapOnMarker() {
+      if (!map.current) {
+        return
       }
 
-      handleLatitudeChange(lngLat.lat)
-      handleLongitudeChange(adjustedLng)
-    })
-  }, [handleLatitudeChange, handleLongitudeChange])
+      const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
+      const nullishLatitudeOrLongitude = !formLatitudeValue || !formLongitudeValue
+
+      if (outOfRangeLatitude || nullishLatitudeOrLongitude) {
+        recordMarker.current.remove()
+      } else {
+        recordMarker.current.setLngLat([formLongitudeValue, formLatitudeValue]).addTo(map.current)
+      }
+
+      if (
+        formLatitudeValue !== undefined &&
+        formLongitudeValue !== undefined &&
+        !outOfRangeLatitude
+      ) {
+        map.current.jumpTo({
+          center: [formLongitudeValue, formLatitudeValue],
+          zoom: map.current.getZoom(),
+        })
+      }
+    },
+    [formLatitudeValue, formLongitudeValue],
+  )
 
   const updateCoralMosaicLayer = (dataLayerFromLocalStorage) =>
     setCoralMosaicLayerProperty(map.current, dataLayerFromLocalStorage)

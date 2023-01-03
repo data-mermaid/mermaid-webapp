@@ -105,8 +105,20 @@ function App({ dexieCurrentUserInstance }) {
     isAppOnline,
   })
 
+  const deleteMermaidData = () => {
+    dexiePerUserDataInstance.delete()
+    dexieCurrentUserInstance.delete()
+  }
+
+  const logoutAndClearMermaidData = () => {
+    // We delete all of the user's data on logout to aid in troubleshooting.
+    // When a user is having issues, its easier to tell them to logout and log back in than to tell them to clear their site data
+    deleteMermaidData()
+    logoutMermaid()
+  }
+
   const layoutProps = {
-    header: <Header currentUser={currentUser} logout={logoutMermaid} />,
+    header: <Header currentUser={currentUser} logout={logoutAndClearMermaidData} />,
     footer: <Footer />,
   }
 

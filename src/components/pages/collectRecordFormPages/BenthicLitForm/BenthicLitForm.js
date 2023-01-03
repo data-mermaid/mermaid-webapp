@@ -208,7 +208,6 @@ const BenthicLitform = ({ isNewRecord }) => {
     <>
       <CollectRecordFormPageAlternative
         areObservationsInputsDirty={areObservationsInputsDirty}
-        benthicAttributeSelectOptions={benthicAttributeSelectOptions}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
         idsNotAssociatedWithData={idsNotAssociatedWithData}

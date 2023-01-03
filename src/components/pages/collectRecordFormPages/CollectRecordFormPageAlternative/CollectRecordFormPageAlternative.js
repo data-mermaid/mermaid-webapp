@@ -566,17 +566,19 @@ CollectRecordFormPageAlternative.propTypes = {
   SampleUnitTransectInputs: PropTypes.elementType.isRequired,
   setAreObservationsInputsDirty: PropTypes.func.isRequired,
   setIdsNotAssociatedWithData: PropTypes.func.isRequired,
-  setIsNewBenthicAttributeModalOpen: PropTypes.func.isRequired,
-  setObservationIdToAddNewBenthicAttributeTo: PropTypes.func.isRequired,
+  setIsNewBenthicAttributeModalOpen: PropTypes.func,
+  setObservationIdToAddNewBenthicAttributeTo: PropTypes.func,
   subNavNode: subNavNodePropTypes,
 }
 
 CollectRecordFormPageAlternative.defaultProps = {
   collectRecordBeingEdited: undefined,
-  subNavNode: null,
   observationsTable1Reducer: [],
   observationsTable2Reducer: [[], () => {}],
   ObservationTable2: undefined,
+  setIsNewBenthicAttributeModalOpen: () => {},
+  setObservationIdToAddNewBenthicAttributeTo: () => {},
+  subNavNode: null,
 }
 
 export default CollectRecordFormPageAlternative

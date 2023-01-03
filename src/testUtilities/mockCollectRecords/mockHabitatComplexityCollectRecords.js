@@ -20,6 +20,7 @@ export const mockHabitatComplexityCollectRecords = [
         management: '3',
         sample_date: '2020-4-19',
       },
+      interval_size: 2,
       benthic_transect: {
         depth: 20,
         label: 'FB-1',
@@ -33,7 +34,23 @@ export const mockHabitatComplexityCollectRecords = [
         current: 'e5dcb32c-614d-44ed-8155-5911b7ee774a',
         tide: '79693274-4ec6-4052-afe1-4bb02eaa04ec',
       },
-      obs_habitat_complexities: [],
+      obs_habitat_complexities: [
+        {
+          id: '1',
+          interval: '0',
+          score: 'c79519af-0b1e-43e0-a5b7-9093d9557ed4',
+        },
+        {
+          id: '2',
+          interval: '2',
+          score: 'c79519af-0b1e-43e0-a5b7-9093d9557ed4',
+        },
+        {
+          id: '3',
+          interval: '4',
+          score: '3dcdb342-2e54-48ae-ad58-ec4d921da561',
+        },
+      ],
     },
     validations: null,
   },

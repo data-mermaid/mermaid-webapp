@@ -358,6 +358,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         name={language.pages.copySiteTable.filterToolbarText}
         value={tableUserPrefs.globalFilter}
         handleGlobalFilterChange={handleGlobalFilterChange}
+        id="copy-sites-filter"
       />
     </CopyModalToolbarWrapper>
   )

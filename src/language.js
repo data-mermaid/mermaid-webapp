@@ -244,13 +244,13 @@ const pages = {
   },
   submittedTable: {
     title: 'Submitted',
-    filterToolbarText: 'Filter sample units by method, site, management, or observer',
+    filterToolbarText: 'Filter this table by method, site, management, or observer',
     noDataMainText: `This project has no submitted sample units.`,
   },
   userTable: {
     title: 'Users',
-    filterToolbarTextForAdmin: 'Filter users by name or email',
-    filterToolbarTextForNonAdmin: 'Filter users by name or role',
+    filterToolbarTextForAdmin: 'Filter this table by name or email',
+    filterToolbarTextForNonAdmin: 'Filter this table by name or role',
     searchEmailToolbarText: 'Enter email address of user to add',
     warningReadOnlyUser: `Some Sample Units can't be submitted because the user is in read-only mode.`,
     newUserModalTitle: `Invite new user`,
@@ -271,7 +271,7 @@ const pages = {
   },
   collectTable: {
     title: 'Collecting',
-    filterToolbarText: 'Filter sample units by method, site, management, or observer',
+    filterToolbarText: 'Filter this table by method, site, management, or observer',
     noDataMainText: `You don't have any active sample units`,
   },
   siteForm: {
@@ -279,7 +279,7 @@ const pages = {
   },
   siteTable: {
     title: 'Sites',
-    filterToolbarText: 'Filter sites by name, reef (type, zone, and exposure)',
+    filterToolbarText: 'Filter this table by name, reef (type, zone, and exposure)',
     noDataMainText: `This project has no sites.`,
     noDataSubText: `You can add sites by creating a new one or copying them from another project.`,
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
@@ -289,13 +289,13 @@ const pages = {
   },
   managementRegimeTable: {
     title: 'Management Regimes',
-    filterToolbarText: 'Filter management regimes by name or year',
+    filterToolbarText: 'Filter this table by name or year',
     noDataMainText: `This project has no management regimes.`,
     noDataSubText: `You can add management regimes by creating a new one or copying them from another project.`,
   },
   usersAndTransectsTable: {
     title: 'Users and Transects',
-    filterToolbarText: 'Filter sample units by site or method',
+    filterToolbarText: 'Filter this table by site or method',
     missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',
     noDataMainText: 'This project has no submitted sample units yet.',
@@ -314,12 +314,12 @@ const pages = {
   },
   copySiteTable: {
     title: 'Copy Sites',
-    filterToolbarText: 'Filter sites by name, project or country',
+    filterToolbarText: 'Filter this table by name, project or country',
     copyButtonText: 'Copy selected sites to project',
   },
   copyManagementRegimeTable: {
     title: 'Copy Management Regimes',
-    filterToolbarText: 'Filter management regimes by name or year',
+    filterToolbarText: 'Filter management regimes by name, project, or year',
     copyButtonText: 'Copy selected MRs to project',
   },
 }

@@ -12,14 +12,14 @@ import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtil
 import App from '../../../App'
 
 describe('Offline', () => {
-  test('Edit Benthic LIT save success shows toast message and proper record information', async () => {
+  test('Edit Habitat Complexity save success shows toast message and proper record information', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthiclit/70'],
+      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
     })
@@ -47,6 +47,7 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(5)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(10)
+    expect(screen.getByLabelText('Interval Size')).toHaveValue(2)
     expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
     expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
     expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
@@ -55,13 +56,13 @@ describe('Offline', () => {
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
-  test('Edit Benthic LIT save stores properly formatted Benthic LIT observations in dexie', async () => {
+  test('Edit Habitat Complexity save stores properly formatted Habitat Complexity observations in dexie', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthiclit/70'],
+      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
     })
@@ -80,23 +81,12 @@ describe('Offline', () => {
     // 4 observations + 1 header row
     expect(observationRows.length).toEqual(5)
 
-    const newBenthicAttributeInput = screen.getAllByLabelText('Benthic Attribute')[3]
-    const newGrowthFromInput = screen.getAllByLabelText('Growth Form')[3]
-    const newLengthInput = screen.getAllByLabelText('Length (cm)')[3]
+    const newHabitatComplexityScoreInput = screen.getAllByLabelText('Habitat Complexity Score')[3]
 
-    userEvent.type(newBenthicAttributeInput, 'dead')
-
-    const benthicAttributeList = screen.getAllByRole('listbox')[3]
-
-    const deadCoralOption = screen.getByRole('option', {
-      name: 'Dead Coral with Algae',
-    })
-
-    userEvent.selectOptions(benthicAttributeList, deadCoralOption)
-
-    userEvent.selectOptions(newGrowthFromInput, 'Columnar')
-
-    userEvent.type(newLengthInput, '43')
+    userEvent.selectOptions(
+      newHabitatComplexityScoreInput,
+      '3 widespread moderately complex (30-60cm) relief',
+    )
 
     userEvent.click(
       screen.getByText('Save', {
@@ -107,15 +97,14 @@ describe('Offline', () => {
     expect(await screen.findByText('Record saved.'))
     const savedCollectRecords = await dexiePerUserDataInstance.collect_records.toArray()
 
-    const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '70')[0]
+    const updatedCollectRecord = savedCollectRecords.filter((record) => record.id === '80')[0]
 
-    const newObservation = updatedCollectRecord.data.obs_benthic_lits[3]
+    const newObservation = updatedCollectRecord.data.obs_habitat_complexities[3]
 
-    expect(newObservation.attribute).toEqual('fcf25ee3-701b-4d15-9a17-71f40406db4c')
-    expect(newObservation.growth_form).toEqual('cbff6080-6387-44e5-b7ad-35f35f3db3a7')
-    expect(newObservation.length).toEqual('43')
+    expect(newObservation.score).toEqual('1dda77b4-0e00-47ae-8b46-063bc7aed349')
+    expect(newObservation.interval).toEqual(7)
   })
-  test('Edit Benthic LIT save failure shows toast message with new edits persisting', async () => {
+  test('Edit Habitat Complexity save failure shows toast message with new edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -124,7 +113,7 @@ describe('Offline', () => {
     dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthiclit/70'],
+      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
     })
@@ -145,14 +134,14 @@ describe('Offline', () => {
     expect(await screen.findByLabelText('Depth')).toHaveValue(45)
   })
 
-  test('Edit Benthic LIT can "unselect" non required radio group inputs', async () => {
+  test('Edit Habitat Complexity can "unselect" non required radio group inputs', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthiclit/70'],
+      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
     })
@@ -182,7 +171,7 @@ describe('Offline', () => {
 
     expect(await screen.findByText('Record saved.'))
 
-    const editedStoredRecord = await dexiePerUserDataInstance.collect_records.get('70')
+    const editedStoredRecord = await dexiePerUserDataInstance.collect_records.get('80')
 
     const storedReefSlope = editedStoredRecord.data.benthic_transect.reef_slope
     const storedVisibility = editedStoredRecord.data.benthic_transect.visibility

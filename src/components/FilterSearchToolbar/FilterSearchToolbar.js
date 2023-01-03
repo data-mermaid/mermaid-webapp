@@ -15,37 +15,30 @@ const FilterLabelWrapper = styled.label`
   }
 `
 
-const FilterSearchToolbar = ({
-  name,
-  handleGlobalFilterChange,
-  value
-}) => {
-  const handleFilterChange = event => {
+const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id }) => {
+  const handleFilterChange = (event) => {
     const { value: eventValue } = event.target
 
     handleGlobalFilterChange(eventValue)
   }
 
   return (
-    <FilterLabelWrapper htmlFor="filter-search">
+    <FilterLabelWrapper htmlFor={id}>
       {name}
-      <Input
-        type="text"
-        id="filter-search"
-        value={value}
-        onChange={handleFilterChange}
-      />
+      <Input type="text" id={id} value={value} onChange={handleFilterChange} />
     </FilterLabelWrapper>
   )
 }
 
 FilterSearchToolbar.defaultProps = {
-  value: undefined
+  id: 'filter-search',
+  value: undefined,
 }
 
 FilterSearchToolbar.propTypes = {
-  name: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
+  id: PropTypes.string,
+  name: PropTypes.string.isRequired,
   value: PropTypes.string,
 }
 

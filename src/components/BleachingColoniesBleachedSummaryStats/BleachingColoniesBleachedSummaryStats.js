@@ -28,7 +28,7 @@ const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached })
   }
 
   const getPercentageOfColonies = (colonyType) => {
-    if (!observationsColoniesBleached.length) {
+    if (!observationsColoniesBleached.length || getTotalOfColonies() === 0) {
       return 0
     }
 

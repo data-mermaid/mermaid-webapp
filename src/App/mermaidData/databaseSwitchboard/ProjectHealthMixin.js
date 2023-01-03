@@ -1,3 +1,4 @@
+import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
@@ -14,6 +15,27 @@ const ProjectHealthMixin = (Base) =>
 
     #hasDuplicates = function hasDuplicates(array) {
       return new Set(array).size !== array.length
+    }
+
+    #removeDateFromName = function removeDateFromName(name) {
+      const elementsInName = name.split(' ')
+
+      const isDateInNames = moment(
+        elementsInName[elementsInName.length - 1],
+        'YYYY-MM-DD',
+        true,
+      ).isValid()
+
+      if (elementsInName.length > 1) {
+        if (isDateInNames) {
+          // Remove the ending Date element from array
+          elementsInName.pop()
+        }
+
+        return elementsInName.join(' ')
+      }
+
+      return elementsInName[0]
     }
 
     #groupSampleUnitNumbersBySampleDate = function groupSampleUnitNumbersBySampleDate(
@@ -84,6 +106,7 @@ const ProjectHealthMixin = (Base) =>
           ] of sampleUnitNumbersGroupBySampleDate) {
             sampleEventUnitRows.push({
               ...sampleEventUnitRow,
+              site_name: `${siteName} ${sampleDate}`,
               sample_date: sampleDate,
               sample_unit_numbers: sampleUnitNumbersBySampleDate,
             })
@@ -146,7 +169,7 @@ const ProjectHealthMixin = (Base) =>
         )
 
         for (const [siteId, siteInfo] of recordsGroupedBySite) {
-          const siteName = siteInfo.site_name
+          const siteName = this.#removeDateFromName(siteInfo.site_name)
           const siteCollectingMethods = collectingSummaryMethods[siteId]
 
           for (const protocol of availableProtocols) {

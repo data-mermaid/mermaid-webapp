@@ -11,11 +11,11 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
-test('Benthic LIT observations: tab in count input on last row duplicates row', async () => {
+test('Habitat Complexity observations: tab in count input on last row duplicates row', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/benthiclit/70'],
+    initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -29,32 +29,40 @@ test('Benthic LIT observations: tab in count input on last row duplicates row', 
   // one header row and three observations
   expect(within(observationsTableBeforeTabKey).getAllByRole('row').length).toEqual(4)
 
-  const lastLengthInput = within(observationsTableBeforeTabKey).getAllByLabelText('Length (cm)')[2]
+  const lastGrowthFormInput = within(observationsTableBeforeTabKey).getByDisplayValue(
+    '1 low (<30cm) and sparse relief',
+  )
 
   // userEvent doesnt work as expected for tab
-  fireEvent.keyDown(lastLengthInput, { key: 'Tab', code: 'Tab' })
+  fireEvent.keyDown(lastGrowthFormInput, { key: 'Tab', code: 'Tab' })
 
   const formAfterTab = screen.getByRole('form')
   const observationsTableAfterTab = within(formAfterTab).getByLabelText('Observations')
 
   expect(within(observationsTableAfterTab).getAllByRole('row').length).toEqual(5)
 
-  expect(within(observationsTableAfterTab).getAllByDisplayValue('Arborescent').length).toEqual(2)
   expect(
-    within(observationsTableAfterTab).getAllByDisplayValue('Dead Coral with Algae').length,
-  ).toEqual(4)
+    within(observationsTableAfterTab).getAllByDisplayValue('1 low (<30cm) and sparse relief')
+      .length,
+  ).toEqual(2)
+  expect(
+    within(observationsTableAfterTab).getAllByDisplayValue(
+      '0 no vertical relief, flat or rubbly areas',
+    ).length,
+  ).toEqual(2)
 
-  const newBenthicAttributeInput =
-    within(observationsTableAfterTab).getAllByDisplayValue('Dead Coral with Algae')[3]
+  const newHabitatComplexityScoreInput = within(observationsTableAfterTab).getAllByLabelText(
+    'Habitat Complexity Score',
+  )[3]
 
-  expect(newBenthicAttributeInput).toHaveFocus()
+  expect(newHabitatComplexityScoreInput).toHaveFocus()
 })
 
-test('Benthic LIT observations: enter key adds a new empty row below row where key pressed', async () => {
+test('Habitat Complexity observations: enter key adds a new empty row below row where key pressed', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    initialEntries: ['/projects/5/collecting/benthiclit/70'],
+    initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -68,12 +76,12 @@ test('Benthic LIT observations: enter key adds a new empty row below row where k
   // one header row and three observations
   expect(within(observationsTableBeforeEnterKey).getAllByRole('row').length).toEqual(4)
 
-  const firstLengthInput = within(observationsTableBeforeEnterKey).getAllByLabelText(
-    'Length (cm)',
+  const firstGrowthFormInput = within(observationsTableBeforeEnterKey).getAllByLabelText(
+    'Habitat Complexity Score',
   )[0]
 
   // userEvent doesnt work as expected for Enter
-  fireEvent.keyDown(firstLengthInput, { key: 'Enter', code: 'Enter' })
+  fireEvent.keyDown(firstGrowthFormInput, { key: 'Enter', code: 'Enter' })
 
   const formAfterEnterKey = screen.getByRole('form')
   const observationsTableAfterEnterKey = within(formAfterEnterKey).getByLabelText('Observations')
@@ -83,5 +91,5 @@ test('Benthic LIT observations: enter key adds a new empty row below row where k
   // 0 is the headers
   const secondObservationRow = within(observationsTableAfterEnterKey).getAllByRole('row')[2]
 
-  expect(within(secondObservationRow).queryAllByDisplayValue('').length).toEqual(3)
+  expect(within(secondObservationRow).queryAllByDisplayValue('').length).toEqual(1)
 })

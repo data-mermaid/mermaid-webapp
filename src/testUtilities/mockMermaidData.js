@@ -1,8 +1,8 @@
 import { mockBenthicLitCollectRecords } from './mockCollectRecords/mockBenthicLitCollectRecords'
+import { mockHabitatComplexityCollectRecords } from './mockCollectRecords/mockHabitatComplexityCollectRecords'
 import mockBenthicPitCollectRecords from './mockCollectRecords/mockBenthicPitCollectRecords'
 import mockBleachingCollectRecords from './mockCollectRecords/mockBleachingCollectRecords'
 import mockFishbeltCollectRecords from './mockCollectRecords/mockFishbeltCollectRecords'
-import { mockHabitatComplexityCollectRecords } from './mockCollectRecords/mockHabitatComplexityCollectRecords'
 
 const projects = [
   {
@@ -95,6 +95,23 @@ const projects = [
   {
     id: '5',
     name: 'Project V',
+    countries: ['Mexico'],
+    tags: [],
+    num_sites: 33,
+    num_active_sample_units: 19,
+    num_sample_units: 29,
+    updated_on: '2001-01-21T08:00:00.000Z',
+    notes: '',
+    data_policy_beltfish: 50,
+    data_policy_benthiclit: 100,
+    data_policy_benthicpit: 100,
+    data_policy_bleachingqc: 10,
+    data_policy_habitatcomplexity: 100,
+    members: ['697a1123-ef22-4acb-aea4-05abbd5589d0'],
+  },
+  {
+    id: '6',
+    name: "Project Z has an apostrophe foo's",
     countries: ['Mexico'],
     tags: [],
     num_sites: 33,
@@ -2317,6 +2334,46 @@ const choices = {
         id: '66f2cd86-a949-414e-96ac-5ea1fb702c5c',
         name: 'Submassive',
         updated_on: '2018-03-17T14:55:16.798383Z',
+      },
+    ],
+  },
+  habitatcomplexityscores: {
+    data: [
+      {
+        id: 'c79519af-0b1e-43e0-a5b7-9093d9557ed4',
+        name: '0 no vertical relief, flat or rubbly areas',
+        updated_on: '2017-09-27T19:51:10.461835Z',
+        val: 0,
+      },
+      {
+        id: '3dcdb342-2e54-48ae-ad58-ec4d921da561',
+        name: '1 low (<30cm) and sparse relief',
+        updated_on: '2017-09-27T19:51:10.461867Z',
+        val: 1,
+      },
+      {
+        id: 'a5e08867-bea0-4f70-8dfe-11ecdd86e68e',
+        name: '2 low but widespread relief',
+        updated_on: '2017-09-27T19:51:10.461889Z',
+        val: 2,
+      },
+      {
+        id: '1dda77b4-0e00-47ae-8b46-063bc7aed349',
+        name: '3 widespread moderately complex (30-60cm) relief',
+        updated_on: '2017-09-27T19:51:10.461919Z',
+        val: 3,
+      },
+      {
+        id: 'd31f57b2-044f-4729-ae9b-b5df7a31a5c4',
+        name: '4 widespread very complex (60-100cm) relief with numerous fissures and caves',
+        updated_on: '2017-09-27T19:51:10.461940Z',
+        val: 4,
+      },
+      {
+        id: 'b72a2851-e24d-4d2d-880b-d2ea0f068455',
+        name: '5 exceptionally complex (>1m) relief with numerous caves and overhangs',
+        updated_on: '2017-09-27T19:51:10.461960Z',
+        val: 5,
       },
     ],
   },
