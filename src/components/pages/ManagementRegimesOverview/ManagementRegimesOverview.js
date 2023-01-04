@@ -357,17 +357,19 @@ const ManagementRegimesOverview = () => {
                       ? isCellValueEqualToMaxSampleUnitCount
                       : isCellValueLessThanMaxSampleUnitCount
 
-                    const cellClassName = isManagementRegimeCellHighlighted
-                      ? `${cell.column.parent.id} highlighted`
-                      : cell.column.parent.id
-
                     const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
 
-                    return (
-                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
+                    const tableCell = isManagementRegimeCellHighlighted ? (
+                      <Td {...cell.getCellProps()} align={cellAlignment} className="highlighted">
+                        <span>{cell.render('Cell')}</span>
+                      </Td>
+                    ) : (
+                      <Td {...cell.getCellProps()} align={cellAlignment}>
                         <span>{cell.render('Cell')}</span>
                       </Td>
                     )
+
+                    return tableCell
                   })}
                 </ManagementOverviewRow>
               )

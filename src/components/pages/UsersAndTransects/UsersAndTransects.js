@@ -473,16 +473,18 @@ const UsersAndTransects = () => {
 
                     const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
 
-                    const cellClassName =
-                      isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
-                        ? `${cell.column.parent.id} highlighted`
-                        : cell.column.parent.id
+                    const tableCell =
+                      isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted ? (
+                        <Td {...cell.getCellProps()} align={cellAlignment} className="highlighted">
+                          <span>{cell.render('Cell')}</span>
+                        </Td>
+                      ) : (
+                        <Td {...cell.getCellProps()} align={cellAlignment}>
+                          <span>{cell.render('Cell')}</span>
+                        </Td>
+                      )
 
-                    return (
-                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
-                        <span>{cell.render('Cell')}</span>
-                      </Td>
-                    )
+                    return tableCell
                   })}
                 </UsersAndTransectsRow>
               )
