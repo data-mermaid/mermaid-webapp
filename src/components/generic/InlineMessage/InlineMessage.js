@@ -18,12 +18,12 @@ const InlineMessageWrapper = styled.div`
   padding: calc(${theme.spacing.xsmall} + 1px);
   border: none;
   width: 100%;
+  max-width: ${theme.spacing.maxWidth};
   font-size: smaller;
   margin: 0 0 0 ${theme.spacing.small};
   p {
-    max-width: ${theme.spacing.maxTextWidth};
-    display: inline;
-    align-self: center;
+    display: inline-block;
+    margin: 0;
   }
   a,
   span {

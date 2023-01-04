@@ -22,6 +22,7 @@ export const InlineValidationButton = styled(ButtonSecondary)`
 `
 
 const InlineValidationItem = styled.li`
+  max-width: ${theme.spacing.maxWidth};
   ${hoverState(css`
     background: ${theme.color.tableRowHover};
   `)}
@@ -29,7 +30,8 @@ const InlineValidationItem = styled.li`
 
 const ScrollToButton = styled(ButtonThatLooksLikeLink)`
   text-decoration: underline;
-  width: 250px;
+  white-space: nowrap;
+  padding: ${theme.spacing.small};
   font-size: smaller;
 `
 
