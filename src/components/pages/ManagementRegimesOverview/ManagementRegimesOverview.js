@@ -339,9 +339,11 @@ const ManagementRegimesOverview = () => {
                 <ManagementOverviewRow {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
+                    const areSiteOrMethodColumns =
+                      cellColumnId === 'site' || cellColumnId === 'method'
 
                     const managementRegimeCellNonEmpty =
-                      cell.value !== '-' && !(cellColumnId === 'site' || cellColumnId === 'method')
+                      cell.value !== '-' && !areSiteOrMethodColumns
 
                     const isCellValueLessThanMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
@@ -355,24 +357,19 @@ const ManagementRegimesOverview = () => {
                       ? isCellValueEqualToMaxSampleUnitCount
                       : isCellValueLessThanMaxSampleUnitCount
 
-                    const HighlightedClassName = isManagementRegimeCellHighlighted
-                      ? 'highlighted'
-                      : undefined
+                    const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
 
-                    const cellAlignment =
-                      cell.column.parent.id === 'site' || cell.column.parent.id === 'method'
-                        ? 'start'
-                        : 'end'
-
-                    return (
-                      <Td
-                        {...cell.getCellProps()}
-                        align={cellAlignment}
-                        className={`${cell.column.parent.id} ${HighlightedClassName}`}
-                      >
+                    const tableCell = isManagementRegimeCellHighlighted ? (
+                      <Td {...cell.getCellProps()} align={cellAlignment} className="highlighted">
+                        <span>{cell.render('Cell')}</span>
+                      </Td>
+                    ) : (
+                      <Td {...cell.getCellProps()} align={cellAlignment}>
                         <span>{cell.render('Cell')}</span>
                       </Td>
                     )
+
+                    return tableCell
                   })}
                 </ManagementOverviewRow>
               )
