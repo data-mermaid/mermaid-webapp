@@ -39,6 +39,11 @@ export const ValidationList = styled('ul')`
   li {
     display: flex;
     margin-bottom: ${theme.spacing.xsmall};
+    ${mediaQueryPhoneOnly(css`
+      flex-direction: column;
+      align-items: start;
+      margin-bottom: ${theme.spacing.medium};
+    `)}
   }
 `
 
@@ -77,7 +82,8 @@ export const RequiredIndicator = styled.span`
 `
 export const InputRow = styled.div`
   display: grid;
-  grid-template-columns: 0.75fr 1.5fr 1fr;
+  grid-template-columns: 22rem 31rem 1fr;
+  max-width: ${theme.spacing.maxWidth};
   margin: 1px 0;
   padding: ${theme.spacing.medium};
   border-width: 0 0 0 ${theme.spacing.borderLarge};
@@ -117,6 +123,9 @@ export const Select = styled.select`
 `
 export const Input = styled.input`
   ${inputTextareaSelectStyles}
+  &[type='number'] {
+    text-align: right;
+  }
 `
 export const Textarea = styled.textarea`
   resize: vertical;

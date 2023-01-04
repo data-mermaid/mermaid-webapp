@@ -153,10 +153,11 @@ export const HeaderCenter = styled.div`
   white-space: nowrap;
 `
 
-export const InlineCell = styled.div`
+export const InlineCell = styled.span`
   min-width: 10ch;
   max-width: 26ch;
   text-align: inherit;
+  display: inline-block;
   a {
     color: inherit;
   }
