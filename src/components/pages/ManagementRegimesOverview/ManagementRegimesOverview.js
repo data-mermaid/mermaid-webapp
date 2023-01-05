@@ -338,9 +338,10 @@ const ManagementRegimesOverview = () => {
               return (
                 <ManagementOverviewRow {...row.getRowProps()}>
                   {row.cells.map((cell) => {
-                    const cellColumnId = cell.column.id
+                    const cellColumnGroupId = cell.column.parent.id
+
                     const areSiteOrMethodColumns =
-                      cellColumnId === 'site' || cellColumnId === 'method'
+                      cellColumnGroupId === 'site' || cellColumnGroupId === 'method'
 
                     const managementRegimeCellNonEmpty =
                       cell.value !== '-' && !areSiteOrMethodColumns
@@ -359,17 +360,15 @@ const ManagementRegimesOverview = () => {
 
                     const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
 
-                    const tableCell = isManagementRegimeCellHighlighted ? (
-                      <Td {...cell.getCellProps()} align={cellAlignment} className="highlighted">
-                        <span>{cell.render('Cell')}</span>
-                      </Td>
-                    ) : (
-                      <Td {...cell.getCellProps()} align={cellAlignment}>
+                    const cellClassName = isManagementRegimeCellHighlighted
+                      ? `${cellColumnGroupId} highlighted`
+                      : cellColumnGroupId
+
+                    return (
+                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
                         <span>{cell.render('Cell')}</span>
                       </Td>
                     )
-
-                    return tableCell
                   })}
                 </ManagementOverviewRow>
               )
