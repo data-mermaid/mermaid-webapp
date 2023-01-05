@@ -78,6 +78,11 @@ function registerValidSW(swUrl, config) {
                   'tabs for this page are closed. See https://cra.link/PWA.',
               )
 
+              // Skip waiting allows the newest installed service worker
+              // take over.  The reload allows the new cached code to be used.
+              registration.waiting.postMessage({ type: 'SKIP_WAITING' })
+              window.location.reload()
+
               // Execute callback
               if (config && config.onUpdate) {
                 config.onUpdate(registration)
