@@ -1,11 +1,7 @@
-import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import Logo from '../../assets/mermaid-beta-white-logo.svg'
-import { IconDown, IconExcel, IconOpenInNew } from '../icons'
-import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import HideShow from '../generic/HideShow'
-import OfflineHide from '../generic/OfflineHide'
+import React, { useState } from 'react'
+
 import {
   AvatarWrapper,
   GlobalNav,
@@ -23,10 +19,15 @@ import {
   BiggerIconMenu,
   LoggedInAs,
 } from './Header.styles'
-import ProfileModal from '../ProfileModal'
-import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
+import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
+import { IconDown, IconExcel, IconOpenInNew } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
+import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
+import HideShow from '../generic/HideShow'
+import Logo from '../../assets/mermaid-beta-white-logo.svg'
+import OfflineHide from '../generic/OfflineHide'
+import ProfileModal from '../ProfileModal'
 
 const GlobalLinks = () => {
   const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
@@ -35,7 +36,9 @@ const GlobalLinks = () => {
 
   return (
     <>
-      <StyledNavLink href="/projects">Projects</StyledNavLink>
+      <StyledNavLink as={Link} to="/projects">
+        Projects
+      </StyledNavLink>
       <StyledNavLink href={`${mermaidReferenceLink}/home`} target="_blank" rel="noreferrer">
         Reference&nbsp;
         <IconExcel />
