@@ -440,6 +440,7 @@ const UsersAndTransects = () => {
                 <UsersAndTransectsRow {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
+                    const cellColumnGroupId = cell.column.parent.id
                     const cellRowValues = cell.row.values
                     const cellRowValuesMethod = cell.row.values.method
                     const isNotBleachingMethodRow = cellRowValuesMethod !== 'Bleaching'
@@ -473,18 +474,16 @@ const UsersAndTransects = () => {
 
                     const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
 
-                    const tableCell =
-                      isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted ? (
-                        <Td {...cell.getCellProps()} align={cellAlignment} className="highlighted">
-                          <span>{cell.render('Cell')}</span>
-                        </Td>
-                      ) : (
-                        <Td {...cell.getCellProps()} align={cellAlignment}>
-                          <span>{cell.render('Cell')}</span>
-                        </Td>
-                      )
+                    const cellClassName =
+                      isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
+                        ? `${cellColumnGroupId} highlighted`
+                        : cellColumnGroupId
 
-                    return tableCell
+                    return (
+                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
+                        <span>{cell.render('Cell')}</span>
+                      </Td>
+                    )
                   })}
                 </UsersAndTransectsRow>
               )
