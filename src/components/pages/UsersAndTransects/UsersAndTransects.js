@@ -23,11 +23,12 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import {
   Tr,
   Th,
-  Td,
   TableNavigation,
   HeaderCenter,
   StickyTableOverflowWrapper,
   StickyProjectHealthTable,
+  OverviewTr,
+  OverviewTd,
 } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
 import theme from '../../../theme'
@@ -72,27 +73,6 @@ const UsersAndTransectsHeaderRow = styled(Tr)`
     }
   }
 `
-const UsersAndTransectsRow = styled(Tr)`
-  &:nth-child(odd) {
-    background: hsl(0, 0%, 100%);
-    td.transect-numbers {
-      background: hsl(0, 0%, 95%);
-    }
-    td.user-headers {
-      background: hsl(0, 0%, 90%);
-    }
-  }
-  &:nth-child(even) {
-    background: hsl(235, 10%, 95%);
-    td.transect-numbers {
-      background: hsl(235, 10%, 90%);
-    }
-    td.user-headers {
-      background: hsl(235, 10%, 85%);
-    }
-  }
-`
-
 const checkDateAndGetSiteName = (name) => {
   const elementsInName = name.split(' ')
   const lastItemInName = elementsInName.pop()
@@ -437,7 +417,7 @@ const UsersAndTransects = () => {
               prepareRow(row)
 
               return (
-                <UsersAndTransectsRow {...row.getRowProps()}>
+                <OverviewTr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellColumnGroupId = cell.column.parent.id
@@ -480,12 +460,16 @@ const UsersAndTransects = () => {
                         : cellColumnGroupId
 
                     return (
-                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
+                      <OverviewTd
+                        {...cell.getCellProps()}
+                        align={cellAlignment}
+                        className={cellClassName}
+                      >
                         <span>{cell.render('Cell')}</span>
-                      </Td>
+                      </OverviewTd>
                     )
                   })}
-                </UsersAndTransectsRow>
+                </OverviewTr>
               )
             })}
           </tbody>

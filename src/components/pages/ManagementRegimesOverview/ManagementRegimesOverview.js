@@ -21,11 +21,12 @@ import { splitSearchQueryStrings } from '../../../library/splitSearchQueryString
 import {
   Tr,
   Th,
-  Td,
+  OverviewTd,
   TableNavigation,
   HeaderCenter,
   StickyTableOverflowWrapper,
   StickyProjectHealthTable,
+  OverviewTr,
 } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
@@ -41,21 +42,6 @@ const ManagementOverviewHeaderRow = styled(Tr)`
     background: hsl(235, 10%, 85%);
     &:after {
       display: none;
-    }
-  }
-`
-
-const ManagementOverviewRow = styled(Tr)`
-  &:nth-child(odd) {
-    background: hsl(0, 0%, 100%);
-    td.management-regime-numbers {
-      background: hsl(0, 0%, 90%);
-    }
-  }
-  &:nth-child(even) {
-    background: hsl(235, 10%, 95%);
-    td.management-regime-numbers {
-      background: hsl(235, 10%, 85%);
     }
   }
 `
@@ -336,7 +322,7 @@ const ManagementRegimesOverview = () => {
                 managementRegimeRowCellValues.every(isEqualToMaxSampleUnitCount)
 
               return (
-                <ManagementOverviewRow {...row.getRowProps()}>
+                <OverviewTr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnGroupId = cell.column.parent.id
 
@@ -365,12 +351,16 @@ const ManagementRegimesOverview = () => {
                       : cellColumnGroupId
 
                     return (
-                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
+                      <OverviewTd
+                        {...cell.getCellProps()}
+                        align={cellAlignment}
+                        className={cellClassName}
+                      >
                         <span>{cell.render('Cell')}</span>
-                      </Td>
+                      </OverviewTd>
                     )
                   })}
-                </ManagementOverviewRow>
+                </OverviewTr>
               )
             })}
           </tbody>

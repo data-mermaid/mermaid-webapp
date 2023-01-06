@@ -9,7 +9,7 @@ import theme from '../../../theme'
 export const TableNavigation = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin: 0 0 ${theme.spacing.xsmall} 0;
+  margin: 3rem 0 ${theme.spacing.xsmall} 0;
   > * {
     padding: ${theme.spacing.small} ${theme.spacing.medium};
   }
@@ -22,9 +22,11 @@ export const TableOverflowWrapper = styled.div`
   ${mediaQueryPhoneOnly(css`
     max-width: calc(100vw - ${theme.spacing.mobileSideNavWidth} - 20px);
   `)}
-  // 20px is the approx scrollbar width this is to prevent
-  // a horziontal scrollbar at the bottom of the page
-  // and to keep the toolbar sticky when needed.
+  /*
+  20px is the approx scrollbar width this is to prevent
+  a horziontal scrollbar at the bottom of the page
+  and to keep the toolbar sticky when needed.
+  */
   overflow-y: auto;
   & + button,
   button + & {
@@ -39,6 +41,11 @@ export const Table = styled('table')`
   border-collapse: collapse;
   font-variant: tabular-nums;
   font-feature-settings: 'tnum';
+  /* 
+  this is to set the height 
+  of the spans in the Td
+  */
+  height: 1px;
 `
 const getHeaderSortAfter = (isMultiSortColumn, sortedIndex, isSortedDescending) => {
   if (sortedIndex < 0) {
@@ -99,22 +106,6 @@ export const Td = styled.td(
     border-color: ${theme.color.tableBorderColor};
     border-style: solid;
     position: relative;
-    &.highlighted {
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: hsl(50, 100%, 50%, 0.4);
-        z-index: 1;
-      }
-      span {
-        z-index: 2;
-        position: relative;
-      }
-    }
     &:first-child {
       border-left: none;
     }
@@ -148,6 +139,76 @@ export const Tr = styled.tr`
   `)}
 `
 
+export const OverviewTr = styled.tr`
+  background: hsl(0, 0%, 100%);
+  height: 100%;
+  position: relative;
+  ${hoverState(css`
+    &:after {
+      content: '';
+      position: absolute;
+      background-color: hsl(0 0% 90%);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  `)}
+`
+export const OverviewTd = styled(Td)`
+  padding: 0;
+  height: inherit;
+  > span {
+    box-sizing: content-box;
+    background-clip: padding-box;
+    padding: 1rem;
+    margin: -1px;
+    height: 100%;
+    border: solid 1px darkgrey;
+    display: block;
+  }
+  &.site,
+  &.method {
+    background: white;
+    border: solid 0 white;
+  }
+  &.transect-numbers {
+    > span {
+      background-color: hsl(0, 0%, 95%);
+    }
+  }
+  &.user-headers {
+    > span {
+      background-color: hsl(0, 0%, 90%);
+    }
+  }
+  &.management-regime-numbers {
+    > span {
+      background-color: hsl(0, 0%, 95%);
+    }
+  }
+  &.management-regime-numbers,
+  &.user-headers,
+  &.transect-numbers {
+    &.highlighted > span {
+      background-color: hsl(50 80% 80% / 1);
+    }
+    /* 
+    This is the first child.
+    This is used to make a gap
+    between the 3 sections of the table.
+    */
+    border-width: 0 0 0 1rem;
+    border-color: white;
+    border-style: solid;
+    & ~ & {
+      /* this is the rest of them */
+      border-width: 0;
+    }
+  }
+`
 export const HeaderCenter = styled.div`
   text-align: center;
   white-space: nowrap;
