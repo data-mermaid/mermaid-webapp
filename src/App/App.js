@@ -28,7 +28,7 @@ import useIsMounted from '../library/useIsMounted'
 import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
 import handleHttpResponseError from '../library/handleHttpResponseError'
 import ErrorBoundary from '../components/ErrorBoundary'
-
+// fake PR. Dont merge
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
