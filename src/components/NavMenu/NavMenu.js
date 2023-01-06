@@ -143,6 +143,11 @@ const NavMenu = ({ subNavNode }) => {
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
 
+  const handleImageError = (event) => {
+    // eslint-disable-next-line no-param-reassign
+    event.target.style.display = 'none'
+  }
+
   return (
     <NavWrapper data-testid="content-page-side-nav">
       <NavList>
@@ -153,13 +158,7 @@ const NavMenu = ({ subNavNode }) => {
               <LiCollecting>
                 <NavLinkSidebar exact to={`${projectUrl}/collecting`}>
                   {currentUser.picture ? (
-                    <CollectionAvatar
-                      src={currentUser.picture}
-                      onError={(e) => {
-                        e.target.onerror = null
-                        e.target.src = ''
-                      }}
-                    />
+                    <CollectionAvatar src={currentUser.picture} onError={handleImageError} />
                   ) : null}
                   <IconCollect />
                   <span>Collecting</span>
