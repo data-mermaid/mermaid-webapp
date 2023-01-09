@@ -62,6 +62,7 @@ const Header = ({ logout, currentUser }) => {
   const closeProfileModal = () => setIsProfileModalOpen(false)
   const { notifications } = useBellNotifications()
   const { isAppOnline } = useOnlineStatus()
+  const [hasImageError, setHasImageError] = useState(false)
 
   const UserMenuDropDownContent = () => (
     <OfflineHide>
@@ -70,17 +71,25 @@ const Header = ({ logout, currentUser }) => {
     </OfflineHide>
   )
 
-  const handleImageError = (event) => {
-    // eslint-disable-next-line no-param-reassign
-    event.target.style.display = 'none'
+  const handleImageError = () => {
+    setHasImageError(true)
   }
 
   const getUserButton = () => {
-    // Avatar
-    if (currentUser && currentUser.picture) {
+    // Avatar with user image
+    if (currentUser && currentUser.picture && !hasImageError) {
       return (
         <AvatarWrapper>
           <CurrentUserImg src={currentUser.picture} alt="" onError={handleImageError} />
+        </AvatarWrapper>
+      )
+    }
+
+    // Avatar with fallback image
+    if (currentUser && currentUser.picture && hasImageError) {
+      return (
+        <AvatarWrapper>
+          <BiggerIconUser />
         </AvatarWrapper>
       )
     }

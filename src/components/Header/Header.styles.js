@@ -26,6 +26,10 @@ export const AvatarWrapper = styled('button')`
   background: none;
   border: none;
 `
+export const AvatarWrapperFallback = styled('button')`
+  color: white;
+`
+
 export const CurrentUserImg = styled('img')`
   height: calc(${theme.spacing.headerHeight} - 10px);
   width: calc(${theme.spacing.headerHeight} - 10px);
@@ -148,6 +152,8 @@ export const BiggerIconMenu = styled(IconMenu)`
 `
 export const BiggerIconUser = styled(IconUser)`
   ${biggerIcons}
+  color: white;
+  position: inherit;
 `
 export const NotificationIndicator = styled.span`
   color: red;
