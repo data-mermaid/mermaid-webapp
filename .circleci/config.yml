@@ -1,0 +1,50 @@
+version: '2.1'
+orbs:
+  browser-tools: circleci/browser-tools@1.2.4
+
+defaults: &defaults
+  
+    # - image: cimg/python:3.10.2-browsers
+      # environment:
+      #   CHROME_BIN: /usr/bin/google-chrome
+
+# install_dependencies: &install_dependencies
+#   run:
+#     name: Install Dependencies
+#     command: |
+#       whoami
+#       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+#       unzip awscliv2.zip
+#       sudo ./aws/install
+#       sudo npm install -g bower gulp karma-cli
+#       bower install
+#       npm install
+#       pip install git+https://github.com/data-mermaid/mermaid-changelog.git
+
+jobs:
+
+  test:
+    docker:
+      - image: cimg/node:16
+    steps:
+      - checkout
+      # - setup_remote_docker
+      # - *install_dependencies
+      # - browser-tools/install-browser-tools
+      - run:
+          name: Install dependencies
+          command: |
+            yarn install --frozen-lockfile
+      - run:
+          name: Run tests
+          command: yarn test
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - test:
+          context: org-global
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)+/
