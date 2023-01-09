@@ -70,12 +70,17 @@ const Header = ({ logout, currentUser }) => {
     </OfflineHide>
   )
 
+  const handleImageError = (event) => {
+    // eslint-disable-next-line no-param-reassign
+    event.target.style.display = 'none'
+  }
+
   const getUserButton = () => {
     // Avatar
     if (currentUser && currentUser.picture) {
       return (
         <AvatarWrapper>
-          <CurrentUserImg src={currentUser.picture} alt="" />
+          <CurrentUserImg src={currentUser.picture} alt="" onError={handleImageError} />
         </AvatarWrapper>
       )
     }
