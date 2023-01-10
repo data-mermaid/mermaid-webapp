@@ -69,7 +69,7 @@ jobs:
           echo "REACT_APP_MERMAID_API=https://api.datamermaid.org/v1" >> "$GITHUB_ENV"
           echo "REACT_APP_MERMAID_REFERENCE_LINK=https://collect.datamermaid.org/#/reference" >> "$GITHUB_ENV"
 
-      - name: CDK Diff
+      - name: CDK
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: ${{ inputs.cdk_subcommand }}
