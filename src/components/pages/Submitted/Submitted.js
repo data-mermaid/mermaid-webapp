@@ -298,6 +298,8 @@ const Submitted = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
+          pageType="submitted"
+          rowLength={page.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
 import { Select } from '../../form'
@@ -8,28 +8,44 @@ const PageSizeSelect = styled(Select)`
   min-width: auto;
 `
 
-const PageSizeSelector = ({ pageSize, pageSizeOptions, onChange }) => {
+const PageSizeSelector = ({ pageSize, pageType, pageSizeOptions, onChange, rowLength }) => {
+  const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
+
+  const _findPageOptionsToDisplay = useEffect(() => {
+    let pageSizeOptionsFiltered = pageSizeOptions.filter((option) => option < rowLength)
+
+    if (pageSizeOptionsFiltered.length === 0) {
+      pageSizeOptionsFiltered = [rowLength]
+    } else if (pageSizeOptionsFiltered[pageSizeOptionsFiltered.length - 1] < rowLength) {
+      pageSizeOptionsFiltered.push(rowLength)
+    }
+
+    setPageOptionsToDisplay(pageSizeOptionsFiltered)
+  }, [pageSizeOptions, rowLength])
+
   return (
     <label htmlFor="page-size-selector">
-      Show{' '}
+      Showing{' '}
       <PageSizeSelect
         value={pageSize}
         onChange={onChange}
         id="page-size-selector"
         data-testid="page-size-selector"
       >
-        {pageSizeOptions.map(size => (
+        {pageOptionsToDisplay.map((size) => (
           <option key={size} value={size}>
             {size}
           </option>
         ))}
       </PageSizeSelect>{' '}
-      rows
+      of {rowLength} {pageType}
     </label>
   )
 }
 
 PageSizeSelector.propTypes = {
+  rowLength: PropTypes.number.isRequired,
+  pageType: PropTypes.string.isRequired,
   pageSize: PropTypes.number.isRequired,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number).isRequired,
   onChange: PropTypes.func.isRequired,
