@@ -30,4 +30,4 @@ jobs:
         name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - run: yarn test --silent --bail
+      - run: yarn test --silent --bail --maxWorkers=4
