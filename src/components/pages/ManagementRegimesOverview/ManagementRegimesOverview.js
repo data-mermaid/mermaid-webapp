@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import styled from 'styled-components/macro'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
@@ -19,14 +18,14 @@ import SampleUnitLinks from '../../SampleUnitLinks'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
-  Tr,
-  Th,
   OverviewTd,
   TableNavigation,
   HeaderCenter,
+  Tr,
   StickyTableOverflowWrapper,
-  StickyProjectHealthTable,
+  StickyOverviewTable,
   OverviewTr,
+  OverviewTh,
 } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
@@ -36,15 +35,6 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-
-const ManagementOverviewHeaderRow = styled(Tr)`
-  th.management-regime-numbers {
-    background: hsl(235, 10%, 85%);
-    &:after {
-      display: none;
-    }
-  }
-`
 
 const groupManagementRegimes = (records) => {
   return records.reduce((accumulator, record) => {
@@ -127,13 +117,13 @@ const ManagementRegimesOverview = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: () => '',
+        Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'site',
         columns: [{ Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort }],
         disableSortBy: true,
       },
       {
-        Header: () => '',
+        Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'method',
         columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
         disableSortBy: true,
@@ -267,10 +257,10 @@ const ManagementRegimesOverview = () => {
   const table = sampleUnitWithManagementRegimeRecords.length ? (
     <>
       <StickyTableOverflowWrapper>
-        <StickyProjectHealthTable {...getTableProps()}>
+        <StickyOverviewTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <ManagementOverviewHeaderRow {...headerGroup.getHeaderGroupProps()}>
+              <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -281,7 +271,7 @@ const ManagementRegimesOverview = () => {
                     column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
 
                   return (
-                    <Th
+                    <OverviewTh
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
@@ -291,11 +281,11 @@ const ManagementRegimesOverview = () => {
                       align={headerAlignment}
                       className={ThClassName}
                     >
-                      {column.render('Header')}
-                    </Th>
+                      <span> {column.render('Header')}</span>
+                    </OverviewTh>
                   )
                 })}
-              </ManagementOverviewHeaderRow>
+              </Tr>
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
@@ -364,7 +354,7 @@ const ManagementRegimesOverview = () => {
               )
             })}
           </tbody>
-        </StickyProjectHealthTable>
+        </StickyOverviewTable>
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector

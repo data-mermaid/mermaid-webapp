@@ -21,12 +21,12 @@ import SampleUnitLinks from '../../SampleUnitLinks'
 import { sortArray } from '../../../library/arrays/sortArray'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
-  Tr,
-  Th,
   TableNavigation,
   HeaderCenter,
   StickyTableOverflowWrapper,
-  StickyProjectHealthTable,
+  StickyOverviewTable,
+  OverviewTh,
+  Tr,
   OverviewTr,
   OverviewTd,
 } from '../../generic/Table/table'
@@ -42,9 +42,8 @@ import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 
 const EMPTY_VALUE = '-'
 
-const UserColumnHeader = styled.div`
-  display: inline-flex;
-  flex-direction: row;
+const UserColumnHeader = styled.span`
+  display: flex;
 `
 
 const ActiveRecordsCount = styled.strong`
@@ -58,20 +57,6 @@ const ActiveRecordsCount = styled.strong`
   margin: 0.25rem 0.5rem;
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
-`
-const UsersAndTransectsHeaderRow = styled(Tr)`
-  th.transect-numbers {
-    background: hsl(235, 10%, 90%);
-    &:after {
-      display: none;
-    }
-  }
-  th.user-headers {
-    background: hsl(235, 10%, 85%);
-    &:after {
-      display: none;
-    }
-  }
 `
 const checkDateAndGetSiteName = (name) => {
   const elementsInName = name.split(' ')
@@ -201,13 +186,13 @@ const UsersAndTransects = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: () => '',
+        Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'site',
         columns: [{ Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort }],
         disableSortBy: true,
       },
       {
-        Header: () => '',
+        Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'method',
         columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
         disableSortBy: true,
@@ -381,10 +366,10 @@ const UsersAndTransects = () => {
   const table = (
     <>
       <StickyTableOverflowWrapper>
-        <StickyProjectHealthTable {...getTableProps()}>
+        <StickyOverviewTable {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
-              <UsersAndTransectsHeaderRow {...headerGroup.getHeaderGroupProps()}>
+              <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -395,7 +380,7 @@ const UsersAndTransects = () => {
                     column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
 
                   return (
-                    <Th
+                    <OverviewTh
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
@@ -405,11 +390,11 @@ const UsersAndTransects = () => {
                       align={headerAlignment}
                       className={ThClassName}
                     >
-                      {column.render('Header')}
-                    </Th>
+                      <span> {column.render('Header')}</span>
+                    </OverviewTh>
                   )
                 })}
-              </UsersAndTransectsHeaderRow>
+              </Tr>
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
@@ -473,7 +458,7 @@ const UsersAndTransects = () => {
               )
             })}
           </tbody>
-        </StickyProjectHealthTable>
+        </StickyOverviewTable>
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector

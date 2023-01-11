@@ -83,12 +83,13 @@ export const Th = styled.th(
     vertical-align: top;
     pointer-events: ${props.disabledHover && 'none'};
     &::after {
-      content: ' \u25b2';
-      color: ${props.isSortingEnabled ? theme.color.secondaryDisabledColor : theme.color.white};
+      content: ${props.isSortingEnabled ? ' \u25b2' : ''};
       font-size: small;
       white-space: nowrap;
     }
-    ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
+    > span {
+      ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
+    }
   `,
 )
 Th.defaultProps = {
@@ -138,9 +139,8 @@ export const Tr = styled.tr`
     background-color: ${theme.color.tableRowHover};
   `)}
 `
-
 export const OverviewTr = styled.tr`
-  background: hsl(0, 0%, 100%);
+  background: ${theme.color.background};
   height: 100%;
   position: relative;
   ${hoverState(css`
@@ -157,61 +157,85 @@ export const OverviewTr = styled.tr`
     }
   `)}
 `
+export const OverviewTh = styled(Th)`
+  background: ${theme.color.background};
+  border-width: 0 1rem 0 0;
+  border-color: transparent;
+  border-style: solid;
+  padding: 0;
+  &:last-child {
+    border-right-width: 0;
+  }
+  &:nth-child(1),
+  &.management-regime-numbers,
+  &.transect-numbers,
+  &.user-headers {
+    border-width: 0;
+  }
+  &.first-user-header {
+    /*
+    this class isn't in  the HTML yet
+    */
+    border-left-width: 1rem;
+  }
+  > span {
+    background-color: ${theme.color.white};
+    padding: ${theme.spacing.small} ${theme.spacing.medium};
+    display: inline-block;
+    width: 100%;
+    outline: solid 1px ${theme.color.border};
+  }
+`
 export const OverviewTd = styled(Td)`
   padding: 0;
   height: inherit;
   > span {
-    box-sizing: content-box;
     background-clip: padding-box;
-    padding: 1rem;
+    background-color: ${theme.color.white};
+    padding: ${theme.spacing.small} ${theme.spacing.medium};
     margin: -1px;
     height: 100%;
-    border: solid 1px darkgrey;
+    border: solid 1px ${theme.color.border};
     display: block;
   }
   &.site,
   &.method {
-    background: white;
-    border: solid 0 white;
+    border: none;
   }
-  &.transect-numbers {
-    > span {
-      background-color: hsl(0, 0%, 95%);
-    }
+  &.transect-numbers > span {
+    background-color: hsl(0, 0%, 95%);
   }
-  &.user-headers {
-    > span {
-      background-color: hsl(0, 0%, 90%);
-    }
+  &.user-headers > span {
+    background-color: hsl(0, 0%, 88%);
   }
-  &.management-regime-numbers {
-    > span {
-      background-color: hsl(0, 0%, 95%);
-    }
+  &.management-regime-numbers > span {
+    background-color: hsl(0, 0%, 95%);
   }
   &.management-regime-numbers,
   &.user-headers,
   &.transect-numbers {
-    &.highlighted > span {
-      background-color: hsl(50 80% 80% / 1);
-    }
     /* 
-    This is the first child.
     This is used to make a gap
     between the 3 sections of the table.
     */
+    /* This is the first child. */
     border-width: 0 0 0 1rem;
-    border-color: white;
+    border-color: transparent;
     border-style: solid;
     & ~ & {
       /* this is the rest of them */
       border-width: 0;
     }
+    &.highlighted > span {
+      background-color: hsl(50 80% 80% / 1);
+    }
   }
 `
-export const HeaderCenter = styled.div`
+export const HeaderCenter = styled.p`
   text-align: center;
   white-space: nowrap;
+  margin: 0;
+  background: white;
 `
 
 export const InlineCell = styled.span`
@@ -230,12 +254,13 @@ export const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
 const stickyStyles = css`
   position: sticky;
   white-space: nowrap;
-  border: solid 1px ${theme.color.tableBorderColor};
   z-index: 3;
   top: calc(${theme.spacing.headerHeight} - 1px);
   &:before {
-    // this is to account for the border-bottom
-    // dissapearing when scrolled.
+    /* 
+    this is to account for the border-bottom
+    dissapearing when scrolled.
+    */
     content: '';
     position: absolute;
     height: 1px;
@@ -246,7 +271,7 @@ const stickyStyles = css`
   }
 `
 
-export const StickyProjectHealthTable = styled(Table)`
+export const StickyOverviewTable = styled(Table)`
   thead tr:nth-child(2) th {
     ${stickyStyles}
   }
