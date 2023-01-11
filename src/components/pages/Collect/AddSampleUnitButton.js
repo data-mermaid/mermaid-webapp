@@ -1,15 +1,20 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
+
+import { Column } from '../../generic/positioning'
+import { hoverState } from '../../../library/styling/mediaQueries'
+import { IconPlus } from '../../icons'
+import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import theme from '../../../theme'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
-import { Column } from '../../generic/positioning'
-import { IconPlus } from '../../icons'
 
 const CustomNavLink = styled(NavLink)`
   padding: ${theme.spacing.buttonPadding};
   text-decoration: none;
+  ${hoverState(css`
+    background: ${theme.color.secondaryHover};
+  `)}
 `
 const StyledButtonSecondaryDropdown = styled(ButtonSecondaryDropdown)`
   white-space: nowrap;
