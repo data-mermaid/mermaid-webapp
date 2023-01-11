@@ -350,7 +350,7 @@ const Sites = () => {
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
           pageType="sites"
-          rowLength={page.length}
+          rowLength={siteRecordsForUiDisplay.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components/macro'
@@ -15,8 +16,10 @@ const PageSizeSelector = ({ pageSize, pageType, pageSizeOptions, onChange, rowLe
     let pageSizeOptionsFiltered = pageSizeOptions.filter((option) => option < rowLength)
 
     if (pageSizeOptionsFiltered.length === 0) {
+      // show the exact number of items as the only selection in the drop down
       pageSizeOptionsFiltered = [rowLength]
     } else if (pageSizeOptionsFiltered[pageSizeOptionsFiltered.length - 1] < rowLength) {
+      // show the exact number of items as the last selection in the drop down
       pageSizeOptionsFiltered.push(rowLength)
     }
 

@@ -382,7 +382,7 @@ const ManagementRegimesOverview = () => {
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
           pageType="management regimes"
-          rowLength={page.length}
+          rowLength={sampleUnitWithManagementRegimeRecords.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

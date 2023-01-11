@@ -497,7 +497,7 @@ const UsersAndTransects = () => {
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
           pageType="users and transects"
-          rowLength={page.length}
+          rowLength={submittedRecords.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
