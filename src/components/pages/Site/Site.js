@@ -127,6 +127,7 @@ const SiteForm = ({
           required
           label="Latitude"
           id="latitude"
+          type="number"
           {...formik.getFieldProps('latitude')}
           validationType={formik.errors.latitude && formik.touched.latitude ? 'error' : null}
           validationMessages={formik.errors.latitude}
@@ -137,6 +138,7 @@ const SiteForm = ({
           required
           label="Longitude"
           id="longitude"
+          type="number"
           {...formik.getFieldProps('longitude')}
           validationType={formik.errors.longitude && formik.touched.longitude ? 'error' : null}
           validationMessages={formik.errors.longitude}

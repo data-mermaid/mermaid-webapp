@@ -104,12 +104,13 @@ export const ButtonCallout = styled(Button)`
   }
 `
 export const ButtonCaution = styled(Button)`
-  background-color: ${theme.color.white};
-  color: ${theme.color.cautionColor};
+  background-color: ${theme.color.cautionColor};
+  color: ${theme.color.white};
   border: solid 1px ${theme.color.cautionColor};
   ${hoverState(
     css`
-      background-color: ${theme.color.cautionHover};
+      background-color: ${theme.color.black};
+      color: ${theme.color.white};
     `,
   )}
   &:disabled {
