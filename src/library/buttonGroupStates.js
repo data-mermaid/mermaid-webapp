@@ -4,6 +4,7 @@ export const buttonGroupStates = {
   submittable: 'submitable',
   submitting: 'submitting',
   unsaved: 'unsaved',
+  untouchedEmptyForm: 'untouchedEmptyForm',
   validatable: 'validatable',
   validated: 'validated',
   validating: 'validating',

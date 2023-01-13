@@ -95,6 +95,7 @@ const SaveValidateSubmitButtonGroup = ({
     submitButtonState === buttonGroupStates.submitting ? 'Submitting' : 'Submit'
 
   const isSaveDisabled =
+    saveButtonState === buttonGroupStates.untouchedEmptyForm ||
     saveButtonState === buttonGroupStates.saved ||
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating
