@@ -29,6 +29,7 @@ import {
   ToolbarButtonWrapper,
   ButtonSecondary,
   LinkLooksLikeButtonSecondary,
+  ButtonPrimary,
 } from '../../generic/buttons'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
@@ -325,7 +326,7 @@ const ManagementRegimes = () => {
           <IconPlus /> New MR
         </LinkLooksLikeButtonSecondary>
         <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
-          <IconCopy /> Copy MRs from other projects
+          <IconCopy /> {language.pages.managementRegimeTable.copyManagementRegimeButtonText}
         </ButtonSecondary>
         {readOnlyMrsHeaderContent}
       </ToolbarButtonWrapper>
@@ -402,7 +403,11 @@ const ManagementRegimes = () => {
   ) : (
     <PageUnavailable
       mainText={language.pages.managementRegimeTable.noDataMainText}
-      subText={language.pages.managementRegimeTable.noDataSubText}
+      subText={
+        <ButtonPrimary type="button" onClick={openCopyManagementRegimesModal}>
+          <IconCopy /> {language.pages.managementRegimeTable.copyManagementRegimeButtonText}
+        </ButtonPrimary>
+      }
     />
   )
 

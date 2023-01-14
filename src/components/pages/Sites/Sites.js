@@ -26,9 +26,10 @@ import {
 } from '../../generic/Table/reactTableNaturalSort'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
-  ToolbarButtonWrapper,
+  ButtonPrimary,
   ButtonSecondary,
   LinkLooksLikeButtonSecondary,
+  ToolbarButtonWrapper,
 } from '../../generic/buttons'
 import { ToolBarRow } from '../../generic/positioning'
 import {
@@ -287,7 +288,7 @@ const Sites = () => {
           <IconPlus /> New site
         </LinkLooksLikeButtonSecondary>
         <ButtonSecondary type="button" onClick={openCopySitesModal}>
-          <IconCopy /> Copy sites from other projects
+          <IconCopy /> {language.pages.siteTable.copySitesButtonText}
         </ButtonSecondary>
         {readOnlySitesHeaderContent}
       </ToolbarButtonWrapper>
@@ -367,7 +368,11 @@ const Sites = () => {
   ) : (
     <PageUnavailable
       mainText={language.pages.siteTable.noDataMainText}
-      subText={language.pages.siteTable.noDataSubText}
+      subText={
+        <ButtonPrimary type="button" onClick={openCopySitesModal}>
+          <IconCopy /> {language.pages.siteTable.copySitesButtonText}
+        </ButtonPrimary>
+      }
     />
   )
 
