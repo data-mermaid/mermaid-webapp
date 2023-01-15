@@ -5,15 +5,14 @@ import { useFormik } from 'formik'
 import { useHistory, useParams } from 'react-router-dom'
 import { H2 } from '../../../generic/text'
 import {
-  managementRegimePropType,
-  sitePropType,
   choicesPropType,
-  subNavNodePropTypes,
+  fishNameConstantsPropType,
+  managementRegimePropType,
+  mermaidRecordPropType,
   observationsReducerPropType,
   observersPropType,
-  fishBeltPropType,
-  benthicPhotoQuadratPropType,
-  fishNameConstantsPropType,
+  sitePropType,
+  subNavNodePropTypes,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import {
   getCollectRecordDataInitialValues,
@@ -57,6 +56,8 @@ import PageUnavailable from '../../PageUnavailable'
 import { getIsFishBelt } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { useScrollCheckError } from '../../../../library/useScrollCheckError'
 import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
+import ValidationSummaryBadges from '../ValidationSummaryBadges/ValidationSummaryBadges'
+import { ColumnCenter } from '../../../generic/positioning'
 
 const CollectRecordFormPage = ({
   isNewRecord,
@@ -683,15 +684,21 @@ const CollectRecordFormPage = ({
               />
             )}
             {!isReadOnlyUser && (
-              <SaveValidateSubmitButtonGroup
-                isNewRecord={isNewRecord}
-                saveButtonState={saveButtonState}
-                validateButtonState={validateButtonState}
-                submitButtonState={submitButtonState}
-                onValidate={handleValidate}
-                onSave={handleSave}
-                onSubmit={handleSubmit}
-              />
+              <ColumnCenter>
+                <SaveValidateSubmitButtonGroup
+                  isNewRecord={isNewRecord}
+                  saveButtonState={saveButtonState}
+                  validateButtonState={validateButtonState}
+                  submitButtonState={submitButtonState}
+                  onValidate={handleValidate}
+                  onSave={handleSave}
+                  onSubmit={handleSubmit}
+                />
+                <ValidationSummaryBadges
+                  collectRecord={collectRecordBeingEdited}
+                  areValidationsShowing={areValidationsShowing}
+                />
+              </ColumnCenter>
             )}
           </ContentPageToolbarWrapper>
         }
@@ -715,7 +722,7 @@ const CollectRecordFormPage = ({
 CollectRecordFormPage.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
   sampleUnitName: PropTypes.string.isRequired,
-  collectRecordBeingEdited: PropTypes.oneOfType([fishBeltPropType, benthicPhotoQuadratPropType]),
+  collectRecordBeingEdited: mermaidRecordPropType,
   handleCollectRecordChange: PropTypes.func.isRequired,
   handleNewObservationAdd: PropTypes.func.isRequired,
   handleSubmitNewObservation: PropTypes.func.isRequired,

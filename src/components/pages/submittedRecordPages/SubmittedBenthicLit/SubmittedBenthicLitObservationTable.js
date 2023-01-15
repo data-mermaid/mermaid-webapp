@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   choicesPropType,
-  submittedBenthicLitPropType,
+  benthicLitPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { SubmittedObservationStickyTable, Tr, Td } from '../../../generic/Table/table'
@@ -58,7 +58,7 @@ const SubmittedBenthicLitObservationTable = ({
 SubmittedBenthicLitObservationTable.propTypes = {
   choices: choicesPropType.isRequired,
   benthicAttributeOptions: inputOptionsPropTypes.isRequired,
-  submittedRecord: submittedBenthicLitPropType,
+  submittedRecord: benthicLitPropType,
 }
 
 SubmittedBenthicLitObservationTable.defaultProps = {

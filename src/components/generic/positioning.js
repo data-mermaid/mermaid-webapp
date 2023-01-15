@@ -29,6 +29,12 @@ export const Column = styled.div`
   display: flex;
   flex-direction: column;
 `
+
+export const ColumnCenter = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 export const ToolBarRow = styled(Row)`
   flex-wrap: wrap;
   align-items: flex-end;

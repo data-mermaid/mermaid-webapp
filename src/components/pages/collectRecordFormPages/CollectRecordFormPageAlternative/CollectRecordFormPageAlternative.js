@@ -5,10 +5,9 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
 
 import {
-  subNavNodePropTypes,
-  fishBeltPropType,
-  benthicPhotoQuadratPropType,
+  mermaidRecordPropType,
   observationsReducerPropType,
+  subNavNodePropTypes,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
@@ -551,7 +550,7 @@ const CollectRecordFormPageAlternative = ({
 
 CollectRecordFormPageAlternative.propTypes = {
   areObservationsInputsDirty: PropTypes.bool.isRequired,
-  collectRecordBeingEdited: PropTypes.oneOfType([fishBeltPropType, benthicPhotoQuadratPropType]),
+  collectRecordBeingEdited: mermaidRecordPropType,
   handleCollectRecordChange: PropTypes.func.isRequired,
   idsNotAssociatedWithData: PropTypes.arrayOf(PropTypes.string).isRequired,
   initialFormikFormValues: PropTypes.shape({}).isRequired,
