@@ -45,7 +45,7 @@ describe('Offline', () => {
       }),
     )
 
-    userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
+    userEvent.selectOptions(screen.getByTestId('page-size-selector'), '19')
 
     const table = screen.getByRole('table')
 

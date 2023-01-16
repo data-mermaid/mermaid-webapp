@@ -349,6 +349,8 @@ const Sites = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
+          pageType="sites"
+          rowLength={siteRecordsForUiDisplay.length}
         />
         <PageSelector
           onPreviousClick={previousPage}

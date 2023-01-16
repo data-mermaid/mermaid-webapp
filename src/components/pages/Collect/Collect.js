@@ -303,6 +303,8 @@ const Collect = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
+          pageType="collect"
+          rowLength={collectRecordsForUiDisplay.length}
         />
         <PageSelector
           onPreviousClick={previousPage}
