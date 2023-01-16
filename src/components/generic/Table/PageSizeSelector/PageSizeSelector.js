@@ -12,17 +12,17 @@ const PageSizeSelector = ({ pageSize, pageType, pageSizeOptions, onChange, rowLe
   const [pageOptionsToDisplay, setPageOptionsToDisplay] = useState([])
 
   const _findPageOptionsToDisplay = useEffect(() => {
-    let pageSizeOptionsFiltered = pageSizeOptions.filter((option) => option < rowLength)
+    let pageOptionsLessThanRowLength = pageSizeOptions.filter((option) => option < rowLength)
 
-    if (pageSizeOptionsFiltered.length === 0) {
+    if (pageOptionsLessThanRowLength.length === 0) {
       // show the exact number of items as the only selection in the drop down
-      pageSizeOptionsFiltered = [rowLength]
-    } else if (pageSizeOptionsFiltered[pageSizeOptionsFiltered.length - 1] < rowLength) {
+      pageOptionsLessThanRowLength = [rowLength]
+    } else if (pageOptionsLessThanRowLength[pageOptionsLessThanRowLength.length - 1] < rowLength) {
       // show the exact number of items as the last selection in the drop down
-      pageSizeOptionsFiltered.push(rowLength)
+      pageOptionsLessThanRowLength.push(rowLength)
     }
 
-    setPageOptionsToDisplay(pageSizeOptionsFiltered)
+    setPageOptionsToDisplay(pageOptionsLessThanRowLength)
   }, [pageSizeOptions, rowLength])
 
   return (
