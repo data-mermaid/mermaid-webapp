@@ -45,12 +45,23 @@ const ProjectsMixin = (Base) =>
           })
       })
     }
-
+    // Approach 1  (wont work)
     // create editProject like above, but with comment (online only)
     // vbecause online only, we skip editing browserStorage (which is a offline/crapy network hedge to not lose data if bad network)
-    // (skip line 36)
+    // (skip line 36).... cant skip line 36 now that I think about it!~! how else would push work if it cant push stuff stored in IDB....
     // still have line 38
     // then in front end code, on success, check for other project with same name, if true, then toast dupe project name (work cause the edti will have failed despite 200)
+
+    // approach 2
+    // create editProject like saveProject
+    // get old project name from IDB/DExie and store it in var
+    // edit IDB/dexie to have new project name (keep line 36), so taht push can get the edited data from IDB
+    // instead of this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
+    // you could do this._apiSyncInstance.pushChanges.then(response => check the nested status code)
+    // if 400, return promise fail or whatever , re-edit IDB to use old project name which you will have to grab before you edit IDB/dexie
+    // if success, do the pull manually within this function
+    // this._apiSyncInstance.pullAllProjectDataExceptChoices(projectId) (I just busted this function out of the pushThenPullAllProjectDataExceptChoices one so we could use it)
+    // on pull success, resolve promise or return something useful (?) to the front end. Probably the updates project if possible . Should still be in pullResponse.data.projects.updates[0]
 
     getProjectTags = async function getProjectTags() {
       return this._isOnlineAuthenticatedAndReady

@@ -173,8 +173,8 @@ const SyncApiDataIntoOfflineStorage = class {
     return pullResponse
   }
 
-  pushThenPullAllProjectDataExceptChoices = async (projectId) => {
-    const apiDataNamesToPullNonProject = [
+  pullAllProjectDataExceptChoices = async (projectId) => {
+    const apiDataNamesToPull = [
       'benthic_attributes',
       'collect_records',
       'fish_families',
@@ -185,14 +185,11 @@ const SyncApiDataIntoOfflineStorage = class {
       'project_sites',
       'projects',
     ]
-
-    await this.pushChanges()
-
     const pullResponse = await pullApiData({
       dexiePerUserDataInstance: this._dexiePerUserDataInstance,
       getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
-      apiDataNamesToPull: apiDataNamesToPullNonProject,
+      apiDataNamesToPull,
       projectId,
     })
 
@@ -201,6 +198,12 @@ const SyncApiDataIntoOfflineStorage = class {
     })
 
     return pullResponse
+  }
+
+  pushThenPullAllProjectDataExceptChoices = async (projectId) => {
+    return this.pushChanges().then(() => {
+      return this.pullAllProjectDataExceptChoices(projectId)
+    })
   }
 
   pushThenRemoveProjectFromOfflineStorage = async (projectId) => {
