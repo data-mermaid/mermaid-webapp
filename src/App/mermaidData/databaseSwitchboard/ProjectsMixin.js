@@ -39,10 +39,18 @@ const ProjectsMixin = (Base) =>
           .then((pullResponse) => {
             const editedProjectFromApi = pullResponse.data.projects.updates[0]
 
+            console.log('gjsdkl', pullResponse)
+
             return editedProjectFromApi
           })
       })
     }
+
+    // create editProject like above, but with comment (online only)
+    // vbecause online only, we skip editing browserStorage (which is a offline/crapy network hedge to not lose data if bad network)
+    // (skip line 36)
+    // still have line 38
+    // then in front end code, on success, check for other project with same name, if true, then toast dupe project name (work cause the edti will have failed despite 200)
 
     getProjectTags = async function getProjectTags() {
       return this._isOnlineAuthenticatedAndReady

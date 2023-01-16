@@ -191,10 +191,11 @@ const ProjectInfo = () => {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
+        databaseSwitchboardInstance.getProjects(),
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, projectTagsResponse]) => {
+        .then(([projectResponse, projectTagsResponse, projectsResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
@@ -232,9 +233,12 @@ const ProjectInfo = () => {
     enableReinitialize: true,
     onSubmit: (values, actions) => {
       setSaveButtonState(buttonGroupStates.saving)
+
+      //check FE dupes here prob not
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: values })
         .then((response) => {
+          // still have to check here (because will be most up to date because of hidden sync in saveProject function)
           console.log('success')
           console.log({ response })
           setSaveButtonState(buttonGroupStates.saved)
