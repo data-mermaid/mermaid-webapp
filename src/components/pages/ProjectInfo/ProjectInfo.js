@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -205,6 +206,7 @@ const ProjectInfo = () => {
           }
         })
         .catch((error) => {
+          console.log('error...')
           const errorStatus = error.response?.status
 
           if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
@@ -239,6 +241,11 @@ const ProjectInfo = () => {
           actions.resetForm({ values }) // resets formiks dirty state
         })
         .catch((error) => {
+          const errorStatus = error.response?.status
+
+          console.log('error...')
+          console.log({ errorStatus })
+
           setSaveButtonState(buttonGroupStates.unsaved)
           handleHttpResponseError({
             error,
