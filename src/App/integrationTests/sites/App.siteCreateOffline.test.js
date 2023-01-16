@@ -127,7 +127,7 @@ describe('offline', () => {
     userEvent.click(within(sideNav).getByText('Sites'))
 
     // show all the records
-    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
+    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '5')
     const table = await screen.findByRole('table')
 
     const tableRows = await screen.findAllByRole('row')
