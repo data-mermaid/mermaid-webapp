@@ -206,7 +206,6 @@ const ProjectInfo = () => {
           }
         })
         .catch((error) => {
-          console.log('error...')
           const errorStatus = error.response?.status
 
           if ((errorStatus === 404 || errorStatus === 400) && isMounted.current) {
@@ -235,7 +234,9 @@ const ProjectInfo = () => {
       setSaveButtonState(buttonGroupStates.saving)
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: values })
-        .then(() => {
+        .then((response) => {
+          console.log('success')
+          console.log({ response })
           setSaveButtonState(buttonGroupStates.saved)
           toast.success(...getToastArguments(language.success.projectSave))
           actions.resetForm({ values }) // resets formiks dirty state
