@@ -66,7 +66,7 @@ jobs:
           echo "TARGET=prod" >> "$GITHUB_ENV"
           echo "REACT_APP_AUTH0_CLIENT_ID=Yahf5mGpQDyYOqbvQlaKE1WqBnUeFPj0" >> "$GITHUB_ENV"
           echo "REACT_APP_AUTH0_AUDIENCE=https://api.datamermaid.org" >> "$GITHUB_ENV"
-          echo "REACT_APP_MERMAID_API=https://api.datamermaid.org/v1" >> "$GITHUB_ENV"
+          echo "REACT_APP_MERMAID_API=https://prod.api2.datamermaid.org/v1" >> "$GITHUB_ENV"
           echo "REACT_APP_MERMAID_REFERENCE_LINK=https://collect.datamermaid.org/#/reference" >> "$GITHUB_ENV"
 
       - name: CDK Diff
