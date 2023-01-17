@@ -71,6 +71,18 @@ const UsersAndTransectsHeaderRow = styled(Tr)`
       display: none;
     }
   }
+  th.first-transect-header {
+    background: black;
+    &:after {
+      display: none;
+    }
+  }
+  th.first-user-header {
+    background: black;
+    &:after {
+      display: none;
+    }
+  }
 `
 const UsersAndTransectsRow = styled(Tr)`
   &:nth-child(odd) {
@@ -90,6 +102,12 @@ const UsersAndTransectsRow = styled(Tr)`
     td.user-headers {
       background: hsl(235, 10%, 85%);
     }
+  }
+  td.first-transect-header {
+    background: black;
+  }
+  td.first-user-header {
+    background: black;
   }
 `
 
@@ -218,8 +236,8 @@ const UsersAndTransects = () => {
     })
   }, [submittedTransectNumbers])
 
-  const tableColumns = useMemo(
-    () => [
+  const tableColumns = useMemo(() => {
+    const headers = [
       {
         Header: () => '',
         id: 'site',
@@ -233,9 +251,21 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
+        Header: () => '',
+        id: 'first-transect-header',
+        columns: [{ Header: '', accessor: 'firstTransectHeader', disableSortBy: true }],
+        disableSortBy: true,
+      },
+      {
         Header: () => <HeaderCenter>Submitted Transect Number</HeaderCenter>,
         id: 'transect-numbers',
         columns: getSubmittedTransectNumberColumnHeaders,
+        disableSortBy: true,
+      },
+      {
+        Header: () => '',
+        id: 'first-user-header',
+        columns: [{ Header: '', accessor: 'firstUserHeader', disableSortBy: true }],
         disableSortBy: true,
       },
       {
@@ -244,9 +274,15 @@ const UsersAndTransects = () => {
         columns: getUserColumnHeaders,
         disableSortBy: true,
       },
-    ],
-    [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
-  )
+    ]
+
+    if (getUserColumnHeaders.length === 0) {
+      // Remove first-user-header column if user columns are empty
+      headers.splice(-2, 1)
+    }
+
+    return headers
+  }, [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders])
 
   const populateTransectNumberRow = useCallback(
     (rowRecord) => {
@@ -398,7 +434,19 @@ const UsersAndTransects = () => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  const table = (
+  const pageNoDataAvailable = (
+    <>
+      <h3>{language.pages.usersAndTransectsTable.noDataMainText}</h3>
+      <p>{language.pages.usersAndTransectsTable.noDataSubTextTitle}</p>
+      <ul>
+        {language.pages.usersAndTransectsTable.noDataSubTexts.map((text) => (
+          <li>{text}</li>
+        ))}
+      </ul>
+    </>
+  )
+
+  const table = submittedRecords.length ? (
     <>
       <StickyTableOverflowWrapper>
         <StickyProjectHealthTable {...getTableProps()}>
@@ -447,7 +495,10 @@ const UsersAndTransects = () => {
                     const isCellInSubmittedTransectNumberColumns =
                       submittedTransectNumbers.includes(cellColumnId)
                     const areSiteOrMethodColumns =
-                      cellColumnId === 'site' || cellColumnId === 'method'
+                      cellColumnId === 'site' ||
+                      cellColumnId === 'method' ||
+                      cellColumnGroupId === 'first-transect-header' ||
+                      cellColumnGroupId === 'first-user-header'
 
                     const cellRowValuesForSubmittedTransectNumbers = Object.entries(
                       cellRowValues,
@@ -510,6 +561,8 @@ const UsersAndTransects = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageUnavailable>{pageNoDataAvailable}</PageUnavailable>
   )
 
   const content = isAppOnline ? (
