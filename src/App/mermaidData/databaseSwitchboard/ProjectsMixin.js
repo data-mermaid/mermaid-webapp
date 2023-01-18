@@ -115,8 +115,8 @@ const ProjectsMixin = (Base) =>
         return this._dexiePerUserDataInstance.project_profiles.put(editedProfile).then(() =>
           this._apiSyncInstance
             .pushThenPullAllProjectDataExceptChoices(projectId)
-            .then((pullResponse) => {
-              const editedProfileFromApi = pullResponse.data.project_profiles.updates[0]
+            .then(({ pullData }) => {
+              const editedProfileFromApi = pullData.data.project_profiles.updates[0]
 
               return editedProfileFromApi
             }),
@@ -301,8 +301,8 @@ const ProjectsMixin = (Base) =>
           .then(() => {
             return this._apiSyncInstance
               .pushThenPullAllProjectDataExceptChoices(projectId)
-              .then((resp) => {
-                return resp
+              .then(({ pullData }) => {
+                return pullData
               })
           })
       }

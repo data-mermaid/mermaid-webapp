@@ -145,7 +145,7 @@ const SitesMixin = (Base) =>
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then((_dataSetsReturnedFromApiPull) => {
+                .then(() => {
                   const siteWithExtraPropertiesWrittenByApi = siteResponseFromApiPush.data
 
                   return siteWithExtraPropertiesWrittenByApi
@@ -208,7 +208,7 @@ const SitesMixin = (Base) =>
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then((_apiPullResponse) => apiPushResponse)
+                .then(() => apiPushResponse)
             }
 
             const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
