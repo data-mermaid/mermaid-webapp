@@ -175,6 +175,7 @@ const ProjectInfo = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const [projectNameError, setProjectNameError] = useState(false)
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -195,7 +196,7 @@ const ProjectInfo = () => {
       ]
 
       Promise.all(promises)
-        .then(([projectResponse, projectTagsResponse, projectsResponse]) => {
+        .then(([projectResponse, projectTagsResponse]) => {
           if (isMounted.current) {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
@@ -233,31 +234,18 @@ const ProjectInfo = () => {
     enableReinitialize: true,
     onSubmit: (values, actions) => {
       setSaveButtonState(buttonGroupStates.saving)
-
-      // check FE dupes here prob not
+      setProjectNameError(false)
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: values })
-        .then((response) => {
-          // still have to check here (because will be most up to date because of hidden sync in saveProject function)
-          console.log('success')
-          console.log({ response })
+        .then(() => {
           setSaveButtonState(buttonGroupStates.saved)
           toast.success(...getToastArguments(language.success.projectSave))
-          actions.resetForm({ values }) // resets formiks dirty state
+          actions.resetForm({ values })
         })
-        .catch((error) => {
-          const errorStatus = error.response?.status
-
-          console.log('error...')
-          console.log({ errorStatus })
-
+        .catch(() => {
+          setProjectNameError(true)
           setSaveButtonState(buttonGroupStates.unsaved)
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.projectSave))
-            },
-          })
+          toast.error(...getToastArguments(language.error.projectSave))
         })
     },
     validate: (values) => {

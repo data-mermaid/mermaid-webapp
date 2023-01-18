@@ -41,30 +41,28 @@ const ProjectsMixin = (Base) =>
             const projectPushStatusCode = pushData.data.projects[0].status_code
 
             if (projectPushStatusCode === 400) {
-              // get old project name
-              const userProjects = await this._dexiePerUserDataInstance.projects
+              const oldProjectName = projectToEdit.name
+              const editedValuesCopy = editedValues
 
-              console.log({ userProjects })
+              editedValuesCopy.name = oldProjectName
+
+              const editedProjectWithOldProjectName = {
+                ...projectToEdit,
+                ...editedValuesCopy,
+                uiState_pushToApi: true,
+              }
+
+              await this._dexiePerUserDataInstance.projects.put(editedProjectWithOldProjectName)
+
+              return Promise.reject(new Error('400: Duplicate project name'))
             }
 
             const editedProjectFromApi = pullData.data.projects.updates[0]
-
-            console.log('save project push response: ', pushData)
 
             return editedProjectFromApi
           })
       })
     }
-    // approach
-    // create editProject like saveProject
-    // get old project name from IDB/DExie and store it in var
-    // edit IDB/dexie to have new project name (keep line 36), so taht push can get the edited data from IDB
-    // instead of this._apiSyncInstance.pushThenPullAllProjectDataExceptChoices(projectId)
-    // you could do this._apiSyncInstance.pushChanges.then(response => check the nested status code)
-    // if 400, return promise fail or whatever , re-edit IDB to use old project name which you will have to grab before you edit IDB/dexie
-    // if success, do the pull manually within this function
-    // this._apiSyncInstance.pullAllProjectDataExceptChoices(projectId) (I just busted this function out of the pushThenPullAllProjectDataExceptChoices one so we could use it)
-    // on pull success, resolve promise or return something useful (?) to the front end. Probably the updates project if possible . Should still be in pullResponse.data.projects.updates[0]
 
     getProjectTags = async function getProjectTags() {
       return this._isOnlineAuthenticatedAndReady
