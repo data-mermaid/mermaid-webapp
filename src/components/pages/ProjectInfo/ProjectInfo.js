@@ -36,6 +36,7 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+// import { ErrorText } from '.././'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -243,9 +244,9 @@ const ProjectInfo = () => {
           actions.resetForm({ values })
         })
         .catch(() => {
-          setProjectNameError(true)
+          setProjectNameError('Project name already exists.')
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(...getToastArguments(language.error.projectSave))
+          toast.error(...getToastArguments(language.error.projectWithSameName))
         })
     },
     validate: (values) => {
@@ -273,6 +274,19 @@ const ProjectInfo = () => {
     </>
   )
 
+  const checkValidationMessage = () => {
+    let errorMessage = []
+
+    if (formik.errors.name) {
+      errorMessage = [formik.errors.name]
+    } else if (projectNameError) {
+      // keeping the same validation format as formik
+      errorMessage = [{ code: projectNameError }]
+    }
+
+    return errorMessage
+  }
+
   const contentViewByRole = isAdminUser ? (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -282,8 +296,8 @@ const ProjectInfo = () => {
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
-          validationType={formik.errors.name ? 'error' : null}
-          validationMessages={formik.errors.name}
+          validationType={formik.errors.name || projectNameError ? 'error' : null}
+          validationMessages={checkValidationMessage()}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
