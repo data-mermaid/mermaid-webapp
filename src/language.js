@@ -301,9 +301,9 @@ const pages = {
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubTextTitle: 'This page will show:',
     noDataSubTexts: [
-      'Who has unsubmited sample units?',
-      'Which sample units are missing?',
-      'Transect number for submitted and unsubmitted sample units?',
+      'Who has unsubmited sample units',
+      'Which sample units are missing',
+      'Transect number for submitted and unsubmitted sample units',
     ],
   },
   managementRegimesOverview: {
