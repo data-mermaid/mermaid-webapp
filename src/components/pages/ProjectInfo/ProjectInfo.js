@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useFormik } from 'formik'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
@@ -36,7 +35,6 @@ import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-// import { ErrorText } from '.././'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`

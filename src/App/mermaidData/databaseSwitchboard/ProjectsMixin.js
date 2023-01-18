@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
