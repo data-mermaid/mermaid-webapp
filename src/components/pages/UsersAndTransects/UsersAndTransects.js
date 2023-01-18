@@ -26,6 +26,7 @@ import {
   StickyTableOverflowWrapper,
   StickyOverviewTable,
   OverviewTh,
+  OverviewThead,
   Tr,
   OverviewTr,
   OverviewTd,
@@ -397,7 +398,7 @@ const UsersAndTransects = () => {
     <>
       <StickyTableOverflowWrapper>
         <StickyOverviewTable {...getTableProps()}>
-          <thead>
+          <OverviewThead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
@@ -420,13 +421,13 @@ const UsersAndTransects = () => {
                       align={headerAlignment}
                       className={ThClassName}
                     >
-                      <span> {column.render('Header')}</span>
+                      {column.render('Header')}
                     </OverviewTh>
                   )
                 })}
               </Tr>
             ))}
-          </thead>
+          </OverviewThead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)

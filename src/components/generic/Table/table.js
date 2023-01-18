@@ -157,78 +157,53 @@ export const OverviewTr = styled.tr`
     }
   `)}
 `
+const gapStyles = css`
+  padding: 0 3px;
+  background-color: ${theme.color.background};
+`
+
+export const OverviewThead = styled('thead')`
+  tr:nth-child(1) {
+    th:nth-child(3),
+    th:nth-child(5) {
+      ${gapStyles};
+    }
+  }
+`
+
 export const OverviewTh = styled(Th)`
-  background: ${theme.color.background};
-  border-width: 0 1rem 0 0;
-  border-color: transparent;
-  border-style: solid;
-  padding: 0;
-  &:last-child {
-    border-right-width: 0;
-  }
-  &:nth-child(1),
-  &.management-regime-numbers,
-  &.transect-numbers,
-  &.user-headers {
-    border-width: 0;
-  }
+  background-color: ${theme.color.white};
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  background-clip: padding-box;
+  border: solid 1px ${theme.color.tableBorderColor};
+  &.first-transect-header,
   &.first-user-header {
-    /*
-    this class isn't in  the HTML yet
-    */
-    border-left-width: 1rem;
-  }
-  > span {
-    background-color: ${theme.color.white};
-    padding: ${theme.spacing.small} ${theme.spacing.medium};
-    display: inline-block;
-    width: 100%;
-    outline: solid 1px ${theme.color.border};
+    ${gapStyles}
   }
 `
 export const OverviewTd = styled(Td)`
-  padding: 0;
   height: inherit;
-  > span {
-    background-clip: padding-box;
-    background-color: ${theme.color.white};
-    padding: ${theme.spacing.small} ${theme.spacing.medium};
-    margin: -1px;
-    height: 100%;
-    border: solid 1px ${theme.color.border};
-    display: block;
+  background-clip: padding-box;
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  &.first-transect-header,
+  &.first-user-header {
+    ${gapStyles}
   }
   &.site,
   &.method {
-    border: none;
+    background-color: ${theme.color.white};
   }
-  &.transect-numbers > span {
-    background-color: hsl(0, 0%, 95%);
-  }
-  &.user-headers > span {
-    background-color: hsl(0, 0%, 88%);
-  }
-  &.management-regime-numbers > span {
-    background-color: hsl(0, 0%, 95%);
-  }
-  &.management-regime-numbers,
-  &.user-headers,
   &.transect-numbers {
-    /* 
-    This is used to make a gap
-    between the 3 sections of the table.
-    */
-    /* This is the first child. */
-    border-width: 0 0 0 1rem;
-    border-color: transparent;
-    border-style: solid;
-    & ~ & {
-      /* this is the rest of them */
-      border-width: 0;
-    }
-    &.highlighted > span {
-      background-color: hsl(50 80% 80% / 1);
-    }
+    background-color: hsl(0, 0%, 97.5%);
+  }
+  &.user-headers {
+    background-color: hsl(0, 0%, 92.5%);
+  }
+  &.management-regime-numbers {
+    background-color: hsl(0, 0%, 95%);
+  }
+  &.highlighted {
+    background-color: hsl(50 80% 80% / 1);
   }
 `
 export const HeaderCenter = styled.p`
