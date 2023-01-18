@@ -234,7 +234,7 @@ const ProjectInfo = () => {
     onSubmit: (values, actions) => {
       setSaveButtonState(buttonGroupStates.saving)
 
-      //check FE dupes here prob not
+      // check FE dupes here prob not
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: values })
         .then((response) => {

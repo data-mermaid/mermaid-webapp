@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from '../../../library/axiosRetry'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 
@@ -36,23 +37,25 @@ const ProjectsMixin = (Base) =>
       return this._dexiePerUserDataInstance.projects.put(editedProject).then(() => {
         return this._apiSyncInstance
           .pushThenPullAllProjectDataExceptChoices(projectId)
-          .then((pullResponse) => {
-            const editedProjectFromApi = pullResponse.data.projects.updates[0]
+          .then(async ({ pushData, pullData }) => {
+            const projectPushStatusCode = pushData.data.projects[0].status_code
 
-            console.log('gjsdkl', pullResponse)
+            if (projectPushStatusCode === 400) {
+              // get old project name
+              const userProjects = await this._dexiePerUserDataInstance.projects
+
+              console.log({ userProjects })
+            }
+
+            const editedProjectFromApi = pullData.data.projects.updates[0]
+
+            console.log('save project push response: ', pushData)
 
             return editedProjectFromApi
           })
       })
     }
-    // Approach 1  (wont work)
-    // create editProject like above, but with comment (online only)
-    // vbecause online only, we skip editing browserStorage (which is a offline/crapy network hedge to not lose data if bad network)
-    // (skip line 36).... cant skip line 36 now that I think about it!~! how else would push work if it cant push stuff stored in IDB....
-    // still have line 38
-    // then in front end code, on success, check for other project with same name, if true, then toast dupe project name (work cause the edti will have failed despite 200)
-
-    // approach 2
+    // approach
     // create editProject like saveProject
     // get old project name from IDB/DExie and store it in var
     // edit IDB/dexie to have new project name (keep line 36), so taht push can get the edited data from IDB
