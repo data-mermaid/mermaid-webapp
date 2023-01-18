@@ -115,7 +115,7 @@ describe('Online', () => {
     userEvent.click(within(sideNav).getByText('Management Regimes'))
 
     // show all the records
-    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '100')
+    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '4')
     const table = await screen.findByRole('table')
 
     const tableRows = await screen.findAllByRole('row')

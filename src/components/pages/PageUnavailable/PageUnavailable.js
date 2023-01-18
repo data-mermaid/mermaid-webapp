@@ -9,7 +9,11 @@ const PageUnavailableContainer = styled(Column)`
   text-align: ${(props) => props.align};
 `
 
-const PageUnavailable = ({ mainText, subText, align }) => {
+const PageUnavailable = ({ mainText, subText, align, children }) => {
+  if (children) {
+    return <PageUnavailableContainer>{children}</PageUnavailableContainer>
+  }
+
   return (
     <PageUnavailableContainer align={align}>
       <h3>{mainText}</h3>
@@ -22,12 +26,14 @@ PageUnavailable.propTypes = {
   mainText: PropTypes.string,
   subText: PropTypes.oneOfType([PropTypes.number, PropTypes.node]),
   align: PropTypes.string,
+  children: PropTypes.node,
 }
 
 PageUnavailable.defaultProps = {
   mainText: 'No Data',
   subText: '',
   align: 'start',
+  children: undefined,
 }
 
 export default PageUnavailable

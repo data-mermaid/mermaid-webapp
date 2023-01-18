@@ -78,7 +78,9 @@ const CollectRecordFormPageAlternative = ({
   const [observationsTable1State, observationsTable1Dispatch] = observationsTable1Reducer
   const [observationsTable2State, observationsTable2Dispatch = () => {}] = observationsTable2Reducer
   const [observerProfiles, setObserverProfiles] = useState([])
-  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [saveButtonState, setSaveButtonState] = useState(
+    isNewRecord ? buttonGroupStates.untouchedEmptyForm : buttonGroupStates.saved,
+  )
   const [sites, setSites] = useState([])
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)

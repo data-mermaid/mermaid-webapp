@@ -91,7 +91,9 @@ const CollectRecordFormPage = ({
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
-  const [saveButtonState, setSaveButtonState] = useState(buttonGroupStates.saved)
+  const [saveButtonState, setSaveButtonState] = useState(
+    isNewRecord ? buttonGroupStates.untouchedEmptyForm : buttonGroupStates.saved,
+  )
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
   const [validateButtonState, setValidateButtonState] = useState(buttonGroupStates.validatable)
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)

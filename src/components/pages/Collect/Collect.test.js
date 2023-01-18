@@ -32,7 +32,7 @@ test('Collect Records table sorts properly by method column', async () => {
 
   const table = screen.getByRole('table')
 
-  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
+  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '20')
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -211,7 +211,7 @@ test('Collect Records table sorts properly by size column', async () => {
 
   const tableRows = within(table).getAllByRole('row')
 
-  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
+  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '20')
 
   expect(within(tableRows[1]).getByText('10m'))
 
@@ -300,7 +300,7 @@ test('Collect Records table sorts properly by sample date column', async () => {
 
   const table = screen.getByRole('table')
 
-  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
+  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '20')
 
   // Double click all of the default sort columns twice to disable default sorting
   userEvent.dblClick(within(table).getByText('Site'))
@@ -435,7 +435,7 @@ test('Collect Records table changes number of rows visible size when pagination 
   // 15 + header row
   expect(tableRows.length).toEqual(16)
 
-  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '50')
+  userEvent.selectOptions(screen.getByTestId('page-size-selector'), '20')
 
   const tableRowsAfter = within(table).getAllByRole('row')
 

@@ -278,20 +278,20 @@ const pages = {
     title: 'Site',
   },
   siteTable: {
-    title: 'Sites',
-    filterToolbarText: 'Filter this table by name, reef (type, zone, and exposure)',
-    noDataMainText: `This project has no sites.`,
-    noDataSubText: `You can add sites by creating a new one or copying them from another project.`,
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
+    copySitesButtonText: 'Copy sites from other projects',
+    filterToolbarText: 'Filter this table by name, reef (type, zone, and exposure)',
+    noDataMainText: 'This project has no sites.',
+    title: 'Sites',
   },
   managementRegimeForm: {
     title: 'Management Regime',
   },
   managementRegimeTable: {
-    title: 'Management Regimes',
+    copyManagementRegimeButtonText: 'Copy MRs from other projects',
     filterToolbarText: 'Filter this table by name or year',
     noDataMainText: `This project has no management regimes.`,
-    noDataSubText: `You can add management regimes by creating a new one or copying them from another project.`,
+    title: 'Management Regimes',
   },
   usersAndTransectsTable: {
     title: 'Users and Transects',
