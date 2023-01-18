@@ -244,7 +244,7 @@ const ProjectInfo = () => {
           actions.resetForm({ values })
         })
         .catch(() => {
-          setProjectNameError('Project name already exists.')
+          setProjectNameError(language.error.formValidation.projectNameExists)
           setSaveButtonState(buttonGroupStates.unsaved)
           toast.error(...getToastArguments(language.error.projectWithSameName))
         })
@@ -278,10 +278,10 @@ const ProjectInfo = () => {
     let errorMessage = []
 
     if (formik.errors.name) {
-      errorMessage = [formik.errors.name]
+      errorMessage = formik.errors.name
     } else if (projectNameError) {
-      // keeping the same validation format as formik
-      errorMessage = [{ code: projectNameError }]
+      // using same error format as Formik so message can be used in InputWithLabelAndValidation
+      errorMessage = [{ code: projectNameError, id: 'Name exists' }]
     }
 
     return errorMessage
