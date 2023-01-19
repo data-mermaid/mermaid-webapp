@@ -4,8 +4,6 @@ import styled from 'styled-components'
 
 import {
   ButtonRemoveRow,
-  CellValidation,
-  CellValidationButton,
   InputAutocompleteContainer,
   NewOptionButton,
   ObservationAutocomplete,
@@ -14,7 +12,6 @@ import {
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
   StickyObservationTable,
-  TableValidationList,
   UnderTableRow,
 } from '../CollectingFormPage.Styles'
 import { ButtonPrimary } from '../../../generic/buttons'
@@ -23,18 +20,19 @@ import {
   benthicPhotoQuadratPropType,
   observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
+import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
-import { Tr, Td, Th } from '../../../generic/Table/table'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
-import language from '../../../../language'
-import { getOptions } from '../../../../library/getOptions'
-import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
-import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import { Tr, Td, Th } from '../../../generic/Table/table'
+import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
+import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
+import language from '../../../../language'
+import ObservationValidationInfo from '../ObservationValidationInfo'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -62,16 +60,6 @@ const StyledColgroup = styled('colgroup')`
   }
 `
 
-const getObservationValidations = (observationId, collectRecord) => {
-  const allObservationsValidations =
-    collectRecord?.validations?.results?.data?.obs_benthic_photo_quadrats ?? []
-
-  const justThisObservationsValidations = allObservationsValidations.flat().filter((validation) => {
-    return validation.context?.observation_id === observationId
-  })
-
-  return justThisObservationsValidations
-}
 const BenthicPhotoQuadratObservationTable = ({
   areObservationsInputsDirty,
   areValidationsShowing,
@@ -204,24 +192,20 @@ const BenthicPhotoQuadratObservationTable = ({
       const growthFormOrEmptyStringToAvoidInputValueErrors = growth_form ?? ''
       const numberOfPointsOrEmptyStringToAvoidInputValueErrors = num_points ?? ''
 
-      const observationValidations = getObservationValidations({
+      const {
+        isObservationValid,
+        hasObservationWarningValidation,
+        hasObservationErrorValidation,
+        hasObservationIgnoredValidation,
+        observationValidationMessages,
+        observationValidationType,
+        hasObservationResetIgnoredValidation,
+      } = getObservationValidationInfo({
         observationId,
         collectRecord,
+        areValidationsShowing,
         observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
       })
-      const observationValidationsToDisplay = getValidationPropertiesForInput(
-        observationValidations,
-        areValidationsShowing,
-      )
-
-      const { validationType } = observationValidationsToDisplay
-      const observationValidationMessages =
-        observationValidationsToDisplay?.validationMessages ?? []
-
-      const isObservationValid = validationType === 'ok'
-      const hasWarningValidation = validationType === 'warning'
-      const hasErrorValidation = validationType === 'error'
-      const hasIgnoredValidation = validationType === 'ignore'
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -286,45 +270,6 @@ const BenthicPhotoQuadratObservationTable = ({
         handleKeyDown({ event, index, observation, isNumberOfPoints: true })
       }
 
-      const handleIgnoreObservationValidations = () => {
-        ignoreObservationValidations({
-          observationId,
-        })
-      }
-
-      const handleResetObservationValidations = () => {
-        resetObservationValidations({
-          observationId,
-        })
-      }
-
-      const validationsMarkup = (
-        <CellValidation>
-          {isObservationValid ? <span aria-label="Passed Validation">&nbsp;</span> : null}
-          {hasErrorValidation || hasWarningValidation ? (
-            <TableValidationList>
-              {observationValidationMessages.map((validation) => (
-                <li className={`${validationType}-indicator`} key={validation.id}>
-                  {language.getValidationMessage(validation)}
-                </li>
-              ))}
-            </TableValidationList>
-          ) : null}
-          {hasWarningValidation ? (
-            <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-              Ignore warning
-            </CellValidationButton>
-          ) : null}
-          {hasIgnoredValidation ? (
-            <>
-              Ignored
-              <CellValidationButton type="button" onClick={handleResetObservationValidations}>
-                Reset validations
-              </CellValidationButton>
-            </>
-          ) : null}
-        </CellValidation>
-      )
       const proposeNewBenthicAttributeClick = () => openNewObservationModal(observationId)
 
       return (
@@ -398,7 +343,20 @@ const BenthicPhotoQuadratObservationTable = ({
               onKeyDown={handleNumberOfPointsKeyDown}
             />
           </Td>
-          {areValidationsShowing ? validationsMarkup : null}
+          {areValidationsShowing ? (
+            <ObservationValidationInfo
+              hasObservationErrorValidation={hasObservationErrorValidation}
+              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
+              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
+              hasObservationWarningValidation={hasObservationWarningValidation}
+              ignoreObservationValidations={ignoreObservationValidations}
+              isObservationValid={isObservationValid}
+              observationId={observationId}
+              observationValidationMessages={observationValidationMessages}
+              observationValidationType={observationValidationType}
+              resetObservationValidations={resetObservationValidations}
+            />
+          ) : null}
           <Td align="center">
             <ButtonRemoveRow
               tabIndex="-1"

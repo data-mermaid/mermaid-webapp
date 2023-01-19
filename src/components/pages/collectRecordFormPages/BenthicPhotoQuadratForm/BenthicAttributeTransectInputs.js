@@ -19,7 +19,7 @@ const LABEL_VALIDATION_PATH = 'data.quadrat_transect.label'
 const LENGTH_SURVEYED_VALIDATION_PATH = 'data.quadrat_transect.len_surveyed'
 const NOTES_VALIDATION_PATH = 'data.quadrat_transect.notes'
 const NUM_POINTS_PER_QUADRAT_VALIDATION_PATH = 'data.quadrat_transect.num_points_per_quadrat'
-const NUM_QUADRATS_VALIDATION_PATH = 'data.quadrat_transect.num_quadrat'
+const NUM_QUADRATS_VALIDATION_PATH = 'data.quadrat_transect.num_quadrats'
 const QUADRAT_NUMBER_START_VALIDATION_PATH = 'data.quadrat_transect.quadrat_number_start'
 const QUADRAT_SIZE_VALIDATION_PATH = 'data.quadrat_transect.quadrat_size'
 const SAMPLE_TIME_VALIDATION_PATH = 'data.quadrat_transect.sample_time'
@@ -338,7 +338,7 @@ const TransectInputs = ({
               validationPath: QUADRAT_NUMBER_START_VALIDATION_PATH,
             })
           }}
-          {...quadratSizeValidationProperties}
+          {...quadratNumberStartValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}

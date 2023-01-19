@@ -3,8 +3,6 @@ import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
-  CellValidation,
-  CellValidationButton,
   InputAutocompleteContainer,
   NewOptionButton,
   ObservationAutocomplete,
@@ -12,7 +10,6 @@ import {
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
   StickyObservationTable,
-  TableValidationList,
   UnderTableRow,
   ButtonRemoveRow,
 } from '../CollectingFormPage.Styles'
@@ -33,6 +30,7 @@ import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservat
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
+import ObservationValidationInfo from '../ObservationValidationInfo'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -111,6 +109,7 @@ const BenthicLitObservationsTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
+        hasObservationResetIgnoredValidation,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -173,45 +172,6 @@ const BenthicLitObservationsTable = ({
       const handleLastCellKeyDown = (event) => {
         handleKeyDown({ event, index, observation, isLastCell: true })
       }
-
-      const handleIgnoreObservationValidations = () => {
-        ignoreObservationValidations({
-          observationId,
-        })
-      }
-
-      const handleResetObservationValidations = () => {
-        resetObservationValidations({
-          observationId,
-        })
-      }
-      const validationsMarkup = (
-        <CellValidation>
-          {isObservationValid ? <span aria-label="Passed Validation">&nbsp;</span> : null}
-          {hasObservationErrorValidation || hasObservationWarningValidation ? (
-            <TableValidationList>
-              {observationValidationMessages.map((validation) => (
-                <li className={`${observationValidationType}-indicator`} key={validation.id}>
-                  {language.getValidationMessage(validation)}
-                </li>
-              ))}
-            </TableValidationList>
-          ) : null}
-          {hasObservationWarningValidation ? (
-            <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-              Ignore warning
-            </CellValidationButton>
-          ) : null}
-          {hasObservationIgnoredValidation ? (
-            <>
-              Ignored
-              <CellValidationButton type="button" onClick={handleResetObservationValidations}>
-                Reset validations
-              </CellValidationButton>
-            </>
-          ) : null}
-        </CellValidation>
-      )
 
       const proposeNewBenthicAttributeClick = () => {
         setObservationIdToAddNewBenthicAttributeTo(observationId)
@@ -277,7 +237,20 @@ const BenthicLitObservationsTable = ({
             />
           </Td>
 
-          {areValidationsShowing ? validationsMarkup : null}
+          {areValidationsShowing ? (
+            <ObservationValidationInfo
+              hasObservationErrorValidation={hasObservationErrorValidation}
+              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
+              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
+              hasObservationWarningValidation={hasObservationWarningValidation}
+              ignoreObservationValidations={ignoreObservationValidations}
+              isObservationValid={isObservationValid}
+              observationId={observationId}
+              observationValidationMessages={observationValidationMessages}
+              observationValidationType={observationValidationType}
+              resetObservationValidations={resetObservationValidations}
+            />
+          ) : null}
           <Td align="center">
             <ButtonRemoveRow
               tabIndex="-1"

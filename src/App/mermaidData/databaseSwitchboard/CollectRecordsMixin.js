@@ -436,7 +436,10 @@ const CollectRecordsMixin = (Base) =>
 
         return {
           ...currentValidationObject,
-          status: currentValidationStatus === 'warning' ? 'ignore' : currentValidationStatus,
+          status:
+            currentValidationStatus === 'warning' || currentValidationStatus === 'reset'
+              ? 'ignore'
+              : currentValidationStatus,
         }
       })
 
@@ -481,11 +484,14 @@ const CollectRecordsMixin = (Base) =>
               const isValidationBelongingToObservation =
                 validation.context?.observation_id === observationId
               const isWarning = validation.status === 'warning'
+              const isReset = validation.status === 'reset'
 
               return {
                 ...validation,
                 status:
-                  isValidationBelongingToObservation && isWarning ? 'ignore' : validation.status,
+                  isValidationBelongingToObservation && (isWarning || isReset)
+                    ? 'ignore'
+                    : validation.status,
               }
             })
           },

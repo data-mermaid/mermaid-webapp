@@ -37,12 +37,14 @@ const getObservationValidationInfo = ({
   const hasObservationWarningValidation = observationValidationType === 'warning'
   const hasObservationErrorValidation = observationValidationType === 'error'
   const hasObservationIgnoredValidation = observationValidationType === 'ignore'
+  const hasObservationResetIgnoredValidation = observationValidationType === 'reset'
 
   return {
-    isObservationValid,
-    hasObservationWarningValidation,
     hasObservationErrorValidation,
     hasObservationIgnoredValidation,
+    hasObservationResetIgnoredValidation,
+    hasObservationWarningValidation,
+    isObservationValid,
     observationValidationMessages,
     observationValidationType,
   }

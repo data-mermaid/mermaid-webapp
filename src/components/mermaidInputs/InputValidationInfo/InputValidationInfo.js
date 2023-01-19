@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
-import { InlineValidationButton } from '../../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import language from '../../../language'
 import ResolveDuplicateSiteButtonAndModal from '../../ResolveDuplicateSiteButtonAndModal/ResolveDuplicateSiteButtonAndModal'
 import ResolveDuplicateMRButtonAndModal from '../../ResolveDuplicateMRButtonAndModal/ResolveDuplicateMRButtonAndModal'
+import InputIgnoreValidationWarningCheckboxWithLabel from '../InputIgnoreValidationWarningCheckboxWithLabel'
 
 const ValidationWrapper = styled('div')`
   padding-left: ${theme.spacing.small};
@@ -25,6 +25,21 @@ const InputValidationInfo = ({
 }) => {
   const areThereValidationMessages = validationMessages.length
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
+  const isIgnoredWarningValidation = validationType === 'ignore'
+  const isResetIgnoredWarningValidation = validationType === 'reset'
+  const isErrorValidation = validationType === 'error'
+  const isValidationPassing = validationType === 'ok'
+
+  const handleIgnoreWarningChange = async (event) => {
+    const isIgnoreChecked = event.target.checked
+
+    if (isIgnoreChecked) {
+      ignoreNonObservationFieldValidations()
+    }
+    if (!isIgnoreChecked) {
+      resetNonObservationFieldValidations()
+    }
+  }
 
   const getWarningValidationButtons = () => {
     if (validationMessages[0]?.code === 'not_unique_site') {
@@ -57,16 +72,24 @@ const InputValidationInfo = ({
     }
 
     return (
-      <InlineValidationButton type="button" onClick={ignoreNonObservationFieldValidations}>
-        Ignore warning
-      </InlineValidationButton>
+      <InputIgnoreValidationWarningCheckboxWithLabel
+        onChange={handleIgnoreWarningChange}
+        checked={isIgnoredWarningValidation}
+      />
     )
   }
 
   return (
     <ValidationWrapper>
+      {isIgnoredWarningValidation ? (
+        <>
+          <InlineMessage type={validationType}>
+            <p>Ignored</p>
+          </InlineMessage>
+        </>
+      ) : null}
       {areThereValidationMessages &&
-      (validationType === 'error' || validationType === 'warning') ? (
+      (isErrorValidation || isWarningValidation || isResetIgnoredWarningValidation) ? (
         <>
           {validationMessages.map((validation) => (
             <InlineMessage
@@ -79,18 +102,10 @@ const InputValidationInfo = ({
           ))}
         </>
       ) : null}
-      {isWarningValidation ? getWarningValidationButtons() : null}
-      {validationType === 'ok' ? <span aria-label="Passed Validation">&nbsp;</span> : null}
-      {validationType === 'ignore' ? (
-        <>
-          <InlineMessage type={validationType}>
-            <p>Ignored</p>
-          </InlineMessage>
-          <InlineValidationButton type="button" onClick={resetNonObservationFieldValidations}>
-            Reset validations
-          </InlineValidationButton>
-        </>
-      ) : null}
+      {isWarningValidation || isIgnoredWarningValidation || isResetIgnoredWarningValidation
+        ? getWarningValidationButtons()
+        : null}
+      {isValidationPassing ? <span aria-label="Passed Validation">&nbsp;</span> : null}
     </ValidationWrapper>
   )
 }

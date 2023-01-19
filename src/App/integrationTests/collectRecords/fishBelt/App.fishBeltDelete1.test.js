@@ -44,7 +44,7 @@ describe('Offline', () => {
       }),
     )
 
-    userEvent.selectOptions(screen.getByTestId('page-size-selector'), '19')
+    userEvent.selectOptions(screen.getByTestId('page-size-selector'), '20')
 
     const table = await screen.findByRole('table')
 

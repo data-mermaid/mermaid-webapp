@@ -33,16 +33,16 @@ const InlineMessageWrapper = styled.div`
 `
 
 const InlineMessage = ({ type, children, className }) => {
+  const typeToUse = type === 'reset' ? 'warning' : type
+
   return (
     <>
       {type && (
-        <MessagePill type={type} className={className}>
-          {language.inlineMessage[type]}
+        <MessagePill type={typeToUse} className={className}>
+          {language.inlineMessage[typeToUse]}
         </MessagePill>
       )}
-      <InlineMessageWrapper className={className} type={type}>
-        {children}
-      </InlineMessageWrapper>
+      <InlineMessageWrapper className={className}>{children}</InlineMessageWrapper>
     </>
   )
 }
