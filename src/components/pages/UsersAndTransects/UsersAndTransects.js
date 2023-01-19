@@ -442,9 +442,10 @@ const UsersAndTransects = () => {
                     const isNotBleachingMethodRow = cellRowValuesMethod !== 'Bleaching'
                     const isCellInSubmittedTransectNumberColumns =
                       submittedTransectNumbers.includes(cellColumnId)
-                    const areSiteOrMethodColumns =
-                      cellColumnId === 'site' ||
-                      cellColumnId === 'method' ||
+
+                    const areSiteOrMethodOrEmptyHeaderColumns =
+                      cellColumnGroupId === 'site' ||
+                      cellColumnGroupId === 'method' ||
                       cellColumnGroupId === 'first-transect-header' ||
                       cellColumnGroupId === 'first-user-header'
 
@@ -469,9 +470,9 @@ const UsersAndTransects = () => {
                     const isCollectingNumberCellHighLighted =
                       cell.value !== EMPTY_VALUE &&
                       !isCellInSubmittedTransectNumberColumns &&
-                      !areSiteOrMethodColumns
+                      !areSiteOrMethodOrEmptyHeaderColumns
 
-                    const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
+                    const cellAlignment = areSiteOrMethodOrEmptyHeaderColumns ? 'left' : 'right'
 
                     const cellClassName =
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted

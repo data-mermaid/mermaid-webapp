@@ -26,6 +26,7 @@ import {
   StickyOverviewTable,
   OverviewTr,
   OverviewTh,
+  OverviewThead,
 } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
@@ -126,6 +127,12 @@ const ManagementRegimesOverview = () => {
         Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'method',
         columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
+      {
+        Header: () => '',
+        id: 'first-transect-header',
+        columns: [{ Header: '', accessor: 'firstTransectHeader', disableSortBy: true }],
         disableSortBy: true,
       },
       {
@@ -258,7 +265,7 @@ const ManagementRegimesOverview = () => {
     <>
       <StickyTableOverflowWrapper>
         <StickyOverviewTable {...getTableProps()}>
-          <thead>
+          <OverviewThead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
@@ -287,40 +294,46 @@ const ManagementRegimesOverview = () => {
                 })}
               </Tr>
             ))}
-          </thead>
+          </OverviewThead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
-              const managementRegimesRowCells = row.cells.filter(
-                (cell) => cell.column.Header !== 'Site' && cell.column.Header !== 'Method',
-              )
-              const managementRegimesRowCellsWithNonEmptyValue = managementRegimesRowCells.filter(
+              const mrTransectNumberRowCells = row.cells.filter((cell) => {
+                return (
+                  cell.column.id !== 'site' &&
+                  cell.column.id !== 'method' &&
+                  cell.column.id !== 'firstTransectHeader'
+                )
+              })
+              const mrTransectNumberRowCellsWithNonEmptyValue = mrTransectNumberRowCells.filter(
                 (cell) => cell.value !== '-',
               )
 
-              const managementRegimeRowCellValues = managementRegimesRowCellsWithNonEmptyValue.map(
+              const mrTransectNumberRowCellValues = mrTransectNumberRowCellsWithNonEmptyValue.map(
                 (cell) => cell.value.props.sampleUnitNumbersRow.length,
               )
 
-              const maxSampleUnitCount = Math.max(...managementRegimeRowCellValues)
+              const maxSampleUnitCount = Math.max(...mrTransectNumberRowCellValues)
 
               const isEqualToMaxSampleUnitCount = (currentValue) =>
                 currentValue === maxSampleUnitCount
 
               const isEveryMRLabelsSameAsMax =
-                managementRegimeRowCellValues.length > 1 &&
-                managementRegimeRowCellValues.every(isEqualToMaxSampleUnitCount)
+                mrTransectNumberRowCellValues.length > 1 &&
+                mrTransectNumberRowCellValues.every(isEqualToMaxSampleUnitCount)
 
               return (
                 <OverviewTr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnGroupId = cell.column.parent.id
 
-                    const areSiteOrMethodColumns =
-                      cellColumnGroupId === 'site' || cellColumnGroupId === 'method'
+                    const areSiteOrMethodOrEmptyHeaderColumns =
+                      cellColumnGroupId === 'site' ||
+                      cellColumnGroupId === 'method' ||
+                      cellColumnGroupId === 'first-transect-header'
 
                     const managementRegimeCellNonEmpty =
-                      cell.value !== '-' && !areSiteOrMethodColumns
+                      cell.value !== '-' && !areSiteOrMethodOrEmptyHeaderColumns
 
                     const isCellValueLessThanMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
@@ -334,7 +347,7 @@ const ManagementRegimesOverview = () => {
                       ? isCellValueEqualToMaxSampleUnitCount
                       : isCellValueLessThanMaxSampleUnitCount
 
-                    const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
+                    const cellAlignment = areSiteOrMethodOrEmptyHeaderColumns ? 'left' : 'right'
 
                     const cellClassName = isManagementRegimeCellHighlighted
                       ? `${cellColumnGroupId} highlighted`
