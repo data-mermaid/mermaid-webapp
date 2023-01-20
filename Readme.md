@@ -98,3 +98,5 @@ Since this app can exist in multiple states (online, offline, various states of 
 ### Infrastructure as Code (IaC)
 
 - see `iac/README.md`
+
+<!-- Manually trigger a deploy -->
