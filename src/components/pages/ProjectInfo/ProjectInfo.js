@@ -244,7 +244,14 @@ const ProjectInfo = () => {
         .catch((error) => {
           setProjectNameError(language.error.formValidation.projectNameExists)
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(...getToastArguments(language.error.projectWithSameName))
+          // discuss strategy for handling top level vs nested errors
+          // by handling nested errors with the same function, we get console complaints about the error structure
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.projectWithSameName))
+            },
+          })
         })
     },
     validate: (values) => {
