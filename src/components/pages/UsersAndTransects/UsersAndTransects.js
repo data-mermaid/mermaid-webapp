@@ -21,13 +21,15 @@ import SampleUnitLinks from '../../SampleUnitLinks'
 import { sortArray } from '../../../library/arrays/sortArray'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
-  Tr,
-  Th,
-  Td,
   TableNavigation,
   HeaderCenter,
   StickyTableOverflowWrapper,
-  StickyProjectHealthTable,
+  StickyOverviewTable,
+  OverviewTh,
+  OverviewThead,
+  Tr,
+  OverviewTr,
+  OverviewTd,
 } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
 import theme from '../../../theme'
@@ -41,9 +43,8 @@ import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 
 const EMPTY_VALUE = '-'
 
-const UserColumnHeader = styled.div`
-  display: inline-flex;
-  flex-direction: row;
+const UserColumnHeader = styled.span`
+  display: flex;
 `
 
 const ActiveRecordsCount = styled.strong`
@@ -58,41 +59,6 @@ const ActiveRecordsCount = styled.strong`
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
 `
-const UsersAndTransectsHeaderRow = styled(Tr)`
-  th.transect-numbers {
-    background: hsl(235, 10%, 90%);
-    &:after {
-      display: none;
-    }
-  }
-  th.user-headers {
-    background: hsl(235, 10%, 85%);
-    &:after {
-      display: none;
-    }
-  }
-`
-const UsersAndTransectsRow = styled(Tr)`
-  &:nth-child(odd) {
-    background: hsl(0, 0%, 100%);
-    td.transect-numbers {
-      background: hsl(0, 0%, 95%);
-    }
-    td.user-headers {
-      background: hsl(0, 0%, 90%);
-    }
-  }
-  &:nth-child(even) {
-    background: hsl(235, 10%, 95%);
-    td.transect-numbers {
-      background: hsl(235, 10%, 90%);
-    }
-    td.user-headers {
-      background: hsl(235, 10%, 85%);
-    }
-  }
-`
-
 const checkDateAndGetSiteName = (name) => {
   const elementsInName = name.split(' ')
   const lastItemInName = elementsInName.pop()
@@ -218,18 +184,24 @@ const UsersAndTransects = () => {
     })
   }, [submittedTransectNumbers])
 
-  const tableColumns = useMemo(
-    () => [
+  const tableColumns = useMemo(() => {
+    const headers = [
       {
-        Header: () => '',
+        Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'site',
         columns: [{ Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort }],
         disableSortBy: true,
       },
       {
-        Header: () => '',
+        Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'method',
         columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
+      {
+        Header: () => '',
+        id: 'first-transect-header',
+        columns: [{ Header: '', accessor: 'firstTransectHeader', disableSortBy: true }],
         disableSortBy: true,
       },
       {
@@ -239,14 +211,26 @@ const UsersAndTransects = () => {
         disableSortBy: true,
       },
       {
+        Header: () => '',
+        id: 'first-user-header',
+        columns: [{ Header: '', accessor: 'firstUserHeader', disableSortBy: true }],
+        disableSortBy: true,
+      },
+      {
         Header: () => <HeaderCenter>Transect Number / User</HeaderCenter>,
         id: 'user-headers',
         columns: getUserColumnHeaders,
         disableSortBy: true,
       },
-    ],
-    [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders],
-  )
+    ]
+
+    if (getUserColumnHeaders.length === 0) {
+      // Remove first-user-header column if user columns are empty
+      headers.splice(-2, 1)
+    }
+
+    return headers
+  }, [getUserColumnHeaders, getSubmittedTransectNumberColumnHeaders])
 
   const populateTransectNumberRow = useCallback(
     (rowRecord) => {
@@ -398,13 +382,25 @@ const UsersAndTransects = () => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
-  const table = (
+  const pageNoDataAvailable = (
+    <>
+      <h3>{language.pages.usersAndTransectsTable.noDataMainText}</h3>
+      <p>{language.pages.usersAndTransectsTable.noDataSubTextTitle}</p>
+      <ul>
+        {language.pages.usersAndTransectsTable.noDataSubTexts.map((text) => (
+          <li>{text}</li>
+        ))}
+      </ul>
+    </>
+  )
+
+  const table = submittedRecords.length ? (
     <>
       <StickyTableOverflowWrapper>
-        <StickyProjectHealthTable {...getTableProps()}>
-          <thead>
+        <StickyOverviewTable {...getTableProps()}>
+          <OverviewThead>
             {headerGroups.map((headerGroup) => (
-              <UsersAndTransectsHeaderRow {...headerGroup.getHeaderGroupProps()}>
+              <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -415,7 +411,7 @@ const UsersAndTransects = () => {
                     column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
 
                   return (
-                    <Th
+                    <OverviewTh
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
@@ -426,18 +422,18 @@ const UsersAndTransects = () => {
                       className={ThClassName}
                     >
                       {column.render('Header')}
-                    </Th>
+                    </OverviewTh>
                   )
                 })}
-              </UsersAndTransectsHeaderRow>
+              </Tr>
             ))}
-          </thead>
+          </OverviewThead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
 
               return (
-                <UsersAndTransectsRow {...row.getRowProps()}>
+                <OverviewTr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnId = cell.column.id
                     const cellColumnGroupId = cell.column.parent.id
@@ -446,8 +442,12 @@ const UsersAndTransects = () => {
                     const isNotBleachingMethodRow = cellRowValuesMethod !== 'Bleaching'
                     const isCellInSubmittedTransectNumberColumns =
                       submittedTransectNumbers.includes(cellColumnId)
-                    const areSiteOrMethodColumns =
-                      cellColumnId === 'site' || cellColumnId === 'method'
+
+                    const areSiteOrMethodOrEmptyHeaderColumns =
+                      cellColumnGroupId === 'site' ||
+                      cellColumnGroupId === 'method' ||
+                      cellColumnGroupId === 'first-transect-header' ||
+                      cellColumnGroupId === 'first-user-header'
 
                     const cellRowValuesForSubmittedTransectNumbers = Object.entries(
                       cellRowValues,
@@ -470,9 +470,9 @@ const UsersAndTransects = () => {
                     const isCollectingNumberCellHighLighted =
                       cell.value !== EMPTY_VALUE &&
                       !isCellInSubmittedTransectNumberColumns &&
-                      !areSiteOrMethodColumns
+                      !areSiteOrMethodOrEmptyHeaderColumns
 
-                    const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
+                    const cellAlignment = areSiteOrMethodOrEmptyHeaderColumns ? 'left' : 'right'
 
                     const cellClassName =
                       isSubmittedNumberCellHightLighted || isCollectingNumberCellHighLighted
@@ -480,16 +480,20 @@ const UsersAndTransects = () => {
                         : cellColumnGroupId
 
                     return (
-                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
+                      <OverviewTd
+                        {...cell.getCellProps()}
+                        align={cellAlignment}
+                        className={cellClassName}
+                      >
                         <span>{cell.render('Cell')}</span>
-                      </Td>
+                      </OverviewTd>
                     )
                   })}
-                </UsersAndTransectsRow>
+                </OverviewTr>
               )
             })}
           </tbody>
-        </StickyProjectHealthTable>
+        </StickyOverviewTable>
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
@@ -510,6 +514,8 @@ const UsersAndTransects = () => {
         />
       </TableNavigation>
     </>
+  ) : (
+    <PageUnavailable>{pageNoDataAvailable}</PageUnavailable>
   )
 
   const content = isAppOnline ? (

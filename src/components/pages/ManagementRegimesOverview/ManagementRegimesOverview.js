@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import styled from 'styled-components/macro'
 import { toast } from 'react-toastify'
 import { useGlobalFilter, usePagination, useSortBy, useTable } from 'react-table'
 import { useParams } from 'react-router-dom'
@@ -19,13 +18,15 @@ import SampleUnitLinks from '../../SampleUnitLinks'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
-  Tr,
-  Th,
-  Td,
+  OverviewTd,
   TableNavigation,
   HeaderCenter,
+  Tr,
   StickyTableOverflowWrapper,
-  StickyProjectHealthTable,
+  StickyOverviewTable,
+  OverviewTr,
+  OverviewTh,
+  OverviewThead,
 } from '../../generic/Table/table'
 import { ToolBarRow } from '../../generic/positioning'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
@@ -35,30 +36,6 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-
-const ManagementOverviewHeaderRow = styled(Tr)`
-  th.management-regime-numbers {
-    background: hsl(235, 10%, 85%);
-    &:after {
-      display: none;
-    }
-  }
-`
-
-const ManagementOverviewRow = styled(Tr)`
-  &:nth-child(odd) {
-    background: hsl(0, 0%, 100%);
-    td.management-regime-numbers {
-      background: hsl(0, 0%, 90%);
-    }
-  }
-  &:nth-child(even) {
-    background: hsl(235, 10%, 95%);
-    td.management-regime-numbers {
-      background: hsl(235, 10%, 85%);
-    }
-  }
-`
 
 const groupManagementRegimes = (records) => {
   return records.reduce((accumulator, record) => {
@@ -141,15 +118,21 @@ const ManagementRegimesOverview = () => {
   const tableColumns = useMemo(
     () => [
       {
-        Header: () => '',
+        Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'site',
         columns: [{ Header: 'Site', accessor: 'site', sortType: reactTableNaturalSort }],
         disableSortBy: true,
       },
       {
-        Header: () => '',
+        Header: () => <HeaderCenter>&nbsp;</HeaderCenter>,
         id: 'method',
         columns: [{ Header: 'Method', accessor: 'method', sortType: reactTableNaturalSort }],
+        disableSortBy: true,
+      },
+      {
+        Header: () => '',
+        id: 'first-transect-header',
+        columns: [{ Header: '', accessor: 'firstTransectHeader', disableSortBy: true }],
         disableSortBy: true,
       },
       {
@@ -281,10 +264,10 @@ const ManagementRegimesOverview = () => {
   const table = sampleUnitWithManagementRegimeRecords.length ? (
     <>
       <StickyTableOverflowWrapper>
-        <StickyProjectHealthTable {...getTableProps()}>
-          <thead>
+        <StickyOverviewTable {...getTableProps()}>
+          <OverviewThead>
             {headerGroups.map((headerGroup) => (
-              <ManagementOverviewHeaderRow {...headerGroup.getHeaderGroupProps()}>
+              <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
@@ -295,7 +278,7 @@ const ManagementRegimesOverview = () => {
                     column.Header === 'Site' || column.Header === 'Method' ? 'left' : 'right'
 
                   return (
-                    <Th
+                    <OverviewTh
                       {...column.getHeaderProps(getTableColumnHeaderProps(column))}
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
@@ -305,46 +288,52 @@ const ManagementRegimesOverview = () => {
                       align={headerAlignment}
                       className={ThClassName}
                     >
-                      {column.render('Header')}
-                    </Th>
+                      <span> {column.render('Header')}</span>
+                    </OverviewTh>
                   )
                 })}
-              </ManagementOverviewHeaderRow>
+              </Tr>
             ))}
-          </thead>
+          </OverviewThead>
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row)
-              const managementRegimesRowCells = row.cells.filter(
-                (cell) => cell.column.Header !== 'Site' && cell.column.Header !== 'Method',
-              )
-              const managementRegimesRowCellsWithNonEmptyValue = managementRegimesRowCells.filter(
+              const mrTransectNumberRowCells = row.cells.filter((cell) => {
+                return (
+                  cell.column.id !== 'site' &&
+                  cell.column.id !== 'method' &&
+                  cell.column.id !== 'firstTransectHeader'
+                )
+              })
+              const mrTransectNumberRowCellsWithNonEmptyValue = mrTransectNumberRowCells.filter(
                 (cell) => cell.value !== '-',
               )
 
-              const managementRegimeRowCellValues = managementRegimesRowCellsWithNonEmptyValue.map(
+              const mrTransectNumberRowCellValues = mrTransectNumberRowCellsWithNonEmptyValue.map(
                 (cell) => cell.value.props.sampleUnitNumbersRow.length,
               )
 
-              const maxSampleUnitCount = Math.max(...managementRegimeRowCellValues)
+              const maxSampleUnitCount = Math.max(...mrTransectNumberRowCellValues)
 
               const isEqualToMaxSampleUnitCount = (currentValue) =>
                 currentValue === maxSampleUnitCount
 
               const isEveryMRLabelsSameAsMax =
-                managementRegimeRowCellValues.length > 1 &&
-                managementRegimeRowCellValues.every(isEqualToMaxSampleUnitCount)
+                mrTransectNumberRowCellValues.length > 1 &&
+                mrTransectNumberRowCellValues.every(isEqualToMaxSampleUnitCount)
 
               return (
-                <ManagementOverviewRow {...row.getRowProps()}>
+                <OverviewTr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     const cellColumnGroupId = cell.column.parent.id
 
-                    const areSiteOrMethodColumns =
-                      cellColumnGroupId === 'site' || cellColumnGroupId === 'method'
+                    const areSiteOrMethodOrEmptyHeaderColumns =
+                      cellColumnGroupId === 'site' ||
+                      cellColumnGroupId === 'method' ||
+                      cellColumnGroupId === 'first-transect-header'
 
                     const managementRegimeCellNonEmpty =
-                      cell.value !== '-' && !areSiteOrMethodColumns
+                      cell.value !== '-' && !areSiteOrMethodOrEmptyHeaderColumns
 
                     const isCellValueLessThanMaxSampleUnitCount =
                       managementRegimeCellNonEmpty &&
@@ -358,23 +347,27 @@ const ManagementRegimesOverview = () => {
                       ? isCellValueEqualToMaxSampleUnitCount
                       : isCellValueLessThanMaxSampleUnitCount
 
-                    const cellAlignment = areSiteOrMethodColumns ? 'left' : 'right'
+                    const cellAlignment = areSiteOrMethodOrEmptyHeaderColumns ? 'left' : 'right'
 
                     const cellClassName = isManagementRegimeCellHighlighted
                       ? `${cellColumnGroupId} highlighted`
                       : cellColumnGroupId
 
                     return (
-                      <Td {...cell.getCellProps()} align={cellAlignment} className={cellClassName}>
+                      <OverviewTd
+                        {...cell.getCellProps()}
+                        align={cellAlignment}
+                        className={cellClassName}
+                      >
                         <span>{cell.render('Cell')}</span>
-                      </Td>
+                      </OverviewTd>
                     )
                   })}
-                </ManagementOverviewRow>
+                </OverviewTr>
               )
             })}
           </tbody>
-        </StickyProjectHealthTable>
+        </StickyOverviewTable>
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector
