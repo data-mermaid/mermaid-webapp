@@ -242,14 +242,12 @@ const ProjectInfo = () => {
           actions.resetForm({ values }) // resets formiks dirty state
         })
         .catch((error) => {
+          // validation error is a custom error (doesn't have the same structure as HTTP response error)
           if (error.message === 'Validation Error') {
             setProjectNameError(language.error.formValidation.projectNameExists)
             toast.error(...getToastArguments(language.error.projectNameError))
             setSaveButtonState(buttonGroupStates.unsaved)
           } else {
-            // discuss strategy for handling top level vs nested errors
-            // by handling nested errors with the same function, we get console complaints about the error structure
-            // this assumes that errors outside of projectSave will be top level
             setSaveButtonState(buttonGroupStates.unsaved)
             handleHttpResponseError({
               error,

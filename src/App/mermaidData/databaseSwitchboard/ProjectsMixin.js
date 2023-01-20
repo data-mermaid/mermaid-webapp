@@ -41,11 +41,7 @@ const ProjectsMixin = (Base) =>
             const projectStatusMessage = pushData.data.projects[0].message
             const isApiResponseSuccessful = this._isStatusCodeSuccessful(projectPushStatusCode)
 
-            if (
-              !isApiResponseSuccessful &&
-              projectPushStatusCode === 400 &&
-              projectStatusMessage === 'Validation Error'
-            ) {
+            if (!isApiResponseSuccessful && projectStatusMessage === 'Validation Error') {
               const oldProjectName = projectToEdit.name
               const editedValuesCopy = editedValues
 
