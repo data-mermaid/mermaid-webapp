@@ -197,8 +197,8 @@ const SyncApiDataIntoOfflineStorage = class {
   }
 
   pushThenPullAllProjectDataExceptChoices = async (projectId) => {
-    return this.pushChanges().then((pushResponse) => {
-      const pullData = this.pullAllProjectDataExceptChoices(projectId)
+    return this.pushChanges().then(async (pushResponse) => {
+      const pullData = await this.pullAllProjectDataExceptChoices(projectId)
       const pushData = pushResponse
 
       return { pushData, pullData }
