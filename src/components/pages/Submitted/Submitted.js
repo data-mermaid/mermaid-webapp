@@ -327,6 +327,7 @@ const Submitted = () => {
       handleGlobalFilterChange={handleGlobalFilterChange}
       handleExportToCSV={handleExportToCSV}
       filterValue={tableUserPrefs.globalFilter}
+      disabled={submittedRecordsForUiDisplay.length === 0}
     />
   ) : (
     <H2>{language.pages.submittedTable.title}</H2>

@@ -391,6 +391,7 @@ const Sites = () => {
               name={language.pages.siteTable.filterToolbarText}
               value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
+              disabled={siteRecordsForUiDisplay.length === 0}
             />
 
             <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>

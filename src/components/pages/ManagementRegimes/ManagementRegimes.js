@@ -426,6 +426,7 @@ const ManagementRegimes = () => {
               name={language.pages.managementRegimeTable.filterToolbarText}
               value={tableUserPrefs.globalFilter}
               handleGlobalFilterChange={handleGlobalFilterChange}
+              disabled={managementRegimeRecordsForUiDisplay.length === 0}
             />
             <ToolbarButtonWrapper>{toolbarButtonsByRole}</ToolbarButtonWrapper>
           </ToolBarRow>

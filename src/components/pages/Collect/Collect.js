@@ -343,6 +343,7 @@ const Collect = () => {
                 name={language.pages.collectTable.filterToolbarText}
                 value={tableUserPrefs.globalFilter}
                 handleGlobalFilterChange={handleGlobalFilterChange}
+                disabled={collectRecordsForUiDisplay.length === 0}
               />
               <AddSampleUnitButton />
             </ToolBarRow>
