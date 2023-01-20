@@ -32,7 +32,6 @@ const error = {
   collectRecordsUnavailable: 'Sample unit data is currently unavailable. Please try again',
   collectRecordUnavailable: 'Sample unit data is currently unavailable. Please try again',
   duplicateNewUserAdd: 'User has already been added to project.',
-  duplicateNewProject: 'A project with the same name already exists.',
   emptyEmailAdd: 'Please enter an email address.',
   error: 'Error',
   fishSpeciesAlreadyExists:
@@ -61,6 +60,7 @@ const error = {
   notificationNotDeleted: 'Notification could not be removed.',
   projectSave: 'Something went wrong. The project has not been saved.',
   projectsUnavailable: 'Projects data is currently unavailable. Please try again.',
+  projectWithSameName: 'A project with the same name already exists.',
   siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again.',
   siteRecordUnavailable: 'Site record data is currently unavailable. Please try again.',
   siteSave: 'Something went wrong. The site has not been saved.',
@@ -301,9 +301,9 @@ const pages = {
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubTextTitle: 'This page will show:',
     noDataSubTexts: [
-      'Who has unsubmited sample units?',
-      'Which sample units are missing?',
-      'Transect number for submitted and unsubmitted sample units?',
+      'Who has unsubmited sample units',
+      'Which sample units are missing',
+      'Transect number for submitted and unsubmitted sample units',
     ],
   },
   managementRegimesOverview: {

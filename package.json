@@ -115,8 +115,5 @@
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!@iconify-icons/.*)(?!@reach/.*)(?!@fontsource/.*)"
     ]
-  },
-  "engines": {
-    "node": ">=16.15.0"
   }
 }

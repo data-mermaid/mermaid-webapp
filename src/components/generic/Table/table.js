@@ -9,7 +9,7 @@ import theme from '../../../theme'
 export const TableNavigation = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  margin: 0 0 ${theme.spacing.xsmall} 0;
+  margin: 3rem 0 ${theme.spacing.xsmall} 0;
   > * {
     padding: ${theme.spacing.small} ${theme.spacing.medium};
   }
@@ -22,9 +22,11 @@ export const TableOverflowWrapper = styled.div`
   ${mediaQueryPhoneOnly(css`
     max-width: calc(100vw - ${theme.spacing.mobileSideNavWidth} - 20px);
   `)}
-  // 20px is the approx scrollbar width this is to prevent
-  // a horziontal scrollbar at the bottom of the page
-  // and to keep the toolbar sticky when needed.
+  /*
+  20px is the approx scrollbar width this is to prevent
+  a horziontal scrollbar at the bottom of the page
+  and to keep the toolbar sticky when needed.
+  */
   overflow-y: auto;
   & + button,
   button + & {
@@ -39,6 +41,11 @@ export const Table = styled('table')`
   border-collapse: collapse;
   font-variant: tabular-nums;
   font-feature-settings: 'tnum';
+  /* 
+  this is to set the height 
+  of the spans in the Td
+  */
+  height: 1px;
 `
 const getHeaderSortAfter = (isMultiSortColumn, sortedIndex, isSortedDescending) => {
   if (sortedIndex < 0) {
@@ -76,12 +83,13 @@ export const Th = styled.th(
     vertical-align: top;
     pointer-events: ${props.disabledHover && 'none'};
     &::after {
-      content: ' \u25b2';
-      color: ${props.isSortingEnabled ? theme.color.secondaryDisabledColor : theme.color.white};
+      content: ${props.isSortingEnabled ? ' \u25b2' : ''};
       font-size: small;
       white-space: nowrap;
     }
-    ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
+    > span {
+      ${getHeaderSortAfter(props.isMultiSortColumn, props.sortedIndex, props.isSortedDescending)}
+    }
   `,
 )
 Th.defaultProps = {
@@ -99,22 +107,6 @@ export const Td = styled.td(
     border-color: ${theme.color.tableBorderColor};
     border-style: solid;
     position: relative;
-    &.highlighted {
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: hsl(50, 100%, 50%, 0.4);
-        z-index: 1;
-      }
-      span {
-        z-index: 2;
-        position: relative;
-      }
-    }
     &:first-child {
       border-left: none;
     }
@@ -147,10 +139,78 @@ export const Tr = styled.tr`
     background-color: ${theme.color.tableRowHover};
   `)}
 `
+export const OverviewTr = styled.tr`
+  background: ${theme.color.background};
+  height: 100%;
+  position: relative;
+  ${hoverState(css`
+    &:after {
+      content: '';
+      position: absolute;
+      background-color: hsl(0 0% 90%);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  `)}
+`
+const gapStyles = css`
+  padding: 0 3px;
+  background-color: ${theme.color.background};
+`
 
-export const HeaderCenter = styled.div`
+export const OverviewThead = styled('thead')`
+  tr:nth-child(1) {
+    th:nth-child(3),
+    th:nth-child(5) {
+      ${gapStyles};
+    }
+  }
+`
+
+export const OverviewTh = styled(Th)`
+  background-color: ${theme.color.white};
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  background-clip: padding-box;
+  border: solid 1px ${theme.color.tableBorderColor};
+  &.first-transect-header,
+  &.first-user-header {
+    ${gapStyles}
+  }
+`
+export const OverviewTd = styled(Td)`
+  height: inherit;
+  background-clip: padding-box;
+  padding: ${theme.spacing.small} ${theme.spacing.medium};
+  &.first-transect-header,
+  &.first-user-header {
+    ${gapStyles}
+  }
+  &.site,
+  &.method {
+    background-color: ${theme.color.white};
+  }
+  &.transect-numbers {
+    background-color: hsl(0, 0%, 97.5%);
+  }
+  &.user-headers {
+    background-color: hsl(0, 0%, 92.5%);
+  }
+  &.management-regime-numbers {
+    background-color: hsl(0, 0%, 95%);
+  }
+  &.highlighted {
+    background-color: hsl(50 80% 80% / 1);
+  }
+`
+export const HeaderCenter = styled.p`
   text-align: center;
   white-space: nowrap;
+  margin: 0;
+  background: white;
 `
 
 export const InlineCell = styled.span`
@@ -169,12 +229,13 @@ export const StickyTableOverflowWrapper = styled(TableOverflowWrapper)`
 const stickyStyles = css`
   position: sticky;
   white-space: nowrap;
-  border: solid 1px ${theme.color.tableBorderColor};
   z-index: 3;
   top: calc(${theme.spacing.headerHeight} - 1px);
   &:before {
-    // this is to account for the border-bottom
-    // dissapearing when scrolled.
+    /* 
+    this is to account for the border-bottom
+    dissapearing when scrolled.
+    */
     content: '';
     position: absolute;
     height: 1px;
@@ -185,7 +246,7 @@ const stickyStyles = css`
   }
 `
 
-export const StickyProjectHealthTable = styled(Table)`
+export const StickyOverviewTable = styled(Table)`
   thead tr:nth-child(2) th {
     ${stickyStyles}
   }

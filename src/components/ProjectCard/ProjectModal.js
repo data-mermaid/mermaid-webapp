@@ -71,7 +71,7 @@ const ProjectModal = ({ isOpen, onDismiss, project, addProjectToProjectsPage }) 
           setNameAlreadyExists(true)
           setExistingName(formik.values.name)
           toast.error(
-            ...getToastArguments(...getToastArguments(language.error.duplicateNewProject)),
+            ...getToastArguments(...getToastArguments(language.error.projectWithSameName)),
           )
         }
       },

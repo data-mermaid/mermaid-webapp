@@ -161,7 +161,7 @@ const ManagementRegimesMixin = (Base) =>
             if (isManagementRegimeStatusCodeSuccessful) {
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then((_dataSetsReturnedFromApiPull) => {
+                .then(({ _pushData, _pullData }) => {
                   const managementRegimeWithExtraPropertiesWrittenByApi =
                     managementRegimeResponseFromApiPush.data
 
@@ -224,7 +224,7 @@ const ManagementRegimesMixin = (Base) =>
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then((_apiPullResponse) => apiPushResponse)
+                .then(({ _pushData, _pullData }) => apiPushResponse)
             }
 
             const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()

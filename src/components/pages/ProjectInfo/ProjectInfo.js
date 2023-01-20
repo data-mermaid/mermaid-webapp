@@ -174,6 +174,7 @@ const ProjectInfo = () => {
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const [projectNameError, setProjectNameError] = useState(false)
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
 
@@ -190,6 +191,7 @@ const ProjectInfo = () => {
       const promises = [
         databaseSwitchboardInstance.getProject(projectId),
         databaseSwitchboardInstance.getProjectTags(),
+        databaseSwitchboardInstance.getProjects(),
       ]
 
       Promise.all(promises)
@@ -231,6 +233,7 @@ const ProjectInfo = () => {
     enableReinitialize: true,
     onSubmit: (values, actions) => {
       setSaveButtonState(buttonGroupStates.saving)
+      setProjectNameError(false)
       databaseSwitchboardInstance
         .saveProject({ projectId, editedValues: values })
         .then(() => {
@@ -239,13 +242,20 @@ const ProjectInfo = () => {
           actions.resetForm({ values }) // resets formiks dirty state
         })
         .catch((error) => {
-          setSaveButtonState(buttonGroupStates.unsaved)
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.projectSave))
-            },
-          })
+          // validation error is a custom error (doesn't have the same structure as HTTP response error)
+          if (error.message === 'Validation Error') {
+            setProjectNameError(language.error.formValidation.projectNameExists)
+            toast.error(...getToastArguments(language.error.projectNameError))
+            setSaveButtonState(buttonGroupStates.unsaved)
+          } else {
+            setSaveButtonState(buttonGroupStates.unsaved)
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.projectSave))
+              },
+            })
+          }
         })
     },
     validate: (values) => {
@@ -273,6 +283,19 @@ const ProjectInfo = () => {
     </>
   )
 
+  const checkValidationMessage = () => {
+    let errorMessage = []
+
+    if (formik.errors.name) {
+      errorMessage = formik.errors.name
+    } else if (projectNameError) {
+      // using same error format as Formik so message can be used in InputWithLabelAndValidation
+      errorMessage = [{ code: projectNameError, id: 'Name exists' }]
+    }
+
+    return errorMessage
+  }
+
   const contentViewByRole = isAdminUser ? (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
@@ -282,8 +305,8 @@ const ProjectInfo = () => {
           id="name"
           type="text"
           {...formik.getFieldProps('name')}
-          validationType={formik.errors.name ? 'error' : null}
-          validationMessages={formik.errors.name}
+          validationType={formik.errors.name || projectNameError ? 'error' : null}
+          validationMessages={checkValidationMessage()}
         />
         <TextareaWithLabelAndValidation
           label="Notes"
