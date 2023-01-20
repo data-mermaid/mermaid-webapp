@@ -239,9 +239,9 @@ const ProjectInfo = () => {
         .then(() => {
           setSaveButtonState(buttonGroupStates.saved)
           toast.success(...getToastArguments(language.success.projectSave))
-          actions.resetForm({ values })
+          actions.resetForm({ values }) // resets formiks dirty state
         })
-        .catch(() => {
+        .catch((error) => {
           setProjectNameError(language.error.formValidation.projectNameExists)
           setSaveButtonState(buttonGroupStates.unsaved)
           toast.error(...getToastArguments(language.error.projectWithSameName))
