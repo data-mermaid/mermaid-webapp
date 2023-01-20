@@ -38,8 +38,14 @@ const ProjectsMixin = (Base) =>
           .pushThenPullAllProjectDataExceptChoices(projectId)
           .then(async ({ pushData, pullData }) => {
             const projectPushStatusCode = pushData.data.projects[0].status_code
+            const projectStatusMessage = pushData.data.projects[0].message
+            const isApiResponseSuccessful = this._isStatusCodeSuccessful(projectPushStatusCode)
 
-            if (projectPushStatusCode === 400) {
+            if (
+              !isApiResponseSuccessful &&
+              projectPushStatusCode === 400 &&
+              projectStatusMessage === 'Validation Error'
+            ) {
               const oldProjectName = projectToEdit.name
               const editedValuesCopy = editedValues
 
@@ -53,7 +59,11 @@ const ProjectsMixin = (Base) =>
 
               await this._dexiePerUserDataInstance.projects.put(editedProjectWithOldProjectName)
 
-              return Promise.reject(new Error('400: Duplicate project name'))
+              return Promise.reject(new Error(projectStatusMessage))
+            }
+
+            if (!isApiResponseSuccessful) {
+              return Promise.reject(new Error(projectStatusMessage))
             }
 
             const editedProjectFromApi = pullData.data.projects.updates[0]

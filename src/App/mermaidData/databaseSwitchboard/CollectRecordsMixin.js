@@ -174,7 +174,7 @@ const CollectRecordsMixin = (Base) =>
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then(() => {
+                .then(({ _pushData, _pullData }) => {
                   const recordWithExtraPropertiesWrittenByApi = recordResponseFromApiPush.data
 
                   return recordWithExtraPropertiesWrittenByApi
@@ -235,7 +235,7 @@ const CollectRecordsMixin = (Base) =>
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then(() => {
+                .then(({ _pushData, _pullData }) => {
                   const recordWithExtraPropertiesWrittenByApi = recordResponseFromApiPush.data
 
                   return recordWithExtraPropertiesWrittenByApi
@@ -301,7 +301,7 @@ const CollectRecordsMixin = (Base) =>
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then(() => apiPushResponse)
+                .then(({ _pushData, _pullData }) => apiPushResponse)
             }
 
             return Promise.reject(
