@@ -242,16 +242,22 @@ const ProjectInfo = () => {
           actions.resetForm({ values }) // resets formiks dirty state
         })
         .catch((error) => {
-          setProjectNameError(language.error.formValidation.projectNameExists)
-          setSaveButtonState(buttonGroupStates.unsaved)
-          // discuss strategy for handling top level vs nested errors
-          // by handling nested errors with the same function, we get console complaints about the error structure
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.projectWithSameName))
-            },
-          })
+          if (error.message === 'Validation Error') {
+            setProjectNameError(language.error.formValidation.projectNameExists)
+            toast.error(...getToastArguments(language.error.projectNameError))
+            setSaveButtonState(buttonGroupStates.unsaved)
+          } else {
+            // discuss strategy for handling top level vs nested errors
+            // by handling nested errors with the same function, we get console complaints about the error structure
+            // this assumes that errors outside of projectSave will be top level
+            setSaveButtonState(buttonGroupStates.unsaved)
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.projectSave))
+              },
+            })
+          }
         })
     },
     validate: (values) => {
