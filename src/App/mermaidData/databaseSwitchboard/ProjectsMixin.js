@@ -36,8 +36,33 @@ const ProjectsMixin = (Base) =>
       return this._dexiePerUserDataInstance.projects.put(editedProject).then(() => {
         return this._apiSyncInstance
           .pushThenPullAllProjectDataExceptChoices(projectId)
-          .then((pullResponse) => {
-            const editedProjectFromApi = pullResponse.data.projects.updates[0]
+          .then(async ({ pushData, pullData }) => {
+            const projectPushStatusCode = pushData.data.projects[0].status_code
+            const projectStatusMessage = pushData.data.projects[0].message
+            const isApiResponseSuccessful = this._isStatusCodeSuccessful(projectPushStatusCode)
+
+            if (!isApiResponseSuccessful && projectStatusMessage === 'Validation Error') {
+              const oldProjectName = projectToEdit.name
+              const editedValuesCopy = editedValues
+
+              editedValuesCopy.name = oldProjectName
+
+              const editedProjectWithOldProjectName = {
+                ...projectToEdit,
+                ...editedValuesCopy,
+                uiState_pushToApi: true,
+              }
+
+              await this._dexiePerUserDataInstance.projects.put(editedProjectWithOldProjectName)
+
+              return Promise.reject(new Error(projectStatusMessage))
+            }
+
+            if (!isApiResponseSuccessful) {
+              return Promise.reject(new Error(projectStatusMessage))
+            }
+
+            const editedProjectFromApi = pullData.data.projects.updates[0]
 
             return editedProjectFromApi
           })
@@ -95,8 +120,8 @@ const ProjectsMixin = (Base) =>
         return this._dexiePerUserDataInstance.project_profiles.put(editedProfile).then(() =>
           this._apiSyncInstance
             .pushThenPullAllProjectDataExceptChoices(projectId)
-            .then((pullResponse) => {
-              const editedProfileFromApi = pullResponse.data.project_profiles.updates[0]
+            .then(({ pullData }) => {
+              const editedProfileFromApi = pullData.data.project_profiles.updates[0]
 
               return editedProfileFromApi
             }),
@@ -281,8 +306,8 @@ const ProjectsMixin = (Base) =>
           .then(() => {
             return this._apiSyncInstance
               .pushThenPullAllProjectDataExceptChoices(projectId)
-              .then((resp) => {
-                return resp
+              .then(({ pullData }) => {
+                return pullData
               })
           })
       }
