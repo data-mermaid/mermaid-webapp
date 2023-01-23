@@ -287,9 +287,11 @@ const Sites = () => {
         <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/sites/new`}>
           <IconPlus /> New site
         </LinkLooksLikeButtonSecondary>
-        <ButtonSecondary type="button" onClick={openCopySitesModal}>
-          <IconCopy /> {language.pages.siteTable.copySitesButtonText}
-        </ButtonSecondary>
+        {isAppOnline ? (
+          <ButtonSecondary type="button" onClick={openCopySitesModal}>
+            <IconCopy /> {language.pages.siteTable.copySitesButtonText}
+          </ButtonSecondary>
+        ) : null}
         {readOnlySitesHeaderContent}
       </ToolbarButtonWrapper>
       <CopySitesModal
