@@ -46,6 +46,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -61,6 +62,7 @@ const ManagementRegimes = () => {
   const [isCopyManagementRegimesModalOpen, setIsCopyManagementRegimesModalOpen] = useState(false)
   const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
   const closeCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(false)
+  const { isAppOnline } = useOnlineStatus()
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -325,9 +327,11 @@ const ManagementRegimes = () => {
         <LinkLooksLikeButtonSecondary to={`${currentProjectPath}/management-regimes/new`}>
           <IconPlus /> New MR
         </LinkLooksLikeButtonSecondary>
-        <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
-          <IconCopy /> {language.pages.managementRegimeTable.copyManagementRegimeButtonText}
-        </ButtonSecondary>
+        {isAppOnline ? (
+          <ButtonSecondary type="button" onClick={openCopyManagementRegimesModal}>
+            <IconCopy /> {language.pages.managementRegimeTable.copyManagementRegimeButtonText}
+          </ButtonSecondary>
+        ) : null}
         {readOnlyMrsHeaderContent}
       </ToolbarButtonWrapper>
       <CopyManagementRegimesModal
