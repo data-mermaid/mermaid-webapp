@@ -33,6 +33,7 @@ import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
 import theme from '../../theme'
+import PageSizeSelector from '../generic/Table/PageSizeSelector'
 
 const DEFAULT_PAGE_SIZE = 5
 
@@ -208,7 +209,8 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     prepareRow,
     previousPage,
     selectedFlatRows,
-    state: { pageIndex, sortBy, globalFilter, selectedRowIds },
+    setPageSize,
+    state: { pageIndex, pageSize, sortBy, globalFilter, selectedRowIds },
     toggleAllRowsSelected,
     setGlobalFilter,
   } = useTable(
@@ -233,6 +235,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
 
   const handleViewSelectedOnlyChange = () => {
     setIsViewSelectedOnly(!isViewSelectedOnly)
+  }
+
+  const handleRowsNumberChange = (e) => {
+    setPageSize(Number(e.target.value))
   }
 
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
@@ -329,6 +335,13 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         </Table>
       </ModalTableOverflowWrapper>
       <CopyModalPaginationWrapper>
+        <PageSizeSelector
+          onChange={handleRowsNumberChange}
+          pageSize={pageSize}
+          pageSizeOptions={[15, 50, 100]}
+          pageType="sites"
+          rowLength={siteRecords.length}
+        />
         <PageSelector
           onPreviousClick={previousPage}
           previousDisabled={!canPreviousPage}

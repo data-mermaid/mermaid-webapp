@@ -17,8 +17,11 @@ const PageSizeSelector = ({ pageSize, pageType, pageSizeOptions, onChange, rowLe
     if (pageOptionsLessThanRowLength.length === 0) {
       // show the exact number of items as the only selection in the drop down
       pageOptionsLessThanRowLength = [rowLength]
-    } else if (pageOptionsLessThanRowLength[pageOptionsLessThanRowLength.length - 1] < rowLength) {
-      // show the exact number of items as the last selection in the drop down
+    } else if (
+      pageOptionsLessThanRowLength[pageOptionsLessThanRowLength.length - 1] < rowLength &&
+      rowLength <= 100
+    ) {
+      // show the exact number of items as the last selection in the drop down (max 100 items at a time)
       pageOptionsLessThanRowLength.push(rowLength)
     }
 

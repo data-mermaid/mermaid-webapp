@@ -204,7 +204,9 @@ export const CopyModalToolbarWrapper = styled.div`
 
 export const CopyModalPaginationWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
 `
 
 export const SubmittedObservationStickyTable = styled(GenericStickyTable)`
