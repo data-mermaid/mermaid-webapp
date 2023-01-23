@@ -30,7 +30,6 @@ const BenthicLitTransectInputs = ({
   areValidationsShowing,
   choices,
   formik,
-  setIgnoredItemsToBeRevalidated,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationsApiData,
@@ -97,95 +96,84 @@ const BenthicLitTransectInputs = ({
 
   const handleTransectNumberChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'number',
-      validationProperties: transectNumberValidationProperties,
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
     })
   }
 
   const handleLabelChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'label',
-      validationProperties: labelValidationProperties,
       validationPath: LABEL_VALIDATION_PATH,
     })
   }
 
   const handleLengthSurveyedChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'len_surveyed',
-      validationProperties: lengthSurveyedValidationProperties,
       validationPath: LENGHT_SURVEYED_VALIDATION_PATH,
     })
   }
 
   const handleReefSlopeChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'reef_slope',
-      validationProperties: reefSlopeValidationProperties,
       validationPath: REEF_SLOPE_VALIDATION_PATH,
     })
   }
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'relative_depth',
-      validationProperties: relativeDepthValidationProperties,
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'visibility',
-      validationProperties: visibilityValidationProperties,
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'current',
-      validationProperties: currentValidationProperties,
       validationPath: CURRENT_VALIDATION_PATH,
     })
   }
 
   const handleNotesChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'notes',
-      validationProperties: notesValidationProperties,
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'tide',
-      validationProperties: tideValidationProperties,
       validationPath: TIDE_VALIDATION_PATH,
     })
   }
 
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'sample_time',
-      validationProperties: sampleTimeValidationProperties,
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
   }
 
   const handleDepthChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
+    resetNonObservationFieldValidations({
       inputName: 'depth',
-      validationProperties: depthValidationProperties,
       validationPath: DEPTH_VALIDATION_PATH,
     })
   }
@@ -402,7 +390,6 @@ BenthicLitTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
-  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,

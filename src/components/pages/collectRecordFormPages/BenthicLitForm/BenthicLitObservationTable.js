@@ -109,7 +109,6 @@ const BenthicLitObservationsTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
-        hasObservationResetIgnoredValidation,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -137,6 +136,9 @@ const BenthicLitObservationsTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleGrowthFormChange = (selectedOption) => {
@@ -150,6 +152,9 @@ const BenthicLitObservationsTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleLengthChange = (event) => {
@@ -162,6 +167,9 @@ const BenthicLitObservationsTable = ({
             newValue,
             observationId,
           },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -241,7 +249,6 @@ const BenthicLitObservationsTable = ({
             <ObservationValidationInfo
               hasObservationErrorValidation={hasObservationErrorValidation}
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               isObservationValid={isObservationValid}

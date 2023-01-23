@@ -219,6 +219,9 @@ const FishBeltObservationTable = ({
           type: 'updateSize',
           payload: { newSize, observationId },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleUpdateSizeEvent = (event) => {
@@ -234,6 +237,9 @@ const FishBeltObservationTable = ({
         observationsDispatch({
           type: 'updateCount',
           payload: { newCount: event.target.value, observationId },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -286,6 +292,9 @@ const FishBeltObservationTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleFishNameKeyDown = (event) => {
@@ -305,7 +314,6 @@ const FishBeltObservationTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
-        hasObservationResetIgnoredValidation,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -370,7 +378,6 @@ const FishBeltObservationTable = ({
             <ObservationValidationInfo
               hasObservationErrorValidation={hasObservationErrorValidation}
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               isObservationValid={isObservationValid}

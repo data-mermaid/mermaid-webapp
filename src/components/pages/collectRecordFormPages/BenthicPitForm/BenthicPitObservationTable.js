@@ -135,7 +135,6 @@ const BenthicPitObservationsTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
-        hasObservationResetIgnoredValidation,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -163,6 +162,9 @@ const BenthicPitObservationsTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleGrowthFormChange = (selectedOption) => {
@@ -175,6 +177,9 @@ const BenthicPitObservationsTable = ({
             newGrowthForm,
             observationId,
           },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -248,7 +253,6 @@ const BenthicPitObservationsTable = ({
             <ObservationValidationInfo
               hasObservationErrorValidation={hasObservationErrorValidation}
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               isObservationValid={isObservationValid}

@@ -114,7 +114,6 @@ const HabitatComplexityObservationsTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
-        hasObservationResetIgnoredValidation,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -141,6 +140,9 @@ const HabitatComplexityObservationsTable = ({
             newValue,
             observationId,
           },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -176,7 +178,6 @@ const HabitatComplexityObservationsTable = ({
             <ObservationValidationInfo
               hasObservationErrorValidation={hasObservationErrorValidation}
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               isObservationValid={isObservationValid}
