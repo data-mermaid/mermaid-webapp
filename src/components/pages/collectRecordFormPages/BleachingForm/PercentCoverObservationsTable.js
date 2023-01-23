@@ -105,7 +105,6 @@ const PercentCoverObservationTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
-        hasObservationResetIgnoredValidation,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -132,6 +131,9 @@ const PercentCoverObservationTable = ({
             newValue,
             observationId,
           },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -184,7 +186,6 @@ const PercentCoverObservationTable = ({
             <ObservationValidationInfo
               hasObservationErrorValidation={hasObservationErrorValidation}
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               isObservationValid={isObservationValid}

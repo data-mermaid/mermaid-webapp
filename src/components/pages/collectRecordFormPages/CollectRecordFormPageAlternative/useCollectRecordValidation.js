@@ -139,21 +139,23 @@ const useCollectRecordValidation = ({
 
   const resetObservationValidations = useCallback(
     ({ observationId }) => {
-      databaseSwitchboardInstance
-        .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
-        .then((recordWithResetValidations) => {
-          handleCollectRecordChange(recordWithResetValidations)
+      if (collectRecordBeingEdited && observationId) {
+        databaseSwitchboardInstance
+          .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
+          .then((recordWithResetValidations) => {
+            handleCollectRecordChange(recordWithResetValidations)
 
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
-            },
+            setIsFormDirty(true)
           })
-        })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+              },
+            })
+          })
+      }
     },
     [
       collectRecordBeingEdited,
@@ -251,22 +253,7 @@ const useCollectRecordValidation = ({
     ],
   )
 
-  const setIgnoredItemsToBeRevalidated = ({
-    validationProperties,
-    validationPath,
-    inputName,
-  }) => {
-    const isInputDirty =
-      formikInstance.initialValues[inputName] === formikInstance.values[inputName]
-    const doesFieldHaveIgnoredValidation = validationProperties.validationType === 'ignore'
-
-    if (doesFieldHaveIgnoredValidation && isInputDirty) {
-      resetNonObservationFieldValidations({ validationPath })
-    }
-  }
-
   return {
-    setIgnoredItemsToBeRevalidated,
     handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,

@@ -520,11 +520,9 @@ const CollectRecordsMixin = (Base) =>
       const originalRecordLevelValidations = record.validations.results.$record
       const recordLevelValidationsWithReset = originalRecordLevelValidations.map((validation) => {
         if (validation.validation_id === validationId) {
-          const currentValidationStatus = validation.status
-
           return {
             ...validation,
-            status: currentValidationStatus === 'ignore' ? 'reset' : currentValidationStatus,
+            status: 'reset',
           }
         }
 
@@ -542,7 +540,7 @@ const CollectRecordsMixin = (Base) =>
         .then(() => recordWithResetValidation)
     }
 
-    resetNonObservationFieldValidations = function resetNonObservationFieldValidations({
+    resetNonObservationFieldValidations = async function resetNonObservationFieldValidations({
       record,
       validationPath,
     }) {
@@ -557,18 +555,18 @@ const CollectRecordsMixin = (Base) =>
         path,
       })
 
+      if (!currentValidations) {
+        return record
+      }
+
       const currentValidationsProperties = Object.keys(currentValidations)
 
       const resettedValidations = currentValidationsProperties.map((currentValidationsProperty) => {
         const currentValidationObject = currentValidations[currentValidationsProperty]
-        const currentValidationStatus = currentValidationObject.status
 
         return {
           ...currentValidationObject,
-          status:
-            currentValidationStatus === 'ignore' || currentValidationStatus === 'warning'
-              ? 'reset'
-              : currentValidationStatus,
+          status: 'reset',
         }
       })
 
@@ -612,12 +610,10 @@ const CollectRecordsMixin = (Base) =>
             return singleObservationValidations.map((validation) => {
               const isValidationBelongingToObservation =
                 validation.context?.observation_id === observationId
-              const isIgnored = validation.status === 'ignore'
 
               return {
                 ...validation,
-                status:
-                  isValidationBelongingToObservation && isIgnored ? 'reset' : validation.status,
+                status: isValidationBelongingToObservation ? 'reset' : validation.status,
               }
             })
           },

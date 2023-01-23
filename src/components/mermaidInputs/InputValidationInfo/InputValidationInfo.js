@@ -26,7 +26,6 @@ const InputValidationInfo = ({
   const areThereValidationMessages = validationMessages.length
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
   const isIgnoredWarningValidation = validationType === 'ignore'
-  const isResetIgnoredWarningValidation = validationType === 'reset'
   const isErrorValidation = validationType === 'error'
   const isValidationPassing = validationType === 'ok'
 
@@ -88,8 +87,7 @@ const InputValidationInfo = ({
           </InlineMessage>
         </>
       ) : null}
-      {areThereValidationMessages &&
-      (isErrorValidation || isWarningValidation || isResetIgnoredWarningValidation) ? (
+      {areThereValidationMessages && (isErrorValidation || isWarningValidation) ? (
         <>
           {validationMessages.map((validation) => (
             <InlineMessage
@@ -102,9 +100,7 @@ const InputValidationInfo = ({
           ))}
         </>
       ) : null}
-      {isWarningValidation || isIgnoredWarningValidation || isResetIgnoredWarningValidation
-        ? getWarningValidationButtons()
-        : null}
+      {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
       {isValidationPassing ? <span aria-label="Passed Validation">&nbsp;</span> : null}
     </ValidationWrapper>
   )

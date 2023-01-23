@@ -127,7 +127,6 @@ const ColoniesBleachedObservationTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
-        hasObservationResetIgnoredValidation,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -155,6 +154,9 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleGrowthFormChange = (selectedOption) => {
@@ -168,6 +170,9 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleObservationInputChange = ({ event, dispatchType }) => {
@@ -180,6 +185,9 @@ const ColoniesBleachedObservationTable = ({
             newValue,
             observationId,
           },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -328,7 +336,6 @@ const ColoniesBleachedObservationTable = ({
             <ObservationValidationInfo
               hasObservationErrorValidation={hasObservationErrorValidation}
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               isObservationValid={isObservationValid}

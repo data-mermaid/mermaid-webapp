@@ -15,7 +15,6 @@ const ObservationValidationInfo = ({
   hasObservationIgnoredValidation,
   observationValidationMessages,
   observationValidationType,
-  hasObservationResetIgnoredValidation,
 }) => {
   const handleIgnoreWarningChange = async (event) => {
     const isIgnoreChecked = event.target.checked
@@ -35,9 +34,7 @@ const ObservationValidationInfo = ({
   return (
     <CellValidation>
       {isObservationValid ? <span aria-label="Passed Validation">&nbsp;</span> : null}
-      {hasObservationErrorValidation ||
-      hasObservationWarningValidation ||
-      hasObservationResetIgnoredValidation ? (
+      {hasObservationErrorValidation || hasObservationWarningValidation ? (
         <TableValidationList>
           {observationValidationMessages.map((validation) => (
             <li className={`${observationValidationType}-indicator`} key={validation.id}>
@@ -47,9 +44,7 @@ const ObservationValidationInfo = ({
         </TableValidationList>
       ) : null}
       {hasObservationIgnoredValidation ? <>Ignored</> : null}
-      {hasObservationWarningValidation ||
-      hasObservationIgnoredValidation ||
-      hasObservationResetIgnoredValidation ? (
+      {hasObservationWarningValidation || hasObservationIgnoredValidation ? (
         <InputIgnoreValidationWarningCheckboxWithLabel
           onChange={handleIgnoreWarningChange}
           checked={hasObservationIgnoredValidation}
@@ -69,7 +64,6 @@ ObservationValidationInfo.propTypes = {
   hasObservationIgnoredValidation: PropTypes.bool.isRequired,
   observationValidationMessages: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   observationValidationType: PropTypes.string.isRequired,
-  hasObservationResetIgnoredValidation: PropTypes.bool.isRequired,
 }
 
 export default ObservationValidationInfo

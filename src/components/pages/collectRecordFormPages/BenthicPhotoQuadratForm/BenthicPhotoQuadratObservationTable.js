@@ -199,7 +199,6 @@ const BenthicPhotoQuadratObservationTable = ({
         hasObservationIgnoredValidation,
         observationValidationMessages,
         observationValidationType,
-        hasObservationResetIgnoredValidation,
       } = getObservationValidationInfo({
         observationId,
         collectRecord,
@@ -218,6 +217,9 @@ const BenthicPhotoQuadratObservationTable = ({
           type: 'updateQuadratNumber',
           payload: { newQuadratNumber: event.target.value, observationId },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleBenthicAttributeChange = (selectedOption) => {
@@ -230,6 +232,9 @@ const BenthicPhotoQuadratObservationTable = ({
             newBenthicAttribute,
             observationId,
           },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -244,6 +249,9 @@ const BenthicPhotoQuadratObservationTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleNumberOfPointsChange = (event) => {
@@ -251,6 +259,9 @@ const BenthicPhotoQuadratObservationTable = ({
         observationsDispatch({
           type: 'updateNumberOfPoints',
           payload: { newNumberOfPoints: event.target.value, observationId },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -347,7 +358,6 @@ const BenthicPhotoQuadratObservationTable = ({
             <ObservationValidationInfo
               hasObservationErrorValidation={hasObservationErrorValidation}
               hasObservationIgnoredValidation={hasObservationIgnoredValidation}
-              hasObservationResetIgnoredValidation={hasObservationResetIgnoredValidation}
               hasObservationWarningValidation={hasObservationWarningValidation}
               ignoreObservationValidations={ignoreObservationValidations}
               isObservationValid={isObservationValid}
