@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components/macro'
+import styled, { css } from 'styled-components/macro'
 import theme from '../../theme'
 import { Input, inputStyles } from '../generic/form'
 
@@ -9,13 +9,19 @@ const FilterLabelWrapper = styled.label`
   flex-direction: column;
   flex-grow: 2;
   justify-content: flex-end;
-  > input {
-    max-width: ${theme.spacing.maxTextWidth};
-    ${inputStyles}
-  }
 `
 
-const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id }) => {
+const FilterInput = styled(Input)`
+  max-width: ${theme.spacing.maxTextWidth};
+  ${inputStyles};
+  ${(props) =>
+    props.disabled &&
+    css`
+      cursor: not-allowed;
+    `}
+`
+
+const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id, disabled }) => {
   const handleFilterChange = (event) => {
     const { value: eventValue } = event.target
 
@@ -25,7 +31,13 @@ const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id }) => {
   return (
     <FilterLabelWrapper htmlFor={id}>
       {name}
-      <Input type="text" id={id} value={value} onChange={handleFilterChange} />
+      <FilterInput
+        type="text"
+        id={id}
+        value={value}
+        onChange={handleFilterChange}
+        disabled={disabled}
+      />
     </FilterLabelWrapper>
   )
 }
@@ -33,6 +45,7 @@ const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id }) => {
 FilterSearchToolbar.defaultProps = {
   id: 'filter-search',
   value: undefined,
+  disabled: false,
 }
 
 FilterSearchToolbar.propTypes = {
@@ -40,6 +53,7 @@ FilterSearchToolbar.propTypes = {
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
+  disabled: PropTypes.bool,
 }
 
 export default FilterSearchToolbar

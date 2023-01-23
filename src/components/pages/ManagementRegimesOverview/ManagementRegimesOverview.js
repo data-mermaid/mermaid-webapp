@@ -409,6 +409,7 @@ const ManagementRegimesOverview = () => {
             name={language.pages.usersAndTransectsTable.filterToolbarText}
             value={tableUserPrefs.globalFilter}
             handleGlobalFilterChange={handleGlobalFilterChange}
+            disabled={sampleUnitWithManagementRegimeRecords.length === 0}
           />
         </ToolBarRow>
       )}
