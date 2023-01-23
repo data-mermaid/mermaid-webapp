@@ -32,6 +32,7 @@ import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import theme from '../../theme'
+import PageSizeSelector from '../generic/Table/PageSizeSelector'
 
 const DEFAULT_PAGE_SIZE = 5
 
@@ -234,7 +235,8 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     prepareRow,
     previousPage,
     selectedFlatRows,
-    state: { pageIndex, sortBy, globalFilter, selectedRowIds },
+    setPageSize,
+    state: { pageIndex, pageSize, sortBy, globalFilter, selectedRowIds },
     toggleAllRowsSelected,
     setGlobalFilter,
   } = useTable(
@@ -262,6 +264,10 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     setIsViewSelectedOnly(!isViewSelectedOnly)
   }
   const handleGlobalFilterChange = (value) => setGlobalFilter(value)
+
+  const handleRowsNumberChange = (e) => {
+    setPageSize(Number(e.target.value))
+  }
 
   const _setSortByPrefs = useEffect(() => {
     handleSetTableUserPrefs({ propertyKey: 'sortBy', currentValue: sortBy })
@@ -363,6 +369,13 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         </Table>
       </ModalTableOverflowWrapper>
       <CopyModalPaginationWrapper>
+        <PageSizeSelector
+          onChange={handleRowsNumberChange}
+          pageSize={pageSize}
+          pageSizeOptions={[15, 50, 100]}
+          pageType="management regimes"
+          rowLength={managementRegimeRecords.length}
+        />
         <PageSelector
           onPreviousClick={previousPage}
           previousDisabled={!canPreviousPage}
