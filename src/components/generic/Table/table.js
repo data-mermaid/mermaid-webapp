@@ -35,6 +35,7 @@ export const TableOverflowWrapper = styled.div`
 `
 
 export const Table = styled('table')`
+  border: solid 1px ${theme.color.tableBorderColor};
   table-layout: auto;
   background: ${theme.color.secondaryColor};
   min-width: 100%;
@@ -259,13 +260,28 @@ export const GenericStickyTable = styled(Table)`
 `
 
 export const CopyModalToolbarWrapper = styled.div`
+  width: 100%;
   display: flex;
-  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: end;
+  ${mediaQueryPhoneOnly(css`
+    flex-direction: column;
+    align-items: start;
+  `)}
+`
+export const ViewSelectedOnly = styled.label`
+  padding-bottom: 0.5rem;
+  input {
+    margin: 0 ${theme.spacing.medium} 0 0;
+    cursor: pointer;
+  }
 `
 
 export const CopyModalPaginationWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  padding: 0.5rem 0;
 `
 
 export const SubmittedObservationStickyTable = styled(GenericStickyTable)`

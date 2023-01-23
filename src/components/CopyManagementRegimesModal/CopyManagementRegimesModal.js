@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
 
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
@@ -10,6 +9,7 @@ import {
   Th,
   Td,
   Table,
+  ViewSelectedOnly,
   CopyModalToolbarWrapper,
   CopyModalPaginationWrapper,
 } from '../generic/Table/table'
@@ -31,18 +31,8 @@ import { pluralize } from '../../library/strings/pluralize'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
-import theme from '../../theme'
 
-const DEFAULT_PAGE_SIZE = 5
-
-const CheckBoxLabel = styled.label`
-  display: inline-block;
-  flex-grow: 1;
-  input {
-    margin: 0 ${theme.spacing.medium} 0 0;
-    cursor: pointer;
-  }
-`
+const DEFAULT_PAGE_SIZE = 7
 
 // eslint-disable-next-line react/prop-types
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
@@ -378,7 +368,13 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
 
   const toolbarContent = (
     <CopyModalToolbarWrapper>
-      <CheckBoxLabel htmlFor="viewSelectedOnly">
+      <FilterSearchToolbar
+        name={language.pages.copyManagementRegimeTable.filterToolbarText}
+        value={tableUserPrefs.globalFilter}
+        handleGlobalFilterChange={handleGlobalFilterChange}
+        id="copy-management-regimes-filter"
+      />
+      <ViewSelectedOnly htmlFor="viewSelectedOnly">
         <input
           id="viewSelectedOnly"
           type="checkbox"
@@ -386,13 +382,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
           onChange={handleViewSelectedOnlyChange}
         />
         View Selected Only
-      </CheckBoxLabel>
-      <FilterSearchToolbar
-        name={language.pages.copyManagementRegimeTable.filterToolbarText}
-        value={tableUserPrefs.globalFilter}
-        handleGlobalFilterChange={handleGlobalFilterChange}
-        id="copy-management-regimes-filter"
-      />
+      </ViewSelectedOnly>
     </CopyModalToolbarWrapper>
   )
 
