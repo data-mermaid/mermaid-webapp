@@ -303,7 +303,7 @@ const Collect = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="collect"
+          pageType="sample units"
           rowLength={collectRecordsForUiDisplay.length}
         />
         <PageSelector
