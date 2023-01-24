@@ -17,7 +17,6 @@ import PageUnavailable from '../PageUnavailable'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-import SampleUnitLinks from '../../SampleUnitLinks'
 import { sortArray } from '../../../library/arrays/sortArray'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
@@ -40,6 +39,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
+import SampleUnitPopup from '../../SampleUnitPopup/SampleUnitPopup'
 
 const EMPTY_VALUE = '-'
 
@@ -247,7 +247,7 @@ const UsersAndTransects = () => {
           )
 
           accumulator[number] = (
-            <SampleUnitLinks
+            <SampleUnitPopup
               rowRecord={rowRecord}
               sampleUnitNumbersRow={filteredRowSampleUnitNumbers}
             />
