@@ -179,6 +179,7 @@ const FishBeltObservationTable = ({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
         })
+        setAreObservationsInputsDirty(true)
       }
 
       if (isEnterKey && !isFishName) {
@@ -190,6 +191,7 @@ const FishBeltObservationTable = ({
             referenceObservationIndex: index,
           },
         })
+        setAreObservationsInputsDirty(true)
       }
     }
 
