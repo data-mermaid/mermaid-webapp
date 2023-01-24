@@ -5,9 +5,9 @@ import language from '../../language'
 import theme from '../../theme'
 
 const size = '3.5rem'
-const speed = '20s'
-const animationDelay = '4s'
-const initialRotation = '15deg'
+const speed = '40s'
+const animationDelay = '6s'
+const initialRotation = '0deg'
 
 const LoadingIndicatorContainer = styled.div`
   display: grid;
@@ -41,7 +41,7 @@ const LoadingIndicatorContainer = styled.div`
       width: 100%;
       height: 100%;
       transform: rotate(${initialRotation});
-      animation: spin ${speed} ease-in infinite;
+      animation: spin ${speed} ease-in-out infinite;
       animation-delay: ${animationDelay};
 
       div {
@@ -50,7 +50,7 @@ const LoadingIndicatorContainer = styled.div`
         width: ${size};
         height: ${size};
         transform: rotate(-${initialRotation});
-        animation: objCounter ${speed} ease-in infinite;
+        animation: objCounter ${speed} ease-in-out infinite;
         animation-delay: ${animationDelay};
       }
       .triangle {
@@ -114,7 +114,7 @@ const LoadingIndicatorContainer = styled.div`
       transform: rotate(${initialRotation});
     }
     to {
-      transform: rotate(360deg);
+      transform: rotate(1080deg);
     }
   }
   @keyframes objCounter {
@@ -122,7 +122,7 @@ const LoadingIndicatorContainer = styled.div`
       transform: rotate(-${initialRotation});
     }
     to {
-      transform: rotate(calc(-360deg - ${initialRotation}));
+      transform: rotate(calc(-1080deg - ${initialRotation}));
     }
   }
 `

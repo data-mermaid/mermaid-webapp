@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
-
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -17,8 +16,12 @@ import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { getTableColumnHeaderProps } from '../../library/getTableColumnHeaderProps'
-import { IconSend } from '../icons'
-import Modal, { ModalTableOverflowWrapper, RightFooter } from '../generic/Modal/Modal'
+import { IconCopy } from '../icons'
+import Modal, {
+  ModalLoadingIndicatorWrapper,
+  ModalTableOverflowWrapper,
+  RightFooter,
+} from '../generic/Modal/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import usePersistUserTablePreferences from '../generic/Table/usePersistUserTablePreferences'
 import { useCurrentUser } from '../../App/CurrentUserContext'
@@ -32,6 +35,7 @@ import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
+import LoadingIndicator from '../LoadingIndicator'
 
 const DEFAULT_PAGE_SIZE = 7
 
@@ -357,7 +361,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedSites}>
-        <IconSend />
+        <IconCopy />
         {language.pages.copySiteTable.copyButtonText}
       </ButtonPrimary>
     </RightFooter>
@@ -369,7 +373,15 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         isOpen={isOpen}
         onDismiss={onDismiss}
         title={language.pages.copySiteTable.title}
-        mainContent={isModalContentLoading ? 'Loading...' : table}
+        mainContent={
+          isModalContentLoading ? (
+            <ModalLoadingIndicatorWrapper>
+              <LoadingIndicator />
+            </ModalLoadingIndicatorWrapper>
+          ) : (
+            table
+          )
+        }
         footerContent={footerContent}
         toolbarContent={!isModalContentLoading && toolbarContent}
       />

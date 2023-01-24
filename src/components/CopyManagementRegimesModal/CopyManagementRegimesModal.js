@@ -1,7 +1,6 @@
 import { toast } from 'react-toastify'
 import { usePagination, useSortBy, useGlobalFilter, useTable, useRowSelect } from 'react-table'
 import { useParams } from 'react-router-dom'
-
 import React, { useState, useEffect, useCallback, useMemo, useRef, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -17,10 +16,13 @@ import useIsMounted from '../../library/useIsMounted'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
 import { getTableColumnHeaderProps } from '../../library/getTableColumnHeaderProps'
-import { IconCheck, IconSend } from '../icons'
-import Modal, { ModalTableOverflowWrapper, RightFooter } from '../generic/Modal/Modal'
+import { IconCheck, IconCopy } from '../icons'
+import Modal, {
+  ModalLoadingIndicatorWrapper,
+  ModalTableOverflowWrapper,
+  RightFooter,
+} from '../generic/Modal/Modal'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import LoadingModal from '../LoadingModal/LoadingModal'
 import { getToastArguments } from '../../library/getToastArguments'
 import language from '../../language'
 import PageSelector from '../generic/Table/PageSelector'
@@ -31,6 +33,7 @@ import { pluralize } from '../../library/strings/pluralize'
 import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
+import LoadingIndicator from '../LoadingIndicator'
 
 const DEFAULT_PAGE_SIZE = 7
 
@@ -390,7 +393,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary disabled={!selectedFlatRows.length} onClick={copySelectedManagementRegimes}>
-        <IconSend />
+        <IconCopy />
         {language.pages.copyManagementRegimeTable.copyButtonText}
       </ButtonPrimary>
     </RightFooter>
@@ -402,11 +405,19 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         isOpen={isOpen}
         onDismiss={onDismiss}
         title={language.pages.copyManagementRegimeTable.title}
-        mainContent={isModalContentLoading ? 'Loading...' : table}
+        mainContent={
+          isModalContentLoading ? (
+            <ModalLoadingIndicatorWrapper>
+              <LoadingIndicator />
+            </ModalLoadingIndicatorWrapper>
+          ) : (
+            table
+          )
+        }
         footerContent={footerContent}
         toolbarContent={!isModalContentLoading && toolbarContent}
       />
-      {isCopyMRsLoading && <LoadingModal />}
+      {isCopyMRsLoading && <LoadingIndicator />}
     </>
   )
 }
