@@ -182,6 +182,7 @@ const BenthicPhotoQuadratObservationTable = ({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
         })
+        setAreObservationsInputsDirty(true)
       }
 
       if (isEnterKey && !isBenthicAttribute) {
@@ -193,6 +194,7 @@ const BenthicPhotoQuadratObservationTable = ({
             referenceObservationIndex: index,
           },
         })
+        setAreObservationsInputsDirty(true)
       }
     }
 
