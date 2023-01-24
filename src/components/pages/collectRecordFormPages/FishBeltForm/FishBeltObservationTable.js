@@ -167,7 +167,7 @@ const FishBeltObservationTable = ({
   const observationsRows = useMemo(() => {
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
 
-    const handleKeyDown = ({ event, index, observation, isCount, isFishName }) => {
+    const handleKeyDown = ({ event, index, observation, isCount }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
@@ -182,7 +182,7 @@ const FishBeltObservationTable = ({
         setAreObservationsInputsDirty(true)
       }
 
-      if (isEnterKey && !isFishName) {
+      if (isEnterKey) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -336,14 +336,6 @@ const FishBeltObservationTable = ({
         })
       }
 
-      const handleFishNameKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isFishName: true })
-      }
-
-      const handleCountKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isCount: true })
-      }
-
       const proposeNewSpeciesClick = () => openNewObservationModal(observationId)
 
       return (
@@ -364,7 +356,6 @@ const FishBeltObservationTable = ({
                   aria-labelledby="fish-name-label"
                   options={fishNameOptions}
                   onChange={handleFishNameChange}
-                  onKeyDown={handleFishNameKeyDown}
                   value={fish_attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
@@ -395,7 +386,9 @@ const FishBeltObservationTable = ({
               step="any"
               aria-labelledby="fish-count-label"
               onChange={handleUpdateCount}
-              onKeyDown={handleCountKeyDown}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isCount: true })
+              }}
             />
           </Td>
           <Td align="right">{observationBiomass ?? <> - </>}</Td>
