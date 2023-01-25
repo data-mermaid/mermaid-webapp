@@ -126,10 +126,10 @@ const ProjectToolBarSection = ({
         <SortByLabelWrapper htmlFor="sort_by">
           Sort By
           <select id="sort_by" onChange={setSortBy} value={projectSortKey}>
+            <option value="updated_on">Last Updated Date</option>
             <option value="name">Project Name</option>
             <option value="countries">Country</option>
             <option value="num_sites">Number of Sites</option>
-            <option value="updated_on">Last Updated Date</option>
           </select>
         </SortByLabelWrapper>
         <ButtonSecondary

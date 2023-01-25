@@ -231,7 +231,7 @@ const stickyStyles = css`
   white-space: nowrap;
   z-index: 3;
   top: calc(${theme.spacing.headerHeight} - 1px);
-  &:before {
+  &::before {
     /* 
     this is to account for the border-bottom
     dissapearing when scrolled.
@@ -255,6 +255,11 @@ export const StickyOverviewTable = styled(Table)`
 export const GenericStickyTable = styled(Table)`
   tr th {
     ${stickyStyles}
+  }
+`
+export const GenericStickyTableTextWrapTh = styled(GenericStickyTable)`
+  tr th {
+    white-space: normal;
   }
 `
 

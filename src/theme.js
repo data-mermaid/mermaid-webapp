@@ -182,6 +182,7 @@ const typography = {
   lineHeight: '1.5',
   smallIconSize: '1rem',
   defaultIconSize: '1.5rem',
+  mediumIconSize: '2.25rem',
   largeIconSize: '3rem',
   xLargeIconSize: '4rem',
   noWordBreak: css`
