@@ -86,6 +86,25 @@ const ModalFooter = styled.div`
     }
   }
 `
+const ModalLoadingIndicatorWrapper = styled('div')`
+  position: static;
+  width: 100%;
+  padding: 5rem 0;
+  .loadingWrapper {
+    position: static;
+    .objectWrapper {
+      div {
+        background-color: ${theme.color.background};
+      }
+    }
+    .loadingPrimary {
+      color: ${theme.color.background};
+      width: auto;
+      position: relative;
+      top: -55%;
+    }
+  }
+`
 const LeftFooter = styled('div')`
   justify-self: start;
 `
@@ -167,4 +186,11 @@ Modal.defaultProps = {
 }
 
 export default Modal
-export { LeftFooter, RightFooter, StyledDialogOverlay, ModalContent, ModalInputRow }
+export {
+  ModalLoadingIndicatorWrapper,
+  LeftFooter,
+  RightFooter,
+  StyledDialogOverlay,
+  ModalContent,
+  ModalInputRow,
+}
