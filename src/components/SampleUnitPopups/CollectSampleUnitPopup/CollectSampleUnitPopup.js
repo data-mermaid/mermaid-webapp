@@ -8,10 +8,10 @@ import { PopupText, SampleUnitNumber, SampleUnitPopupInfo } from '../SampleUnitP
 import language from '../../../language'
 import { sortArray } from '../../../library/arrays/sortArray'
 
-const CollectSampleUnitPopup = ({ rowRecord, recordProfileId }) => {
-  const { sample_unit_method, site_name, profile_summary } = rowRecord
+const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
+  const { sample_unit_method, site_name } = rowRecord
 
-  const sampleUnitLinks = sortArray(profile_summary[recordProfileId].labels).map((row, idx) => {
+  const sampleUnitLinks = sortArray(recordProfileSummary.labels).map((row, idx) => {
     const { name, sample_date } = row
 
     const rowName = name || language.pages.usersAndTransectsTable.missingLabelNumber
@@ -36,7 +36,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileId }) => {
             {language.popoverTexts.notSubmittedSampleUnit}
           </PopupText>
         </SampleUnitPopupInfo>
-        {idx < profile_summary[recordProfileId].labels.length - 1 && ','}
+        {idx < recordProfileSummary.labels.length - 1 && ','}
       </SampleUnitNumber>
     )
   })
@@ -49,12 +49,13 @@ CollectSampleUnitPopup.propTypes = {
     sample_unit_method: PropTypes.string,
     sample_unit_protocol: PropTypes.string,
     site_name: PropTypes.string,
-    profile_summary: PropTypes.shape({
-      name: PropTypes.string,
-      sample_date: PropTypes.string,
-    }),
   }).isRequired,
-  recordProfileId: PropTypes.string.isRequired,
+  recordProfileSummary: PropTypes.shape({
+    profile_name: PropTypes.string,
+    labels: PropTypes.arrayOf(
+      PropTypes.shape({ name: PropTypes.string, sample_date: PropTypes.string }),
+    ),
+  }).isRequired,
 }
 
 export default CollectSampleUnitPopup

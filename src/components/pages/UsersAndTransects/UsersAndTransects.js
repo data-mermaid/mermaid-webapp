@@ -271,7 +271,10 @@ const UsersAndTransects = () => {
       const collectTransectNumbersRow = collectRecordsByProfileValues.reduce(
         (accumulator, record) => {
           accumulator[record.profileId] = rowRecord.profile_summary[record.profileId] ? (
-            <CollectSampleUnitPopup rowRecord={rowRecord} recordProfileId={record.profileId} />
+            <CollectSampleUnitPopup
+              rowRecord={rowRecord}
+              recordProfileSummary={rowRecord.profile_summary[record.profileId]}
+            />
           ) : (
             EMPTY_VALUE
           )

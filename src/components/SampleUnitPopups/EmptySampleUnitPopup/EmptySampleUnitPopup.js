@@ -10,12 +10,20 @@ const EmptySampleUnitPopup = ({ tableCellData, collectRecordsByProfile }) => {
     row: { values },
   } = tableCellData
 
-  const filterRowValues = Object.entries(values).filter((rowValue) => {
-    return typeof rowValue[1] === 'string' && rowValue[1].split(',').includes(Header)
+  const filterProfileValues = Object.entries(values).filter((rowValue) => {
+    return rowValue[1]?.props?.recordProfileSummary
   })
 
-  if (filterRowValues.length) {
-    const profileNames = filterRowValues
+  const testProfileNames = filterProfileValues.filter((value) => {
+    const filteredLabels = value[1]?.props?.recordProfileSummary?.labels.filter(
+      (profileLabel) => profileLabel?.name === Header,
+    )
+
+    return filteredLabels.length
+  })
+
+  if (testProfileNames.length) {
+    const profileNames = testProfileNames
       .map((profile) => collectRecordsByProfile[profile[0]].profileName)
       .join(', ')
 
