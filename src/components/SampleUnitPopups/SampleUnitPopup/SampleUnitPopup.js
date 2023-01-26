@@ -1,56 +1,17 @@
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import React from 'react'
-import styled from 'styled-components/macro'
 
-import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import { InlineCell, Table, Td, Th, Tr } from '../generic/Table/table'
-import theme from '../../theme'
-import TableRowItem from '../generic/Table/TableRowItem'
-import { getSampleDateLabel } from '../../App/mermaidData/getSampleDateLabel'
-
-const SampleUnitNumber = styled('span')`
-  white-space: nowrap;
-  border-style: dotted;
-  border-width: 0 0 ${theme.spacing.borderMedium} 0;
-  position: relative;
-  display: inline-grid;
-  place-items: center;
-  cursor: pointer;
-  &:hover span,
-  &:focus span {
-    transition: ${theme.timing.hoverTransition};
-    display: block;
-  }
-`
-
-const SampleUnitPopupInfo = styled('span')`
-  display: none;
-  width: 100%;
-  min-width: 30ch;
-  max-width: 60ch;
-  background-color: ${theme.color.calloutColor};
-  /* color: ${theme.color.primaryColor}; */
-  position: absolute;
-  font-size: ${theme.typography.smallFontSize};
-  bottom: 3rem;
-  white-space: normal;
-  z-index: 100;
-  border: 2px solid ${theme.color.primaryColor};
-`
-
-const PopupText = styled('div')`
-  display: flex;
-  justify-content: center;
-  margin: 4px;
-  font-size: ${theme.typography.smallFontSize};
-`
-const PopupLink = styled(Link)`
-  display: flex;
-  justify-content: center;
-  margin: 4px;
-  font-size: ${theme.typography.smallFontSize};
-`
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import { InlineCell, Table } from '../../generic/Table/table'
+import TableRowItem from '../../generic/Table/TableRowItem'
+import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
+import {
+  PopupLink,
+  PopupText,
+  SampleUnitNumber,
+  SampleUnitPopupInfo,
+} from '../SampleUnitPopups.styles'
+import language from '../../../language'
 
 const SampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
   const currentProjectPath = useCurrentProjectPath()
@@ -77,10 +38,10 @@ const SampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
             </tbody>
           </Table>
           <PopupLink to={`${currentProjectPath}/submitted/${sample_unit_protocol}/${row.id}`}>
-            View Submitted Sample Unit
+            {language.popoverTexts.viewSubmittedSampleUnit}
           </PopupLink>
         </SampleUnitPopupInfo>
-        {idx < sampleUnitNumbersRow.length - 1 && ', '}
+        {idx < sampleUnitNumbersRow.length - 1 && ','}
       </SampleUnitNumber>
     )
   })

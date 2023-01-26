@@ -39,7 +39,9 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
-import SampleUnitPopup from '../../SampleUnitPopup/SampleUnitPopup'
+import SampleUnitPopup from '../../SampleUnitPopups/SampleUnitPopup'
+import EmptySampleUnitPopup from '../../SampleUnitPopups/EmptySampleUnitPopup/EmptySampleUnitPopup'
+import CollectSampleUnitPopup from '../../SampleUnitPopups/CollectSampleUnitPopup/CollectSampleUnitPopup'
 
 const EMPTY_VALUE = '-'
 
@@ -268,17 +270,11 @@ const UsersAndTransects = () => {
 
       const collectTransectNumbersRow = collectRecordsByProfileValues.reduce(
         (accumulator, record) => {
-          const replaceEmptyLabels = (labels) => {
-            return labels.map((label) => {
-              return label.name || language.pages.usersAndTransectsTable.missingLabelNumber
-            })
-          }
-
-          accumulator[record.profileId] = rowRecord.profile_summary[record.profileId]
-            ? sortArray(
-                replaceEmptyLabels(rowRecord.profile_summary[record.profileId].labels),
-              ).join(', ')
-            : EMPTY_VALUE
+          accumulator[record.profileId] = rowRecord.profile_summary[record.profileId] ? (
+            <CollectSampleUnitPopup rowRecord={rowRecord} recordProfileId={record.profileId} />
+          ) : (
+            EMPTY_VALUE
+          )
 
           return accumulator
         },
@@ -485,7 +481,15 @@ const UsersAndTransects = () => {
                         align={cellAlignment}
                         className={cellClassName}
                       >
-                        <span>{cell.render('Cell')}</span>
+                        <span>
+                          {cell.render('Cell')}{' '}
+                          {isSubmittedNumberCellHightLighted && (
+                            <EmptySampleUnitPopup
+                              tableCellData={cell}
+                              collectRecordsByProfile={collectRecordsByProfile}
+                            />
+                          )}
+                        </span>
                       </OverviewTd>
                     )
                   })}

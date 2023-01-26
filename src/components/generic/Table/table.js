@@ -205,6 +205,11 @@ export const OverviewTd = styled(Td)`
   &.highlighted {
     background-color: hsl(50 80% 80% / 1);
   }
+  &:hover div,
+  &:focus div {
+    transition: ${theme.timing.hoverTransition};
+    display: block;
+  }
 `
 export const HeaderCenter = styled.p`
   text-align: center;

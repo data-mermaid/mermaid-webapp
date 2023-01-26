@@ -340,6 +340,12 @@ const map = {
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
 }
 
+const popoverTexts = {
+  noSampleUnitMatch: 'No sample units match:',
+  viewSubmittedSampleUnit: 'View Submitted Sample Unit',
+  notSubmittedSampleUnit: `This sample unit isn't submitted`,
+}
+
 const getResolveModalLanguage = (siteOrManagementRegime) => {
   return {
     original: `Original ${siteOrManagementRegime}`,
@@ -448,6 +454,7 @@ export default {
   inlineMessage,
   loadingIndicator,
   map,
+  popoverTexts,
   navigateAwayPrompt,
   pages,
   projectCodes,
