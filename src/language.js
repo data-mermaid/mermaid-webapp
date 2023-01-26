@@ -31,6 +31,7 @@ const error = {
   collectRecordSubmit: 'Something went wrong. The sample unit has not been submitted.',
   collectRecordsUnavailable: 'Sample unit data is currently unavailable. Please try again',
   collectRecordUnavailable: 'Sample unit data is currently unavailable. Please try again',
+  collectRecordSubmitDisabled: 'Errors or warnings are preventing you from submitting',
   duplicateNewUserAdd: 'User has already been added to project.',
   emptyEmailAdd: 'Please enter an email address.',
   error: 'Error',

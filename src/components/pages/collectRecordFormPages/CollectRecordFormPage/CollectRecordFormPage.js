@@ -56,7 +56,13 @@ import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers
 import PageUnavailable from '../../PageUnavailable'
 import { getIsFishBelt } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { useScrollCheckError } from '../../../../library/useScrollCheckError'
-import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
+import {
+  ErrorBox,
+  ErrorText,
+  ErrorTextButton,
+  ErrorTextSubmit,
+  ErrorBoxSubmit,
+} from '../CollectingFormPage.Styles'
 
 const CollectRecordFormPage = ({
   isNewRecord,
@@ -111,6 +117,10 @@ const CollectRecordFormPage = ({
   const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
+  const recordLevelValidationsWithErrors = recordLevelValidations?.filter(
+    (validation) => validation.status === 'error',
+  )
+
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
@@ -695,6 +705,12 @@ const CollectRecordFormPage = ({
                 onSubmit={handleSubmit}
               />
             )}
+            <ErrorBoxSubmit>
+              <ErrorTextSubmit isErrorShown={recordLevelValidationsWithErrors.length}>
+                {language.error.collectRecordSubmitDisabled}
+                <ErrorTextButton type="submit">x</ErrorTextButton>
+              </ErrorTextSubmit>
+            </ErrorBoxSubmit>
           </ContentPageToolbarWrapper>
         }
       />

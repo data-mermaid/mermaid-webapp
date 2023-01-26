@@ -163,6 +163,15 @@ export const ErrorText = styled.div`
     border-color: ${theme.color.border};
   }
 `
+export const ErrorTextSubmit = styled(ErrorText)`
+  text-transform: inherit;
+  position: absolute;
+  margin-top: 1em;
+  margin-right: 3em;
+  &:after {
+    left: calc(90% - 5px);
+  }
+`
 
 export const ErrorBox = styled.div`
   position: fixed;
@@ -185,4 +194,17 @@ export const ErrorBox = styled.div`
       transform: rotate(-135deg);
     }
   }
+`
+export const ErrorBoxSubmit = styled(ErrorBox)`
+  position: absolute;
+  top: 3.5em;
+  right: 0;
+`
+export const ErrorTextButton = styled('button')`
+  cursor: pointer;
+  border-style: none;
+  background-color: transparent;
+  font-size: 12px;
+  margin-left: 0.8em;
+  padding: 0;
 `
