@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { toast } from 'react-toastify'
@@ -119,13 +118,6 @@ const CollectRecordFormPage = ({
   const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
-  const recordLevelValidationsWithErrors = recordLevelValidations?.filter(
-    (validation) => validation.status === 'error',
-  )
-
-  console.log({ recordLevelValidationsWithErrors })
-
-  console.log({ isSubmitWarningVisible })
 
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
