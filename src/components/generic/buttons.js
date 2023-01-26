@@ -32,7 +32,7 @@ const buttonCss = css`
   display: inline-block;
   cursor: pointer;
   &:disabled {
-    color: ${theme.color.disabledText};
+    color: ${theme.color.disabledTextDark};
     cursor: not-allowed;
   }
   &:active:enabled {
