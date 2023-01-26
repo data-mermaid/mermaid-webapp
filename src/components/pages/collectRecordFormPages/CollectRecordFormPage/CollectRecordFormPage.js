@@ -105,6 +105,7 @@ const CollectRecordFormPage = ({
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
   const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+  const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
   const openDeleteRecordModal = () => {
     setIsDeleteRecordModalOpen(true)
@@ -259,6 +260,9 @@ const CollectRecordFormPage = ({
     databaseSwitchboardInstance
       .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
+        if (recordLevelValidationsWithErrors.length) {
+          setIsSubmitWarningVisible(true)
+        }
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
@@ -544,6 +548,10 @@ const CollectRecordFormPage = ({
     }
   }
 
+  const handleDismissSubmitWarning = () => {
+    setIsSubmitWarningVisible(false)
+  }
+
   const sampleUnitTransectInputs = isFishBeltSampleUnit ? (
     <FishBeltTransectInputs
       areValidationsShowing={areValidationsShowing}
@@ -706,9 +714,11 @@ const CollectRecordFormPage = ({
               />
             )}
             <ErrorBoxSubmit>
-              <ErrorTextSubmit isErrorShown={recordLevelValidationsWithErrors.length}>
+              <ErrorTextSubmit isErrorShown={isSubmitWarningVisible}>
                 {language.error.collectRecordSubmitDisabled}
-                <ErrorTextButton type="submit">x</ErrorTextButton>
+                <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                  x
+                </ErrorTextButton>
               </ErrorTextSubmit>
             </ErrorBoxSubmit>
           </ContentPageToolbarWrapper>
