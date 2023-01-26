@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { toast } from 'react-toastify'
@@ -121,6 +122,10 @@ const CollectRecordFormPage = ({
   const recordLevelValidationsWithErrors = recordLevelValidations?.filter(
     (validation) => validation.status === 'error',
   )
+
+  console.log({ recordLevelValidationsWithErrors })
+
+  console.log({ isSubmitWarningVisible })
 
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
@@ -260,12 +265,13 @@ const CollectRecordFormPage = ({
     databaseSwitchboardInstance
       .validateSampleUnit({ recordId, projectId })
       .then((validatedRecordResponse) => {
-        if (recordLevelValidationsWithErrors.length) {
-          setIsSubmitWarningVisible(true)
-        }
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
+
+        if (validatedRecordResponse.validations.status === 'error') {
+          setIsSubmitWarningVisible(true)
+        }
       })
       .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)
@@ -388,7 +394,6 @@ const CollectRecordFormPage = ({
         .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
         .then((recordWithResetValidations) => {
           handleCollectRecordChange(recordWithResetValidations)
-
           setIsFormDirty(true)
         })
         .catch((error) => {
