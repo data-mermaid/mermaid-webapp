@@ -13,7 +13,13 @@ import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import { IconAccount, IconAccountConvert, IconPlus, IconAlert } from '../../icons'
+import {
+  IconAccount,
+  IconAccountConvert,
+  IconPlus,
+  IconAlert,
+  IconAccountRemove,
+} from '../../icons'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodesSecondChild,
@@ -579,7 +585,7 @@ const Users = () => {
             disabled={isCurrentUser || isTableUpdating}
             onClick={() => openRemoveUserModal(profile)}
           >
-            X
+            <IconAccountRemove />
           </ButtonCaution>
         ),
       }
