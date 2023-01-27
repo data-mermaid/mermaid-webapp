@@ -54,9 +54,13 @@ const WarningIcon = styled(InlineIcon)`
   color: ${theme.color.warningColor};
 `
 
+const DeleteIcon = styled(InlineIcon)`
+  color: ${theme.color.cautionColor};
+`
+
 export const IconAccount = (props) => <InlineIcon icon={accountCircle} {...props} />
 export const IconAccountConvert = (props) => <InlineIcon icon={accountConvert} {...props} />
-export const IconAccountRemove = (props) => <InlineIcon icon={accountRemove} {...props} />
+export const IconAccountRemove = (props) => <DeleteIcon icon={accountRemove} {...props} />
 export const IconAdmin = (props) => <InlineIcon icon={fileAccountOutline} {...props} />
 export const IconAlert = (props) => <WarningIcon icon={alert} {...props} />
 export const IconArrowBack = (props) => <InlineIcon icon={arrowBack} {...props} />
