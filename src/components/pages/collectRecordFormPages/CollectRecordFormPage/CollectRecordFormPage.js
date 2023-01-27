@@ -671,7 +671,7 @@ const CollectRecordFormPage = ({
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}
       />
-      {errorBoxContent}
+      {!isSubmitWarningVisible ? errorBoxContent : null}
     </>
   ) : (
     <PageUnavailable mainText={language.error.pageReadOnly} />
