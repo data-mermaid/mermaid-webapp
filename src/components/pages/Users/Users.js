@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { ButtonSecondary } from '../../generic/buttons'
+import { ButtonSecondary, ButtonCaution } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
@@ -13,13 +13,7 @@ import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
 import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQueries'
-import {
-  IconAccount,
-  IconAccountConvert,
-  IconAccountRemove,
-  IconPlus,
-  IconAlert,
-} from '../../icons'
+import { IconAccount, IconAccountConvert, IconPlus, IconAlert } from '../../icons'
 import {
   reactTableNaturalSort,
   reactTableNaturalSortReactNodesSecondChild,
@@ -580,13 +574,13 @@ const Users = () => {
           </>
         ),
         remove: (
-          <ButtonSecondary
+          <ButtonCaution
             type="button"
             disabled={isCurrentUser || isTableUpdating}
             onClick={() => openRemoveUserModal(profile)}
           >
-            <IconAccountRemove />
-          </ButtonSecondary>
+            X
+          </ButtonCaution>
         ),
       }
     })

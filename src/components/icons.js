@@ -55,7 +55,7 @@ const WarningIcon = styled(InlineIcon)`
 `
 
 const DeleteIcon = styled(InlineIcon)`
-  color: ${theme.color.cautionColor};
+  color: ${theme.color.cautionText};
 `
 
 export const IconAccount = (props) => <InlineIcon icon={accountCircle} {...props} />
