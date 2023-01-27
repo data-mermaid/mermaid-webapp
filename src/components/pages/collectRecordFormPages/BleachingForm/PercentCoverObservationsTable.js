@@ -137,8 +137,8 @@ const PercentCoverObservationTable = ({
         })
       }
 
-      const handleLastCellKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isLastCell: true })
+      const handleObservationKeyDown = (event) => {
+        handleKeyDown({ event, index, observation })
       }
 
       return (
@@ -156,6 +156,7 @@ const PercentCoverObservationTable = ({
                 handleObservationInputChange({ event, dispatchType: 'updateHardCoralPercent' })
               }}
               autoFocus={autoFocusAllowed}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -167,6 +168,7 @@ const PercentCoverObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateSoftCoralPercent' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -178,7 +180,9 @@ const PercentCoverObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateAlgaePercent' })
               }}
-              onKeyDown={handleLastCellKeyDown}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isLastCell: true })
+              }}
             />
           </Td>
 

@@ -146,10 +146,6 @@ const HabitatComplexityObservationsTable = ({
         })
       }
 
-      const handleHabitatComplexityScoreKeydown = (event) => {
-        handleKeyDown({ event, index, observation, isLastCell: true })
-      }
-
       return (
         <ObservationTr key={observationId}>
           <Td align="center">{rowNumber}</Td>
@@ -160,7 +156,9 @@ const HabitatComplexityObservationsTable = ({
           <Td align="center">
             <Select
               onChange={handleHabitatComplexityScoreChange}
-              onKeyDown={handleHabitatComplexityScoreKeydown}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isLastCell: true })
+              }}
               value={habitatComplexityScore}
               aria-labelledby="habitat-complexity-score-label"
               autoFocus={autoFocusAllowed}

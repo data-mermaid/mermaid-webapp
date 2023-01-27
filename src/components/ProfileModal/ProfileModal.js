@@ -3,7 +3,7 @@ import { useFormik } from 'formik'
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { ButtonPrimary, ButtonSecondary } from '../generic/buttons'
-import { IconSend } from '../icons'
+import { IconSave } from '../icons'
 import { Input } from '../generic/form'
 import language from '../../language'
 import { getToastArguments } from '../../library/getToastArguments'
@@ -64,7 +64,7 @@ const ProfileModal = ({ isOpen, onDismiss }) => {
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>Cancel</ButtonSecondary>
       <ButtonPrimary onClick={handleOnSubmit}>
-        <IconSend />
+        <IconSave />
         Save Changes
       </ButtonPrimary>
     </RightFooter>

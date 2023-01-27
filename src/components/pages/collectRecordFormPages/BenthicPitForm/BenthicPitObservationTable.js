@@ -94,7 +94,7 @@ const BenthicPitObservationsTable = ({
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
     const growthFormSelectOptions = getOptions(choices.growthforms)
 
-    const handleKeyDown = ({ event, index, observation, isGrowthForm, isBenthicAttribute }) => {
+    const handleKeyDown = ({ event, index, observation, isGrowthForm }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
@@ -109,7 +109,7 @@ const BenthicPitObservationsTable = ({
         setAreObservationsInputsDirty(true)
       }
 
-      if (isEnterKey && !isBenthicAttribute) {
+      if (isEnterKey) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -183,14 +183,6 @@ const BenthicPitObservationsTable = ({
         })
       }
 
-      const handleBenthicAttributeKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isBenthicAttribute: true })
-      }
-
-      const handleGrowthFormKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isGrowthForm: true })
-      }
-
       const proposeNewBenthicAttributeClick = () => {
         setObservationIdToAddNewBenthicAttributeTo(observationId)
         setIsNewBenthicAttributeModalOpen(true)
@@ -211,7 +203,6 @@ const BenthicPitObservationsTable = ({
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
-                  onKeyDown={handleBenthicAttributeKeyDown}
                   value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
@@ -236,7 +227,9 @@ const BenthicPitObservationsTable = ({
           <Td align="right">
             <Select
               onChange={handleGrowthFormChange}
-              onKeyDown={handleGrowthFormKeyDown}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isGrowthForm: true })
+              }}
               value={growth_form}
               aria-labelledby="growth-form-label"
             >

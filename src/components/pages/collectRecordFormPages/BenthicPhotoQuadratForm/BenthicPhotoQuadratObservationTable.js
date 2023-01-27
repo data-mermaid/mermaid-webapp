@@ -158,7 +158,7 @@ const BenthicPhotoQuadratObservationTable = ({
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
     const growthFormOptions = getOptions(choices.growthforms)
 
-    const handleKeyDown = ({ event, index, observation, isBenthicAttribute, isNumberOfPoints }) => {
+    const handleKeyDown = ({ event, index, observation, isNumberOfPoints }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
@@ -170,9 +170,10 @@ const BenthicPhotoQuadratObservationTable = ({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
         })
+        setAreObservationsInputsDirty(true)
       }
 
-      if (isEnterKey && !isBenthicAttribute) {
+      if (isEnterKey) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -181,6 +182,7 @@ const BenthicPhotoQuadratObservationTable = ({
             referenceObservationIndex: index,
           },
         })
+        setAreObservationsInputsDirty(true)
       }
     }
 
@@ -265,23 +267,11 @@ const BenthicPhotoQuadratObservationTable = ({
         })
       }
 
-      const handleBenthicAttributeKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isBenthicAttribute: true })
-      }
-
-      const handleQuadratNumberKeyDown = (event) => {
-        handleKeyDown({ event, index, observation })
-      }
-
-      const handleGrowthFormKeyDown = (event) => {
-        handleKeyDown({ event, index, observation })
-      }
-
-      const handleNumberOfPointsKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isNumberOfPoints: true })
-      }
-
       const proposeNewBenthicAttributeClick = () => openNewObservationModal(observationId)
+
+      const handleObservationKeyDown = (event) => {
+        handleKeyDown({ event, index, observation })
+      }
 
       return (
         <ObservationTr key={observationId}>
@@ -295,7 +285,7 @@ const BenthicPhotoQuadratObservationTable = ({
               step="any"
               aria-labelledby="quadrat-number-label"
               onChange={handleQuadratNumberChange}
-              onKeyDown={handleQuadratNumberKeyDown}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="left">
@@ -306,7 +296,6 @@ const BenthicPhotoQuadratObservationTable = ({
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeOptions}
                   onChange={handleBenthicAttributeChange}
-                  onKeyDown={handleBenthicAttributeKeyDown}
                   value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
@@ -331,7 +320,7 @@ const BenthicPhotoQuadratObservationTable = ({
           <Td align="right">
             <Select
               onChange={handleGrowthFormChange}
-              onKeyDown={handleGrowthFormKeyDown}
+              onKeyDown={handleObservationKeyDown}
               value={growthFormOrEmptyStringToAvoidInputValueErrors}
               aria-labelledby="growth-form-label"
             >
@@ -351,7 +340,9 @@ const BenthicPhotoQuadratObservationTable = ({
               step="any"
               aria-labelledby="number-of-points-label"
               onChange={handleNumberOfPointsChange}
-              onKeyDown={handleNumberOfPointsKeyDown}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isNumberOfPoints: true })
+              }}
             />
           </Td>
           {areValidationsShowing ? (

@@ -70,7 +70,7 @@ const BenthicLitObservationsTable = ({
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
     const growthFormSelectOptions = getOptions(choices.growthforms)
 
-    const handleKeyDown = ({ event, index, observation, isLastCell, isBenthicAttribute }) => {
+    const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
@@ -85,7 +85,7 @@ const BenthicLitObservationsTable = ({
         setAreObservationsInputsDirty(true)
       }
 
-      if (isEnterKey && !isBenthicAttribute) {
+      if (isEnterKey) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -173,17 +173,13 @@ const BenthicLitObservationsTable = ({
         })
       }
 
-      const handleBenthicAttributeKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isBenthicAttribute: true })
-      }
-
-      const handleLastCellKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isLastCell: true })
-      }
-
       const proposeNewBenthicAttributeClick = () => {
         setObservationIdToAddNewBenthicAttributeTo(observationId)
         setIsNewBenthicAttributeModalOpen(true)
+      }
+
+      const handleObservationKeyDown = (event) => {
+        handleKeyDown({ event, index, observation })
       }
 
       return (
@@ -199,7 +195,6 @@ const BenthicLitObservationsTable = ({
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
-                  onKeyDown={handleBenthicAttributeKeyDown}
                   value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
@@ -226,6 +221,7 @@ const BenthicLitObservationsTable = ({
               onChange={handleGrowthFormChange}
               value={growth_form}
               aria-labelledby="growth-form-label"
+              onKeyDown={handleObservationKeyDown}
             >
               <option value=""> </option>
               {growthFormSelectOptions.map((item) => (
@@ -241,7 +237,7 @@ const BenthicLitObservationsTable = ({
               unit="m"
               aria-labelledby="length-label"
               onChange={handleLengthChange}
-              onKeyDown={handleLastCellKeyDown}
+              onKeyDown={(event) => handleKeyDown({ event, index, observation, isLastCell: true })}
             />
           </Td>
 

@@ -9,8 +9,8 @@ import {
   Th,
   Td,
   TableNavigation,
-  GenericStickyTable,
   StickyTableOverflowWrapper,
+  GenericStickyTableTextWrapTh,
 } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import CopyManagementRegimesModal from '../../CopyManagementRegimesModal'
@@ -345,7 +345,7 @@ const ManagementRegimes = () => {
   const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
       <StickyTableOverflowWrapper>
-        <GenericStickyTable {...getTableProps()}>
+        <GenericStickyTableTextWrapTh {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
@@ -383,7 +383,7 @@ const ManagementRegimes = () => {
               )
             })}
           </tbody>
-        </GenericStickyTable>
+        </GenericStickyTableTextWrapTh>
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector

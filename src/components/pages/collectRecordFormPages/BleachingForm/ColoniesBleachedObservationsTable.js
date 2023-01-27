@@ -77,7 +77,7 @@ const ColoniesBleachedObservationTable = ({
   const observationRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms)
 
-    const handleKeyDown = ({ event, index, observation, isLastCell, isBenthicAttribute }) => {
+    const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
@@ -92,7 +92,7 @@ const ColoniesBleachedObservationTable = ({
         setAreObservationsInputsDirty(true)
       }
 
-      if (isEnterKey && !isBenthicAttribute) {
+      if (isEnterKey) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -191,17 +191,12 @@ const ColoniesBleachedObservationTable = ({
         })
       }
 
-      const handleBenthicAttributeKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isBenthicAttribute: true })
-      }
-
-      const handleLastCellKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isLastCell: true })
-      }
-
       const proposeNewBenthicAttributeClick = () => {
         setObservationIdToAddNewBenthicAttributeTo(observationId)
         setIsNewBenthicAttributeModalOpen(true)
+      }
+      const handleObservationKeyDown = (event) => {
+        handleKeyDown({ event, index, observation })
       }
 
       return (
@@ -217,7 +212,6 @@ const ColoniesBleachedObservationTable = ({
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
-                  onKeyDown={handleBenthicAttributeKeyDown}
                   value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
@@ -244,6 +238,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={handleGrowthFormChange}
               value={growth_form}
               aria-labelledby="growth-form-label"
+              onKeyDown={handleObservationKeyDown}
             >
               <option value=""> </option>
               {growthFormSelectOptions.map((item) => (
@@ -262,6 +257,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateNormal' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -273,6 +269,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updatePale' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -284,6 +281,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update20Bleached' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -295,6 +293,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update50Bleached' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -306,6 +305,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update80Bleached' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -317,6 +317,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update100Bleached' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -328,7 +329,9 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateRecentlyDead' })
               }}
-              onKeyDown={handleLastCellKeyDown}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isLastCell: true })
+              }}
             />
           </Td>
 
