@@ -294,7 +294,7 @@ const pages = {
     title: 'Management Regimes',
   },
   usersAndTransectsTable: {
-    title: 'Users and Transects',
+    title: 'Observers and Transects',
     filterToolbarText: 'Filter this table by site or method',
     missingSiteName: '(Missing Site Name)',
     missingLabelNumber: 'missing number',

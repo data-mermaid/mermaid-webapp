@@ -13,7 +13,7 @@ const NavLinkButtonGroup = ({ projectUrl }) => {
     <>
       <OfflineHide>
         <NavLinkThatLooksLikeButtonIcon
-          to={`${projectUrl}/users-and-transects`}
+          to={`${projectUrl}/observers-and-transects`}
           aria-label="Users And Transects"
           onClick={stopEventPropagation}
         >
