@@ -14,7 +14,13 @@ import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
+import {
+  ErrorBox,
+  ErrorText,
+  ErrorTextButton,
+  ErrorTextSubmit,
+  ErrorBoxSubmit,
+} from '../CollectingFormPage.Styles'
 import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getToastArguments } from '../../../../library/getToastArguments'
@@ -91,6 +97,7 @@ const CollectRecordFormPageAlternative = ({
   const isLoading = isParentDataLoading || isCommonProtocolDataLoading
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
+  const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -298,6 +305,7 @@ const CollectRecordFormPageAlternative = ({
     setAreValidationsShowing,
     setIsFormDirty,
     setValidateButtonState,
+    setIsSubmitWarningVisible,
   })
 
   const handleSave = () => {
@@ -398,6 +406,10 @@ const CollectRecordFormPageAlternative = ({
           },
         })
       })
+  }
+
+  const handleDismissSubmitWarning = () => {
+    setIsSubmitWarningVisible(false)
   }
 
   const errorBoxContent = (
@@ -541,6 +553,14 @@ const CollectRecordFormPageAlternative = ({
                 onSubmit={handleSubmit}
               />
             )}
+            <ErrorBoxSubmit>
+              <ErrorTextSubmit isErrorShown={isSubmitWarningVisible}>
+                {language.error.collectRecordSubmitDisabled}
+                <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                  x
+                </ErrorTextButton>
+              </ErrorTextSubmit>
+            </ErrorBoxSubmit>
           </ContentPageToolbarWrapper>
         }
       />

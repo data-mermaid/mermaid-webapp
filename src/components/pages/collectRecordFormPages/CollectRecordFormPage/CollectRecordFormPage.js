@@ -56,7 +56,13 @@ import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers
 import PageUnavailable from '../../PageUnavailable'
 import { getIsFishBelt } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { useScrollCheckError } from '../../../../library/useScrollCheckError'
-import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
+import {
+  ErrorBox,
+  ErrorText,
+  ErrorTextButton,
+  ErrorTextSubmit,
+  ErrorBoxSubmit,
+} from '../CollectingFormPage.Styles'
 
 const CollectRecordFormPage = ({
   isNewRecord,
@@ -99,6 +105,7 @@ const CollectRecordFormPage = ({
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
   const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+  const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
   const openDeleteRecordModal = () => {
     setIsDeleteRecordModalOpen(true)
@@ -111,6 +118,7 @@ const CollectRecordFormPage = ({
   const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
+
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
@@ -252,6 +260,10 @@ const CollectRecordFormPage = ({
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
+
+        if (validatedRecordResponse.validations.status === 'error') {
+          setIsSubmitWarningVisible(true)
+        }
       })
       .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)
@@ -374,7 +386,6 @@ const CollectRecordFormPage = ({
         .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
         .then((recordWithResetValidations) => {
           handleCollectRecordChange(recordWithResetValidations)
-
           setIsFormDirty(true)
         })
         .catch((error) => {
@@ -534,6 +545,10 @@ const CollectRecordFormPage = ({
     }
   }
 
+  const handleDismissSubmitWarning = () => {
+    setIsSubmitWarningVisible(false)
+  }
+
   const sampleUnitTransectInputs = isFishBeltSampleUnit ? (
     <FishBeltTransectInputs
       areValidationsShowing={areValidationsShowing}
@@ -656,7 +671,7 @@ const CollectRecordFormPage = ({
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}
       />
-      {errorBoxContent}
+      {!isSubmitWarningVisible ? errorBoxContent : null}
     </>
   ) : (
     <PageUnavailable mainText={language.error.pageReadOnly} />
@@ -695,6 +710,14 @@ const CollectRecordFormPage = ({
                 onSubmit={handleSubmit}
               />
             )}
+            <ErrorBoxSubmit>
+              <ErrorTextSubmit isErrorShown={isSubmitWarningVisible}>
+                {language.error.collectRecordSubmitDisabled}
+                <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                  x
+                </ErrorTextButton>
+              </ErrorTextSubmit>
+            </ErrorBoxSubmit>
           </ContentPageToolbarWrapper>
         }
       />
