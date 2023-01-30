@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { ButtonSecondary } from '../../generic/buttons'
+import { ButtonSecondary, ButtonCaution } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
@@ -16,9 +16,9 @@ import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQ
 import {
   IconAccount,
   IconAccountConvert,
-  IconAccountRemove,
   IconPlus,
   IconAlert,
+  IconAccountRemove,
 } from '../../icons'
 import {
   reactTableNaturalSort,
@@ -580,13 +580,13 @@ const Users = () => {
           </>
         ),
         remove: (
-          <ButtonSecondary
+          <ButtonCaution
             type="button"
             disabled={isCurrentUser || isTableUpdating}
             onClick={() => openRemoveUserModal(profile)}
           >
             <IconAccountRemove />
-          </ButtonSecondary>
+          </ButtonCaution>
         ),
       }
     })

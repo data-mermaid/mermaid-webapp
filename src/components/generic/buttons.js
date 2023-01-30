@@ -109,7 +109,7 @@ export const ButtonCaution = styled(Button)`
   border: solid 1px ${theme.color.cautionColor};
   ${hoverState(
     css`
-      background-color: ${theme.color.black};
+      background-color: ${theme.color.cautionColor};
       color: ${theme.color.white};
     `,
   )}
