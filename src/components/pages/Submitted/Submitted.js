@@ -298,7 +298,7 @@ const Submitted = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="submitted"
+          pageType="sample units"
           rowLength={submittedRecordsForUiDisplay.length}
         />
         <PageSelector
