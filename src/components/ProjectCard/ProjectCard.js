@@ -86,7 +86,7 @@ const ProjectCard = ({
     }
 
     const destinationUrl = isAppOnline
-      ? `${projectUrl}/users-and-transects`
+      ? `${projectUrl}/observers-and-transects`
       : `${projectUrl}/collecting`
 
     history.push(destinationUrl)

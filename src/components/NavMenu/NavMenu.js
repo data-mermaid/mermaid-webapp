@@ -202,8 +202,8 @@ const NavMenu = ({ subNavNode }) => {
             <NavHeaderSecondary>Overview</NavHeaderSecondary>
             <ul>
               <li>
-                <NavLinkSidebar to={`${projectUrl}/users-and-transects`}>
-                  <IconUsersAndTransects /> <span>Users and Transects</span>
+                <NavLinkSidebar to={`${projectUrl}/observers-and-transects`}>
+                  <IconUsersAndTransects /> <span>Observers and Transects</span>
                 </NavLinkSidebar>
               </li>
               <li>
