@@ -49,7 +49,8 @@ const useCollectRecordValidation = ({
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
-        validatedRecordResponse.validations.status === 'error'
+        validatedRecordResponse.validations.status === 'error' ||
+        validatedRecordResponse.validations.status === 'warning'
           ? setIsSubmitWarningVisible(true)
           : setIsSubmitWarningVisible(false)
       })
