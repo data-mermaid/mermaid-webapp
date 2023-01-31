@@ -500,7 +500,7 @@ const UsersAndTransects = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="users and transects"
+          pageType="records"
           rowLength={submittedRecords.length}
         />
         <PageSelector
