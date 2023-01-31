@@ -17,6 +17,7 @@ const useCollectRecordValidation = ({
   setAreValidationsShowing,
   setIsFormDirty,
   setValidateButtonState,
+  setIsSubmitWarningVisible,
 }) => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const getValidationButtonStatus = useCallback((collectRecord) => {
@@ -48,6 +49,9 @@ const useCollectRecordValidation = ({
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
+        if (validatedRecordResponse.validations.status === 'error') {
+          setIsSubmitWarningVisible(true)
+        }
       })
       .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)
