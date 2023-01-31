@@ -317,6 +317,7 @@ const CollectRecordFormPageAlternative = ({
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
+    setIsSubmitWarningVisible(false)
 
     databaseSwitchboardInstance
       .saveSampleUnit({
