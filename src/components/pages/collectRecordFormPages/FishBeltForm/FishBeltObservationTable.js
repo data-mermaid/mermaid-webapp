@@ -26,8 +26,6 @@ import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWit
 import language from '../../../../language'
 import {
   ButtonRemoveRow,
-  CellValidation,
-  CellValidationButton,
   InputAutocompleteContainer,
   NewOptionButton,
   ObservationAutocomplete,
@@ -36,10 +34,12 @@ import {
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
   StickyObservationTable,
-  TableValidationList,
   UnderTableRow,
 } from '../CollectingFormPage.Styles'
 import { fishReferenceEndpoint } from '../../../../App/mermaidData/fishNameHelpers'
+import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
+import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
+import ObservationValidationInfo from '../ObservationValidationInfo'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -221,6 +221,9 @@ const FishBeltObservationTable = ({
           type: 'updateSize',
           payload: { newSize, observationId },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleUpdateSizeEvent = (event) => {
@@ -236,6 +239,9 @@ const FishBeltObservationTable = ({
         observationsDispatch({
           type: 'updateCount',
           payload: { newCount: event.target.value, observationId },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -270,58 +276,12 @@ const FishBeltObservationTable = ({
 
       const observationValidations = getObservationValidations(observationId, collectRecord)
 
-      const handleIgnoreObservationValidations = () => {
-        ignoreObservationValidations({
-          observationId,
-        })
-      }
-
-      const handleResetObservationValidations = () => {
-        resetObservationValidations({
-          observationId,
-        })
-      }
-
       const observationValidationsToDisplay = getValidationPropertiesForInput(
         observationValidations,
         areValidationsShowing,
       )
 
       const { validationType } = observationValidationsToDisplay
-      const observationValidationMessages =
-        observationValidationsToDisplay?.validationMessages ?? []
-      const isObservationValid = validationType === 'ok'
-      const hasWarningValidation = validationType === 'warning'
-      const hasErrorValidation = validationType === 'error'
-      const hasIgnoredValidation = validationType === 'ignore'
-
-      const validationsMarkup = (
-        <CellValidation>
-          {isObservationValid ? <span aria-label="Passed Validation">&nbsp;</span> : null}
-          {hasErrorValidation || hasWarningValidation ? (
-            <TableValidationList>
-              {observationValidationMessages.map((validation) => (
-                <li className={`${validationType}-indicator`} type="warning" key={validation.id}>
-                  {language.getValidationMessage(validation)}
-                </li>
-              ))}
-            </TableValidationList>
-          ) : null}
-          {hasWarningValidation ? (
-            <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-              Ignore warning
-            </CellValidationButton>
-          ) : null}
-          {hasIgnoredValidation ? (
-            <>
-              Ignored
-              <CellValidationButton type="button" onClick={handleResetObservationValidations}>
-                Reset validations
-              </CellValidationButton>
-            </>
-          ) : null}
-        </CellValidation>
-      )
 
       const handleFishNameChange = (selectedOption) => {
         const newFishName = selectedOption.value
@@ -334,9 +294,26 @@ const FishBeltObservationTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const proposeNewSpeciesClick = () => openNewObservationModal(observationId)
+
+      const {
+        isObservationValid,
+        hasObservationWarningValidation,
+        hasObservationErrorValidation,
+        hasObservationIgnoredValidation,
+        observationValidationMessages,
+        observationValidationType,
+      } = getObservationValidationInfo({
+        observationId,
+        collectRecord,
+        areValidationsShowing,
+        observationsPropertyName: getObservationsPropertyNames(collectRecord)[0],
+      })
 
       return (
         <ObservationTr key={observationId} messageType={validationType}>
@@ -392,7 +369,19 @@ const FishBeltObservationTable = ({
             />
           </Td>
           <Td align="right">{observationBiomass ?? <> - </>}</Td>
-          {areValidationsShowing ? validationsMarkup : null}
+          {areValidationsShowing ? (
+            <ObservationValidationInfo
+              hasObservationErrorValidation={hasObservationErrorValidation}
+              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
+              hasObservationWarningValidation={hasObservationWarningValidation}
+              ignoreObservationValidations={ignoreObservationValidations}
+              isObservationValid={isObservationValid}
+              observationId={observationId}
+              observationValidationMessages={observationValidationMessages}
+              observationValidationType={observationValidationType}
+              resetObservationValidations={resetObservationValidations}
+            />
+          ) : null}
           <Td align="center">
             <ButtonRemoveRow
               tabIndex="-1"

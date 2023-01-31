@@ -24,11 +24,11 @@ test('Collect page only shows records that arent marked to be deleted next sync'
     dexieCurrentUserInstance,
   })
 
-  userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '19')
+  userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '20')
 
   const rows = await screen.findAllByRole('row')
 
-  expect(rows).toHaveLength(20)
+  expect(rows).toHaveLength(21)
 })
 
 test('Sites page only shows records that arent marked to be deleted next sync', async () => {

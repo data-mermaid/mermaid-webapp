@@ -28,7 +28,6 @@ const BleachingTransectInputs = ({
   areValidationsShowing,
   choices,
   formik,
-  setIgnoredItemsToBeRevalidated,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationsApiData,
@@ -84,78 +83,60 @@ const BleachingTransectInputs = ({
 
   const handleLabelChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'label',
-      validationProperties: labelValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: LABEL_VALIDATION_PATH,
     })
   }
 
   const handleQuadratSizeChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'quadrat_size',
-      validationProperties: quadratSizeValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: QUADRAT_SIZE_VALIDATION_PATH,
     })
   }
 
   const handleRelativeDepthChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'relative_depth',
-      validationProperties: relativeDepthValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
   }
   const handleVisibilityChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'visibility',
-      validationProperties: visibilityValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
   }
   const handleCurrentChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'current',
-      validationProperties: currentValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: CURRENT_VALIDATION_PATH,
     })
   }
 
   const handleNotesChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'notes',
-      validationProperties: notesValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
   const handleTideChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'tide',
-      validationProperties: tideValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: TIDE_VALIDATION_PATH,
     })
   }
 
   const handleSampleTimeChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'sample_time',
-      validationProperties: sampleTimeValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
   }
 
   const handleDepthChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'depth',
-      validationProperties: depthValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: DEPTH_VALIDATION_PATH,
     })
   }
@@ -334,7 +315,6 @@ BleachingTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
-  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: benthicPitValidationPropType.isRequired,

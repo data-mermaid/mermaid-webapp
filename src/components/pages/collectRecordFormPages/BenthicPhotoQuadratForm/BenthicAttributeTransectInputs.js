@@ -19,7 +19,7 @@ const LABEL_VALIDATION_PATH = 'data.quadrat_transect.label'
 const LENGTH_SURVEYED_VALIDATION_PATH = 'data.quadrat_transect.len_surveyed'
 const NOTES_VALIDATION_PATH = 'data.quadrat_transect.notes'
 const NUM_POINTS_PER_QUADRAT_VALIDATION_PATH = 'data.quadrat_transect.num_points_per_quadrat'
-const NUM_QUADRATS_VALIDATION_PATH = 'data.quadrat_transect.num_quadrat'
+const NUM_QUADRATS_VALIDATION_PATH = 'data.quadrat_transect.num_quadrats'
 const QUADRAT_NUMBER_START_VALIDATION_PATH = 'data.quadrat_transect.quadrat_number_start'
 const QUADRAT_SIZE_VALIDATION_PATH = 'data.quadrat_transect.quadrat_size'
 const SAMPLE_TIME_VALIDATION_PATH = 'data.quadrat_transect.sample_time'
@@ -33,7 +33,6 @@ const TransectInputs = ({
   areValidationsShowing,
   choices,
   formik,
-  setIgnoredItemsToBeRevalidated,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationsApiData,
@@ -106,105 +105,79 @@ const TransectInputs = ({
   )
 
   const handleTransectNumberChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'number',
-      validationProperties: transectNumberValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: TRANSECT_NUMBER_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleLabelChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'label',
-      validationProperties: labelValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: LABEL_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleSampleTimeChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'sample_time',
-      validationProperties: sampleTimeValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: SAMPLE_TIME_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleDepthChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'depth',
-      validationProperties: depthValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: DEPTH_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleLengthSurveyedChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'len_surveyed',
-      validationProperties: lengthSurveyedValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: LENGTH_SURVEYED_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleQuadratNumberStartChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'quadrat_number_start',
-      validationProperties: quadratNumberStartValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: QUADRAT_NUMBER_START_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleQuadratSizeChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'quadrat_size',
-      validationProperties: quadratSizeValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: QUADRAT_SIZE_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleNumberOfQuadratsChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'num_quadrats',
-      validationProperties: numberOfQuadratsValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: NUM_QUADRATS_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleNumberOfPointsPerQuadratChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'num_points_per_quadrat',
-      validationProperties: numberOfPointsPerQuadratValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: NUM_POINTS_PER_QUADRAT_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleVisibilityChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'visibility',
-      validationProperties: visibilityValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: VISIBILITY_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleCurrentChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'current',
-      validationProperties: currentValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: CURRENT_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleRelativeDepthChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'relative_depth',
-      validationProperties: relativeDepthValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: RELATIVE_DEPTH_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
   const handleTideChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'tide',
-      validationProperties: tideValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: TIDE_VALIDATION_PATH,
     })
     formik.handleChange(event)
@@ -212,9 +185,7 @@ const TransectInputs = ({
 
   const handleNotesChange = (event) => {
     formik.handleChange(event)
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'notes',
-      validationProperties: notesValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: NOTES_VALIDATION_PATH,
     })
   }
@@ -338,7 +309,7 @@ const TransectInputs = ({
               validationPath: QUADRAT_NUMBER_START_VALIDATION_PATH,
             })
           }}
-          {...quadratSizeValidationProperties}
+          {...quadratNumberStartValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_number_start}
           onChange={handleQuadratNumberStartChange}
@@ -492,7 +463,6 @@ TransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
-  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ quadrat_transect: benthicpqtValidationPropType })

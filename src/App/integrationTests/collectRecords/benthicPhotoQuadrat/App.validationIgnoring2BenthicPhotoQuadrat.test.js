@@ -12,11 +12,11 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-import { mockBenthicLitCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
+import mockBenthicPhotoQuadratCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPhotoQuadratCollectRecords'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-test('Benthic LIT validation: user can reset ignored observation warnings ', async () => {
+test('Benthic photo quadrat validation: user can reset ignored observation warnings ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -26,12 +26,12 @@ test('Benthic LIT validation: user can reset ignored observation warnings ', asy
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicLitCollectRecords[0],
+        ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: {
           status: 'error',
           results: {
             data: {
-              obs_benthic_lits: [
+              obs_benthic_photo_quadrats: [
                 [
                   {
                     context: { observation_id: '1' },
@@ -92,7 +92,7 @@ test('Benthic LIT validation: user can reset ignored observation warnings ', asy
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/benthiclit/70'],
+      initialEntries: ['/projects/5/collecting/benthicpqt/90'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -139,7 +139,7 @@ test('user can reset dismissed record-level warnings', async () => {
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicLitCollectRecords[0],
+        ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: {
           status: 'error',
           results: {
@@ -174,7 +174,7 @@ test('user can reset dismissed record-level warnings', async () => {
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/benthiclit/70'],
+      initialEntries: ['/projects/5/collecting/benthicpqt/90'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -202,7 +202,7 @@ test('user can reset dismissed record-level warnings', async () => {
   expect(isFormDirtyAfterReset)
 })
 
-test('Benthic LIT validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
+test('Benthic photo quadrat validation: user edits non-observation input with ignored validation resets the ignored status for that input.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -212,7 +212,7 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
 
     rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
       const collectRecordWithValidation = {
-        ...mockBenthicLitCollectRecords[0],
+        ...mockBenthicPhotoQuadratCollectRecords[0],
         validations: {
           status: 'error',
           results: {
@@ -267,7 +267,7 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
                   },
                 ],
               },
-              benthic_transect: {
+              quadrat_transect: {
                 depth: [
                   {
                     validation_id: Math.random(),
@@ -328,7 +328,43 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
                     status: 'ignore',
                   },
                 ],
-                reef_slope: [
+                relative_depth: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                visibility: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                current: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                tide: [
                   {
                     validation_id: Math.random(),
                     name: 'firstWarning',
@@ -341,6 +377,54 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
                   },
                 ],
                 notes: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                quadrat_size: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                num_quadrats: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                num_points_per_quadrat: [
+                  {
+                    validation_id: Math.random(),
+                    name: 'firstWarning',
+                    status: 'ignore',
+                  },
+                  {
+                    validation_id: Math.random(),
+                    name: 'secondWarning',
+                    status: 'ignore',
+                  },
+                ],
+                quadrat_number_start: [
                   {
                     validation_id: Math.random(),
                     name: 'firstWarning',
@@ -378,7 +462,7 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
   renderAuthenticatedOnline(
     <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
     {
-      initialEntries: ['/projects/5/collecting/benthiclit/70'],
+      initialEntries: ['/projects/5/collecting/benthicpqt/90'],
     },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -396,9 +480,16 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
   const transectNumberRow = screen.getByTestId('transect_number')
   const labelRow = screen.getByTestId('label')
   const lengthSurveyedRow = screen.getByTestId('len_surveyed')
-  const reefSlopeRow = screen.getByTestId('reef_slope')
+  const relativeDepthRow = screen.getByTestId('relative_depth')
+  const visibilityRow = screen.getByTestId('visibility')
+  const currentRow = screen.getByTestId('current')
+  const tideRow = screen.getByTestId('tide')
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
+  const quadratNumberStartRow = screen.getByTestId('quadrat_number_start')
+  const quadratSizeRow = screen.getByTestId('quadrat_size')
+  const numberOfQuadratsRow = screen.getByTestId('num_quadrats')
+  const numberOfPointsPerQuadratRow = screen.getByTestId('num_points_per_quadrat')
 
   expect(within(siteRow).getByText('Ignored')).toBeInTheDocument()
   expect(within(managementRow).getByText('Ignored')).toBeInTheDocument()
@@ -408,9 +499,16 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
   expect(within(transectNumberRow).getByText('Ignored')).toBeInTheDocument()
   expect(within(labelRow).getByText('Ignored')).toBeInTheDocument()
   expect(within(lengthSurveyedRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(reefSlopeRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(relativeDepthRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(visibilityRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(currentRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(tideRow).getByText('Ignored')).toBeInTheDocument()
   expect(within(notesRow).getByText('Ignored')).toBeInTheDocument()
   expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(quadratNumberStartRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(quadratSizeRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(numberOfQuadratsRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(numberOfPointsPerQuadratRow).getByText('Ignored')).toBeInTheDocument()
 
   userEvent.selectOptions(within(siteRow).getByLabelText('Site'), '1')
   await waitFor(() => expect(within(siteRow).queryByText('Ignored')).not.toBeInTheDocument())
@@ -440,14 +538,46 @@ test('Benthic LIT validation: user edits non-observation input with ignored vali
     expect(within(lengthSurveyedRow).queryByText('Ignored')).not.toBeInTheDocument(),
   )
 
-  userEvent.click(within(reefSlopeRow).getByLabelText('crest'))
-  await waitFor(() => expect(within(reefSlopeRow).queryByText('Ignored')).not.toBeInTheDocument())
+  userEvent.click(within(relativeDepthRow).getByLabelText('shallow'))
+  await waitFor(() =>
+    expect(within(relativeDepthRow).queryByText('Ignored')).not.toBeInTheDocument(),
+  )
+
+  userEvent.click(within(visibilityRow).getByLabelText('not reported'))
+  await waitFor(() => expect(within(visibilityRow).queryByText('Ignored')).not.toBeInTheDocument())
+
+  userEvent.click(within(currentRow).getByLabelText('moderate'))
+  await waitFor(() => expect(within(currentRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.type(within(notesRow).getByLabelText('Notes'), '1')
   await waitFor(() => expect(within(notesRow).queryByText('Ignored')).not.toBeInTheDocument())
 
   userEvent.click(within(observersRow).getByLabelText('Melissa Nunes'))
   await waitFor(() => expect(within(observersRow).queryByText('Ignored')).not.toBeInTheDocument())
+
+  userEvent.click(within(tideRow).getByLabelText('low'))
+  await waitFor(() => expect(within(tideRow).queryByText('Ignored')).not.toBeInTheDocument())
+
+  userEvent.type(within(quadratNumberStartRow).getByLabelText('Quadrat Number Start'), '99')
+  await waitFor(() =>
+    expect(within(quadratNumberStartRow).queryByText('Ignored')).not.toBeInTheDocument(),
+  )
+
+  userEvent.type(within(quadratSizeRow).getByLabelText('Quadrat Size'), '99')
+  await waitFor(() => expect(within(quadratSizeRow).queryByText('Ignored')).not.toBeInTheDocument())
+
+  userEvent.type(within(numberOfQuadratsRow).getByLabelText('Number of Quadrats'), '99')
+  await waitFor(() =>
+    expect(within(numberOfQuadratsRow).queryByText('Ignored')).not.toBeInTheDocument(),
+  )
+
+  userEvent.type(
+    within(numberOfPointsPerQuadratRow).getByLabelText('Number of Points per Quadrat'),
+    '99',
+  )
+  await waitFor(() =>
+    expect(within(numberOfPointsPerQuadratRow).queryByText('Ignored')).not.toBeInTheDocument(),
+  )
 
   // make act error go away
   await waitFor(() => expect(screen.getByRole('button', { name: 'Save' })))

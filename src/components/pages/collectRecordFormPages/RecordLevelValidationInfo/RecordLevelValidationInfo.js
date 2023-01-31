@@ -9,6 +9,7 @@ import { ValidationList } from '../../../generic/form'
 import InlineMessage from '../../../generic/InlineMessage/InlineMessage'
 import language from '../../../../language'
 import theme from '../../../../theme'
+import InputIgnoreValidationWarningCheckboxWithLabel from '../../../mermaidInputs/InputIgnoreValidationWarningCheckboxWithLabel'
 
 export const InlineValidationButton = styled(ButtonSecondary)`
   margin: ${theme.spacing.xxsmall};
@@ -53,6 +54,16 @@ const RecordLevelValidationInfo = ({
   handleScrollToObservation,
 }) => {
   const { projectId } = useParams()
+  const handleIgnoreWarningChange = async ({ event, validationId }) => {
+    const isIgnoreChecked = event.target.checked
+
+    if (isIgnoreChecked) {
+      ignoreRecordLevelValidation({ validationId })
+    }
+    if (!isIgnoreChecked) {
+      resetRecordLevelValidation({ validationId })
+    }
+  }
 
   return (
     <ValidationList data-testid="record-level-validations">
@@ -77,25 +88,13 @@ const RecordLevelValidationInfo = ({
                 Scroll to observations
               </ScrollToButton>
             )}
-            {isWarning || isReset ? (
-              <InlineValidationButton
-                type="button"
-                onClick={() =>
-                  ignoreRecordLevelValidation({ validationId: validation.validation_id })
-                }
-              >
-                Ignore Warning
-              </InlineValidationButton>
-            ) : null}
-            {isIgnored ? (
-              <InlineValidationButton
-                type="button"
-                onClick={() =>
-                  resetRecordLevelValidation({ validationId: validation.validation_id })
-                }
-              >
-                Reset validation
-              </InlineValidationButton>
+            {isWarning || isReset || isIgnored ? (
+              <InputIgnoreValidationWarningCheckboxWithLabel
+                onChange={(event) => {
+                  handleIgnoreWarningChange({ event, validationId: validation.validation_id })
+                }}
+                checked={isIgnored}
+              />
             ) : null}
           </InlineValidationItem>
         ) : null
