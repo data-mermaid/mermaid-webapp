@@ -218,6 +218,7 @@ const CollectRecordFormPage = ({
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
+    setIsSubmitWarningVisible(false)
 
     databaseSwitchboardInstance
       .saveSampleUnit({
@@ -261,9 +262,10 @@ const CollectRecordFormPage = ({
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
 
-        if (validatedRecordResponse.validations.status === 'error') {
-          setIsSubmitWarningVisible(true)
-        }
+        validatedRecordResponse.validations.status === 'error' ||
+        validatedRecordResponse.validations.status === 'warning'
+          ? setIsSubmitWarningVisible(true)
+          : setIsSubmitWarningVisible(false)
       })
       .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)

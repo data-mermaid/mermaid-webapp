@@ -317,6 +317,7 @@ const CollectRecordFormPageAlternative = ({
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
+    setIsSubmitWarningVisible(false)
 
     databaseSwitchboardInstance
       .saveSampleUnit({
@@ -510,7 +511,7 @@ const CollectRecordFormPageAlternative = ({
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}
       />
-      {errorBoxContent}
+      {!isSubmitWarningVisible ? errorBoxContent : null}
     </>
   ) : (
     <PageUnavailable mainText={language.error.pageReadOnly} />
