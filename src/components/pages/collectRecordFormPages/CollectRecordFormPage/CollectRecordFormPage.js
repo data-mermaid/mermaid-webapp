@@ -354,23 +354,25 @@ const CollectRecordFormPage = ({
 
   const ignoreNonObservationFieldValidations = useCallback(
     ({ validationPath }) => {
-      databaseSwitchboardInstance
-        .ignoreNonObservationFieldValidations({
-          record: collectRecordBeingEdited,
-          validationPath,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
-            },
+      if (collectRecordBeingEdited && validationPath) {
+        databaseSwitchboardInstance
+          .ignoreNonObservationFieldValidations({
+            record: collectRecordBeingEdited,
+            validationPath,
           })
-        })
+          .then((recordWithIgnoredValidations) => {
+            handleCollectRecordChange(recordWithIgnoredValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+              },
+            })
+          })
+      }
     },
     [
       collectRecordBeingEdited,
