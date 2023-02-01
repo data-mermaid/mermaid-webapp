@@ -213,28 +213,29 @@ const ProjectHealthMixin = (Base) =>
 
       if (collectingProfileSummary) {
         for (const [profileId, profileInfo] of Object.entries(collectingProfileSummary)) {
-          const labelsWithSampleDatesInSampleEvent = profileInfo.labels.filter(
-            (label) =>
-              sampleEventUnitSampleDate !== '' && label.sample_date === sampleEventUnitSampleDate,
+          const labelsWithSampleDatesInSampleEvent = profileInfo.collect_records.filter(
+            (collectRecord) =>
+              sampleEventUnitSampleDate !== '' &&
+              collectRecord.sample_date === sampleEventUnitSampleDate,
           )
 
-          const specialLabels = profileInfo.labels.filter(
-            (label) =>
+          const specialLabels = profileInfo.collect_records.filter(
+            (collectRecord) =>
               sampleEventUnitSampleDate === '' &&
-              !filteredSampleEventUnitRows.includes(label.sample_date),
+              !filteredSampleEventUnitRows.includes(collectRecord.sample_date),
           )
 
           if (labelsWithSampleDatesInSampleEvent.length) {
             sampleUnitProfileSummary[profileId] = {
               profile_name: profileInfo.profile_name,
-              labels: labelsWithSampleDatesInSampleEvent,
+              collect_records: labelsWithSampleDatesInSampleEvent,
             }
           }
 
           if (specialLabels.length) {
             sampleUnitProfileSummary[profileId] = {
               profile_name: profileInfo.profile_name,
-              labels: specialLabels,
+              collect_records: specialLabels,
             }
           }
         }
@@ -302,7 +303,7 @@ const ProjectHealthMixin = (Base) =>
             .map(({ sample_date }) => sample_date)
 
           for (const profile of Object.values(protocolProfileSummary)) {
-            profileSummaryLabels.push(...profile.labels)
+            profileSummaryLabels.push(...profile.collect_records)
           }
 
           const profileSummaryLabelSampleDates = profileSummaryLabels.map(

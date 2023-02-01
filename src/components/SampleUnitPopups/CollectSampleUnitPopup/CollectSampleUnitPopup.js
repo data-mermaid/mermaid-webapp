@@ -11,7 +11,7 @@ import { sortArray } from '../../../library/arrays/sortArray'
 const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
   const { sample_unit_method, site_name } = rowRecord
 
-  const sampleUnitLinks = sortArray(recordProfileSummary.labels).map((row, idx) => {
+  const sampleUnitLinks = sortArray(recordProfileSummary.collect_records).map((row, idx) => {
     const { name, sample_date } = row
 
     const rowName = name || language.pages.usersAndTransectsTable.missingLabelNumber
@@ -36,7 +36,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
             {language.popoverTexts.notSubmittedSampleUnit}
           </PopupText>
         </SampleUnitPopupInfo>
-        {idx < recordProfileSummary.labels.length - 1 && ','}
+        {idx < recordProfileSummary.collect_records.length - 1 && ','}
       </SampleUnitNumber>
     )
   })
@@ -52,7 +52,7 @@ CollectSampleUnitPopup.propTypes = {
   }).isRequired,
   recordProfileSummary: PropTypes.shape({
     profile_name: PropTypes.string,
-    labels: PropTypes.arrayOf(
+    collect_records: PropTypes.arrayOf(
       PropTypes.shape({ name: PropTypes.string, sample_date: PropTypes.string }),
     ),
   }).isRequired,

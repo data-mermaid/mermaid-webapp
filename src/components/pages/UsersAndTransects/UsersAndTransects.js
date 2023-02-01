@@ -79,7 +79,7 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
 
     for (const collectRecordProfile in profileSummary) {
       if (profileSummary[collectRecordProfile]) {
-        const collectRecords = profileSummary[collectRecordProfile]?.labels
+        const collectRecords = profileSummary[collectRecordProfile]?.collect_records
 
         accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
         accumulator[collectRecordProfile] = {
@@ -122,6 +122,8 @@ const UsersAndTransects = () => {
             if (!sampleUnitRecordsResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+
+            console.log('sampleUnitRecordsResponse ', sampleUnitRecordsResponse)
 
             const sampleUnitTransectNumbers = sampleUnitRecordsResponse
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
