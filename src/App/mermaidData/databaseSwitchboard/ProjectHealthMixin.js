@@ -2,7 +2,7 @@ import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getName } from '../../../library/strings/getName'
+import { getName, MISSING_NAME } from '../../../library/strings/nameHelpers'
 
 const ProjectHealthMixin = (Base) =>
   class extends Base {
@@ -144,7 +144,7 @@ const ProjectHealthMixin = (Base) =>
         )
 
         const collectingSummaryWithNameIsNotNull = Object.entries(siteCollectingSummary).filter(
-          (summary) => summary[0] !== MISSING_SITE_NAME,
+          (summary) => summary[0] !== MISSING_NAME,
         )
 
         const collectingSummaryMethods = collectingSummaryWithNameIsNotNull.reduce(

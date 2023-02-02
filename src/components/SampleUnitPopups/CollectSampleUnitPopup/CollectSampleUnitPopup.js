@@ -7,7 +7,7 @@ import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 import { SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
 import language from '../../../language'
 import { sortArray } from '../../../library/arrays/sortArray'
-import { getName } from '../../../library/strings/getName'
+import { getName } from '../../../library/strings/nameHelpers'
 
 const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
   const { sample_unit_method, site_name } = rowRecord
