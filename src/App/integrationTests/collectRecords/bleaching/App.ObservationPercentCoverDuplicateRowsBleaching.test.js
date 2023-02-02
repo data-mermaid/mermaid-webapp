@@ -32,12 +32,12 @@ test('Bleaching percent cover observations: tab in count input on last row dupli
   // one and three observations
   expect(within(observationsTableBeforeTabKey).getAllByRole('row').length).toEqual(4)
 
-  const lastMicroalgaePercentCoverInput = within(observationsTableBeforeTabKey).getByDisplayValue(
+  const lastMacroalgeePercentCoverInput = within(observationsTableBeforeTabKey).getByDisplayValue(
     '70',
   )
 
   // userEvent doesnt work as expected for tab
-  fireEvent.keyDown(lastMicroalgaePercentCoverInput, { key: 'Tab', code: 'Tab' })
+  fireEvent.keyDown(lastMacroalgeePercentCoverInput, { key: 'Tab', code: 'Tab' })
 
   const formAfterTab = screen.getByRole('form')
   const observationsTableAfterTab = within(formAfterTab).getByLabelText(
@@ -77,12 +77,12 @@ test('Bleaching percent cover observations: enter key adds a new empty row below
   // one header row and three observations
   expect(within(observationsTableBeforeEnterKey).getAllByRole('row').length).toEqual(4)
 
-  const firstMicroalgaePercentcoverInput = within(
+  const firstMacroalgeePercentcoverInput = within(
     observationsTableBeforeEnterKey,
   ).getByDisplayValue('90')
 
   // userEvent doesnt work as expected for Enter
-  fireEvent.keyDown(firstMicroalgaePercentcoverInput, { key: 'Enter', code: 'Enter' })
+  fireEvent.keyDown(firstMacroalgeePercentcoverInput, { key: 'Enter', code: 'Enter' })
 
   const formAfterEnterKey = screen.getByRole('form')
   const observationsTableAfterEnterKey = within(formAfterEnterKey).getByLabelText(

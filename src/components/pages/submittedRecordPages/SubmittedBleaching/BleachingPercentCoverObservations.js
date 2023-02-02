@@ -50,7 +50,7 @@ const BleachingPercentCoverObservations = ({ record }) => {
               <TheadItem align="center">Quadrat</TheadItem>
               <TheadItem align="right">Hard coral % cover</TheadItem>
               <TheadItem align="right">Soft coral % cover</TheadItem>
-              <TheadItem align="right">Microalgae % cover</TheadItem>
+              <TheadItem align="right">Macroalgee % cover</TheadItem>
             </Tr>
           </thead>
           <tbody>{observationRows}</tbody>

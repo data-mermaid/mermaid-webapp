@@ -173,7 +173,7 @@ const PercentCoverObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
-              aria-labelledby="microalgae-percent-cover-label"
+              aria-labelledby="macroalgee-percent-cover-label"
               value={percent_algae}
               min="0"
               step="any"
@@ -251,8 +251,8 @@ const PercentCoverObservationTable = ({
                   <Th align="center" id="soft-coral-percent-cover-label">
                     Soft coral % cover <RequiredIndicator />
                   </Th>
-                  <Th align="center" id="microalgae-percent-cover-label">
-                    Microalgae % cover <RequiredIndicator />
+                  <Th align="center" id="macroalgee-percent-cover-label">
+                    Macroalgee % cover <RequiredIndicator />
                   </Th>
                   {areValidationsShowing ? <Th align="center">Validations</Th> : null}
                   <Th />

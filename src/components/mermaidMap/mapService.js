@@ -4,7 +4,7 @@ const coralAtlasAppId = process.env.REACT_APP_CORAL_ATLAS_APP_ID
 
 export const benthicColors = {
   'Coral/Algae': 'rgb(255, 97, 97)',
-  'Benthic Microalgae': 'rgb(155, 204, 79)',
+  'Benthic Macroalgee': 'rgb(155, 204, 79)',
   Rock: 'rgb(177, 156, 58)',
   Rubble: 'rgb(224, 208, 94)',
   Sand: 'rgb(255, 255, 190)',
@@ -88,7 +88,7 @@ const benthicColorExpression = [
   'case',
   ['==', ['get', 'class_name'], 'Coral/Algae'],
   'rgb(255, 97, 97)',
-  ['==', ['get', 'class_name'], 'Benthic Microalgae'],
+  ['==', ['get', 'class_name'], 'Benthic Macroalgee'],
   'rgb(155, 204, 79)',
   ['==', ['get', 'class_name'], 'Rock'],
   'rgb(177, 156, 58)',
@@ -109,7 +109,7 @@ const benthicOpacityExpression = [
   1,
   ['==', ['get', 'class_name'], 'Rubble'],
   1,
-  ['==', ['get', 'class_name'], 'Benthic Microalgae'],
+  ['==', ['get', 'class_name'], 'Benthic Macroalgee'],
   1,
   ['==', ['get', 'class_name'], 'Rock'],
   1,
