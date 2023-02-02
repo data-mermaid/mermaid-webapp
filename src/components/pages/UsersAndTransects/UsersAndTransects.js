@@ -39,7 +39,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
-import SampleUnitPopup from '../../SampleUnitPopups/SampleUnitPopup'
+import SubmittedSampleUnitPopup from '../../SampleUnitPopups/SubmittedSampleUnitPopup'
 import EmptySampleUnitPopup from '../../SampleUnitPopups/EmptySampleUnitPopup/EmptySampleUnitPopup'
 import CollectSampleUnitPopup from '../../SampleUnitPopups/CollectSampleUnitPopup/CollectSampleUnitPopup'
 
@@ -122,8 +122,6 @@ const UsersAndTransects = () => {
             if (!sampleUnitRecordsResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
-
-            console.log('sampleUnitRecordsResponse ', sampleUnitRecordsResponse)
 
             const sampleUnitTransectNumbers = sampleUnitRecordsResponse
               .reduce((acc, record) => acc.concat(record.sample_unit_numbers), [])
@@ -251,7 +249,7 @@ const UsersAndTransects = () => {
           )
 
           accumulator[number] = (
-            <SampleUnitPopup
+            <SubmittedSampleUnitPopup
               rowRecord={rowRecord}
               sampleUnitNumbersRow={filteredRowSampleUnitNumbers}
             />

@@ -2,17 +2,10 @@ import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-
-const MISSING_SITE_NAME = '__null__'
+import { getName } from '../../../library/strings/getName'
 
 const ProjectHealthMixin = (Base) =>
   class extends Base {
-    #getSiteName = function getSiteName(siteName) {
-      return siteName === MISSING_SITE_NAME
-        ? language.pages.usersAndTransectsTable.missingSiteName
-        : siteName
-    }
-
     #hasDuplicates = function hasDuplicates(array) {
       return new Set(array).size !== array.length
     }
@@ -321,7 +314,7 @@ const ProjectHealthMixin = (Base) =>
           if (emptyOrDifferentSampleDatesInCollectRecords) {
             sampleEventUnitRowsCopy.push({
               site_id: siteId,
-              site_name: this.#getSiteName(site_name),
+              site_name: getName(site_name, language.pages.usersAndTransectsTable.missingSiteName),
               sample_date: '',
               sample_unit_numbers: [],
               sample_unit_protocol: protocol,

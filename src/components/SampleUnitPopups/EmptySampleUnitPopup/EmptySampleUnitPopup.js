@@ -14,16 +14,14 @@ const EmptySampleUnitPopup = ({ tableCellData, collectRecordsByProfile }) => {
     return rowValue[1]?.props?.recordProfileSummary
   })
 
-  const testProfileNames = filterProfileValues.filter((value) => {
-    const filteredLabels = value[1]?.props?.recordProfileSummary?.labels.filter(
+  const matchedProfileNamesFromCollectRecords = filterProfileValues.filter((value) => {
+    return value[1]?.props?.recordProfileSummary?.collect_records.filter(
       (profileLabel) => profileLabel?.name === Header,
-    )
-
-    return filteredLabels.length
+    ).length
   })
 
-  if (testProfileNames.length) {
-    const profileNames = testProfileNames
+  if (matchedProfileNamesFromCollectRecords.length) {
+    const profileNames = matchedProfileNamesFromCollectRecords
       .map((profile) => collectRecordsByProfile[profile[0]].profileName)
       .join(', ')
 

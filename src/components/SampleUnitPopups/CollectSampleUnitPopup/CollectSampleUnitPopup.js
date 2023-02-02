@@ -4,38 +4,42 @@ import React from 'react'
 import { InlineCell, Table } from '../../generic/Table/table'
 import TableRowItem from '../../generic/Table/TableRowItem'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
-import { PopupText, SampleUnitNumber, SampleUnitPopupInfo } from '../SampleUnitPopups.styles'
+import { SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
 import language from '../../../language'
 import { sortArray } from '../../../library/arrays/sortArray'
+import { getName } from '../../../library/strings/getName'
 
 const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
   const { sample_unit_method, site_name } = rowRecord
+  const { profile_name, collect_records } = recordProfileSummary
 
-  const sampleUnitLinks = sortArray(recordProfileSummary.collect_records).map((row, idx) => {
-    const { name, sample_date } = row
+  const sampleUnitLinks = sortArray(collect_records).map((row, idx) => {
+    const { name, sample_date, observers, management_name } = row
 
     const rowName = name || language.pages.usersAndTransectsTable.missingLabelNumber
+    const managementName = getName(
+      management_name,
+      language.pages.usersAndTransectsTable.missingMRName,
+    )
 
     return (
       <SampleUnitNumber tabIndex="0" id={idx}>
         {rowName}
-        <SampleUnitPopupInfo role="tooltip">
-          <PopupText>
+        <SampleUnitPopup role="tooltip">
+          <div>
             {sample_unit_method} {name}
-          </PopupText>
+          </div>
           <Table>
             <tbody>
-              <TableRowItem title="Last edited by" value="" />
-              <TableRowItem title="Observers" value="" />
+              <TableRowItem title="Last edited by" value={profile_name} />
+              <TableRowItem title="Observers" value={observers.join(',')} />
               <TableRowItem title="Site" value={site_name} />
-              <TableRowItem title="Management" value="" />
+              <TableRowItem title="Management" value={managementName} />
               <TableRowItem title="Date" value={getSampleDateLabel(sample_date)} />
             </tbody>
           </Table>
-          <PopupText className="highlighted">
-            {language.popoverTexts.notSubmittedSampleUnit}
-          </PopupText>
-        </SampleUnitPopupInfo>
+          <div>{language.popoverTexts.notSubmittedSampleUnit}</div>
+        </SampleUnitPopup>
         {idx < recordProfileSummary.collect_records.length - 1 && ','}
       </SampleUnitNumber>
     )
@@ -49,6 +53,7 @@ CollectSampleUnitPopup.propTypes = {
     sample_unit_method: PropTypes.string,
     sample_unit_protocol: PropTypes.string,
     site_name: PropTypes.string,
+    management_name: PropTypes.string,
   }).isRequired,
   recordProfileSummary: PropTypes.shape({
     profile_name: PropTypes.string,

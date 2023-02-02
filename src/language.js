@@ -297,6 +297,7 @@ const pages = {
     title: 'Users and Transects',
     filterToolbarText: 'Filter this table by site or method',
     missingSiteName: '(Missing Site Name)',
+    missingMRName: '(Missing MR Name)',
     missingLabelNumber: 'missing number',
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubTextTitle: 'This page will show:',

@@ -8,7 +8,6 @@ export const SampleUnitNumber = styled('span')`
   border-width: 0 0 ${theme.spacing.borderMedium} 0;
   position: relative;
   display: inline-grid;
-  place-items: center;
   margin-left: 4px;
   cursor: pointer;
   &:hover span,
@@ -18,7 +17,7 @@ export const SampleUnitNumber = styled('span')`
   }
 `
 
-export const SampleUnitPopupInfo = styled('span')`
+export const SampleUnitPopup = styled('span')`
   display: none;
   width: 100%;
   min-width: 35ch;
@@ -30,6 +29,11 @@ export const SampleUnitPopupInfo = styled('span')`
   white-space: normal;
   z-index: 100;
   border: 2px solid ${theme.color.primaryColor};
+  right: -1rem;
+  & > div {
+    text-align: center;
+    padding: 4px;
+  }
 `
 
 export const EmptyCellPopup = styled(`div`)`
@@ -50,19 +54,9 @@ export const EmptyCellPopup = styled(`div`)`
   }
 `
 
-export const PopupText = styled('div')`
-  display: flex;
-  text-align: left;
-  padding: 4px;
-  font-size: ${theme.typography.smallFontSize};
-  &.highlighted {
-    text-align: center;
-    background-color: hsl(50 80% 80% / 1);
-  }
-`
 export const PopupLink = styled(Link)`
   display: flex;
-  justify-content: center;
   padding: 4px;
   font-size: ${theme.typography.smallFontSize};
+  justify-content: center;
 `

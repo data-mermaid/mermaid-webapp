@@ -5,33 +5,28 @@ import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { InlineCell, Table } from '../../generic/Table/table'
 import TableRowItem from '../../generic/Table/TableRowItem'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
-import {
-  PopupLink,
-  PopupText,
-  SampleUnitNumber,
-  SampleUnitPopupInfo,
-} from '../SampleUnitPopups.styles'
+import { PopupLink, SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
 import language from '../../../language'
 
-const SampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
+const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
   const currentProjectPath = useCurrentProjectPath()
   const { sample_unit_method, sample_unit_protocol, site_name } = rowRecord
   const SiteTitle = `${sample_unit_method} ${site_name}`
 
   const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
-    const { label, management, sample_date } = row
+    const { label, management, sample_date, updated_by, observers } = row
 
     return (
       <SampleUnitNumber tabIndex="0" id={idx}>
         {label}
-        <SampleUnitPopupInfo role="tooltip">
-          <PopupText>
+        <SampleUnitPopup role="tooltip">
+          <div>
             {SiteTitle} {label}
-          </PopupText>
+          </div>
           <Table>
             <tbody>
-              <TableRowItem title="Last edited by" value="" />
-              <TableRowItem title="Observers" value="" />
+              <TableRowItem title="Last edited by" value={updated_by} />
+              <TableRowItem title="Observers" value={observers.join(',')} />
               <TableRowItem title="Site" value={site_name} />
               <TableRowItem title="Management" value={management.name} />
               <TableRowItem title="Date" value={getSampleDateLabel(sample_date)} />
@@ -40,7 +35,7 @@ const SampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
           <PopupLink to={`${currentProjectPath}/submitted/${sample_unit_protocol}/${row.id}`}>
             {language.popoverTexts.viewSubmittedSampleUnit}
           </PopupLink>
-        </SampleUnitPopupInfo>
+        </SampleUnitPopup>
         {idx < sampleUnitNumbersRow.length - 1 && ','}
       </SampleUnitNumber>
     )
@@ -49,11 +44,13 @@ const SampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
   return <InlineCell>{sampleUnitLinks}</InlineCell>
 }
 
-SampleUnitPopup.propTypes = {
+SubmittedSampleUnitPopup.propTypes = {
   rowRecord: PropTypes.shape({
     sample_unit_method: PropTypes.string,
     sample_unit_protocol: PropTypes.string,
     site_name: PropTypes.string,
+    updated_by: PropTypes.string,
+    observers: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   sampleUnitNumbersRow: PropTypes.arrayOf(
     PropTypes.shape({
@@ -63,4 +60,4 @@ SampleUnitPopup.propTypes = {
   ).isRequired,
 }
 
-export default SampleUnitPopup
+export default SubmittedSampleUnitPopup
