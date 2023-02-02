@@ -13,7 +13,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
   const { sample_unit_method, site_name } = rowRecord
   const { profile_name, collect_records } = recordProfileSummary
 
-  const sampleUnitLinks = sortArray(collect_records).map((record, idx) => {
+  const sampleUnitsWithPopup = sortArray(collect_records).map((record, idx) => {
     const { name, sample_date, observers, management_name } = record
     const popupTitle = `${sample_unit_method} ${name}`
 
@@ -26,7 +26,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
     return (
       <SampleUnitNumber tabIndex="0" id={idx}>
         {transectNumberLabel}
-        <SampleUnitPopup role="tooltip"> 
+        <SampleUnitPopup role="tooltip">
           <div>{popupTitle}</div>
           <Table>
             <tbody>
@@ -44,7 +44,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
     )
   })
 
-  return <InlineCell>{sampleUnitLinks}</InlineCell>
+  return <InlineCell>{sampleUnitsWithPopup}</InlineCell>
 }
 
 CollectSampleUnitPopup.propTypes = {

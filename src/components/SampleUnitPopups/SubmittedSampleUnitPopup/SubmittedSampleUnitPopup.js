@@ -14,7 +14,7 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
   const { sample_unit_method, sample_unit_protocol, site_name } = rowRecord
   const popupTitle = `${sample_unit_method} ${site_name}`
 
-  const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
+  const sampleUnitsWithPopup = sampleUnitNumbersRow.map((row, idx) => {
     const { label: transectNumberLabel, management, sample_date, updated_by, observers } = row
     const managementName = getName(
       management.name,
@@ -46,7 +46,7 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
     )
   })
 
-  return <InlineCell>{sampleUnitLinks}</InlineCell>
+  return <InlineCell>{sampleUnitsWithPopup}</InlineCell>
 }
 
 SubmittedSampleUnitPopup.propTypes = {
