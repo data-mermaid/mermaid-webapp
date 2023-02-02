@@ -27,7 +27,7 @@ const BleachingPercentCoverSummaryStats = ({ observations }) => {
           <Td>{getAverage(softPercentages)}</Td>
         </Tr>
         <Tr>
-          <Th>Avg Marcroalgae Cover %</Th>
+          <Th>Avg Macroalgae Cover %</Th>
           <Td>{getAverage(algaePercentages)}</Td>
         </Tr>
       </tbody>

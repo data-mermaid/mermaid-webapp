@@ -234,7 +234,7 @@ const BenthicLitObservationsTable = ({
           <Td align="right">
             <InputNumberNoScrollWithUnit
               value={length}
-              unit="m"
+              unit=""
               aria-labelledby="length-label"
               onChange={handleLengthChange}
               onKeyDown={(event) => handleKeyDown({ event, index, observation, isLastCell: true })}

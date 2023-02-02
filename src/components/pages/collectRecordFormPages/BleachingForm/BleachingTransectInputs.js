@@ -220,7 +220,7 @@ const BleachingTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.quadrat_size}
           onChange={handleQuadratSizeChange}
-          unit="(m²)"
+          unit="m²"
         />
 
         <InputRadioWithLabelAndValidation
