@@ -255,7 +255,7 @@ const BenthicLitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.depth}
           onChange={handleDepthChange}
-          unit="m"
+          unit="cm"
         />
         <InputWithLabelAndValidation
           label="Transect Length Surveyed"
@@ -278,7 +278,7 @@ const BenthicLitTransectInputs = ({
           onBlur={formik.handleBlur}
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
-          unit="m"
+          unit="cm"
         />
 
         <InputRadioWithLabelAndValidation
