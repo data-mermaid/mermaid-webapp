@@ -17,7 +17,7 @@ const UnitContainer = styled.span`
   width: auto;
   white-space: nowrap;
   background: ${theme.color.unitBackground};
-  padding: 0 0.5em;
+  padding: 0.2em 0.5em;
   margin: 0;
   font-size: ${theme.typography.defaultFontSize};
 `
