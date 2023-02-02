@@ -10,25 +10,27 @@ const EmptySampleUnitPopup = ({ tableCellData, collectRecordsByProfile }) => {
     row: { values },
   } = tableCellData
 
-  const filterProfileValues = Object.entries(values).filter((rowValue) => {
+  const recordProfileSummaryValues = Object.entries(values).filter((rowValue) => {
     return rowValue[1]?.props?.recordProfileSummary
   })
 
-  const matchedProfileNamesFromCollectRecords = filterProfileValues.filter((value) => {
-    return value[1]?.props?.recordProfileSummary?.collect_records.filter(
-      (profileLabel) => profileLabel?.name === Header,
-    ).length
-  })
+  const matchHeaderProfileNamesByCollectRecordProfileSummaries = recordProfileSummaryValues.filter(
+    (value) => {
+      return value[1]?.props?.recordProfileSummary?.collect_records.filter(
+        (profileLabel) => profileLabel?.name === Header,
+      ).length
+    },
+  )
 
-  if (matchedProfileNamesFromCollectRecords.length) {
-    const profileNames = matchedProfileNamesFromCollectRecords
+  if (matchHeaderProfileNamesByCollectRecordProfileSummaries.length) {
+    const profileNames = matchHeaderProfileNamesByCollectRecordProfileSummaries
       .map((profile) => collectRecordsByProfile[profile[0]].profileName)
       .join(', ')
 
     return (
       <EmptyCellPopup>
         <div>
-          In Collecting With: <strong>{profileNames}</strong>
+          {language.popoverTexts.inCollectingWith} <strong>{profileNames}</strong>
         </div>
       </EmptyCellPopup>
     )

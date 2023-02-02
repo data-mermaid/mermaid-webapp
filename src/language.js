@@ -345,6 +345,7 @@ const popoverTexts = {
   noSampleUnitMatch: 'No sample units match:',
   viewSubmittedSampleUnit: 'View Submitted Sample Unit',
   notSubmittedSampleUnit: `This sample unit isn't submitted`,
+  inCollectingWith: 'In Collecting With:',
 }
 
 const getResolveModalLanguage = (siteOrManagementRegime) => {

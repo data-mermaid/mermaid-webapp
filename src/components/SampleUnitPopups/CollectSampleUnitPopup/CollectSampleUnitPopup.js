@@ -13,10 +13,11 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
   const { sample_unit_method, site_name } = rowRecord
   const { profile_name, collect_records } = recordProfileSummary
 
-  const sampleUnitLinks = sortArray(collect_records).map((row, idx) => {
-    const { name, sample_date, observers, management_name } = row
+  const sampleUnitLinks = sortArray(collect_records).map((record, idx) => {
+    const { name, sample_date, observers, management_name } = record
+    const popupTitle = `${sample_unit_method} ${name}`
 
-    const rowName = name || language.pages.usersAndTransectsTable.missingLabelNumber
+    const transectNumberLabel = name || language.pages.usersAndTransectsTable.missingLabelNumber
     const managementName = getName(
       management_name,
       language.pages.usersAndTransectsTable.missingMRName,
@@ -24,11 +25,9 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
 
     return (
       <SampleUnitNumber tabIndex="0" id={idx}>
-        {rowName}
-        <SampleUnitPopup role="tooltip">
-          <div>
-            {sample_unit_method} {name}
-          </div>
+        {transectNumberLabel}
+        <SampleUnitPopup role="tooltip"> 
+          <div>{popupTitle}</div>
           <Table>
             <tbody>
               <TableRowItem title="Last edited by" value={profile_name} />

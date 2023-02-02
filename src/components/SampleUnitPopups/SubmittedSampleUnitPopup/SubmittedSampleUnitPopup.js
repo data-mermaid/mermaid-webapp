@@ -7,28 +7,33 @@ import TableRowItem from '../../generic/Table/TableRowItem'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 import { PopupLink, SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
 import language from '../../../language'
+import { getName } from '../../../library/strings/nameHelpers'
 
 const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
   const currentProjectPath = useCurrentProjectPath()
   const { sample_unit_method, sample_unit_protocol, site_name } = rowRecord
-  const SiteTitle = `${sample_unit_method} ${site_name}`
+  const popupTitle = `${sample_unit_method} ${site_name}`
 
   const sampleUnitLinks = sampleUnitNumbersRow.map((row, idx) => {
-    const { label, management, sample_date, updated_by, observers } = row
+    const { label: transectNumberLabel, management, sample_date, updated_by, observers } = row
+    const managementName = getName(
+      management.name,
+      language.pages.usersAndTransectsTable.missingMRName,
+    )
 
     return (
       <SampleUnitNumber tabIndex="0" id={idx}>
-        {label}
+        {transectNumberLabel}
         <SampleUnitPopup role="tooltip">
           <div>
-            {SiteTitle} {label}
+            {popupTitle} {transectNumberLabel}
           </div>
           <Table>
             <tbody>
               <TableRowItem title="Last edited by" value={updated_by} />
               <TableRowItem title="Observers" value={observers.join(',')} />
               <TableRowItem title="Site" value={site_name} />
-              <TableRowItem title="Management" value={management.name} />
+              <TableRowItem title="Management" value={managementName} />
               <TableRowItem title="Date" value={getSampleDateLabel(sample_date)} />
             </tbody>
           </Table>
