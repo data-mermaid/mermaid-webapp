@@ -1,5 +1,5 @@
 // prettier-ignore
-import { getSystemValidationErrorMessage, getDuplicateSampleUnitLink } from './library/validationMessageHelpers'
+import { getSystemValidationErrorMessage, getDuplicateSampleUnitLink, goToManagementOverviewPageLink } from './library/validationMessageHelpers'
 
 const projectCodes = {
   status: { open: 90, test: 80 },
@@ -409,15 +409,14 @@ const getValidationMessage = (validation, projectId = '') => {
     not_part_of_fish_family_subset: () => `Fish is not part of project-defined fish families`,
     not_positive_integer: () => 'Value is not greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
-    not_unique_management: () =>
-      'Management Regime: Other sample events at this site have a different management regime',
+    not_unique_management: () => goToManagementOverviewPageLink(projectId),
     observations_total_length_incorrect: () =>
       `Total length of observations (${context?.total_obs_length}) not within 50% of transect length`,
     required: () => `Required`,
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
-    similar_name: () => 'Management Regime: Similar records detected',
+    similar_name: () => 'Another Management Regime is similar to this one.',
     site_not_found: () => 'Site record not available for similarity validation',
     too_many_observations: () => `Greater than ${context?.observation_count_range[1]} observations`,
     too_few_observations: () => `Fewer than ${context?.observation_count_range[0]} observations`,

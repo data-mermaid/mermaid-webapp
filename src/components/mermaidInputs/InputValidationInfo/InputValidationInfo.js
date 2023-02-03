@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/macro'
 import PropTypes from 'prop-types'
+import { useParams } from 'react-router-dom'
 import theme from '../../../theme'
 import mermaidInputsPropTypes from '../mermaidInputsPropTypes'
 import InlineMessage from '../../generic/InlineMessage/InlineMessage'
@@ -23,6 +24,7 @@ const InputValidationInfo = ({
   currentSelectValue,
   updateValueAndResetValidationForDuplicateWarning,
 }) => {
+  const { projectId } = useParams()
   const areThereValidationMessages = validationMessages.length
   const isWarningValidation = areThereValidationMessages && validationType === 'warning'
   const isIgnoredWarningValidation = validationType === 'ignore'
@@ -54,10 +56,7 @@ const InputValidationInfo = ({
       )
     }
 
-    if (
-      validationMessages[0]?.code === 'not_unique_management' ||
-      validationMessages[0]?.code === 'similar_name'
-    ) {
+    if (validationMessages[0]?.code === 'similar_name') {
       return (
         <ResolveDuplicateMRButtonAndModal
           currentSelectValue={currentSelectValue}
@@ -80,14 +79,8 @@ const InputValidationInfo = ({
 
   return (
     <ValidationWrapper>
-      {isIgnoredWarningValidation ? (
-        <>
-          <InlineMessage type={validationType}>
-            <p>Ignored</p>
-          </InlineMessage>
-        </>
-      ) : null}
-      {areThereValidationMessages && (isErrorValidation || isWarningValidation) ? (
+      {areThereValidationMessages &&
+      (isErrorValidation || isWarningValidation || isIgnoredWarningValidation) ? (
         <>
           {validationMessages.map((validation) => (
             <InlineMessage
@@ -95,12 +88,14 @@ const InputValidationInfo = ({
               key={validation.id}
               className={`${validationType}-indicator`}
             >
-              <p>{language.getValidationMessage(validation)}</p>
+              <p>{language.getValidationMessage(validation, projectId)}</p>
             </InlineMessage>
           ))}
         </>
       ) : null}
-      {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
+      {isWarningValidation || isIgnoredWarningValidation || isIgnoredWarningValidation
+        ? getWarningValidationButtons()
+        : null}
       {isValidationPassing ? <span aria-label="Passed Validation">&nbsp;</span> : null}
     </ValidationWrapper>
   )
