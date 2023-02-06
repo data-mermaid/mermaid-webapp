@@ -260,7 +260,6 @@ const FishBeltObservationTable = ({
           type="number"
           min="0"
           value={sizeOrEmptyStringToAvoidInputValueErrors}
-          unit="cm"
           step="any"
           aria-labelledby="fish-size-label"
           onChange={handleUpdateSizeEvent}

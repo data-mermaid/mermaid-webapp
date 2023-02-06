@@ -19,15 +19,15 @@ const BleachingPercentCoverSummaryStats = ({ observations }) => {
           <Td>{quadratCounts.length}</Td>
         </Tr>
         <Tr>
-          <Th>Avg Hard Coral %</Th>
+          <Th>Avg Hard Coral Cover %</Th>
           <Td>{getAverage(hardPercentages)}</Td>
         </Tr>
         <Tr>
-          <Th>Avg Soft Coral %</Th>
+          <Th>Avg Soft Coral Cover %</Th>
           <Td>{getAverage(softPercentages)}</Td>
         </Tr>
         <Tr>
-          <Th>Avg Marcroalgae Cover %</Th>
+          <Th>Avg Macroalgae Cover %</Th>
           <Td>{getAverage(algaePercentages)}</Td>
         </Tr>
       </tbody>
