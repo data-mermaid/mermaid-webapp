@@ -36,6 +36,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const groupManagementRegimes = (records) => {
   return records.reduce((accumulator, record) => {
@@ -233,7 +234,7 @@ const ManagementRegimesOverview = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 100,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
