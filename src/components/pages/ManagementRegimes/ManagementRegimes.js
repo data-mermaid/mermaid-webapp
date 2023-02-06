@@ -47,6 +47,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -273,7 +274,7 @@ const ManagementRegimes = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 15,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -359,7 +360,7 @@ const ManagementRegimes = () => {
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   ))}
                 </Tr>

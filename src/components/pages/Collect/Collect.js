@@ -42,6 +42,7 @@ import {
   noLabelSymbol,
 } from '../../../App/mermaidData/recordProtocolHelpers'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
@@ -225,7 +226,7 @@ const Collect = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 15,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -272,7 +273,7 @@ const Collect = () => {
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   ))}
                 </Tr>

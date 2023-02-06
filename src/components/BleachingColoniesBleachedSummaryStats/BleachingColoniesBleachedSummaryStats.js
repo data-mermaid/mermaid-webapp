@@ -21,7 +21,7 @@ const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached })
   }
 
   const getTotalOfCoralGenera = () => {
-    const attributeIds = observationsColoniesBleached.map((item) => item.attribute)
+    const attributeIds = observationsColoniesBleached.filter((item) => item.attribute)
     const uniqueAttributeIds = [...new Set(attributeIds)]
 
     return uniqueAttributeIds.length

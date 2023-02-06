@@ -57,6 +57,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -659,7 +660,7 @@ const Users = () => {
       columns: isAdminUser ? tableColumnsForAdmin : tableColumnsForNonAdmin,
       data: isAdminUser ? tableCellDataForAdmin : tableCellDataForNonAdmin,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 15,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -709,7 +710,7 @@ const Users = () => {
                       isSortingEnabled={!column.disableSortBy}
                       disabledHover={column.disableSortBy}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   )
                 })}

@@ -40,6 +40,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const EMPTY_VALUE = '-'
 
@@ -318,7 +319,7 @@ const UsersAndTransects = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-usersAndTransectsTable`,
+    key: `${currentUser.id}-observersAndTransectsTable`,
     defaultValue: tableDefaultPrefs,
   })
 
@@ -354,7 +355,7 @@ const UsersAndTransects = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 100,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -421,7 +422,7 @@ const UsersAndTransects = () => {
                       align={headerAlignment}
                       className={ThClassName}
                     >
-                      {column.render('Header')}
+                      <span> {column.render('Header')}</span>
                     </OverviewTh>
                   )
                 })}
