@@ -36,8 +36,8 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
-    toastId: 'Something went wrong with the server.',
+  expect(toastSpy).toHaveBeenCalledWith('Server error: please contact support@datamermaid.org', {
+    toastId: 'Server error: please contact support@datamermaid.org',
     transition: Slide,
   })
 
@@ -51,8 +51,8 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
-    toastId: 'Something went wrong with the server.',
+  expect(toastSpy).toHaveBeenCalledWith('Server error: please contact support@datamermaid.org', {
+    toastId: 'Server error: please contact support@datamermaid.org',
     transition: Slide,
   })
 
@@ -66,8 +66,8 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith('Something went wrong with the server.', {
-    toastId: 'Something went wrong with the server.',
+  expect(toastSpy).toHaveBeenCalledWith('Server error: please contact support@datamermaid.org', {
+    toastId: 'Server error: please contact support@datamermaid.org',
     transition: Slide,
   })
 

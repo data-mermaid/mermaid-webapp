@@ -1,46 +1,47 @@
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useMemo } from 'react'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React, { useState, useEffect, useMemo } from 'react'
 
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { formikPropType } from '../../../library/formikPropType'
+import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
-import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
+import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
+import { InputWrapper } from '../../generic/form'
+import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
+import { showSyncToastError } from '../../../library/showSyncToastError'
+import { sortManagementComplianceChoices } from '../../../library/arrays/sortManagementComplianceChoices'
+import { Table } from '../../generic/Table/table'
+import { useCurrentUser } from '../../../App/CurrentUserContext'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
+import DeleteRecordButton from '../../DeleteRecordButton'
+import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InputCheckboxGroupWithLabelAndValidation from '../../mermaidInputs/InputCheckboxGroupWithLabelAndValidation'
 import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
-import { InputWrapper } from '../../generic/form'
-import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import LoadingModal from '../../LoadingModal/LoadingModal'
 import language from '../../../language'
+import LoadingModal from '../../LoadingModal/LoadingModal'
 import ManagementRulesInput from '../ManagementRulesInput'
-import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
+import PageUnavailable from '../PageUnavailable'
 import SaveButton from '../../generic/SaveButton'
-import { Table } from '../../generic/Table/table'
 import TableRowItem from '../../generic/Table/TableRowItem'
 import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
-import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import { useCurrentUser } from '../../../App/CurrentUserContext'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
-import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
-import PageUnavailable from '../PageUnavailable'
-import { sortManagementComplianceChoices } from '../../../library/arrays/sortManagementComplianceChoices'
-import DeleteRecordButton from '../../DeleteRecordButton'
-import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
-import { useOnlineStatus } from '../../../library/onlineStatusContext'
 
 const ReadOnlyManagementRegimeContent = ({
   managementRegimeFormikValues,
@@ -323,7 +324,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       databaseSwitchboardInstance
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then((response) => {
-          toast.success(language.success.managementRegimeSave)
+          toast.success(language.success.getMermaidDataSaveSuccess('management regime'))
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)
@@ -336,19 +337,27 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           }
         })
         .catch((error) => {
-          const errorTitle = language.getErrorTitle('management regime')
-          const errorLang = language.getErrorMessages(error)
-
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(
-            ...getToastArguments(
-              <div data-testid="management-regime-toast-error">
-                {errorTitle}
-                <br />
-                {errorLang}
-              </div>,
-            ),
-          )
+          const { isSyncError } = error
+
+          if (isSyncError && isAppOnline) {
+            const toastTitle = language.error.getSaveOnlineSyncErrorTitle('management regime')
+
+            showSyncToastError({ toastTitle, error, testId: 'management-regime-toast-error' })
+          }
+          if (!isSyncError && isAppOnline) {
+            handleHttpResponseError({
+              error,
+            })
+          }
+
+          if (!isAppOnline) {
+            showSyncToastError({
+              toastTitle: language.error.getSaveOfflineErrorTitle('management regime'),
+              error,
+              testId: 'management-regime-toast-error',
+            })
+          }
         })
     },
     validate: (values) => {
@@ -405,18 +414,40 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
         clearPersistedUnsavedFormikData()
         closeDeleteRecordModal()
         setIsDeletingRecord(false)
-        toast.success(...getToastArguments(language.success.collectRecordDelete))
+        toast.success(
+          ...getToastArguments(language.success.getMermaidDataDeleteSuccess('management regime')),
+        )
         history.push(`${ensureTrailingSlash(currentProjectPath)}management-regimes/`)
       })
       .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            setDeleteErrorData(error)
-            setIsDeletingRecord(false)
-            goToPageTwoOfDeleteRecordModal()
-          },
-        })
+        const { isSyncError, isDeleteRejectedError } = error
+
+        if (isSyncError && !isDeleteRejectedError && isAppOnline) {
+          const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('management regime')
+
+          showSyncToastError({ toastTitle, error, testId: 'management-regime-toast-error' })
+          setIsDeletingRecord(false)
+          closeDeleteRecordModal()
+        }
+
+        if (isSyncError && isDeleteRejectedError && isAppOnline) {
+          // show modal which lists the associated sumbitted sample units that are associated with the MR
+          setDeleteErrorData(error.associatedSampleUnits)
+          setIsDeletingRecord(false)
+          goToPageTwoOfDeleteRecordModal()
+        }
+        if (!isSyncError && isAppOnline) {
+          handleHttpResponseError({
+            error,
+          })
+        }
+        if (!isAppOnline) {
+          showSyncToastError({
+            toastTitle: language.error.getDeleteOfflineErrorTitle('management regime'),
+            error,
+            testId: 'management-regime-toast-error',
+          })
+        }
       })
   }
 
