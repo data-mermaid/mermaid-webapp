@@ -93,9 +93,7 @@ const InputValidationInfo = ({
           ))}
         </>
       ) : null}
-      {isWarningValidation || isIgnoredWarningValidation || isIgnoredWarningValidation
-        ? getWarningValidationButtons()
-        : null}
+      {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
       {isValidationPassing ? <span aria-label="Passed Validation">&nbsp;</span> : null}
     </ValidationWrapper>
   )
