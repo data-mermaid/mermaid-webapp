@@ -709,7 +709,7 @@ const Users = () => {
                       isSortingEnabled={!column.disableSortBy}
                       disabledHover={column.disableSortBy}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   )
                 })}

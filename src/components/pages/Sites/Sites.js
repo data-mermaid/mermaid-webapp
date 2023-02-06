@@ -313,6 +313,7 @@ const Sites = () => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
                   )
+                  const ThClassName = column.parent ? column.parent.id : undefined
 
                   return (
                     <Th
@@ -320,8 +321,9 @@ const Sites = () => {
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
+                      className={ThClassName}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   )
                 })}

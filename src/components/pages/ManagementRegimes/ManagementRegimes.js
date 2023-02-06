@@ -359,7 +359,7 @@ const ManagementRegimes = () => {
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   ))}
                 </Tr>
