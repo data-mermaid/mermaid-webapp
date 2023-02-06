@@ -1,46 +1,47 @@
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useParams, useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 
 import { buttonGroupStates } from '../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
-import EnhancedPrompt from '../../generic/EnhancedPrompt'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { formikPropType } from '../../../library/formikPropType'
-import { getOptions } from '../../../library/getOptions'
 import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { H2 } from '../../generic/text'
-import IdsNotFound from '../IdsNotFound/IdsNotFound'
-import InputAutocomplete from '../../generic/InputAutocomplete'
-import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
-import { InputRow, InputWrapper, RequiredIndicator } from '../../generic/form'
-import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
 import { inputOptionsPropTypes } from '../../../library/miscPropTypes'
-import LoadingModal from '../../LoadingModal/LoadingModal'
-import language from '../../../language'
-import SaveButton from '../../generic/SaveButton'
-import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
+import { InputRow, InputWrapper, RequiredIndicator } from '../../generic/form'
+import { showSyncToastError } from '../../../library/showSyncToastError'
 import { sitePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import { Table } from '../../generic/Table/table'
-import TableRowItem from '../../generic/Table/TableRowItem'
-import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
-import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useDocumentTitle from '../../../library/useDocumentTitle'
-import useIsMounted from '../../../library/useIsMounted'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useUnsavedDirtyFormDataUtilities } from '../../../library/useUnsavedDirtyFormDataUtilities'
-import PageUnavailable from '../PageUnavailable'
 import DeleteRecordButton from '../../DeleteRecordButton'
+import EnhancedPrompt from '../../generic/EnhancedPrompt'
+import IdsNotFound from '../IdsNotFound/IdsNotFound'
+import InputAutocomplete from '../../generic/InputAutocomplete'
+import InputRadioWithLabelAndValidation from '../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
-import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
+import InputWithLabelAndValidation from '../../mermaidInputs/InputWithLabelAndValidation'
+import language from '../../../language'
+import LoadingModal from '../../LoadingModal/LoadingModal'
+import PageUnavailable from '../PageUnavailable'
+import SaveButton from '../../generic/SaveButton'
+import SingleSiteMap from '../../mermaidMap/SingleSiteMap'
+import TableRowItem from '../../generic/Table/TableRowItem'
+import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabelAndValidation'
+import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
+import useDocumentTitle from '../../../library/useDocumentTitle'
+import useIsMounted from '../../../library/useIsMounted'
 
 const ReadOnlySiteContent = ({
   site,
@@ -313,7 +314,7 @@ const Site = ({ isNewSite }) => {
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
         .then((response) => {
-          toast.success(...getToastArguments(language.success.siteSave))
+          toast.success(...getToastArguments(language.success.getMermaidDataSaveSuccess('site')))
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)
@@ -324,19 +325,27 @@ const Site = ({ isNewSite }) => {
           }
         })
         .catch((error) => {
-          const errorTitle = language.getErrorTitle('site')
-          const errorLang = language.getErrorMessages(error)
-
           setSaveButtonState(buttonGroupStates.unsaved)
-          toast.error(
-            ...getToastArguments(
-              <div data-testid="site-toast-error">
-                {errorTitle}
-                <br />
-                {errorLang}
-              </div>,
-            ),
-          )
+
+          const { isSyncError } = error
+
+          if (isSyncError && isAppOnline) {
+            const toastTitle = language.error.getSaveOnlineSyncErrorTitle('site')
+
+            showSyncToastError({ toastTitle, error, testId: 'site-toast-error' })
+          }
+          if (!isSyncError && isAppOnline) {
+            handleHttpResponseError({
+              error,
+            })
+          }
+          if (!isAppOnline) {
+            showSyncToastError({
+              toastTitle: language.error.getSaveOfflineErrorTitle('site'),
+              error,
+              testId: 'site-toast-error',
+            })
+          }
         })
     },
     validate: (values) => {
@@ -425,18 +434,31 @@ const Site = ({ isNewSite }) => {
         clearPersistedUnsavedFormikData()
         closeDeleteRecordModal()
         setIsDeletingSite(false)
-        toast.success(...getToastArguments(language.success.collectRecordDelete))
+        toast.success(...getToastArguments(language.success.getMermaidDataDeleteSuccess('site')))
         history.push(`${ensureTrailingSlash(currentProjectPath)}sites/`)
       })
       .catch((error) => {
-        handleHttpResponseError({
-          error,
-          callback: () => {
-            setSiteDeleteErrorData(error)
-            setIsDeletingSite(false)
-            goToPageTwoOfDeleteRecordModal()
-          },
-        })
+        const { isSyncError, isDeleteRejectedError } = error
+
+        if (isSyncError && !isDeleteRejectedError) {
+          const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('site')
+
+          showSyncToastError({ toastTitle, error, testId: 'site-toast-error' })
+          setIsDeletingSite(false)
+          closeDeleteRecordModal()
+        }
+
+        if (isSyncError && isDeleteRejectedError) {
+          // show modal which lists the associated sumbitted sample units that are associated with the site
+          setSiteDeleteErrorData(error.associatedSampleUnits)
+          setIsDeletingSite(false)
+          goToPageTwoOfDeleteRecordModal()
+        }
+        if (!isSyncError) {
+          handleHttpResponseError({
+            error,
+          })
+        }
       })
   }
 

@@ -89,7 +89,11 @@ describe('offline', () => {
 
     await saveSite()
 
-    expect(await screen.findByText('Site saved.'))
+    expect(
+      await screen.findByText(
+        'The site has been saved on your computer and in the MERMAID online system.',
+      ),
+    )
 
     // ensure the new form is now the edit form
     expect(
@@ -120,7 +124,11 @@ describe('offline', () => {
 
     await saveSite()
 
-    expect(await screen.findByText('Site saved.'))
+    expect(
+      await screen.findByText(
+        'The site has been saved on your computer and in the MERMAID online system.',
+      ),
+    )
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -140,14 +148,10 @@ describe('offline', () => {
   test('new site save failure shows toast message with edits persisting', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    const mockSiteErrorData = {
-      name: 'This field may not be blank.',
-      country: 'This field is required.',
-    }
-
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    dexiePerUserDataInstance.project_sites.put = () => Promise.reject(mockSiteErrorData)
+    dexiePerUserDataInstance.project_sites.put = () =>
+      Promise.reject(new Error('this is a dexie error'))
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/sites/new'],
@@ -158,8 +162,9 @@ describe('offline', () => {
     await saveSite()
 
     expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-      `The site has not been saved. name: This field may not be blank. country: This field is required.`,
+      `The site failed to save both on your computer and in the MERMAID online system.`,
     )
+    expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(`this is a dexie error`)
 
     // ensure the were not in edit mode, but new site mode
     expect(

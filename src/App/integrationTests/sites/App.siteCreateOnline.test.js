@@ -1,13 +1,21 @@
+import { rest } from 'msw'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 
 import { getMockDexieInstancesAllSuccess } from '../../../testUtilities/mockDexie'
 import {
+  mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
   within,
 } from '../../../testUtilities/testingLibraryWithHelpers'
 import App from '../../App'
+import {
+  mock400StatusCodeForAllDataTypesPush,
+  mock500StatusCodeForAllDataTypesPush,
+} from '../../../testUtilities/mockPushStatusCodes'
+
+const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
 const saveSite = async () => {
   userEvent.type(await screen.findByLabelText('Name'), 'Rebecca')
@@ -84,7 +92,11 @@ describe('Online', () => {
 
     await saveSite()
 
-    expect(await screen.findByText('Site saved.'))
+    expect(
+      await screen.findByText(
+        'The site has been saved on your computer and in the MERMAID online system.',
+      ),
+    )
 
     // ensure the new form is now the edit form
     expect(
@@ -113,7 +125,11 @@ describe('Online', () => {
 
     await saveSite()
 
-    expect(await screen.findByText('Site saved.'))
+    expect(
+      await screen.findByText(
+        'The site has been saved on your computer and in the MERMAID online system.',
+      ),
+    )
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -130,15 +146,16 @@ describe('Online', () => {
 
     expect(await within(table).findByText('Rebecca'))
   })
-  test('new site save failure shows toast message with edits persisting', async () => {
+  test('New MR save will handle 400 push status codes by passing on reasoning to the user. Edits persist.', async () => {
+    // it is possible that other 40X status codes will be received, but this test can represent the whole lot as a time management tradeoff
+
+    mockMermaidApiAllSuccessful.use(
+      // append the validated data on the pull response, because that is what the UI uses to update itself
+      rest.post(`${apiBaseUrl}/push/`, (_req, res, ctx) => {
+        return res(ctx.json(mock400StatusCodeForAllDataTypesPush))
+      }),
+    )
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
-
-    const mockSiteErrorData = {
-      name: 'This field may not be blank.',
-      country: 'This field is required.',
-    }
-
-    dexiePerUserDataInstance.project_sites.put = () => Promise.reject(mockSiteErrorData)
 
     renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/sites/new'],
@@ -149,7 +166,13 @@ describe('Online', () => {
     await saveSite()
 
     expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-      `The site has not been saved. name: This field may not be blank. country: This field is required.`,
+      `The site has been saved on your computer, but not in the MERMAID online system.`,
+    )
+    expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
+      'name: an error message from api',
+    )
+    expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
+      'other: another error message from api',
     )
 
     // ensure the were not in edit mode, but new site mode
@@ -169,4 +192,52 @@ describe('Online', () => {
     expect(within(screen.getByLabelText('Reef Zone')).getByLabelText('back reef')).toBeChecked()
     expect(screen.getByLabelText('Notes')).toHaveDisplayValue('la dee dah')
   })
+})
+
+test('New MR save will handle 500 push status codes with a generic message and spare the user any api generated error details. Edits will perisit', async () => {
+  mockMermaidApiAllSuccessful.use(
+    // append the validated data on the pull response, because that is what the UI uses to update itself
+    rest.post(`${apiBaseUrl}/push/`, (_req, res, ctx) => {
+      return res(ctx.json(mock500StatusCodeForAllDataTypesPush))
+    }),
+  )
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/sites/new'],
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
+
+  await saveSite()
+
+  expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
+    'The site has been saved on your computer, but not in the MERMAID online system.',
+  )
+  expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
+    'Server error: please contact support@datamermaid.org',
+  )
+  expect(await screen.findByTestId('site-toast-error')).not.toHaveTextContent(
+    'name: an error message from api',
+  )
+  expect(await screen.findByTestId('site-toast-error')).not.toHaveTextContent(
+    'other: another error message from api',
+  )
+
+  // ensure the were not in edit mode, but new site mode
+  expect(
+    screen.getByText('Site', {
+      selector: 'h2',
+    }),
+  )
+
+  // edits persisted
+  expect(screen.getByLabelText('Name')).toHaveDisplayValue('Rebecca')
+  expect(screen.getByLabelText('Country')).toHaveDisplayValue('Canada')
+  expect(screen.getByLabelText('Latitude')).toHaveDisplayValue('54')
+  expect(screen.getByLabelText('Longitude')).toHaveDisplayValue('45')
+  expect(within(screen.getByLabelText('Exposure')).getByLabelText('very sheltered')).toBeChecked()
+  expect(within(screen.getByLabelText('Reef Type')).getByLabelText('atoll')).toBeChecked()
+  expect(within(screen.getByLabelText('Reef Zone')).getByLabelText('back reef')).toBeChecked()
+  expect(screen.getByLabelText('Notes')).toHaveDisplayValue('la dee dah')
 })

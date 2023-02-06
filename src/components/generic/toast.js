@@ -34,6 +34,9 @@ export const CustomToastContainer = styled(ToastContainer).attrs({
     }
   }
   .Toastify__toast--warning {
+    border-left-color: ${theme.color.warningColor};
+  }
+  .Toastify__toast--error {
     border-left-color: ${theme.color.cautionColor};
   }
   .Toastify__toast--default {
