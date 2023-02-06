@@ -421,7 +421,7 @@ const UsersAndTransects = () => {
                       align={headerAlignment}
                       className={ThClassName}
                     >
-                      {column.render('Header')}
+                      <span> {column.render('Header')}</span>
                     </OverviewTh>
                   )
                 })}
