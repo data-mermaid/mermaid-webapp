@@ -16,11 +16,13 @@ import {
   WhatsNewLink,
   UserMenu,
   BiggerIconBell,
+  MediumIconExcel,
+  MediumIconOpenInNew,
   BiggerIconMenu,
   LoggedInAs,
 } from './Header.styles'
 import { currentUserPropType } from '../../App/mermaidData/mermaidDataProptypes'
-import { IconDown, IconExcel, IconOpenInNew } from '../icons'
+import { IconDown } from '../icons'
 import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
@@ -41,7 +43,7 @@ const GlobalLinks = () => {
       </StyledNavLink>
       <StyledNavLink href={`${mermaidReferenceLink}/home`} target="_blank" rel="noreferrer">
         Reference&nbsp;
-        <IconExcel />
+        <MediumIconExcel />
       </StyledNavLink>
       <OfflineHide>
         <StyledNavLink href={mermaidDashboardLink} target="_blank" rel="noreferrer">
@@ -49,7 +51,7 @@ const GlobalLinks = () => {
         </StyledNavLink>
         <WhatsNewLink href={mermaidWhatsNewLink} target="_blank" rel="noreferrer">
           What&apos;s new&nbsp;
-          <IconOpenInNew />
+          <MediumIconOpenInNew />
         </WhatsNewLink>
       </OfflineHide>
     </>

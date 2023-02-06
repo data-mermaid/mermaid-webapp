@@ -56,7 +56,13 @@ import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers
 import PageUnavailable from '../../PageUnavailable'
 import { getIsFishBelt } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { useScrollCheckError } from '../../../../library/useScrollCheckError'
-import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
+import {
+  ErrorBox,
+  ErrorText,
+  ErrorTextButton,
+  ErrorTextSubmit,
+  ErrorBoxSubmit,
+} from '../CollectingFormPage.Styles'
 
 const CollectRecordFormPage = ({
   isNewRecord,
@@ -99,6 +105,7 @@ const CollectRecordFormPage = ({
   const [isNewObservationModalOpen, setIsNewObservationModalOpen] = useState(false)
   const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isDeleteRecordModalOpen, setIsDeleteRecordModalOpen] = useState(false)
+  const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
   const openDeleteRecordModal = () => {
     setIsDeleteRecordModalOpen(true)
@@ -111,6 +118,7 @@ const CollectRecordFormPage = ({
   const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
+
   const displayLoadingModal =
     saveButtonState === buttonGroupStates.saving ||
     validateButtonState === buttonGroupStates.validating ||
@@ -210,6 +218,7 @@ const CollectRecordFormPage = ({
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
+    setIsSubmitWarningVisible(false)
 
     databaseSwitchboardInstance
       .saveSampleUnit({
@@ -252,6 +261,11 @@ const CollectRecordFormPage = ({
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
+
+        validatedRecordResponse.validations.status === 'error' ||
+        validatedRecordResponse.validations.status === 'warning'
+          ? setIsSubmitWarningVisible(true)
+          : setIsSubmitWarningVisible(false)
       })
       .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)
@@ -342,23 +356,25 @@ const CollectRecordFormPage = ({
 
   const ignoreNonObservationFieldValidations = useCallback(
     ({ validationPath }) => {
-      databaseSwitchboardInstance
-        .ignoreNonObservationFieldValidations({
-          record: collectRecordBeingEdited,
-          validationPath,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
-            },
+      if (collectRecordBeingEdited && validationPath) {
+        databaseSwitchboardInstance
+          .ignoreNonObservationFieldValidations({
+            record: collectRecordBeingEdited,
+            validationPath,
           })
-        })
+          .then((recordWithIgnoredValidations) => {
+            handleCollectRecordChange(recordWithIgnoredValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+              },
+            })
+          })
+      }
     },
     [
       collectRecordBeingEdited,
@@ -370,21 +386,23 @@ const CollectRecordFormPage = ({
 
   const resetObservationValidations = useCallback(
     ({ observationId }) => {
-      databaseSwitchboardInstance
-        .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
-        .then((recordWithResetValidations) => {
-          handleCollectRecordChange(recordWithResetValidations)
+      if (collectRecordBeingEdited && observationId) {
+        databaseSwitchboardInstance
+          .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
+          .then((recordWithResetValidations) => {
+            handleCollectRecordChange(recordWithResetValidations)
 
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
-            },
+            setIsFormDirty(true)
           })
-        })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+              },
+            })
+          })
+      }
     },
     [
       collectRecordBeingEdited,
@@ -424,23 +442,25 @@ const CollectRecordFormPage = ({
 
   const resetNonObservationFieldValidations = useCallback(
     ({ validationPath }) => {
-      databaseSwitchboardInstance
-        .resetNonObservationFieldValidations({
-          record: collectRecordBeingEdited,
-          validationPath,
-        })
-        .then((recordWithResetValidations) => {
-          handleCollectRecordChange(recordWithResetValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
-            },
+      if (collectRecordBeingEdited && validationPath) {
+        databaseSwitchboardInstance
+          .resetNonObservationFieldValidations({
+            record: collectRecordBeingEdited,
+            validationPath,
           })
-        })
+          .then((recordWithResetValidations) => {
+            handleCollectRecordChange(recordWithResetValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+              },
+            })
+          })
+      }
     },
     [
       collectRecordBeingEdited,
@@ -469,15 +489,6 @@ const CollectRecordFormPage = ({
       setSaveButtonState(buttonGroupStates.unsaved)
     }
   }, [isFormDirty, setSaveButtonState])
-
-  const setIgnoredItemsToBeRevalidated = ({ validationProperties, validationPath, inputName }) => {
-    const isInputDirty = formik.initialValues[inputName] === formik.values[inputName]
-    const doesFieldHaveIgnoredValidation = validationProperties.validationType === 'ignore'
-
-    if (doesFieldHaveIgnoredValidation && isInputDirty) {
-      resetNonObservationFieldValidations({ validationPath })
-    }
-  }
 
   const validationPropertiesWithDirtyResetOnInputChange = (validationProperties, property) => {
     // for UX purpose only, validation is cleared when input is on change after page is validated
@@ -534,12 +545,15 @@ const CollectRecordFormPage = ({
     }
   }
 
+  const handleDismissSubmitWarning = () => {
+    setIsSubmitWarningVisible(false)
+  }
+
   const sampleUnitTransectInputs = isFishBeltSampleUnit ? (
     <FishBeltTransectInputs
       areValidationsShowing={areValidationsShowing}
       choices={choices}
       formik={formik}
-      setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
       ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
       onSizeBinChange={handleSizeBinChange}
       resetNonObservationFieldValidations={resetNonObservationFieldValidations}
@@ -553,7 +567,6 @@ const CollectRecordFormPage = ({
       areValidationsShowing={areValidationsShowing}
       choices={choices}
       formik={formik}
-      setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
       ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
       resetNonObservationFieldValidations={resetNonObservationFieldValidations}
       validationsApiData={validationsApiData}
@@ -624,7 +637,6 @@ const CollectRecordFormPage = ({
           handleManagementRegimesChange={handleManagementRegimesChange}
           sites={sites}
           handleSitesChange={handleSitesChange}
-          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationPropertiesWithDirtyResetOnInputChange={
@@ -638,7 +650,6 @@ const CollectRecordFormPage = ({
           formik={formik}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           observers={observerProfiles}
-          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationsApiData={validationsApiData}
           validationPropertiesWithDirtyResetOnInputChange={
@@ -656,7 +667,7 @@ const CollectRecordFormPage = ({
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}
       />
-      {errorBoxContent}
+      {!isSubmitWarningVisible ? errorBoxContent : null}
     </>
   ) : (
     <PageUnavailable mainText={language.error.pageReadOnly} />
@@ -695,6 +706,14 @@ const CollectRecordFormPage = ({
                 onSubmit={handleSubmit}
               />
             )}
+            <ErrorBoxSubmit>
+              <ErrorTextSubmit isErrorShown={isSubmitWarningVisible}>
+                {language.error.collectRecordSubmitDisabled}
+                <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                  x
+                </ErrorTextButton>
+              </ErrorTextSubmit>
+            </ErrorBoxSubmit>
           </ContentPageToolbarWrapper>
         }
       />

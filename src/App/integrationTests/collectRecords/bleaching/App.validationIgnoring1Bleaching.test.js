@@ -270,17 +270,17 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(observersRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(observersRow).getByText('secondWarning')).toBeInTheDocument()
 
-  userEvent.click(within(siteRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(siteRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() => expect(within(siteRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(siteRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(siteRow).getByRole('button', { name: 'Reset validations' }))
+  expect(within(siteRow).getByRole('checkbox', { name: 'Ignore warning' }))
   expect(within(siteRow).getByText('Ignored'))
 
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterIgnore)
-  userEvent.click(within(managementRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(managementRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
     expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -288,13 +288,13 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(managementRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(depthRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(depthRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() => expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(depthRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(sampleDateRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(sampleDateRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
     expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -302,7 +302,7 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(sampleDateRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(sampleTimeRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(sampleTimeRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
     expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -310,7 +310,7 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(sampleTimeRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(quadratSizeRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(quadratSizeRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
     expect(within(quadratSizeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -318,13 +318,13 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(quadratSizeRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(quadratSizeRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(labelRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(labelRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() => expect(within(labelRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(labelRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(relativeDepthRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(relativeDepthRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
     expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -332,7 +332,7 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(relativeDepthRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(visibilityRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(visibilityRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
     expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -340,7 +340,7 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(visibilityRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(currentRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(currentRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
     expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -348,19 +348,19 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(currentRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(tideRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(tideRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() => expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(tideRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(notesRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(notesRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() => expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument())
   expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
   expect(within(notesRow).getByText('Ignored')).toBeInTheDocument()
 
-  userEvent.click(within(observersRow).getByRole('button', { name: 'Ignore warning' }))
+  userEvent.click(within(observersRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
     expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument(),
@@ -429,7 +429,7 @@ test('Bleaching collect record validation: user can dismiss record-level warning
   expect(within(recordLevelValidationsSection).getByText('warning')).toBeInTheDocument()
 
   userEvent.click(
-    within(recordLevelValidationsSection).getByRole('button', { name: 'Ignore Warning' }),
+    within(recordLevelValidationsSection).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
   await waitFor(() =>
@@ -438,7 +438,7 @@ test('Bleaching collect record validation: user can dismiss record-level warning
   expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
 
   userEvent.click(
-    within(recordLevelValidationsSection).getByRole('button', { name: 'Reset validation' }),
+    within(recordLevelValidationsSection).getByRole('checkbox', { name: 'Ignore warning' }),
   )
   expect(await within(recordLevelValidationsSection).findByText('warning')).toBeInTheDocument()
   await waitFor(() =>
@@ -544,7 +544,7 @@ test('Bleaching collect record validation: user can dismiss colonies bleached ob
   expect(within(coloniesBleachedObservationsTable).getByText('secondWarning')).toBeInTheDocument()
 
   userEvent.click(
-    within(coloniesBleachedObservationsTable).getByRole('button', { name: 'Ignore warning' }),
+    within(coloniesBleachedObservationsTable).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
   await waitFor(() =>
@@ -557,8 +557,8 @@ test('Bleaching collect record validation: user can dismiss colonies bleached ob
   ).not.toBeInTheDocument()
 
   expect(
-    within(coloniesBleachedObservationsTable).getByRole('button', { name: 'Reset validations' }),
-  )
+    within(coloniesBleachedObservationsTable).getByRole('checkbox', { name: 'Ignore warning' }),
+  ).toBeChecked()
   expect(within(coloniesBleachedObservationsTable).getByText('Ignored'))
 
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
@@ -658,7 +658,7 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
   expect(within(percentCoverObservationTable).getByText('secondWarning')).toBeInTheDocument()
 
   userEvent.click(
-    within(percentCoverObservationTable).getByRole('button', { name: 'Ignore warning' }),
+    within(percentCoverObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
   await waitFor(() =>
@@ -668,7 +668,9 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
   )
   expect(within(percentCoverObservationTable).queryByText('secondWarning')).not.toBeInTheDocument()
 
-  expect(within(percentCoverObservationTable).getByRole('button', { name: 'Reset validations' }))
+  expect(
+    within(percentCoverObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
+  ).toBeChecked()
   expect(within(percentCoverObservationTable).getByText('Ignored'))
 
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
@@ -937,9 +939,23 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
+  expect(within(siteRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(managementRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(depthRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(sampleDateRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(sampleTimeRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(quadratSizeRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(labelRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(relativeDepthRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(visibilityRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(currentRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(tideRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(notesRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
+
   userEvent.click(
-    await within(siteRow).findByRole('button', {
-      name: 'Reset validations',
+    await within(siteRow).findByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -953,8 +969,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(siteRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(managementRow).getByRole('button', {
-      name: 'Reset validations',
+    within(managementRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -965,8 +981,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(managementRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(depthRow).getByRole('button', {
-      name: 'Reset validations',
+    within(depthRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -976,8 +992,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(depthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(sampleDateRow).getByRole('button', {
-      name: 'Reset validations',
+    within(sampleDateRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -987,8 +1003,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(sampleDateRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(sampleTimeRow).getByRole('button', {
-      name: 'Reset validations',
+    within(sampleTimeRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -998,8 +1014,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(sampleTimeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(quadratSizeRow).getByRole('button', {
-      name: 'Reset validations',
+    within(quadratSizeRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -1009,8 +1025,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(quadratSizeRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(labelRow).getByRole('button', {
-      name: 'Reset validations',
+    within(labelRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -1020,8 +1036,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(labelRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(relativeDepthRow).getByRole('button', {
-      name: 'Reset validations',
+    within(relativeDepthRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -1033,8 +1049,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(relativeDepthRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(visibilityRow).getByRole('button', {
-      name: 'Reset validations',
+    within(visibilityRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -1044,8 +1060,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(visibilityRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(currentRow).getByRole('button', {
-      name: 'Reset validations',
+    within(currentRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -1055,8 +1071,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(currentRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(tideRow).getByRole('button', {
-      name: 'Reset validations',
+    within(tideRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -1066,8 +1082,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(tideRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(notesRow).getByRole('button', {
-      name: 'Reset validations',
+    within(notesRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 
@@ -1077,8 +1093,8 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   expect(within(notesRow).queryByLabelText('Passed Validation')).not.toBeInTheDocument()
 
   userEvent.click(
-    within(observersRow).getByRole('button', {
-      name: 'Reset validations',
+    within(observersRow).getByRole('checkbox', {
+      name: 'Ignore warning',
     }),
   )
 

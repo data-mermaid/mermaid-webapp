@@ -124,7 +124,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
   ).toEqual(2)
 
   userEvent.click(
-    within(coloniesBleachedObservationTable).getByRole('button', { name: 'Reset validations' }),
+    within(coloniesBleachedObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
   const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
@@ -251,7 +251,7 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
   ).toEqual(2)
 
   userEvent.click(
-    within(percentCoverObservationTable).getByRole('button', { name: 'Reset validations' }),
+    within(percentCoverObservationTable).getByRole('checkbox', { name: 'Ignore warning' }),
   )
 
   const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
@@ -328,9 +328,7 @@ test('user can reset dismissed record-level warnings', async () => {
   expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
 
   userEvent.click(
-    await within(recordLevelValidationsSection).findByRole('button', {
-      name: 'Reset validation',
-    }),
+    await within(recordLevelValidationsSection).findByRole('checkbox', { name: 'Ignore warning' }),
   )
 
   await waitFor(() =>

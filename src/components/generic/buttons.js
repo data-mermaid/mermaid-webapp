@@ -32,7 +32,7 @@ const buttonCss = css`
   display: inline-block;
   cursor: pointer;
   &:disabled {
-    color: ${theme.color.disabledText};
+    color: ${theme.color.disabledTextDark};
     cursor: not-allowed;
   }
   &:active:enabled {
@@ -109,7 +109,7 @@ export const ButtonCaution = styled(Button)`
   border: solid 1px ${theme.color.cautionColor};
   ${hoverState(
     css`
-      background-color: ${theme.color.black};
+      background-color: ${theme.color.cautionColor};
       color: ${theme.color.white};
     `,
   )}

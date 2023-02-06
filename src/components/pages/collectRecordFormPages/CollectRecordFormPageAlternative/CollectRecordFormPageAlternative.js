@@ -14,7 +14,13 @@ import { buttonGroupStates } from '../../../../library/buttonGroupStates'
 import { ContentPageLayout } from '../../../Layout'
 import { ContentPageToolbarWrapper } from '../../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
-import { ErrorBox, ErrorText } from '../CollectingFormPage.Styles'
+import {
+  ErrorBox,
+  ErrorText,
+  ErrorTextButton,
+  ErrorTextSubmit,
+  ErrorBoxSubmit,
+} from '../CollectingFormPage.Styles'
 import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getToastArguments } from '../../../../library/getToastArguments'
@@ -91,6 +97,7 @@ const CollectRecordFormPageAlternative = ({
   const isLoading = isParentDataLoading || isCommonProtocolDataLoading
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
+  const [isSubmitWarningVisible, setIsSubmitWarningVisible] = useState(false)
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -276,7 +283,6 @@ const CollectRecordFormPageAlternative = ({
   )
 
   const {
-    setIgnoredItemsToBeRevalidated,
     handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,
@@ -298,6 +304,7 @@ const CollectRecordFormPageAlternative = ({
     setAreValidationsShowing,
     setIsFormDirty,
     setValidateButtonState,
+    setIsSubmitWarningVisible,
   })
 
   const handleSave = () => {
@@ -310,6 +317,7 @@ const CollectRecordFormPageAlternative = ({
 
     setSaveButtonState(buttonGroupStates.saving)
     setAreValidationsShowing(false)
+    setIsSubmitWarningVisible(false)
 
     databaseSwitchboardInstance
       .saveSampleUnit({
@@ -400,6 +408,10 @@ const CollectRecordFormPageAlternative = ({
       })
   }
 
+  const handleDismissSubmitWarning = () => {
+    setIsSubmitWarningVisible(false)
+  }
+
   const errorBoxContent = (
     <ErrorBox>
       {<ErrorText isErrorShown={isErrorAbove}>{language.error.onPageWarningAbove}</ErrorText>}
@@ -429,7 +441,6 @@ const CollectRecordFormPageAlternative = ({
           handleManagementRegimesChange={handleManagementRegimesChange}
           sites={sites}
           handleSitesChange={handleSitesChange}
-          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationPropertiesWithDirtyResetOnInputChange={
@@ -440,7 +451,6 @@ const CollectRecordFormPageAlternative = ({
           areValidationsShowing={areValidationsShowing}
           choices={choices}
           formik={formik}
-          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationsApiData={validationsApiData}
@@ -455,7 +465,6 @@ const CollectRecordFormPageAlternative = ({
           formik={formik}
           ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
           observers={observerProfiles}
-          setIgnoredItemsToBeRevalidated={setIgnoredItemsToBeRevalidated}
           resetNonObservationFieldValidations={resetNonObservationFieldValidations}
           validationsApiData={validationsApiData}
           validationPropertiesWithDirtyResetOnInputChange={
@@ -502,7 +511,7 @@ const CollectRecordFormPageAlternative = ({
         onDismiss={closeDeleteRecordModal}
         openModal={openDeleteRecordModal}
       />
-      {errorBoxContent}
+      {!isSubmitWarningVisible ? errorBoxContent : null}
     </>
   ) : (
     <PageUnavailable mainText={language.error.pageReadOnly} />
@@ -541,6 +550,14 @@ const CollectRecordFormPageAlternative = ({
                 onSubmit={handleSubmit}
               />
             )}
+            <ErrorBoxSubmit>
+              <ErrorTextSubmit isErrorShown={isSubmitWarningVisible}>
+                {language.error.collectRecordSubmitDisabled}
+                <ErrorTextButton type="submit" onClick={handleDismissSubmitWarning}>
+                  x
+                </ErrorTextButton>
+              </ErrorTextSubmit>
+            </ErrorBoxSubmit>
           </ContentPageToolbarWrapper>
         }
       />

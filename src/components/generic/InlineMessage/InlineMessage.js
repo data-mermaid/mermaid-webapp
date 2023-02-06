@@ -40,9 +40,7 @@ const InlineMessage = ({ type, children, className }) => {
           {language.inlineMessage[type]}
         </MessagePill>
       )}
-      <InlineMessageWrapper className={className} type={type}>
-        {children}
-      </InlineMessageWrapper>
+      <InlineMessageWrapper className={className}>{children}</InlineMessageWrapper>
     </>
   )
 }

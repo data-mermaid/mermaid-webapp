@@ -3,12 +3,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
-  CellValidation,
-  CellValidationButton,
   ObservationTr,
   StyledOverflowWrapper,
   StickyObservationTable,
-  TableValidationList,
   UnderTableRow,
   ButtonRemoveRow,
 } from '../CollectingFormPage.Styles'
@@ -25,7 +22,7 @@ import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import language from '../../../../language'
+import ObservationValidationInfo from '../ObservationValidationInfo'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -144,50 +141,10 @@ const HabitatComplexityObservationsTable = ({
             observationId,
           },
         })
-      }
-
-      const handleHabitatComplexityScoreKeydown = (event) => {
-        handleKeyDown({ event, index, observation, isLastCell: true })
-      }
-
-      const handleIgnoreObservationValidations = () => {
-        ignoreObservationValidations({
-          observationId,
-        })
-      }
-
-      const handleResetObservationValidations = () => {
         resetObservationValidations({
           observationId,
         })
       }
-      const validationsMarkup = (
-        <CellValidation>
-          {isObservationValid ? <span aria-label="Passed Validation">&nbsp;</span> : null}
-          {hasObservationErrorValidation || hasObservationWarningValidation ? (
-            <TableValidationList>
-              {observationValidationMessages.map((validation) => (
-                <li className={`${observationValidationType}-indicator`} key={validation.id}>
-                  {language.getValidationMessage(validation)}
-                </li>
-              ))}
-            </TableValidationList>
-          ) : null}
-          {hasObservationWarningValidation ? (
-            <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-              Ignore warning
-            </CellValidationButton>
-          ) : null}
-          {hasObservationIgnoredValidation ? (
-            <>
-              Ignored
-              <CellValidationButton type="button" onClick={handleResetObservationValidations}>
-                Reset validations
-              </CellValidationButton>
-            </>
-          ) : null}
-        </CellValidation>
-      )
 
       return (
         <ObservationTr key={observationId}>
@@ -199,7 +156,9 @@ const HabitatComplexityObservationsTable = ({
           <Td align="center">
             <Select
               onChange={handleHabitatComplexityScoreChange}
-              onKeyDown={handleHabitatComplexityScoreKeydown}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isLastCell: true })
+              }}
               value={habitatComplexityScore}
               aria-labelledby="habitat-complexity-score-label"
               autoFocus={autoFocusAllowed}
@@ -213,7 +172,19 @@ const HabitatComplexityObservationsTable = ({
             </Select>
           </Td>
 
-          {areValidationsShowing ? validationsMarkup : null}
+          {areValidationsShowing ? (
+            <ObservationValidationInfo
+              hasObservationErrorValidation={hasObservationErrorValidation}
+              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
+              hasObservationWarningValidation={hasObservationWarningValidation}
+              ignoreObservationValidations={ignoreObservationValidations}
+              isObservationValid={isObservationValid}
+              observationId={observationId}
+              observationValidationMessages={observationValidationMessages}
+              observationValidationType={observationValidationType}
+              resetObservationValidations={resetObservationValidations}
+            />
+          ) : null}
           <Td align="center">
             <ButtonRemoveRow
               tabIndex="-1"

@@ -17,6 +17,7 @@ const useCollectRecordValidation = ({
   setAreValidationsShowing,
   setIsFormDirty,
   setValidateButtonState,
+  setIsSubmitWarningVisible,
 }) => {
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const getValidationButtonStatus = useCallback((collectRecord) => {
@@ -48,6 +49,10 @@ const useCollectRecordValidation = ({
         setAreValidationsShowing(true)
         handleCollectRecordChange(validatedRecordResponse)
         setValidateButtonState(getValidationButtonStatus(validatedRecordResponse))
+        validatedRecordResponse.validations.status === 'error' ||
+        validatedRecordResponse.validations.status === 'warning'
+          ? setIsSubmitWarningVisible(true)
+          : setIsSubmitWarningVisible(false)
       })
       .catch((error) => {
         setValidateButtonState(buttonGroupStates.validatable)
@@ -110,23 +115,25 @@ const useCollectRecordValidation = ({
 
   const ignoreNonObservationFieldValidations = useCallback(
     ({ validationPath }) => {
-      databaseSwitchboardInstance
-        .ignoreNonObservationFieldValidations({
-          record: collectRecordBeingEdited,
-          validationPath,
-        })
-        .then((recordWithIgnoredValidations) => {
-          handleCollectRecordChange(recordWithIgnoredValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
-            },
+      if (collectRecordBeingEdited && validationPath) {
+        databaseSwitchboardInstance
+          .ignoreNonObservationFieldValidations({
+            record: collectRecordBeingEdited,
+            validationPath,
           })
-        })
+          .then((recordWithIgnoredValidations) => {
+            handleCollectRecordChange(recordWithIgnoredValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
+              },
+            })
+          })
+      }
     },
     [
       collectRecordBeingEdited,
@@ -139,21 +146,23 @@ const useCollectRecordValidation = ({
 
   const resetObservationValidations = useCallback(
     ({ observationId }) => {
-      databaseSwitchboardInstance
-        .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
-        .then((recordWithResetValidations) => {
-          handleCollectRecordChange(recordWithResetValidations)
+      if (collectRecordBeingEdited && observationId) {
+        databaseSwitchboardInstance
+          .resetObservationValidations({ recordId: collectRecordBeingEdited.id, observationId })
+          .then((recordWithResetValidations) => {
+            handleCollectRecordChange(recordWithResetValidations)
 
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
-            },
+            setIsFormDirty(true)
           })
-        })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+              },
+            })
+          })
+      }
     },
     [
       collectRecordBeingEdited,
@@ -195,23 +204,25 @@ const useCollectRecordValidation = ({
 
   const resetNonObservationFieldValidations = useCallback(
     ({ validationPath }) => {
-      databaseSwitchboardInstance
-        .resetNonObservationFieldValidations({
-          record: collectRecordBeingEdited,
-          validationPath,
-        })
-        .then((recordWithResetValidations) => {
-          handleCollectRecordChange(recordWithResetValidations)
-          setIsFormDirty(true)
-        })
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordValidationReset))
-            },
+      if (collectRecordBeingEdited && validationPath) {
+        databaseSwitchboardInstance
+          .resetNonObservationFieldValidations({
+            record: collectRecordBeingEdited,
+            validationPath,
           })
-        })
+          .then((recordWithResetValidations) => {
+            handleCollectRecordChange(recordWithResetValidations)
+            setIsFormDirty(true)
+          })
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                toast.error(...getToastArguments(language.error.collectRecordValidationReset))
+              },
+            })
+          })
+      }
     },
     [
       collectRecordBeingEdited,
@@ -251,22 +262,7 @@ const useCollectRecordValidation = ({
     ],
   )
 
-  const setIgnoredItemsToBeRevalidated = ({
-    validationProperties,
-    validationPath,
-    inputName,
-  }) => {
-    const isInputDirty =
-      formikInstance.initialValues[inputName] === formikInstance.values[inputName]
-    const doesFieldHaveIgnoredValidation = validationProperties.validationType === 'ignore'
-
-    if (doesFieldHaveIgnoredValidation && isInputDirty) {
-      resetNonObservationFieldValidations({ validationPath })
-    }
-  }
-
   return {
-    setIgnoredItemsToBeRevalidated,
     handleScrollToObservation,
     handleValidate,
     ignoreNonObservationFieldValidations,

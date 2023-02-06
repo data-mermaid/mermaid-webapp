@@ -48,6 +48,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const Sites = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -208,7 +209,7 @@ const Sites = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 15,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -313,6 +314,7 @@ const Sites = () => {
                   const isMultiSortColumn = headerGroup.headers.some(
                     (header) => header.sortedIndex > 0,
                   )
+                  const ThClassName = column.parent ? column.parent.id : undefined
 
                   return (
                     <Th
@@ -320,8 +322,9 @@ const Sites = () => {
                       isSortedDescending={column.isSortedDesc}
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
+                      className={ThClassName}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   )
                 })}

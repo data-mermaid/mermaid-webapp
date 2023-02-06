@@ -3,6 +3,7 @@ import { mockHabitatComplexityCollectRecords } from './mockCollectRecords/mockHa
 import mockBenthicPitCollectRecords from './mockCollectRecords/mockBenthicPitCollectRecords'
 import mockBleachingCollectRecords from './mockCollectRecords/mockBleachingCollectRecords'
 import mockFishbeltCollectRecords from './mockCollectRecords/mockFishbeltCollectRecords'
+import mockBenthicPhotoQuadratCollectRecords from './mockCollectRecords/mockBenthicPhotoQuadratCollectRecords'
 
 const projects = [
   {
@@ -480,6 +481,7 @@ const collect_records = [
   ...mockBleachingCollectRecords,
   ...mockBenthicLitCollectRecords,
   ...mockHabitatComplexityCollectRecords,
+  ...mockBenthicPhotoQuadratCollectRecords,
 ]
 
 const project_sites = [

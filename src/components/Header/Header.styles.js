@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components/macro'
-import { IconBell, IconMenu, IconUser } from '../icons'
+import { IconBell, IconOpenInNew, IconExcel, IconMenu, IconUser } from '../icons'
 import theme from '../../theme'
 import { ButtonThatLooksLikeLink } from '../generic/buttons'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../library/styling/mediaQueries'
@@ -34,7 +34,6 @@ export const CurrentUserImg = styled('img')`
   height: calc(${theme.spacing.headerHeight} - 10px);
   width: calc(${theme.spacing.headerHeight} - 10px);
   border-radius: 50%;
-  /* border: solid 2px ${theme.color.white}; */
   ${hoverState(
     css`
       outline: solid 3px ${theme.color.callout};
@@ -143,7 +142,19 @@ const biggerIcons = css`
   top: 0.7rem;
   position: relative;
 `
+const mediumIcons = css`
+  width: ${theme.typography.mediumIconSize};
+  height: ${theme.typography.mediumIconSize};
+  top: 0.5rem;
+  position: relative;
+`
 
+export const MediumIconOpenInNew = styled(IconOpenInNew)`
+  ${mediumIcons};
+`
+export const MediumIconExcel = styled(IconExcel)`
+  ${mediumIcons};
+`
 export const BiggerIconBell = styled(IconBell)`
   ${biggerIcons}
 `

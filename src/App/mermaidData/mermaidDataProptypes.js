@@ -224,7 +224,7 @@ export const habitatComplexityPropType = PropTypes.shape({
   }),
 })
 
-export const submittedBenthicLitPropType = PropTypes.shape({
+export const benthicLitPropType = PropTypes.shape({
   id: PropTypes.string,
   interval_size: PropTypes.number,
   inetrval_start: PropTypes.number,
@@ -491,3 +491,12 @@ export const subNavNodePropTypes = PropTypes.shape({
   number: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   label: PropTypes.string,
 })
+
+export const mermaidRecordPropType = PropTypes.oneOfType([
+  benthicLitPropType,
+  benthicPhotoQuadratPropType,
+  benthicPitRecordPropType,
+  bleachingRecordPropType,
+  fishBeltPropType,
+  habitatComplexityPropType,
+])

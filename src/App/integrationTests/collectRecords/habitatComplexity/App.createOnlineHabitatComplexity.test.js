@@ -92,7 +92,7 @@ describe('Online', () => {
     userEvent.click(within(sideNav).getByText('Collecting'))
 
     // show all the records
-    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '21')
+    userEvent.selectOptions(await screen.findByTestId('page-size-selector'), '22')
     const table = await screen.findByRole('table')
 
     const linksToHabitatComplexityRecords = within(table).getAllByRole('link', {

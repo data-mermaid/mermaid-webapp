@@ -42,6 +42,7 @@ import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 import SubmittedSampleUnitPopup from '../../SampleUnitPopups/SubmittedSampleUnitPopup'
 import EmptySampleUnitPopup from '../../SampleUnitPopups/EmptySampleUnitPopup/EmptySampleUnitPopup'
 import CollectSampleUnitPopup from '../../SampleUnitPopups/CollectSampleUnitPopup/CollectSampleUnitPopup'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const EMPTY_VALUE = '-'
 
@@ -317,7 +318,7 @@ const UsersAndTransects = () => {
   }, [])
 
   const [tableUserPrefs, handleSetTableUserPrefs] = usePersistUserTablePreferences({
-    key: `${currentUser.id}-usersAndTransectsTable`,
+    key: `${currentUser.id}-observersAndTransectsTable`,
     defaultValue: tableDefaultPrefs,
   })
 
@@ -353,7 +354,7 @@ const UsersAndTransects = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 100,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -420,7 +421,7 @@ const UsersAndTransects = () => {
                       align={headerAlignment}
                       className={ThClassName}
                     >
-                      {column.render('Header')}
+                      <span> {column.render('Header')}</span>
                     </OverviewTh>
                   )
                 })}
@@ -507,7 +508,7 @@ const UsersAndTransects = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="users and transects"
+          pageType="records"
           rowLength={submittedRecords.length}
         />
         <PageSelector

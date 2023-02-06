@@ -26,7 +26,6 @@ const SampleEventInputs = ({
   handleManagementRegimesChange,
   sites,
   handleSitesChange,
-  setIgnoredItemsToBeRevalidated,
   ignoreNonObservationFieldValidations,
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
@@ -52,27 +51,21 @@ const SampleEventInputs = ({
   )
 
   const handleSiteChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'site',
-      validationProperties: siteValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: SITE_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
 
   const handleManagementChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'management',
-      validationProperties: managementValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: MANAGEMENT_VALIDATION_PATH,
     })
     formik.handleChange(event)
   }
 
   const handleSampleDateChange = (event) => {
-    setIgnoredItemsToBeRevalidated({
-      inputName: 'sample_date',
-      validationProperties: sampleDateValidationProperties,
+    resetNonObservationFieldValidations({
       validationPath: SAMPLE_DATE_VALIDATION_PATH,
     })
     formik.handleChange(event)
@@ -167,7 +160,6 @@ SampleEventInputs.propTypes = {
   handleManagementRegimesChange: PropTypes.func.isRequired,
   sites: PropTypes.arrayOf(sitePropType).isRequired,
   handleSitesChange: PropTypes.func.isRequired,
-  setIgnoredItemsToBeRevalidated: PropTypes.func.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,

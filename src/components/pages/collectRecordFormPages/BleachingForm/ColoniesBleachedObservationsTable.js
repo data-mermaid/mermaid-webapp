@@ -3,8 +3,6 @@ import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
-  CellValidation,
-  CellValidationButton,
   InputAutocompleteContainer,
   NewOptionButton,
   ObservationAutocomplete,
@@ -12,7 +10,6 @@ import {
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
   StickyObservationTable,
-  TableValidationList,
   UnderTableRow,
   ButtonRemoveRow,
 } from '../CollectingFormPage.Styles'
@@ -22,17 +19,18 @@ import {
   bleachingRecordPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { ButtonPrimary } from '../../../generic/buttons'
+import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
+import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
-import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
-import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
+import ObservationValidationInfo from '../ObservationValidationInfo'
 
 const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
 
@@ -79,7 +77,7 @@ const ColoniesBleachedObservationTable = ({
   const observationRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms)
 
-    const handleKeyDown = ({ event, index, observation, isLastCell, isBenthicAttribute }) => {
+    const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
       const isLastRow = index === observationsState.length - 1
@@ -94,7 +92,7 @@ const ColoniesBleachedObservationTable = ({
         setAreObservationsInputsDirty(true)
       }
 
-      if (isEnterKey && !isBenthicAttribute) {
+      if (isEnterKey) {
         event.preventDefault()
         setAutoFocusAllowed(true)
         observationsDispatch({
@@ -156,6 +154,9 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
+        resetObservationValidations({
+          observationId,
+        })
       }
 
       const handleGrowthFormChange = (selectedOption) => {
@@ -168,6 +169,9 @@ const ColoniesBleachedObservationTable = ({
             newValue,
             observationId,
           },
+        })
+        resetObservationValidations({
+          observationId,
         })
       }
 
@@ -182,58 +186,17 @@ const ColoniesBleachedObservationTable = ({
             observationId,
           },
         })
-      }
-
-      const handleBenthicAttributeKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isBenthicAttribute: true })
-      }
-
-      const handleLastCellKeyDown = (event) => {
-        handleKeyDown({ event, index, observation, isLastCell: true })
-      }
-
-      const handleIgnoreObservationValidations = () => {
-        ignoreObservationValidations({
-          observationId,
-        })
-      }
-
-      const handleResetObservationValidations = () => {
         resetObservationValidations({
           observationId,
         })
       }
-      const validationsMarkup = (
-        <CellValidation>
-          {isObservationValid ? <span aria-label="Passed Validation">&nbsp;</span> : null}
-          {hasObservationErrorValidation || hasObservationWarningValidation ? (
-            <TableValidationList>
-              {observationValidationMessages.map((validation) => (
-                <li className={`${observationValidationType}-indicator`} key={validation.id}>
-                  {language.getValidationMessage(validation)}
-                </li>
-              ))}
-            </TableValidationList>
-          ) : null}
-          {hasObservationWarningValidation ? (
-            <CellValidationButton type="button" onClick={handleIgnoreObservationValidations}>
-              Ignore warning
-            </CellValidationButton>
-          ) : null}
-          {hasObservationIgnoredValidation ? (
-            <>
-              Ignored
-              <CellValidationButton type="button" onClick={handleResetObservationValidations}>
-                Reset validations
-              </CellValidationButton>
-            </>
-          ) : null}
-        </CellValidation>
-      )
 
       const proposeNewBenthicAttributeClick = () => {
         setObservationIdToAddNewBenthicAttributeTo(observationId)
         setIsNewBenthicAttributeModalOpen(true)
+      }
+      const handleObservationKeyDown = (event) => {
+        handleKeyDown({ event, index, observation })
       }
 
       return (
@@ -249,7 +212,6 @@ const ColoniesBleachedObservationTable = ({
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
-                  onKeyDown={handleBenthicAttributeKeyDown}
                   value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
                   noResultsAction={
@@ -276,6 +238,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={handleGrowthFormChange}
               value={growth_form}
               aria-labelledby="growth-form-label"
+              onKeyDown={handleObservationKeyDown}
             >
               <option value=""> </option>
               {growthFormSelectOptions.map((item) => (
@@ -294,6 +257,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateNormal' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -305,6 +269,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updatePale' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -316,6 +281,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update20Bleached' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -327,6 +293,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update50Bleached' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -338,6 +305,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update80Bleached' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -349,6 +317,7 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'update100Bleached' })
               }}
+              onKeyDown={handleObservationKeyDown}
             />
           </Td>
           <Td align="right">
@@ -360,11 +329,25 @@ const ColoniesBleachedObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateRecentlyDead' })
               }}
-              onKeyDown={handleLastCellKeyDown}
+              onKeyDown={(event) => {
+                handleKeyDown({ event, index, observation, isLastCell: true })
+              }}
             />
           </Td>
 
-          {areValidationsShowing ? validationsMarkup : null}
+          {areValidationsShowing ? (
+            <ObservationValidationInfo
+              hasObservationErrorValidation={hasObservationErrorValidation}
+              hasObservationIgnoredValidation={hasObservationIgnoredValidation}
+              hasObservationWarningValidation={hasObservationWarningValidation}
+              ignoreObservationValidations={ignoreObservationValidations}
+              isObservationValid={isObservationValid}
+              observationId={observationId}
+              observationValidationMessages={observationValidationMessages}
+              observationValidationType={observationValidationType}
+              resetObservationValidations={resetObservationValidations}
+            />
+          ) : null}
           <Td align="center">
             <ButtonRemoveRow
               tabIndex="-1"

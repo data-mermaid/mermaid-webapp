@@ -115,7 +115,7 @@ test('Habitat Complexity validation: user can reset ignored observation warnings
   // other two passing
   expect(within(observationsTable).queryAllByLabelText('Passed Validation').length).toEqual(2)
 
-  userEvent.click(within(observationsTable).getByRole('button', { name: 'Reset validations' }))
+  userEvent.click(within(observationsTable).getByRole('checkbox', { name: 'Ignore warning' }))
 
   const isFormDirtyAfterReset = await screen.findByRole('button', { name: 'Save' })
 
@@ -189,9 +189,7 @@ test('user can reset dismissed record-level warnings', async () => {
   expect(within(recordLevelValidationsSection).getByText('ignored')).toBeInTheDocument()
 
   userEvent.click(
-    await within(recordLevelValidationsSection).findByRole('button', {
-      name: 'Reset validation',
-    }),
+    await within(recordLevelValidationsSection).findByRole('checkbox', { name: 'Ignore warning' }),
   )
 
   await waitFor(() =>

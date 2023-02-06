@@ -9,8 +9,8 @@ import {
   Th,
   Td,
   TableNavigation,
-  GenericStickyTable,
   StickyTableOverflowWrapper,
+  GenericStickyTableTextWrapTh,
 } from '../../generic/Table/table'
 import { ContentPageLayout } from '../../Layout'
 import CopyManagementRegimesModal from '../../CopyManagementRegimesModal'
@@ -47,6 +47,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -273,7 +274,7 @@ const ManagementRegimes = () => {
       columns: tableColumns,
       data: tableCellData,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 15,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -345,7 +346,7 @@ const ManagementRegimes = () => {
   const table = managementRegimeRecordsForUiDisplay.length ? (
     <>
       <StickyTableOverflowWrapper>
-        <GenericStickyTable {...getTableProps()}>
+        <GenericStickyTableTextWrapTh {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => {
               const isMultiSortColumn = headerGroup.headers.some((header) => header.sortedIndex > 0)
@@ -359,7 +360,7 @@ const ManagementRegimes = () => {
                       sortedIndex={column.sortedIndex}
                       isMultiSortColumn={isMultiSortColumn}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   ))}
                 </Tr>
@@ -383,7 +384,7 @@ const ManagementRegimes = () => {
               )
             })}
           </tbody>
-        </GenericStickyTable>
+        </GenericStickyTableTextWrapTh>
       </StickyTableOverflowWrapper>
       <TableNavigation>
         <PageSizeSelector

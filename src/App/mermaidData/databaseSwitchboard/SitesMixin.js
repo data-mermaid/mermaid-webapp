@@ -1,7 +1,7 @@
-import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getSampleUnitLabel } from '../getSampleUnitLabel'
+import axios from '../../../library/axiosRetry'
+import language from '../../../language'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -132,9 +132,8 @@ const SitesMixin = (Base) =>
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
-          .then((response) => {
-            const [siteResponseFromApiPush] = response.data.project_sites
-            const projectSitesErrorData = siteResponseFromApiPush.data
+          .then((pushResponse) => {
+            const [siteResponseFromApiPush] = pushResponse.data.project_sites
 
             const isSiteStatusCodeSuccessful = this._isStatusCodeSuccessful(
               siteResponseFromApiPush.status_code,
@@ -152,7 +151,16 @@ const SitesMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(projectSitesErrorData)
+            if (!isSiteStatusCodeSuccessful) {
+              return Promise.reject(
+                this._getMermaidDataPushSyncStatusCodeError({
+                  mermaidDataTypeName: 'project_sites',
+                  pushResponse,
+                }),
+              )
+            }
+
+            return Promise.reject(new Error(language.error.generic))
           })
       }
 
@@ -165,28 +173,30 @@ const SitesMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteSite = async function deleteSite(record, projectId) {
-      if (!record) {
-        throw new Error('deleteSite expects record, profileId, and projectId parameters')
+    deleteSite = async function deleteSite(originalSiteToBeDeleted, projectId) {
+      if (!originalSiteToBeDeleted && !projectId) {
+        throw new Error(
+          'deleteSite expects originalSiteToBeDeleted, profileId, and projectId parameters',
+        )
       }
 
-      const hasCorrespondingRecordInTheApi = !!record._last_revision_num
+      const hasCorrespondingSiteInTheApi = !!originalSiteToBeDeleted._last_revision_num
 
-      const recordMarkedToBeDeleted = {
-        ...record,
+      const siteCopyMarkedToBeDeleted = {
+        ...originalSiteToBeDeleted,
         _deleted: true,
         uiState_pushToApi: true,
       }
 
-      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
+      if (hasCorrespondingSiteInTheApi && this._isOnlineAuthenticatedAndReady) {
         // Add to IDB in case the there are network issues before the API responds
-        await this._dexiePerUserDataInstance.project_sites.put(recordMarkedToBeDeleted)
+        await this._dexiePerUserDataInstance.project_sites.put(siteCopyMarkedToBeDeleted)
 
         return axios
           .post(
             `${this._apiBaseUrl}/push/`,
             {
-              project_sites: [recordMarkedToBeDeleted],
+              project_sites: [siteCopyMarkedToBeDeleted],
             },
             {
               params: {
@@ -195,26 +205,37 @@ const SitesMixin = (Base) =>
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
-          .then((apiPushResponse) => {
-            const recordReturnedFromApiPush = apiPushResponse.data.project_sites[0]
-            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
-              recordReturnedFromApiPush.status_code,
+          .then((pushResponse) => {
+            const siteReturnedFromApiPush = pushResponse.data.project_sites[0]
+            const isStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              siteReturnedFromApiPush.status_code,
             )
 
-            const { sampleevent, ...sampleUnitProtocols } = recordReturnedFromApiPush.data // eslint-disable-line no-unused-vars
-
-            if (isRecordStatusCodeSuccessful) {
+            if (isStatusCodeSuccessful) {
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then(() => apiPushResponse)
+                .then(() => pushResponse)
             }
 
-            const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
-            const sampleUnitProtocolLabels = getSampleUnitLabel(sampleUnitProtocolValues)
+            if (!isStatusCodeSuccessful) {
+              const syncError = this._getMermaidDataPushSyncStatusCodeError({
+                mermaidDataTypeName: 'project_sites',
+                pushResponse,
+              })
 
-            return Promise.reject(sampleUnitProtocolLabels)
+              if (syncError.isDeleteRejectedError) {
+                // not awaiting this because its not the end of the world if
+                // this doesnt get rolled back to the original(it just means
+                //  the next push will try again unecessarily)
+                this._dexiePerUserDataInstance.project_sites.put(originalSiteToBeDeleted)
+              }
+
+              return Promise.reject(syncError)
+            }
+
+            return Promise.reject(new Error(language.error.generic))
           })
       }
 

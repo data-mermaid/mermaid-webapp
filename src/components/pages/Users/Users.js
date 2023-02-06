@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import styled, { css } from 'styled-components/macro'
 
-import { ButtonSecondary } from '../../generic/buttons'
+import { ButtonSecondary, ButtonCaution } from '../../generic/buttons'
 import { ContentPageLayout } from '../../Layout'
 import { getProfileNameOrEmailForPendingUser } from '../../../library/getProfileNameOrEmailForPendingUser'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
@@ -16,9 +16,9 @@ import { hoverState, mediaQueryPhoneOnly } from '../../../library/styling/mediaQ
 import {
   IconAccount,
   IconAccountConvert,
-  IconAccountRemove,
   IconPlus,
   IconAlert,
+  IconAccountRemove,
 } from '../../icons'
 import {
   reactTableNaturalSort,
@@ -57,6 +57,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -580,13 +581,13 @@ const Users = () => {
           </>
         ),
         remove: (
-          <ButtonSecondary
+          <ButtonCaution
             type="button"
             disabled={isCurrentUser || isTableUpdating}
             onClick={() => openRemoveUserModal(profile)}
           >
             <IconAccountRemove />
-          </ButtonSecondary>
+          </ButtonCaution>
         ),
       }
     })
@@ -659,7 +660,7 @@ const Users = () => {
       columns: isAdminUser ? tableColumnsForAdmin : tableColumnsForNonAdmin,
       data: isAdminUser ? tableCellDataForAdmin : tableCellDataForNonAdmin,
       initialState: {
-        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : 15,
+        pageSize: tableUserPrefs.pageSize ? tableUserPrefs.pageSize : PAGE_SIZE_DEFAULT,
         sortBy: tableUserPrefs.sortBy,
         globalFilter: tableUserPrefs.globalFilter,
       },
@@ -709,7 +710,7 @@ const Users = () => {
                       isSortingEnabled={!column.disableSortBy}
                       disabledHover={column.disableSortBy}
                     >
-                      {column.render('Header')}
+                      <span>{column.render('Header')}</span>
                     </Th>
                   )
                 })}

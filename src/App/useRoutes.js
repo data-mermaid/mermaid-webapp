@@ -33,7 +33,7 @@ export const useRoutes = ({ apiSyncInstance }) => {
       Component: () => <Projects apiSyncInstance={apiSyncInstance} />,
     },
     {
-      path: '/projects/:projectId/users-and-transects',
+      path: '/projects/:projectId/observers-and-transects',
       Component: UsersAndTransects,
     },
     {
