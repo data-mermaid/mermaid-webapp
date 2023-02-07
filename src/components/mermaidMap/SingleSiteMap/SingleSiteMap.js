@@ -45,7 +45,7 @@ const SingleSiteMap = ({
       customAttribution: language.map.attribution,
     })
 
-    recordMarker.current = new maplibregl.Marker(markerElement)
+    recordMarker.current = new maplibregl.Marker(markerElement, { draggable: !isReadOnlyUser })
 
     addMapController(map.current)
 
@@ -72,6 +72,22 @@ const SingleSiteMap = ({
         handleLatitudeChange(lngLat.lat)
         handleLongitudeChange(adjustedLng)
       }
+    })
+
+    recordMarker.current.on('dragend', () => {
+      const lngLat = recordMarker.current.getLngLat()
+
+      // Adjust lng at international dateline
+      let adjustedLng = lngLat.lng
+
+      if (lngLat.lng < -180) {
+        adjustedLng = 360 + lngLat.lng
+      } else if (lngLat.lng > 180) {
+        adjustedLng = lngLat.lng - 360
+      }
+
+      handleLatitudeChange(lngLat.lat)
+      handleLongitudeChange(adjustedLng)
     })
 
     // clean up on unmount
