@@ -10,7 +10,6 @@ import {
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
 
-import { getProtocolTransectType } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoHabitatComplexityRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'

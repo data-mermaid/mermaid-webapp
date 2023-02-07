@@ -11,7 +11,6 @@ import {
 } from '../collectRecordFormInitialValues'
 
 import { getBenthicOptions } from '../../../../library/getOptions'
-import { getProtocolTransectType } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBenthicPitRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
