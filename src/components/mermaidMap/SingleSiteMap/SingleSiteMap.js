@@ -31,6 +31,20 @@ const SingleSiteMap = ({
   const handleZoomDisplayHelpText = (displayValue) => setDisplayHelpText(displayValue)
 
   const _initializeMap = useEffect(() => {
+    const handleMarkerLocationChange = (lngLat) => {
+      // Adjust lng at international dateline
+      let adjustedLng = lngLat.lng
+
+      if (lngLat.lng < -180) {
+        adjustedLng = 360 + lngLat.lng
+      } else if (lngLat.lng > 180) {
+        adjustedLng = lngLat.lng - 360
+      }
+
+      handleLatitudeChange(lngLat.lat)
+      handleLongitudeChange(adjustedLng)
+    }
+
     const markerElement = document.createElement('div')
 
     markerElement.id = 'marker'
@@ -45,7 +59,7 @@ const SingleSiteMap = ({
       customAttribution: language.map.attribution,
     })
 
-    recordMarker.current = new maplibregl.Marker(markerElement)
+    recordMarker.current = new maplibregl.Marker(markerElement, { draggable: !isReadOnlyUser })
 
     addMapController(map.current)
 
@@ -60,18 +74,14 @@ const SingleSiteMap = ({
 
         recordMarker.current.setLngLat(lngLat)
 
-        // Adjust lng at international dateline
-        let adjustedLng = lngLat.lng
-
-        if (lngLat.lng < -180) {
-          adjustedLng = 360 + lngLat.lng
-        } else if (lngLat.lng > 180) {
-          adjustedLng = lngLat.lng - 360
-        }
-
-        handleLatitudeChange(lngLat.lat)
-        handleLongitudeChange(adjustedLng)
+        handleMarkerLocationChange(lngLat)
       }
+    })
+
+    recordMarker.current.on('dragend', () => {
+      const lngLat = recordMarker.current.getLngLat()
+
+      handleMarkerLocationChange(lngLat)
     })
 
     // clean up on unmount
