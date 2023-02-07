@@ -76,11 +76,7 @@ const BleachingForm = ({ isNewRecord }) => {
 
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      getProtocolTransectType(collectRecordResponse?.protocol),
-                    )
+                  ? getRecordSubNavNodeInfo(collectRecordResponse, sitesResponse)
                   : { name: language.protocolTitles.bleachingqc }
 
               setCollectRecordBeingEdited(collectRecordResponse)
@@ -235,7 +231,7 @@ const BleachingForm = ({ isNewRecord }) => {
           modalAttributeOptions={benthicAttributeSelectOptions}
         />
       )}
-    </ErrorBoundary >
+    </ErrorBoundary>
   )
 }
 

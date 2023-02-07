@@ -43,7 +43,6 @@ const FishBeltForm = ({ isNewRecord }) => {
   const [modalAttributeOptions, setModalAttributeOptions] = useState([])
 
   const _getSupportingData = useEffect(() => {
-
     if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
       const promises = [
         databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
@@ -97,12 +96,8 @@ const FishBeltForm = ({ isNewRecord }) => {
 
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      'fishbelt_transect',
-                    )
-                  : { name: 'Fish Belt' }
+                  ? getRecordSubNavNodeInfo(collectRecordResponse, sitesResponse)
+                  : { name: language.protocolTitles.fishbelt }
 
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
@@ -207,29 +202,29 @@ const FishBeltForm = ({ isNewRecord }) => {
   }
 
   return (
-  <ErrorBoundary>
-    <CollectRecordFormPage
-      isNewRecord={isNewRecord}
-      sampleUnitName="fishbelt"
-      collectRecordBeingEdited={collectRecordBeingEdited}
-      handleCollectRecordChange={handleCollectRecordChange}
-      handleNewObservationAdd={handleNewObservationAdd}
-      handleSubmitNewObservation={onSubmitNewFishSpecies}
-      observationsReducer={observationsReducer}
-      sites={sites}
-      handleSitesChange={handleSitesChange}
-      managementRegimes={managementRegimes}
-      handleManagementRegimesChange={handleManagementRegimesChange}
-      choices={choices}
-      idsNotAssociatedWithData={idsNotAssociatedWithData}
-      isLoading={isLoading}
-      subNavNode={subNavNode}
-      observerProfiles={observerProfiles}
-      observationOptions={fishNameOptions}
-      modalAttributeOptions={modalAttributeOptions}
-      fishNameConstants={fishNameConstants}
-    />
-  </ErrorBoundary>
+    <ErrorBoundary>
+      <CollectRecordFormPage
+        isNewRecord={isNewRecord}
+        sampleUnitName="fishbelt"
+        collectRecordBeingEdited={collectRecordBeingEdited}
+        handleCollectRecordChange={handleCollectRecordChange}
+        handleNewObservationAdd={handleNewObservationAdd}
+        handleSubmitNewObservation={onSubmitNewFishSpecies}
+        observationsReducer={observationsReducer}
+        sites={sites}
+        handleSitesChange={handleSitesChange}
+        managementRegimes={managementRegimes}
+        handleManagementRegimesChange={handleManagementRegimesChange}
+        choices={choices}
+        idsNotAssociatedWithData={idsNotAssociatedWithData}
+        isLoading={isLoading}
+        subNavNode={subNavNode}
+        observerProfiles={observerProfiles}
+        observationOptions={fishNameOptions}
+        modalAttributeOptions={modalAttributeOptions}
+        fishNameConstants={fishNameConstants}
+      />
+    </ErrorBoundary>
   )
 }
 
