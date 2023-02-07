@@ -421,8 +421,10 @@ const getValidationMessage = (validation, projectId = '') => {
     not_unique_site: () => 'Site: Similar records detected',
     not_unique_management: () =>
       'Management Regime: Other sample events at this site have a different management regime',
-    observations_total_length_incorrect: () =>
-      `Total length of observations (${context?.total_obs_length}) not within 50% of transect length`,
+    obs_total_length_toolarge: () =>
+      `Total length of observations (${context?.total_obs_length} cm) greater than transect length (${context?.len_surveyed} cm) + 50%`,
+    obs_total_length_toosmall: () =>
+      `Total length of observations (${context?.total_obs_length} cm) less than transect length (${context?.len_surveyed} cm) - 50%`,
     required: () => `Required`,
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
