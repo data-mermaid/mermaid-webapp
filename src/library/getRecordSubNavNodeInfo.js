@@ -6,20 +6,19 @@ import { getProtocolTransectType } from '../App/mermaidData/recordProtocolHelper
  *
  * @param {Object} collectRecord - Collect record object
  * @param {Array<Site>} sites - Array of sites
+ * @param {string} protocol - Name of protocol
  * @returns {name: string, number: number || string, label: string} Object of name, number and label for menu sub navigation node
  */
 
-export const getRecordSubNavNodeInfo = (collectRecord, sites) => {
-  const { data: recordData } = collectRecord
+export const getRecordSubNavNodeInfo = (sampleUnitRecordData, sites, protocol) => {
   const {
-    protocol,
     sample_event: { site: siteId },
-  } = recordData
+  } = sampleUnitRecordData
   const protocolTransectType = getProtocolTransectType(protocol)
 
   const siteName = getObjectById(sites, siteId)?.name ?? language.protocolTitles[protocol]
-  const transectNumber = recordData[protocolTransectType]?.number ?? ''
-  const label = recordData[protocolTransectType]?.label ?? ''
+  const transectNumber = sampleUnitRecordData[protocolTransectType]?.number ?? ''
+  const label = sampleUnitRecordData[protocolTransectType]?.label ?? ''
 
   return { name: siteName, number: transectNumber, label }
 }

@@ -63,7 +63,11 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
 
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(collectRecordResponse, sitesResponse)
+                  ? getRecordSubNavNodeInfo(
+                      collectRecordResponse.data,
+                      sitesResponse,
+                      collectRecordResponse.data.protocol,
+                    )
                   : { name: language.protocolTitles.habitatcomplexity }
 
               setCollectRecordBeingEdited(collectRecordResponse)

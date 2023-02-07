@@ -96,7 +96,11 @@ const FishBeltForm = ({ isNewRecord }) => {
 
               const recordNameForSubNode =
                 !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(collectRecordResponse, sitesResponse)
+                  ? getRecordSubNavNodeInfo(
+                      collectRecordResponse.data,
+                      sitesResponse,
+                      collectRecordResponse.data.protocol,
+                    )
                   : { name: language.protocolTitles.fishbelt }
 
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
