@@ -78,7 +78,7 @@ const SubmittedBenthicLit = () => {
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
-                'benthic_transect',
+                'benthiclit',
               )
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
