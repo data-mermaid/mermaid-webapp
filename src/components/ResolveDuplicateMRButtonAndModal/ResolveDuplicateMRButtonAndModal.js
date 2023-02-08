@@ -62,7 +62,9 @@ const ResolveDuplicateMRButtonAndModal = ({
 
   useEffect(
     function loadManagementRegimes() {
-      const isDuplicateManagementRegimeMessage = validationMessages[0]?.code === 'similar_name'
+      const isDuplicateManagementRegimeMessage =
+        validationMessages[0]?.code === 'not_unique_management' ||
+        validationMessages[0]?.code === 'similar_name'
 
       const duplicateManagementRegimeId =
         isDuplicateManagementRegimeMessage && validationMessages[0]?.context?.matches[0]
@@ -198,7 +200,7 @@ const ResolveDuplicateMRButtonAndModal = ({
 
   const handleEditManagementRegime = (managementRegimeId) => {
     history.push(
-      `${ensureTrailingSlash(currentProjectPath)}management-regimes/${managementRegimeId}`,
+      `${ensureTrailingSlash(currentProjectPath)}managementregimes/${managementRegimeId}`,
     )
   }
 
