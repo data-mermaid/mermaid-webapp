@@ -34,7 +34,11 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
     }),
   )
 
-  expect(await screen.findByText('Site saved.'))
+  expect(
+    await screen.findByText(
+      'The site has been saved on your computer and in the MERMAID online system.',
+    ),
+  )
 
   expect(siteNameInput).toHaveValue('OOF')
 })
@@ -59,7 +63,11 @@ test('Online: Edit Site shows toast and edited record info', async () => {
     }),
   )
 
-  expect(await screen.findByText('Site saved.'))
+  expect(
+    await screen.findByText(
+      'The site has been saved on your computer and in the MERMAID online system.',
+    ),
+  )
 
   expect(siteNameInput).toHaveValue('OOF')
 })
@@ -88,7 +96,11 @@ test('Offline: edit site save stored site in dexie', async () => {
     }),
   )
 
-  expect(await screen.findByText('Site saved.'))
+  expect(
+    await screen.findByText(
+      'The site has been saved on your computer and in the MERMAID online system.',
+    ),
+  )
 
   const savedSites = await dexiePerUserDataInstance.project_sites.toArray()
 
@@ -99,15 +111,12 @@ test('Offline: edit site save stored site in dexie', async () => {
 test('Offline: Edit site  save failure shows toast message with new edits persisting', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  const mockSiteErrorData = {
-    name: 'This field may not be blank.',
-    country: 'This field is required.',
-  }
-
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   // make sure the next save will fail
-  dexiePerUserDataInstance.project_sites.put = jest.fn().mockRejectedValueOnce(mockSiteErrorData)
+  dexiePerUserDataInstance.project_sites.put = jest
+    .fn()
+    .mockRejectedValueOnce(new Error('this is a dexie error'))
 
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -130,8 +139,9 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   )
 
   expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-    `The site has not been saved. name: This field may not be blank. country: This field is required.`,
+    `The site failed to save both on your computer and in the MERMAID online system.`,
   )
+  expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(`this is a dexie error`)
 
   expect(siteNameInput).toHaveValue('OOF')
 })

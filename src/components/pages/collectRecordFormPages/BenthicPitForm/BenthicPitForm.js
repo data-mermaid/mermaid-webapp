@@ -11,7 +11,6 @@ import {
 } from '../collectRecordFormInitialValues'
 
 import { getBenthicOptions } from '../../../../library/getOptions'
-import { getProtocolTransectType } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBenthicPitRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
@@ -78,7 +77,7 @@ const BenthicPitForm = ({ isNewRecord }) => {
                   ? getRecordSubNavNodeInfo(
                       collectRecordResponse.data,
                       sitesResponse,
-                      getProtocolTransectType(collectRecordResponse?.protocol),
+                      collectRecordResponse.data.protocol,
                     )
                   : { name: language.protocolTitles.benthicpit }
 

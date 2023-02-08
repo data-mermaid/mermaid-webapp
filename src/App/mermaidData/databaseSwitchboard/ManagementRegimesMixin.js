@@ -1,7 +1,7 @@
+import language from '../../../language'
 import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getSampleUnitLabel } from '../getSampleUnitLabel'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
@@ -150,9 +150,8 @@ const ManagementRegimesMixin = (Base) =>
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
-          .then((response) => {
-            const [managementRegimeResponseFromApiPush] = response.data.project_managements
-            const projectManagementsErrorData = managementRegimeResponseFromApiPush.data
+          .then((pushResponse) => {
+            const [managementRegimeResponseFromApiPush] = pushResponse.data.project_managements
 
             const isManagementRegimeStatusCodeSuccessful = this._isStatusCodeSuccessful(
               managementRegimeResponseFromApiPush.status_code,
@@ -161,7 +160,7 @@ const ManagementRegimesMixin = (Base) =>
             if (isManagementRegimeStatusCodeSuccessful) {
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then(({ _pushData, _pullData }) => {
+                .then(() => {
                   const managementRegimeWithExtraPropertiesWrittenByApi =
                     managementRegimeResponseFromApiPush.data
 
@@ -169,7 +168,16 @@ const ManagementRegimesMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(projectManagementsErrorData)
+            if (!isManagementRegimeStatusCodeSuccessful) {
+              return Promise.reject(
+                this._getMermaidDataPushSyncStatusCodeError({
+                  mermaidDataTypeName: 'project_managements',
+                  pushResponse,
+                }),
+              )
+            }
+
+            return Promise.reject(new Error(language.error.generic))
           })
       }
       if (this._isOfflineAuthenticatedAndReady) {
@@ -181,28 +189,36 @@ const ManagementRegimesMixin = (Base) =>
       return Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    deleteManagementRegime = async function deleteManagementRegime(record, projectId) {
-      if (!record) {
-        throw new Error('deleteSite expects record, profileId, and projectId parameters')
+    deleteManagementRegime = async function deleteManagementRegime(
+      originalManagementRegimeToBeDeleted,
+      projectId,
+    ) {
+      if (!originalManagementRegimeToBeDeleted && !projectId) {
+        throw new Error(
+          'deleteManagementRegime expects originalManagementRegimeToBeDeleted, and projectId parameters',
+        )
       }
 
-      const hasCorrespondingRecordInTheApi = !!record._last_revision_num
+      const hasCorrespondingManagementRegimeInTheApi =
+        !!originalManagementRegimeToBeDeleted._last_revision_num
 
-      const recordMarkedToBeDeleted = {
-        ...record,
+      const managementRegimeCopyMarkedToBeDeleted = {
+        ...originalManagementRegimeToBeDeleted,
         _deleted: true,
         uiState_pushToApi: true,
       }
 
-      if (hasCorrespondingRecordInTheApi && this._isOnlineAuthenticatedAndReady) {
+      if (hasCorrespondingManagementRegimeInTheApi && this._isOnlineAuthenticatedAndReady) {
         // Add to IDB in case the there are network issues before the API responds
-        await this._dexiePerUserDataInstance.project_sites.put(recordMarkedToBeDeleted)
+        await this._dexiePerUserDataInstance.project_managements.put(
+          managementRegimeCopyMarkedToBeDeleted,
+        )
 
         return axios
           .post(
             `${this._apiBaseUrl}/push/`,
             {
-              project_managements: [recordMarkedToBeDeleted],
+              project_managements: [managementRegimeCopyMarkedToBeDeleted],
             },
             {
               params: {
@@ -211,26 +227,36 @@ const ManagementRegimesMixin = (Base) =>
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
-          .then((apiPushResponse) => {
-            const recordReturnedFromApiPush = apiPushResponse.data.project_managements[0]
-            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
-              recordReturnedFromApiPush.status_code,
-            )
+          .then((pushResponse) => {
+            const managementRegimeReturnedFromApiPush = pushResponse.data.project_managements[0]
+            const statusCode = managementRegimeReturnedFromApiPush.status_code
+            const isStatusCodeSuccessful = this._isStatusCodeSuccessful(statusCode)
 
-            const { sampleevent, ...sampleUnitProtocols } = recordReturnedFromApiPush.data // eslint-disable-line no-unused-vars
-
-            if (isRecordStatusCodeSuccessful) {
+            if (isStatusCodeSuccessful) {
               // do a pull of data related to collect records
               // to make sure it is all updated/deleted in IDB
               return this._apiSyncInstance
                 .pushThenPullAllProjectDataExceptChoices(projectId)
-                .then(({ _pushData, _pullData }) => apiPushResponse)
+                .then(() => pushResponse)
             }
 
-            const sampleUnitProtocolValues = Object.values(sampleUnitProtocols).flat()
-            const sampleUnitProtocolLabels = getSampleUnitLabel(sampleUnitProtocolValues)
+            if (!isStatusCodeSuccessful) {
+              const syncError = this._getMermaidDataPushSyncStatusCodeError({
+                mermaidDataTypeName: 'project_managements',
+                pushResponse,
+              })
 
-            return Promise.reject(sampleUnitProtocolLabels)
+              if (syncError.isDeleteRejectedError) {
+                // not awaiting this because its not the end of the world if this doesnt get rolled back to the original (it just meant the next push will try again unecessarily)
+                this._dexiePerUserDataInstance.project_managements.put(
+                  originalManagementRegimeToBeDeleted,
+                )
+              }
+
+              return Promise.reject(syncError)
+            }
+
+            return Promise.reject(new Error(language.error.generic))
           })
       }
 

@@ -14,9 +14,9 @@ const inlineMessage = {
 
 const error = {
   403: 'The current user does not have sufficient permission to do that.',
-  500: 'Something went wrong with the server.',
-  502: 'Something went wrong with the server.',
-  503: 'Something went wrong with the server.',
+  500: 'Server error: please contact support@datamermaid.org',
+  502: 'Server error: please contact support@datamermaid.org',
+  503: 'Server error: please contact support@datamermaid.org',
   apiDataSync: 'The app was not able to sync data with the API. Please try again.',
   appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
   collectRecordChoicesUnavailable:
@@ -50,13 +50,20 @@ const error = {
   },
   generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
   generic: 'Something went wrong.',
+  getSaveOnlineSyncErrorTitle: (mermaidDataTypeLabel) =>
+    `The ${mermaidDataTypeLabel} has been saved on your computer, but not in the MERMAID online system.`,
+  getDeleteOnlineSyncErrorTitle: (mermaidDataTypeLabel) =>
+    `The ${mermaidDataTypeLabel} has not been deleted from your computer or the MERMAID online system.`,
+  getSaveOfflineErrorTitle: (mermaidDataTypeLabel) =>
+    `The ${mermaidDataTypeLabel} failed to save both on your computer and in the MERMAID online system.`,
+  getDeleteOfflineErrorTitle: (mermaidDataTypeLabel) =>
+    `The ${mermaidDataTypeLabel} has failed to delete from your computer or the MERMAID online system.`,
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
   managementRegimeRecordsUnavailable:
     'Management Regime records data is currently unavailable. Please try again.',
   managementRegimeRecordUnavailable:
     'Management Regime record data is currently unavailable. Please try again.',
-  managementRegimeSave: 'Something went wrong. The management regime has not been saved.',
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
   projectSave: 'Something went wrong. The project has not been saved.',
@@ -64,7 +71,6 @@ const error = {
   projectWithSameName: 'A project with the same name already exists.',
   siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again.',
   siteRecordUnavailable: 'Site record data is currently unavailable. Please try again.',
-  siteSave: 'Something went wrong. The site has not been saved.',
   submittedRecordsUnavailable: 'Submitted records data is currently unavailable. Please try again',
   submittedRecordUnavailable: 'Submitted record data is currently unavailable. Please try again',
   submittedRecordMoveToCollect:
@@ -123,8 +129,11 @@ const success = {
   projectSave: 'Project saved',
   projectCopied: 'Project copied',
   projectCreated: 'Project created',
-  siteSave: 'Site saved.',
-  managementRegimeSave: 'Management Regime saved.',
+  getMermaidDataSaveSuccess: (mermaidDataTypeLabel) =>
+    `The ${mermaidDataTypeLabel} has been saved on your computer and in the MERMAID online system.`,
+  getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
+    `The ${mermaidDataTypeLabel} has been deleted from your computer and the MERMAID online system.`,
+
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
   projectStatusSaved: `Test project selection saved.`,
   getDataSharingPolicyChangeSuccess: (method, policy_code) => {
@@ -396,6 +405,7 @@ const getValidationMessage = (validation, projectId = '') => {
     invalid_sample_date: () => 'Invalid date',
     invalid_score: () => `Invalid score`,
     invalid_total_percent: () => `Sum of percents must not be less than 0 or greater than 100`,
+    large_num_quadrats: () => 'Number of quadrats is too large',
     len_surveyed_not_positive: () => 'Transect length must be a non-negative number',
     len_surveyed_out_of_range: () =>
       `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
@@ -410,8 +420,10 @@ const getValidationMessage = (validation, projectId = '') => {
     not_positive_integer: () => 'Value is not greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
     not_unique_management: () => goToManagementOverviewPageLink(projectId),
-    observations_total_length_incorrect: () =>
-      `Total length of observations (${context?.total_obs_length}) not within 50% of transect length`,
+    obs_total_length_toolarge: () =>
+      `Total length of observations (${context?.total_obs_length} cm) greater than transect length (${context?.len_surveyed} cm) + 50%`,
+    obs_total_length_toosmall: () =>
+      `Total length of observations (${context?.total_obs_length} cm) less than transect length (${context?.len_surveyed} cm) - 50%`,
     required: () => `Required`,
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
@@ -428,21 +440,12 @@ const getValidationMessage = (validation, projectId = '') => {
   return (validationMessages[code] || validationMessages.default)()
 }
 
-const getErrorTitle = (page) => `The ${page} has not been saved. `
-
-const getErrorMessages = (pageError) => {
-  return Object.entries(pageError)
-    .map(([key, value]) => `${key}: ${value}`)
-    .join('\n')
-}
-
 export default {
   autocomplete,
   createNewOptionModal,
   deleteRecord,
   error,
-  getErrorMessages,
-  getErrorTitle,
+  getResolveModalLanguage,
   getValidationMessage,
   header,
   inlineMessage,
@@ -456,5 +459,4 @@ export default {
   success,
   table,
   title,
-  getResolveModalLanguage,
 }
