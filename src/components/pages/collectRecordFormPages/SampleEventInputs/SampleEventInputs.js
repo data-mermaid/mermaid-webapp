@@ -7,7 +7,7 @@ import {
   benthicPhotoQuadratPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
-import { getOptions } from '../../../../library/getOptions'
+import { getMROptions, getOptions } from '../../../../library/getOptions'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import { H2 } from '../../../generic/text'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
@@ -30,7 +30,7 @@ const SampleEventInputs = ({
   resetNonObservationFieldValidations,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
-  const managementSelectOptions = getOptions(managementRegimes, false)
+  const managementSelectOptions = getMROptions(managementRegimes)
   const siteSelectOptions = getOptions(sites, false)
   const validationsApiData = collectRecord?.validations?.results?.data
   const sample_event = validationsApiData?.sample_event
