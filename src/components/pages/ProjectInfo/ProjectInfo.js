@@ -202,7 +202,7 @@ const ProjectInfo = () => {
             }
 
             setProjectBeingEdited(projectResponse)
-            setProjectTagOptions(getOptions(projectTagsResponse, false))
+            setProjectTagOptions(getOptions(projectTagsResponse))
             setIsLoading(false)
           }
         })

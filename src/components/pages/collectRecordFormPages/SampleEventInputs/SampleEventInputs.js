@@ -31,7 +31,7 @@ const SampleEventInputs = ({
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
   const managementSelectOptions = getMROptions(managementRegimes)
-  const siteSelectOptions = getOptions(sites, false)
+  const siteSelectOptions = getOptions(sites)
   const validationsApiData = collectRecord?.validations?.results?.data
   const sample_event = validationsApiData?.sample_event
 
