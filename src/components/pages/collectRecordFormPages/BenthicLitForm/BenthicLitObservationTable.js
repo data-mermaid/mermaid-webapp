@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import {
   InputAutocompleteContainer,
   NewOptionButton,
-  ObservationAutocomplete,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
@@ -31,6 +30,7 @@ import getObservationValidationInfo from '../CollectRecordFormPageAlternative/ge
 import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
+import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
 const StyledColgroup = styled('colgroup')`
   col {

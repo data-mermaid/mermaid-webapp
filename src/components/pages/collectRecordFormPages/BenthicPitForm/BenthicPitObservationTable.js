@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import {
   InputAutocompleteContainer,
   NewOptionButton,
-  ObservationAutocomplete,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
@@ -30,6 +29,7 @@ import language from '../../../../language'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import ObservationValidationInfo from '../ObservationValidationInfo'
+import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
 const StyledColgroup = styled('colgroup')`
   col {

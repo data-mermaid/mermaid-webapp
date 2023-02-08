@@ -35,14 +35,15 @@ const NoResultSection = styled.div`
 
 const InputAutocomplete = ({
   className,
-  noResultsText,
-  noResultsAction,
-  id,
   helperText,
+  id,
+  noResultsAction,
+  noResultsText,
   onChange,
-  options,
-  value,
   onKeyDown,
+  options,
+  isTabUsedToSelectHighlighted,
+  value,
   ...restOfProps
 }) => {
   const optionMatchingValueProp = useMemo(
@@ -58,6 +59,22 @@ const InputAutocomplete = ({
     setIsMenuOpen(false)
     setSelectedValue(optionMatchingValueProp)
   }, [optionMatchingValueProp])
+
+  const stateReducer = (state, changes) => {
+    switch (changes.type) {
+      case Downshift.stateChangeTypes.blurInput: {
+        // This causes the tab key to behave like the enter
+        // key and select the item associated with the key press
+        // blurInput = tab or shift+tab for Downshift
+        return {
+          ...changes,
+          selectedItem: isTabUsedToSelectHighlighted ? menuItems[state.highlightedIndex] : null,
+        }
+      }
+      default:
+        return changes
+    }
+  }
 
   const handleStateChange = useCallback(
     (changes) => {
@@ -123,6 +140,7 @@ const InputAutocomplete = ({
       onStateChange={handleStateChange}
       onInputValueChange={handleInputValueChange}
       itemToString={(item) => (item ? item.label : '')}
+      stateReducer={stateReducer}
     >
       {(downshiftObject) => {
         const { getRootProps, getInputProps, getMenuProps } = downshiftObject
@@ -168,6 +186,7 @@ InputAutocomplete.propTypes = {
   onChange: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func,
   options: inputOptionsPropTypes.isRequired,
+  isTabUsedToSelectHighlighted: PropTypes.bool,
   value: PropTypes.string,
 }
 
@@ -177,6 +196,7 @@ InputAutocomplete.defaultProps = {
   noResultsAction: undefined,
   noResultsText: undefined,
   onKeyDown: undefined,
+  isTabUsedToSelectHighlighted: false,
   value: '',
 }
 
