@@ -1,14 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import styled from 'styled-components/macro'
 import { getObjectById } from '../../../../library/getObjectById'
-import { Tr, Td } from '../table'
-
-const TdKey = styled(Td)`
-  white-space: nowrap;
-  font-weight: 900;
-  width: 0;
-`
+import { Tr, TableRowTdKey, TableRowTd } from '../table'
 
 const getItemLabelOrName = (itemOptions, itemValue) =>
   getObjectById(itemOptions, itemValue)?.name || getObjectById(itemOptions, itemValue)?.label
@@ -30,20 +23,21 @@ const TableRowItem = ({
 }) => {
   const rowItemValue = options ? getOptionsByItemLabelOrName(value, options) : value
   const extraRowItemValue = options ? getOptionsByItemLabelOrName(extraValue, options) : extraValue
-  const showExtraRowItem = extraValue !== undefined
+  const hasExtraRowForDuplicateRecord = extraValue !== undefined
   const highlightedCurrentSite = isOriginalSelected ? 'highlighted' : undefined
   const highlightedDuplicateSite = isDuplicateSelected ? 'highlighted' : undefined
 
   return (
     <Tr>
-      <TdKey>{title}</TdKey>
-      <Td
-        className={highlightedDuplicateSite}
-        style={isAllowNewlines ? { whiteSpace: 'pre-wrap' } : {}}
-      >
+      <TableRowTdKey>{title}</TableRowTdKey>
+      <TableRowTd hightedBackground={highlightedDuplicateSite} isAllowNewLines={isAllowNewlines}>
         {rowItemValue}
-      </Td>
-      {showExtraRowItem && <Td className={highlightedCurrentSite}>{extraRowItemValue}</Td>}
+      </TableRowTd>
+      {hasExtraRowForDuplicateRecord && (
+        <TableRowTd hightedBackground={highlightedCurrentSite} isAllowNewLines={isAllowNewlines}>
+          {extraRowItemValue}
+        </TableRowTd>
+      )}
     </Tr>
   )
 }
