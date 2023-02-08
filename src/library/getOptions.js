@@ -5,8 +5,8 @@ export const getOptions = (choices) => {
   }))
 }
 
-export const getMROptions = (mrChoices) => {
-  return mrChoices.map(({ name, name_secondary, id }) => ({
+export const getManagementRegimeOptions = (managementRegimeChoices) => {
+  return managementRegimeChoices.map(({ name, name_secondary, id }) => ({
     label: name_secondary.length ? `${name} [${name_secondary}]` : name,
     value: id,
   }))
