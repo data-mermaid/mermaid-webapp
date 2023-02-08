@@ -27,7 +27,7 @@ test('Header component shows projects, whats new, reference, and global dashboar
   })
 
   expect(reference).toBeInTheDocument()
-  expect(reference).toHaveAttribute('href', `${mermaidReferenceLink}/home`)
+  expect(reference).toHaveAttribute('href', `${mermaidReferenceLink}`)
 
   const whatsNewLink = screen.queryByText("What's new")
 
