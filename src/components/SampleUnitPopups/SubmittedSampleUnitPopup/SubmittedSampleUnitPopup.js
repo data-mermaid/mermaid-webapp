@@ -7,7 +7,7 @@ import TableRowItem from '../../generic/Table/TableRowItem'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 import { PopupLink, SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
 import language from '../../../language'
-import { API_NULL_NAME } from '../../../library/constants/tableConstants'
+import { API_NULL_NAME } from '../../../library/constants/constants'
 
 const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
   const currentProjectPath = useCurrentProjectPath()

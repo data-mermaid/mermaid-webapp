@@ -2,7 +2,7 @@ import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { API_NULL_NAME } from '../../../library/constants/tableConstants'
+import { API_NULL_NAME } from '../../../library/constants/constants'
 
 const ProjectHealthMixin = (Base) =>
   class extends Base {
