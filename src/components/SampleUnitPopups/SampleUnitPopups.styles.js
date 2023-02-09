@@ -19,7 +19,6 @@ export const SampleUnitNumber = styled('span')`
 
 export const SampleUnitPopup = styled('span')`
   display: none;
-  width: 100%;
   min-width: 35ch;
   max-width: 60ch;
   background-color: ${theme.color.calloutColor};
@@ -38,7 +37,6 @@ export const SampleUnitPopup = styled('span')`
 
 export const EmptyCellPopup = styled(`div`)`
   display: none;
-  width: 100%;
   min-width: 21ch;
   background-color: ${theme.color.calloutColor};
   position: absolute;
