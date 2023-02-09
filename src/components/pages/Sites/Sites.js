@@ -48,8 +48,8 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 import { getFileExportName } from '../../../library/getFileExportName'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const Sites = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()

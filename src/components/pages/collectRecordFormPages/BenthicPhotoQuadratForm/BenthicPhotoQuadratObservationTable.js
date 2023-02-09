@@ -6,7 +6,6 @@ import {
   ButtonRemoveRow,
   InputAutocompleteContainer,
   NewOptionButton,
-  ObservationAutocomplete,
   ObservationsSummaryStats,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
@@ -33,6 +32,7 @@ import getObservationValidationInfo from '../CollectRecordFormPageAlternative/ge
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
+import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
 const StyledColgroup = styled('colgroup')`
   col {
@@ -156,7 +156,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
   const observationsRows = useMemo(() => {
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
-    const growthFormOptions = getOptions(choices.growthforms)
+    const growthFormOptions = getOptions(choices.growthforms.data)
 
     const handleKeyDown = ({ event, index, observation, isNumberOfPoints }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey

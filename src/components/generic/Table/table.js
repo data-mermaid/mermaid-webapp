@@ -123,15 +123,10 @@ export const Td = styled.td(
   `,
 )
 
-export const TableRowTdKey = styled(Td)`
+export const TdKey = styled(Td)`
   white-space: nowrap;
   font-weight: 900;
   width: 0;
-`
-
-export const TableRowTd = styled(Td)`
-  background-color: ${(props) => props.hightedBackground && 'hsl(50 80% 80% / 1)'};
-  white-space: ${(props) => props.isAllowNewLines && 'pre-wrap'};
 `
 
 export const Tr = styled.tr`
@@ -210,6 +205,11 @@ export const OverviewTd = styled(Td)`
   }
   &.highlighted {
     background-color: hsl(50 80% 80% / 1);
+  }
+  &:hover div,
+  &:focus div {
+    transition: ${theme.timing.hoverTransition};
+    display: block;
   }
 `
 export const HeaderCenter = styled.p`

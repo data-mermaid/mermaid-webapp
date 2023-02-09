@@ -22,7 +22,7 @@ const SubmittedBenthicPhotoQuadratObservationTable = ({
   submittedRecord,
 }) => {
   const { obs_benthic_photo_quadrats } = submittedRecord
-  const growthFormOptions = getOptions(choices.growthforms)
+  const growthFormOptions = getOptions(choices.growthforms.data)
 
   const observationCategoryPercentages = useMemo(() => {
     const addTopCategoryInfoToObservation = obs_benthic_photo_quadrats.map((obs) => {

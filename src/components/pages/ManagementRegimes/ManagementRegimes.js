@@ -47,8 +47,8 @@ import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
 import { getFileExportName } from '../../../library/getFileExportName'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const ManagementRegimes = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -62,7 +62,7 @@ const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
-  const [mrExportName, setMrExportName] = useState('')
+  const [managementRegimeExportName, setManagementRegimeExportName] = useState('')
   const [choices, setChoices] = useState({})
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const [isCopyManagementRegimesModalOpen, setIsCopyManagementRegimesModalOpen] = useState(false)
@@ -87,7 +87,7 @@ const ManagementRegimes = () => {
             const exportName = getFileExportName(projectResponse, 'MRs')
 
             setManagementRegimeRecordsForUiDisplay(managementRegimes)
-            setMrExportName(exportName)
+            setManagementRegimeExportName(exportName)
             setChoices(choicesResponse)
             setIsLoading(false)
           }
@@ -112,6 +112,11 @@ const ManagementRegimes = () => {
       {
         Header: 'Management Regime Name',
         accessor: 'name',
+        sortType: reactTableNaturalSortReactNodes,
+      },
+      {
+        Header: 'Secondary Name',
+        accessor: 'secondaryName',
         sortType: reactTableNaturalSortReactNodes,
       },
       {
@@ -175,6 +180,7 @@ const ManagementRegimes = () => {
             {managementRegime.name}
           </Link>
         ),
+        secondaryName: managementRegime.name_secondary,
         estYear: managementRegime.est_year,
         compliance: complianceName,
         openAccess: getIconCheckLabel(managementRegime.open_access),
@@ -316,7 +322,7 @@ const ManagementRegimes = () => {
       <ButtonSecondary>
         <CSVLink
           data={getDataForCSV}
-          filename={mrExportName}
+          filename={managementRegimeExportName}
           style={{ margin: 0, textDecoration: 'none' }}
         >
           <IconDownload /> Export MRs

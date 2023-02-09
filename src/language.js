@@ -1,5 +1,5 @@
 // prettier-ignore
-import { getSystemValidationErrorMessage, getDuplicateSampleUnitLink, goToManagementOverviewPageLink } from './library/validationMessageHelpers'
+import { getSystemValidationErrorMessage, getDuplicateSampleUnitLink } from './library/validationMessageHelpers'
 
 const projectCodes = {
   status: { open: 90, test: 80 },
@@ -290,7 +290,7 @@ const pages = {
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
     copySitesButtonText: 'Copy sites from other projects',
-    filterToolbarText: 'Filter this table by name, reef (type, zone, and exposure)',
+    filterToolbarText: 'Filter this table by name, reef type, reef zone, and exposure.',
     noDataMainText: 'This project has no sites.',
     title: 'Sites',
   },
@@ -307,6 +307,7 @@ const pages = {
     title: 'Observers and Transects',
     filterToolbarText: 'Filter this table by site or method',
     missingSiteName: '(Missing Site Name)',
+    missingMRName: '(Missing MR Name)',
     missingLabelNumber: 'missing number',
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubTextTitle: 'This page will show:',
@@ -348,6 +349,13 @@ const projectModal = {
 const map = {
   attribution:
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
+}
+
+const popoverTexts = {
+  noSampleUnitMatch: 'No sample units match:',
+  viewSubmittedSampleUnit: 'View Submitted Sample Unit',
+  notSubmittedSampleUnit: `This sample unit isn't submitted`,
+  inCollectingWith: 'In Collecting With:',
 }
 
 const getResolveModalLanguage = (siteOrManagementRegime) => {
@@ -419,7 +427,8 @@ const getValidationMessage = (validation, projectId = '') => {
     not_part_of_fish_family_subset: () => `Fish is not part of project-defined fish families`,
     not_positive_integer: () => 'Value is not greater or equal to zero',
     not_unique_site: () => 'Site: Similar records detected',
-    not_unique_management: () => goToManagementOverviewPageLink(projectId),
+    not_unique_management: () =>
+      'Management Regime: Other sample events at this site have a different management regime',
     obs_total_length_toolarge: () =>
       `Total length of observations (${context?.total_obs_length} cm) greater than transect length (${context?.len_surveyed} cm) + 50%`,
     obs_total_length_toosmall: () =>
@@ -428,7 +437,7 @@ const getValidationMessage = (validation, projectId = '') => {
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
-    similar_name: () => 'Another Management Regime is similar to this one.',
+    similar_name: () => 'Management Regime: Similar records detected',
     site_not_found: () => 'Site record not available for similarity validation',
     too_many_observations: () => `Greater than ${context?.observation_count_range[1]} observations`,
     too_few_observations: () => `Fewer than ${context?.observation_count_range[0]} observations`,
@@ -451,6 +460,7 @@ export default {
   inlineMessage,
   loadingIndicator,
   map,
+  popoverTexts,
   navigateAwayPrompt,
   pages,
   projectCodes,
