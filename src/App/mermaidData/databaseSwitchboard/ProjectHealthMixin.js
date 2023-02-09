@@ -2,7 +2,7 @@ import moment from 'moment'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getName, MISSING_NAME } from '../../../library/strings/nameHelpers'
+import { API_NULL_NAME } from '../../../library/constants/tableConstants'
 
 const ProjectHealthMixin = (Base) =>
   class extends Base {
@@ -144,7 +144,7 @@ const ProjectHealthMixin = (Base) =>
         )
 
         const collectingSummaryWithNameIsNotNull = Object.entries(siteCollectingSummary).filter(
-          (summary) => summary[0] !== MISSING_NAME,
+          (summary) => summary[0] !== API_NULL_NAME,
         )
 
         const collectingSummaryMethods = collectingSummaryWithNameIsNotNull.reduce(
@@ -206,29 +206,29 @@ const ProjectHealthMixin = (Base) =>
 
       if (collectingProfileSummary) {
         for (const [profileId, profileInfo] of Object.entries(collectingProfileSummary)) {
-          const labelsWithSampleDatesInSampleEvent = profileInfo.collect_records.filter(
+          const collectRecordsWithSampleDatesInSampleEvent = profileInfo.collect_records.filter(
             (collectRecord) =>
               sampleEventUnitSampleDate !== '' &&
               collectRecord.sample_date === sampleEventUnitSampleDate,
           )
 
-          const specialLabels = profileInfo.collect_records.filter(
+          const restOfCollectRecords = profileInfo.collect_records.filter(
             (collectRecord) =>
               sampleEventUnitSampleDate === '' &&
               !filteredSampleEventUnitRows.includes(collectRecord.sample_date),
           )
 
-          if (labelsWithSampleDatesInSampleEvent.length) {
+          if (collectRecordsWithSampleDatesInSampleEvent.length) {
             sampleUnitProfileSummary[profileId] = {
               profile_name: profileInfo.profile_name,
-              collect_records: labelsWithSampleDatesInSampleEvent,
+              collect_records: collectRecordsWithSampleDatesInSampleEvent,
             }
           }
 
-          if (specialLabels.length) {
+          if (restOfCollectRecords.length) {
             sampleUnitProfileSummary[profileId] = {
               profile_name: profileInfo.profile_name,
-              collect_records: specialLabels,
+              collect_records: restOfCollectRecords,
             }
           }
         }
@@ -314,7 +314,10 @@ const ProjectHealthMixin = (Base) =>
           if (emptyOrDifferentSampleDatesInCollectRecords) {
             sampleEventUnitRowsCopy.push({
               site_id: siteId,
-              site_name: getName(site_name, language.pages.usersAndTransectsTable.missingSiteName),
+              site_name:
+                site_name === API_NULL_NAME
+                  ? language.pages.usersAndTransectsTable.missingSiteName
+                  : site_name,
               sample_date: '',
               sample_unit_numbers: [],
               sample_unit_protocol: protocol,

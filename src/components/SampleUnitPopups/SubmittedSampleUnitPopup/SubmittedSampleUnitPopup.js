@@ -7,22 +7,22 @@ import TableRowItem from '../../generic/Table/TableRowItem'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 import { PopupLink, SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
 import language from '../../../language'
-import { getName } from '../../../library/strings/nameHelpers'
+import { API_NULL_NAME } from '../../../library/constants/tableConstants'
 
 const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
   const currentProjectPath = useCurrentProjectPath()
   const { sample_unit_method, sample_unit_protocol, site_name } = rowRecord
   const popupTitle = `${sample_unit_method} ${site_name}`
 
-  const sampleUnitsWithPopup = sampleUnitNumbersRow.map((row, idx) => {
+  const sampleUnitsWithPopup = sampleUnitNumbersRow.map((row, index) => {
     const { label: transectNumberLabel, management, sample_date, updated_by, observers } = row
-    const managementName = getName(
-      management.name,
-      language.pages.usersAndTransectsTable.missingMRName,
-    )
+    const managementName =
+      management.name === API_NULL_NAME
+        ? language.pages.usersAndTransectsTable.missingMRName
+        : management.name
 
     return (
-      <SampleUnitNumber tabIndex="0" id={idx}>
+      <SampleUnitNumber tabIndex="0" id={index}>
         {transectNumberLabel}
         <SampleUnitPopup role="tooltip">
           <div>
@@ -41,7 +41,7 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
             {language.popoverTexts.viewSubmittedSampleUnit}
           </PopupLink>
         </SampleUnitPopup>
-        {idx < sampleUnitNumbersRow.length - 1 && ','}
+        {index < sampleUnitNumbersRow.length - 1 && ','}
       </SampleUnitNumber>
     )
   })

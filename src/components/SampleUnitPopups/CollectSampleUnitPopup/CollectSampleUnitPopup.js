@@ -7,24 +7,24 @@ import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
 import { SampleUnitNumber, SampleUnitPopup } from '../SampleUnitPopups.styles'
 import language from '../../../language'
 import { sortArray } from '../../../library/arrays/sortArray'
-import { getName } from '../../../library/strings/nameHelpers'
+import { API_NULL_NAME } from '../../../library/constants/tableConstants'
 
 const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
   const { sample_unit_method, site_name } = rowRecord
   const { profile_name, collect_records } = recordProfileSummary
 
-  const sampleUnitsWithPopup = sortArray(collect_records).map((record, idx) => {
+  const sampleUnitsWithPopup = sortArray(collect_records).map((record, index) => {
     const { name, sample_date, observers, management_name } = record
     const popupTitle = `${sample_unit_method} ${name}`
 
     const transectNumberLabel = name || language.pages.usersAndTransectsTable.missingLabelNumber
-    const managementName = getName(
-      management_name,
-      language.pages.usersAndTransectsTable.missingMRName,
-    )
+    const managementName =
+      management_name === API_NULL_NAME
+        ? language.pages.usersAndTransectsTable.missingMRName
+        : management_name
 
     return (
-      <SampleUnitNumber tabIndex="0" id={idx}>
+      <SampleUnitNumber tabIndex="0" id={index}>
         {transectNumberLabel}
         <SampleUnitPopup role="tooltip">
           <div>{popupTitle}</div>
@@ -39,7 +39,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
           </Table>
           <div>{language.popoverTexts.notSubmittedSampleUnit}</div>
         </SampleUnitPopup>
-        {idx < recordProfileSummary.collect_records.length - 1 && ','}
+        {index < recordProfileSummary.collect_records.length - 1 && ','}
       </SampleUnitNumber>
     )
   })
