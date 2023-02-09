@@ -11,7 +11,7 @@ import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
 import Modal, { RightFooter } from '../generic/Modal/Modal'
-import { Table, TableOverflowWrapper, Tr, Td, TdKey } from '../generic/Table/table'
+import { Table, TableOverflowWrapper, Tr, Td, TableRowTdKey } from '../generic/Table/table'
 import { InlineValidationButton } from '../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import ResolveDuplicateSiteMap from '../mermaidMap/ResolveDuplicateSiteMap'
 import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
@@ -238,7 +238,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
             isDuplicateSelected={isDuplicateSelected}
           />
           <Tr>
-            <TdKey>Map</TdKey>
+            <TableRowTdKey>Map</TableRowTdKey>
             <Td className={isDuplicateSelected ? 'highlighted' : undefined}>
               <ResolveDuplicateSiteMap
                 formLatitudeValue={currentSiteData?.location?.coordinates[1]}
