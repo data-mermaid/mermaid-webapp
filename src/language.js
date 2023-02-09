@@ -290,7 +290,7 @@ const pages = {
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
     copySitesButtonText: 'Copy sites from other projects',
-    filterToolbarText: 'Filter this table by name, reef (type, zone, and exposure)',
+    filterToolbarText: 'Filter this table by name, reef type, reef zone, and exposure.',
     noDataMainText: 'This project has no sites.',
     title: 'Sites',
   },
