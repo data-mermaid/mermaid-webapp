@@ -35,7 +35,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageUnavailable from '../PageUnavailable'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const getTransectReportProperties = (transect) => {
   return {

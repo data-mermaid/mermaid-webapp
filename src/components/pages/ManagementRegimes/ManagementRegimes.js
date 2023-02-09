@@ -47,7 +47,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const ManagementRegimes = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])

@@ -42,7 +42,7 @@ import {
   noLabelSymbol,
 } from '../../../App/mermaidData/recordProtocolHelpers'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const Collect = () => {
   const [collectRecordsForUiDisplay, setCollectRecordsForUiDisplay] = useState([])
