@@ -375,7 +375,7 @@ const ManagementRegimesOverview = () => {
           onChange={handleRowsNumberChange}
           pageSize={pageSize}
           pageSizeOptions={[15, 50, 100]}
-          pageType="management regimes"
+          pageType="records"
           rowLength={sampleUnitWithManagementRegimeRecords.length}
         />
         <PageSelector
