@@ -68,7 +68,7 @@ const BenthicLitObservationsTable = ({
 
   const observationsRows = useMemo(() => {
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
-    const growthFormSelectOptions = getOptions(choices.growthforms)
+    const growthFormSelectOptions = getOptions(choices.growthforms.data)
 
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey

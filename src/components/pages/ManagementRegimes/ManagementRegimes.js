@@ -108,6 +108,11 @@ const ManagementRegimes = () => {
         sortType: reactTableNaturalSortReactNodes,
       },
       {
+        Header: 'Secondary Name',
+        accessor: 'secondaryName',
+        sortType: reactTableNaturalSortReactNodes,
+      },
+      {
         Header: 'Year Est.',
         accessor: 'estYear',
         sortType: reactTableNaturalSort,
@@ -168,6 +173,7 @@ const ManagementRegimes = () => {
             {managementRegime.name}
           </Link>
         ),
+        secondaryName: managementRegime.name_secondary,
         estYear: managementRegime.est_year,
         compliance: complianceName,
         openAccess: getIconCheckLabel(managementRegime.open_access),
