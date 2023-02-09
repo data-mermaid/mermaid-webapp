@@ -78,7 +78,7 @@ const SubmittedBenthicPit = () => {
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
-                'benthic_transect',
+                'benthicpit',
               )
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)

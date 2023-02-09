@@ -96,7 +96,7 @@ const SubmittedFishBelt = () => {
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
-                'fishbelt_transect',
+                'fishbelt',
               )
 
               const filteredUserProfile = projectProfilesResponse.filter(

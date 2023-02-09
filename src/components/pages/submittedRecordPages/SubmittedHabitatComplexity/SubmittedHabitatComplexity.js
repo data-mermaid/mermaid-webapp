@@ -78,7 +78,7 @@ const SubmittedHabitatComplexity = () => {
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
-                'benthic_transect',
+                'habitatcomplexity',
               )
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
