@@ -1,41 +1,42 @@
-import React from 'react'
+import { useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import React from 'react'
 import styled, { css } from 'styled-components'
-import theme from '../../../theme'
-import { H2 } from '../../generic/text'
+
 import { Column, ToolBarRow } from '../../generic/positioning'
+import { H2 } from '../../generic/text'
+import { hoverState } from '../../../library/styling/mediaQueries'
+import { IconDownload } from '../../icons'
+import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import ButtonSecondaryDropdown from '../../generic/ButtonSecondaryDropdown'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import { hoverState } from '../../../library/styling/mediaQueries'
-
-import { IconDownload } from '../../icons'
-
-const TemporarySpanStyling = styled.span`
-  color: grey;
-  padding: 0.5rem 1rem;
-`
+import theme from '../../../theme'
 
 const DropdownItemStyle = styled.button`
   padding: 0.5rem 1rem;
   cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
   ${hoverState(css`
     background-color: ${theme.color.primaryHover};
     color: ${theme.color.white};
   `)}
 `
 
-const SubmittedToolbarSection = ({
-  name,
-  handleGlobalFilterChange,
-  handleExportToCSV,
-  filterValue,
-  disabled,
-}) => {
+const SubmittedToolbarSection = ({ name, handleGlobalFilterChange, filterValue, disabled }) => {
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { projectId } = useParams()
+
   const label = (
     <>
-      <IconDownload /> Export To CSV
+      <IconDownload /> Export To XLSX
     </>
   )
+
+  const handleExportSubmitted = (protocol) => {
+    databaseSwitchboardInstance.exportSubmittedRecords({ projectId, protocol })
+  }
 
   return (
     <>
@@ -49,14 +50,27 @@ const SubmittedToolbarSection = ({
         />
         <ButtonSecondaryDropdown label={label}>
           <Column as="nav" data-testid="export-to-csv">
-            <DropdownItemStyle as="span" onClick={() => handleExportToCSV('Fish Belt')}>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('fishbelt')}>
               Fish Belt
             </DropdownItemStyle>
-            <TemporarySpanStyling>Benthic LIT</TemporarySpanStyling>
-            <TemporarySpanStyling>Benthic PIT</TemporarySpanStyling>
-            <TemporarySpanStyling>Habitat Complexity</TemporarySpanStyling>
-            <TemporarySpanStyling>Colonies Bleached</TemporarySpanStyling>
-            <TemporarySpanStyling>Quadrat Percentage</TemporarySpanStyling>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthiclit')}>
+              Benthic LIT
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpit')}>
+              Benthic PIT
+            </DropdownItemStyle>
+            <DropdownItemStyle
+              as="button"
+              onClick={() => handleExportSubmitted('habitatcomplexity')}
+            >
+              Habitat Complexity
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('bleachingqc')}>
+              Bleaching
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpqt')}>
+              Benthic Photo Quadrat
+            </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
       </ToolBarRow>
@@ -72,7 +86,6 @@ SubmittedToolbarSection.defaultProps = {
 SubmittedToolbarSection.propTypes = {
   name: PropTypes.string.isRequired,
   handleGlobalFilterChange: PropTypes.func.isRequired,
-  handleExportToCSV: PropTypes.func.isRequired,
   filterValue: PropTypes.string,
   disabled: PropTypes.bool,
 }

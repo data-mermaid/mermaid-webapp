@@ -31,3 +31,14 @@ export const getObservationsPropertyNames = (collectRecord) => {
     }[collectRecord?.data?.protocol] ?? []
   )
 }
+
+export const getProtocolMethodsType = (protocol) => {
+  return {
+    fishbelt: 'beltfishtransectmethods',
+    benthiclit: 'bbenthiclittransectmethods',
+    benthicpit: 'benthicpittransectmethods',
+    habitatcomplexity: 'habitatcomplexitytransectmethods',
+    bleachingqc: 'bleachingquadratcollectionmethods',
+    benthicpqt: 'benthicphotoquadrattransectmethods',
+  }[protocol]
+}
