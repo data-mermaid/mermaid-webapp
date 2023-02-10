@@ -48,22 +48,13 @@ const FishBeltTransectInputs = ({
     currents,
     tides,
   } = choices
-  const transectWidthSelectOptions = sortArrayByObjectKey(
-    getOptions(belttransectwidths.data),
-    'label',
-  )
-  const fishSizeBinSelectOptions = getOptions(fishsizebins.data)
-  const reefSlopeSelectOptions = [
-    ...getOptions(reefslopes.data),
-    { label: 'not reported', value: '' },
-  ]
-  const relativeDepthOptions = [
-    ...getOptions(relativedepths.data),
-    { label: 'not reported', value: '' },
-  ]
-  const visibilityOptions = [...getOptions(visibilities.data), { label: 'not reported', value: '' }]
-  const currentOptions = [...getOptions(currents.data), { label: 'not reported', value: '' }]
-  const tideOptions = [...getOptions(tides.data), { label: 'not reported', value: '' }]
+  const transectWidthSelectOptions = sortArrayByObjectKey(getOptions(belttransectwidths), 'label')
+  const fishSizeBinSelectOptions = getOptions(fishsizebins)
+  const reefSlopeSelectOptions = [...getOptions(reefslopes), { label: 'not reported', value: '' }]
+  const relativeDepthOptions = [...getOptions(relativedepths), { label: 'not reported', value: '' }]
+  const visibilityOptions = [...getOptions(visibilities), { label: 'not reported', value: '' }]
+  const currentOptions = [...getOptions(currents), { label: 'not reported', value: '' }]
+  const tideOptions = [...getOptions(tides), { label: 'not reported', value: '' }]
   const fishbelt_transect = validationsApiData?.fishbelt_transect
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(

@@ -12,7 +12,7 @@ import { getOptions } from '../../../../library/getOptions'
 
 const SubmittedHabitatComplexityObservationTable = ({ choices, submittedRecord }) => {
   const { obs_habitat_complexities } = submittedRecord
-  const habitatComplexityFormOptions = getOptions(choices.habitatcomplexityscores.data)
+  const habitatComplexityFormOptions = getOptions(choices.habitatcomplexityscores)
 
   const observationsHabitatComplexity = obs_habitat_complexities.map((item, index) => (
     <Tr key={item.id}>

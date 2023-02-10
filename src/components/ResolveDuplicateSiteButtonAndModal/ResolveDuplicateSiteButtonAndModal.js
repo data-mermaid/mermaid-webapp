@@ -77,10 +77,10 @@ const ResolveDuplicateSiteButtonAndModal = ({
 
         Promise.all(promises)
           .then(([choicesResponse, currentSiteResponse, duplicateSiteResponse]) => {
-            setCountryOptions(getOptions(choicesResponse.countries.data))
-            setExposureOptions(getOptions(choicesResponse.reefexposures.data))
-            setReefTypeOptions(getOptions(choicesResponse.reeftypes.data))
-            setReefZoneOptions(getOptions(choicesResponse.reefzones.data))
+            setCountryOptions(getOptions(choicesResponse.countries))
+            setExposureOptions(getOptions(choicesResponse.reefexposures))
+            setReefTypeOptions(getOptions(choicesResponse.reeftypes))
+            setReefZoneOptions(getOptions(choicesResponse.reefzones))
             setCurrentSiteData(currentSiteResponse)
             setDuplicateSiteData(duplicateSiteResponse)
           })
