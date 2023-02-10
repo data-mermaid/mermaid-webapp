@@ -41,7 +41,7 @@ const GlobalLinks = () => {
       <StyledNavLink as={Link} to="/projects">
         Projects
       </StyledNavLink>
-      <StyledNavLink href={`${mermaidReferenceLink}/home`} target="_blank" rel="noreferrer">
+      <StyledNavLink href={`${mermaidReferenceLink}`} target="_blank" rel="noreferrer" download>
         Reference&nbsp;
         <MediumIconExcel />
       </StyledNavLink>

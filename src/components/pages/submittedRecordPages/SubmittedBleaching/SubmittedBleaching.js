@@ -79,7 +79,7 @@ const SubmittedBleaching = () => {
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
-                'quadrat_collection',
+                'bleachingqc',
               )
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)

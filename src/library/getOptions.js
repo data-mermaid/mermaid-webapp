@@ -1,8 +1,13 @@
-export const getOptions = (choices, hasData = true) => {
-  const optionData = hasData ? choices.data : choices
-
-  return optionData.map(({ name, id }) => ({
+export const getOptions = (choices) => {
+  return choices.map(({ name, id }) => ({
     label: name,
+    value: id,
+  }))
+}
+
+export const getManagementRegimeOptions = (managementRegimeChoices) => {
+  return managementRegimeChoices.map(({ name, name_secondary, id }) => ({
+    label: name_secondary.length ? `${name} [${name_secondary}]` : name,
     value: id,
   }))
 }

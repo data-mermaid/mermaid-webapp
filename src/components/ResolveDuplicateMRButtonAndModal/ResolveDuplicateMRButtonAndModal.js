@@ -83,8 +83,8 @@ const ResolveDuplicateMRButtonAndModal = ({
               currentManagementRegimeResponse,
               duplicateManagementRegimeResponse,
             ]) => {
-              setManagementPartyOptions(getOptions(choicesResponse.managementparties))
-              setManagementComplianceOptions(getOptions(choicesResponse.managementcompliances))
+              setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
+              setManagementComplianceOptions(getOptions(choicesResponse.managementcompliances.data))
               setCurrentManagementRegimeData(currentManagementRegimeResponse)
               setDuplicateManagementRegimeData(duplicateManagementRegimeResponse)
             },

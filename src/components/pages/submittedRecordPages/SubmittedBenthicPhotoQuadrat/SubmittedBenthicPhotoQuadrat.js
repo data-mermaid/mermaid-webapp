@@ -78,7 +78,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
               const recordNameForSubNode = getRecordSubNavNodeInfo(
                 submittedRecordResponse,
                 sitesResponse,
-                'quadrat_transect',
+                'benthicpqt',
               )
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)

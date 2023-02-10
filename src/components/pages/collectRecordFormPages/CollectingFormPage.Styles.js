@@ -3,7 +3,6 @@ import theme from '../../../theme'
 import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../library/styling/mediaQueries'
 import { ButtonCaution, ButtonThatLooksLikeLink, ButtonSecondary } from '../../generic/buttons'
 import { Table, TableOverflowWrapper, Tr, Td, GenericStickyTable } from '../../generic/Table/table'
-import InputAutocomplete from '../../generic/InputAutocomplete'
 import { inputTextareaSelectStyles } from '../../generic/form'
 import { LinkThatLooksLikeButton } from '../../generic/links'
 
@@ -18,15 +17,6 @@ export const ObservationTr = styled(Tr)`
   border-width: 0 0 0 ${theme.spacing.xsmall};
   border-style: solid;
   border-color: ${(props) => theme.color.getBorderColor(props.messageType)};
-`
-
-export const ObservationAutocomplete = styled(InputAutocomplete)`
-  & input {
-    border: none;
-  }
-  width: 100%;
-  text-align: inherit;
-  padding: 0;
 `
 
 export const InputAutocompleteContainer = styled.div`
