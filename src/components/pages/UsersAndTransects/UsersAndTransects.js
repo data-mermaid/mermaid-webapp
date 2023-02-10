@@ -227,6 +227,11 @@ const UsersAndTransects = () => {
       },
     ]
 
+    if (getSubmittedTransectNumberColumnHeaders.length === 0) {
+      // Remove first-transect-header column if transect number columns are empty
+      headers.splice(2, 1)
+    }
+
     if (getUserColumnHeaders.length === 0) {
       // Remove first-user-header column if user columns are empty
       headers.splice(-2, 1)
