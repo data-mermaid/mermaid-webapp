@@ -28,7 +28,6 @@ import {
   ButtonRemoveRow,
   InputAutocompleteContainer,
   NewOptionButton,
-  ObservationAutocomplete,
   ObservationsSummaryStats,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
@@ -40,6 +39,7 @@ import { fishReferenceEndpoint } from '../../../../App/mermaidData/fishNameHelpe
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
 import ObservationValidationInfo from '../ObservationValidationInfo'
+import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
 const StyledColgroup = styled('colgroup')`
   col {

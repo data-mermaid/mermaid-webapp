@@ -290,7 +290,7 @@ const pages = {
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
     copySitesButtonText: 'Copy sites from other projects',
-    filterToolbarText: 'Filter this table by name, reef (type, zone, and exposure)',
+    filterToolbarText: 'Filter this table by name, reef type, reef zone, and exposure.',
     noDataMainText: 'This project has no sites.',
     title: 'Sites',
   },
@@ -307,6 +307,7 @@ const pages = {
     title: 'Observers and Transects',
     filterToolbarText: 'Filter this table by site or method',
     missingSiteName: '(Missing Site Name)',
+    missingMRName: '(Missing MR Name)',
     missingLabelNumber: 'missing number',
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubTextTitle: 'This page will show:',
@@ -348,6 +349,13 @@ const projectModal = {
 const map = {
   attribution:
     'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community &copy; <a href="http://www.allencoralatlas.org/"  style="font-size:1.25rem;">2019 Allen Coral Atlas Partnership and Vulcan, Inc.</a>',
+}
+
+const popoverTexts = {
+  noSampleUnitMatch: 'No sample units match:',
+  viewSubmittedSampleUnit: 'View Submitted Sample Unit',
+  notSubmittedSampleUnit: `This sample unit isn't submitted`,
+  inCollectingWith: 'In Collecting With:',
 }
 
 const getResolveModalLanguage = (siteOrManagementRegime) => {
@@ -451,6 +459,7 @@ export default {
   inlineMessage,
   loadingIndicator,
   map,
+  popoverTexts,
   navigateAwayPrompt,
   pages,
   projectCodes,

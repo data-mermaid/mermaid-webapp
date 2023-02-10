@@ -57,7 +57,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;

@@ -17,7 +17,6 @@ import PageUnavailable from '../PageUnavailable'
 import PageSelector from '../../generic/Table/PageSelector'
 import PageSizeSelector from '../../generic/Table/PageSizeSelector'
 import { reactTableNaturalSort } from '../../generic/Table/reactTableNaturalSort'
-import SampleUnitLinks from '../../SampleUnitLinks'
 import { sortArray } from '../../../library/arrays/sortArray'
 import { splitSearchQueryStrings } from '../../../library/splitSearchQueryStrings'
 import {
@@ -40,7 +39,10 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { getSampleDateLabel } from '../../../App/mermaidData/getSampleDateLabel'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
+import SubmittedSampleUnitPopup from '../../SampleUnitPopups/SubmittedSampleUnitPopup'
+import EmptySampleUnitPopup from '../../SampleUnitPopups/EmptySampleUnitPopup/EmptySampleUnitPopup'
+import CollectSampleUnitPopup from '../../SampleUnitPopups/CollectSampleUnitPopup/CollectSampleUnitPopup'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const EMPTY_VALUE = '-'
 
@@ -78,7 +80,7 @@ const groupCollectSampleUnitsByProfileSummary = (records) => {
 
     for (const collectRecordProfile in profileSummary) {
       if (profileSummary[collectRecordProfile]) {
-        const collectRecords = profileSummary[collectRecordProfile]?.labels
+        const collectRecords = profileSummary[collectRecordProfile]?.collect_records
 
         accumulator[collectRecordProfile] = accumulator[collectRecordProfile] || {}
         accumulator[collectRecordProfile] = {
@@ -225,6 +227,11 @@ const UsersAndTransects = () => {
       },
     ]
 
+    if (getSubmittedTransectNumberColumnHeaders.length === 0) {
+      // Remove first-transect-header column if transect number columns are empty
+      headers.splice(2, 1)
+    }
+
     if (getUserColumnHeaders.length === 0) {
       // Remove first-user-header column if user columns are empty
       headers.splice(-2, 1)
@@ -248,7 +255,7 @@ const UsersAndTransects = () => {
           )
 
           accumulator[number] = (
-            <SampleUnitLinks
+            <SubmittedSampleUnitPopup
               rowRecord={rowRecord}
               sampleUnitNumbersRow={filteredRowSampleUnitNumbers}
             />
@@ -269,17 +276,14 @@ const UsersAndTransects = () => {
 
       const collectTransectNumbersRow = collectRecordsByProfileValues.reduce(
         (accumulator, record) => {
-          const replaceEmptyLabels = (labels) => {
-            return labels.map((label) => {
-              return label.name || language.pages.usersAndTransectsTable.missingLabelNumber
-            })
-          }
-
-          accumulator[record.profileId] = rowRecord.profile_summary[record.profileId]
-            ? sortArray(
-                replaceEmptyLabels(rowRecord.profile_summary[record.profileId].labels),
-              ).join(', ')
-            : EMPTY_VALUE
+          accumulator[record.profileId] = rowRecord.profile_summary[record.profileId] ? (
+            <CollectSampleUnitPopup
+              rowRecord={rowRecord}
+              recordProfileSummary={rowRecord.profile_summary[record.profileId]}
+            />
+          ) : (
+            EMPTY_VALUE
+          )
 
           return accumulator
         },
@@ -486,7 +490,15 @@ const UsersAndTransects = () => {
                         align={cellAlignment}
                         className={cellClassName}
                       >
-                        <span>{cell.render('Cell')}</span>
+                        <span>
+                          {cell.render('Cell')}{' '}
+                          {isSubmittedNumberCellHightLighted && (
+                            <EmptySampleUnitPopup
+                              tableCellData={cell}
+                              collectRecordsByProfile={collectRecordsByProfile}
+                            />
+                          )}
+                        </span>
                       </OverviewTd>
                     )
                   })}

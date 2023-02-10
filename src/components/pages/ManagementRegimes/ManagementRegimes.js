@@ -47,23 +47,27 @@ import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
 import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
-import { PAGE_SIZE_DEFAULT } from '../../../library/constants/tableConstants'
+import { getFileExportName } from '../../../library/getFileExportName'
+import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const ManagementRegimes = () => {
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [choices, setChoices] = useState({})
-  const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const currentProjectPath = useCurrentProjectPath()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
   const isMounted = useIsMounted()
+  const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
+
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
+  const [managementRegimeExportName, setManagementRegimeExportName] = useState('')
+  const [choices, setChoices] = useState({})
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const [isCopyManagementRegimesModalOpen, setIsCopyManagementRegimesModalOpen] = useState(false)
   const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
   const closeCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(false)
-  const { isAppOnline } = useOnlineStatus()
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -79,7 +83,11 @@ const ManagementRegimes = () => {
             if (!projectResponse && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
+
+            const exportName = getFileExportName(projectResponse, 'MRs')
+
             setManagementRegimeRecordsForUiDisplay(managementRegimes)
+            setManagementRegimeExportName(exportName)
             setChoices(choicesResponse)
             setIsLoading(false)
           }
@@ -90,7 +98,6 @@ const ManagementRegimes = () => {
     }
   }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
 
-  const currentProjectPath = useCurrentProjectPath()
   const getIconCheckLabel = (property) => property && <IconCheck />
 
   const addCopiedMRsToManagementRegimeTable = (copiedManagementRegimes) => {
@@ -315,7 +322,7 @@ const ManagementRegimes = () => {
       <ButtonSecondary>
         <CSVLink
           data={getDataForCSV}
-          filename="Export_MRs.csv"
+          filename={managementRegimeExportName}
           style={{ margin: 0, textDecoration: 'none' }}
         >
           <IconDownload /> Export MRs

@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import {
   InputAutocompleteContainer,
   NewOptionButton,
-  ObservationAutocomplete,
   ObservationTr,
   StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
@@ -31,6 +30,7 @@ import getObservationValidationInfo from '../CollectRecordFormPageAlternative/ge
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
+import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
 const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
 
