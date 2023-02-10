@@ -79,11 +79,13 @@ const ReadOnlySiteContent = ({
 }
 
 const enforceNumberInput = (event) => {
+  const numbersPlusMinusAndDotSymbols = /[0-9+-.]/.source
   const regex = new RegExp(
-    /^[0-9+-.]+$|(Backspace|Tab|Delete|ArrowLeft|ArrowRight|ArrowUp|ArrowDown)/,
+    `${numbersPlusMinusAndDotSymbols}|(Backspace|Tab|Delete|ArrowLeft|ArrowRight|ArrowUp|ArrowDown)`,
   )
+  const preventKeyPressNotMatchInRegex = !event.key.match(regex) && event.preventDefault()
 
-  return !event.key.match(regex) && event.preventDefault()
+  return preventKeyPressNotMatchInRegex
 }
 
 const SiteForm = ({
