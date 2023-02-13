@@ -18,7 +18,7 @@ const SubmittedBenthicLitObservationTable = ({
   submittedRecord,
 }) => {
   const { obs_benthic_lits } = submittedRecord
-  const growthFormOptions = getOptions(choices.growthforms.data)
+  const growthFormOptions = getOptions(choices.growthforms)
 
   const observationsBenthicLit = obs_benthic_lits.map((item, index) => (
     <Tr key={item.id}>

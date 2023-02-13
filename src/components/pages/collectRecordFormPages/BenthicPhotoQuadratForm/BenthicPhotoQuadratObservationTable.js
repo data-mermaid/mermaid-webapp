@@ -156,7 +156,7 @@ const BenthicPhotoQuadratObservationTable = ({
 
   const observationsRows = useMemo(() => {
     const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
-    const growthFormOptions = getOptions(choices.growthforms.data)
+    const growthFormOptions = getOptions(choices.growthforms)
 
     const handleKeyDown = ({ event, index, observation, isNumberOfPoints }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
