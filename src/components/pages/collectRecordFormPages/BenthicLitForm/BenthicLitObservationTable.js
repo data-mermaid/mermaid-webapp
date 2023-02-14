@@ -27,7 +27,7 @@ import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit'
+import InputNumberNoScroll from '../../../generic/InputNumberNoScroll'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -232,7 +232,7 @@ const BenthicLitObservationsTable = ({
             </Select>
           </Td>
           <Td align="right">
-            <InputNumberNoScrollWithUnit
+            <InputNumberNoScroll
               value={length}
               aria-labelledby="length-label"
               onChange={handleLengthChange}
