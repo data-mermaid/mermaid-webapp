@@ -319,125 +319,143 @@ test('Habitat Complexity validation: user can dismiss non-observations input war
 
   userEvent.click(siteIgnoreWarningCheckbox)
 
-  await waitFor(() => expect(within(siteRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(siteRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(siteIgnoreWarningCheckbox).toBeChecked()
-  expect(within(siteRow).getByText('Ignored'))
+  await waitFor(() => expect(within(siteRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(siteRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(siteRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(siteRow).getByRole('checkbox', { name: 'Ignore warning' }))
+  expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   const isFormDirtyAfterIgnore = await screen.findByRole('button', { name: 'Save' })
 
   expect(isFormDirtyAfterIgnore)
   userEvent.click(within(managementRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() =>
-    expect(within(managementRow).queryByText('firstWarning')).not.toBeInTheDocument(),
-  )
-  expect(within(managementRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(managementRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(managementRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(managementRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(managementRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(managementRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(managementRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(depthRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() => expect(within(depthRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(depthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(depthRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(depthRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(depthRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(depthRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(depthRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(depthRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(sampleDateRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() =>
-    expect(within(sampleDateRow).queryByText('firstWarning')).not.toBeInTheDocument(),
-  )
-  expect(within(sampleDateRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sampleDateRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(sampleDateRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(sampleDateRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(sampleDateRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(sampleDateRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(sampleDateRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(sampleTimeRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() =>
-    expect(within(sampleTimeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
-  )
-  expect(within(sampleTimeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(sampleTimeRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(sampleTimeRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(sampleTimeRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(sampleTimeRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(sampleTimeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(sampleTimeRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(transectNumberRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
-    expect(within(transectNumberRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(transectNumberRow).queryByText('warning')).not.toBeInTheDocument(),
   )
-  expect(within(transectNumberRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(transectNumberRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(transectNumberRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(transectNumberRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(transectNumberRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(transectNumberRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(labelRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() => expect(within(labelRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(labelRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(labelRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(labelRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(labelRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(labelRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(labelRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(labelRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(lengthSurveyedRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
-    expect(within(lengthSurveyedRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(lengthSurveyedRow).queryByText('warning')).not.toBeInTheDocument(),
   )
-  expect(within(lengthSurveyedRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(lengthSurveyedRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(intervalSizeRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
-    expect(within(intervalSizeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(intervalSizeRow).queryByText('warning')).not.toBeInTheDocument(),
   )
-  expect(within(intervalSizeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(intervalSizeRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(intervalSizeRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(intervalSizeRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(intervalSizeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(intervalSizeRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(reefSlopeRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() =>
-    expect(within(reefSlopeRow).queryByText('firstWarning')).not.toBeInTheDocument(),
-  )
-  expect(within(reefSlopeRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(reefSlopeRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(reefSlopeRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(reefSlopeRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(reefSlopeRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(relativeDepthRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
   await waitFor(() =>
-    expect(within(relativeDepthRow).queryByText('firstWarning')).not.toBeInTheDocument(),
+    expect(within(relativeDepthRow).queryByText('warning')).not.toBeInTheDocument(),
   )
-  expect(within(relativeDepthRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(relativeDepthRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(relativeDepthRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(relativeDepthRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(relativeDepthRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(relativeDepthRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(visibilityRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() =>
-    expect(within(visibilityRow).queryByText('firstWarning')).not.toBeInTheDocument(),
-  )
-  expect(within(visibilityRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(visibilityRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(visibilityRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(visibilityRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(visibilityRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(visibilityRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(visibilityRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(currentRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() =>
-    expect(within(currentRow).queryByText('firstWarning')).not.toBeInTheDocument(),
-  )
-  expect(within(currentRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(currentRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(currentRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(currentRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(currentRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(currentRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(currentRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(tideRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() => expect(within(tideRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(tideRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(tideRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(tideRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(tideRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(tideRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(tideRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(tideRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(notesRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() => expect(within(notesRow).queryByText('firstWarning')).not.toBeInTheDocument())
-  expect(within(notesRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(notesRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(notesRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(notesRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(notesRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(notesRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(notesRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(observersRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
-  await waitFor(() =>
-    expect(within(observersRow).queryByText('firstWarning')).not.toBeInTheDocument(),
-  )
-  expect(within(observersRow).queryByText('secondWarning')).not.toBeInTheDocument()
-  expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
+  await waitFor(() => expect(within(observersRow).queryByText('warning')).not.toBeInTheDocument())
+  expect(within(observersRow).getByText('firstWarning')).toBeInTheDocument()
+  expect(within(observersRow).getByText('secondWarning')).toBeInTheDocument()
+  expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
 }, 50000)
 
 test('Habitat Complexity validation: user can dismiss record-level warnings ', async () => {
@@ -891,22 +909,38 @@ test('Habitat Complexity validation: user can reset dismissed non-observation in
   const notesRow = screen.getByTestId('notes')
   const observersRow = screen.getByTestId('observers')
 
-  expect(within(siteRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(managementRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(depthRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(sampleDateRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(sampleTimeRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(transectNumberRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(labelRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(lengthSurveyedRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(intervalSizeRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(reefSlopeRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(relativeDepthRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(visibilityRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(currentRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(tideRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(notesRow).getByText('Ignored')).toBeInTheDocument()
-  expect(within(observersRow).getByText('Ignored')).toBeInTheDocument()
+  expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(managementRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(managementRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(depthRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(depthRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(sampleDateRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(sampleDateRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(sampleTimeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(sampleTimeRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(transectNumberRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(transectNumberRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(labelRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(labelRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(lengthSurveyedRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(intervalSizeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(intervalSizeRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(relativeDepthRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(relativeDepthRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(visibilityRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(visibilityRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(currentRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(currentRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(tideRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(tideRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(notesRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(notesRow).getAllByText('ignored')[1]).toBeInTheDocument()
+  expect(within(observersRow).getAllByText('ignored')[0]).toBeInTheDocument()
+  expect(within(observersRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(
     await within(siteRow).findByRole('checkbox', {
