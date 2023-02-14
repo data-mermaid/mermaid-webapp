@@ -380,7 +380,7 @@ test('Benthic LIT validation: user can dismiss non-observations input warnings '
   expect(within(reefSlopeRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
   userEvent.click(within(relativeDepthRow).getByRole('checkbox', { name: 'Ignore warning' }))
-  
+
   await waitFor(() =>
     expect(within(relativeDepthRow).queryByText('warning')).not.toBeInTheDocument(),
   )
