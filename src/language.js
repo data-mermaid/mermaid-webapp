@@ -430,9 +430,9 @@ const getValidationMessage = (validation, projectId = '') => {
     not_unique_management: () =>
       'Management Regime: Other sample events at this site have a different management regime',
     obs_total_length_toolarge: () =>
-      `Total length of observations (${context?.total_obs_length} cm) greater than transect length (${context?.len_surveyed} cm) + 50%`,
+      `Total length of observations (${context?.total_obs_length} cm) is greater than the transect length (${context?.len_surveyed} m) + 50%`,
     obs_total_length_toosmall: () =>
-      `Total length of observations (${context?.total_obs_length} cm) less than transect length (${context?.len_surveyed} cm) - 50%`,
+      `Total length of observations (${context?.total_obs_length} cm) is less than 50% of the transect length (${context?.len_surveyed} m)`,
     required: () => `Required`,
     required_management_rules: () => 'Management rules are required',
     sample_time_out_of_range: () =>
