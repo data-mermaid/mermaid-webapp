@@ -22,7 +22,6 @@ import { summarizeArrayObjectValuesByProperty } from '../../../../library/summar
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
 import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
-import InputNumberNoScrollWithUnit from '../../../generic/InputNumberNoScrollWithUnit/InputNumberNoScrollWithUnit'
 import language from '../../../../language'
 import {
   ButtonRemoveRow,
@@ -248,7 +247,7 @@ const FishBeltObservationTable = ({
       ) : null
 
       const sizeInput = showNumericSizeInput ? (
-        <InputNumberNoScrollWithUnit
+        <InputNumberNoScroll
           type="number"
           min="0"
           value={sizeOrEmptyStringToAvoidInputValueErrors}

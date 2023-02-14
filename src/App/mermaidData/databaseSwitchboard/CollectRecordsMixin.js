@@ -595,6 +595,12 @@ const CollectRecordsMixin = (Base) =>
         recordId,
       )
 
+      const areThereValidationsToReset = !!unmodifiedCollectRecord?.validations
+
+      if (!areThereValidationsToReset) {
+        return unmodifiedCollectRecord
+      }
+
       const observationTableNames = getObservationsPropertyNames(unmodifiedCollectRecord)
 
       let modifiedCollectRecordWithResetObservationValidations = { ...unmodifiedCollectRecord }
