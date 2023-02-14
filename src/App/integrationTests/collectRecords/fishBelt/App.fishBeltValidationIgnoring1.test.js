@@ -328,10 +328,10 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
 
   userEvent.click(within(siteRow).getByRole('checkbox', { name: 'Ignore warning' }))
 
+  await waitFor(() => expect(within(siteRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(siteRow).getByText('firstWarning')).toBeInTheDocument()
   expect(within(siteRow).getByText('secondWarning')).toBeInTheDocument()
   expect(within(siteRow).getByRole('checkbox', { name: 'Ignore warning' }))
-  await waitFor(() => expect(within(siteRow).queryByText('warning')).not.toBeInTheDocument())
   expect(within(siteRow).getAllByText('ignored')[0]).toBeInTheDocument()
   expect(within(siteRow).getAllByText('ignored')[1]).toBeInTheDocument()
 
