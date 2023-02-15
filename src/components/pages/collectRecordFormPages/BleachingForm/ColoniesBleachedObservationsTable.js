@@ -31,8 +31,6 @@ import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
 
-const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
-
 const StyledColgroup = styled('colgroup')`
   col {
     &.number {
