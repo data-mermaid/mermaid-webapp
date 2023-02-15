@@ -30,3 +30,15 @@ export const getDuplicateSampleUnitLink = (duplicateTransectMethodContext, proje
     </span>
   )
 }
+
+export const goToManagementOverviewPageLink = (projectId) => {
+  const linkToMROverviewPage = `/projects/${projectId}/management-regimes-overview`
+
+  return (
+    <span>
+      {' '}
+      Other sample events at this site have a different management regime. Go to{' '}
+      <a href={linkToMROverviewPage}>Management Regime Overview</a>.
+    </span>
+  )
+}

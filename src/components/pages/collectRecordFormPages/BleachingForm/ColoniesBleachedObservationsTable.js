@@ -75,7 +75,7 @@ const ColoniesBleachedObservationTable = ({
   }
 
   const observationRows = useMemo(() => {
-    const growthFormSelectOptions = getOptions(choices.growthforms)
+    const growthFormSelectOptions = getOptions(choices.growthforms.data)
 
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
