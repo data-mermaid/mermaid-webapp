@@ -1,10 +1,14 @@
 import moment from 'moment'
 
 export const getFileExportName = (project, tableName) => {
-  const { name, created_on } = project
+  if (!project) {
+    return ''
+  }
+
+  const { name } = project
 
   const modifiedName = name.replace(/[ ,.]/g, '_') // Replace space or punctuations with underscores
-  const momentDateString = moment(created_on).format('YYYY-MM-DD')
+  const momentToday = moment().format('YYYY-MM-DD')
 
-  return `${modifiedName}-${momentDateString}_${tableName}.csv`
+  return `${modifiedName}_${momentToday}_${tableName}.csv`
 }

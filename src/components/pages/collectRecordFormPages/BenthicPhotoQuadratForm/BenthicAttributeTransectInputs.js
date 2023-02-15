@@ -41,7 +41,10 @@ const TransectInputs = ({
   const { currents, relativedepths, tides, visibilities } = choices
 
   const currentOptions = [...getOptions(currents.data), { label: 'not reported', value: '' }]
-  const relativeDepthOptions = [...getOptions(relativedepths.data), { label: 'not reported', value: '' }]
+  const relativeDepthOptions = [
+    ...getOptions(relativedepths.data),
+    { label: 'not reported', value: '' },
+  ]
   const tideOptions = [...getOptions(tides.data), { label: 'not reported', value: '' }]
   const visibilityOptions = [...getOptions(visibilities.data), { label: 'not reported', value: '' }]
   const quadrat_transect = validationsApiData?.quadrat_transect

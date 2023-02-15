@@ -40,7 +40,7 @@ describe('Offline', () => {
     // Site select
     expect(screen.getByDisplayValue('Site D'))
     // Management select
-    expect(screen.getByDisplayValue('Management Regimes C'))
+    expect(screen.getByDisplayValue('Management Regimes C [Management Regimes 3]'))
     expect(screen.getByLabelText('Depth')).toHaveValue(45)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-03-02')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('11:55')

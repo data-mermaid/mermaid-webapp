@@ -39,8 +39,14 @@ const BenthicPitTransectInputs = ({
 }) => {
   const { reefslopes, relativedepths, visibilities, currents, tides } = choices
 
-  const reefSlopeSelectOptions = [...getOptions(reefslopes.data), { label: 'not reported', value: '' }]
-  const relativeDepthOptions = [...getOptions(relativedepths.data), { label: 'not reported', value: '' }]
+  const reefSlopeSelectOptions = [
+    ...getOptions(reefslopes.data),
+    { label: 'not reported', value: '' },
+  ]
+  const relativeDepthOptions = [
+    ...getOptions(relativedepths.data),
+    { label: 'not reported', value: '' },
+  ]
   const visibilityOptions = [...getOptions(visibilities.data), { label: 'not reported', value: '' }]
   const currentOptions = [...getOptions(currents.data), { label: 'not reported', value: '' }]
   const tideOptions = [...getOptions(tides.data), { label: 'not reported', value: '' }]
