@@ -372,7 +372,7 @@ const Site = ({ isNewSite }) => {
         errors.country = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
-      if (!values.latitude) {
+      if (!values.latitude && values.latitude !== 0) {
         errors.latitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
@@ -380,7 +380,7 @@ const Site = ({ isNewSite }) => {
         errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
       }
 
-      if (!values.longitude) {
+      if (!values.longitude && values.latitude !== 0) {
         errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
