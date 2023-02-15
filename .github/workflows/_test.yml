@@ -10,6 +10,7 @@ env:
   REACT_APP_MERMAID_REFERENCE_LINK: https://dev-public.datamermaid.org/mermaid_attributes.xlsx
   REACT_APP_MERMAID_DASHBOARD_LINK: https://dashboard.datamermaid.org
   REACT_APP_CORAL_ATLAS_APP_ID: v8nkxznp3m
+  REACT_APP_MERMAID_WHATS_NEW_LINK: https://datamermaid.org/reef-stories/mermaid-v2-what-s-new
 
 jobs:
   test:
