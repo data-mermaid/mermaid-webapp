@@ -32,7 +32,12 @@ import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 
 const GlobalLinks = () => {
-  const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
+  const { isAppOnline } = useOnlineStatus()
+  // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
+  // (eg a user has just added a new fish species and it has been approved, but the service worker has cahed the old one)
+  const mermaidReferenceLink = isAppOnline
+    ? `${process.env.REACT_APP_MERMAID_REFERENCE_LINK}?nocache=${Date.now()}`
+    : process.env.REACT_APP_MERMAID_REFERENCE_LINK
   const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
   const mermaidWhatsNewLink = process.env.REACT_APP_MERMAID_WHATS_NEW_LINK
 
