@@ -48,10 +48,15 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { getFileExportName } from '../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const Sites = () => {
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
+  const [choices, setChoices] = useState({})
+
+  const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const currentProjectPath = useCurrentProjectPath()
   const { isSyncInProgress } = useSyncStatus()
@@ -59,13 +64,6 @@ const Sites = () => {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
-
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [siteRecordsForUiDisplay, setSiteRecordsForUiDisplay] = useState([])
-  const [siteExportName, setSiteExportName] = useState('')
-  const [choices, setChoices] = useState({})
-  const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
   const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
   const openCopySitesModal = () => setIsCopySitesModalOpen(true)
@@ -86,12 +84,8 @@ const Sites = () => {
             if (!project && projectId) {
               setIdsNotAssociatedWithData([projectId])
             }
-
-            const exportName = getFileExportName(project, 'sites')
-
             setSiteRecordsForUiDisplay(sites)
             setSitesForMapMarkers(sites)
-            setSiteExportName(exportName)
             setChoices(choicesResponse)
             setIsLoading(false)
           }
@@ -275,7 +269,7 @@ const Sites = () => {
       <ButtonSecondary>
         <CSVLink
           data={getDataForCSV}
-          filename={siteExportName}
+          filename="Export_sites.csv"
           style={{ margin: 0, textDecoration: 'none' }}
         >
           <IconDownload /> Export sites

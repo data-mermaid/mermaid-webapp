@@ -37,6 +37,17 @@ import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageUnavailable from '../PageUnavailable'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
+const getTransectReportProperties = (transect) => {
+  return {
+    'Fish Belt': 'beltfishes',
+    'Benthic LIT': 'benthiclits',
+    'Benthic PIT': 'benthicpits',
+    'Habitat Complexity': 'habitatcomplexities',
+    'Colonies Bleached': ['bleachingqcs', 'obscoloniesbleacheds'],
+    'Quadrat Percentage': ['bleachingqcs', 'obsquadratbenthicpercents'],
+  }[transect]
+}
+
 const Submitted = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
@@ -225,6 +236,21 @@ const Submitted = () => {
     handleSetTableUserPrefs({ propertyKey: 'pageSize', currentValue: pageSize })
   }, [pageSize, handleSetTableUserPrefs])
 
+  const handleExportToCSV = (transect) => {
+    const isBleachingTransect =
+      transect === 'Colonies Bleached' || transect === 'Quadrat Percentage'
+    const transectReportProperty = getTransectReportProperties(transect)
+
+    const transectProtocol = isBleachingTransect
+      ? transectReportProperty[0]
+      : transectReportProperty
+    const transectMethod = isBleachingTransect
+      ? transectReportProperty[1]
+      : `obstransect${transectReportProperty}`
+
+    databaseSwitchboardInstance.exportToCSV(projectId, transectProtocol, transectMethod)
+  }
+
   const table = submittedRecordsForUiDisplay.length ? (
     <>
       <StickyTableOverflowWrapper>
@@ -300,6 +326,7 @@ const Submitted = () => {
     <SubmittedToolbarSection
       name={language.pages.submittedTable.filterToolbarText}
       handleGlobalFilterChange={handleGlobalFilterChange}
+      handleExportToCSV={handleExportToCSV}
       filterValue={tableUserPrefs.globalFilter}
       disabled={submittedRecordsForUiDisplay.length === 0}
     />

@@ -1,7 +1,6 @@
-import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
-import { getProtocolMethodsType } from '../recordProtocolHelpers'
-import { getSampleDateLabel } from '../getSampleDateLabel'
 import axios from '../../../library/axiosRetry'
+import { getSampleDateLabel } from '../getSampleDateLabel'
+import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import language from '../../../language'
 
 const SubmittedRecordsMixin = (Base) =>
@@ -97,12 +96,10 @@ const SubmittedRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    exportSubmittedRecords = async function exportSubmittedRecords({ projectId, protocol }) {
+    exportToCSV = async function exportToCSV(projectId, protocol, method) {
       const token = await this._getAccessToken()
 
-      const method = getProtocolMethodsType(protocol)
-
-      const report_url = `${this._apiBaseUrl}/projects/${projectId}/${method}/xlsx/?access_token=${token}`
+      const report_url = `${this._apiBaseUrl}/projects/${projectId}/${protocol}/${method}/csv/?field_report=true&access_token=${token}`
 
       window.open(report_url)
     }

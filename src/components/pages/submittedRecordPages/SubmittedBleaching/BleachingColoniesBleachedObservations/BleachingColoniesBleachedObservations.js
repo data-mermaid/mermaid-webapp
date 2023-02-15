@@ -17,7 +17,7 @@ const BleachingColoniesBleachedObservations = ({
   choices,
   observationsColoniesBleached,
 }) => {
-  const growthFormOptions = getOptions(choices.growthforms.data)
+  const growthFormOptions = getOptions(choices.growthforms)
 
   const observationsBleaching = observationsColoniesBleached.map((item, index) => (
     <Tr key={item.id}>

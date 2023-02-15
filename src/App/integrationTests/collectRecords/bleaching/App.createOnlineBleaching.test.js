@@ -52,7 +52,7 @@ describe('Online', () => {
     // Site select
     expect(screen.getByDisplayValue('Site A'))
     // Management select
-    expect(screen.getByDisplayValue('Management Regimes B [Management Regimes 2]'))
+    expect(screen.getByDisplayValue('Management Regimes B'))
     expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
@@ -119,7 +119,7 @@ describe('Online', () => {
     // Site select
     expect(screen.getByDisplayValue('Site A'))
     // Management select
-    expect(screen.getByDisplayValue('Management Regimes B [Management Regimes 2]'))
+    expect(screen.getByDisplayValue('Management Regimes B'))
     expect(screen.getByLabelText('Depth')).toHaveValue(10000)
     expect(screen.getByLabelText('Sample Date')).toHaveValue('2021-04-21')
     expect(screen.getByLabelText('Sample Time')).toHaveValue('12:34')
