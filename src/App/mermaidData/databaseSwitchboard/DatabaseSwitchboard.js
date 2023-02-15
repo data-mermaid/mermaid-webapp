@@ -50,7 +50,7 @@ const databaseSwitchboardPropTypes = PropTypes.shape({
   getSubmittedSampleUnitRecord: PropTypes.func,
   getSubmittedRecordsForUIDisplay: PropTypes.func,
   moveToCollect: PropTypes.func,
-  exportSubmittedRecords: PropTypes.func,
+  exportToCSV: PropTypes.func,
   saveFishBelt: PropTypes.func,
   deleteSampleUnit: PropTypes.func,
   validateSampleUnit: PropTypes.func,

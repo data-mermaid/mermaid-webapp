@@ -14,7 +14,7 @@ import { FishBeltObservationSizeSelect } from './FishBeltObservationSizeSelect'
 import { getFishBinLabel } from './fishBeltBins'
 import { getObservationBiomass } from './fishBeltBiomass'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
+import { IconClose, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
@@ -30,12 +30,10 @@ import {
   NewOptionButton,
   ObservationsSummaryStats,
   ObservationTr,
-  StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
   StickyObservationTable,
   UnderTableRow,
 } from '../CollectingFormPage.Styles'
-import { fishReferenceEndpoint } from '../../../../App/mermaidData/fishNameHelpers'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -165,8 +163,6 @@ const FishBeltObservationTable = ({
   )
 
   const observationsRows = useMemo(() => {
-    const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
-
     const handleKeyDown = ({ event, index, observation, isCount }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
       const isEnterKey = event.code === 'Enter'
@@ -197,10 +193,6 @@ const FishBeltObservationTable = ({
 
     return observationsState.map((observation, index) => {
       const { id: observationId, count, size, fish_attribute } = observation
-      const taxonomicRank = fishNameConstants.find(
-        ({ id }) => id === fish_attribute,
-      )?.taxonomic_rank
-      const fishMatchingUrl = fishReferenceEndpoint[taxonomicRank]
 
       const handleDeleteObservation = () => {
         setAreObservationsInputsDirty(true)
@@ -340,16 +332,6 @@ const FishBeltObservationTable = ({
                     </NewOptionButton>
                   }
                 />
-                {fish_attribute && (
-                  <StyledLinkThatLooksLikeButtonToReference
-                    aria-label="fish name reference"
-                    target="_blank"
-                    tabIndex="-1"
-                    href={`${mermaidReferenceLink}/fishattributes/${fishMatchingUrl}/${fish_attribute}`}
-                  >
-                    <IconLibraryBooks />
-                  </StyledLinkThatLooksLikeButtonToReference>
-                )}
               </InputAutocompleteContainer>
             )}
           </Td>
@@ -407,7 +389,6 @@ const FishBeltObservationTable = ({
     openNewObservationModal,
     resetObservationValidations,
     setAreObservationsInputsDirty,
-    fishNameConstants,
   ])
 
   return (

@@ -239,11 +239,11 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
             }
 
             const sortedManagementComplianceOptions = sortManagementComplianceChoices([
-              ...getOptions(choicesResponse.managementcompliances.data),
+              ...getOptions(choicesResponse.managementcompliances),
               { label: 'not reported', value: '' },
             ])
 
-            setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
+            setManagementPartyOptions(getOptions(choicesResponse.managementparties))
             setManagementComplianceOptions(sortedManagementComplianceOptions)
             setManagementRegimeBeingEdited(managementRegimeResponse)
             setIsLoading(false)
