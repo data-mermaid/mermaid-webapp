@@ -72,7 +72,7 @@ const HabitatComplexityObservationsTable = ({
   }
 
   const observationsRows = useMemo(() => {
-    const habitatComplexityScoreOptions = getOptions(choices.habitatcomplexityscores)
+    const habitatComplexityScoreOptions = getOptions(choices.habitatcomplexityscores.data)
 
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
