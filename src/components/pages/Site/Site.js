@@ -78,6 +78,16 @@ const ReadOnlySiteContent = ({
   )
 }
 
+const enforceNumberInput = (event) => {
+  const numbersPlusMinusAndDotSymbols = /[0-9+-.]/.source
+  const regex = new RegExp(
+    `${numbersPlusMinusAndDotSymbols}|(Backspace|Tab|Delete|ArrowLeft|ArrowRight|ArrowUp|ArrowDown)`,
+  )
+  const preventKeyPressNotMatchInRegex = !event.key.match(regex) && event.preventDefault()
+
+  return preventKeyPressNotMatchInRegex
+}
+
 const SiteForm = ({
   formik,
   isAppOnline,
@@ -130,6 +140,7 @@ const SiteForm = ({
           id="latitude"
           type="number"
           {...formik.getFieldProps('latitude')}
+          onKeyDown={(event) => enforceNumberInput(event)}
           validationType={formik.errors.latitude && formik.touched.latitude ? 'error' : null}
           validationMessages={formik.errors.latitude}
           testId="latitude"
@@ -141,6 +152,7 @@ const SiteForm = ({
           id="longitude"
           type="number"
           {...formik.getFieldProps('longitude')}
+          onKeyDown={(event) => enforceNumberInput(event)}
           validationType={formik.errors.longitude && formik.touched.longitude ? 'error' : null}
           validationMessages={formik.errors.longitude}
           testId="longitude"
