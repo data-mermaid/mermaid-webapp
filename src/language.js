@@ -418,7 +418,7 @@ const getValidationMessage = (validation, projectId = '') => {
     len_surveyed_out_of_range: () =>
       `Transect length surveyed value outside range of ${context?.len_surveyed_range[0]} and ${context?.len_surveyed_range[1]}`,
     low_density: () => `Fish biomass less than ${context?.biomass_range[0]} kg/ha`,
-    management_not_found: () => 'Management Regime record not available for similarity validation',
+    management_not_found: () => 'Management Regime not available for similarity validation.',
     max_depth: () => `Depth exceeds ${context?.depth_range[1]} m`,
     max_fish_size: () => 'Fish size is larger than maximum observed size',
     minimum_total_fish_count: () => `Total fish count less than ${context?.minimum_fish_count}`,
@@ -433,7 +433,7 @@ const getValidationMessage = (validation, projectId = '') => {
     obs_total_length_toosmall: () =>
       `Total length of observations (${context?.total_obs_length} cm) is less than 50% of the transect length (${context?.len_surveyed} m)`,
     required: () => `Required`,
-    required_management_rules: () => 'Management rules are required',
+    required_management_rules: () => 'At least one rule must be specified for this Management Regime.',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
     similar_name: () => 'Another Management Regime is similar to this one.',
