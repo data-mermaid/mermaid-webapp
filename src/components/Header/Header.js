@@ -33,20 +33,33 @@ import ProfileModal from '../ProfileModal'
 
 const GlobalLinks = () => {
   const { isAppOnline } = useOnlineStatus()
-  // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
-  // (eg a user has just added a new fish species and it has been approved, but the service worker has cahed the old one)
-  const mermaidReferenceLink = isAppOnline
-    ? `${process.env.REACT_APP_MERMAID_REFERENCE_LINK}?nocache=${Date.now()}`
-    : process.env.REACT_APP_MERMAID_REFERENCE_LINK
   const mermaidDashboardLink = process.env.REACT_APP_MERMAID_DASHBOARD_LINK
   const mermaidWhatsNewLink = process.env.REACT_APP_MERMAID_WHATS_NEW_LINK
+
+  const handleReferenceMouseOver = (event) => {
+    // we add a hack so when online the reference spreadsheet isnt pulled from an outdated cache.
+    // (eg a user has just added a new fish species and it has been approved, but the service worker has cahed the old one)
+    // we use a hover event instead of click so devs can confirm the strategy, and the hover behaviour shows the href in the
+    // browser bottom left corner that will
+    // be followed onClick (instead of a stale one from the last click)
+    // eslint-disable-next-line no-param-reassign
+    event.target.href = isAppOnline
+      ? `${process.env.REACT_APP_MERMAID_REFERENCE_LINK}?nocache=${Date.now()}`
+      : process.env.REACT_APP_MERMAID_REFERENCE_LINK
+  }
 
   return (
     <>
       <StyledNavLink as={Link} to="/projects">
         Projects
       </StyledNavLink>
-      <StyledNavLink href={`${mermaidReferenceLink}`} target="_blank" rel="noreferrer" download>
+      <StyledNavLink
+        href={process.env.REACT_APP_MERMAID_REFERENCE_LINK}
+        target="_blank"
+        rel="noreferrer"
+        download
+        onMouseOver={handleReferenceMouseOver}
+      >
         Reference&nbsp;
         <MediumIconExcel />
       </StyledNavLink>
