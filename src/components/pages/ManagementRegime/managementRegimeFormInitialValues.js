@@ -11,7 +11,7 @@ const getManagementRegimeInitialValues = (managementRegimeRecord) => {
     est_year: managementRegimeRecord?.est_year ?? '',
     size: managementRegimeRecord?.size ?? '',
     parties: managementRegimeRecord?.parties ?? [],
-    open_access: managementRegimeRecord?.open_access ?? false,
+    open_access: managementRegimeRecord?.open_access ?? true,
     no_take: managementRegimeRecord?.no_take ?? false,
     access_restriction: managementRegimeRecord?.access_restriction,
     periodic_closure: managementRegimeRecord?.periodic_closure,
