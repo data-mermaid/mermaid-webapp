@@ -22,7 +22,7 @@ const SubmittedRecordsMixin = (Base) =>
             .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc,benthicpqt`,
-                limit: 1000,
+                limit: 10000,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
