@@ -40,7 +40,7 @@ const SitesMixin = (Base) =>
               params: {
                 exclude_projects: projectId,
                 include_fields: `country_name,project_name,reef_type_name,reef_zone_name,exposure_name`,
-                limit: 10000,
+                limit: 5000,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
