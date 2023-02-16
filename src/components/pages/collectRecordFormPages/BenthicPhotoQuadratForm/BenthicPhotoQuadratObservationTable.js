@@ -8,6 +8,7 @@ import {
   NewOptionButton,
   ObservationsSummaryStats,
   ObservationTr,
+  StyledLinkThatLooksLikeButtonToReference,
   StyledOverflowWrapper,
   StickyObservationTable,
   UnderTableRow,
@@ -21,7 +22,7 @@ import {
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
-import { IconClose, IconPlus } from '../../../icons'
+import { IconClose, IconLibraryBooks, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
@@ -154,7 +155,8 @@ const BenthicPhotoQuadratObservationTable = ({
   }, [observationsState, benthicAttributeOptions])
 
   const observationsRows = useMemo(() => {
-    const growthFormOptions = getOptions(choices.growthforms)
+    const mermaidReferenceLink = process.env.REACT_APP_MERMAID_REFERENCE_LINK
+    const growthFormOptions = getOptions(choices.growthforms.data)
 
     const handleKeyDown = ({ event, index, observation, isNumberOfPoints }) => {
       const isTabKey = event.code === 'Tab' && !event.shiftKey
@@ -302,6 +304,16 @@ const BenthicPhotoQuadratObservationTable = ({
                     </NewOptionButton>
                   }
                 />
+                {attribute && (
+                  <StyledLinkThatLooksLikeButtonToReference
+                    aria-label="benthic attribute reference"
+                    target="_blank"
+                    tabIndex="-1"
+                    href={`${mermaidReferenceLink}/benthicattributes/${attribute}`}
+                  >
+                    <IconLibraryBooks />
+                  </StyledLinkThatLooksLikeButtonToReference>
+                )}
               </InputAutocompleteContainer>
             )}
           </Td>

@@ -4,6 +4,7 @@ import { hoverState, mediaQueryTabletLandscapeOnly } from '../../../library/styl
 import { ButtonCaution, ButtonThatLooksLikeLink, ButtonSecondary } from '../../generic/buttons'
 import { Table, TableOverflowWrapper, Tr, Td, GenericStickyTable } from '../../generic/Table/table'
 import { inputTextareaSelectStyles } from '../../generic/form'
+import { LinkThatLooksLikeButton } from '../../generic/links'
 
 export const NewOptionButton = styled(ButtonThatLooksLikeLink)`
   ${hoverState(css`
@@ -45,6 +46,11 @@ export const ObservationsSummaryStats = styled(Table)`
 export const ButtonRemoveRow = styled(ButtonCaution)`
   display: none;
   padding: 0;
+`
+
+export const StyledLinkThatLooksLikeButtonToReference = styled(LinkThatLooksLikeButton)`
+  padding: 0.5rem 1rem 0 1rem;
+  background: transparent;
 `
 
 export const StyledOverflowWrapper = styled(TableOverflowWrapper)`

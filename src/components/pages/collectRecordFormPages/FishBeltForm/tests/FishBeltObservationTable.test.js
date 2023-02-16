@@ -211,3 +211,43 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 
   await waitFor(() => expect(sizeInputs.length).toEqual(2))
 })
+
+test('Fishbelt observations hide and show fish name reference link appropriately', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
+  renderAuthenticatedOnline(
+    <Route path="/projects/:projectId/collecting/fishbelt">
+      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
+    </Route>,
+    {
+      isSyncInProgressOverride: true,
+      dexiePerUserDataInstance,
+      initialEntries: ['/projects/5/collecting/fishbelt'],
+    },
+  )
+
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
+
+  userEvent.click(await screen.findByRole('button', { name: 'Add Row' }))
+
+  // wait for new row to show up
+  await screen.findByLabelText('Size (cm)')
+
+  expect(screen.queryByLabelText('fish name reference')).not.toBeInTheDocument()
+
+  const fishNameInput = await screen.findByLabelText('Fish Name')
+
+  userEvent.type(fishNameInput, 'neb')
+
+  const fishNameList = screen.getByRole('listbox')
+
+  const nebriusOption = screen.getByRole('option', {
+    name: 'Nebrius',
+  })
+
+  userEvent.selectOptions(fishNameList, nebriusOption)
+
+  expect(await screen.findByLabelText('fish name reference')).toBeInTheDocument()
+})

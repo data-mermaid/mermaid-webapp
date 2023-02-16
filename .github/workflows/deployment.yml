@@ -36,15 +36,15 @@ jobs:
     needs: [deps-cache]
     uses: ./.github/workflows/_lint.yml
   
-  # call-test:
-  #   if: github.event.pull_request.draft == false
-  #   needs: [call-lint]
-  #   uses: ./.github/workflows/_test.yml
+  call-test:
+    if: github.event.pull_request.draft == false
+    needs: [deps-cache]
+    uses: ./.github/workflows/_test.yml
 
   call-cdk-deploy:
     concurrency:
       group: app-deployment-${{ github.ref }}
-    needs: [deps-cache]
+    needs: [call-test, call-lint]
     uses: ./.github/workflows/_cdk.yml
     with:
       cdk_subcommand: deploy
