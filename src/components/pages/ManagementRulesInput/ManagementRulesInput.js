@@ -55,13 +55,9 @@ const ManagementRulesInput = ({
       gear_restriction ||
       species_restriction
 
-    // For new MR, set default rule to Open Access
-    const defaultRuleValue =
-      (!open_access && !no_take && partialRestrictionRules === undefined) || open_access
-
     return {
-      open_access: defaultRuleValue,
-      no_take: rules.no_take,
+      open_access,
+      no_take,
       partial_restrictions: partialRestrictionRules,
     }
   }
