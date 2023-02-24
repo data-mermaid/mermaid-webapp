@@ -380,7 +380,7 @@ const Site = ({ isNewSite }) => {
         errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
       }
 
-      if (!values.longitude && values.latitude !== 0) {
+      if (!values.longitude && values.longitude !== 0) {
         errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 

@@ -98,7 +98,10 @@ const SingleSiteMap = ({
       }
 
       const outOfRangeLatitude = formLatitudeValue > 90 || formLatitudeValue < -90
-      const nullishLatitudeOrLongitude = !formLatitudeValue || !formLongitudeValue
+
+      const nullishLatitudeOrLongitude =
+        (!formLatitudeValue && formLatitudeValue !== 0) ||
+        (!formLongitudeValue && formLongitudeValue !== 0)
 
       if (outOfRangeLatitude || nullishLatitudeOrLongitude) {
         recordMarker.current.remove()
