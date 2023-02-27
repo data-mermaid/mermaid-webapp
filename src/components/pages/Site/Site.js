@@ -352,11 +352,14 @@ const Site = ({ isNewSite }) => {
             })
           }
           if (!isAppOnline) {
-            showSyncToastError({
-              toastTitle: language.error.getSaveOfflineErrorTitle('site'),
-              error,
-              testId: 'site-toast-error',
-            })
+            console.error(error)
+            toast.error(
+              ...getToastArguments(
+                <div data-testid="site-toast-error">
+                  {language.error.getSaveOfflineErrorTitle('site')}
+                </div>,
+              ),
+            )
           }
         })
     },
@@ -438,6 +441,7 @@ const Site = ({ isNewSite }) => {
   )
 
   const deleteRecord = () => {
+    // only available online
     setIsDeletingSite(true)
 
     databaseSwitchboardInstance
