@@ -121,7 +121,7 @@ const FishBeltForm = ({ isNewRecord }) => {
             error,
             callback: () => {
               const errorMessage = isNewRecord
-                ? language.error.collectRecordChoicesUnavailable
+                ? language.error.collectRecordSupportingDataUnavailable
                 : language.error.collectRecordUnavailable
 
               toast.error(...getToastArguments(errorMessage))

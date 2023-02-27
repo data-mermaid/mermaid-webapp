@@ -19,8 +19,8 @@ const error = {
   503: 'Server error: please contact support@datamermaid.org',
   apiDataSync: 'The app was not able to sync data with the API. Please try again.',
   appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
-  collectRecordChoicesUnavailable:
-    'Options data for creating a sample unit is currently unavailable. Please try again',
+  collectRecordSupportingDataUnavailable:
+    'Supporting data for creating a sample unit is currently unavailable. Please try again',
   collectRecordDelete: 'Something went wrong. The sample unit has not been deleted.',
   collectRecordValidation: 'Validation is currently unavailable for this record.',
   collectRecordValidationIgnore:
