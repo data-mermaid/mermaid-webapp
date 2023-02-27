@@ -85,22 +85,17 @@ test('handleHttpResponseError can be extended with a callback function', () => {
 
   expect(callback).toHaveBeenCalled()
 })
-test('if no callback is provided handleHttpResponseError will produce a generic error toast message f', () => {
-  const toastSpy = jest.spyOn(toast, 'error')
+test('if there is an error, it will be logged to console.error', () => {
+  const consoleSpy = jest.spyOn(console, 'error')
 
   const logoutMermaid = jest.fn()
 
   handleHttpResponseError({
-    error: {
-      response: { status: 'something that wont be handled in util function logic' },
-      logoutMermaid,
-    },
+    error: 'the provided error',
+    logoutMermaid,
   })
 
-  expect(toastSpy).toHaveBeenCalledWith('Something went wrong.', {
-    toastId: 'Something went wrong.',
-    transition: Slide,
-  })
+  expect(consoleSpy).toHaveBeenCalledWith('the provided error')
 })
 
 test('If a callback is provided, handleHttpResponseError will not produce a generic user message for status 400', () => {
