@@ -352,11 +352,14 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           }
 
           if (!isAppOnline) {
-            showSyncToastError({
-              toastTitle: language.error.getSaveOfflineErrorTitle('management regime'),
-              error,
-              testId: 'management-regime-toast-error',
-            })
+            console.error(error)
+            toast.error(
+              ...getToastArguments(
+                <div data-testid="management-regime-toast-error">
+                  {language.error.getSaveOfflineErrorTitle('management regime')}
+                </div>,
+              ),
+            )
           }
         })
     },
@@ -406,6 +409,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   )
 
   const deleteRecord = () => {
+    // only available online
     setIsDeletingRecord(true)
 
     databaseSwitchboardInstance
@@ -422,7 +426,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       .catch((error) => {
         const { isSyncError, isDeleteRejectedError } = error
 
-        if (isSyncError && !isDeleteRejectedError && isAppOnline) {
+        if (isSyncError && !isDeleteRejectedError) {
           const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('management regime')
 
           showSyncToastError({ toastTitle, error, testId: 'management-regime-toast-error' })
@@ -430,22 +434,15 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           closeDeleteRecordModal()
         }
 
-        if (isSyncError && isDeleteRejectedError && isAppOnline) {
+        if (isSyncError && isDeleteRejectedError) {
           // show modal which lists the associated sumbitted sample units that are associated with the MR
           setDeleteErrorData(error.associatedSampleUnits)
           setIsDeletingRecord(false)
           goToPageTwoOfDeleteRecordModal()
         }
-        if (!isSyncError && isAppOnline) {
+        if (!isSyncError) {
           handleHttpResponseError({
             error,
-          })
-        }
-        if (!isAppOnline) {
-          showSyncToastError({
-            toastTitle: language.error.getDeleteOfflineErrorTitle('management regime'),
-            error,
-            testId: 'management-regime-toast-error',
           })
         }
       })

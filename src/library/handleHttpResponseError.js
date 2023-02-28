@@ -3,19 +3,11 @@ import language from '../language'
 import { getToastArguments } from './getToastArguments'
 
 const handleHttpResponseError = ({ error, callback, logoutMermaid }) => {
-  const errorStatus = error?.response?.status
-
-  if (!errorStatus) {
-    // If there is a general error which does not have a response status
-    // Don't throw an error. This should only ever encountered if axios is called after the the test is destroyed
-    toast.error(...getToastArguments(language.error.generic))
+  if (error) {
     console.error(error)
-    console.error(
-      'handleHttpResponseError needs to have an error object with the schema of error.response.status.',
-    )
   }
 
-  const errorStatusesToRespondTo = [401, 403, 500, 502, 503]
+  const errorStatus = error?.response?.status
 
   if (errorStatus === 401) {
     // User is unauthorized so logout and redirect to login screen
@@ -28,10 +20,14 @@ const handleHttpResponseError = ({ error, callback, logoutMermaid }) => {
         'A 401 error occurred. handleHttpResponseError requires a logoutMermaid function in its config object.',
       )
     }
+
+    return
   }
 
+  const otherErrorStatusesToRespondTo = [403, 500, 502, 503]
+
   // Make sure to only include status codes that need a custom message for a given context
-  if (errorStatusesToRespondTo.includes(errorStatus)) {
+  if (otherErrorStatusesToRespondTo.includes(errorStatus)) {
     toast.error(...getToastArguments(language.error[errorStatus]))
 
     return
@@ -45,9 +41,6 @@ const handleHttpResponseError = ({ error, callback, logoutMermaid }) => {
 
     return
   }
-
-  // Display a generic error if we haven't returned yet
-  toast.error(...getToastArguments(language.error.generic))
 }
 
 export default handleHttpResponseError

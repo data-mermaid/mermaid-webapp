@@ -248,7 +248,7 @@ const useCollectRecordValidation = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordSubmit))
+              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
             },
           })
         })

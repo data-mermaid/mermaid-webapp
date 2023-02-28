@@ -19,8 +19,8 @@ const error = {
   503: 'Server error: please contact support@datamermaid.org',
   apiDataSync: 'The app was not able to sync data with the API. Please try again.',
   appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
-  collectRecordChoicesUnavailable:
-    'Options data for creating a sample unit is currently unavailable. Please try again',
+  collectRecordSupportingDataUnavailable:
+    'Supporting data for creating a sample unit is currently unavailable. Please try again',
   collectRecordDelete: 'Something went wrong. The sample unit has not been deleted.',
   collectRecordValidation: 'Validation is currently unavailable for this record.',
   collectRecordValidationIgnore:
@@ -34,7 +34,6 @@ const error = {
   collectRecordSubmitDisabled: 'Errors or warnings are preventing you from submitting',
   duplicateNewUserAdd: 'User has already been added to project.',
   emptyEmailAdd: 'Please enter an email address.',
-  error: 'Error',
   fishSpeciesAlreadyExists:
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
   fishSpeciesSave:
@@ -48,7 +47,6 @@ const error = {
     projectNameExists: 'Project name already exists',
     managementPartialRestrictionRequired: 'At least one rule is required',
   },
-  generaUnavailable: 'Fish genera data is currently unavailable. Please try again.',
   generic: 'Something went wrong.',
   getSaveOnlineSyncErrorTitle: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has been saved on your computer, but not in the MERMAID online system.`,
@@ -101,7 +99,7 @@ const error = {
     "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
   homePageNavigation: 'Go back to the home page.',
   transferSampleUnitsUnavailable:
-    'Something went wrong. Sample units are failed to transfer. Please try again.',
+    'Something went wrong. Sample units failed to transfer. Please try again.',
   onPageWarningAbove: 'Warning or error',
   onPageWarningBelow: 'Warning or error',
   errorBoundaryPrimary: "A part of this page didn't load correctly.",
@@ -433,7 +431,8 @@ const getValidationMessage = (validation, projectId = '') => {
     obs_total_length_toosmall: () =>
       `Total length of observations (${context?.total_obs_length} cm) is less than 50% of the transect length (${context?.len_surveyed} m)`,
     required: () => `Required`,
-    required_management_rules: () => 'At least one rule must be specified for this Management Regime.',
+    required_management_rules: () =>
+      'At least one rule must be specified for this Management Regime.',
     sample_time_out_of_range: () =>
       `Sample time outside of range ${context?.time_range[0]} and ${context?.time_range[1]}`,
     similar_name: () => 'Another Management Regime is similar to this one.',

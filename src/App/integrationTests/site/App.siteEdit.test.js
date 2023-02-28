@@ -109,14 +109,15 @@ test('Offline: edit site save stored site in dexie', async () => {
   expect(updatedSite.name).toEqual('OOF')
 })
 test('Offline: Edit site  save failure shows toast message with new edits persisting', async () => {
+  const consoleSpy = jest.spyOn(console, 'error')
+
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+  const dexieError = new Error('this is a dexie error')
 
   // make sure the next save will fail
-  dexiePerUserDataInstance.project_sites.put = jest
-    .fn()
-    .mockRejectedValueOnce(new Error('this is a dexie error'))
+  dexiePerUserDataInstance.project_sites.put = jest.fn().mockRejectedValueOnce(dexieError)
 
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -141,7 +142,7 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
     `The site failed to save both on your computer and in the MERMAID online system.`,
   )
-  expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(`this is a dexie error`)
+  expect(consoleSpy).toHaveBeenCalledWith(dexieError)
 
   expect(siteNameInput).toHaveValue('OOF')
 })
