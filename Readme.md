@@ -84,6 +84,7 @@ Since this app can exist in multiple states (online, offline, various states of 
 - A preview of the application is created when a pull request is opened, sychronized (commit is made), or re-opened.
 - A bot will add a PR comment with the link to the preview, once it is ready.
 - Once a pull request is merged or closed, the respective preview will be deleted.
+- Please use merge to update the develop branch (not rebase)
 
 ### Develop (non-prod)
 
