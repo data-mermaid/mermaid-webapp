@@ -25,6 +25,7 @@ import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
 import { getIsReadOnlyUserRole } from '../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../App/CurrentUserContext'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 
 const ProjectCard = ({
   project,
@@ -41,6 +42,8 @@ const ProjectCard = ({
   const history = useHistory()
   const projectUrl = `projects/${id}`
 
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+
   const handleProjectOfflineReadyClick = (event) => {
     const isChecked = event.target.checked
 
@@ -55,10 +58,15 @@ const ProjectCard = ({
             ...getToastArguments(language.success.getProjectTurnOnOfflineReadySuccess(name)),
           )
         })
-        .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.getProjectTurnOnOfflineReadyFailure(name)),
-          )
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(
+                ...getToastArguments(language.error.getProjectTurnOnOfflineReadyFailure(name)),
+              )
+            },
+          })
         })
     }
     if (!isChecked) {
@@ -72,10 +80,15 @@ const ProjectCard = ({
             ...getToastArguments(language.success.getProjectTurnOffOfflineReadySuccess(name)),
           )
         })
-        .catch(() => {
-          toast.error(
-            ...getToastArguments(language.error.getProjectTurnOffOfflineReadyFailure(name)),
-          )
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(
+                ...getToastArguments(language.error.getProjectTurnOffOfflineReadyFailure(name)),
+              )
+            },
+          })
         })
     }
   }

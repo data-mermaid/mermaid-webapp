@@ -198,7 +198,12 @@ const FishBeltForm = ({ isNewRecord }) => {
             },
           })
         } else {
-          toast.error(...getToastArguments(language.error.fishSpeciesSave))
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.fishSpeciesSave))
+            },
+          })
         }
       })
 

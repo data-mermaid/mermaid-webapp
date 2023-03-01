@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
 import { getCurrentUserProfile, setCurrentUserProfile } from './currentUserProfileHelpers'
+import { useHttpResponseErrorHandler } from './HttpResponseErrorHandlerContext'
 
 export const useInitializeCurrentUser = ({
   apiBaseUrl,
@@ -13,6 +14,7 @@ export const useInitializeCurrentUser = ({
   isSyncInProgress,
 }) => {
   const [currentUser, setCurrentUser] = useState()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const _initializeUserOnAuthentication = useEffect(() => {
     let isMounted = true
@@ -31,8 +33,13 @@ export const useInitializeCurrentUser = ({
             setCurrentUser(user)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.userProfileUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.userProfileUnavailable))
+            },
+          })
         })
     }
 
@@ -46,6 +53,7 @@ export const useInitializeCurrentUser = ({
     isMermaidAuthenticated,
     isAppOnline,
     isSyncInProgress,
+    handleHttpResponseError,
   ])
 
   const saveUserProfile = (userProfile) => {

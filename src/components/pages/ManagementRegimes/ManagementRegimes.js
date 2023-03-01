@@ -49,25 +49,27 @@ import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getFileExportName } from '../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const ManagementRegimes = () => {
+  const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const currentProjectPath = useCurrentProjectPath()
+  const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
   const { projectId } = useParams()
+  const currentProjectPath = useCurrentProjectPath()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
-  const { isAppOnline } = useOnlineStatus()
-  const { currentUser } = useCurrentUser()
 
-  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
-  const [managementRegimeExportName, setManagementRegimeExportName] = useState('')
   const [choices, setChoices] = useState({})
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isCopyManagementRegimesModalOpen, setIsCopyManagementRegimesModalOpen] = useState(false)
-  const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
+  const [isLoading, setIsLoading] = useState(true)
+  const [managementRegimeExportName, setManagementRegimeExportName] = useState('')
+  const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
+  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
   const closeCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(false)
+  const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
 
   useDocumentTitle(`${language.pages.managementRegimeTable.title} - ${language.title.mermaid}`)
 
@@ -92,11 +94,16 @@ const ManagementRegimes = () => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
 
   const getIconCheckLabel = (property) => property && <IconCheck />
 
