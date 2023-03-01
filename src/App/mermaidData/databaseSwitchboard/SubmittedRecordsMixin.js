@@ -26,7 +26,7 @@ const SubmittedRecordsMixin = (Base) =>
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
-            .then((apiResults) => apiResults.data.results)
+            .then((apiResults) => apiResults?.data?.results)
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
@@ -56,12 +56,12 @@ const SubmittedRecordsMixin = (Base) =>
 
       return this._isAuthenticatedAndReady
         ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
-            return submittedRecords.map((record) => ({
+            return submittedRecords?.map((record) => ({
               ...record,
               uiLabels: {
                 depth: record.depth,
                 management: record.management_name,
-                observers: record.observers.join(', '),
+                observers: record.observers?.join(', '),
                 protocol: language.protocolTitles[record.protocol],
                 sampleDate: getSampleDateLabel(record.sample_date),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),
