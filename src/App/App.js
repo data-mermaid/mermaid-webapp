@@ -51,6 +51,7 @@ function App({ dexieCurrentUserInstance }) {
     isMermaidAuthenticated,
     isAppOnline,
     isSyncInProgress,
+    handleHttpResponseErrorWithLogoutFunction,
   })
 
   const { dexiePerUserDataInstance } = useDexiePerUserDataInstance({
@@ -103,6 +104,7 @@ function App({ dexieCurrentUserInstance }) {
     getAccessToken,
     isMermaidAuthenticated,
     isAppOnline,
+    handleHttpResponseErrorWithLogoutFunction,
   })
 
   const deleteMermaidData = () => {
