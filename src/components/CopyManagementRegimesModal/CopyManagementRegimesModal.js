@@ -34,6 +34,7 @@ import FilterSearchToolbar from '../FilterSearchToolbar/FilterSearchToolbar'
 import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import LoadingIndicator from '../LoadingIndicator'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 
 const DEFAULT_PAGE_SIZE = 7
 
@@ -54,17 +55,18 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 })
 
 const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagementRegimeTable }) => {
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const { projectId } = useParams()
-  const { isAppOnline } = useOnlineStatus()
-  const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isAppOnline } = useOnlineStatus()
+  const { projectId } = useParams()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const isMounted = useIsMounted()
 
   const [isCopyMRsLoading, setIsCopyMRsLoading] = useState(false)
   const [isModalContentLoading, setIsModalContentLoading] = useState(true)
-  const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
-  const [managementRegimeRecords, setManagementRegimeRecords] = useState([])
   const [isViewSelectedOnly, setIsViewSelectedOnly] = useState(false)
+  const [managementRegimeRecords, setManagementRegimeRecords] = useState([])
+  const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
 
   const _getManagementRegimeRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -80,11 +82,23 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
             setIsModalContentLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.managementRegimeRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isAppOnline, isMounted, isOpen])
+  }, [
+    databaseSwitchboardInstance,
+    projectId,
+    isAppOnline,
+    isMounted,
+    isOpen,
+    handleHttpResponseError,
+  ])
 
   const getIconCheckLabel = (property) => property && <IconCheck />
 

@@ -36,6 +36,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import PageUnavailable from '../PageUnavailable'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const Submitted = () => {
   const [submittedRecordsForUiDisplay, setSubmittedRecordsForUiDisplay] = useState([])
@@ -46,6 +47,7 @@ const Submitted = () => {
   const { projectId } = useParams()
   const isMounted = useIsMounted()
   const { currentUser } = useCurrentUser()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   useDocumentTitle(`${language.pages.submittedTable.title} - ${language.title.mermaid}`)
 
@@ -70,10 +72,16 @@ const Submitted = () => {
             setIdsNotAssociatedWithData([projectId])
             setIsLoading(false)
           }
-          toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
+
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.submittedRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline])
+  }, [databaseSwitchboardInstance, projectId, isMounted, isAppOnline, handleHttpResponseError])
   const currentProjectPath = useCurrentProjectPath()
 
   const tableColumns = useMemo(
