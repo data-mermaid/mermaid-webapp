@@ -5,18 +5,17 @@ import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
 import { getBellNotifications, deleteBellNotification } from './bellNotificationHelpers'
-import { useHttpResponseErrorHandler } from './HttpResponseErrorHandlerContext'
 
 export const useInitializeBellNotifications = ({
   apiBaseUrl,
   getAccessToken,
   isMermaidAuthenticated,
   isAppOnline,
+  handleHttpResponseErrorWithLogoutFunction,
 }) => {
   const location = useLocation() // Changes when the route changes. Useful for fetching notifications again
 
   const [notifications, setNotifications] = useState()
-  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const updateNotifications = () => {
     let isMounted = true
@@ -34,7 +33,7 @@ export const useInitializeBellNotifications = ({
           }
         })
         .catch((error) => {
-          handleHttpResponseError({
+          handleHttpResponseErrorWithLogoutFunction({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.notificationsUnavailable))
@@ -64,7 +63,7 @@ export const useInitializeBellNotifications = ({
           updateNotifications()
         })
         .catch((error) => {
-          handleHttpResponseError({
+          handleHttpResponseErrorWithLogoutFunction({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.notificationNotDeleted))
