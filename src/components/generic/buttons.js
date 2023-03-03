@@ -54,6 +54,7 @@ export const ButtonPrimary = styled(Button)`
   )}
   &:disabled {
     background-color: ${theme.color.primaryDisabledColor};
+    color: ${theme.color.primaryDisabledText};
   }
   &:active:enabled {
     background-color: ${theme.color.primaryActive};
@@ -71,6 +72,7 @@ const buttonSecondaryCss = css`
   )}
   &:disabled {
     background-color: ${theme.color.secondaryDisabledColor};
+    color: ${theme.color.secondaryDisabledText};
   }
   &:active:enabled {
     background-color: ${theme.color.secondaryActive};
@@ -96,7 +98,7 @@ export const ButtonCallout = styled(Button)`
     `,
   )}
   &:disabled {
-    color: ${theme.color.disabledBorder};
+    color: ${theme.color.calloutDisabledText};
     border-color: ${theme.color.disabledBorder};
   }
   &:active:enabled {
@@ -115,6 +117,7 @@ export const ButtonCaution = styled(Button)`
   )}
   &:disabled {
     background-color: ${theme.color.cautionDisabledColor};
+    color: ${theme.color.cautionDisabledText};
   }
   &:active:enabled {
     background-color: ${theme.color.cautionActive};
@@ -128,7 +131,7 @@ export const ButtonThatLooksLikeLink = styled('button')`
   border: none;
   cursor: pointer;
   &:disabled {
-    color: ${theme.color.disabledText};
+    color: ${theme.color.secondaryDisabledText};
   }
 `
 export const ToolbarButtonWrapper = styled('div')`
