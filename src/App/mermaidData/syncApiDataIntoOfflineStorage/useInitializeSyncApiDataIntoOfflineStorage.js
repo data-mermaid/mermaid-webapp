@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import language from '../../../language'
 import { getToastArguments } from '../../../library/getToastArguments'
-import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from './SyncStatusContext'
 
 const getProjectIdFromLocation = (location) => {
@@ -23,19 +22,11 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
   isMounted,
   isAppOnline,
   handleHttpResponseError,
+  syncApiDataIntoOfflineStorage,
 }) => {
   const location = useLocation()
   const isPageReload = useRef(true)
 
-  const syncApiDataIntoOfflineStorage = useMemo(
-    () =>
-      new SyncApiDataIntoOfflineStorage({
-        dexiePerUserDataInstance,
-        apiBaseUrl,
-        getAccessToken,
-      }),
-    [dexiePerUserDataInstance, apiBaseUrl, getAccessToken],
-  )
   const { setIsSyncInProgress, setIsOfflineStorageHydrated, setSyncErrors } = useSyncStatus()
 
   const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {

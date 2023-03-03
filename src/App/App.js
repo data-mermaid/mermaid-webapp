@@ -57,6 +57,13 @@ function App({ dexieCurrentUserInstance }) {
   const { dexiePerUserDataInstance } = useDexiePerUserDataInstance({
     currentUser,
   })
+  const apiSyncInstance = useMemo(() => {
+    return new SyncApiDataIntoOfflineStorage({
+      dexiePerUserDataInstance,
+      apiBaseUrl,
+      getAccessToken,
+    })
+  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken])
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
@@ -65,15 +72,8 @@ function App({ dexieCurrentUserInstance }) {
     isMounted,
     isAppOnline,
     handleHttpResponseError: handleHttpResponseErrorWithLogoutFunction,
+    syncApiDataIntoOfflineStorage: apiSyncInstance,
   })
-
-  const apiSyncInstance = useMemo(() => {
-    return new SyncApiDataIntoOfflineStorage({
-      dexiePerUserDataInstance,
-      apiBaseUrl,
-      getAccessToken,
-    })
-  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken])
 
   const databaseSwitchboardInstance = useMemo(() => {
     const areDependenciesReady = !!dexiePerUserDataInstance && apiBaseUrl && isMermaidAuthenticated
