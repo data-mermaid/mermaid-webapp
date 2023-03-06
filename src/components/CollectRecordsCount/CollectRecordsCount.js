@@ -15,22 +15,27 @@ const CollectRecordsCountWrapper = styled.strong`
   background: ${theme.color.callout};
   border-radius: 50%;
   border: solid 1px ${theme.color.white};
-  width: ${theme.spacing.xlarge};
-  height: ${theme.spacing.xlarge};
+  aspect-ratio: 1 / 1;
+  padding: 3px;
+  min-width: ${theme.spacing.xlarge};
+  min-height: ${theme.spacing.xlarge};
   color: ${theme.color.white};
   display: grid;
   place-items: center;
   font-size: ${theme.typography.smallFontSize};
+  line-height: ${theme.typography.smallFontSize};
   z-index: 2;
   position: absolute;
   right: 0.25rem;
   top: 1rem;
   ${mediaQueryPhoneOnly(css`
     line-height: ${theme.typography.xSmallFontSize};
-    width: ${theme.spacing.large};
-    height: ${theme.spacing.large};
     font-size: ${theme.typography.xSmallFontSize};
-    top: 0.75rem;
+    min-height: auto;
+    min-width: auto;
+    top: 0.5rem;
+    aspect-ratio: auto;
+    border-radius: 1rem;
   `)}
 `
 
