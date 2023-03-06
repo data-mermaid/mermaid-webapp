@@ -79,6 +79,7 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
     apiBaseUrl,
     apiDataNamesToPull: allTheDataNames,
     projectId,
+    handleProjectPushPull403: () => {},
   })
 
   await Promise.all([

@@ -18,6 +18,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () 
       dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
+      handleProjectPushPull403: () => {},
     }),
     getAccessToken,
     dexiePerUserDataInstance,
@@ -45,6 +46,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () =>
       dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
+      handleProjectPushPull403: () => {},
     }),
   })
 }
@@ -62,6 +64,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
       dexiePerUserDataInstance: getMockDexieInstanceThatProducesErrors(),
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
+      handleProjectPushPull403: () => {},
     }),
   })
 }
@@ -76,6 +79,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = ()
       dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
+      handleProjectPushPull403: () => {},
     }),
     getAccessToken,
     dexiePerUserDataInstance,

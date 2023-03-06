@@ -2,18 +2,10 @@ import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import language from '../../../language'
+import { getIsProjectPage } from '../../../library/getIsProjectPage'
+import { getProjectId } from '../../../library/getProjectId'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { useSyncStatus } from './SyncStatusContext'
-
-const getProjectIdFromLocation = (location) => {
-  const { pathname } = location
-
-  const pathNameParts = pathname.split('/')
-
-  const projectId = pathNameParts[pathNameParts.indexOf('projects') + 1]
-
-  return projectId
-}
 
 export const useInitializeSyncApiDataIntoOfflineStorage = ({
   apiBaseUrl,
@@ -40,9 +32,9 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     const isOnlineAndReady =
       apiBaseUrl && dexiePerUserDataInstance && isMounted.current && isAppOnline
 
-    const projectId = getProjectIdFromLocation(location)
+    const projectId = getProjectId({ routerLocation: location })
 
-    const isProjectPage = !!projectId
+    const isProjectPage = getIsProjectPage({ routerLocation: location })
 
     const isOfflineAndReadyAndAlreadyInitiated =
       apiBaseUrl && dexiePerUserDataInstance && isMounted.current && !isAppOnline

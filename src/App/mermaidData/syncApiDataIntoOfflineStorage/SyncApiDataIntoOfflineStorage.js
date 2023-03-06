@@ -17,10 +17,14 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  constructor({ dexiePerUserDataInstance, apiBaseUrl, getAccessToken }) {
+  constructor({ dexiePerUserDataInstance, apiBaseUrl, getAccessToken, handleProjectPushPull403 }) {
+    if (!dexiePerUserDataInstance || !getAccessToken || !apiBaseUrl || !handleProjectPushPull403) {
+      throw new Error('SyncApiDataIntoOfflineStorage is missing a required parameter')
+    }
     this._dexiePerUserDataInstance = dexiePerUserDataInstance
     this._apiBaseUrl = apiBaseUrl
     this._getAccessToken = getAccessToken
+    this._handleProjectPushPull403 = handleProjectPushPull403
   }
 
   pullAllProjects = () => {
@@ -31,6 +35,7 @@ const SyncApiDataIntoOfflineStorage = class {
       getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: apiProjectsToPull,
+      handleProjectPushPull403: this._handleProjectPushPull403,
     })
   }
 
@@ -49,6 +54,7 @@ const SyncApiDataIntoOfflineStorage = class {
       getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: apiDataNamesToPullNonProject,
+      handleProjectPushPull403: this._handleProjectPushPull403,
     })
   }
 
@@ -70,6 +76,7 @@ const SyncApiDataIntoOfflineStorage = class {
         apiBaseUrl: this._apiBaseUrl,
         apiDataNamesToPull: apiDataNamesToPullNonProject,
         projectId: project.id,
+        handleProjectPushPull403: this._handleProjectPushPull403,
       }),
     )
 
@@ -86,39 +93,50 @@ const SyncApiDataIntoOfflineStorage = class {
       this._dexiePerUserDataInstance.project_sites.toArray(),
       this._dexiePerUserDataInstance.projects.toArray(),
       this._getAccessToken(),
-    ]).then(
-      ([
-        benthic_attributes,
-        collect_records,
-        fish_species,
-        project_managements,
-        project_profiles,
-        project_sites,
-        projects,
-        token,
-      ]) => {
-        return axios.post(
-          `${this._apiBaseUrl}/push/`,
-          {
-            benthic_attributes: this.#getOnlyModifiedAndDeletedItems(benthic_attributes),
-            collect_records: this.#getOnlyModifiedAndDeletedItems(collect_records),
-            fish_species: this.#getOnlyModifiedAndDeletedItems(fish_species),
-            project_managements: this.#getOnlyModifiedAndDeletedItems(project_managements),
-            project_profiles: this.#getOnlyModifiedAndDeletedItems(project_profiles),
-            project_sites: this.#getOnlyModifiedAndDeletedItems(project_sites),
-            projects: this.#getOnlyModifiedAndDeletedItems(projects),
-          },
-          {
-            params: {
-              force: true,
+    ])
+      .then(
+        ([
+          benthic_attributes,
+          collect_records,
+          fish_species,
+          project_managements,
+          project_profiles,
+          project_sites,
+          projects,
+          token,
+        ]) => {
+          return axios.post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              benthic_attributes: this.#getOnlyModifiedAndDeletedItems(benthic_attributes),
+              collect_records: this.#getOnlyModifiedAndDeletedItems(collect_records),
+              fish_species: this.#getOnlyModifiedAndDeletedItems(fish_species),
+              project_managements: this.#getOnlyModifiedAndDeletedItems(project_managements),
+              project_profiles: this.#getOnlyModifiedAndDeletedItems(project_profiles),
+              project_sites: this.#getOnlyModifiedAndDeletedItems(project_sites),
+              projects: this.#getOnlyModifiedAndDeletedItems(projects),
             },
-            headers: {
-              Authorization: `Bearer ${token}`,
+            {
+              params: {
+                force: true,
+              },
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             },
-          },
-        )
-      },
-    )
+          )
+        },
+      )
+      .catch((error) => {
+        if (error.response?.status === 403) {
+          // this assumes the api would never throw a 403 for non project data types such as fish species.
+          this._handleProjectPushPull403()
+
+          return
+        }
+
+        throw error
+      })
   }
 
   pushThenPullEverything = async () => {
@@ -135,6 +153,7 @@ const SyncApiDataIntoOfflineStorage = class {
       getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: [fishOrBenthicAttributesData],
+      handleProjectPushPull403: this._handleProjectPushPull403,
     })
   }
 
@@ -160,6 +179,7 @@ const SyncApiDataIntoOfflineStorage = class {
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: allTheDataNames,
       projectId,
+      handleProjectPushPull403: this._handleProjectPushPull403,
     })
 
     await this._dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
@@ -187,6 +207,7 @@ const SyncApiDataIntoOfflineStorage = class {
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull,
       projectId,
+      handleProjectPushPull403: this._handleProjectPushPull403,
     })
 
     await this._dexiePerUserDataInstance.uiState_offlineReadyProjects.put({

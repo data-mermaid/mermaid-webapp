@@ -21,6 +21,7 @@ test('Projects component renders with the expected UI elements', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -65,6 +66,7 @@ test('A project card renders with the expected UI elements for button groups', a
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -101,6 +103,7 @@ test('A project card shows relevant data for a project', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -156,6 +159,7 @@ test('A project card renders appropriately when offline', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -198,6 +202,7 @@ test('A project card renders appropriately when online', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -243,6 +248,7 @@ test('Hide new project button in project toolbar when offline', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOffline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -268,6 +274,7 @@ test('Projects can be sorted by countries', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -298,6 +305,7 @@ test('Projects can be sorted by number of sites', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -328,6 +336,7 @@ test('Projects can be sorted by updated on date', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -358,6 +367,7 @@ test('Project sorted descending', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -387,6 +397,7 @@ test('Project filter filters by name and country', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {
@@ -426,6 +437,7 @@ test('Project filter can accomodate words containing apostrophes', async () => {
     dexiePerUserDataInstance,
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
+    handleProjectPushPull403: () => {},
   })
 
   renderAuthenticatedOnline(<Projects apiSyncInstance={apiSyncInstance} />, {

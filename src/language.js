@@ -14,6 +14,7 @@ const inlineMessage = {
 
 const error = {
   403: 'The current user does not have sufficient permission to do that.',
+  getProjectPushPull403: (projectName) => `You are not authorized for ${projectName}`,
   500: 'Server error: please contact support@datamermaid.org',
   502: 'Server error: please contact support@datamermaid.org',
   503: 'Server error: please contact support@datamermaid.org',

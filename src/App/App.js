@@ -1,12 +1,17 @@
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
+import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
 
-import { CurrentUserProvider } from './CurrentUserContext'
 import { BellNotificationProvider } from './BellNotificationContext'
-import { HttpResponseErrorHandlerProvider } from './HttpResponseErrorHandlerContext'
+import { CurrentUserProvider } from './CurrentUserContext'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { getIsProjectPage } from '../library/getIsProjectPage'
+import { getProjectId } from '../library/getProjectId'
+import { getToastArguments } from '../library/getToastArguments'
+import { HttpResponseErrorHandlerProvider } from './HttpResponseErrorHandlerContext'
+import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
 import { useInitializeBellNotifications } from './useInitializeBellNotifications'
 import { useInitializeCurrentUser } from './useInitializeCurrentUser'
 import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
@@ -15,9 +20,12 @@ import { useRoutes } from './useRoutes'
 import { useSyncStatus } from './mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import dexieInstancePropTypes from './dexieInstancePropTypes'
+import ErrorBoundary from '../components/ErrorBoundary'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
+import handleHttpResponseError from '../library/handleHttpResponseError'
 import Header from '../components/Header'
+import language from '../language'
 import Layout from '../components/Layout'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import PageNotFound from '../components/pages/PageNotFound'
@@ -25,15 +33,15 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
-import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
-import handleHttpResponseError from '../library/handleHttpResponseError'
-import ErrorBoundary from '../components/ErrorBoundary'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
-  const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const isMounted = useIsMounted()
   const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
+  const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+  const history = useHistory()
+  const isMounted = useIsMounted()
+
+  let databaseSwitchboardInstance
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
@@ -57,13 +65,36 @@ function App({ dexieCurrentUserInstance }) {
   const { dexiePerUserDataInstance } = useDexiePerUserDataInstance({
     currentUser,
   })
+
+  const handleProjectPushPull403 = useCallback(async () => {
+    const routerLocation = history.location
+    const isProjectPage = getIsProjectPage({ routerLocation })
+
+    // make tests for this
+
+    if (isProjectPage && databaseSwitchboardInstance) {
+      const projectId = getProjectId({ routerLocation })
+
+      const projectName = (await databaseSwitchboardInstance.getProject(projectId)).name
+
+      toast.error(...getToastArguments(language.error.getProjectPushPull403(projectName)))
+
+      history.push('/projects')
+    }
+  }, [history, databaseSwitchboardInstance])
+
   const apiSyncInstance = useMemo(() => {
-    return new SyncApiDataIntoOfflineStorage({
-      dexiePerUserDataInstance,
-      apiBaseUrl,
-      getAccessToken,
-    })
-  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken])
+    if (dexiePerUserDataInstance && apiBaseUrl && getAccessToken && history) {
+      return new SyncApiDataIntoOfflineStorage({
+        dexiePerUserDataInstance,
+        apiBaseUrl,
+        getAccessToken,
+        handleProjectPushPull403,
+      })
+    }
+
+    return undefined
+  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken, history, handleProjectPushPull403])
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
@@ -75,7 +106,7 @@ function App({ dexieCurrentUserInstance }) {
     syncApiDataIntoOfflineStorage: apiSyncInstance,
   })
 
-  const databaseSwitchboardInstance = useMemo(() => {
+  databaseSwitchboardInstance = useMemo(() => {
     const areDependenciesReady = !!dexiePerUserDataInstance && apiBaseUrl && isMermaidAuthenticated
 
     return !areDependenciesReady

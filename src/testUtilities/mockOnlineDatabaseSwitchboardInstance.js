@@ -22,6 +22,7 @@ const getMockOnlineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance }) 
       dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
+      handleProjectPushPull403: () => {},
     }),
     isOfflineStorageHydrated: true,
   })
@@ -43,6 +44,7 @@ const getMockOfflineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance })
       dexiePerUserDataInstance: dexieUserDataDatabaseInstanceToUse,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
+      handleProjectPushPull403: () => {},
     }),
     isOfflineStorageHydrated: true,
   })
