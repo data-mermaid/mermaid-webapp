@@ -12,7 +12,7 @@ import App from '../../App'
 test('App renders show page unavailable offline when navigate to Project Health page while offline.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/observers-and-transects'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -24,7 +24,7 @@ test('App renders show page unavailable offline when navigate to Project Health 
 test('App renders show page unavailable offline when navigate to Submitted page while offline.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/submitted'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -35,7 +35,7 @@ test('App renders show page unavailable offline when navigate to Submitted page 
 test('App renders show page unavailable offline when navigate to Graphs and Maps page while offline.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/graphs-and-maps'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -47,7 +47,7 @@ test('App renders show page unavailable offline when navigate to Graphs and Maps
 test('App renders show page unavailable offline when navigate to Project Info page while offline.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/project-info'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

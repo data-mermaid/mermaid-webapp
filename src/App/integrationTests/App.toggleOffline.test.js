@@ -21,7 +21,7 @@ test('Starting ONLINE - Toggle is checked and switched to OFFLINE, some navigati
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticated(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/'],
     },
@@ -64,7 +64,7 @@ test('Navigator online - Toggle switch is not checked, and is enabled', async ()
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -80,7 +80,7 @@ test('Navigator offline - Toggle switch is checked and disabled', async () => {
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -94,7 +94,7 @@ test('Navigator offline - Toggle switch is checked and disabled', async () => {
 test('Server is reachable - Toggle switch is not checked, and is enabled', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -114,7 +114,7 @@ test('Server is unreachable - Toggle switch is not checked, and is enabled', asy
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

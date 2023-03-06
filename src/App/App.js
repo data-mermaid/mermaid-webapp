@@ -14,7 +14,6 @@ import { useOnlineStatus } from '../library/onlineStatusContext'
 import { useRoutes } from './useRoutes'
 import { useSyncStatus } from './mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
-import dexieInstancePropTypes from './dexieInstancePropTypes'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
 import Header from '../components/Header'
@@ -28,12 +27,14 @@ import useIsMounted from '../library/useIsMounted'
 import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
 import handleHttpResponseError from '../library/handleHttpResponseError'
 import ErrorBoundary from '../components/ErrorBoundary'
+import { useDexieCurrentUserInstance } from './dexieCurrentUserInstanceContext'
 
-function App({ dexieCurrentUserInstance }) {
+function App() {
   const { isAppOnline } = useOnlineStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const isMounted = useIsMounted()
   const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
+  const dexieCurrentUserInstance = useDexieCurrentUserInstance()
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
@@ -188,10 +189,6 @@ function App({ dexieCurrentUserInstance }) {
       </DatabaseSwitchboardInstanceProvider>
     </ThemeProvider>
   )
-}
-
-App.propTypes = {
-  dexieCurrentUserInstance: dexieInstancePropTypes.isRequired,
 }
 
 export default App

@@ -14,7 +14,7 @@ test('Offline site shows no info associated with SITE id view ', async () => {
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/sites/nonExistantSiteId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -26,7 +26,7 @@ test('Offline site shows no info associated with SITE id view ', async () => {
 test('Online site shows no info associated with SITE id view ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/sites/nonExistantSiteId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -40,7 +40,7 @@ test('Offline site shows no info associated with PROJECT id view ', async () => 
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/sites/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -52,7 +52,7 @@ test('Offline site shows no info associated with PROJECT id view ', async () => 
 test('Online site shows no info associated with PROJECT id view ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/sites/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -66,7 +66,7 @@ test('Offline site shows no info associated with PROJECT or SITE id view ', asyn
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/sites/nonExistantSiteId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -82,7 +82,7 @@ test('Offline site shows no info associated with PROJECT or SITE id view ', asyn
 test('Online site shows no info associated with PROJECT or SITE id view ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/sites/nonExistantSiteId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

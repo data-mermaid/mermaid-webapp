@@ -18,7 +18,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 test('Submit fishbelt success shows toast message and redirects to collect record list page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -85,7 +85,7 @@ test('Submit fishbelt success shows toast message and redirects to collect recor
 test('Submit fishbelt failure shows toast message and an enabled submit button', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

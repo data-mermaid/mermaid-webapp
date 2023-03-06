@@ -14,7 +14,7 @@ import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish Belt page.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -46,7 +46,7 @@ test('Clicking Add Sample Unit then click Fish Belt link expects to see New Fish
 test('Clicking Add Sample Unit then click Benthic Pit link expects to see New Benthic PIT page.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -78,7 +78,7 @@ test('Clicking Add Sample Unit then click Benthic Pit link expects to see New Be
 test('Clicking Add Sample Unit then click Habitat Complexity link expects to see New Habitat Complexity page.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -110,7 +110,7 @@ test('Clicking Add Sample Unit then click Habitat Complexity link expects to see
 test('Clicking Add Sample Unit then click Benthic LIT link expects to see New Benthic LIT page.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -142,7 +142,7 @@ test('Clicking Add Sample Unit then click Benthic LIT link expects to see New Be
 test('Clicking Add Sample Unit then click Bleaching link expects to see New Bleaching page.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

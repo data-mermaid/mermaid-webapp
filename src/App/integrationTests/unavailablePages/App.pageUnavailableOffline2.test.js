@@ -15,7 +15,7 @@ test('App renders show page unavailable offline when navigate to Project Info pa
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/project-info'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -29,7 +29,7 @@ test('App renders show page unavailable offline when navigate to Users page whil
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/users'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -43,7 +43,7 @@ test('App renders show page unavailable offline when navigate to Fish Families p
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/fish-families'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -58,7 +58,7 @@ test('App renders show page unavailable offline when navigate to Data Sharing pa
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
   renderAuthenticatedOffline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     { initialEntries: ['/projects/5/data-sharing'] },
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

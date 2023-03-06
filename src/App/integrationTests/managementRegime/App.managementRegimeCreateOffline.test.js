@@ -31,7 +31,7 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/management-regimes/'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -79,7 +79,7 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/management-regimes/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -111,7 +111,7 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/management-regimes/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -151,7 +151,7 @@ describe('Offline', () => {
 
     dexiePerUserDataInstance.project_managements.put = () => Promise.reject(dexieError)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/management-regimes/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,

@@ -93,7 +93,7 @@ test('Bleaching collect record validations will show the all warnings when there
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -223,7 +223,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -393,7 +393,7 @@ test('Bleaching collect record validations will show passed input validations', 
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },

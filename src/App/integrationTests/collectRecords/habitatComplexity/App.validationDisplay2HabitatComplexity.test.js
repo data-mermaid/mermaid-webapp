@@ -48,7 +48,7 @@ test('Validating an empty Habitat Complexity collect record shows validations (p
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     },
@@ -212,7 +212,7 @@ test('Habitat Complexity validations will show only the first error when there a
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     },

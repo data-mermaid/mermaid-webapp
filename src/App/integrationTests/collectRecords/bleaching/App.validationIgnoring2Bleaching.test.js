@@ -92,7 +92,7 @@ test('Bleaching validation: user can reset ignored observation warnings (colonie
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -221,7 +221,7 @@ test('Bleaching validation: user can reset ignored observation warnings (percent
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -311,7 +311,7 @@ test('user can reset dismissed record-level warnings', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -503,7 +503,7 @@ test('Bleaching validation: user edits non-observation input with ignored valida
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },

@@ -261,7 +261,7 @@ test('Fishbelt Validation: user can dismiss non-observations input warnings ', a
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -516,7 +516,7 @@ test('Fishbelt Validation: user can dismiss record-level warnings ', async () =>
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -628,7 +628,7 @@ test('Fishbelt Validation: user can dismiss observation warnings ', async () => 
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -908,7 +908,7 @@ test('Fishbelt validation: user can reset dismissed non-observation input warnin
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },

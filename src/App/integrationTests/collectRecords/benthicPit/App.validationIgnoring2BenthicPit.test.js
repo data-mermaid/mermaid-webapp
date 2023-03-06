@@ -90,7 +90,7 @@ test('Benthic PIT validation: user can reset ignored observation warnings ', asy
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
@@ -172,7 +172,7 @@ test('user can reset dismissed record-level warnings', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
@@ -400,7 +400,7 @@ test('Benthic PIT validation: user edits non-observation input with ignored vali
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },

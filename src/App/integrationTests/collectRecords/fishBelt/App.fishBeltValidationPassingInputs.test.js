@@ -61,7 +61,7 @@ test('Fishbelt validations show check for valid inputs', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },

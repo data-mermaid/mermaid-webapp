@@ -13,7 +13,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 test('Unsaved NEW Habitat Complexity form edits clear when the user navigates away and back', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -54,7 +54,7 @@ test('Unsaved NEW Habitat Complexity form edits clear when the user navigates aw
 test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates away and back', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -95,7 +95,7 @@ test('Unsaved EDIT Habitat Complexity form edits clear when the user navigates a
 test('Unsaved NEW Habitat Complexity form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -123,7 +123,7 @@ test('Unsaved NEW Habitat Complexity form edits persist through change in online
 test('Unsaved EDIT Habitat Complexity form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

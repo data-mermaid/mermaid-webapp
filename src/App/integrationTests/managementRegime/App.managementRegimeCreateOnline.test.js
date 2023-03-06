@@ -36,7 +36,7 @@ describe('Online', () => {
   test('New MR button navigates to new MR form properly', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/management-regimes/'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -82,7 +82,7 @@ describe('Online', () => {
   test('New MR save success shows saved inputs, toast, and navigates to the edit MR page for the newly created MR', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/management-regimes/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -112,7 +112,7 @@ describe('Online', () => {
   test('New MR save success show new record in MR table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/management-regimes/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -151,7 +151,7 @@ describe('Online', () => {
       }),
     )
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/management-regimes/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -197,7 +197,7 @@ describe('Online', () => {
     )
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/management-regimes/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,

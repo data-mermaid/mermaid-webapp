@@ -15,7 +15,7 @@ import App from '../../../App'
 test('Benthic Pit observations: intervals are derived from interval start and interval size fields', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthicpit/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -79,7 +79,7 @@ test('Benthic Pit observations: intervals are derived from interval start and in
 test('Benthic PIT observations: intervals recalculate when user deletes an observation', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthicpit/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -131,7 +131,7 @@ test('Benthic PIT observations: intervals recalculate when user deletes an obser
 test('Benthic Pit observations: intervals reclaculate when a user inserts a row using the enter key', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthicpit/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

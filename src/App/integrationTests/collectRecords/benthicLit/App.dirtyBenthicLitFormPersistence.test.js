@@ -13,7 +13,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 test('Unsaved NEW benthic LIT form edits clear when the user navigates away and back', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthiclit'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -54,7 +54,7 @@ test('Unsaved NEW benthic LIT form edits clear when the user navigates away and 
 test('Unsaved EDIT benthic LIT form edits clear when the user navigates away and back', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -95,7 +95,7 @@ test('Unsaved EDIT benthic LIT form edits clear when the user navigates away and
 test('Unsaved NEW benthic LIT form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     initialEntries: ['/projects/5/collecting/benthiclit'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -123,7 +123,7 @@ test('Unsaved NEW benthic LIT form edits persist through change in online/offlin
 test('Unsaved EDIT benthic LIT form edits persist through change in online/offline status', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

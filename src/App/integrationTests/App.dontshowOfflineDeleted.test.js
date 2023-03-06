@@ -18,7 +18,7 @@ test('Collect page only shows records that arent marked to be deleted next sync'
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/collecting/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -43,7 +43,7 @@ test('Sites page only shows records that arent marked to be deleted next sync', 
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/sites/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -68,7 +68,7 @@ test('Management Regimes page only shows records that arent marked to be deleted
     _deleted: true,
   })
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/management-regimes/'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

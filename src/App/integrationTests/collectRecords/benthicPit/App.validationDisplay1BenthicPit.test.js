@@ -90,7 +90,7 @@ test('Benthic PIT validations will show the all warnings when there are multiple
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
@@ -189,7 +189,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
@@ -354,7 +354,7 @@ test('Benthic PIT validations will show passed input validations', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },

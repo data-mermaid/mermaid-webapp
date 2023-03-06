@@ -13,7 +13,7 @@ import App from '../App'
 test('App renders shows the users name from the API for an online and authenticated user', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -29,7 +29,7 @@ test('App renders shows the users name from the API for an online and authentica
 test('App renders shows the users name from offline storage for an offline user who is authenticated when online', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

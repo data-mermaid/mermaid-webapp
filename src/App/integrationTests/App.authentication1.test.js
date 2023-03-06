@@ -16,7 +16,7 @@ import App from '../App'
 test('App renders the initial screen as expected for an online and authenticated user', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -32,7 +32,7 @@ test('App renders the initial screen as expected for an online and authenticated
 test('App: an online and authenticated user can logout', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     dexieCurrentUserInstance,
     dexiePerUserDataInstance,
   })

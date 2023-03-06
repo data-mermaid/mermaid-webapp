@@ -14,7 +14,7 @@ test('Offline fish belt collect shows no info associated with RECORD id view ', 
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/nonExistantRecordId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -26,7 +26,7 @@ test('Offline fish belt collect shows no info associated with RECORD id view ', 
 test('Online fish belt collect shows no info associated with RECORD id view ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/nonExistantRecordId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -40,7 +40,7 @@ test('Offline fish belt collect shows no info associated with PROJECT id view ',
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/collecting/fishbelt/5'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -52,7 +52,7 @@ test('Offline fish belt collect shows no info associated with PROJECT id view ',
 test('Online fish belt collect shows no info associated with PROJECT id view ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/collecting/fishbelt/5'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

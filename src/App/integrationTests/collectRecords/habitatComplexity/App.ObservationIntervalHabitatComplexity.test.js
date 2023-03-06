@@ -15,7 +15,7 @@ import App from '../../../App'
 test('Habitat Complexity observations: intervals are derived from interval size fields', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -61,7 +61,7 @@ test('Habitat Complexity observations: intervals are derived from interval size 
 test('Habitat Complexity observations: intervals recalculate when user deletes an observation', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -109,7 +109,7 @@ test('Habitat Complexity observations: intervals recalculate when user deletes a
 test('Habitat Complexity observations: intervals reclaculate when a user inserts a row using the enter key', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

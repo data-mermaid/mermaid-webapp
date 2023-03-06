@@ -89,7 +89,7 @@ test('Fishbelt validations will show the all warnings when there are multiple wa
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -188,7 +188,7 @@ test('Validating an empty collect record, and then editing an input with errors 
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -357,7 +357,7 @@ test('Fishbelt validations will show passed input validations', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },

@@ -19,7 +19,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 test('Submit Benthic LIT success shows toast message and redirects to collect record list page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -86,7 +86,7 @@ test('Submit Benthic LIT success shows toast message and redirects to collect re
 test('Submit Benthic LIT failure shows toast message and an enabled submit button', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthiclit/70'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

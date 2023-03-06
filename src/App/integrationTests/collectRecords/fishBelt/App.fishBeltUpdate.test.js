@@ -18,7 +18,7 @@ describe('Offline', () => {
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -62,7 +62,7 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -123,7 +123,7 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -177,7 +177,7 @@ describe('Offline', () => {
     // make sure the next save will fail
     dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -205,7 +205,7 @@ describe('Offline', () => {
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/collecting/fishbelt/2'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,

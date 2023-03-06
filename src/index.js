@@ -11,8 +11,8 @@ import reportWebVitals from './reportWebVitals'
 import { App } from './App'
 import { OnlineStatusProvider } from './library/onlineStatusContext'
 import { SyncStatusProvider } from './App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import dexieCurrentUserInstance from './App/dexieCurrentUserInstance'
 import { DexiePerUserDataInstanceProvider } from './App/dexiePerUserDataInstanceContext'
+import { DexieCurrentUserInstanceProvider } from './App/dexieCurrentUserInstanceContext'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -34,7 +34,9 @@ ReactDOM.render(
         <OnlineStatusProvider>
           <SyncStatusProvider>
             <DexiePerUserDataInstanceProvider>
-              <App dexieCurrentUserInstance={dexieCurrentUserInstance} />
+              <DexieCurrentUserInstanceProvider>
+                <App />
+              </DexieCurrentUserInstanceProvider>
             </DexiePerUserDataInstanceProvider>
           </SyncStatusProvider>
         </OnlineStatusProvider>

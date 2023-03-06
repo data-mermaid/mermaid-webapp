@@ -14,7 +14,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 test('Habitat Complexity observations: tab in count input on last row duplicates row', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -61,7 +61,7 @@ test('Habitat Complexity observations: tab in count input on last row duplicates
 test('Habitat Complexity observations: enter key adds a new empty row below row where key pressed', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

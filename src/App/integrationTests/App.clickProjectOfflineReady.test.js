@@ -52,7 +52,7 @@ beforeEach(() => {
 test('Sync: select project to be offline ready, shows toast, syncs and stores data, shows project as selected', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -97,7 +97,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
 test('Sync: select project to NOT be offline ready, shows toast, removes data, shows project as not selected', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

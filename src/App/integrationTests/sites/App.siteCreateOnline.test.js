@@ -40,7 +40,7 @@ describe('Online', () => {
   test('new site button navigates to new site form properly', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/sites/'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -84,7 +84,7 @@ describe('Online', () => {
   test('new site save success shows saved inputs, toast, and navigates to the edit site page for the newly created site', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/sites/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -117,7 +117,7 @@ describe('Online', () => {
   test('new site save success show new record in site table', async () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/sites/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -157,7 +157,7 @@ describe('Online', () => {
     )
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/sites/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -203,7 +203,7 @@ test('New MR save will handle 500 push status codes with a generic message and s
   )
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/sites/new'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

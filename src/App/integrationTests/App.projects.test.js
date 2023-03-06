@@ -11,7 +11,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -35,7 +35,7 @@ test('Clicking anywhere on a project card navigates to the project collect page 
 // commented out for alpha, reactivate post alpha
 // test('Clicking anywhere on a project card navigates to the project health page when online', async () => {
 //   renderAuthenticatedOnline(
-//     <App dexieInstance={getMockDexieInstancesAllSuccess()} />,
+//     <App />,
 //   )
 
 //   expect(
@@ -61,7 +61,7 @@ test('Offline projects page only shows offline ready projects', async () => {
   // this includes marking one project as offline ready imperatively
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

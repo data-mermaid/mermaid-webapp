@@ -16,7 +16,7 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,

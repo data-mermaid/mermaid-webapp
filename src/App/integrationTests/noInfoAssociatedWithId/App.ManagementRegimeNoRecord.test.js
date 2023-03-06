@@ -14,7 +14,7 @@ test('Offline management regime shows no info associated with MANAGEMENT REGIME 
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/management-regimes/nonExistantMrId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -26,7 +26,7 @@ test('Offline management regime shows no info associated with MANAGEMENT REGIME 
 test('Online management regime shows no info associated with MANAGEMENT REGIME id view ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/management-regimes/nonExistantMrId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -40,7 +40,7 @@ test('Offline management regime shows no info associated with PROJECT id view ',
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/management-regimes/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -52,7 +52,7 @@ test('Offline management regime shows no info associated with PROJECT id view ',
 test('Online management regime shows no info associated with PROJECT id view ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/management-regimes/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -66,7 +66,7 @@ test('Offline management regime shows no info associated with PROJECT or MANAGEM
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/management-regimes/nonExistantMrId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -82,7 +82,7 @@ test('Offline management regime shows no info associated with PROJECT or MANAGEM
 test('Online management regime shows no info associated with PROJECT or MANAGEMENT REGIME id view ', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/nonExistantProjectId/management-regimes/nonExistantMrId'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

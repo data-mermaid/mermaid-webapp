@@ -48,7 +48,7 @@ test('Validating an empty benthic PIT collect record shows validations (proof of
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },
@@ -213,7 +213,7 @@ test('Benthic PIT validations will show only the first error when there are mult
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpit/50'],
     },

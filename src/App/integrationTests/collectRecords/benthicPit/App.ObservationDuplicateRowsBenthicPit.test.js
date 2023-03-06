@@ -14,7 +14,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 test('Benthic Pit observations: tab in count input on last row duplicates row', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthicpit/50'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -53,7 +53,7 @@ test('Benthic Pit observations: tab in count input on last row duplicates row', 
 test('Benthic Pit observations: enter key adds a new empty row below row where key pressed', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/benthicpit/50'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

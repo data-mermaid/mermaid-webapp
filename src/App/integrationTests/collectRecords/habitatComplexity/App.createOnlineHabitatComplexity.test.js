@@ -35,7 +35,7 @@ describe('Online', () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     renderAuthenticatedOnline(
-      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      <App />,
       {
         initialEntries: ['/projects/5/collecting/habitatcomplexity/'],
       },
@@ -75,7 +75,7 @@ describe('Online', () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     renderAuthenticatedOnline(
-      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+      <App />,
       {
         initialEntries: ['/projects/5/collecting/habitatcomplexity/'],
       },
@@ -108,7 +108,7 @@ describe('Online', () => {
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     dexiePerUserDataInstance.collect_records.put = () => Promise.reject()
-    renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOnline(<App />, {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,

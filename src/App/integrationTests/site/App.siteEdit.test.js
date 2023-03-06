@@ -17,7 +17,7 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/sites/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -46,7 +46,7 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
 test('Online: Edit Site shows toast and edited record info', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/sites/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -79,7 +79,7 @@ test('Offline: edit site save stored site in dexie', async () => {
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/sites/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -122,7 +122,7 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   // make sure there is a site to edit in dexie
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     initialEntries: ['/projects/5/sites/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

@@ -10,7 +10,7 @@ test('App renders shows page not found when navigate to unknown path.', async ()
 
   renderAuthenticatedOnline(
     <Route>
-      <App dexieCurrentUserInstance={dexieCurrentUserInstance} />
+      <App />
     </Route>,
     { initialEntries: ['/thisRouteDoesNotExist'] },
     { dexiePerUserDataInstance, dexieCurrentUserInstance },

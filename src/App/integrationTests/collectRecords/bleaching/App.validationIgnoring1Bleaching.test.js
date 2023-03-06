@@ -217,7 +217,7 @@ test('Bleaching collect record validation: user can dismiss non-observations inp
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -424,7 +424,7 @@ test('Bleaching collect record validation: user can dismiss record-level warning
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -536,7 +536,7 @@ test('Bleaching collect record validation: user can dismiss colonies bleached ob
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -652,7 +652,7 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -926,7 +926,7 @@ test('Bleaching collect record validation: user can reset dismissed non-observat
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },

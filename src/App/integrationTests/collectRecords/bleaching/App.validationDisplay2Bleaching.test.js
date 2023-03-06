@@ -48,7 +48,7 @@ test('Validating an empty bleaching collect record collect record shows validati
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },
@@ -229,7 +229,7 @@ test('bleaching collect record validations will show only the first error when t
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     },

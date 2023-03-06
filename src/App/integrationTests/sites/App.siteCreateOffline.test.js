@@ -35,7 +35,7 @@ describe('offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/sites/'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -81,7 +81,7 @@ describe('offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/sites/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -116,7 +116,7 @@ describe('offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/sites/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,
@@ -155,7 +155,7 @@ describe('offline', () => {
 
     dexiePerUserDataInstance.project_sites.put = () => Promise.reject(dexieError)
 
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    renderAuthenticatedOffline(<App />, {
       initialEntries: ['/projects/5/sites/new'],
       dexiePerUserDataInstance,
       dexieCurrentUserInstance,

@@ -58,7 +58,7 @@ test('Sync: initial page load on non project page', async () => {
   expect((await dexiePerUserDataInstance.fish_species.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.projects.toArray()).length).toEqual(0)
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -98,7 +98,7 @@ test('Sync: initial page load on project page', async () => {
   expect((await dexiePerUserDataInstance.project_profiles.toArray()).length).toEqual(0)
   expect((await dexiePerUserDataInstance.project_sites.toArray()).length).toEqual(0)
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
     initialEntries: ['/projects/5/collecting/fishbelt/'],
@@ -142,7 +142,7 @@ test('Sync: initial page load on project page', async () => {
 test('Sync: initial page load already done, navigate to non project page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

@@ -240,7 +240,7 @@ test('Benthic LIT validation: user can dismiss non-observations input warnings '
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
@@ -473,7 +473,7 @@ test('Benthic LIT validation: user can dismiss record-level warnings ', async ()
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
@@ -585,7 +585,7 @@ test('Benthic LIT validation: user can dismiss observation warnings ', async () 
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
@@ -841,7 +841,7 @@ test('Benthic LIT validation: user can reset dismissed non-observation input war
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },

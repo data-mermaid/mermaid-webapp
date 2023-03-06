@@ -251,7 +251,7 @@ test('Habitat Complexity validation: user can dismiss non-observations input war
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     },
@@ -501,7 +501,7 @@ test('Habitat Complexity validation: user can dismiss record-level warnings ', a
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     },
@@ -613,7 +613,7 @@ test('Habitat Complexity validation: user can dismiss observation warnings ', as
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     },
@@ -881,7 +881,7 @@ test('Habitat Complexity validation: user can reset dismissed non-observation in
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     },

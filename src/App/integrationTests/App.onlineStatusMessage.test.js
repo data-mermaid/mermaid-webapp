@@ -16,7 +16,7 @@ test('Appropriate online status message shows when navigator is online', async (
 
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -32,7 +32,7 @@ test('Appropriate online status message shows when navigator is offline', async 
   jest.spyOn(navigator, 'onLine', 'get').mockReturnValue(false)
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -48,7 +48,7 @@ test('Appropriate online status message shows when navigator is offline', async 
 test('Appropriate online status message shows when server is reachable', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
@@ -68,7 +68,7 @@ test('Appropriate online status message shows when server is unreachable', async
   )
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticated(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticated(<App />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })

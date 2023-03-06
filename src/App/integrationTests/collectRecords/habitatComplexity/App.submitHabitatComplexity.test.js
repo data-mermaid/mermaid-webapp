@@ -19,7 +19,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 test('Submit Habitat Complexity success shows toast message and redirects to collect record list page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -86,7 +86,7 @@ test('Submit Habitat Complexity success shows toast message and redirects to col
 test('Submit Habitat Complexity failure shows toast message and an enabled submit button', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

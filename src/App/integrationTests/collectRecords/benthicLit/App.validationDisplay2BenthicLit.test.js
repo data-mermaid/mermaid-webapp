@@ -48,7 +48,7 @@ test('Validating an empty benthic LIT collect record shows validations (proof of
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },
@@ -211,7 +211,7 @@ test('benthic LIT validations will show only the first error when there are mult
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthiclit/70'],
     },

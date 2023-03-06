@@ -275,7 +275,7 @@ test('Benthic Photo Quadrat validation: user can dismiss non-observations input 
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpqt/90'],
     },
@@ -549,7 +549,7 @@ test('Benthic Photo Quadrat validation: user can dismiss record-level warnings '
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpqt/90'],
     },
@@ -661,7 +661,7 @@ test('Benthic Photo Quadrat validation: user can dismiss observation warnings ',
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpqt/90'],
     },
@@ -955,7 +955,7 @@ test('Benthic Photo Quadrat validation: user can reset dismissed non-observation
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/benthicpqt/90'],
     },

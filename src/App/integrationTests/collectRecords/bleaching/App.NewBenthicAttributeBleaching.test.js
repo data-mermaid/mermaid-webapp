@@ -17,7 +17,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 test('Bleaching collect record observations add new benthic attribute - filling out new attribute form adds a new attribute to dexie and the observation benthic attribute input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -128,7 +128,7 @@ test('Bleaching collect record observations add new benthic attribute - filling 
 test('Bleaching collect record observations add new benthic attribute - proposing new attribute that already exists results in no added attribute, and a toast message warning.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

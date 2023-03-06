@@ -18,7 +18,7 @@ import App from '../App'
 test('App renders the initial screen as expected for an offline user who is authenticated when online', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOffline(<App />, {
     dexieCurrentUserInstance,
     dexiePerUserDataInstance,
   })
@@ -35,7 +35,7 @@ test('App renders the initial screen as expected for an offline user who is auth
 test('App renders the initial screen as expected for an online but not authenticated user', () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderUnauthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderUnauthenticatedOnline(<App />, {
     dexieCurrentUserInstance,
     dexiePerUserDataInstance,
   })
@@ -46,7 +46,7 @@ test('App renders the initial screen as expected for an online but not authentic
 test('App renders the initial screen as expected for an offline user who is not authenticated in an online environment', () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderUnauthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderUnauthenticatedOffline(<App />, {
     dexieCurrentUserInstance,
     dexiePerUserDataInstance,
   })

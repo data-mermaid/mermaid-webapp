@@ -18,7 +18,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 test('Edit Bleaching collect record - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -49,7 +49,7 @@ test('Edit Bleaching collect record - Save button starts with Saved status, make
 test('Validate Bleaching collect record: fails to validate, shows button able to run validation again.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -93,7 +93,7 @@ test('Validate Bleaching collect record: fails to validate, shows button able to
 test('Validate & submit Bleaching collect record: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -164,7 +164,7 @@ test('Validate & submit Bleaching collect record: validation passes, shows valid
 test('Initial load of successfully validated record', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/bleachingqc/60'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

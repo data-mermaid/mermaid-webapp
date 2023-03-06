@@ -89,7 +89,7 @@ test('Validation: user can reset ignored observation warnings ', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -171,7 +171,7 @@ test('user can reset dismissed record-level warnings', async () => {
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -399,7 +399,7 @@ test('Validation: user edits non-observation input with ignored validation reset
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },

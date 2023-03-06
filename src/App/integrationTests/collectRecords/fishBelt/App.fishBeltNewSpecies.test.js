@@ -17,7 +17,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 test('Fishbelt observations add new species - filling out new species form adds a new species to dexie and the observation fish name input', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/2'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -129,7 +129,7 @@ test('Fishbelt observations add new species - filling out new species form adds 
 test('Fishbelt observations add new species - proposing new species that already exists results in no added species, and a toast message warning.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/2'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,

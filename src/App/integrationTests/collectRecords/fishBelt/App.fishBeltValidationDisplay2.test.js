@@ -47,7 +47,7 @@ test('Validating an empty collect record shows validations (proof of wire-up)', 
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },
@@ -213,7 +213,7 @@ test('Fishbelt validations will show only the first error when there are multipl
   )
 
   renderAuthenticatedOnline(
-    <App dexieCurrentUserInstance={dexieCurrentUserInstance} />,
+    <App />,
     {
       initialEntries: ['/projects/5/collecting/fishbelt/1'],
     },

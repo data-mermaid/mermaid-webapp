@@ -17,7 +17,7 @@ const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved change to Saving, and finally to Saved. Validate button is disabled during saving', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/2'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -48,7 +48,7 @@ test('Edit Fishbelt - Save button starts with Saved status, make changes, Saved 
 test('Validate fishbelt: fails to validate, shows button able to run validation again.', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -92,7 +92,7 @@ test('Validate fishbelt: fails to validate, shows button able to run validation 
 test('Validate & submit fishbelt: validation passes, shows validate button disabled with proper text, submit is enabled. On submit, submit button is disabled and has "submitting" text', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
@@ -163,7 +163,7 @@ test('Validate & submit fishbelt: validation passes, shows validate button disab
 test('Initial load of successfully validated record', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+  renderAuthenticatedOnline(<App />, {
     initialEntries: ['/projects/5/collecting/fishbelt/1'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
