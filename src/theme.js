@@ -55,13 +55,15 @@ const color = {
   primaryText: white,
   primaryBorder: primary.mix(colorHelper(black), 0.2),
   primaryDisabledColor: primary.mix(colorHelper('grey'), 0.6),
+  primaryDisabledText: '#9AA8B7',
 
   secondaryColor: secondary,
   secondaryHover: secondary.mix(colorHelper('white'), 0.2),
   secondaryActive: secondary.mix(colorHelper('black'), 0.2),
-  secondaryText: black,
+  secondaryText: textColor,
   secondaryBorder: secondary.mix(colorHelper(black), 0.2),
   secondaryDisabledColor: white.mix(colorHelper(black), 0.2),
+  secondaryDisabledText: '#6B6B6B',
 
   cautionColor: caution,
   cautionHover: caution.mix(colorHelper(white), 0.9),
@@ -69,6 +71,7 @@ const color = {
   cautionBorder: caution.mix(colorHelper(black), 0.2),
   cautionActive: caution.mix(colorHelper(white), 0.7),
   cautionDisabledColor: caution.mix(colorHelper('black'), 0.2),
+  cautionDisabledText: '#C0766C',
   inlineErrorColor: '#F6DCD9',
 
   calloutColor: white,
@@ -77,6 +80,7 @@ const color = {
   calloutBorder: callout,
   calloutActive: callout.mix(colorHelper('white'), 0.8),
   calloutDisabledColor: callout.mix(colorHelper('black'), 0.2),
+  calloutDisabledText: '#969696',
 
   disabledColor: '#D5D5DD',
   disabledText: 'rgba(255,255,255,0.5)',
