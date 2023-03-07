@@ -18,12 +18,13 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
 
     const popupTitle = `${sample_unit_method} ${name}`
     const transectNumberLabel = name || language.pages.usersAndTransectsTable.missingLabelNumber
-    const keyName = transectNumberLabel + index
 
     const managementName =
       management_name === API_NULL_NAME
         ? language.pages.usersAndTransectsTable.missingMRName
         : management_name
+
+    const keyName = transectNumberLabel + site_name + managementName + profile_name + sample_date
 
     return (
       <SampleUnitNumber tabIndex="0" id={index} key={keyName}>
