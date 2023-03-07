@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
+import { Route } from 'react-router-dom'
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
@@ -11,8 +12,9 @@ import {
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { mockHabitatComplexityCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityCollectRecords'
 import { mockHabitatComplexityValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityValidationsObject'
-import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
+import HabitatComplexityForm from '../../../../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
@@ -89,13 +91,19 @@ test('Habitat Complexity validations will show the all warnings when there are m
     }),
   )
 
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(
-    <App />,
+    <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+      <HabitatComplexityForm isNewRecord={false} />
+    </Route>,
+
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+      isSyncInProgressOverride: true,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     },
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
   )
 
   userEvent.click(
@@ -188,13 +196,19 @@ test('Validating an empty collect record, and then editing an input with errors 
     }),
   )
 
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(
-    <App />,
+    <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+      <HabitatComplexityForm isNewRecord={false} />
+    </Route>,
+
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+      isSyncInProgressOverride: true,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     },
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
   )
 
   userEvent.click(
@@ -357,13 +371,19 @@ test('Habitat Complexity validations will show passed input validations', async 
     }),
   )
 
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(
-    <App />,
+    <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+      <HabitatComplexityForm isNewRecord={false} />
+    </Route>,
+
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+      isSyncInProgressOverride: true,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     },
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
   )
 
   userEvent.click(

@@ -691,7 +691,7 @@ test('Bleaching collect record validation: user can dismiss percent cover observ
 }, 60000)
 
 test('Bleaching collect record validation: user can reset dismissed non-observation input warnings', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {

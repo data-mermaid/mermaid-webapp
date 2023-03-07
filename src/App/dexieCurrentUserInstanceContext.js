@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext } from 'react'
 
 import dexieInstancePropTypes from './dexieInstancePropTypes'
 import dexieCurrentUserInstance from './dexieCurrentUserInstance'

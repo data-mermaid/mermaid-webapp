@@ -2,17 +2,21 @@ import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
+import { Route } from 'react-router-dom'
+
 import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
-import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import { mockHabitatComplexityValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityValidationsObject'
 import { mockHabitatComplexityCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityCollectRecords'
+import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
+
+import HabitatComplexityForm from '../../../../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
@@ -47,13 +51,19 @@ test('Validating an empty Habitat Complexity collect record shows validations (p
     }),
   )
 
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(
-    <App />,
+    <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+      <HabitatComplexityForm isNewRecord={false} />
+    </Route>,
+
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+      isSyncInProgressOverride: true,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     },
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
   )
 
   userEvent.click(
@@ -211,13 +221,19 @@ test('Habitat Complexity validations will show only the first error when there a
     }),
   )
 
+  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
+
   renderAuthenticatedOnline(
-    <App />,
+    <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+      <HabitatComplexityForm isNewRecord={false} />
+    </Route>,
+
     {
       initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+      isSyncInProgressOverride: true,
+      dexiePerUserDataInstance,
+      dexieCurrentUserInstance,
     },
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
   )
 
   userEvent.click(

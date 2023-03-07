@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom/extend-expect'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
+import { Route } from 'react-router-dom'
+
 import {
   screen,
   renderAuthenticatedOffline,
@@ -9,7 +11,7 @@ import {
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
-import App from '../../../App'
+import HabitatComplexityForm from '../../../../components/pages/collectRecordFormPages/HabitatComplexityForm/HabitatComplexityForm'
 
 describe('Offline', () => {
   test('Edit Habitat Complexity save success shows toast message and proper record information', async () => {
@@ -18,11 +20,17 @@ describe('Offline', () => {
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App />, {
-      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    renderAuthenticatedOffline(
+      <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+        <HabitatComplexityForm isNewRecord={false} />
+      </Route>,
+      {
+        initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+        isSyncInProgressOverride: true,
+      },
+    )
 
     // make a change
 
@@ -61,11 +69,17 @@ describe('Offline', () => {
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App />, {
-      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    renderAuthenticatedOffline(
+      <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+        <HabitatComplexityForm isNewRecord={false} />
+      </Route>,
+      {
+        initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+        isSyncInProgressOverride: true,
+      },
+    )
 
     // test all observers format too
     const addObservationButton = await screen.findByRole('button', {
@@ -112,11 +126,17 @@ describe('Offline', () => {
     // make sure the next save will fail
     dexiePerUserDataInstance.collect_records.put = jest.fn().mockRejectedValueOnce()
 
-    renderAuthenticatedOffline(<App />, {
-      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    renderAuthenticatedOffline(
+      <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+        <HabitatComplexityForm isNewRecord={false} />
+      </Route>,
+      {
+        initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+        isSyncInProgressOverride: true,
+      },
+    )
 
     // make an unsaved change
     const depthInput = await screen.findByLabelText('Depth')
@@ -140,11 +160,17 @@ describe('Offline', () => {
     // make sure there is a collect record to edit in dexie
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    renderAuthenticatedOffline(<App />, {
-      initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
+    renderAuthenticatedOffline(
+      <Route path="/projects/:projectId/collecting/habitatcomplexity/:recordId">
+        <HabitatComplexityForm isNewRecord={false} />
+      </Route>,
+      {
+        initialEntries: ['/projects/5/collecting/habitatcomplexity/80'],
+        dexiePerUserDataInstance,
+        dexieCurrentUserInstance,
+        isSyncInProgressOverride: true,
+      },
+    )
 
     await screen.findByLabelText('project pages loading indicator')
     await waitForElementToBeRemoved(() =>

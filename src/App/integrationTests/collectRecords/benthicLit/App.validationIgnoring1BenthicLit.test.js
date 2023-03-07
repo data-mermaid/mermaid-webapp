@@ -618,7 +618,7 @@ test('Benthic LIT validation: user can dismiss observation warnings ', async () 
 }, 60000)
 
 test('Benthic LIT validation: user can reset dismissed non-observation input warnings', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
     rest.post(`${apiBaseUrl}/projects/5/collectrecords/validate/`, (req, res, ctx) => {
