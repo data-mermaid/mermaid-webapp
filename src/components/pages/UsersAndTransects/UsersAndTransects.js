@@ -393,7 +393,7 @@ const UsersAndTransects = () => {
       <p>{language.pages.usersAndTransectsTable.noDataSubTextTitle}</p>
       <ul>
         {language.pages.usersAndTransectsTable.noDataSubTexts.map((text) => (
-          <li>{text}</li>
+          <li key={text}>{text}</li>
         ))}
       </ul>
     </>

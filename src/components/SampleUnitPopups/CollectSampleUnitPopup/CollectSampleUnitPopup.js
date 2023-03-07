@@ -15,16 +15,18 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
 
   const sampleUnitsWithPopup = sortArray(collect_records).map((record, index) => {
     const { name, sample_date, observers, management_name } = record
-    const popupTitle = `${sample_unit_method} ${name}`
 
+    const popupTitle = `${sample_unit_method} ${name}`
     const transectNumberLabel = name || language.pages.usersAndTransectsTable.missingLabelNumber
+    const keyName = transectNumberLabel + index
+
     const managementName =
       management_name === API_NULL_NAME
         ? language.pages.usersAndTransectsTable.missingMRName
         : management_name
 
     return (
-      <SampleUnitNumber tabIndex="0" id={index}>
+      <SampleUnitNumber tabIndex="0" id={index} key={keyName}>
         {transectNumberLabel}
         <SampleUnitPopup role="tooltip">
           <div>{popupTitle}</div>
