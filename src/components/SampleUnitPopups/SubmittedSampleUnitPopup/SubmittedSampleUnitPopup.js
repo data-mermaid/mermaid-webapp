@@ -16,13 +16,16 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
 
   const sampleUnitsWithPopup = sampleUnitNumbersRow.map((row, index) => {
     const { label: transectNumberLabel, management, sample_date, updated_by, observers } = row
+
     const managementName =
       management.name === API_NULL_NAME
         ? language.pages.usersAndTransectsTable.missingMRName
         : management.name
 
+    const keyName = transectNumberLabel + site_name + managementName + updated_by + sample_date
+
     return (
-      <SampleUnitNumber tabIndex="0" id={index}>
+      <SampleUnitNumber tabIndex="0" id={index} key={keyName}>
         {transectNumberLabel}
         <SampleUnitPopup role="tooltip">
           <div>
