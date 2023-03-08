@@ -87,7 +87,7 @@ const mockMermaidApiAllSuccessful = setupServer(
   rest.post(`${apiBaseUrl}/projects/5/collectrecords/submit/`, (req, res, ctx) => {
     return res(ctx.status(200))
   }),
-  rest.get(`${apiBaseUrl}/projects/5/summary`, (req, res, ctx) => {
+  rest.get(`${apiBaseUrl}/projects/5/summary/`, (req, res, ctx) => {
     return res(ctx.status(200))
   }),
   rest.get(`${apiBaseUrl}/sites/`, (req, res, ctx) => {

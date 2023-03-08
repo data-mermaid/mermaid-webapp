@@ -436,7 +436,7 @@ const ProjectHealthMixin = (Base) =>
       return this._isOnlineAuthenticatedAndReady
         ? axios
             .get(
-              `${this._apiBaseUrl}/projects/${projectId}/summary`,
+              `${this._apiBaseUrl}/projects/${projectId}/summary/`,
               await getAuthorizationHeaders(this._getAccessToken),
             )
             .then((apiResults) => apiResults.data)
