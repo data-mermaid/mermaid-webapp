@@ -127,8 +127,10 @@ const success = {
   projectSave: 'Project saved',
   projectCopied: 'Project copied',
   projectCreated: 'Project created',
-  getMermaidDataSaveSuccess: (mermaidDataTypeLabel) =>
-    `The ${mermaidDataTypeLabel} has been saved on your computer and in the MERMAID online system.`,
+  getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
+    isAppOnline
+      ? `The ${mermaidDataTypeLabel} has been saved on your computer and in the MERMAID online system.`
+      : `The ${mermaidDataTypeLabel} has been saved on your computer.`,
   getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
     `The ${mermaidDataTypeLabel} has been deleted from your computer and the MERMAID online system.`,
 

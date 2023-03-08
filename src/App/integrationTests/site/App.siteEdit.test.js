@@ -34,11 +34,7 @@ test('Offline: Edit Site shows toast and edited record info', async () => {
     }),
   )
 
-  expect(
-    await screen.findByText(
-      'The site has been saved on your computer and in the MERMAID online system.',
-    ),
-  )
+  expect(await screen.findByText('The site has been saved on your computer.'))
 
   expect(siteNameInput).toHaveValue('OOF')
 })
@@ -96,11 +92,7 @@ test('Offline: edit site save stored site in dexie', async () => {
     }),
   )
 
-  expect(
-    await screen.findByText(
-      'The site has been saved on your computer and in the MERMAID online system.',
-    ),
-  )
+  expect(await screen.findByText('The site has been saved on your computer.'))
 
   const savedSites = await dexiePerUserDataInstance.project_sites.toArray()
 

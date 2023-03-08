@@ -89,11 +89,7 @@ describe('offline', () => {
 
     await saveSite()
 
-    expect(
-      await screen.findByText(
-        'The site has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The site has been saved on your computer.'))
 
     // ensure the new form is now the edit form
     expect(
@@ -124,11 +120,7 @@ describe('offline', () => {
 
     await saveSite()
 
-    expect(
-      await screen.findByText(
-        'The site has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The site has been saved on your computer.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
