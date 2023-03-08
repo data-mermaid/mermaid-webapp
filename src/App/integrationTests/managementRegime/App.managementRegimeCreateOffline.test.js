@@ -87,11 +87,7 @@ describe('Offline', () => {
 
     await saveMR()
 
-    expect(
-      await screen.findByText(
-        'The management regime has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The management regime has been saved on your computer.'))
 
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-management-regime-form-title'))
@@ -119,11 +115,7 @@ describe('Offline', () => {
 
     await saveMR()
 
-    expect(
-      await screen.findByText(
-        'The management regime has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The management regime has been saved on your computer.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 

@@ -326,7 +326,14 @@ const Site = ({ isNewSite }) => {
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
         .then((response) => {
-          toast.success(...getToastArguments(language.success.getMermaidDataSaveSuccess('site')))
+          toast.success(
+            ...getToastArguments(
+              language.success.getMermaidDataSaveSuccess({
+                mermaidDataTypeLabel: 'site',
+                isAppOnline,
+              }),
+            ),
+          )
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)

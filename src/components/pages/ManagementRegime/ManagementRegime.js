@@ -324,7 +324,12 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       databaseSwitchboardInstance
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then((response) => {
-          toast.success(language.success.getMermaidDataSaveSuccess('management regime'))
+          toast.success(
+            language.success.getMermaidDataSaveSuccess({
+              mermaidDataTypeLabel: 'management regime',
+              isAppOnline,
+            }),
+          )
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)
