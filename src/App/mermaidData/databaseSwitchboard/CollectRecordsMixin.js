@@ -595,7 +595,7 @@ const CollectRecordsMixin = (Base) =>
         recordId,
       )
 
-      const areThereValidationsToReset = !!unmodifiedCollectRecord?.validations
+      const areThereValidationsToReset = !!unmodifiedCollectRecord?.validations?.results?.data
 
       if (!areThereValidationsToReset) {
         return unmodifiedCollectRecord
