@@ -77,7 +77,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
         .getSitesExcludedInCurrentProject(projectId)
         .then((sitesResponse) => {
           if (isMounted.current) {
-            setSiteRecords(sitesResponse.results)
+            setSiteRecords(sitesResponse)
             setIsModalContentLoading(false)
           }
         })

@@ -78,7 +78,7 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
         .getManagementRegimesExcludedInCurrentProject(projectId)
         .then((managementRegimesResponse) => {
           if (isMounted.current) {
-            setManagementRegimeRecords(managementRegimesResponse.results)
+            setManagementRegimeRecords(managementRegimesResponse)
             setIsModalContentLoading(false)
           }
         })

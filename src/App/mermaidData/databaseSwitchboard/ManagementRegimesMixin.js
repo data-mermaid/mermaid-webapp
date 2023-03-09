@@ -2,6 +2,7 @@ import language from '../../../language'
 import axios from '../../../library/axiosRetry'
 import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
+import { DEFAULT_QUERY_LIMIT } from '../../../library/constants/constants'
 
 const ManagementRegimesMixin = (Base) =>
   class extends Base {
@@ -39,24 +40,38 @@ const ManagementRegimesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
+    getManagementRegimesFromApi = async function getManagementRegimesFromApi(projectId, pageNo) {
+      if (!projectId) {
+        return Promise.reject(this._operationMissingParameterError)
+      }
+
+      return this._isOnlineAuthenticatedAndReady
+        ? axios
+            .get(`${this._apiBaseUrl}/managements/`, {
+              params: {
+                exclude_projects: projectId,
+                include_fields: `project_name`,
+                page: pageNo,
+                limit: DEFAULT_QUERY_LIMIT,
+              },
+              ...(await getAuthorizationHeaders(this._getAccessToken)),
+            })
+            .then((apiResults) => apiResults.data)
+        : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
     getManagementRegimesExcludedInCurrentProject =
-      async function getManagementRegimesExcludedInCurrentProject(projectId) {
-        if (!projectId) {
-          return Promise.reject(this._operationMissingParameterError)
+      async function getManagementRegimesExcludedInCurrentProject(projectId, pageNo = 1) {
+        const apiResultData = await this.getManagementRegimesFromApi(projectId, pageNo)
+        const { results, count } = apiResultData
+
+        if (pageNo * DEFAULT_QUERY_LIMIT < count) {
+          return [...results].concat(
+            await this.getManagementRegimesExcludedInCurrentProject(projectId, pageNo + 1),
+          )
         }
 
-        return this._isOnlineAuthenticatedAndReady
-          ? axios
-              .get(`${this._apiBaseUrl}/managements/`, {
-                params: {
-                  exclude_projects: projectId,
-                  include_fields: `project_name`,
-                  limit: 5000,
-                },
-                ...(await getAuthorizationHeaders(this._getAccessToken)),
-              })
-              .then((apiResults) => apiResults.data)
-          : Promise.reject(this._notAuthenticatedAndReadyError)
+        return results
       }
 
     copyManagementRegimesToProject = async function copyManagementRegimesToProject(

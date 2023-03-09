@@ -3,6 +3,7 @@ import { getProtocolMethodsType } from '../recordProtocolHelpers'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
+import { DEFAULT_QUERY_LIMIT } from '../../../library/constants/constants'
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
@@ -12,7 +13,7 @@ const SubmittedRecordsMixin = (Base) =>
       return sampleUnit === '' ? undefined : sampleUnit
     }
 
-    getSubmittedRecords = async function getSubmittedRecords(projectId) {
+    getSubmittedRecordsFromApi = async function getSubmittedRecordsFromApi(projectId, pageNo) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -22,12 +23,24 @@ const SubmittedRecordsMixin = (Base) =>
             .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc,benthicpqt`,
-                limit: 5000,
+                page: pageNo,
+                limit: DEFAULT_QUERY_LIMIT,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
-            .then((apiResults) => apiResults?.data?.results)
+            .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getSubmittedRecords = async function getSubmittedRecords(projectId, pageNo = 1) {
+      const apiResultData = await this.getSubmittedRecordsFromApi(projectId, pageNo)
+      const { results, count } = apiResultData
+
+      if (pageNo * DEFAULT_QUERY_LIMIT < count) {
+        return [...results].concat(await this.getSubmittedRecords(projectId, pageNo + 1))
+      }
+
+      return results
     }
 
     getSubmittedSampleUnitRecord = async function getSubmittedSampleUnitRecord(
