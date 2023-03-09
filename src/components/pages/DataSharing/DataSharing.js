@@ -27,6 +27,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import { PROJECT_CODES } from '../../../library/constants/constants'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -163,7 +164,7 @@ const DataSharing = () => {
 
   const handleTestProjectChange = (event) => {
     const isChecked = event.target.checked
-    const status = isChecked ? language.projectCodes.status.test : language.projectCodes.status.open
+    const status = isChecked ? PROJECT_CODES.status.test : PROJECT_CODES.status.open
     const editedValues = { ...projectBeingEdited, status }
 
     handleSaveProject(editedValues, language.success.projectStatusSaved)
@@ -172,6 +173,7 @@ const DataSharing = () => {
   const findToolTipDescription = (policy) =>
     dataPolicyOptions.find(({ label }) => label === policy)?.description || ''
 
+  const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
   const contentViewByRole = (
     <MaxWidthInputWrapper>
       <h3>Data is much more powerful when shared.</h3>
@@ -266,20 +268,21 @@ const DataSharing = () => {
       ) : (
         <ReadOnlyDataSharingContent project={projectBeingEdited} />
       )}
-      {isAdminUser && (
+      {isAdminUser ? (
         <>
           <CheckBoxLabel>
             <input
               id="test-project-toggle"
               type="checkbox"
-              checked={projectBeingEdited?.status === language.projectCodes.status.test}
+              checked={isTestProject}
               onChange={handleTestProjectChange}
             />{' '}
-            This is a test project
+            {language.pages.dataSharing.isTestProject}
           </CheckBoxLabel>
           <P>{language.pages.dataSharing.testProjectHelperText}</P>
         </>
-      )}
+      ) : null}
+      {!isAdminUser && isTestProject ? <p>{language.pages.dataSharing.isTestProject}</p> : null}
       <DataSharingInfoModal
         isOpen={issDataSharingInfoModalOpen}
         onDismiss={closeDataSharingInfoModal}
