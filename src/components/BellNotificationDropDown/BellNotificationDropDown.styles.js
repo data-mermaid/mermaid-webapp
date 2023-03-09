@@ -1,7 +1,7 @@
 import styled from 'styled-components/macro'
 
 import theme from '../../theme'
-import { CloseButton } from '../generic/buttons'
+import { ButtonSecondary, CloseButton } from '../generic/buttons'
 
 export const NotificationCardWrapper = styled('div')`
   background: ${theme.color.grey1};
@@ -11,11 +11,15 @@ export const NotificationCardWrapper = styled('div')`
   overflow-y: auto;
   position: absolute;
   right: 0;
+  padding: ${theme.spacing.medium};
+`
+export const DismissButtonSecondary = styled(ButtonSecondary)`
+  width: 100%;
 `
 export const NotificationCard = styled('div')`
   display: grid;
   grid-template-columns: calc(${theme.spacing.medium} * 2) auto;
-  margin: ${theme.spacing.medium};
+  margin: ${theme.spacing.medium} 0;
   background: ${theme.color.grey5};
   padding: ${theme.spacing.medium};
 `
