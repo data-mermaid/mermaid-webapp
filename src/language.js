@@ -238,13 +238,14 @@ const pages = {
     newBenthicAttributeLink: 'Propose New Benthic Attribute...',
   },
   projectInfo: {
-    title: 'Project Info',
-    newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
     createOrganizationTitle: 'Suggest a new organization',
-    suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your project.`,
-    organizationsHelperText: `Type to search for an organization.`,
+    newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
+    noNotes: 'no notes for this project',
     noOrganizationFound: `No organization found.`,
+    organizationsHelperText: `Type to search for an organization.`,
     removeOrganization: `Remove organization from project`,
+    suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your project.`,
+    title: 'Project Info',
   },
   dataSharing: {
     title: 'Data Sharing',
