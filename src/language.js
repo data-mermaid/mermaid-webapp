@@ -192,6 +192,7 @@ const autocomplete = {
 
 const header = {
   noNotifications: 'There are currently no notifications',
+  dismissAllNotifications: 'Dismiss all notifications',
 }
 
 const table = {

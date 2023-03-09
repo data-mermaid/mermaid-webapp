@@ -42,7 +42,7 @@ const BellNotificationDropDown = () => {
 
   return (
     <NotificationCardWrapper>
-      <DismissButtonSecondary>Dismiss all notifications</DismissButtonSecondary>
+      <DismissButtonSecondary>{language.header.dismissAllNotifications}</DismissButtonSecondary>
       {sortedNotifications.map((notification) => {
         const dateTime = moment(notification.created_on)
 
