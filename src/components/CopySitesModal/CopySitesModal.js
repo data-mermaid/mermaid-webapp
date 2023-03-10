@@ -74,10 +74,10 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
 
     if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
       databaseSwitchboardInstance
-        .getSitesExcludedInCurrentProject(projectId)
+        .getSitesExcludedInCurrentProjectByPage(projectId)
         .then((sitesResponse) => {
           if (isMounted.current) {
-            setSiteRecords(sitesResponse.results)
+            setSiteRecords(sitesResponse)
             setIsModalContentLoading(false)
           }
         })

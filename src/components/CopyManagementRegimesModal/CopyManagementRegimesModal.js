@@ -75,10 +75,10 @@ const CopyManagementRegimesModal = ({ isOpen, onDismiss, addCopiedMRsToManagemen
 
     if (isAppOnline && databaseSwitchboardInstance && projectId && isOpen) {
       databaseSwitchboardInstance
-        .getManagementRegimesExcludedInCurrentProject(projectId)
+        .getManagementRegimesExcludedInCurrentProjectByPage(projectId)
         .then((managementRegimesResponse) => {
           if (isMounted.current) {
-            setManagementRegimeRecords(managementRegimesResponse.results)
+            setManagementRegimeRecords(managementRegimesResponse)
             setIsModalContentLoading(false)
           }
         })

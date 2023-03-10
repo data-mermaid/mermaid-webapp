@@ -2,6 +2,7 @@ import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
+import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -29,7 +30,7 @@ const SitesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSitesExcludedInCurrentProject = async function getSitesExcludedInCurrentProject(projectId) {
+    getSitesFromApi = async function getManagementRegimesFromApi(projectId, pageNo) {
       if (!projectId) {
         return Promise.reject(this._operationMissingParameterError)
       }
@@ -40,12 +41,30 @@ const SitesMixin = (Base) =>
               params: {
                 exclude_projects: projectId,
                 include_fields: `country_name,project_name,reef_type_name,reef_zone_name,exposure_name`,
-                limit: 5000,
+                page: pageNo,
+                limit: DEFAULT_RECORDS_PER_PAGE,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
             .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getSitesExcludedInCurrentProjectByPage = async function getSitesExcludedInCurrentProjectByPage(
+      projectId,
+      pageNo = 1,
+    ) {
+      const apiResultData = await this.getSitesFromApi(projectId, pageNo)
+      const { results, count: totalRecordsCount } = apiResultData
+      const totalPages = Math.ceil(totalRecordsCount / DEFAULT_RECORDS_PER_PAGE)
+
+      if (pageNo < totalPages) {
+        return [...results].concat(
+          await this.getSitesExcludedInCurrentProjectByPage(projectId, pageNo + 1),
+        )
+      }
+
+      return results
     }
 
     copySitesToProject = async function copySitesToProject(projectId, originalIds) {
