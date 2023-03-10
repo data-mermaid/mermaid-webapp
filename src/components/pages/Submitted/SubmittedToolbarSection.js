@@ -53,23 +53,23 @@ const SubmittedToolbarSection = ({ name, handleGlobalFilterChange, filterValue, 
             <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('fishbelt')}>
               Fish Belt
             </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpit')}>
+              Benthic PIT
+            </DropdownItemStyle>
             <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthiclit')}>
               Benthic LIT
             </DropdownItemStyle>
-            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpit')}>
-              Benthic PIT
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpqt')}>
+              Benthic Photo Quadrat
+            </DropdownItemStyle>
+            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('bleachingqc')}>
+              Bleaching
             </DropdownItemStyle>
             <DropdownItemStyle
               as="button"
               onClick={() => handleExportSubmitted('habitatcomplexity')}
             >
               Habitat Complexity
-            </DropdownItemStyle>
-            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('bleachingqc')}>
-              Bleaching
-            </DropdownItemStyle>
-            <DropdownItemStyle as="button" onClick={() => handleExportSubmitted('benthicpqt')}>
-              Benthic Photo Quadrat
             </DropdownItemStyle>
           </Column>
         </ButtonSecondaryDropdown>
