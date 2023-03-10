@@ -3,7 +3,7 @@ import { getProtocolMethodsType } from '../recordProtocolHelpers'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
-import { DEFAULT_QUERY_LIMIT } from '../../../library/constants/constants'
+import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
@@ -24,7 +24,7 @@ const SubmittedRecordsMixin = (Base) =>
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc,benthicpqt`,
                 page: pageNo,
-                limit: DEFAULT_QUERY_LIMIT,
+                limit: DEFAULT_RECORDS_PER_PAGE,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
@@ -34,9 +34,10 @@ const SubmittedRecordsMixin = (Base) =>
 
     getSubmittedRecords = async function getSubmittedRecords(projectId, pageNo = 1) {
       const apiResultData = await this.getSubmittedRecordsFromApi(projectId, pageNo)
-      const { results, count } = apiResultData
+      const { results, count: totalRecordsCount } = apiResultData
+      const totalPages = Math.ceil(totalRecordsCount / DEFAULT_RECORDS_PER_PAGE)
 
-      if (pageNo * DEFAULT_QUERY_LIMIT < count) {
+      if (pageNo < totalPages) {
         return [...results].concat(await this.getSubmittedRecords(projectId, pageNo + 1))
       }
 

@@ -2,7 +2,7 @@ import { createUuid } from '../../../library/createUuid'
 import { getAuthorizationHeaders } from '../../../library/getAuthorizationHeaders'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
-import { DEFAULT_QUERY_LIMIT } from '../../../library/constants/constants'
+import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 
 const SitesMixin = (Base) =>
   class extends Base {
@@ -42,7 +42,7 @@ const SitesMixin = (Base) =>
                 exclude_projects: projectId,
                 include_fields: `country_name,project_name,reef_type_name,reef_zone_name,exposure_name`,
                 page: pageNo,
-                limit: DEFAULT_QUERY_LIMIT,
+                limit: DEFAULT_RECORDS_PER_PAGE,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
@@ -55,9 +55,10 @@ const SitesMixin = (Base) =>
       pageNo = 1,
     ) {
       const apiResultData = await this.getSitesFromApi(projectId, pageNo)
-      const { results, count } = apiResultData
+      const { results, count: totalRecordsCount } = apiResultData
+      const totalPages = Math.ceil(totalRecordsCount / DEFAULT_RECORDS_PER_PAGE)
 
-      if (pageNo * DEFAULT_QUERY_LIMIT < count) {
+      if (pageNo < totalPages) {
         return [...results].concat(
           await this.getSitesExcludedInCurrentProject(projectId, pageNo + 1),
         )
