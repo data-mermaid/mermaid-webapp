@@ -50,7 +50,7 @@ const SitesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSitesExcludedInCurrentProject = async function getSitesExcludedInCurrentProject(
+    getSitesExcludedInCurrentProjectByPage = async function getSitesExcludedInCurrentProjectByPage(
       projectId,
       pageNo = 1,
     ) {
@@ -60,7 +60,7 @@ const SitesMixin = (Base) =>
 
       if (pageNo < totalPages) {
         return [...results].concat(
-          await this.getSitesExcludedInCurrentProject(projectId, pageNo + 1),
+          await this.getSitesExcludedInCurrentProjectByPage(projectId, pageNo + 1),
         )
       }
 

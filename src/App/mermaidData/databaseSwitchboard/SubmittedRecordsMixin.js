@@ -32,13 +32,13 @@ const SubmittedRecordsMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getSubmittedRecords = async function getSubmittedRecords(projectId, pageNo = 1) {
+    getSubmittedRecordsByPage = async function getSubmittedRecordsByPage(projectId, pageNo = 1) {
       const apiResultData = await this.getSubmittedRecordsFromApi(projectId, pageNo)
       const { results, count: totalRecordsCount } = apiResultData
       const totalPages = Math.ceil(totalRecordsCount / DEFAULT_RECORDS_PER_PAGE)
 
       if (pageNo < totalPages) {
-        return [...results].concat(await this.getSubmittedRecords(projectId, pageNo + 1))
+        return [...results].concat(await this.getSubmittedRecordsByPage(projectId, pageNo + 1))
       }
 
       return results
@@ -69,7 +69,7 @@ const SubmittedRecordsMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
+        ? this.getSubmittedRecordsByPage(projectId).then((submittedRecords) => {
             return submittedRecords?.map((record) => ({
               ...record,
               uiLabels: {

@@ -60,15 +60,15 @@ const ManagementRegimesMixin = (Base) =>
         : Promise.reject(this._notAuthenticatedAndReadyError)
     }
 
-    getManagementRegimesExcludedInCurrentProject =
-      async function getManagementRegimesExcludedInCurrentProject(projectId, pageNo = 1) {
+    getManagementRegimesExcludedInCurrentProjectByPage =
+      async function getManagementRegimesExcludedInCurrentProjectByPage(projectId, pageNo = 1) {
         const apiResultData = await this.getManagementRegimesFromApi(projectId, pageNo)
         const { results, count: totalRecordsCount } = apiResultData
         const totalPages = Math.ceil(totalRecordsCount / DEFAULT_RECORDS_PER_PAGE)
 
         if (pageNo < totalPages) {
           return [...results].concat(
-            await this.getManagementRegimesExcludedInCurrentProject(projectId, pageNo + 1),
+            await this.getManagementRegimesExcludedInCurrentProjectByPage(projectId, pageNo + 1),
           )
         }
 
