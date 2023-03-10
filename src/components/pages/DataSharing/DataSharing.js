@@ -50,7 +50,7 @@ const CheckBoxLabel = styled.label`
   display: inline-block;
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
-    cursor: pointer;
+    cursor: ${(props) => props.cursor || 'pointer'};
   }
 `
 
@@ -77,6 +77,7 @@ const DataSharing = () => {
   const isMounted = useIsMounted()
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
   const [isTableUpdating, setIsTableUpdating] = useState(false)
+  const [isTestProjectUpdating, setIsTestProjectUpdating] = useState(false)
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -137,6 +138,7 @@ const DataSharing = () => {
           editedValues,
         })
         .then((updatedProject) => {
+          setIsTestProjectUpdating(false)
           setProjectBeingEdited(updatedProject)
           toast.success(...getToastArguments(toastMessage))
           setIsTableUpdating(false)
@@ -167,6 +169,7 @@ const DataSharing = () => {
   }
 
   const handleTestProjectChange = (event) => {
+    setIsTestProjectUpdating(true)
     const isChecked = event.target.checked
     const status = isChecked ? language.projectCodes.status.test : language.projectCodes.status.open
     const editedValues = { ...projectBeingEdited, status }
@@ -276,12 +279,13 @@ const DataSharing = () => {
       )}
       {isAdminUser && (
         <>
-          <CheckBoxLabel>
+          <CheckBoxLabel cursor={isTestProjectUpdating ? 'wait' : 'pointer'}>
             <input
               id="test-project-toggle"
               type="checkbox"
               checked={projectBeingEdited?.status === language.projectCodes.status.test}
               onChange={handleTestProjectChange}
+              disabled={isTestProjectUpdating}
             />{' '}
             This is a test project
           </CheckBoxLabel>
