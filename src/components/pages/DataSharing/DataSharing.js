@@ -76,7 +76,7 @@ const DataSharing = () => {
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
-  const [isPolicyUpdating, setIsPolicyUpdating] = useState(false)
+  const [isTableUpdating, setIsTableUpdating] = useState(false)
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -139,7 +139,7 @@ const DataSharing = () => {
         .then((updatedProject) => {
           setProjectBeingEdited(updatedProject)
           toast.success(...getToastArguments(toastMessage))
-          setIsPolicyUpdating(false)
+          setIsTableUpdating(false)
         })
         .catch(() => {
           toast.error(...getToastArguments(language.error.projectSave))
@@ -153,7 +153,7 @@ const DataSharing = () => {
     const editedValues = { ...projectBeingEdited }
     const toastMessage = getToastMessageForDataPolicyChange(propertyToUpdate, policyCode)
 
-    setIsPolicyUpdating(true)
+    setIsTableUpdating(true)
 
     if (propertyToUpdate === 'data_policy_benthiclit') {
       editedValues.data_policy_benthiclit = policyCode
@@ -186,7 +186,7 @@ const DataSharing = () => {
       </ButtonPrimary>
       {isAdminUser ? (
         <TableOverflowWrapper>
-          <DataSharingTable cursor={isPolicyUpdating ? 'wait' : 'pointer'}>
+          <DataSharingTable cursor={isTableUpdating ? 'wait' : 'pointer'}>
             <thead>
               <Tr>
                 <Th>&nbsp;</Th>
@@ -226,7 +226,7 @@ const DataSharing = () => {
                         id={`fish-belt${item.value}`}
                         checked={projectBeingEdited?.data_policy_beltfish === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
-                        disabled={isPolicyUpdating}
+                        disabled={isTableUpdating}
                       />
                     </label>
                   </Td>
@@ -244,7 +244,7 @@ const DataSharing = () => {
                         id={`benthic${item.value}`}
                         checked={projectBeingEdited?.data_policy_benthiclit === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
-                        disabled={isPolicyUpdating}
+                        disabled={isTableUpdating}
                       />
                     </label>
                   </Td>
@@ -262,7 +262,7 @@ const DataSharing = () => {
                         value={item.value}
                         checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
-                        disabled={isPolicyUpdating}
+                        disabled={isTableUpdating}
                       />
                     </label>
                   </Td>

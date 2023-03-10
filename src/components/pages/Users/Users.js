@@ -103,6 +103,9 @@ const NameCellStyle = styled('div')`
 `
 const UserTableTd = styled(Td)`
   position: relative;
+  label {
+    cursor: ${(props) => props.cursor || 'pointer'};
+  }
 `
 const TableRadioLabel = styled('label')`
   top: 0;
@@ -746,7 +749,11 @@ const Users = () => {
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <UserTableTd {...cell.getCellProps()} align={cell.column.align}>
+                      <UserTableTd
+                        {...cell.getCellProps()}
+                        align={cell.column.align}
+                        cursor={isTableUpdating ? 'wait' : 'pointer'}
+                      >
                         {cell.render('Cell')}
                       </UserTableTd>
                     )
