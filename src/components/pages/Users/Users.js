@@ -103,9 +103,6 @@ const NameCellStyle = styled('div')`
 `
 const UserTableTd = styled(Td)`
   position: relative;
-  label {
-    cursor: ${(props) => props.cursor || 'pointer'};
-  }
 `
 const TableRadioLabel = styled('label')`
   top: 0;
@@ -716,7 +713,7 @@ const Users = () => {
   const table = (
     <>
       <StickyTableOverflowWrapper>
-        <GenericStickyTable {...getTableProps()}>
+        <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -749,11 +746,7 @@ const Users = () => {
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
                     return (
-                      <UserTableTd
-                        {...cell.getCellProps()}
-                        align={cell.column.align}
-                        cursor={isTableUpdating ? 'wait' : 'pointer'}
-                      >
+                      <UserTableTd {...cell.getCellProps()} align={cell.column.align}>
                         {cell.render('Cell')}
                       </UserTableTd>
                     )
