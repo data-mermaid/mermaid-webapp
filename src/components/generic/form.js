@@ -52,6 +52,7 @@ export const InputWrapper = styled.div`
 `
 export const MaxWidthInputWrapper = styled(InputWrapper)`
   max-width: ${theme.spacing.maxWidth};
+  cursor: ${(props) => props.cursor || 'pointer'};
 `
 export const HelperText = styled.span`
   font-size: ${theme.typography.smallFontSize};
