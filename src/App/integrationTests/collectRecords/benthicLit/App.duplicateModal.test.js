@@ -346,9 +346,9 @@ test('Validate collect record, get site duplicate warning, show resolve button, 
   userEvent.click(editOriginalSite)
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
-  // const siteCPage = await screen.findByText('Site C', {
-  //   selector: 'h2',
-  // })
+  const siteCPage = await screen.findByText('Site C', {
+    selector: 'h2',
+  })
 
-  // expect(siteCPage).toBeInTheDocument()
+  expect(siteCPage).toBeInTheDocument()
 }, 50000)
