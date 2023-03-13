@@ -713,7 +713,7 @@ const Users = () => {
   const table = (
     <>
       <StickyTableOverflowWrapper>
-        <GenericStickyTable {...getTableProps()}>
+        <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>
