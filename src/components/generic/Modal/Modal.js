@@ -136,6 +136,7 @@ const Modal = ({
   footerContent,
   contentOverflowIsVisible,
   toolbarContent,
+  testId,
 }) => {
   const _closeModalWithEscapeKey = useEffect(() => {
     const close = (event) => {
@@ -151,7 +152,7 @@ const Modal = ({
 
   return (
     isOpen && (
-      <StyledDialogOverlay>
+      <StyledDialogOverlay data-testid={testId}>
         <StyledDialog role="dialog" aria-labelledby="modal-title" aria-describedby="modal-content">
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>
@@ -178,11 +179,13 @@ Modal.propTypes = {
   title: PropTypes.string.isRequired,
   contentOverflowIsVisible: PropTypes.bool,
   toolbarContent: PropTypes.node,
+  testId: PropTypes.string,
 }
 
 Modal.defaultProps = {
   contentOverflowIsVisible: false,
   toolbarContent: undefined,
+  testId: '',
 }
 
 export default Modal

@@ -23,8 +23,9 @@ export const mockBenthicLitValidationsObject = {
           {
             name: 'unique_site_validator',
             fields: ['data.sample_event.site'],
-            status: 'ok',
+            status: 'warning',
             context: null,
+            code: 'not_unique_site',
             validation_id: '46227dd7ef79f00d8f3529859c5ebfd9',
           },
         ],

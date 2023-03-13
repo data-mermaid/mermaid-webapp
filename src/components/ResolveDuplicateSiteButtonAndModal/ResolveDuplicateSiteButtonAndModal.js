@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
@@ -21,6 +21,7 @@ import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import { IconCheck, IconCheckAll, IconClose, IconPen } from '../icons'
 import { ensureTrailingSlash } from '../../library/strings/ensureTrailingSlash'
 import useCurrentProjectPath from '../../library/useCurrentProjectPath'
+import useIsMounted from '../../library/useIsMounted'
 
 const Thead = styled.th`
   background-color: ${theme.color.primaryColor};
@@ -49,6 +50,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
   const { projectId } = useParams()
   const history = useHistory()
   const currentProjectPath = useCurrentProjectPath()
+  const isMounted = useIsMounted()
 
   const [currentSiteData, setCurrentSiteData] = useState({})
   const [duplicateSiteData, setDuplicateSiteData] = useState({})
@@ -77,12 +79,14 @@ const ResolveDuplicateSiteButtonAndModal = ({
 
         Promise.all(promises)
           .then(([choicesResponse, currentSiteResponse, duplicateSiteResponse]) => {
-            setCountryOptions(getOptions(choicesResponse.countries.data))
-            setExposureOptions(getOptions(choicesResponse.reefexposures.data))
-            setReefTypeOptions(getOptions(choicesResponse.reeftypes.data))
-            setReefZoneOptions(getOptions(choicesResponse.reefzones.data))
-            setCurrentSiteData(currentSiteResponse)
-            setDuplicateSiteData(duplicateSiteResponse)
+            if (isMounted.current) {
+              setCountryOptions(getOptions(choicesResponse.countries.data))
+              setExposureOptions(getOptions(choicesResponse.reefexposures.data))
+              setReefTypeOptions(getOptions(choicesResponse.reeftypes.data))
+              setReefZoneOptions(getOptions(choicesResponse.reefzones.data))
+              setCurrentSiteData(currentSiteResponse)
+              setDuplicateSiteData(duplicateSiteResponse)
+            }
           })
           .catch((error) => {
             handleHttpResponseError({
@@ -94,7 +98,13 @@ const ResolveDuplicateSiteButtonAndModal = ({
           })
       }
     },
-    [databaseSwitchboardInstance, currentSelectValue, validationMessages, handleHttpResponseError],
+    [
+      databaseSwitchboardInstance,
+      isMounted,
+      currentSelectValue,
+      validationMessages,
+      handleHttpResponseError,
+    ],
   )
 
   const openResolveDuplicateModal = () => setIsResolveDuplicateModalOpen(true)
@@ -126,10 +136,10 @@ const ResolveDuplicateSiteButtonAndModal = ({
           .then((sitesResponse) => {
             const sortedSitesResponse = sortArrayByObjectKey(sitesResponse, 'name')
 
-            updateValueAndResetValidationForDuplicateWarning(replaceRecordId, sortedSitesResponse)
             setIsResolveDuplicateModalLoading(false)
             closeConfirmationModalOpen()
             closeResolveDuplicateModal()
+            updateValueAndResetValidationForDuplicateWarning(replaceRecordId, sortedSitesResponse)
           })
       })
       .catch((error) => {
@@ -143,15 +153,20 @@ const ResolveDuplicateSiteButtonAndModal = ({
       })
   }
 
-  const handleKeepSite = (siteId) => {
-    const confirmationText =
-      siteId === currentSiteData?.id
-        ? getConfirmMergeMessage(original.toLowerCase())
-        : getConfirmMergeMessage(duplicate.toLowerCase())
+  const handleKeepOriginalSite = () => {
+    const confirmationText = getConfirmMergeMessage(original.toLowerCase())
 
-    setConfirmationModalContent(confirmationText)
-    setRecordIdToKeep(siteId)
     openConfirmationModalOpen()
+    setConfirmationModalContent(confirmationText)
+    setRecordIdToKeep(currentSiteData?.id)
+  }
+
+  const handleKeepDuplicateSite = () => {
+    const confirmationText = getConfirmMergeMessage(duplicate.toLowerCase())
+
+    openConfirmationModalOpen()
+    setConfirmationModalContent(confirmationText)
+    setRecordIdToKeep(duplicateSiteData?.id)
   }
 
   const handleEditSite = (siteId) => {
@@ -185,9 +200,9 @@ const ResolveDuplicateSiteButtonAndModal = ({
         <thead>
           <Tr>
             <Thead />
-            <Thead>
+            <Thead data-testid="original-site">
               {original}{' '}
-              <ButtonCaution onClick={() => handleKeepSite(currentSiteData?.id)}>
+              <ButtonCaution onClick={handleKeepOriginalSite}>
                 <IconCheck />
                 {keepEither}
               </ButtonCaution>{' '}
@@ -195,9 +210,9 @@ const ResolveDuplicateSiteButtonAndModal = ({
                 <IconPen /> {editEither}
               </ButtonCaution>
             </Thead>
-            <Thead>
+            <Thead data-testid="duplicate-site">
               {duplicate}{' '}
-              <ButtonCaution onClick={() => handleKeepSite(duplicateSiteData?.id)}>
+              <ButtonCaution onClick={handleKeepDuplicateSite}>
                 <IconCheck />
                 {keepEither}
               </ButtonCaution>{' '}
@@ -286,6 +301,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
         </tbody>
       </Table>
       <Modal
+        testId="confirm-merge-site"
         title="Confirm Merge Site"
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
@@ -312,6 +328,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
         Resolve
       </InlineValidationButton>
       <Modal
+        testId="resolve-duplicate-site"
         title="Resolve Duplicate"
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
