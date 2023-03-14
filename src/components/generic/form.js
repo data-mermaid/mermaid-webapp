@@ -90,6 +90,7 @@ export const InputRow = styled.div`
   border-width: 0 0 0 ${theme.spacing.borderLarge};
   border-style: solid;
   border-color: ${(props) => theme.color.getBorderColor(props.validationType)};
+  align-items: baseline;
   ${hoverState(css`
     background-color: ${theme.color.tableRowHover};
   `)}
