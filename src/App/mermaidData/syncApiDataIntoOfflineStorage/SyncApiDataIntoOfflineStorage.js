@@ -6,8 +6,8 @@ const SyncApiDataIntoOfflineStorage = class {
 
   _dexiePerUserDataInstance
 
-  _getTableNamesWhereSyncingWasRejectedListedPerProject =
-    function _getTableNamesWhereSyncingWasRejectedListedPerProject(pushResponse) {
+  #getTableNamesWhereSyncingWasRejectedListedPerProject =
+    function getTableNamesWhereSyncingWasRejectedListedPerProject(pushResponse) {
       const projectsWithSyncErrors = {}
 
       try {
@@ -50,10 +50,6 @@ const SyncApiDataIntoOfflineStorage = class {
       }
     }
 
-  _handleSyncPullErrors
-
-  _handleSyncPushErrors
-
   #getOnlyModifiedAndDeletedItems = (dataList) => {
     return (
       dataList
@@ -64,6 +60,10 @@ const SyncApiDataIntoOfflineStorage = class {
         .map(({ uiState_pushToApi, ...keepProps }) => keepProps)
     )
   }
+
+  #handleSyncPullErrors
+
+  #handleSyncPushErrors
 
   constructor({
     apiBaseUrl,
@@ -84,8 +84,8 @@ const SyncApiDataIntoOfflineStorage = class {
     this._dexiePerUserDataInstance = dexiePerUserDataInstance
     this._apiBaseUrl = apiBaseUrl
     this._getAccessToken = getAccessToken
-    this._handleSyncPullErrors = handleSyncPullErrors
-    this._handleSyncPushErrors = handleSyncPushErrors
+    this.#handleSyncPullErrors = handleSyncPullErrors
+    this.#handleSyncPushErrors = handleSyncPushErrors
   }
 
   pullAllProjects = () => {
@@ -96,6 +96,7 @@ const SyncApiDataIntoOfflineStorage = class {
       getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: apiProjectsToPull,
+      handleSyncPullErrors: this.#handleSyncPullErrors,
     })
   }
 
@@ -114,6 +115,7 @@ const SyncApiDataIntoOfflineStorage = class {
       getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: apiDataNamesToPullNonProject,
+      handleSyncPullErrors: this.#handleSyncPullErrors,
     })
   }
 
@@ -135,6 +137,7 @@ const SyncApiDataIntoOfflineStorage = class {
         apiBaseUrl: this._apiBaseUrl,
         apiDataNamesToPull: apiDataNamesToPullNonProject,
         projectId: project.id,
+        handleSyncPullErrors: this.#handleSyncPullErrors,
       }),
     )
 
@@ -185,11 +188,11 @@ const SyncApiDataIntoOfflineStorage = class {
           )
           .then((response) => {
             const projectsWithSyncErrors =
-              this._getTableNamesWhereSyncingWasRejectedListedPerProject(response)
+              this.#getTableNamesWhereSyncingWasRejectedListedPerProject(response)
             const areThereSyncErrors = Object.keys(projectsWithSyncErrors).length
 
             if (areThereSyncErrors) {
-              this._handleSyncPushErrors(projectsWithSyncErrors)
+              this.#handleSyncPushErrors(projectsWithSyncErrors)
             }
 
             return response
@@ -212,6 +215,7 @@ const SyncApiDataIntoOfflineStorage = class {
       getAccessToken: this._getAccessToken,
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: [fishOrBenthicAttributesData],
+      handleSyncPullErrors: this.#handleSyncPullErrors,
     })
   }
 
@@ -237,6 +241,7 @@ const SyncApiDataIntoOfflineStorage = class {
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull: allTheDataNames,
       projectId,
+      handleSyncPullErrors: this.#handleSyncPullErrors,
     })
 
     await this._dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
@@ -264,6 +269,7 @@ const SyncApiDataIntoOfflineStorage = class {
       apiBaseUrl: this._apiBaseUrl,
       apiDataNamesToPull,
       projectId,
+      handleSyncPullErrors: this.#handleSyncPullErrors,
     })
 
     await this._dexiePerUserDataInstance.uiState_offlineReadyProjects.put({

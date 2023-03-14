@@ -12,12 +12,22 @@ const isIndexedDBProjectInProjectResults = (indexedDBProject, projectsResults) =
   projectsResults.some((responseProject) => indexedDBProject.id === responseProject.id)
 
 export const pullApiData = async ({
-  dexiePerUserDataInstance,
-  getAccessToken,
   apiBaseUrl,
   apiDataNamesToPull,
+  dexiePerUserDataInstance,
+  getAccessToken,
+  handleSyncPullErrors,
   projectId,
 }) => {
+  if (
+    !getAccessToken ||
+    !apiBaseUrl ||
+    !apiDataNamesToPull ||
+    !dexiePerUserDataInstance ||
+    !handleSyncPullErrors
+  ) {
+    throw new Error('pullApiData is missing a required parameter')
+  }
   const lastRevisionNumbersPulled = await getLastRevisionNumbersPulledForAProject({
     dexiePerUserDataInstance,
     projectId,
@@ -34,11 +44,13 @@ export const pullApiData = async ({
     {},
   )
 
-  const pullResponse = await axios.post(
-    `${apiBaseUrl}/pull/`,
-    pullRequestBody,
-    await getAuthorizationHeaders(getAccessToken),
-  )
+  const pullResponse = await axios
+    .post(`${apiBaseUrl}/pull/`, pullRequestBody, await getAuthorizationHeaders(getAccessToken))
+    .then((response) => {
+      console.log('foo', response)
+
+      return response
+    })
 
   // If projects are part of the API pull determine if the user has been
   // removed from a project. This is determined later in this function.
@@ -107,7 +119,10 @@ export const pullApiData = async ({
 
           // Determine which projects in IndexedDB are not in the /projects API response
           const deleteProjectIds = indexedDbProjects
-            .filter((indexedDBProject) => !isIndexedDBProjectInProjectResults(indexedDBProject, projectsResults))
+            .filter(
+              (indexedDBProject) =>
+                !isIndexedDBProjectInProjectResults(indexedDBProject, projectsResults),
+            )
             .map((removedProject) => removedProject.id)
 
           if (deleteProjectIds.length) {
