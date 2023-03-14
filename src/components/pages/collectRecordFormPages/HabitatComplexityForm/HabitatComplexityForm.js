@@ -114,8 +114,12 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
-  const handleCollectRecordChange = (updatedCollectRecord) =>
+  const handleCollectRecordChange = (updatedCollectRecord) => {
+    // maybe rename this function. Its pretty vague...
+    // need to recompute record name for sub nav node for all CRs
+    // setSubNavNode(recordNameForSubNode)
     setCollectRecordBeingEdited(updatedCollectRecord)
+  }
 
   return (
     <ErrorBoundary>
