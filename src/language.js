@@ -106,6 +106,8 @@ const error = {
   errorBoundarySecondary: 'If you keep seeing this error, try reloading this page, or you can',
   errorBoundaryContactUs: 'contact us',
   errorBoundaryTryAgain: 'Try Again',
+  disabledFishSizeBinSelect: "You can't change the fish size bin when there are observations",
+  addRowUnavailable: 'You must select a fish size bin before adding any observations.',
 }
 
 const success = {

@@ -99,6 +99,13 @@ export const UnderTableRow = styled('div')`
     gap: ${theme.spacing.small};
   `)}
 `
+export const UnderTableRowButtonArea = styled('div')`
+  display: flex;
+  flex-direction: column;
+  button {
+    align-self: flex-start;
+  }
+`
 
 export const CellValidation = styled(Td)``
 
