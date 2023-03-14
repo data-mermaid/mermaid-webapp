@@ -37,7 +37,7 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
               <TableRowItem title="Observers" value={observers.join(',')} />
               <TableRowItem title="Site" value={site_name} />
               <TableRowItem title="Management" value={managementName} />
-              <TableRowItem title="Date" value={getSampleDateLabel(sample_date)} />
+              <TableRowItem title="Sample Date" value={getSampleDateLabel(sample_date)} />
             </tbody>
           </Table>
           <PopupLink to={`${currentProjectPath}/submitted/${sample_unit_protocol}/${row.id}`}>
