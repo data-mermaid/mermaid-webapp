@@ -66,16 +66,25 @@ const mockMermaidApiAllSuccessful = setupServer(
 
   rest.post(`${apiBaseUrl}/pull/`, (req, res, ctx) => {
     const response = {
-      benthic_attributes: { updates: mockMermaidData.benthic_attributes },
-      choices: { updates: mockMermaidData.choices },
-      collect_records: { updates: mockMermaidData.collect_records },
-      fish_families: { updates: mockMermaidData.fish_families },
-      fish_genera: { updates: mockMermaidData.fish_genera },
-      fish_species: { updates: mockMermaidData.fish_species },
-      project_managements: { updates: mockMermaidData.project_managements },
-      project_profiles: { updates: mockMermaidData.project_profiles },
-      project_sites: { updates: mockMermaidData.project_sites },
-      projects: { updates: mockMermaidData.projects },
+      benthic_attributes: {
+        updates: mockMermaidData.benthic_attributes,
+        last_revision_num: 'initial',
+      },
+      choices: { updates: mockMermaidData.choices, last_revision_num: 'initial' },
+      collect_records: { updates: mockMermaidData.collect_records, last_revision_num: 'initial' },
+      fish_families: { updates: mockMermaidData.fish_families, last_revision_num: 'initial' },
+      fish_genera: { updates: mockMermaidData.fish_genera, last_revision_num: 'initial' },
+      fish_species: { updates: mockMermaidData.fish_species, last_revision_num: 'initial' },
+      project_managements: {
+        updates: mockMermaidData.project_managements,
+        last_revision_num: 'initial',
+      },
+      project_profiles: {
+        updates: mockMermaidData.project_profiles,
+        last_revision_num: 'initial',
+      },
+      project_sites: { updates: mockMermaidData.project_sites, last_revision_num: 'initial' },
+      projects: { updates: mockMermaidData.projects, last_revision_num: 'initial' },
     }
 
     return res(ctx.json(response))
