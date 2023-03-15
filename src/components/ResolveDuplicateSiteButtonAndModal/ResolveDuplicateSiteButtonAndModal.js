@@ -3,25 +3,28 @@ import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { useHistory, useParams } from 'react-router-dom'
+
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useCurrentProjectPath from '../../library/useCurrentProjectPath'
+import useIsMounted from '../../library/useIsMounted'
+
 import language from '../../language'
 import { getOptions } from '../../library/getOptions'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { ModalLoadingIndicatorWrapper, RightFooter } from '../generic/Modal/Modal'
 import { Table, TableOverflowWrapper, Tr, Td, TableRowTdKey } from '../generic/Table/table'
 import { InlineValidationButton } from '../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import ResolveDuplicateSiteMap from '../mermaidMap/ResolveDuplicateSiteMap'
 import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
 import TableRowItem from '../generic/Table/TableRowItem'
-import LoadingModal from '../LoadingModal/LoadingModal'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import { IconCheck, IconCheckAll, IconClose, IconPen } from '../icons'
 import { ensureTrailingSlash } from '../../library/strings/ensureTrailingSlash'
-import useCurrentProjectPath from '../../library/useCurrentProjectPath'
-import useIsMounted from '../../library/useIsMounted'
+import LoadingModal from '../LoadingModal/LoadingModal'
+import LoadingIndicator from '../LoadingIndicator'
 
 const Thead = styled.th`
   background-color: ${theme.color.primaryColor};
@@ -59,6 +62,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
   const [reefZoneOptions, setReefZoneOptions] = useState([])
   const [exposureOptions, setExposureOptions] = useState([])
   const [isResolveDuplicateModalLoading, setIsResolveDuplicateModalLoading] = useState(true)
+  const [isMergeDuplicateLoading, setIsMergeDuplicateLoading] = useState(false)
 
   const [isResolveDuplicateModalOpen, setIsResolveDuplicateModalOpen] = useState(false)
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
@@ -80,13 +84,13 @@ const ResolveDuplicateSiteButtonAndModal = ({
         Promise.all(promises)
           .then(([choicesResponse, currentSiteResponse, duplicateSiteResponse]) => {
             if (isMounted.current) {
-              setIsResolveDuplicateModalLoading(false)
               setCountryOptions(getOptions(choicesResponse.countries.data))
               setExposureOptions(getOptions(choicesResponse.reefexposures.data))
               setReefTypeOptions(getOptions(choicesResponse.reeftypes.data))
               setReefZoneOptions(getOptions(choicesResponse.reefzones.data))
               setCurrentSiteData(currentSiteResponse)
               setDuplicateSiteData(duplicateSiteResponse)
+              setIsResolveDuplicateModalLoading(false)
             }
           })
           .catch((error) => {
@@ -125,7 +129,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
   )
 
   const handleMergeSite = () => {
-    setIsResolveDuplicateModalLoading(true)
+    setIsMergeDuplicateLoading(true)
 
     const findRecordId = isOriginalSelected ? duplicateSiteData.id : currentSiteData.id
     const replaceRecordId = isOriginalSelected ? currentSiteData.id : duplicateSiteData.id
@@ -138,14 +142,14 @@ const ResolveDuplicateSiteButtonAndModal = ({
           .then((sitesResponse) => {
             const sortedSitesResponse = sortArrayByObjectKey(sitesResponse, 'name')
 
-            setIsResolveDuplicateModalLoading(false)
+            setIsMergeDuplicateLoading(false)
             closeConfirmationModalOpen()
             closeResolveDuplicateModal()
             updateValueAndResetValidationForDuplicateWarning(replaceRecordId, sortedSitesResponse)
           })
       })
       .catch((error) => {
-        setIsResolveDuplicateModalLoading(false)
+        setIsMergeDuplicateLoading(false)
         handleHttpResponseError({
           error,
           callback: () => {
@@ -198,124 +202,119 @@ const ResolveDuplicateSiteButtonAndModal = ({
 
   const mainContent = (
     <TableOverflowWrapper>
-      {isResolveDuplicateModalLoading ? (
-        <LoadingModal />
-      ) : (
-        <>
-          <Table>
-            <thead>
-              <Tr>
-                <Thead />
-                <Thead data-testid="original-site">
-                  {original}{' '}
-                  <ButtonCaution onClick={handleKeepOriginalSite}>
-                    <IconCheck />
-                    {keepEither}
-                  </ButtonCaution>{' '}
-                  <ButtonCaution onClick={() => handleEditSite(currentSiteData?.id)}>
-                    <IconPen /> {editEither}
-                  </ButtonCaution>
-                </Thead>
-                <Thead data-testid="duplicate-site">
-                  {duplicate}{' '}
-                  <ButtonCaution onClick={handleKeepDuplicateSite}>
-                    <IconCheck />
-                    {keepEither}
-                  </ButtonCaution>{' '}
-                  <ButtonCaution onClick={() => handleEditSite(duplicateSiteData?.id)}>
-                    <IconPen /> {editEither}
-                  </ButtonCaution>
-                </Thead>
-              </Tr>
-            </thead>
-            <tbody>
-              <TableRowItem
-                title="Name"
-                value={currentSiteData?.name}
-                extraValue={duplicateSiteData?.name}
-                isOriginalSelected={isOriginalSelected}
-                isDuplicateSelected={isDuplicateSelected}
-              />
-              <TableRowItem
-                title="Country"
-                options={countryOptions}
-                value={currentSiteData?.country}
-                extraValue={duplicateSiteData?.country}
-                isOriginalSelected={isOriginalSelected}
-                isDuplicateSelected={isDuplicateSelected}
-              />
-              <TableRowItem
-                title="Latitude"
-                value={currentSiteData?.location?.coordinates[1]}
-                extraValue={duplicateSiteData?.location?.coordinates[1]}
-                isOriginalSelected={isOriginalSelected}
-                isDuplicateSelected={isDuplicateSelected}
-              />
-              <TableRowItem
-                title="Longitude"
-                value={currentSiteData?.location?.coordinates[0]}
-                extraValue={duplicateSiteData?.location?.coordinates[0]}
-                isOriginalSelected={isOriginalSelected}
-                isDuplicateSelected={isDuplicateSelected}
-              />
-              <Tr>
-                <TableRowTdKey>Map</TableRowTdKey>
-                <Td className={isDuplicateSelected ? 'highlighted' : undefined}>
-                  <ResolveDuplicateSiteMap
-                    formLatitudeValue={currentSiteData?.location?.coordinates[1]}
-                    formLongitudeValue={currentSiteData?.location?.coordinates[0]}
-                  />
-                </Td>
-                <Td className={isOriginalSelected ? 'highlighted' : undefined}>
-                  <ResolveDuplicateSiteMap
-                    formLatitudeValue={duplicateSiteData?.location?.coordinates[1]}
-                    formLongitudeValue={duplicateSiteData?.location?.coordinates[0]}
-                  />
-                </Td>
-              </Tr>
-              <TableRowItem
-                title="Exposure"
-                options={exposureOptions}
-                value={currentSiteData?.exposure}
-                extraValue={duplicateSiteData?.exposure}
-                isOriginalSelected={isOriginalSelected}
-                isDuplicateSelected={isDuplicateSelected}
-              />
-              <TableRowItem
-                title="Reef Type"
-                options={reefTypeOptions}
-                value={currentSiteData?.reef_type}
-                extraValue={duplicateSiteData?.reef_type}
-                isOriginalSelected={isOriginalSelected}
-                isDuplicateSelected={isDuplicateSelected}
-              />
-              <TableRowItem
-                title="Reef Zone"
-                options={reefZoneOptions}
-                value={currentSiteData?.reef_zone}
-                extraValue={duplicateSiteData?.reef_zone}
-                isOriginalSelected={isOriginalSelected}
-                isDuplicateSelected={isDuplicateSelected}
-              />
-              <TableRowItem
-                title="Notes"
-                value={currentSiteData?.notes}
-                extraValue={duplicateSiteData?.notes}
-                isOriginalSelected={isOriginalSelected}
-                isDuplicateSelected={isDuplicateSelected}
-              />
-            </tbody>
-          </Table>
-          <Modal
-            testId="confirm-merge-site"
-            title="Confirm Merge Site"
-            isOpen={isConfirmationModalOpen}
-            onDismiss={closeConfirmationModalOpen}
-            mainContent={confirmationModalMainContent}
-            footerContent={confirmationModalFooterContent}
+      <Table>
+        <thead>
+          <Tr>
+            <Thead />
+            <Thead data-testid="original-site">
+              {original}{' '}
+              <ButtonCaution onClick={handleKeepOriginalSite}>
+                <IconCheck />
+                {keepEither}
+              </ButtonCaution>{' '}
+              <ButtonCaution onClick={() => handleEditSite(currentSiteData?.id)}>
+                <IconPen /> {editEither}
+              </ButtonCaution>
+            </Thead>
+            <Thead data-testid="duplicate-site">
+              {duplicate}{' '}
+              <ButtonCaution onClick={handleKeepDuplicateSite}>
+                <IconCheck />
+                {keepEither}
+              </ButtonCaution>{' '}
+              <ButtonCaution onClick={() => handleEditSite(duplicateSiteData?.id)}>
+                <IconPen /> {editEither}
+              </ButtonCaution>
+            </Thead>
+          </Tr>
+        </thead>
+        <tbody>
+          <TableRowItem
+            title="Name"
+            value={currentSiteData?.name}
+            extraValue={duplicateSiteData?.name}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
           />
-        </>
-      )}
+          <TableRowItem
+            title="Country"
+            options={countryOptions}
+            value={currentSiteData?.country}
+            extraValue={duplicateSiteData?.country}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
+          />
+          <TableRowItem
+            title="Latitude"
+            value={currentSiteData?.location?.coordinates[1]}
+            extraValue={duplicateSiteData?.location?.coordinates[1]}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
+          />
+          <TableRowItem
+            title="Longitude"
+            value={currentSiteData?.location?.coordinates[0]}
+            extraValue={duplicateSiteData?.location?.coordinates[0]}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
+          />
+          <Tr>
+            <TableRowTdKey>Map</TableRowTdKey>
+            <Td className={isDuplicateSelected ? 'highlighted' : undefined}>
+              <ResolveDuplicateSiteMap
+                formLatitudeValue={currentSiteData?.location?.coordinates[1]}
+                formLongitudeValue={currentSiteData?.location?.coordinates[0]}
+              />
+            </Td>
+            <Td className={isOriginalSelected ? 'highlighted' : undefined}>
+              <ResolveDuplicateSiteMap
+                formLatitudeValue={duplicateSiteData?.location?.coordinates[1]}
+                formLongitudeValue={duplicateSiteData?.location?.coordinates[0]}
+              />
+            </Td>
+          </Tr>
+          <TableRowItem
+            title="Exposure"
+            options={exposureOptions}
+            value={currentSiteData?.exposure}
+            extraValue={duplicateSiteData?.exposure}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
+          />
+          <TableRowItem
+            title="Reef Type"
+            options={reefTypeOptions}
+            value={currentSiteData?.reef_type}
+            extraValue={duplicateSiteData?.reef_type}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
+          />
+          <TableRowItem
+            title="Reef Zone"
+            options={reefZoneOptions}
+            value={currentSiteData?.reef_zone}
+            extraValue={duplicateSiteData?.reef_zone}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
+          />
+          <TableRowItem
+            title="Notes"
+            value={currentSiteData?.notes}
+            extraValue={duplicateSiteData?.notes}
+            isOriginalSelected={isOriginalSelected}
+            isDuplicateSelected={isDuplicateSelected}
+          />
+        </tbody>
+      </Table>
+      <Modal
+        testId="confirm-merge-site"
+        title="Confirm Merge Site"
+        isOpen={isConfirmationModalOpen}
+        onDismiss={closeConfirmationModalOpen}
+        mainContent={confirmationModalMainContent}
+        footerContent={confirmationModalFooterContent}
+      />
+      {isMergeDuplicateLoading && <LoadingModal />}
     </TableOverflowWrapper>
   )
 
@@ -339,7 +338,15 @@ const ResolveDuplicateSiteButtonAndModal = ({
         title="Resolve Duplicate"
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
-        mainContent={mainContent}
+        mainContent={
+          isResolveDuplicateModalLoading ? (
+            <ModalLoadingIndicatorWrapper>
+              <LoadingIndicator />
+            </ModalLoadingIndicatorWrapper>
+          ) : (
+            mainContent
+          )
+        }
         footerContent={footerContent}
       />
     </>

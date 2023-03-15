@@ -3,23 +3,27 @@ import PropTypes from 'prop-types'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 import { useHistory, useParams } from 'react-router-dom'
+
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 import { useDatabaseSwitchboardInstance } from '../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import useCurrentProjectPath from '../../library/useCurrentProjectPath'
+import useIsMounted from '../../library/useIsMounted'
+
 import language from '../../language'
 import { getOptions } from '../../library/getOptions'
 import { getToastArguments } from '../../library/getToastArguments'
 import theme from '../../theme'
 import { ButtonCaution, ButtonSecondary } from '../generic/buttons'
-import Modal, { RightFooter } from '../generic/Modal/Modal'
+import Modal, { ModalLoadingIndicatorWrapper, RightFooter } from '../generic/Modal/Modal'
 import { Table, TableOverflowWrapper, Tr } from '../generic/Table/table'
 import { InlineValidationButton } from '../pages/collectRecordFormPages/RecordLevelValidationInfo/RecordLevelValidationInfo'
 import mermaidInputsPropTypes from '../mermaidInputs/mermaidInputsPropTypes'
 import TableRowItem from '../generic/Table/TableRowItem'
-import LoadingModal from '../LoadingModal/LoadingModal'
 import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 import { IconCheck, IconCheckAll, IconClose, IconPen } from '../icons'
 import { ensureTrailingSlash } from '../../library/strings/ensureTrailingSlash'
-import useCurrentProjectPath from '../../library/useCurrentProjectPath'
+import LoadingIndicator from '../LoadingIndicator'
+import LoadingModal from '../LoadingModal/LoadingModal'
 
 const Thead = styled.th`
   background-color: ${theme.color.primaryColor};
@@ -48,12 +52,14 @@ const ResolveDuplicateMRButtonAndModal = ({
   const { projectId } = useParams()
   const history = useHistory()
   const currentProjectPath = useCurrentProjectPath()
+  const isMounted = useIsMounted()
 
   const [currentManagementRegimeData, setCurrentManagementRegimeData] = useState({})
   const [duplicateManagementRegimeData, setDuplicateManagementRegimeData] = useState({})
   const [managementPartyOptions, setManagementPartyOptions] = useState([])
   const [managementComplianceOptions, setManagementComplianceOptions] = useState([])
-  const [isResolveDuplicateModalLoading, setIsResolveDuplicateModalLoading] = useState(false)
+  const [isResolveDuplicateModalLoading, setIsResolveDuplicateModalLoading] = useState(true)
+  const [isMergeDuplicateLoading, setIsMergeDuplicateLoading] = useState(false)
 
   const [isResolveDuplicateModalOpen, setIsResolveDuplicateModalOpen] = useState(false)
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false)
@@ -63,7 +69,6 @@ const ResolveDuplicateMRButtonAndModal = ({
   useEffect(
     function loadManagementRegimes() {
       const isDuplicateManagementRegimeMessage = validationMessages[0]?.code === 'similar_name'
-
       const duplicateManagementRegimeId =
         isDuplicateManagementRegimeMessage && validationMessages[0]?.context?.matches[0]
 
@@ -81,13 +86,19 @@ const ResolveDuplicateMRButtonAndModal = ({
               currentManagementRegimeResponse,
               duplicateManagementRegimeResponse,
             ]) => {
-              setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
-              setManagementComplianceOptions(getOptions(choicesResponse.managementcompliances.data))
-              setCurrentManagementRegimeData(currentManagementRegimeResponse)
-              setDuplicateManagementRegimeData(duplicateManagementRegimeResponse)
+              if (isMounted.current) {
+                setManagementPartyOptions(getOptions(choicesResponse.managementparties.data))
+                setManagementComplianceOptions(
+                  getOptions(choicesResponse.managementcompliances.data),
+                )
+                setCurrentManagementRegimeData(currentManagementRegimeResponse)
+                setDuplicateManagementRegimeData(duplicateManagementRegimeResponse)
+                setIsResolveDuplicateModalLoading(false)
+              }
             },
           )
           .catch((error) => {
+            setIsResolveDuplicateModalLoading(false)
             handleHttpResponseError({
               error,
               callback: () => {
@@ -97,7 +108,13 @@ const ResolveDuplicateMRButtonAndModal = ({
           })
       }
     },
-    [databaseSwitchboardInstance, currentSelectValue, validationMessages, handleHttpResponseError],
+    [
+      databaseSwitchboardInstance,
+      isMounted,
+      currentSelectValue,
+      validationMessages,
+      handleHttpResponseError,
+    ],
   )
 
   const openResolveDuplicateModal = () => setIsResolveDuplicateModalOpen(true)
@@ -105,10 +122,9 @@ const ResolveDuplicateMRButtonAndModal = ({
   const openConfirmationModalOpen = () => setIsConfirmationModalOpen(true)
   const closeConfirmationModalOpen = () => setIsConfirmationModalOpen(false)
 
-  const isOriginalSelected = useMemo(
-    () => recordIdToKeep === currentManagementRegimeData?.id,
-    [recordIdToKeep, currentManagementRegimeData],
-  )
+  const isOriginalSelected = useMemo(() => {
+    return recordIdToKeep === currentManagementRegimeData?.id
+  }, [recordIdToKeep, currentManagementRegimeData])
 
   const isDuplicateSelected = useMemo(
     () => recordIdToKeep === duplicateManagementRegimeData?.id,
@@ -145,7 +161,7 @@ const ResolveDuplicateMRButtonAndModal = ({
   }
 
   const handleMergeManagementRegime = () => {
-    setIsResolveDuplicateModalLoading(true)
+    setIsMergeDuplicateLoading(true)
 
     const findRecordId = isOriginalSelected
       ? duplicateManagementRegimeData.id
@@ -165,17 +181,17 @@ const ResolveDuplicateMRButtonAndModal = ({
               'name',
             )
 
+            setIsMergeDuplicateLoading(false)
+            closeConfirmationModalOpen()
+            closeResolveDuplicateModal()
             updateValueAndResetValidationForDuplicateWarning(
               replaceRecordId,
               sortedManagementRegimesResponse,
             )
-            setIsResolveDuplicateModalLoading(false)
-            closeConfirmationModalOpen()
-            closeResolveDuplicateModal()
           })
       })
       .catch((error) => {
-        setIsResolveDuplicateModalLoading(false)
+        setIsMergeDuplicateLoading(false)
         handleHttpResponseError({
           error,
           callback: () => {
@@ -185,15 +201,20 @@ const ResolveDuplicateMRButtonAndModal = ({
       })
   }
 
-  const handleKeepManagementRegime = (managementRegimeId) => {
-    const confirmationText =
-      managementRegimeId === currentManagementRegimeData?.id
-        ? getConfirmMergeMessage(original.toLowerCase())
-        : getConfirmMergeMessage(duplicate.toLowerCase())
+  const handleKeepOriginalManagementRegime = () => {
+    const confirmationText = getConfirmMergeMessage(original.toLowerCase())
 
-    setConfirmationModalContent(confirmationText)
-    setRecordIdToKeep(managementRegimeId)
     openConfirmationModalOpen()
+    setConfirmationModalContent(confirmationText)
+    setRecordIdToKeep(currentManagementRegimeData?.id)
+  }
+
+  const handleKeepDuplicateManagementRegime = () => {
+    const confirmationText = getConfirmMergeMessage(duplicate.toLowerCase())
+
+    openConfirmationModalOpen()
+    setConfirmationModalContent(confirmationText)
+    setRecordIdToKeep(duplicateManagementRegimeData?.id)
   }
 
   const handleEditManagementRegime = (managementRegimeId) => {
@@ -229,11 +250,9 @@ const ResolveDuplicateMRButtonAndModal = ({
         <thead>
           <Tr>
             <Thead />
-            <Thead>
+            <Thead data-testid="original-management">
               {original}{' '}
-              <ButtonCaution
-                onClick={() => handleKeepManagementRegime(currentManagementRegimeData?.id)}
-              >
+              <ButtonCaution onClick={handleKeepOriginalManagementRegime}>
                 <IconCheck />
                 {keepEither}
               </ButtonCaution>{' '}
@@ -243,11 +262,9 @@ const ResolveDuplicateMRButtonAndModal = ({
                 <IconPen /> {editEither}
               </ButtonCaution>
             </Thead>
-            <Thead>
+            <Thead data-testid="duplicate-management">
               {duplicate}{' '}
-              <ButtonCaution
-                onClick={() => handleKeepManagementRegime(duplicateManagementRegimeData?.id)}
-              >
+              <ButtonCaution onClick={handleKeepDuplicateManagementRegime}>
                 <IconCheck />
                 {keepEither}
               </ButtonCaution>{' '}
@@ -321,13 +338,14 @@ const ResolveDuplicateMRButtonAndModal = ({
         </tbody>
       </Table>
       <Modal
-        title="Confirm Merge Site"
+        testId="confirm-merge-management"
+        title="Confirm Merge Management"
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
         mainContent={confirmationModalMainContent}
         footerContent={confirmationModalFooterContent}
       />
-      {isResolveDuplicateModalLoading && <LoadingModal />}
+      {isMergeDuplicateLoading && <LoadingModal />}
     </TableOverflowWrapper>
   )
 
@@ -347,10 +365,19 @@ const ResolveDuplicateMRButtonAndModal = ({
         Resolve
       </InlineValidationButton>
       <Modal
+        testId="resolve-duplicate-management"
         title="Resolve Duplicate"
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
-        mainContent={mainContent}
+        mainContent={
+          isResolveDuplicateModalLoading ? (
+            <ModalLoadingIndicatorWrapper>
+              <LoadingIndicator />
+            </ModalLoadingIndicatorWrapper>
+          ) : (
+            mainContent
+          )
+        }
         footerContent={footerContent}
       />
     </>
