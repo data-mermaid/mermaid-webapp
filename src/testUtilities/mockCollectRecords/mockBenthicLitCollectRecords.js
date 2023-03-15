@@ -1,4 +1,4 @@
-export const mockBenthicLitCollectRecords = [
+export default [
   {
     id: '70',
     project: '5',

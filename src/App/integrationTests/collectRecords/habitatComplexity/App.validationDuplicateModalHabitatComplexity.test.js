@@ -13,8 +13,8 @@ import {
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-import { mockSampleEventValidationObject } from '../../../../testUtilities/mockCollectRecords/mockSampleEventValidationObject'
-import { mockHabitatComplexityCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityCollectRecords'
+import mockSampleEventValidationObject from '../../../../testUtilities/mockCollectRecords/mockSampleEventValidationObject'
+import mockHabitatComplexityCollectRecords from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityCollectRecords'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 

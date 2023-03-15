@@ -1,4 +1,4 @@
-export const mockSampleEventValidationObject = {
+export default {
   status: 'error',
   results: {
     data: {

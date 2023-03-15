@@ -8,8 +8,8 @@ import {
   renderAuthenticatedOnline,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { mockHabitatComplexityCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityCollectRecords'
-import { mockHabitatComplexityValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityValidationsObject'
+import mockHabitatComplexityCollectRecords from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityCollectRecords'
+import mockHabitatComplexityValidationsObject from '../../../../testUtilities/mockCollectRecords/mockHabitatComplexityValidationsObject'
 import App from '../../../App'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'

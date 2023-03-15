@@ -1,4 +1,4 @@
-export const mockBenthicPitValidationsObject = {
+export default {
   status: 'error',
   results: {
     data: {

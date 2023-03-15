@@ -11,10 +11,10 @@ import {
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { mockBenthicLitCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
+import mockBenthicLitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
 import App from '../../../App'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-import { mockSampleEventValidationObject } from '../../../../testUtilities/mockCollectRecords/mockSampleEventValidationObject'
+import mockSampleEventValidationObject from '../../../../testUtilities/mockCollectRecords/mockSampleEventValidationObject'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
