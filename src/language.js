@@ -1,4 +1,6 @@
 // prettier-ignore
+import React from 'react'
+
 import { PROJECT_CODES } from './library/constants/constants'
 import {
   getSystemValidationErrorMessage,
@@ -10,6 +12,16 @@ const inlineMessage = {
   ignore: 'ignored',
   warning: 'warning',
   error: 'error',
+}
+
+const apiDataTableNames = {
+  benthic_attributes: 'benthic attributes',
+  collect_records: 'unsubmitted sample units',
+  fish_species: 'fish species',
+  project_managements: 'management regimes',
+  project_profiles: 'project users',
+  project_sites: 'sites',
+  projects: 'project info',
 }
 
 const error = {
@@ -88,6 +100,21 @@ const error = {
     `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>
     `Something went wrong. The Project ${projectName}, has not been removed from being offline-ready.`,
+  getPullSyncErrorMessage: (projectName) => (
+    <>
+      You do not have permission to read data from <strong>{projectName}</strong>. Please check your
+      notifications and consult with a project administrator.
+    </>
+  ),
+  getPushSyncErrorMessage: (projectName) => (
+    <>
+      You do not have permission to sync data to <strong>{projectName}</strong>. Please check your
+      notifications and consult with a project administrator about your project role.
+    </>
+  ),
+
+  pushSyncErrorMessageUnsavedData: 'Unsaved data:',
+
   getUserRoleChangeFailureMessage: (userName) =>
     `Something went wrong. ${userName}'s role has not been changed.`,
   pageUnavailableOffline: 'This page is unavailable offline.',
@@ -452,6 +479,7 @@ const getValidationMessage = (validation, projectId = '') => {
 }
 
 export default {
+  apiDataTableNames,
   autocomplete,
   createNewOptionModal,
   deleteRecord,

@@ -1,12 +1,16 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
+import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
 
-import { CurrentUserProvider } from './CurrentUserContext'
 import { BellNotificationProvider } from './BellNotificationContext'
-import { HttpResponseErrorHandlerProvider } from './HttpResponseErrorHandlerContext'
+import { CurrentUserProvider } from './CurrentUserContext'
 import { CustomToastContainer } from '../components/generic/toast'
 import { DatabaseSwitchboardInstanceProvider } from './mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
+import { getToastArguments } from '../library/getToastArguments'
+import { HttpResponseErrorHandlerProvider } from './HttpResponseErrorHandlerContext'
+import { P } from '../components/generic/text'
+import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
 import { useInitializeBellNotifications } from './useInitializeBellNotifications'
 import { useInitializeCurrentUser } from './useInitializeCurrentUser'
 import { useInitializeSyncApiDataIntoOfflineStorage } from './mermaidData/syncApiDataIntoOfflineStorage/useInitializeSyncApiDataIntoOfflineStorage'
@@ -15,9 +19,12 @@ import { useRoutes } from './useRoutes'
 import { useSyncStatus } from './mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import DatabaseSwitchboard from './mermaidData/databaseSwitchboard'
 import dexieInstancePropTypes from './dexieInstancePropTypes'
+import ErrorBoundary from '../components/ErrorBoundary'
 import Footer from '../components/Footer'
 import GlobalStyle from '../library/styling/globalStyles'
+import handleHttpResponseError from '../library/handleHttpResponseError'
 import Header from '../components/Header'
+import language from '../language'
 import Layout from '../components/Layout'
 import LoadingIndicator from '../components/LoadingIndicator/LoadingIndicator'
 import PageNotFound from '../components/pages/PageNotFound'
@@ -25,9 +32,6 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
-import { useDexiePerUserDataInstance } from './dexiePerUserDataInstanceContext'
-import handleHttpResponseError from '../library/handleHttpResponseError'
-import ErrorBoundary from '../components/ErrorBoundary'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
@@ -44,6 +48,34 @@ function App({ dexieCurrentUserInstance }) {
     [logoutMermaid],
   )
 
+  const handleSyncPushErrors = (projectsWithSyncErrors) => {
+    // projectsWithSyncErrors's type: { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
+    Object.entries(projectsWithSyncErrors).forEach((projectWithSyncErrorsEntry) => {
+      const projectId = projectWithSyncErrorsEntry[0]
+      const { name: projectName, apiDataTablesThatRejectedSyncing } = projectWithSyncErrorsEntry[1]
+
+      const toastContent = (
+        <div data-testid={`sync-error-for-project-${projectId}`}>
+          <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
+          {language.error.pushSyncErrorMessageUnsavedData}
+          <ul>
+            {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
+              <li key={rejectedDataTableName}>
+                {language.apiDataTableNames[rejectedDataTableName]}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+
+      toast.error(...getToastArguments(toastContent))
+    })
+  }
+
+  const handleSyncPullErrors = ({ projectName }) => {
+    toast.error(...getToastArguments(language.error.getPullSyncErrorMessage(projectName)))
+  }
+
   const { currentUser, saveUserProfile } = useInitializeCurrentUser({
     apiBaseUrl,
     getAccessToken,
@@ -58,6 +90,26 @@ function App({ dexieCurrentUserInstance }) {
     currentUser,
   })
 
+  const apiSyncInstance = useMemo(() => {
+    if (
+      dexiePerUserDataInstance &&
+      apiBaseUrl &&
+      getAccessToken &&
+      handleSyncPullErrors &&
+      handleSyncPushErrors
+    ) {
+      return new SyncApiDataIntoOfflineStorage({
+        dexiePerUserDataInstance,
+        apiBaseUrl,
+        getAccessToken,
+        handleSyncPullErrors,
+        handleSyncPushErrors,
+      })
+    }
+
+    return undefined
+  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken])
+
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
     getAccessToken,
@@ -65,15 +117,8 @@ function App({ dexieCurrentUserInstance }) {
     isMounted,
     isAppOnline,
     handleHttpResponseError: handleHttpResponseErrorWithLogoutFunction,
+    syncApiDataIntoOfflineStorage: apiSyncInstance,
   })
-
-  const apiSyncInstance = useMemo(() => {
-    return new SyncApiDataIntoOfflineStorage({
-      dexiePerUserDataInstance,
-      apiBaseUrl,
-      getAccessToken,
-    })
-  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken])
 
   const databaseSwitchboardInstance = useMemo(() => {
     const areDependenciesReady = !!dexiePerUserDataInstance && apiBaseUrl && isMermaidAuthenticated
