@@ -26,12 +26,20 @@ import language from '../../../../language'
 import useIsMounted from '../../../../library/useIsMounted'
 import ErrorBoundary from '../../../ErrorBoundary'
 
+// I wonder if we can make this reusable for all protocols
+
+const getDataForSubNavNode = ({ isNewRecord, collectRecord, sites }) =>
+  !isNewRecord && collectRecord
+    ? getRecordSubNavNodeInfo(collectRecord.data, sites, collectRecord.data.protocol)
+    : { name: language.protocolTitles.habitatcomplexity }
+
 const HabitatComplexityForm = ({ isNewRecord }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [subNavNode, setSubNavNode] = useState()
+  const [sites, setSites] = useState()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -61,18 +69,16 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
 
-              const recordNameForSubNode =
-                !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      collectRecordResponse.data.protocol,
-                    )
-                  : { name: language.protocolTitles.habitatcomplexity }
-
               setCollectRecordBeingEdited(collectRecordResponse)
-              setSubNavNode(recordNameForSubNode)
+              setSubNavNode(
+                getDataForSubNavNode({
+                  isNewRecord,
+                  collectRecord: collectRecordResponse,
+                  sites: sitesResponse,
+                }),
+              )
               setIsLoading(false)
+              setSites(sitesResponse)
             }
           })
           .catch((error) => {
@@ -118,6 +124,16 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
     // maybe rename this function. Its pretty vague...
     // need to recompute record name for sub nav node for all CRs
     // setSubNavNode(recordNameForSubNode)
+
+    // { name: siteName, number: transectNumber, label }
+
+    setSubNavNode(
+      getDataForSubNavNode({
+        isNewRecord,
+        collectRecord: updatedCollectRecord,
+        sites,
+      }),
+    )
     setCollectRecordBeingEdited(updatedCollectRecord)
   }
 
