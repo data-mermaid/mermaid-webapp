@@ -2,8 +2,10 @@ import axios from '../../library/axiosRetry'
 import {
   getLastRevisionNumbersPulledForAProject,
   persistLastRevisionNumbersPulled,
+  resetLastRevisionNumberForProjectDataType,
 } from './lastRevisionNumbers'
 import { getAuthorizationHeaders } from '../../library/getAuthorizationHeaders'
+import { getIsDataTypeProjectAssociated } from './getIsDataTypeProjectAssociated'
 
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
@@ -64,7 +66,7 @@ export const pullApiData = async ({
     dexiePerUserDataInstance.projects,
     dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled,
     async () => {
-      persistLastRevisionNumbersPulled({
+      await persistLastRevisionNumbersPulled({
         dexiePerUserDataInstance,
         apiData,
         projectId,
@@ -86,13 +88,30 @@ export const pullApiData = async ({
           const deletes = apiData[apiDataType]?.deletes ?? []
           const deleteIds = deletes.map(({ id }) => id)
           const error = apiData[apiDataType]?.error
-          const errorIds = error && [401, 403].includes(error.code) ? error.record_ids : []
+          // it is implied that we will only get 401 and 403 sync errors for project-related tables
+          // those responses will include an array of ids to wipe out everything associated with the project
+          // causing the 401 or 403
+          const isAnyErrorCodeAssociatedRecordsToBeDeleted =
+            error && [401, 403].includes(error.code)
+          const errorCodeAssociatedIds = isAnyErrorCodeAssociatedRecordsToBeDeleted
+            ? error.record_ids
+            : []
+          const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(apiDataType)
 
-          // Use Set to remove duplicates
-          const bulkDeleteIds = Array.from(new Set([...deleteIds, ...errorIds]))
+          const bulkDeleteIdsWithNoDuplicates = Array.from(
+            new Set([...deleteIds, ...errorCodeAssociatedIds]),
+          )
 
           dexiePerUserDataInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
-          dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIds)
+          dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
+
+          if (isAnyErrorCodeAssociatedRecordsToBeDeleted && isDataTypeProjectAssociated) {
+            resetLastRevisionNumberForProjectDataType({
+              dataType: apiDataType,
+              projectId,
+              dexiePerUserDataInstance,
+            })
+          }
         }
 
         // If the user has been removed from a project, the backend does not treat
@@ -107,7 +126,10 @@ export const pullApiData = async ({
 
           // Determine which projects in IndexedDB are not in the /projects API response
           const deleteProjectIds = indexedDbProjects
-            .filter((indexedDBProject) => !isIndexedDBProjectInProjectResults(indexedDBProject, projectsResults))
+            .filter(
+              (indexedDBProject) =>
+                !isIndexedDBProjectInProjectResults(indexedDBProject, projectsResults),
+            )
             .map((removedProject) => removedProject.id)
 
           if (deleteProjectIds.length) {

@@ -1,3 +1,5 @@
+import { getIsDataTypeProjectAssociated } from './getIsDataTypeProjectAssociated'
+
 const persistLastRevisionNumbersPulled = ({ dexiePerUserDataInstance, apiData, projectId }) => {
   return dexiePerUserDataInstance.transaction(
     'rw',
@@ -18,11 +20,7 @@ const persistLastRevisionNumbersPulled = ({ dexiePerUserDataInstance, apiData, p
 
       dataTypes.forEach((dataType) => {
         if (apiData[dataType]) {
-          const isDataTypeProjectAssociated =
-            dataType === 'collect_records' ||
-            dataType === 'project_managements' ||
-            dataType === 'project_profiles' ||
-            dataType === 'project_sites'
+          const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(dataType)
 
           const projectIdToUse = isDataTypeProjectAssociated
             ? projectId ?? 'n/a' // this hedges against the api sending more dataTypes than were asked for, eg in tests
@@ -37,6 +35,32 @@ const persistLastRevisionNumbersPulled = ({ dexiePerUserDataInstance, apiData, p
       })
     },
   )
+}
+
+const resetLastRevisionNumberForProjectDataType = ({
+  dataType,
+  projectId,
+  dexiePerUserDataInstance,
+}) => {
+  const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(dataType)
+
+  if (!projectId || !dexiePerUserDataInstance || !dataType) {
+    throw new Error(
+      `Improper use of resetLastRevisionNumberForProjectDataType. One or more parameters are missing.`,
+    )
+  }
+
+  if (!isDataTypeProjectAssociated) {
+    throw new Error(
+      `Improper use of resetLastRevisionNumberForProjectDataType. The data type of ${dataType} is not supported.`,
+    )
+  }
+
+  return dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled.put({
+    dataType,
+    projectId,
+    lastRevisionNumber: null,
+  })
 }
 
 const getLastRevisionNumbersPulledForAProject = async ({ dexiePerUserDataInstance, projectId }) => {
@@ -57,4 +81,8 @@ const getLastRevisionNumbersPulledForAProject = async ({ dexiePerUserDataInstanc
   return lastRevisionNumbersObject
 }
 
-export { persistLastRevisionNumbersPulled, getLastRevisionNumbersPulledForAProject }
+export {
+  getLastRevisionNumbersPulledForAProject,
+  persistLastRevisionNumbersPulled,
+  resetLastRevisionNumberForProjectDataType,
+}
