@@ -15,6 +15,7 @@ import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioW
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
+import language from '../../../../language'
 
 const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
@@ -92,10 +93,6 @@ const FishBeltTransectInputs = ({
     fishbelt_transect?.size_bin,
     areValidationsShowing,
   )
-
-  // const sizeBinValidationInfo = hasSizeBinValidation
-  //   ? {...validationPropertiesWithDirtyResetOnInputChange(sizeBinValidationProperties, 'size_bin'), {validationType: 'extra-error', validationMessage: 'extra error'}}
-  //   : validationPropertiesWithDirtyResetOnInputChange(sizeBinValidationProperties, 'size_bin')
 
   const reefSlopeValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.reef_slope,
@@ -367,7 +364,9 @@ const FishBeltTransectInputs = ({
             sizeBinValidationProperties,
             'size_bin',
           )}
-          hasObservationRecords={hasFishBeltObservations}
+          additionalText={
+            hasFishBeltObservations ? <>{language.error.disabledFishSizeBinSelect}</> : null
+          }
           value={formik.values.size_bin}
           onChange={handleSizeBinChange}
         />

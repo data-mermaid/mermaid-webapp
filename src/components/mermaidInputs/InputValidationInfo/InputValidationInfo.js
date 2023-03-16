@@ -23,7 +23,7 @@ const InputValidationInfo = ({
   validationType,
   currentSelectValue,
   updateValueAndResetValidationForDuplicateWarning,
-  hasObservationRecords,
+  additionalText,
 }) => {
   const { projectId } = useParams()
   const areThereValidationMessages = validationMessages.length
@@ -94,7 +94,7 @@ const InputValidationInfo = ({
           ))}
         </>
       ) : null}
-      {hasObservationRecords ? <>{language.error.disabledFishSizeBinSelect}</> : null}
+      {additionalText}
       {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
       {isValidationPassing ? <span aria-label="Passed Validation">&nbsp;</span> : null}
     </ValidationWrapper>
@@ -108,7 +108,7 @@ InputValidationInfo.propTypes = {
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   currentSelectValue: PropTypes.string,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
-  hasObservationRecords: PropTypes.bool,
+  additionalText: PropTypes.node,
 }
 
 InputValidationInfo.defaultProps = {
@@ -118,7 +118,7 @@ InputValidationInfo.defaultProps = {
   validationType: undefined,
   currentSelectValue: undefined,
   updateValueAndResetValidationForDuplicateWarning: () => {},
-  hasObservationRecords: false,
+  additionalText: null,
 }
 
 export default InputValidationInfo
