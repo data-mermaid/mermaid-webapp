@@ -75,7 +75,7 @@ export const StickyObservationTable = styled(GenericStickyTable)`
           background: rgba(255, 255, 255, 0.5);
         }
       }
-      input,
+      input:not([type='checkbox']),
       select {
         background: transparent;
         border: none;

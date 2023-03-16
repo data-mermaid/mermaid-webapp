@@ -14,12 +14,9 @@ export const inputStyles = css`
 `
 export const CheckRadioWrapper = styled.div`
   display: grid;
-  grid-template-columns: 2rem auto;
-  justify-items: start;
+  grid-template-columns: 1.5rem auto;
+  align-items: bottom;
   padding: ${theme.spacing.xsmall};
-  input {
-    margin-top: ${theme.spacing.small};
-  }
   ${hoverState(css`
     background-color: ${theme.color.white};
   `)}
@@ -90,6 +87,10 @@ export const InputRow = styled.div`
   border-width: 0 0 0 ${theme.spacing.borderLarge};
   border-style: solid;
   border-color: ${(props) => theme.color.getBorderColor(props.validationType)};
+  align-items: baseline;
+  > label {
+    align-self: start;
+  }
   ${hoverState(css`
     background-color: ${theme.color.tableRowHover};
   `)}

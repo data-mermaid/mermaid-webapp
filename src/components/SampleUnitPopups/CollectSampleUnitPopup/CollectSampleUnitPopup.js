@@ -37,7 +37,7 @@ const CollectSampleUnitPopup = ({ rowRecord, recordProfileSummary }) => {
               <TableRowItem title="Observers" value={observers.join(',')} />
               <TableRowItem title="Site" value={site_name} />
               <TableRowItem title="Management" value={managementName} />
-              <TableRowItem title="Date" value={getSampleDateLabel(sample_date)} />
+              <TableRowItem title="Sample Date" value={getSampleDateLabel(sample_date)} />
             </tbody>
           </Table>
           <div>{language.popoverTexts.notSubmittedSampleUnit}</div>

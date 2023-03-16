@@ -12,11 +12,10 @@ export const CardWrapper = styled('div')`
   width: ${theme.spacing.width};
   max-width: ${theme.spacing.maxWidth};
   background: ${theme.color.white};
-  cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   ${hoverState(css`
     outline: ${(props) => props.disabled && `solid 2px ${theme.color.primaryBorder}`};
   `)}
-  }
   ${mediaQueryTabletLandscapeOnly(css`
     width: 98%;
     display: grid;
