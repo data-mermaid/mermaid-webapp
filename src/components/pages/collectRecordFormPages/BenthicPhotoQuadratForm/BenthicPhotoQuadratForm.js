@@ -117,8 +117,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
   ])
 
   const handleCollectRecordChange = (updatedCollectRecord) => {
-    // eslint-disable-next-line no-console
-    console.log('updated: ', updatedCollectRecord)
     setCollectRecordBeingEdited(updatedCollectRecord)
 
     setSubNavNode(
