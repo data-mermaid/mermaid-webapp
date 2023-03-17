@@ -8,7 +8,7 @@ import {
   getFishNameConstants,
   getFishNameOptions,
 } from '../../../../App/mermaidData/fishNameHelpers'
-import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
+import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
@@ -94,14 +94,14 @@ const FishBeltForm = ({ isNewRecord }) => {
 
               const generaOptions = genera.map((genus) => ({ label: genus.name, value: genus.id }))
 
-              const recordNameForSubNode =
-                !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      collectRecordResponse.data.protocol,
-                    )
-                  : { name: language.protocolTitles.fishbelt }
+              setSubNavNode(
+                getDataForSubNavNode({
+                  isNewRecord,
+                  collectRecord: collectRecordResponse,
+                  sites: sitesResponse,
+                  protocol: 'fishbelt',
+                }),
+              )
 
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
@@ -111,7 +111,6 @@ const FishBeltForm = ({ isNewRecord }) => {
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
               setModalAttributeOptions(generaOptions)
-              setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
           },
@@ -139,8 +138,17 @@ const FishBeltForm = ({ isNewRecord }) => {
     isSyncInProgress,
   ])
 
-  const handleCollectRecordChange = (updatedCollectRecord) =>
+  const handleCollectRecordChange = (updatedCollectRecord) => {
     setCollectRecordBeingEdited(updatedCollectRecord)
+    setSubNavNode(
+      getDataForSubNavNode({
+        isNewRecord,
+        collectRecord: updatedCollectRecord,
+        sites,
+        protocol: 'fishbelt',
+      }),
+    )
+  }
 
   const handleNewObservationAdd = (observationAttributeId) =>
     setNewObservationToAdd(observationAttributeId)
