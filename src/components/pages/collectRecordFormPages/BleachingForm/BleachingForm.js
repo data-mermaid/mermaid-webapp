@@ -9,7 +9,7 @@ import {
   getSampleInfoInitialValues,
 } from '../collectRecordFormInitialValues'
 import { getBenthicOptions } from '../../../../library/getOptions'
-import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
+import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoBleachingRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
@@ -38,6 +38,7 @@ const BleachingForm = ({ isNewRecord }) => {
   const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
     useState()
   const [subNavNode, setSubNavNode] = useState(null)
+  const [sites, setSites] = useState()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -73,19 +74,17 @@ const BleachingForm = ({ isNewRecord }) => {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
 
-              const recordNameForSubNode =
-                !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      collectRecordResponse.data.protocol,
-                    )
-                  : { name: language.protocolTitles.bleachingqc }
+              setSubNavNode(
+                getDataForSubNavNode({
+                  isNewRecord,
+                  collectRecord: collectRecordResponse,
+                  sites: sitesResponse,
+                }),
+              )
 
               setCollectRecordBeingEdited(collectRecordResponse)
               setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributesResponse))
-              setSubNavNode(recordNameForSubNode)
-
+              setSites(sitesResponse)
               setIsLoading(false)
             }
           })
@@ -127,8 +126,16 @@ const BleachingForm = ({ isNewRecord }) => {
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
-  const handleCollectRecordChange = (updatedCollectRecord) =>
+  const handleCollectRecordChange = (updatedCollectRecord) => {
     setCollectRecordBeingEdited(updatedCollectRecord)
+    setSubNavNode(
+      getDataForSubNavNode({
+        isNewRecord,
+        collectRecord: updatedCollectRecord,
+        sites,
+      }),
+    )
+  }
 
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
