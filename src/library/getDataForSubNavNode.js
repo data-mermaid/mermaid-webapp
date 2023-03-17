@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { getRecordSubNavNodeInfo } from './getRecordSubNavNodeInfo'
 import language from '../language'
 
