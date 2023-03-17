@@ -326,7 +326,7 @@ const CollectRecordFormPageAlternative = ({
         projectId,
         protocol: sampleUnitName,
       })
-      .then((response) => {
+      .then((collectRecordResponse) => {
         toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsTable1Data()
@@ -336,9 +336,12 @@ const CollectRecordFormPageAlternative = ({
         setValidateButtonState(buttonGroupStates.validatable)
         setIsFormDirty(false)
         formik.resetForm({ values: formik.values }) // this resets formik's dirty state
+        handleCollectRecordChange(collectRecordResponse)
 
         if (isNewRecord) {
-          history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
+          history.push(
+            `${ensureTrailingSlash(history.location.pathname)}${collectRecordResponse.id}`,
+          )
         }
       })
       .catch((error) => {

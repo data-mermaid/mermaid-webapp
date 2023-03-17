@@ -26,12 +26,18 @@ import language from '../../../../language'
 import useIsMounted from '../../../../library/useIsMounted'
 import ErrorBoundary from '../../../ErrorBoundary'
 
+const getDataForSubNavNode = ({ isNewRecord, collectRecord, sites }) =>
+  !isNewRecord && collectRecord
+    ? getRecordSubNavNodeInfo(collectRecord.data, sites, collectRecord.data.protocol)
+    : { name: language.protocolTitles[collectRecord.data.protocol] }
+
 const HabitatComplexityForm = ({ isNewRecord }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [subNavNode, setSubNavNode] = useState()
+  const [sites, setSites] = useState()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -61,17 +67,16 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
 
-              const recordNameForSubNode =
-                !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      collectRecordResponse.data.protocol,
-                    )
-                  : { name: language.protocolTitles.habitatcomplexity }
+              setSubNavNode(
+                getDataForSubNavNode({
+                  isNewRecord,
+                  collectRecord: collectRecordResponse,
+                  sites: sitesResponse,
+                }),
+              )
 
               setCollectRecordBeingEdited(collectRecordResponse)
-              setSubNavNode(recordNameForSubNode)
+              setSites(sitesResponse)
               setIsLoading(false)
             }
           })
@@ -114,8 +119,16 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
-  const handleCollectRecordChange = (updatedCollectRecord) =>
+  const handleCollectRecordChange = (updatedCollectRecord) => {
     setCollectRecordBeingEdited(updatedCollectRecord)
+    setSubNavNode(
+      getDataForSubNavNode({
+        isNewRecord,
+        collectRecord: updatedCollectRecord,
+        sites,
+      }),
+    )
+  }
 
   return (
     <ErrorBoundary>
