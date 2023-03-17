@@ -79,6 +79,7 @@ const BleachingForm = ({ isNewRecord }) => {
                   isNewRecord,
                   collectRecord: collectRecordResponse,
                   sites: sitesResponse,
+                  protocol: 'bleachingqc',
                 }),
               )
 
@@ -133,6 +134,7 @@ const BleachingForm = ({ isNewRecord }) => {
         isNewRecord,
         collectRecord: updatedCollectRecord,
         sites,
+        protocol: 'bleachingqc',
       }),
     )
   }

@@ -67,6 +67,7 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
                   isNewRecord,
                   collectRecord: collectRecordResponse,
                   sites: sitesResponse,
+                  protocol: 'habitatcomplexity',
                 }),
               )
 
@@ -121,6 +122,7 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
         isNewRecord,
         collectRecord: updatedCollectRecord,
         sites,
+        protocol: 'habitatcomplexity',
       }),
     )
   }
