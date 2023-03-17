@@ -6,6 +6,7 @@ import {
   renderAuthenticatedOnline,
   screen,
   waitForElementToBeRemoved,
+  within,
 } from '../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import App from '../App'
@@ -71,4 +72,51 @@ test('User being denied push sync shows toasts', async () => {
   expect(project900ToastContent).toHaveTextContent('project users')
   expect(project900ToastContent).not.toHaveTextContent('sites')
   expect(project900ToastContent).toHaveTextContent('project info')
+})
+
+test('User being denied push sync toast doesnt show duplicate unsaved data types', async () => {
+  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
+
+  const mockSyncErrorDataWithDuplicateUnsavedDataInfo = {
+    benthic_attributes: [
+      {
+        status_code: 403,
+        message: 'You do not have permission to perform this action.',
+        data: {
+          project_id: '100',
+          project_name: 'Project 100',
+        },
+      },
+      {
+        status_code: 403,
+        message: 'You do not have permission to perform this action.',
+        data: {
+          project_id: '100',
+          project_name: 'Project 100',
+        },
+      },
+    ],
+  }
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (req, res, ctx) => {
+        return res(ctx.json(mockSyncErrorDataWithDuplicateUnsavedDataInfo))
+      },
+    ),
+  )
+
+  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    dexiePerUserDataInstance,
+    dexieCurrentUserInstance,
+  })
+
+  await screen.findByLabelText('projects list loading indicator')
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
+
+  const project100ToastContent = await screen.findByTestId('sync-error-for-project-100')
+
+  expect(within(project100ToastContent).getAllByText('benthic attributes').length).toEqual(1)
 })
