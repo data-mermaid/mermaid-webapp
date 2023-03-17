@@ -206,7 +206,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
         <thead>
           <Tr>
             <Thead />
-            <Thead data-testid="original-site">
+            <Thead aria-label="Original Site">
               {original}{' '}
               <ButtonCaution onClick={handleKeepOriginalSite}>
                 <IconCheck />
@@ -216,7 +216,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
                 <IconPen /> {editEither}
               </ButtonCaution>
             </Thead>
-            <Thead data-testid="duplicate-site">
+            <Thead aria-label="Duplicate Site">
               {duplicate}{' '}
               <ButtonCaution onClick={handleKeepDuplicateSite}>
                 <IconCheck />
@@ -307,7 +307,6 @@ const ResolveDuplicateSiteButtonAndModal = ({
         </tbody>
       </Table>
       <Modal
-        testId="confirm-merge-site"
         title="Confirm Merge Site"
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
@@ -334,8 +333,7 @@ const ResolveDuplicateSiteButtonAndModal = ({
         Resolve
       </InlineValidationButton>
       <Modal
-        testId="resolve-duplicate-site"
-        title="Resolve Duplicate"
+        title="Resolve Duplicate Site"
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
         mainContent={

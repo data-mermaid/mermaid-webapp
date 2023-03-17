@@ -18,7 +18,7 @@ import mockBleachingCollectRecords from '../../../../testUtilities/mockCollectRe
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
-const validateCollectRecordAndResolveSimilarSite = async () => {
+const validateCollectRecord = async () => {
   userEvent.click(
     await screen.findByRole(
       'button',
@@ -43,47 +43,6 @@ const validateCollectRecordAndResolveSimilarSite = async () => {
       { timeout: 10000 },
     ),
   )
-
-  expect(
-    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
-  ).toBeInTheDocument()
-
-  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
-}
-
-const validateCollectRecordAndResolveSimilarManagementRegime = async () => {
-  userEvent.click(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
-
-  expect(
-    await screen.findByRole('button', {
-      name: 'Validating',
-    }),
-  )
-  expect(
-    await screen.findByRole(
-      'button',
-      {
-        name: 'Validate',
-      },
-      { timeout: 10000 },
-    ),
-  )
-
-  expect(
-    within(screen.getByTestId('management')).queryByText(
-      'Another Management Regime is similar to this one.',
-    ),
-  ).toBeInTheDocument()
-
-  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
 }
 
 test('Validate Bleaching collect record, get site duplicate warning, show resolve button, keep original site, and merge duplicate site to original site', async () => {
@@ -126,17 +85,23 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarSite()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-site')
-  const originalSite = await within(resolveModal).findByTestId('original-site')
+  expect(
+    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
+  const originalSite = await within(resolveModal).findByLabelText('Original Site')
   const keepOriginalSiteButton = await within(originalSite).findByRole('button', {
     name: 'Keep site',
   })
 
   userEvent.click(keepOriginalSiteButton)
 
-  const confirmationModal = screen.getByTestId('confirm-merge-site')
+  const confirmationModal = screen.getByLabelText('Confirm Merge Site Modal')
 
   expect(
     await within(confirmationModal).findByText(
@@ -148,7 +113,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   userEvent.click(mergeButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-site'))
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('Resolve Duplicate Site Modal'))
 
   await waitFor(() =>
     expect(
@@ -197,18 +162,23 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarSite()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-site')
+  expect(
+    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+  ).toBeInTheDocument()
 
-  const duplicateSite = await within(resolveModal).findByTestId('duplicate-site')
+  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
+  const duplicateSite = await within(resolveModal).findByLabelText('Duplicate Site')
   const keepDuplicateSiteButton = await within(duplicateSite).findByRole('button', {
     name: 'Keep site',
   })
 
   userEvent.click(keepDuplicateSiteButton, { id: '4' })
 
-  const confirmationModal = screen.getByTestId('confirm-merge-site')
+  const confirmationModal = screen.getByLabelText('Confirm Merge Site Modal')
 
   expect(
     await within(confirmationModal).findByText(
@@ -220,7 +190,7 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
 
   userEvent.click(mergeButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-site'))
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('Resolve Duplicate Site Modal'))
 
   await waitFor(() =>
     expect(
@@ -269,10 +239,16 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarSite()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-site')
-  const originalSite = await within(resolveModal).findByTestId('original-site')
+  expect(
+    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
+  const originalSite = await within(resolveModal).findByLabelText('Original Site')
   const editOriginalSiteButton = await within(originalSite).findByRole('button', {
     name: 'Edit site',
   })
@@ -327,10 +303,16 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarSite()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-site')
-  const duplicateSite = await within(resolveModal).findByTestId('duplicate-site')
+  expect(
+    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
+  const duplicateSite = await within(resolveModal).findByLabelText('Duplicate Site')
   const editDuplicateSiteButton = await within(duplicateSite).findByRole('button', {
     name: 'Edit site',
   })
@@ -385,9 +367,15 @@ test('Validate Bleaching collect record, get site duplicate warning, show resolv
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarSite()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-site')
+  expect(
+    within(screen.getByTestId('site')).queryByText('Site: Similar records detected'),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('site')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Site Modal')
   const keepBothSiteButton = await within(resolveModal).findByRole('button', { name: 'Keep both' })
 
   userEvent.click(keepBothSiteButton)
@@ -439,17 +427,25 @@ test('Validate Bleaching collect record, get management similar name warning, sh
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarManagementRegime()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-management')
-  const originalManagement = await within(resolveModal).findByTestId('original-management')
+  expect(
+    within(screen.getByTestId('management')).queryByText(
+      'Another Management Regime is similar to this one.',
+    ),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
+  const originalManagement = await within(resolveModal).findByLabelText('Original Management')
   const keepOriginalManagementButton = await within(originalManagement).findByRole('button', {
     name: 'Keep MR',
   })
 
   userEvent.click(keepOriginalManagementButton)
 
-  const confirmationModal = screen.getByTestId('confirm-merge-management')
+  const confirmationModal = screen.getByLabelText('Confirm Merge Management Modal')
 
   expect(
     await within(confirmationModal).findByText(
@@ -461,7 +457,9 @@ test('Validate Bleaching collect record, get management similar name warning, sh
 
   userEvent.click(mergeButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-management'))
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('Resolve Duplicate Management Modal'),
+  )
 
   await waitFor(() =>
     expect(
@@ -512,17 +510,25 @@ test('Validate Bleaching collect record, get management similar name warning, sh
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarManagementRegime()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-management')
-  const duplicateManagement = await within(resolveModal).findByTestId('duplicate-management')
+  expect(
+    within(screen.getByTestId('management')).queryByText(
+      'Another Management Regime is similar to this one.',
+    ),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
+  const duplicateManagement = await within(resolveModal).findByLabelText('Duplicate Management')
   const keepDuplicateManagementButton = await within(duplicateManagement).findByRole('button', {
     name: 'Keep MR',
   })
 
   userEvent.click(keepDuplicateManagementButton)
 
-  const confirmationModal = screen.getByTestId('confirm-merge-management')
+  const confirmationModal = screen.getByLabelText('Confirm Merge Management Modal')
 
   expect(
     await within(confirmationModal).findByText(
@@ -534,7 +540,9 @@ test('Validate Bleaching collect record, get management similar name warning, sh
 
   userEvent.click(mergeButton)
 
-  await waitForElementToBeRemoved(() => screen.queryByTestId('resolve-duplicate-management'))
+  await waitForElementToBeRemoved(() =>
+    screen.queryByLabelText('Resolve Duplicate Management Modal'),
+  )
 
   await waitFor(() =>
     expect(
@@ -585,10 +593,18 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarManagementRegime()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-management')
-  const originalManagement = await within(resolveModal).findByTestId('original-management')
+  expect(
+    within(screen.getByTestId('management')).queryByText(
+      'Another Management Regime is similar to this one.',
+    ),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
+  const originalManagement = await within(resolveModal).findByLabelText('Original Management')
   const editOriginalManagementButton = await within(originalManagement).findByRole('button', {
     name: 'Edit MR',
   })
@@ -643,10 +659,18 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarManagementRegime()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-management')
-  const duplicateManagement = await within(resolveModal).findByTestId('duplicate-management')
+  expect(
+    within(screen.getByTestId('management')).queryByText(
+      'Another Management Regime is similar to this one.',
+    ),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
+  const duplicateManagement = await within(resolveModal).findByLabelText('Duplicate Management')
   const editDuplicateManagementButton = await within(duplicateManagement).findByRole('button', {
     name: 'Edit MR',
   })
@@ -701,9 +725,17 @@ test('Validate Bleaching collect record, get management duplicate warning, show 
     dexieCurrentUserInstance,
   )
 
-  await validateCollectRecordAndResolveSimilarManagementRegime()
+  await validateCollectRecord()
 
-  const resolveModal = screen.getByTestId('resolve-duplicate-management')
+  expect(
+    within(screen.getByTestId('management')).queryByText(
+      'Another Management Regime is similar to this one.',
+    ),
+  ).toBeInTheDocument()
+
+  userEvent.click(within(screen.getByTestId('management')).getByRole('button', { name: 'Resolve' }))
+
+  const resolveModal = screen.getByLabelText('Resolve Duplicate Management Modal')
   const keepBothManagementRegimeButton = await within(resolveModal).findByRole('button', {
     name: 'Keep both',
   })

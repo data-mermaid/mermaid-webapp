@@ -250,7 +250,7 @@ const ResolveDuplicateMRButtonAndModal = ({
         <thead>
           <Tr>
             <Thead />
-            <Thead data-testid="original-management">
+            <Thead aria-label="Original Management">
               {original}{' '}
               <ButtonCaution onClick={handleKeepOriginalManagementRegime}>
                 <IconCheck />
@@ -262,7 +262,7 @@ const ResolveDuplicateMRButtonAndModal = ({
                 <IconPen /> {editEither}
               </ButtonCaution>
             </Thead>
-            <Thead data-testid="duplicate-management">
+            <Thead aria-label="Duplicate Management">
               {duplicate}{' '}
               <ButtonCaution onClick={handleKeepDuplicateManagementRegime}>
                 <IconCheck />
@@ -338,7 +338,6 @@ const ResolveDuplicateMRButtonAndModal = ({
         </tbody>
       </Table>
       <Modal
-        testId="confirm-merge-management"
         title="Confirm Merge Management"
         isOpen={isConfirmationModalOpen}
         onDismiss={closeConfirmationModalOpen}
@@ -365,8 +364,7 @@ const ResolveDuplicateMRButtonAndModal = ({
         Resolve
       </InlineValidationButton>
       <Modal
-        testId="resolve-duplicate-management"
-        title="Resolve Duplicate"
+        title="Resolve Duplicate Management"
         isOpen={isResolveDuplicateModalOpen}
         onDismiss={closeResolveDuplicateModal}
         mainContent={
