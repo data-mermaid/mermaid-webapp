@@ -50,7 +50,6 @@ const CheckBoxLabel = styled.label`
   display: inline-block;
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
-    cursor: pointer;
   }
 `
 
@@ -76,6 +75,7 @@ const DataSharing = () => {
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
   const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const [isDataUpdating, setIsDataUpdating] = useState(false)
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -136,6 +136,7 @@ const DataSharing = () => {
           editedValues,
         })
         .then((updatedProject) => {
+          setIsDataUpdating(false)
           setProjectBeingEdited(updatedProject)
           toast.success(...getToastArguments(toastMessage))
         })
@@ -151,6 +152,8 @@ const DataSharing = () => {
     const editedValues = { ...projectBeingEdited }
     const toastMessage = getToastMessageForDataPolicyChange(propertyToUpdate, policyCode)
 
+    setIsDataUpdating(true)
+
     if (propertyToUpdate === 'data_policy_benthiclit') {
       editedValues.data_policy_benthiclit = policyCode
       editedValues.data_policy_benthicpit = policyCode
@@ -163,6 +166,7 @@ const DataSharing = () => {
   }
 
   const handleTestProjectChange = (event) => {
+    setIsDataUpdating(true)
     const isChecked = event.target.checked
     const status = isChecked ? PROJECT_CODES.status.test : PROJECT_CODES.status.open
     const editedValues = { ...projectBeingEdited, status }
@@ -175,7 +179,7 @@ const DataSharing = () => {
 
   const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
   const contentViewByRole = (
-    <MaxWidthInputWrapper>
+    <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'pointer'}>
       <h3>Data is much more powerful when shared.</h3>
       <P>{language.pages.dataSharing.introductionParagraph}</P>
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
@@ -223,6 +227,7 @@ const DataSharing = () => {
                         id={`fish-belt${item.value}`}
                         checked={projectBeingEdited?.data_policy_beltfish === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
+                        disabled={isDataUpdating}
                       />
                     </label>
                   </Td>
@@ -240,6 +245,7 @@ const DataSharing = () => {
                         id={`benthic${item.value}`}
                         checked={projectBeingEdited?.data_policy_benthiclit === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
+                        disabled={isDataUpdating}
                       />
                     </label>
                   </Td>
@@ -257,6 +263,7 @@ const DataSharing = () => {
                         value={item.value}
                         checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
+                        disabled={isDataUpdating}
                       />
                     </label>
                   </Td>
@@ -276,6 +283,7 @@ const DataSharing = () => {
               type="checkbox"
               checked={isTestProject}
               onChange={handleTestProjectChange}
+              disabled={isDataUpdating}
             />{' '}
             {language.pages.dataSharing.isTestProject}
           </CheckBoxLabel>

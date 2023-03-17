@@ -6,6 +6,54 @@ const SyncApiDataIntoOfflineStorage = class {
 
   _dexiePerUserDataInstance
 
+  _getTableNamesWhereSyncingWasRejectedListedPerProject =
+    function _getTableNamesWhereSyncingWasRejectedListedPerProject(pushResponse) {
+      const projectsWithSyncErrors = {}
+
+      try {
+        const responseData = pushResponse.data
+
+        const mermaidApiSyncTableNames = Object.keys(responseData)
+
+        mermaidApiSyncTableNames.forEach((apiSyncTableName) => {
+          responseData[apiSyncTableName].forEach((itemSyncResponseObject) => {
+            const isSync403 = itemSyncResponseObject.status_code === 403
+            const syncErrorProjectName = itemSyncResponseObject.data.project_name
+            const syncErrorProjectId = itemSyncResponseObject.data.project_id
+
+            // to differentiate from other 403s, the proxy metric here is that if the
+            // response includes a project name, this means a user in not allowed to sync
+            const isUserDeniedFromSyncingToProject = isSync403 && syncErrorProjectName
+
+            if (isUserDeniedFromSyncingToProject) {
+              const projectsOtherApiDataTablesThatRejectedSyncing =
+                projectsWithSyncErrors[syncErrorProjectId]?.apiDataTablesThatRejectedSyncing ?? []
+
+              projectsWithSyncErrors[syncErrorProjectId] = {
+                name: syncErrorProjectName,
+                apiDataTablesThatRejectedSyncing: [
+                  ...projectsOtherApiDataTablesThatRejectedSyncing,
+                  apiSyncTableName,
+                ],
+              }
+            }
+          })
+        })
+
+        // the format of the returned object will be
+        // { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
+        return projectsWithSyncErrors
+      } catch (error) {
+        console.error('Not able to assess syncing success', error)
+
+        return {}
+      }
+    }
+
+  _handleSyncPullErrors
+
+  _handleSyncPushErrors
+
   #getOnlyModifiedAndDeletedItems = (dataList) => {
     return (
       dataList
@@ -17,10 +65,27 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  constructor({ dexiePerUserDataInstance, apiBaseUrl, getAccessToken }) {
+  constructor({
+    apiBaseUrl,
+    dexiePerUserDataInstance,
+    getAccessToken,
+    handleSyncPullErrors,
+    handleSyncPushErrors,
+  }) {
+    if (
+      !apiBaseUrl ||
+      !dexiePerUserDataInstance ||
+      !getAccessToken ||
+      !handleSyncPullErrors ||
+      !handleSyncPushErrors
+    ) {
+      throw new Error('SyncApiDataIntoOfflineStorage instantiated with missing parameter')
+    }
     this._dexiePerUserDataInstance = dexiePerUserDataInstance
     this._apiBaseUrl = apiBaseUrl
     this._getAccessToken = getAccessToken
+    this._handleSyncPullErrors = handleSyncPullErrors
+    this._handleSyncPushErrors = handleSyncPushErrors
   }
 
   pullAllProjects = () => {
@@ -97,26 +162,38 @@ const SyncApiDataIntoOfflineStorage = class {
         projects,
         token,
       ]) => {
-        return axios.post(
-          `${this._apiBaseUrl}/push/`,
-          {
-            benthic_attributes: this.#getOnlyModifiedAndDeletedItems(benthic_attributes),
-            collect_records: this.#getOnlyModifiedAndDeletedItems(collect_records),
-            fish_species: this.#getOnlyModifiedAndDeletedItems(fish_species),
-            project_managements: this.#getOnlyModifiedAndDeletedItems(project_managements),
-            project_profiles: this.#getOnlyModifiedAndDeletedItems(project_profiles),
-            project_sites: this.#getOnlyModifiedAndDeletedItems(project_sites),
-            projects: this.#getOnlyModifiedAndDeletedItems(projects),
-          },
-          {
-            params: {
-              force: true,
+        return axios
+          .post(
+            `${this._apiBaseUrl}/push/`,
+            {
+              benthic_attributes: this.#getOnlyModifiedAndDeletedItems(benthic_attributes),
+              collect_records: this.#getOnlyModifiedAndDeletedItems(collect_records),
+              fish_species: this.#getOnlyModifiedAndDeletedItems(fish_species),
+              project_managements: this.#getOnlyModifiedAndDeletedItems(project_managements),
+              project_profiles: this.#getOnlyModifiedAndDeletedItems(project_profiles),
+              project_sites: this.#getOnlyModifiedAndDeletedItems(project_sites),
+              projects: this.#getOnlyModifiedAndDeletedItems(projects),
             },
-            headers: {
-              Authorization: `Bearer ${token}`,
+            {
+              params: {
+                force: true,
+              },
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             },
-          },
-        )
+          )
+          .then((response) => {
+            const projectsWithSyncErrors =
+              this._getTableNamesWhereSyncingWasRejectedListedPerProject(response)
+            const areThereSyncErrors = Object.keys(projectsWithSyncErrors).length
+
+            if (areThereSyncErrors) {
+              this._handleSyncPushErrors(projectsWithSyncErrors)
+            }
+
+            return response
+          })
       },
     )
   }

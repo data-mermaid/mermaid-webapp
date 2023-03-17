@@ -19,8 +19,7 @@ const DropdownItemStyle = styled.button`
   border: none;
   text-align: left;
   ${hoverState(css`
-    background-color: ${theme.color.primaryHover};
-    color: ${theme.color.white};
+    background-color: ${theme.color.secondaryHover};
   `)}
 `
 
