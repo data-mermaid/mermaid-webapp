@@ -10,7 +10,7 @@ import {
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
 
-import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
+import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoHabitatComplexityRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
@@ -25,11 +25,6 @@ import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternativ
 import language from '../../../../language'
 import useIsMounted from '../../../../library/useIsMounted'
 import ErrorBoundary from '../../../ErrorBoundary'
-
-const getDataForSubNavNode = ({ isNewRecord, collectRecord, sites }) =>
-  !isNewRecord && collectRecord
-    ? getRecordSubNavNodeInfo(collectRecord.data, sites, collectRecord.data.protocol)
-    : { name: language.protocolTitles[collectRecord.data.protocol] }
 
 const HabitatComplexityForm = ({ isNewRecord }) => {
   const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
