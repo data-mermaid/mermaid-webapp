@@ -109,7 +109,7 @@ describe('Offline', () => {
     const newObservation = updatedCollectRecord.data.obs_benthic_pits[3]
 
     expect(newObservation.attribute).toEqual('fcf25ee3-701b-4d15-9a17-71f40406db4c')
-    expect(newObservation.interval).toEqual(6)
+    expect(newObservation.interval).toEqual('6.0')
     expect(newObservation.growth_form).toEqual('cbff6080-6387-44e5-b7ad-35f35f3db3a7')
   })
   test('Edit Benthic PIT save failure shows toast message with new edits persisting', async () => {

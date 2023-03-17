@@ -17,8 +17,8 @@ const benthicPitObservationReducer = (state, action) => {
     observations.forEach((observation, index) => {
       const previousObservation = recalculatedObservations[index - 1]
       const interval = !previousObservation
-        ? intervalStartToUse
-        : previousObservation.interval + intervalSize
+        ? Number(intervalStartToUse).toFixed(1)
+        : (Number(previousObservation.interval) + Number(intervalSize)).toFixed(1)
 
       recalculatedObservations.push({ ...observation, interval })
     })
