@@ -78,7 +78,7 @@ const BenthicPitForm = ({ isNewRecord }) => {
                   isNewRecord,
                   collectRecord: collectRecordResponse,
                   sites: sitesResponse,
-                  protocol: 'benthicpit',
+                  protocol: collectRecordResponse.data.protocol,
                 }),
               )
 
@@ -128,14 +128,14 @@ const BenthicPitForm = ({ isNewRecord }) => {
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
-  const handleCollectRecordChange = (updatedCollectRecord) => {
-    setCollectRecordBeingEdited(updatedCollectRecord)
+  const handleCollectRecordChange = (collectRecordResponse) => {
+    setCollectRecordBeingEdited(collectRecordResponse)
     setSubNavNode(
       getDataForSubNavNode({
         isNewRecord,
-        collectRecord: updatedCollectRecord,
+        collectRecord: collectRecordResponse,
         sites,
-        protocol: 'benthicpit',
+        protocol: collectRecordResponse.data.protocol,
       }),
     )
   }

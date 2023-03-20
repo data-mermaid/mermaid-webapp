@@ -77,7 +77,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
                   isNewRecord,
                   collectRecord: collectRecordResponse,
                   sites: sitesResponse,
-                  protocol: 'benthicpqt',
+                  protocol: collectRecordResponse.data.protocol,
                 }),
               )
 
@@ -116,15 +116,15 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
     handleHttpResponseError,
   ])
 
-  const handleCollectRecordChange = (updatedCollectRecord) => {
-    setCollectRecordBeingEdited(updatedCollectRecord)
+  const handleCollectRecordChange = (collectRecordResponse) => {
+    setCollectRecordBeingEdited(collectRecordResponse)
 
     setSubNavNode(
       getDataForSubNavNode({
         isNewRecord,
-        collectRecord: updatedCollectRecord,
+        collectRecord: collectRecordResponse,
         sites,
-        protocol: 'benthicpqt',
+        protocol: collectRecordResponse.data.protocol,
       }),
     )
   }

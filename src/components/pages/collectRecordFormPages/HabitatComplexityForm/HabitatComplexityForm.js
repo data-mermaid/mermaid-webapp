@@ -67,7 +67,7 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
                   isNewRecord,
                   collectRecord: collectRecordResponse,
                   sites: sitesResponse,
-                  protocol: 'habitatcomplexity',
+                  protocol: collectRecordResponse.data.protocol,
                 }),
               )
 
@@ -115,14 +115,14 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
-  const handleCollectRecordChange = (updatedCollectRecord) => {
-    setCollectRecordBeingEdited(updatedCollectRecord)
+  const handleCollectRecordChange = (collectRecordResponse) => {
+    setCollectRecordBeingEdited(collectRecordResponse)
     setSubNavNode(
       getDataForSubNavNode({
         isNewRecord,
-        collectRecord: updatedCollectRecord,
+        collectRecord: collectRecordResponse,
         sites,
-        protocol: 'habitatcomplexity',
+        protocol: collectRecordResponse.data.protocol,
       }),
     )
   }

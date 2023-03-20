@@ -79,7 +79,7 @@ const BleachingForm = ({ isNewRecord }) => {
                   isNewRecord,
                   collectRecord: collectRecordResponse,
                   sites: sitesResponse,
-                  protocol: 'bleachingqc',
+                  protocol: collectRecordResponse.data.protocol,
                 }),
               )
 
@@ -127,14 +127,14 @@ const BleachingForm = ({ isNewRecord }) => {
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
-  const handleCollectRecordChange = (updatedCollectRecord) => {
-    setCollectRecordBeingEdited(updatedCollectRecord)
+  const handleCollectRecordChange = (collectRecordResponse) => {
+    setCollectRecordBeingEdited(collectRecordResponse)
     setSubNavNode(
       getDataForSubNavNode({
         isNewRecord,
-        collectRecord: updatedCollectRecord,
+        collectRecord: collectRecordResponse,
         sites,
-        protocol: 'bleachingqc',
+        protocol: collectRecordResponse.data.protocol,
       }),
     )
   }
