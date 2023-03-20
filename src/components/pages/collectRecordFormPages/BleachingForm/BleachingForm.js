@@ -79,7 +79,7 @@ const BleachingForm = ({ isNewRecord }) => {
                   isNewRecord,
                   collectRecord: collectRecordResponse,
                   sites: sitesResponse,
-                  protocol: collectRecordResponse.data.protocol,
+                  protocol: collectRecordResponse?.data.protocol,
                 }),
               )
 
@@ -134,7 +134,7 @@ const BleachingForm = ({ isNewRecord }) => {
         isNewRecord,
         collectRecord: collectRecordResponse,
         sites,
-        protocol: collectRecordResponse.data.protocol,
+        protocol: collectRecordResponse?.data.protocol,
       }),
     )
   }

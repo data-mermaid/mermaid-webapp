@@ -99,7 +99,7 @@ const FishBeltForm = ({ isNewRecord }) => {
                   isNewRecord,
                   collectRecord: collectRecordResponse,
                   sites: sitesResponse,
-                  protocol: collectRecordResponse.data.protocol,
+                  protocol: collectRecordResponse?.data.protocol,
                 }),
               )
 
