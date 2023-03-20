@@ -18,8 +18,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieSuccess = () 
       dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
-      handleSyncPullErrors: () => {},
-      handleSyncPushErrors: () => {},
+      handleUserDeniedSyncPush: () => {},
     }),
     getAccessToken,
     dexiePerUserDataInstance,
@@ -47,8 +46,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOnlineDexieError = () =>
       dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
-      handleSyncPullErrors: () => {},
-      handleSyncPushErrors: () => {},
+      handleUserDeniedSyncPush: () => {},
     }),
   })
 }
@@ -66,8 +64,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieError = () =
       dexiePerUserDataInstance: getMockDexieInstanceThatProducesErrors(),
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
-      handleSyncPullErrors: () => {},
-      handleSyncPushErrors: () => {},
+      handleUserDeniedSyncPush: () => {},
     }),
   })
 }
@@ -82,8 +79,7 @@ export const getDatabaseSwitchboardInstanceAuthenticatedOfflineDexieSuccess = ()
       dexiePerUserDataInstance,
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
-      handleSyncPullErrors: () => {},
-      handleSyncPushErrors: () => {},
+      handleUserDeniedSyncPush: () => {},
     }),
     getAccessToken,
     dexiePerUserDataInstance,

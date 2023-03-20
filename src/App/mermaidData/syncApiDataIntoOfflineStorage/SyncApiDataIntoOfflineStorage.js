@@ -6,8 +6,8 @@ const SyncApiDataIntoOfflineStorage = class {
 
   _dexiePerUserDataInstance
 
-  _getTableNamesWhereSyncingWasRejectedListedPerProject =
-    function _getTableNamesWhereSyncingWasRejectedListedPerProject(pushResponse) {
+  #getTableNamesWhereSyncingWasRejectedListedPerProjectFromSyncPushError =
+    function getTableNamesWhereSyncingWasRejectedListedPerProjectFromSyncPushError(pushResponse) {
       const projectsWithSyncErrors = {}
 
       try {
@@ -50,10 +50,6 @@ const SyncApiDataIntoOfflineStorage = class {
       }
     }
 
-  _handleSyncPullErrors
-
-  _handleSyncPushErrors
-
   #getOnlyModifiedAndDeletedItems = (dataList) => {
     return (
       dataList
@@ -65,27 +61,16 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
-  constructor({
-    apiBaseUrl,
-    dexiePerUserDataInstance,
-    getAccessToken,
-    handleSyncPullErrors,
-    handleSyncPushErrors,
-  }) {
-    if (
-      !apiBaseUrl ||
-      !dexiePerUserDataInstance ||
-      !getAccessToken ||
-      !handleSyncPullErrors ||
-      !handleSyncPushErrors
-    ) {
+  #handleUserDeniedSyncPush
+
+  constructor({ apiBaseUrl, dexiePerUserDataInstance, getAccessToken, handleUserDeniedSyncPush }) {
+    if (!apiBaseUrl || !dexiePerUserDataInstance || !getAccessToken || !handleUserDeniedSyncPush) {
       throw new Error('SyncApiDataIntoOfflineStorage instantiated with missing parameter')
     }
     this._dexiePerUserDataInstance = dexiePerUserDataInstance
     this._apiBaseUrl = apiBaseUrl
     this._getAccessToken = getAccessToken
-    this._handleSyncPullErrors = handleSyncPullErrors
-    this._handleSyncPushErrors = handleSyncPushErrors
+    this.#handleUserDeniedSyncPush = handleUserDeniedSyncPush
   }
 
   pullAllProjects = () => {
@@ -185,11 +170,11 @@ const SyncApiDataIntoOfflineStorage = class {
           )
           .then((response) => {
             const projectsWithSyncErrors =
-              this._getTableNamesWhereSyncingWasRejectedListedPerProject(response)
+              this.#getTableNamesWhereSyncingWasRejectedListedPerProjectFromSyncPushError(response)
             const areThereSyncErrors = Object.keys(projectsWithSyncErrors).length
 
             if (areThereSyncErrors) {
-              this._handleSyncPushErrors(projectsWithSyncErrors)
+              this.#handleUserDeniedSyncPush(projectsWithSyncErrors)
             }
 
             return response
