@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 
 import benthicpqtObservationReducer from './benthicpqtObservationReducer'
 import { getBenthicOptions } from '../../../../library/getOptions'
-import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
+import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
@@ -72,14 +72,14 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
               }
 
-              const recordNameForSubNode =
-                !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      collectRecordResponse.data.protocol,
-                    )
-                  : { name: language.protocolTitles.benthicpqt }
+              setSubNavNode(
+                getDataForSubNavNode({
+                  isNewRecord,
+                  collectRecord: collectRecordResponse,
+                  sites: sitesResponse,
+                  protocol: collectRecordResponse?.data.protocol,
+                }),
+              )
 
               const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
 
@@ -89,7 +89,6 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
               setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
               setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setCollectRecordBeingEdited(collectRecordResponse)
-              setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
           },
@@ -117,8 +116,18 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
     handleHttpResponseError,
   ])
 
-  const handleCollectRecordChange = (updatedCollectRecord) =>
-    setCollectRecordBeingEdited(updatedCollectRecord)
+  const handleCollectRecordChange = (collectRecordResponse) => {
+    setCollectRecordBeingEdited(collectRecordResponse)
+
+    setSubNavNode(
+      getDataForSubNavNode({
+        isNewRecord,
+        collectRecord: collectRecordResponse,
+        sites,
+        protocol: collectRecordResponse?.data.protocol,
+      }),
+    )
+  }
 
   const handleNewObservationAdd = (observationAttributeId) =>
     setNewObservationToAdd(observationAttributeId)
