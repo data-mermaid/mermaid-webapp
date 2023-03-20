@@ -29,12 +29,13 @@ const SyncApiDataIntoOfflineStorage = class {
               const projectsOtherApiDataTablesThatRejectedSyncing =
                 projectsWithSyncErrors[syncErrorProjectId]?.apiDataTablesThatRejectedSyncing ?? []
 
+              const uniqueApiDataTablesThatRejectedSyncing = [
+                ...new Set([...projectsOtherApiDataTablesThatRejectedSyncing, apiSyncTableName]),
+              ]
+
               projectsWithSyncErrors[syncErrorProjectId] = {
                 name: syncErrorProjectName,
-                apiDataTablesThatRejectedSyncing: [
-                  ...projectsOtherApiDataTablesThatRejectedSyncing,
-                  apiSyncTableName,
-                ],
+                apiDataTablesThatRejectedSyncing: uniqueApiDataTablesThatRejectedSyncing,
               }
             }
           })
