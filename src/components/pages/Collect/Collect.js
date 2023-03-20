@@ -41,7 +41,7 @@ import {
   getIsQuadratSampleUnit,
   noLabelSymbol,
 } from '../../../App/mermaidData/recordProtocolHelpers'
-import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 
 const Collect = () => {
@@ -54,7 +54,7 @@ const Collect = () => {
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
 
   useDocumentTitle(`${language.pages.collectTable.title} - ${language.title.mermaid}`)
 

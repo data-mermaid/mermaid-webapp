@@ -17,7 +17,7 @@ import RecordFormTitle from '../../../RecordFormTitle'
 import { RowSpaceBetween } from '../../../generic/positioning'
 import { IconPen } from '../../../icons'
 import { ButtonSecondary } from '../../../generic/buttons'
-import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingSlash'
@@ -48,7 +48,7 @@ const SubmittedHabitatComplexity = () => {
   const [isMoveToButtonDisabled, setIsMoveToButtonDisabled] = useState(false)
   const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
 
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
 
   const _getSupportingData = useEffect(() => {

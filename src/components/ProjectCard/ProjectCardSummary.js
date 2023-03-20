@@ -16,7 +16,7 @@ import { IconCollect, IconData, IconSites, IconUsers } from '../icons'
 import { projectPropType } from '../../App/mermaidData/mermaidDataProptypes'
 import stopEventPropagation from '../../library/stopEventPropagation'
 import { useCurrentUser } from '../../App/CurrentUserContext'
-import { getIsReadOnlyUserRole } from '../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
 import language from '../../language'
 
 const ProjectCardSummary = ({ project, isAppOnline }) => {
@@ -32,7 +32,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     id,
   } = project
 
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, id)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, id)
   const projectUrl = `projects/${id}`
 
   const userCollectCount = useMemo(() => {
@@ -84,7 +84,11 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   )
 
   const submittedCardOnline = (
-    <SummaryCard to={`${projectUrl}/submitted`} aria-label="Submitted" onClick={stopEventPropagation}>
+    <SummaryCard
+      to={`${projectUrl}/submitted`}
+      aria-label="Submitted"
+      onClick={stopEventPropagation}
+    >
       <SubCardTitle>Submitted</SubCardTitle>
       <SubCardIconAndCount>
         <IconData />
