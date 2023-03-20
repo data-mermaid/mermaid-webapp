@@ -8,11 +8,11 @@ import {
   renderAuthenticatedOnline,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { mockBenthicLitValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
+import mockBenthicLitValidationsObject from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
 import App from '../../../App'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-import { mockBenthicLitCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
+import mockBenthicLitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 

@@ -151,7 +151,7 @@ const Modal = ({
 
   return (
     isOpen && (
-      <StyledDialogOverlay>
+      <StyledDialogOverlay aria-label={`${title} Modal`}>
         <StyledDialog role="dialog" aria-labelledby="modal-title" aria-describedby="modal-content">
           <ModalTitle>
             <h2 id="modal-title">{title}</h2>

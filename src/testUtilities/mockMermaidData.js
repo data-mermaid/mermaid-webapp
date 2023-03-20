@@ -1,5 +1,5 @@
-import { mockBenthicLitCollectRecords } from './mockCollectRecords/mockBenthicLitCollectRecords'
-import { mockHabitatComplexityCollectRecords } from './mockCollectRecords/mockHabitatComplexityCollectRecords'
+import mockBenthicLitCollectRecords from './mockCollectRecords/mockBenthicLitCollectRecords'
+import mockHabitatComplexityCollectRecords from './mockCollectRecords/mockHabitatComplexityCollectRecords'
 import mockBenthicPitCollectRecords from './mockCollectRecords/mockBenthicPitCollectRecords'
 import mockBleachingCollectRecords from './mockCollectRecords/mockBleachingCollectRecords'
 import mockFishbeltCollectRecords from './mockCollectRecords/mockFishbeltCollectRecords'

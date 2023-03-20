@@ -9,7 +9,7 @@ import {
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { mockBenthicPitValidationsObject } from '../../../../testUtilities/mockBenthicPitValidationsObject'
+import mockBenthicPitValidationsObject from '../../../../testUtilities/mockBenthicPitValidationsObject'
 import App from '../../../App'
 import mockBenthicPitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
