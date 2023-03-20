@@ -559,6 +559,7 @@ const CollectRecordFormPage = ({
       formik={formik}
       ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
       onSizeBinChange={handleSizeBinChange}
+      observationsReducer={observationsReducer}
       resetNonObservationFieldValidations={resetNonObservationFieldValidations}
       validationsApiData={validationsApiData}
       validationPropertiesWithDirtyResetOnInputChange={
