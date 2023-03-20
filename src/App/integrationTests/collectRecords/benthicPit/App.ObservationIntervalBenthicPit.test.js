@@ -41,10 +41,10 @@ test('Benthic Pit observations: intervals are derived from interval start and in
     const observationIntervalLabelsAfterFourRowsAdded =
       within(observationsSection).getAllByLabelText('Interval')
 
-    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15.0m')
   })
 
   // user changes interval start value
@@ -55,10 +55,10 @@ test('Benthic Pit observations: intervals are derived from interval start and in
     const observationIntervalLabelsAfterIntervalStartChange =
       within(observationsSection).getAllByLabelText('Interval')
 
-    expect(observationIntervalLabelsAfterIntervalStartChange[0]).toHaveTextContent('5m')
-    expect(observationIntervalLabelsAfterIntervalStartChange[1]).toHaveTextContent('10m')
-    expect(observationIntervalLabelsAfterIntervalStartChange[2]).toHaveTextContent('15m')
-    expect(observationIntervalLabelsAfterIntervalStartChange[3]).toHaveTextContent('20m')
+    expect(observationIntervalLabelsAfterIntervalStartChange[0]).toHaveTextContent('5.0m')
+    expect(observationIntervalLabelsAfterIntervalStartChange[1]).toHaveTextContent('10.0m')
+    expect(observationIntervalLabelsAfterIntervalStartChange[2]).toHaveTextContent('15.0m')
+    expect(observationIntervalLabelsAfterIntervalStartChange[3]).toHaveTextContent('20.0m')
   })
 
   // user changes interval size value
@@ -69,10 +69,10 @@ test('Benthic Pit observations: intervals are derived from interval start and in
     const observationIntervalLabelsAfterIntervalSizeChange =
       within(observationsSection).getAllByLabelText('Interval')
 
-    expect(observationIntervalLabelsAfterIntervalSizeChange[0]).toHaveTextContent('5m')
-    expect(observationIntervalLabelsAfterIntervalSizeChange[1]).toHaveTextContent('105m')
-    expect(observationIntervalLabelsAfterIntervalSizeChange[2]).toHaveTextContent('205m')
-    expect(observationIntervalLabelsAfterIntervalSizeChange[3]).toHaveTextContent('305m')
+    expect(observationIntervalLabelsAfterIntervalSizeChange[0]).toHaveTextContent('5.0m')
+    expect(observationIntervalLabelsAfterIntervalSizeChange[1]).toHaveTextContent('105.0m')
+    expect(observationIntervalLabelsAfterIntervalSizeChange[2]).toHaveTextContent('205.0m')
+    expect(observationIntervalLabelsAfterIntervalSizeChange[3]).toHaveTextContent('305.0m')
   })
 })
 
@@ -105,10 +105,10 @@ test('Benthic PIT observations: intervals recalculate when user deletes an obser
     const observationIntervalLabelsAfterFourRowsAdded =
       within(observationsSection).getAllByLabelText('Interval')
 
-    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15.0m')
   })
 
   // delete the first observation, the intervals should recalculate
@@ -122,9 +122,9 @@ test('Benthic PIT observations: intervals recalculate when user deletes an obser
   const observationIntervalLabelsAfterObservationDelete =
     within(observationsSection).getAllByLabelText('Interval')
 
-  expect(observationIntervalLabelsAfterObservationDelete[0]).toHaveTextContent('0m')
-  expect(observationIntervalLabelsAfterObservationDelete[1]).toHaveTextContent('5m')
-  expect(observationIntervalLabelsAfterObservationDelete[2]).toHaveTextContent('10m')
+  expect(observationIntervalLabelsAfterObservationDelete[0]).toHaveTextContent('0.0m')
+  expect(observationIntervalLabelsAfterObservationDelete[1]).toHaveTextContent('5.0m')
+  expect(observationIntervalLabelsAfterObservationDelete[2]).toHaveTextContent('10.0m')
   expect(observationIntervalLabelsAfterObservationDelete[3]).toBeUndefined()
 })
 
@@ -157,10 +157,10 @@ test('Benthic Pit observations: intervals reclaculate when a user inserts a row 
     const observationIntervalLabelsAfterFourRowsAdded =
       within(observationsSection).getAllByLabelText('Interval')
 
-    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[0]).toHaveTextContent('0.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10.0m')
+    expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15.0m')
     expect(observationIntervalLabelsAfterFourRowsAdded[4]).toBeUndefined()
   })
 
@@ -174,10 +174,10 @@ test('Benthic Pit observations: intervals reclaculate when a user inserts a row 
     const observationIntervalLabelsAfterEnterKey =
       within(observationsSection).getAllByLabelText('Interval')
 
-    expect(observationIntervalLabelsAfterEnterKey[0]).toHaveTextContent('0m')
-    expect(observationIntervalLabelsAfterEnterKey[1]).toHaveTextContent('5m')
-    expect(observationIntervalLabelsAfterEnterKey[2]).toHaveTextContent('10m')
-    expect(observationIntervalLabelsAfterEnterKey[3]).toHaveTextContent('15m')
-    expect(observationIntervalLabelsAfterEnterKey[4]).toHaveTextContent('20m')
+    expect(observationIntervalLabelsAfterEnterKey[0]).toHaveTextContent('0.0m')
+    expect(observationIntervalLabelsAfterEnterKey[1]).toHaveTextContent('5.0m')
+    expect(observationIntervalLabelsAfterEnterKey[2]).toHaveTextContent('10.0m')
+    expect(observationIntervalLabelsAfterEnterKey[3]).toHaveTextContent('15.0m')
+    expect(observationIntervalLabelsAfterEnterKey[4]).toHaveTextContent('20.0m')
   })
 })
