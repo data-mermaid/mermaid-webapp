@@ -125,7 +125,7 @@ test('Benthic PIT observations: intervals recalculate when user deletes an obser
   expect(observationIntervalLabelsAfterObservationDelete[0]).toHaveTextContent('0m')
   expect(observationIntervalLabelsAfterObservationDelete[1]).toHaveTextContent('5m')
   expect(observationIntervalLabelsAfterObservationDelete[2]).toHaveTextContent('10m')
-  expect(observationIntervalLabelsAfterObservationDelete[3]).toBeUndefined()
+  expect(observationIntervalLabelsAfterObservationDelete[3]).toHaveTextContent('15m')
 })
 
 test('Benthic Pit observations: intervals reclaculate when a user inserts a row using the enter key', async () => {
@@ -161,7 +161,7 @@ test('Benthic Pit observations: intervals reclaculate when a user inserts a row 
     expect(observationIntervalLabelsAfterFourRowsAdded[1]).toHaveTextContent('5m')
     expect(observationIntervalLabelsAfterFourRowsAdded[2]).toHaveTextContent('10m')
     expect(observationIntervalLabelsAfterFourRowsAdded[3]).toHaveTextContent('15m')
-    expect(observationIntervalLabelsAfterFourRowsAdded[4]).toBeUndefined()
+    expect(observationIntervalLabelsAfterFourRowsAdded[4]).toHaveTextContent('20m')
   })
 
   // hit enter key to duplicate first observation into second place below first
