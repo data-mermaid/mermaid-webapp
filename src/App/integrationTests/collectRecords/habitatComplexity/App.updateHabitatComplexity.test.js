@@ -129,7 +129,7 @@ describe('Offline', () => {
       }),
     )
 
-    expect(await screen.findByText('Something went wrong. The sample unit has not been saved.'))
+    expect(await screen.findByText("The sample unit hasn't been saved."))
 
     expect(await screen.findByLabelText('Depth')).toHaveValue(45)
   })

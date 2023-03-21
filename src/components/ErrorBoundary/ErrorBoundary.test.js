@@ -26,24 +26,24 @@ test('ErrorBoundary renders children when no error is thrown', () => {
 
 test('ErrorBoundary renders the fallback UI when an error is thrown', () => {
   // Surpress the error which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => { })
+  jest.spyOn(console, 'error').mockImplementation(() => {})
 
   render(
     <ErrorBoundary>
       <ChildComponentWithOneOffError />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
 
   expect(screen.getByText(/A part of this page didn't load correctly./)).toBeInTheDocument()
 })
 
-test('ErrorBoundary resets the error message when the try again button is clicked', () => {
+test('ErrorBoundary resets the error message when the Try Again button is clicked', () => {
   // Surpress the error which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => { })
+  jest.spyOn(console, 'error').mockImplementation(() => {})
   render(
     <ErrorBoundary>
       <ChildComponentWithOneOffError />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
 
   expect(screen.getByText(/A part of this page didn't load correctly./)).toBeInTheDocument()
@@ -55,12 +55,12 @@ test('ErrorBoundary resets the error message when the try again button is clicke
 
 test('ErrorBoundary removes Try Again button after one failed re-render', () => {
   // Surpress the errors which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => { })
+  jest.spyOn(console, 'error').mockImplementation(() => {})
 
   render(
     <ErrorBoundary>
       <ChildComponentWithPermanentError />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
 
   expect(screen.getByText(/A part of this page didn't load correctly./)).toBeInTheDocument()

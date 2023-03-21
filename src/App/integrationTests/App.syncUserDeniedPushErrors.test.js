@@ -39,7 +39,7 @@ test('User being denied push sync shows toasts', async () => {
   expect(project100ToastContent).toHaveTextContent(
     'You do not have permission to sync data to Project 100. Please check your notifications and consult with a project administrator about your project role.',
   )
-  expect(project100ToastContent).toHaveTextContent('Unsaved data:')
+  expect(project100ToastContent).toHaveTextContent("The following haven't been saved: ")
   expect(project100ToastContent).toHaveTextContent('benthic attributes')
   expect(project100ToastContent).toHaveTextContent('unsubmitted sample units')
   expect(project100ToastContent).toHaveTextContent('fish species')
@@ -51,7 +51,7 @@ test('User being denied push sync shows toasts', async () => {
   expect(project500ToastContent).toHaveTextContent(
     'You do not have permission to sync data to Project 500. Please check your notifications and consult with a project administrator about your project role.',
   )
-  expect(project500ToastContent).toHaveTextContent('Unsaved data:')
+  expect(project500ToastContent).toHaveTextContent("The following haven't been saved: ")
   expect(project500ToastContent).not.toHaveTextContent('benthic attributes')
   expect(project500ToastContent).not.toHaveTextContent('unsubmitted sample units')
   expect(project500ToastContent).not.toHaveTextContent('fish species')
@@ -63,7 +63,7 @@ test('User being denied push sync shows toasts', async () => {
   expect(project900ToastContent).toHaveTextContent(
     'You do not have permission to sync data to Project 900. Please check your notifications and consult with a project administrator about your project role.',
   )
-  expect(project900ToastContent).toHaveTextContent('Unsaved data:')
+  expect(project900ToastContent).toHaveTextContent("The following haven't been saved: ")
   expect(project900ToastContent).not.toHaveTextContent('benthic attributes')
   expect(project900ToastContent).toHaveTextContent('unsubmitted sample units')
   expect(project900ToastContent).not.toHaveTextContent('fish species')

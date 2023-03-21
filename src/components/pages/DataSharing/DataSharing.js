@@ -180,10 +180,10 @@ const DataSharing = () => {
   const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
   const contentViewByRole = (
     <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'pointer'}>
-      <h3>Data is much more powerful when shared.</h3>
+      <h3>Data are much more powerful when shared.</h3>
       <P>{language.pages.dataSharing.introductionParagraph}</P>
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>
-        <IconInfo /> Learn more about how your data is shared...
+        <IconInfo /> Learn more about how your data are shared...
       </ButtonPrimary>
       {isAdminUser ? (
         <TableOverflowWrapper>

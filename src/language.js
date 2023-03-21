@@ -25,33 +25,29 @@ const apiDataTableNames = {
 }
 
 const error = {
-  403: 'The current user does not have sufficient permission to do that.',
-  500: 'Server error: please contact support@datamermaid.org',
-  502: 'Server error: please contact support@datamermaid.org',
-  503: 'Server error: please contact support@datamermaid.org',
-  apiDataSync: 'The app was not able to sync data with the API. Please try again.',
-  appNotAuthenticatedOrReady: 'Initialization error. Try reloading or reauthenticating.',
+  403: "The current user doesn't have permission to do that.",
+  500: 'MERMAID error: please contact support@datamermaid.org',
+  502: 'MERMAID error: please contact support@datamermaid.org',
+  503: 'MERMAID error: please contact support@datamermaid.org',
+  apiDataSync: "MERMAID wasn't able to sync data.",
+  appNotAuthenticatedOrReady: "MERMAID didn't load correclty. Try logging back in.",
   collectRecordSupportingDataUnavailable:
-    'Supporting data for creating a sample unit is currently unavailable. Please try again',
-  collectRecordDelete: 'Something went wrong. The sample unit has not been deleted.',
+    'Supporting data for creating a sample unit is currently unavailable.',
+  collectRecordDelete: "The sample unit hasn't been deleted.",
   collectRecordValidation: 'Validation is currently unavailable for this record.',
-  collectRecordValidationIgnore:
-    'Something went wrong. This validation cannot be ignored. Please try again.',
-  collectRecordValidationReset:
-    'Something went wrong. This validation cannot be reset. Please try again.',
-  collectRecordSave: 'Something went wrong. The sample unit has not been saved.',
-  collectRecordSubmit: 'Something went wrong. The sample unit has not been submitted.',
-  collectRecordsUnavailable: 'Sample unit data is currently unavailable. Please try again',
-  collectRecordUnavailable: 'Sample unit data is currently unavailable. Please try again',
+  collectRecordValidationIgnore: "This validation can't be ignored.",
+  collectRecordValidationReset: "This validation can't be reset.",
+  collectRecordSave: "The sample unit hasn't been saved.",
+  collectRecordSubmit: "The sample unit hasn't been submitted.",
+  collectRecordsUnavailable: 'Sample unit data are currently unavailable.',
+  collectRecordUnavailable: 'Sample unit data are currently unavailable.',
   collectRecordSubmitDisabled: 'Errors or warnings are preventing you from submitting',
   duplicateNewUserAdd: 'User has already been added to project.',
   emptyEmailAdd: 'Please enter an email address.',
   fishSpeciesAlreadyExists:
     'The proposed fish species already exists in the list. The observation has been edited to show the existing species selected.',
-  fishSpeciesSave:
-    'Something went Wrong. The new fish species has not been saved. Please try proposing it again.',
-  attributeSave: (attribute) =>
-    `Something went Wrong. The new ${attribute} has not been saved. Please try proposing it again.`,
+  fishSpeciesSave: "The new fish species hasn't been saved.",
+  attributeSave: (attribute) => `The new ${attribute} hasn't been saved.`,
   formValidation: {
     latitude: 'Latitude should be between -90° and 90°',
     longitude: 'Longitude should be between -180° and 180°',
@@ -59,36 +55,32 @@ const error = {
     projectNameExists: 'Project name already exists',
     managementPartialRestrictionRequired: 'At least one rule is required',
   },
-  generic: 'Something went wrong.',
+  generic: 'MERMAID error.',
   getSaveOnlineSyncErrorTitle: (mermaidDataTypeLabel) =>
-    `The ${mermaidDataTypeLabel} has been saved on your computer, but not in the MERMAID online system.`,
+    `The ${mermaidDataTypeLabel} has been saved on your computer, but not online.`,
   getDeleteOnlineSyncErrorTitle: (mermaidDataTypeLabel) =>
-    `The ${mermaidDataTypeLabel} has not been deleted from your computer or the MERMAID online system.`,
+    `The ${mermaidDataTypeLabel} hasn't been deleted from your computer or online.`,
   getSaveOfflineErrorTitle: (mermaidDataTypeLabel) =>
-    `The ${mermaidDataTypeLabel} failed to save both on your computer and in the MERMAID online system.`,
+    `The ${mermaidDataTypeLabel} failed to save both on your computer and online.`,
   getDeleteOfflineErrorTitle: (mermaidDataTypeLabel) =>
-    `The ${mermaidDataTypeLabel} has failed to delete from your computer or the MERMAID online system.`,
+    `The ${mermaidDataTypeLabel} has failed to delete from your computer or online.`,
   idNotFoundUserAction: "Please check the URL in your browser's address bar.",
   invalidEmailAdd: 'Invalid email address.',
-  managementRegimeRecordsUnavailable:
-    'Management Regime records data is currently unavailable. Please try again.',
-  managementRegimeRecordUnavailable:
-    'Management Regime record data is currently unavailable. Please try again.',
+  managementRegimeRecordsUnavailable: 'Management Regime records data are currently unavailable.',
+  managementRegimeRecordUnavailable: 'Management Regime record data are currently unavailable.',
   notificationsUnavailable: 'Notifications are unavailable.',
-  notificationNotDeleted: 'Notification could not be removed.',
-  projectSave: 'Something went wrong. The project has not been saved.',
-  projectsUnavailable: 'Projects data is currently unavailable. Please try again.',
+  notificationNotDeleted: "Notification couldn't be removed.",
+  projectSave: "The project hasn't been saved.",
+  projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
-  siteRecordsUnavailable: 'Site records data is currently unavailable. Please try again.',
-  siteRecordUnavailable: 'Site record data is currently unavailable. Please try again.',
-  submittedRecordsUnavailable: 'Submitted records data is currently unavailable. Please try again',
-  submittedRecordUnavailable: 'Submitted record data is currently unavailable. Please try again',
-  submittedRecordMoveToCollect:
-    'Something went wrong. The submitted record has not been made editable',
+  siteRecordsUnavailable: 'Site record data are currently unavailable.',
+  siteRecordUnavailable: 'Site record data are currently unavailable.',
+  submittedRecordsUnavailable: 'Submitted record data are currently unavailable.',
+  submittedRecordUnavailable: 'Submitted record data are currently unavailable.',
+  submittedRecordMoveToCollect: "The submitted record hasn't been made editable",
   userProfileUnavailable: 'The user profile is unavailable.',
-  userRecordsUnavailable: 'User records data is currently unavailable. Please try again.',
-  projectHealthRecordsUnavailable:
-    'Summary records data is currently unavailable. Please try again',
+  userRecordsUnavailable: 'User record data are currently unavailable.',
+  projectHealthRecordsUnavailable: 'Summary record data are currently unavailable.',
   attributeAlreadyExists: (attribute) =>
     `The proposed ${attribute} already exists in the list. The observation has been edited to show the existing ${attribute} selected.`,
 
@@ -97,9 +89,9 @@ const error = {
       ? `The items with the ids ${id} can't be found.`
       : `The item with the id ${id} can't be found.`,
   getProjectTurnOnOfflineReadyFailure: (projectName) =>
-    `Something went wrong. The Project ${projectName}, may not be ready to be used offline. Please try again.`,
+    `The Project ${projectName}, may not be ready to be used offline.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>
-    `Something went wrong. The Project ${projectName}, has not been removed from being offline-ready.`,
+    `The Project ${projectName}, hasn't been removed from being offline-ready.`,
   getPullSyncErrorMessage: (projectName) => (
     <>
       You do not have permission to read data from <strong>{projectName}</strong>. Please check your
@@ -113,20 +105,18 @@ const error = {
     </>
   ),
 
-  pushSyncErrorMessageUnsavedData: 'Unsaved data:',
+  pushSyncErrorMessageUnsavedData: "The following haven't been saved: ",
 
-  getUserRoleChangeFailureMessage: (userName) =>
-    `Something went wrong. ${userName}'s role has not been changed.`,
+  getUserRoleChangeFailureMessage: (userName) => `${userName}'s role hasn't been changed.`,
   pageUnavailableOffline: 'This page is unavailable offline.',
   pageNotFound: "This page can't be found.",
   pageNotFoundRecovery: 'Make sure the URL is correct.',
-  pageReadOnly: 'You cannot access this page because you are a read-only member of this project.',
+  pageReadOnly: "You can't access this page because you are a read-only member of this project.",
   idNotFound: "This item can't be found.",
   idNotFoundRecovery:
     "It might have been deleted, you don't have permission to view it, or the URL might be wrong.",
   homePageNavigation: 'Go back to the home page.',
-  transferSampleUnitsUnavailable:
-    'Something went wrong. Sample units failed to transfer. Please try again.',
+  transferSampleUnitsUnavailable: 'Sample units failed to transfer.',
   onPageWarningAbove: 'Warning or error',
   onPageWarningBelow: 'Warning or error',
   errorBoundaryPrimary: "A part of this page didn't load correctly.",
@@ -142,10 +132,9 @@ const success = {
   newOrganizationAdd: 'Organization added.',
   fishSpeciesSave:
     'Proposed fish species saved. The observation has been edited to show it selected.',
-  getProjectTurnOnOfflineReadySuccess: (projectName) =>
-    `The project, ${projectName}, is now offline ready`,
+  getProjectTurnOnOfflineReadySuccess: (projectName) => `${projectName} is now offline ready`,
   getProjectTurnOffOfflineReadySuccess: (projectName) =>
-    `The project, ${projectName}, has been removed from being offline ready`,
+    `${projectName} has been removed from being offline ready`,
   getUserRoleChangeSuccessMessage: ({ userName, role }) =>
     `${userName}'s role is now set to ${role}.`,
   newUserAdd: 'New user added.',
@@ -156,10 +145,10 @@ const success = {
   projectCreated: 'Project created',
   getMermaidDataSaveSuccess: ({ mermaidDataTypeLabel, isAppOnline }) =>
     isAppOnline
-      ? `The ${mermaidDataTypeLabel} has been saved on your computer and in the MERMAID online system.`
+      ? `The ${mermaidDataTypeLabel} has been saved on your computer and online.`
       : `The ${mermaidDataTypeLabel} has been saved on your computer.`,
   getMermaidDataDeleteSuccess: (mermaidDataTypeLabel) =>
-    `The ${mermaidDataTypeLabel} has been deleted from your computer and the MERMAID online system.`,
+    `The ${mermaidDataTypeLabel} has been deleted from your computer and online.`,
 
   submittedRecordMoveToCollect: 'The submitted record has been moved to collecting.',
   projectStatusSaved: `Test project selection saved.`,
@@ -185,7 +174,7 @@ const deleteRecord = (pageName) => {
     prompt: `Are you sure you want to delete this ${pageName.toLowerCase()}?`,
     yes: `Delete ${pageName}`,
     no: 'Cancel',
-    confirmDeleteText1: `You can not delete this ${pageName.toLowerCase()} because it is used in the following sample units:`,
+    confirmDeleteText1: `You can't delete this ${pageName.toLowerCase()} because it is used in the following sample units:`,
     confirmDeleteText2: `You have to remove this ${pageName.toLowerCase()} from all sample units before you can delete it.`,
   }
 }
@@ -255,7 +244,7 @@ const pages = {
     noFilterResults: 'No results',
     noFilterResultsSubText: 'No projects match the current filter term.',
     readOnlyUserWithActiveSampleUnits:
-      'You cannot submit these collect records because you only have read-only access to this project. Please contact a project admin.',
+      "You can't submit these collect records because you only have read-only access to this project. Please contact the project admin.",
   },
   collectRecord: {
     title: 'Collecting',
@@ -267,7 +256,7 @@ const pages = {
   projectInfo: {
     createOrganizationTitle: 'Suggest a new organization',
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
-    noNotes: 'no notes for this project',
+    noNotes: 'No notes for this project',
     noOrganizationFound: `No organization found.`,
     organizationsHelperText: `Type to search for an organization.`,
     removeOrganization: `Remove organization from project`,
@@ -275,7 +264,7 @@ const pages = {
     title: 'Project Info',
   },
   dataSharing: {
-    introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data is collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
+    introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
     isTestProject: 'This is a test project',
     moreInfoTitle: 'Data sharing',
     testProjectHelperText: 'Data for a test project will not be included in public reporting.',
@@ -300,11 +289,11 @@ const pages = {
     deleteUnsyncedButton: 'Delete Unsynced Sample Units',
     removeUserModalTitle: 'Remove User From Project',
     removeUserButton: 'Remove User',
-    cancelButton: 'cancel',
+    cancelButton: 'Cancel',
   },
   submittedForm: {
     sampleUnitsAreReadOnly: 'Submitted sample units are read-only.',
-    moveSampleUnitButton: 'Edit Sample Unit - move to Collecting',
+    moveSampleUnitButton: 'Edit Sample Unit — move to Collecting',
     adminEditOnly:
       'Submitted sample units are read-only and can only be moved to Collecting by an admin.',
   },
@@ -319,7 +308,7 @@ const pages = {
   siteTable: {
     controlZoomText: 'Use Ctrl + Scroll to zoom the map',
     copySitesButtonText: 'Copy sites from other projects',
-    filterToolbarText: 'Filter this table by name, reef type, reef zone, and exposure.',
+    filterToolbarText: 'Filter this table by name, reef type, reef zone, or exposure.',
     noDataMainText: 'This project has no sites.',
     title: 'Sites',
   },
@@ -329,7 +318,7 @@ const pages = {
   managementRegimeTable: {
     copyManagementRegimeButtonText: 'Copy MRs from other projects',
     filterToolbarText: 'Filter this table by name or year',
-    noDataMainText: `This project has no management regimes.`,
+    noDataMainText: `This project has no Management Regimes.`,
     title: 'Management Regimes',
   },
   usersAndTransectsTable: {
@@ -350,16 +339,16 @@ const pages = {
     title: 'Management Regimes Overview',
     noDataMainText: 'This project has no submitted sample units yet.',
     noDataSubText:
-      'This page will show the management regime of submitted sample units by method and site.',
+      'This page will show the Management Regime of submitted sample units by method and site.',
   },
   copySiteTable: {
     title: 'Copy Sites',
-    filterToolbarText: 'Filter this table by name, project or country',
+    filterToolbarText: 'Filter this table by name, project, or country',
     copyButtonText: 'Copy selected sites to project',
   },
   copyManagementRegimeTable: {
     title: 'Copy Management Regimes',
-    filterToolbarText: 'Filter management regimes by name, project, or year',
+    filterToolbarText: 'Filter Management Regimes by name, project, or year',
     copyButtonText: 'Copy selected MRs to project',
   },
 }
@@ -381,10 +370,10 @@ const map = {
 }
 
 const popoverTexts = {
-  noSampleUnitMatch: 'No sample units match:',
-  viewSubmittedSampleUnit: 'View Submitted Sample Unit',
+  noSampleUnitMatch: 'No Sample Units match:',
+  viewSubmittedSampleUnit: 'View submitted Sample Unit',
   notSubmittedSampleUnit: `This sample unit isn't submitted`,
-  inCollectingWith: 'In Collecting With:',
+  inCollectingWith: 'In Collecting with:',
 }
 
 const getResolveModalLanguage = (siteOrManagementRegime) => {
