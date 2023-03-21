@@ -743,6 +743,12 @@ const choices = {
         updated_on: '2020-03-13T18:34:46.244096Z',
         val: 'AGRRA',
       },
+      {
+        id: '811c8fdd-36a4-4148-be37-2e2bd948e9f8',
+        name: 'WCS India',
+        updated_on: '2021-08-17T17:06:41.054263Z',
+        val: 'WCS India',
+      },
     ],
   },
   reefslopes: {
