@@ -89,6 +89,12 @@ const BenthicPitObservationsTable = ({
     observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
   }
 
+  const _addInitialEmptyObservationRow = useEffect(() => {
+    if (!collectRecord && observationsState.length === 0) {
+      handleAddObservation()
+    }
+  })
+
   const observationsRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
 

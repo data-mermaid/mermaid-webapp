@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -64,6 +64,12 @@ const BenthicLitObservationsTable = ({
 
     observationsDispatch({ type: 'addObservation' })
   }
+
+  const _addInitialEmptyObservationRow = useEffect(() => {
+    if (!collectRecord && observationsState.length === 0) {
+      handleAddObservation()
+    }
+  })
 
   const observationsRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
