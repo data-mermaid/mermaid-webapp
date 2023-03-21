@@ -71,6 +71,11 @@ export const inputTextareaSelectStyles = css`
     -webkit-appearance: none;
   }
   -moz-appearance: textfield;
+  &:disabled {
+    background: ${theme.color.disabledInputBackground};
+    cursor: not-allowed;
+    color: ${theme.color.disabledTextDark};
+  }
 `
 export const RequiredIndicator = styled.span`
   color: ${theme.color.callout};
