@@ -15,7 +15,7 @@ import {
 import App from '../App'
 
 /**  this is a very imperative test suite in that its testing state (indexeddb),
- * but since sync is integral to the app, and since we don't have the
+ * but since sync is integral to the app, and since we do not have the
  * features fully consuming the synced state yet to test against,
  * we are making an exception. Testing is a push was part of the
  * sync was skipped as it might be a convoluted test and not great ROI

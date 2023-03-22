@@ -18,8 +18,8 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith("The current user doesn't have permission to do that.", {
-    toastId: "The current user doesn't have permission to do that.",
+  expect(toastSpy).toHaveBeenCalledWith('The current user does not have permission to do that.', {
+    toastId: 'The current user does not have permission to do that.',
     transition: Slide,
   })
 

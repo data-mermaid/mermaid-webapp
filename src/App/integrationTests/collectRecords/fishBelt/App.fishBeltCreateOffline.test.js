@@ -115,7 +115,7 @@ describe('Offline', () => {
 
     await saveFishbeltRecord()
 
-    expect(await screen.findByText("The sample unit hasn't been saved."))
+    expect(await screen.findByText('The sample unit has not been saved.'))
 
     // ensure the were not in edit mode, but new fish belt mode
     expect(
