@@ -49,8 +49,7 @@ test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revis
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: () => {},
+    handleUserDeniedSyncPush: () => {},
   })
 
   // initial pull from api with last revision numbers being null
@@ -103,8 +102,7 @@ test('pushThenPullAllProjectData keeps track of returned last_revision_nums and 
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: () => {},
+    handleUserDeniedSyncPush: () => {},
   })
 
   // initial pull from api with last revision numbers being null
@@ -153,8 +151,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: () => {},
+    handleUserDeniedSyncPush: () => {},
   })
 
   // initial pull from api with last revision numbers being null
@@ -171,8 +168,7 @@ test('pushThenPullAllProjectDataExceptChoices updates IDB with API data', async 
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: () => {},
+    handleUserDeniedSyncPush: () => {},
   })
 
   const apiDataNamesToPullNonProject = [
@@ -346,8 +342,7 @@ test('pushThenPullAllProjectData updates IDB with API data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: () => {},
+    handleUserDeniedSyncPush: () => {},
   })
 
   const apiDataNamesToPullNonProject = [
@@ -536,8 +531,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: () => {},
+    handleUserDeniedSyncPush: () => {},
   })
 
   const apiDataNamesToPullNonProject = [
@@ -708,8 +702,7 @@ test('pushChanges includes the force flag', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: () => {},
+    handleUserDeniedSyncPush: () => {},
   })
 
   mockMermaidApiAllSuccessful.use(
@@ -777,8 +770,7 @@ test('pushChanges includes the expected modified data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: () => {},
+    handleUserDeniedSyncPush: () => {},
   })
 
   mockMermaidApiAllSuccessful.use(
@@ -818,7 +810,7 @@ test('pushChanges includes the expected modified data', async () => {
   expect(response).not.toBeUndefined()
 })
 
-test('All of the push functions handle sync errors with the callback function', async () => {
+test('All of the push functions handle sync errors with the handleUserDeniedSyncPush callback function', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
   const pushSyncErrorCallback = jest.fn()
 
@@ -836,8 +828,8 @@ test('All of the push functions handle sync errors with the callback function', 
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
-    handleSyncPullErrors: () => {},
-    handleSyncPushErrors: pushSyncErrorCallback,
+
+    handleUserDeniedSyncPush: pushSyncErrorCallback,
   })
 
   await apiSync.pushChanges()
