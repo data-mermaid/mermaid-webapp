@@ -14,12 +14,15 @@ const isIndexedDBProjectInProjectResults = (indexedDBProject, projectsResults) =
   projectsResults.some((responseProject) => indexedDBProject.id === responseProject.id)
 
 export const pullApiData = async ({
-  dexiePerUserDataInstance,
-  getAccessToken,
   apiBaseUrl,
   apiDataNamesToPull,
+  dexiePerUserDataInstance,
+  getAccessToken,
   projectId,
 }) => {
+  if (!getAccessToken || !apiBaseUrl || !apiDataNamesToPull || !dexiePerUserDataInstance) {
+    throw new Error('pullApiData is missing a required parameter')
+  }
   const lastRevisionNumbersPulled = await getLastRevisionNumbersPulledForAProject({
     dexiePerUserDataInstance,
     projectId,

@@ -48,13 +48,13 @@ function App({ dexieCurrentUserInstance }) {
     [logoutMermaid],
   )
 
-  const handleSyncPushErrors = (projectsWithSyncErrors) => {
+  const handleUserDeniedSyncPush = (projectsWithSyncErrors) => {
     // projectsWithSyncErrors's type: { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
     Object.entries(projectsWithSyncErrors).forEach((projectWithSyncErrorsEntry) => {
       const projectId = projectWithSyncErrorsEntry[0]
       const { name: projectName, apiDataTablesThatRejectedSyncing } = projectWithSyncErrorsEntry[1]
 
-      const toastContent = (
+      const syncErrorUserMessaging = (
         <div data-testid={`sync-error-for-project-${projectId}`}>
           <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
           {language.error.pushSyncErrorMessageUnsavedData}
@@ -68,12 +68,8 @@ function App({ dexieCurrentUserInstance }) {
         </div>
       )
 
-      toast.error(...getToastArguments(toastContent))
+      toast.error(...getToastArguments(syncErrorUserMessaging))
     })
-  }
-
-  const handleSyncPullErrors = ({ projectName }) => {
-    toast.error(...getToastArguments(language.error.getPullSyncErrorMessage(projectName)))
   }
 
   const { currentUser, saveUserProfile } = useInitializeCurrentUser({
@@ -91,19 +87,12 @@ function App({ dexieCurrentUserInstance }) {
   })
 
   const apiSyncInstance = useMemo(() => {
-    if (
-      dexiePerUserDataInstance &&
-      apiBaseUrl &&
-      getAccessToken &&
-      handleSyncPullErrors &&
-      handleSyncPushErrors
-    ) {
+    if (dexiePerUserDataInstance && apiBaseUrl && getAccessToken && handleUserDeniedSyncPush) {
       return new SyncApiDataIntoOfflineStorage({
         dexiePerUserDataInstance,
         apiBaseUrl,
         getAccessToken,
-        handleSyncPullErrors,
-        handleSyncPushErrors,
+        handleUserDeniedSyncPush,
       })
     }
 
