@@ -30,7 +30,8 @@ const error = {
   502: 'MERMAID error: please contact support@datamermaid.org',
   503: 'MERMAID error: please contact support@datamermaid.org',
   apiDataSync: 'MERMAID was not able to sync data.',
-  appNotAuthenticatedOrReady: 'MERMAID did not load correclty. Try logging back in.',
+  appNotAuthenticatedOrReady:
+    'MERMAID did not load correclty. Try loggin out and then logging back in.',
   collectRecordSupportingDataUnavailable:
     'Supporting data for creating a sample unit is currently unavailable.',
   collectRecordDelete: 'The sample unit has not been deleted.',
@@ -348,7 +349,7 @@ const pages = {
   },
   copyManagementRegimeTable: {
     title: 'Copy Management Regimes',
-    filterToolbarText: 'Filter Management Regimes by name, project, or year',
+    filterToolbarText: 'Filter management regimes by name, project, or year',
     copyButtonText: 'Copy selected MRs to project',
   },
 }
