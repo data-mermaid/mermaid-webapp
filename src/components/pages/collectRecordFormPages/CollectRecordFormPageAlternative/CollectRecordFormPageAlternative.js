@@ -2,7 +2,7 @@ import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { useHistory, useParams } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 
 import {
   subNavNodePropTypes,
@@ -47,6 +47,41 @@ import useCollectRecordValidation from './useCollectRecordValidation'
 import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
 
+function loadObservationsFromCollectRecordIntoTableState({
+  isObservationsTableReducerInitialized,
+  collectRecordBeingEdited,
+  getPersistedUnsavedObservationsTableData,
+  observationsTableDispatch,
+  handleAddObservationTable,
+  setObservationsTableReducerInitialized,
+}) {
+  if (!isObservationsTableReducerInitialized && collectRecordBeingEdited) {
+    const observationsFromApiTable =
+      collectRecordBeingEdited.data[getObservationsPropertyNames(collectRecordBeingEdited)[0]] ?? []
+
+    const persistedUnsavedObservationsTable = getPersistedUnsavedObservationsTableData()
+    const initialObservationsToLoadTable =
+      persistedUnsavedObservationsTable ?? observationsFromApiTable
+
+    if (initialObservationsToLoadTable.length) {
+      observationsTableDispatch({
+        type: 'loadObservationsFromApi',
+        payload: initialObservationsToLoadTable,
+      })
+    }
+    if (!initialObservationsToLoadTable.length) {
+      handleAddObservationTable()
+    }
+
+    setObservationsTableReducerInitialized(true)
+  }
+
+  if (!isObservationsTableReducerInitialized && !collectRecordBeingEdited) {
+    handleAddObservationTable()
+    setObservationsTableReducerInitialized(true)
+  }
+}
+
 const CollectRecordFormPageAlternative = ({
   areObservationsInputsDirty,
   collectRecordBeingEdited,
@@ -73,6 +108,8 @@ const CollectRecordFormPageAlternative = ({
   // tech debt ticket to refactor away old abstraction:
   // https://trello.com/c/IBEfA5bn/799-tech-debt-refactor-fishbelt-and-benthic-photo-quadrat-to-use-same-collect-record-abstraction-as-other-protocols
 
+  // check out this tech debt ticket. Maybe now is the time to move fishbelt and photo quadrat to this abstraction....?? or not.
+
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
   const [isCommonProtocolDataLoading, setIsCommonProtocolDataLoading] = useState(true)
@@ -80,9 +117,13 @@ const CollectRecordFormPageAlternative = ({
   const [isDeletingRecord, setIsDeletingRecord] = useState(false)
   const [isFormDirty, setIsFormDirty] = useState(false)
   const [managementRegimes, setManagementRegimes] = useState([])
-  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
+  const [isObservationsTable1ReducerInitialized, setObservationsTable1ReducerInitialized] =
+    useState(false)
+  const [isObservationsTable2ReducerInitialized, setObservationsTable2ReducerInitialized] =
+    useState(false)
   const [observationsTable1State, observationsTable1Dispatch] = observationsTable1Reducer
-  const [observationsTable2State, observationsTable2Dispatch = () => {}] = observationsTable2Reducer
+  const [observationsTable2State, observationsTable2Dispatch = () => {}] =
+    observationsTable2Reducer ?? []
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(
     isNewRecord ? buttonGroupStates.untouchedEmptyForm : buttonGroupStates.saved,
@@ -240,44 +281,59 @@ const CollectRecordFormPageAlternative = ({
     getPersistedUnsavedObservationsTable2Data,
   ])
 
-  useEffect(
-    function loadObservationsFromCollectRecordIntoState() {
-      if (!apiObservationsLoaded && collectRecordBeingEdited) {
-        const observationsFromApiTable1 =
-          collectRecordBeingEdited.data[
-            getObservationsPropertyNames(collectRecordBeingEdited)[0]
-          ] ?? []
-        const observationsFromApiTable2 =
-          collectRecordBeingEdited.data[
-            getObservationsPropertyNames(collectRecordBeingEdited)[1]
-          ] ?? []
+  const { interval_size: intervalSize, interval_start: intervalStart } = formik.values
 
-        const persistedUnsavedObservationsTable1 = getPersistedUnsavedObservationsTable1Data()
-        const persistedUnsavedObservationsTable2 = getPersistedUnsavedObservationsTable2Data()
-        const initialObservationsToLoadTable1 =
-          persistedUnsavedObservationsTable1 ?? observationsFromApiTable1
-        const initialObservationsToLoadTable2 =
-          persistedUnsavedObservationsTable2 ?? observationsFromApiTable2
-
-        observationsTable1Dispatch({
-          type: 'loadObservationsFromApi',
-          payload: initialObservationsToLoadTable1,
-        })
-
-        observationsTable2Dispatch({
-          type: 'loadObservationsFromApi',
-          payload: initialObservationsToLoadTable2,
-        })
-
-        setApiObservationsLoaded(true)
-      }
+  const handleAddObservation = useCallback(
+    (observationsTableDispatch) => {
+      setAreObservationsInputsDirty(true)
+      // some protocols will ignore payload values, potential namespace pollution is the tradeoff of having this abstraction
+      // Julia, maybe leave this explainer comment above?
+      observationsTableDispatch({
+        type: 'addObservation',
+        payload: { intervalSize, intervalStart },
+      })
     },
+    [setAreObservationsInputsDirty, intervalSize, intervalStart],
+  )
+
+  useEffect(
+    function initializeObservationReducerTable1() {
+      loadObservationsFromCollectRecordIntoTableState({
+        collectRecordBeingEdited,
+        getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable1Data,
+        handleAddObservationTable: () => handleAddObservation(observationsTable1Dispatch),
+        isObservationsTableReducerInitialized: isObservationsTable1ReducerInitialized,
+        observationsTableDispatch: observationsTable1Dispatch,
+        setObservationsTableReducerInitialized: setObservationsTable1ReducerInitialized,
+      })
+    },
+
     [
-      apiObservationsLoaded,
       collectRecordBeingEdited,
       getPersistedUnsavedObservationsTable1Data,
-      getPersistedUnsavedObservationsTable2Data,
+      handleAddObservation,
+      isObservationsTable1ReducerInitialized,
       observationsTable1Dispatch,
+    ],
+  )
+
+  useEffect(
+    function initializeObservationReducerTable2() {
+      loadObservationsFromCollectRecordIntoTableState({
+        collectRecordBeingEdited,
+        getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable2Data,
+        handleAddObservationTable: () => handleAddObservation(observationsTable2Dispatch),
+        isObservationsTableReducerInitialized: isObservationsTable2ReducerInitialized,
+        observationsTableDispatch: observationsTable2Dispatch,
+        setObservationsTableReducerInitialized: setObservationsTable2ReducerInitialized,
+      })
+    },
+
+    [
+      collectRecordBeingEdited,
+      getPersistedUnsavedObservationsTable2Data,
+      handleAddObservation,
+      isObservationsTable2ReducerInitialized,
       observationsTable2Dispatch,
     ],
   )
@@ -487,6 +543,7 @@ const CollectRecordFormPageAlternative = ({
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
+            handleAddObservation={() => handleAddObservation(observationsTable1Dispatch)}
           />
         </div>
         {ObservationTable2 ? (
@@ -502,6 +559,7 @@ const CollectRecordFormPageAlternative = ({
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
+            handleAddObservation={() => handleAddObservation(observationsTable2Dispatch)}
           />
         ) : null}
       </form>
@@ -580,7 +638,8 @@ CollectRecordFormPageAlternative.propTypes = {
   isNewRecord: PropTypes.bool.isRequired,
   isParentDataLoading: PropTypes.bool.isRequired,
   observationsTable1Reducer: observationsReducerPropType,
-  observationsTable2Reducer: observationsReducerPropType,
+  // eslint-disable-next-line react/forbid-prop-types
+  observationsTable2Reducer: PropTypes.array,
   ObservationTable1: PropTypes.elementType.isRequired,
   ObservationTable2: PropTypes.elementType,
   sampleUnitFormatSaveFunction: PropTypes.func.isRequired,
@@ -596,7 +655,7 @@ CollectRecordFormPageAlternative.propTypes = {
 CollectRecordFormPageAlternative.defaultProps = {
   collectRecordBeingEdited: undefined,
   observationsTable1Reducer: [],
-  observationsTable2Reducer: [[], () => {}],
+  observationsTable2Reducer: undefined,
   ObservationTable2: undefined,
   setIsNewBenthicAttributeModalOpen: () => {},
   setObservationIdToAddNewBenthicAttributeTo: () => {},

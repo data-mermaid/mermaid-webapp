@@ -53,6 +53,7 @@ const ColoniesBleachedObservationTable = ({
   benthicAttributeSelectOptions,
   choices,
   collectRecord,
+  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -61,15 +62,7 @@ const ColoniesBleachedObservationTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
-  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
-
-  const handleAddObservation = () => {
-    setAreObservationsInputsDirty(true)
-    setAutoFocusAllowed(true)
-
-    observationsDispatch({ type: 'addObservation' })
-  }
 
   const observationRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
@@ -81,7 +74,6 @@ const ColoniesBleachedObservationTable = ({
 
       if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -91,7 +83,6 @@ const ColoniesBleachedObservationTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -205,7 +196,6 @@ const ColoniesBleachedObservationTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
-                  autoFocus={autoFocusAllowed}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
@@ -350,7 +340,6 @@ const ColoniesBleachedObservationTable = ({
     })
   }, [
     areValidationsShowing,
-    autoFocusAllowed,
     benthicAttributeSelectOptions,
     choices,
     collectRecord,
@@ -447,6 +436,7 @@ ColoniesBleachedObservationTable.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: bleachingRecordPropType,
+  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

@@ -44,6 +44,7 @@ const StyledColgroup = styled('colgroup')`
 const PercentCoverObservationTable = ({
   areValidationsShowing,
   collectRecord,
+  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -51,13 +52,6 @@ const PercentCoverObservationTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
-  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
-
-  const handleAddObservation = () => {
-    setAreObservationsInputsDirty(true)
-    setAutoFocusAllowed(true)
-    observationsDispatch({ type: 'addObservation' })
-  }
 
   const observationRows = useMemo(() => {
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
@@ -67,7 +61,6 @@ const PercentCoverObservationTable = ({
 
       if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -77,7 +70,6 @@ const PercentCoverObservationTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -155,7 +147,6 @@ const PercentCoverObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateHardCoralPercent' })
               }}
-              autoFocus={autoFocusAllowed}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
@@ -214,7 +205,6 @@ const PercentCoverObservationTable = ({
     })
   }, [
     areValidationsShowing,
-    autoFocusAllowed,
     collectRecord,
     ignoreObservationValidations,
     observationsDispatch,
@@ -276,6 +266,7 @@ const PercentCoverObservationTable = ({
 PercentCoverObservationTable.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: bleachingRecordPropType,
+  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

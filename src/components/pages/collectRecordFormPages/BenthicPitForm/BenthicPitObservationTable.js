@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -59,6 +59,7 @@ const BenthicPitObservationsTable = ({
   choices,
   collectRecord,
   formik,
+  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -68,44 +69,18 @@ const BenthicPitObservationsTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
-  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
   const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
-  const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
 
-  const handleAddObservation = useCallback(() => {
-    setAreObservationsInputsDirty(true)
-    setAutoFocusAllowed(true)
-
-    observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
-  }, [observationsDispatch, setAreObservationsInputsDirty, intervalSize, intervalStart])
-
-  const _initializeObservationReducer = useEffect(() => {
-    if (!isObservationReducerInitialized && collectRecord) {
-      const observationsFromApi = collectRecord.data.obs_benthic_pits ?? []
-
+  useEffect(
+    function recalculateObservationIntervals() {
       observationsDispatch({
         type: 'recalculateObservationIntervals',
         payload: { intervalStart, intervalSize },
       })
-
-      if (!observationsFromApi.length) {
-        handleAddObservation()
-      }
-      setIsObservationReducerInitialized(true)
-    }
-    if (!isObservationReducerInitialized && !collectRecord) {
-      handleAddObservation()
-      setIsObservationReducerInitialized(true)
-    }
-  }, [
-    collectRecord,
-    handleAddObservation,
-    intervalSize,
-    intervalStart,
-    isObservationReducerInitialized,
-    observationsDispatch,
-  ])
+    },
+    [intervalSize, intervalStart, observationsDispatch],
+  )
 
   const observationsRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
@@ -117,7 +92,6 @@ const BenthicPitObservationsTable = ({
 
       if (isTabKey && isLastRow && isGrowthForm) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation, intervalStart, intervalSize },
@@ -127,7 +101,6 @@ const BenthicPitObservationsTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -215,7 +188,6 @@ const BenthicPitObservationsTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
-                  autoFocus={autoFocusAllowed}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
@@ -276,7 +248,6 @@ const BenthicPitObservationsTable = ({
     })
   }, [
     areValidationsShowing,
-    autoFocusAllowed,
     benthicAttributeSelectOptions,
     choices,
     collectRecord,
@@ -345,6 +316,7 @@ BenthicPitObservationsTable.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: benthicPitRecordPropType,
+  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,
