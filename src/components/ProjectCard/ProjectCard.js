@@ -23,7 +23,7 @@ import { ButtonSecondary } from '../generic/buttons'
 import { removeTimeZoneFromDate } from '../../library/removeTimeZoneFromDate'
 import ProjectCardSummary from './ProjectCardSummary'
 import ProjectModal from './ProjectModal'
-import { getIsReadOnlyUserRole } from '../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
 import { useCurrentUser } from '../../App/CurrentUserContext'
 import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 
@@ -37,7 +37,7 @@ const ProjectCard = ({
   const { isAppOnline } = useOnlineStatus()
   const { name, countries, updated_on, id } = project
   const { currentUser } = useCurrentUser()
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, id)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, id)
   const { setIsSyncInProgress } = useSyncStatus()
   const history = useHistory()
   const projectUrl = `projects/${id}`

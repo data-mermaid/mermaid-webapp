@@ -26,7 +26,7 @@ import theme from '../../../theme'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { PROJECT_CODES } from '../../../library/constants/constants'
 
 const DataSharingTable = styled(Table)`
@@ -74,7 +74,7 @@ const DataSharing = () => {
   const { projectId } = useParams()
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [isDataUpdating, setIsDataUpdating] = useState(false)
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)

@@ -55,7 +55,10 @@ import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import {
+  getIsUserAdminForProject,
+  getIsProjectProfileReadOnly,
+} from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
@@ -126,7 +129,6 @@ const getRoleLabel = (roleCode) => {
 }
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
-const getIsUserRoleReadOnly = (profile) => profile.role === userRole.read_only
 
 const Users = () => {
   const [fromUser, setFromUser] = useState({})
@@ -152,7 +154,7 @@ const Users = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { setIsSyncInProgress } = useSyncStatus()
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
 
   const handleHttpResponseError = useHttpResponseErrorHandler()
@@ -197,7 +199,7 @@ const Users = () => {
     setIsReadonlyUserWithActiveSampleUnits(false)
     observerProfiles.forEach((profile) => {
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
-      const isUserRoleReadOnly = getIsUserRoleReadOnly(profile)
+      const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
 
       if (userHasActiveSampleUnits && isUserRoleReadOnly) {
         setIsReadonlyUserWithActiveSampleUnits(true)
@@ -518,7 +520,7 @@ const Users = () => {
       } = profile
 
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
-      const isUserRoleReadOnly = getIsUserRoleReadOnly(profile)
+      const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
       const isCurrentUser = userId === currentUser.id
       const isActiveSampleUnitsWarningShowing = userHasActiveSampleUnits && isUserRoleReadOnly
 
