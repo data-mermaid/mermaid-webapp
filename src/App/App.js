@@ -53,6 +53,9 @@ function App({ dexieCurrentUserInstance }) {
     Object.entries(projectsWithSyncErrors).forEach((projectWithSyncErrorsEntry) => {
       const projectId = projectWithSyncErrorsEntry[0]
       const { name: projectName, apiDataTablesThatRejectedSyncing } = projectWithSyncErrorsEntry[1]
+      const currentUrlPath = window.location.href
+
+      const isErrorSpecificToProject = currentUrlPath.includes(projectId)
 
       const syncErrorUserMessaging = (
         <div data-testid={`sync-error-for-project-${projectId}`}>
@@ -68,7 +71,9 @@ function App({ dexieCurrentUserInstance }) {
         </div>
       )
 
-      toast.error(...getToastArguments(syncErrorUserMessaging))
+      if (isErrorSpecificToProject) {
+        toast.error(...getToastArguments(syncErrorUserMessaging))
+      }
     })
   }
 
