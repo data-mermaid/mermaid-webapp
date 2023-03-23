@@ -89,6 +89,7 @@ const BenthicPitObservationsTable = ({
     observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
   }
 
+  // refactor this like fishbelt to make one effect responsible for initializing the obs reducer
   const _addInitialEmptyObservationRow = useEffect(() => {
     if (!collectRecord && observationsState.length === 0) {
       handleAddObservation()

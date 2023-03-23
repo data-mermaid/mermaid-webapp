@@ -65,11 +65,12 @@ const BenthicLitObservationsTable = ({
     observationsDispatch({ type: 'addObservation' })
   }
 
+  // refactor this like fishbelt to make one effect responsible for initializing the obs reducer
   const _addInitialEmptyObservationRow = useEffect(() => {
     if (!collectRecord && observationsState.length === 0) {
       handleAddObservation()
     }
-  })
+  }) // missing dependency array means this is theoretically running all the time
 
   const observationsRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
