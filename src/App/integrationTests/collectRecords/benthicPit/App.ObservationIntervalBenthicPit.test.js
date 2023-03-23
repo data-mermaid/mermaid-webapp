@@ -35,7 +35,6 @@ test('Benthic Pit observations: intervals are derived from interval start and in
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
-  userEvent.click(addRowButton)
 
   await waitFor(() => {
     const observationIntervalLabelsAfterFourRowsAdded =
