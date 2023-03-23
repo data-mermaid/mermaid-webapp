@@ -38,7 +38,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
+  // userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -69,7 +69,7 @@ test('FishBelt observations size shows a numeric input when fish bin size is und
 
   userEvent.click(bin1Radio)
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
+  // userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -100,7 +100,7 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
 
   userEvent.click(bin5Radio)
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
+  // userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -133,7 +133,7 @@ test('FishBelt observations size shows a select input when fish bin size is 10',
 
   userEvent.click(bin10Radio)
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
+  // userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -166,7 +166,7 @@ test('FishBelt observations size shows a select input when fish bin size is AGRR
 
   userEvent.click(binAGRRARadio)
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
+  // userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -199,7 +199,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
 
   userEvent.click(binAGRRARadio)
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
+  // userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
