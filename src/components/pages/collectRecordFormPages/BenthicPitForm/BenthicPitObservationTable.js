@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -71,30 +71,41 @@ const BenthicPitObservationsTable = ({
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
   const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
+  const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
 
-  useEffect(
-    function recalculateObservationIntervals() {
-      observationsDispatch({
-        type: 'recalculateObservationIntervals',
-        payload: { intervalStart, intervalSize },
-      })
-    },
-    [intervalSize, intervalStart, observationsDispatch],
-  )
-
-  const handleAddObservation = () => {
+  const handleAddObservation = useCallback(() => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
 
     observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
-  }
+  }, [observationsDispatch, setAreObservationsInputsDirty, intervalSize, intervalStart])
 
-  // refactor this like fishbelt to make one effect responsible for initializing the obs reducer
-  const _addInitialEmptyObservationRow = useEffect(() => {
-    if (!collectRecord && observationsState.length === 0) {
-      handleAddObservation()
+  const _initializeObservationReducer = useEffect(() => {
+    if (!isObservationReducerInitialized && collectRecord) {
+      const observationsFromApi = collectRecord.data.obs_benthic_pits ?? []
+
+      observationsDispatch({
+        type: 'recalculateObservationIntervals',
+        payload: { intervalStart, intervalSize },
+      })
+
+      if (!observationsFromApi.length) {
+        handleAddObservation()
+      }
+      setIsObservationReducerInitialized(true)
     }
-  })
+    if (!isObservationReducerInitialized && !collectRecord) {
+      handleAddObservation()
+      setIsObservationReducerInitialized(true)
+    }
+  }, [
+    collectRecord,
+    handleAddObservation,
+    intervalSize,
+    intervalStart,
+    isObservationReducerInitialized,
+    observationsDispatch,
+  ])
 
   const observationsRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)

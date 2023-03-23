@@ -99,7 +99,6 @@ test('Benthic PIT observations: intervals recalculate when user deletes an obser
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
-  // userEvent.click(addRowButton)
 
   await waitFor(() => {
     const observationIntervalLabelsAfterFourRowsAdded =

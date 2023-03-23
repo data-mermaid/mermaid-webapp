@@ -147,12 +147,6 @@ const FishBeltObservationTable = ({
     observationsState.length,
   ])
 
-  // const _addInitialEmptyObservationRow = useEffect(() => {
-  //   if (!collectRecord && observationsState.length === 0) {
-  //     handleAddObservation()
-  //   }
-  // })
-
   const observationsBiomass = useMemo(
     () =>
       observationsState.map((observation) => ({
