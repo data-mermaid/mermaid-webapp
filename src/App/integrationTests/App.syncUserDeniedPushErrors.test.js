@@ -5,7 +5,6 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
-  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
@@ -74,41 +73,6 @@ test('User being denied push sync shows toasts on project-related page', async (
   expect(project900ToastContent).toHaveTextContent('project users')
   expect(project900ToastContent).not.toHaveTextContent('sites')
   expect(project900ToastContent).toHaveTextContent('project info')
-})
-
-test('User being denied push sync shows NO toasts on projects list page', async () => {
-  const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
-
-  mockMermaidApiAllSuccessful.use(
-    rest.post(
-      `${process.env.REACT_APP_MERMAID_API}/push/`,
-
-      (req, res, ctx) => {
-        return res(ctx.json(mockUserDoesntHavePushSyncPermissionForProjects))
-      },
-    ),
-  )
-
-  renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-    dexiePerUserDataInstance,
-    dexieCurrentUserInstance,
-  })
-
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
-
-  const project100ToastContent = screen.queryByTestId('sync-error-for-project-100')
-  const project500ToastContent = screen.queryByTestId('sync-error-for-project-500')
-  const project900ToastContent = screen.queryByTestId('sync-error-for-project-900')
-
-  // we should jsut delete this test since the next assertions will always be true and false positives.
-  // They will return true right away so always pass
-
-  // All the ways we could assert that the toasts *never* occure are hard to reason code, so I say just pass on testing this and delete this test.
-
-  await waitFor(() => expect(project100ToastContent).not.toBeInTheDocument()) // false positive
-  await waitFor(() => expect(project500ToastContent).not.toBeInTheDocument()) // false positive
-  await waitFor(() => expect(project900ToastContent).not.toBeInTheDocument()) // false positive
 })
 
 test('User being denied push sync toast doesnt show duplicate unsaved data types', async () => {
