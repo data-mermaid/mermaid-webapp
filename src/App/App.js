@@ -50,41 +50,47 @@ function App({ dexieCurrentUserInstance }) {
     [logoutMermaid],
   )
 
-  const handleUserDeniedSyncPush = (projectsWithSyncErrors) => {
-    // projectsWithSyncErrors's type: { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
-    Object.entries(projectsWithSyncErrors).forEach((projectWithSyncErrorsEntry) => {
-      const projectId = projectWithSyncErrorsEntry[0]
-      const { name: projectName, apiDataTablesThatRejectedSyncing } = projectWithSyncErrorsEntry[1]
-      //const currentUrlPath = window.location.href
-      // the test environment wont see client side routing paths (I cosoled it and looked at the console output of the test)
-      // console.log(currentUrlPath)
-      console.log(location.pathname, projectId, location.pathname.includes(projectId))
+  const handleUserDeniedSyncPush = useCallback(
+    (projectsWithSyncErrors) => {
+      // projectsWithSyncErrors's type: { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
+      Object.entries(projectsWithSyncErrors).forEach((projectWithSyncErrorsEntry) => {
+        const projectId = projectWithSyncErrorsEntry[0]
+        const { name: projectName, apiDataTablesThatRejectedSyncing } =
+          projectWithSyncErrorsEntry[1]
+        //const currentUrlPath = window.location.href
+        // the test environment wont see client side routing paths (I cosoled it and looked at the console output of the test)
+        // console.log(currentUrlPath)
 
-      //const isErrorSpecificToProject = location.pathname.includes(projectId)
-      // the projectId here isnt necessarily the same one as in the url since we have offline ready projects which will be pushed/synced no matter what project page you are on.
-      // instead we can check if there is a project id.
+        //const isErrorSpecificToProject = location.pathname.includes(projectId)
+        // the projectId here isnt necessarily the same one as in the url since we have offline ready projects which will be pushed/synced no matter what project page you are on.
+        // instead we can check if there is a project id.
 
-      const isCurrentRouteAProjectPage = !!getProjectIdFromLocation(location)
+        const currentPagesProjectId = getProjectIdFromLocation(location)
+        const isErrorSpecificToProject = currentPagesProjectId === projectId
 
-      if (isCurrentRouteAProjectPage) {
-        const syncErrorUserMessaging = (
-          <div data-testid={`sync-error-for-project-${projectId}`}>
-            <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
-            {language.error.pushSyncErrorMessageUnsavedData}
-            <ul>
-              {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
-                <li key={rejectedDataTableName}>
-                  {language.apiDataTableNames[rejectedDataTableName]}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )
+        console.log(location.pathname)
 
-        toast.error(...getToastArguments(syncErrorUserMessaging))
-      }
-    })
-  }
+        if (isErrorSpecificToProject) {
+          const syncErrorUserMessaging = (
+            <div data-testid={`sync-error-for-project-${projectId}`}>
+              <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
+              {language.error.pushSyncErrorMessageUnsavedData}
+              <ul>
+                {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
+                  <li key={rejectedDataTableName}>
+                    {language.apiDataTableNames[rejectedDataTableName]}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+
+          toast.error(...getToastArguments(syncErrorUserMessaging))
+        }
+      })
+    },
+    [location],
+  )
 
   const { currentUser, saveUserProfile } = useInitializeCurrentUser({
     apiBaseUrl,
@@ -111,7 +117,7 @@ function App({ dexieCurrentUserInstance }) {
     }
 
     return undefined
-  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken])
+  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken, handleUserDeniedSyncPush])
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,
