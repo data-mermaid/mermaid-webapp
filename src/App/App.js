@@ -32,7 +32,6 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
-import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
@@ -58,8 +57,7 @@ function App({ dexieCurrentUserInstance }) {
         const { name: projectName, apiDataTablesThatRejectedSyncing } =
           projectWithSyncErrorsEntry[1]
 
-        const currentPagesProjectId = getProjectIdFromLocation(location)
-        const isErrorSpecificToProject = currentPagesProjectId === projectId
+        const isErrorSpecificToProject = location.pathname.includes(projectId)
 
         if (isErrorSpecificToProject) {
           const syncErrorUserMessaging = (
