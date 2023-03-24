@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
@@ -32,12 +32,14 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
+import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const isMounted = useIsMounted()
   const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
+  const location = useLocation()
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
@@ -53,25 +55,32 @@ function App({ dexieCurrentUserInstance }) {
     Object.entries(projectsWithSyncErrors).forEach((projectWithSyncErrorsEntry) => {
       const projectId = projectWithSyncErrorsEntry[0]
       const { name: projectName, apiDataTablesThatRejectedSyncing } = projectWithSyncErrorsEntry[1]
-      const currentUrlPath = window.location.href
+      //const currentUrlPath = window.location.href
+      // the test environment wont see client side routing paths (I cosoled it and looked at the console output of the test)
+      // console.log(currentUrlPath)
+      console.log(location.pathname, projectId, location.pathname.includes(projectId))
 
-      const isErrorSpecificToProject = currentUrlPath.includes(projectId)
+      //const isErrorSpecificToProject = location.pathname.includes(projectId)
+      // the projectId here isnt necessarily the same one as in the url since we have offline ready projects which will be pushed/synced no matter what project page you are on.
+      // instead we can check if there is a project id.
 
-      const syncErrorUserMessaging = (
-        <div data-testid={`sync-error-for-project-${projectId}`}>
-          <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
-          {language.error.pushSyncErrorMessageUnsavedData}
-          <ul>
-            {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
-              <li key={rejectedDataTableName}>
-                {language.apiDataTableNames[rejectedDataTableName]}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
+      const isCurrentRouteAProjectPage = !!getProjectIdFromLocation(location)
 
-      if (isErrorSpecificToProject) {
+      if (isCurrentRouteAProjectPage) {
+        const syncErrorUserMessaging = (
+          <div data-testid={`sync-error-for-project-${projectId}`}>
+            <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
+            {language.error.pushSyncErrorMessageUnsavedData}
+            <ul>
+              {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
+                <li key={rejectedDataTableName}>
+                  {language.apiDataTableNames[rejectedDataTableName]}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+
         toast.error(...getToastArguments(syncErrorUserMessaging))
       }
     })
