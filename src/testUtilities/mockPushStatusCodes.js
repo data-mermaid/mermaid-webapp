@@ -124,8 +124,8 @@ export const mockUserDoesntHavePushSyncPermissionForProjects = {
       status_code: 403,
       message: 'You do not have permission to perform this action.',
       data: {
-        project_id: '100',
-        project_name: 'Project 100',
+        project_id: '5',
+        project_name: 'Project 5',
       },
     },
   ],
@@ -134,8 +134,8 @@ export const mockUserDoesntHavePushSyncPermissionForProjects = {
       status_code: 403,
       message: 'You do not have permission to perform this action.',
       data: {
-        project_id: '100',
-        project_name: 'Project 100',
+        project_id: '5',
+        project_name: 'Project 5',
       },
     },
     {
@@ -152,8 +152,8 @@ export const mockUserDoesntHavePushSyncPermissionForProjects = {
       status_code: 403,
       message: 'You do not have permission to perform this action.',
       data: {
-        project_id: '100',
-        project_name: 'Project 100',
+        project_id: '5',
+        project_name: 'Project 5',
       },
     },
   ],
@@ -162,8 +162,8 @@ export const mockUserDoesntHavePushSyncPermissionForProjects = {
       status_code: 403,
       message: 'You do not have permission to perform this action.',
       data: {
-        project_id: '100',
-        project_name: 'Project 100',
+        project_id: '5',
+        project_name: 'Project 5',
       },
     },
     {
@@ -188,8 +188,8 @@ export const mockUserDoesntHavePushSyncPermissionForProjects = {
       status_code: 403,
       message: 'You do not have permission to perform this action.',
       data: {
-        project_id: '100',
-        project_name: 'Project 100',
+        project_id: '5',
+        project_name: 'Project 5',
       },
     },
     {
@@ -214,7 +214,7 @@ export const mockUserDoesntHavePushSyncPermissionForProjects = {
       status_code: 403,
       message: 'You do not have permission to perform this action.',
       data: {
-        project_id: '100',
+        project_id: '5',
         project_name: 'Dev Team Test ProjectMy project 2',
       },
     },
@@ -224,8 +224,8 @@ export const mockUserDoesntHavePushSyncPermissionForProjects = {
       status_code: 403,
       message: 'You do not have permission to perform this action.',
       data: {
-        project_id: '100',
-        project_name: 'Project 100',
+        project_id: '5',
+        project_name: 'Project 5',
       },
     },
     {
