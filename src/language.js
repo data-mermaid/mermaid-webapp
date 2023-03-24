@@ -373,7 +373,7 @@ const map = {
 const popoverTexts = {
   noSampleUnitMatch: 'No Sample Units match:',
   viewSubmittedSampleUnit: 'View submitted Sample Unit',
-  notSubmittedSampleUnit: `This sample unit is not submitted`,
+  notSubmittedSampleUnit: `This Sample Unit is not submitted`,
   inCollectingWith: 'In Collecting with:',
 }
 
