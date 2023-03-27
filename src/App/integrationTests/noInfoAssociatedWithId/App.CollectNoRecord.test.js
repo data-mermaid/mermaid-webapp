@@ -20,7 +20,7 @@ test('Offline collect records list shows no info associated with projectId view 
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
+  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
 })
 
 test('Online collect records list shows no info associated with projectId view ', async () => {
@@ -32,5 +32,5 @@ test('Online collect records list shows no info associated with projectId view '
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
+  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
 })

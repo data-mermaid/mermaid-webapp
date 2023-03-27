@@ -59,11 +59,7 @@ test('Online: Edit Site shows toast and edited record info', async () => {
     }),
   )
 
-  expect(
-    await screen.findByText(
-      'The site has been saved on your computer and in the MERMAID online system.',
-    ),
-  )
+  expect(await screen.findByText('The site has been saved on your computer and online.'))
 
   expect(siteNameInput).toHaveValue('OOF')
 })
@@ -132,7 +128,7 @@ test('Offline: Edit site  save failure shows toast message with new edits persis
   )
 
   expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-    `The site failed to save both on your computer and in the MERMAID online system.`,
+    `The site failed to save both on your computer and online.`,
   )
   expect(consoleSpy).toHaveBeenCalledWith(dexieError)
 

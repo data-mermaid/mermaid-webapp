@@ -152,7 +152,7 @@ describe('Offline', () => {
     await saveMR()
 
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'The management regime failed to save both on your computer and in the MERMAID online system.',
+      'The management regime failed to save both on your computer and online.',
     )
     expect(consoleSpy).toHaveBeenCalledWith(dexieError)
 

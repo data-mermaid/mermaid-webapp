@@ -18,13 +18,10 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   handleHttpResponseError({ error: { response: { status: 403 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith(
-    'The current user does not have sufficient permission to do that.',
-    {
-      toastId: 'The current user does not have sufficient permission to do that.',
-      transition: Slide,
-    },
-  )
+  expect(toastSpy).toHaveBeenCalledWith('The current user does not have permission to do that.', {
+    toastId: 'The current user does not have permission to do that.',
+    transition: Slide,
+  })
 
   expect(callback).not.toHaveBeenCalled()
 })
@@ -36,8 +33,8 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   handleHttpResponseError({ error: { response: { status: 500 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith('Server error: please contact support@datamermaid.org', {
-    toastId: 'Server error: please contact support@datamermaid.org',
+  expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+    toastId: 'MERMAID error: please contact support@datamermaid.org',
     transition: Slide,
   })
 
@@ -51,8 +48,8 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   handleHttpResponseError({ error: { response: { status: 502 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith('Server error: please contact support@datamermaid.org', {
-    toastId: 'Server error: please contact support@datamermaid.org',
+  expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+    toastId: 'MERMAID error: please contact support@datamermaid.org',
     transition: Slide,
   })
 
@@ -66,8 +63,8 @@ test('handleHttpResponseError produces the appropriate toast message if the stat
 
   handleHttpResponseError({ error: { response: { status: 503 } }, callback, logoutMermaid })
 
-  expect(toastSpy).toHaveBeenCalledWith('Server error: please contact support@datamermaid.org', {
-    toastId: 'Server error: please contact support@datamermaid.org',
+  expect(toastSpy).toHaveBeenCalledWith('MERMAID error: please contact support@datamermaid.org', {
+    toastId: 'MERMAID error: please contact support@datamermaid.org',
     transition: Slide,
   })
 
