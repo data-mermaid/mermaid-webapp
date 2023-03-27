@@ -5,6 +5,7 @@ import {
   mockMermaidApiAllSuccessful,
   renderAuthenticatedOnline,
   screen,
+  waitFor,
   waitForElementToBeRemoved,
   within,
 } from '../../testUtilities/testingLibraryWithHelpers'
@@ -12,7 +13,7 @@ import { getMockDexieInstancesAllSuccess } from '../../testUtilities/mockDexie'
 import App from '../App'
 import { mockUserDoesntHavePushSyncPermissionForProjects } from '../../testUtilities/mockPushStatusCodes'
 
-test('User being denied push sync shows toasts', async () => {
+test('User being denied push sync shows toasts on project-related page', async () => {
   const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
   mockMermaidApiAllSuccessful.use(
@@ -26,52 +27,31 @@ test('User being denied push sync shows toasts', async () => {
   )
 
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
+    initialEntries: ['/projects/5/collecting'],
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
   })
 
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
+  await screen.findByLabelText('project pages loading indicator')
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  const project100ToastContent = await screen.findByTestId('sync-error-for-project-100')
-  const project500ToastContent = await screen.findByTestId('sync-error-for-project-500')
-  const project900ToastContent = await screen.findByTestId('sync-error-for-project-900')
+  const project5ToastContent = await screen.findByTestId('sync-error-for-project-5')
+  const project500ToastContent = screen.queryByTestId('sync-error-for-project-500')
+  const project900ToastContent = screen.queryByTestId('sync-error-for-project-900')
 
-  expect(project100ToastContent).toHaveTextContent(
-    'You do not have permission to sync data to Project 100. Please check your notifications and consult with a project administrator about your project role.',
+  expect(project5ToastContent).toHaveTextContent(
+    'You do not have permission to sync data to Project 5. Please check your notifications and consult with a project administrator about your project role.',
   )
-  expect(project100ToastContent).toHaveTextContent('The following have not been saved: ')
-  expect(project100ToastContent).toHaveTextContent('benthic attributes')
-  expect(project100ToastContent).toHaveTextContent('unsubmitted sample units')
-  expect(project100ToastContent).toHaveTextContent('fish species')
-  expect(project100ToastContent).toHaveTextContent('management regimes')
-  expect(project100ToastContent).toHaveTextContent('project users')
-  expect(project100ToastContent).toHaveTextContent('sites')
-  expect(project100ToastContent).toHaveTextContent('project info')
+  expect(project5ToastContent).toHaveTextContent('benthic attributes')
+  expect(project5ToastContent).toHaveTextContent('unsubmitted sample units')
+  expect(project5ToastContent).toHaveTextContent('fish species')
+  expect(project5ToastContent).toHaveTextContent('management regimes')
+  expect(project5ToastContent).toHaveTextContent('project users')
+  expect(project5ToastContent).toHaveTextContent('sites')
+  expect(project5ToastContent).toHaveTextContent('project info')
 
-  expect(project500ToastContent).toHaveTextContent(
-    'You do not have permission to sync data to Project 500. Please check your notifications and consult with a project administrator about your project role.',
-  )
-  expect(project500ToastContent).toHaveTextContent('The following have not been saved: ')
-  expect(project500ToastContent).not.toHaveTextContent('benthic attributes')
-  expect(project500ToastContent).not.toHaveTextContent('unsubmitted sample units')
-  expect(project500ToastContent).not.toHaveTextContent('fish species')
-  expect(project500ToastContent).toHaveTextContent('management regimes')
-  expect(project500ToastContent).not.toHaveTextContent('project users')
-  expect(project500ToastContent).toHaveTextContent('sites')
-  expect(project500ToastContent).not.toHaveTextContent('project info')
-
-  expect(project900ToastContent).toHaveTextContent(
-    'You do not have permission to sync data to Project 900. Please check your notifications and consult with a project administrator about your project role.',
-  )
-  expect(project900ToastContent).toHaveTextContent('The following have not been saved: ')
-  expect(project900ToastContent).not.toHaveTextContent('benthic attributes')
-  expect(project900ToastContent).toHaveTextContent('unsubmitted sample units')
-  expect(project900ToastContent).not.toHaveTextContent('fish species')
-  expect(project900ToastContent).toHaveTextContent('management regimes')
-  expect(project900ToastContent).toHaveTextContent('project users')
-  expect(project900ToastContent).not.toHaveTextContent('sites')
-  expect(project900ToastContent).toHaveTextContent('project info')
+  await waitFor(() => expect(project500ToastContent).not.toBeInTheDocument())
+  await waitFor(() => expect(project900ToastContent).not.toBeInTheDocument())
 })
 
 test('User being denied push sync toast doesnt show duplicate unsaved data types', async () => {
@@ -83,16 +63,16 @@ test('User being denied push sync toast doesnt show duplicate unsaved data types
         status_code: 403,
         message: 'You do not have permission to perform this action.',
         data: {
-          project_id: '100',
-          project_name: 'Project 100',
+          project_id: '5',
+          project_name: 'Project 5',
         },
       },
       {
         status_code: 403,
         message: 'You do not have permission to perform this action.',
         data: {
-          project_id: '100',
-          project_name: 'Project 100',
+          project_id: '5',
+          project_name: 'Project 5',
         },
       },
     ],
@@ -111,12 +91,13 @@ test('User being denied push sync toast doesnt show duplicate unsaved data types
   renderAuthenticatedOnline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
     dexiePerUserDataInstance,
     dexieCurrentUserInstance,
+    initialEntries: ['/projects/5/collecting'],
   })
 
-  await screen.findByLabelText('projects list loading indicator')
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('projects list loading indicator'))
+  await screen.findByLabelText('project pages loading indicator')
+  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
 
-  const project100ToastContent = await screen.findByTestId('sync-error-for-project-100')
+  const project5ToastContent = await screen.findByTestId('sync-error-for-project-5')
 
-  expect(within(project100ToastContent).getAllByText('benthic attributes').length).toEqual(1)
+  expect(within(project5ToastContent).getAllByText('benthic attributes').length).toEqual(1)
 })
