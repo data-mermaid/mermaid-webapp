@@ -12,6 +12,7 @@ import Modal, { RightFooter } from '../generic/Modal/Modal'
 import { pluralize } from '../../library/strings/pluralize'
 import { getProfileNameOrEmailForPendingUser } from '../../library/getProfileNameOrEmailForPendingUser'
 import theme from '../../theme'
+import { getIsProjectProfileReadOnly } from '../../App/currentUserProfileHelpers'
 
 const ModalBoxItem = styled(Column)`
   width: 100%;
@@ -57,7 +58,12 @@ const TransferSampleUnitsModal = ({
   }, [fromUser, currentUserId])
 
   const optionList = userOptions
-    .filter(({ profile }) => profile !== fromUser.profile)
+    .filter((projectProfile) => {
+      const isProjectProfileReadOnly = getIsProjectProfileReadOnly(projectProfile)
+      const isProjectProfileCurrentUser = projectProfile.profile === fromUser.profile
+
+      return !isProjectProfileCurrentUser && !isProjectProfileReadOnly
+    })
     .map((user) => {
       const profileName = getProfileNameOrEmailForPendingUser(user)
 

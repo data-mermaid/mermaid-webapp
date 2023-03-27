@@ -91,9 +91,7 @@ describe('Online', () => {
     await saveMR()
 
     expect(
-      await screen.findByText(
-        'The management regime has been saved on your computer and in the MERMAID online system.',
-      ),
+      await screen.findByText('The management regime has been saved on your computer and online.'),
     )
 
     // ensure the new form is now the edit form
@@ -121,9 +119,7 @@ describe('Online', () => {
     await saveMR()
 
     expect(
-      await screen.findByText(
-        'The management regime has been saved on your computer and in the MERMAID online system.',
-      ),
+      await screen.findByText('The management regime has been saved on your computer and online.'),
     )
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
@@ -160,7 +156,7 @@ describe('Online', () => {
     await saveMR()
 
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'The management regime has been saved on your computer, but not in the MERMAID online system.',
+      'The management regime has been saved on your computer, but not online.',
     )
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
       'an error message from api',
@@ -206,10 +202,10 @@ describe('Online', () => {
     await saveMR()
 
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'The management regime has been saved on your computer, but not in the MERMAID online system.',
+      'The management regime has been saved on your computer, but not online.',
     )
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'Server error: please contact support@datamermaid.org',
+      'MERMAID error: please contact support@datamermaid.org',
     )
     expect(await screen.findByTestId('management-regime-toast-error')).not.toHaveTextContent(
       'an error message from api',

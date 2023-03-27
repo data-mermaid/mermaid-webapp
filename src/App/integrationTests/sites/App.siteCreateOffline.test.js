@@ -156,7 +156,7 @@ describe('offline', () => {
     await saveSite()
 
     expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-      `The site failed to save both on your computer and in the MERMAID online system.`,
+      `The site failed to save both on your computer and online.`,
     )
     expect(consoleSpy).toHaveBeenCalledWith(dexieError)
 

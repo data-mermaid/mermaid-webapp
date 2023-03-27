@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components/macro'
+import styled from 'styled-components/macro'
 import theme from '../../theme'
 import { Input, inputStyles } from '../generic/form'
 
@@ -14,11 +14,6 @@ const FilterLabelWrapper = styled.label`
 const FilterInput = styled(Input)`
   max-width: ${theme.spacing.maxTextWidth};
   ${inputStyles};
-  ${(props) =>
-    props.disabled &&
-    css`
-      cursor: not-allowed;
-    `}
 `
 
 const FilterSearchToolbar = ({ name, handleGlobalFilterChange, value, id, disabled }) => {

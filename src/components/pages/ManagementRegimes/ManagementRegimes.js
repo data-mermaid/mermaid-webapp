@@ -45,7 +45,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import useIsMounted from '../../../library/useIsMounted'
 import PageUnavailable from '../PageUnavailable'
-import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { getFileExportName } from '../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
@@ -67,7 +67,7 @@ const ManagementRegimes = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [managementRegimeExportName, setManagementRegimeExportName] = useState('')
   const [managementRegimeRecordsForUiDisplay, setManagementRegimeRecordsForUiDisplay] = useState([])
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const closeCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(false)
   const openCopyManagementRegimesModal = () => setIsCopyManagementRegimesModalOpen(true)
 

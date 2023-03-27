@@ -26,46 +26,46 @@ test('ErrorBoundary renders children when no error is thrown', () => {
 
 test('ErrorBoundary renders the fallback UI when an error is thrown', () => {
   // Surpress the error which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => { })
+  jest.spyOn(console, 'error').mockImplementation(() => {})
 
   render(
     <ErrorBoundary>
       <ChildComponentWithOneOffError />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
 
-  expect(screen.getByText(/A part of this page didn't load correctly./)).toBeInTheDocument()
+  expect(screen.getByText(/A part of this page did not load correctly./)).toBeInTheDocument()
 })
 
-test('ErrorBoundary resets the error message when the try again button is clicked', () => {
+test('ErrorBoundary resets the error message when the Try Again button is clicked', () => {
   // Surpress the error which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => { })
+  jest.spyOn(console, 'error').mockImplementation(() => {})
   render(
     <ErrorBoundary>
       <ChildComponentWithOneOffError />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
 
-  expect(screen.getByText(/A part of this page didn't load correctly./)).toBeInTheDocument()
+  expect(screen.getByText(/A part of this page did not load correctly./)).toBeInTheDocument()
   userEvent.click(screen.queryByRole('button', { name: /Try Again/ }))
 
   expect(screen.getByText(/Content/)).toBeInTheDocument()
-  expect(screen.queryByText(/A part of this page didn't load correctly./)).not.toBeInTheDocument()
+  expect(screen.queryByText(/A part of this page did not load correctly./)).not.toBeInTheDocument()
 })
 
 test('ErrorBoundary removes Try Again button after one failed re-render', () => {
   // Surpress the errors which will automatically be logged
-  jest.spyOn(console, 'error').mockImplementation(() => { })
+  jest.spyOn(console, 'error').mockImplementation(() => {})
 
   render(
     <ErrorBoundary>
       <ChildComponentWithPermanentError />
-    </ErrorBoundary>
+    </ErrorBoundary>,
   )
 
-  expect(screen.getByText(/A part of this page didn't load correctly./)).toBeInTheDocument()
+  expect(screen.getByText(/A part of this page did not load correctly./)).toBeInTheDocument()
   userEvent.click(screen.queryByRole('button', { name: /Try Again/ }))
 
-  expect(screen.getByText(/A part of this page didn't load correctly./)).toBeInTheDocument()
+  expect(screen.getByText(/A part of this page did not load correctly./)).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: /Try Again/ })).not.toBeInTheDocument()
 })

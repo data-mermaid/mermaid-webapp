@@ -20,7 +20,7 @@ test('Offline site shows no info associated with SITE id view ', async () => {
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText("The item with the id nonExistantSiteId can't be found."))
+  expect(await screen.findByText('The item with the id nonExistantSiteId cannot be found.'))
 })
 
 test('Online site shows no info associated with SITE id view ', async () => {
@@ -32,7 +32,7 @@ test('Online site shows no info associated with SITE id view ', async () => {
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText("The item with the id nonExistantSiteId can't be found."))
+  expect(await screen.findByText('The item with the id nonExistantSiteId cannot be found.'))
 })
 
 test('Offline site shows no info associated with PROJECT id view ', async () => {
@@ -46,7 +46,7 @@ test('Offline site shows no info associated with PROJECT id view ', async () => 
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
+  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
 })
 
 test('Online site shows no info associated with PROJECT id view ', async () => {
@@ -58,7 +58,7 @@ test('Online site shows no info associated with PROJECT id view ', async () => {
     dexieCurrentUserInstance,
   })
 
-  expect(await screen.findByText("The item with the id nonExistantProjectId can't be found."))
+  expect(await screen.findByText('The item with the id nonExistantProjectId cannot be found.'))
 })
 
 test('Offline site shows no info associated with PROJECT or SITE id view ', async () => {
@@ -74,7 +74,7 @@ test('Offline site shows no info associated with PROJECT or SITE id view ', asyn
 
   expect(
     await screen.findByText(
-      "The items with the ids nonExistantSiteId,nonExistantProjectId can't be found.",
+      'The items with the ids nonExistantSiteId,nonExistantProjectId cannot be found.',
     ),
   )
 })
@@ -89,7 +89,7 @@ test('Online site shows no info associated with PROJECT or SITE id view ', async
   })
   expect(
     await screen.findByText(
-      "The items with the ids nonExistantSiteId,nonExistantProjectId can't be found.",
+      'The items with the ids nonExistantSiteId,nonExistantProjectId cannot be found.',
     ),
   )
 })

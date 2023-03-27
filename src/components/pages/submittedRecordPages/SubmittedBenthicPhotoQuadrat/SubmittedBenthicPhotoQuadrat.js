@@ -8,7 +8,7 @@ import { ensureTrailingSlash } from '../../../../library/strings/ensureTrailingS
 import { IconPen } from '../../../icons'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import { getBenthicOptions } from '../../../../library/getOptions'
-import { getIsAdminUserRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsUserAdminForProject } from '../../../../App/currentUserProfileHelpers'
 import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
@@ -48,7 +48,7 @@ const SubmittedBenthicPhotoQuadrat = () => {
   const [subNavNode, setSubNavNode] = useState(null)
   const handleHttpResponseError = useHttpResponseErrorHandler()
 
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const observers = submittedRecord?.observers ?? []
 
   const _getSupportingData = useEffect(() => {

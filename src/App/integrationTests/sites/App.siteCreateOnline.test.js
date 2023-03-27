@@ -92,11 +92,7 @@ describe('Online', () => {
 
     await saveSite()
 
-    expect(
-      await screen.findByText(
-        'The site has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The site has been saved on your computer and online.'))
 
     // ensure the new form is now the edit form
     expect(
@@ -125,11 +121,7 @@ describe('Online', () => {
 
     await saveSite()
 
-    expect(
-      await screen.findByText(
-        'The site has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The site has been saved on your computer and online.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -166,7 +158,7 @@ describe('Online', () => {
     await saveSite()
 
     expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-      `The site has been saved on your computer, but not in the MERMAID online system.`,
+      `The site has been saved on your computer, but not online.`,
     )
     expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
       'name: an error message from api',
@@ -212,10 +204,10 @@ test('New MR save will handle 500 push status codes with a generic message and s
   await saveSite()
 
   expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-    'The site has been saved on your computer, but not in the MERMAID online system.',
+    'The site has been saved on your computer, but not online.',
   )
   expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-    'Server error: please contact support@datamermaid.org',
+    'MERMAID error: please contact support@datamermaid.org',
   )
   expect(await screen.findByTestId('site-toast-error')).not.toHaveTextContent(
     'name: an error message from api',
