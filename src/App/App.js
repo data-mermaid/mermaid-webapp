@@ -50,6 +50,10 @@ function App({ dexieCurrentUserInstance }) {
     [logoutMermaid],
   )
 
+  const handleNested500SyncError = () => {
+    toast.error(...getToastArguments(language.error.pushSyncErrorMessageStatusCode500))
+  }
+
   const handleUserDeniedSyncPush = useCallback(
     (projectsWithSyncErrors) => {
       // projectsWithSyncErrors's type: { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
@@ -104,6 +108,7 @@ function App({ dexieCurrentUserInstance }) {
         apiBaseUrl,
         getAccessToken,
         handleUserDeniedSyncPush,
+        handleNested500SyncError,
       })
     }
 
