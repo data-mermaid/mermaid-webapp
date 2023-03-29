@@ -59,7 +59,6 @@ const BenthicPitObservationsTable = ({
   choices,
   collectRecord,
   formik,
-  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -71,6 +70,12 @@ const BenthicPitObservationsTable = ({
   const [observationsState, observationsDispatch] = observationsReducer
 
   const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
+
+  const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
+
+    observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
+  }
 
   useEffect(
     function recalculateObservationIntervals() {
@@ -316,7 +321,6 @@ BenthicPitObservationsTable.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: benthicPitRecordPropType,
-  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,

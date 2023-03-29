@@ -47,7 +47,6 @@ const BenthicLitObservationsTable = ({
   benthicAttributeSelectOptions,
   choices,
   collectRecord,
-  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -57,6 +56,11 @@ const BenthicLitObservationsTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
+
+  const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
+    observationsDispatch({ type: 'addObservation' })
+  }
 
   const observationsRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
@@ -315,7 +319,6 @@ BenthicLitObservationsTable.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: benthicPitRecordPropType,
-  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,

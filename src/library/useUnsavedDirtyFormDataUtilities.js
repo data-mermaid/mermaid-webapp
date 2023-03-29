@@ -19,10 +19,13 @@ export const useUnsavedDirtyFormDataUtilities = (sessionStorageName) => {
     [sessionStorageName],
   )
 
-  const getPersistedUnsavedFormData = useCallback(
-    () => JSON.parse(window.sessionStorage.getItem(sessionStorageName)),
-    [sessionStorageName],
-  )
+  const getPersistedUnsavedFormData = useCallback(() => {
+    try {
+      return JSON.parse(window.sessionStorage.getItem(sessionStorageName))
+    } catch {
+      return null
+    }
+  }, [sessionStorageName])
 
   const _clearPersistedUnsavedFormDataBeforeUnload = useEffect(() => {
     window.addEventListener('beforeunload', clearPersistedUnsavedFormData)

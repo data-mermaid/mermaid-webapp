@@ -53,7 +53,6 @@ const ColoniesBleachedObservationTable = ({
   benthicAttributeSelectOptions,
   choices,
   collectRecord,
-  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -63,6 +62,11 @@ const ColoniesBleachedObservationTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
+
+  const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
+    observationsDispatch({ type: 'addObservation' })
+  }
 
   const observationRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
@@ -436,7 +440,6 @@ ColoniesBleachedObservationTable.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: bleachingRecordPropType,
-  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

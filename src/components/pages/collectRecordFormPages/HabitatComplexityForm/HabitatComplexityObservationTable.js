@@ -43,7 +43,6 @@ const HabitatComplexityObservationsTable = ({
   choices,
   collectRecord,
   formik,
-  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -63,6 +62,12 @@ const HabitatComplexityObservationsTable = ({
     },
     [intervalSize, observationsDispatch],
   )
+
+  const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
+
+    observationsDispatch({ type: 'addObservation', payload: { intervalSize } })
+  }
 
   const observationsRows = useMemo(() => {
     const habitatComplexityScoreOptions = getOptions(choices.habitatcomplexityscores.data)
@@ -245,7 +250,6 @@ HabitatComplexityObservationsTable.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: habitatComplexityPropType,
-  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,

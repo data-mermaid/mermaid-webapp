@@ -44,7 +44,6 @@ const StyledColgroup = styled('colgroup')`
 const PercentCoverObservationTable = ({
   areValidationsShowing,
   collectRecord,
-  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -52,6 +51,10 @@ const PercentCoverObservationTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
+  const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
+    observationsDispatch({ type: 'addObservation' })
+  }
 
   const observationRows = useMemo(() => {
     const handleKeyDown = ({ event, index, observation, isLastCell }) => {
@@ -266,7 +269,6 @@ const PercentCoverObservationTable = ({
 PercentCoverObservationTable.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   collectRecord: bleachingRecordPropType,
-  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   formik: PropTypes.shape({
     values: PropTypes.shape({

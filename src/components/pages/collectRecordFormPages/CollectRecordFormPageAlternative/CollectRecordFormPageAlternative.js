@@ -52,7 +52,7 @@ function loadObservationsFromCollectRecordIntoTableState({
   collectRecordBeingEdited,
   getPersistedUnsavedObservationsTableData,
   observationsTableDispatch,
-  handleAddObservationTable,
+  handleAddObservationToTable,
   setObservationsTableReducerInitialized,
 }) {
   if (!isObservationsTableReducerInitialized && collectRecordBeingEdited) {
@@ -70,14 +70,14 @@ function loadObservationsFromCollectRecordIntoTableState({
       })
     }
     if (!initialObservationsToLoadTable.length) {
-      handleAddObservationTable()
+      handleAddObservationToTable()
     }
 
     setObservationsTableReducerInitialized(true)
   }
 
   if (!isObservationsTableReducerInitialized && !collectRecordBeingEdited) {
-    handleAddObservationTable()
+    handleAddObservationToTable()
     setObservationsTableReducerInitialized(true)
   }
 }
@@ -122,11 +122,10 @@ const CollectRecordFormPageAlternative = ({
   const [isObservationsTable2ReducerInitialized, setObservationsTable2ReducerInitialized] =
     useState(false)
   const [observationsTable1State, observationsTable1Dispatch] = observationsTable1Reducer
-  const [observationsTable2State, observationsTable2Dispatch = () => {}] =
-    observationsTable2Reducer ?? []
+  const [observationsTable2State, observationsTable2Dispatch = () => {}] = observationsTable2Reducer
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(
-    isNewRecord ? buttonGroupStates.untouchedEmptyForm : buttonGroupStates.saved,
+    isNewRecord ? buttonGroupStates.saved : buttonGroupStates.saved,
   )
   const [sites, setSites] = useState([])
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
@@ -283,17 +282,14 @@ const CollectRecordFormPageAlternative = ({
 
   const { interval_size: intervalSize, interval_start: intervalStart } = formik.values
 
-  const handleAddObservation = useCallback(
+  const handleAddEmptyInitialObservation = useCallback(
     (observationsTableDispatch) => {
-      setAreObservationsInputsDirty(true)
-      // some protocols will ignore payload values, potential namespace pollution is the tradeoff of having this abstraction
-      // Julia, maybe leave this explainer comment above?
       observationsTableDispatch({
         type: 'addObservation',
         payload: { intervalSize, intervalStart },
       })
     },
-    [setAreObservationsInputsDirty, intervalSize, intervalStart],
+    [intervalSize, intervalStart],
   )
 
   useEffect(
@@ -301,7 +297,8 @@ const CollectRecordFormPageAlternative = ({
       loadObservationsFromCollectRecordIntoTableState({
         collectRecordBeingEdited,
         getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable1Data,
-        handleAddObservationTable: () => handleAddObservation(observationsTable1Dispatch),
+        handleAddObservationToTable: () =>
+          handleAddEmptyInitialObservation(observationsTable1Dispatch),
         isObservationsTableReducerInitialized: isObservationsTable1ReducerInitialized,
         observationsTableDispatch: observationsTable1Dispatch,
         setObservationsTableReducerInitialized: setObservationsTable1ReducerInitialized,
@@ -311,7 +308,7 @@ const CollectRecordFormPageAlternative = ({
     [
       collectRecordBeingEdited,
       getPersistedUnsavedObservationsTable1Data,
-      handleAddObservation,
+      handleAddEmptyInitialObservation,
       isObservationsTable1ReducerInitialized,
       observationsTable1Dispatch,
     ],
@@ -322,7 +319,8 @@ const CollectRecordFormPageAlternative = ({
       loadObservationsFromCollectRecordIntoTableState({
         collectRecordBeingEdited,
         getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable2Data,
-        handleAddObservationTable: () => handleAddObservation(observationsTable2Dispatch),
+        handleAddObservationToTable: () =>
+          handleAddEmptyInitialObservation(observationsTable2Dispatch),
         isObservationsTableReducerInitialized: isObservationsTable2ReducerInitialized,
         observationsTableDispatch: observationsTable2Dispatch,
         setObservationsTableReducerInitialized: setObservationsTable2ReducerInitialized,
@@ -332,7 +330,7 @@ const CollectRecordFormPageAlternative = ({
     [
       collectRecordBeingEdited,
       getPersistedUnsavedObservationsTable2Data,
-      handleAddObservation,
+      handleAddEmptyInitialObservation,
       isObservationsTable2ReducerInitialized,
       observationsTable2Dispatch,
     ],
@@ -543,7 +541,6 @@ const CollectRecordFormPageAlternative = ({
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
-            handleAddObservation={() => handleAddObservation(observationsTable1Dispatch)}
           />
         </div>
         {ObservationTable2 ? (
@@ -559,7 +556,6 @@ const CollectRecordFormPageAlternative = ({
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
-            handleAddObservation={() => handleAddObservation(observationsTable2Dispatch)}
           />
         ) : null}
       </form>
@@ -655,7 +651,7 @@ CollectRecordFormPageAlternative.propTypes = {
 CollectRecordFormPageAlternative.defaultProps = {
   collectRecordBeingEdited: undefined,
   observationsTable1Reducer: [],
-  observationsTable2Reducer: undefined,
+  observationsTable2Reducer: [],
   ObservationTable2: undefined,
   setIsNewBenthicAttributeModalOpen: () => {},
   setObservationIdToAddNewBenthicAttributeTo: () => {},
