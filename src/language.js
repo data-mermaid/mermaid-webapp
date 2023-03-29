@@ -31,7 +31,7 @@ const error = {
   503: 'MERMAID error: please contact support@datamermaid.org',
   apiDataSync: 'MERMAID was not able to sync data.',
   appNotAuthenticatedOrReady:
-    'MERMAID did not load correclty. Try loggin out and then logging back in.',
+    'MERMAID did not load correctly. Try logging out and then logging back in.',
   collectRecordSupportingDataUnavailable:
     'Supporting data for creating a sample unit is currently unavailable.',
   collectRecordDelete: 'The sample unit has not been deleted.',
@@ -93,21 +93,14 @@ const error = {
     `The Project ${projectName}, may not be ready to be used offline.`,
   getProjectTurnOffOfflineReadyFailure: (projectName) =>
     `The Project ${projectName}, has not been removed from being offline-ready.`,
-  getPullSyncErrorMessage: (projectName) => (
-    <>
-      You do not have permission to read data from <strong>{projectName}</strong>. Please check your
-      notifications and consult with a project administrator.
-    </>
-  ),
   getPushSyncErrorMessage: (projectName) => (
     <>
       You do not have permission to sync data to <strong>{projectName}</strong>. Please check your
       notifications and consult with a project administrator about your project role.
     </>
   ),
-
   pushSyncErrorMessageUnsavedData: 'The following have not been saved: ',
-
+  pushSyncErrorMessageStatusCode500: 'MERMAID sync error: please contact support@datamermaid.org',
   getUserRoleChangeFailureMessage: (userName) => `${userName}'s role has not been changed.`,
   pageUnavailableOffline: 'This page is unavailable offline.',
   pageNotFound: 'This page cannot be found.',

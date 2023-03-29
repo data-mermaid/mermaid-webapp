@@ -2,11 +2,13 @@ import axios from '../../../library/axiosRetry'
 import { pullApiData } from '../pullApiData'
 
 const SyncApiDataIntoOfflineStorage = class {
-  _apiBaseUrl
+  #apiBaseUrl
 
-  _dexiePerUserDataInstance
+  #dexiePerUserDataInstance
 
-  #getTableNamesWhereSyncingWasRejectedListedPerProjectFromSyncPushError =
+  #getAccessToken
+
+  #getTableNamesWhereUserWasDeniedPushSyncListedPerProject =
     function getTableNamesWhereSyncingWasRejectedListedPerProjectFromSyncPushError(pushResponse) {
       const projectsWithSyncErrors = {}
 
@@ -62,25 +64,40 @@ const SyncApiDataIntoOfflineStorage = class {
     )
   }
 
+  #handleNested500SyncError
+
   #handleUserDeniedSyncPush
 
-  constructor({ apiBaseUrl, dexiePerUserDataInstance, getAccessToken, handleUserDeniedSyncPush }) {
-    if (!apiBaseUrl || !dexiePerUserDataInstance || !getAccessToken || !handleUserDeniedSyncPush) {
+  constructor({
+    apiBaseUrl,
+    dexiePerUserDataInstance,
+    getAccessToken,
+    handleUserDeniedSyncPush,
+    handleNested500SyncError,
+  }) {
+    if (
+      !apiBaseUrl ||
+      !dexiePerUserDataInstance ||
+      !getAccessToken ||
+      !handleUserDeniedSyncPush ||
+      !handleNested500SyncError
+    ) {
       throw new Error('SyncApiDataIntoOfflineStorage instantiated with missing parameter')
     }
-    this._dexiePerUserDataInstance = dexiePerUserDataInstance
-    this._apiBaseUrl = apiBaseUrl
-    this._getAccessToken = getAccessToken
+    this.#dexiePerUserDataInstance = dexiePerUserDataInstance
+    this.#apiBaseUrl = apiBaseUrl
+    this.#getAccessToken = getAccessToken
     this.#handleUserDeniedSyncPush = handleUserDeniedSyncPush
+    this.#handleNested500SyncError = handleNested500SyncError
   }
 
   pullAllProjects = () => {
     const apiProjectsToPull = ['projects']
 
     return pullApiData({
-      dexiePerUserDataInstance: this._dexiePerUserDataInstance,
-      getAccessToken: this._getAccessToken,
-      apiBaseUrl: this._apiBaseUrl,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull: apiProjectsToPull,
     })
   }
@@ -96,16 +113,16 @@ const SyncApiDataIntoOfflineStorage = class {
     ]
 
     return pullApiData({
-      dexiePerUserDataInstance: this._dexiePerUserDataInstance,
-      getAccessToken: this._getAccessToken,
-      apiBaseUrl: this._apiBaseUrl,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull: apiDataNamesToPullNonProject,
     })
   }
 
   #pullOfflineProjects = async () => {
     const offlineReadyProjects =
-      await this._dexiePerUserDataInstance.uiState_offlineReadyProjects.toArray()
+      await this.#dexiePerUserDataInstance.uiState_offlineReadyProjects.toArray()
 
     const apiDataNamesToPullNonProject = [
       'collect_records',
@@ -116,9 +133,9 @@ const SyncApiDataIntoOfflineStorage = class {
 
     const pullProjectPromises = offlineReadyProjects.map((project) =>
       pullApiData({
-        dexiePerUserDataInstance: this._dexiePerUserDataInstance,
-        getAccessToken: this._getAccessToken,
-        apiBaseUrl: this._apiBaseUrl,
+        dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+        getAccessToken: this.#getAccessToken,
+        apiBaseUrl: this.#apiBaseUrl,
         apiDataNamesToPull: apiDataNamesToPullNonProject,
         projectId: project.id,
       }),
@@ -129,14 +146,14 @@ const SyncApiDataIntoOfflineStorage = class {
 
   pushChanges = async () => {
     return Promise.all([
-      this._dexiePerUserDataInstance.benthic_attributes.toArray(),
-      this._dexiePerUserDataInstance.collect_records.toArray(),
-      this._dexiePerUserDataInstance.fish_species.toArray(),
-      this._dexiePerUserDataInstance.project_managements.toArray(),
-      this._dexiePerUserDataInstance.project_profiles.toArray(),
-      this._dexiePerUserDataInstance.project_sites.toArray(),
-      this._dexiePerUserDataInstance.projects.toArray(),
-      this._getAccessToken(),
+      this.#dexiePerUserDataInstance.benthic_attributes.toArray(),
+      this.#dexiePerUserDataInstance.collect_records.toArray(),
+      this.#dexiePerUserDataInstance.fish_species.toArray(),
+      this.#dexiePerUserDataInstance.project_managements.toArray(),
+      this.#dexiePerUserDataInstance.project_profiles.toArray(),
+      this.#dexiePerUserDataInstance.project_sites.toArray(),
+      this.#dexiePerUserDataInstance.projects.toArray(),
+      this.#getAccessToken(),
     ]).then(
       ([
         benthic_attributes,
@@ -150,7 +167,7 @@ const SyncApiDataIntoOfflineStorage = class {
       ]) => {
         return axios
           .post(
-            `${this._apiBaseUrl}/push/`,
+            `${this.#apiBaseUrl}/push/`,
             {
               benthic_attributes: this.#getOnlyModifiedAndDeletedItems(benthic_attributes),
               collect_records: this.#getOnlyModifiedAndDeletedItems(collect_records),
@@ -170,12 +187,31 @@ const SyncApiDataIntoOfflineStorage = class {
             },
           )
           .then((response) => {
-            const projectsWithSyncErrors =
-              this.#getTableNamesWhereSyncingWasRejectedListedPerProjectFromSyncPushError(response)
-            const areThereSyncErrors = Object.keys(projectsWithSyncErrors).length
+            const allSyncStatusCodes = Object.entries(response.data)
+              .flatMap((apiTableSyncResponseEntry) => {
+                return apiTableSyncResponseEntry[1]
+              })
+              .map((syncResponses) => {
+                return syncResponses.status_code
+              })
 
-            if (areThereSyncErrors) {
-              this.#handleUserDeniedSyncPush(projectsWithSyncErrors)
+            const areThereUserDeniedPushSyncErrors = !!allSyncStatusCodes.find(
+              (statusCode) => statusCode === 403,
+            )
+
+            const areThereStatusCode500SyncErrors = !!allSyncStatusCodes.find(
+              (statusCode) => statusCode === 500,
+            )
+
+            if (areThereUserDeniedPushSyncErrors) {
+              const projectsWithUserDeniedSyncErrors =
+                this.#getTableNamesWhereUserWasDeniedPushSyncListedPerProject(response)
+
+              this.#handleUserDeniedSyncPush(projectsWithUserDeniedSyncErrors)
+            }
+
+            if (areThereStatusCode500SyncErrors) {
+              this.#handleNested500SyncError()
             }
 
             return response
@@ -194,9 +230,9 @@ const SyncApiDataIntoOfflineStorage = class {
     await this.pushChanges()
 
     return pullApiData({
-      dexiePerUserDataInstance: this._dexiePerUserDataInstance,
-      getAccessToken: this._getAccessToken,
-      apiBaseUrl: this._apiBaseUrl,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull: [fishOrBenthicAttributesData],
     })
   }
@@ -218,14 +254,14 @@ const SyncApiDataIntoOfflineStorage = class {
     await this.pushChanges()
 
     const pullResponse = await pullApiData({
-      dexiePerUserDataInstance: this._dexiePerUserDataInstance,
-      getAccessToken: this._getAccessToken,
-      apiBaseUrl: this._apiBaseUrl,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull: allTheDataNames,
       projectId,
     })
 
-    await this._dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
+    await this.#dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
       id: projectId,
     })
 
@@ -245,14 +281,14 @@ const SyncApiDataIntoOfflineStorage = class {
       'projects',
     ]
     const pullResponse = await pullApiData({
-      dexiePerUserDataInstance: this._dexiePerUserDataInstance,
-      getAccessToken: this._getAccessToken,
-      apiBaseUrl: this._apiBaseUrl,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull,
       projectId,
     })
 
-    await this._dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
+    await this.#dexiePerUserDataInstance.uiState_offlineReadyProjects.put({
       id: projectId,
     })
 
@@ -271,21 +307,21 @@ const SyncApiDataIntoOfflineStorage = class {
   pushThenRemoveProjectFromOfflineStorage = async (projectId) => {
     await this.pushChanges()
 
-    const removeProjectDataFromUsersDataDatabase = this._dexiePerUserDataInstance.transaction(
+    const removeProjectDataFromUsersDataDatabase = this.#dexiePerUserDataInstance.transaction(
       'rw',
-      this._dexiePerUserDataInstance.collect_records,
-      this._dexiePerUserDataInstance.project_managements,
-      this._dexiePerUserDataInstance.project_profiles,
-      this._dexiePerUserDataInstance.project_sites,
-      this._dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled,
+      this.#dexiePerUserDataInstance.collect_records,
+      this.#dexiePerUserDataInstance.project_managements,
+      this.#dexiePerUserDataInstance.project_profiles,
+      this.#dexiePerUserDataInstance.project_sites,
+      this.#dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled,
 
       async () => {
-        this._dexiePerUserDataInstance.collect_records.where({ project: projectId }).delete()
-        this._dexiePerUserDataInstance.project_managements.where({ project: projectId }).delete()
-        this._dexiePerUserDataInstance.project_profiles.where({ project: projectId }).delete()
-        this._dexiePerUserDataInstance.project_sites.where({ project: projectId }).delete()
+        this.#dexiePerUserDataInstance.collect_records.where({ project: projectId }).delete()
+        this.#dexiePerUserDataInstance.project_managements.where({ project: projectId }).delete()
+        this.#dexiePerUserDataInstance.project_profiles.where({ project: projectId }).delete()
+        this.#dexiePerUserDataInstance.project_sites.where({ project: projectId }).delete()
 
-        this._dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled
+        this.#dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled
           .where('[dataType+projectId]')
           .anyOf([
             ['collect_records', projectId],
@@ -298,7 +334,7 @@ const SyncApiDataIntoOfflineStorage = class {
     )
 
     const removeProjectDataFromUiStateDatabase =
-      this._dexiePerUserDataInstance.uiState_offlineReadyProjects.delete(projectId)
+      this.#dexiePerUserDataInstance.uiState_offlineReadyProjects.delete(projectId)
 
     return Promise.all([
       removeProjectDataFromUsersDataDatabase,

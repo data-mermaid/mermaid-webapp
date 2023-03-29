@@ -23,6 +23,7 @@ const getMockOnlineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance }) 
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
       handleUserDeniedSyncPush: () => {},
+      handleNested500SyncError: () => {},
     }),
     isOfflineStorageHydrated: true,
   })
@@ -45,6 +46,7 @@ const getMockOfflineDatabaseSwitchboardInstance = ({ dexiePerUserDataInstance })
       apiBaseUrl,
       getAccessToken: getFakeAccessToken,
       handleUserDeniedSyncPush: () => {},
+      handleNested500SyncError: () => {},
     }),
     isOfflineStorageHydrated: true,
   })
