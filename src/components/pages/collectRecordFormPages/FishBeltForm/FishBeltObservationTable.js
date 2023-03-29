@@ -178,7 +178,6 @@ const FishBeltObservationTable = ({
 
       if (isTabKey && isLastRow && isCount) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -188,7 +187,6 @@ const FishBeltObservationTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
