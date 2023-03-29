@@ -48,14 +48,22 @@ import useCurrentProjectPath from '../../../../library/useCurrentProjectPath'
 import useIsMounted from '../../../../library/useIsMounted'
 
 function loadObservationsFromCollectRecordIntoTableState({
-  isObservationsTableReducerInitialized,
   collectRecordBeingEdited,
   getPersistedUnsavedObservationsTableData,
   observationsTableDispatch,
-  handleAddObservationToTable,
   setObservationsTableReducerInitialized,
+  formik,
 }) {
-  if (!isObservationsTableReducerInitialized && collectRecordBeingEdited) {
+  const handleAddEmptyInitialObservation = () => {
+    const { interval_size: intervalSize, interval_start: intervalStart } = formik.values
+
+    observationsTableDispatch({
+      type: 'addObservation',
+      payload: { intervalSize, intervalStart },
+    })
+  }
+
+  if (collectRecordBeingEdited) {
     const observationsFromApiTable =
       collectRecordBeingEdited.data[getObservationsPropertyNames(collectRecordBeingEdited)[0]] ?? []
 
@@ -70,14 +78,14 @@ function loadObservationsFromCollectRecordIntoTableState({
       })
     }
     if (!initialObservationsToLoadTable.length) {
-      handleAddObservationToTable()
+      handleAddEmptyInitialObservation()
     }
 
     setObservationsTableReducerInitialized(true)
   }
 
-  if (!isObservationsTableReducerInitialized && !collectRecordBeingEdited) {
-    handleAddObservationToTable()
+  if (!collectRecordBeingEdited) {
+    handleAddEmptyInitialObservation()
     setObservationsTableReducerInitialized(true)
   }
 }
@@ -125,7 +133,7 @@ const CollectRecordFormPageAlternative = ({
   const [observationsTable2State, observationsTable2Dispatch = () => {}] = observationsTable2Reducer
   const [observerProfiles, setObserverProfiles] = useState([])
   const [saveButtonState, setSaveButtonState] = useState(
-    isNewRecord ? buttonGroupStates.saved : buttonGroupStates.saved,
+    isNewRecord ? buttonGroupStates.untouchedEmptyForm : buttonGroupStates.saved,
   )
   const [sites, setSites] = useState([])
   const [submitButtonState, setSubmitButtonState] = useState(buttonGroupStates.submittable)
@@ -280,59 +288,47 @@ const CollectRecordFormPageAlternative = ({
     getPersistedUnsavedObservationsTable2Data,
   ])
 
-  const { interval_size: intervalSize, interval_start: intervalStart } = formik.values
-
-  const handleAddEmptyInitialObservation = useCallback(
-    (observationsTableDispatch) => {
-      observationsTableDispatch({
-        type: 'addObservation',
-        payload: { intervalSize, intervalStart },
-      })
-    },
-    [intervalSize, intervalStart],
-  )
-
   useEffect(
     function initializeObservationReducerTable1() {
-      loadObservationsFromCollectRecordIntoTableState({
-        collectRecordBeingEdited,
-        getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable1Data,
-        handleAddObservationToTable: () =>
-          handleAddEmptyInitialObservation(observationsTable1Dispatch),
-        isObservationsTableReducerInitialized: isObservationsTable1ReducerInitialized,
-        observationsTableDispatch: observationsTable1Dispatch,
-        setObservationsTableReducerInitialized: setObservationsTable1ReducerInitialized,
-      })
+      if (!isObservationsTable1ReducerInitialized) {
+        loadObservationsFromCollectRecordIntoTableState({
+          collectRecordBeingEdited,
+          getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable1Data,
+          observationsTableDispatch: observationsTable1Dispatch,
+          setObservationsTableReducerInitialized: setObservationsTable1ReducerInitialized,
+          formik,
+        })
+      }
     },
 
     [
       collectRecordBeingEdited,
       getPersistedUnsavedObservationsTable1Data,
-      handleAddEmptyInitialObservation,
       isObservationsTable1ReducerInitialized,
       observationsTable1Dispatch,
+      formik,
     ],
   )
 
   useEffect(
     function initializeObservationReducerTable2() {
-      loadObservationsFromCollectRecordIntoTableState({
-        collectRecordBeingEdited,
-        getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable2Data,
-        handleAddObservationToTable: () =>
-          handleAddEmptyInitialObservation(observationsTable2Dispatch),
-        isObservationsTableReducerInitialized: isObservationsTable2ReducerInitialized,
-        observationsTableDispatch: observationsTable2Dispatch,
-        setObservationsTableReducerInitialized: setObservationsTable2ReducerInitialized,
-      })
+      if (!isObservationsTable2ReducerInitialized) {
+        loadObservationsFromCollectRecordIntoTableState({
+          collectRecordBeingEdited,
+          getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable2Data,
+          observationsTableDispatch: observationsTable2Dispatch,
+          setObservationsTableReducerInitialized: setObservationsTable2ReducerInitialized,
+          formik,
+        })
+      }
     },
 
     [
       collectRecordBeingEdited,
       getPersistedUnsavedObservationsTable2Data,
-      handleAddEmptyInitialObservation,
       isObservationsTable2ReducerInitialized,
       observationsTable2Dispatch,
+      formik,
     ],
   )
 
