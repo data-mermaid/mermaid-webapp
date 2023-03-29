@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -47,6 +47,7 @@ const BenthicLitObservationsTable = ({
   benthicAttributeSelectOptions,
   choices,
   collectRecord,
+  handleAddObservation,
   ignoreObservationValidations,
   observationsReducer,
   resetObservationValidations,
@@ -56,21 +57,6 @@ const BenthicLitObservationsTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
-  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
-
-  const handleAddObservation = () => {
-    setAreObservationsInputsDirty(true)
-    setAutoFocusAllowed(true)
-
-    observationsDispatch({ type: 'addObservation' })
-  }
-
-  // refactor this like fishbelt to make one effect responsible for initializing the obs reducer
-  const _addInitialEmptyObservationRow = useEffect(() => {
-    if (!collectRecord && observationsState.length === 0) {
-      handleAddObservation()
-    }
-  }) // missing dependency array means this is theoretically running all the time
 
   const observationsRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
@@ -82,7 +68,6 @@ const BenthicLitObservationsTable = ({
 
       if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -92,7 +77,6 @@ const BenthicLitObservationsTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
-        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -196,7 +180,6 @@ const BenthicLitObservationsTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
-                  autoFocus={autoFocusAllowed}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
@@ -263,7 +246,6 @@ const BenthicLitObservationsTable = ({
     })
   }, [
     areValidationsShowing,
-    autoFocusAllowed,
     benthicAttributeSelectOptions,
     choices,
     collectRecord,
@@ -333,6 +315,7 @@ BenthicLitObservationsTable.propTypes = {
   benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: benthicPitRecordPropType,
+  handleAddObservation: PropTypes.func.isRequired,
   ignoreObservationValidations: PropTypes.func.isRequired,
   observationsReducer: observationsReducerPropType,
   resetObservationValidations: PropTypes.func.isRequired,
