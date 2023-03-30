@@ -149,7 +149,6 @@ test('Benthic Pit observations: intervals reclaculate when a user inserts a row 
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
-  // userEvent.click(addRowButton)
 
   await waitFor(() => {
     const observationIntervalLabelsAfterFourRowsAdded =
