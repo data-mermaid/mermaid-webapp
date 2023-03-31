@@ -1,5 +1,7 @@
-export const getIsDataTypeProjectAssociated = (dataType) =>
-  dataType === 'collect_records' ||
-  dataType === 'project_managements' ||
-  dataType === 'project_profiles' ||
-  dataType === 'project_sites'
+import { apiDataTypes } from '../../library/constants/constants'
+
+export const getIsDataTypeProjectAssociated = (apiDataType) =>
+  apiDataType === apiDataTypes.collectRecords ||
+  apiDataType === apiDataTypes.projectManagements ||
+  apiDataType === apiDataTypes.projectSites ||
+  apiDataType === apiDataTypes.projectProfiles
