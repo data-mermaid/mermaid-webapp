@@ -89,6 +89,8 @@ const BenthicPhotoQuadratObservationTable = ({
 
   const handleAddObservation = useCallback(() => {
     setAreObservationsInputsDirty(true)
+    setAutoFocusAllowed(true)
+
     observationsDispatch({ type: 'addObservation' })
   }, [observationsDispatch, setAreObservationsInputsDirty])
 

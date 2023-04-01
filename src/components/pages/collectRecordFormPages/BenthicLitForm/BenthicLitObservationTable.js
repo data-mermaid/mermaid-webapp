@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -56,9 +56,12 @@ const BenthicLitObservationsTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
+    setAutoFocusAllowed(true)
+
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -72,6 +75,7 @@ const BenthicLitObservationsTable = ({
 
       if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -81,6 +85,7 @@ const BenthicLitObservationsTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -184,6 +189,7 @@ const BenthicLitObservationsTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
+                  autoFocus={autoFocusAllowed}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
@@ -250,6 +256,7 @@ const BenthicLitObservationsTable = ({
     })
   }, [
     areValidationsShowing,
+    autoFocusAllowed,
     benthicAttributeSelectOptions,
     choices,
     collectRecord,

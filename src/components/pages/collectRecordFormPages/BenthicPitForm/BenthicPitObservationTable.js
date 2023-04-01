@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -68,12 +68,13 @@ const BenthicPitObservationsTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
   const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
-
+    setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
   }
 
@@ -97,6 +98,7 @@ const BenthicPitObservationsTable = ({
 
       if (isTabKey && isLastRow && isGrowthForm) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation, intervalStart, intervalSize },
@@ -106,6 +108,7 @@ const BenthicPitObservationsTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -193,6 +196,7 @@ const BenthicPitObservationsTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
+                  autoFocus={autoFocusAllowed}
                   aria-labelledby="benthic-attribute-label"
                   options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
@@ -253,6 +257,7 @@ const BenthicPitObservationsTable = ({
     })
   }, [
     areValidationsShowing,
+    autoFocusAllowed,
     benthicAttributeSelectOptions,
     choices,
     collectRecord,

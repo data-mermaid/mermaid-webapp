@@ -96,6 +96,7 @@ const FishBeltObservationTable = ({
     width: widthId,
   } = formik?.values
   const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
   const {
@@ -111,6 +112,7 @@ const FishBeltObservationTable = ({
 
   const handleAddObservation = useCallback(() => {
     setAreObservationsInputsDirty(true)
+    setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }, [observationsDispatch, setAreObservationsInputsDirty])
 
@@ -178,6 +180,7 @@ const FishBeltObservationTable = ({
 
       if (isTabKey && isLastRow && isCount) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -187,6 +190,7 @@ const FishBeltObservationTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -320,6 +324,13 @@ const FishBeltObservationTable = ({
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
+                  // we only want autofocus to take over focus after the user adds
+                  // new observations, not before. Otherwise initial page load focus
+                  // is on the most recently painted observation instead of default focus.
+                  // This approach seems easier than handling a list of refs for each observation
+                  // and the logic to focus on the right one. in react autoFocus just focuses
+                  // the newest element with the autoFocus tag
+                  autoFocus={autoFocusAllowed}
                   aria-labelledby="fish-name-label"
                   options={fishNameOptions}
                   onChange={handleFishNameChange}
@@ -381,6 +392,7 @@ const FishBeltObservationTable = ({
     fishNameOptions,
     collectRecord,
     ignoreObservationValidations,
+    autoFocusAllowed,
     observationsBiomass,
     observationsDispatch,
     observationsState,

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -51,8 +51,12 @@ const PercentCoverObservationTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
+
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
+    setAutoFocusAllowed(true)
+
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -64,6 +68,7 @@ const PercentCoverObservationTable = ({
 
       if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation },
@@ -73,6 +78,7 @@ const PercentCoverObservationTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -150,6 +156,7 @@ const PercentCoverObservationTable = ({
               onChange={(event) => {
                 handleObservationInputChange({ event, dispatchType: 'updateHardCoralPercent' })
               }}
+              autoFocus={autoFocusAllowed}
               onKeyDown={handleObservationKeyDown}
             />
           </Td>
@@ -208,6 +215,7 @@ const PercentCoverObservationTable = ({
     })
   }, [
     areValidationsShowing,
+    autoFocusAllowed,
     collectRecord,
     ignoreObservationValidations,
     observationsDispatch,

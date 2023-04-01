@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -50,6 +50,7 @@ const HabitatComplexityObservationsTable = ({
   testId,
 }) => {
   const [observationsState, observationsDispatch] = observationsReducer
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
   const { interval_size: intervalSize } = formik.values
 
@@ -65,6 +66,7 @@ const HabitatComplexityObservationsTable = ({
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
+    setAutoFocusAllowed(true)
 
     observationsDispatch({ type: 'addObservation', payload: { intervalSize } })
   }
@@ -79,6 +81,7 @@ const HabitatComplexityObservationsTable = ({
 
       if (isTabKey && isLastRow && isLastCell) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'duplicateLastObservation',
           payload: { referenceObservation: observation, intervalSize },
@@ -88,6 +91,7 @@ const HabitatComplexityObservationsTable = ({
 
       if (isEnterKey) {
         event.preventDefault()
+        setAutoFocusAllowed(true)
         observationsDispatch({
           type: 'addNewObservationBelow',
           payload: {
@@ -157,6 +161,7 @@ const HabitatComplexityObservationsTable = ({
               }}
               value={habitatComplexityScore}
               aria-labelledby="habitat-complexity-score-label"
+              autoFocus={autoFocusAllowed}
             >
               <option value=""> </option>
               {habitatComplexityScoreOptions.map((item) => (
@@ -195,6 +200,7 @@ const HabitatComplexityObservationsTable = ({
     })
   }, [
     areValidationsShowing,
+    autoFocusAllowed,
     choices,
     collectRecord,
     ignoreObservationValidations,

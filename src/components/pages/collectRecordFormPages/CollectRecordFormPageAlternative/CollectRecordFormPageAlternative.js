@@ -49,10 +49,12 @@ import useIsMounted from '../../../../library/useIsMounted'
 
 function loadObservationsFromCollectRecordIntoTableState({
   collectRecordBeingEdited,
+  formik,
   getPersistedUnsavedObservationsTableData,
+  isNewRecord,
+  observationsPropertyName,
   observationsTableDispatch,
   setObservationsTableReducerInitialized,
-  formik,
 }) {
   const handleAddEmptyInitialObservation = () => {
     const { interval_size: intervalSize, interval_start: intervalStart } = formik.values
@@ -63,9 +65,8 @@ function loadObservationsFromCollectRecordIntoTableState({
     })
   }
 
-  if (collectRecordBeingEdited) {
-    const observationsFromApiTable =
-      collectRecordBeingEdited.data[getObservationsPropertyNames(collectRecordBeingEdited)[0]] ?? []
+  if (collectRecordBeingEdited && !isNewRecord) {
+    const observationsFromApiTable = collectRecordBeingEdited.data[observationsPropertyName] ?? []
 
     const persistedUnsavedObservationsTable = getPersistedUnsavedObservationsTableData()
     const initialObservationsToLoadTable =
@@ -84,7 +85,7 @@ function loadObservationsFromCollectRecordIntoTableState({
     setObservationsTableReducerInitialized(true)
   }
 
-  if (!collectRecordBeingEdited) {
+  if (isNewRecord) {
     handleAddEmptyInitialObservation()
     setObservationsTableReducerInitialized(true)
   }
@@ -293,20 +294,23 @@ const CollectRecordFormPageAlternative = ({
       if (!isObservationsTable1ReducerInitialized) {
         loadObservationsFromCollectRecordIntoTableState({
           collectRecordBeingEdited,
+          formik,
           getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable1Data,
+          isNewRecord,
+          observationsPropertyName: getObservationsPropertyNames(collectRecordBeingEdited)[0],
           observationsTableDispatch: observationsTable1Dispatch,
           setObservationsTableReducerInitialized: setObservationsTable1ReducerInitialized,
-          formik,
         })
       }
     },
 
     [
       collectRecordBeingEdited,
+      formik,
       getPersistedUnsavedObservationsTable1Data,
+      isNewRecord,
       isObservationsTable1ReducerInitialized,
       observationsTable1Dispatch,
-      formik,
     ],
   )
 
@@ -315,20 +319,23 @@ const CollectRecordFormPageAlternative = ({
       if (!isObservationsTable2ReducerInitialized) {
         loadObservationsFromCollectRecordIntoTableState({
           collectRecordBeingEdited,
+          formik,
           getPersistedUnsavedObservationsTableData: getPersistedUnsavedObservationsTable2Data,
+          isNewRecord,
+          observationsPropertyName: getObservationsPropertyNames(collectRecordBeingEdited)[1],
           observationsTableDispatch: observationsTable2Dispatch,
           setObservationsTableReducerInitialized: setObservationsTable2ReducerInitialized,
-          formik,
         })
       }
     },
 
     [
       collectRecordBeingEdited,
+      formik,
       getPersistedUnsavedObservationsTable2Data,
+      isNewRecord,
       isObservationsTable2ReducerInitialized,
       observationsTable2Dispatch,
-      formik,
     ],
   )
 
