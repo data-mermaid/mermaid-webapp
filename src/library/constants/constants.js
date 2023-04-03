@@ -5,5 +5,16 @@ export const PROJECT_CODES = {
   status: { open: 90, test: 80 },
   policy: { private: 10, publicSummary: 50 },
 }
-
+export const apiDataTypes = {
+  benthicAttributes: 'benthic_attributes',
+  choices: 'choices',
+  collectRecords: 'collect_records',
+  fishFamilies: 'fish_families',
+  fishGenera: 'fish_genera',
+  fishSpecies: 'fish_species',
+  projectManagements: 'project_managements',
+  projectProfiles: 'project_profiles',
+  projectSites: 'project_sites',
+}
 Object.freeze(PROJECT_CODES)
+Object.freeze(apiDataTypes)

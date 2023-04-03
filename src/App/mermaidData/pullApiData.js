@@ -10,9 +10,6 @@ import { getIsDataTypeProjectAssociated } from './getIsDataTypeProjectAssociated
 const resetPushToApiTagFromItems = (items) =>
   items.map((item) => ({ ...item, uiState_pushToApi: false }))
 
-const isIndexedDBProjectInProjectResults = (indexedDBProject, projectsResults) =>
-  projectsResults.some((responseProject) => indexedDBProject.id === responseProject.id)
-
 export const pullApiData = async ({
   apiBaseUrl,
   apiDataNamesToPull,
@@ -45,14 +42,6 @@ export const pullApiData = async ({
     await getAuthorizationHeaders(getAccessToken),
   )
 
-  // If projects are part of the API pull determine if the user has been
-  // removed from a project. This is determined later in this function.
-  // If the user has been removed, the project will be removed from the IndexedDB.
-  const projectsResponse = apiDataNamesToPull.includes('projects')
-    ? await axios.get(`${apiBaseUrl}/projects/`, await getAuthorizationHeaders(getAccessToken))
-    : undefined
-  const indexedDbProjects = await dexiePerUserDataInstance.projects.toArray()
-
   const apiData = pullResponse.data
 
   await dexiePerUserDataInstance.transaction(
@@ -68,6 +57,7 @@ export const pullApiData = async ({
     dexiePerUserDataInstance.project_sites,
     dexiePerUserDataInstance.projects,
     dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled,
+    dexiePerUserDataInstance.uiState_offlineReadyProjects,
     async () => {
       await persistLastRevisionNumbersPulled({
         dexiePerUserDataInstance,
@@ -75,7 +65,7 @@ export const pullApiData = async ({
         projectId,
       })
 
-      apiDataNamesToPull.forEach((apiDataType) => {
+      apiDataNamesToPull.forEach(async (apiDataType) => {
         if (apiDataType === 'choices') {
           // choices deletes property will always be empty, so we just ignore it
           // additionally the updates property is an object, not an array, so we just store it directly
@@ -89,55 +79,40 @@ export const pullApiData = async ({
           const updates = apiData[apiDataType]?.updates ?? []
           const updatesWithPushToApiTagReset = resetPushToApiTagFromItems(updates)
           const deletes = apiData[apiDataType]?.deletes ?? []
+          const removes = apiData[apiDataType]?.removes ?? []
           const deleteIds = deletes.map(({ id }) => id)
+          const removeIds = removes.map(({ id }) => id)
           const error = apiData[apiDataType]?.error
-          // it is implied that we will only get 401 and 403 sync errors for project-related tables
-          // those responses will include an array of ids to wipe out everything associated with the project
-          // causing the 401 or 403
-          const isAnyErrorCodeAssociatedRecordsToBeDeleted =
-            error && [401, 403].includes(error.code)
-          const errorCodeAssociatedIds = isAnyErrorCodeAssociatedRecordsToBeDeleted
-            ? error.record_ids
-            : []
+          const is401Or403 = error && [401, 403].includes(error.code)
+
           const isDataTypeProjectAssociated = getIsDataTypeProjectAssociated(apiDataType)
 
-          const bulkDeleteIdsWithNoDuplicates = Array.from(
-            new Set([...deleteIds, ...errorCodeAssociatedIds]),
-          )
+          const bulkDeleteIdsWithNoDuplicates = Array.from(new Set([...deleteIds, ...removeIds]))
 
           dexiePerUserDataInstance[apiDataType].bulkPut(updatesWithPushToApiTagReset)
           dexiePerUserDataInstance[apiDataType].bulkDelete(bulkDeleteIdsWithNoDuplicates)
 
-          if (isAnyErrorCodeAssociatedRecordsToBeDeleted && isDataTypeProjectAssociated) {
-            resetLastRevisionNumberForProjectDataType({
-              dataType: apiDataType,
-              projectId,
-              dexiePerUserDataInstance,
-            })
-          }
-        }
+          if (is401Or403 && isDataTypeProjectAssociated && projectId) {
+            // we still delete project related data in addition to anything in the removes array,
+            // because the removes array response doesnt include all the things we want to delete currently.
+            const deleteProjectRelatedRecords = dexiePerUserDataInstance[apiDataType]
+              .where({ project: projectId })
+              .delete()
+            const resetProjectRelatedLastRevisionNumbers =
+              resetLastRevisionNumberForProjectDataType({
+                dataType: apiDataType,
+                projectId,
+                dexiePerUserDataInstance,
+              })
 
-        // If the user has been removed from a project, the backend does not treat
-        // it as a change to the project itself, therefore no revision is triggered.
-        // Only the project profile changes in this case.
-        // If the user remains online, project profile will not be updated by a pull.
-        // Determine if the user's project membership has changed based on the
-        // /projects endpoint response and delete the project in the IndexedDb if
-        // they have been removed.
-        if (projectsResponse && apiDataType === 'projects') {
-          const projectsResults = projectsResponse.data?.results
+            const removeOfflineReadyProjectStatus =
+              dexiePerUserDataInstance.uiState_offlineReadyProjects.delete(projectId)
 
-          // Determine which projects in IndexedDB are not in the /projects API response
-          const deleteProjectIds = indexedDbProjects
-            .filter(
-              (indexedDBProject) =>
-                !isIndexedDBProjectInProjectResults(indexedDBProject, projectsResults),
-            )
-            .map((removedProject) => removedProject.id)
-
-          if (deleteProjectIds.length) {
-            // Delete the projects from IndexedDB as the user has been removed from them
-            dexiePerUserDataInstance.projects.bulkDelete(deleteProjectIds)
+            await Promise.all([
+              deleteProjectRelatedRecords,
+              resetProjectRelatedLastRevisionNumbers,
+              removeOfflineReadyProjectStatus,
+            ])
           }
         }
       })
