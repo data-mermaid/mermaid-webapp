@@ -97,16 +97,10 @@ const enforceNumberInput = (event) => {
   const isMovingAndSpecialCharactersKeyPressed = specialActionAndCharacterKeys.includes(event.key)
   const isNumbersKeyPressed =
     (event.keyCode >= 48 && event.keyCode <= 58) || (event.keyCode >= 96 && event.keyCode <= 105)
-  const isCopyPasteSelectAllActionsKeyPresses =
-    (event.metaKey || event.ctrlKey) && ['c', 'p', 'a'].includes(event.key)
 
   return (
-    !(
-      isModifiersKeyPressed ||
-      isMovingAndSpecialCharactersKeyPressed ||
-      isNumbersKeyPressed ||
-      isCopyPasteSelectAllActionsKeyPresses
-    ) && event.preventDefault()
+    !(isModifiersKeyPressed || isMovingAndSpecialCharactersKeyPressed || isNumbersKeyPressed) &&
+    event.preventDefault()
   )
 }
 
