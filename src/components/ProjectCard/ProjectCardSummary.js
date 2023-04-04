@@ -84,7 +84,11 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
   )
 
   const submittedCardOnline = (
-    <SummaryCard to={`${projectUrl}/submitted`} aria-label="Submitted" onClick={stopEventPropagation}>
+    <SummaryCard
+      to={`${projectUrl}/submitted`}
+      aria-label="Submitted"
+      onClick={stopEventPropagation}
+    >
       <SubCardTitle>Submitted</SubCardTitle>
       <SubCardIconAndCount>
         <IconData />
@@ -168,7 +172,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     <SummaryCardGroup>
       {isReadOnlyUser ? readOnlyCollectingCard : collectingCard}
       {isAppOnline ? submittedCardOnline : submittedCardOffline}
-      {isAppOnline ? sitesCardOnline : sitesCardOffline}
+      {isAppOnline || !isReadOnlyUser ? sitesCardOnline : sitesCardOffline}
       {isAppOnline ? usersCardOnline : usersCardOffline}
       {isAppOnline ? dataSharingCardOnline : dataSharingCardOffline}
     </SummaryCardGroup>
