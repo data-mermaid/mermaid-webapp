@@ -74,10 +74,11 @@ test('pullApiData strips uiState_pushToApi properties from api response', async 
   )
 
   await pullApiData({
-    dexiePerUserDataInstance,
-    getAccessToken: getFakeAccessToken,
     apiBaseUrl,
     apiDataNamesToPull: allTheDataNames,
+    dexiePerUserDataInstance,
+    getAccessToken: getFakeAccessToken,
+    handleUserDeniedSyncPull: () => {},
     projectId,
   })
 

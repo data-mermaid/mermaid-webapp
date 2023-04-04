@@ -41,6 +41,8 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     const isProjectsListPage =
       location.pathname === '/projects' || location.pathname === '/projects/'
 
+    const isUserDeniedProjectAccessPage = location.pathname.includes('noProjectAccess')
+
     const isProjectsListPageAndOnline = isProjectsListPage && isOnlineAndReady
 
     const isInitialLoadOnProjectPageAndOnline =
@@ -48,7 +50,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     const isNotInitialLoadOnProjectPageAndOnline =
       !isPageReload.current && isProjectPage && isOnlineAndReady
 
-    if (isOfflineAndReadyAndAlreadyInitiated) {
+    if (isOfflineAndReadyAndAlreadyInitiated || isUserDeniedProjectAccessPage) {
       setIsOfflineStorageHydrated(true)
       setIsSyncInProgress(false)
     }
