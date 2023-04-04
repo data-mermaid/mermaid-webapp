@@ -82,13 +82,32 @@ const ReadOnlySiteContent = ({
 }
 
 const enforceNumberInput = (event) => {
-  const numbersPlusMinusAndDotSymbols = /[0-9+-.]/.source
-  const regex = new RegExp(
-    `${numbersPlusMinusAndDotSymbols}|(Backspace|Tab|Delete|ArrowLeft|ArrowRight|ArrowUp|ArrowDown)`,
-  )
-  const preventKeyPressNotMatchInRegex = !event.key.match(regex) && event.preventDefault()
+  const specialActionAndCharacterKeys = [
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'Backspace',
+    'Delete',
+    '-',
+    '.',
+  ]
 
-  return preventKeyPressNotMatchInRegex
+  const isModifiersKeyPressed = event.metaKey || event.ctrlKey || event.shiftKey
+  const isMovingAndSpecialCharactersKeyPressed = specialActionAndCharacterKeys.includes(event.key)
+  const isNumbersKeyPressed =
+    (event.keyCode >= 48 && event.keyCode <= 58) || (event.keyCode >= 96 && event.keyCode <= 105)
+  const isCopyPasteSelectAllActionsKeyPresses =
+    (event.metaKey || event.ctrlKey) && ['c', 'p', 'a'].includes(event.key)
+
+  return (
+    !(
+      isModifiersKeyPressed ||
+      isMovingAndSpecialCharactersKeyPressed ||
+      isNumbersKeyPressed ||
+      isCopyPasteSelectAllActionsKeyPresses
+    ) && event.preventDefault()
+  )
 }
 
 const SiteForm = ({
