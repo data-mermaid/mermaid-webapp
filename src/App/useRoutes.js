@@ -25,6 +25,7 @@ import HabitatComplexityForm from '../components/pages/collectRecordFormPages/Ha
 import BenthicLitForm from '../components/pages/collectRecordFormPages/BenthicLitForm/BenthicLitForm'
 import SubmittedHabitatComplexity from '../components/pages/submittedRecordPages/SubmittedHabitatComplexity/SubmittedHabitatComplexity'
 import SubmittedBenthicLit from '../components/pages/submittedRecordPages/SubmittedBenthicLit/SubmittedBenthicLit'
+import UserDoesntHaveProjectAccess from '../components/pages/UserDoesntHaveProjectAccess'
 
 export const useRoutes = ({ apiSyncInstance }) => {
   const routes = [
@@ -165,6 +166,14 @@ export const useRoutes = ({ apiSyncInstance }) => {
     {
       path: '/projects/:projectId/data-sharing',
       Component: () => <DataSharing />,
+    },
+    {
+      path: '/noProjectAccess',
+      Component: UserDoesntHaveProjectAccess,
+    },
+    {
+      path: '/noProjectAccess/:projectName',
+      Component: UserDoesntHaveProjectAccess,
     },
   ]
 

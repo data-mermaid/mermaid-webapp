@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
+import { Switch, Route, Redirect, useLocation, useHistory } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
@@ -36,9 +36,10 @@ import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
-  const apiBaseUrl = process.env.REACT_APP_MERMAID_API
-  const isMounted = useIsMounted()
   const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
+  const apiBaseUrl = process.env.REACT_APP_MERMAID_API
+  const history = useHistory()
+  const isMounted = useIsMounted()
   const location = useLocation()
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
@@ -53,6 +54,13 @@ function App({ dexieCurrentUserInstance }) {
   const handleNested500SyncError = () => {
     toast.error(...getToastArguments(language.error.pushSyncErrorMessageStatusCode500))
   }
+
+  const handleUserDeniedSyncPull = useCallback(
+    (projectName) => {
+      history.push(projectName ? `/noProjectAccess/${projectName}` : '/noProjectAccess')
+    },
+    [history],
+  )
 
   const handleUserDeniedSyncPush = useCallback(
     (projectsWithSyncErrors) => {
@@ -107,13 +115,20 @@ function App({ dexieCurrentUserInstance }) {
         dexiePerUserDataInstance,
         apiBaseUrl,
         getAccessToken,
+        handleUserDeniedSyncPull,
         handleUserDeniedSyncPush,
         handleNested500SyncError,
       })
     }
 
     return undefined
-  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken, handleUserDeniedSyncPush])
+  }, [
+    apiBaseUrl,
+    dexiePerUserDataInstance,
+    getAccessToken,
+    handleUserDeniedSyncPull,
+    handleUserDeniedSyncPush,
+  ])
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,

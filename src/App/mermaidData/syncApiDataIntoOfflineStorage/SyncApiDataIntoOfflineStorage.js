@@ -66,12 +66,15 @@ const SyncApiDataIntoOfflineStorage = class {
 
   #handleNested500SyncError
 
+  #handleUserDeniedSyncPull
+
   #handleUserDeniedSyncPush
 
   constructor({
     apiBaseUrl,
     dexiePerUserDataInstance,
     getAccessToken,
+    handleUserDeniedSyncPull,
     handleUserDeniedSyncPush,
     handleNested500SyncError,
   }) {
@@ -79,6 +82,7 @@ const SyncApiDataIntoOfflineStorage = class {
       !apiBaseUrl ||
       !dexiePerUserDataInstance ||
       !getAccessToken ||
+      !handleUserDeniedSyncPull ||
       !handleUserDeniedSyncPush ||
       !handleNested500SyncError
     ) {
@@ -87,6 +91,7 @@ const SyncApiDataIntoOfflineStorage = class {
     this.#dexiePerUserDataInstance = dexiePerUserDataInstance
     this.#apiBaseUrl = apiBaseUrl
     this.#getAccessToken = getAccessToken
+    this.#handleUserDeniedSyncPull = handleUserDeniedSyncPull
     this.#handleUserDeniedSyncPush = handleUserDeniedSyncPush
     this.#handleNested500SyncError = handleNested500SyncError
   }
@@ -95,10 +100,11 @@ const SyncApiDataIntoOfflineStorage = class {
     const apiProjectsToPull = ['projects']
 
     return pullApiData({
-      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
-      getAccessToken: this.#getAccessToken,
       apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull: apiProjectsToPull,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      handleUserDeniedSyncPull: this.#handleUserDeniedSyncPull,
     })
   }
 
@@ -113,10 +119,11 @@ const SyncApiDataIntoOfflineStorage = class {
     ]
 
     return pullApiData({
-      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
-      getAccessToken: this.#getAccessToken,
       apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull: apiDataNamesToPullNonProject,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      handleUserDeniedSyncPull: this.#handleUserDeniedSyncPull,
     })
   }
 
@@ -133,10 +140,11 @@ const SyncApiDataIntoOfflineStorage = class {
 
     const pullProjectPromises = offlineReadyProjects.map((project) =>
       pullApiData({
-        dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
-        getAccessToken: this.#getAccessToken,
         apiBaseUrl: this.#apiBaseUrl,
         apiDataNamesToPull: apiDataNamesToPullNonProject,
+        dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+        getAccessToken: this.#getAccessToken,
+        handleUserDeniedSyncPull: this.#handleUserDeniedSyncPull,
         projectId: project.id,
       }),
     )
@@ -230,10 +238,11 @@ const SyncApiDataIntoOfflineStorage = class {
     await this.pushChanges()
 
     return pullApiData({
-      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
-      getAccessToken: this.#getAccessToken,
       apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull: [fishOrBenthicAttributesData],
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      handleUserDeniedSyncPull: this.#handleUserDeniedSyncPull,
     })
   }
 
@@ -254,10 +263,11 @@ const SyncApiDataIntoOfflineStorage = class {
     await this.pushChanges()
 
     const pullResponse = await pullApiData({
-      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
-      getAccessToken: this.#getAccessToken,
       apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull: allTheDataNames,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      handleUserDeniedSyncPull: this.#handleUserDeniedSyncPull,
       projectId,
     })
 
@@ -281,10 +291,11 @@ const SyncApiDataIntoOfflineStorage = class {
       'projects',
     ]
     const pullResponse = await pullApiData({
-      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
-      getAccessToken: this.#getAccessToken,
       apiBaseUrl: this.#apiBaseUrl,
       apiDataNamesToPull,
+      dexiePerUserDataInstance: this.#dexiePerUserDataInstance,
+      getAccessToken: this.#getAccessToken,
+      handleUserDeniedSyncPull: this.#handleUserDeniedSyncPull,
       projectId,
     })
 

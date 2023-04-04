@@ -231,6 +231,15 @@ const protocolTitles = {
 }
 
 const pages = {
+  userDoesntHaveProjectAccess: {
+    title: 'You do not have permission to access this project.',
+    getSubtitle: (projectName) => {
+      const projectNameToUse = projectName || <code>unknown project name</code>
+
+      return <>The admin of {projectNameToUse} can add you to this project.</>
+    },
+    homepageLink: 'Go back to the home page.',
+  },
   projectsList: {
     title: 'Projects',
     offlineReadyCheckboxLabel: 'Offline Ready',

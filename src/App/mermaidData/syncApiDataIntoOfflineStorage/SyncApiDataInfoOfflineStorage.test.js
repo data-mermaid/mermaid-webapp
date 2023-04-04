@@ -49,6 +49,7 @@ test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revis
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: () => {},
     handleNested500SyncError: () => {},
   })
@@ -103,6 +104,7 @@ test('pushThenPullAllProjectData keeps track of returned last_revision_nums and 
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: () => {},
     handleNested500SyncError: () => {},
   })
@@ -153,6 +155,7 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: () => {},
     handleNested500SyncError: () => {},
   })
@@ -171,6 +174,7 @@ test('pushThenPullAllProjectDataExceptChoices updates IDB with API data', async 
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: () => {},
     handleNested500SyncError: () => {},
   })
@@ -346,6 +350,7 @@ test('pushThenPullAllProjectData updates IDB with API data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: () => {},
     handleNested500SyncError: () => {},
   })
@@ -536,6 +541,7 @@ test('pushThenPullEverything updates IDB with API data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: () => {},
     handleNested500SyncError: () => {},
   })
@@ -708,6 +714,7 @@ test('pushChanges includes the force flag', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: () => {},
     handleNested500SyncError: () => {},
   })
@@ -777,6 +784,7 @@ test('pushChanges includes the expected modified data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: () => {},
     handleNested500SyncError: () => {},
   })
@@ -836,6 +844,7 @@ test('All of the push functions handle sync errors with the handleUserDeniedSync
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
     handleUserDeniedSyncPush: pushSyncErrorCallback,
     handleNested500SyncError: () => {},
   })
