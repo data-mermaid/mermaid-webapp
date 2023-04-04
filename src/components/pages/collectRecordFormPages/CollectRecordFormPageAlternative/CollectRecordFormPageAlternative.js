@@ -21,7 +21,7 @@ import {
   ErrorTextSubmit,
   ErrorBoxSubmit,
 } from '../CollectingFormPage.Styles'
-import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../../../App/currentUserProfileHelpers'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
@@ -156,7 +156,7 @@ const CollectRecordFormPageAlternative = ({
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const history = useHistory()
   const isMounted = useIsMounted()
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const observationTableRef = useRef(null)
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)

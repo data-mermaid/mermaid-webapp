@@ -1,4 +1,4 @@
-export const mockHabitatComplexityValidationsObject = {
+export default {
   status: 'error',
   results: {
     data: {

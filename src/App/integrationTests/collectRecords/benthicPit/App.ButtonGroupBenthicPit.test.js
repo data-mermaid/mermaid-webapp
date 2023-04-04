@@ -11,7 +11,7 @@ import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockD
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
 import mockBenthicPitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
-import { mockBenthicPitValidationsObject } from '../../../../testUtilities/mockBenthicPitValidationsObject'
+import mockBenthicPitValidationsObject from '../../../../testUtilities/mockBenthicPitValidationsObject'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 

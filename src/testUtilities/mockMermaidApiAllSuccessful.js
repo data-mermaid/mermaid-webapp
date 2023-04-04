@@ -113,6 +113,24 @@ const mockMermaidApiAllSuccessful = setupServer(
 
     return res(ctx.json(response))
   }),
+  rest.put(`${apiBaseUrl}/projects/5/find_and_replace_sites`, (req, res, ctx) => {
+    const response = {
+      num_collect_records_updated: 3,
+      num_sample_events_updated: 2,
+      num_sites_removed: 1,
+    }
+
+    return res(ctx.json(response))
+  }),
+  rest.put(`${apiBaseUrl}/projects/5/find_and_replace_managements`, (req, res, ctx) => {
+    const response = {
+      num_collect_records_updated: 3,
+      num_sample_events_updated: 2,
+      num_managements_removed: 1,
+    }
+
+    return res(ctx.json(response))
+  }),
 )
 
 mockMermaidApiAllSuccessful.listen({

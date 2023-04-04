@@ -2,18 +2,9 @@ import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import language from '../../../language'
+import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'
 import { getToastArguments } from '../../../library/getToastArguments'
 import { useSyncStatus } from './SyncStatusContext'
-
-const getProjectIdFromLocation = (location) => {
-  const { pathname } = location
-
-  const pathNameParts = pathname.split('/')
-
-  const projectId = pathNameParts[pathNameParts.indexOf('projects') + 1]
-
-  return projectId
-}
 
 export const useInitializeSyncApiDataIntoOfflineStorage = ({
   apiBaseUrl,

@@ -52,7 +52,7 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import FishBeltTransectInputs from '../FishBeltForm/FishBeltTransectInputs'
 import language from '../../../../language'
-import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../../../App/currentUserProfileHelpers'
 import PageUnavailable from '../../PageUnavailable'
 import { getIsFishBelt } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { useScrollCheckError } from '../../../../library/useScrollCheckError'
@@ -114,7 +114,7 @@ const CollectRecordFormPage = ({
     setIsDeleteRecordModalOpen(false)
   }
 
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
@@ -559,6 +559,7 @@ const CollectRecordFormPage = ({
       formik={formik}
       ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
       onSizeBinChange={handleSizeBinChange}
+      observationsReducer={observationsReducer}
       resetNonObservationFieldValidations={resetNonObservationFieldValidations}
       validationsApiData={validationsApiData}
       validationPropertiesWithDirtyResetOnInputChange={

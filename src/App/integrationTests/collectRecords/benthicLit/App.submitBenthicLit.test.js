@@ -8,11 +8,11 @@ import {
   renderAuthenticatedOnline,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { mockBenthicLitValidationsObject } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
+import mockBenthicLitValidationsObject from '../../../../testUtilities/mockCollectRecords/mockBenthicLitValidationsObject'
 import App from '../../../App'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
 import mockMermaidData from '../../../../testUtilities/mockMermaidData'
-import { mockBenthicLitCollectRecords } from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
+import mockBenthicLitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicLitCollectRecords'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
 
@@ -146,7 +146,7 @@ test('Submit Benthic LIT failure shows toast message and an enabled submit butto
   userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
   expect(await screen.findByText('Submitting', { selector: 'button' }))
 
-  expect(await screen.findByText('Something went wrong. The sample unit has not been submitted.'))
+  expect(await screen.findByText('The sample unit has not been submitted.'))
   expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
   expect(await screen.findByText('Validated', { selector: 'button' })).toBeDisabled()
   expect(await screen.findByText('Saved', { selector: 'button' })).toBeDisabled()

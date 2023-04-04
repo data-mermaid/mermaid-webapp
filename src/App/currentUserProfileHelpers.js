@@ -123,10 +123,12 @@ export const getProjectRole = (userProfile, projectId) => {
   return userProfile?.projects?.find(({ id: idToCheck }) => idToCheck === projectId)?.role
 }
 
-export const getIsReadOnlyUserRole = (userProfile, projectId) => {
+export const getIsUserReadOnlyForProject = (userProfile, projectId) => {
   return getProjectRole(userProfile, projectId) === userRole.read_only
 }
 
-export const getIsAdminUserRole = (userProfile, projectId) => {
+export const getIsProjectProfileReadOnly = (profile) => profile.role === userRole.read_only
+
+export const getIsUserAdminForProject = (userProfile, projectId) => {
   return getProjectRole(userProfile, projectId) === userRole.admin
 }

@@ -16,5 +16,5 @@ test('App renders shows page not found when navigate to unknown path.', async ()
     { dexiePerUserDataInstance, dexieCurrentUserInstance },
   )
 
-  expect(await screen.findByText(/This page can't be found./i))
+  expect(await screen.findByText(/This page cannot be found./i))
 })

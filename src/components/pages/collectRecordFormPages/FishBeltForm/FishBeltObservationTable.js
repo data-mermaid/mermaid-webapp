@@ -32,6 +32,7 @@ import {
   StyledOverflowWrapper,
   StickyObservationTable,
   UnderTableRow,
+  UnderTableRowButtonArea,
 } from '../CollectingFormPage.Styles'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
@@ -99,6 +100,7 @@ const FishBeltObservationTable = ({
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
+
   const {
     persistUnsavedFormData: persistUnsavedObservationsData,
     getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
@@ -441,9 +443,16 @@ const FishBeltObservationTable = ({
         </StickyObservationTable>
       </StyledOverflowWrapper>
       <UnderTableRow>
-        <ButtonPrimary type="button" onClick={handleAddObservation}>
-          <IconPlus /> Add Row
-        </ButtonPrimary>
+        <UnderTableRowButtonArea>
+          <ButtonPrimary
+            type="button"
+            onClick={handleAddObservation}
+            disabled={!fishBinSelectedLabel}
+          >
+            <IconPlus /> Add Row
+          </ButtonPrimary>
+          {!fishBinSelectedLabel ? <p>{language.error.addRowUnavailable}</p> : null}
+        </UnderTableRowButtonArea>
         <ObservationsSummaryStats>
           <tbody>
             <Tr>

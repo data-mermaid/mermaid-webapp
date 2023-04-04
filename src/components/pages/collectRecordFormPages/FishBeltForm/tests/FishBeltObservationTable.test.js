@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 import { Route } from 'react-router-dom'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
+import preview from 'jest-preview'
 
 import {
   renderAuthenticatedOnline,
@@ -89,6 +90,7 @@ test('FishBelt observations size shows a select input when fish bin size is 5', 
       initialEntries: ['/projects/5/collecting/fishbelt/'],
     },
   )
+  preview.debug()
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 

@@ -23,6 +23,7 @@ const InputValidationInfo = ({
   validationType,
   currentSelectValue,
   updateValueAndResetValidationForDuplicateWarning,
+  additionalText,
 }) => {
   const { projectId } = useParams()
   const areThereValidationMessages = validationMessages.length
@@ -93,6 +94,7 @@ const InputValidationInfo = ({
           ))}
         </>
       ) : null}
+      {additionalText}
       {isWarningValidation || isIgnoredWarningValidation ? getWarningValidationButtons() : null}
       {isValidationPassing ? <span aria-label="Passed Validation">&nbsp;</span> : null}
     </ValidationWrapper>
@@ -106,6 +108,7 @@ InputValidationInfo.propTypes = {
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   currentSelectValue: PropTypes.string,
   updateValueAndResetValidationForDuplicateWarning: PropTypes.func,
+  additionalText: PropTypes.node,
 }
 
 InputValidationInfo.defaultProps = {
@@ -115,6 +118,7 @@ InputValidationInfo.defaultProps = {
   validationType: undefined,
   currentSelectValue: undefined,
   updateValueAndResetValidationForDuplicateWarning: () => {},
+  additionalText: null,
 }
 
 export default InputValidationInfo

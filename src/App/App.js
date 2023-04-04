@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components/macro'
 import { toast } from 'react-toastify'
 import React, { useCallback, useMemo } from 'react'
@@ -32,12 +32,14 @@ import SyncApiDataIntoOfflineStorage from './mermaidData/syncApiDataIntoOfflineS
 import theme from '../theme'
 import useAuthentication from './useAuthentication'
 import useIsMounted from '../library/useIsMounted'
+import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 
 function App({ dexieCurrentUserInstance }) {
   const { isAppOnline } = useOnlineStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const isMounted = useIsMounted()
   const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
+  const location = useLocation()
 
   const { getAccessToken, isMermaidAuthenticated, logoutMermaid } = useAuthentication({
     dexieCurrentUserInstance,
@@ -48,33 +50,42 @@ function App({ dexieCurrentUserInstance }) {
     [logoutMermaid],
   )
 
-  const handleSyncPushErrors = (projectsWithSyncErrors) => {
-    // projectsWithSyncErrors's type: { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
-    Object.entries(projectsWithSyncErrors).forEach((projectWithSyncErrorsEntry) => {
-      const projectId = projectWithSyncErrorsEntry[0]
-      const { name: projectName, apiDataTablesThatRejectedSyncing } = projectWithSyncErrorsEntry[1]
-
-      const toastContent = (
-        <div data-testid={`sync-error-for-project-${projectId}`}>
-          <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
-          {language.error.pushSyncErrorMessageUnsavedData}
-          <ul>
-            {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
-              <li key={rejectedDataTableName}>
-                {language.apiDataTableNames[rejectedDataTableName]}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-
-      toast.error(...getToastArguments(toastContent))
-    })
+  const handleNested500SyncError = () => {
+    toast.error(...getToastArguments(language.error.pushSyncErrorMessageStatusCode500))
   }
 
-  const handleSyncPullErrors = ({ projectName }) => {
-    toast.error(...getToastArguments(language.error.getPullSyncErrorMessage(projectName)))
-  }
+  const handleUserDeniedSyncPush = useCallback(
+    (projectsWithSyncErrors) => {
+      // projectsWithSyncErrors's type: { projectId: { name: string, apiDataTablesThatRejectedSyncing: string[] } }
+      Object.entries(projectsWithSyncErrors).forEach((projectWithSyncErrorsEntry) => {
+        const projectId = projectWithSyncErrorsEntry[0]
+        const { name: projectName, apiDataTablesThatRejectedSyncing } =
+          projectWithSyncErrorsEntry[1]
+
+        const currentPagesProjectId = getProjectIdFromLocation(location)
+        const isErrorSpecificToProject = currentPagesProjectId === projectId
+
+        if (isErrorSpecificToProject) {
+          const syncErrorUserMessaging = (
+            <div data-testid={`sync-error-for-project-${projectId}`}>
+              <P>{language.error.getPushSyncErrorMessage(projectName)}</P>
+              {language.error.pushSyncErrorMessageUnsavedData}
+              <ul>
+                {apiDataTablesThatRejectedSyncing?.map((rejectedDataTableName) => (
+                  <li key={rejectedDataTableName}>
+                    {language.apiDataTableNames[rejectedDataTableName]}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+
+          toast.error(...getToastArguments(syncErrorUserMessaging))
+        }
+      })
+    },
+    [location],
+  )
 
   const { currentUser, saveUserProfile } = useInitializeCurrentUser({
     apiBaseUrl,
@@ -91,24 +102,18 @@ function App({ dexieCurrentUserInstance }) {
   })
 
   const apiSyncInstance = useMemo(() => {
-    if (
-      dexiePerUserDataInstance &&
-      apiBaseUrl &&
-      getAccessToken &&
-      handleSyncPullErrors &&
-      handleSyncPushErrors
-    ) {
+    if (dexiePerUserDataInstance && apiBaseUrl && getAccessToken && handleUserDeniedSyncPush) {
       return new SyncApiDataIntoOfflineStorage({
         dexiePerUserDataInstance,
         apiBaseUrl,
         getAccessToken,
-        handleSyncPullErrors,
-        handleSyncPushErrors,
+        handleUserDeniedSyncPush,
+        handleNested500SyncError,
       })
     }
 
     return undefined
-  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken])
+  }, [dexiePerUserDataInstance, apiBaseUrl, getAccessToken, handleUserDeniedSyncPush])
 
   useInitializeSyncApiDataIntoOfflineStorage({
     apiBaseUrl,

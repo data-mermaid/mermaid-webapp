@@ -83,6 +83,7 @@ const color = {
   calloutDisabledText: '#969696',
 
   disabledColor: '#D5D5DD',
+  disabledInputBackground: '#E4E4E4',
   disabledText: 'rgba(255,255,255,0.5)',
   disabledTextDark: 'rgba(0,0,0,0.5)',
   disabledBorder: '#969696',

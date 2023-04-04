@@ -9,7 +9,10 @@ import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { formikPropType } from '../../../library/formikPropType'
-import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import {
+  getIsUserReadOnlyForProject,
+  getIsUserAdminForProject,
+} from '../../../App/currentUserProfileHelpers'
 import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
@@ -242,8 +245,8 @@ const Site = ({ isNewSite }) => {
     setIsDeleteRecordModalOpen(false)
   }
 
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
