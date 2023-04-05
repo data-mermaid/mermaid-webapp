@@ -70,7 +70,9 @@ const FishBeltTransectInputs = ({
   const tideOptions = [...getOptions(tides.data), { label: 'not reported', value: '' }]
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   // account for empty starter row
-  const hasFishBeltObservations = observationsState.length > 1
+  const hasFishBeltObservations =
+    !!observationsState.length > 0 &&
+    Object.prototype.hasOwnProperty.call(observationsState[0], 'fish_attribute')
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,

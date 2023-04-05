@@ -112,13 +112,6 @@ const CollectRecordFormPageAlternative = ({
   setObservationIdToAddNewBenthicAttributeTo,
   subNavNode,
 }) => {
-  // This component is a more flexible abstraction for collect records.
-  // We are makign a new abstraction for the existing for the sake of timelines.
-  // tech debt ticket to refactor away old abstraction:
-  // https://trello.com/c/IBEfA5bn/799-tech-debt-refactor-fishbelt-and-benthic-photo-quadrat-to-use-same-collect-record-abstraction-as-other-protocols
-
-  // check out this tech debt ticket. Maybe now is the time to move fishbelt and photo quadrat to this abstraction....?? or not.
-
   const [areValidationsShowing, setAreValidationsShowing] = useState(false)
   const [choices, setChoices] = useState({})
   const [isCommonProtocolDataLoading, setIsCommonProtocolDataLoading] = useState(true)
