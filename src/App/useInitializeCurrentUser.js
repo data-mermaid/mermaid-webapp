@@ -11,6 +11,7 @@ export const useInitializeCurrentUser = ({
   isMermaidAuthenticated,
   isAppOnline,
   isSyncInProgress,
+  handleHttpResponseErrorWithLogoutFunction,
 }) => {
   const [currentUser, setCurrentUser] = useState()
 
@@ -31,8 +32,13 @@ export const useInitializeCurrentUser = ({
             setCurrentUser(user)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.userProfileUnavailable))
+        .catch((error) => {
+          handleHttpResponseErrorWithLogoutFunction({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.userProfileUnavailable))
+            },
+          })
         })
     }
 
@@ -46,6 +52,7 @@ export const useInitializeCurrentUser = ({
     isMermaidAuthenticated,
     isAppOnline,
     isSyncInProgress,
+    handleHttpResponseErrorWithLogoutFunction,
   ])
 
   const saveUserProfile = (userProfile) => {

@@ -55,13 +55,15 @@ const color = {
   primaryText: white,
   primaryBorder: primary.mix(colorHelper(black), 0.2),
   primaryDisabledColor: primary.mix(colorHelper('grey'), 0.6),
+  primaryDisabledText: '#9AA8B7',
 
   secondaryColor: secondary,
   secondaryHover: secondary.mix(colorHelper('white'), 0.2),
   secondaryActive: secondary.mix(colorHelper('black'), 0.2),
-  secondaryText: black,
+  secondaryText: textColor,
   secondaryBorder: secondary.mix(colorHelper(black), 0.2),
   secondaryDisabledColor: white.mix(colorHelper(black), 0.2),
+  secondaryDisabledText: '#6B6B6B',
 
   cautionColor: caution,
   cautionHover: caution.mix(colorHelper(white), 0.9),
@@ -69,6 +71,7 @@ const color = {
   cautionBorder: caution.mix(colorHelper(black), 0.2),
   cautionActive: caution.mix(colorHelper(white), 0.7),
   cautionDisabledColor: caution.mix(colorHelper('black'), 0.2),
+  cautionDisabledText: '#C0766C',
   inlineErrorColor: '#F6DCD9',
 
   calloutColor: white,
@@ -77,8 +80,10 @@ const color = {
   calloutBorder: callout,
   calloutActive: callout.mix(colorHelper('white'), 0.8),
   calloutDisabledColor: callout.mix(colorHelper('black'), 0.2),
+  calloutDisabledText: '#969696',
 
   disabledColor: '#D5D5DD',
+  disabledInputBackground: '#E4E4E4',
   disabledText: 'rgba(255,255,255,0.5)',
   disabledTextDark: 'rgba(0,0,0,0.5)',
   disabledBorder: '#969696',
@@ -95,7 +100,7 @@ const color = {
   unitBackground: white.mix(colorHelper(black), 0.1),
   inputBackground: white,
   outline: `solid 2px ${primary}`,
-  headerDropdownMenuBackground: `#174b82dd`,
+  headerDropdownMenuBackground: `#174b82ee`,
   getMessageColorBackground: function getMessageColorBackground(messageType) {
     if (messageType === 'ignore') {
       return this.ignoreColor.alpha(0.15)
@@ -161,7 +166,7 @@ const spacing = {
   headerHeight: '4.9rem',
   toolbarHeight: '7rem',
   sideNavWidth: '17.5rem',
-  mobileSideNavWidth: '8rem',
+  mobileSideNavWidth: '9rem',
   borderSmall: '1px',
   borderMedium: '2px',
   borderLarge: '4px',

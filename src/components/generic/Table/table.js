@@ -267,6 +267,7 @@ export const GenericStickyTable = styled(Table)`
   tr th {
     ${stickyStyles}
   }
+  cursor: ${(props) => props.cursor || 'pointer'};
 `
 export const GenericStickyTableTextWrapTh = styled(GenericStickyTable)`
   tr th {

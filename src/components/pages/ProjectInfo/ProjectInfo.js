@@ -33,7 +33,7 @@ import useDocumentTitle from '../../../library/useDocumentTitle'
 import SaveButton from '../../generic/SaveButton'
 import LoadingModal from '../../LoadingModal/LoadingModal'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
-import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const SuggestNewOrganizationButton = styled(ButtonThatLooksLikeLink)`
@@ -150,17 +150,6 @@ const OrganizationList = ({ organizations, handleOrganizationsChange }) => {
   )
 }
 
-const ReadOnlyAdminContent = ({ project }) => (
-  <ReadOnlyContentWrapper>
-    <H3>Notes</H3>
-    <P>{project.notes.length ? project.notes : 'no notes for this project'}</P>
-    <H3>Organizations</H3>
-    {project.tags.map((org) => (
-      <li key={org}>{org}</li>
-    ))}
-  </ReadOnlyContentWrapper>
-)
-
 const ProjectInfo = () => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -173,7 +162,7 @@ const ProjectInfo = () => {
   const { currentUser } = useCurrentUser()
   const isMounted = useIsMounted()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [projectNameError, setProjectNameError] = useState(false)
 
   useDocumentTitle(`${language.pages.projectInfo.title} - ${language.title.mermaid}`)
@@ -296,7 +285,7 @@ const ProjectInfo = () => {
     return errorMessage
   }
 
-  const contentViewByRole = isAdminUser ? (
+  const adminContent = (
     <form id="project-info-form" onSubmit={formik.handleSubmit}>
       <InputWrapper>
         <InputWithLabelAndValidation
@@ -358,9 +347,22 @@ const ProjectInfo = () => {
         }}
       />
     </form>
-  ) : (
-    <ReadOnlyAdminContent project={formik.values} />
   )
+
+  const { name, notes, tags } = formik.values
+  const readOnlyContent = (
+    <ReadOnlyContentWrapper>
+      <H2>{name}</H2>
+      <H3>Notes</H3>
+      <P>{notes.length ? notes : language.pages.projectInfo.noNotes}</P>
+      <H3>Organizations</H3>
+      {tags.map((org) => (
+        <li key={org}>{org}</li>
+      ))}
+    </ReadOnlyContentWrapper>
+  )
+
+  const contentViewByRole = isAdminUser ? adminContent : readOnlyContent
 
   return idsNotAssociatedWithData.length ? (
     <ContentPageLayout
@@ -402,13 +404,6 @@ const ProjectInfo = () => {
 OrganizationList.propTypes = {
   organizations: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleOrganizationsChange: PropTypes.func.isRequired,
-}
-
-ReadOnlyAdminContent.propTypes = {
-  project: PropTypes.shape({
-    notes: PropTypes.string,
-    tags: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
 }
 
 export default ProjectInfo

@@ -332,7 +332,7 @@ const NewAttributeModal = ({
         />
       }
       footerContent={footer}
-      contentOverflowIsvisible={true}
+      contentOverflowIsVisible={true}
     />
   )
 }

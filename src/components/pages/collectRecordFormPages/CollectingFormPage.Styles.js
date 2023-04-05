@@ -75,7 +75,7 @@ export const StickyObservationTable = styled(GenericStickyTable)`
           background: rgba(255, 255, 255, 0.5);
         }
       }
-      input,
+      input:not([type='checkbox']),
       select {
         background: transparent;
         border: none;
@@ -98,6 +98,13 @@ export const UnderTableRow = styled('div')`
     flex-direction: column;
     gap: ${theme.spacing.small};
   `)}
+`
+export const UnderTableRowButtonArea = styled('div')`
+  display: flex;
+  flex-direction: column;
+  button {
+    align-self: flex-start;
+  }
 `
 
 export const CellValidation = styled(Td)``

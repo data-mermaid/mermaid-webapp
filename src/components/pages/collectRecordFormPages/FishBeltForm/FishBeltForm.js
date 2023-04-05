@@ -8,7 +8,7 @@ import {
   getFishNameConstants,
   getFishNameOptions,
 } from '../../../../App/mermaidData/fishNameHelpers'
-import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
+import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import language from '../../../../language'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
@@ -94,14 +94,14 @@ const FishBeltForm = ({ isNewRecord }) => {
 
               const generaOptions = genera.map((genus) => ({ label: genus.name, value: genus.id }))
 
-              const recordNameForSubNode =
-                !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      collectRecordResponse.data.protocol,
-                    )
-                  : { name: language.protocolTitles.fishbelt }
+              setSubNavNode(
+                getDataForSubNavNode({
+                  isNewRecord,
+                  collectRecord: collectRecordResponse,
+                  sites: sitesResponse,
+                  protocol: collectRecordResponse?.data.protocol,
+                }),
+              )
 
               setSites(sortArrayByObjectKey(sitesResponse, 'name'))
               setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
@@ -111,7 +111,6 @@ const FishBeltForm = ({ isNewRecord }) => {
               setFishNameConstants(updateFishNameConstants)
               setFishNameOptions(updateFishNameOptions)
               setModalAttributeOptions(generaOptions)
-              setSubNavNode(recordNameForSubNode)
               setIsLoading(false)
             }
           },
@@ -121,7 +120,7 @@ const FishBeltForm = ({ isNewRecord }) => {
             error,
             callback: () => {
               const errorMessage = isNewRecord
-                ? language.error.collectRecordChoicesUnavailable
+                ? language.error.collectRecordSupportingDataUnavailable
                 : language.error.collectRecordUnavailable
 
               toast.error(...getToastArguments(errorMessage))
@@ -139,8 +138,17 @@ const FishBeltForm = ({ isNewRecord }) => {
     isSyncInProgress,
   ])
 
-  const handleCollectRecordChange = (updatedCollectRecord) =>
-    setCollectRecordBeingEdited(updatedCollectRecord)
+  const handleCollectRecordChange = (collectRecordResponse) => {
+    setCollectRecordBeingEdited(collectRecordResponse)
+    setSubNavNode(
+      getDataForSubNavNode({
+        isNewRecord,
+        collectRecord: collectRecordResponse,
+        sites,
+        protocol: collectRecordResponse.data.protocol,
+      }),
+    )
+  }
 
   const handleNewObservationAdd = (observationAttributeId) =>
     setNewObservationToAdd(observationAttributeId)
@@ -198,7 +206,12 @@ const FishBeltForm = ({ isNewRecord }) => {
             },
           })
         } else {
-          toast.error(...getToastArguments(language.error.fishSpeciesSave))
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.fishSpeciesSave))
+            },
+          })
         }
       })
 

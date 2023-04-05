@@ -14,12 +14,9 @@ export const inputStyles = css`
 `
 export const CheckRadioWrapper = styled.div`
   display: grid;
-  grid-template-columns: 2rem auto;
-  justify-items: start;
+  grid-template-columns: 1.5rem auto;
+  align-items: bottom;
   padding: ${theme.spacing.xsmall};
-  input {
-    margin-top: ${theme.spacing.small};
-  }
   ${hoverState(css`
     background-color: ${theme.color.white};
   `)}
@@ -52,6 +49,7 @@ export const InputWrapper = styled.div`
 `
 export const MaxWidthInputWrapper = styled(InputWrapper)`
   max-width: ${theme.spacing.maxWidth};
+  cursor: ${(props) => props.cursor || 'pointer'};
 `
 export const HelperText = styled.span`
   font-size: ${theme.typography.smallFontSize};
@@ -73,6 +71,11 @@ export const inputTextareaSelectStyles = css`
     -webkit-appearance: none;
   }
   -moz-appearance: textfield;
+  &:disabled {
+    background: ${theme.color.disabledInputBackground};
+    cursor: not-allowed;
+    color: ${theme.color.disabledTextDark};
+  }
 `
 export const RequiredIndicator = styled.span`
   color: ${theme.color.callout};
@@ -89,6 +92,10 @@ export const InputRow = styled.div`
   border-width: 0 0 0 ${theme.spacing.borderLarge};
   border-style: solid;
   border-color: ${(props) => theme.color.getBorderColor(props.validationType)};
+  align-items: baseline;
+  > label {
+    align-self: start;
+  }
   ${hoverState(css`
     background-color: ${theme.color.tableRowHover};
   `)}

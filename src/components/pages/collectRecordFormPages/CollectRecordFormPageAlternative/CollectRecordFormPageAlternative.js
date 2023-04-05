@@ -21,7 +21,7 @@ import {
   ErrorTextSubmit,
   ErrorBoxSubmit,
 } from '../CollectingFormPage.Styles'
-import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../../../App/currentUserProfileHelpers'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { H2 } from '../../../generic/text'
@@ -107,7 +107,7 @@ const CollectRecordFormPageAlternative = ({
   const handleHttpResponseError = useHttpResponseErrorHandler()
   const history = useHistory()
   const isMounted = useIsMounted()
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const observationTableRef = useRef(null)
 
   const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
@@ -171,7 +171,7 @@ const CollectRecordFormPageAlternative = ({
               error,
               callback: () => {
                 const errorMessage = isNewRecord
-                  ? language.error.collectRecordChoicesUnavailable
+                  ? language.error.collectRecordSupportingDataUnavailable
                   : language.error.collectRecordUnavailable
 
                 toast.error(...getToastArguments(errorMessage))
@@ -326,7 +326,7 @@ const CollectRecordFormPageAlternative = ({
         projectId,
         protocol: sampleUnitName,
       })
-      .then((response) => {
+      .then((collectRecordResponse) => {
         toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsTable1Data()
@@ -336,9 +336,12 @@ const CollectRecordFormPageAlternative = ({
         setValidateButtonState(buttonGroupStates.validatable)
         setIsFormDirty(false)
         formik.resetForm({ values: formik.values }) // this resets formik's dirty state
+        handleCollectRecordChange(collectRecordResponse)
 
         if (isNewRecord) {
-          history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
+          history.push(
+            `${ensureTrailingSlash(history.location.pathname)}${collectRecordResponse.id}`,
+          )
         }
       })
       .catch((error) => {

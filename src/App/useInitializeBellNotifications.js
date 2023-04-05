@@ -11,6 +11,7 @@ export const useInitializeBellNotifications = ({
   getAccessToken,
   isMermaidAuthenticated,
   isAppOnline,
+  handleHttpResponseErrorWithLogoutFunction,
 }) => {
   const location = useLocation() // Changes when the route changes. Useful for fetching notifications again
 
@@ -31,8 +32,13 @@ export const useInitializeBellNotifications = ({
             setNotifications(results)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.notificationsUnavailable))
+        .catch((error) => {
+          handleHttpResponseErrorWithLogoutFunction({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.notificationsUnavailable))
+            },
+          })
         })
     }
 
@@ -56,8 +62,13 @@ export const useInitializeBellNotifications = ({
         .then(() => {
           updateNotifications()
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.notificationNotDeleted))
+        .catch((error) => {
+          handleHttpResponseErrorWithLogoutFunction({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.notificationNotDeleted))
+            },
+          })
         })
     }
   }

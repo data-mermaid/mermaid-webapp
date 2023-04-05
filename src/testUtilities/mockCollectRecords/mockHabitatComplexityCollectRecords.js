@@ -1,4 +1,4 @@
-export const mockHabitatComplexityCollectRecords = [
+export default [
   {
     id: '80',
     project: '5',

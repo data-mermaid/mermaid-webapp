@@ -10,7 +10,7 @@ import {
   getTransectInitialValues,
 } from '../collectRecordFormInitialValues'
 
-import { getRecordSubNavNodeInfo } from '../../../../library/getRecordSubNavNodeInfo'
+import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
 import { reformatFormValuesIntoHabitatComplexityRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
 import { useCurrentUser } from '../../../../App/CurrentUserContext'
@@ -32,6 +32,7 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [subNavNode, setSubNavNode] = useState()
+  const [sites, setSites] = useState()
 
   const { currentUser } = useCurrentUser()
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -61,17 +62,17 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
               }
 
-              const recordNameForSubNode =
-                !isNewRecord && collectRecordResponse
-                  ? getRecordSubNavNodeInfo(
-                      collectRecordResponse.data,
-                      sitesResponse,
-                      collectRecordResponse.data.protocol,
-                    )
-                  : { name: language.protocolTitles.habitatcomplexity }
+              setSubNavNode(
+                getDataForSubNavNode({
+                  isNewRecord,
+                  collectRecord: collectRecordResponse,
+                  sites: sitesResponse,
+                  protocol: collectRecordResponse?.data.protocol,
+                }),
+              )
 
               setCollectRecordBeingEdited(collectRecordResponse)
-              setSubNavNode(recordNameForSubNode)
+              setSites(sitesResponse)
               setIsLoading(false)
             }
           })
@@ -80,7 +81,7 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
               error,
               callback: () => {
                 const errorMessage = isNewRecord
-                  ? language.error.collectRecordChoicesUnavailable
+                  ? language.error.collectRecordSupportingDataUnavailable
                   : language.error.collectRecordUnavailable
 
                 toast.error(...getToastArguments(errorMessage))
@@ -114,8 +115,17 @@ const HabitatComplexityForm = ({ isNewRecord }) => {
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
-  const handleCollectRecordChange = (updatedCollectRecord) =>
-    setCollectRecordBeingEdited(updatedCollectRecord)
+  const handleCollectRecordChange = (collectRecordResponse) => {
+    setCollectRecordBeingEdited(collectRecordResponse)
+    setSubNavNode(
+      getDataForSubNavNode({
+        isNewRecord,
+        collectRecord: collectRecordResponse,
+        sites,
+        protocol: collectRecordResponse?.data.protocol,
+      }),
+    )
+  }
 
   return (
     <ErrorBoundary>

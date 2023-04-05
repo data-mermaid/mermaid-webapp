@@ -45,6 +45,8 @@ const DatabaseSwitchboardState = class {
     const itemReturnedFromApiPush = pushResponse.data[mermaidDataTypeName][0]
     const statusCode = itemReturnedFromApiPush.status_code
 
+    console.error('nested sync error', { itemReturnedFromApiPush, statusCode })
+
     // if 500 we spare the user from all the tech reasons things went wrong, and just return standard error with text
     // Other 50X wont occur with status_code.
     // status_code errors from a push response are NOT related to HTTP.

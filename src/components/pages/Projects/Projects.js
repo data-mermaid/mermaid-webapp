@@ -19,20 +19,22 @@ import PageUnavailable from '../PageUnavailable'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import { sortArrayByObjectKey } from '../../../library/arrays/sortArrayByObjectKey'
 import ErrorBoundary from '../../ErrorBoundary'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 /**
  * All Projects page (lists projects)
  */
 const Projects = ({ apiSyncInstance }) => {
   const [isLoading, setIsLoading] = useState(true)
-  const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
-  const [projects, setProjects] = useState([])
-  const [projectFilter, setProjectFilter] = useState('')
-  const [projectSortKey, setProjectSortKey] = useState('name')
   const [isProjectSortAsc, setIsProjectSortAsc] = useState(true)
+  const [offlineReadyProjectIds, setOfflineReadyProjectIds] = useState([])
+  const [projectFilter, setProjectFilter] = useState('')
+  const [projects, setProjects] = useState([])
+  const [projectSortKey, setProjectSortKey] = useState('name')
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const { isAppOnline } = useOnlineStatus()
   const { isSyncInProgress } = useSyncStatus()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
   const isMounted = useIsMounted()
 
   useDocumentTitle(`${language.pages.projectsList.title} - ${language.title.mermaid}`)
@@ -50,11 +52,16 @@ const Projects = ({ apiSyncInstance }) => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.projectsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.projectsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress])
+  }, [databaseSwitchboardInstance, isMounted, isSyncInProgress, handleHttpResponseError])
 
   const getIsProjectOffline = (projectId) =>
     !!offlineReadyProjectIds.find((offlineProject) => offlineProject.id === projectId)

@@ -17,7 +17,7 @@ import {
   IconUsersAndTransects,
   IconManagementRegimesOverview,
 } from '../icons'
-import { getIsReadOnlyUserRole } from '../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../App/currentUserProfileHelpers'
 import OfflineHide from '../generic/OfflineHide'
 import CollectRecordsCount from '../CollectRecordsCount'
 import SubNavMenuRecordName from '../SubNavMenuRecordName'
@@ -141,7 +141,7 @@ const NavMenu = ({ subNavNode }) => {
   const isCollectingSubNode = recordId || pathname.includes('collecting')
   const isSiteSubNode = siteId || pathname.includes('sites')
   const isManagementRegimeSubNode = managementRegimeId || pathname.includes('management-regimes')
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
 
   const handleImageError = (event) => {
     // eslint-disable-next-line no-param-reassign

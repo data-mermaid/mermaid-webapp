@@ -5,6 +5,7 @@ import mockMermaidApiAllSuccessful from '../../../testUtilities/mockMermaidApiAl
 import mockMermaidData from '../../../testUtilities/mockMermaidData'
 import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { getFakeAccessToken } from '../../../testUtilities/getFakeAccessToken'
+import { mockUserDoesntHavePushSyncPermissionForProjects } from '../../../testUtilities/mockPushStatusCodes'
 
 test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revision_nums and sends them with the next response', async () => {
   let hasFirstPullCallHappened = false
@@ -48,6 +49,9 @@ test('pushThenPullAllProjectDataExceptChoices keeps track of returned last_revis
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
   })
 
   // initial pull from api with last revision numbers being null
@@ -100,6 +104,9 @@ test('pushThenPullAllProjectData keeps track of returned last_revision_nums and 
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
   })
 
   // initial pull from api with last revision numbers being null
@@ -148,6 +155,9 @@ test('pushThenPullEverything keeps track of returned last_revision_nums and send
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
   })
 
   // initial pull from api with last revision numbers being null
@@ -164,6 +174,9 @@ test('pushThenPullAllProjectDataExceptChoices updates IDB with API data', async 
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
   })
 
   const apiDataNamesToPullNonProject = [
@@ -337,6 +350,9 @@ test('pushThenPullAllProjectData updates IDB with API data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
   })
 
   const apiDataNamesToPullNonProject = [
@@ -525,6 +541,9 @@ test('pushThenPullEverything updates IDB with API data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
   })
 
   const apiDataNamesToPullNonProject = [
@@ -695,6 +714,9 @@ test('pushChanges includes the force flag', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
   })
 
   mockMermaidApiAllSuccessful.use(
@@ -762,6 +784,9 @@ test('pushChanges includes the expected modified data', async () => {
     apiBaseUrl: process.env.REACT_APP_MERMAID_API,
     getAccessToken: getFakeAccessToken,
     dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: () => {},
+    handleNested500SyncError: () => {},
   })
 
   mockMermaidApiAllSuccessful.use(
@@ -799,4 +824,37 @@ test('pushChanges includes the expected modified data', async () => {
   const response = await apiSync.pushChanges()
 
   expect(response).not.toBeUndefined()
+})
+
+test('All of the push functions handle sync errors with the handleUserDeniedSyncPush callback function', async () => {
+  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
+  const pushSyncErrorCallback = jest.fn()
+
+  mockMermaidApiAllSuccessful.use(
+    rest.post(
+      `${process.env.REACT_APP_MERMAID_API}/push/`,
+
+      (req, res, ctx) => {
+        return res(ctx.json(mockUserDoesntHavePushSyncPermissionForProjects))
+      },
+    ),
+  )
+
+  const apiSync = new SyncApiDataIntoOfflineStorage({
+    apiBaseUrl: process.env.REACT_APP_MERMAID_API,
+    getAccessToken: getFakeAccessToken,
+    dexiePerUserDataInstance,
+    handleUserDeniedSyncPull: () => {},
+    handleUserDeniedSyncPush: pushSyncErrorCallback,
+    handleNested500SyncError: () => {},
+  })
+
+  await apiSync.pushChanges()
+  await apiSync.pushThenPullAllProjectData('PROJECT ID')
+  await apiSync.pushThenPullAllProjectDataExceptChoices('PROJECT ID')
+  await apiSync.pushThenPullEverything()
+  await apiSync.pushThenPullFishOrBenthicAttributes('fish_species')
+  await apiSync.pushThenRemoveProjectFromOfflineStorage('PROJECT ID')
+
+  expect(pushSyncErrorCallback).toHaveBeenCalledTimes(6)
 })

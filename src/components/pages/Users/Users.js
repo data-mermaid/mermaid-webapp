@@ -38,7 +38,6 @@ import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
 import { useOnlineStatus } from '../../../library/onlineStatusContext'
 import { validateEmail } from '../../../library/strings/validateEmail'
-import handleHttpResponseError from '../../../library/handleHttpResponseError'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
 import IdsNotFound from '../IdsNotFound/IdsNotFound'
 import InlineMessage from '../../generic/InlineMessage'
@@ -56,8 +55,12 @@ import useIsMounted from '../../../library/useIsMounted'
 import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTablePreferences'
 import { userRole } from '../../../App/mermaidData/userRole'
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
-import { getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import {
+  getIsUserAdminForProject,
+  getIsProjectProfileReadOnly,
+} from '../../../App/currentUserProfileHelpers'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const ToolbarRowWrapper = styled('div')`
   display: grid;
@@ -126,7 +129,6 @@ const getRoleLabel = (roleCode) => {
 }
 
 const getDoesUserHaveActiveSampleUnits = (profile) => profile.num_active_sample_units > 0
-const getIsUserRoleReadOnly = (profile) => profile.role === userRole.read_only
 
 const Users = () => {
   const [fromUser, setFromUser] = useState({})
@@ -152,8 +154,10 @@ const Users = () => {
   const { isAppOnline } = useOnlineStatus()
   const { projectId } = useParams()
   const { setIsSyncInProgress } = useSyncStatus()
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const isMounted = useIsMounted()
+
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   useDocumentTitle(`${language.pages.userTable.title} - ${language.title.mermaid}`)
 
@@ -180,17 +184,22 @@ const Users = () => {
             setIsPageLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [isAppOnline, databaseSwitchboardInstance, isMounted, projectId])
+  }, [isAppOnline, databaseSwitchboardInstance, isMounted, projectId, handleHttpResponseError])
 
   const _setIsReadonlyUserWithActiveSampleUnits = useEffect(() => {
     setIsReadonlyUserWithActiveSampleUnits(false)
     observerProfiles.forEach((profile) => {
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
-      const isUserRoleReadOnly = getIsUserRoleReadOnly(profile)
+      const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
 
       if (userHasActiveSampleUnits && isUserRoleReadOnly) {
         setIsReadonlyUserWithActiveSampleUnits(true)
@@ -205,13 +214,18 @@ const Users = () => {
         .then((projectProfilesResponse) => {
           return setObserverProfiles(projectProfilesResponse)
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.userRecordsUnavailable))
+            },
+          })
         })
     }
 
     return Promise.reject(new Error('databaseSwitchboardInstance isnt defined'))
-  }, [databaseSwitchboardInstance, projectId])
+  }, [databaseSwitchboardInstance, projectId, handleHttpResponseError])
 
   const addExistingUser = () => {
     setIsTableUpdating(true)
@@ -327,9 +341,13 @@ const Users = () => {
 
         setIsSyncInProgress(false) // hack to get collect record count to update, also shows a loader
       })
-      .catch(() => {
-        toast.error(...getToastArguments(language.error.transferSampleUnitsUnavailable))
+      .catch((error) => {
         setIsSyncInProgress(false)
+        handleHttpResponseError({
+          error,
+          callback: () =>
+            toast.error(...getToastArguments(language.error.transferSampleUnitsUnavailable)),
+        })
       })
   }
 
@@ -470,18 +488,23 @@ const Users = () => {
           )
           setIsTableUpdating(false)
         })
-        .catch(() => {
-          const userToBeEdited = observerProfiles.find(({ id }) => id === projectProfileId)
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              const userToBeEdited = observerProfiles.find(({ id }) => id === projectProfileId)
 
-          toast.error(
-            ...getToastArguments(
-              language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name),
-            ),
-          )
+              toast.error(
+                ...getToastArguments(
+                  language.error.getUserRoleChangeFailureMessage(userToBeEdited.profile_name),
+                ),
+              )
+            },
+          })
           setIsTableUpdating(false)
         })
     },
-    [databaseSwitchboardInstance, observerProfiles, projectId],
+    [databaseSwitchboardInstance, observerProfiles, projectId, handleHttpResponseError],
   )
 
   const tableCellDataForAdmin = useMemo(() => {
@@ -497,7 +520,7 @@ const Users = () => {
       } = profile
 
       const userHasActiveSampleUnits = getDoesUserHaveActiveSampleUnits(profile)
-      const isUserRoleReadOnly = getIsUserRoleReadOnly(profile)
+      const isUserRoleReadOnly = getIsProjectProfileReadOnly(profile)
       const isCurrentUser = userId === currentUser.id
       const isActiveSampleUnitsWarningShowing = userHasActiveSampleUnits && isUserRoleReadOnly
 
@@ -692,7 +715,7 @@ const Users = () => {
   const table = (
     <>
       <StickyTableOverflowWrapper>
-        <GenericStickyTable {...getTableProps()}>
+        <GenericStickyTable {...getTableProps()} cursor={isTableUpdating ? 'wait' : 'pointer'}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <Tr {...headerGroup.getHeaderGroupProps()}>

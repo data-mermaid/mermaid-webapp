@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {
   choicesPropType,
   fishbeltValidationPropType,
+  observationsReducerPropType,
 } from '../../../../App/mermaidData/mermaidDataProptypes'
 import { formikPropType } from '../../../../library/formikPropType'
 import { getOptions } from '../../../../library/getOptions'
@@ -14,6 +15,7 @@ import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioW
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
+import language from '../../../../language'
 
 const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
@@ -35,10 +37,12 @@ const FishBeltTransectInputs = ({
   formik,
   ignoreNonObservationFieldValidations,
   onSizeBinChange,
+  observationsReducer,
   resetNonObservationFieldValidations,
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
+  const [observationsState] = observationsReducer
   const {
     belttransectwidths,
     fishsizebins,
@@ -65,6 +69,7 @@ const FishBeltTransectInputs = ({
   const currentOptions = [...getOptions(currents.data), { label: 'not reported', value: '' }]
   const tideOptions = [...getOptions(tides.data), { label: 'not reported', value: '' }]
   const fishbelt_transect = validationsApiData?.fishbelt_transect
+  const hasFishBeltObservations = !!observationsState.length
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
@@ -342,6 +347,7 @@ const FishBeltTransectInputs = ({
           onChange={handleWidthChange}
         />
         <InputRadioWithLabelAndValidation
+          disabled={hasFishBeltObservations}
           label="Fish Size Bin (cm)"
           required={true}
           id="size_bin"
@@ -358,6 +364,9 @@ const FishBeltTransectInputs = ({
             sizeBinValidationProperties,
             'size_bin',
           )}
+          additionalText={
+            hasFishBeltObservations ? <>{language.error.disabledFishSizeBinSelect}</> : null
+          }
           value={formik.values.size_bin}
           onChange={handleSizeBinChange}
         />
@@ -472,9 +481,14 @@ FishBeltTransectInputs.propTypes = {
   formik: formikPropType.isRequired,
   ignoreNonObservationFieldValidations: PropTypes.func.isRequired,
   onSizeBinChange: PropTypes.func.isRequired,
+  observationsReducer: observationsReducerPropType,
   resetNonObservationFieldValidations: PropTypes.func.isRequired,
   validationsApiData: PropTypes.shape({ fishbelt_transect: fishbeltValidationPropType }).isRequired,
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
+}
+
+FishBeltTransectInputs.defaultProps = {
+  observationsReducer: [],
 }
 
 export default FishBeltTransectInputs

@@ -16,13 +16,16 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
 
   const sampleUnitsWithPopup = sampleUnitNumbersRow.map((row, index) => {
     const { label: transectNumberLabel, management, sample_date, updated_by, observers } = row
+
     const managementName =
       management.name === API_NULL_NAME
         ? language.pages.usersAndTransectsTable.missingMRName
         : management.name
 
+    const keyName = transectNumberLabel + site_name + managementName + updated_by + sample_date
+
     return (
-      <SampleUnitNumber tabIndex="0" id={index}>
+      <SampleUnitNumber tabIndex="0" id={index} key={keyName}>
         {transectNumberLabel}
         <SampleUnitPopup role="tooltip">
           <div>
@@ -34,7 +37,7 @@ const SubmittedSampleUnitPopup = ({ rowRecord, sampleUnitNumbersRow }) => {
               <TableRowItem title="Observers" value={observers.join(',')} />
               <TableRowItem title="Site" value={site_name} />
               <TableRowItem title="Management" value={managementName} />
-              <TableRowItem title="Date" value={getSampleDateLabel(sample_date)} />
+              <TableRowItem title="Sample Date" value={getSampleDateLabel(sample_date)} />
             </tbody>
           </Table>
           <PopupLink to={`${currentProjectPath}/submitted/${sample_unit_protocol}/${row.id}`}>

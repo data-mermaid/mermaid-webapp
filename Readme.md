@@ -55,7 +55,7 @@ As a tradeoff between mixing concerns and having an overlycomplex, it was decide
 
 - ` uiState_pushToApi` set to true if you want an entity to be included in the next push to the API
 - API stuff:
-  - `last_revision_num` is tricky and there are no API docs for it. Definitely Dustin for an overview if you need to touch it (I cant remember the details).
+  - `last_revision_num` is tricky and there are no API docs for it. Definitely ask Dustin or Kim for an overview if you need to touch it (I cant remember the details).
   - a `_deleted` property is stored and sent to the api to let it know to delete an item.
 
 #### Navigation prompts
@@ -84,6 +84,7 @@ Since this app can exist in multiple states (online, offline, various states of 
 - A preview of the application is created when a pull request is opened, sychronized (commit is made), or re-opened.
 - A bot will add a PR comment with the link to the preview, once it is ready.
 - Once a pull request is merged or closed, the respective preview will be deleted.
+- Please use merge to update the develop branch (not rebase)
 
 ### Develop (non-prod)
 

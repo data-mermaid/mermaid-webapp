@@ -9,7 +9,10 @@ import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { formikPropType } from '../../../library/formikPropType'
-import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import {
+  getIsUserReadOnlyForProject,
+  getIsUserAdminForProject,
+} from '../../../App/currentUserProfileHelpers'
 import { getOptions } from '../../../library/getOptions'
 import { getSiteInitialValues } from './siteRecordFormInitialValues'
 import { getToastArguments } from '../../../library/getToastArguments'
@@ -242,8 +245,8 @@ const Site = ({ isNewSite }) => {
     setIsDeleteRecordModalOpen(false)
   }
 
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -326,7 +329,14 @@ const Site = ({ isNewSite }) => {
       databaseSwitchboardInstance
         .saveSite({ site: formattedSiteForApi, projectId })
         .then((response) => {
-          toast.success(...getToastArguments(language.success.getMermaidDataSaveSuccess('site')))
+          toast.success(
+            ...getToastArguments(
+              language.success.getMermaidDataSaveSuccess({
+                mermaidDataTypeLabel: 'site',
+                isAppOnline,
+              }),
+            ),
+          )
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)
@@ -352,11 +362,14 @@ const Site = ({ isNewSite }) => {
             })
           }
           if (!isAppOnline) {
-            showSyncToastError({
-              toastTitle: language.error.getSaveOfflineErrorTitle('site'),
-              error,
-              testId: 'site-toast-error',
-            })
+            console.error(error)
+            toast.error(
+              ...getToastArguments(
+                <div data-testid="site-toast-error">
+                  {language.error.getSaveOfflineErrorTitle('site')}
+                </div>,
+              ),
+            )
           }
         })
     },
@@ -380,7 +393,7 @@ const Site = ({ isNewSite }) => {
         errors.latitude = [{ code: language.error.formValidation.latitude, id: 'Invalid Latitude' }]
       }
 
-      if (!values.longitude && values.latitude !== 0) {
+      if (!values.longitude && values.longitude !== 0) {
         errors.longitude = [{ code: language.error.formValidation.required, id: 'Required' }]
       }
 
@@ -438,6 +451,7 @@ const Site = ({ isNewSite }) => {
   )
 
   const deleteRecord = () => {
+    // only available online
     setIsDeletingSite(true)
 
     databaseSwitchboardInstance

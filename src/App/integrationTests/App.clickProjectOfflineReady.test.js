@@ -15,7 +15,7 @@ import {
 import App from '../App'
 
 /**  this is a very imperative test suite in that its testing state (indexeddb),
- * but since sync is integral to the app, and since we don't have the
+ * but since sync is integral to the app, and since we do not have the
  * features fully consuming the synced state yet to test against,
  * we are making an exception. Testing is a push was part of the
  * sync was skipped as it might be a convoluted test and not great ROI
@@ -75,7 +75,7 @@ test('Sync: select project to be offline ready, shows toast, syncs and stores da
 
   userEvent.click(project5OfflineCheckboxBeforeFirstClick)
 
-  expect(await screen.findByText('The project, Project V, is now offline ready'))
+  expect(await screen.findByText('Project V is now offline ready'))
 
   const project5OfflineCheckboxAfterProjectSetOffline = within(
     (await screen.findAllByTestId('project-card'))[4],
@@ -108,7 +108,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   userEvent.click(project5OfflineCheckboxBeforeFirstClick)
 
-  expect(await screen.findByText('The project, Project V, is now offline ready'))
+  expect(await screen.findByText('Project V is now offline ready'))
 
   const project5OfflineCheckboxAfterFirstClick = within(
     (await screen.findAllByTestId('project-card'))[4],
@@ -116,9 +116,7 @@ test('Sync: select project to NOT be offline ready, shows toast, removes data, s
 
   userEvent.click(project5OfflineCheckboxAfterFirstClick)
 
-  expect(
-    await screen.findByText('The project, Project V, has been removed from being offline ready'),
-  )
+  expect(await screen.findByText('Project V has been removed from being offline ready'))
 
   const project5OfflineCheckboxAfterProjectSetOffline = within(
     (await screen.findAllByRole('listitem'))[4],

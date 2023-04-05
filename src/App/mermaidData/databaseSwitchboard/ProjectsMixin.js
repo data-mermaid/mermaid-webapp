@@ -277,7 +277,11 @@ const ProjectsMixin = (Base) =>
                 })
             }
 
-            return Promise.reject(new Error('The API status is unsuccessful'))
+            return Promise.reject(
+              new Error(
+                'the API record returned from addUser doesnt have a successful status code',
+              ),
+            )
           })
       }
 
@@ -303,12 +307,25 @@ const ProjectsMixin = (Base) =>
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             },
           )
-          .then(() => {
-            return this._apiSyncInstance
-              .pushThenPullAllProjectDataExceptChoices(projectId)
-              .then(({ pullData }) => {
-                return pullData
-              })
+          .then((response) => {
+            const [recordResponseFromApiPush] = response.data.project_profiles
+            const isRecordStatusCodeSuccessful = this._isStatusCodeSuccessful(
+              recordResponseFromApiPush.status_code,
+            )
+
+            if (isRecordStatusCodeSuccessful) {
+              return this._apiSyncInstance
+                .pushThenPullAllProjectDataExceptChoices(projectId)
+                .then(({ pullData }) => {
+                  return pullData
+                })
+            }
+
+            return Promise.reject(
+              new Error(
+                'the API record returned from removeUser doesnt have a successful status code',
+              ),
+            )
           })
       }
 

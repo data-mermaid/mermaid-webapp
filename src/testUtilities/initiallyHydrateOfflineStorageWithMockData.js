@@ -14,6 +14,7 @@ export const initiallyHydrateOfflineStorageWithMockData = (dexiePerUserDataInsta
     dexiePerUserDataInstance.project_sites,
     dexiePerUserDataInstance.projects,
     dexiePerUserDataInstance.uiState_offlineReadyProjects,
+    dexiePerUserDataInstance.uiState_lastRevisionNumbersPulled,
 
     async () => {
       // choices is not an array, so not like th others

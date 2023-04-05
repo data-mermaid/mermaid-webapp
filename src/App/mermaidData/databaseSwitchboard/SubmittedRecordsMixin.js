@@ -3,6 +3,7 @@ import { getProtocolMethodsType } from '../recordProtocolHelpers'
 import { getSampleDateLabel } from '../getSampleDateLabel'
 import axios from '../../../library/axiosRetry'
 import language from '../../../language'
+import { DEFAULT_RECORDS_PER_PAGE } from '../../../library/constants/constants'
 
 const SubmittedRecordsMixin = (Base) =>
   class extends Base {
@@ -12,7 +13,7 @@ const SubmittedRecordsMixin = (Base) =>
       return sampleUnit === '' ? undefined : sampleUnit
     }
 
-    getSubmittedRecords = async function getSubmittedRecords(projectId) {
+    getSubmittedRecordsFromApi = async function getSubmittedRecordsFromApi(projectId, pageNo) {
       if (!projectId) {
         Promise.reject(this._operationMissingParameterError)
       }
@@ -22,12 +23,25 @@ const SubmittedRecordsMixin = (Base) =>
             .get(`${this._apiBaseUrl}/projects/${projectId}/sampleunitmethods/`, {
               params: {
                 protocol: `fishbelt,benthiclit,benthicpit,habitatcomplexity,bleachingqc,benthicpqt`,
-                limit: 5000,
+                page: pageNo,
+                limit: DEFAULT_RECORDS_PER_PAGE,
               },
               ...(await getAuthorizationHeaders(this._getAccessToken)),
             })
-            .then((apiResults) => apiResults.data.results)
+            .then((apiResults) => apiResults.data)
         : Promise.reject(this._notAuthenticatedAndReadyError)
+    }
+
+    getSubmittedRecordsByPage = async function getSubmittedRecordsByPage(projectId, pageNo = 1) {
+      const apiResultData = await this.getSubmittedRecordsFromApi(projectId, pageNo)
+      const { results, count: totalRecordsCount } = apiResultData
+      const totalPages = Math.ceil(totalRecordsCount / DEFAULT_RECORDS_PER_PAGE)
+
+      if (pageNo < totalPages) {
+        return [...results].concat(await this.getSubmittedRecordsByPage(projectId, pageNo + 1))
+      }
+
+      return results
     }
 
     getSubmittedSampleUnitRecord = async function getSubmittedSampleUnitRecord(
@@ -55,13 +69,13 @@ const SubmittedRecordsMixin = (Base) =>
       }
 
       return this._isAuthenticatedAndReady
-        ? this.getSubmittedRecords(projectId).then((submittedRecords) => {
-            return submittedRecords.map((record) => ({
+        ? this.getSubmittedRecordsByPage(projectId).then((submittedRecords) => {
+            return submittedRecords?.map((record) => ({
               ...record,
               uiLabels: {
                 depth: record.depth,
                 management: record.management_name,
-                observers: record.observers.join(', '),
+                observers: record.observers?.join(', '),
                 protocol: language.protocolTitles[record.protocol],
                 sampleDate: getSampleDateLabel(record.sample_date),
                 sampleUnitNumber: this.#getSampleUnitLabel(record),

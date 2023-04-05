@@ -89,11 +89,7 @@ describe('offline', () => {
 
     await saveSite()
 
-    expect(
-      await screen.findByText(
-        'The site has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The site has been saved on your computer.'))
 
     // ensure the new form is now the edit form
     expect(
@@ -124,11 +120,7 @@ describe('offline', () => {
 
     await saveSite()
 
-    expect(
-      await screen.findByText(
-        'The site has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The site has been saved on your computer.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -146,12 +138,14 @@ describe('offline', () => {
     expect(await within(table).findByText('Rebecca'))
   })
   test('new site save failure shows toast message with edits persisting', async () => {
+    const consoleSpy = jest.spyOn(console, 'error')
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    dexiePerUserDataInstance.project_sites.put = () =>
-      Promise.reject(new Error('this is a dexie error'))
+    const dexieError = new Error('this is a dexie error')
+
+    dexiePerUserDataInstance.project_sites.put = () => Promise.reject(dexieError)
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/sites/new'],
@@ -162,9 +156,9 @@ describe('offline', () => {
     await saveSite()
 
     expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(
-      `The site failed to save both on your computer and in the MERMAID online system.`,
+      `The site failed to save both on your computer and online.`,
     )
-    expect(await screen.findByTestId('site-toast-error')).toHaveTextContent(`this is a dexie error`)
+    expect(consoleSpy).toHaveBeenCalledWith(dexieError)
 
     // ensure the were not in edit mode, but new site mode
     expect(

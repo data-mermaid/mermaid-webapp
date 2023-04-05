@@ -87,11 +87,7 @@ describe('Offline', () => {
 
     await saveMR()
 
-    expect(
-      await screen.findByText(
-        'The management regime has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The management regime has been saved on your computer.'))
 
     // ensure the new form is now the edit form
     expect(await screen.findByTestId('edit-management-regime-form-title'))
@@ -119,11 +115,7 @@ describe('Offline', () => {
 
     await saveMR()
 
-    expect(
-      await screen.findByText(
-        'The management regime has been saved on your computer and in the MERMAID online system.',
-      ),
-    )
+    expect(await screen.findByText('The management regime has been saved on your computer.'))
 
     const sideNav = await screen.findByTestId('content-page-side-nav')
 
@@ -141,12 +133,15 @@ describe('Offline', () => {
     expect(await within(table).findByText('Rebecca'))
   })
   test('New MR save failure shows toast message with edits persisting', async () => {
+    const consoleSpy = jest.spyOn(console, 'error')
+
     const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
 
     await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
 
-    dexiePerUserDataInstance.project_managements.put = () =>
-      Promise.reject(new Error('this is a dexie error'))
+    const dexieError = new Error('this is a dexie error')
+
+    dexiePerUserDataInstance.project_managements.put = () => Promise.reject(dexieError)
 
     renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
       initialEntries: ['/projects/5/management-regimes/new'],
@@ -157,11 +152,9 @@ describe('Offline', () => {
     await saveMR()
 
     expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'The management regime failed to save both on your computer and in the MERMAID online system.',
+      'The management regime failed to save both on your computer and online.',
     )
-    expect(await screen.findByTestId('management-regime-toast-error')).toHaveTextContent(
-      'this is a dexie error',
-    )
+    expect(consoleSpy).toHaveBeenCalledWith(dexieError)
 
     // ensure the were not in edit mode, but new management regime mode
     expect(

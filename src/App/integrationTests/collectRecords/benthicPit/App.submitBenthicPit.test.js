@@ -8,7 +8,7 @@ import {
   renderAuthenticatedOnline,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
-import { mockBenthicPitValidationsObject } from '../../../../testUtilities/mockBenthicPitValidationsObject'
+import mockBenthicPitValidationsObject from '../../../../testUtilities/mockBenthicPitValidationsObject'
 import App from '../../../App'
 import mockBenthicPitCollectRecords from '../../../../testUtilities/mockCollectRecords/mockBenthicPitCollectRecords'
 import mockMermaidApiAllSuccessful from '../../../../testUtilities/mockMermaidApiAllSuccessful'
@@ -146,7 +146,7 @@ test('Submit Benthic PIT failure shows toast message and an enabled submit butto
   userEvent.click(await screen.findByText('Submit', { selector: 'button' }))
   expect(await screen.findByText('Submitting', { selector: 'button' }))
 
-  expect(await screen.findByText('Something went wrong. The sample unit has not been submitted.'))
+  expect(await screen.findByText('The sample unit has not been submitted.'))
   expect(await screen.findByText('Submit', { selector: 'button' })).toBeEnabled()
   expect(await screen.findByText('Validated', { selector: 'button' })).toBeDisabled()
   expect(await screen.findByText('Saved', { selector: 'button' })).toBeDisabled()

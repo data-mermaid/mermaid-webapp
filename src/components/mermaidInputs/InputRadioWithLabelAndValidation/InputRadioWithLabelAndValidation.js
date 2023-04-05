@@ -16,6 +16,7 @@ const InputRadioWithLabelAndValidation = ({
   resetNonObservationFieldValidations,
   validationType,
   testId,
+  additionalText,
   ...restOfProps
 }) => {
   const optionsList = options.map(({ label: optionLabel, value: optionValue }) => {
@@ -44,6 +45,7 @@ const InputRadioWithLabelAndValidation = ({
         resetNonObservationFieldValidations={resetNonObservationFieldValidations}
         validationMessages={validationMessages}
         validationType={validationType}
+        additionalText={additionalText}
       />
     </InputRow>
   )
@@ -60,6 +62,7 @@ InputRadioWithLabelAndValidation.propTypes = {
   testId: PropTypes.string,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
+  additionalText: PropTypes.node,
 }
 
 InputRadioWithLabelAndValidation.defaultProps = {
@@ -69,6 +72,7 @@ InputRadioWithLabelAndValidation.defaultProps = {
   testId: undefined,
   validationMessages: [],
   validationType: undefined,
+  additionalText: null,
 }
 
 export default InputRadioWithLabelAndValidation

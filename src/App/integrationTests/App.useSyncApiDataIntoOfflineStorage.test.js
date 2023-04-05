@@ -15,7 +15,7 @@ import {
 import App from '../App'
 
 /**  this is a very imperative test suite in that its testing state (indexeddb),
- * but since sync is integral to the app, and since we don't have the
+ * but since sync is integral to the app, and since we do not have the
  * features fully consuming the synced state yet to test against,
  * we are making an exception. Testing is a push was part of the
  * sync was skipped as it might be a convoluted test and not great ROI
@@ -153,10 +153,10 @@ test('Sync: initial page load already done, navigate to non project page', async
   /**
    * because of the other landing page initial load sync test,
    * we can rely on that data already being here and focus on the
-   * the data that hasn't yet been synced. A project page nav sync
+   * the data that has not yet been synced. A project page nav sync
    * will technically pull more than this
    * (the stuff that gets pulled on a non project page load minus choices),
-   * but we are going to just test the data that hasn't already been pulled
+   * but we are going to just test the data that has not already been pulled
    * to balance ROI. Ignoring choices for the same reason as its exclusion
    * is for performance optimization, and it being pulled or not will not cause bugs
    */

@@ -52,7 +52,7 @@ import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
 import IdsNotFound from '../../IdsNotFound/IdsNotFound'
 import FishBeltTransectInputs from '../FishBeltForm/FishBeltTransectInputs'
 import language from '../../../../language'
-import { getIsReadOnlyUserRole } from '../../../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../../../App/currentUserProfileHelpers'
 import PageUnavailable from '../../PageUnavailable'
 import { getIsFishBelt } from '../../../../App/mermaidData/recordProtocolHelpers'
 import { useScrollCheckError } from '../../../../library/useScrollCheckError'
@@ -114,7 +114,7 @@ const CollectRecordFormPage = ({
     setIsDeleteRecordModalOpen(false)
   }
 
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const isFishBeltSampleUnit = getIsFishBelt(sampleUnitName)
   const recordLevelValidations = collectRecordBeingEdited?.validations?.results?.$record ?? []
   const validationsApiData = collectRecordBeingEdited?.validations?.results?.data ?? {}
@@ -227,7 +227,7 @@ const CollectRecordFormPage = ({
         projectId,
         protocol: sampleUnitName,
       })
-      .then((response) => {
+      .then((collectRecordResponse) => {
         toast.success(...getToastArguments(language.success.collectRecordSave))
         clearPersistedUnsavedFormikData()
         clearPersistedUnsavedObservationsData()
@@ -236,9 +236,12 @@ const CollectRecordFormPage = ({
         setValidateButtonState(buttonGroupStates.validatable)
         setIsFormDirty(false)
         formik.resetForm({ values: formik.values }) // this resets formik's dirty state
+        handleCollectRecordChange(collectRecordResponse)
 
         if (isNewRecord) {
-          history.push(`${ensureTrailingSlash(history.location.pathname)}${response.id}`)
+          history.push(
+            `${ensureTrailingSlash(history.location.pathname)}${collectRecordResponse.id}`,
+          )
         }
       })
       .catch((error) => {
@@ -313,7 +316,7 @@ const CollectRecordFormPage = ({
           handleHttpResponseError({
             error,
             callback: () => {
-              toast.error(...getToastArguments(language.error.collectRecordSubmit))
+              toast.error(...getToastArguments(language.error.collectRecordValidationIgnore))
             },
           })
         })
@@ -556,6 +559,7 @@ const CollectRecordFormPage = ({
       formik={formik}
       ignoreNonObservationFieldValidations={ignoreNonObservationFieldValidations}
       onSizeBinChange={handleSizeBinChange}
+      observationsReducer={observationsReducer}
       resetNonObservationFieldValidations={resetNonObservationFieldValidations}
       validationsApiData={validationsApiData}
       validationPropertiesWithDirtyResetOnInputChange={

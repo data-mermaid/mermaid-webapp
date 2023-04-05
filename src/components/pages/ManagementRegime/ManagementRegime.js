@@ -9,7 +9,10 @@ import { ContentPageLayout } from '../../Layout'
 import { ContentPageToolbarWrapper } from '../../Layout/subLayouts/ContentPageLayout/ContentPageLayout'
 import { ensureTrailingSlash } from '../../../library/strings/ensureTrailingSlash'
 import { formikPropType } from '../../../library/formikPropType'
-import { getIsReadOnlyUserRole, getIsAdminUserRole } from '../../../App/currentUserProfileHelpers'
+import {
+  getIsUserReadOnlyForProject,
+  getIsUserAdminForProject,
+} from '../../../App/currentUserProfileHelpers'
 import { getManagementRegimeInitialValues } from './managementRegimeFormInitialValues'
 import { getOptions } from '../../../library/getOptions'
 import { getToastArguments } from '../../../library/getToastArguments'
@@ -214,8 +217,8 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
     setIsDeleteRecordModalOpen(false)
   }
 
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
-  const isAdminUser = getIsAdminUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
+  const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
 
   const _getSupportingData = useEffect(() => {
     if (databaseSwitchboardInstance && !isSyncInProgress) {
@@ -324,7 +327,12 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       databaseSwitchboardInstance
         .saveManagementRegime({ managementRegime: formattedManagementRegimeForApi, projectId })
         .then((response) => {
-          toast.success(language.success.getMermaidDataSaveSuccess('management regime'))
+          toast.success(
+            language.success.getMermaidDataSaveSuccess({
+              mermaidDataTypeLabel: 'management regime',
+              isAppOnline,
+            }),
+          )
           clearPersistedUnsavedFormikData()
           setSaveButtonState(buttonGroupStates.saved)
           setIsFormDirty(false)
@@ -352,11 +360,14 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           }
 
           if (!isAppOnline) {
-            showSyncToastError({
-              toastTitle: language.error.getSaveOfflineErrorTitle('management regime'),
-              error,
-              testId: 'management-regime-toast-error',
-            })
+            console.error(error)
+            toast.error(
+              ...getToastArguments(
+                <div data-testid="management-regime-toast-error">
+                  {language.error.getSaveOfflineErrorTitle('management regime')}
+                </div>,
+              ),
+            )
           }
         })
     },
@@ -406,6 +417,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
   )
 
   const deleteRecord = () => {
+    // only available online
     setIsDeletingRecord(true)
 
     databaseSwitchboardInstance
@@ -422,7 +434,7 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
       .catch((error) => {
         const { isSyncError, isDeleteRejectedError } = error
 
-        if (isSyncError && !isDeleteRejectedError && isAppOnline) {
+        if (isSyncError && !isDeleteRejectedError) {
           const toastTitle = language.error.getDeleteOnlineSyncErrorTitle('management regime')
 
           showSyncToastError({ toastTitle, error, testId: 'management-regime-toast-error' })
@@ -430,22 +442,15 @@ const ManagementRegime = ({ isNewManagementRegime }) => {
           closeDeleteRecordModal()
         }
 
-        if (isSyncError && isDeleteRejectedError && isAppOnline) {
+        if (isSyncError && isDeleteRejectedError) {
           // show modal which lists the associated sumbitted sample units that are associated with the MR
           setDeleteErrorData(error.associatedSampleUnits)
           setIsDeletingRecord(false)
           goToPageTwoOfDeleteRecordModal()
         }
-        if (!isSyncError && isAppOnline) {
+        if (!isSyncError) {
           handleHttpResponseError({
             error,
-          })
-        }
-        if (!isAppOnline) {
-          showSyncToastError({
-            toastTitle: language.error.getDeleteOfflineErrorTitle('management regime'),
-            error,
-            testId: 'management-regime-toast-error',
           })
         }
       })

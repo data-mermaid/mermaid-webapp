@@ -1,20 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import language from '../../../language'
+import { getProjectIdFromLocation } from '../../../library/getProjectIdFromLocation'
 import { getToastArguments } from '../../../library/getToastArguments'
-import SyncApiDataIntoOfflineStorage from './SyncApiDataIntoOfflineStorage'
 import { useSyncStatus } from './SyncStatusContext'
-
-const getProjectIdFromLocation = (location) => {
-  const { pathname } = location
-
-  const pathNameParts = pathname.split('/')
-
-  const projectId = pathNameParts[pathNameParts.indexOf('projects') + 1]
-
-  return projectId
-}
 
 export const useInitializeSyncApiDataIntoOfflineStorage = ({
   apiBaseUrl,
@@ -23,19 +13,11 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
   isMounted,
   isAppOnline,
   handleHttpResponseError,
+  syncApiDataIntoOfflineStorage,
 }) => {
   const location = useLocation()
   const isPageReload = useRef(true)
 
-  const syncApiDataIntoOfflineStorage = useMemo(
-    () =>
-      new SyncApiDataIntoOfflineStorage({
-        dexiePerUserDataInstance,
-        apiBaseUrl,
-        getAccessToken,
-      }),
-    [dexiePerUserDataInstance, apiBaseUrl, getAccessToken],
-  )
   const { setIsSyncInProgress, setIsOfflineStorageHydrated, setSyncErrors } = useSyncStatus()
 
   const _conditionallySyncOfflineStorageWithApiData = useEffect(() => {
@@ -59,6 +41,8 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     const isProjectsListPage =
       location.pathname === '/projects' || location.pathname === '/projects/'
 
+    const isUserDeniedProjectAccessPage = location.pathname.includes('noProjectAccess')
+
     const isProjectsListPageAndOnline = isProjectsListPage && isOnlineAndReady
 
     const isInitialLoadOnProjectPageAndOnline =
@@ -66,7 +50,7 @@ export const useInitializeSyncApiDataIntoOfflineStorage = ({
     const isNotInitialLoadOnProjectPageAndOnline =
       !isPageReload.current && isProjectPage && isOnlineAndReady
 
-    if (isOfflineAndReadyAndAlreadyInitiated) {
+    if (isOfflineAndReadyAndAlreadyInitiated || isUserDeniedProjectAccessPage) {
       setIsOfflineStorageHydrated(true)
       setIsSyncInProgress(false)
     }

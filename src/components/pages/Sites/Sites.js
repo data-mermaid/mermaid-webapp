@@ -7,7 +7,7 @@ import { usePagination, useSortBy, useGlobalFilter, useTable } from 'react-table
 import { ContentPageLayout } from '../../Layout'
 import CopySitesModal from '../../CopySitesModal'
 import FilterSearchToolbar from '../../FilterSearchToolbar/FilterSearchToolbar'
-import { getIsReadOnlyUserRole } from '../../../App/currentUserProfileHelpers'
+import { getIsUserReadOnlyForProject } from '../../../App/currentUserProfileHelpers'
 import { getObjectById } from '../../../library/getObjectById'
 import { getTableColumnHeaderProps } from '../../../library/getTableColumnHeaderProps'
 import { getTableFilteredRows } from '../../../library/getTableFilteredRows'
@@ -66,7 +66,7 @@ const Sites = () => {
   const [siteExportName, setSiteExportName] = useState('')
   const [choices, setChoices] = useState({})
   const [sitesForMapMarkers, setSitesForMapMarkers] = useState([])
-  const isReadOnlyUser = getIsReadOnlyUserRole(currentUser, projectId)
+  const isReadOnlyUser = getIsUserReadOnlyForProject(currentUser, projectId)
   const [isCopySitesModalOpen, setIsCopySitesModalOpen] = useState(false)
   const openCopySitesModal = () => setIsCopySitesModalOpen(true)
   const closeCopySitesModal = () => setIsCopySitesModalOpen(false)
