@@ -71,8 +71,7 @@ const FishBeltTransectInputs = ({
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   // account for empty starter row
   const hasFishBeltObservations =
-    !!observationsState.length > 0 &&
-    Object.prototype.hasOwnProperty.call(observationsState[0], 'fish_attribute')
+    !!observationsState.length > 0 && observationsState[0]?.fish_attribute
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
