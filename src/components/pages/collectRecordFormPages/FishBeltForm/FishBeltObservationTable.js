@@ -112,11 +112,16 @@ const FishBeltObservationTable = ({
     }
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
-  const handleAddObservation = useCallback(() => {
+  const handleAddEmptyInitialObservation = useCallback(() => {
+    setAreObservationsInputsDirty(true)
+    observationsDispatch({ type: 'addObservation' })
+  }, [observationsDispatch, setAreObservationsInputsDirty])
+
+  const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
-  }, [observationsDispatch, setAreObservationsInputsDirty])
+  }
 
   const _initializeObservationReducer = useEffect(() => {
     if (!isObservationReducerInitialized && collectRecord) {
@@ -131,13 +136,13 @@ const FishBeltObservationTable = ({
         })
       }
       if (!initialObservationsToLoad.length) {
-        handleAddObservation()
+        handleAddEmptyInitialObservation()
       }
 
       setIsObservationReducerInitialized(true)
     }
     if (!isObservationReducerInitialized && !collectRecord) {
-      handleAddObservation()
+      handleAddEmptyInitialObservation()
       setIsObservationReducerInitialized(true)
     }
   }, [
@@ -145,7 +150,7 @@ const FishBeltObservationTable = ({
     getPersistedUnsavedObservationsData,
     isObservationReducerInitialized,
     observationsDispatch,
-    handleAddObservation,
+    handleAddEmptyInitialObservation,
     observationsState.length,
   ])
 

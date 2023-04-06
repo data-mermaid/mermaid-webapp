@@ -87,12 +87,17 @@ const BenthicPhotoQuadratObservationTable = ({
     }
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
-  const handleAddObservation = useCallback(() => {
+  const handleAddEmptyInitialObservation = useCallback(() => {
     setAreObservationsInputsDirty(true)
-    setAutoFocusAllowed(true)
 
     observationsDispatch({ type: 'addObservation' })
   }, [observationsDispatch, setAreObservationsInputsDirty])
+
+  const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
+    setAutoFocusAllowed(true)
+    observationsDispatch({ type: 'addObservation' })
+  }
 
   const _initializeObservationReducer = useEffect(() => {
     if (!isObservationReducerInitialized && collectRecord) {
@@ -108,13 +113,13 @@ const BenthicPhotoQuadratObservationTable = ({
         })
       }
       if (!initialObservationsToLoad.length) {
-        handleAddObservation()
+        handleAddEmptyInitialObservation()
       }
 
       setIsObservationReducerInitialized(true)
     }
     if (!isObservationReducerInitialized && !collectRecord) {
-      handleAddObservation()
+      handleAddEmptyInitialObservation()
       setIsObservationReducerInitialized(true)
     }
   }, [
@@ -122,7 +127,7 @@ const BenthicPhotoQuadratObservationTable = ({
     getPersistedUnsavedObservationsData,
     isObservationReducerInitialized,
     observationsDispatch,
-    handleAddObservation,
+    handleAddEmptyInitialObservation,
   ])
 
   const observationCategoryPercentages = useMemo(() => {
