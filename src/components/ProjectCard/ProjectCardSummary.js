@@ -172,7 +172,7 @@ const ProjectCardSummary = ({ project, isAppOnline }) => {
     <SummaryCardGroup>
       {isReadOnlyUser ? readOnlyCollectingCard : collectingCard}
       {isAppOnline ? submittedCardOnline : submittedCardOffline}
-      {isAppOnline ? sitesCardOnline : sitesCardOffline}
+      {isAppOnline || !isReadOnlyUser ? sitesCardOnline : sitesCardOffline}
       {isAppOnline ? usersCardOnline : usersCardOffline}
       {isAppOnline ? dataSharingCardOnline : dataSharingCardOffline}
     </SummaryCardGroup>
