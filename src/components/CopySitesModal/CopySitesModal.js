@@ -36,6 +36,7 @@ import { splitSearchQueryStrings } from '../../library/splitSearchQueryStrings'
 import { getTableFilteredRows } from '../../library/getTableFilteredRows'
 import CopySitesMap from '../mermaidMap/CopySitesMap'
 import LoadingIndicator from '../LoadingIndicator'
+import { useHttpResponseErrorHandler } from '../../App/HttpResponseErrorHandlerContext'
 
 const DEFAULT_PAGE_SIZE = 7
 
@@ -66,6 +67,7 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
   const [isViewSelectedOnly, setIsViewSelectedOnly] = useState(false)
   const [siteRecords, setSiteRecords] = useState([])
   const [selectedRowIdsForCopy, setSelectedRowIdsForCopy] = useState([])
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const _getSiteRecords = useEffect(() => {
     if (!isAppOnline) {
@@ -81,11 +83,23 @@ const CopySitesModal = ({ isOpen, onDismiss, addCopiedSitesToSiteTable }) => {
             setIsModalContentLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isAppOnline, isMounted, isOpen])
+  }, [
+    databaseSwitchboardInstance,
+    handleHttpResponseError,
+    isAppOnline,
+    isMounted,
+    isOpen,
+    projectId,
+  ])
 
   const tableColumns = useMemo(
     () => [

@@ -28,6 +28,7 @@ import useIsMounted from '../../../library/useIsMounted'
 import { useCurrentUser } from '../../../App/CurrentUserContext'
 import { getIsUserAdminForProject } from '../../../App/currentUserProfileHelpers'
 import { PROJECT_CODES } from '../../../library/constants/constants'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const DataSharingTable = styled(Table)`
   td {
@@ -76,6 +77,7 @@ const DataSharing = () => {
   const isMounted = useIsMounted()
   const isAdminUser = getIsUserAdminForProject(currentUser, projectId)
   const [isDataUpdating, setIsDataUpdating] = useState(false)
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   useDocumentTitle(`${language.pages.dataSharing.title} - ${language.title.mermaid}`)
 
@@ -106,11 +108,14 @@ const DataSharing = () => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.projectsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: toast.error(...getToastArguments(language.error.projectsUnavailable)),
+          })
         })
     }
-  }, [isAppOnline, databaseSwitchboardInstance, projectId, isMounted])
+  }, [isAppOnline, databaseSwitchboardInstance, projectId, isMounted, handleHttpResponseError])
 
   const getToastMessageForDataPolicyChange = (property, policy) => {
     switch (property) {
@@ -140,11 +145,14 @@ const DataSharing = () => {
           setProjectBeingEdited(updatedProject)
           toast.success(...getToastArguments(toastMessage))
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.projectSave))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: toast.error(...getToastArguments(language.error.projectSave)),
+          })
         })
     },
-    [databaseSwitchboardInstance, projectId],
+    [databaseSwitchboardInstance, projectId, handleHttpResponseError],
   )
 
   const handleDataPolicyChange = (event, propertyToUpdate) => {

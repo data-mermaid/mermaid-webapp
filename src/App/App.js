@@ -46,7 +46,7 @@ function App({ dexieCurrentUserInstance }) {
     dexieCurrentUserInstance,
   })
 
-  const handleHttpResponseErrorPartiallyApplied = useCallback(
+  const handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied = useCallback(
     ({ error, callback, shouldShowServerNonResponseMessage }) =>
       handleHttpResponseError({
         error,
@@ -109,7 +109,7 @@ function App({ dexieCurrentUserInstance }) {
     isMermaidAuthenticated,
     isAppOnline,
     isSyncInProgress,
-    handleHttpResponseErrorPartiallyApplied,
+    handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
   })
 
   const { dexiePerUserDataInstance } = useDexiePerUserDataInstance({
@@ -143,7 +143,7 @@ function App({ dexieCurrentUserInstance }) {
     dexiePerUserDataInstance,
     isMounted,
     isAppOnline,
-    handleHttpResponseError: handleHttpResponseErrorPartiallyApplied,
+    handleHttpResponseError: handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
     syncApiDataIntoOfflineStorage: apiSyncInstance,
   })
 
@@ -176,7 +176,7 @@ function App({ dexieCurrentUserInstance }) {
     getAccessToken,
     isMermaidAuthenticated,
     isAppOnline,
-    handleHttpResponseErrorPartiallyApplied,
+    handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
   })
 
   const deleteMermaidData = () => {
@@ -206,7 +206,9 @@ function App({ dexieCurrentUserInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={{ currentUser, saveUserProfile }}>
-          <HttpResponseErrorHandlerProvider value={handleHttpResponseErrorPartiallyApplied}>
+          <HttpResponseErrorHandlerProvider
+            value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
+          >
             <BellNotificationProvider value={{ notifications, deleteNotification }}>
               <GlobalStyle />
               <CustomToastContainer limit={5} />

@@ -11,7 +11,7 @@ export const useInitializeBellNotifications = ({
   getAccessToken,
   isMermaidAuthenticated,
   isAppOnline,
-  handleHttpResponseErrorPartiallyApplied,
+  handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
 }) => {
   const location = useLocation() // Changes when the route changes. Useful for fetching notifications again
 
@@ -33,11 +33,12 @@ export const useInitializeBellNotifications = ({
           }
         })
         .catch((error) => {
-          handleHttpResponseErrorPartiallyApplied({
+          handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.notificationsUnavailable))
             },
+            shouldShowServerNonResponseMessage: false,
           })
         })
     }
@@ -63,7 +64,7 @@ export const useInitializeBellNotifications = ({
           updateNotifications()
         })
         .catch((error) => {
-          handleHttpResponseErrorPartiallyApplied({
+          handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
             error,
             callback: () => {
               toast.error(...getToastArguments(language.error.notificationNotDeleted))
