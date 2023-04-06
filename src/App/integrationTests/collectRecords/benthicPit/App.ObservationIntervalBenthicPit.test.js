@@ -35,7 +35,6 @@ test('Benthic Pit observations: intervals are derived from interval start and in
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
-  userEvent.click(addRowButton)
 
   await waitFor(() => {
     const observationIntervalLabelsAfterFourRowsAdded =
@@ -99,7 +98,6 @@ test('Benthic PIT observations: intervals recalculate when user deletes an obser
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
-  userEvent.click(addRowButton)
 
   await waitFor(() => {
     const observationIntervalLabelsAfterFourRowsAdded =
@@ -148,7 +146,6 @@ test('Benthic Pit observations: intervals reclaculate when a user inserts a row 
   const observationsSection = await screen.findByTestId('observations-section')
   const addRowButton = within(observationsSection).getByRole('button', { name: 'Add Row' })
 
-  userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)

@@ -61,8 +61,8 @@ const ColoniesBleachedObservationTable = ({
   setObservationIdToAddNewBenthicAttributeTo,
   testId,
 }) => {
-  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
+  const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)

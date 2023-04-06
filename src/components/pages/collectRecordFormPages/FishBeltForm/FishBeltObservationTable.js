@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '../../../generic/buttons'
@@ -96,7 +96,7 @@ const FishBeltObservationTable = ({
     len_surveyed: transectLengthSurveyed,
     width: widthId,
   } = formik?.values
-  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
+  const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
@@ -112,31 +112,47 @@ const FishBeltObservationTable = ({
     }
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
-  const _loadObservationsFromApiIntoState = useEffect(() => {
-    if (!apiObservationsLoaded && collectRecord) {
-      const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
-      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
-
-      observationsDispatch({
-        type: 'loadObservationsFromApi',
-        payload: initialObservationsToLoad,
-      })
-
-      setApiObservationsLoaded(true)
-    }
-  }, [
-    collectRecord,
-    getPersistedUnsavedObservationsData,
-    apiObservationsLoaded,
-    observationsDispatch,
-  ])
+  const handleAddEmptyInitialObservation = useCallback(() => {
+    setAreObservationsInputsDirty(true)
+    observationsDispatch({ type: 'addObservation' })
+  }, [observationsDispatch, setAreObservationsInputsDirty])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
+
+  const _initializeObservationReducer = useEffect(() => {
+    if (!isObservationReducerInitialized && collectRecord) {
+      const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
+      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
+      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
+
+      if (initialObservationsToLoad.length) {
+        observationsDispatch({
+          type: 'loadObservationsFromApi',
+          payload: initialObservationsToLoad,
+        })
+      }
+      if (!initialObservationsToLoad.length) {
+        handleAddEmptyInitialObservation()
+      }
+
+      setIsObservationReducerInitialized(true)
+    }
+    if (!isObservationReducerInitialized && !collectRecord) {
+      handleAddEmptyInitialObservation()
+      setIsObservationReducerInitialized(true)
+    }
+  }, [
+    collectRecord,
+    getPersistedUnsavedObservationsData,
+    isObservationReducerInitialized,
+    observationsDispatch,
+    handleAddEmptyInitialObservation,
+    observationsState.length,
+  ])
 
   const observationsBiomass = useMemo(
     () =>

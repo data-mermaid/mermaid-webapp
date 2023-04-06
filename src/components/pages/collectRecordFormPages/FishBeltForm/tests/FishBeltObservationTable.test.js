@@ -42,8 +42,6 @@ test('FishBelt observations size shows a numeric input when fish size bin is 1',
 
   userEvent.click(bin1Radio)
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
-
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
@@ -72,8 +70,6 @@ test('FishBelt observations size shows a select input when fish size bin is 5', 
   const bin5Radio = within(fishbeltForm).getByLabelText('5')
 
   userEvent.click(bin5Radio)
-
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -106,8 +102,6 @@ test('FishBelt observations size shows a select input when fish size bin is 10',
 
   userEvent.click(bin10Radio)
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
-
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
@@ -139,8 +133,6 @@ test('FishBelt observations size shows a select input when fish size bin is AGRR
 
   userEvent.click(binAGRRARadio)
 
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
-
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
   const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
@@ -171,8 +163,6 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
   const binAGRRARadio = within(fishbeltForm).getByLabelText('AGRRA')
 
   userEvent.click(binAGRRARadio)
-
-  userEvent.click(within(fishbeltForm).getByRole('button', { name: 'Add Row' }))
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 

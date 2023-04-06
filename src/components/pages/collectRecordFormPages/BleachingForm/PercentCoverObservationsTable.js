@@ -56,6 +56,7 @@ const PercentCoverObservationTable = ({
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
+
     observationsDispatch({ type: 'addObservation' })
   }
 

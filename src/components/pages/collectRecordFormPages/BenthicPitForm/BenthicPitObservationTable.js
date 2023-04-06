@@ -72,6 +72,12 @@ const BenthicPitObservationsTable = ({
 
   const { interval_start: intervalStart, interval_size: intervalSize } = formik.values
 
+  const handleAddObservation = () => {
+    setAreObservationsInputsDirty(true)
+    setAutoFocusAllowed(true)
+    observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
+  }
+
   useEffect(
     function recalculateObservationIntervals() {
       observationsDispatch({
@@ -81,13 +87,6 @@ const BenthicPitObservationsTable = ({
     },
     [intervalSize, intervalStart, observationsDispatch],
   )
-
-  const handleAddObservation = () => {
-    setAreObservationsInputsDirty(true)
-    setAutoFocusAllowed(true)
-
-    observationsDispatch({ type: 'addObservation', payload: { intervalStart, intervalSize } })
-  }
 
   const observationsRows = useMemo(() => {
     const growthFormSelectOptions = getOptions(choices.growthforms.data)
