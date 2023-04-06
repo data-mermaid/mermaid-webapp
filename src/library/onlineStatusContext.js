@@ -57,6 +57,10 @@ const OnlineStatusProvider = ({ children, value }) => {
     setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
   }
 
+  const setServerNotReachable = () => {
+    setIsServerReachable(false)
+  }
+
   const _setIsNavigatorOnline = useEffect(() => {
     const handleOnline = () => {
       setIsNavigatorOnline(true)
@@ -82,6 +86,7 @@ const OnlineStatusProvider = ({ children, value }) => {
         isAppOnline,
         canUserOverrideOnlineStatus,
         toggleUserOnlineStatusOverride,
+        setServerNotReachable,
         ...value,
       }}
     >

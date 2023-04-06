@@ -2,9 +2,26 @@ import { toast } from 'react-toastify'
 import language from '../language'
 import { getToastArguments } from './getToastArguments'
 
-const handleHttpResponseError = ({ error, callback, logoutMermaid }) => {
+const handleHttpResponseError = ({
+  error,
+  callback,
+  logoutMermaid,
+  shouldShowServerNonResponseMessage = true,
+  setServerNotReachable,
+}) => {
   if (error) {
     console.error(error)
+  }
+  const requestWasMadeWithNoResponse = error?.request && !error?.response
+
+  if (requestWasMadeWithNoResponse) {
+    if (shouldShowServerNonResponseMessage) {
+      toast.error(...getToastArguments(language.error.noServerResponse))
+    }
+
+    setServerNotReachable()
+
+    return
   }
 
   const errorStatus = error?.response?.status
@@ -34,7 +51,8 @@ const handleHttpResponseError = ({ error, callback, logoutMermaid }) => {
   }
 
   if (callback) {
-    // This allows the logic to be extended.
+    // This allows the logic to be extended in the
+    // scenario where one of the above error conditions isnt met
     // If a callback is used, the user will want to
     // consider providing a generic message as well.
     callback()
