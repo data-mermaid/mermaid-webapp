@@ -82,6 +82,7 @@ const ReadOnlySiteContent = ({
 }
 
 const enforceNumberInput = (event) => {
+  // Allow only numbers, special key presses, and copy paste shortcuts.
   const specialActionAndCharacterKeys = [
     'ArrowUp',
     'ArrowDown',
