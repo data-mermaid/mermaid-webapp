@@ -7,7 +7,7 @@ const InputNumberNoScroll = (props) => {
 
   useStopInputScrollingIncrementNumber(textFieldRef)
 
-  return <Input type="number" {...props} ref={textFieldRef} />
+  return <Input type="text" inputmode="numeric" pattern="[0-9]*" {...props} ref={textFieldRef} />
 }
 
 InputNumberNoScroll.propTypes = {}

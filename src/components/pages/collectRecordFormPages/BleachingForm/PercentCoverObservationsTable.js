@@ -123,7 +123,7 @@ const PercentCoverObservationTable = ({
       }
 
       const handleObservationInputChange = ({ event, dispatchType }) => {
-        const newValue = event.target.value
+        const newValue = event.target.value.replace(/\D/g, '')
 
         setAreObservationsInputsDirty(true)
         observationsDispatch({
