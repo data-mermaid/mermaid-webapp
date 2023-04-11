@@ -46,7 +46,10 @@ test('FishBelt observations size shows a numeric input when fish size bin is 1',
 
   const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
 
-  expect(sizeInput).toHaveAttribute('type', 'number')
+  // coming out as null for some reason
+  // previous: expect(sizeInput).toHaveAttribute('type', 'number')
+  // input now includes: type="text" inputmode="numeric" pattern="[0-9]*"
+  expect(sizeInput).toHaveAttribute('inputmode', 'numeric')
 })
 
 test('FishBelt observations size shows a select input when fish size bin is 5', async () => {
