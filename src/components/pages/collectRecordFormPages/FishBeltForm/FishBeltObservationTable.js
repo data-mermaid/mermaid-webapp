@@ -236,7 +236,9 @@ const FishBeltObservationTable = ({
       }
 
       const handleUpdateSizeEvent = (event) => {
-        handleUpdateSize(event.target.value, observationId)
+        const newValue = event.target.value.replace(/\D/g, '')
+
+        handleUpdateSize(newValue, observationId)
       }
 
       const handleObservationKeyDown = (event) => {
@@ -244,10 +246,12 @@ const FishBeltObservationTable = ({
       }
 
       const handleUpdateCount = (event) => {
+        const newValue = event.target.value.replace(/\D/g, '')
+
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateCount',
-          payload: { newCount: event.target.value, observationId },
+          payload: { newCount: newValue, observationId },
         })
         resetObservationValidations({
           observationId,
@@ -266,8 +270,6 @@ const FishBeltObservationTable = ({
 
       const sizeInput = showNumericSizeInput ? (
         <InputNumberNoScroll
-          type="number"
-          min="0"
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           step="any"
           aria-labelledby="fish-size-label"
@@ -355,8 +357,6 @@ const FishBeltObservationTable = ({
           <Td align="right">{sizeInput}</Td>
           <Td align="right">
             <InputNumberNoScroll
-              type="number"
-              min="0"
               value={countOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="fish-count-label"

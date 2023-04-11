@@ -271,10 +271,12 @@ const BenthicPhotoQuadratObservationTable = ({
       }
 
       const handleNumberOfPointsChange = (event) => {
+        const newValue = event.target.value.replace(/\D/g, '')
+
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateNumberOfPoints',
-          payload: { newNumberOfPoints: event.target.value, observationId },
+          payload: { newNumberOfPoints: newValue, observationId },
         })
         resetObservationValidations({
           observationId,
@@ -338,8 +340,6 @@ const BenthicPhotoQuadratObservationTable = ({
           </Td>
           <Td align="right">
             <InputNumberNoScroll
-              type="number"
-              min="0"
               value={numberOfPointsOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="number-of-points-label"
