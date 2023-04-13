@@ -173,7 +173,8 @@ const ColoniesBleachedObservationTable = ({
       }
 
       const handleObservationInputChange = ({ event, dispatchType }) => {
-        const newValue = event.target.value.replace(/\D/g, '')
+        const regexNumbersOnly = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regexNumbersOnly, '')
 
         setAreObservationsInputsDirty(true)
         observationsDispatch({

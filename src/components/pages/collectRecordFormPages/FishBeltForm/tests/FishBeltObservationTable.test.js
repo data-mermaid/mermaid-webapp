@@ -20,7 +20,7 @@ const fakeCurrentUser = {
   first_name: 'FakeFirstName',
 }
 
-test('FishBelt observations size shows a numeric input when fish size bin is 1', async () => {
+test('FishBelt observations size shows a numeric pattern when fish size bin is 1', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -46,10 +46,7 @@ test('FishBelt observations size shows a numeric input when fish size bin is 1',
 
   const sizeInput = await within(observationsTable).findByLabelText('Size (cm)')
 
-  // coming out as null for some reason
-  // previous: expect(sizeInput).toHaveAttribute('type', 'number')
-  // input now includes: type="text" inputmode="numeric" pattern="[0-9]*"
-  expect(sizeInput).toHaveAttribute('inputmode', 'numeric')
+  expect(sizeInput).toHaveAttribute('pattern', '[0-9]*')
 })
 
 test('FishBelt observations size shows a select input when fish size bin is 5', async () => {
