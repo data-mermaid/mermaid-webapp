@@ -16,7 +16,7 @@ import { getObservationBiomass } from './fishBeltBiomass'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, RequiredIndicator } from '../../../generic/form'
+import { Input, InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { Tr, Td, Th } from '../../../generic/Table/table'
@@ -271,7 +271,10 @@ const FishBeltObservationTable = ({
       ) : null
 
       const sizeInput = showNumericSizeInput ? (
-        <InputNumberNoScroll
+        <Input
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           step="any"
           aria-labelledby="fish-size-label"
@@ -358,7 +361,10 @@ const FishBeltObservationTable = ({
           </Td>
           <Td align="right">{sizeInput}</Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               value={countOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="fish-count-label"

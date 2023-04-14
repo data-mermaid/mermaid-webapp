@@ -23,7 +23,7 @@ import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
+import { Input, InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal'
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { Tr, Td, Th } from '../../../generic/Table/table'
@@ -340,7 +340,10 @@ const BenthicPhotoQuadratObservationTable = ({
             </Select>
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               value={numberOfPointsOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="number-of-points-label"

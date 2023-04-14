@@ -22,7 +22,7 @@ import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { IconClose, IconPlus } from '../../../icons'
 import { inputOptionsPropTypes } from '../../../../library/miscPropTypes'
-import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
+import { Input, InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
@@ -237,7 +237,10 @@ const ColoniesBleachedObservationTable = ({
             </Select>
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               aria-labelledby="normal-label"
               value={count_normal}
               min="0"
@@ -249,7 +252,10 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               aria-labelledby="pale-label"
               value={count_pale}
               min="0"
@@ -261,7 +267,10 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               aria-labelledby="20-bleached-label"
               value={count_20}
               min="0"
@@ -273,7 +282,10 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               aria-labelledby="50-bleached-label"
               value={count_50}
               min="0"
@@ -285,7 +297,10 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               aria-labelledby="80-bleached-label"
               value={count_80}
               min="0"
@@ -297,7 +312,10 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               aria-labelledby="100-bleached-label"
               value={count_100}
               min="0"
@@ -309,7 +327,10 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <Input
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
               aria-labelledby="recently-dead-label"
               value={count_dead}
               min="0"
