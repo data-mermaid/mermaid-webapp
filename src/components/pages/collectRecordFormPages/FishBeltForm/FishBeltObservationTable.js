@@ -21,7 +21,7 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import {
   ButtonRemoveRow,
@@ -271,7 +271,7 @@ const FishBeltObservationTable = ({
       ) : null
 
       const sizeInput = showNumericSizeInput ? (
-        <InputNumberNoScroll
+        <InputNumberNumericCharactersOnly
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           step="any"
           aria-labelledby="fish-size-label"
@@ -358,7 +358,7 @@ const FishBeltObservationTable = ({
           </Td>
           <Td align="right">{sizeInput}</Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               value={countOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="fish-count-label"
