@@ -26,7 +26,6 @@ import { Input, InputWrapper, RequiredIndicator, Select } from '../../../generic
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BenthicPitLitObservationSummaryStats from '../../../BenthicPitLitObservationSummaryStats/BenthicPitLitObservationSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'

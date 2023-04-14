@@ -21,7 +21,6 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
 import {
   ButtonRemoveRow,

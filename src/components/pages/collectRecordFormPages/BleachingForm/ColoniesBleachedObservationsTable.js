@@ -26,7 +26,6 @@ import { Input, InputWrapper, RequiredIndicator, Select } from '../../../generic
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
