@@ -1,0 +1,3 @@
+import InputNumberNumericCharactersOnly from './InputNumberNumericCharactersOnly'
+
+export default InputNumberNumericCharactersOnly

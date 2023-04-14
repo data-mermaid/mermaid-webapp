@@ -26,7 +26,7 @@ import { InputWrapper, RequiredIndicator, Select } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import BleachincColoniesBleachedSummaryStats from '../../../BleachingColoniesBleachedSummaryStats/BleachingColoniesBleachedSummaryStats'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -173,7 +173,8 @@ const ColoniesBleachedObservationTable = ({
       }
 
       const handleObservationInputChange = ({ event, dispatchType }) => {
-        const newValue = event.target.value
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
 
         setAreObservationsInputsDirty(true)
         observationsDispatch({
@@ -236,7 +237,7 @@ const ColoniesBleachedObservationTable = ({
             </Select>
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="normal-label"
               value={count_normal}
               min="0"
@@ -248,7 +249,7 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="pale-label"
               value={count_pale}
               min="0"
@@ -260,7 +261,7 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="20-bleached-label"
               value={count_20}
               min="0"
@@ -272,7 +273,7 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="50-bleached-label"
               value={count_50}
               min="0"
@@ -284,7 +285,7 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="80-bleached-label"
               value={count_80}
               min="0"
@@ -296,7 +297,7 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="100-bleached-label"
               value={count_100}
               min="0"
@@ -308,7 +309,7 @@ const ColoniesBleachedObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="recently-dead-label"
               value={count_dead}
               min="0"

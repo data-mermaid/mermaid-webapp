@@ -21,7 +21,7 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import {
   ButtonRemoveRow,
@@ -236,7 +236,10 @@ const FishBeltObservationTable = ({
       }
 
       const handleUpdateSizeEvent = (event) => {
-        handleUpdateSize(event.target.value, observationId)
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
+
+        handleUpdateSize(newValue, observationId)
       }
 
       const handleObservationKeyDown = (event) => {
@@ -244,10 +247,13 @@ const FishBeltObservationTable = ({
       }
 
       const handleUpdateCount = (event) => {
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
+
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateCount',
-          payload: { newCount: event.target.value, observationId },
+          payload: { newCount: newValue, observationId },
         })
         resetObservationValidations({
           observationId,
@@ -265,9 +271,7 @@ const FishBeltObservationTable = ({
       ) : null
 
       const sizeInput = showNumericSizeInput ? (
-        <InputNumberNoScroll
-          type="number"
-          min="0"
+        <InputNumberNumericCharactersOnly
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           step="any"
           aria-labelledby="fish-size-label"
@@ -354,9 +358,7 @@ const FishBeltObservationTable = ({
           </Td>
           <Td align="right">{sizeInput}</Td>
           <Td align="right">
-            <InputNumberNoScroll
-              type="number"
-              min="0"
+            <InputNumberNumericCharactersOnly
               value={countOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="fish-count-label"

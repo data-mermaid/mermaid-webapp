@@ -28,7 +28,7 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -271,10 +271,13 @@ const BenthicPhotoQuadratObservationTable = ({
       }
 
       const handleNumberOfPointsChange = (event) => {
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
+
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateNumberOfPoints',
-          payload: { newNumberOfPoints: event.target.value, observationId },
+          payload: { newNumberOfPoints: newValue, observationId },
         })
         resetObservationValidations({
           observationId,
@@ -291,7 +294,7 @@ const BenthicPhotoQuadratObservationTable = ({
         <ObservationTr key={observationId}>
           <Td align="center">{rowNumber}</Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               type="number"
               autoFocus={autoFocusAllowed}
               min="0"
@@ -337,9 +340,7 @@ const BenthicPhotoQuadratObservationTable = ({
             </Select>
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
-              type="number"
-              min="0"
+            <InputNumberNumericCharactersOnly
               value={numberOfPointsOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="number-of-points-label"
