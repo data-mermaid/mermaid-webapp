@@ -236,8 +236,8 @@ const FishBeltObservationTable = ({
       }
 
       const handleUpdateSizeEvent = (event) => {
-        const regexNumbersOnly = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regexNumbersOnly, '')
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
 
         handleUpdateSize(newValue, observationId)
       }
@@ -247,8 +247,8 @@ const FishBeltObservationTable = ({
       }
 
       const handleUpdateCount = (event) => {
-        const regexNumbersOnly = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regexNumbersOnly, '')
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
 
         setAreObservationsInputsDirty(true)
         observationsDispatch({

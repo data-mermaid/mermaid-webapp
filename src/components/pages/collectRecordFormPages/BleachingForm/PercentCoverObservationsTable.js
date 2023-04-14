@@ -123,8 +123,8 @@ const PercentCoverObservationTable = ({
       }
 
       const handleObservationInputChange = ({ event, dispatchType }) => {
-        const regexNumbersOnly = new RegExp(/\D/g)
-        const newValue = event.target.value.replace(regexNumbersOnly, '')
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
 
         setAreObservationsInputsDirty(true)
         observationsDispatch({
