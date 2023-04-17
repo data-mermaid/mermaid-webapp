@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { InputRow, CheckRadioLabel, CheckRadioWrapper } from '../../generic/form'
+import { InputRow, CheckRadioLabel, CheckRadioWrapper, RequiredIndicator } from '../../generic/form'
 import { managementRegimePropType } from '../../../App/mermaidData/mermaidDataProptypes'
 import InputValidationInfo from '../../mermaidInputs/InputValidationInfo/InputValidationInfo'
 import mermaidInputsPropTypes from '../../mermaidInputs/mermaidInputsPropTypes'
@@ -33,6 +33,7 @@ const ManagementRulesInput = ({
   label,
   managementFormValues,
   onChange,
+  required,
   validationMessages,
   validationType,
   ...restOfProps
@@ -149,7 +150,10 @@ const ManagementRulesInput = ({
   return (
     <InputRow {...restOfProps} validationType={validationType}>
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-      <label id={`${id}-management-rules-input`}>{label}</label>
+      <label id={`${id}-management-rules-input`}>
+        {label}
+        {required ? <RequiredIndicator /> : null}
+      </label>
       <div aria-labelledby={`${id}-management-rules-input`}>
         <StyledCheckRadioWrapper>
           <input
@@ -210,6 +214,7 @@ ManagementRulesInput.propTypes = {
   label: PropTypes.string,
   managementFormValues: managementRegimePropType,
   onChange: PropTypes.func.isRequired,
+  required: PropTypes.bool.isRequired,
   validationMessages: mermaidInputsPropTypes.validationMessagesPropType,
   validationType: PropTypes.string,
 }
