@@ -14,6 +14,7 @@ import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioW
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 
+const NUMBER_VALIDATION_PATH = 'data.quadrat_collection.number'
 const CURRENT_VALIDATION_PATH = 'data.quadrat_collection.current'
 const DEPTH_VALIDATION_PATH = 'data.quadrat_collection.depth'
 const LABEL_VALIDATION_PATH = 'data.quadrat_collection.label'
@@ -84,6 +85,13 @@ const BleachingTransectInputs = ({
     areValidationsShowing,
   )
 
+  const handleNumberChange = (event) => {
+    formik.handleChange(event)
+    resetNonObservationFieldValidations({
+      validationPath: NUMBER_VALIDATION_PATH,
+    })
+  }
+
   const handleLabelChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
@@ -149,6 +157,23 @@ const BleachingTransectInputs = ({
       <InputWrapper>
         <H2>Quadrat</H2>
 
+        <InputWithLabelAndValidation
+          disabled
+          label="Number"
+          id="number"
+          testId="number"
+          type="number"
+          ignoreNonObservationFieldValidations={() => {
+            ignoreNonObservationFieldValidations({ validationPath: NUMBER_VALIDATION_PATH })
+          }}
+          resetNonObservationFieldValidations={() => {
+            resetNonObservationFieldValidations({ validationPath: NUMBER_VALIDATION_PATH })
+          }}
+          {...labelValidationProperties}
+          onBlur={formik.handleBlur}
+          value={formik.values.number}
+          onChange={handleNumberChange}
+        />
         <InputWithLabelAndValidation
           label="Label"
           id="label"
