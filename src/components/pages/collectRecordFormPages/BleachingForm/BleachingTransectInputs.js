@@ -150,6 +150,15 @@ const BleachingTransectInputs = ({
         <H2>Quadrat</H2>
 
         <InputWithLabelAndValidation
+          disabled
+          label="Number"
+          id="number"
+          testId="number"
+          type="number"
+          {...labelValidationProperties}
+          value={formik.values.number}
+        />
+        <InputWithLabelAndValidation
           label="Label"
           id="label"
           testId="label"
