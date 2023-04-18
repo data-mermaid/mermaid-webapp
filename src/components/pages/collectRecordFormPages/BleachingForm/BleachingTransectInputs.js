@@ -14,7 +14,6 @@ import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioW
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 
-const NUMBER_VALIDATION_PATH = 'data.quadrat_collection.number'
 const CURRENT_VALIDATION_PATH = 'data.quadrat_collection.current'
 const DEPTH_VALIDATION_PATH = 'data.quadrat_collection.depth'
 const LABEL_VALIDATION_PATH = 'data.quadrat_collection.label'
@@ -154,15 +153,9 @@ const BleachingTransectInputs = ({
           disabled
           label="Number"
           id="number"
+          testId="number"
           type="number"
-          ignoreNonObservationFieldValidations={() => {
-            ignoreNonObservationFieldValidations({ validationPath: NUMBER_VALIDATION_PATH })
-          }}
-          resetNonObservationFieldValidations={() => {
-            resetNonObservationFieldValidations({ validationPath: NUMBER_VALIDATION_PATH })
-          }}
           {...labelValidationProperties}
-          onBlur={formik.handleBlur}
           value={formik.values.number}
         />
         <InputWithLabelAndValidation
