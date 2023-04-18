@@ -85,13 +85,6 @@ const BleachingTransectInputs = ({
     areValidationsShowing,
   )
 
-  const handleNumberChange = (event) => {
-    formik.handleChange(event)
-    resetNonObservationFieldValidations({
-      validationPath: NUMBER_VALIDATION_PATH,
-    })
-  }
-
   const handleLabelChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
@@ -161,7 +154,6 @@ const BleachingTransectInputs = ({
           disabled
           label="Number"
           id="number"
-          testId="number"
           type="number"
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: NUMBER_VALIDATION_PATH })
@@ -172,7 +164,6 @@ const BleachingTransectInputs = ({
           {...labelValidationProperties}
           onBlur={formik.handleBlur}
           value={formik.values.number}
-          onChange={handleNumberChange}
         />
         <InputWithLabelAndValidation
           label="Label"
