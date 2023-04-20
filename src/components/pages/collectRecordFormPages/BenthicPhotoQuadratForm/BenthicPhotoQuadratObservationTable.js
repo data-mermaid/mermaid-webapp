@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useCallback } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -28,7 +28,7 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import ObservationValidationInfo from '../ObservationValidationInfo'
 import ObservationAutocomplete from '../../../ObservationAutocomplete/ObservationAutocomplete'
@@ -72,7 +72,7 @@ const BenthicPhotoQuadratObservationTable = ({
   resetObservationValidations,
   setAreObservationsInputsDirty,
 }) => {
-  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
+  const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
 
@@ -87,32 +87,48 @@ const BenthicPhotoQuadratObservationTable = ({
     }
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
-  const _loadObservationsFromApiIntoState = useEffect(() => {
-    if (!apiObservationsLoaded && collectRecord) {
-      const observationsFromApi = collectRecord.data.obs_benthic_photo_quadrats ?? []
+  const handleAddEmptyInitialObservation = useCallback(() => {
+    setAreObservationsInputsDirty(true)
 
-      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
-
-      observationsDispatch({
-        type: 'loadObservationsFromApi',
-        payload: initialObservationsToLoad,
-      })
-
-      setApiObservationsLoaded(true)
-    }
-  }, [
-    collectRecord,
-    getPersistedUnsavedObservationsData,
-    apiObservationsLoaded,
-    observationsDispatch,
-  ])
+    observationsDispatch({ type: 'addObservation' })
+  }, [observationsDispatch, setAreObservationsInputsDirty])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
+
+  const _initializeObservationReducer = useEffect(() => {
+    if (!isObservationReducerInitialized && collectRecord) {
+      const observationsFromApi = collectRecord.data.obs_benthic_photo_quadrats ?? []
+
+      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
+      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
+
+      if (initialObservationsToLoad.length) {
+        observationsDispatch({
+          type: 'loadObservationsFromApi',
+          payload: initialObservationsToLoad,
+        })
+      }
+      if (!initialObservationsToLoad.length) {
+        handleAddEmptyInitialObservation()
+      }
+
+      setIsObservationReducerInitialized(true)
+    }
+    if (!isObservationReducerInitialized && !collectRecord) {
+      handleAddEmptyInitialObservation()
+      setIsObservationReducerInitialized(true)
+    }
+  }, [
+    collectRecord,
+    getPersistedUnsavedObservationsData,
+    isObservationReducerInitialized,
+    observationsDispatch,
+    handleAddEmptyInitialObservation,
+  ])
 
   const observationCategoryPercentages = useMemo(() => {
     const getCategory = (benthicAttributeId) =>
@@ -255,10 +271,13 @@ const BenthicPhotoQuadratObservationTable = ({
       }
 
       const handleNumberOfPointsChange = (event) => {
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
+
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateNumberOfPoints',
-          payload: { newNumberOfPoints: event.target.value, observationId },
+          payload: { newNumberOfPoints: newValue, observationId },
         })
         resetObservationValidations({
           observationId,
@@ -275,7 +294,7 @@ const BenthicPhotoQuadratObservationTable = ({
         <ObservationTr key={observationId}>
           <Td align="center">{rowNumber}</Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               type="number"
               autoFocus={autoFocusAllowed}
               min="0"
@@ -321,9 +340,7 @@ const BenthicPhotoQuadratObservationTable = ({
             </Select>
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
-              type="number"
-              min="0"
+            <InputNumberNumericCharactersOnly
               value={numberOfPointsOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="number-of-points-label"

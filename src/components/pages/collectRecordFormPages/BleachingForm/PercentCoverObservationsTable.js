@@ -19,7 +19,7 @@ import { IconClose, IconPlus } from '../../../icons'
 import { InputWrapper, RequiredIndicator } from '../../../generic/form'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getObservationValidationInfo from '../CollectRecordFormPageAlternative/getObservationValidationInfo'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import { getObservationsPropertyNames } from '../../../../App/mermaidData/recordProtocolHelpers'
 import BleachingPercentCoverSummaryStats from '../../../BleachingPercentCoverSummaryStats/BleachingPercentCoverSummaryStats'
 import ObservationValidationInfo from '../ObservationValidationInfo'
@@ -56,6 +56,7 @@ const PercentCoverObservationTable = ({
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
+
     observationsDispatch({ type: 'addObservation' })
   }
 
@@ -122,7 +123,8 @@ const PercentCoverObservationTable = ({
       }
 
       const handleObservationInputChange = ({ event, dispatchType }) => {
-        const newValue = event.target.value
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
 
         setAreObservationsInputsDirty(true)
         observationsDispatch({
@@ -147,7 +149,7 @@ const PercentCoverObservationTable = ({
           <Td align="center">{quadrat_number}</Td>
 
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="hard-coral-percent-cover-label"
               value={percent_hard}
               min="0"
@@ -160,7 +162,7 @@ const PercentCoverObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="soft-coral-percent-cover-label"
               value={percent_soft}
               min="0"
@@ -172,7 +174,7 @@ const PercentCoverObservationTable = ({
             />
           </Td>
           <Td align="right">
-            <InputNumberNoScroll
+            <InputNumberNumericCharactersOnly
               aria-labelledby="microalgae-percent-cover-label"
               value={percent_algae}
               min="0"

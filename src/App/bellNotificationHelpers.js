@@ -29,6 +29,7 @@ export const getBellNotifications = async ({
       })
       .catch((error) => {
         console.error(error.response || error)
+        throw error
       })
   }
 

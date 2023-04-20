@@ -163,6 +163,7 @@ const ManagementRegimeForm = ({ formik, managementComplianceOptions, managementP
           validationType={formik.errors.rules ? 'error' : null}
           validationMessages={formik.errors.rules}
           data-testid="rules"
+          required={true}
         />
         <InputRadioWithLabelAndValidation
           label="Compliance"

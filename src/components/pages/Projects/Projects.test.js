@@ -188,12 +188,12 @@ test('A project card renders appropriately when offline', async () => {
 
   expect(within(projectCard).getByLabelText(/collect/i)).toBeInTheDocument()
   expect(within(projectCard).getByLabelText(/submitted offline/i)).toBeInTheDocument()
-  expect(within(projectCard).getByLabelText(/sites offline/i)).toBeInTheDocument()
+  expect(within(projectCard).getByLabelText(/sites/i)).toBeInTheDocument()
   expect(within(projectCard).getByLabelText(/users offline/i)).toBeInTheDocument()
   expect(within(projectCard).getByLabelText(/data-sharing offline/i)).toBeInTheDocument()
   expect(within(collectingSummaryCard).getByText('12'))
   expect(within(submittedSummaryCard).getByText('Online Only'))
-  expect(within(sitesSummaryCard).getByText('Online Only'))
+  expect(within(sitesSummaryCard).getByText('13'))
   expect(within(usersSummaryCard).getByText('Online Only'))
   expect(within(dataSharingSummaryCard).getByText('Online Only'))
 

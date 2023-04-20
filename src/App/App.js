@@ -35,7 +35,7 @@ import useIsMounted from '../library/useIsMounted'
 import { getProjectIdFromLocation } from '../library/getProjectIdFromLocation'
 
 function App({ dexieCurrentUserInstance }) {
-  const { isAppOnline } = useOnlineStatus()
+  const { isAppOnline, setServerNotReachable } = useOnlineStatus()
   const { isOfflineStorageHydrated, syncErrors, isSyncInProgress } = useSyncStatus()
   const apiBaseUrl = process.env.REACT_APP_MERMAID_API
   const history = useHistory()
@@ -46,9 +46,16 @@ function App({ dexieCurrentUserInstance }) {
     dexieCurrentUserInstance,
   })
 
-  const handleHttpResponseErrorWithLogoutFunction = useCallback(
-    ({ error, callback }) => handleHttpResponseError({ error, callback, logoutMermaid }),
-    [logoutMermaid],
+  const handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied = useCallback(
+    ({ error, callback, shouldShowServerNonResponseMessage }) =>
+      handleHttpResponseError({
+        error,
+        callback,
+        logoutMermaid,
+        shouldShowServerNonResponseMessage,
+        setServerNotReachable,
+      }),
+    [logoutMermaid, setServerNotReachable],
   )
 
   const handleNested500SyncError = () => {
@@ -102,7 +109,7 @@ function App({ dexieCurrentUserInstance }) {
     isMermaidAuthenticated,
     isAppOnline,
     isSyncInProgress,
-    handleHttpResponseErrorWithLogoutFunction,
+    handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
   })
 
   const { dexiePerUserDataInstance } = useDexiePerUserDataInstance({
@@ -136,7 +143,7 @@ function App({ dexieCurrentUserInstance }) {
     dexiePerUserDataInstance,
     isMounted,
     isAppOnline,
-    handleHttpResponseError: handleHttpResponseErrorWithLogoutFunction,
+    handleHttpResponseError: handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
     syncApiDataIntoOfflineStorage: apiSyncInstance,
   })
 
@@ -169,7 +176,7 @@ function App({ dexieCurrentUserInstance }) {
     getAccessToken,
     isMermaidAuthenticated,
     isAppOnline,
-    handleHttpResponseErrorWithLogoutFunction,
+    handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied,
   })
 
   const deleteMermaidData = () => {
@@ -199,7 +206,9 @@ function App({ dexieCurrentUserInstance }) {
     <ThemeProvider theme={theme}>
       <DatabaseSwitchboardInstanceProvider value={databaseSwitchboardInstance}>
         <CurrentUserProvider value={{ currentUser, saveUserProfile }}>
-          <HttpResponseErrorHandlerProvider value={handleHttpResponseErrorWithLogoutFunction}>
+          <HttpResponseErrorHandlerProvider
+            value={handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied}
+          >
             <BellNotificationProvider value={{ notifications, deleteNotification }}>
               <GlobalStyle />
               <CustomToastContainer limit={5} />

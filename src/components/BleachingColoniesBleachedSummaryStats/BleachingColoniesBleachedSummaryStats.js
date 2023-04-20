@@ -45,7 +45,7 @@ const BleachincColoniesBleachedSummaryStats = ({ observationsColoniesBleached })
         )
       })
     } else {
-      totals = observationsColoniesBleached.map((item) => item[colonyType])
+      totals = observationsColoniesBleached.map((item) => Number(item[colonyType]))
     }
 
     return (

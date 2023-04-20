@@ -77,7 +77,6 @@ test('Habitat Complexity observations: intervals recalculate when user deletes a
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
-  userEvent.click(addRowButton)
 
   await waitFor(() => {
     const observationIntervalLabelsAfterFourRowsAdded =
@@ -122,7 +121,6 @@ test('Habitat Complexity observations: intervals reclaculate when a user inserts
   const observationsSection = await screen.findByTestId('observations-section')
   const addRowButton = within(observationsSection).getByRole('button', { name: 'Add Row' })
 
-  userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)
   userEvent.click(addRowButton)

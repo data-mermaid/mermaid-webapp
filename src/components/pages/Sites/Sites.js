@@ -50,6 +50,7 @@ import usePersistUserTablePreferences from '../../generic/Table/usePersistUserTa
 import { useSyncStatus } from '../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { getFileExportName } from '../../../library/getFileExportName'
 import { PAGE_SIZE_DEFAULT } from '../../../library/constants/constants'
+import { useHttpResponseErrorHandler } from '../../../App/HttpResponseErrorHandlerContext'
 
 const Sites = () => {
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
@@ -59,6 +60,7 @@ const Sites = () => {
   const isMounted = useIsMounted()
   const { isAppOnline } = useOnlineStatus()
   const { currentUser } = useCurrentUser()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
 
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -96,11 +98,16 @@ const Sites = () => {
             setIsLoading(false)
           }
         })
-        .catch(() => {
-          toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+        .catch((error) => {
+          handleHttpResponseError({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.siteRecordsUnavailable))
+            },
+          })
         })
     }
-  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted])
+  }, [databaseSwitchboardInstance, projectId, isSyncInProgress, isMounted, handleHttpResponseError])
 
   const addCopiedSitesToSiteTable = (copiedSites) => {
     setSiteRecordsForUiDisplay([...siteRecordsForUiDisplay, ...copiedSites])

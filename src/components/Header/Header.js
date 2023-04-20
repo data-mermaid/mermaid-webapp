@@ -27,7 +27,7 @@ import { useBellNotifications } from '../../App/BellNotificationContext'
 import { useOnlineStatus } from '../../library/onlineStatusContext'
 import BellNotificationDropDown from '../BellNotificationDropDown/BellNotificationDropDown'
 import HideShow from '../generic/HideShow'
-import Logo from '../../assets/mermaid-beta-white-logo.svg'
+import Logo from '../../assets/mermaid-logo.svg'
 import OfflineHide from '../generic/OfflineHide'
 import ProfileModal from '../ProfileModal'
 
@@ -156,7 +156,7 @@ const Header = ({ logout, currentUser }) => {
     <>
       <StyledHeader>
         <Link to="/projects">
-          <LogoImg src={Logo} alt="MERMAID Beta Logo" />
+          <LogoImg src={Logo} alt="MERMAID Logo" />
         </Link>
         <GlobalNav>
           <div className="desktop">

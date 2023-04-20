@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '../../../generic/buttons'
@@ -21,7 +21,7 @@ import { roundToOneDecimal } from '../../../../library/numbers/roundToOneDecimal
 import { summarizeArrayObjectValuesByProperty } from '../../../../library/summarizeArrayObjectValuesByProperty'
 import { Tr, Td, Th } from '../../../generic/Table/table'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputNumberNoScroll from '../../../generic/InputNumberNoScroll/InputNumberNoScroll'
+import InputNumberNumericCharactersOnly from '../../../generic/InputNumberNumericCharctersOnly/InputNumberNumericCharactersOnly'
 import language from '../../../../language'
 import {
   ButtonRemoveRow,
@@ -96,7 +96,7 @@ const FishBeltObservationTable = ({
     len_surveyed: transectLengthSurveyed,
     width: widthId,
   } = formik?.values
-  const [apiObservationsLoaded, setApiObservationsLoaded] = useState(false)
+  const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
   const fishBinSelectedLabel = getFishBinLabel(choices, fishBinSelected)
@@ -112,31 +112,47 @@ const FishBeltObservationTable = ({
     }
   }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
-  const _loadObservationsFromApiIntoState = useEffect(() => {
-    if (!apiObservationsLoaded && collectRecord) {
-      const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
-      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
-
-      observationsDispatch({
-        type: 'loadObservationsFromApi',
-        payload: initialObservationsToLoad,
-      })
-
-      setApiObservationsLoaded(true)
-    }
-  }, [
-    collectRecord,
-    getPersistedUnsavedObservationsData,
-    apiObservationsLoaded,
-    observationsDispatch,
-  ])
+  const handleAddEmptyInitialObservation = useCallback(() => {
+    setAreObservationsInputsDirty(true)
+    observationsDispatch({ type: 'addObservation' })
+  }, [observationsDispatch, setAreObservationsInputsDirty])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
     setAutoFocusAllowed(true)
     observationsDispatch({ type: 'addObservation' })
   }
+
+  const _initializeObservationReducer = useEffect(() => {
+    if (!isObservationReducerInitialized && collectRecord) {
+      const observationsFromApi = collectRecord.data.obs_belt_fishes ?? []
+      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
+      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
+
+      if (initialObservationsToLoad.length) {
+        observationsDispatch({
+          type: 'loadObservationsFromApi',
+          payload: initialObservationsToLoad,
+        })
+      }
+      if (!initialObservationsToLoad.length) {
+        handleAddEmptyInitialObservation()
+      }
+
+      setIsObservationReducerInitialized(true)
+    }
+    if (!isObservationReducerInitialized && !collectRecord) {
+      handleAddEmptyInitialObservation()
+      setIsObservationReducerInitialized(true)
+    }
+  }, [
+    collectRecord,
+    getPersistedUnsavedObservationsData,
+    isObservationReducerInitialized,
+    observationsDispatch,
+    handleAddEmptyInitialObservation,
+    observationsState.length,
+  ])
 
   const observationsBiomass = useMemo(
     () =>
@@ -220,7 +236,10 @@ const FishBeltObservationTable = ({
       }
 
       const handleUpdateSizeEvent = (event) => {
-        handleUpdateSize(event.target.value, observationId)
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
+
+        handleUpdateSize(newValue, observationId)
       }
 
       const handleObservationKeyDown = (event) => {
@@ -228,10 +247,13 @@ const FishBeltObservationTable = ({
       }
 
       const handleUpdateCount = (event) => {
+        const regExNumbers = new RegExp(/\D/g)
+        const newValue = event.target.value.replace(regExNumbers, '')
+
         setAreObservationsInputsDirty(true)
         observationsDispatch({
           type: 'updateCount',
-          payload: { newCount: event.target.value, observationId },
+          payload: { newCount: newValue, observationId },
         })
         resetObservationValidations({
           observationId,
@@ -249,9 +271,7 @@ const FishBeltObservationTable = ({
       ) : null
 
       const sizeInput = showNumericSizeInput ? (
-        <InputNumberNoScroll
-          type="number"
-          min="0"
+        <InputNumberNumericCharactersOnly
           value={sizeOrEmptyStringToAvoidInputValueErrors}
           step="any"
           aria-labelledby="fish-size-label"
@@ -338,9 +358,7 @@ const FishBeltObservationTable = ({
           </Td>
           <Td align="right">{sizeInput}</Td>
           <Td align="right">
-            <InputNumberNoScroll
-              type="number"
-              min="0"
+            <InputNumberNumericCharactersOnly
               value={countOrEmptyStringToAvoidInputValueErrors}
               step="any"
               aria-labelledby="fish-count-label"
