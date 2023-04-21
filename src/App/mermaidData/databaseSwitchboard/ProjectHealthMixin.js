@@ -386,6 +386,12 @@ const ProjectHealthMixin = (Base) =>
               management_regimes: Object.values(managements),
             }
 
+            sampleEventUnitRow.management_regimes.forEach((regime) => {
+              const labelsSortedNumerically = regime.labels.sort((a, b) => a.label - b.label)
+
+              return labelsSortedNumerically
+            })
+
             sampleEventUnitRowsCopy.push(sampleEventUnitRow)
           }
         }
