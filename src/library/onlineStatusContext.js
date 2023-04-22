@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
 const apiBaseUrl = process.env.REACT_APP_MERMAID_API
@@ -17,24 +17,24 @@ const OnlineStatusProvider = ({ children, value }) => {
 
   const rePingApiRef = useRef()
 
-  const stopPingingApi = useCallback(() => {
-    setIsServerReachable(null)
-    clearInterval(rePingApiRef.current)
-  }, [])
+  const pingApi = () => {
+    axios
+      .get(`${apiBaseUrl}/health/`, {
+        cache: false,
+        method: 'HEAD',
+      })
+      .then(() => {
+        setIsServerReachable(true)
+      })
+      .catch(() => {
+        setIsServerReachable(false)
+      })
+  }
 
   const _setIsServerReachable = useEffect(() => {
-    const pingApi = () => {
-      axios
-        .get(`${apiBaseUrl}/health/`, {
-          cache: false,
-          method: 'HEAD',
-        })
-        .then(() => {
-          setIsServerReachable(true)
-        })
-        .catch(() => {
-          setIsServerReachable(false)
-        })
+    const stopPingingApi = () => {
+      setIsServerReachable(null)
+      clearInterval(rePingApiRef.current)
     }
 
     if (!isNavigatorOnline) {
@@ -50,9 +50,17 @@ const OnlineStatusProvider = ({ children, value }) => {
     return () => {
       stopPingingApi()
     }
-  }, [isNavigatorOnline, stopPingingApi])
+  }, [isNavigatorOnline])
 
   const toggleUserOnlineStatusOverride = () => {
+    const isTheUserAboutToTurnTheAppOnline = hasUserTurnedAppOffline // this is still old state, we havent updated anything yet, thats why its the opposite of what you would expect.
+
+    if (isTheUserAboutToTurnTheAppOnline) {
+      // do a health check on the server. If its dead, we dont want to wait forever for the next scheduled one
+      // we do this before we update hasUserTurnedAppOffline to avoid race conditions with updating state
+      pingApi()
+    }
+
     localStorage.setItem('hasUserTurnedAppOffline', !hasUserTurnedAppOffline)
     setHasUserTurnedAppOffline(!hasUserTurnedAppOffline)
   }
