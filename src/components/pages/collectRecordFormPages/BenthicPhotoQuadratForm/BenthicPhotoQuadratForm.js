@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useReducer } from 'react'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
 
-import benthicpqtObservationReducer from './benthicpqtObservationReducer'
+import { benthicPhotoQuadratObservationReducer } from './benthicPhotoQuadratObservationReducer'
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
@@ -23,7 +23,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
 
   const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
   const handleHttpResponseError = useHttpResponseErrorHandler()
-  const observationsReducer = useReducer(benthicpqtObservationReducer, [])
+  const observationsReducer = useReducer(benthicPhotoQuadratObservationReducer, [])
   const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
 
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()

@@ -41,8 +41,8 @@ import NewAttributeModal from '../../../NewAttributeModal'
 import ObserversInput from '../ObserversInput'
 import DeleteRecordButton from '../../../DeleteRecordButton'
 import SampleEventInputs from '../SampleEventInputs'
-import BenthicAttributeTransectInputs from '../BenthicPhotoQuadratForm/BenthicAttributeTransectInputs'
-import BenthicPhotoQuadratObservationTable from '../BenthicPhotoQuadratForm/BenthicPhotoQuadratObservationTable'
+import { BenthicPhotoQuadratTransectInputs } from '../BenthicPhotoQuadratForm/BenthicPhotoQuadratTransectInputs'
+import { BenthicPhotoQuadratObservationTable } from '../BenthicPhotoQuadratForm/BenthicPhotoQuadratObservationTable'
 import LoadingModal from '../../../LoadingModal/LoadingModal'
 import RecordFormTitle from '../../../RecordFormTitle'
 import RecordLevelInputValidationInfo from '../RecordLevelValidationInfo/RecordLevelValidationInfo'
@@ -567,7 +567,7 @@ const CollectRecordFormPage = ({
       }
     />
   ) : (
-    <BenthicAttributeTransectInputs
+    <BenthicPhotoQuadratTransectInputs
       areValidationsShowing={areValidationsShowing}
       choices={choices}
       formik={formik}

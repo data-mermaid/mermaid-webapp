@@ -29,7 +29,7 @@ const CURRENT_VALIDATION_PATH = 'data.quadrat_transect.current'
 const RELATIVE_DEPTH_VALIDATION_PATH = 'data.quadrat_transect.relative_depth'
 const TIDE_VALIDATION_PATH = 'data.quadrat_transect.tide'
 
-const TransectInputs = ({
+const BenthicPhotoQuadratTransectInputs = ({
   areValidationsShowing,
   choices,
   formik,
@@ -462,7 +462,7 @@ const TransectInputs = ({
   )
 }
 
-TransectInputs.propTypes = {
+BenthicPhotoQuadratTransectInputs.propTypes = {
   areValidationsShowing: PropTypes.bool.isRequired,
   choices: choicesPropType.isRequired,
   formik: formikPropType.isRequired,
@@ -473,4 +473,4 @@ TransectInputs.propTypes = {
   validationPropertiesWithDirtyResetOnInputChange: PropTypes.func.isRequired,
 }
 
-export default TransectInputs
+export { BenthicPhotoQuadratTransectInputs }

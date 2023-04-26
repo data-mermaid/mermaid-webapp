@@ -476,4 +476,4 @@ BenthicPhotoQuadratObservationTable.defaultProps = {
   observationsReducer: [],
 }
 
-export default BenthicPhotoQuadratObservationTable
+export { BenthicPhotoQuadratObservationTable }

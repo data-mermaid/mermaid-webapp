@@ -1,6 +1,6 @@
 import { createUuid } from '../../../../library/createUuid'
 
-const benthicpqtObservationReducer = (state, action) => {
+const benthicPhotoQuadratObservationReducer = (state, action) => {
   switch (action.type) {
     case 'loadObservationsFromApi': {
       const updateObservationsWithIds = [...action.payload].map((record) => ({
@@ -113,4 +113,4 @@ const benthicpqtObservationReducer = (state, action) => {
   }
 }
 
-export default benthicpqtObservationReducer
+export { benthicPhotoQuadratObservationReducer }
