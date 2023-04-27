@@ -1,75 +1,75 @@
-import PropTypes from 'prop-types'
-import React, { useState, useEffect, useCallback, useReducer } from 'react'
 import { toast } from 'react-toastify'
 import { useParams } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import React, { useState, useReducer, useEffect, useMemo, useCallback } from 'react'
 
-import { benthicPhotoQuadratObservationReducer } from './benthicPhotoQuadratObservationReducer'
+import {
+  getCollectRecordDataInitialValues,
+  getSampleInfoInitialValues,
+  getTransectInitialValues,
+} from '../collectRecordFormInitialValues'
+
 import { getBenthicOptions } from '../../../../library/getOptions'
 import { getDataForSubNavNode } from '../../../../library/getDataForSubNavNode'
 import { getToastArguments } from '../../../../library/getToastArguments'
-import language from '../../../../language'
-import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
+import { reformatFormValuesIntoBenthicPQTRecord } from '../CollectRecordFormPage/reformatFormValuesIntoRecord'
+import { useCurrentUser } from '../../../../App/CurrentUserContext'
 import { useDatabaseSwitchboardInstance } from '../../../../App/mermaidData/databaseSwitchboard/DatabaseSwitchboardContext'
-import useIsMounted from '../../../../library/useIsMounted'
-import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
 import { useHttpResponseErrorHandler } from '../../../../App/HttpResponseErrorHandlerContext'
-import CollectRecordFormPage from '../CollectRecordFormPage'
+import { useSyncStatus } from '../../../../App/mermaidData/syncApiDataIntoOfflineStorage/SyncStatusContext'
+import { useUnsavedDirtyFormDataUtilities } from '../../../../library/useUnsavedDirtyFormDataUtilities'
+import CollectRecordFormPageAlternative from '../CollectRecordFormPageAlternative'
+import language from '../../../../language'
+import NewAttributeModal from '../../../NewAttributeModal'
+import useIsMounted from '../../../../library/useIsMounted'
+import { BenthicPhotoQuadratTransectInputs } from './BenthicPhotoQuadratTransectInputs'
+import { BenthicPhotoQuadratObservationTable } from './BenthicPhotoQuadratObservationTable'
+import { benthicPhotoQuadratObservationReducer } from './benthicPhotoQuadratObservationReducer'
 import ErrorBoundary from '../../../ErrorBoundary'
 
 const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
-  const { recordId, projectId } = useParams()
-  const { isSyncInProgress } = useSyncStatus()
-  const isMounted = useIsMounted()
-
-  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
-  const handleHttpResponseError = useHttpResponseErrorHandler()
-  const observationsReducer = useReducer(benthicPhotoQuadratObservationReducer, [])
-  const [observationsState, observationsDispatch] = observationsReducer // eslint-disable-line no-unused-vars
-
+  const [areObservationsInputsDirty, setAreObservationsInputsDirty] = useState(false)
+  const [benthicAttributeSelectOptions, setBenthicAttributeSelectOptions] = useState([])
   const [collectRecordBeingEdited, setCollectRecordBeingEdited] = useState()
-  const [benthicAttributeOptions, setBenthicAttributeOptions] = useState([])
-  const [observerProfiles, setObserverProfiles] = useState([])
   const [idsNotAssociatedWithData, setIdsNotAssociatedWithData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [subNavNode, setSubNavNode] = useState(null)
-  const [sites, setSites] = useState([])
-  const [managementRegimes, setManagementRegimes] = useState([])
-  const [choices, setChoices] = useState({})
-  const [newObservationToAdd, setNewObservationToAdd] = useState()
+  const [isNewBenthicAttributeModalOpen, setIsNewBenthicAttributeModalOpen] = useState(false)
+  const [observationIdToAddNewBenthicAttributeTo, setObservationIdToAddNewBenthicAttributeTo] =
+    useState()
+  const [subNavNode, setSubNavNode] = useState()
 
-  const _getSupportingData = useEffect(() => {
-    if (databaseSwitchboardInstance && projectId && !isSyncInProgress) {
-      const promises = [
-        databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
-        databaseSwitchboardInstance.getManagementRegimesWithoutOfflineDeleted(projectId),
-        databaseSwitchboardInstance.getChoices(),
-        databaseSwitchboardInstance.getProjectProfiles(projectId),
-        databaseSwitchboardInstance.getBenthicAttributes(),
-        databaseSwitchboardInstance.getProject(projectId),
-      ]
+  const { currentUser } = useCurrentUser()
+  const { databaseSwitchboardInstance } = useDatabaseSwitchboardInstance()
+  const { isSyncInProgress } = useSyncStatus()
+  const { recordId, projectId } = useParams()
+  const handleHttpResponseError = useHttpResponseErrorHandler()
+  const isMounted = useIsMounted()
+  const observationsReducer = useReducer(benthicPhotoQuadratObservationReducer, [])
+  const [sites, setSites] = useState()
 
-      if (recordId && !isNewRecord) {
-        promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
-      }
-      Promise.all(promises)
-        .then(
-          ([
-            sitesResponse,
-            managementRegimesResponse,
-            choicesResponse,
-            projectProfilesResponse,
-            benthicAttributes,
-            projectResponse,
+  const [, observationsDispatch] = observationsReducer
 
-            // collectRecord needs to be last in array because its pushed to the promise array conditionally
-            collectRecordResponse,
-          ]) => {
+  useEffect(
+    function loadSupportingData() {
+      if (databaseSwitchboardInstance && !isSyncInProgress) {
+        if (isNewRecord) {
+          setIsLoading(false)
+        }
+
+        const promises = [
+          databaseSwitchboardInstance.getBenthicAttributes(),
+          databaseSwitchboardInstance.getSitesWithoutOfflineDeleted(projectId),
+        ]
+
+        if (recordId && !isNewRecord) {
+          promises.push(databaseSwitchboardInstance.getCollectRecord(recordId))
+        }
+
+        Promise.all(promises)
+          .then(([benthicAttributesResponse, sitesResponse, collectRecordResponse]) => {
             if (isMounted.current) {
               if (!isNewRecord && !collectRecordResponse && recordId) {
                 setIdsNotAssociatedWithData((previousState) => [...previousState, recordId])
-              }
-              if (!projectResponse && projectId) {
-                setIdsNotAssociatedWithData((previousState) => [...previousState, projectId])
               }
 
               setSubNavNode(
@@ -81,44 +81,54 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
                 }),
               )
 
-              const updateBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
-
-              setSites(sortArrayByObjectKey(sitesResponse, 'name'))
-              setManagementRegimes(sortArrayByObjectKey(managementRegimesResponse, 'name'))
-              setChoices(choicesResponse)
-              setObserverProfiles(sortArrayByObjectKey(projectProfilesResponse, 'profile_name'))
-              setBenthicAttributeOptions(updateBenthicAttributeOptions)
               setCollectRecordBeingEdited(collectRecordResponse)
+              setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributesResponse))
+              setSites(sitesResponse)
+
               setIsLoading(false)
             }
-          },
-        )
-        .catch((error) => {
-          handleHttpResponseError({
-            error,
-            callback: () => {
-              const errorMessage = isNewRecord
-                ? language.error.collectRecordSupportingDataUnavailable
-                : language.error.collectRecordUnavailable
-
-              toast.error(...getToastArguments(errorMessage))
-            },
           })
-        })
-    }
-  }, [
-    databaseSwitchboardInstance,
-    isMounted,
-    isNewRecord,
-    recordId,
-    projectId,
-    isSyncInProgress,
-    handleHttpResponseError,
-  ])
+          .catch((error) => {
+            handleHttpResponseError({
+              error,
+              callback: () => {
+                const errorMessage = isNewRecord
+                  ? language.error.collectRecordSupportingDataUnavailable
+                  : language.error.collectRecordUnavailable
+
+                toast.error(...getToastArguments(errorMessage))
+              },
+            })
+          })
+      }
+    },
+    [
+      databaseSwitchboardInstance,
+      isMounted,
+      isNewRecord,
+      recordId,
+      projectId,
+      handleHttpResponseError,
+      isSyncInProgress,
+    ],
+  )
+
+  const { getPersistedUnsavedFormData: getPersistedUnsavedFormikData } =
+    useUnsavedDirtyFormDataUtilities(`${currentUser.id}-unsavedSampleInfoInputs`)
+
+  const initialFormikFormValues = useMemo(() => {
+    return (
+      getPersistedUnsavedFormikData() ?? {
+        ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
+        ...getSampleInfoInitialValues(collectRecordBeingEdited),
+        ...getTransectInitialValues(collectRecordBeingEdited, 'benthic_transect'),
+        // ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
+      }
+    )
+  }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
 
   const handleCollectRecordChange = (collectRecordResponse) => {
     setCollectRecordBeingEdited(collectRecordResponse)
-
     setSubNavNode(
       getDataForSubNavNode({
         isNewRecord,
@@ -129,30 +139,24 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
     )
   }
 
-  const handleNewObservationAdd = (observationAttributeId) =>
-    setNewObservationToAdd(observationAttributeId)
-
-  const handleSitesChange = (updatedSiteRecords) => setSites(updatedSiteRecords)
-
-  const handleManagementRegimesChange = (updatedManagementRegimeRecords) =>
-    setManagementRegimes(updatedManagementRegimeRecords)
-
   const updateBenthicAttributeOptionsStateWithOfflineStorageData = useCallback(() => {
     if (databaseSwitchboardInstance) {
       databaseSwitchboardInstance.getBenthicAttributes().then((benthicAttributes) => {
-        const updatedBenthicAttributeOptions = getBenthicOptions(benthicAttributes)
-
-        setBenthicAttributeOptions(updatedBenthicAttributeOptions)
+        setBenthicAttributeSelectOptions(getBenthicOptions(benthicAttributes))
       })
     }
   }, [databaseSwitchboardInstance])
 
-  const onSubmitNewBenthicAttribute = ({
+  const closeNewBenthicAttributeModal = () => {
+    setIsNewBenthicAttributeModalOpen(false)
+  }
+
+  const handleSubmitNewBenthicAttribute = ({
     benthicAttributeParentId,
     benthicAttributeParentName,
     newBenthicAttributeName,
   }) => {
-    databaseSwitchboardInstance
+    return databaseSwitchboardInstance
       .addBenthicAttribute({
         benthicAttributeParentId,
         benthicAttributeParentName,
@@ -162,8 +166,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
         observationsDispatch({
           type: 'updateBenthicAttribute',
           payload: {
-            observationId: newObservationToAdd,
-            newBenthicAttribute: newBenthicAttribute.id,
+            observationId: observationIdToAddNewBenthicAttributeTo,
+            newValue: newBenthicAttribute.id,
           },
         })
         updateBenthicAttributeOptionsStateWithOfflineStorageData()
@@ -181,8 +185,8 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
               observationsDispatch({
                 type: 'updateBenthicAttribute',
                 payload: {
-                  observationId: newObservationToAdd,
-                  newBenthicAttribute: error.existingBenthicAttribute.id,
+                  observationId: observationIdToAddNewBenthicAttributeTo,
+                  newValue: error.existingBenthicAttribute.id,
                 },
               })
             } else {
@@ -191,42 +195,61 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
           },
         })
       })
-
-    return Promise.resolve()
   }
+
+  const PartiallyAppliedBenthicPhotoQuadratObservationsTable = useCallback(
+    (props) => {
+      // the conditional here makes tests happy
+      if (benthicAttributeSelectOptions.length) {
+        return (
+          <BenthicPhotoQuadratObservationTable
+            benthicAttributeSelectOptions={benthicAttributeSelectOptions}
+            {...props}
+          />
+        )
+      }
+
+      return null
+    },
+
+    [benthicAttributeSelectOptions],
+  )
 
   return (
     <ErrorBoundary>
-      <CollectRecordFormPage
-        isNewRecord={isNewRecord}
-        sampleUnitName="benthicpqt"
+      <CollectRecordFormPageAlternative
+        areObservationsInputsDirty={areObservationsInputsDirty}
         collectRecordBeingEdited={collectRecordBeingEdited}
         handleCollectRecordChange={handleCollectRecordChange}
-        handleNewObservationAdd={handleNewObservationAdd}
-        handleSubmitNewObservation={onSubmitNewBenthicAttribute}
-        observationsReducer={observationsReducer}
-        sites={sites}
-        handleSitesChange={handleSitesChange}
-        managementRegimes={managementRegimes}
-        handleManagementRegimesChange={handleManagementRegimesChange}
-        choices={choices}
         idsNotAssociatedWithData={idsNotAssociatedWithData}
-        isLoading={isLoading}
+        initialFormikFormValues={initialFormikFormValues}
+        isNewRecord={isNewRecord}
+        isParentDataLoading={isLoading}
+        observationsTable1Reducer={observationsReducer}
+        ObservationTable1={PartiallyAppliedBenthicPhotoQuadratObservationsTable}
+        sampleUnitFormatSaveFunction={reformatFormValuesIntoBenthicPQTRecord}
+        sampleUnitName="benthicpqt"
+        SampleUnitTransectInputs={BenthicPhotoQuadratTransectInputs}
+        setAreObservationsInputsDirty={setAreObservationsInputsDirty}
+        setIdsNotAssociatedWithData={setIdsNotAssociatedWithData}
+        setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
+        setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
         subNavNode={subNavNode}
-        observerProfiles={observerProfiles}
-        observationOptions={benthicAttributeOptions}
-        modalAttributeOptions={benthicAttributeOptions}
       />
+      {!!projectId && !!currentUser && (
+        <NewAttributeModal
+          isFishBeltSampleUnit={false}
+          isOpen={isNewBenthicAttributeModalOpen}
+          onDismiss={closeNewBenthicAttributeModal}
+          onSubmit={handleSubmitNewBenthicAttribute}
+          modalAttributeOptions={benthicAttributeSelectOptions}
+        />
+      )}
     </ErrorBoundary>
   )
 }
 
-BenthicPhotoQuadratForm.propTypes = {
-  isNewRecord: PropTypes.bool,
-}
-
-BenthicPhotoQuadratForm.defaultProps = {
-  isNewRecord: true,
-}
+BenthicPhotoQuadratForm.propTypes = { isNewRecord: PropTypes.bool }
+BenthicPhotoQuadratForm.defaultProps = { isNewRecord: true }
 
 export default BenthicPhotoQuadratForm
