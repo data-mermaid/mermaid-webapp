@@ -60,38 +60,38 @@ const StyledColgroup = styled('colgroup')`
 `
 
 const BenthicPhotoQuadratObservationTable = ({
-  areObservationsInputsDirty,
+  // areObservationsInputsDirty,
   areValidationsShowing,
-  benthicAttributeOptions,
+  benthicAttributeSelectOptions,
   choices,
   collectRecord,
+  ignoreObservationValidations,
   observationsReducer,
   openNewObservationModal,
-  persistUnsavedObservationsUtilities,
-  ignoreObservationValidations,
+  // persistUnsavedObservationsUtilities,
   resetObservationValidations,
   setAreObservationsInputsDirty,
 }) => {
-  const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
+  // const [isObservationReducerInitialized, setIsObservationReducerInitialized] = useState(false)
   const [autoFocusAllowed, setAutoFocusAllowed] = useState(false)
   const [observationsState, observationsDispatch] = observationsReducer
 
-  const {
-    persistUnsavedFormData: persistUnsavedObservationsData,
-    getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
-  } = persistUnsavedObservationsUtilities
+  // const {
+  //   persistUnsavedFormData: persistUnsavedObservationsData,
+  //   getPersistedUnsavedFormData: getPersistedUnsavedObservationsData,
+  // } = persistUnsavedObservationsUtilities
 
-  const _ensureUnsavedObservationsArePersisted = useEffect(() => {
-    if (areObservationsInputsDirty) {
-      persistUnsavedObservationsData(observationsState)
-    }
-  }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
+  // const _ensureUnsavedObservationsArePersisted = useEffect(() => {
+  //   if (areObservationsInputsDirty) {
+  //     persistUnsavedObservationsData(observationsState)
+  //   }
+  // }, [areObservationsInputsDirty, observationsState, persistUnsavedObservationsData])
 
-  const handleAddEmptyInitialObservation = useCallback(() => {
-    setAreObservationsInputsDirty(true)
+  // const handleAddEmptyInitialObservation = useCallback(() => {
+  //   setAreObservationsInputsDirty(true)
 
-    observationsDispatch({ type: 'addObservation' })
-  }, [observationsDispatch, setAreObservationsInputsDirty])
+  //   observationsDispatch({ type: 'addObservation' })
+  // }, [observationsDispatch, setAreObservationsInputsDirty])
 
   const handleAddObservation = () => {
     setAreObservationsInputsDirty(true)
@@ -99,40 +99,40 @@ const BenthicPhotoQuadratObservationTable = ({
     observationsDispatch({ type: 'addObservation' })
   }
 
-  const _initializeObservationReducer = useEffect(() => {
-    if (!isObservationReducerInitialized && collectRecord) {
-      const observationsFromApi = collectRecord.data.obs_benthic_photo_quadrats ?? []
+  // const _initializeObservationReducer = useEffect(() => {
+  //   if (!isObservationReducerInitialized && collectRecord) {
+  //     const observationsFromApi = collectRecord.data.obs_benthic_photo_quadrats ?? []
 
-      const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
-      const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
+  //     // const persistedUnsavedObservations = getPersistedUnsavedObservationsData()
+  //     // const initialObservationsToLoad = persistedUnsavedObservations ?? observationsFromApi
 
-      if (initialObservationsToLoad.length) {
-        observationsDispatch({
-          type: 'loadObservationsFromApi',
-          payload: initialObservationsToLoad,
-        })
-      }
-      if (!initialObservationsToLoad.length) {
-        handleAddEmptyInitialObservation()
-      }
+  //     if (initialObservationsToLoad.length) {
+  //       observationsDispatch({
+  //         type: 'loadObservationsFromApi',
+  //         payload: initialObservationsToLoad,
+  //       })
+  //     }
+  //     if (!initialObservationsToLoad.length) {
+  //       handleAddEmptyInitialObservation()
+  //     }
 
-      setIsObservationReducerInitialized(true)
-    }
-    if (!isObservationReducerInitialized && !collectRecord) {
-      handleAddEmptyInitialObservation()
-      setIsObservationReducerInitialized(true)
-    }
-  }, [
-    collectRecord,
-    getPersistedUnsavedObservationsData,
-    isObservationReducerInitialized,
-    observationsDispatch,
-    handleAddEmptyInitialObservation,
-  ])
+  //     setIsObservationReducerInitialized(true)
+  //   }
+  //   if (!isObservationReducerInitialized && !collectRecord) {
+  //     handleAddEmptyInitialObservation()
+  //     setIsObservationReducerInitialized(true)
+  //   }
+  // }, [
+  //   collectRecord,
+  //   getPersistedUnsavedObservationsData,
+  //   isObservationReducerInitialized,
+  //   observationsDispatch,
+  //   handleAddEmptyInitialObservation,
+  // ])
 
   const observationCategoryPercentages = useMemo(() => {
     const getCategory = (benthicAttributeId) =>
-      benthicAttributeOptions.find((benthic) => benthic.value === benthicAttributeId)
+      benthicAttributeSelectOptions.find((benthic) => benthic.value === benthicAttributeId)
 
     const addTopCategoryInfoToObservation = observationsState.map((obs) => {
       const benthicAttribute = getCategory(obs.attribute)
@@ -167,7 +167,7 @@ const BenthicPhotoQuadratObservationTable = ({
     })
 
     return categoryPercentages
-  }, [observationsState, benthicAttributeOptions])
+  }, [observationsState, benthicAttributeSelectOptions])
 
   const observationsRows = useMemo(() => {
     const growthFormOptions = getOptions(choices.growthforms.data)
@@ -306,12 +306,12 @@ const BenthicPhotoQuadratObservationTable = ({
             />
           </Td>
           <Td align="left">
-            {benthicAttributeOptions.length && (
+            {benthicAttributeSelectOptions.length && (
               <InputAutocompleteContainer>
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   aria-labelledby="benthic-attribute-label"
-                  options={benthicAttributeOptions}
+                  options={benthicAttributeSelectOptions}
                   onChange={handleBenthicAttributeChange}
                   value={attribute}
                   noResultsText={language.autocomplete.noResultsDefault}
@@ -379,7 +379,7 @@ const BenthicPhotoQuadratObservationTable = ({
   }, [
     areValidationsShowing,
     autoFocusAllowed,
-    benthicAttributeOptions,
+    benthicAttributeSelectOptions,
     collectRecord,
     choices,
     observationsDispatch,
@@ -454,9 +454,9 @@ const BenthicPhotoQuadratObservationTable = ({
 }
 
 BenthicPhotoQuadratObservationTable.propTypes = {
-  areObservationsInputsDirty: PropTypes.bool.isRequired,
+  // areObservationsInputsDirty: PropTypes.bool.isRequired,
   areValidationsShowing: PropTypes.bool.isRequired,
-  benthicAttributeOptions: inputOptionsPropTypes.isRequired,
+  benthicAttributeSelectOptions: inputOptionsPropTypes.isRequired,
   choices: choicesPropType.isRequired,
   collectRecord: benthicPhotoQuadratPropType,
   observationsReducer: observationsReducerPropType,

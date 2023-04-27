@@ -235,6 +235,7 @@ const CollectRecordFormPageAlternative = ({
 
   useEffect(
     function ensureUnsavedObservationsArePersisted() {
+      // the abstraction is takeing care of persisting observations data now, so BPQ observations doesnt need to do that
       if (areObservationsInputsDirty) {
         persistUnsavedObservationsTable1Data(observationsTable1State)
         persistUnsavedObservationsTable2Data(observationsTable2State)
@@ -526,7 +527,6 @@ const CollectRecordFormPageAlternative = ({
         />
         <div ref={observationTableRef}>
           <ObservationTable1
-            testId="observations-section"
             areValidationsShowing={areValidationsShowing}
             choices={choices}
             collectRecord={collectRecordBeingEdited}
@@ -537,6 +537,7 @@ const CollectRecordFormPageAlternative = ({
             setAreObservationsInputsDirty={setAreObservationsInputsDirty}
             setIsNewBenthicAttributeModalOpen={setIsNewBenthicAttributeModalOpen}
             setObservationIdToAddNewBenthicAttributeTo={setObservationIdToAddNewBenthicAttributeTo}
+            testId="observations-section"
           />
         </div>
         {ObservationTable2 ? (

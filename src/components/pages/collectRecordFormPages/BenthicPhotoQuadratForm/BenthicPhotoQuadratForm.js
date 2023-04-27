@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import React, { useState, useReducer, useEffect, useMemo, useCallback } from 'react'
 
 import {
+  getBenthicPhotoQuadratAdditionalValues,
   getCollectRecordDataInitialValues,
   getSampleInfoInitialValues,
   getTransectInitialValues,
@@ -122,7 +123,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(collectRecordBeingEdited),
         ...getTransectInitialValues(collectRecordBeingEdited, 'benthic_transect'),
-        // ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
+        ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
       }
     )
   }, [collectRecordBeingEdited, getPersistedUnsavedFormikData])
