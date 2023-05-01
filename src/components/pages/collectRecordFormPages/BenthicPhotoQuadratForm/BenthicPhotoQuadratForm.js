@@ -122,7 +122,7 @@ const BenthicPhotoQuadratForm = ({ isNewRecord }) => {
       getPersistedUnsavedFormikData() ?? {
         ...getCollectRecordDataInitialValues(collectRecordBeingEdited),
         ...getSampleInfoInitialValues(collectRecordBeingEdited),
-        ...getTransectInitialValues(collectRecordBeingEdited, 'benthic_transect'),
+        ...getTransectInitialValues(collectRecordBeingEdited, 'quadrat_transect'),
         ...getBenthicPhotoQuadratAdditionalValues(collectRecordBeingEdited),
       }
     )
