@@ -44,7 +44,7 @@ const FishBeltTransectInputs = ({
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
-  const [observationsState] = observationsReducer
+  const [observationsState, observationsDispatch] = observationsReducer
   const {
     belttransectwidths,
     fishsizebins,
@@ -75,7 +75,6 @@ const FishBeltTransectInputs = ({
   const hasFishBeltObservations =
     !!observationsState.length > 0 && observationsState[0]?.fish_attribute
   const [isClearSizeValueModalOpen, setIsClearSizeValueModalOpen] = useState(false)
-  const [isClearingSizeValues, setIsClearingSizeValues] = useState(false)
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
@@ -244,9 +243,10 @@ const FishBeltTransectInputs = ({
   }
 
   const clearSizeValues = () => {
-    setIsClearingSizeValues(true)
-    setIsClearingSizeValues(false)
-    console.log('clearing size values')
+    observationsDispatch({
+      type: 'resetFishSizes',
+    })
+    closeClearSizeValuesModal()
   }
 
   return (
@@ -491,7 +491,6 @@ const FishBeltTransectInputs = ({
         />
       </InputWrapper>
       <ClearSizeValuesModal
-        isLoading={isClearingSizeValues}
         isOpen={isClearSizeValueModalOpen}
         modalText={language.clearSizeValuesModal}
         clearSizeValues={clearSizeValues}
