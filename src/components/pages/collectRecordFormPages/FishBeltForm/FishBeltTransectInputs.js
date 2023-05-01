@@ -75,6 +75,7 @@ const FishBeltTransectInputs = ({
   const hasFishBeltObservations =
     !!observationsState.length > 0 && observationsState[0]?.fish_attribute
   const [isClearSizeValueModalOpen, setIsClearSizeValueModalOpen] = useState(false)
+  const [sizeBinEvent, setSizeBinEvent] = useState({})
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
@@ -172,9 +173,11 @@ const FishBeltTransectInputs = ({
       validationPath: WIDTH_VALIDATION_PATH,
     })
   }
+
   const handleSizeBinChange = (event) => {
     if (hasFishBeltObservations) {
       openClearSizeValuesModal()
+      setSizeBinEvent(event)
     } else {
       onSizeBinChange(event)
       resetNonObservationFieldValidations({
@@ -242,7 +245,12 @@ const FishBeltTransectInputs = ({
     })
   }
 
-  const clearSizeValues = () => {
+  const handleResetSizeValues = () => {
+    onSizeBinChange(sizeBinEvent)
+    resetNonObservationFieldValidations({
+      inputName: 'size_bin',
+      validationPath: SIZE_BIN_VALIDATION_PATH,
+    })
     observationsDispatch({
       type: 'resetFishSizes',
     })
@@ -493,7 +501,7 @@ const FishBeltTransectInputs = ({
       <ClearSizeValuesModal
         isOpen={isClearSizeValueModalOpen}
         modalText={language.clearSizeValuesModal}
-        clearSizeValues={clearSizeValues}
+        handleResetSizeValues={handleResetSizeValues}
         onDismiss={closeClearSizeValuesModal}
         openModal={openClearSizeValuesModal}
       />

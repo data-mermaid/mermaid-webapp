@@ -3,11 +3,11 @@ import React from 'react'
 import { ButtonCaution, ButtonSecondary } from '../../../generic/buttons'
 import Modal, { RightFooter } from '../../../generic/Modal/Modal'
 
-const ClearSizeValuesModal = ({ isOpen, modalText, clearSizeValues, onDismiss }) => {
+const ClearSizeValuesModal = ({ isOpen, modalText, handleResetSizeValues, onDismiss }) => {
   const footerContent = (
     <RightFooter>
       <ButtonSecondary onClick={onDismiss}>{modalText.no}</ButtonSecondary>
-      <ButtonCaution onClick={clearSizeValues}>{modalText.yes}</ButtonCaution>
+      <ButtonCaution onClick={handleResetSizeValues}>{modalText.yes}</ButtonCaution>
     </RightFooter>
   )
 
@@ -32,7 +32,7 @@ ClearSizeValuesModal.propTypes = {
     yes: PropTypes.string,
     no: PropTypes.string,
   }).isRequired,
-  clearSizeValues: PropTypes.func.isRequired,
+  handleResetSizeValues: PropTypes.func.isRequired,
   onDismiss: PropTypes.func.isRequired,
 }
 
