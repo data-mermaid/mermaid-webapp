@@ -200,6 +200,13 @@ const createNewOptionModal = {
   submit: 'Send to MERMAID for review',
 }
 
+const clearSizeValuesModal = {
+  title: `Clear Size Values`,
+  prompt: `This will clear all the size values for all observations.`,
+  yes: `Clear Size Values`,
+  no: 'Cancel',
+}
+
 const autocomplete = {
   noResultsDefault: 'No results found',
 }
@@ -477,6 +484,7 @@ const getValidationMessage = (validation, projectId = '') => {
 export default {
   apiDataTableNames,
   autocomplete,
+  clearSizeValuesModal,
   createNewOptionModal,
   deleteRecord,
   error,
