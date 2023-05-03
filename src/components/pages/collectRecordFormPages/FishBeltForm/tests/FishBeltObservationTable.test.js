@@ -175,7 +175,7 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
   await waitFor(() => expect(sizeInputs.length).toEqual(2))
 })
 
-test('Fish size bin radios are disabled when there are active observations, delete all observations -> Fish size bin radios are re-enabled', async () => {
+test('Fish size bin radio buttons remain enabled even after new observation rows are added', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
   await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
@@ -201,17 +201,18 @@ test('Fish size bin radios are disabled when there are active observations, dele
   const binAGRRARadio = within(fishbeltForm).getByLabelText('AGRRA')
   const binWCSIndiaRadio = within(fishbeltForm).getByLabelText('WCS India')
 
-  expect(bin1Radio).toBeDisabled()
-  expect(bin5Radio).toBeDisabled()
-  expect(bin10Radio).toBeDisabled()
-  expect(binAGRRARadio).toBeDisabled()
-  expect(binWCSIndiaRadio).toBeDisabled()
+  expect(bin1Radio).toBeEnabled()
+  expect(bin5Radio).toBeEnabled()
+  expect(bin10Radio).toBeEnabled()
+  expect(binAGRRARadio).toBeEnabled()
+  expect(binWCSIndiaRadio).toBeEnabled()
 
-  const observationRows = within(screen.getByLabelText('Observations')).getAllByRole('row')
+  const addRowButton = within(fishbeltForm).getByRole('button', { name: 'Add Row' })
 
-  userEvent.click(within(observationRows[1]).getByLabelText('Delete Observation'))
-  userEvent.click(within(observationRows[2]).getByLabelText('Delete Observation'))
-  userEvent.click(within(observationRows[3]).getByLabelText('Delete Observation'))
+  expect(addRowButton).toBeEnabled()
+
+  userEvent.click(addRowButton)
+  userEvent.click(addRowButton)
 
   expect(bin1Radio).toBeEnabled()
   expect(bin5Radio).toBeEnabled()
