@@ -65,9 +65,7 @@
     "test": "TZ=UTC react-scripts test",
     "eject": "react-scripts eject",
     "prettier": "prettier --write ./src/**/*.js ",
-    "lint": "eslint './src/**/*.js'",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "lint": "eslint './src/**/*.js'"
   },
   "eslintConfig": {
     "extends": [
@@ -89,12 +87,6 @@
   },
   "devDependencies": {
     "@sparkgeo/eslint-config-react": "^0.9.0",
-    "@storybook/addon-actions": "^6.1.16",
-    "@storybook/addon-essentials": "^6.1.16",
-    "@storybook/addon-links": "^6.1.16",
-    "@storybook/node-logger": "^6.1.16",
-    "@storybook/preset-create-react-app": "^3.1.5",
-    "@storybook/react": "^6.1.16",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.5.0",
