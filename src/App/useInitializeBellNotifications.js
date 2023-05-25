@@ -4,7 +4,11 @@ import { toast } from 'react-toastify'
 
 import language from '../language'
 import { getToastArguments } from '../library/getToastArguments'
-import { getBellNotifications, deleteBellNotification } from './bellNotificationHelpers'
+import {
+  getBellNotifications,
+  deleteBellNotification,
+  deleteAllBellNotifications,
+} from './bellNotificationHelpers'
 
 export const useInitializeBellNotifications = ({
   apiBaseUrl,
@@ -74,5 +78,29 @@ export const useInitializeBellNotifications = ({
     }
   }
 
-  return { notifications, deleteNotification }
+  const deleteAllNotifications = () => {
+    // eslint-disable-next-line no-console
+    console.log('delete all notifications exists!!')
+    if (isMermaidAuthenticated && apiBaseUrl) {
+      deleteAllBellNotifications({
+        apiBaseUrl,
+        getAccessToken,
+        isMermaidAuthenticated,
+        isAppOnline,
+      })
+        .then(() => {
+          updateNotifications()
+        })
+        .catch((error) => {
+          handleHttpResponseErrorWithLogoutAndSetServerNotReachableApplied({
+            error,
+            callback: () => {
+              toast.error(...getToastArguments(language.error.notificationNotDeleted))
+            },
+          })
+        })
+    }
+  }
+
+  return { notifications, deleteNotification, deleteAllNotifications }
 }
