@@ -79,8 +79,6 @@ export const useInitializeBellNotifications = ({
   }
 
   const deleteAllNotifications = () => {
-    // eslint-disable-next-line no-console
-    console.log('delete all notifications exists!!')
     if (isMermaidAuthenticated && apiBaseUrl) {
       deleteAllBellNotifications({
         apiBaseUrl,
