@@ -14,6 +14,7 @@ import {
   NotificationHeader,
   NotificationStatus,
   NoNotifications,
+  DismissButtonSecondary,
 } from './BellNotificationDropDown.styles'
 import { IconClose } from '../icons'
 import language from '../../language'
@@ -44,6 +45,7 @@ const BellNotificationDropDown = () => {
 
   return (
     <NotificationCardWrapper>
+      <DismissButtonSecondary>{language.header.dismissAllNotifications}</DismissButtonSecondary>
       {sortedNotifications.map((notification) => {
         const dateTime = moment(notification.created_on)
 
