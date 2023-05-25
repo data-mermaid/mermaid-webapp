@@ -69,7 +69,7 @@ export const deleteAllBellNotifications = async ({
   isAppOnline,
 }) => {
   if (!apiBaseUrl) {
-    throw new Error('deleteAllBellNotificatios needs an API base url')
+    throw new Error('deleteAllBellNotifications needs an API base url')
   }
 
   const isAuthenticatedAndReady = isMermaidAuthenticated
