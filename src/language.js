@@ -71,6 +71,7 @@ const error = {
   managementRegimeRecordUnavailable: 'Management Regime record data are currently unavailable.',
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
+  notificationsNotDeleted: 'Notifications could not be removed',
   projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
@@ -213,6 +214,7 @@ const autocomplete = {
 
 const header = {
   noNotifications: 'There are currently no notifications',
+  dismissAllNotifications: 'Dismiss all notifications',
 }
 
 const table = {

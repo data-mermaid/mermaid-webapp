@@ -14,6 +14,7 @@ import {
   NotificationHeader,
   NotificationStatus,
   NoNotifications,
+  DismissButtonSecondary,
 } from './BellNotificationDropDown.styles'
 import { IconClose } from '../icons'
 import language from '../../language'
@@ -23,10 +24,15 @@ import { sortArrayByObjectKey } from '../../library/arrays/sortArrayByObjectKey'
 const sanitizeHtml = domPurify.sanitize
 
 const BellNotificationDropDown = () => {
-  const { notifications, deleteNotification } = useBellNotifications()
+  const { notifications, deleteNotification, deleteAllNotifications } = useBellNotifications()
 
   const dismissNotification = (event, id) => {
     deleteNotification(id)
+    event.stopPropagation()
+  }
+
+  const dismissAllNotifications = (event) => {
+    deleteAllNotifications()
     event.stopPropagation()
   }
 
@@ -44,6 +50,9 @@ const BellNotificationDropDown = () => {
 
   return (
     <NotificationCardWrapper>
+      <DismissButtonSecondary onClick={(event) => dismissAllNotifications(event)}>
+        {language.header.dismissAllNotifications}
+      </DismissButtonSecondary>
       {sortedNotifications.map((notification) => {
         const dateTime = moment(notification.created_on)
 
