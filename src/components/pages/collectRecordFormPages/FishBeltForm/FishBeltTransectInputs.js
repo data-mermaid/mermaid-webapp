@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -15,6 +15,7 @@ import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioW
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
+import ClearSizeValuesModal from './ClearSizeValueModal'
 import language from '../../../../language'
 
 const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
@@ -42,7 +43,7 @@ const FishBeltTransectInputs = ({
   validationsApiData,
   validationPropertiesWithDirtyResetOnInputChange,
 }) => {
-  const [observationsState] = observationsReducer
+  const [observationsState, observationsDispatch] = observationsReducer
   const {
     belttransectwidths,
     fishsizebins,
@@ -72,6 +73,8 @@ const FishBeltTransectInputs = ({
   // account for empty starter row
   const hasFishBeltObservations =
     !!observationsState.length > 0 && observationsState[0]?.fish_attribute
+  const [isClearSizeValueModalOpen, setIsClearSizeValueModalOpen] = useState(false)
+  const [sizeBinEvent, setSizeBinEvent] = useState({})
 
   const transectNumberValidationProperties = getValidationPropertiesForInput(
     fishbelt_transect?.number,
@@ -132,6 +135,13 @@ const FishBeltTransectInputs = ({
     areValidationsShowing,
   )
 
+  const openClearSizeValuesModal = () => {
+    setIsClearSizeValueModalOpen(true)
+  }
+  const closeClearSizeValuesModal = () => {
+    setIsClearSizeValueModalOpen(false)
+  }
+
   const handleTransectNumberChange = (event) => {
     formik.handleChange(event)
     resetNonObservationFieldValidations({
@@ -162,12 +172,18 @@ const FishBeltTransectInputs = ({
       validationPath: WIDTH_VALIDATION_PATH,
     })
   }
+
   const handleSizeBinChange = (event) => {
-    onSizeBinChange(event)
-    resetNonObservationFieldValidations({
-      inputName: 'size_bin',
-      validationPath: SIZE_BIN_VALIDATION_PATH,
-    })
+    if (hasFishBeltObservations) {
+      openClearSizeValuesModal()
+      setSizeBinEvent(event)
+    } else {
+      onSizeBinChange(event)
+      resetNonObservationFieldValidations({
+        inputName: 'size_bin',
+        validationPath: SIZE_BIN_VALIDATION_PATH,
+      })
+    }
   }
   const handleReefSlopeChange = (event) => {
     formik.handleChange(event)
@@ -226,6 +242,18 @@ const FishBeltTransectInputs = ({
       inputName: 'depth',
       validationPath: DEPTH_VALIDATION_PATH,
     })
+  }
+
+  const handleResetSizeValues = () => {
+    onSizeBinChange(sizeBinEvent)
+    resetNonObservationFieldValidations({
+      inputName: 'size_bin',
+      validationPath: SIZE_BIN_VALIDATION_PATH,
+    })
+    observationsDispatch({
+      type: 'resetFishSizes',
+    })
+    closeClearSizeValuesModal()
   }
 
   return (
@@ -349,7 +377,6 @@ const FishBeltTransectInputs = ({
           onChange={handleWidthChange}
         />
         <InputRadioWithLabelAndValidation
-          disabled={hasFishBeltObservations}
           label="Fish Size Bin (cm)"
           required={true}
           id="size_bin"
@@ -366,9 +393,6 @@ const FishBeltTransectInputs = ({
             sizeBinValidationProperties,
             'size_bin',
           )}
-          additionalText={
-            hasFishBeltObservations ? <>{language.error.disabledFishSizeBinSelect}</> : null
-          }
           value={formik.values.size_bin}
           onChange={handleSizeBinChange}
         />
@@ -473,6 +497,13 @@ const FishBeltTransectInputs = ({
           onChange={handleNotesChange}
         />
       </InputWrapper>
+      <ClearSizeValuesModal
+        isOpen={isClearSizeValueModalOpen}
+        modalText={language.clearSizeValuesModal}
+        handleResetSizeValues={handleResetSizeValues}
+        onDismiss={closeClearSizeValuesModal}
+        openModal={openClearSizeValuesModal}
+      />
     </>
   )
 }

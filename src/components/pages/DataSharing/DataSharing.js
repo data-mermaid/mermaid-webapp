@@ -187,7 +187,7 @@ const DataSharing = () => {
 
   const isTestProject = projectBeingEdited?.status === PROJECT_CODES.status.test
   const contentViewByRole = (
-    <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'pointer'}>
+    <MaxWidthInputWrapper cursor={isDataUpdating ? 'wait' : 'auto'}>
       <h3>Data are much more powerful when shared.</h3>
       <P>{language.pages.dataSharing.introductionParagraph}</P>
       <ButtonPrimary type="button" onClick={openDataSharingInfoModal}>

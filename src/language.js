@@ -71,6 +71,7 @@ const error = {
   managementRegimeRecordUnavailable: 'Management Regime record data are currently unavailable.',
   notificationsUnavailable: 'Notifications are unavailable.',
   notificationNotDeleted: 'Notification could not be removed.',
+  notificationsNotDeleted: 'Notifications could not be removed',
   projectSave: 'The project has not been saved.',
   projectsUnavailable: 'Project data are currently unavailable.',
   projectWithSameName: 'A project with the same name already exists.',
@@ -200,12 +201,20 @@ const createNewOptionModal = {
   submit: 'Send to MERMAID for review',
 }
 
+const clearSizeValuesModal = {
+  title: `Clear Size Values`,
+  prompt: `This will clear all the size values for all observations.`,
+  yes: `Clear Size Values`,
+  no: 'Cancel',
+}
+
 const autocomplete = {
   noResultsDefault: 'No results found',
 }
 
 const header = {
   noNotifications: 'There are currently no notifications',
+  dismissAllNotifications: 'Dismiss all notifications',
 }
 
 const table = {
@@ -477,6 +486,7 @@ const getValidationMessage = (validation, projectId = '') => {
 export default {
   apiDataTableNames,
   autocomplete,
+  clearSizeValuesModal,
   createNewOptionModal,
   deleteRecord,
   error,
