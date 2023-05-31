@@ -42,10 +42,13 @@ jobs:
     needs: [deps-cache]
     uses: ./.github/workflows/_lint.yml
   
-  call-test:
-    if: github.event.pull_request.draft == false
-    needs: [deps-cache]
-    uses: ./.github/workflows/_test.yml
+  # NOTE: removing this until unit tests run faster in CI/CD
+  # https://trello.com/c/t0w5Dsl8/160-fix-turn-on-tests-for-frontend-ci-cd
+  # 
+  # call-test:
+  #   if: github.event.pull_request.draft == false
+  #   needs: [deps-cache, call-lint]
+  #   uses: ./.github/workflows/_test.yml
 
   call-preview:
     if: github.event.pull_request.draft == false

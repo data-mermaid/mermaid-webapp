@@ -38,7 +38,7 @@ jobs:
   
   call-test:
     if: github.event.pull_request.draft == false
-    needs: [deps-cache]
+    needs: [deps-cache, call-lint]
     uses: ./.github/workflows/_test.yml
 
   call-cdk-deploy:
