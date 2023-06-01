@@ -7,7 +7,7 @@ export const Menu = styled('ul')`
   background: ${theme.color.white};
   position: absolute;
   width: 100%;
-  max-height: 20rem;
+  max-height: 18rem;
   cursor: default;
   overflow-y: auto;
   overflow-x: hidden;

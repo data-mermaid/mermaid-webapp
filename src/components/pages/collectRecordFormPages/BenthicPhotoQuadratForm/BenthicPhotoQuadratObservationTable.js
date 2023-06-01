@@ -311,6 +311,7 @@ const BenthicPhotoQuadratObservationTable = ({
                 <ObservationAutocomplete
                   id={`observation-${observationId}`}
                   aria-labelledby="benthic-attribute-label"
+                  isLastRow={observationsState.length === rowNumber}
                   options={benthicAttributeOptions}
                   onChange={handleBenthicAttributeChange}
                   value={attribute}
