@@ -272,12 +272,15 @@ const pages = {
   projectInfo: {
     createOrganizationTitle: 'Suggest a new organization',
     newOrganizationNameLink: 'Suggest a new organization to MERMAID...',
-    noNotes: 'No notes for this project',
+    noNotes: 'No notes for this Project',
     noOrganizationFound: `No organization found.`,
     organizationsHelperText: `Type to search for an organization.`,
-    removeOrganization: `Remove organization from project`,
-    suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your project.`,
+    removeOrganization: `Remove organization from Project`,
+    suggestionOrganizationHelperText: `If your organization is approved, it'll be automatically added to your Project.`,
     title: 'Project Info',
+    organizations: 'Organizations',
+    notes: 'Notes',
+    noOrganization: 'This Project has no organizations.',
   },
   dataSharing: {
     introductionParagraph: `Given the urgent need for global coral reef conservation, MERMAID is committed to working collectively as a community and using the power of data to help make faster, better decisions. Coral reef monitoring data are collected with the intent of advancing coral reef science and improving management. We recognize the large effort to collect data and your sense of ownership. While not required, we hope you choose to make your data available to fuel new discoveries and inform conservation solutions.`,
