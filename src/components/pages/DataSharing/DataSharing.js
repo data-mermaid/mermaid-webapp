@@ -49,9 +49,18 @@ const DataSharingTable = styled(Table)`
 `
 const CheckBoxLabel = styled.label`
   display: inline-block;
+  cursor: ${(props) => props.cursor || 'pointer'};
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
   }
+`
+
+const Input = styled.input`
+  cursor: ${(props) => props.cursor || 'pointer'};
+`
+
+const Label = styled.label`
+  cursor: ${(props) => props.cursor || 'pointer'};
 `
 
 const ReadOnlyDataSharingContent = ({ project }) => (
@@ -227,8 +236,11 @@ const DataSharing = () => {
                 <Td>Fish Belt</Td>
                 {dataPolicyOptions.map((item) => (
                   <Td key={item.value}>
-                    <label htmlFor={`fish-belt${item.value}`}>
-                      <input
+                    <Label
+                      htmlFor={`fish-belt${item.value}`}
+                      cursor={isDataUpdating ? 'wait' : 'auto'}
+                    >
+                      <Input
                         type="radio"
                         value={item.value}
                         name="fish-belt"
@@ -236,8 +248,9 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_beltfish === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
                         disabled={isDataUpdating}
+                        cursor={isDataUpdating ? 'wait' : 'auto'}
                       />
-                    </label>
+                    </Label>
                   </Td>
                 ))}
               </Tr>
@@ -245,8 +258,11 @@ const DataSharing = () => {
                 <Td>Benthic: PIT, LIT, and Habitat Complexity</Td>
                 {dataPolicyOptions.map((item) => (
                   <Td key={item.value}>
-                    <label htmlFor={`benthic${item.value}`}>
-                      <input
+                    <Label
+                      htmlFor={`benthic${item.value}`}
+                      cursor={isDataUpdating ? 'wait' : 'auto'}
+                    >
+                      <Input
                         type="radio"
                         value={item.value}
                         name="benthic"
@@ -254,8 +270,9 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_benthiclit === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
                         disabled={isDataUpdating}
+                        cursor={isDataUpdating ? 'wait' : 'auto'}
                       />
-                    </label>
+                    </Label>
                   </Td>
                 ))}
               </Tr>
@@ -263,8 +280,11 @@ const DataSharing = () => {
                 <Td>Bleaching</Td>
                 {dataPolicyOptions.map((item) => (
                   <Td key={item.value}>
-                    <label htmlFor={`bleaching${item.value}`}>
-                      <input
+                    <Label
+                      htmlFor={`bleaching${item.value}`}
+                      cursor={isDataUpdating ? 'wait' : 'auto'}
+                    >
+                      <Input
                         type="radio"
                         name="bleaching"
                         id={`bleaching${item.value}`}
@@ -272,8 +292,9 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
                         disabled={isDataUpdating}
+                        cursor={isDataUpdating ? 'wait' : 'auto'}
                       />
-                    </label>
+                    </Label>
                   </Td>
                 ))}
               </Tr>
@@ -285,13 +306,14 @@ const DataSharing = () => {
       )}
       {isAdminUser ? (
         <>
-          <CheckBoxLabel>
-            <input
+          <CheckBoxLabel cursor={isDataUpdating ? 'wait' : 'auto'}>
+            <Input
               id="test-project-toggle"
               type="checkbox"
               checked={isTestProject}
               onChange={handleTestProjectChange}
               disabled={isDataUpdating}
+              cursor={isDataUpdating ? 'wait' : 'auto'}
             />{' '}
             {language.pages.dataSharing.isTestProject}
           </CheckBoxLabel>
