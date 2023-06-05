@@ -49,18 +49,18 @@ const DataSharingTable = styled(Table)`
 `
 const CheckBoxLabel = styled.label`
   display: inline-block;
-  cursor: ${(props) => props.cursor || 'pointer'};
+  cursor: ${(props) => props.cursor};
   input {
     margin: 0 ${theme.spacing.xsmall} 0 0;
   }
 `
 
 const Input = styled.input`
-  cursor: ${(props) => props.cursor || 'pointer'};
+  cursor: ${(props) => props.cursor};
 `
 
 const Label = styled.label`
-  cursor: ${(props) => props.cursor || 'pointer'};
+  cursor: ${(props) => props.cursor};
 `
 
 const ReadOnlyDataSharingContent = ({ project }) => (
@@ -238,7 +238,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`fish-belt${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'auto'}
+                      cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -248,7 +248,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_beltfish === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_beltfish')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'auto'}
+                        cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -260,7 +260,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`benthic${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'auto'}
+                      cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -270,7 +270,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_benthiclit === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_benthiclit')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'auto'}
+                        cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -282,7 +282,7 @@ const DataSharing = () => {
                   <Td key={item.value}>
                     <Label
                       htmlFor={`bleaching${item.value}`}
-                      cursor={isDataUpdating ? 'wait' : 'auto'}
+                      cursor={isDataUpdating ? 'wait' : 'pointer'}
                     >
                       <Input
                         type="radio"
@@ -292,7 +292,7 @@ const DataSharing = () => {
                         checked={projectBeingEdited?.data_policy_bleachingqc === item.value}
                         onChange={(e) => handleDataPolicyChange(e, 'data_policy_bleachingqc')}
                         disabled={isDataUpdating}
-                        cursor={isDataUpdating ? 'wait' : 'auto'}
+                        cursor={isDataUpdating ? 'wait' : 'pointer'}
                       />
                     </Label>
                   </Td>
@@ -313,7 +313,7 @@ const DataSharing = () => {
               checked={isTestProject}
               onChange={handleTestProjectChange}
               disabled={isDataUpdating}
-              cursor={isDataUpdating ? 'wait' : 'auto'}
+              cursor={isDataUpdating ? 'wait' : 'pointer'}
             />{' '}
             {language.pages.dataSharing.isTestProject}
           </CheckBoxLabel>
