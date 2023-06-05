@@ -37,6 +37,7 @@ const InputAutocomplete = ({
   className,
   helperText,
   id,
+  isLastRow,
   noResultsAction,
   noResultsText,
   onChange,
@@ -80,12 +81,13 @@ const InputAutocomplete = ({
     (changes) => {
       const { selectedItem, inputValue } = changes
 
-      const shouldMenuBeOpen = inputValue?.length >= 3 && inputValue !== selectedValue.label
+      const shouldMenuBeOpen = inputValue?.length >= 1 && inputValue !== selectedValue.label
 
       if (selectedItem) {
         onChange(selectedItem)
         setIsMenuOpen(false)
       }
+
       if (!selectedItem && inputValue) {
         setIsMenuOpen(shouldMenuBeOpen)
       }
@@ -99,6 +101,11 @@ const InputAutocomplete = ({
 
   const handleInputValueChange = useCallback(
     (inputValueItem) => {
+      // scroll to bottom of page to show full menu contents
+      if (isLastRow && isMenuOpen) {
+        window.scrollTo(0, document.body.scrollHeight)
+      }
+
       const matchingMenuItems = inputValueItem
         ? matchSorter(options, inputValueItem, {
             keys: ['label'],
@@ -107,7 +114,7 @@ const InputAutocomplete = ({
 
       setMenuItems(matchingMenuItems)
     },
-    [options],
+    [options, isLastRow, isMenuOpen],
   )
 
   const getMenuContents = useCallback(
@@ -180,6 +187,7 @@ const InputAutocomplete = ({
 InputAutocomplete.propTypes = {
   className: PropTypes.string,
   helperText: PropTypes.string,
+  isLastRow: PropTypes.bool.isRequired,
   id: PropTypes.string.isRequired,
   noResultsAction: PropTypes.node,
   noResultsText: PropTypes.string,

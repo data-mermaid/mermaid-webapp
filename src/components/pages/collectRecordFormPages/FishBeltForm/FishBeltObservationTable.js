@@ -342,6 +342,7 @@ const FishBeltObservationTable = ({
                   // and the logic to focus on the right one. in react autoFocus just focuses
                   // the newest element with the autoFocus tag
                   autoFocus={autoFocusAllowed}
+                  isLastRow={observationsState.length === rowNumber}
                   aria-labelledby="fish-name-label"
                   options={fishNameOptions}
                   onChange={handleFishNameChange}
