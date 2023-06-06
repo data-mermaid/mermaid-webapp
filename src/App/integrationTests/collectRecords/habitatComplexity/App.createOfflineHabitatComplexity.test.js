@@ -21,11 +21,20 @@ const saveHabitatComplexityRecord = async () => {
   userEvent.type(screen.getByLabelText('Label'), 'some label')
   userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
   userEvent.type(screen.getByLabelText('Interval Size'), '7')
-  userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('flat'))
-  userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor'))
-  userEvent.click(within(screen.getByTestId('current')).getByLabelText('high'))
-  userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('deep'))
-  userEvent.click(within(screen.getByTestId('tide')).getByLabelText('falling'))
+  userEvent.selectOptions(
+    await screen.findByLabelText('Reef Slope'),
+    'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+  )
+  userEvent.selectOptions(
+    screen.getByLabelText('Visibility'),
+    'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
+  userEvent.selectOptions(
+    screen.getByLabelText('Relative Depth'),
+    '8f381e71-219e-469c-8c13-231b088fb861',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
   userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
@@ -63,11 +72,16 @@ describe('Offline', () => {
     expect(within(form).getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
     expect(screen.getByLabelText('Interval Size')).toHaveValue(7)
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('falling')).toBeChecked()
+    // Reef slope select
+    expect(screen.getByDisplayValue('flat'))
+    // Visibility select
+    expect(screen.getByDisplayValue('1-5m - poor'))
+    // Current select
+    expect(screen.getByDisplayValue('high'))
+    // Relative Depth select
+    expect(screen.getByDisplayValue('deep'))
+    // Tide select
+    expect(screen.getByDisplayValue('falling'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
   test('New Habitat Complexity save success show new record in collecting table', async () => {
@@ -137,8 +151,8 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
     expect(screen.getByLabelText('Interval Size')).toHaveValue(7)
 
-    // reef slope radio checked on flat value
-    expect(screen.getByLabelText('flat')).toBeChecked()
+    // Reef Slope select on flat value
+    expect(screen.getByDisplayValue('flat'))
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
