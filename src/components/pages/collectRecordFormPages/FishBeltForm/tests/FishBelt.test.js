@@ -15,11 +15,6 @@ import FishBeltForm from '../FishBeltForm'
 import { getMockDexieInstancesAllSuccess } from '../../../../../testUtilities/mockDexie'
 import { initiallyHydrateOfflineStorageWithMockData } from '../../../../../testUtilities/initiallyHydrateOfflineStorageWithMockData'
 
-const fakeCurrentUser = {
-  id: 'fake-id',
-  first_name: 'FakeFirstName',
-}
-
 test('FishBelt component in EDIT mode renders with the expected UI elements', async () => {
   const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
 
