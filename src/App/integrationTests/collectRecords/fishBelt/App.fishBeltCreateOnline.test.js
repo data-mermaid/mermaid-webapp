@@ -19,13 +19,28 @@ const saveFishbeltRecord = async () => {
   userEvent.type(screen.getByLabelText('Transect Number'), '56')
   userEvent.type(screen.getByLabelText('Label'), 'some label')
   userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
-  userEvent.click(within(screen.getByTestId('width')).getByLabelText('10m'))
-  userEvent.click(within(screen.getByTestId('size_bin')).getByLabelText('1'))
-  userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('flat'))
-  userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor'))
-  userEvent.click(within(screen.getByTestId('current')).getByLabelText('high'))
-  userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('deep'))
-  userEvent.click(within(screen.getByTestId('tide')).getByLabelText('falling'))
+  userEvent.selectOptions(
+    await screen.findByLabelText('Width'),
+    '228c932d-b5da-4464-b0df-d15a05c05c02',
+  )
+  userEvent.selectOptions(
+    await screen.findByLabelText('Fish Size Bin (cm)'),
+    '67c1356f-e0a7-4383-8034-77b2f36e1a49',
+  )
+  userEvent.selectOptions(
+    await screen.findByLabelText('Reef Slope'),
+    'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+  )
+  userEvent.selectOptions(
+    screen.getByLabelText('Visibility'),
+    'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
+  userEvent.selectOptions(
+    screen.getByLabelText('Relative Depth'),
+    '8f381e71-219e-469c-8c13-231b088fb861',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
   userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
@@ -61,13 +76,20 @@ describe('Online', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    expect(within(screen.getByTestId('width')).getByLabelText('10m')).toBeChecked()
-    expect(within(screen.getByTestId('size_bin')).getByLabelText('1')).toBeChecked()
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('falling')).toBeChecked()
+    // Width select on 10m
+    expect(screen.getByDisplayValue('10m'))
+    // Fish size bin select on 1
+    expect(screen.getByDisplayValue('1'))
+    // Reef slope select on flat
+    expect(screen.getByDisplayValue('flat'))
+    // Visibility select on 1-5m -poor
+    expect(screen.getByDisplayValue('1-5m - poor'))
+    // Current select on high
+    expect(screen.getByDisplayValue('high'))
+    // Relative Depth select on deep
+    expect(screen.getByDisplayValue('deep'))
+    // Tide select on falling
+    expect(screen.getByDisplayValue('falling'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)
   test('New fishbelt save success show new record in collecting table', async () => {
@@ -133,12 +155,12 @@ describe('Online', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    // width radio checked on 1
-    expect(screen.getByLabelText('10m')).toBeChecked()
-    // fish size bin radio checked on 1
-    expect(screen.getByLabelText('1')).toBeChecked()
-    // reef slope radio checked on flat value
-    expect(screen.getByLabelText('flat')).toBeChecked()
+    // Width select on 10m
+    expect(screen.getByDisplayValue('10m'))
+    // Fish size bin select on 1
+    expect(screen.getByDisplayValue('1'))
+    // Reef Slope select on flat
+    expect(screen.getByDisplayValue('flat'))
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)

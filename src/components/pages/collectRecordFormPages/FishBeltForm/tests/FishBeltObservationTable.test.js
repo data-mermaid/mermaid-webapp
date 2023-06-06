@@ -38,9 +38,11 @@ test('FishBelt observations size shows a numeric pattern when fish size bin is 1
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
-  const bin1Radio = within(fishbeltForm).getByLabelText('1')
-
-  userEvent.click(bin1Radio)
+  // Fish size bin select on 1
+  userEvent.selectOptions(
+    await screen.findByLabelText('Fish Size Bin (cm)'),
+    '67c1356f-e0a7-4383-8034-77b2f36e1a49',
+  )
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -67,9 +69,11 @@ test('FishBelt observations size shows a select input when fish size bin is 5', 
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
-  const bin5Radio = within(fishbeltForm).getByLabelText('5')
-
-  userEvent.click(bin5Radio)
+  // Fish size bin select on 5
+  userEvent.selectOptions(
+    await screen.findByLabelText('Fish Size Bin (cm)'),
+    'ab91e41a-c0d5-477f-baf3-f0571d7c0dcf',
+  )
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -98,9 +102,11 @@ test('FishBelt observations size shows a select input when fish size bin is 10',
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
-  const bin10Radio = within(fishbeltForm).getByLabelText('10')
-
-  userEvent.click(bin10Radio)
+  // Fish size bin select on 10
+  userEvent.selectOptions(
+    await screen.findByLabelText('Fish Size Bin (cm)'),
+    '3232100a-a9b2-462c-955c-0dae7b72514f',
+  )
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -129,9 +135,11 @@ test('FishBelt observations size shows a select input when fish size bin is AGRR
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
-  const binAGRRARadio = within(fishbeltForm).getByLabelText('AGRRA')
-
-  userEvent.click(binAGRRARadio)
+  // Fish size bin select on AGRRA
+  userEvent.selectOptions(
+    await screen.findByLabelText('Fish Size Bin (cm)'),
+    'ccef720a-a1c9-4956-906d-09ed56f16249',
+  )
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -160,9 +168,11 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
   await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
   const fishbeltForm = screen.getByRole('form')
 
-  const binAGRRARadio = within(fishbeltForm).getByLabelText('AGRRA')
-
-  userEvent.click(binAGRRARadio)
+  // Fish size bin select on AGRRA
+  userEvent.selectOptions(
+    await screen.findByLabelText('Fish Size Bin (cm)'),
+    'ccef720a-a1c9-4956-906d-09ed56f16249',
+  )
 
   const observationsTable = within(fishbeltForm).getAllByRole('table')[0]
 
@@ -173,50 +183,4 @@ test('Fishbelt observations shows extra input for sizes over 50', async () => {
   const sizeInputs = await within(observationsTable).findAllByLabelText('Size (cm)')
 
   await waitFor(() => expect(sizeInputs.length).toEqual(2))
-})
-
-test('Fish size bin radio buttons remain enabled even after new observation rows are added', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-
-  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-  renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt/:recordId">
-      <FishBeltForm isNewRecord={false} currentUser={fakeCurrentUser} />
-    </Route>,
-    {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      isSyncInProgressOverride: true,
-    },
-  )
-
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
-
-  const fishbeltForm = screen.getByRole('form')
-
-  const bin1Radio = within(fishbeltForm).getByLabelText('1')
-  const bin5Radio = within(fishbeltForm).getByLabelText('5')
-  const bin10Radio = within(fishbeltForm).getByLabelText('10')
-  const binAGRRARadio = within(fishbeltForm).getByLabelText('AGRRA')
-  const binWCSIndiaRadio = within(fishbeltForm).getByLabelText('WCS India')
-
-  expect(bin1Radio).toBeEnabled()
-  expect(bin5Radio).toBeEnabled()
-  expect(bin10Radio).toBeEnabled()
-  expect(binAGRRARadio).toBeEnabled()
-  expect(binWCSIndiaRadio).toBeEnabled()
-
-  const addRowButton = within(fishbeltForm).getByRole('button', { name: 'Add Row' })
-
-  expect(addRowButton).toBeEnabled()
-
-  userEvent.click(addRowButton)
-  userEvent.click(addRowButton)
-
-  expect(bin1Radio).toBeEnabled()
-  expect(bin5Radio).toBeEnabled()
-  expect(bin10Radio).toBeEnabled()
-  expect(binAGRRARadio).toBeEnabled()
-  expect(binWCSIndiaRadio).toBeEnabled()
 })

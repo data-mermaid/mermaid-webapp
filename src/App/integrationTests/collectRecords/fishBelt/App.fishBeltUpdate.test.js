@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOffline,
-  waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -47,14 +46,20 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
-    expect(within(screen.getByTestId('width')).getByLabelText('2m')).toBeChecked()
-    expect(within(screen.getByTestId('size_bin')).getByLabelText('5')).toBeChecked()
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
-
+    // Width select on 2m
+    expect(screen.getByDisplayValue('2m'))
+    // Fish size bin select on 5
+    expect(screen.getByDisplayValue('5'))
+    // Reef slope select on flat
+    expect(screen.getByDisplayValue('flat'))
+    // Visibility select on <1m - bad
+    expect(screen.getByDisplayValue('<1m - bad'))
+    // Current select on moderate
+    expect(screen.getByDisplayValue('moderate'))
+    // Relative Depth select on deep
+    expect(screen.getByDisplayValue('deep'))
+    // Tide select on high
+    expect(screen.getByDisplayValue('high'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
   test('Edit fishbelt save stores properly formatted fish belt observations in dexie', async () => {
@@ -197,58 +202,5 @@ describe('Offline', () => {
     expect(await screen.findByText('The sample unit has not been saved.'))
 
     expect(await screen.findByLabelText('Depth')).toHaveValue(45)
-  })
-
-  test('Edit fishbelt can "unselect" non required radio group inputs', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
-
-    // make sure there is a collect record to edit in dexie
-    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/fishbelt/2'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
-
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
-
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
-
-    userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('current')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('tide')).getByLabelText('not reported'))
-
-    userEvent.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
-
-    expect(await screen.findByText('Record saved.'))
-
-    const editedStoredRecord = await dexiePerUserDataInstance.collect_records.get('2')
-
-    const storedReefSlope = editedStoredRecord.data.fishbelt_transect.reef_slope
-    const storedVisibility = editedStoredRecord.data.fishbelt_transect.visibility
-    const storedCurrent = editedStoredRecord.data.fishbelt_transect.current
-    const storedRelativeDepth = editedStoredRecord.data.fishbelt_transect.relative_depth
-    const storedTide = editedStoredRecord.data.fishbelt_transect.tide
-
-    // we store a non selection as an empty string because React doesnt like inputs changing type and the api interprets them as null
-    expect(storedReefSlope).toEqual('')
-    expect(storedVisibility).toEqual('')
-    expect(storedCurrent).toEqual('')
-    expect(storedRelativeDepth).toEqual('')
-    expect(storedTide).toEqual('')
   })
 })

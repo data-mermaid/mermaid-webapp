@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event'
 import {
   screen,
   renderAuthenticatedOffline,
-  waitForElementToBeRemoved,
   within,
 } from '../../../../testUtilities/testingLibraryWithHelpers'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
@@ -48,15 +47,15 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(10)
     expect(screen.getByLabelText('Interval Size')).toHaveValue(2)
-    // Reef slope select
+    // Reef slope select on flat
     expect(screen.getByDisplayValue('flat'))
-    // Visibility select
+    // Visibility select on <1m -bad
     expect(screen.getByDisplayValue('<1m - bad'))
-    // Current select
+    // Current select on moderate
     expect(screen.getByDisplayValue('moderate'))
-    // Relative Depth select
+    // Relative Depth select on deep
     expect(screen.getByDisplayValue('deep'))
-    // Tide select
+    // Tide select on high
     expect(screen.getByDisplayValue('high'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })

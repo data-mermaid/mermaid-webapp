@@ -72,15 +72,15 @@ describe('Offline', () => {
     expect(within(form).getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
     expect(screen.getByLabelText('Interval Size')).toHaveValue(7)
-    // Reef slope select
+    // Reef slope select on flat
     expect(screen.getByDisplayValue('flat'))
-    // Visibility select
+    // Visibility select on 1-5m - poor
     expect(screen.getByDisplayValue('1-5m - poor'))
-    // Current select
+    // Current select on high
     expect(screen.getByDisplayValue('high'))
-    // Relative Depth select
+    // Relative Depth select on deep
     expect(screen.getByDisplayValue('deep'))
-    // Tide select
+    // Tide select on falling
     expect(screen.getByDisplayValue('falling'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   })
@@ -151,7 +151,7 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
     expect(screen.getByLabelText('Interval Size')).toHaveValue(7)
 
-    // Reef Slope select on flat value
+    // Reef Slope select on flat
     expect(screen.getByDisplayValue('flat'))
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')

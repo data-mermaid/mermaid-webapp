@@ -156,12 +156,12 @@ test('FishBelt component in EDIT mode - form inputs are initialized with the cor
   expect(screen.getByLabelText('Transect Number')).toHaveValue(2)
   expect(screen.getByLabelText('Label')).toHaveValue('FB-2')
   expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(6)
-  // width radio
-  expect(screen.getByLabelText('2m')).toBeChecked()
-  // fish size bin radio
-  expect(screen.getByLabelText('5')).toBeChecked()
-  // reef slope radio
-  expect(screen.getByLabelText('flat')).toBeChecked()
+  // Width select on 2m
+  expect(screen.getByDisplayValue('2m'))
+  // Fish size bin select on 5
+  expect(screen.getByDisplayValue('5'))
+  // Reef Slope select on flat
+  expect(screen.getByDisplayValue('flat'))
   expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
 
   const observationsTable = screen.getByLabelText('Observations')
@@ -316,69 +316,4 @@ test('Fishbelt observations: delete observation button deleted observation', asy
 
   expect(within(observationsTableAfterDelete).getAllByRole('row').length).toEqual(3)
   expect(within(observationsTableAfterDelete).queryByDisplayValue(2)).not.toBeInTheDocument()
-})
-
-test('Add row button disabled when fish size bin is undefined', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-
-  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-  renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
-    </Route>,
-    {
-      isSyncInProgressOverride: true,
-      dexiePerUserDataInstance,
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
-    },
-  )
-
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
-  const fishbeltForm = screen.getByRole('form')
-  const addRowButton = within(fishbeltForm).getByRole('button', { name: 'Add Row' })
-
-  const bin1Radio = within(fishbeltForm).getByLabelText('1')
-  const bin5Radio = within(fishbeltForm).getByLabelText('5')
-  const bin10Radio = within(fishbeltForm).getByLabelText('10')
-  const binAGRRARadio = within(fishbeltForm).getByLabelText('AGRRA')
-  const binWCSIndiaRadio = within(fishbeltForm).getByLabelText('WCS India')
-
-  expect(bin1Radio).toBeEnabled()
-  expect(bin5Radio).toBeEnabled()
-  expect(bin10Radio).toBeEnabled()
-  expect(binAGRRARadio).toBeEnabled()
-  expect(binWCSIndiaRadio).toBeEnabled()
-
-  expect(addRowButton).toBeDisabled()
-})
-
-test('Add row button enabled when any fish size bin radio is selected (example: bin 1)', async () => {
-  const { dexiePerUserDataInstance } = getMockDexieInstancesAllSuccess()
-
-  await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-  renderAuthenticatedOnline(
-    <Route path="/projects/:projectId/collecting/fishbelt">
-      <FishBeltForm isNewRecord={true} currentUser={fakeCurrentUser} />
-    </Route>,
-    {
-      isSyncInProgressOverride: true,
-      dexiePerUserDataInstance,
-      initialEntries: ['/projects/5/collecting/fishbelt/'],
-    },
-  )
-
-  await waitForElementToBeRemoved(() => screen.queryByLabelText('project pages loading indicator'))
-  const fishbeltForm = screen.getByRole('form')
-  const addRowButton = within(fishbeltForm).getByRole('button', { name: 'Add Row' })
-
-  const bin1Radio = within(fishbeltForm).getByLabelText('1')
-
-  expect(bin1Radio).toBeEnabled()
-  expect(addRowButton).toBeDisabled()
-
-  userEvent.click(bin1Radio)
-
-  expect(addRowButton).toBeEnabled()
 })

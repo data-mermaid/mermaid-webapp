@@ -11,12 +11,12 @@ import { getOptions } from '../../../../library/getOptions'
 import { H2 } from '../../../generic/text'
 import { InputWrapper } from '../../../generic/form'
 import getValidationPropertiesForInput from '../getValidationPropertiesForInput'
-import InputRadioWithLabelAndValidation from '../../../mermaidInputs/InputRadioWithLabelAndValidation'
 import InputWithLabelAndValidation from '../../../mermaidInputs/InputWithLabelAndValidation'
 import TextareaWithLabelAndValidation from '../../../mermaidInputs/TextareaWithLabelAndValidation'
 import { sortArrayByObjectKey } from '../../../../library/arrays/sortArrayByObjectKey'
 import ClearSizeValuesModal from './ClearSizeValueModal'
 import language from '../../../../language'
+import InputSelectWithLabelAndValidation from '../../../mermaidInputs/InputSelectWithLabelAndValidation'
 
 const CURRENT_VALIDATION_PATH = 'data.fishbelt_transect.current'
 const DEPTH_VALIDATION_PATH = 'data.fishbelt_transect.depth'
@@ -58,17 +58,11 @@ const FishBeltTransectInputs = ({
     'label',
   )
   const fishSizeBinSelectOptions = getOptions(fishsizebins.data)
-  const reefSlopeSelectOptions = [
-    ...getOptions(reefslopes.data),
-    { label: 'not reported', value: '' },
-  ]
-  const relativeDepthOptions = [
-    ...getOptions(relativedepths.data),
-    { label: 'not reported', value: '' },
-  ]
-  const visibilityOptions = [...getOptions(visibilities.data), { label: 'not reported', value: '' }]
-  const currentOptions = [...getOptions(currents.data), { label: 'not reported', value: '' }]
-  const tideOptions = [...getOptions(tides.data), { label: 'not reported', value: '' }]
+  const reefSlopeSelectOptions = getOptions(reefslopes.data)
+  const relativeDepthOptions = getOptions(relativedepths.data)
+  const visibilityOptions = getOptions(visibilities.data)
+  const currentOptions = getOptions(currents.data)
+  const tideOptions = getOptions(tides.data)
   const fishbelt_transect = validationsApiData?.fishbelt_transect
   // account for empty starter row
   const hasFishBeltObservations =
@@ -358,7 +352,7 @@ const FishBeltTransectInputs = ({
           value={formik.values.len_surveyed}
           onChange={handleLengthSurveyedChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Width"
           required={true}
           id="width"
@@ -370,18 +364,17 @@ const FishBeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: WIDTH_VALIDATION_PATH })
           }}
+          {...widthValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(widthValidationProperties, 'width')}
           onBlur={formik.handleBlur}
           value={formik.values.width}
-          name="width"
           onChange={handleWidthChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Fish Size Bin (cm)"
           required={true}
           id="size_bin"
           testId="size_bin"
-          name="fish-size-bin"
           options={fishSizeBinSelectOptions}
           ignoreNonObservationFieldValidations={() => {
             ignoreNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
@@ -389,15 +382,18 @@ const FishBeltTransectInputs = ({
           resetNonObservationFieldValidations={() => {
             resetNonObservationFieldValidations({ validationPath: SIZE_BIN_VALIDATION_PATH })
           }}
+          {...sizeBinValidationProperties}
           {...validationPropertiesWithDirtyResetOnInputChange(
             sizeBinValidationProperties,
             'size_bin',
           )}
+          onBlur={formik.handleBlur}
           value={formik.values.size_bin}
           onChange={handleSizeBinChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Reef Slope"
+          required={false}
           id="reef_slope"
           testId="reef_slope"
           options={reefSlopeSelectOptions}
@@ -408,13 +404,17 @@ const FishBeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: REEF_SLOPE_VALIDATION_PATH })
           }}
           {...reefSlopeValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            reefSlopeValidationProperties,
+            'reef_slope',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.reef_slope}
-          name="reef_slope"
           onChange={handleReefSlopeChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Visibility"
+          required={false}
           id="visibility"
           testId="visibility"
           options={visibilityOptions}
@@ -425,13 +425,17 @@ const FishBeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: VISIBILITY_VALIDATION_PATH })
           }}
           {...visibilityValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            visibilityValidationProperties,
+            'visibility',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.visibility}
-          name="visibility"
           onChange={handleVisibilityChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Current"
+          required={false}
           id="current"
           testId="current"
           options={currentOptions}
@@ -442,13 +446,17 @@ const FishBeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: CURRENT_VALIDATION_PATH })
           }}
           {...currentValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            currentValidationProperties,
+            'current',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.current}
-          name="current"
           onChange={handleCurrentChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Relative Depth"
+          required={false}
           id="relative_depth"
           testId="relative_depth"
           options={relativeDepthOptions}
@@ -459,13 +467,17 @@ const FishBeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: RELATIVE_DEPTH_VALIDATION_PATH })
           }}
           {...relativeDepthValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(
+            relativeDepthValidationProperties,
+            'relative_depth',
+          )}
           onBlur={formik.handleBlur}
           value={formik.values.relative_depth}
-          name="relative_depth"
           onChange={handleRelativeDepthChange}
         />
-        <InputRadioWithLabelAndValidation
+        <InputSelectWithLabelAndValidation
           label="Tide"
+          required={false}
           id="tide"
           testId="tide"
           options={tideOptions}
@@ -476,9 +488,9 @@ const FishBeltTransectInputs = ({
             resetNonObservationFieldValidations({ validationPath: TIDE_VALIDATION_PATH })
           }}
           {...tideValidationProperties}
+          {...validationPropertiesWithDirtyResetOnInputChange(tideValidationProperties, 'tide')}
           onBlur={formik.handleBlur}
           value={formik.values.tide}
-          name="tide"
           onChange={handleTideChange}
         />
         <TextareaWithLabelAndValidation
