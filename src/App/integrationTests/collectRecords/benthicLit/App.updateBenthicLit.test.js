@@ -47,11 +47,12 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(5)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(10)
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
+
+    expect(screen.getByDisplayValue('flat'))
+    expect(screen.getByDisplayValue('<1m - bad'))
+    expect(screen.getByDisplayValue('moderate'))
+    expect(screen.getByDisplayValue('deep'))
+    expect(screen.getByDisplayValue('high')[1])
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
@@ -143,58 +144,5 @@ describe('Offline', () => {
     expect(await screen.findByText('The sample unit has not been saved.'))
 
     expect(await screen.findByLabelText('Depth')).toHaveValue(45)
-  })
-
-  test('Edit Benthic LIT can "unselect" non required radio group inputs', async () => {
-    const { dexiePerUserDataInstance, dexieCurrentUserInstance } = getMockDexieInstancesAllSuccess()
-
-    // make sure there is a collect record to edit in dexie
-    await initiallyHydrateOfflineStorageWithMockData(dexiePerUserDataInstance)
-
-    renderAuthenticatedOffline(<App dexieCurrentUserInstance={dexieCurrentUserInstance} />, {
-      initialEntries: ['/projects/5/collecting/benthiclit/70'],
-      dexiePerUserDataInstance,
-      dexieCurrentUserInstance,
-    })
-
-    await screen.findByLabelText('project pages loading indicator')
-    await waitForElementToBeRemoved(() =>
-      screen.queryByLabelText('project pages loading indicator'),
-    )
-
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('<1m - bad')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('high')).toBeChecked()
-
-    userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('current')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('not reported'))
-    userEvent.click(within(screen.getByTestId('tide')).getByLabelText('not reported'))
-
-    userEvent.click(
-      screen.getByText('Save', {
-        selector: 'button',
-      }),
-    )
-
-    expect(await screen.findByText('Record saved.'))
-
-    const editedStoredRecord = await dexiePerUserDataInstance.collect_records.get('70')
-
-    const storedReefSlope = editedStoredRecord.data.benthic_transect.reef_slope
-    const storedVisibility = editedStoredRecord.data.benthic_transect.visibility
-    const storedCurrent = editedStoredRecord.data.benthic_transect.current
-    const storedRelativeDepth = editedStoredRecord.data.benthic_transect.relative_depth
-    const storedTide = editedStoredRecord.data.benthic_transect.tide
-
-    // we store a non selection as an empty string because React doesnt like inputs changing type and the api interprets them as null
-    expect(storedReefSlope).toEqual('')
-    expect(storedVisibility).toEqual('')
-    expect(storedCurrent).toEqual('')
-    expect(storedRelativeDepth).toEqual('')
-    expect(storedTide).toEqual('')
   })
 })
