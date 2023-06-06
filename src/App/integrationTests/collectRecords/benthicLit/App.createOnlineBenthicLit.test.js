@@ -146,7 +146,7 @@ describe('Online', () => {
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
 
-    // Reef Slope select
+    // Reef Slope select on flat value
     expect(screen.getByDisplayValue('flat'))
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')

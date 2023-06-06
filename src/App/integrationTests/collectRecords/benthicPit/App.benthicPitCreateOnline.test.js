@@ -9,7 +9,7 @@ import {
 import App from '../../../App'
 import { getMockDexieInstancesAllSuccess } from '../../../../testUtilities/mockDexie'
 
-const saveFishbeltRecord = async () => {
+const saveBenthicPitRecord = async () => {
   userEvent.selectOptions(await screen.findByLabelText('Site'), '1')
   userEvent.selectOptions(screen.getByLabelText('Management'), '2')
   userEvent.type(screen.getByLabelText('Depth'), '10000')
@@ -19,11 +19,25 @@ const saveFishbeltRecord = async () => {
   userEvent.type(screen.getByLabelText('Transect Number'), '56')
   userEvent.type(screen.getByLabelText('Label'), 'some label')
   userEvent.type(screen.getByLabelText('Transect Length Surveyed'), '2')
-  userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('flat'))
-  userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor'))
-  userEvent.click(within(screen.getByTestId('current')).getByLabelText('high'))
-  userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('deep'))
-  userEvent.click(within(screen.getByTestId('tide')).getByLabelText('falling'))
+  // userEvent.click(within(screen.getByTestId('reef_slope')).getByLabelText('flat'))
+  // userEvent.click(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor'))
+  // userEvent.click(within(screen.getByTestId('current')).getByLabelText('high'))
+  // userEvent.click(within(screen.getByTestId('relative_depth')).getByLabelText('deep'))
+  // userEvent.click(within(screen.getByTestId('tide')).getByLabelText('falling'))
+  userEvent.selectOptions(
+    await screen.findByLabelText('Reef Slope'),
+    'c04bcf7e-2d5a-48d3-817a-5eb2a213b6fa',
+  )
+  userEvent.selectOptions(
+    screen.getByLabelText('Visibility'),
+    'a3ba3f14-330d-47ee-9763-bc32d37d03a5',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Current'), 'e5dcb32c-614d-44ed-8155-5911b7ee774a')
+  userEvent.selectOptions(
+    screen.getByLabelText('Relative Depth'),
+    '8f381e71-219e-469c-8c13-231b088fb861',
+  )
+  userEvent.selectOptions(screen.getByLabelText('Tide'), '97a63da7-e98c-4be7-8f13-e95d38aa17ae')
   userEvent.type(screen.getByLabelText('Notes'), 'some notes')
 
   userEvent.click(screen.getByText('Save', { selector: 'button' }))
@@ -42,7 +56,7 @@ describe('Online', () => {
       dexieCurrentUserInstance,
     )
 
-    await saveFishbeltRecord()
+    await saveBenthicPitRecord()
 
     expect(await screen.findByText('Record saved.'))
 
@@ -62,11 +76,16 @@ describe('Online', () => {
     expect(within(form).getByLabelText('Transect Number')).toHaveValue(56)
     expect(within(form).getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    expect(within(screen.getByTestId('reef_slope')).getByLabelText('flat')).toBeChecked()
-    expect(within(screen.getByTestId('visibility')).getByLabelText('1-5m - poor')).toBeChecked()
-    expect(within(screen.getByTestId('current')).getByLabelText('high')).toBeChecked()
-    expect(within(screen.getByTestId('relative_depth')).getByLabelText('deep')).toBeChecked()
-    expect(within(screen.getByTestId('tide')).getByLabelText('falling')).toBeChecked()
+    // Reef slope select
+    expect(screen.getByDisplayValue('flat'))
+    // Visibility select
+    expect(screen.getByDisplayValue('1-5m - poor'))
+    // Current select
+    expect(screen.getByDisplayValue('high'))
+    // Relative Depth select
+    expect(screen.getByDisplayValue('deep'))
+    // Tide select
+    expect(screen.getByDisplayValue('falling'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)
   test('New Benthic PIT save success show new record in collecting table', async () => {
@@ -81,7 +100,7 @@ describe('Online', () => {
       dexieCurrentUserInstance,
     )
 
-    await saveFishbeltRecord()
+    await saveBenthicPitRecord()
 
     expect(await screen.findByText('Record saved.'))
 
@@ -110,7 +129,7 @@ describe('Online', () => {
       dexieCurrentUserInstance,
     })
 
-    await saveFishbeltRecord()
+    await saveBenthicPitRecord()
 
     expect(await screen.findByText('The sample unit has not been saved.'))
 
@@ -131,8 +150,8 @@ describe('Online', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(56)
     expect(screen.getByLabelText('Label')).toHaveValue('some label')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(2)
-    // reef slope radio checked on flat value
-    expect(screen.getByLabelText('flat')).toBeChecked()
+    // Reef Slope select on flat value
+    expect(screen.getByDisplayValue('flat'))
 
     expect(screen.getByLabelText('Notes')).toHaveValue('some notes')
   }, 50000)

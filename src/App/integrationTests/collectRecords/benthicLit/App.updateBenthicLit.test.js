@@ -47,13 +47,16 @@ describe('Offline', () => {
     expect(screen.getByLabelText('Transect Number')).toHaveValue(5)
     expect(screen.getByLabelText('Label')).toHaveValue('FB-1')
     expect(screen.getByLabelText('Transect Length Surveyed')).toHaveValue(10)
-
+    // Reef slope select
     expect(screen.getByDisplayValue('flat'))
+    // Visibility select
     expect(screen.getByDisplayValue('<1m - bad'))
+    // Current select
     expect(screen.getByDisplayValue('moderate'))
+    // Relative Depth select
     expect(screen.getByDisplayValue('deep'))
-    expect(screen.getByDisplayValue('high')[1])
-
+    // Tide select
+    expect(screen.getByDisplayValue('high'))
     expect(screen.getByLabelText('Notes')).toHaveValue('some fish notes')
   })
   test('Edit Benthic LIT save stores properly formatted Benthic LIT observations in dexie', async () => {
