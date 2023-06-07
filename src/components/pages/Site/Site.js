@@ -45,6 +45,7 @@ import TextareaWithLabelAndValidation from '../../mermaidInputs/TextareaWithLabe
 import useCurrentProjectPath from '../../../library/useCurrentProjectPath'
 import useDocumentTitle from '../../../library/useDocumentTitle'
 import useIsMounted from '../../../library/useIsMounted'
+import InputSelectWithLabelAndValidation from '../../mermaidInputs/InputSelectWithLabelAndValidation'
 
 const ReadOnlySiteContent = ({
   site,
@@ -183,28 +184,28 @@ const SiteForm = ({
             handleLongitudeChange={handleLongitudeChange}
           />
         )}
-        <InputRadioWithLabelAndValidation
-          required
+        <InputSelectWithLabelAndValidation
           label="Exposure"
           id="exposure"
+          required={true}
           options={exposureOptions}
           {...formik.getFieldProps('exposure')}
           validationType={formik.errors.exposure && formik.touched.exposure ? 'error' : null}
           validationMessages={formik.errors.exposure}
         />
-        <InputRadioWithLabelAndValidation
-          required
+        <InputSelectWithLabelAndValidation
           label="Reef Type"
           id="reef_type"
+          required={true}
           options={reefTypeOptions}
           {...formik.getFieldProps('reef_type')}
           validationType={formik.errors.reef_type && formik.touched.reef_type ? 'error' : null}
           validationMessages={formik.errors.reef_type}
         />
-        <InputRadioWithLabelAndValidation
-          required
+        <InputSelectWithLabelAndValidation
           label="Reef Zone"
           id="reef_zone"
+          required={true}
           options={reefZoneOptions}
           {...formik.getFieldProps('reef_zone')}
           validationType={formik.errors.reef_zone && formik.touched.reef_zone ? 'error' : null}
